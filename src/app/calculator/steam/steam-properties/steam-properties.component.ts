@@ -41,6 +41,7 @@ export class SteamPropertiesComponent implements OnInit {
 
   plotReady: boolean = false;
   ranges: { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number }
+  toggleResetData: boolean = false;
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
@@ -68,6 +69,14 @@ export class SteamPropertiesComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    this.steamService.steamPropertiesInput = null;
+    this.steamPropertiesOutput = this.getEmptyResults();
+    this.getForm(0);
+    this.calculate(this.steamPropertiesForm);
+    this.toggleResetData = !this.toggleResetData;
   }
 
   getForm(quantityValue: number) {

@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { Quantity } from '../../../shared/models/steam/steam-inputs';
-import { PressureTurbineOperationTypes } from '../../../shared/models/steam/ssmt';
+import { PressureTurbineOperationTypes, PressureTurbine } from '../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../ssmt.service';
 import { CompareService } from '../../compare.service';
+import { TurbineService } from '../turbine.service';
 
 @Component({
   selector: 'app-pressure-turbine-form',
@@ -24,9 +25,11 @@ export class PressureTurbineFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
-
+  @Input()
+  idString: string;
+  
   turbineTypeOptions: Array<Quantity>;
-  constructor(private ssmtService: SsmtService, private compareService: CompareService) {
+  constructor(private ssmtService: SsmtService, private compareService: CompareService, private turbineService: TurbineService) {
   }
 
   ngOnInit() {
@@ -48,6 +51,18 @@ export class PressureTurbineFormComponent implements OnInit {
     }
   }
 
+  changeOperationValidators() {
+    let tmpObj: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.turbineForm);
+    let tmpValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.turbineService.getPressureOperationValueRanges(tmpObj);
+    this.turbineForm.controls.operationValue1.setValidators(tmpValidators.operationValue1Validators);
+    this.turbineForm.controls.operationValue1.reset(this.turbineForm.controls.operationValue1.value);
+    this.turbineForm.controls.operationValue1.markAsDirty();
+    this.turbineForm.controls.operationValue2.setValidators(tmpValidators.operationValue2Validators);
+    this.turbineForm.controls.operationValue2.reset(this.turbineForm.controls.operationValue2.value);
+    this.turbineForm.controls.operationValue2.markAsDirty();
+    this.save();
+  }
+
   enableForm() {
     this.turbineForm.controls.operationType.enable();
   }
@@ -55,7 +70,6 @@ export class PressureTurbineFormComponent implements OnInit {
   disableForm() {
     this.turbineForm.controls.operationType.disable();
   }
-
 
   save() {
     this.emitSave.emit(true);

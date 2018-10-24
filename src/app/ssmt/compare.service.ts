@@ -380,11 +380,22 @@ export class CompareService {
     }
 
     if (baseline && modification) {
-      return (
-        this.isHighPressureHeaderDifferent() ||
-        this.isMediumPressureHeaderDifferent() ||
-        this.isLowPressureHeaderDifferent()
-      )
+      if (baseline.headerInput.numberOfHeaders == 1) {
+        return (
+          this.isHighPressureHeaderDifferent()
+        )
+      } else if (baseline.headerInput.numberOfHeaders == 2) {
+        return (
+          this.isHighPressureHeaderDifferent() ||
+          this.isLowPressureHeaderDifferent()
+        )
+      } else if (baseline.headerInput.numberOfHeaders == 3) {
+        return (
+          this.isHighPressureHeaderDifferent() ||
+          this.isMediumPressureHeaderDifferent() ||
+          this.isLowPressureHeaderDifferent()
+        )
+      }
     } else {
       return false;
     }
@@ -748,11 +759,18 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.turbineInput[turbineTypeString].isentropicEfficiency != modification.turbineInput[turbineTypeString].isentropicEfficiency) {
+      if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
+        if (baseline.turbineInput[turbineTypeString].isentropicEfficiency != modification.turbineInput[turbineTypeString].isentropicEfficiency) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (baseline.turbineInput[turbineTypeString] && !modification.turbineInput[turbineTypeString] || !baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
         return true;
       } else {
         return false;
       }
+
     } else {
       return false;
     }
@@ -766,7 +784,13 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.turbineInput[turbineTypeString].generationEfficiency != modification.turbineInput[turbineTypeString].generationEfficiency) {
+      if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
+        if (baseline.turbineInput[turbineTypeString].generationEfficiency != modification.turbineInput[turbineTypeString].generationEfficiency) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (baseline.turbineInput[turbineTypeString] && !modification.turbineInput[turbineTypeString] || !baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
         return true;
       } else {
         return false;
@@ -784,7 +808,13 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.turbineInput[turbineTypeString].condenserPressure != modification.turbineInput[turbineTypeString].condenserPressure) {
+      if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
+        if (baseline.turbineInput[turbineTypeString].condenserPressure != modification.turbineInput[turbineTypeString].condenserPressure) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (baseline.turbineInput[turbineTypeString] && !modification.turbineInput[turbineTypeString] || !baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
         return true;
       } else {
         return false;
@@ -802,7 +832,13 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.turbineInput[turbineTypeString].operationType != modification.turbineInput[turbineTypeString].operationType) {
+      if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
+        if (baseline.turbineInput[turbineTypeString].operationType != modification.turbineInput[turbineTypeString].operationType) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (baseline.turbineInput[turbineTypeString] && !modification.turbineInput[turbineTypeString] || !baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
         return true;
       } else {
         return false;
@@ -820,7 +856,13 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.turbineInput.condensingTurbine.operationValue != modification.turbineInput.condensingTurbine.operationValue) {
+      if (baseline.turbineInput.condensingTurbine && modification.turbineInput.condensingTurbine) {
+        if (baseline.turbineInput.condensingTurbine.operationValue != modification.turbineInput.condensingTurbine.operationValue) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (baseline.turbineInput.condensingTurbine && !modification.turbineInput.condensingTurbine || !baseline.turbineInput.condensingTurbine && modification.turbineInput.condensingTurbine) {
         return true;
       } else {
         return false;
@@ -838,7 +880,13 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.turbineInput[turbineTypeString].useTurbine != modification.turbineInput[turbineTypeString].useTurbine) {
+      if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
+        if (baseline.turbineInput[turbineTypeString].useTurbine != modification.turbineInput[turbineTypeString].useTurbine) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (baseline.turbineInput[turbineTypeString] && !modification.turbineInput[turbineTypeString] || !baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
         return true;
       } else {
         return false;
@@ -856,7 +904,13 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.turbineInput[turbineTypeString].operationValue1 != modification.turbineInput[turbineTypeString].operationValue1) {
+      if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
+        if (baseline.turbineInput[turbineTypeString].operationValue1 != modification.turbineInput[turbineTypeString].operationValue1) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (baseline.turbineInput[turbineTypeString] && !modification.turbineInput[turbineTypeString] || !baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
         return true;
       } else {
         return false;
@@ -874,7 +928,13 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.turbineInput[turbineTypeString].operationValue2 != modification.turbineInput[turbineTypeString].operationValue2) {
+      if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
+        if (baseline.turbineInput[turbineTypeString].operationValue2 != modification.turbineInput[turbineTypeString].operationValue2) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (baseline.turbineInput[turbineTypeString] && !modification.turbineInput[turbineTypeString] || !baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
         return true;
       } else {
         return false;

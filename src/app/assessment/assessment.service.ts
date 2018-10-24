@@ -59,6 +59,9 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/fsat/' + assessment.id);
     } else if (assessment.type == 'SSMT') {
+      if (assessment.ssmt.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
       this.router.navigateByUrl('/ssmt/' + assessment.id);
 
     }
@@ -100,7 +103,7 @@ export class AssessmentService {
       motor_field_power: null,
       motor_field_current: null,
       motor_field_voltage: 460,
-      cost_kw_hour: 0.06,
+      cost_kw_hour: null,
       fluidType: 'Water',
       fluidTemperature: 68
     };
@@ -261,7 +264,7 @@ export class AssessmentService {
         outletPressure: null,
         loadEstimatedMethod: 0,
         motorPower: null,
-        cost: .06,
+        cost: null,
         compressibilityFactor: 0.988,
         specificHeatRatio: 1.4,
         measuredVoltage: 460
@@ -319,90 +322,21 @@ export class AssessmentService {
         hoursPerYear: 8736
       },
       operatingCosts: {
-        fuelCost: 8.00,
-        makeUpWaterCost: 10.00,
-        electricityCost: .080
+        fuelCost: undefined,
+        makeUpWaterCost: 0,
+        electricityCost: undefined
       },
       generalSteamOperations: {
-        sitePowerImport: 0,
-        makeUpWaterTemperature: 0
+        sitePowerImport: undefined,
+        makeUpWaterTemperature: undefined
       },
       implementationCosts: 0.0,
       equipmentNotes: '',
       turbineInput: {
-        condensingTurbine: {
-          isentropicEfficiency: undefined,
-          generationEfficiency: undefined,
-          condenserPressure: undefined,
-          operationType: 0,
-          operationValue: undefined,
-          useTurbine: true,
-        },
-        highToLowTurbine: {
-          isentropicEfficiency: undefined,
-          generationEfficiency: undefined,
-          operationType: 0,
-          operationValue1: undefined,
-          operationValue2: undefined,
-          useTurbine: false
-        },
-        highToMediumTurbine: {
-          isentropicEfficiency: undefined,
-          generationEfficiency: undefined,
-          operationType: 0,
-          operationValue1: undefined,
-          operationValue2: undefined,
-          useTurbine: false
-        },
-        mediumToLowTurbine: {
-          isentropicEfficiency: undefined,
-          generationEfficiency: undefined,
-          operationType: 0,
-          operationValue1: undefined,
-          operationValue2: undefined,
-          useTurbine: false
-        }
-      },
-      headerInput: {
-        numberOfHeaders: 1,
-        highPressure: {
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          condensateReturnTemperature: undefined,
-          flashCondensateReturn: false
-        },
-        mediumPressure:{
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          flashCondensateIntoHeader: undefined,
-          desuperheatSteamIntoNextHighest: undefined,
-          desuperheatSteamTemperature: undefined
-        },
-        lowPressure: {
-          pressure: undefined,
-          processSteamUsage: undefined,
-          condensationRecoveryRate: undefined,
-          heatLoss: undefined,
-          flashCondensateIntoHeader: undefined,
-          desuperheatSteamIntoNextHighest: undefined,
-          desuperheatSteamTemperature: undefined
-        }
-      },
-      boilerInput: {
-        fuelType: 1,
-        fuel: 1,
-        combustionEfficiency: undefined,
-        blowdownRate: undefined,
-        blowdownFlashed: undefined,
-        preheatMakeupWater: undefined,
-        steamTemperature: undefined,
-        deaeratorVentRate: undefined,
-        deaeratorPressure: undefined,
-        approachTemperature: undefined
+        condensingTurbine: undefined,
+        highToLowTurbine: undefined,
+        highToMediumTurbine: undefined,
+        mediumToLowTurbine: undefined
       }
     }
   }

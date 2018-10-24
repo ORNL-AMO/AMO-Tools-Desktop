@@ -6,9 +6,9 @@
         <label class="small" for="o2CombAir">O
           <sub>2</sub> in combustion air</label>
         <div class="input-group">
-          <input name="o2CombAir" autofocus type="number" min="1" step="any" max="100" class="form-control"
-            id="o2CombAir" (input)="calc()" (focus)="changeField('o2CombAir')" formControlName="o2CombAir" onfocus="this.select();"
-            (keyup.enter)="enterPlot()" (blur)="focusOut()">
+          <input name="o2CombAir" autofocus type="number" min="1" step="any" max="100" class="form-control" id="o2CombAir"
+            (input)="calc()" (focus)="changeField('o2CombAir')" formControlName="o2CombAir" onfocus="this.select();"
+            (blur)="focusOut()">
           <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.o2CombAir.invalid && !o2Form.controls.o2CombAir.pristine">
@@ -24,8 +24,7 @@
         <label class="small" for="combAirTemp">Combustion air preheat temperature</label>
         <div class="input-group">
           <input name="combAirTemp" type="number" min="0" step="10" class="form-control" id="combAirTemp" (input)="calc()"
-            (focus)="changeField('combAirTemp')" formControlName="combAirTemp" onfocus="this.select();" (keyup.enter)="enterPlot()"
-            (blur)="focusOut()">
+            (focus)="changeField('combAirTemp')" formControlName="combAirTemp" onfocus="this.select();" (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
@@ -49,7 +48,7 @@
         <div class="input-group">
           <input name="o2FlueGas" type="number" min="0" step="any" max="100" class="form-control" id="o2FlueGas"
             (input)="calc()" (focus)="changeField('o2FlueGas')" formControlName="o2FlueGas" onfocus="this.select();"
-            (keyup.enter)="enterPlot()" (blur)="focusOut()">
+            (blur)="focusOut()">
           <span class="input-group-addon units">% Dry</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.o2FlueGas.invalid && !o2Form.controls.o2FlueGas.pristine">
@@ -65,8 +64,7 @@
         <label class="small" for="flueGasTemp">Flue gas temperature</label>
         <div class="input-group">
           <input name="flueGasTemp" type="number" min="0" step="10" class="form-control" id="flueGasTemp" (input)="calc()"
-            (focus)="changeField('flueGasTemp')" formControlName="flueGasTemp" onfocus="this.select();" (keyup.enter)="enterPlot()"
-            (blur)="focusOut()">
+            (focus)="changeField('flueGasTemp')" formControlName="flueGasTemp" onfocus="this.select();" (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
 
@@ -90,7 +88,7 @@
         <div class="input-group">
           <input name="fuelConsumption" type="number" min="0" step="any" class="form-control" id="fuelConsumption"
             (input)="calc()" (focus)="changeField('fuelConsumption')" formControlName="fuelConsumption" onfocus="this.select();"
-            (keyup.enter)="enterPlot()" (blur)="focusOut()">
+            (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
         </div>
@@ -106,7 +104,7 @@
         <div class="input-group">
           <input name="o2CombAirEnriched" type="number" min="0" step="any" max="100" class="form-control" id="o2CombAirEnriched"
             (focus)="changeField('o2CombAir')" formControlName="o2CombAirEnriched" (input)="calc()" onfocus="this.select();"
-            (keyup.enter)="enterPlot()" (blur)="focusOut()">
+            (blur)="focusOut()">
           <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.o2CombAirEnriched.invalid && !o2Form.controls.o2CombAirEnriched.pristine">
@@ -123,7 +121,7 @@
         <div class="input-group">
           <input name="combAirTempEnriched" type="number" min="0" step="10" class="form-control" id="combAirTempEnriched"
             (focus)="changeField('combAirTemp')" formControlName="combAirTempEnriched" (input)="calc()" onfocus="this.select();"
-            (keyup.enter)="enterPlot()" (blur)="focusOut()">
+            (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
@@ -147,7 +145,7 @@
         <div class="input-group">
           <input name="o2FlueGasEnriched" type="number" min="0" step="any" max="100" class="form-control" id="o2FlueGasEnriched"
             (input)="calc()" (focus)="changeField('o2FlueGas')" formControlName="o2FlueGasEnriched" onfocus="this.select();"
-            (keyup.enter)="enterPlot()" (blur)="focusOut()">
+            (blur)="focusOut()">
           <span class="input-group-addon units">% Dry</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.o2FlueGasEnriched.invalid && !o2Form.controls.o2FlueGasEnriched.pristine">
@@ -164,7 +162,7 @@
         <div class="input-group">
           <input name="flueGasTempEnriched" type="number" min="0" step="10" class="form-control" id="flueGasTempEnriched"
             (input)="calc()" (focus)="changeField('flueGasTemp')" formControlName="flueGasTempEnriched" onfocus="this.select();"
-            (keyup.enter)="enterPlot()" (blur)="focusOut()">
+            (blur)="focusOut()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>

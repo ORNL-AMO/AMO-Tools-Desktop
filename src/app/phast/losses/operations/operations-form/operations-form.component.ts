@@ -23,9 +23,16 @@ export class OperationsFormComponent implements OnInit {
   isCalculated: boolean;
 
   warnings: OperationsWarnings;
+  idString: string;
   constructor(private operationsCompareService: OperationsCompareService, private operationsService: OperationsService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification';
+    }
+    else {
+      this.idString = '_baseline';
+    }
     this.checkWarnings();
   }
 

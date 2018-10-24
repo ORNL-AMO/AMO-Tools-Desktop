@@ -18,19 +18,14 @@ export class CashFlowComponent implements OnInit {
     results: 0,
     payback: 0
   };
-
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
-
   headerHeight: number;
-
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
-
   constructor(private cashFlowService: CashFlowService, private settingsDbService: SettingsDbService) {
   }
 
@@ -59,8 +54,22 @@ export class CashFlowComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.cashFlowService.inputData = this.cashFlowForm;
+  }
+
+  btnResetData() {
+    this.cashFlowForm = {
+      lifeYears: 10,
+      energySavings: 1000,
+      salvageInput: 3000,
+      installationCost: 10000,
+      operationCost: 500,
+      fuelCost: 500,
+      junkCost: 500
+    }
+    this.cashFlowService.inputData = this.cashFlowForm;
+    this.calculate();
   }
 
   resizeTabs() {
@@ -83,7 +92,7 @@ export class CashFlowComponent implements OnInit {
       (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) * this.cashFlowForm.lifeYears);
     // Payback
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
-    this.cashFlowService.calculate.next(true);
+    this.toggleCalculate = !this.toggleCalculate;
   }
 
 

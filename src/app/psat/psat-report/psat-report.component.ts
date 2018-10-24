@@ -11,6 +11,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { PsatReportService } from './psat-report.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-psat-report',
@@ -104,9 +105,9 @@ export class PsatReportComponent implements OnInit {
       }
     }
   }
-  
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.containerHeight && !changes.containerHeight.firstChange){
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
     }
   }
@@ -114,17 +115,20 @@ export class PsatReportComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    },100)
+    }, 100)
   }
 
-  getContainerHeight(){
+  getContainerHeight() {
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight-btnHeight-headerHeight-25;
+    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
   }
 
   setTab(str: string) {
     this.currentTab = str;
+    setTimeout(() => {
+      d3.selectAll('.tick text').style('display', 'initial');
+    }, 50);
   }
 
   getSettings() {

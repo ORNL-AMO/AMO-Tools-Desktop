@@ -1,19 +1,19 @@
 <form [formGroup]="chargeMaterialForm">
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="materialName">Name of Material
+      <label class="small" for="{{'materialName_'+idString}}">Name of Material
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas Material</a>
       </label>
-      <select name="{{'materialName_'+lossIndex}}" class="form-control" id="materialName" formControlName="materialId" (change)="setProperties()"
+      <select name="{{'materialName_'+lossIndex}}" class="form-control" id="{{'materialName_'+idString}}" formControlName="materialId" (change)="setProperties()"
         (focus)="focusField('materialName')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareGasMaterialId(), 'invalid': chargeMaterialForm.controls.materialId.invalid}">
         <option *ngFor="let material of materialTypes" [ngValue]="material.id">{{material.substance}}</option>
       </select>
     </div>
     <div class="form-group">
-      <label class="small" for="materialSpecificHeat">Specific Heat of Gas</label>
+      <label class="small" for="{{'materialSpecificHeat_'+idString}}">Specific Heat of Gas</label>
       <div class="input-group" [ngClass]="{'indicate-different-db':checkMaterialValues(), 'error': warnings.specificHeatGasWarning !== null, 'invalid': chargeMaterialForm.controls.materialSpecificHeat.invalid}">
         <input [readonly]="!baselineSelected" name="{{'materialSpecificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialSpecificHeat"
-          id="materialSpecificHeat" onfocus="this.select();" (input)="save()" (focus)="focusField('materialSpecificHeat')"
+          id="{{'materialSpecificHeat_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('materialSpecificHeat')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
@@ -23,9 +23,9 @@
   </div>
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="feedRate">Feed Rate for Gas Mixture</label>
+      <label class="small" for="{{'feedRate_'+idString}}">Feed Rate for Gas Mixture</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasFeedRate(), 'error': warnings.feedGasRateWarning !== null, 'invalid': chargeMaterialForm.controls.feedRate.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate"
+        <input [readonly]="!baselineSelected" name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="{{'feedRate_'+idString}}"
           onfocus="this.select();" (input)="save()" (focus)="focusField('feedRate')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
@@ -34,10 +34,10 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="initialTemperature">Initial Temperature</label>
+      <label class="small" for="{{'initialTemperature_'+idString}}">Initial Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasInitialTemperature(), 'error': warnings.initialTempWarning !== null, 'invalid': chargeMaterialForm.controls.initialTemperature.invalid}">
         <input [readonly]="!baselineSelected" name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
-          id="initialTemperature" onfocus="this.select();" (input)="save()" (focus)="focusField('initialTemperature')"
+          id="{{'initialTemperature_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('initialTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -46,10 +46,10 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="dischargeTemperature">Discharge Temperature</label>
+      <label class="small" for="{{'dischargeTemperature_'+idString}}">Discharge Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasDischargeTemperature(), 'error': warnings.initialTempWarning !== null, 'invalid': chargeMaterialForm.controls.dischargeTemperature.invalid}">
         <input [readonly]="!baselineSelected" name="{{'dischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="dischargeTemperature"
-          id="dischargeTemperature" onfocus="this.select();" (input)="save()" (focus)="focusField('dischargeTemperature')"
+          id="{{'dischargeTemperature_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('dischargeTemperature')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -58,9 +58,9 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="vaporInGas">Vapor in Gas Mixture</label>
+      <label class="small" for="{{'vaporInGas_'+idString}}">Vapor in Gas Mixture</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasPercentVapor(), 'error': warnings.gasMixVaporWarning !== null, 'invalid': chargeMaterialForm.controls.vaporInGas.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'vaporInGas_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="vaporInGas" id="vaporInGas"
+        <input [readonly]="!baselineSelected" name="{{'vaporInGas_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="vaporInGas" id="{{'vaporInGas_'+idString}}"
           onfocus="this.select();" (input)="save()" (focus)="focusField('vaporInGas')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
@@ -68,10 +68,10 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="specificHeatOfVapor">Specific Heat of Vapor</label>
+      <label class="small" for="{{'specificHeatOfVapor_'+idString}}">Specific Heat of Vapor</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasSpecificHeatVapor(), 'error': warnings.specificHeatGasVaporWarning !== null, 'invalid': chargeMaterialForm.controls.specificHeatOfVapor.invalid}">
         <input [readonly]="!baselineSelected" name="{{'specificHeatOfVapor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificHeatOfVapor"
-          id="specificHeatOfVapor" onfocus="this.select();" (input)="save()" (focus)="focusField('specificHeatOfVapor')"
+          id="{{'specificHeatOfVapor_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('specificHeatOfVapor')"
           (blur)="focusOut()">
 
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
@@ -81,9 +81,9 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="gasReacted">Feed Gas Reacted</label>
+      <label class="small" for="{{'gasReacted_'+idString}}">Feed Gas Reacted</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasPercentReacted(), 'error': warnings.feedGasReactedWarning !== null, 'invalid': chargeMaterialForm.controls.gasReacted.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'gasReacted_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="gasReacted" id="gasReacted"
+        <input [readonly]="!baselineSelected" name="{{'gasReacted_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="gasReacted" id="{{'gasReacted_'+idString}}"
           onfocus="this.select();" (input)="save()" (focus)="focusField('gasReacted')" (blur)="focusOut()">
         <span class="units">%</span>
       </div>
@@ -91,10 +91,10 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="heatOfReaction">Heat of Reaction</label>
+      <label class="small" for="{{'heatOfReaction_'+idString}}">Heat of Reaction</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasReactionHeat(), 'error': warnings.heatOfReactionWarning !== null, 'invalid': chargeMaterialForm.controls.heatOfReaction.invalid}">
         <input [readonly]="!baselineSelected" name="{{'heatOfReaction_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatOfReaction"
-          id="heatOfReaction" onfocus="this.select();" (input)="save()" (focus)="focusField('heatOfReaction')" (blur)="focusOut()">
+          id="{{'heatOfReaction_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('heatOfReaction')" (blur)="focusOut()">
 
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
@@ -103,8 +103,8 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
-      <select name="{{'endothermicOrExothermic_'+lossIndex}}" class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic"
+      <label class="small" for="{{'endothermicOrExothermic_'+idString}}">Endothermic/Exothermic</label>
+      <select name="{{'endothermicOrExothermic_'+lossIndex}}" class="form-control" formControlName="endothermicOrExothermic" id="{{'endothermicOrExothermic_'+idString}}"
         (change)="save()" (focus)="focusField('endothermicOrExothermic')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareGasThermicReactionType(), 'invalid': chargeMaterialForm.controls.endothermicOrExothermic.invalid}">
         <option>Endothermic</option>
         <option>Exothermic</option>
@@ -112,10 +112,10 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="c">Additional Heat Required</label>
+      <label class="small" for="{{'additionalHeatRequired_'+idString}}">Additional Heat Required</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareGasAdditionalHeat(), 'invalid': chargeMaterialForm.controls.additionalHeatRequired.invalid}">
         <input [readonly]="!baselineSelected" name="{{'additionalHeatRequired_'+lossIndex}}" type="number" class="form-control" formControlName="additionalHeatRequired"
-          id="additionalHeatRequired" onfocus="this.select();" (input)="save()" (focus)="focusField('additionalHeatRequired')"
+          id="{{'additionalHeatRequired_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('additionalHeatRequired')"
           (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>

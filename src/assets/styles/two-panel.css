@@ -99,6 +99,11 @@
     border-bottom: #145A32 solid 2px;
 }
 
+.lighting .header{
+    border-bottom: #FFFF00 solid 2px;
+}
+
+
 .psat .disabled .header{
     border-bottom-color: gray;
 }
@@ -248,6 +253,10 @@
 
 .steam .group-label{
     border-bottom: #2C3E50 solid 2px;
+}
+
+.lighting .group-label{
+    border-bottom: #FFFF00 solid 2px;
 }
 
 .loss-label{

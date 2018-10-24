@@ -233,14 +233,15 @@ export class FsatWarningService {
   }
 
   //FAN
-  checkFanWarnings(fanSetup: FanSetup): { fanEfficiencyError: string, fanSpeedError: string } {
+  checkFanWarnings(fanSetup: FanSetup): { fanEfficiencyError: string, fanSpeedError: string, specifiedDriveEfficiencyError: string } {
     let fanEfficiencyError: string = null;
     if (fanSetup.fanType == 12) {
       fanEfficiencyError = this.checkFanEfficiency(fanSetup);
     }
     return {
       fanEfficiencyError: fanEfficiencyError,
-      fanSpeedError: this.checkFanSpeed(fanSetup)
+      fanSpeedError: this.checkFanSpeed(fanSetup),
+      specifiedDriveEfficiencyError: this.checkSpecifiedDriveEfficiency(fanSetup)
     }
   }
 
@@ -260,6 +261,21 @@ export class FsatWarningService {
     } else if (fanSetup.fanSpeed > 5000) {
       return 'Fan speed must be less than or equal to 5000';
     } else {
+      return null;
+    }
+  }
+
+  checkSpecifiedDriveEfficiency(fanSetup: FanSetup) {
+    if (fanSetup.specifiedDriveEfficiency > 100) {
+      return "Unrealistic efficiency, shouldn't be greater then 100%";
+    }
+    else if (fanSetup.specifiedDriveEfficiency == 0) {
+      return "Cannot have 0% efficiency";
+    }
+    else if (fanSetup.specifiedDriveEfficiency < 0) {
+      return "Cannot have negative efficiency";
+    }
+    else {
       return null;
     }
   }

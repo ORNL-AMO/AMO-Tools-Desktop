@@ -59,8 +59,8 @@
     <div class="col-12">
       <div class="form-section">
         <div class="form-group">
-          <label class="small" for="type">Select Type</label>
-          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"
+          <label class="small" for="{{'type_'+lossIndex+idString}}">Select Type</label>
+          <select class="form-control" id="{{'type_'+lossIndex+idString}}" [(ngModel)]="material.chargeMaterialType" [disabled]="(!baselineSelected || lossesLocked) && !inSetup"
             (focus)="changeField('chargeMaterialType')" (blur)="focusOut()">
             <option>Solid</option>
             <option>Liquid</option>
@@ -69,13 +69,13 @@
         </div>
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.solidForm"
-        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" [isBaseline]="isBaseline" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.liquidForm"
-        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" [isBaseline]="isBaseline" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.gasForm"
-        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" [isBaseline]="isBaseline" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-gas-charge-material-form>
     </div>
   </div>

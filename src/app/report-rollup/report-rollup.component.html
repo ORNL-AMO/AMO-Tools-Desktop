@@ -117,7 +117,7 @@
                     </div>
                 </div>
 
-                <div class="row print-break-before">
+                <div *ngIf="_fsatAssessments.length > 0" class="row print-break-before">
                     <div class="col-12">
                         <!--fsat print-->
                         <app-fsat-rollup-print [settings]="settings"></app-fsat-rollup-print>

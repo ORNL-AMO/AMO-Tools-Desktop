@@ -23,13 +23,19 @@ export class HeaderComponent implements OnInit {
   selected: boolean;
   @Input()
   modificationExists: boolean;
+  @Input()
+  isBaseline: boolean;
 
   highPressureForm: FormGroup;
   mediumPressureForm: FormGroup;
   lowPressureForm: FormGroup;
+  idString: string = 'baseline_';
   constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
+    if(!this.isBaseline){
+      this.idString = 'modification_';
+    }
     if (!this.headerInput) {
       this.headerInput = this.headerService.initHeaderDataObj();
     }
@@ -48,9 +54,24 @@ export class HeaderComponent implements OnInit {
   }
 
   initForms() {
-    this.highPressureForm = this.headerService.initHighestPressureHeaderFormFromObj(this.headerInput.highPressure);
-    this.mediumPressureForm = this.headerService.initHeaderFormFromObj(this.headerInput.mediumPressure);
-    this.lowPressureForm = this.headerService.initHeaderFormFromObj(this.headerInput.lowPressure);
+    if (this.headerInput.highPressure) {
+      this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings);
+    }
+    else {
+      this.highPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings);
+    }
+
+    if (this.headerInput.mediumPressure) {
+      this.mediumPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.mediumPressure, this.settings);
+    } else {
+      this.mediumPressureForm = this.headerService.initHeaderForm(this.settings);
+    }
+
+    if (this.headerInput.lowPressure) {
+      this.lowPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressure, this.settings);
+    } else {
+      this.lowPressureForm = this.headerService.initHeaderForm(this.settings);
+    }
   }
 
   focusField(str: string) {
@@ -59,21 +80,6 @@ export class HeaderComponent implements OnInit {
 
   focusOut() {
     this.ssmtService.currentField.next('default');
-  }
-
-  setNumberOfHeaders() {
-    // if (this.headerInput.numberOfHeaders < this.headerForms.length) {
-    //   for (let i = this.headerForms.length; i > this.headerInput.numberOfHeaders; i--) {
-    //     this.headerForms.pop();
-    //   }
-    // } else if (this.headerInput.numberOfHeaders > this.headerForms.length) {
-    //   for (let i = this.headerForms.length; i < this.headerInput.numberOfHeaders; i++) {
-    //     let headerInput: Header = this.headerService.initHeaderInputObj(this.headerForms.length);
-    //     let tmpForm: FormGroup = this.headerService.initHeaderFormFromObj(headerInput);
-    //     this.headerForms.push(tmpForm);
-    //   }
-    // }
-    this.save();
   }
 
   save() {

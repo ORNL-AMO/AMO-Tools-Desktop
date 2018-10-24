@@ -69,6 +69,11 @@ export class MotorPerformanceComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.performanceForm = this.motorPerformanceService.initForm();
+    this.calculate();
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

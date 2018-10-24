@@ -50,7 +50,8 @@ export class PumpCurveComponent implements OnInit {
   isFan: boolean;
   @Input()
   fsat: FSAT;
-
+  @Input()
+  pumpCurvePrimary: boolean;
 
   tabSelect: string = 'results';
 
@@ -62,8 +63,8 @@ export class PumpCurveComponent implements OnInit {
   }
 
   headerHeight: number;
-  pumpCurveCollapsed: string = 'open';
-  systemCurveCollapsed: string = 'open';
+  pumpCurveCollapsed: string;
+  systemCurveCollapsed: string;
 
   //system curve variables
   pointOne: { form: FormGroup, fluidPower: number };
@@ -71,6 +72,8 @@ export class PumpCurveComponent implements OnInit {
   curveConstants: { form: FormGroup };
   staticHead: number;
   lossCoefficient: number;
+  graphSystemCurve: boolean;
+  graphPumpCurve: boolean;
 
   pumpCurveForm: PumpCurveForm;
   toggleCalculate: boolean = false;
@@ -88,6 +91,10 @@ export class PumpCurveComponent implements OnInit {
   constructor(private systemCurveService: SystemCurveService, private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsDbService: SettingsDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
+    this.systemCurveCollapsed = this.pumpCurvePrimary ? "closed" : "open";
+    this.pumpCurveCollapsed = this.pumpCurvePrimary ? "open" : "closed";
+    this.graphPumpCurve = this.pumpCurvePrimary;
+    this.graphSystemCurve = !this.pumpCurvePrimary;
     //get systen settings if using stand alone calculator
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
@@ -179,8 +186,27 @@ export class PumpCurveComponent implements OnInit {
       this.pumpCurveService.fanPointOne = this.pointOne;
       this.pumpCurveService.fanPointTwo = this.pointTwo;
     }
+    this.pumpCurveService.regEquation.next(null);
     this.calcMethodSubscription.unsubscribe();
     this.regEquationSubscription.unsubscribe();
+  }
+
+  btnResetSystemCurveData() {
+    this.initDefault();
+    if (!this.isFan) {
+      this.convertPumpDefaults(this.settings);
+    }
+    else {
+      this.convertFanDefaults(this.settings);
+    }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
+  }
+
+  btnResetPumpCurveData() {
+    this.pumpCurveForm = this.pumpCurveService.initForm();
+    this.calculate();
   }
 
   initForm() {
@@ -190,7 +216,7 @@ export class PumpCurveComponent implements OnInit {
       this.pointOne = this.pumpCurveService.pumpPointOne;
       this.pointTwo = this.pumpCurveService.pumpPointTwo;
     }
-    else if (this.pumpCurveService.pumpCurveData && !this.inAssessment && this.isFan) {
+    else if (this.pumpCurveService.fanCurveData && !this.inAssessment && this.isFan) {
       this.pumpCurveForm = this.pumpCurveService.fanCurveData;
       this.curveConstants = this.pumpCurveService.fanCurveConstants;
       this.pointOne = this.pumpCurveService.fanPointOne;
@@ -531,20 +557,23 @@ export class PumpCurveComponent implements OnInit {
     }
   }
 
-
   toggleSystemCurveCollapse() {
     if (this.systemCurveCollapsed == 'open') {
       this.systemCurveCollapsed = 'closed';
+      this.graphSystemCurve = false;
     } else {
       this.systemCurveCollapsed = 'open';
+      this.graphSystemCurve = true;
     }
   }
 
   togglePumpCurveCollapse() {
     if (this.pumpCurveCollapsed == 'open') {
       this.pumpCurveCollapsed = 'closed';
+      this.graphPumpCurve = false;
     } else {
       this.pumpCurveCollapsed = 'open';
+      this.graphPumpCurve = true;
     }
   }
 }

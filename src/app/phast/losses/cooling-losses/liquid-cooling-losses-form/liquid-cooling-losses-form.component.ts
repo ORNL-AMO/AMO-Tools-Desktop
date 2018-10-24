@@ -29,11 +29,20 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   warnings: LiquidCoolingWarnings;
+  idString: string;
   constructor(private coolingLossesCompareService: CoolingLossesCompareService, private coolingLossesService: CoolingLossesService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.checkWarnings();
   }
 

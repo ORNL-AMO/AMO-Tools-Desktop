@@ -18,13 +18,19 @@ export class OperationsComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
+
+  idString: string = 'baseline_';
   constructor() { }
 
   ngOnInit() {
-  
+    if (!this.isBaseline) {
+      this.idString = 'modification_';
+    }
   }
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 }

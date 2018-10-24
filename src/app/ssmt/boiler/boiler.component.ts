@@ -24,28 +24,26 @@ export class BoilerComponent implements OnInit {
   boilerInput: BoilerInput;
   @Output('emitSave')
   emitSave = new EventEmitter<BoilerInput>();
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-
-
-  fuelOptions: Array<string> = [
-    'Natural Gas',
-    'Coal',
-    'Heavy Fuel Oil',
-    'Tires'
-  ];
 
   boilerForm: FormGroup;
   options: any;
   showModal: boolean;
+  idString: string = 'baseline_';
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
     private compareService: CompareService) { }
 
   ngOnInit() {
+    if(!this.isBaseline){
+      this.idString = 'modification_';
+    }
     if (this.boilerInput) {
-      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput);
+      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
     } else {
-      this.boilerForm = this.boilerService.initForm();
+      this.boilerForm = this.boilerService.initForm(this.settings);
     }
     this.setFuelTypes();
     if (this.selected == false) {

@@ -8,7 +8,7 @@
     <!-- <app-explore-opportunities-form (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" (changeField)="focusField($event)"
 		 (emitOptimize)="optimize()" [exploreModIndex]="modificationIndex" [(fsat)]="assessment.fsat" (emitAddNewMod)="addNewMod()">
 		</app-explore-opportunities-form> -->
-    <app-explore-opportunities-form (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()"
+    <app-explore-opportunities-form (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save($event)"
       (changeField)="focusField($event)" [exploreModIndex]="modificationIndex" [(ssmt)]="assessment.ssmt"></app-explore-opportunities-form>
   </div>
   <div *ngIf="!modificationExists" class="no-data w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">

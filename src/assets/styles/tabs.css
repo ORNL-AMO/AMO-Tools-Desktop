@@ -85,6 +85,11 @@ Tabs
     border: none;
     border-bottom: #F39C12 solid 3px;
   }
+  .lighting .tabs.primary .active a {
+    border: none;
+    border-bottom:   #FFFF00 solid 3px;
+  }
+
 
   .fixed-tab-size{
     min-width: 200px;
@@ -167,7 +172,9 @@ Tabs
     .tabs.subtabs.phast .active.missing-data .step-number,
     .tabs.subtabs.phast .missing-data .step-number,
     .tabs.subtabs.psat .active.missing-data .step-number,
-    .tabs.subtabs.psat .missing-data .step-number {
+    .tabs.subtabs.psat .missing-data .step-number,
+    .tabs.subtabs.ssmt .missing-data .step-number,
+    .tabs.subtabs.ssmt .active.missing-data .step-number {
       background: red;
     }
 
@@ -176,7 +183,9 @@ Tabs
     .tabs.subtabs.phast .active.input-error .step-number,
     .tabs.subtabs.phast .input-error .step-number,
     .tabs.subtabs.psat .active.input-error .step-number,
-    .tabs.subtabs.psat .input-error .step-number {
+    .tabs.subtabs.psat .input-error .step-number,
+    .tabs.subtabs.ssmt .active.input-error .step-number,
+    .tabs.subtabs.ssmt .input-error .step-number {
       background: orange;
     }
 
@@ -185,7 +194,9 @@ Tabs
     .tabs.subtabs.phast .active.success .step-number,
     .tabs.subtabs.phast .success .step-number,
     .tabs.subtabs.psat .active.success .step-number,
-    .tabs.subtabs.psat .success .step-number {
+    .tabs.subtabs.psat .success .step-number,
+    .tabs.subtabs.ssmt .active.success .step-number,
+    .tabs.subtabs.ssmt .success .step-number  {
       background: green;
     }
 

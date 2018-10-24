@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OperatingCosts } from '../../../shared/models/operations';
-import { Settings } from 'electron';
 import { CompareService } from '../../compare.service';
 import { SsmtService } from '../../ssmt.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-operating-costs',
@@ -20,9 +20,23 @@ export class OperatingCostsComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  idString: string;
+  
   constructor(private compareService: CompareService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
+    if(!this.operatingCosts.electricityCost){
+      this.operatingCosts.electricityCost = this.settings.electricityCost;
+    }
+
+    if(!this.operatingCosts.fuelCost){
+      this.operatingCosts.fuelCost = this.settings.fuelCost;
+    }
+
+    if(!this.operatingCosts.makeUpWaterCost){
+      this.operatingCosts.makeUpWaterCost = 0;
+    }
   }
 
   save() {

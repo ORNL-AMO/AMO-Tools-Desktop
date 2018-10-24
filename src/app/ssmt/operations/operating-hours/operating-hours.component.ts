@@ -17,6 +17,8 @@ export class OperatingHoursComponent implements OnInit {
   selected: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  idString: string;
 
   timeError: string = null;
   weeksPerYearError: string = null;

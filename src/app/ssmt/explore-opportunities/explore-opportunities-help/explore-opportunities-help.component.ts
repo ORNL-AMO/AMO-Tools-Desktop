@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ExploreOpportunitiesService } from '../explore-opportunities.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-explore-opportunities-help',
@@ -7,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExploreOpportunitiesHelpComponent implements OnInit {
 
-  constructor() { }
+  currentField: string;
+  currentTab: string;
+
+  currentTabSubscription: Subscription;
+  currentFieldSubscription: Subscription;
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit() {
+    this.currentTabSubscription = this.exploreOpportunitiesService.currentTab.subscribe(val => {
+      this.currentTab = val;
+    })
+    this.currentFieldSubscription = this.exploreOpportunitiesService.currentField.subscribe(val => {
+      this.currentField = val;
+    })
+  }
+
+  ngOnDestroy(){
+    this.currentFieldSubscription.unsubscribe();
+    this.currentTabSubscription.unsubscribe();
   }
 
 }

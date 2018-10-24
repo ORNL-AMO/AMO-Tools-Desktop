@@ -1,40 +1,42 @@
 <form [formGroup]="flueGasLossForm">
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="gasTypeId">Fuel
-        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Fuel</a>
+      <label class="small" for="{{'gasTypeId'+idString}}">Fuel
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add
+          New Fuel</a>
       </label>
-      <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()"
-        (focus)="focusField('gasTypeId')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareMassGasTypeId(), 'invalid': flueGasLossForm.controls.gasTypeId.invalid}">
+      <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="{{'gasTypeId'+idString}}"
+        (change)="setProperties()" (focus)="focusField('gasTypeId')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareMassGasTypeId(), 'invalid': flueGasLossForm.controls.gasTypeId.invalid}">
         <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label class="small" for="flueGasTemperature">Flue Gas Temperature</label>
+      <label class="small" for="{{'flueGasTemperature'+idString}}">Flue Gas Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassFlueGasTemperature(), 'invalid': flueGasLossForm.controls.flueGasTemperature.invalid}">
         <input [readonly]="!baselineSelected" name="{{'flueGasTemperature_'+lossIndex}}" type="number" step="10" class="form-control"
-          formControlName="flueGasTemperature" id="flueGasTemperature" onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('flueGasTemperature')"
-          (blur)="focusOut()">
+          formControlName="flueGasTemperature" id="{{'flueGasTemperature'+idString}}" onfocus="this.select();" (input)="calcExcessAir()"
+          (focus)="focusField('flueGasTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="small" for="oxygenCalculationMethod">Percent Oxygen Or Excess Air?</label>
-      <select name="{{'oxygenCalculationMethod_'+lossIndex}}" class="form-control" (change)="changeMethod()" formControlName="oxygenCalculationMethod"
-        id="oxygenCalculationMethod" (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()" [ngClass]="{'indicate-different': compareMassOxygenCalculationMethod(), 'invalid': flueGasLossForm.controls.oxygenCalculationMethod.invalid}">
+      <label class="small" for="{{'oxygenCalculationMethod'+idString}}">Percent Oxygen Or Excess Air?</label>
+      <select name="{{'oxygenCalculationMethod_'+lossIndex}}" class="form-control" (change)="changeMethod()"
+        formControlName="oxygenCalculationMethod" id="{{'oxygenCalculationMethod'+idString}}" (focus)="focusField('oxygenCalculationMethod')"
+        (blur)="focusOut()" [ngClass]="{'indicate-different': compareMassOxygenCalculationMethod(), 'invalid': flueGasLossForm.controls.oxygenCalculationMethod.invalid}">
         <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
       </select>
     </div>
 
     <div class="form-group" *ngIf="flueGasLossForm.controls.oxygenCalculationMethod.value == 'Oxygen in Flue Gas'">
-      <label class="small" for="o2InFlueGas">Oxygen In Flue Gas</label>
+      <label class="small" for="{{'o2InFlueGas'+idString}}">Oxygen In Flue Gas</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassExcessAirPercentage(), 'error': warnings.o2Warning !== null, 'invalid': flueGasLossForm.controls.o2InFlueGas.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'o2InFlueGas_'+lossIndex}}" type="number" step="0.5" min="0" max="20.5" class="form-control"
-          formControlName="o2InFlueGas" id="o2InFlueGas" onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('o2InFlueGas')"
-          (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="{{'o2InFlueGas_'+lossIndex}}" type="number" step="0.5" min="0" max="20.5"
+          class="form-control" formControlName="o2InFlueGas" id="{{'o2InFlueGas'+idString}}" onfocus="this.select();" (input)="calcExcessAir()"
+          (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
@@ -57,22 +59,22 @@
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.o2Warning !== null">{{warnings.o2Warning}}</span>
 
-      <label class="small" for="excessAirPercentage">Excess Air</label>
+      <label class="small" for="{{'excessAirPercentage'+idString}}">Excess Air</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassExcessAirPercentage(), 'error': warnings.excessAirWarning !== null, 'invalid': flueGasLossForm.controls.excessAirPercentage.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'excessAirPercentage_'+lossIndex}}" type="number" step="any" min="0" class="form-control"
-          formControlName="excessAirPercentage" id="excessAirPercentage" onfocus="this.select();" (input)="calcExcessAir()"
-          (focus)="focusField('excessAirPercentage')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="{{'excessAirPercentage_'+lossIndex}}" type="number" step="any" min="0"
+          class="form-control" formControlName="excessAirPercentage" id="{{'excessAirPercentage'+idString}}" onfocus="this.select();"
+          (input)="calcExcessAir()" (focus)="focusField('excessAirPercentage')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.excessAirWarning !== null">{{warnings.excessAirWarning}}</span>
     </div>
 
     <div class="form-group">
-      <label class="small" for="combustionAirTemperature">Combustion Air Temperature</label>
+      <label class="small" for="{{'combustionAirTemperature'+idString}}">Combustion Air Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassCombustionAirTemperature(), 'error': warnings.combustionAirTempWarning !== null, 'invalid': flueGasLossForm.controls.combustionAirTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'combustionAirTemperature_'+lossIndex}}" type="number" step="10" class="form-control"
-          formControlName="combustionAirTemperature" id="combustionAirTemperature" onfocus="this.select();" (input)="calcExcessAir()"
-          (focus)="focusField('combustionAirTemperature')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="{{'combustionAirTemperature_'+lossIndex}}" type="number" step="10"
+          class="form-control" formControlName="combustionAirTemperature" id="{{'combustionAirTemperature'+idString}}" onfocus="this.select();"
+          (input)="calcExcessAir()" (focus)="focusField('combustionAirTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -80,44 +82,44 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="fuelTemperature">Fuel Temperature</label>
+      <label class="small" for="{{'fuelTemperature'+idString}}">Fuel Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassFuelTemperature(), 'invalid': flueGasLossForm.controls.fuelTemperature.invalid}">
         <input [readonly]="!baselineSelected" name="{{'fuelTemperature_'+lossIndex}}" type="number" step="10" class="form-control"
-          formControlName="fuelTemperature" id="fuelTemperature" onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('fuelTemperature')"
-          (blur)="focusOut()">
+          formControlName="fuelTemperature" id="{{'fuelTemperature'+idString}}" onfocus="this.select();" (input)="calcExcessAir()"
+          (focus)="focusField('fuelTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="small" for="moistureInAirComposition">Moisture in Combustion Air</label>
+      <label class="small" for="{{'moistureInAirComposition'+idString}}">Moisture in Combustion Air</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassMoistureInAirComposition(), 'error': warnings.moistureInAirCompositionWarning !== null, 'invalid': flueGasLossForm.controls.moistureInAirComposition.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any" min="0" max="100"
-          class="form-control" formControlName="moistureInAirComposition" id="moistureInAirComposition" onfocus="this.select();"
-          (input)="calcExcessAir()" (focus)="focusField('moistureInAirComposition')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any"
+          min="0" max="100" class="form-control" formControlName="moistureInAirComposition" id="{{'moistureInAirComposition'+idString}}"
+          onfocus="this.select();" (input)="calcExcessAir()" (focus)="focusField('moistureInAirComposition')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.moistureInAirCompositionWarning !== null">{{warnings.moistureInAirCompositionWarning}}</span>
     </div>
 
     <div class="form-group">
-      <label class="small" for="ashDischargeTemperature">Ash Discharge Temperature</label>
+      <label class="small" for="{{'ashDischargeTemperature'+idString}}">Ash Discharge Temperature</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassAshDischargeTemperature(), 'invalid': flueGasLossForm.controls.ashDischargeTemperature.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'ashDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control"
-          formControlName="ashDischargeTemperature" id="ashDischargeTemperature" onfocus="this.select();" (input)="calcExcessAir()"
-          (focus)="focusField('ashDischargeTemperature')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="{{'ashDischargeTemperature_'+lossIndex}}" type="number" step="any"
+          class="form-control" formControlName="ashDischargeTemperature" id="{{'ashDischargeTemperature'+idString}}" onfocus="this.select();"
+          (input)="calcExcessAir()" (focus)="focusField('ashDischargeTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="small" for="unburnedCarbonInAsh">Unburned Carbon in Ash</label>
+      <label class="small" for="{{'unburnedCarbonInAsh'+idString}}">Unburned Carbon in Ash</label>
       <div class="input-group" [ngClass]="{'indicate-different': compareMassUnburnedCarbonInAsh(), 'error': warnings.unburnedCarbonInAshWarning !== null, 'invalid': flueGasLossForm.controls.unburnedCarbonInAsh.invalid}">
-        <input [readonly]="!baselineSelected" name="{{'unburnedCarbonInAsh_'+lossIndex}}" type="number" step="any" min="0" max="100"
-          class="form-control" formControlName="unburnedCarbonInAsh" id="unburnedCarbonInAsh" onfocus="this.select();" (input)="calcExcessAir()"
-          (focus)="focusField('unburnedCarbonInAsh')" (blur)="focusOut()">
+        <input [readonly]="!baselineSelected" name="{{'unburnedCarbonInAsh_'+lossIndex}}" type="number" step="any" min="0"
+          max="100" class="form-control" formControlName="unburnedCarbonInAsh" id="{{'unburnedCarbonInAsh'+idString}}" onfocus="this.select();"
+          (input)="calcExcessAir()" (focus)="focusField('unburnedCarbonInAsh')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="warnings.unburnedCarbonInAshWarning !== null">{{warnings.unburnedCarbonInAshWarning}}</span>

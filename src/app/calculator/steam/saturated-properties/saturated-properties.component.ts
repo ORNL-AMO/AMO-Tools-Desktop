@@ -42,7 +42,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   graphToggle: string = '0';
   graphToggleForm: FormGroup;
   plotReady: boolean = false;
-
+  toggleResetData: boolean = true;
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
@@ -71,6 +71,15 @@ export class SaturatedPropertiesComponent implements OnInit {
       this.changeDetectorRef.detectChanges();
     }, 100)
   }
+
+  btnResetData() {
+    this.saturatedPropertiesOutput = this.getEmptyResults();
+    this.steamService.saturatedPropertiesInputs = null;
+    this.initForm();
+    this.calculate(this.saturatedPropertiesForm);
+    this.toggleResetData = !this.toggleResetData;
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
