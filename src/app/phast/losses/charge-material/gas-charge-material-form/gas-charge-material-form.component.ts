@@ -34,6 +34,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -41,11 +43,18 @@ export class GasChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   showModal: boolean = false;
   warnings: GasMaterialWarnings;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService,  private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService) { }
+  idString: string;
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.baselineSelected){
-      if(!changes.baselineSelected.firstChange){
+    if (!this.isBaseline) {
+      this.idString = 'phast_modification_solid_' + this.lossIndex;
+    }
+    else {
+      this.idString = 'phast_baseline_solid_' + this.lossIndex;
+    }
+    if (changes.baselineSelected) {
+      if (!changes.baselineSelected.firstChange) {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {

@@ -1,0 +1,83 @@
+<!--useTurbine-->
+<li>
+  <div class="checkbox">
+    <label for="{{turbineType+'modifyUseTurbine'}}">
+      <input type="checkbox" id="{{turbineType+'modifyUseTurbine'}}" (focus)="focusField('useTurbine')" (change)="toggleTurbineStatus()"
+        [(ngModel)]="showUseTurbine" /> Change Initial Turbine Status
+    </label>
+  </div>
+  <form *ngIf="showUseTurbine">
+    <div class="form-group">
+      <label for="{{turbineType+'baselineUseTurbine'}}">Baseline Status</label>
+      <select name="{{turbineType+'baselineUseTurbine'}}" id="{{turbineType+'baselineUseTurbine'}}" class="form-control"
+        (focus)="focusField('useTurbine')" (change)="save()" [(ngModel)]="baselineTurbine.useTurbine" [disabled]="true">
+        <option [ngValue]="true">On</option>
+        <option [ngValue]="false">Off</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="{{turbineType+'modificationUseTurbine'}}">Modification Status</label>
+      <select name="{{turbineType+'modificationUseTurbine'}}" id="{{turbineType+'modificationUseTurbine'}}" class="form-control"
+        (focus)="focusField('useTurbine')" (change)="save()" [(ngModel)]="modificationTurbine.useTurbine">
+        <option [ngValue]="true">On</option>
+        <option [ngValue]="false">Off</option>
+      </select>
+    </div>
+  </form>
+</li>
+<!--isentropicEfficiency-->
+<li *ngIf="modificationTurbine.useTurbine">
+  <div class="checkbox">
+    <label for="{{turbineType+'modifyIsentropicEfficiency'}}">
+      <input type="checkbox" id="{{turbineType+'modifyIsentropicEfficiency'}}" (focus)="focusField('isentropicEfficiency')"
+        (change)="toggleIsentropicEfficiency()" [(ngModel)]="showIsentropicEfficiency" /> Adjust Isentropic Efficiency
+    </label>
+  </div>
+  <form *ngIf="showIsentropicEfficiency">
+    <div class="form-group">
+      <label for="{{turbineType+'baselineIsentropicEfficiency'}}">Baseline Isentropic Efficiency</label>
+      <div class="input-group">
+        <input name="{{turbineType+'baselineIsentropicEfficiency'}}" type="number" step="any" id="{{turbineType+'baselineIsentropicEfficiency'}}"
+          class="form-control" (focus)="focusField('isentropicEfficiency')" (input)="save()" [(ngModel)]="baselineTurbine.isentropicEfficiency"
+          [disabled]="true" />
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="{{turbineType+'modificationIsentropicEfficiency'}}">Modification Isentropic Efficiency</label>
+      <div class="input-group">
+        <input name="{{turbineType+'modificationIsentropicEfficiency'}}" type="number" step="any" id="{{turbineType+'modificationIsentropicEfficiency'}}"
+          class="form-control" (focus)="focusField('isentropicEfficiency')" (input)="save()" [(ngModel)]="modificationTurbine.isentropicEfficiency" />
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+  </form>
+</li>
+<!--generationEfficiency-->
+<li *ngIf="modificationTurbine.useTurbine">
+  <div class="checkbox">
+    <label for="{{turbineType+'modifyGenerationEfficiency'}}">
+      <input type="checkbox" id="{{turbineType+'modifyGenerationEfficiency'}}" (focus)="focusField('generationEfficiency')"
+        (change)="toggleGenerationEfficiency()" [(ngModel)]="showGenerationEfficiency" /> Adjust Generator Efficiency
+    </label>
+  </div>
+  <form *ngIf="showGenerationEfficiency">
+    <div class="form-group">
+      <label for="{{turbineType+'baselineGenerationEfficiency'}}">Baseline Generator Efficiency</label>
+      <div class="input-group">
+        <input name="{{turbineType+'baselineGenerationEfficiency'}}" type="number" step="any" id="{{turbineType+'baselineGenerationEfficiency'}}"
+          class="form-control" (focus)="focusField('generationEfficiency')" (input)="save()" [(ngModel)]="baselineTurbine.generationEfficiency"
+          [disabled]="true" />
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="{{turbineType+'modificationGenerationEfficiency'}}">Modification Generator Efficiency</label>
+      <div class="input-group">
+        <input name="{{turbineType+'modificationGenerationEfficiency'}}" type="number" step="any" id="{{turbineType+'modificationGenerationEfficiency'}}"
+          class="form-control" (focus)="focusField('generationEfficiency')" (input)="save()" [(ngModel)]="modificationTurbine.generationEfficiency" />
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+  </form>
+</li>

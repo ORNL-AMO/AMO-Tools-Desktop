@@ -1,0 +1,104 @@
+
+.list-group-item.modification-item.active-item{
+    border-left: solid 8px #F39C12;
+    border-right: solid 8px #F39C12;
+    border-bottom: solid 2px #F39C12;
+    border-top: solid 2px #F39C12;
+    background-color: white;
+    font-weight: bold;
+}
+.list-group-item.modification-item{
+    background-color: #EAECEE;
+}
+
+.dropdown-menu.shown{
+    display: grid;
+    padding: 0px;
+}
+
+.dropdown-item{
+    padding: .25rem;
+    font-size: small;
+}
+
+.badge-primary{
+    margin-left: 0.1rem;
+    margin-right: .1rem;
+    margin-top: .1rem;
+}
+
+.badge-primary:hover{
+    cursor: pointer;
+    box-shadow: 0 0 0 0.2rem #AED6F1;
+}
+
+.title-item{
+    border-bottom: solid black 2px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+
+.btn-primary{
+    padding-top: 6px;
+    padding-bottom: 6px;
+    white-space: normal;
+}
+
+.btn-group .btn{
+    padding: 6px;
+    padding-left: 3px;
+    color: white;
+    font-size: small;
+}
+
+.btn-primary:focus{
+    box-shadow: 0 0 0 0.2rem white
+}
+
+.btn-rename{
+    background-color: #99A3A4;
+    border-color: #99A3A4;
+}
+
+.input-group-addon.units{
+    color: white;
+    background-color: #145A32;
+}
+
+.input-group-addon.units:hover{
+    cursor: pointer;
+    background-color: #82E0AA;
+}
+
+
+.danger{
+    background-color:#922B21;
+    color: white;
+}
+
+.btn-danger,
+.btn-default{
+    padding: 4px;
+}
+
+.red{
+    color: red;
+}
+
+.dropdown-item:hover{
+    cursor: pointer;
+    background-color: #99A3A4;
+    border-color: #F39C12;
+}
+
+.dropdown-menu{
+    min-width: 5rem;
+    bottom: 0;
+    left: 110%;
+    top: inherit;
+}
+
+.scroll-item{
+    max-height: 75vh;
+}

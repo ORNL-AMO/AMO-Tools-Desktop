@@ -175,6 +175,9 @@
       <li [ngClass]="{'selected': selectedCalculator == 'power-factor-correction'}">
         <span class="sidebar-item" (click)="selectCalculator('power-factor-correction')">Power Factor Correction</span>
       </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'co2-savings'}">
+        <span class="sidebar-item" (click)="selectCalculator('co2-savings')">CO<sub>2</sub> Savings</span>
+      </li>
     </ul>
   </li>
 </ul>

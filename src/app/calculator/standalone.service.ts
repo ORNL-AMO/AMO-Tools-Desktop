@@ -33,8 +33,8 @@ export class StandaloneService {
       //metric: kPa imperial: psi
       inputCpy.airPressure = this.convertUnitsService.value(inputCpy.airPressure).from('kPa').to('psi');
       let output: PneumaticAirRequirementOutput = standaloneAddon.pneumaticAirRequirement(inputCpy);
-      //metric: m imperial: ft
-      output.airRequirementPneumaticCylinder = this.convertUnitsService.value(output.airRequirementPneumaticCylinder).from('ft').to('m');
+      //metric: m3 imperial: ft3
+      output.airRequirementPneumaticCylinder = this.convertUnitsService.value(output.airRequirementPneumaticCylinder).from('ft3').to('m3');
       //metric: m3 imperial: ft3
       output.volumeAirIntakePiston = this.convertUnitsService.value(output.volumeAirIntakePiston).from('ft3').to('m3');
       return output

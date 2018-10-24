@@ -1,0 +1,78 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Steam Operations Help
+    <br>
+    <!-- <small class="text-muted">Enter measured data to calculate your system's annual savings potential.
+      </small> -->
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Enter measured data to calculate your system's annual savings potential.
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'hoursPerYear'">
+    <h6>
+      Operating Hours
+      <br>
+      <small class="text-muted">
+        Denotes the annual operating hours during which the facility utilizes the steam system. Either the total hours
+        of operation or the operating schedule (day/week, hours/day) should be
+        entered.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'sitePowerImport'">
+    <h6>
+      Site Import Power
+      <br>
+      <small class="text-muted">
+        Average power imported (positive) or exported (negative). Does not include power generated and used onsite.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'makeUpWaterTemperature'">
+    <h6>
+      Make-up Water Temperature
+      <br>
+      <small class="text-muted">
+        Average temperature of makeup water.  Generally close to average outside temperature.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fuelCost'">
+    <h6>
+      Fuel Cost
+      <br>
+      <small class="text-muted">
+        Cost of fuel per energy unit.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'electricityCost'">
+    <h6>
+      Electricity Cost
+      <br>
+      <small class="text-muted">
+        Average cost per unit of electricity.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'makeUpWaterCost'">
+    <h6>
+      Make-up Water Cost
+      <br>
+      <small class="text-muted">
+        Cost of makeup water per unit volume.
+      </small>
+    </h6>
+  </div>
+
+</div>

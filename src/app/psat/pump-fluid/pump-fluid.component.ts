@@ -44,7 +44,9 @@ export class PumpFluidComponent implements OnInit {
   rpmError: string = null;
   temperatureError: string = null;
   pumpEfficiencyError: string = null;
+  specifiedDriveEfficiencyError: string = null;
   tempUnit: string;
+  idString: string;
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -64,6 +66,12 @@ export class PumpFluidComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.baseline) {
+      this.idString = 'psat_modification_' + this.modificationIndex;
+    }
+    else {
+      this.idString = 'psat_baseline';
+    }
     this.pumpTypes = pumpTypes;
     this.drives = drives;
     this.fluidProperties = fluidProperties;
@@ -174,10 +182,11 @@ export class PumpFluidComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpWarnings:  { rpmError: string, temperatureError: string, pumpEfficiencyError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
+    let tmpWarnings: { rpmError: string, temperatureError: string, pumpEfficiencyError: string, specifiedDriveEfficiencyError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
     this.rpmError = tmpWarnings.rpmError;
     this.temperatureError = tmpWarnings.temperatureError;
     this.pumpEfficiencyError = tmpWarnings.pumpEfficiencyError;
+    this.specifiedDriveEfficiencyError = tmpWarnings.specifiedDriveEfficiencyError;
   }
 
   canCompare() {
@@ -212,6 +221,13 @@ export class PumpFluidComponent implements OnInit {
   isDriveDifferent() {
     if (this.canCompare()) {
       return this.compareService.isDriveDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSpecifiedDriveEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecifiedDriveEfficiencyDifferent();
     } else {
       return false;
     }
@@ -253,7 +269,7 @@ export class PumpFluidComponent implements OnInit {
     }
   }
 
-  isSpecifiedEfficiencyDifferent(){
+  isSpecifiedEfficiencyDifferent() {
     if (this.canCompare()) {
       return this.compareService.isSpecifiedEfficiencyDifferent();
     } else {

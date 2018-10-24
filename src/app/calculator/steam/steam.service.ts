@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { SaturatedPropertiesInput, SaturatedPropertiesOutput, SteamPropertiesInput, SteamPropertiesOutput, BoilerInput, BoilerOutput, DeaeratorInput, DeaeratorOutput, FlashTankInput, FlashTankOutput, HeaderInput, HeaderOutput, HeatLossInput, HeatLossOutput, TurbineInput, TurbineOutput, PrvInput, PrvOutput, HeaderOutputObj } from "../../shared/models/steam";
+import { SaturatedPropertiesInput,  SteamPropertiesInput, BoilerInput,  DeaeratorInput,  FlashTankInput, HeaderInput, HeatLossInput, TurbineInput, PrvInput } from "../../shared/models/steam/steam-inputs";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
+import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, TurbineOutput, PrvOutput } from '../../shared/models/steam/steam-outputs';
 
 declare var steamAddon: any;
 

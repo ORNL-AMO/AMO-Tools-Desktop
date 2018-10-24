@@ -1,0 +1,23 @@
+<div class="d-flex flex-column ml-2 mr-2">
+  <label class="group-label">General Details</label>
+  <div class="form-group">
+    <label for="{{idString+'sitePowerImport'}}">Site Power Import</label>
+    <div class="input-group">
+      <input name="sitePowerImport" type="number" step="any" class="form-control" id="{{idString+'sitePowerImport'}}" (input)="save()"
+        [(ngModel)]="generalSteamOperations.sitePowerImport" [disabled]="!selected" [ngClass]="{'indicate-different': isSitePowerImportDifferent()}"
+        (focus)="focusField('sitePowerImport')" (blur)="focusOut()">
+      <span class="units input-group-addon">$/{{settings.steamEnergyMeasurement}}</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="{{idString+'makeUpWaterTemperature'}}">Make-up Water Temperature</label>
+    <div class="input-group">
+      <input name="makeUpWaterTemperature" type="number" step="any" class="form-control" id="{{idString+'makeUpWaterTemperature'}}"
+        (input)="save()" [(ngModel)]="generalSteamOperations.makeUpWaterTemperature" [disabled]="!selected" [ngClass]="{'indicate-different': isMakeUpWaterTemperatureDifferent()}"
+        (focus)="focusField('makeUpWaterTemperature')" (blur)="focusOut()" min="0">
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+
+    </div>
+  </div>
+</div>

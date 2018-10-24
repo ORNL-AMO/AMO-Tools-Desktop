@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { SettingsService } from "../../../settings/settings.service";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SaturatedPropertiesOutput, SaturatedPropertiesInput } from '../../../shared/models/steam';
+import { SaturatedPropertiesInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
+import { SaturatedPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-saturated-properties',
@@ -42,7 +42,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   graphToggle: string = '0';
   graphToggleForm: FormGroup;
   plotReady: boolean = false;
-
+  toggleResetData: boolean = true;
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
@@ -71,6 +71,15 @@ export class SaturatedPropertiesComponent implements OnInit {
       this.changeDetectorRef.detectChanges();
     }, 100)
   }
+
+  btnResetData() {
+    this.saturatedPropertiesOutput = this.getEmptyResults();
+    this.steamService.saturatedPropertiesInputs = null;
+    this.initForm();
+    this.calculate(this.saturatedPropertiesForm);
+    this.toggleResetData = !this.toggleResetData;
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

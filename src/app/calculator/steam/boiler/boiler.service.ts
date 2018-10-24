@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BoilerInput } from '../../../shared/models/steam';
+import { BoilerInput } from '../../../shared/models/steam/steam-inputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { SteamService } from '../steam.service';

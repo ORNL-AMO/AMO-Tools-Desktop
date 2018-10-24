@@ -52,7 +52,7 @@ export class CombinedHeatPowerComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-    if(this.combinedHeatPowerService.inputData){
+    if (this.combinedHeatPowerService.inputData) {
       this.inputs = this.combinedHeatPowerService.inputData;
     }
   }
@@ -63,8 +63,27 @@ export class CombinedHeatPowerComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.combinedHeatPowerService.inputData = this.inputs;
+  }
+
+  btnResetData() {
+    this.inputs = {
+      annualOperatingHours: 0,
+      annualElectricityConsumption: 0,
+      annualThermalDemand: 0,
+      boilerThermalFuelCosts: 0,
+      avgElectricityCosts: 0,
+      option: 0,
+      boilerThermalFuelCostsCHPcase: 0,
+      CHPfuelCosts: 0,
+      percentAvgkWhElectricCostAvoidedOrStandbyRate: 75,
+      displacedThermalEfficiency: 0,
+      chpAvailability: 0,
+      thermalUtilization: 0
+    };
+    this.combinedHeatPowerService.inputData = this.inputs;
+    this.calculate();
   }
 
   resizeTabs() {
@@ -72,7 +91,7 @@ export class CombinedHeatPowerComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
-  
+
   setCurrentField(str: string) {
     this.currentField = str;
   }

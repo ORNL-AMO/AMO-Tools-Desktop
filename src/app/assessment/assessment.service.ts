@@ -5,6 +5,7 @@ import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
+import { SSMT } from '../shared/models/steam/ssmt';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -21,7 +22,7 @@ export class AssessmentService {
   tutorialShown: boolean = false;
   dashboardView: BehaviorSubject<string>;
   workingDirectoryId: BehaviorSubject<number>;
-  updateSidebarData:BehaviorSubject<boolean>;
+  updateSidebarData: BehaviorSubject<boolean>;
   constructor(private router: Router) {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
@@ -57,6 +58,12 @@ export class AssessmentService {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/fsat/' + assessment.id);
+    } else if (assessment.type == 'SSMT') {
+      if (assessment.ssmt.setupDone && !str && !assessment.isExample) {
+        this.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/ssmt/' + assessment.id);
+
     }
   }
 
@@ -96,7 +103,7 @@ export class AssessmentService {
       motor_field_power: null,
       motor_field_current: null,
       motor_field_voltage: 460,
-      cost_kw_hour: 0.06,
+      cost_kw_hour: null,
       fluidType: 'Water',
       fluidTemperature: 68
     };
@@ -257,7 +264,7 @@ export class AssessmentService {
         outletPressure: null,
         loadEstimatedMethod: 0,
         motorPower: null,
-        cost: .06,
+        cost: null,
         compressibilityFactor: 0.988,
         specificHeatRatio: 1.4,
         measuredVoltage: 460
@@ -301,5 +308,36 @@ export class AssessmentService {
       }
     }
     return newFsat;
+  }
+
+  getNewSsmt(): SSMT {
+    return {
+      name: '',
+      setupDone: false,
+      operatingHours: {
+        weeksPerYear: 52,
+        daysPerWeek: 7,
+        shiftsPerDay: 3,
+        hoursPerShift: 8,
+        hoursPerYear: 8736
+      },
+      operatingCosts: {
+        fuelCost: undefined,
+        makeUpWaterCost: 0,
+        electricityCost: undefined
+      },
+      generalSteamOperations: {
+        sitePowerImport: undefined,
+        makeUpWaterTemperature: undefined
+      },
+      implementationCosts: 0.0,
+      equipmentNotes: '',
+      turbineInput: {
+        condensingTurbine: undefined,
+        highToLowTurbine: undefined,
+        highToMediumTurbine: undefined,
+        mediumToLowTurbine: undefined
+      }
+    }
   }
 }

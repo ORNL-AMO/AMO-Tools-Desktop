@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
-import { FlashTankInput, FlashTankOutput } from '../../../shared/models/steam';
+import { FlashTankInput } from '../../../shared/models/steam/steam-inputs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
 import { Settings } from '../../../shared/models/settings';
 import { FlashTankService } from './flash-tank.service';
+import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-flash-tank',
@@ -44,6 +45,11 @@ export class FlashTankComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 50);
+  }
+
+  btnResetData() {
+    this.flashTankForm = this.flashTankService.initForm(this.settings);
+    this.calculate(this.flashTankForm);
   }
 
   resizeTabs() {
@@ -86,6 +92,7 @@ export class FlashTankComponent implements OnInit {
       inletWaterSpecificEnthalpy: 0,
       inletWaterSpecificEntropy: 0,
       inletWaterTemperature: 0,
+      inletWaterVolume: 0,
       outletGasEnergyFlow: 0,
       outletGasMassFlow: 0,
       outletGasPressure: 0,
@@ -93,6 +100,7 @@ export class FlashTankComponent implements OnInit {
       outletGasSpecificEnthalpy: 0,
       outletGasSpecificEntropy: 0,
       outletGasTemperature: 0,
+      outletGasVolume: 0,
       outletLiquidEnergyFlow: 0,
       outletLiquidMassFlow: 0,
       outletLiquidPressure: 0,
@@ -100,6 +108,7 @@ export class FlashTankComponent implements OnInit {
       outletLiquidSpecificEnthalpy: 0,
       outletLiquidSpecificEntropy: 0,
       outletLiquidTemperature: 0,
+      outletLiquidVolume: 0
     }
 
     return emptyResults;

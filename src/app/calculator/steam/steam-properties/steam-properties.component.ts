@@ -2,8 +2,9 @@ import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Hos
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SteamPropertiesOutput, SteamPropertiesInput } from '../../../shared/models/steam';
+import { SteamPropertiesInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
+import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class SteamPropertiesComponent implements OnInit {
 
   plotReady: boolean = false;
   ranges: { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number }
+  toggleResetData: boolean = false;
   constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
@@ -67,6 +69,14 @@ export class SteamPropertiesComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    this.steamService.steamPropertiesInput = null;
+    this.steamPropertiesOutput = this.getEmptyResults();
+    this.getForm(0);
+    this.calculate(this.steamPropertiesForm);
+    this.toggleResetData = !this.toggleResetData;
   }
 
   getForm(quantityValue: number) {

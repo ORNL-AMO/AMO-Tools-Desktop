@@ -1,0 +1,103 @@
+<div #content class="ssmt-container d-flex flex-column ssmt" *ngIf="assessment && settings">
+  <div #header class="w-100 hide-print sticky-top">
+    <app-ssmt-banner [assessment]="assessment"></app-ssmt-banner>
+    <app-ssmt-tabs [settings]="settings" [ssmt]="_ssmt"></app-ssmt-tabs>
+  </div>
+  <!--Setup-->
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}" [ngStyle]="{'height.px': containerHeight}">
+      <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
+        (emitSave)="saveSettings($event)" [ssmt]="_ssmt"></app-system-basics>
+      <app-operations *ngIf="stepTab == 'operations'" [(ssmt)]="_ssmt" [settings]="settings" (emitSave)="save()"
+        [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
+      <app-boiler *ngIf="stepTab == 'boiler'" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true"
+        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true"></app-boiler>
+      <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true"
+        [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
+        [isBaseline]="true"></app-header>
+      <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput" [selected]="true" [inSetup]="true"
+        [settings]="settings" (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>
+    </div>
+    <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+      <app-help-panel [settings]="settings" [inSetup]="true"></app-help-panel>
+    </div>
+  </div>
+  <!--Assessment-->
+  <div *ngIf="mainTab == 'assessment'" [ngClass]="{'modal-open': isModalOpen == true}" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [ssmt]="_ssmt"
+      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="save()"
+      [containerHeight]="containerHeight"></app-modify-conditions>
+    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [ssmt]="_ssmt" [assessment]="assessment"
+      [settings]="settings" (emitSave)="saveSsmt($event)" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex"
+      [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()" (exploreOppsToast)="setExploreOppsToast($event)"
+      (emitSave)="saveSsmt($event)"></app-explore-opportunities>
+  </div>
+
+  <!--report-->
+  <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
+    <div class="col-11 report-column">
+    </div>
+  </div>
+  <!--diagram-->
+  <div class="tab-content" *ngIf="mainTab == 'diagram'">
+    <app-ssmt-diagram></app-ssmt-diagram>
+  </div>
+  <!--calculators-->
+  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+
+  </div>
+  <!--sankey-->
+  <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100" [ngStyle]="{'height.px': containerHeight}">
+    <div class="sankey-padding w-100">
+      <app-ssmt-sankey></app-ssmt-sankey>
+    </div>
+  </div>
+
+  <div #footer id="ssmtFooter" class="footer hide-print" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
+    <div class="pull-left" *ngIf="stepTab != 'system-basics'">
+      <button class="btn btn-default" (click)="back()">Back</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
+      <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'assessment'">
+      <button class="btn btn-primary" (click)="goToReport()">View Report</button>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #addNewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Scenario</h3>
+        <button class="close" (click)="closeAddNewModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-add-modification *ngIf="showAddModal" [ssmt]="_ssmt" [modifications]="_ssmt.modifications" (save)="saveNewMod($event)"></app-add-modification>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_ssmt && _ssmt.modifications">
+  <div class="modal-dialog modal-lg list-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Scenario</h3>
+        <button class="close" (click)="closeSelectModification()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-modification-list [ssmt]="_ssmt" (save)="save()" [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
+      </div>
+    </div>
+  </div>
+</div>

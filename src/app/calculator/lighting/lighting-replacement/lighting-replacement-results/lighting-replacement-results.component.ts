@@ -12,9 +12,9 @@ export class LightingReplacementResultsComponent implements OnInit {
   @Input()
   modificationData: Array<LightingReplacementData>;
   @Input()
-  baselineResults: Array<LightingReplacementResults>;
+  baselineResults: LightingReplacementResults;
   @Input()
-  modificationResults: Array<LightingReplacementResults>;
+  modificationResults: LightingReplacementResults;
   
   constructor() { }
 

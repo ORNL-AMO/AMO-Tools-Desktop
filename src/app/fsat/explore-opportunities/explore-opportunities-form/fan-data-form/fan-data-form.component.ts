@@ -20,14 +20,16 @@ export class FanDataFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
 
-  drives: Array<{display: string, value: number}>;
-  fanTypes: Array<{display: string, value: number}>;
+  drives: Array<{ display: string, value: number }>;
+  fanTypes: Array<{ display: string, value: number }>;
   showFanData: boolean = false;
   showFanType: boolean = false;
   showMotorDrive: boolean = false;
   showFanSpecified: boolean = false;
   specifiedError1: string = null;
   specifiedError2: string = null;
+  baselineSpecifiedDriveEfficiencyError: string = null;
+  modificationSpecifiedDriveEfficiencyError: string = null;
   constructor(private modifyConditionsService: ModifyConditionsService, private helpPanelService: HelpPanelService, private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
@@ -125,9 +127,13 @@ export class FanDataFormComponent implements OnInit {
     this.calculate();
   }
 
-  checkWarnings(){
-    this.specifiedError1 = this.fsatWarningService.checkFanWarnings(this.fsat.fanSetup).fanEfficiencyError;
-    this.specifiedError2 = this.fsatWarningService.checkFanWarnings(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup).fanEfficiencyError;
+  checkWarnings() {
+    let baseWarnings = this.fsatWarningService.checkFanWarnings(this.fsat.fanSetup);
+    let modWarnings = this.fsatWarningService.checkFanWarnings(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup);
+    this.specifiedError1 = baseWarnings.fanEfficiencyError;
+    this.baselineSpecifiedDriveEfficiencyError = baseWarnings.specifiedDriveEfficiencyError;
+    this.specifiedError2 = modWarnings.fanEfficiencyError;
+    this.modificationSpecifiedDriveEfficiencyError = modWarnings.specifiedDriveEfficiencyError;
   }
 
   checkFanTypes() {

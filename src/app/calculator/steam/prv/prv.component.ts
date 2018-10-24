@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
-import { PrvInput, PrvOutput } from '../../../shared/models/steam';
+import { PrvInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PrvService } from './prv.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-prv',
@@ -51,6 +52,12 @@ export class PrvComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 50);
+  }
+
+  btnResetData() {
+    this.isSuperHeating = false;
+    this.setInletForm(this.prvService.initInletForm(this.settings))
+    this.setFeedwaterForm(this.prvService.initFeedwaterForm(this.settings));
   }
 
   resizeTabs() {
@@ -137,6 +144,7 @@ export class PrvComponent implements OnInit {
       feedwaterSpecificEnthalpy: 0,
       feedwaterSpecificEntropy: 0,
       feedwaterTemperature: 0,
+      feedwaterVolume: 0,
       inletEnergyFlow: 0,
       inletMassFlow: 0,
       inletPressure: 0,
@@ -144,13 +152,15 @@ export class PrvComponent implements OnInit {
       inletSpecificEnthalpy: 0,
       inletSpecificEntropy: 0,
       inletTemperature: 0,
+      inletVolume: 0,
       outletEnergyFlow: 0,
       outletMassFlow: 0,
       outletPressure: 0,
       outletQuality: 0,
       outletSpecificEnthalpy: 0,
       outletSpecificEntropy: 0,
-      outletTemperature: 0
+      outletTemperature: 0,
+      outletVolume: 0
     }
 
     return emptyResults;

@@ -81,6 +81,10 @@ Tabs
     border-bottom:   #A569BD groove 3px;
   }
 
+  .ssmt .tabs.primary .active a {
+    border: none;
+    border-bottom: #F39C12 solid 3px;
+  }
   .lighting .tabs.primary .active a {
     border: none;
     border-bottom:   #FFFF00 solid 3px;
@@ -132,6 +136,10 @@ Tabs
   .tabs.subtabs.fsat {
    border-bottom: #FFE400 solid 3px; 
   }
+
+  .tabs.subtabs.ssmt {
+    border-bottom: #F39C12 solid 3px;
+  }
   
     .tabs.subtabs.progress-tabs a {
       color: #000;
@@ -164,7 +172,9 @@ Tabs
     .tabs.subtabs.phast .active.missing-data .step-number,
     .tabs.subtabs.phast .missing-data .step-number,
     .tabs.subtabs.psat .active.missing-data .step-number,
-    .tabs.subtabs.psat .missing-data .step-number {
+    .tabs.subtabs.psat .missing-data .step-number,
+    .tabs.subtabs.ssmt .missing-data .step-number,
+    .tabs.subtabs.ssmt .active.missing-data .step-number {
       background: red;
     }
 
@@ -173,7 +183,9 @@ Tabs
     .tabs.subtabs.phast .active.input-error .step-number,
     .tabs.subtabs.phast .input-error .step-number,
     .tabs.subtabs.psat .active.input-error .step-number,
-    .tabs.subtabs.psat .input-error .step-number {
+    .tabs.subtabs.psat .input-error .step-number,
+    .tabs.subtabs.ssmt .active.input-error .step-number,
+    .tabs.subtabs.ssmt .input-error .step-number {
       background: orange;
     }
 
@@ -182,7 +194,9 @@ Tabs
     .tabs.subtabs.phast .active.success .step-number,
     .tabs.subtabs.phast .success .step-number,
     .tabs.subtabs.psat .active.success .step-number,
-    .tabs.subtabs.psat .success .step-number {
+    .tabs.subtabs.psat .success .step-number,
+    .tabs.subtabs.ssmt .active.success .step-number,
+    .tabs.subtabs.ssmt .success .step-number  {
       background: green;
     }
 
@@ -191,6 +205,10 @@ Tabs
       }
       .tabs.subtabs.psat .active .step-number {
         background: #2980b9;
+      }
+
+      .tabs.subtabs.ssmt .active .step-number {
+        background: #F39C12;
       }
 
       .tabs.subtabs.fsat .active .step-number{

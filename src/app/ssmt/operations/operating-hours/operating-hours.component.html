@@ -1,0 +1,73 @@
+<div class="d-flex flex-column ml-2 mr-2">
+  <label class="group-label">Operating Hours</label>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="{{idString+'weeksPerYear'}}">Weeks / Year</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractWeek()" [disabled]="operatingHours.weeksPerYear == 0">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" (click)="addWeek()" [disabled]="operatingHours.weeksPerYear == 52">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input name="weeksPerYear" type="number" step="1" min="0" max="52" class="form-control" id="{{idString+'weeksPerYear'}}"
+          (input)="calculatHrsPerYear()" [(ngModel)]="operatingHours.weeksPerYear" [disabled]="!selected" (focus)="focusField('hoursPerYear')"
+          (blur)="focusOut()">
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="weeksPerYearError !== null">{{weeksPerYearError}}</span>
+    </div>
+    <div class="form-group">
+      <label for="{{idString+'daysPerWeek'}}">Days / Week</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractWeekDay()" [disabled]="operatingHours.daysPerWeek == 0">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" (click)="addWeekDay()" [disabled]="operatingHours.daysPerWeek == 7">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input name="daysPerWeek" type="number" step="1" min="0" max="7" class="form-control" id="{{idString+'daysPerWeek'}}" (input)="calculatHrsPerYear()"
+          [(ngModel)]="operatingHours.daysPerWeek" [disabled]="!selected" (focus)="focusField('hoursPerYear')" (blur)="focusOut()">
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="daysPerWeekError !== null">{{daysPerWeekError}}</span>
+    </div>
+    <div class="form-group">
+      <label for="{{idString+'shiftsPerDay'}}">Shifts / Day</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractShift()" [disabled]="operatingHours.shiftsPerDay == 0">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" (click)="addShift()" [disabled]="operatingHours.shiftsPerDay == 3">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input name="shiftsPerDay" type="number" step="1" min="0" class="form-control" id="{{idString+'shiftsPerDay'}}" (input)="calculatHrsPerYear()"
+          [(ngModel)]="operatingHours.shiftsPerDay" [disabled]="!selected" (focus)="focusField('hoursPerYear')" (blur)="focusOut()">
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="shiftsPerDayError !== null">{{shiftsPerDayError}}</span>
+    </div>
+    <div class="form-group">
+      <label for="{{idString+'hoursPerShift'}}">Hours / Shift</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractShiftHr()" [disabled]="operatingHours.hoursPerShift == 0">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" (click)="addShiftHr()" [disabled]="operatingHours.hoursPerShift == 8">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input name="hoursPerShift" type="number" step="1" min="0" max="24" class="form-control" id="{{idString+'hoursPerShift'}}"
+          (input)="calculatHrsPerYear()" [(ngModel)]="operatingHours.hoursPerShift" [disabled]="!selected" (focus)="focusField('hoursPerYear')"
+          (blur)="focusOut()">
+      </div>
+    </div>
+    <span class="alert-warning pull-right small" *ngIf="hoursPerShiftError !== null">{{hoursPerShiftError}}</span>
+    <span class="alert-warning pull-right small" *ngIf="timeError !== null">{{timeError}}</span>
+  </div>
+  <div class="form-section pt-2 pb-2">
+    <div class="form-group">
+      <label for="{{idString+'hoursPerYear'}}">Hours / Year</label>
+      <input name="hoursPerYear" type="number" step="any" class="form-control" id="{{idString+'hoursPerYear'}}" (input)="setNotCalculated()"
+        [(ngModel)]="operatingHours.hoursPerYear" [disabled]="!selected" [ngClass]="{'indicate-different': isHoursPerYearDifferent()}"
+        (focus)="focusField('hoursPerYear')" (blur)="focusOut()" min="0">
+    </div>
+    <span class="alert-warning pull-right small" *ngIf="hoursPerYearError !== null">{{hoursPerYearError}}</span>
+  </div>
+</div>

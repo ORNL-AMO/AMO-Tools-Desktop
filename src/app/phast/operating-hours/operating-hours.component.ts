@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { PHAST, OperatingHours } from '../../shared/models/phast/phast';
+import { PHAST } from '../../shared/models/phast/phast';
+import { OperatingHours } from '../../shared/models/operations';
 
 @Component({
   selector: 'app-operating-hours',

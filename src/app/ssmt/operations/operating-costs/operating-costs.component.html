@@ -1,0 +1,30 @@
+<div class="d-flex flex-column ml-2 mr-2">
+  <label class="group-label">Energy Costs for Operation</label>
+  <div class="form-group">
+    <label for="{{idString+'fuelCost'}}">Fuel</label>
+    <div class="input-group">
+      <input name="fuelCost" min="0" type="number" step="any" class="form-control" id="{{idString+'fuelCost'}}" (input)="save()" [(ngModel)]="operatingCosts.fuelCost"
+        [disabled]="!selected" [ngClass]="{'indicate-different': isFuelCostDifferent()}" (focus)="focusField('fuelCost')" (blur)="focusOut()">
+      <span class="units input-group-addon">$/{{settings.steamEnergyMeasurement}}</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="electricityCost">Electricity</label>
+    <div class="input-group">
+      <input name="electricityCost" min="0" type="number" step="any" class="form-control" id="electricityCost" (input)="save()"
+        [(ngModel)]="operatingCosts.electricityCost" [disabled]="!selected" [ngClass]="{'indicate-different': isElectricityCostDifferent()}"
+        (focus)="focusField('electricityCost')" (blur)="focusOut()">
+      <span class="units input-group-addon">$/kWh</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="{{idString+'makeUpWaterCost'}}">Make-Up Water Cost
+    </label>
+    <div class="input-group">
+      <input name="makeUpWaterCost" min="0" type="number" step="any" class="form-control" id="{{idString+'makeUpWaterCost'}}" (input)="save()"
+        [(ngModel)]="operatingCosts.makeUpWaterCost" [disabled]="!selected" [ngClass]="{'indicate-different': isMakeUpWaterCostsDifferent()}"
+        (focus)="focusField('makeUpWaterCost')" (blur)="focusOut()">
+      <span class="units input-group-addon">$/{{settings.steamVolumeMeasurement}}</span>
+    </div>
+  </div>
+</div>

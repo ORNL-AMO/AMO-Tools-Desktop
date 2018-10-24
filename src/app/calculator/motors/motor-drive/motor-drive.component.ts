@@ -49,6 +49,16 @@ export class MotorDriveComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    let initMotorDriveData: MotorDriveInputs = {
+      motorPower: 5,
+      annualOperatingHours: 8760,
+      averageMotorLoad: 50,
+      electricityCost: this.settings.electricityCost
+    }
+    this.calculate(initMotorDriveData);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

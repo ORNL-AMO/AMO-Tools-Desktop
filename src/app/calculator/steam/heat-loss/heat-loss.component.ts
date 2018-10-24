@@ -4,7 +4,8 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
 import { HeatLossService } from './heat-loss.service';
-import { HeatLossInput, HeatLossOutput } from '../../../shared/models/steam';
+import { HeatLossInput } from '../../../shared/models/steam/steam-inputs';
+import { HeatLossOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-heat-loss',
@@ -45,6 +46,11 @@ export class HeatLossComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 50);
+  }
+
+  btnResetData() {
+    this.heatLossForm = this.heatLossService.initForm(this.settings);
+    this.calculate(this.heatLossForm);
   }
 
   setTab(str: string) {

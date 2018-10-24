@@ -3,7 +3,7 @@ import { SteamService } from '../steam.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { HeaderInput, HeaderInputObj } from '../../../shared/models/steam';
+import { HeaderInput, HeaderInputObj } from '../../../shared/models/steam/steam-inputs';
 
 @Injectable()
 export class HeaderService {
@@ -34,7 +34,6 @@ export class HeaderService {
     let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
     let tmpForm: FormGroup = this.formBuilder.group({
       headerPressure: [inputObj.headerPressure, [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
-      numInlets: [inputObj.numInlets, [Validators.required]]
     });
     return tmpForm;
   }
@@ -53,7 +52,6 @@ export class HeaderService {
   getObjFromForm(headerForm: FormGroup, inletForms: Array<FormGroup>): HeaderInput {
     let input: HeaderInput = {
       headerPressure: headerForm.controls.headerPressure.value,
-      numInlets: headerForm.controls.numInlets.value,
       inlets: new Array<HeaderInputObj>()
     }
     inletForms.forEach(form => {

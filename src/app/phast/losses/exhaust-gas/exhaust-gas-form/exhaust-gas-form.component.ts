@@ -25,10 +25,19 @@ export class ExhaustGasFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
+  idString: string;
   constructor(private exhaustGasCompareService: ExhaustGasCompareService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
   }
 
   focusField(str: string) {
