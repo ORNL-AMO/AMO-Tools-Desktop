@@ -55,8 +55,8 @@ export class FlashTankService {
       quantityValueMax: quantityMinMax.max,
       inletWaterMassFlowMin: 0,
       inletWaterMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
-      tankPressureMin: -14.5,
-      tankPressureMax: 3185
+      tankPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      tankPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3))
     }
     return ranges;
   }
