@@ -10,7 +10,7 @@
       <label for="{{turbineType+'baselineOperationType'}}">Baseline Operation Type</label>
       <select name="{{turbineType+'baselineOperationType'}}" class="form-control" id="{{turbineType+'baselineOperationType'}}"
         (change)="save()" (focus)="focusField('operationType')" [(ngModel)]="baselineTurbine.operationType" [disabled]="true">
-        <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
+        <option *ngFor="let type of turbineTypeOptions" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
     <div class="form-group" *ngIf="baselineTurbine.operationType != 2">
@@ -45,7 +45,7 @@
       <label for="{{turbineType+'modificationOperationType'}}">Modification Operation Type</label>
       <select name="{{turbineType+'modificationOperationType'}}" class="form-control" id="{{turbineType+'modificationOperationType'}}"
         (change)="save()" (focus)="focusField('operationType')" [(ngModel)]="modificationTurbine.operationType">
-        <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
+        <option *ngFor="let type of turbineTypeOptions" [ngValue]="type.value">{{type.display}}</option>
       </select>
     </div>
     <div class="form-group" *ngIf="modificationTurbine.operationType != 2">
