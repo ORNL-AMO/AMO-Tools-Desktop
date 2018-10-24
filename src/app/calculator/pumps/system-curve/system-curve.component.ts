@@ -159,23 +159,38 @@ export class SystemCurveComponent implements OnInit {
 
   setPointValuesFromCalc(init?: boolean) {
     if (this.pointOne && !init) {
-      this.calculator.systemCurve.selectedP1Name = this.pointOne.form.controls.pointAdjustment.value;
+      this.calculator.systemCurve.selectedP1Name = this.pointTwo.form.controls.pointAdjustment.value + "1";
+    }
+    else {
+      this.calculator.systemCurve.selectedP1Name = "Baseline1";
     }
     if (this.pointTwo && !init) {
       this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
     }
+    else {
+      this.calculator.systemCurve.selectedP2Name = "Baseline";
+    }
+
     let p1 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name });
+    if (p1 === undefined) {
+      p1 = {
+        flowRate: 0,
+        head: 0,
+        modName: this.calculator.systemCurve.selectedP1Name
+      }
+    }
     this.pointOne.form.patchValue({
       flowRate: p1.flowRate,
       head: p1.head,
       pointAdjustment: p1.modName
-    })
+    });
+
     let p2 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name });
     this.pointTwo.form.patchValue({
       flowRate: p2.flowRate,
       head: p2.head,
       pointAdjustment: p2.modName
-    })
+    });
     this.calculateP1Flow();
     this.calculateP2Flow();
     this.calculateValues();
@@ -364,30 +379,55 @@ export class SystemCurveComponent implements OnInit {
 
   initializeFsatCalculator() {
     let dataPoints = new Array<CurveData>();
-    let baselinePoint: CurveData = {
-      modName: this.fsat.name,
+    let baselinePoint1: CurveData = {
+      modName: "Baseline1",
+      flowRate: 0,
+      head: 0
+    };
+    let baselinePoint2: CurveData = {
+      modName: "Baseline",
       flowRate: this.fsat.fieldData.flowRate,
       head: this.fsat.fieldData.outletPressure - this.fsat.fieldData.inletPressure
-    }
-    dataPoints.push(baselinePoint)
+    };
+    dataPoints.push(baselinePoint1);
+    dataPoints.push(baselinePoint2);
     if (this.fsat.modifications) {
       this.fsat.modifications.forEach(mod => {
-        let modPoint: CurveData = {
+        let modPoint1: CurveData = {
+          modName: mod.fsat.name + "1",
+          flowRate: 0,
+          head: 0
+        }
+        let modPoint2: CurveData = {
           modName: mod.fsat.name,
           flowRate: mod.fsat.fieldData.flowRate,
           head: mod.fsat.fieldData.outletPressure - mod.fsat.fieldData.inletPressure
         }
-        dataPoints.push(modPoint);
-      })
+        dataPoints.push(modPoint1);
+        dataPoints.push(modPoint2);
+      });
     }
-    let systemCurve: SystemCurve = {
-      specificGravity: this.fsat.fieldData.compressibilityFactor,
-      systemLossExponent: 1.9,
-      dataPoints: dataPoints,
-      selectedP1Name: dataPoints[0].modName,
-      selectedP2Name: dataPoints[1].modName
+
+    if (dataPoints.length > 1) {
+      let systemCurve: SystemCurve = {
+        specificGravity: this.fsat.fieldData.compressibilityFactor,
+        systemLossExponent: 1.9,
+        dataPoints: dataPoints,
+        selectedP1Name: dataPoints[0].modName,
+        selectedP2Name: dataPoints[1].modName,
+      };
+      return systemCurve;
     }
-    return systemCurve;
+    else {
+      let systemCurve: SystemCurve = {
+        specificGravity: this.fsat.fieldData.compressibilityFactor,
+        systemLossExponent: 1.9,
+        dataPoints: dataPoints,
+        selectedP1Name: "Baseline1",
+        selectedP2Name: "Baseline"
+      }
+      return systemCurve
+    }
   }
 
   saveCalculator() {

@@ -45,15 +45,18 @@
 
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings" [inAssessment]="true" [assessment]="assessment"></app-fsat-203>
-    <app-system-curve *ngIf="calcTab == 'system-curve'" [fsat]="_fsat" [isFan]="true" [inAssessment]="_fsat.setupDone"
-      [settings]="settings" [assessment]="assessment"></app-system-curve>
-    <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment" [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
+    <!-- <app-system-curve *ngIf="calcTab == 'system-curve'" [fsat]="_fsat" [isFan]="true" [inAssessment]="_fsat.setupDone"
+      [settings]="settings" [assessment]="assessment"></app-system-curve> -->
+    <app-pump-curve *ngIf="calcTab == 'system-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings"
+      [assessment]="assessment" [fsat]="_fsat" [pumpCurvePrimary]="false"></app-pump-curve>
+    <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment" [fsat]="_fsat"
+      [settings]="settings"></app-fan-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings" [inAssessment]="true"
       [assessment]="assessment"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inAssessment]="true" [assessment]="assessment"
       [settings]="settings"></app-nema-energy-efficiency>
     <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings"
-      [assessment]="assessment" [fsat]="_fsat"></app-pump-curve>
+      [assessment]="assessment" [fsat]="_fsat" [pumpCurvePrimary]="true"></app-pump-curve>
   </div>
   <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100" [ngStyle]="{'height.px': containerHeight}">
     <div class="p-1 mx-auto">

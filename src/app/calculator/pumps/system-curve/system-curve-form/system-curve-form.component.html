@@ -19,9 +19,9 @@
 <form [formGroup]="pointOne.form" class="form-section">
   <div class="form-group">
     <label class="group-label point-label" for="pointAdjustment">Point 1</label>
-    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment" (focus)="focusField('pointAdjustment')">
+    <!-- <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment" (focus)="focusField('pointAdjustment')">
       <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
-    </select>
+    </select> -->
   </div>
   <div class="form-group">
     <label class="small" for="flowRate1">Flow Rate</label>
