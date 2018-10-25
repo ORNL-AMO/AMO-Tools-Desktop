@@ -20,7 +20,7 @@
         (change)="save()" (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null, 'invalid': fanMotorForm.controls.motorRatedPower.invalid}">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.fanPowerMeasurement}}</option>
       </select> -->
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null && !fanMotorForm.controls.fullLoadAmps.invalid}">
         <input type="number" name="motorRatedPower" class="form-control number-input-field" id="{{'motorRatedPower_'+idString}}"
           (focus)="focusField('motorRatedPower')" (input)="save()" formControlName="motorRatedPower">
         <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
@@ -29,12 +29,12 @@
         <span class="alert-danger pull-right small" *ngIf="fanMotorForm.controls.motorRatedPower.errors.required">Value
           Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !fanMotorForm.controls.motorRatedPower.pristine">{{warnings.ratedPowerError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !fanMotorForm.controls.motorRatedPower.pristine && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.ratedPowerError}}</span>
     </div>
 
     <div class="form-group">
       <label for="{{'motorRpm_'+idString}}">Motor RPM</label>
-      <div name="motorRpm" class="input-group" [ngClass]="{'indicate-different': isMotorRpmDifferent(),'error': warnings.rpmError !== null}">
+      <div name="motorRpm" class="input-group" [ngClass]="{'indicate-different': isMotorRpmDifferent(),'error': warnings.rpmError !== null && !fanMotorForm.controls.fullLoadAmps.invalid}">
         <input type="number" step="10" class="form-control number-input-field" id="{{'motorRpm_'+idString}}"
           formControlName="motorRpm" (input)="save()" (focus)="focusField('motorRPM')" onfocus="this.select();"
           [readonly]="!selected">
@@ -44,7 +44,7 @@
         <span class="alert-danger pull-right small" *ngIf="fanMotorForm.controls.motorRpm.errors.required">Value
           Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.rpmError !== null && !fanMotorForm.controls.motorRpm.pristine">{{warnings.rpmError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.rpmError !== null && !fanMotorForm.controls.motorRpm.pristine && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.rpmError}}</span>
     </div>
 
     <div class="form-group">
@@ -58,7 +58,7 @@
 
     <div class="form-group" *ngIf="fanMotorForm.controls.efficiencyClass.value == 3">
       <label for="{{'specifiedEfficiency_'+idString}}">Efficiency</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent(),'error': warnings.efficiencyError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent()}">
         <input name="specifiedEfficiency" type="number" min="0" step="any" class="form-control" id="{{'specifiedEfficiency_'+idString}}"
           formControlName="specifiedEfficiency" (input)="save()" (focus)="focusField('specifiedEfficiency')" onfocus="this.select();"
           [readonly]="!selected">
@@ -75,7 +75,7 @@
 
     <div class="form-group">
       <label for="{{'motorRatedVoltage_'+idString}}">Rated Voltage</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': warnings.voltageError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': warnings.voltageError !== null && !fanMotorForm.controls.fullLoadAmps.invalid}">
         <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="{{'motorRatedVoltage_'+idString}}"
           formControlName="motorRatedVoltage" (input)="save()" (focus)="focusField('motorVoltage')" onfocus="this.select();"
           [readonly]="!selected">
@@ -85,7 +85,7 @@
         <span class="alert-danger pull-right small" *ngIf="fanMotorForm.controls.motorRatedVoltage.errors.required">Value
           Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null && !fanMotorForm.controls.motorRatedVoltage.pristine">{{warnings.voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null && !fanMotorForm.controls.motorRatedVoltage.pristine && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.voltageError}}</span>
     </div>
 
     <div class="form-group">
@@ -93,7 +93,7 @@
         Full-Load Amps
         <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent(),'error': warnings.flaError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent(),'error': warnings.flaError !== null && !fanMotorForm.controls.fullLoadAmps.invalid}">
         <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="{{'fullLoadAmps_'+idString}}"
           formControlName="fullLoadAmps" (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();"
           [readonly]="!selected">
@@ -103,7 +103,7 @@
         <span class="alert-danger pull-right small" *ngIf="fanMotorForm.controls.fullLoadAmps.errors.required">Value
           Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.flaError !== null && !fanMotorForm.controls.fullLoadAmps.pristine">{{warnings.flaError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.flaError !== null && !fanMotorForm.controls.fullLoadAmps.pristine && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.flaError}}</span>
     </div>
   </div>
 </form>

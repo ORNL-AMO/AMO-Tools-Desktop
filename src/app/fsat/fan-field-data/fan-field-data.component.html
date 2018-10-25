@@ -23,7 +23,7 @@
     <!--min-->
     <div class="form-group">
       <label for="{{'cost_'+idString}}">Cost</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isCostDifferent(),'error': warnings.costError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isCostDifferent(),'error': warnings.costError !== null && fieldDataForm.controls.cost.invalid}">
         <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost" id="{{'cost_'+idString}}"
           (input)="save()" (focus)="focusField('cost')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">$/kWh</span>
@@ -33,7 +33,7 @@
         <span *ngIf="fieldDataForm.controls.cost.errors.min">Value can't be less than
           {{fieldDataForm.controls.cost.errors.min.min}} $/kWh.</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.costError !== null && !fieldDataForm.controls.cost.pristine">{{warnings.costError}}
+      <span class="alert-warning pull-right small" *ngIf="warnings.costError !== null && !fieldDataForm.controls.cost.pristine && !fieldDataForm.controls.cost.invalid">{{warnings.costError}}
         $/kWh.</span>
     </div>
 
@@ -59,7 +59,7 @@
         <a class="form-text small click-link" (click)="showOutletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate
           Outlet Pressure</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isOutletPressureDifferent(),'error': warnings.outletPressureError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isOutletPressureDifferent(),'error': warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.invalid}">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure"
           id="{{'outletPressure_'+idString}}" (input)="save()" (focus)="focusField('outletPressure')" onfocus="this.select();"
           [readonly]="!selected">
@@ -68,7 +68,7 @@
       <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.outletPressure.invalid && !fieldDataForm.controls.outletPressure.pristine">
         <span *ngIf="fieldDataForm.controls.outletPressure.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine">{{warnings.outletPressureError}}
+      <span class="alert-warning pull-right small" *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine && !fieldDataForm.controls.outletPressure.invalid">{{warnings.outletPressureError}}
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></span>
     </div>
     <div class="form-group">
@@ -76,7 +76,7 @@
         <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled-link':!selected}">Calculate
           Flow Rate and Pressures</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent(),'error': warnings.flowRateError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent(),'error': warnings.flowRateError !== null && !fieldDataForm.controls.flowRate.invalid}">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="{{'flowRate_'+idString}}"
           (input)="save()" (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
@@ -85,7 +85,7 @@
       <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.flowRate.invalid && !fieldDataForm.controls.flowRate.pristine">
         <span *ngIf="fieldDataForm.controls.flowRate.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.flowRateError !== null && !fieldDataForm.controls.flowRate.pristine">{{warnings.flowRateError}}
+      <span class="alert-warning pull-right small" *ngIf="warnings.flowRateError !== null && !fieldDataForm.controls.flowRate.pristine && !fieldDataForm.controls.flowRate.invalid">{{warnings.flowRateError}}
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
     </div>
 
@@ -101,7 +101,7 @@
       <label for="{{'motorPower_'+idString}}" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">Motor Power</label>
       <label for="{{'motorPower_'+idString}}" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">Motor
         Current</label>
-      <div class="input-group" [ngClass]="{'error': warnings.ratedPowerError !== null}">
+      <div class="input-group" [ngClass]="{'error': warnings.ratedPowerError !== null && !fieldDataForm.controls.motorPower.invalid}">
         <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="{{'motorPower_'+idString}}"
           (input)="save()" (focus)="focusField('motorPower')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">kW</span>
@@ -110,11 +110,11 @@
       <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.motorPower.invalid && !fieldDataForm.controls.motorPower.pristine">
         <span *ngIf="fieldDataForm.controls.motorPower.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !fieldDataForm.controls.motorPower.pristine">{{warnings.ratedPowerError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !fieldDataForm.controls.motorPower.pristine && !fieldDataForm.controls.motorPower.invalid">{{warnings.ratedPowerError}}</span>
     </div>
     <div class="form-group" *ngIf="baseline">
       <label for="{{'measuredVoltage_'+idString}}">Measured Voltage</label>
-      <div class="input-group" [ngClass]="{'error': warnings.voltageError !== null}">
+      <div class="input-group" [ngClass]="{'error': warnings.voltageError !== null && !fieldDataForm.controls.measuredVoltage.invalid}">
         <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage"
           id="{{'measuredVoltage_'+idString}}" (input)="save()" (focus)="focusField('measuredVoltage')" onfocus="this.select();"
           [readonly]="!selected">
@@ -123,7 +123,7 @@
       <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.measuredVoltage.invalid && !fieldDataForm.controls.measuredVoltage.pristine">
         <span *ngIf="fieldDataForm.controls.measuredVoltage.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null && !fieldDataForm.controls.measuredVoltage.pristine">{{warnings.voltageError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null && !fieldDataForm.controls.measuredVoltage.pristine && !fieldDataForm.controls.measuredVoltage.invalid">{{warnings.voltageError}}</span>
     </div>
 
     <!--min-->

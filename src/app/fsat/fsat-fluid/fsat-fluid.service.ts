@@ -19,11 +19,14 @@ export class FsatFluidService {
       barometricPressure: [obj.barometricPressure, Validators.required],
       specificGravity: [obj.specificGravity],
       wetBulbTemp: [obj.wetBulbTemp],
-      relativeHumidity: [obj.relativeHumidity],
+      relativeHumidity: [obj.relativeHumidity, [Validators.min(0), Validators.max(100)]],
       dewPoint: [obj.dewPoint],
-      gasDensity: [obj.gasDensity, Validators.required],
-      specificHeatGas: [obj.specificHeatGas]
+      gasDensity: [obj.gasDensity, [Validators.min(0.01), Validators.required]],
+      specificHeatGas: [obj.specificHeatGas, [Validators.min(0.01)]]
     })
+    for (let key in form.controls) {
+      form.controls[key].markAsDirty();
+    }
     return form;
   }
 

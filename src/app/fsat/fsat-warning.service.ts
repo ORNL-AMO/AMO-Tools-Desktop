@@ -261,60 +261,64 @@ export class FsatWarningService {
     }
   }
 
-  checkSpecifiedDriveEfficiency(fanSetup: FanSetup) {
-    if (fanSetup.specifiedDriveEfficiency > 100) {
-      return "Unrealistic efficiency, shouldn't be greater then 100%";
-    }
-    else if (fanSetup.specifiedDriveEfficiency == 0) {
-      return "Cannot have 0% efficiency";
-    }
-    else if (fanSetup.specifiedDriveEfficiency < 0) {
-      return "Cannot have negative efficiency";
-    }
-    else {
-      return null;
-    }
-  }
+  // checkSpecifiedDriveEfficiency(fanSetup: FanSetup) {
+  //   if (fanSetup.specifiedDriveEfficiency > 100) {
+  //     return "Unrealistic efficiency, shouldn't be greater then 100%";
+  //   }
+  //   else if (fanSetup.specifiedDriveEfficiency == 0) {
+  //     return "Cannot have 0% efficiency";
+  //   }
+  //   else if (fanSetup.specifiedDriveEfficiency < 0) {
+  //     return "Cannot have negative efficiency";
+  //   }
+  //   else {
+  //     return null;
+  //   }
+  // }
 
   //FAN FLUID
   checkFanFluidWarnings(baseGasDensity: BaseGasDensity, settings: Settings): FanFluidWarnings {
     let barometricPressureError: string = this.checkBarometricPressure(baseGasDensity, settings);
-    let relativeHumidityError: string = null;
-    let gasDensityError: string = this.checkGasDensity(baseGasDensity);
-    let specificHeatGasError: string = null;
-    if (baseGasDensity.inputType == 'relativeHumidity') {
-      relativeHumidityError = this.checkRelativeHumidity(baseGasDensity);
-    }
-    if (baseGasDensity.inputType == 'wetBulb') {
-      specificHeatGasError = this.checkSpecificHeat(baseGasDensity);
-    }
+    // let relativeHumidityError: string = null;
+    // let gasDensityError: string = this.checkGasDensity(baseGasDensity);
+    // let specificHeatGasError: string = null;
+    // if (baseGasDensity.inputType == 'relativeHumidity') {
+    //   relativeHumidityError = this.checkRelativeHumidity(baseGasDensity);
+    // }
+    // if (baseGasDensity.inputType == 'wetBulb') {
+    //   specificHeatGasError = this.checkSpecificHeat(baseGasDensity);
+    // }
     return {
       barometricPressureError: barometricPressureError,
-      relativeHumidityError: relativeHumidityError,
-      gasDensityError: gasDensityError,
-      specificHeatGasError: specificHeatGasError
+      // relativeHumidityError: relativeHumidityError,
+      // gasDensityError: gasDensityError,
+      // specificHeatGasError: specificHeatGasError
     }
   }
 
   //TODO: NOT Imperial || Other
   checkBarometricPressure(baseGasDensity: BaseGasDensity, settings: Settings) {
-    if (settings.unitsOfMeasure == 'Imperial') {
-      if (baseGasDensity.barometricPressure < 20) {
-        return 'Value should be greater than 20';
-      } else if (baseGasDensity.barometricPressure > 40) {
-        return 'Value should be less than 40';
-      } else {
-        return null;
-      }
+    if (baseGasDensity.barometricPressure) {
+      if (settings.unitsOfMeasure == 'Imperial') {
+        if (baseGasDensity.barometricPressure < 20) {
+          return 'Value should be greater than 20';
+        } else if (baseGasDensity.barometricPressure > 40) {
+          return 'Value should be less than 40';
+        } else {
+          return null;
+        }
 
-    } else {
-      if (baseGasDensity.barometricPressure < 65) {
-        return 'Value should be greater than 65';
-      } else if (baseGasDensity.barometricPressure > 140) {
-        return 'Value should be less than 140';
       } else {
-        return null;
+        if (baseGasDensity.barometricPressure < 65) {
+          return 'Value should be greater than 65';
+        } else if (baseGasDensity.barometricPressure > 140) {
+          return 'Value should be less than 140';
+        } else {
+          return null;
+        }
       }
+    } else {
+      return null;
     }
   }
 
@@ -327,21 +331,21 @@ export class FsatWarningService {
       return null;
     }
   }
-  checkGasDensity(baseGasDensity: BaseGasDensity) {
-    if (baseGasDensity.gasDensity <= 0) {
-      return 'Value should be greater than 0';
-    } else {
-      return null;
-    }
-  }
+  // checkGasDensity(baseGasDensity: BaseGasDensity) {
+  //   if (baseGasDensity.gasDensity <= 0) {
+  //     return 'Value should be greater than 0';
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
-  checkSpecificHeat(baseGasDensity: BaseGasDensity) {
-    if (baseGasDensity.specificHeatGas <= 0) {
-      return 'Value should be greater than 0';
-    } else {
-      return null;
-    }
-  }
+  // checkSpecificHeat(baseGasDensity: BaseGasDensity) {
+  //   if (baseGasDensity.specificHeatGas <= 0) {
+  //     return 'Value should be greater than 0';
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   checkWarningsExist(warnings: FanFieldDataWarnings | FanMotorWarnings | FanFluidWarnings | { fanSpeedError: string }): boolean {
     let hasWarning: boolean = false;
@@ -377,7 +381,7 @@ export interface FanMotorWarnings {
 
 export interface FanFluidWarnings {
   barometricPressureError: string;
-  relativeHumidityError: string;
-  gasDensityError: string;
-  specificHeatGasError: string;
+  // relativeHumidityError: string;
+  // gasDensityError: string;
+  // specificHeatGasError: string;
 }
