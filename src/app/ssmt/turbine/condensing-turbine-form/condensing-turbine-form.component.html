@@ -46,14 +46,14 @@
         <input name="condenserPressure" type="number" step="any" class="form-control" id="{{idString+'condenserPressure'}}" (input)="save()"
           [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')" (blur)="focusOut()"
           [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
-        <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+        <span class="units input-group-addon">{{settings.steamVacuumPressure}}</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.condenserPressure.invalid && !turbineForm.controls.condenserPressure.pristine">
         <span *ngIf="turbineForm.controls.condenserPressure.errors.required">Value Required</span>
         <span *ngIf="turbineForm.controls.condenserPressure.errors.max">Value can't be greater than
-          {{turbineForm.controls.condenserPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+          {{turbineForm.controls.condenserPressure.errors.max.max}} {{settings.steamVacuumPressure}}.</span>
         <span *ngIf="turbineForm.controls.condenserPressure.errors.min">Value can't be less than
-          {{turbineForm.controls.condenserPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+          {{turbineForm.controls.condenserPressure.errors.min.min}} {{settings.steamVacuumPressure}}.</span>
       </span>
     </div>
 

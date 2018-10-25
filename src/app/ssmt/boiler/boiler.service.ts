@@ -71,10 +71,9 @@ export class BoilerService {
     let tmpSteamTemperatureMax: number = this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement);
     tmpSteamTemperatureMax = this.convertUnitsService.roundVal(tmpSteamTemperatureMax, 0);
 
-    //TODO: Verify using psi gauge
-    let tmpDeaeratorPressureMin: number = this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement);
+    let tmpDeaeratorPressureMin: number = this.convertUnitsService.value(-14.5).from('psia').to(settings.steamPressureMeasurement);
     tmpDeaeratorPressureMin = this.convertUnitsService.roundVal(tmpDeaeratorPressureMin, 0);
-    let tmpDeaeratorPressureMax: number = this.convertUnitsService.value(3185).from('psi').to(settings.steamPressureMeasurement);
+    let tmpDeaeratorPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     tmpDeaeratorPressureMax = this.convertUnitsService.roundVal(tmpDeaeratorPressureMax, 0);
 
     return {

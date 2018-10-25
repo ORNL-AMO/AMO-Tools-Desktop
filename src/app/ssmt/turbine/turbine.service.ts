@@ -41,10 +41,9 @@ export class TurbineService {
   }
 
   initCondensingTurbine(settings: Settings): FormGroup {
-    //TODO: from = 'psia'
-    let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psi').to(settings.steamPressureMeasurement);
+    let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMin = this.convertUnitsService.roundVal(tmpCondensingPressureMin, 1);
-    let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psi').to(settings.steamPressureMeasurement);
+    let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMax = this.convertUnitsService.roundVal(tmpCondensingPressureMax, 1);
     let tmpOperationValueRanges: { min: number, max: number } = this.getCondensingOperationRange(0);
     return this.formBuilder.group({
@@ -58,10 +57,9 @@ export class TurbineService {
   }
 
   getCondensingFormFromObj(obj: CondensingTurbine, settings: Settings): FormGroup {
-    //TODO: from = 'psia'
-    let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psi').to(settings.steamPressureMeasurement);
+    let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psia').to(settings.steamPressureMeasurement);
     tmpCondensingPressureMin = this.convertUnitsService.roundVal(tmpCondensingPressureMin, 1);
-    let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psi').to(settings.steamPressureMeasurement);
+    let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psia').to(settings.steamPressureMeasurement);
     tmpCondensingPressureMax = this.convertUnitsService.roundVal(tmpCondensingPressureMax, 1);
     let tmpOperationValueRanges: { min: number, max: number } = this.getCondensingOperationRange(obj.operationType);
     let form: FormGroup = this.formBuilder.group({

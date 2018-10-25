@@ -159,10 +159,15 @@ export class SteamSettingsComponent implements OnInit {
     })
 
     //steam vacuum
-    //should be bara and psia
     tmpList = [
-      'psi',
-      'bar',
+      'kPaa',
+      'kPag',
+      'psia',
+      'psig',
+      'barg',
+      'bara',
+      'MPa',
+      'MPaa'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {

@@ -66,7 +66,7 @@ export class SettingsService {
       'steamPowerMeasurement': [settings.steamPowerMeasurement || 'MMBtu'],
       'steamVolumeMeasurement': [settings.steamVolumeMeasurement || 'gal'],
       'steamVolumeFlowMeasurement': [settings.steamVolumeFlowMeasurement || 'gpm'],
-      'steamVacuumPressure': [settings.steamVacuumPressure || 'psi'],
+      'steamVacuumPressure': [settings.steamVacuumPressure || 'psia'],
       'currentMeasurement': [settings.currentMeasurement],
       'viscosityMeasurement': [settings.viscosityMeasurement],
       'voltageMeasurement': [settings.voltageMeasurement],
@@ -164,7 +164,7 @@ export class SettingsService {
       steamPowerMeasurement: settings.steamPowerMeasurement || 'MMBtu',
       steamVolumeMeasurement: settings.steamVolumeMeasurement || 'gal',
       steamVolumeFlowMeasurement: settings.steamVolumeFlowMeasurement || 'gpm',
-      steamVacuumPressure: settings.steamVacuumPressure || 'psi',
+      steamVacuumPressure: settings.steamVacuumPressure || 'psia',
       currentMeasurement: settings.currentMeasurement,
       viscosityMeasurement: settings.viscosityMeasurement,
       voltageMeasurement: settings.voltageMeasurement,
@@ -210,7 +210,7 @@ export class SettingsService {
         steamMassFlowMeasurement: 'klb',
         steamVolumeMeasurement: 'gal',
         steamVolumeFlowMeasurement: 'gpm',
-        steamVacuumPressure: 'psi',
+        steamVacuumPressure: 'psia',
         energyResultUnit: 'MMBtu',
         phastRollupUnit: 'MMBtu',
         phastRollupFuelUnit: 'MMBtu',
@@ -244,7 +244,7 @@ export class SettingsService {
         steamMassFlowMeasurement: 'tonne',
         steamVolumeMeasurement: 'L',
         steamVolumeFlowMeasurement: 'L/min',
-        steamVacuumPressure: 'bar',
+        steamVacuumPressure: 'bara',
         energyResultUnit: 'GJ',
         phastRollupUnit: 'GJ',
         phastRollupFuelUnit: 'GJ',
@@ -358,7 +358,7 @@ export class SettingsService {
         settings.steamVolumeFlowMeasurement = 'gpm'
       }
       if (!settings.steamVacuumPressure) {
-        settings.steamVacuumPressure = 'psi'
+        settings.steamVacuumPressure = 'psia'
       }
     } else {
       if (!settings.steamTemperatureMeasurement) {
@@ -390,7 +390,7 @@ export class SettingsService {
         settings.steamVolumeFlowMeasurement = 'L/min'
       }
       if (!settings.steamVacuumPressure) {
-        settings.steamVacuumPressure = 'bar'
+        settings.steamVacuumPressure = 'bara'
       }
     }
     return settings;
