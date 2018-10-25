@@ -383,8 +383,6 @@ export class PumpCurveComponent implements OnInit {
 
   setPointValuesFromCalc(init?: boolean) {
     if (this.pointOne && !init) {
-      console.log('this.calculator = ');
-      console.log(this.calculator);
       this.calculator.systemCurve.selectedP1Name = this.pointTwo.form.controls.pointAdjustment.value + "1";
     }
     else {

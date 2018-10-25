@@ -45,8 +45,6 @@
 
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings" [inAssessment]="true" [assessment]="assessment"></app-fsat-203>
-    <!-- <app-system-curve *ngIf="calcTab == 'system-curve'" [fsat]="_fsat" [isFan]="true" [inAssessment]="_fsat.setupDone"
-      [settings]="settings" [assessment]="assessment"></app-system-curve> -->
     <app-pump-curve *ngIf="calcTab == 'system-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings"
       [assessment]="assessment" [fsat]="_fsat" [pumpCurvePrimary]="false"></app-pump-curve>
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment" [fsat]="_fsat"

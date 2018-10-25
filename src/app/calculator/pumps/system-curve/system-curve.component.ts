@@ -351,21 +351,33 @@ export class SystemCurveComponent implements OnInit {
 
   initializePsatCalculator() {
     let dataPoints = new Array<CurveData>();
-    let baselinePoint: CurveData = {
-      modName: this.psat.name,
+    let baselinePoint1: CurveData = {
+      modName: "Baseline1",
+      flowRate: 0,
+      head: 0
+    };
+    let baselinePoint2: CurveData = {
+      modName: "Baseline",
       flowRate: this.psat.inputs.flow_rate,
       head: this.psat.inputs.head
-    }
-    dataPoints.push(baselinePoint)
+    };
+    dataPoints.push(baselinePoint1);
+    dataPoints.push(baselinePoint2);
     if (this.psat.modifications) {
       this.psat.modifications.forEach(mod => {
-        let modPoint: CurveData = {
+        let modPoint1: CurveData = {
+          modName: mod.psat.name + "1",
+          flowRate: 0,
+          head: 0
+        };
+        let modPoint2: CurveData = {
           modName: mod.psat.name,
           flowRate: mod.psat.inputs.flow_rate,
           head: mod.psat.inputs.head
-        }
-        dataPoints.push(modPoint);
-      })
+        };
+        dataPoints.push(modPoint1);
+        dataPoints.push(modPoint2);
+      });
     }
     let systemCurve: SystemCurve = {
       specificGravity: this.psat.inputs.specific_gravity,
@@ -397,12 +409,12 @@ export class SystemCurveComponent implements OnInit {
           modName: mod.fsat.name + "1",
           flowRate: 0,
           head: 0
-        }
+        };
         let modPoint2: CurveData = {
           modName: mod.fsat.name,
           flowRate: mod.fsat.fieldData.flowRate,
           head: mod.fsat.fieldData.outletPressure - mod.fsat.fieldData.inletPressure
-        }
+        };
         dataPoints.push(modPoint1);
         dataPoints.push(modPoint2);
       });
@@ -425,7 +437,7 @@ export class SystemCurveComponent implements OnInit {
         dataPoints: dataPoints,
         selectedP1Name: "Baseline1",
         selectedP2Name: "Baseline"
-      }
+      };
       return systemCurve
     }
   }
