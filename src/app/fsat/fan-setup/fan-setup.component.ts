@@ -71,7 +71,7 @@ export class FanSetupComponent implements OnInit {
       this.fanSetup.specifiedDriveEfficiency = 100;
     }
     else {
-      this.fanSetup.specifiedDriveEfficiency = this.fanSetup.specifiedDriveEfficiency | 100;
+      this.fanSetup.specifiedDriveEfficiency = this.fanSetup.specifiedDriveEfficiency || 100;
     }
     this.fanForm = this.fanSetupService.getFormFromObj(this.fanSetup);
     this.checkForWarnings();
