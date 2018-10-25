@@ -1159,7 +1159,7 @@ export const MockPhastSettings: Settings = {
     customFurnaceName: null,
     temperatureMeasurement: "F",
     steamTemperatureMeasurement: "F",
-    steamPressureMeasurement: "psi",
+    steamPressureMeasurement: "psig",
     steamSpecificEnthalpyMeasurement: "btuLb",
     steamSpecificEntropyMeasurement: "btulbF",
     steamSpecificVolumeMeasurement: "ft3lb",

@@ -203,7 +203,7 @@ export class SettingsService {
         pressureMeasurement: 'psi',
         temperatureMeasurement: 'F',
         steamTemperatureMeasurement: 'F',
-        steamPressureMeasurement: 'psi',
+        steamPressureMeasurement: 'psig',
         steamSpecificEnthalpyMeasurement: 'btuLb',
         steamSpecificEntropyMeasurement: 'btulbF',
         steamSpecificVolumeMeasurement: 'ft3lb',
@@ -236,7 +236,7 @@ export class SettingsService {
         distanceMeasurement: 'm',
         pressureMeasurement: 'kPa',
         temperatureMeasurement: 'C',
-        steamPressureMeasurement: 'kPa',
+        steamPressureMeasurement: 'kPag',
         steamTemperatureMeasurement: 'C',
         steamSpecificEnthalpyMeasurement: 'kJkg',
         steamSpecificEntropyMeasurement: 'kJkgK',
@@ -253,7 +253,7 @@ export class SettingsService {
         densityMeasurement: 'kgNm3',
         fanFlowRate: 'm3/s',
         fanPressureMeasurement: 'Pa',
-        fanBarometricPressure: 'kPa',
+        fanBarometricPressure: 'kPaa',
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
         steamEnergyMeasurement: 'kWh',
@@ -334,7 +334,7 @@ export class SettingsService {
         settings.steamTemperatureMeasurement = 'F';
       }
       if (!settings.steamPressureMeasurement) {
-        settings.steamPressureMeasurement = 'psi';
+        settings.steamPressureMeasurement = 'psig';
       }
       if (!settings.steamSpecificEnthalpyMeasurement) {
         settings.steamSpecificEnthalpyMeasurement = 'Btu/lb';
@@ -365,7 +365,7 @@ export class SettingsService {
         settings.steamTemperatureMeasurement = 'C';
       }
       if (!settings.steamPressureMeasurement) {
-        settings.steamPressureMeasurement = 'kPa';
+        settings.steamPressureMeasurement = 'kPag';
       }
       if (!settings.steamSpecificEnthalpyMeasurement) {
         settings.steamSpecificEnthalpyMeasurement = 'kJ/kg';
@@ -409,7 +409,7 @@ export class SettingsService {
         settings.fanPressureMeasurement = 'Pa';
       }
       if (!settings.fanBarometricPressure) {
-        settings.fanBarometricPressure = 'kPa';
+        settings.fanBarometricPressure = 'kPaa';
       }
       if (!settings.fanSpecificHeatGas) {
         settings.fanSpecificHeatGas = 'kJkgC';

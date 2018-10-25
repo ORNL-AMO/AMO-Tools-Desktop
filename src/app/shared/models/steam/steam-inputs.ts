@@ -153,6 +153,7 @@ export interface FlashTankInput {
 export interface HeaderInput {
   headerPressure: number;
   inlets: Array<HeaderInputObj>;
+  numberOfInlets?: number;
 }
 
 export interface HeaderInputObj {

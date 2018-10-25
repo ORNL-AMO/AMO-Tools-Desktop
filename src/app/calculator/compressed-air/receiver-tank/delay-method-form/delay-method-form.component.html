@@ -4,7 +4,7 @@
     <div class="input-group">
       <input name="distanceToCompressorRoom" class="form-control" type="number" step="any" [(ngModel)]="inputs.distanceToCompressorRoom"
         id="distanceToCompressorRoom" (input)="getTotalReceiverVolume()" onfocus="this.select();" (focus)="changeField('distanceToCompressorRoom')">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
     </div>
   </div>
@@ -13,7 +13,7 @@
     <div class="input-group">
       <input name="speedOfAir" class="form-control" type="number" step="any" [(ngModel)]="inputs.speedOfAir" id="speedOfAir" (input)="getTotalReceiverVolume()"
         onfocus="this.select();" (focus)="changeField('speedOfAir')">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft/s</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft/s</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m/s</span>
     </div>
   </div>
@@ -22,7 +22,7 @@
     <div class="input-group">
       <input name="airDemand" class="form-control" type="number" step="any" [(ngModel)]="inputs.airDemand" id="airDemand" (input)="getTotalReceiverVolume()"
         onfocus="this.select();" (focus)="changeField('airDemand')">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scfm</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">scfm</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/min</span>
     </div>
   </div>
@@ -31,7 +31,7 @@
     <div class="input-group">
       <input name="allowablePressureDrop" class="form-control" type="number" step="any" [(ngModel)]="inputs.allowablePressureDrop"
         id="allowablePressureDrop" (input)="getTotalReceiverVolume()" onfocus="this.select();" (focus)="changeField('allowablePressureDrop')">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psia</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
     </div>
   </div>
@@ -40,8 +40,8 @@
     <div class="input-group">
       <input name="atmosphericPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.atmosphericPressure"
         id="atmosphericPressure" (input)="getTotalReceiverVolume()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
-      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psia</span>
-      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
+      <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
     </div>
   </div>
 </div>
@@ -51,7 +51,7 @@
     <div class="text-center small">
       <span *ngIf="totalReceiverVolume">
         <strong>{{totalReceiverVolume | number:'1.0-2'}} </strong>
-        <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</strong>
+        <strong *ngIf="settings.unitsOfMeasure != 'Metric'">gal</strong>
         <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
       </span>
       <span *ngIf="!totalReceiverVolume">

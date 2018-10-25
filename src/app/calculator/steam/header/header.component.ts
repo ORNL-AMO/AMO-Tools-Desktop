@@ -47,6 +47,10 @@ export class HeaderComponent implements OnInit {
     }, 50);
   }
 
+  ngOnDestroy(){
+    this.headerService.headerInput = this.input;
+  }
+
   btnResetData() {
     this.inletForms = new Array<FormGroup>();
     this.headerPressureForm = this.headerService.initHeaderForm(this.settings);

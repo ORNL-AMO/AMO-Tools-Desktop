@@ -42,9 +42,14 @@ export class SteamSettingsComponent implements OnInit {
     this.steamVacuumPreasureMeasurements = new Array();
     //pressureMeasurements
     let tmpList = [
-      'kPa',
-      'psi',
-      'bar'
+      'kPaa',
+      'kPag',
+      'psia',
+      'psig',
+      'barg',
+      'bara',
+      'MPa',
+      'MPaa'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
