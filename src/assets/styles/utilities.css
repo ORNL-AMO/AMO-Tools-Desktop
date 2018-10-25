@@ -131,6 +131,11 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     border-right: 5px solid orange; /* red */
 }
 
+.fsat .indicate-different.ng-invalid:not(form), .fsat .ng-invalid:not(form)  {
+    border-left: 5px solid red; /* red */
+    border-right: 5px solid red; /* red */
+  }
+
 
 .card-item{
     box-shadow: 3px 0px 5px 2px gray;

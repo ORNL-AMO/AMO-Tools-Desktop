@@ -14,11 +14,9 @@ export class FsatWarningService {
       flowRateError: this.checkFlowRate(fsat),
       costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
-      opFractionError: this.checkOperatingFraction(fsat),
       ratedPowerError: this.checkRatedPower(fsat, settings),
       outletPressureError: this.checkOutletPressure(fsat),
-      specificHeatRatioError: this.checkSpecificHeatRatio(fsat),
-      compressibilityFactorError: this.checkCompressibilityFactor(fsat)
+      //specificHeatRatioError: this.checkSpecificHeatRatio(fsat)
     }
   }
 
@@ -39,36 +37,34 @@ export class FsatWarningService {
     }
   }
   //REQUIRED
-  checkSpecificHeatRatio(fsat: FSAT) {
-    if (fsat.fieldData.specificHeatRatio < 0) {
-      return 'Specific heat ratio must be greater than or equal to 0';
-    } else {
-      return null;
-    }
-  }
+  // checkSpecificHeatRatio(fsat: FSAT) {
+  //   if (fsat.fieldData.specificHeatRatio < 0) {
+  //     return 'Specific heat ratio must be greater than or equal to 0';
+  //   } else {
+  //     return null;
+  //   }
+  // }
   //REQUIRED
-  checkCompressibilityFactor(fsat: FSAT) {
-    if (fsat.fieldData.compressibilityFactor < 0) {
-      return 'Compressibility factor must be greater than or equal to 0';
-    } else {
-      return null;
-    }
-  }
+  // checkCompressibilityFactor(fsat: FSAT) {
+  //   if (fsat.fieldData.compressibilityFactor < 0) {
+  //     return 'Compressibility factor must be greater than or equal to 0';
+  //   } else {
+  //     return null;
+  //   }
+  // }
   //REQUIRED
-  checkOperatingFraction(fsat: FSAT) {
-    if (fsat.fieldData.operatingFraction > 1) {
-      return 'Operating fraction needs to be between 0 - 1';
-    } else if (fsat.fieldData.operatingFraction < 0) {
-      return "Cannot have negative operating fraction";
-    } else {
-      return null;
-    }
-  }
-  //REQUIRED
+  // checkOperatingFraction(fsat: FSAT) {
+  //   if (fsat.fieldData.operatingFraction > 1) {
+  //     return 'Operating fraction needs to be between 0 - 1';
+  //   } else if (fsat.fieldData.operatingFraction < 0) {
+  //     return "Cannot have negative operating fraction";
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
   checkCost(fsat: FSAT) {
-    if (fsat.fieldData.cost < 0) {
-      return 'Cannot have negative cost';
-    } else if (fsat.fieldData.cost > 1) {
+    if (fsat.fieldData.cost > 1) {
       return "Shouldn't be greater then 1";
     } else {
       return null;
@@ -363,12 +359,12 @@ export interface FanFieldDataWarnings {
   flowRateError: string,
   voltageError: string,
   costError: string,
-  opFractionError: string,
+  //opFractionError: string,
   ratedPowerError: string,
   // marginError: string,
   outletPressureError: string,
-  specificHeatRatioError: string,
-  compressibilityFactorError: string
+  //specificHeatRatioError: string,
+  //compressibilityFactorError: string
 }
 
 export interface FanMotorWarnings {
