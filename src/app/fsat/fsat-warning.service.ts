@@ -217,9 +217,9 @@ export class FsatWarningService {
       let flaMax = estEfficiency * 1.05;
       let flaMin = estEfficiency * .95;
       if (fsat.fanMotor.fullLoadAmps < flaMin) {
-        return 'Value should be greater than ' + Math.round(flaMin);
+        return 'Value should be greater than ' + Math.round(flaMin) + ' A';
       } else if (fsat.fanMotor.fullLoadAmps > flaMax) {
-        return 'Value should be less than ' + Math.round(flaMax);
+        return 'Value should be less than ' + Math.round(flaMax) + ' A';
       } else {
         return null;
       }
@@ -229,27 +229,27 @@ export class FsatWarningService {
   }
 
   //FAN
-  checkFanWarnings(fanSetup: FanSetup): { fanEfficiencyError: string, fanSpeedError: string, specifiedDriveEfficiencyError: string } {
-    let fanEfficiencyError: string = null;
-    if (fanSetup.fanType == 12) {
-      fanEfficiencyError = this.checkFanEfficiency(fanSetup);
-    }
+  checkFanWarnings(fanSetup: FanSetup): { fanSpeedError: string } {
+    // let fanEfficiencyError: string = null;
+    // if (fanSetup.fanType == 12) {
+    //   fanEfficiencyError = this.checkFanEfficiency(fanSetup);
+    // }
     return {
-      fanEfficiencyError: fanEfficiencyError,
+      //fanEfficiencyError: fanEfficiencyError,
       fanSpeedError: this.checkFanSpeed(fanSetup),
-      specifiedDriveEfficiencyError: this.checkSpecifiedDriveEfficiency(fanSetup)
+      // specifiedDriveEfficiencyError: this.checkSpecifiedDriveEfficiency(fanSetup)
     }
   }
 
-  checkFanEfficiency(fanSetup: FanSetup) {
-    if (fanSetup.fanSpecified < 0) {
-      return 'Value must be greater than or equal to 0';
-    } else if (fanSetup.fanSpecified > 100) {
-      return 'Value must be less than or equal to 100';
-    } else {
-      return null;
-    }
-  }
+  // checkFanEfficiency(fanSetup: FanSetup) {
+  //   if (fanSetup.fanSpecified < 0) {
+  //     return 'Value must be greater than or equal to 0';
+  //   } else if (fanSetup.fanSpecified > 100) {
+  //     return 'Value must be less than or equal to 100';
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   checkFanSpeed(fanSetup: FanSetup) {
     if (fanSetup.fanSpeed < 0) {
@@ -343,7 +343,7 @@ export class FsatWarningService {
     }
   }
 
-  checkWarningsExist(warnings: FanFieldDataWarnings | FanMotorWarnings | FanFluidWarnings | { fanEfficiencyError: string, fanSpeedError: string }): boolean {
+  checkWarningsExist(warnings: FanFieldDataWarnings | FanMotorWarnings | FanFluidWarnings | { fanSpeedError: string }): boolean {
     let hasWarning: boolean = false;
     for (var key in warnings) {
       if (warnings[key] !== null) {

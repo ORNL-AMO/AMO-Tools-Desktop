@@ -68,7 +68,8 @@
       <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.outletPressure.invalid && !fieldDataForm.controls.outletPressure.pristine">
         <span *ngIf="fieldDataForm.controls.outletPressure.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine">{{warnings.outletPressureError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine">{{warnings.outletPressureError}}
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></span>
     </div>
     <div class="form-group">
       <label for="{{'flowRate_'+idString}}">Flow Rate
@@ -84,7 +85,8 @@
       <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.flowRate.invalid && !fieldDataForm.controls.flowRate.pristine">
         <span *ngIf="fieldDataForm.controls.flowRate.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.flowRateError !== null && !fieldDataForm.controls.flowRate.pristine">{{warnings.flowRateError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.flowRateError !== null && !fieldDataForm.controls.flowRate.pristine">{{warnings.flowRateError}}
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
     </div>
 
     <div class="form-group" *ngIf="baseline">

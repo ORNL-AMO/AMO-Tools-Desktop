@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FanSetupService } from './fan-setup.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { FanSetup, FSAT } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FanTypes, Drives } from '../fanOptions';
@@ -33,9 +33,9 @@ export class FanSetupComponent implements OnInit {
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   fanForm: FormGroup;
-  fanEfficiencyError: string = null;
+  // fanEfficiencyError: string = null;
   fanSpeedError: string = null;
-  specifiedDriveEfficiencyError: string = null;
+  // specifiedDriveEfficiencyError: string = null;
   idString: string;
   constructor(private fsatWarningService: FsatWarningService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
@@ -90,11 +90,38 @@ export class FanSetupComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
+  changeFanType() {
+    if (this.fanForm.controls.fanType.value == 12) {
+      this.fanForm.controls.fanSpecified.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      this.fanForm.controls.fanSpecified.reset(this.fanForm.controls.fanSpecified.value);
+      this.fanForm.controls.fanSpecified.markAsDirty();
+    }else{
+      this.fanForm.controls.fanSpecified.setValidators([]);
+      this.fanForm.controls.fanSpecified.reset(this.fanForm.controls.fanSpecified.value);
+      this.fanForm.controls.fanSpecified.markAsDirty();
+    }
+    this.save();
+  }
+
+  changeDriveType() {
+    if (this.fanForm.controls.drive.value == 4) {
+      this.fanForm.controls.specifiedDriveEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      this.fanForm.controls.specifiedDriveEfficiency.reset(this.fanForm.controls.specifiedDriveEfficiency.value);
+      this.fanForm.controls.specifiedDriveEfficiency.markAsDirty();
+    }else{
+      this.fanForm.controls.specifiedDriveEfficiency.setValidators([]);
+      this.fanForm.controls.specifiedDriveEfficiency.reset(this.fanForm.controls.specifiedDriveEfficiency.value);
+      this.fanForm.controls.specifiedDriveEfficiency.markAsDirty();
+    }
+    this.save();
+  }
+
+
   checkForWarnings() {
-    let warnings: { fanEfficiencyError: string, fanSpeedError: string, specifiedDriveEfficiencyError: string } = this.fsatWarningService.checkFanWarnings(this.fanSetup);
+    let warnings: { fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.fanSetup);
     this.fanSpeedError = warnings.fanSpeedError;
-    this.fanEfficiencyError = warnings.fanEfficiencyError;
-    this.specifiedDriveEfficiencyError = warnings.specifiedDriveEfficiencyError;
+    // this.fanEfficiencyError = warnings.fanEfficiencyError;
+    // this.specifiedDriveEfficiencyError = warnings.specifiedDriveEfficiencyError;
   }
 
   save() {
