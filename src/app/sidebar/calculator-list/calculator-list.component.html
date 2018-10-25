@@ -49,7 +49,7 @@
     <span [ngClass]="{'selected': selectedCalculatorType == 'fans'}" class="sidebar-item" (click)="chooseCalculator('fans')">Fans</span>
     <ul *ngIf="selectedCalculatorType == 'fans'">
       <li [ngClass]="{'selected': selectedCalculator == 'fsat-203'}">
-        <span class="sidebar-item" (click)="selectCalculator('fsat-203')">Operating Points</span>
+        <span class="sidebar-item" (click)="selectCalculator('fsat-203')">Fan Analysis</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'system-curve'}">
         <span class="sidebar-item" (click)="selectCalculator('system-curve')">System Curve</span>
