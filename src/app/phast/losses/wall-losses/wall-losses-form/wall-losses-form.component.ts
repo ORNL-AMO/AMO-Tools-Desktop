@@ -33,6 +33,8 @@ export class WallLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
@@ -40,9 +42,16 @@ export class WallLossesFormComponent implements OnInit {
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
   warnings: WallLossWarnings;
+  idString: string;
   constructor(private wallLossCompareService: WallLossCompareService, private wallLossesService: WallLossesService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
     //init warnings
     this.checkWarnings();
@@ -53,8 +62,8 @@ export class WallLossesFormComponent implements OnInit {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.baselineSelected){
-      if(!changes.baselineSelected.firstChange){
+    if (changes.baselineSelected) {
+      if (!changes.baselineSelected.firstChange) {
         //on changes to baseline selected enable/disable form
         if (!this.baselineSelected) {
           this.disableForm();
@@ -83,7 +92,7 @@ export class WallLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   //check iputs for errors
-  checkWarnings(){
+  checkWarnings() {
     let tmpLoss: WallLoss = this.wallLossesService.getWallLossFromForm(this.wallLossesForm);
     this.warnings = this.wallLossesService.checkWarnings(tmpLoss);
     let hasWarning: boolean = this.wallLossesService.checkWarningsExist(this.warnings);

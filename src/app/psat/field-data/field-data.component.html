@@ -7,17 +7,17 @@
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div class="form-group">
-      <label for="operatingFraction">Operating Fraction</label>
+      <label for="{{'operatingFraction_'+idString}}">Operating Fraction</label>
       <input [readonly]="!selected" name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
-        id="operatingFraction" (input)="save()" (focus)="focusField('operatingFraction')" onfocus="this.select();"
+        id="{{'operatingFraction_'+idString}}" (input)="save()" (focus)="focusField('operatingFraction')" onfocus="this.select();"
         [ngClass]="{'indicate-different': isOperatingFractionDifferent(),'error': fieldDataWarnings.opFractionError !== null, 'invalid': psatForm.controls.operatingFraction.invalid}">
       <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.opFractionError !== null">{{fieldDataWarnings.opFractionError}}</span>
     </div>
 
     <div class="form-group">
-      <label for="costKwHr">Cost</label>
+      <label for="{{'costKwHr_'+idString}}">Cost</label>
       <div class="input-group" [ngClass]="{'indicate-different': isCostKwhrDifferent(),'error': fieldDataWarnings.costError !== null, 'invalid': !psatForm.controls.costKwHr.valid}">
-        <input [readonly]="!selected" name="costKwHr" type="number" min="0" max="1" step="any" class="form-control" formControlName="costKwHr" id="costKwHr"
+        <input [readonly]="!selected" name="costKwHr" type="number" min="0" max="1" step="any" class="form-control" formControlName="costKwHr" id="{{'costKwHr_'+idString}}"
           (input)="save()" (focus)="focusField('costKwHr')" onfocus="this.select();">
         <span class="input-group-addon units">$/kWh</span>
       </div>
@@ -25,9 +25,9 @@
     </div>
 
     <div class="form-group">
-      <label for="flowRate">Flow Rate</label>
+      <label for="{{'flowRate_'+idString}}">Flow Rate</label>
       <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent(),'error': fieldDataWarnings.flowError !== null, 'invalid': psatForm.controls.flowRate.invalid}">
-        <input [readonly]="!selected" name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="save()"
+        <input [readonly]="!selected" name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="{{'flowRate_'+idString}}" (input)="save()"
           (focus)="focusField('flowRate')" onfocus="this.select();">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
       </div>
@@ -36,12 +36,12 @@
 
     <div class="form-group">
 
-      <label for="head">
+      <label for="{{'head_'+idString}}">
         Head
         <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" (click)="showHeadToolModal()">Calculate Head</a>
       </label>
       <div class="input-group" [ngClass]="{'indicate-different': isHeadDifferent(),'error': fieldDataWarnings.headError !== null, 'invalid': psatForm.controls.head.invalid}">
-        <input [readonly]="!selected" name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="head" (input)="save()"
+        <input [readonly]="!selected" name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="{{'head_'+idString}}" (input)="save()"
           (focus)="focusField('head')" onfocus="this.select();">
         <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
       </div>
@@ -49,17 +49,17 @@
     </div>
 
     <div class="form-group" *ngIf="baseline">
-      <label for="loadEstimatedMethod">Load Estimation Method</label>
-      <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (change)="changeLoadMethod()"
+      <label for="{{'loadEstimatedMethod_'+idString}}">Load Estimation Method</label>
+      <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="{{'loadEstimatedMethod_'+idString}}" (change)="changeLoadMethod()"
         (focus)="focusField('loadEstimatedMethod')">
         <option *ngFor="let method of loadEstimateMethods" [ngValue]="method">{{method}}</option>
       </select>
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 'Power' && baseline">
-      <label for="motorKW">Motor Power</label>
+      <label for="{{'motorKW_'+idString}}">Motor Power</label>
       <div class="input-group" [ngClass]="{'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorKW.invalid}">
-        <input [readonly]="!selected" name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="motorKW" (input)="save()"
+        <input [readonly]="!selected" name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="{{'motorKW_'+idString}}" (input)="save()"
           (focus)="focusField('motorPower')" onfocus="this.select();">
         <span class="input-group-addon units">kW</span>
       </div>
@@ -67,9 +67,9 @@
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 'Current' && baseline">
-      <label for="motorAmps">Motor Current</label>
+      <label for="{{'motorAmps_'+idString}}">Motor Current</label>
       <div class="input-group" [ngClass]="{'error': fieldDataWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.motorAmps.invalid}">
-        <input [readonly]="!selected" name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
+        <input [readonly]="!selected" name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="{{'motorAmps_'+idString}}"
           (input)="save()" (focus)="focusField('motorPower')" onfocus="this.select();">
         <span class="input-group-addon units">A</span>
       </div>
@@ -77,9 +77,9 @@
     </div>
 
     <div class="form-group" *ngIf="baseline">
-      <label for="measuredVoltage">Measured Voltage</label>
+      <label for="{{'measuredVoltage_'+idString}}">Measured Voltage</label>
       <div class="input-group" [ngClass]="{'error': fieldDataWarnings.voltageError !== null, 'invalid': psatForm.controls.measuredVoltage.invalid}">
-        <input [readonly]="!selected" name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
+        <input [readonly]="!selected" name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="{{'measuredVoltage_'+idString}}"
           (input)="save()" (focus)="focusField('measuredVoltage')" onfocus="this.select();">
         <span class="units">V</span>
       </div>
@@ -94,19 +94,19 @@
         Optimize Pump and Motor combination for a Fixed Specific Speed</label>
     </div>
     <div class="form-group">
-      <label for="sizeMargin">Size Margin</label>
+      <label for="{{'sizeMargin_'+idString}}">Size Margin</label>
       <div class="input-group" [ngClass]="{'error': fieldDataWarnings.marginError !== null, 'invalid': psatForm.controls.sizeMargin.invalid}">
-        <input [readonly]="!selected" name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
+        <input [readonly]="!selected" name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="{{'sizeMargin_'+idString}}" formControlName="sizeMargin"
           (input)="save()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.marginError !== null">{{fieldDataWarnings.marginError}}</span>
     </div>
     <div class="form-group">
-      <label for="implementationCosts">Implementation Costs</label>
+      <label for="{{'implementationCosts_'+idString}}">Implementation Costs</label>
       <div class="input-group" [ngClass]="{'invalid': psatForm.controls.implementationCosts.invalid}">
         <input [readonly]="!selected" name="implementationCosts" type="number" min="0" step="any" class="form-control" formControlName="implementationCosts"
-          id="implementationCosts" (input)="save()" (focus)="focusField('implementationCosts')" onfocus="this.select();">
+          id="{{'implementationCosts_'+idString}}" (input)="save()" (focus)="focusField('implementationCosts')" onfocus="this.select();">
         <span class="units">$</span>
       </div>
     </div>

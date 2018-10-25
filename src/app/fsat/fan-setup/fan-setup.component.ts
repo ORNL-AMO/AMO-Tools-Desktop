@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FanSetupService } from './fan-setup.service';
 import { FormGroup } from '@angular/forms';
-import { FanSetup } from '../../shared/models/fans';
+import { FanSetup, FSAT } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { FanTypes, Drives } from '../fanOptions';
 import { CompareService } from '../compare.service';
@@ -25,6 +25,10 @@ export class FanSetupComponent implements OnInit {
   emitSave = new EventEmitter<FanSetup>();
   @Input()
   settings: Settings;
+  @Input()
+  fsat: FSAT;
+  @Input()
+  baseline: boolean;
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
@@ -32,9 +36,16 @@ export class FanSetupComponent implements OnInit {
   fanEfficiencyError: string = null;
   fanSpeedError: string = null;
   specifiedDriveEfficiencyError: string = null;
+  idString: string;
   constructor(private fsatWarningService: FsatWarningService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
+    if (!this.baseline) {
+      this.idString = 'fsat_modification_' + this.modificationIndex;
+    }
+    else {
+      this.idString = 'fsat_baseline';
+    }
     this.drives = Drives;
     this.fanTypes = FanTypes;
     this.init();

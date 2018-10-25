@@ -31,14 +31,23 @@ export class OpeningLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   totalArea: number = 0.0;
   warnings: OpeningLossWarnings;
+  idString: string;
   constructor(private convertUnitsService: ConvertUnitsService,
     private openingLossesCompareService: OpeningLossesCompareService,
     private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.checkWarnings();
     this.getArea(true)
     if (!this.baselineSelected) {

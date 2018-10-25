@@ -60,9 +60,16 @@ export class MotorComponent implements OnInit {
   motorWarnings: MotorWarnings;
   ratedPowerError: string = null;
   disableFLAOptimized: boolean = false;
+  idString: string;
   constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    if (!this.baseline) {
+      this.idString = 'psat_modification_' + this.modificationIndex;
+    }
+    else {
+      this.idString = 'psat_baseline';
+    }
     this.init();
     // if (this.settings.powerMeasurement == 'hp') {
     //   this.options = this.horsePowers;
@@ -98,11 +105,11 @@ export class MotorComponent implements OnInit {
     this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('lineFrequency');
     //init alert meessages
-   // this.modifyPowerArrays();
+    // this.modifyPowerArrays();
     this.checkWarnings();
   }
 
-  checkWarnings(){
+  checkWarnings() {
     this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings)
   }
 
