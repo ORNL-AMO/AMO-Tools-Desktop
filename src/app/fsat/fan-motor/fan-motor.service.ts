@@ -8,15 +8,18 @@ export class FanMotorService {
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromObj(obj: FanMotor): FormGroup {
-    let form = this.formBuilder.group({
+    let form: FormGroup = this.formBuilder.group({
       lineFrequency: [obj.lineFrequency, Validators.required],
       motorRatedPower: [obj.motorRatedPower, Validators.required],
       motorRpm: [obj.motorRpm, Validators.required],
       efficiencyClass: [obj.efficiencyClass, Validators.required],
-      specifiedEfficiency: [obj.specifiedEfficiency],
+      specifiedEfficiency: [obj.specifiedEfficiency, [Validators.min(0), Validators.max(100)]],
       motorRatedVoltage: [obj.motorRatedVoltage, Validators.required],
       fullLoadAmps: [obj.fullLoadAmps, Validators.required]
     })
+    for (let key in form.controls) {
+      form.controls[key].markAsDirty();
+    }
     return form;
   }
 

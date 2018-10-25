@@ -140,7 +140,7 @@ export class FsatWarningService {
   checkEfficiency(fsat: FSAT) {
     if (fsat.fanMotor.specifiedEfficiency) {
       if (fsat.fanMotor.specifiedEfficiency > 100) {
-        return "Unrealistic efficiency, shouldn't be greater than 100%";
+        return "Unrealistic efficiency, cannot be greater than 100%";
       }
       else if (fsat.fanMotor.specifiedEfficiency == 0) {
         return "Cannot have 0% efficiency";
@@ -282,7 +282,7 @@ export class FsatWarningService {
 
   //FAN FLUID
   checkFanFluidWarnings(baseGasDensity: BaseGasDensity, settings: Settings): FanFluidWarnings {
-    let barometricPressureError: string = this.checkBarometricPressurer(baseGasDensity, settings);
+    let barometricPressureError: string = this.checkBarometricPressure(baseGasDensity, settings);
     let relativeHumidityError: string = null;
     let gasDensityError: string = this.checkGasDensity(baseGasDensity);
     let specificHeatGasError: string = null;
@@ -301,7 +301,7 @@ export class FsatWarningService {
   }
 
   //TODO: NOT Imperial || Other
-  checkBarometricPressurer(baseGasDensity: BaseGasDensity, settings: Settings) {
+  checkBarometricPressure(baseGasDensity: BaseGasDensity, settings: Settings) {
     if (settings.unitsOfMeasure == 'Imperial') {
       if (baseGasDensity.barometricPressure < 20) {
         return 'Value should be greater than 20';
