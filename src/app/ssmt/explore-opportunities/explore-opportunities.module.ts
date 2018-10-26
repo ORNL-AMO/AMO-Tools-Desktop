@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ExploreOpportunitiesComponent } from './explore-opportunities.component';
 import { ExploreOpportunitiesFormComponent } from './explore-opportunities-form/explore-opportunities-form.component';
 import { ExploreOpportunitiesHelpComponent } from './explore-opportunities-help/explore-opportunities-help.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OperationsFormComponent } from './explore-opportunities-form/operations-form/operations-form.component';
 import { BoilerFormComponent } from './explore-opportunities-form/boiler-form/boiler-form.component';
 import { HeaderFormComponent } from './explore-opportunities-form/header-form/header-form.component';
@@ -19,6 +19,7 @@ import { ExploreOpportunitiesService } from './explore-opportunities.service';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     HelpPanelModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],

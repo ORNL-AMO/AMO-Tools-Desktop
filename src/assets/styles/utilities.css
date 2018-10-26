@@ -111,29 +111,36 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 
 
 .indicate-different {
-	border: #007bff solid 2px;
-    box-shadow: 0px 0px 5px #007bff;
+	border: #007bff solid 3px;
+    /* box-shadow: 0px 0px 5px #007bff; */
 }
 
 .indicate-different.form-control {
-    border: 2px solid #007bff;
-    box-shadow: 0px 0px 5px #007bff;
+    border: 3px solid #007bff;
+    /* box-shadow: 0px 0px 5px #007bff; */
 }
 
 .indicate-different.incrementor {
-    border: 2px solid #007bff;
-    box-shadow: 0px 0px 5px #007bff;
+    border: 3px solid #007bff;
+    /* box-shadow: 0px 0px 5px #007bff; */
 }
 
 .invalid, .indicate-different.invalid, input.indicate-different.invalid{
-	border: red solid 2px !important;
-    box-shadow: 0px 0px 5px red !important;
+    border-left: 5px solid red; /* red */
+    border-right: 5px solid red; /* red */
 }
 
 .error, .indicate-different.error, input.indicate-different.error {
-    border: orange solid 2px;
-    box-shadow: 0px 0px 5px orange;
+    /* border: orange solid 2px;
+    box-shadow: 0px 0px 5px orange; */
+    border-left: 5px solid orange; /* red */
+    border-right: 5px solid orange; /* red */
 }
+.ssmt .indicate-different.ng-invalid:not(form), .ssmt .ng-invalid:not(form)  {
+    border-left: 5px solid red; /* red */
+    border-right: 5px solid red; /* red */
+  }
+
 
 
 .card-item{
