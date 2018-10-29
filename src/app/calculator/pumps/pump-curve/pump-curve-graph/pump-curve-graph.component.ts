@@ -499,7 +499,8 @@ export class PumpCurveGraphComponent implements OnInit {
     let modHeadOrPressure = "&mdash;";
     let systemHeadOrPressure = "&mdash;";
     let fluidPower = "&mdash;";
-    let data: Array<string> = [flowRate];
+    let data: Array<string> = new Array<string>();
+    data.push(flowRate);
     if (this.graphPumpCurve) {
       if (this.dPump.x > maxX - 10) {
         baseHeadOrPressure = format(this.dPump.y).toString();
