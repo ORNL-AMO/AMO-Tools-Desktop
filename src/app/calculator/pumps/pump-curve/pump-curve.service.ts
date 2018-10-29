@@ -92,6 +92,9 @@ export class PumpCurveService {
       }
     }
     if (graphSystemCurve) {
+      if (!graphPumpCurve) {
+        columnTitles.push('Flow Rate (' + flowMeasurement + ')');
+      }
       columnTitles.push('System ' + headOrPressure + ' (' + distanceMeasurement + ')');
       columnTitles.push('Fluid Power (' + powerMeasurement + ')');
     }
