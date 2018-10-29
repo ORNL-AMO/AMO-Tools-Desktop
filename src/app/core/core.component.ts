@@ -56,7 +56,6 @@ export class CoreComponent implements OnInit {
       if (arg == true) {
         this.updateError = true;
       }
-      console.log(arg);
     })
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
