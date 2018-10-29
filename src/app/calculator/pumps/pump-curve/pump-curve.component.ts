@@ -103,6 +103,12 @@ export class PumpCurveComponent implements OnInit {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     if (this.inAssessment) {
+      if (this.isFan) {
+        this.fsat.name = "Baseline";
+      }
+      else {
+        this.psat.name = "Baseline";
+      }
       this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
       if (this.calculator) {
         this.calcExists = true;
@@ -308,7 +314,7 @@ export class PumpCurveComponent implements OnInit {
     if (this.inAssessment && this.calculator.systemCurve) {
       this.calculator.systemCurve.specificGravity = this.curveConstants.form.controls.specificGravity.value;
       this.calculator.systemCurve.systemLossExponent = this.curveConstants.form.controls.systemLossExponent.value;
-      this.calculator.systemCurve.selectedP1Name = this.pointOne.form.controls.pointAdjustment.value;
+      this.calculator.systemCurve.selectedP1Name = this.pointTwo.form.controls.pointAdjustment.value + "1";
       this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
       _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name }).flowRate = this.pointOne.form.controls.flowRate.value;
       _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name }).head = this.pointOne.form.controls.head.value;
@@ -374,11 +380,6 @@ export class PumpCurveComponent implements OnInit {
         fluidPower: 0
       };
     }
-
-    this.pointTwo.form.patchValue({
-      flowRate: 0,
-      head: 200
-    })
   }
 
   setPointValuesFromCalc(init?: boolean) {
@@ -441,21 +442,33 @@ export class PumpCurveComponent implements OnInit {
 
   initializePsatCalculator() {
     let dataPoints = new Array<CurveData>();
-    let baselinePoint: CurveData = {
-      modName: this.psat.name,
+    let baselinePoint1: CurveData = {
+      modName: "Baseline1",
+      flowRate: 0,
+      head: 0
+    };
+    let baselinePoint2: CurveData = {
+      modName: "Baseline",
       flowRate: this.psat.inputs.flow_rate,
       head: this.psat.inputs.head
-    }
-    dataPoints.push(baselinePoint)
+    };
+    dataPoints.push(baselinePoint1);
+    dataPoints.push(baselinePoint2);
     if (this.psat.modifications) {
       this.psat.modifications.forEach(mod => {
-        let modPoint: CurveData = {
+        let modPoint1: CurveData = {
+          modName: mod.psat.name + "1",
+          flowRate: 0,
+          head: 0
+        };
+        let modPoint2: CurveData = {
           modName: mod.psat.name,
           flowRate: mod.psat.inputs.flow_rate,
           head: mod.psat.inputs.head
-        }
-        dataPoints.push(modPoint);
-      })
+        };
+        dataPoints.push(modPoint1);
+        dataPoints.push(modPoint2);
+      });
     }
     let systemCurve: SystemCurve = {
       specificGravity: this.psat.inputs.specific_gravity,
