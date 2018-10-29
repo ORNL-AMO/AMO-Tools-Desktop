@@ -290,16 +290,12 @@
             (focus)="focusField('deaeratorPressure')" (input)="save()" formControlName="deaeratorPressure" />
           <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.steamTemperature.invalid && !baselineForm.controls.steamTemperature.pristine">
-          <span *ngIf="baselineForm.controls.steamTemperature.errors.required">Value Required</span>
-          <span *ngIf="baselineForm.controls.steamTemperature.errors.max">Value can't be greater than
-            {{baselineForm.controls.steamTemperature.errors.max.max}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
-          <span *ngIf="baselineForm.controls.steamTemperature.errors.min">Value can't be less than
-            {{baselineForm.controls.steamTemperature.errors.min.min}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.deaeratorPressure.invalid && !baselineForm.controls.deaeratorPressure.pristine">
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.required">Value Required</span>
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.max">Value can't be greater than
+            {{baselineForm.controls.deaeratorPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.min">Value can't be less than
+            {{baselineForm.controls.deaeratorPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
         </span>
       </div>
       <div class="form-group">
@@ -326,16 +322,12 @@
             (focus)="focusField('deaeratorPressure')" (input)="save()" formControlName="deaeratorPressure" />
           <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.steamTemperature.invalid && !modificationForm.controls.steamTemperature.pristine">
-          <span *ngIf="modificationForm.controls.steamTemperature.errors.required">Value Required</span>
-          <span *ngIf="modificationForm.controls.steamTemperature.errors.max">Value can't be greater than
-            {{modificationForm.controls.steamTemperature.errors.max.max}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
-          <span *ngIf="modificationForm.controls.steamTemperature.errors.min">Value can't be less than
-            {{modificationForm.controls.steamTemperature.errors.min.min}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.deaeratorPressure.invalid && !modificationForm.controls.deaeratorPressure.pristine">
+          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.max">Value can't be greater than
+            {{modificationForm.controls.deaeratorPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.min">Value can't be less than
+            {{modificationForm.controls.deaeratorPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
         </span>
       </div>
       <div class="form-group">

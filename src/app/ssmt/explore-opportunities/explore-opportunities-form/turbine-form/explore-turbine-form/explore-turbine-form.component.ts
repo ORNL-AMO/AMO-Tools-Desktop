@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { PressureTurbine, CondensingTurbine } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -11,13 +12,13 @@ import { ExploreOpportunitiesService } from '../../../explore-opportunities.serv
 })
 export class ExploreTurbineFormComponent implements OnInit {
   @Input()
-  baselineTurbine: PressureTurbine | CondensingTurbine;
+  baselineForm: FormGroup;
   @Input()
   settings: Settings;
   @Input()
-  modificationTurbine: PressureTurbine | CondensingTurbine;
+  modificationForm: FormGroup;
   @Output('emitSave')
-  emitSave = new EventEmitter<{baselineTurbine: PressureTurbine | CondensingTurbine, modificationTurbine: PressureTurbine | CondensingTurbine}>();
+  emitSave = new EventEmitter<boolean>();
   @Input()
   turbineType: string;
   @Output('emitShowTurbine')
@@ -63,43 +64,43 @@ export class ExploreTurbineFormComponent implements OnInit {
   }
 
   initTurbineStatus() {
-    if (this.baselineTurbine.useTurbine != this.modificationTurbine.useTurbine) {
+    if (this.baselineForm.controls.useTurbine.value != this.modificationForm.controls.useTurbine.value) {
       this.showUseTurbine = true;
     }
   }
 
   initIsentropicEfficiency() {
-    if (this.baselineTurbine.isentropicEfficiency != this.modificationTurbine.isentropicEfficiency) {
+    if (this.baselineForm.controls.isentropicEfficiency.value != this.modificationForm.controls.isentropicEfficiency.value) {
       this.showIsentropicEfficiency = true;
     }
   }
 
   initGenerationEfficiency() {
-    if (this.baselineTurbine.generationEfficiency != this.modificationTurbine.generationEfficiency) {
+    if (this.baselineForm.controls.generationEfficiency.value != this.modificationForm.controls.generationEfficiency.value) {
       this.showGenerationEfficiency = true;
     }
   }
 
   toggleTurbineStatus() {
     if (this.showUseTurbine == false) {
-      this.modificationTurbine.useTurbine = this.baselineTurbine.useTurbine;
+      this.modificationForm.controls.useTurbine.patchValue(this.baselineForm.controls.useTurbine.value);
     }
   }
 
   toggleIsentropicEfficiency() {
     if (this.showIsentropicEfficiency == false) {
-      this.modificationTurbine.isentropicEfficiency = this.baselineTurbine.isentropicEfficiency;
+      this.modificationForm.controls.isentropicEfficiency.patchValue(this.baselineForm.controls.isentropicEfficiency);
     }
   }
 
   toggleGenerationEfficiency() {
     if (this.showGenerationEfficiency == false) {
-      this.modificationTurbine.generationEfficiency = this.baselineTurbine.generationEfficiency;
+      this.modificationForm.controls.generationEfficiency.patchValue(this.baselineForm.controls.generationEfficiency);
     }
   }
 
   save() {
-    this.emitSave.emit({baselineTurbine: this.baselineTurbine, modificationTurbine: this.modificationTurbine});
+    this.emitSave.emit(true);
   }
 
   focusField(str: string) {

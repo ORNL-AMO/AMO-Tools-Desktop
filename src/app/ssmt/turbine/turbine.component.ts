@@ -45,7 +45,7 @@ export class TurbineComponent implements OnInit {
     if (this.turbineInput.condensingTurbine) {
       this.condensingTurbineForm = this.turbineService.getCondensingFormFromObj(this.turbineInput.condensingTurbine, this.settings);
     } else {
-      this.condensingTurbineForm = this.turbineService.initCondensingTurbine(this.settings);
+      this.condensingTurbineForm = this.turbineService.initCondensingTurbineForm(this.settings);
     }
     if (this.turbineInput.highToLowTurbine) {
       this.highToLowTurbineForm = this.turbineService.getPressureFormFromObj(this.turbineInput.highToLowTurbine);

@@ -160,7 +160,7 @@
         <div class="input-group">
           <input name="baselineHPSteamUsage" type="number" step="any" id="baselineHPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="input-group-addon units">%</span>
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.processSteamUsage.invalid && !baselineHighPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
@@ -177,7 +177,7 @@
         <div class="input-group">
           <input name="modificationHPSteamUsage" type="number" step="any" id="modificationHPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="input-group-addon units">%</span>
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.processSteamUsage.invalid && !modificationHighPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
@@ -202,7 +202,7 @@
         <div class="input-group">
           <input name="baselineMPSteamUsage" type="number" step="any" id="baselineMPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="input-group-addon units">%</span>
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="baselineMediumPressureForm.controls.processSteamUsage.invalid && !baselineMediumPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
@@ -219,7 +219,7 @@
         <div class="input-group">
           <input name="modificationMPSteamUsage" type="number" step="any" id="modificationMPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="input-group-addon units">%</span>
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.processSteamUsage.invalid && !modificationMediumPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
@@ -247,7 +247,7 @@
         <div class="input-group">
           <input name="baselineLPSteamUsage" type="number" step="any" id="baselineLPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="input-group-addon units">%</span>
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="baselineLowPressureForm.controls.processSteamUsage.invalid && !baselineLowPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
@@ -266,7 +266,7 @@
         <div class="input-group">
           <input name="modificationLPSteamUsage" type="number" step="any" id="modificationLPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="input-group-addon units">%</span>
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.processSteamUsage.invalid && !modificationLowPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>

@@ -4,6 +4,8 @@ import { SSMT, CondensingTurbineOperationTypes } from '../../../../../shared/mod
 import { Quantity } from '../../../../../shared/models/steam/steam-inputs';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 import { SsmtService } from '../../../../ssmt.service';
+import { FormGroup, Validators } from '@angular/forms';
+import { TurbineService } from '../../../../turbine/turbine.service';
 
 @Component({
   selector: 'app-explore-condensing-turbine-form',
@@ -12,13 +14,15 @@ import { SsmtService } from '../../../../ssmt.service';
 })
 export class ExploreCondensingTurbineFormComponent implements OnInit {
   @Input()
-  ssmt: SSMT;
+  baselineForm: FormGroup;
+  @Input()
+  modificationForm: FormGroup;
   @Input()
   settings: Settings;
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<SSMT>();
+  emitSave = new EventEmitter<boolean>();
   @Output('emitShowTurbine')
   emitShowTurbine = new EventEmitter<boolean>();
   @Input()
@@ -27,7 +31,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   showCondenserPressure: boolean;
   showOperation: boolean;
   turbineOptionTypes: Array<Quantity>;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService, private turbineService: TurbineService) { }
 
   ngOnInit() {
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
@@ -41,12 +45,34 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
         this.showCondenserPressure = false;
       }
     }
-
     if(changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()){
       this.showOperation = false;
       this.showCondenserPressure = false;
       this.initForm();
     }
+  }
+  changeBaselineOperationValidators() {
+    let tmpOperationMinMax: { min: number, max: number } = this.turbineService.getCondensingOperationRange(this.baselineForm.controls.operationType.value);
+    if (tmpOperationMinMax.max) {
+      this.baselineForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min), Validators.max(tmpOperationMinMax.max)]);
+    } else {
+      this.baselineForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min)]);
+    }
+    this.baselineForm.controls.operationValue.reset(this.baselineForm.controls.operationValue.value);
+    this.baselineForm.controls.operationValue.markAsDirty();
+    this.save();
+  }
+
+  changeModificationOperationValidators() {
+    let tmpOperationMinMax: { min: number, max: number } = this.turbineService.getCondensingOperationRange(this.modificationForm.controls.operationType.value);
+    if (tmpOperationMinMax.max) {
+      this.modificationForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min), Validators.max(tmpOperationMinMax.max)]);
+    } else {
+      this.modificationForm.controls.operationValue.setValidators([Validators.required, Validators.min(tmpOperationMinMax.min)]);
+    }
+    this.modificationForm.controls.operationValue.reset(this.modificationForm.controls.operationValue.value);
+    this.modificationForm.controls.operationValue.markAsDirty();
+    this.save();
   }
 
 
@@ -59,35 +85,35 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   }
 
   initCondenserPressure() {
-    if (this.ssmt.turbineInput.condensingTurbine.condenserPressure != this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.condenserPressure) {
+    if (this.baselineForm.controls.condenserPressure.value != this.modificationForm.controls.condenserPressure.value) {
       this.showCondenserPressure = true;
     }
   }
 
   initOperationType() {
-    if (this.ssmt.turbineInput.condensingTurbine.operationType != this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType ||
-      this.ssmt.turbineInput.condensingTurbine.operationValue != this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.operationValue) {
+    if (this.baselineForm.controls.operationType.value != this.modificationForm.controls.operationType.value ||
+      this.baselineForm.controls.operationValue.value != this.modificationForm.controls.operationValue.value) {
       this.showOperation = true;
     }
   }
 
   toggleCondenserPressure() {
     if (this.showCondenserPressure == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.condenserPressure = this.ssmt.turbineInput.condensingTurbine.condenserPressure;
+      this.modificationForm.controls.condenserPressure.patchValue(this.baselineForm.controls.condenserPressure.value);
       this.save();
     }
   }
 
   toggleOperationType() {
     if (this.showOperation == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.operationType = this.ssmt.turbineInput.condensingTurbine.operationType;
-      this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.condensingTurbine.operationValue = this.ssmt.turbineInput.condensingTurbine.operationValue;
+      this.modificationForm.controls.operationType.patchValue(this.baselineForm.controls.operationType.value);
+      this.modificationForm.controls.operationValue.patchValue(this.baselineForm.controls.operationValue.value);
       this.save();
     }
   }
 
   save() {
-    this.emitSave.emit(this.ssmt);
+    this.emitSave.emit(true);
   }
 
   focusField(str: string) {
