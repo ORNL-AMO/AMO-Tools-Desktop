@@ -36,7 +36,7 @@
 
     <div class="form-group">
       <label for="{{'inputType_'+idString}}">Method to Establish Gas Density</label>
-      <select class="form-control" name="inputType" formControlName="inputType" id="{{'inputType_'+idString}}" (change)="getDensity()"
+      <select class="form-control" name="inputType" formControlName="inputType" id="{{'inputType_'+idString}}" (change)="changeMethod()"
         (focus)="focusField('inputType')" [ngClass]="{'indicate-different': isInputTypeDifferent()}">
         <option *ngFor="let method of methods" [ngValue]="method.value">{{method.display}}</option>
       </select>
@@ -110,6 +110,8 @@
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="gasDensityForm.controls.relativeHumidity.invalid && !gasDensityForm.controls.relativeHumidity.pristine">
+        <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.required">Value
+          Required</span>
         <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.max">Value can't be greater than
           {{gasDensityForm.controls.relativeHumidity.errors.max.max}} %.</span>
         <span *ngIf="gasDensityForm.controls.relativeHumidity.errors.min">Value can't be less than

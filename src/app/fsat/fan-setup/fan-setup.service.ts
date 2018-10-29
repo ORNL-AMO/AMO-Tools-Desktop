@@ -22,11 +22,7 @@ export class FanSetupService {
       fanSpecified: [obj.fanSpecified, fanSpecifiedValidators],
       fanSpeed: [obj.fanSpeed, Validators.required],
       drive: [obj.drive, Validators.required],
-<<<<<<< HEAD
-      specifiedDriveEfficiency: [obj.specifiedDriveEfficiency],
-=======
       specifiedDriveEfficiency: [obj.specifiedDriveEfficiency, specifiedDriveValidators],
->>>>>>> issue-2480
       fanEfficiency: [obj.fanEfficiency]
     })
     return form;
