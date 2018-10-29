@@ -130,10 +130,10 @@ export class FanDataFormComponent implements OnInit {
   checkWarnings() {
     let baseWarnings = this.fsatWarningService.checkFanWarnings(this.fsat.fanSetup);
     let modWarnings = this.fsatWarningService.checkFanWarnings(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup);
-    this.specifiedError1 = baseWarnings.fanEfficiencyError;
-    this.baselineSpecifiedDriveEfficiencyError = baseWarnings.specifiedDriveEfficiencyError;
-    this.specifiedError2 = modWarnings.fanEfficiencyError;
-    this.modificationSpecifiedDriveEfficiencyError = modWarnings.specifiedDriveEfficiencyError;
+    // this.specifiedError1 = baseWarnings.fanEfficiencyError;
+    // this.baselineSpecifiedDriveEfficiencyError = baseWarnings.specifiedDriveEfficiencyError;
+    // this.specifiedError2 = modWarnings.fanEfficiencyError;
+    // this.modificationSpecifiedDriveEfficiencyError = modWarnings.specifiedDriveEfficiencyError;
   }
 
   checkFanTypes() {

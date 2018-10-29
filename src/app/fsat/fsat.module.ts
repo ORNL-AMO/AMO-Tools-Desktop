@@ -9,10 +9,6 @@ import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
 import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 
-import { FsatInfoComponent } from './fsat-info/fsat-info.component';
-import { FanCurveDataComponent } from './fan-curve-data/fan-curve-data.component';
-import { OperatingPointsComponent } from './operating-points/operating-points.component';
-import { OperatingPointsFormComponent } from './operating-points/operating-points-form/operating-points-form.component';
 import { RatedOperatingPointsComponent } from './rated-operating-points/rated-operating-points.component';
 import { RatedOperatingPointsFormComponent } from './rated-operating-points/rated-operating-points-form/rated-operating-points-form.component';
 import { Fsat203Module } from '../calculator/fans/fsat-203/fsat-203.module';
@@ -83,10 +79,6 @@ import { FsatWarningService } from './fsat-warning.service';
     FsatBannerComponent,
     FsatTabsComponent,
     SystemBasicsComponent,
-    FsatInfoComponent,
-    FanCurveDataComponent,
-    OperatingPointsComponent,
-    OperatingPointsFormComponent,
     RatedOperatingPointsComponent,
     RatedOperatingPointsFormComponent,
     FsatFluidComponent,

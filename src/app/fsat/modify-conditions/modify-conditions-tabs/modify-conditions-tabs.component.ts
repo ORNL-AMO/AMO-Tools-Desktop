@@ -185,14 +185,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   checkFanSetupWarnings() {
     let hasWarning: boolean = false;
-    let baselineWarnings: { fanEfficiencyError: string, fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.baselineFSAT.fanSetup);
+    let baselineWarnings: { fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.baselineFSAT.fanSetup);
     for (var key in baselineWarnings) {
       if (baselineWarnings[key] !== null) {
         hasWarning = true;
       }
     }
     if (this.compareService.modifiedFSAT && !hasWarning) {
-      let modifiedWarnings: { fanEfficiencyError: string, fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.modifiedFSAT.fanSetup);
+      let modifiedWarnings: { fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.modifiedFSAT.fanSetup);
       for (var key in modifiedWarnings) {
         if (modifiedWarnings[key] !== null) {
           hasWarning = true;

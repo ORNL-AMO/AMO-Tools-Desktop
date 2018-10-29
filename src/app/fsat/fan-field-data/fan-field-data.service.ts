@@ -9,18 +9,21 @@ export class FanFieldDataService {
 
 
   getFormFromObj(obj: FieldData): FormGroup {
-    let form = this.formBuilder.group({
-      operatingFraction: [obj.operatingFraction, Validators.required],
+    let form: FormGroup = this.formBuilder.group({
+      operatingFraction: [obj.operatingFraction, [Validators.required, Validators.min(0), Validators.max(1)]],
       flowRate: [obj.flowRate, Validators.required],
       inletPressure: [obj.inletPressure, Validators.required],
       outletPressure: [obj.outletPressure, Validators.required],
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
-      cost: [obj.cost, Validators.required],
-      specificHeatRatio: [obj.specificHeatRatio, Validators.required],
-      compressibilityFactor: [obj.compressibilityFactor, Validators.required],
+      cost: [obj.cost, [Validators.required, Validators.min(0)]],
+      specificHeatRatio: [obj.specificHeatRatio, [Validators.required, Validators.min(0)]],
+      compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
       measuredVoltage: [obj.measuredVoltage, Validators.required]
     })
+    for (let key in form.controls) {
+      form.controls[key].markAsDirty();
+    }
     return form;
   }
 
@@ -40,11 +43,11 @@ export class FanFieldDataService {
     return newData;
   }
 
-  isFanFieldDataValid(obj: FieldData): boolean{
+  isFanFieldDataValid(obj: FieldData): boolean {
     let form: FormGroup = this.getFormFromObj(obj);
-    if(form.status == 'VALID'){
+    if (form.status == 'VALID') {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
