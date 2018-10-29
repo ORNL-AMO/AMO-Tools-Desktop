@@ -56,11 +56,13 @@ app.on('ready', function () {
       autoUpdater.on('download-progress', (progressObj) => {
         win.webContents.send('progress', progressObj.percent)
       });
+      autoUpdater.on('error', (event, error) => {
+        coreCompEvent.sender.send('error', error);
+      });
     }
   })
 
-  autoUpdater.on('error', (event, error) => {
-  });
+
 
   // autoUpdater.on('download-progress', (progressObj) => {
   //   log.info(progressObj);

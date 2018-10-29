@@ -37,6 +37,7 @@ export class CoreComponent implements OnInit {
   inTutorialsView: boolean;
   dashboardTab: string;
   dashboardViewSub: Subscription;
+  updateError: boolean = false;
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
@@ -51,6 +52,12 @@ export class CoreComponent implements OnInit {
       }
     })
 
+    this.electronService.ipcRenderer.once('error', (event, arg) => {
+      if (arg == true) {
+        this.updateError = true;
+      }
+      console.log(arg);
+    })
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
 
