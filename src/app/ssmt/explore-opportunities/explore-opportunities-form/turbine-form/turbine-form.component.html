@@ -26,7 +26,7 @@
   <app-explore-turbine-form [baselineForm]="baselineHighToLowTurbineForm" [modificationForm]="modificationHighToLowTurbineForm"
     [settings]="settings" (emitSave)="saveHighToLowTurbine()" (emitShowTurbine)="setShowHighLowTurbine($event)"
     [turbineType]="'highToLowTurbine'" [showFormToggle]="showHighToLowPressureTurbine"></app-explore-turbine-form>
-  <app-explore-pressure-turbine-form *ngIf="ssmt.modifications[exploreModIndex].ssmt.turbineInput.highToLowTurbine.useTurbine"
+  <app-explore-pressure-turbine-form *ngIf="modificationHighToLowTurbineForm.controls.useTurbine.value == true"
     [exploreModIndex]="exploreModIndex" [settings]="settings" (emitSave)="saveHighToLowTurbine()" [baselineForm]="baselineHighToLowTurbineForm"
     [modificationForm]="modificationHighToLowTurbineForm" [turbineType]="'highToLowTurbine'" [showFormToggle]="showHighToLowPressureTurbine"></app-explore-pressure-turbine-form>
 </ul>

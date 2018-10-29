@@ -125,7 +125,7 @@
       <span *ngIf="numberOfHeaders == 3 && pressureLevel == 'lowPressure'">Medium Pressure</span>
       Header</label>
     <select name="desuperheatSteamIntoNextHighest" class="form-control" id="{{idString+pressureLevel+'_desuperheatSteamIntoNextHighest'}}"
-      (change)="save()" (focus)="focusField('desuperheatSteamIntoNextHighest')" (blur)="focusOut()" formControlName="desuperheatSteamIntoNextHighest"
+      (change)="setDesuperheatSteam()" (focus)="focusField('desuperheatSteamIntoNextHighest')" (blur)="focusOut()" formControlName="desuperheatSteamIntoNextHighest"
       [ngClass]="{'indicate-different': isDesuperheatSteamIntoNextHighestDifferent()}">
       <option [ngValue]=true>Yes</option>
       <option [ngValue]=false>No</option>
@@ -146,7 +146,7 @@
         {{headerForm.controls.desuperheatSteamTemperature.errors.max.max}}
         <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
         <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
-      <span *ngIf="headerForm.desuperheatSteamTemperature.heatLoss.errors.min">Value can't be less than
+      <span *ngIf="headerForm.controls.desuperheatSteamTemperature.errors.min">Value can't be less than
         {{headerForm.controls.desuperheatSteamTemperature.errors.min.min}}
         <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
         <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>

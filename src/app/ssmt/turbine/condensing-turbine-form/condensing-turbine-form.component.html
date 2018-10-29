@@ -2,7 +2,7 @@
   <label class="group-label w-100">
     <div class="form-group">
       <input type="checkbox" (change)="save()" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()" [ngClass]="{'indicate-different': isUseTurbineDifferent()}">
-      Condensing Turbine
+      <span class="pl-1">Condensing Turbine</span>
     </div>
   </label>
   <div *ngIf="turbineForm.controls.useTurbine.value == true">

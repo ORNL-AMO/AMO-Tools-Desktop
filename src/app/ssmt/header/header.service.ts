@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HeaderInput, HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 
@@ -70,6 +70,12 @@ export class HeaderService {
 
   getHeaderFormFromObj(obj: HeaderNotHighestPressure, settings: Settings): FormGroup {
     let ranges: HeaderRanges = this.getRanges(settings)
+    let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
+    if(obj.desuperheatSteamIntoNextHighest){
+      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+    }else{
+      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+    }
     let form: FormGroup = this.formBuilder.group({
       pressure: [obj.pressure, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
       processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(0), Validators.max(1000)]],
@@ -77,7 +83,7 @@ export class HeaderService {
       heatLoss: [obj.heatLoss, [Validators.required, Validators.min(0), Validators.max(10)]],
       flashCondensateIntoHeader: [obj.flashCondensateIntoHeader, Validators.required],
       desuperheatSteamIntoNextHighest: [obj.desuperheatSteamIntoNextHighest, Validators.required],
-      desuperheatSteamTemperature: [obj.desuperheatSteamTemperature, [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
+      desuperheatSteamTemperature: [obj.desuperheatSteamTemperature, tmpDesuperheatSteamTemperatureValidators],
     })
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
