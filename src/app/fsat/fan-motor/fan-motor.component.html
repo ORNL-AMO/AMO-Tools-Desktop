@@ -20,7 +20,7 @@
         (change)="save()" (focus)="focusField('motorRatedPower')" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null, 'invalid': fanMotorForm.controls.motorRatedPower.invalid}">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.fanPowerMeasurement}}</option>
       </select> -->
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null && !fanMotorForm.controls.fullLoadAmps.invalid}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null}">
         <input type="number" name="motorRatedPower" class="form-control number-input-field" id="{{'motorRatedPower_'+idString}}"
           (focus)="focusField('motorRatedPower')" (input)="save()" formControlName="motorRatedPower">
         <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
@@ -93,7 +93,7 @@
         Full-Load Amps
         <a class="form-text small click-link" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent(),'error': warnings.flaError !== null && !fanMotorForm.controls.fullLoadAmps.invalid}">
+      <div class="input-group" [ngClass]="{'indicate-different': isMotorFullLoadAmpsDifferent(),'error': warnings.flaError !== null}">
         <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="{{'fullLoadAmps_'+idString}}"
           formControlName="fullLoadAmps" (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();"
           [readonly]="!selected">

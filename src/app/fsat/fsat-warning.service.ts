@@ -72,39 +72,43 @@ export class FsatWarningService {
   }
 
   checkRatedPower(fsat: FSAT, settings: Settings) {
-    let motorPowerStr: string;
-    if (fsat.fieldData.loadEstimatedMethod == 0) {
-      motorPowerStr = 'Motor Power';
-    } else {
-      motorPowerStr = 'Motor Current';
-    }
+    if (!fsat.fanMotor.optimize) {
+      let motorPowerStr: string;
+      if (fsat.fieldData.loadEstimatedMethod == 0) {
+        motorPowerStr = 'Motor Power';
+      } else {
+        motorPowerStr = 'Motor Current';
+      }
 
-    let tmpVal = fsat.fanMotor.motorRatedPower;
-    let min: number = 5;
-    let max: number = 10000;
-    if (tmpVal < this.convertUnitsService.value(min).from('hp').to(settings.fanPowerMeasurement)) {
-      return 'Rated motor power is too small.';
-    } else if (tmpVal > this.convertUnitsService.value(max).from('hp').to(settings.fanPowerMeasurement)) {
-      return 'Rated motor power is too large.';
-    } else {
-      if (fsat.fieldData.motorPower && tmpVal) {
-        let val, compare;
-        if (settings.fanPowerMeasurement == 'hp') {
-          val = this.convertUnitsService.value(tmpVal).from(settings.fanPowerMeasurement).to('kW');
-          compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
-        } else {
-          val = tmpVal;
-          compare = fsat.fieldData.motorPower;
-        }
-        val = val * 1.5;
-        if (val < compare) {
-          return 'The Field Data ' + motorPowerStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
+      let tmpVal = fsat.fanMotor.motorRatedPower;
+      let min: number = 5;
+      let max: number = 10000;
+      if (tmpVal < this.convertUnitsService.value(min).from('hp').to(settings.fanPowerMeasurement)) {
+        return 'Rated motor power is too small.';
+      } else if (tmpVal > this.convertUnitsService.value(max).from('hp').to(settings.fanPowerMeasurement)) {
+        return 'Rated motor power is too large.';
+      } else {
+        if (fsat.fieldData.motorPower && tmpVal) {
+          let val, compare;
+          if (settings.fanPowerMeasurement == 'hp') {
+            val = this.convertUnitsService.value(tmpVal).from(settings.fanPowerMeasurement).to('kW');
+            compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
+          } else {
+            val = tmpVal;
+            compare = fsat.fieldData.motorPower;
+          }
+          val = val * 1.5;
+          if (val < compare) {
+            return 'The Field Data ' + motorPowerStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
+          } else {
+            return null;
+          }
         } else {
           return null;
         }
-      } else {
-        return null;
       }
+    } else {
+      return null;
     }
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ValidatorFn } from '@angular/forms';
 import { FanMotorService } from './fan-motor.service';
 import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../../shared/models/settings';
@@ -222,7 +222,10 @@ export class FanMotorComponent implements OnInit {
   }
 
   changeEfficiencyClass() {
-    // this.modifyPowerArrays();
+    let tmpEfficiencyValidators: Array<ValidatorFn> = this.fanMotorService.getEfficiencyValidators(this.fanMotorForm.controls.efficiencyClass.value);
+    this.fanMotorForm.controls.efficiencyClass.setValidators(tmpEfficiencyValidators);
+    this.fanMotorForm.controls.efficiencyClass.reset(this.fanMotorForm.controls.efficiencyClass.value);
+    this.fanMotorForm.controls.efficiencyClass.markAsDirty();
     this.save();
   }
 

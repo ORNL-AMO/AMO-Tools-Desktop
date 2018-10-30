@@ -59,6 +59,7 @@ export class SystemDataFormComponent implements OnInit {
 
     init() {
         this.baselineForm = this.fanFieldDataService.getFormFromObj(this.fsat.fieldData);
+        this.baselineForm.disable();
         this.modificationForm = this.fanFieldDataService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fieldData);
         this.initCost();
         this.initFlowRate();

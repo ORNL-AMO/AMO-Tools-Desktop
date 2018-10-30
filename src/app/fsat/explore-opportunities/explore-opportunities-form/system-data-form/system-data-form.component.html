@@ -66,7 +66,7 @@
                 <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
                     <span *ngIf="baselineForm.controls.flowRate.errors.required">Value Required</span>
                     <span *ngIf="baselineForm.controls.flowRate.errors.min">Value can't be less than
-                        {{baselineForm.controls.cost.errors.min.min}} <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
+                        {{baselineForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
                 </span>
             </div>
         </form>
@@ -82,8 +82,7 @@
                 <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.flowRate.invalid && !modificationForm.controls.flowRate.pristine">
                     <span *ngIf="modificationForm.controls.flowRate.errors.required">Value Required</span>
                     <span *ngIf="modificationForm.controls.flowRate.errors.min">Value can't be less than
-                        {{modificationForm.controls.cost.errors.min.min}} <span class="input-group-addon units"
-                            [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
+                        {{modificationForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
                 </span>
             </div>
         </form>
@@ -119,7 +118,7 @@
                     <span *ngIf="baselineForm.controls.outletPressure.errors.required">Value Required</span>
                 </span>
                 <span class="alert-warning pull-right small" *ngIf="baselineWarnings.outletPressureError !== null && !baselineForm.controls.outletPressure.pristine && !baselineForm.controls.outletPressure.invalid">
-                    {{baselineWarnings.outletPressureError}} <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+                    {{baselineWarnings.outletPressureError}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
                 </span>
             </div>
         </form>
@@ -148,7 +147,7 @@
                     <span *ngIf="modificationForm.controls.outletPressure.errors.required">Value Required</span>
                 </span>
                 <span class="alert-warning pull-right small" *ngIf="modificationWarnings.outletPressureError !== null && !modificationForm.controls.outletPressure.pristine && !modificationForm.controls.outletPressure.invalid">
-                    {{modificationWarnings.outletPressureError}} <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+                    {{modificationWarnings.outletPressureError}} <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
                 </span>
             </div>
         </form>
