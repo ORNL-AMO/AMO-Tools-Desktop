@@ -11,7 +11,7 @@ export class FanFieldDataService {
   getFormFromObj(obj: FieldData): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       operatingFraction: [obj.operatingFraction, [Validators.required, Validators.min(0), Validators.max(1)]],
-      flowRate: [obj.flowRate, Validators.required],
+      flowRate: [obj.flowRate, [Validators.required, Validators.min(0)]],
       inletPressure: [obj.inletPressure, Validators.required],
       outletPressure: [obj.outletPressure, Validators.required],
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],

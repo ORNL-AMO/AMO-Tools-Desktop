@@ -11,7 +11,7 @@ export class FsatWarningService {
 
   checkFieldDataWarnings(fsat: FSAT, settings: Settings): FanFieldDataWarnings {
     return {
-      flowRateError: this.checkFlowRate(fsat),
+      // flowRateError: this.checkFlowRate(fsat),
       costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
       ratedPowerError: this.checkRatedPower(fsat, settings),
@@ -360,7 +360,7 @@ export class FsatWarningService {
 
 
 export interface FanFieldDataWarnings {
-  flowRateError: string,
+  // flowRateError: string,
   voltageError: string,
   costError: string,
   //opFractionError: string,

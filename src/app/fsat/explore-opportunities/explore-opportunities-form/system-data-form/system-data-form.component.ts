@@ -6,6 +6,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { FsatWarningService, FanFieldDataWarnings } from '../../../fsat-warning.service';
+import { FanFieldDataService } from '../../../fan-field-data/fan-field-data.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-system-data-form',
@@ -32,7 +34,15 @@ export class SystemDataFormComponent implements OnInit {
     modificationWarnings: FanFieldDataWarnings;
     baselineWarnings: FanFieldDataWarnings;
     tmpBaselineName: string = 'Baseline';
-    constructor(private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService, private fsatWarningService: FsatWarningService) {
+
+    baselineForm: FormGroup;
+    modificationForm: FormGroup;
+    constructor(
+        private convertUnitsService: ConvertUnitsService, 
+        private helpPanelService: HelpPanelService, 
+        private modifyConditionsService: ModifyConditionsService, 
+        private fsatWarningService: FsatWarningService,
+        private fanFieldDataService: FanFieldDataService) {
     }
 
     ngOnInit() {
@@ -48,6 +58,8 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     init() {
+        this.baselineForm = this.fanFieldDataService.getFormFromObj(this.fsat.fieldData);
+        this.modificationForm = this.fanFieldDataService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fieldData);
         this.initCost();
         this.initFlowRate();
         this.initPressure();
@@ -57,7 +69,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initCost() {
-        if (this.fsat.fieldData.cost != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.cost) {
+        if (this.baselineForm.controls.cost.value != this.modificationForm.controls.cost.value) {
             this.showCost = true;
         } else {
             this.showCost = false;
@@ -65,7 +77,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initFlowRate() {
-        if (this.fsat.fieldData.flowRate != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.flowRate) {
+        if (this.baselineForm.controls.flowRate.value != this.modificationForm.controls.flowRate.value) {
             this.showFlowRate = true;
         } else {
             this.showFlowRate = false;
@@ -73,8 +85,8 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initPressure() {
-        if (this.fsat.fieldData.inletPressure != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressure ||
-            this.fsat.fieldData.outletPressure != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressure) {
+        if (this.baselineForm.controls.inletPressure.value != this.modificationForm.controls.inletPressure.value ||
+            this.baselineForm.controls.outletPressure.value != this.modificationForm.controls.outletPressure.value) {
             this.showPressure = true;
         } else {
             this.showPressure = false;
@@ -82,7 +94,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initOpFraction() {
-        if (this.fsat.fieldData.operatingFraction != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.operatingFraction) {
+        if (this.baselineForm.controls.operatingFraction.value != this.modificationForm.controls.operatingFraction.value) {
             this.showOperatingFraction = true;
         } else {
             this.showOperatingFraction = false;
@@ -112,41 +124,42 @@ export class SystemDataFormComponent implements OnInit {
 
     toggleCost() {
         if (this.showCost == false) {
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.cost = this.fsat.fieldData.cost;
+            this.modificationForm.controls.cost.patchValue(this.baselineForm.controls.cost);
             this.calculate();
         }
     }
 
     togglePressure() {
         if (this.showPressure == false) {
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressure = this.fsat.fieldData.inletPressure;
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressure = this.fsat.fieldData.outletPressure;
+            this.modificationForm.controls.inletPressure.patchValue(this.baselineForm.controls.inletPressure.value);
+            this.modificationForm.controls.outletPressure.patchValue(this.baselineForm.controls.outletPressure.value);
             this.calculate();
         }
     }
 
     toggleOperatingFraction() {
         if (this.showOperatingFraction == false) {
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.operatingFraction = this.fsat.fieldData.operatingFraction;
+            this.modificationForm.controls.operatingFraction.patchValue(this.baselineForm.controls.operatingFraction.value);
             this.calculate();
         }
     }
 
     toggleFlowRate() {
         if (this.showFlowRate == false) {
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.flowRate = this.fsat.fieldData.flowRate;
+            this.modificationForm.controls.flowRate.patchValue(this.baselineForm.controls.flowRate.value);
             this.calculate();
         }
     }
 
     calculate() {
-        this.emitCalculate.emit(true);
+        this.fsat.modifications[this.exploreModIndex].fsat.fieldData = this.fanFieldDataService.getObjFromForm(this.modificationForm);
         this.checkWarnings();
+        this.emitCalculate.emit(true);
     }
 
     focusField(str: string) {
         this.helpPanelService.currentField.next(str);
-        this.modifyConditionsService.modifyConditionsTab.next('fan-field-data')
+        this.modifyConditionsService.modifyConditionsTab.next('fan-field-data');
     }
 
     checkWarnings() {

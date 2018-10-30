@@ -1,65 +1,90 @@
 <div class="checkbox">
     <label class="group-label" for="general">
-        <input type="checkbox" id="general" value="true" (focus)="focusField('cost')" (change)="toggleSystemData()" [(ngModel)]="showSystemData"
-        /> Adjust System Data
+        <input type="checkbox" id="general" value="true" (focus)="focusField('cost')" (change)="toggleSystemData()"
+            [(ngModel)]="showSystemData" /> Adjust System Data
     </label>
 </div>
 <ul *ngIf="showSystemData">
     <li>
         <div class="checkbox">
             <label for="modifyCost">
-                <input type="checkbox" id="modifyCost" value="true" (focus)="focusField('cost')" (change)="toggleCost()" [(ngModel)]="showCost"
-                /> Modify Cost
+                <input type="checkbox" id="modifyCost" value="true" (focus)="focusField('cost')" (change)="toggleCost()"
+                    [(ngModel)]="showCost" /> Modify Cost
             </label>
         </div>
-        <form *ngIf="showCost">
+        <form [formGroup]="baselineForm" *ngIf="showCost">
             <div class="form-group">
                 <label for="baselineCost">Baseline Cost</label>
                 <div class="input-group">
-                    <input name="baselineCost" [disabled]="true" type="number" step="any" id="baselineCost" class="form-control" (focus)="focusField('cost')"
-                        (input)="calculate()" [(ngModel)]="fsat.fieldData.cost" />
+                    <input name="baselineCost" type="number" step="any" id="baselineCost" class="form-control" (focus)="focusField('cost')"
+                        (input)="calculate()" formControlName="cost" [ngClass]="{'error': baselineWarnings.costError !== null}" />
                     <span class="input-group-addon units">$/kWH</span>
                 </div>
-                <span class="alert-warning pull-right small" *ngIf="baselineWarnings.costError !== null">{{baselineWarnings.costError}}</span>
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.cost.invalid && !baselineForm.controls.cost.pristine">
+                    <span *ngIf="baselineForm.controls.cost.errors.required">Value Required</span>
+                    <span *ngIf="baselineForm.controls.cost.errors.min">Value can't be less than
+                        {{baselineForm.controls.cost.errors.min.min}} $/kWh.</span>
+                </span>
+                <span class="alert-warning pull-right small" *ngIf="baselineWarnings.costError !== null && !baselineForm.controls.cost.pristine && !baselineForm.controls.cost.invalid">
+                    {{baselineWarnings.costError}} $/kWh.</span>
             </div>
+        </form>
+        <form [formGroup]="modificationForm" *ngIf="showCost">
             <div class="form-group">
                 <label for="modificationCost">Modification Cost</label>
                 <div class="input-group">
-                    <input name="modificationCost" type="number" step="0.01" min="0" id="modificationCost" class="form-control" (focus)="focusField('cost')"
-                        [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.cost" (input)="calculate()" />
+                    <input name="modificationCost" type="number" step="0.01" min="0" id="modificationCost" class="form-control"
+                        (focus)="focusField('cost')" formControlName="cost" (input)="calculate()" [ngClass]="{'error': modificationWarnings.costError !== null}" />
                     <span class="input-group-addon units">$/kWh</span>
                 </div>
-                <span class="alert-warning pull-right small" *ngIf="modificationWarnings.costError !== null">{{modificationWarnings.costError}}</span>
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.cost.invalid && !modificationForm.controls.cost.pristine">
+                    <span *ngIf="modificationForm.controls.cost.errors.required">Value Required</span>
+                    <span *ngIf="modificationForm.controls.cost.errors.min">Value can't be less than
+                        {{modificationForm.controls.cost.errors.min.min}} $/kWh.</span>
+                </span>
+                <span class="alert-warning pull-right small" *ngIf="modificationWarnings.costError !== null && !modificationForm.controls.cost.pristine && !modificationForm.controls.cost.invalid">
+                    {{modificationWarnings.costError}} $/kWh.</span>
             </div>
         </form>
     </li>
     <li>
         <div class="checkbox">
             <label for="modifyFlowRate">
-                <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')" (change)="toggleFlowRate()" [(ngModel)]="showFlowRate"
-                /> Modify Flow Rate
+                <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
+                    [(ngModel)]="showFlowRate" /> Modify Flow Rate
             </label>
         </div>
-        <form *ngIf="showFlowRate">
+        <form [formGroup]="baselineForm" *ngIf="showFlowRate">
             <div class="form-group">
                 <label for="baselineFlowRate">Baseline Flow Rate</label>
                 <div class="input-group">
-                    <input name="baselineFlowRate" [disabled]="true" type="number" step="any" id="baselineFlowRate" class="form-control" (focus)="focusField('flowRate')"
-                        (input)="calculate()" [(ngModel)]="fsat.fieldData.flowRate" />
+                    <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control"
+                        (focus)="focusField('flowRate')" (input)="calculate()" formControlName="flowRate" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.fanFlowRate)"></span>
                     <!--<span class="input-group-addon units">{{settings.fanFlowRate}}</span>-->
                 </div>
-                <span class="alert-warning pull-right small" *ngIf="baselineWarnings.flowRateError !== null">{{baselineWarnings.flowRateError}}</span>
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
+                    <span *ngIf="baselineForm.controls.flowRate.errors.required">Value Required</span>
+                    <span *ngIf="baselineForm.controls.flowRate.errors.min">Value can't be less than
+                        {{baselineForm.controls.cost.errors.min.min}} <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
+                </span>
             </div>
+        </form>
+        <form [formGroup]="modificationForm" *ngIf="showFlowRate">
             <div class="form-group">
                 <label for="modificationFlowRate">Modification Flow Rate</label>
                 <div class="input-group">
-                    <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control" (focus)="focusField('flowRate')"
-                        [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.flowRate" (input)="calculate()" />
+                    <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control"
+                        (focus)="focusField('flowRate')" formControlName="flowRate" (input)="calculate()" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.fanFlowRate)"></span>
                     <!--<span class="input-group-addon units">{{settings.fanFlowRate}}</span>-->
                 </div>
-                <span class="alert-warning pull-right small" *ngIf="modificationWarnings.flowRateError !== null">{{modificationWarnings.flowRateError}}</span>
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.flowRate.invalid && !modificationForm.controls.flowRate.pristine">
+                    <span *ngIf="modificationForm.controls.flowRate.errors.required">Value Required</span>
+                    <span *ngIf="modificationForm.controls.flowRate.errors.min">Value can't be less than
+                        {{modificationForm.controls.cost.errors.min.min}} <span class="input-group-addon units"
+                            [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
+                </span>
             </div>
         </form>
     </li>
@@ -70,68 +95,99 @@
                     [(ngModel)]="showPressure" /> Modify Pressure
             </label>
         </div>
-        <form *ngIf="showPressure">
+        <form [formGroup]="baselineForm" *ngIf="showPressure">
             <div class="form-group">
                 <label for="baselinePressure">Baseline Inlet Pressure</label>
                 <div class="input-group">
-                    <input name="baselinePressure" [disabled]="true" type="number" step="any" id="baselinePressure" class="form-control" (focus)="focusField('inletPressure')"
-                        (input)="calculate()" [(ngModel)]="fsat.fieldData.inletPressure" />
+                    <input name="baselinePressure" type="number" step="any" id="baselinePressure" class="form-control"
+                        (focus)="focusField('inletPressure')" (input)="calculate()" formControlName="inletPressure" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.fanPressureMeasurement)"></span>
-
                 </div>
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.inletPressure.invalid && !baselineForm.controls.inletPressure.pristine">
+                    <span *ngIf="baselineForm.controls.inletPressure.errors.required">Value Required</span>
+                </span>
             </div>
             <div class="form-group">
                 <label for="baselineOutletPressure">Baseline Outlet Pressure</label>
                 <div class="input-group">
-                    <input name="baselineOutletPressure" [disabled]="true" type="number" step="any" id="baselineOutletPressure" class="form-control"
-                        (focus)="focusField('outletPressure')" (input)="calculate()" [(ngModel)]="fsat.fieldData.outletPressure"
-                    />
+                    <input name="baselineOutletPressure" type="number" step="any" id="baselineOutletPressure" class="form-control"
+                        (focus)="focusField('outletPressure')" (input)="calculate()" formControlName="outletPressure"
+                        [ngClass]="{'error': baselineWarnings.outletPressureError !== null}" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.fanPressureMeasurement)"></span>
                 </div>
-                <span class="alert-warning pull-right small" *ngIf="baselineWarnings.outletPressureError !== null">{{baselineWarnings.outletPressureError}}</span>
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.outletPressure.invalid && !baselineForm.controls.outletPressure.pristine">
+                    <span *ngIf="baselineForm.controls.outletPressure.errors.required">Value Required</span>
+                </span>
+                <span class="alert-warning pull-right small" *ngIf="baselineWarnings.outletPressureError !== null && !baselineForm.controls.outletPressure.pristine && !baselineForm.controls.outletPressure.invalid">
+                    {{baselineWarnings.outletPressureError}} <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+                </span>
             </div>
+        </form>
+        <form [formGroup]="modificationForm" *ngIf="showPressure">
             <div class="form-group">
                 <label for="modificationInletPressure">Modification Inlet Pressure</label>
                 <div class="input-group">
-                    <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure" class="form-control" (focus)="focusField('inletPressure')"
-                        (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.inletPressure"
-                    />
+                    <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure"
+                        class="form-control" (focus)="focusField('inletPressure')" (input)="calculate()"
+                        formControlName="inletPressure" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.fanPressureMeasurement)"></span>
                 </div>
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.inletPressure.invalid && !modificationForm.controls.inletPressure.pristine">
+                    <span *ngIf="modificationForm.controls.inletPressure.errors.required">Value Required</span>
+                </span>
             </div>
             <div class="form-group">
                 <label for="modificationOutletPressure">Modification Outlet Pressure</label>
                 <div class="input-group">
-                    <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure" class="form-control" (focus)="focusField('outletPressure')"
-                        (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.outletPressure"
-                    />
+                    <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure"
+                        class="form-control" (focus)="focusField('outletPressure')" (input)="calculate()"
+                        formControlName="outletPressure" [ngClass]="{'error': modificationWarnings.outletPressureError !== null}" />
                     <span class="input-group-addon units" [innerHTML]="getUnit(settings.fanPressureMeasurement)"></span>
                 </div>
-                <span class="alert-warning pull-right small" *ngIf="modificationWarnings.outletPressureError !== null">{{modificationWarnings.outletPressureError}}</span>
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.outletPressure.invalid && !modificationForm.controls.outletPressure.pristine">
+                    <span *ngIf="modificationForm.controls.outletPressure.errors.required">Value Required</span>
+                </span>
+                <span class="alert-warning pull-right small" *ngIf="modificationWarnings.outletPressureError !== null && !modificationForm.controls.outletPressure.pristine && !modificationForm.controls.outletPressure.invalid">
+                    {{modificationWarnings.outletPressureError}} <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+                </span>
             </div>
         </form>
     </li>
     <li>
         <div class="checkbox">
             <label for="modifyOperatingFraction">
-                <input type="checkbox" id="modifyOperatingFraction" value="true" (focus)="focusField('operatingFraction')" (change)="toggleOperatingFraction()"
-                    [(ngModel)]="showOperatingFraction" /> Modify Operating Fraction
+                <input type="checkbox" id="modifyOperatingFraction" value="true" (focus)="focusField('operatingFraction')"
+                    (change)="toggleOperatingFraction()" [(ngModel)]="showOperatingFraction" /> Modify Operating
+                Fraction
             </label>
         </div>
-        <form *ngIf="showOperatingFraction">
+        <form [formGroup]="baselineForm" *ngIf="showOperatingFraction">
             <div class="form-group">
                 <label for="baselineOperatingFraction">Baseline operating fractiong</label>
-                <input name="baselineOperatingFraction" [disabled]="true" type="number" step="any" id="baselineOperatingFraction" class="form-control"
-                    (focus)="focusField('operatingFraction')" (input)="calculate()" [(ngModel)]="fsat.fieldData.operatingFraction"
-                />
-                <span class="alert-warning pull-right small" *ngIf="baselineWarnings.opFractionError !== null">{{baselineWarnings.opFractionError}}</span>
+                <input name="baselineOperatingFraction" type="number" step="any" id="baselineOperatingFraction" class="form-control"
+                    (focus)="focusField('operatingFraction')" (input)="calculate()" formControlName="operatingFraction" />
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.operatingFraction.invalid && !baselineForm.controls.operatingFraction.pristine">
+                    <span *ngIf="baselineForm.controls.operatingFraction.errors.required">Value Required</span>
+                    <span *ngIf="baselineForm.controls.operatingFraction.errors.max">Value can't be greater than
+                        {{baselineForm.controls.operatingFraction.errors.max.max}}.</span>
+                    <span *ngIf="baselineForm.controls.operatingFraction.errors.min">Value can't be less than
+                        {{baselineForm.controls.operatingFraction.errors.min.min}}.</span>
+                </span>
             </div>
+        </form>
+        <form [formGroup]="modificationForm" *ngIf="showOperatingFraction">
             <div class="form-group">
                 <label for="modificationOperatingFraction">Modification operating fraction</label>
-                <input name="modificationOperatingFraction" type="number" step="0.1" min="0" max="1" id="modificationOperatingFraction" class="form-control"
-                    (focus)="focusField('operatingFraction')" (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fieldData.operatingFraction"
-                />
-                <span class="alert-warning pull-right small" *ngIf="modificationWarnings.opFractionError !== null">{{modificationWarnings.opFractionError}}</span>
+                <input name="modificationOperatingFraction" type="number" step="0.1" min="0" max="1" id="modificationOperatingFraction"
+                    class="form-control" (focus)="focusField('operatingFraction')" (input)="calculate()"
+                    formControlName="operatingFraction" />
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.operatingFraction.invalid && !modificationForm.controls.operatingFraction.pristine">
+                    <span *ngIf="modificationForm.controls.operatingFraction.errors.required">Value Required</span>
+                    <span *ngIf="modificationForm.controls.operatingFraction.errors.max">Value can't be greater than
+                        {{modificationForm.controls.operatingFraction.errors.max.max}}.</span>
+                    <span *ngIf="modificationForm.controls.operatingFraction.errors.min">Value can't be less than
+                        {{modificationForm.controls.operatingFraction.errors.min.min}}.</span>
+                </span>
             </div>
         </form>
     </li>
