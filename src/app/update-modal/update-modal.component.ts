@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, ChangeDetectorRef, Input } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ElectronService } from 'ngx-electron';
+import { ImportExportService } from '../shared/import-export/import-export.service';
 @Component({
   selector: 'app-update-modal',
   templateUrl: './update-modal.component.html',
@@ -9,11 +10,13 @@ import { ElectronService } from 'ngx-electron';
 export class UpdateModalComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<boolean>();
+  @Input()
+  updateError: boolean;
 
   @ViewChild('updateModal') public updateModal: ModalDirective;
   updateAvailable: boolean;
   updateSelected: boolean = false;
-  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef) { }
+  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private importExportService: ImportExportService) { }
 
   ngOnInit() {
 
@@ -44,5 +47,9 @@ export class UpdateModalComponent implements OnInit {
   cancel() {
     this.hideUpdateModal();
     //this.electronService.ipcRenderer.send('later', null);
+  }
+
+  sendMail(){
+    this.importExportService.openMailTo();
   }
 }
