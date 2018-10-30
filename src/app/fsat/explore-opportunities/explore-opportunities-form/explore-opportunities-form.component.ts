@@ -37,6 +37,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   save() {
+    console.log(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.drive);
     this.emitSave.emit(true);
   }
 

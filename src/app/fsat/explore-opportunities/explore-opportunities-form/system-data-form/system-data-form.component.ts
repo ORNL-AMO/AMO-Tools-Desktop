@@ -168,7 +168,7 @@ export class SystemDataFormComponent implements OnInit {
         this.modificationWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat.modifications[this.exploreModIndex].fsat, this.settings);
     }
 
-    getUnit(unit: string) {
+    getDisplayUnit(unit: string) {
         let tmpUnit = this.convertUnitsService.getUnit(unit);
         let dsp = tmpUnit.unit.name.display.replace('(', '');
         dsp = dsp.replace(')', '');
