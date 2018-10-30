@@ -25,6 +25,9 @@ export class FanSetupService {
       specifiedDriveEfficiency: [obj.specifiedDriveEfficiency, specifiedDriveValidators],
       fanEfficiency: [obj.fanEfficiency]
     })
+    for (let key in form.controls) {
+      form.controls[key].markAsDirty();
+    }
     return form;
   }
 

@@ -56,12 +56,12 @@
         <span class="input-group-addon units">%</span>
       </div>
       <!-- <span class="alert-warning pull-right small" *ngIf="specifiedDriveEfficiencyError !== null" [innerHtml]="specifiedDriveEfficiencyError"></span> -->
-      <span class="alert-danger pull-right small" *ngIf="fanForm.controls.fanSpecified.invalid && !fanForm.controls.fanSpecified.pristine">
-        <span *ngIf="fanForm.controls.fanSpecified.errors.required">Value Required</span>
-        <span *ngIf="fanForm.controls.fanSpecified.errors.max">Value can't be greater than
-          {{fanForm.controls.fanSpecified.errors.max.max}} %.</span>
+      <span class="alert-danger pull-right small" *ngIf="fanForm.controls.specifiedDriveEfficiency.invalid && !fanForm.controls.specifiedDriveEfficiency.pristine">
+        <span *ngIf="fanForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
+        <span *ngIf="fanForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
+          {{fanForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
         <span *ngIf="fanForm.controls.fanSpecified.errors.min">Value can't be less than
-          {{fanForm.controls.fanSpecified.errors.min.min}} %.</span>
+          {{fanForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
       </span>
     </div>
 
