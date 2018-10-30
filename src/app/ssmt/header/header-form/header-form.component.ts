@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
-import { HeaderService } from '../header.service';
+import { HeaderService, HeaderRanges } from '../header.service';
 import { SsmtService } from '../../ssmt.service';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../../shared/models/steam/ssmt';
 import { CompareService } from '../../compare.service';
@@ -28,7 +28,7 @@ export class HeaderFormComponent implements OnInit {
   inSetup: boolean;
   @Input()
   idString: string;
-  
+
   headerLabel: string;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
@@ -88,6 +88,19 @@ export class HeaderFormComponent implements OnInit {
     }
   }
 
+  setDesuperheatSteam() {
+    let ranges: HeaderRanges = this.headerService.getRanges(this.settings)
+    let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
+    if (this.headerForm.controls.desuperheatSteamIntoNextHighest.value == true) {
+      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+    } else {
+      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+    }
+    this.headerForm.controls.desuperheatSteamTemperature.setValidators(tmpDesuperheatSteamTemperatureValidators);
+    this.headerForm.controls.desuperheatSteamTemperature.reset(this.headerForm.controls.desuperheatSteamTemperature.value);
+    this.headerForm.controls.desuperheatSteamTemperature.markAsDirty();
+    this.save();
+  }
 
   canCompare(): boolean {
     if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {

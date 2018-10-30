@@ -4,6 +4,8 @@ import { Settings } from '../../../../../shared/models/settings';
 import { Quantity } from '../../../../../shared/models/steam/steam-inputs';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
 import { SsmtService } from '../../../../ssmt.service';
+import { FormGroup, ValidatorFn } from '@angular/forms';
+import { TurbineService } from '../../../../turbine/turbine.service';
 
 @Component({
   selector: 'app-explore-pressure-turbine-form',
@@ -16,11 +18,11 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<{baselineTurbine: PressureTurbine, modificationTurbine: PressureTurbine}>();
+  emitSave = new EventEmitter<boolean>();
   @Input()
-  baselineTurbine: PressureTurbine;
+  baselineForm: FormGroup;
   @Input()
-  modificationTurbine: PressureTurbine;
+  modificationForm: FormGroup;
   @Output('emitShowTurbine')
   emitShowTurbine = new EventEmitter<boolean>();
   @Input()
@@ -31,7 +33,7 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
   turbineTypeOptions: Array<Quantity>;
 
   showOperation: boolean;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService) { }
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService, private turbineService: TurbineService) { }
 
   ngOnInit() {
     this.turbineTypeOptions = PressureTurbineOperationTypes;
@@ -52,12 +54,12 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
 
 
   initOperationType() {
-    if (this.baselineTurbine.operationType != this.modificationTurbine.operationType) {
+    if (this.baselineForm.controls.operationType.value != this.modificationForm.controls.operationType.value) {
       this.showOperation = true;
       this.emitShowTurbine.emit(true);
-    } else if (this.baselineTurbine.operationType != 2) {
-      if (this.baselineTurbine.operationValue1 != this.modificationTurbine.operationValue1 ||
-        this.baselineTurbine.operationValue2 != this.modificationTurbine.operationValue2) {
+    } else if (this.baselineForm.controls.operationType.value != 2) {
+      if (this.baselineForm.controls.operationValue1.value != this.modificationForm.controls.operationValue1.value ||
+        this.baselineForm.controls.operationValue2.value != this.modificationForm.controls.operationValue2.value) {
         this.showOperation = true;
         this.emitShowTurbine.emit(true);
       }
@@ -69,8 +71,34 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
     
   }
 
+  changeBaselineOperationValidators() {
+    let tmpObj: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.baselineForm);
+    let tmpValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.turbineService.getPressureOperationValueRanges(tmpObj);
+    this.baselineForm.controls.operationValue1.setValidators(tmpValidators.operationValue1Validators);
+    this.baselineForm.controls.operationValue1.reset(this.baselineForm.controls.operationValue1.value);
+    this.baselineForm.controls.operationValue1.markAsDirty();
+    this.baselineForm.controls.operationValue2.setValidators(tmpValidators.operationValue2Validators);
+    this.baselineForm.controls.operationValue2.reset(this.baselineForm.controls.operationValue2.value);
+    this.baselineForm.controls.operationValue2.markAsDirty();
+    this.save();
+  }
+
+  changeModificationOperationValidators() {
+    let tmpObj: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.modificationForm);
+    let tmpValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.turbineService.getPressureOperationValueRanges(tmpObj);
+    this.modificationForm.controls.operationValue1.setValidators(tmpValidators.operationValue1Validators);
+    this.modificationForm.controls.operationValue1.reset(this.modificationForm.controls.operationValue1.value);
+    this.modificationForm.controls.operationValue1.markAsDirty();
+    this.modificationForm.controls.operationValue2.setValidators(tmpValidators.operationValue2Validators);
+    this.modificationForm.controls.operationValue2.reset(this.modificationForm.controls.operationValue2.value);
+    this.modificationForm.controls.operationValue2.markAsDirty();
+    this.save();
+  }
+
+
   save() {
-    this.emitSave.emit({baselineTurbine: this.baselineTurbine, modificationTurbine: this.modificationTurbine});
+    // this.emitSave.emit({baselineTurbine: this.baselineForm.controls, modificationTurbine: this.modificationForm.controls});
+    this.emitSave.emit(true);
   }
 
   focusField(str: string) {

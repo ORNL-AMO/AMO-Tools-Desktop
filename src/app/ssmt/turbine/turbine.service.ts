@@ -40,7 +40,7 @@ export class TurbineService {
     }
   }
 
-  initCondensingTurbine(settings: Settings): FormGroup {
+  initCondensingTurbineForm(settings: Settings): FormGroup {
     let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMin = this.convertUnitsService.roundVal(tmpCondensingPressureMin, 1);
     let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psia').to(settings.steamVacuumPressure);

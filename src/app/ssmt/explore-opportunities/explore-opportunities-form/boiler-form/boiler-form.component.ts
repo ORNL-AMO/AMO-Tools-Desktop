@@ -1,9 +1,11 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { SsmtService } from '../../../ssmt.service';
-import { SSMT } from '../../../../shared/models/steam/ssmt';
+import { SSMT, BoilerInput } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
+import { BoilerService } from '../../../boiler/boiler.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-boiler-form',
@@ -18,7 +20,7 @@ export class BoilerFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<SSMT>();
 
   baselineFuelOptions: any;
   modificationFuelOptions: any;
@@ -31,7 +33,11 @@ export class BoilerFormComponent implements OnInit {
   showPreheatBlowdownWater: boolean = false;
   showInitialSteamTemperature: boolean = false;
   showDeaeratorConditions: boolean = false;
-  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private suiteDbService: SuiteDbService) { }
+
+  baselineForm: FormGroup;
+  modificationForm: FormGroup;
+
+  constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private suiteDbService: SuiteDbService, private boilerService: BoilerService) { }
 
   ngOnInit() {
     this.init();
@@ -54,20 +60,27 @@ export class BoilerFormComponent implements OnInit {
     }
   }
 
-  setFuelTypes() {
-    if (this.ssmt.boilerInput.fuelType == 0) {
+  setFuelTypes(save?: boolean) {
+    if (this.baselineForm.controls.fuelType.value == 0) {
       this.baselineFuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    } else if (this.ssmt.boilerInput.fuelType == 1) {
+    } else if (this.baselineForm.controls.fuelType.value == 1) {
       this.baselineFuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
     }
-    if (this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.fuelType == 0) {
+    if (this.modificationForm.controls.fuelType.value == 0) {
       this.modificationFuelOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    } else if (this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.fuelType == 1) {
+    } else if (this.modificationForm.controls.fuelType.value == 1) {
       this.modificationFuelOptions = this.suiteDbService.selectGasFlueGasMaterials();
+    }
+    if(save){
+      this.save();
     }
   }
 
   init() {
+    this.baselineForm = this.boilerService.initFormFromObj(this.ssmt.boilerInput, this.settings);
+    this.baselineForm.disable();
+    this.modificationForm = this.boilerService.initFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput, this.settings);
+
     this.initCombustionEfficiency();
     this.initFuel();
     this.initBlowdownRate();
@@ -81,46 +94,46 @@ export class BoilerFormComponent implements OnInit {
   }
 
   initCombustionEfficiency() {
-    if (this.ssmt.boilerInput.combustionEfficiency != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.combustionEfficiency) {
+    if (this.baselineForm.controls.combustionEfficiency.value != this.modificationForm.controls.combustionEfficiency.value) {
       this.showCombustionEfficiency = true;
     }
   }
 
   initFuel() {
-    if (this.ssmt.boilerInput.fuel != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.fuel ||
-      this.ssmt.boilerInput.fuelType != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.fuelType) {
+    if (this.baselineForm.controls.fuel.value != this.modificationForm.controls.fuel.value ||
+      this.baselineForm.controls.fuelType.value != this.modificationForm.controls.fuelType.value) {
       this.showFuelType = true;
     }
   }
 
   initBlowdownRate() {
-    if (this.ssmt.boilerInput.blowdownRate != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.blowdownRate) {
+    if (this.baselineForm.controls.blowdownRate.value != this.modificationForm.controls.blowdownRate.value) {
       this.showBlowdownRate = true;
     }
   }
 
   initBlowdownFlashed() {
-    if (this.ssmt.boilerInput.blowdownFlashed != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.blowdownFlashed) {
+    if (this.baselineForm.controls.blowdownFlashed.value != this.modificationForm.controls.blowdownFlashed.value) {
       this.showBlowdownFlashed = true;
     }
   }
 
   initPreheatMakeupWater() {
-    if (this.ssmt.boilerInput.preheatMakeupWater != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.preheatMakeupWater ||
-      this.ssmt.boilerInput.approachTemperature != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.approachTemperature) {
+    if (this.baselineForm.controls.preheatMakeupWater.value != this.modificationForm.controls.preheatMakeupWater.value ||
+      this.baselineForm.controls.approachTemperature.value != this.modificationForm.controls.approachTemperature.value) {
       this.showPreheatBlowdownWater = true;
     }
   }
 
   initInitialSteamTemperature() {
-    if (this.ssmt.boilerInput.steamTemperature != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.steamTemperature) {
+    if (this.baselineForm.controls.steamTemperature.value != this.modificationForm.controls.steamTemperature.value) {
       this.showInitialSteamTemperature = true;
     }
   }
 
   initDeaeratorConditions() {
-    if (this.ssmt.boilerInput.deaeratorPressure != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure ||
-      this.ssmt.boilerInput.deaeratorVentRate != this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorVentRate) {
+    if (this.baselineForm.controls.deaeratorPressure.value != this.modificationForm.controls.deaeratorPressure.value ||
+      this.baselineForm.controls.deaeratorVentRate.value != this.modificationForm.controls.deaeratorVentRate.value) {
       this.showDeaeratorConditions = true;
     }
   }
@@ -146,57 +159,62 @@ export class BoilerFormComponent implements OnInit {
 
   toggleCombustionEfficiency() {
     if (this.showCombustionEfficiency == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.combustionEfficiency = this.ssmt.boilerInput.combustionEfficiency;
+      this.modificationForm.controls.combustionEfficiency.patchValue(this.baselineForm.controls.combustionEfficiency.value);
       this.save();
     }
   }
 
   toggleFuelType() {
     if (this.showFuelType == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.fuelType = this.ssmt.boilerInput.fuelType;
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.fuel = this.ssmt.boilerInput.fuel;
+      this.modificationForm.controls.fuelType.patchValue(this.baselineForm.controls.fuelType.value);
+      this.modificationForm.controls.fuel.patchValue(this.baselineForm.controls.fuel.value);
       this.save();
     }
   }
 
   toggleBlowdownRate() {
     if (this.showBlowdownRate == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.blowdownRate = this.ssmt.boilerInput.blowdownRate;
+      this.modificationForm.controls.blowdownRate.patchValue(this.baselineForm.controls.blowdownRate.value);
       this.save();
     }
   }
 
   toggleBlowdownFlashed() {
     if (this.showBlowdownFlashed == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.blowdownFlashed = this.ssmt.boilerInput.blowdownFlashed;
+      this.modificationForm.controls.blowdownFlashed.patchValue(this.baselineForm.controls.blowdownFlashed.value);
       this.save();
     }
   }
 
   togglePreheatBlowdownWater() {
     if (this.showFuelType == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.preheatMakeupWater = this.ssmt.boilerInput.preheatMakeupWater;
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.approachTemperature = this.ssmt.boilerInput.approachTemperature;
+      this.modificationForm.controls.preheatMakeupWater.patchValue(this.baselineForm.controls.preheatMakeupWater.value);
+      this.modificationForm.controls.approachTemperature.patchValue(this.baselineForm.controls.approachTemperature.value);
       this.save();
     }
   }
 
   toggleInitialSteamTemperature() {
     if (this.showInitialSteamTemperature == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.steamTemperature = this.ssmt.boilerInput.steamTemperature;
+      this.modificationForm.controls.steamTemperature.patchValue(this.baselineForm.controls.steamTemperature.value);
       this.save();
     }
   }
   toggleDeaeratorConditions() {
     if (this.showDeaeratorConditions == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure = this.ssmt.boilerInput.deaeratorPressure;
-      this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorVentRate = this.ssmt.boilerInput.deaeratorVentRate;
+      this.modificationForm.controls.deaeratorPressure.patchValue(this.baselineForm.controls.deaeratorPressure.value);
+      this.modificationForm.controls.deaeratorVentRate.patchValue(this.baselineForm.controls.deaeratorVentRate.value);
       this.save();
     }
   }
 
   save() {
-    this.emitSave.emit(true);
+    // not needed unles we enable baseline fields
+    // let tmpBaselineBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.baselineForm);
+    // this.ssmt.boilerInput = tmpBaselineBoilerInput;
+    let tmpModificationBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.modificationForm);
+    this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput = tmpModificationBoilerInput;
+    this.emitSave.emit(this.ssmt);
   }
 
   focusField(str: string) {

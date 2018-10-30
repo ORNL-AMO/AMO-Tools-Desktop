@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { SSMT } from '../../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../../shared/models/settings';
-import { SsmtService } from '../../../../ssmt.service';
 import { ExploreOpportunitiesService } from '../../../explore-opportunities.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-condensate-handling-form',
@@ -17,7 +17,20 @@ export class CondensateHandlingFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<SSMT>();
+  emitSave = new EventEmitter<boolean>();
+  @Input()
+  baselineHighPressureForm: FormGroup;
+  @Input()
+  modificationHighPressureForm: FormGroup;
+  @Input()
+  baselineLowPressureForm: FormGroup;
+  @Input()
+  modificationLowPressureForm: FormGroup;
+  @Input()
+  baselineMediumPressureForm: FormGroup;
+  @Input()
+  modificationMediumPressureForm: FormGroup;
+
 
   showCondensateHandling: boolean = false;
   showHighPressureCondensateRecovery: boolean = false;
@@ -50,11 +63,11 @@ export class CondensateHandlingFormComponent implements OnInit {
   initCondensateHandling() {
     this.initHighPressureCondensateRecovery();
     this.initReturnTemperature();
-    if (this.ssmt.headerInput.mediumPressure) {
+    if (this.baselineMediumPressureForm) {
       this.initMediumPressureCondensateRecovery();
       this.initFlashCondensateMediumPressure();
     }
-    if (this.ssmt.headerInput.lowPressure) {
+    if (this.baselineLowPressureForm.controls) {
       this.initLowPressureCondensateRecovery();
       this.initFlashCondensateLowPressure();
     }
@@ -72,11 +85,11 @@ export class CondensateHandlingFormComponent implements OnInit {
     this.showFlashCondensateLowPressure = false;
     this.toggleReturnTemperature();
     this.toggleHighPressureCondensateRecovery();
-    if (this.ssmt.headerInput.mediumPressure) {
+    if (this.baselineMediumPressureForm) {
       this.toggleMediumPressureCondensateRecovery();
       this.toggleFlashCondensateMediumPressure();
     }
-    if (this.ssmt.headerInput.lowPressure) {
+    if (this.baselineLowPressureForm.controls) {
       this.toggleFlashCondensateLowPressure();
       this.toggleLowPressureCondensateRecovery();
     }
@@ -84,52 +97,52 @@ export class CondensateHandlingFormComponent implements OnInit {
 
   //condensate recovery rate
   initHighPressureCondensateRecovery() {
-    if (this.ssmt.headerInput.highPressure.condensationRecoveryRate != this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.condensationRecoveryRate) {
+    if (this.baselineHighPressureForm.controls.condensationRecoveryRate.value != this.modificationHighPressureForm.controls.condensationRecoveryRate.value) {
       this.showHighPressureCondensateRecovery = true;
     }
   }
   initMediumPressureCondensateRecovery() {
-    if (this.ssmt.headerInput.mediumPressure.condensationRecoveryRate != this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure.condensationRecoveryRate) {
+    if (this.baselineMediumPressureForm.controls.condensationRecoveryRate.value != this.modificationMediumPressureForm.controls.condensationRecoveryRate.value) {
       this.showMediumPressureCondensateRecovery = true;
     }
   }
   initLowPressureCondensateRecovery() {
-    if (this.ssmt.headerInput.lowPressure.condensationRecoveryRate != this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.condensationRecoveryRate) {
+    if (this.baselineLowPressureForm.controls.condensationRecoveryRate.value != this.modificationLowPressureForm.controls.condensationRecoveryRate.value) {
       this.showLowPressureCondensateRecovery = true;
     }
   }
 
   toggleHighPressureCondensateRecovery() {
     if (this.showHighPressureCondensateRecovery == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.condensationRecoveryRate = this.ssmt.headerInput.highPressure.condensationRecoveryRate;
+      this.modificationHighPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineHighPressureForm.controls.condensationRecoveryRate.value);
       this.save();
     }
   }
 
   toggleMediumPressureCondensateRecovery() {
     if (this.showMediumPressureCondensateRecovery == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure.condensationRecoveryRate = this.ssmt.headerInput.mediumPressure.condensationRecoveryRate;
+      this.modificationMediumPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineMediumPressureForm.controls.condensationRecoveryRate.value);
       this.save();
     }
   }
 
   toggleLowPressureCondensateRecovery() {
     if (this.showLowPressureCondensateRecovery == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.condensationRecoveryRate = this.ssmt.headerInput.lowPressure.condensationRecoveryRate;
+      this.modificationLowPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineLowPressureForm.controls.condensationRecoveryRate.value);
       this.save();
     }
   }
 
   //condensate return temperature
   initReturnTemperature() {
-    if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.condensateReturnTemperature != this.ssmt.headerInput.highPressure.condensateReturnTemperature) {
+    if (this.modificationHighPressureForm.controls.condensateReturnTemperature.value != this.baselineHighPressureForm.controls.condensateReturnTemperature.value) {
       this.showReturnTemperature = true;
     }
   }
 
   toggleReturnTemperature() {
     if (this.showReturnTemperature == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.condensateReturnTemperature = this.ssmt.headerInput.highPressure.condensateReturnTemperature;
+      this.modificationHighPressureForm.controls.condensateReturnTemperature.patchValue(this.baselineHighPressureForm.controls.condensateReturnTemperature.value);
       this.save();
     }
   }
@@ -137,32 +150,32 @@ export class CondensateHandlingFormComponent implements OnInit {
 
   //flash condensate
   initFlashCondensateLowPressure() {
-    if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader != this.ssmt.headerInput.lowPressure.flashCondensateIntoHeader) {
+    if (this.modificationLowPressureForm.controls.flashCondensateIntoHeader.value != this.baselineLowPressureForm.controls.flashCondensateIntoHeader.value) {
       this.showFlashCondensateLowPressure = true;
     }
   }
 
   toggleFlashCondensateLowPressure() {
     if (this.showFlashCondensateLowPressure == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.flashCondensateIntoHeader = this.ssmt.headerInput.lowPressure.flashCondensateIntoHeader;
+      this.modificationLowPressureForm.controls.flashCondensateIntoHeader.patchValue(this.baselineLowPressureForm.controls.flashCondensateIntoHeader.value);
       this.save();
     }
   }
 
   initFlashCondensateMediumPressure() {
-    if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure.flashCondensateIntoHeader != this.ssmt.headerInput.mediumPressure.flashCondensateIntoHeader) {
+    if (this.modificationMediumPressureForm.controls.flashCondensateIntoHeader.value != this.baselineMediumPressureForm.controls.flashCondensateIntoHeader.value) {
       this.showFlashCondensateMediumPressure = true;
     }
   }
 
   toggleFlashCondensateMediumPressure() {
     if (this.showFlashCondensateLowPressure == false) {
-      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure.flashCondensateIntoHeader = this.ssmt.headerInput.mediumPressure.flashCondensateIntoHeader;
+      this.modificationMediumPressureForm.controls.flashCondensateIntoHeader.patchValue(this.baselineMediumPressureForm.controls.flashCondensateIntoHeader.value);
       this.save();
     }
   }
   save() {
-    this.emitSave.emit(this.ssmt);
+    this.emitSave.emit(true);
   }
 
   focusField(str: string) {
