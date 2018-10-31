@@ -65,11 +65,6 @@ export class FanMotorComponent implements OnInit {
     }
     this.efficiencyClasses = EfficiencyClasses;
     this.init();
-    // if (this.settings.powerMeasurement == 'hp') {
-    //   this.options = this.horsePowers;
-    // } else {
-    //   this.options = this.kWatts;
-    // }
     if (!this.selected) {
       this.disableForm();
     }
@@ -90,55 +85,37 @@ export class FanMotorComponent implements OnInit {
 
   disableForm() {
     this.fanMotorForm.controls.lineFrequency.disable();
-    this.fanMotorForm.controls.motorRatedPower.disable();
+    //this.fanMotorForm.controls.motorRatedPower.disable();
     this.fanMotorForm.controls.efficiencyClass.disable();
   }
 
   enableForm() {
     this.fanMotorForm.controls.lineFrequency.enable();
-    this.fanMotorForm.controls.motorRatedPower.enable();
+    //this.fanMotorForm.controls.motorRatedPower.enable();
     this.fanMotorForm.controls.efficiencyClass.enable();
   }
+
   init() {
     this.fanMotorForm = this.fanMotorService.getFormFromObj(this.fanMotor)
-    // this.helpPanelService.currentField.next('lineFrequency');
-    //init alert meessages
-    //this.modifyPowerArrays();
     this.checkWarnings();
   }
 
   changeLineFreq() {
-    this.defaultRpm();
+    if (this.fanMotorForm.controls.lineFrequency.value == 60) {
+      if (this.fanMotorForm.controls.motorRpm.value == 1485) {
+        this.fanMotorForm.controls.motorRpm.patchValue(1780);
+      }
+    } else if (this.fanMotorForm.controls.lineFrequency.value == 50) {
+      if (this.fanMotorForm.controls.motorRpm.value == 1780) {
+        this.fanMotorForm.controls.motorRpm.patchValue(1485)
+      }
+    }
     this.save();
   }
+
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
   }
-  // modifyPowerArrays() {
-  //   if (this.fanMotorForm.controls.efficiencyClass.value === 'Premium') {
-  //     if (this.settings.powerMeasurement === 'hp') {
-  //       if (this.fanMotorForm.controls.motorRatedPower.value > 500) {
-  //         this.fanMotorForm.patchValue({
-  //           'motorRatedPower': this.horsePowersPremium[this.horsePowersPremium.length - 1]
-  //         });
-  //       }
-  //       this.options = this.horsePowersPremium;
-  //     } else {
-  //       if (this.fanMotorForm.controls.motorRatedPower.value > 355) {
-  //         this.fanMotorForm.patchValue({
-  //           'motorRatedPower': this.kWattsPremium[this.kWattsPremium.length - 1]
-  //         });
-  //       }
-  //       this.options = this.kWattsPremium;
-  //     }
-  //   } else {
-  //     if (this.settings.powerMeasurement === 'hp') {
-  //       this.options = this.horsePowers;
-  //     } else {
-  //       this.options = this.kWatts;
-  //     }
-  //   }
-  // }
 
   checkWarnings() {
     this.warnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings);
@@ -179,21 +156,7 @@ export class FanMotorComponent implements OnInit {
       this.save();
     }
   }
-  defaultRpm() {
-    if (this.fanMotorForm.controls.lineFrequency.value == 60) {
-      if (this.fanMotorForm.controls.motorRpm.value == 1485) {
-        this.fanMotorForm.patchValue({
-          motorRPM: 1780
-        })
-      }
-    } else if (this.fanMotorForm.controls.lineFrequency.value == 50) {
-      if (this.fanMotorForm.controls.motorRpm.value == 1780) {
-        this.fanMotorForm.patchValue({
-          motorRPM: 1485
-        })
-      }
-    }
-  }
+
   disableFLA(): boolean {
     if (!this.disableFLAOptimized) {
       if (

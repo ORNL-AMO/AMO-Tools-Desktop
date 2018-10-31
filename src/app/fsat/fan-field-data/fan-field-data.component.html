@@ -76,7 +76,7 @@
         <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled-link':!selected}">Calculate
           Flow Rate and Pressures</a>
       </label>
-      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent(),'error': warnings.flowRateError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isFlowRateDifferent()}">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="{{'flowRate_'+idString}}"
           (input)="save()" (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>

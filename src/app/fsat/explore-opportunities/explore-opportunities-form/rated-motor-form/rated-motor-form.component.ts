@@ -222,8 +222,8 @@ export class RatedMotorFormComponent implements OnInit {
     if (
       !this.disableModifiedFLA()
     ) {
-      if (!this.modificationForm.controls.specifiedEfficiency) {
-        this.modificationForm.controls.specifiedEfficiency = this.modificationForm.controls.efficiencyClass;
+      if (!this.modificationForm.controls.specifiedEfficiency.value) {
+        this.modificationForm.controls.specifiedEfficiency.patchValue(90);
       }
       let estEfficiency = this.psatService.estFLA(
         this.modificationForm.controls.motorRatedPower.value,

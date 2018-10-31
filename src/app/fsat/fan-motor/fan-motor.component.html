@@ -22,7 +22,7 @@
       </select> -->
       <div class="input-group" [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': warnings.ratedPowerError !== null}">
         <input type="number" name="motorRatedPower" class="form-control number-input-field" id="{{'motorRatedPower_'+idString}}"
-          (focus)="focusField('motorRatedPower')" (input)="save()" formControlName="motorRatedPower">
+          (focus)="focusField('motorRatedPower')" (input)="save()" formControlName="motorRatedPower" [readonly]="!selected">
         <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
       </div>
       <span *ngIf="fanMotorForm.controls.motorRatedPower.invalid && !fanMotorForm.controls.motorRatedPower.pristine">
