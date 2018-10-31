@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { PsatWarningService, FieldDataWarnings, MotorWarnings } from '../../psat-warning.service';
 import { Settings } from '../../../shared/models/settings';
 import { PsatTabService } from '../../psat-tab.service';
+import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -29,7 +30,8 @@ export class ModifyConditionsTabsComponent implements OnInit {
   resultsSub: Subscription;
   modTabSub: Subscription;
   modifyTab: string;
-  constructor(private compareService: CompareService, private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService) { }
+  constructor(private compareService: CompareService, private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService,
+    private pumpFluidService: PumpFluidService) { }
 
   ngOnInit() {
     this.resultsSub = this.psatService.getResults.subscribe(val => {
@@ -105,11 +107,13 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setPumpFluidBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.psatService.isPumpFluidFormValid(baselineForm);
+    let tmpBaselinePumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this.compareService.baselinePSAT.inputs);
+    let validBaselineTest = tmpBaselinePumpFluidForm.valid;
     let validModTest = true;
     let isDifferent = false;
     if (modifiedForm) {
-      validModTest = this.psatService.isPumpFluidFormValid(modifiedForm)
+      let tmpModificationPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this.compareService.baselinePSAT.inputs);
+      validModTest = tmpModificationPumpFluidForm.valid;
       isDifferent = this.compareService.checkPumpDifferent();
     }
     let inputError = this.checkPumpFluidWarnings();
@@ -123,16 +127,16 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  checkPumpFluidWarnings(){
+  checkPumpFluidWarnings() {
     let hasWarning: boolean = false;
-    let baselinePumpFluidWarnings: { rpmError: string, temperatureError: string }  = this.psatWarningService.checkPumpFluidWarnings(this.compareService.baselinePSAT, this.settings);
+    let baselinePumpFluidWarnings: { rpmError: string, temperatureError: string } = this.psatWarningService.checkPumpFluidWarnings(this.compareService.baselinePSAT, this.settings);
     for (var key in baselinePumpFluidWarnings) {
       if (baselinePumpFluidWarnings[key] !== null) {
         hasWarning = true;
       }
     }
     if (this.compareService.modifiedPSAT && !hasWarning) {
-      let modifiedPumpFluidWarnings: { rpmError: string, temperatureError: string }  = this.psatWarningService.checkPumpFluidWarnings(this.compareService.modifiedPSAT, this.settings);
+      let modifiedPumpFluidWarnings: { rpmError: string, temperatureError: string } = this.psatWarningService.checkPumpFluidWarnings(this.compareService.modifiedPSAT, this.settings);
       for (var key in modifiedPumpFluidWarnings) {
         if (modifiedPumpFluidWarnings[key] !== null) {
           hasWarning = true;

@@ -20,6 +20,8 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { Directory } from '../shared/models/directory';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { PsatTabService } from './psat-tab.service';
+import { PumpFluidService } from './pump-fluid/pump-fluid.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-psat',
@@ -84,7 +86,8 @@ export class PsatComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
-    private psatTabService: PsatTabService) {
+    private psatTabService: PsatTabService,
+    private pumpFluidService: PumpFluidService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -284,8 +287,8 @@ export class PsatComponent implements OnInit {
       return true;
     }
     else if (this.stepTab == 'pump-fluid') {
-      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-      return this.psatService.isPumpFluidFormValid(tmpForm);
+      let tmpForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
+      return tmpForm.valid;
     } else if (this.stepTab == 'motor') {
       let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
       return this.psatService.isMotorFormValid(tmpForm);
@@ -301,8 +304,9 @@ export class PsatComponent implements OnInit {
 
   save() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+    let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
     if (
-      (this.psatService.isPumpFluidFormValid(tmpForm) &&
+      (tmpPumpFluidForm.valid &&
         this.psatService.isMotorFormValid(tmpForm) &&
         this.psatService.isFieldDataFormValid(tmpForm)) || this.modificationExists
     ) {

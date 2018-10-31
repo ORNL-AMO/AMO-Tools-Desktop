@@ -819,29 +819,29 @@ export class PsatService {
     return tmpPsatInputs;
   }
 
-  isPumpFluidFormValid(form: FormGroup) {
-    if (
-      form.controls.pumpType.status == 'VALID' &&
-      form.controls.pumpRPM.status == 'VALID' &&
-      form.controls.drive.status == 'VALID' &&
-      form.controls.gravity.status == 'VALID' &&
-      form.controls.stages.status == 'VALID' &&
-      form.controls.fluidTemperature.status == 'VALID'
-    ) {
-      //TODO: Check pumpType for custom
-      if (form.controls.pumpType.value != "Specified Optimal Efficiency") {
-        return true;
-      } else {
-        if (form.controls.specifiedPumpEfficiency.status == 'VALID') {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-  }
+  // isPumpFluidFormValid(form: FormGroup) {
+  //   if (
+  //     form.controls.pumpType.status == 'VALID' &&
+  //     form.controls.pumpRPM.status == 'VALID' &&
+  //     form.controls.drive.status == 'VALID' &&
+  //     form.controls.gravity.status == 'VALID' &&
+  //     form.controls.stages.status == 'VALID' &&
+  //     form.controls.fluidTemperature.status == 'VALID'
+  //   ) {
+  //     //TODO: Check pumpType for custom
+  //     if (form.controls.pumpType.value != "Specified Optimal Efficiency") {
+  //       return true;
+  //     } else {
+  //       if (form.controls.specifiedPumpEfficiency.status == 'VALID') {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   isMotorFormValid(form: FormGroup) {
     if (

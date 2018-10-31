@@ -8,8 +8,8 @@ export class PumpFluidService {
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromObj(psatInputs: PsatInputs): FormGroup {
-    let specifiedPumpEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedPumpEfficiencyValidators(psatInputs);
-    let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedDriveEfficiency(psatInputs);
+    let specifiedPumpEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedPumpEfficiencyValidators(psatInputs.pump_style);
+    let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedDriveEfficiency(psatInputs.drive);
     let form: FormGroup = this.formBuilder.group({
       pumpType: [psatInputs.pump_style, Validators.required],
       specifiedPumpEfficiency: [psatInputs.pump_specified, specifiedPumpEfficiencyValidators],
@@ -28,16 +28,16 @@ export class PumpFluidService {
     return form;
   }
 
-  getSpecifiedPumpEfficiencyValidators(psatInputs: PsatInputs): Array<ValidatorFn> {
-    if (psatInputs.pump_style == 11) {
+  getSpecifiedPumpEfficiencyValidators(pumpStyle: number): Array<ValidatorFn> {
+    if (pumpStyle == 11) {
       return [Validators.required, Validators.min(0), Validators.max(100)];
     } else {
       return [];
     }
   }
 
-  getSpecifiedDriveEfficiency(psatInputs: PsatInputs): Array<ValidatorFn> {
-    if (psatInputs.drive == 4) {
+  getSpecifiedDriveEfficiency(driveType: number): Array<ValidatorFn> {
+    if (driveType == 4) {
       return [Validators.required, Validators.min(0), Validators.max(100)];
     } else {
       return [];

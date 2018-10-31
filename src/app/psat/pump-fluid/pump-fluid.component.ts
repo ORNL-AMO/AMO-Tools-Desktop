@@ -5,7 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ValidatorFn } from '@angular/forms';
 import { pumpTypes, drives, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
@@ -175,6 +175,22 @@ export class PumpFluidComponent implements OnInit {
     this.save();
   }
 
+  changePumpType() {
+    let specifiedPumpEfficiencyValidators: Array<ValidatorFn> = this.pumpFluidService.getSpecifiedPumpEfficiencyValidators(this.psatForm.controls.pumpType.value);
+    this.psatForm.controls.specifiedPumpEfficiency.setValidators(specifiedPumpEfficiencyValidators);
+    this.psatForm.controls.specifiedPumpEfficiency.reset(this.psatForm.controls.specifiedPumpEfficiency.value);
+    this.psatForm.controls.specifiedPumpEfficiency.markAsDirty();
+    this.save();
+  }
+
+  changeDriveType() {
+    let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.pumpFluidService.getSpecifiedDriveEfficiency(this.psatForm.controls.drive.value);
+    this.psatForm.controls.specifiedDriveEfficiency.setValidators(specifiedDriveEfficiencyValidators);
+    this.psatForm.controls.specifiedDriveEfficiency.reset(this.psatForm.controls.specifiedDriveEfficiency.value);
+    this.psatForm.controls.specifiedDriveEfficiency.markAsDirty();
+    this.save();
+  }
+
 
   save() {
     // this.checkForm(this.psatForm);
@@ -184,7 +200,7 @@ export class PumpFluidComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpWarnings: { rpmError: string, temperatureError: string} = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
+    let tmpWarnings: { rpmError: string, temperatureError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
     this.rpmError = tmpWarnings.rpmError;
     this.temperatureError = tmpWarnings.temperatureError;
     // this.pumpEfficiencyError = tmpWarnings.pumpEfficiencyError;

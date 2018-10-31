@@ -57,19 +57,19 @@ export const drives: Array<{ value: number, display: string }> = [
         display: 'Direct Drive'
     },
     {
-        value: 0,
+        value: 1,
         display: 'V-Belt Drive'
     },
     {
-        value: 0,
+        value: 2,
         display: 'Notched V-Belt Drive'
     },
     {
-        value: 0,
+        value: 3,
         display: 'Synchronous Belt Drive'
     },
     {
-        value: 0,
+        value: 4,
         display: 'Specified Efficiency'
     }
 ];
