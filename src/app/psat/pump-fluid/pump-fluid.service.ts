@@ -1,0 +1,61 @@
+import { Injectable } from '@angular/core';
+import { PSAT, PsatInputs } from '../../shared/models/psat';
+import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
+
+@Injectable()
+export class PumpFluidService {
+
+  constructor(private formBuilder: FormBuilder) { }
+
+  getFormFromObj(psatInputs: PsatInputs): FormGroup {
+    let specifiedPumpEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedPumpEfficiencyValidators(psatInputs);
+    let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedDriveEfficiency(psatInputs);
+    let form: FormGroup = this.formBuilder.group({
+      pumpType: [psatInputs.pump_style, Validators.required],
+      specifiedPumpEfficiency: [psatInputs.pump_specified, specifiedPumpEfficiencyValidators],
+      pumpRPM: [psatInputs.pump_rated_speed, Validators.required],
+      drive: [psatInputs.drive, Validators.required],
+      specifiedDriveEfficiency: [psatInputs.specifiedDriveEfficiency, specifiedDriveEfficiencyValidators],
+      fluidType: [psatInputs.fluidType, Validators.required],
+      fluidTemperature: [psatInputs.fluidTemperature, Validators.required],
+      gravity: [psatInputs.specific_gravity, [Validators.required, Validators.min(0)]],
+      viscosity: [psatInputs.kinematic_viscosity, [Validators.required, Validators.min(0)]],
+      stages: [psatInputs.stages, [Validators.required, Validators.min(1)]]
+    })
+    for (let key in form.controls) {
+      form.controls[key].markAsDirty();
+    }
+    return form;
+  }
+
+  getSpecifiedPumpEfficiencyValidators(psatInputs: PsatInputs): Array<ValidatorFn> {
+    if (psatInputs.pump_style == 11) {
+      return [Validators.required, Validators.min(0), Validators.max(100)];
+    } else {
+      return [];
+    }
+  }
+
+  getSpecifiedDriveEfficiency(psatInputs: PsatInputs): Array<ValidatorFn> {
+    if (psatInputs.drive == 4) {
+      return [Validators.required, Validators.min(0), Validators.max(100)];
+    } else {
+      return [];
+    }
+  }
+
+  getPsatInputsFromForm(form: FormGroup, psatInputs: PsatInputs): PsatInputs {
+    psatInputs.pump_style = form.controls.pumpType.value;
+    psatInputs.pump_specified = form.controls.specifiedPumpEfficiency.value;
+    psatInputs.pump_rated_speed = form.controls.pumpRPM.value;
+    psatInputs.drive = form.controls.drive.value;
+    psatInputs.specifiedDriveEfficiency = form.controls.specifiedDriveEfficiency.value;
+    psatInputs.fluidType = form.controls.fluidType.value;
+    psatInputs.fluidTemperature = form.controls.fluidTemperature.value;
+    psatInputs.specific_gravity = form.controls.gravity.value;
+    psatInputs.kinematic_viscosity = form.controls.viscosity.value;
+    psatInputs.stages = form.controls.stages.value;
+    return psatInputs;
+
+  }
+}

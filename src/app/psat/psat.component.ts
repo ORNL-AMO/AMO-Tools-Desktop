@@ -236,7 +236,7 @@ export class PsatComponent implements OnInit {
     }
   }
 
-  getSettings(update?: boolean) {
+  getSettings() {
     //get assessment settings
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
@@ -260,7 +260,6 @@ export class PsatComponent implements OnInit {
       this.indexedDbService.addSettings(tmpSettings).then(
         results => {
           this.settingsDbService.setAll().then(() => {
-            this.addToast('Settings Saved');
             this.getSettings();
           })
         })
@@ -341,16 +340,6 @@ export class PsatComponent implements OnInit {
     this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);
   }
 
-
-  addToast(msg: string) {
-    let toastOptions: ToastOptions = {
-      title: msg,
-      timeout: 4000,
-      showClose: true,
-      theme: 'default'
-    }
-    this.toastyService.success(toastOptions);
-  }
   goToReport() {
     this.psatTabService.mainTab.next('report');
   }

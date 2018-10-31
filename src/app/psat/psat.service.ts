@@ -15,7 +15,6 @@ export class PsatService {
     flaMax: 0
   };
 
-  baseline: PSAT;
   getResults: BehaviorSubject<boolean>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
     this.getResults = new BehaviorSubject<boolean>(true);
@@ -506,45 +505,45 @@ export class PsatService {
     }
     return enumPumpStyle;
   }
-  getPumpStyleFromEnum(num: number): string {
-    let pumpStyle;
-    if (num == 0) {
-      pumpStyle = 'End Suction Slurry';
-    }
-    else if (num == 1) {
-      pumpStyle = 'End Suction Sewage';
-    }
-    else if (num == 2) {
-      pumpStyle = 'End Suction Stock';
-    }
-    else if (num == 3) {
-      pumpStyle = 'End Suction Submersible Sewage';
-    }
-    else if (num == 4) {
-      pumpStyle = 'API Double Suction';
-    }
-    else if (num == 5) {
-      pumpStyle = 'Multistage Boiler Feed';
-    }
-    else if (num == 6) {
-      pumpStyle = 'End Suction ANSI/API';
-    }
-    else if (num == 7) {
-      pumpStyle = 'Axial Flow';
-    }
-    else if (num == 8) {
-      pumpStyle = 'Double Suction';
-    }
-    else if (num == 9) {
-      pumpStyle = 'Vertical Turbine';
-    }
-    else if (num == 10) {
-      pumpStyle = 'Large End Suction';
-    }
-    else if (num == 11) {
-      pumpStyle = 'Specified Optimal Efficiency';
-    }
-    return pumpStyle;
+  getPumpStyleFromEnum(num: number): number {
+    // let pumpStyle;
+    // if (num == 0) {
+    //   pumpStyle = 'End Suction Slurry';
+    // }
+    // else if (num == 1) {
+    //   pumpStyle = 'End Suction Sewage';
+    // }
+    // else if (num == 2) {
+    //   pumpStyle = 'End Suction Stock';
+    // }
+    // else if (num == 3) {
+    //   pumpStyle = 'End Suction Submersible Sewage';
+    // }
+    // else if (num == 4) {
+    //   pumpStyle = 'API Double Suction';
+    // }
+    // else if (num == 5) {
+    //   pumpStyle = 'Multistage Boiler Feed';
+    // }
+    // else if (num == 6) {
+    //   pumpStyle = 'End Suction ANSI/API';
+    // }
+    // else if (num == 7) {
+    //   pumpStyle = 'Axial Flow';
+    // }
+    // else if (num == 8) {
+    //   pumpStyle = 'Double Suction';
+    // }
+    // else if (num == 9) {
+    //   pumpStyle = 'Vertical Turbine';
+    // }
+    // else if (num == 10) {
+    //   pumpStyle = 'Large End Suction';
+    // }
+    // else if (num == 11) {
+    //   pumpStyle = 'Specified Optimal Efficiency';
+    // }
+    return num;
   }
   getLineFreqEnum(lineFreq: string): number {
     let lineFreqEnum: number;

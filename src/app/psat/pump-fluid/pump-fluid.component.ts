@@ -8,6 +8,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { FormGroup } from '@angular/forms';
 import { pumpTypes, drives, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
+import { PumpFluidService } from './pump-fluid.service';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -35,33 +36,30 @@ export class PumpFluidComponent implements OnInit {
   modificationIndex: number;
 
   formValid: boolean;
-  pumpTypes: Array<string>;
-  drives: Array<string>;
+  pumpTypes: Array<{ display: string, value: number }>;
+  drives: Array<{ display: string, value: number }>;
   fluidProperties;
   fluidTypes: Array<string>;
   psatForm: FormGroup;
   isFirstChange: boolean = true;
   rpmError: string = null;
   temperatureError: string = null;
-  pumpEfficiencyError: string = null;
-  specifiedDriveEfficiencyError: string = null;
+  //  pumpEfficiencyError: string = null;
+  //  specifiedDriveEfficiencyError: string = null;
   tempUnit: string;
   idString: string;
-  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
       if (!this.selected) {
         this.disableForm();
       } else {
         this.enableForm();
       }
-      if (changes.modificationIndex) {
-        this.init();
-      }
     }
-    else {
-      this.isFirstChange = false;
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.init();
     }
   }
 
@@ -73,6 +71,10 @@ export class PumpFluidComponent implements OnInit {
       this.idString = 'psat_baseline';
     }
     this.pumpTypes = pumpTypes;
+    if (this.baseline) {
+      //remove specified if baseline
+      this.pumpTypes.pop();
+    }
     this.drives = drives;
     this.fluidProperties = fluidProperties;
     this.fluidTypes = fluidTypes;
@@ -93,8 +95,8 @@ export class PumpFluidComponent implements OnInit {
   }
 
   init() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
+    this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+    // this.checkForm(this.psatForm);
     this.checkWarnings();
   }
 
@@ -132,17 +134,17 @@ export class PumpFluidComponent implements OnInit {
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
-    this.checkForm(this.psatForm);
+    //   this.checkForm(this.psatForm);
   }
 
-  checkForm(form: FormGroup) {
-    this.formValid = this.psatService.isPumpFluidFormValid(form);
-    if (this.formValid) {
-      this.isValid.emit(true)
-    } else {
-      this.isInvalid.emit(true)
-    }
-  }
+  // checkForm(form: FormGroup) {
+  //   this.formValid = this.psatService.isPumpFluidFormValid(form);
+  //   if (this.formValid) {
+  //     this.isValid.emit(true)
+  //   } else {
+  //     this.isInvalid.emit(true)
+  //   }
+  // }
 
   calculateSpecificGravity() {
     let fluidType = this.psatForm.controls.fluidType.value;
@@ -175,18 +177,18 @@ export class PumpFluidComponent implements OnInit {
 
 
   save() {
-    this.checkForm(this.psatForm);
-    this.psat.inputs = this.psatService.getPsatInputsFromForm(this.psatForm);
+    // this.checkForm(this.psatForm);
+    this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     this.checkWarnings();
     this.saved.emit(this.selected);
   }
 
   checkWarnings() {
-    let tmpWarnings: { rpmError: string, temperatureError: string, pumpEfficiencyError: string, specifiedDriveEfficiencyError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
+    let tmpWarnings: { rpmError: string, temperatureError: string} = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
     this.rpmError = tmpWarnings.rpmError;
     this.temperatureError = tmpWarnings.temperatureError;
-    this.pumpEfficiencyError = tmpWarnings.pumpEfficiencyError;
-    this.specifiedDriveEfficiencyError = tmpWarnings.specifiedDriveEfficiencyError;
+    // this.pumpEfficiencyError = tmpWarnings.pumpEfficiencyError;
+    // this.specifiedDriveEfficiencyError = tmpWarnings.specifiedDriveEfficiencyError;
   }
 
   canCompare() {

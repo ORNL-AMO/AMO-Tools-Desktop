@@ -119,7 +119,7 @@ export interface PsatCsvData {
   CreatedDate: string,
   ModifiedDate: string,
   PsatName: string,
-  PumpStyle: string,
+  PumpStyle: number,
   PumpRatedSpeed: number,
   PumpRatedSpeedUnit: string,
   Drive: string,

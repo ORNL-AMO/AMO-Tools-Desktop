@@ -324,19 +324,19 @@ export class PsatWarningService {
   checkPumpFluidWarnings(psat: PSAT, settings: Settings): PumpFluidWarnings {
     let rpmError = this.checkPumpRpm(psat);
     let temperatureError = this.checkTemperatureError(psat, settings);
-    let pumpEfficiencyError = null;
-    let specifiedDriveEfficiencyError = null;
-    if (psat.inputs.pump_style == 11) {
-      pumpEfficiencyError = this.checkPumpEfficiency(psat);
-    }
-    if (psat.inputs.drive == 4) {
-      specifiedDriveEfficiencyError = this.checkSpecifiedDriveEfficiency(psat);
-    }
+    // let pumpEfficiencyError = null;
+    // let specifiedDriveEfficiencyError = null;
+    // if (psat.inputs.pump_style == 11) {
+    //   pumpEfficiencyError = this.checkPumpEfficiency(psat);
+    // }
+    // if (psat.inputs.drive == 4) {
+    //   specifiedDriveEfficiencyError = this.checkSpecifiedDriveEfficiency(psat);
+    // }
     return {
       rpmError: rpmError,
-      temperatureError: temperatureError,
-      pumpEfficiencyError: pumpEfficiencyError,
-      specifiedDriveEfficiencyError: specifiedDriveEfficiencyError
+      temperatureError: temperatureError
+      // pumpEfficiencyError: pumpEfficiencyError,
+      // specifiedDriveEfficiencyError: specifiedDriveEfficiencyError
     }
   }
 
@@ -351,9 +351,9 @@ export class PsatWarningService {
       max = Infinity;
     }
     if (psat.inputs.pump_rated_speed < min) {
-      return 'Pump Speed should be greater than' + min + ' rpm';
+      return 'Pump Speed should be greater than ' + min + ' rpm';
     } else if (psat.inputs.pump_rated_speed > max) {
-      return 'Pump Speed should be greater than ' + max + ' rpm';
+      return 'Pump Speed should be less than ' + max + ' rpm';
     } else {
       return null;
     }
@@ -457,6 +457,6 @@ export interface MotorWarnings {
 export interface PumpFluidWarnings {
   rpmError: string,
   temperatureError: string,
-  pumpEfficiencyError: string,
-  specifiedDriveEfficiencyError: string
+  // pumpEfficiencyError: string,
+  // specifiedDriveEfficiencyError: string
 }

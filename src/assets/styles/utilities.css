@@ -142,6 +142,10 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     border-right: 5px solid red; /* red */
   }
 
+  .psat .indicate-different.ng-invalid:not(form), .psat .ng-invalid:not(form), .psat .incrementor input.ng-invalid  {
+    border-left: 5px solid red; /* red */
+    border-right: 5px solid red; /* red */
+  }
 
 .card-item{
     box-shadow: 3px 0px 5px 2px gray;
