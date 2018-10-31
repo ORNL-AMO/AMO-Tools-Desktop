@@ -103,3 +103,22 @@ export const fluidTypes: Array<string> = [
     'Petroleum',
     'Water'
 ];
+
+export const motorEfficiencies: Array<{ value: number, display: string }> = [
+    {
+        value: 0,
+        display: 'Standard Efficiency'
+    },
+    {
+        value: 1,
+        display: 'Energy Efficient'
+    },
+    {
+        value: 2,
+        display: 'Premium Efficient'
+    },
+    {
+        value: 3,
+        display: 'Specified'
+    }
+]

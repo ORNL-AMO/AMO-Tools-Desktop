@@ -22,6 +22,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { PsatTabService } from './psat-tab.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { FormGroup } from '@angular/forms';
+import { MotorService } from './motor/motor.service';
 
 @Component({
   selector: 'app-psat',
@@ -78,8 +79,6 @@ export class PsatComponent implements OnInit {
     private psatService: PsatService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private jsonToCsvService: JsonToCsvService,
     private compareService: CompareService,
     private settingsService: SettingsService,
@@ -87,11 +86,8 @@ export class PsatComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private psatTabService: PsatTabService,
-    private pumpFluidService: PumpFluidService) {
-
-    this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-right';
-    this.toastyConfig.limit = 1;
+    private pumpFluidService: PumpFluidService,
+    private motorService: MotorService) {
   }
 
   ngOnInit() {
@@ -290,8 +286,8 @@ export class PsatComponent implements OnInit {
       let tmpForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'motor') {
-      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-      return this.psatService.isMotorFormValid(tmpForm);
+      let tmpForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
+      return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
       let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
       return this.psatService.isFieldDataFormValid(tmpForm);
@@ -305,9 +301,10 @@ export class PsatComponent implements OnInit {
   save() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
     let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
+    let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
+
     if (
-      (tmpPumpFluidForm.valid &&
-        this.psatService.isMotorFormValid(tmpForm) &&
+      (tmpPumpFluidForm.valid && tmpMotorForm.valid &&
         this.psatService.isFieldDataFormValid(tmpForm)) || this.modificationExists
     ) {
       this._psat.setupDone = true;

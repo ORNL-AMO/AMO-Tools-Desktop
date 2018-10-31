@@ -8,6 +8,7 @@ import { PsatTabService } from '../psat-tab.service';
 import { PsatWarningService, PumpFluidWarnings, MotorWarnings, FieldDataWarnings } from '../psat-warning.service';
 import { FormGroup } from '@angular/forms';
 import { PumpFluidService } from '../pump-fluid/pump-fluid.service';
+import { MotorService } from '../motor/motor.service';
 @Component({
   selector: 'app-psat-tabs',
   templateUrl: './psat-tabs.component.html',
@@ -40,7 +41,7 @@ export class PsatTabsComponent implements OnInit {
   stepTabSub: Subscription;
 
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService, private compareService: CompareService, private cd: ChangeDetectorRef,
-    private pumpFluidService: PumpFluidService) { }
+    private pumpFluidService: PumpFluidService, private motorService: MotorService) { }
 
   ngOnInit() {
     this.secondarySub = this.psatTabService.secondaryTab.subscribe(val => {
@@ -96,10 +97,9 @@ export class PsatTabsComponent implements OnInit {
     return tmpForm.invalid;
   }
 
-  checkMotor() {
-    let tmpForm: FormGroup = this.psatService.getFormFromPsat(this.psat.inputs);
-    let tmpBoolMotor: boolean = this.psatService.isMotorFormValid(tmpForm);
-    return !tmpBoolMotor;
+  checkMotorInvalid() {
+    let tmpForm: FormGroup = this.motorService.getFormFromObj(this.psat.inputs);
+    return tmpForm.invalid;
   }
 
   checkFieldData(): boolean {
@@ -115,7 +115,7 @@ export class PsatTabsComponent implements OnInit {
         this.psatTabService.stepTab.next(str);
       }
     } else if (str == 'field-data') {
-      let tmpBool = this.checkMotor();
+      let tmpBool = this.checkMotorInvalid();
       if (!tmpBool == true) {
         this.psatTabService.stepTab.next(str);
       }
@@ -150,7 +150,7 @@ export class PsatTabsComponent implements OnInit {
 
   checkMotorStatus() {
     let pumpFluidInvalid: boolean = this.checkPumpFluidInvalid();
-    let motorInvalid: boolean = this.checkMotor();
+    let motorInvalid: boolean = this.checkMotorInvalid();
     let motorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
     let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(motorWarnings);
     if (pumpFluidInvalid) {
@@ -169,7 +169,7 @@ export class PsatTabsComponent implements OnInit {
 
   checkFieldDataSatus() {
     let pumpFluidInvalid: boolean = this.checkPumpFluidInvalid();
-    let motorInvalid: boolean = this.checkMotor();
+    let motorInvalid: boolean = this.checkMotorInvalid();
     let fieldDataInvalid: boolean = this.checkFieldData();
     let fieldDataWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings, true);
     let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(fieldDataWarnings);

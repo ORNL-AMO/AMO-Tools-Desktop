@@ -177,15 +177,15 @@ export class PsatWarningService {
     let voltageError = this.checkMotorVoltage(psat);
     let flaError = this.checkFLA(psat, settings);
     let ratedPowerError = this.checkMotorRatedPower(psat, settings);
-    let efficiencyError = null;
-    if (psat.inputs.efficiency_class == 3) {
-      efficiencyError = this.checkEfficiency(psat);
-    }
+    // let efficiencyError = null;
+    // if (psat.inputs.efficiency_class == 3) {
+    //   efficiencyError = this.checkEfficiency(psat);
+    // }
     return {
       rpmError: rpmError,
       voltageError: voltageError,
       flaError: flaError,
-      efficiencyError: efficiencyError,
+      // efficiencyError: efficiencyError,
       ratedPowerError: ratedPowerError
     }
   }
@@ -283,8 +283,8 @@ export class PsatWarningService {
       let estEfficiency = this.psatService.estFLA(
         psat.inputs.motor_rated_power,
         psat.inputs.motor_rated_speed,
-        this.psatService.getLineFreqFromEnum(psat.inputs.line_frequency),
-        this.psatService.getEfficiencyClassFromEnum(psat.inputs.efficiency_class),
+        psat.inputs.line_frequency,
+        psat.inputs.efficiency_class,
         psat.inputs.efficiency,
         psat.inputs.motor_rated_voltage,
         settings
@@ -450,7 +450,7 @@ export interface MotorWarnings {
   rpmError: string;
   voltageError: string;
   flaError: string;
-  efficiencyError: string;
+  // efficiencyError: string;
   ratedPowerError: string;
 }
 

@@ -7,6 +7,7 @@ import { PsatWarningService, FieldDataWarnings, MotorWarnings } from '../../psat
 import { Settings } from '../../../shared/models/settings';
 import { PsatTabService } from '../../psat-tab.service';
 import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
+import { MotorService } from '../../motor/motor.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -31,7 +32,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   modTabSub: Subscription;
   modifyTab: string;
   constructor(private compareService: CompareService, private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService,
-    private pumpFluidService: PumpFluidService) { }
+    private pumpFluidService: PumpFluidService, private motorService: MotorService) { }
 
   ngOnInit() {
     this.resultsSub = this.psatService.getResults.subscribe(val => {
@@ -148,12 +149,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setMotorBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.psatService.isMotorFormValid(baselineForm);
+    let tmpBaselineMotorForm: FormGroup = this.motorService.getFormFromObj(this.compareService.baselinePSAT.inputs);
+    let validBaselineTest = tmpBaselineMotorForm.valid;
     let inputError = this.checkMotorInputError();
     let validModTest = true;
     let isDifferent = false;
     if (modifiedForm) {
-      validModTest = this.psatService.isMotorFormValid(modifiedForm)
+      let tmpModificationMotorForm: FormGroup = this.motorService.getFormFromObj(this.compareService.baselinePSAT.inputs);
+      validModTest = tmpModificationMotorForm.valid;
       isDifferent = this.compareService.checkMotorDifferent();
     }
     if (!validBaselineTest || !validModTest) {

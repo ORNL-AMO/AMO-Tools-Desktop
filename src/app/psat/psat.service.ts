@@ -321,24 +321,24 @@ export class PsatService {
   }
 
   estFLA(
-    horsePower,
-    motorRPM,
-    frequency,
-    efficiencyClass,
-    efficiency,
-    motorVoltage,
+    horsePower: number,
+    motorRPM: number,
+    frequency: number,
+    efficiencyClass: number,
+    efficiency: number,
+    motorVoltage: number,
     settings: Settings
   ) {
     if (settings.powerMeasurement != 'hp') {
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
-    let lineFreqEnum = this.getLineFreqEnum(frequency);
-    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
+    // let lineFreqEnum = this.getLineFreqEnum(frequency);
+    // let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
     let inputs: any = {
       motor_rated_power: horsePower,
       motor_rated_speed: motorRPM,
-      line_frequency: lineFreqEnum,
-      efficiency_class: effClassEnum,
+      line_frequency: frequency,
+      efficiency_class: efficiencyClass,
       efficiency: efficiency,
       motor_rated_voltage: motorVoltage
     }
@@ -843,29 +843,29 @@ export class PsatService {
   //   }
   // }
 
-  isMotorFormValid(form: FormGroup) {
-    if (
-      form.controls.frequency.status == 'VALID' &&
-      form.controls.horsePower.status == 'VALID' &&
-      form.controls.motorRPM.status == 'VALID' &&
-      form.controls.efficiencyClass.status == 'VALID' &&
-      form.controls.motorVoltage.status == 'VALID' &&
-      form.controls.fullLoadAmps.status == 'VALID'
-    ) {
-      if (form.controls.efficiencyClass.value != 'Specified') {
-        return true;
-      } else {
-        if (form.controls.efficiency.value > 0 && form.controls.efficiency.value <= 100) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-    else {
-      return false;
-    }
-  }
+  // isMotorFormValid(form: FormGroup) {
+  //   if (
+  //     form.controls.frequency.status == 'VALID' &&
+  //     form.controls.horsePower.status == 'VALID' &&
+  //     form.controls.motorRPM.status == 'VALID' &&
+  //     form.controls.efficiencyClass.status == 'VALID' &&
+  //     form.controls.motorVoltage.status == 'VALID' &&
+  //     form.controls.fullLoadAmps.status == 'VALID'
+  //   ) {
+  //     if (form.controls.efficiencyClass.value != 'Specified') {
+  //       return true;
+  //     } else {
+  //       if (form.controls.efficiency.value > 0 && form.controls.efficiency.value <= 100) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
 
   isFieldDataFormValid(form: FormGroup) {
     if (

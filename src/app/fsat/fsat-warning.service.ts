@@ -212,8 +212,8 @@ export class FsatWarningService {
       let estEfficiency = this.psatService.estFLA(
         fsat.fanMotor.motorRatedPower,
         fsat.fanMotor.motorRpm,
-        fsat.fanMotor.lineFrequency + ' Hz',
-        this.psatService.getEfficiencyClassFromEnum(fsat.fanMotor.efficiencyClass),
+        fsat.fanMotor.lineFrequency,
+        fsat.fanMotor.efficiencyClass,
         fsat.fanMotor.specifiedEfficiency,
         fsat.fanMotor.motorRatedVoltage,
         settings

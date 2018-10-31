@@ -136,11 +136,11 @@ export class RatedMotorFormComponent implements OnInit {
 
   checkWarnings() {
     let baselineWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
-    this.efficiencyError1 = baselineWarnings.efficiencyError;
+    // this.efficiencyError1 = baselineWarnings.efficiencyError;
     this.ratedPowerError1 = baselineWarnings.ratedPowerError;
     this.flaError1 = baselineWarnings.flaError;
     let modifiedWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-    this.efficiencyError2 = modifiedWarnings.efficiencyError;
+    // this.efficiencyError2 = modifiedWarnings.efficiencyError;
     this.ratedPowerError2 = modifiedWarnings.ratedPowerError;
     this.flaError2 = modifiedWarnings.flaError;
   }
@@ -234,8 +234,8 @@ export class RatedMotorFormComponent implements OnInit {
       let estEfficiency = this.psatService.estFLA(
         this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power,
         this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_speed,
-        this.psatService.getLineFreqFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.line_frequency),
-        this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class),
+        this.psat.modifications[this.exploreModIndex].psat.inputs.line_frequency,
+        this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class,
         this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency,
         this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_voltage,
         this.settings

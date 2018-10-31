@@ -48,6 +48,7 @@ import { PsatReportGraphsPrintComponent } from './psat-report/psat-report-graphs
 import { PsatWarningService } from './psat-warning.service';
 import { PsatTabService } from './psat-tab.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
+import { MotorService } from './motor/motor.service';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
     PsatReportService,
     PsatWarningService,
     PsatTabService,
-    PumpFluidService
+    PumpFluidService,
+    MotorService
   ]
 })
 

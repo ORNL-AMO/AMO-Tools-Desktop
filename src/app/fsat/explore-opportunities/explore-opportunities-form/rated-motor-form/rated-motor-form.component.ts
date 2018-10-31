@@ -2,13 +2,13 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { EfficiencyClasses } from '../../../fanOptions';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { FsatWarningService, FanMotorWarnings } from '../../../fsat-warning.service';
 import { PsatService } from '../../../../psat/psat.service';
 import { FormGroup, ValidatorFn } from '@angular/forms';
 import { FanMotorService } from '../../../fan-motor/fan-motor.service';
+import { motorEfficiencies } from '../../../../psat/psatConstants';
 
 @Component({
   selector: 'app-rated-motor-form',
@@ -50,7 +50,7 @@ export class RatedMotorFormComponent implements OnInit {
     private fanMotorService: FanMotorService) { }
 
   ngOnInit() {
-    this.efficiencyClasses = EfficiencyClasses;
+    this.efficiencyClasses = motorEfficiencies;
     this.init();
   }
 
@@ -228,8 +228,8 @@ export class RatedMotorFormComponent implements OnInit {
       let estEfficiency = this.psatService.estFLA(
         this.modificationForm.controls.motorRatedPower.value,
         this.modificationForm.controls.motorRpm.value,
-        this.modificationForm.controls.lineFrequency.value + ' Hz',
-        this.psatService.getEfficiencyClassFromEnum(this.modificationForm.controls.efficiencyClass.value),
+        this.modificationForm.controls.lineFrequency.value,
+        this.modificationForm.controls.efficiencyClass.value,
         this.modificationForm.controls.specifiedEfficiency.value,
         this.modificationForm.controls.motorRatedVoltage.value,
         this.settings

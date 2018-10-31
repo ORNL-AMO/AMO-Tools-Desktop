@@ -6,9 +6,9 @@ import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FanMotor, FieldData, FSAT } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { EfficiencyClasses } from '../fanOptions';
 import { CompareService } from '../compare.service';
 import { FanMotorWarnings, FsatWarningService } from '../fsat-warning.service';
+import { motorEfficiencies } from '../../psat/psatConstants';
 @Component({
   selector: 'app-fan-motor',
   templateUrl: './fan-motor.component.html',
@@ -63,7 +63,7 @@ export class FanMotorComponent implements OnInit {
     else {
       this.idString = 'fsat_baseline';
     }
-    this.efficiencyClasses = EfficiencyClasses;
+    this.efficiencyClasses = motorEfficiencies;
     this.init();
     if (!this.selected) {
       this.disableForm();
@@ -136,8 +136,8 @@ export class FanMotorComponent implements OnInit {
       let estEfficiency = this.psatService.estFLA(
         this.fanMotorForm.controls.motorRatedPower.value,
         this.fanMotorForm.controls.motorRpm.value,
-        this.fanMotorForm.controls.lineFrequency.value + ' Hz',
-        this.psatService.getEfficiencyClassFromEnum(this.fanMotorForm.controls.efficiencyClass.value),
+        this.fanMotorForm.controls.lineFrequency.value,
+        this.fanMotorForm.controls.efficiencyClass.value,
         tmpEfficiency,
         this.fanMotorForm.controls.motorRatedVoltage.value,
         this.settings

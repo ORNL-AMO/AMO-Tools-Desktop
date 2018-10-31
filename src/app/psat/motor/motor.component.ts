@@ -8,6 +8,8 @@ import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { MotorWarnings, PsatWarningService } from '../psat-warning.service';
+import { MotorService } from './motor.service';
+import { motorEfficiencies } from '../psatConstants';
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
@@ -35,35 +37,30 @@ export class MotorComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  efficiencyClasses: Array<string> = [
-    'Standard Efficiency',
-    'Energy Efficient',
-    'Premium Efficient',
-    'Specified'
-  ];
+  efficiencyClasses: Array<{ value: number, display: string }>;
 
   // horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
   // horsePowersPremium: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500];
   // kWatts: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000];
   // kWattsPremium: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355];
 
-  frequencies: Array<string> = [
-    '50 Hz',
-    '60 Hz'
+  frequencies: Array<number> = [
+    50,
+    60
   ];
 
-  options: Array<any>;
-  counter: any;
+  //options: Array<any>;
+  //counter: any;
   psatForm: FormGroup;
-  isFirstChange: boolean = true;
-  formValid: boolean;
+  //isFirstChange: boolean = true;
+  //formValid: boolean;
   motorWarnings: MotorWarnings;
-  ratedPowerError: string = null;
   disableFLAOptimized: boolean = false;
   idString: string;
-  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private motorService: MotorService) { }
 
   ngOnInit() {
+    this.efficiencyClasses = motorEfficiencies;
     if (!this.baseline) {
       this.idString = 'psat_modification_' + this.modificationIndex;
     }
@@ -85,24 +82,21 @@ export class MotorComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
       if (!this.selected) {
         this.disableForm();
       } else {
         this.enableForm();
       }
-      if (changes.modificationIndex) {
-        this.init();
-      }
     }
-    else {
-      this.isFirstChange = false;
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.init();
     }
   }
 
   init() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
+    this.psatForm = this.motorService.getFormFromObj(this.psat.inputs);
+    // this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('lineFrequency');
     //init alert meessages
     // this.modifyPowerArrays();
@@ -166,13 +160,13 @@ export class MotorComponent implements OnInit {
   disableFLA() {
     if (!this.disableFLAOptimized) {
       if (
-        this.psatForm.controls.frequency.status == 'VALID' &&
-        this.psatForm.controls.horsePower.status == 'VALID' &&
-        this.psatForm.controls.motorRPM.status == 'VALID' &&
-        this.psatForm.controls.efficiencyClass.status == 'VALID' &&
-        this.psatForm.controls.motorVoltage.status == 'VALID'
+        this.psatForm.controls.frequency.valid &&
+        this.psatForm.controls.horsePower.valid &&
+        this.psatForm.controls.motorRPM.valid &&
+        this.psatForm.controls.efficiencyClass.valid &&
+        this.psatForm.controls.motorVoltage.valid
       ) {
-        if (this.psatForm.controls.efficiencyClass.value != 'Specified') {
+        if (this.psatForm.controls.efficiencyClass.value != 3) {
           return false;
         } else {
           if (this.psatForm.controls.efficiency.value) {
@@ -218,23 +212,23 @@ export class MotorComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
-  checkForm(form: FormGroup) {
-    this.formValid = this.psatService.isMotorFormValid(form);
-    if (this.formValid) {
-      this.isValid.emit(true)
-    } else {
-      this.isInvalid.emit(true)
-    }
-  }
+  // checkForm(form: FormGroup) {
+  //   this.formValid = this.psatService.isMotorFormValid(form);
+  //   if (this.formValid) {
+  //     this.isValid.emit(true)
+  //   } else {
+  //     this.isInvalid.emit(true)
+  //   }
+  // }
 
   defaultRpm() {
-    if (this.psatForm.controls.frequency.value == '60 Hz') {
+    if (this.psatForm.controls.frequency.value == 60) {
       if (this.psatForm.controls.motorRPM.value == 1485) {
         this.psatForm.patchValue({
           motorRPM: 1780
         })
       }
-    } else if (this.psatForm.controls.frequency.value == '50 Hz') {
+    } else if (this.psatForm.controls.frequency.value == 50) {
       if (this.psatForm.controls.motorRPM.value == 1780) {
         this.psatForm.patchValue({
           motorRPM: 1485
@@ -244,8 +238,8 @@ export class MotorComponent implements OnInit {
   }
 
   save() {
-    this.checkForm(this.psatForm);
-    this.psat.inputs = this.psatService.getPsatInputsFromForm(this.psatForm);
+    // this.checkForm(this.psatForm);
+    this.psat.inputs = this.motorService.getInputsFromFrom(this.psatForm, this.psat.inputs);
     this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
     this.saved.emit(this.selected);
   }
