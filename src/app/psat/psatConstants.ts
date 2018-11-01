@@ -1,4 +1,4 @@
-export const pumpTypes: Array<{ value: number, display: string }> = [
+export const pumpTypesConstant: Array<{ value: number, display: string }> = [
     {
         value: 0,
         display: 'End Suction Slurry'
@@ -51,7 +51,7 @@ export const pumpTypes: Array<{ value: number, display: string }> = [
     // 'Specified Optimal Efficiency'
 ];
 
-export const drives: Array<{ value: number, display: string }> = [
+export const driveConstants: Array<{ value: number, display: string }> = [
     {
         value: 0,
         display: 'Direct Drive'

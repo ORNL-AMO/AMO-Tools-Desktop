@@ -6,7 +6,7 @@ import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup, ValidatorFn } from '@angular/forms';
-import { pumpTypes, drives, fluidProperties, fluidTypes } from '../psatConstants';
+import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
 
@@ -70,12 +70,12 @@ export class PumpFluidComponent implements OnInit {
     else {
       this.idString = 'psat_baseline';
     }
-    this.pumpTypes = pumpTypes;
+    this.pumpTypes = pumpTypesConstant;
     if (this.baseline) {
       //remove specified if baseline
       this.pumpTypes.pop();
     }
-    this.drives = drives;
+    this.drives = driveConstants;
     this.fluidProperties = fluidProperties;
     this.fluidTypes = fluidTypes;
 

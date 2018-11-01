@@ -46,6 +46,26 @@ export class PumpFluidService {
     }
   }
 
+  updateSpecifiedPumpEfficiency(form: FormGroup): FormGroup {
+    let specifiedPumpEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedPumpEfficiencyValidators(form.controls.pumpType.value);
+    form.controls.specifiedPumpEfficiency.setValidators(specifiedPumpEfficiencyValidators);
+    form.controls.specifiedPumpEfficiency.reset(form.controls.specifiedPumpEfficiency.value);
+    if (form.controls.specifiedPumpEfficiency.value) {
+      form.controls.specifiedPumpEfficiency.markAsDirty();
+    }
+    return form;
+  }
+
+  updateSpecifiedDriveEfficiency(form: FormGroup): FormGroup {
+    let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedDriveEfficiency(form.controls.drive.value);
+    form.controls.drive.setValidators(specifiedDriveEfficiencyValidators);
+    form.controls.drive.reset(form.controls.drive.value);
+    if (form.controls.drive.value) {
+      form.controls.drive.markAsDirty();
+    }
+    return form;
+  }
+
   getPsatInputsFromForm(form: FormGroup, psatInputs: PsatInputs): PsatInputs {
     psatInputs.pump_style = form.controls.pumpType.value;
     psatInputs.pump_specified = form.controls.specifiedPumpEfficiency.value;
