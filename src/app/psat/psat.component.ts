@@ -23,6 +23,7 @@ import { PsatTabService } from './psat-tab.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { FormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
+import { FieldDataService } from './field-data/field-data.service';
 
 @Component({
   selector: 'app-psat',
@@ -87,7 +88,8 @@ export class PsatComponent implements OnInit {
     private assessmentDbService: AssessmentDbService,
     private psatTabService: PsatTabService,
     private pumpFluidService: PumpFluidService,
-    private motorService: MotorService) {
+    private motorService: MotorService,
+    private fieldDataService: FieldDataService) {
   }
 
   ngOnInit() {
@@ -289,8 +291,8 @@ export class PsatComponent implements OnInit {
       let tmpForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
       return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
-      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-      return this.psatService.isFieldDataFormValid(tmpForm);
+      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+      return tmpForm.valid;
     }
   }
 
@@ -299,14 +301,10 @@ export class PsatComponent implements OnInit {
   }
 
   save() {
-    let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
     let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
     let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
-
-    if (
-      (tmpPumpFluidForm.valid && tmpMotorForm.valid &&
-        this.psatService.isFieldDataFormValid(tmpForm)) || this.modificationExists
-    ) {
+    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+    if ((tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid) || this.modificationExists) {
       this._psat.setupDone = true;
       this.initSankeyList();
     } else {

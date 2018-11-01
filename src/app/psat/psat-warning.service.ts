@@ -14,22 +14,22 @@ export class PsatWarningService {
   checkFieldData(psat: PSAT, settings: Settings, baseline?: boolean): FieldDataWarnings {
     let flowError = this.checkFlowRate(psat.inputs.pump_style, psat.inputs.flow_rate, settings);
     let voltageError = this.checkVoltage(psat);
-    let costError = this.checkCost(psat);
-    let opFractionError = this.checkOpFraction(psat);
+    //  let costError = this.checkCost(psat);
+    //  let opFractionError = this.checkOpFraction(psat);
     let ratedPowerError = null;
     if (baseline) {
       ratedPowerError = this.checkRatedPower(psat, settings);
     }
-    let marginError = this.checkMargin(psat);
-    let headError = this.checkHead(psat);
+    //   let marginError = this.checkMargin(psat);
+    //  let headError = this.checkHead(psat);
     return {
       flowError: flowError,
       voltageError: voltageError,
-      costError: costError,
-      opFractionError: opFractionError,
+      //  costError: costError,
+      //    opFractionError: opFractionError,
       ratedPowerError: ratedPowerError,
-      marginError: marginError,
-      headError: headError
+      //   marginError: marginError,
+      //   headError: headError
     }
   }
 
@@ -109,15 +109,15 @@ export class PsatWarningService {
     }
   }
   //REQUIRED?
-  checkCost(psat: PSAT) {
-    if (psat.inputs.cost_kw_hour < 0) {
-      return 'Should not have negative cost';
-    } else if (psat.inputs.cost_kw_hour > 1) {
-      return "Cost shouldn't be greater than 1";
-    } else {
-      return null;
-    }
-  }
+  // checkCost(psat: PSAT) {
+  //   if (psat.inputs.cost_kw_hour < 0) {
+  //     return 'Should not have negative cost';
+  //   } else if (psat.inputs.cost_kw_hour > 1) {
+  //     return "Cost shouldn't be greater than 1";
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   checkRatedPower(psat: PSAT, settings: Settings) {
     let tmpVal: number;
@@ -142,34 +142,34 @@ export class PsatWarningService {
     }
   }
   //REQUIRED?
-  checkMargin(psat: PSAT) {
-    if (psat.inputs.margin > 100) {
-      return "Unrealistic size margin, shouldn't be greater then 100%";
-    } else if (psat.inputs.margin < 0) {
-      return "Shouldn't have negative size margin";
-    } else {
-      return null;
-    }
-  }
+  // checkMargin(psat: PSAT) {
+  //   if (psat.inputs.margin > 100) {
+  //     return "Unrealistic size margin, shouldn't be greater then 100%";
+  //   } else if (psat.inputs.margin < 0) {
+  //     return "Shouldn't have negative size margin";
+  //   } else {
+  //     return null;
+  //   }
+  // }
   //REQUIRED?
-  checkOpFraction(psat: PSAT) {
-    if (psat.inputs.operating_fraction > 1) {
-      return 'Operating fraction needs to be between 0 - 1';
-    } else if (psat.inputs.operating_fraction < 0) {
-      return "Cannot have negative operating fraction";
-    } else {
-      return null;
-    }
-  }
+  // checkOpFraction(psat: PSAT) {
+  //   if (psat.inputs.operating_fraction > 1) {
+  //     return 'Operating fraction needs to be between 0 - 1';
+  //   } else if (psat.inputs.operating_fraction < 0) {
+  //     return "Cannot have negative operating fraction";
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   //REQUIRED?
-  checkHead(psat: PSAT) {
-    if (psat.inputs.head < 0) {
-      return 'Head cannot be negative';
-    } else {
-      return null;
-    }
-  }
+  // checkHead(psat: PSAT) {
+  //   if (psat.inputs.head < 0) {
+  //     return 'Head cannot be negative';
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   //MOTOR
   checkMotorWarnings(psat: PSAT, settings: Settings): MotorWarnings {
@@ -439,11 +439,11 @@ export class PsatWarningService {
 export interface FieldDataWarnings {
   flowError: string,
   voltageError: string,
-  costError: string,
-  opFractionError: string,
+  // costError: string,
+  //opFractionError: string,
   ratedPowerError: string,
-  marginError: string,
-  headError: string
+  // marginError: string,
+  // headError: string
 }
 
 export interface MotorWarnings {

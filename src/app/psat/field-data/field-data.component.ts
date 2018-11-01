@@ -9,6 +9,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
+import { FieldDataService } from './field-data.service';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -52,15 +53,21 @@ export class FieldDataComponent implements OnInit {
 
   //Create your array of options
   //first item in array will be default selected, can modify that functionality later if desired
-  loadEstimateMethods: Array<string> = [
-    'Power',
-    'Current'
+  loadEstimateMethods: Array<{ display: string, value: number }> = [
+    {
+      display: 'Power',
+      value: 0
+    },
+    {
+      display: 'Current',
+      value: 1
+    }
   ];
   psatForm: FormGroup;
   isFirstChange: boolean = true;
   fieldDataWarnings: FieldDataWarnings;
   idString: string;
-  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private cd: ChangeDetectorRef, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -101,8 +108,8 @@ export class FieldDataComponent implements OnInit {
     if (!this.psat.inputs.cost_kw_hour) {
       this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
     }
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
+    this.psatForm = this.fieldDataService.getFormFromObj(this.psat.inputs, this.baseline);
+    //this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('operatingFraction');
     if (!this.baseline) {
       this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
@@ -131,18 +138,18 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  checkForm(form: FormGroup) {
-    this.formValid = this.psatService.isFieldDataFormValid(form);
-    if (this.formValid) {
-      this.isValid.emit(true)
-    } else {
-      this.isInvalid.emit(true)
-    }
-  }
+  // checkForm(form: FormGroup) {
+  //   this.formValid = this.psatService.isFieldDataFormValid(form);
+  //   if (this.formValid) {
+  //     this.isValid.emit(true)
+  //   } else {
+  //     this.isInvalid.emit(true)
+  //   }
+  // }
 
   save() {
-    this.checkForm(this.psatForm);
-    this.psat.inputs = this.psatService.getPsatInputsFromForm(this.psatForm);
+  //  this.checkForm(this.psatForm);
+    this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     this.checkWarnings();
     this.saved.emit(true);
   }
@@ -155,7 +162,7 @@ export class FieldDataComponent implements OnInit {
     let motorAmpsValidators: Array<ValidatorFn> = new Array();
     let motorKWValidators: Array<ValidatorFn> = new Array();
 
-    if (this.psatForm.controls.loadEstimatedMethod.value == 'Power') {
+    if (this.psatForm.controls.loadEstimatedMethod.value == 0) {
       motorKWValidators = [Validators.required];
     } else {
       motorAmpsValidators = [Validators.required];

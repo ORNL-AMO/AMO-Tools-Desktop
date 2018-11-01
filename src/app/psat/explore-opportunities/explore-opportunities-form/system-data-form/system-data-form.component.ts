@@ -151,13 +151,13 @@ export class SystemDataFormComponent implements OnInit {
 
     checkWarnings() {
         let baselineWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
-        this.opFractionError1 = baselineWarnings.opFractionError;
+        // this.opFractionError1 = baselineWarnings.opFractionError;
         this.flowRateError1 = baselineWarnings.flowError;
-        this.costError1 = baselineWarnings.costError;
+        // this.costError1 = baselineWarnings.costError;
         let modificationWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-        this.opFractionError2 = modificationWarnings.opFractionError;
+        // this.opFractionError2 = modificationWarnings.opFractionError;
         this.flowRateError2 = modificationWarnings.flowError;
-        this.costError2 = modificationWarnings.costError;
+        // this.costError2 = modificationWarnings.costError;
     }
 
     getUnit(unit: string) {
@@ -165,7 +165,6 @@ export class SystemDataFormComponent implements OnInit {
         let dsp = tmpUnit.unit.name.display.replace('(', '');
         dsp = dsp.replace(')', '');
         return dsp;
-
     }
 
 }

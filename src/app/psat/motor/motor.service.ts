@@ -9,6 +9,9 @@ export class MotorService {
 
   getFormFromObj(psatInput: PsatInputs): FormGroup {
     let efficiencyValidators: Array<ValidatorFn>;
+    if(!psatInput.efficiency){
+      psatInput.efficiency = 90;
+    }
     let form: FormGroup = this.formBuilder.group({
       frequency: [psatInput.line_frequency, Validators.required],
       horsePower: [psatInput.motor_rated_power, Validators.required],
@@ -18,6 +21,11 @@ export class MotorService {
       motorVoltage: [psatInput.motor_rated_voltage, Validators.required],
       fullLoadAmps: [psatInput.motor_rated_fla, Validators.required]
     })
+    for (let key in form.controls) {
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
+    }
     return form;
   }
 

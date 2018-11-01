@@ -49,6 +49,7 @@ import { PsatWarningService } from './psat-warning.service';
 import { PsatTabService } from './psat-tab.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { MotorService } from './motor/motor.service';
+import { FieldDataService } from './field-data/field-data.service';
 
 @NgModule({
   declarations: [
@@ -104,7 +105,8 @@ import { MotorService } from './motor/motor.service';
     PsatWarningService,
     PsatTabService,
     PumpFluidService,
-    MotorService
+    MotorService,
+    FieldDataService
   ]
 })
 

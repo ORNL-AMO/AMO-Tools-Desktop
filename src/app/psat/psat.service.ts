@@ -867,22 +867,22 @@ export class PsatService {
   //   }
   // }
 
-  isFieldDataFormValid(form: FormGroup) {
-    if (
-      form.controls.operatingFraction.status == 'VALID' &&
-      form.controls.flowRate.status == 'VALID' &&
-      form.controls.head.status == 'VALID' &&
-      form.controls.loadEstimatedMethod.status == 'VALID' &&
-      form.controls.measuredVoltage.status == 'VALID' &&
-      form.controls.costKwHr.status == 'VALID' &&
-      form.controls.motorKW.status == 'VALID' &&
-      form.controls.motorAmps.status == 'VALID'
-    ) {
-      //TODO check motorAMPS or motorKW
-      return true
-    }
-    else {
-      return false;
-    }
-  }
+  // isFieldDataFormValid(form: FormGroup) {
+  //   if (
+  //     form.controls.operatingFraction.status == 'VALID' &&
+  //     form.controls.flowRate.status == 'VALID' &&
+  //     form.controls.head.status == 'VALID' &&
+  //     form.controls.loadEstimatedMethod.status == 'VALID' &&
+  //     form.controls.measuredVoltage.status == 'VALID' &&
+  //     form.controls.costKwHr.status == 'VALID' &&
+  //     form.controls.motorKW.status == 'VALID' &&
+  //     form.controls.motorAmps.status == 'VALID'
+  //   ) {
+  //     //TODO check motorAMPS or motorKW
+  //     return true
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
 }

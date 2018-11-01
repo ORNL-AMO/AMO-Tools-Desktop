@@ -612,8 +612,8 @@ export class Fsat203Service {
           amps: undefined
         },
         driveType: 'Direct Drive',
-        efficiencyClass: 'Energy Efficient',
-        frequency: '60 Hz'
+        efficiencyClass: 1,
+        frequency: 60
       }
     };
 
@@ -739,11 +739,11 @@ export class Fsat203Service {
         amps: 105,
         driveType: "Direct Drive",
         efficiencyBelt: 100,
-        efficiencyClass: "Energy Efficient",
+        efficiencyClass: 1,
         efficiencyMotor: 100,
         efficiencyVFD: 100,
         fla: 210,
-        frequency: "60 Hz",
+        frequency: 60,
         isMethodOne: false,
         isVFD: "Yes",
         mainsDataAvailable: "Yes",
@@ -918,8 +918,8 @@ export class Fsat203Service {
           amps: 205
         },
         driveType: 'Direct Drive',
-        efficiencyClass: 'Standard Efficiency',
-        frequency: '50 Hz'
+        efficiencyClass: 1,
+        frequency: 50
       }
     };
   }

@@ -105,13 +105,13 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 
 
 .indicate-different input {
-	border-left: #007bff solid 3px;
-	border-right: #007bff solid 3px;
+	border-left: #007bff solid 5px;
+	border-right: #007bff solid 5px;
     /* box-shadow: 0px 0px 5px #007bff; */
 }
  .indicate-different.form-control {
-	border-left: #007bff solid 3px;
-	border-right: #007bff solid 3px;
+	border-left: #007bff solid 5px;
+	border-right: #007bff solid 5px;
     /* box-shadow: 0px 0px 5px #007bff; */
 }
  /* .indicate-different.incrementor {

@@ -81,7 +81,7 @@ export class AssessmentService {
       specific_gravity: 1.002,
       stages: 1,
       fixed_speed: 0,
-      line_frequency: 0,
+      line_frequency: 50,
       motor_rated_power: 200,
       motor_rated_speed: 1780,
       efficiency_class: 1,

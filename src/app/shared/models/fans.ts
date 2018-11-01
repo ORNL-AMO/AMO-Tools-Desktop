@@ -153,8 +153,8 @@ export interface FanShaftPower {
   phase1: MotorPhase,
   phase2: MotorPhase,
   phase3: MotorPhase,
-  efficiencyClass: string,
-  frequency: string
+  efficiencyClass: number,
+  frequency: number
 }
 export interface MotorPhase {
   voltage: number,

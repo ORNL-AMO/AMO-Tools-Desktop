@@ -23,7 +23,9 @@ export class PumpFluidService {
       stages: [psatInputs.stages, [Validators.required, Validators.min(1)]]
     })
     for (let key in form.controls) {
-      form.controls[key].markAsDirty();
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
     }
     return form;
   }
