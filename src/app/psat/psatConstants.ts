@@ -104,7 +104,7 @@ export const fluidTypes: Array<string> = [
     'Water'
 ];
 
-export const motorEfficiencies: Array<{ value: number, display: string }> = [
+export const motorEfficiencyConstants: Array<{ value: number, display: string }> = [
     {
         value: 0,
         display: 'Standard Efficiency'

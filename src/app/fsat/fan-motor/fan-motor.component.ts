@@ -8,7 +8,7 @@ import { FanMotor, FieldData, FSAT } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { CompareService } from '../compare.service';
 import { FanMotorWarnings, FsatWarningService } from '../fsat-warning.service';
-import { motorEfficiencies } from '../../psat/psatConstants';
+import { motorEfficiencyConstants } from '../../psat/psatConstants';
 @Component({
   selector: 'app-fan-motor',
   templateUrl: './fan-motor.component.html',
@@ -63,7 +63,7 @@ export class FanMotorComponent implements OnInit {
     else {
       this.idString = 'fsat_baseline';
     }
-    this.efficiencyClasses = motorEfficiencies;
+    this.efficiencyClasses = motorEfficiencyConstants;
     this.init();
     if (!this.selected) {
       this.disableForm();

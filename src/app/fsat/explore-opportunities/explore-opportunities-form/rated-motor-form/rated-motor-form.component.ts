@@ -8,7 +8,7 @@ import { FsatWarningService, FanMotorWarnings } from '../../../fsat-warning.serv
 import { PsatService } from '../../../../psat/psat.service';
 import { FormGroup, ValidatorFn } from '@angular/forms';
 import { FanMotorService } from '../../../fan-motor/fan-motor.service';
-import { motorEfficiencies } from '../../../../psat/psatConstants';
+import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 
 @Component({
   selector: 'app-rated-motor-form',
@@ -50,7 +50,7 @@ export class RatedMotorFormComponent implements OnInit {
     private fanMotorService: FanMotorService) { }
 
   ngOnInit() {
-    this.efficiencyClasses = motorEfficiencies;
+    this.efficiencyClasses = motorEfficiencyConstants;
     this.init();
   }
 

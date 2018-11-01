@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { PsatInputs } from '../../shared/models/psat';
+import { PsatService } from '../psat.service';
+import { Settings } from '../../shared/models/settings';
 
 @Injectable()
 export class MotorService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService) { }
 
   getFormFromObj(psatInput: PsatInputs): FormGroup {
     let efficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(psatInput.efficiency_class);
@@ -26,10 +28,10 @@ export class MotorService {
     return form;
   }
 
-  getEfficiencyValidators(efficiencyClass: number): Array<ValidatorFn>{
-    if(efficiencyClass == 3){
+  getEfficiencyValidators(efficiencyClass: number): Array<ValidatorFn> {
+    if (efficiencyClass == 3) {
       return [Validators.required, Validators.min(0), Validators.max(100)];
-    }else{
+    } else {
       return [];
     }
   }
@@ -44,5 +46,55 @@ export class MotorService {
     psatInputs.motor_rated_voltage = form.controls.motorVoltage.value;
     psatInputs.motor_rated_fla = form.controls.fullLoadAmps.value;
     return psatInputs;
+  }
+
+
+  disableFLA(form: FormGroup): boolean {
+    if (
+      form.controls.frequency.valid &&
+      form.controls.horsePower.valid &&
+      form.controls.motorRPM.valid &&
+      form.controls.efficiencyClass.valid &&
+      form.controls.motorVoltage.valid
+    ) {
+      if (form.controls.efficiencyClass.value != 3) {
+        return false;
+      } else {
+        if (form.controls.efficiency.value) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+    else {
+      return true;
+    }
+  }
+
+  setFormFullLoadAmps(form: FormGroup, settings: Settings): FormGroup {
+    let estEfficiency = this.psatService.estFLA(
+      form.controls.horsePower.value,
+      form.controls.motorRPM.value,
+      form.controls.frequency.value,
+      form.controls.efficiencyClass.value,
+      form.controls.efficiency.value,
+      form.controls.motorVoltage.value,
+      settings
+    );
+    form.patchValue({
+      fullLoadAmps: estEfficiency
+    });
+    return form;
+  }
+
+  updateFormEfficiencyValidators(form: FormGroup): FormGroup {
+    let tmpEfficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(form.controls.efficiencyClass.value);
+    form.controls.efficiency.setValidators(tmpEfficiencyValidators);
+    form.controls.efficiency.reset(form.controls.efficiency.value);
+    if (form.controls.efficiency.value) {
+      form.controls.efficiency.markAsDirty();
+    }
+    return form;
   }
 }

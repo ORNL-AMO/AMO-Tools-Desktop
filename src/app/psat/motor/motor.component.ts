@@ -1,15 +1,12 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PsatService } from '../psat.service';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup, ValidatorFn } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { MotorWarnings, PsatWarningService } from '../psat-warning.service';
 import { MotorService } from './motor.service';
-import { motorEfficiencies } from '../psatConstants';
+import { motorEfficiencyConstants } from '../psatConstants';
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
@@ -18,12 +15,6 @@ import { motorEfficiencies } from '../psatConstants';
 export class MotorComponent implements OnInit {
   @Input()
   psat: PSAT;
-  // @Output('changeField')
-  // changeField = new EventEmitter<string>();
-  @Output('isValid')
-  isValid = new EventEmitter<boolean>();
-  @Output('isInvalid')
-  isInvalid = new EventEmitter<boolean>();
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Input()
@@ -57,10 +48,10 @@ export class MotorComponent implements OnInit {
   motorWarnings: MotorWarnings;
   disableFLAOptimized: boolean = false;
   idString: string;
-  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private motorService: MotorService) { }
+  constructor(private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private motorService: MotorService) { }
 
   ngOnInit() {
-    this.efficiencyClasses = motorEfficiencies;
+    this.efficiencyClasses = motorEfficiencyConstants;
     if (!this.baseline) {
       this.idString = 'psat_modification_' + this.modificationIndex;
     }
@@ -99,13 +90,8 @@ export class MotorComponent implements OnInit {
     this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings)
   }
 
-  changeEfficiencyClass(){
-    let tmpEfficiencyValidators: Array<ValidatorFn> = this.motorService.getEfficiencyValidators(this.psatForm.controls.efficiencyClass.value);
-    this.psatForm.controls.efficiency.setValidators(tmpEfficiencyValidators);
-    this.psatForm.controls.efficiency.reset(this.psatForm.controls.efficiency.value);
-    if (this.psatForm.controls.efficiency.value) {
-      this.psatForm.controls.efficiency.markAsDirty();
-    }
+  changeEfficiencyClass() {
+    this.psatForm = this.motorService.updateFormEfficiencyValidators(this.psatForm);
     this.save();
   }
 
@@ -128,44 +114,14 @@ export class MotorComponent implements OnInit {
 
   getFullLoadAmps() {
     if (!this.disableFLA()) {
-      let estEfficiency = this.psatService.estFLA(
-        this.psatForm.controls.horsePower.value,
-        this.psatForm.controls.motorRPM.value,
-        this.psatForm.controls.frequency.value,
-        this.psatForm.controls.efficiencyClass.value,
-        this.psatForm.controls.efficiency.value,
-        this.psatForm.controls.motorVoltage.value,
-        this.settings
-      );
-      this.psatForm.patchValue({
-        fullLoadAmps: estEfficiency
-      });
+      this.psatForm = this.motorService.setFormFullLoadAmps(this.psatForm, this.settings);
       this.save();
     }
   }
 
   disableFLA() {
     if (!this.disableFLAOptimized) {
-      if (
-        this.psatForm.controls.frequency.valid &&
-        this.psatForm.controls.horsePower.valid &&
-        this.psatForm.controls.motorRPM.valid &&
-        this.psatForm.controls.efficiencyClass.valid &&
-        this.psatForm.controls.motorVoltage.valid
-      ) {
-        if (this.psatForm.controls.efficiencyClass.value != 3) {
-          return false;
-        } else {
-          if (this.psatForm.controls.efficiency.value) {
-            return false;
-          } else {
-            return true;
-          }
-        }
-      }
-      else {
-        return true;
-      }
+      return this.motorService.disableFLA(this.psatForm);
     } else {
       return true;
     }
