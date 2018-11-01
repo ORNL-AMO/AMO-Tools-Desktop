@@ -8,10 +8,7 @@ export class MotorService {
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromObj(psatInput: PsatInputs): FormGroup {
-    let efficiencyValidators: Array<ValidatorFn>;
-    if(!psatInput.efficiency){
-      psatInput.efficiency = 90;
-    }
+    let efficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(psatInput.efficiency_class);
     let form: FormGroup = this.formBuilder.group({
       frequency: [psatInput.line_frequency, Validators.required],
       horsePower: [psatInput.motor_rated_power, Validators.required],
@@ -29,8 +26,8 @@ export class MotorService {
     return form;
   }
 
-  getEfficiencyValidators(psatInput: PsatInputs): Array<ValidatorFn>{
-    if(psatInput.efficiency_class == 3){
+  getEfficiencyValidators(efficiencyClass: number): Array<ValidatorFn>{
+    if(efficiencyClass == 3){
       return [Validators.required, Validators.min(0), Validators.max(100)];
     }else{
       return [];

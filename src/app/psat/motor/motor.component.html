@@ -49,7 +49,7 @@
     <div class="form-group">
       <label for="{{'efficiencyClass_'+idString}}">Efficiency Class</label>
       <select name="efficiencyClass" class="form-control select-input-field" id="{{'efficiencyClass_'+idString}}"
-        formControlName="efficiencyClass" (change)="save()" (focus)="focusField('efficiencyClass')" [ngClass]="{'indicate-different': isEfficiencyClassDifferent()}">
+        formControlName="efficiencyClass" (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')" [ngClass]="{'indicate-different': isEfficiencyClassDifferent()}">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>
     </div>
