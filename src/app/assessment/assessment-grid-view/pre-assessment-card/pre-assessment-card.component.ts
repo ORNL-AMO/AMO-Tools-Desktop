@@ -51,6 +51,7 @@ export class PreAssessmentCardComponent implements OnInit {
 
   ngOnInit() {
     //  this.populateDirArray();
+    this.calculator.selected = false;
     this.getData();
     this.calculatorCopy = JSON.parse(JSON.stringify(this.calculator));
     delete this.calculatorCopy.id;
