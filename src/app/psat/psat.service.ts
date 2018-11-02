@@ -370,7 +370,7 @@ export class PsatService {
 
   ///achievable pump efficiency
   pumpEfficiency(
-    pumpStyle: string,
+    pumpStyle: number,
     flowRate: number,
     settings: Settings
   ) {
@@ -379,9 +379,9 @@ export class PsatService {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
     let inputs: any;
-    let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
+    // let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
     inputs = {
-      pump_style: enumPumpStyle,
+      pump_style: pumpStyle,
       flow_rate: flowRate
     }
     let tmpResults = psatAddon.pumpEfficiency(inputs);
