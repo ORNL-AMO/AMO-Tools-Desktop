@@ -37,6 +37,7 @@ import { PhastCompareService } from './phast-compare.service';
 import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
+import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { AddModificationComponent } from './add-modification/add-modification.co
     EnergyEquivalencyModule,
     EnergyUseModule,
     ExplorePhastOpportunitiesModule,
-    LossesTabsModule
+    LossesTabsModule,
+    UtilitiesModule
   ],
   providers: [
     PhastService,
