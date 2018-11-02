@@ -5,6 +5,7 @@ import { PsatWarningService, MotorWarnings } from '../../../psat-warning.service
 import { MotorService } from '../../../motor/motor.service';
 import { FormGroup } from '@angular/forms';
 import { motorEfficiencyConstants } from '../../../psatConstants';
+import { PsatService } from '../../../psat.service';
 @Component({
   selector: 'app-rated-motor-form',
   templateUrl: './rated-motor-form.component.html',
@@ -34,7 +35,7 @@ export class RatedMotorFormComponent implements OnInit {
 
   baselineWarnings: MotorWarnings;
   modificationWarnings: MotorWarnings;
-  constructor(private psatWarningService: PsatWarningService, private motorService: MotorService) { }
+  constructor(private psatWarningService: PsatWarningService, private motorService: MotorService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.efficiencyClasses = motorEfficiencyConstants;
@@ -154,7 +155,7 @@ export class RatedMotorFormComponent implements OnInit {
   getModificationFLA() {
     let disableFla: boolean = this.disableFla();
     if (!disableFla) {
-      this.motorService.setFormFullLoadAmps(this.modificationForm, this.settings);
+      this.modificationForm = this.psatService.setFormFullLoadAmps(this.modificationForm, this.settings);
     }
     this.calculate();
   }

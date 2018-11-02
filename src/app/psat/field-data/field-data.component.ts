@@ -1,7 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
-import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -18,10 +17,6 @@ import { FieldDataService } from './field-data.service';
 export class FieldDataComponent implements OnInit {
   @Input()
   psat: PSAT;
-  @Output('isValid')
-  isValid = new EventEmitter<boolean>();
-  @Output('isInvalid')
-  isInvalid = new EventEmitter<boolean>();
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Input()
@@ -51,8 +46,6 @@ export class FieldDataComponent implements OnInit {
     pumpHead: 0.0
   };
 
-  //Create your array of options
-  //first item in array will be default selected, can modify that functionality later if desired
   loadEstimateMethods: Array<{ display: string, value: number }> = [
     {
       display: 'Power',
@@ -64,10 +57,9 @@ export class FieldDataComponent implements OnInit {
     }
   ];
   psatForm: FormGroup;
-  isFirstChange: boolean = true;
   fieldDataWarnings: FieldDataWarnings;
   idString: string;
-  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
+  constructor(private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -84,23 +76,18 @@ export class FieldDataComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (changes.selected) {
-        if (!this.selected) {
-          this.disableForm();
-        } else {
-          this.enableForm();
-        }
-        if (!this.baseline) {
-          this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-        }
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
       }
-      if (changes.modificationIndex) {
-        this.init();
+      if (!this.baseline) {
+        this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
       }
     }
-    else {
-      this.isFirstChange = false;
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.init();
     }
   }
 
@@ -109,7 +96,6 @@ export class FieldDataComponent implements OnInit {
       this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
     }
     this.psatForm = this.fieldDataService.getFormFromObj(this.psat.inputs, this.baseline);
-    //this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('operatingFraction');
     if (!this.baseline) {
       this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
@@ -138,17 +124,7 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  // checkForm(form: FormGroup) {
-  //   this.formValid = this.psatService.isFieldDataFormValid(form);
-  //   if (this.formValid) {
-  //     this.isValid.emit(true)
-  //   } else {
-  //     this.isInvalid.emit(true)
-  //   }
-  // }
-
   save() {
-  //  this.checkForm(this.psatForm);
     this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     this.checkWarnings();
     this.saved.emit(true);

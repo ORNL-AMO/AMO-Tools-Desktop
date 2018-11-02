@@ -34,7 +34,7 @@
 
     <div class="form-group">
       <label for="{{'pumpRPM_'+idString}}">Pump Speed</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': rpmError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': pumpFluidWarnings.rpmError !== null}">
         <input [readonly]="!selected" type="number" name="pumpRPM" min="0" step="10" class="form-control"
           formControlName="pumpRPM" id="{{'pumpRPM_'+idString}}" (input)="save()" (focus)="focusField('pumpRPM')"
           onfocus="this.select();">
@@ -43,7 +43,7 @@
       <span class="alert-danger pull-right small" *ngIf="psatForm.controls.pumpRPM.invalid && !psatForm.controls.pumpRPM.pristine">
         <span *ngIf="psatForm.controls.pumpRPM.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="rpmError !== null && !psatForm.controls.pumpRPM.invalid && !psatForm.controls.pumpRPM.pristine">{{rpmError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="pumpFluidWarnings.rpmError !== null && !psatForm.controls.pumpRPM.invalid && !psatForm.controls.pumpRPM.pristine">{{pumpFluidWarnings.rpmError}}</span>
     </div>
 
     <div class="form-group">
@@ -81,7 +81,7 @@
 
     <div class="form-group">
       <label for="{{'fluidTemperature_'+idString}}">Fluid Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isFluidTempDifferent(),'error': temperatureError !== null}">
+      <div class="input-group" [ngClass]="{'indicate-different': isFluidTempDifferent(),'error': pumpFluidWarnings.temperatureError !== null}">
         <input [readonly]="!selected" type="number" name="fluidTemperature" step="any" class="form-control"
           formControlName="fluidTemperature" id="{{'fluidTemperature_'+idString}}" (input)="calculateSpecificGravity()"
           (focus)="focusField('fluidTemperature')" onfocus="this.select();">
@@ -90,8 +90,8 @@
       <span class="alert-danger pull-right small" *ngIf="psatForm.controls.fluidTemperature.invalid && !psatForm.controls.fluidTemperature.pristine">
         <span *ngIf="psatForm.controls.fluidTemperature.errors.required">Value Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="temperatureError !== null && !psatForm.controls.fluidTemperature.invalid && !psatForm.controls.fluidTemperature.pristine"
-        [innerHtml]="temperatureError"></span>
+      <span class="alert-warning pull-right small" *ngIf="pumpFluidWarnings.temperatureError !== null && !psatForm.controls.fluidTemperature.invalid && !psatForm.controls.fluidTemperature.pristine"
+        [innerHtml]="pumpFluidWarnings.temperatureError"></span>
     </div>
 
     <div class="form-group">

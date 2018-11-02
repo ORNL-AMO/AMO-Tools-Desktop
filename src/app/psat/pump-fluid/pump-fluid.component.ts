@@ -20,10 +20,6 @@ export class PumpFluidComponent implements OnInit {
   psat: PSAT;
   @Output('saved')
   saved = new EventEmitter<boolean>();
-  @Output('isValid')
-  isValid = new EventEmitter<boolean>();
-  @Output('isInvalid')
-  isInvalid = new EventEmitter<boolean>();
   @Input()
   selected: boolean;
   @Input()
@@ -35,19 +31,14 @@ export class PumpFluidComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  formValid: boolean;
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
   fluidProperties;
   fluidTypes: Array<string>;
   psatForm: FormGroup;
-  isFirstChange: boolean = true;
-  rpmError: string = null;
-  temperatureError: string = null;
-  //  pumpEfficiencyError: string = null;
-  //  specifiedDriveEfficiencyError: string = null;
   tempUnit: string;
   idString: string;
+  pumpFluidWarnings: { rpmError: string, temperatureError: string };
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -96,7 +87,6 @@ export class PumpFluidComponent implements OnInit {
 
   init() {
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
-    // this.checkForm(this.psatForm);
     this.checkWarnings();
   }
 
@@ -134,17 +124,7 @@ export class PumpFluidComponent implements OnInit {
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
-    //   this.checkForm(this.psatForm);
   }
-
-  // checkForm(form: FormGroup) {
-  //   this.formValid = this.psatService.isPumpFluidFormValid(form);
-  //   if (this.formValid) {
-  //     this.isValid.emit(true)
-  //   } else {
-  //     this.isInvalid.emit(true)
-  //   }
-  // }
 
   calculateSpecificGravity() {
     let fluidType = this.psatForm.controls.fluidType.value;
@@ -200,11 +180,7 @@ export class PumpFluidComponent implements OnInit {
   }
 
   checkWarnings() {
-    let tmpWarnings: { rpmError: string, temperatureError: string } = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
-    this.rpmError = tmpWarnings.rpmError;
-    this.temperatureError = tmpWarnings.temperatureError;
-    // this.pumpEfficiencyError = tmpWarnings.pumpEfficiencyError;
-    // this.specifiedDriveEfficiencyError = tmpWarnings.specifiedDriveEfficiencyError;
+    this.pumpFluidWarnings = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
   }
 
   canCompare() {

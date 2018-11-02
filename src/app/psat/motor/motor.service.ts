@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { PsatInputs } from '../../shared/models/psat';
-import { PsatService } from '../psat.service';
-import { Settings } from '../../shared/models/settings';
 
 @Injectable()
 export class MotorService {
 
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   getFormFromObj(psatInput: PsatInputs): FormGroup {
     let efficiencyValidators: Array<ValidatorFn> = this.getEfficiencyValidators(psatInput.efficiency_class);
@@ -70,22 +68,6 @@ export class MotorService {
     else {
       return true;
     }
-  }
-
-  setFormFullLoadAmps(form: FormGroup, settings: Settings): FormGroup {
-    let estEfficiency = this.psatService.estFLA(
-      form.controls.horsePower.value,
-      form.controls.motorRPM.value,
-      form.controls.frequency.value,
-      form.controls.efficiencyClass.value,
-      form.controls.efficiency.value,
-      form.controls.motorVoltage.value,
-      settings
-    );
-    form.patchValue({
-      fullLoadAmps: estEfficiency
-    });
-    return form;
   }
 
   updateFormEfficiencyValidators(form: FormGroup): FormGroup {

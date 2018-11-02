@@ -3,6 +3,8 @@ import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PsatWarningService, FieldDataWarnings } from '../../../psat-warning.service';
+import { FormGroup } from '@angular/forms';
+import { FieldDataService } from '../../../field-data/field-data.service';
 @Component({
     selector: 'app-system-data-form',
     templateUrl: './system-data-form.component.html',
@@ -27,15 +29,11 @@ export class SystemDataFormComponent implements OnInit {
     showHead: boolean = false;
     showName: boolean = false;
 
-    costError1: string = null;
-    costError2: string = null;
-    flowRateError1: string = null;
-    flowRateError2: string = null;
-    opFractionError1: string = null;
-    opFractionError2: string = null;
-
-    tmpBaselineName: string = 'Baseline';
-    constructor(private convertUnitsService: ConvertUnitsService, private psatWarningService: PsatWarningService) {
+    baselineForm: FormGroup;
+    modificationForm: FormGroup;
+    baselineWarnings: FieldDataWarnings;
+    modificationWarnings: FieldDataWarnings;
+    constructor(private convertUnitsService: ConvertUnitsService, private psatWarningService: PsatWarningService, private fieldDataService: FieldDataService) {
 
     }
 
@@ -52,6 +50,10 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     init() {
+        this.baselineForm = this.fieldDataService.getFormFromObj(this.psat.inputs, true);
+        this.baselineForm.disable();
+        this.modificationForm = this.fieldDataService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs, false);
+        this.checkWarnings();
         this.initCost();
         this.initFlowRate();
         this.initHead();
@@ -60,7 +62,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initCost() {
-        if (this.psat.inputs.cost_kw_hour != this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour) {
+        if (this.baselineForm.controls.costKwHr.value != this.modificationForm.controls.costKwHr.value) {
             this.showCost = true;
         } else {
             this.showCost = false;
@@ -68,7 +70,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initFlowRate() {
-        if (this.psat.inputs.flow_rate != this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
+        if (this.baselineForm.controls.flowRate.value != this.modificationForm.controls.flowRate.value) {
             this.showFlowRate = true;
         } else {
             this.showFlowRate = false;
@@ -76,7 +78,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initHead() {
-        if (this.psat.inputs.head != this.psat.modifications[this.exploreModIndex].psat.inputs.head) {
+        if (this.baselineForm.controls.head.value != this.modificationForm.controls.head.value) {
             this.showHead = true;
         } else {
             this.showHead = false;
@@ -84,7 +86,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initOpFraction() {
-        if (this.psat.inputs.operating_fraction != this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction) {
+        if (this.baselineForm.controls.operatingFraction.value != this.modificationForm.controls.operatingFraction.value) {
             this.showOperatingFraction = true;
         } else {
             this.showOperatingFraction = false;
@@ -114,33 +116,36 @@ export class SystemDataFormComponent implements OnInit {
 
     toggleCost() {
         if (this.showCost == false) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour = this.psat.inputs.cost_kw_hour;
+            this.modificationForm.controls.costKwHr.patchValue(this.baselineForm.controls.costKwHr.value);
             this.calculate();
         }
     }
 
     toggleHead() {
         if (this.showHead == false) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.head = this.psat.inputs.head;
+            this.modificationForm.controls.head.patchValue(this.baselineForm.controls.head.value);
             this.calculate();
         }
     }
 
     toggleOperatingFraction() {
         if (this.showOperatingFraction == false) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction = this.psat.inputs.operating_fraction;
+            this.modificationForm.controls.operatingFraction.patchValue(this.baselineForm.controls.operatingFraction.value);
             this.calculate();
         }
     }
 
     toggleFlowRate() {
         if (this.showFlowRate == false) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate = this.psat.inputs.flow_rate;
+            this.modificationForm.controls.flowRate.patchValue(this.baselineForm.controls.flowRate.value);
             this.calculate();
         }
     }
 
     calculate() {
+        //not needed unless we enable baseline editing
+        //this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.baselineForm, this.psat.inputs);
+        this.psat.modifications[this.exploreModIndex].psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.modificationForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
         this.checkWarnings();
         this.emitCalculate.emit(true);
     }
@@ -150,17 +155,11 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     checkWarnings() {
-        let baselineWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
-        // this.opFractionError1 = baselineWarnings.opFractionError;
-        this.flowRateError1 = baselineWarnings.flowError;
-        // this.costError1 = baselineWarnings.costError;
-        let modificationWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-        // this.opFractionError2 = modificationWarnings.opFractionError;
-        this.flowRateError2 = modificationWarnings.flowError;
-        // this.costError2 = modificationWarnings.costError;
+        this.baselineWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
+        this.modificationWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
     }
 
-    getUnit(unit: string) {
+    getDisplayUnit(unit: string) {
         let tmpUnit = this.convertUnitsService.getUnit(unit);
         let dsp = tmpUnit.unit.name.display.replace('(', '');
         dsp = dsp.replace(')', '');

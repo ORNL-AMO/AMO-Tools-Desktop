@@ -25,10 +25,10 @@ export class FieldDataService {
       sizeMarginValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
     let form: FormGroup = this.formBuilder.group({
-      operatingFraction: [psatInputs.operating_fraction, [Validators.required]],
+      operatingFraction: [psatInputs.operating_fraction, [Validators.required, Validators.min(0), Validators.max(1)]],
       costKwHr: [psatInputs.cost_kw_hour, [Validators.required, Validators.min(0), Validators.max(1)]],
       flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
-      head: [psatInputs.head, [Validators.required, Validators.min(0)]],
+      head: [psatInputs.head, [Validators.required, Validators.min(0.1)]],
       loadEstimatedMethod: [psatInputs.load_estimation_method, loadEstimationMethodValidators],
       motorKW: [psatInputs.motor_field_power, motorKwValidators],
       motorAmps: [psatInputs.motor_field_current, motorAmpsValidators],

@@ -65,14 +65,14 @@
       <div class="input-group" [ngClass]="{'indicate-different': isHeadDifferent()}">
         <input [readonly]="!selected" name="head" type="number" min="0.1" step="any" class="form-control"
           formControlName="head" id="{{'head_'+idString}}" (input)="save()" (focus)="focusField('head')" onfocus="this.select();">
-        <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="psatForm.controls.head.invalid && !psatForm.controls.head.pristine">
         <span *ngIf="psatForm.controls.head.errors.required">Value Required</span>
         <span *ngIf="psatForm.controls.head.errors.max">Value can't be greater than
-          {{psatForm.controls.head.errors.max.max}} {{settings.distanceMeasurement}}.</span>
+          {{psatForm.controls.head.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
         <span *ngIf="psatForm.controls.head.errors.min">Value can't be less than
-          {{psatForm.controls.head.errors.min.min}} {{settings.distanceMeasurement}}.</span>
+          {{psatForm.controls.head.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
       </span>
     </div>
 

@@ -8,6 +8,9 @@ import { ValidationService } from '../shared/validation.service';
 declare var psatAddon: any;
 import { BehaviorSubject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { MotorService } from './motor/motor.service';
+import { FieldDataService } from './field-data/field-data.service';
+import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 @Injectable()
 export class PsatService {
   flaRange: any = {
@@ -16,7 +19,8 @@ export class PsatService {
   };
 
   getResults: BehaviorSubject<boolean>;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService, private pumpFluidService: PumpFluidService,
+    private motorService: MotorService, private fieldDataService: FieldDataService) {
     this.getResults = new BehaviorSubject<boolean>(true);
   }
 
@@ -688,201 +692,195 @@ export class PsatService {
     return efficiency;
   }
 
-  //PSAT FORM UTILITIES
-  initForm() {
-    return this.formBuilder.group({
-      'pumpType': ['', Validators.required],
-      'specifiedPumpEfficiency': [''],
-      'pumpRPM': ['', Validators.required],
-      'drive': ['', Validators.required],
-      'specifiedDriveEfficiency': [''],
-      'viscosity': ['', Validators.required],
-      'gravity': ['', Validators.required],
-      'stages': ['', Validators.required],
-      'fixedSpeed': ['Yes', Validators.required],
-      'frequency': ['', Validators.required],
-      'horsePower': ['', Validators.required],
-      'motorRPM': ['', [Validators.required, Validators.min(1)]],
-      'efficiencyClass': ['', Validators.required],
-      'efficiency': [''],
-      'motorVoltage': ['', Validators.required],
-      'fullLoadAmps': ['', Validators.required],
-      'sizeMargin': [0, Validators.required],
-      'operatingFraction': ['', Validators.required],
-      'costKwHr': ['', Validators.required],
-      'flowRate': ['', Validators.required],
-      'head': ['', Validators.required],
-      'loadEstimatedMethod': ['', Validators.required],
-      'motorKW': [''],
-      'motorAmps': [''],
-      'measuredVoltage': ['', Validators.required],
-      'optimizeCalculation': [''],
-      'implementationCosts': ['']
-    })
+  getPsatResults(baselinePsatInputs: PsatInputs, settings: Settings, modificationPsatInputs?: PsatInputs): { baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number } {
+    let baselineResults: PsatOutputs = this.emptyResults();
+    let modificationResults: PsatOutputs = this.emptyResults();
+    let annualSavings: number;
+    let percentSavings: number;
+
+    //create copies of inputs to use for calcs
+    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(baselinePsatInputs));
+    let isPsatValid: boolean = this.isPsatValid(psatInputs, true);
+    if (isPsatValid) {
+      if (psatInputs.optimize_calculation) {
+        baselineResults = this.resultsOptimal(psatInputs, settings);
+      } else {
+        baselineResults = this.resultsExisting(psatInputs, settings);
+      }
+    }
+    if (modificationPsatInputs) {
+      let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
+      isPsatValid = this.isPsatValid(modInputs, false);
+      if (isPsatValid) {
+        if (modInputs.optimize_calculation) {
+          modificationResults = this.resultsOptimal(modInputs, settings);
+        } else {
+          modificationResults = this.resultsModified(modInputs, settings, baselineResults.pump_efficiency);
+        }
+      }
+    }
+    annualSavings = baselineResults.annual_cost - modificationResults.annual_cost;
+    percentSavings = Number(Math.round((((annualSavings * 100) / baselineResults.annual_cost) * 100) / 100).toFixed(0));
+    return {
+      baselineResults: baselineResults,
+      modificationResults: modificationResults,
+      annualSavings: annualSavings,
+      percentSavings: percentSavings
+    }
   }
 
-  getFormFromPsat(psatInputs: PsatInputs): FormGroup {
-    let motorAmpsValidators: Array<Validators> = new Array<Validators>();
-    let motorKwValidators: Array<Validators> = new Array<Validators>();
-    if (!psatInputs.fixed_speed) {
-      psatInputs.fixed_speed = 0;
-    }
-    if (!psatInputs.margin) {
-      psatInputs.margin = 0;
-    }
-
-    if (psatInputs.load_estimation_method == 0) {
-      motorKwValidators = [Validators.required];
-    } else {
-      motorAmpsValidators = [Validators.required];
-    }
-    let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
-    let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
-    let effClass = this.getEfficiencyClassFromEnum(psatInputs.efficiency_class);
-    let drive = this.getDriveFromEnum(psatInputs.drive);
-    let fixedSpeed = this.getFixedSpeedFromEnum(psatInputs.fixed_speed);
-    let loadEstMethod = this.getLoadEstimationFromEnum(psatInputs.load_estimation_method);
-    return this.formBuilder.group({
-      'pumpType': [pumpStyle, Validators.required],
-      'specifiedPumpEfficiency': [psatInputs.pump_specified],
-      'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
-      'drive': [drive, Validators.required],
-      'specifiedDriveEfficiency': [psatInputs.specifiedDriveEfficiency],
-      'viscosity': [psatInputs.kinematic_viscosity, Validators.required],
-      'gravity': [psatInputs.specific_gravity, Validators.required],
-      'stages': [psatInputs.stages, Validators.required],
-      'fixedSpeed': [fixedSpeed, Validators.required],
-      'frequency': [lineFreq, Validators.required],
-      'horsePower': [psatInputs.motor_rated_power, Validators.required],
-      'motorRPM': [psatInputs.motor_rated_speed, [Validators.required, Validators.min(1)]],
-      'efficiencyClass': [effClass, Validators.required],
-      'efficiency': [psatInputs.efficiency],
-      'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
-      'fullLoadAmps': [psatInputs.motor_rated_fla, Validators.required],
-      'sizeMargin': [psatInputs.margin, Validators.required],
-      'operatingFraction': [psatInputs.operating_fraction, Validators.required],
-      'costKwHr': [psatInputs.cost_kw_hour, Validators.required],
-      'flowRate': [psatInputs.flow_rate, Validators.required],
-      'head': [psatInputs.head, Validators.required],
-      'loadEstimatedMethod': [loadEstMethod, Validators.required],
-      'motorKW': [psatInputs.motor_field_power, motorKwValidators],
-      'motorAmps': [psatInputs.motor_field_current, motorAmpsValidators],
-      'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
-      'optimizeCalculation': [psatInputs.optimize_calculation],
-      'implementationCosts': [psatInputs.implementationCosts],
-      'fluidType': [psatInputs.fluidType],
-      'fluidTemperature': [psatInputs.fluidTemperature, Validators.required]
-    })
+  setFormFullLoadAmps(form: FormGroup, settings: Settings): FormGroup {
+    let estEfficiency = this.estFLA(
+      form.controls.horsePower.value,
+      form.controls.motorRPM.value,
+      form.controls.frequency.value,
+      form.controls.efficiencyClass.value,
+      form.controls.efficiency.value,
+      form.controls.motorVoltage.value,
+      settings
+    );
+    form.patchValue({
+      fullLoadAmps: estEfficiency
+    });
+    return form;
   }
 
-  getPsatInputsFromForm(form: FormGroup): PsatInputs {
 
-    let efficiency = this.getEfficiencyFromForm(form);
-    let lineFreqEnum = this.getLineFreqEnum(form.controls.frequency.value);
-    let pumpStyleEnum = this.getPumpStyleEnum(form.controls.pumpType.value);
-    let efficiencyClassEnum = this.getEfficienyClassEnum(form.controls.efficiencyClass.value);
-    let driveEnum = this.getDriveEnum(form.controls.drive.value);
-    let fixedSpeedEnum = this.getFixedSpeedEmum(form.controls.fixedSpeed.value);
-    let loadEstMethodEnum = this.getLoadEstimationEnum(form.controls.loadEstimatedMethod.value);
-    let tmpPsatInputs: PsatInputs = {
-      pump_style: pumpStyleEnum,
-      pump_specified: form.controls.specifiedPumpEfficiency.value,
-      pump_rated_speed: form.controls.pumpRPM.value,
-      drive: driveEnum,
-      specifiedDriveEfficiency: form.controls.specifiedDriveEfficiency.value,
-      kinematic_viscosity: form.controls.viscosity.value,
-      specific_gravity: form.controls.gravity.value,
-      stages: form.controls.stages.value,
-      fixed_speed: fixedSpeedEnum,
-      line_frequency: lineFreqEnum,
-      motor_rated_power: form.controls.horsePower.value,
-      motor_rated_speed: form.controls.motorRPM.value,
-      efficiency_class: efficiencyClassEnum,
-      efficiency: efficiency,
-      motor_rated_voltage: form.controls.motorVoltage.value,
-      load_estimation_method: loadEstMethodEnum,
-      motor_rated_fla: form.controls.fullLoadAmps.value,
-      margin: form.controls.sizeMargin.value,
-      operating_fraction: form.controls.operatingFraction.value,
-      flow_rate: form.controls.flowRate.value,
-      head: form.controls.head.value,
-      motor_field_power: form.controls.motorKW.value,
-      motor_field_current: form.controls.motorAmps.value,
-      motor_field_voltage: form.controls.measuredVoltage.value,
-      cost_kw_hour: form.controls.costKwHr.value,
-      cost: form.controls.costKwHr.value,
-      optimize_calculation: form.controls.optimizeCalculation.value,
-      implementationCosts: form.controls.implementationCosts.value,
-      fluidType: form.controls.fluidType.value,
-      fluidTemperature: form.controls.fluidTemperature.value
-    };
-    return tmpPsatInputs;
+  isPsatValid(psatInputs: PsatInputs, isBaseline: boolean): boolean {
+    let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(psatInputs);
+    let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(psatInputs);
+    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(psatInputs, isBaseline);
+    return tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid
   }
 
-  // isPumpFluidFormValid(form: FormGroup) {
-  //   if (
-  //     form.controls.pumpType.status == 'VALID' &&
-  //     form.controls.pumpRPM.status == 'VALID' &&
-  //     form.controls.drive.status == 'VALID' &&
-  //     form.controls.gravity.status == 'VALID' &&
-  //     form.controls.stages.status == 'VALID' &&
-  //     form.controls.fluidTemperature.status == 'VALID'
-  //   ) {
-  //     //TODO: Check pumpType for custom
-  //     if (form.controls.pumpType.value != "Specified Optimal Efficiency") {
-  //       return true;
-  //     } else {
-  //       if (form.controls.specifiedPumpEfficiency.status == 'VALID') {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     }
+  // //PSAT FORM UTILITIES
+  // initForm() {
+  //   return this.formBuilder.group({
+  //     'pumpType': ['', Validators.required],
+  //     'specifiedPumpEfficiency': [''],
+  //     'pumpRPM': ['', Validators.required],
+  //     'drive': ['', Validators.required],
+  //     'specifiedDriveEfficiency': [''],
+  //     'viscosity': ['', Validators.required],
+  //     'gravity': ['', Validators.required],
+  //     'stages': ['', Validators.required],
+  //     'fixedSpeed': ['Yes', Validators.required],
+  //     'frequency': ['', Validators.required],
+  //     'horsePower': ['', Validators.required],
+  //     'motorRPM': ['', [Validators.required, Validators.min(1)]],
+  //     'efficiencyClass': ['', Validators.required],
+  //     'efficiency': [''],
+  //     'motorVoltage': ['', Validators.required],
+  //     'fullLoadAmps': ['', Validators.required],
+  //     'sizeMargin': [0, Validators.required],
+  //     'operatingFraction': ['', Validators.required],
+  //     'costKwHr': ['', Validators.required],
+  //     'flowRate': ['', Validators.required],
+  //     'head': ['', Validators.required],
+  //     'loadEstimatedMethod': ['', Validators.required],
+  //     'motorKW': [''],
+  //     'motorAmps': [''],
+  //     'measuredVoltage': ['', Validators.required],
+  //     'optimizeCalculation': [''],
+  //     'implementationCosts': ['']
+  //   })
+  // }
+
+  // getFormFromPsat(psatInputs: PsatInputs): FormGroup {
+  //   let motorAmpsValidators: Array<Validators> = new Array<Validators>();
+  //   let motorKwValidators: Array<Validators> = new Array<Validators>();
+  //   if (!psatInputs.fixed_speed) {
+  //     psatInputs.fixed_speed = 0;
+  //   }
+  //   if (!psatInputs.margin) {
+  //     psatInputs.margin = 0;
+  //   }
+
+  //   if (psatInputs.load_estimation_method == 0) {
+  //     motorKwValidators = [Validators.required];
   //   } else {
-  //     return false;
+  //     motorAmpsValidators = [Validators.required];
   //   }
+  //   let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
+  //   let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
+  //   let effClass = this.getEfficiencyClassFromEnum(psatInputs.efficiency_class);
+  //   let drive = this.getDriveFromEnum(psatInputs.drive);
+  //   let fixedSpeed = this.getFixedSpeedFromEnum(psatInputs.fixed_speed);
+  //   let loadEstMethod = this.getLoadEstimationFromEnum(psatInputs.load_estimation_method);
+  //   return this.formBuilder.group({
+  //     'pumpType': [pumpStyle, Validators.required],
+  //     'specifiedPumpEfficiency': [psatInputs.pump_specified],
+  //     'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
+  //     'drive': [drive, Validators.required],
+  //     'specifiedDriveEfficiency': [psatInputs.specifiedDriveEfficiency],
+  //     'viscosity': [psatInputs.kinematic_viscosity, Validators.required],
+  //     'gravity': [psatInputs.specific_gravity, Validators.required],
+  //     'stages': [psatInputs.stages, Validators.required],
+  //     'fixedSpeed': [fixedSpeed, Validators.required],
+  //     'frequency': [lineFreq, Validators.required],
+  //     'horsePower': [psatInputs.motor_rated_power, Validators.required],
+  //     'motorRPM': [psatInputs.motor_rated_speed, [Validators.required, Validators.min(1)]],
+  //     'efficiencyClass': [effClass, Validators.required],
+  //     'efficiency': [psatInputs.efficiency],
+  //     'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
+  //     'fullLoadAmps': [psatInputs.motor_rated_fla, Validators.required],
+  //     'sizeMargin': [psatInputs.margin, Validators.required],
+  //     'operatingFraction': [psatInputs.operating_fraction, Validators.required],
+  //     'costKwHr': [psatInputs.cost_kw_hour, Validators.required],
+  //     'flowRate': [psatInputs.flow_rate, Validators.required],
+  //     'head': [psatInputs.head, Validators.required],
+  //     'loadEstimatedMethod': [loadEstMethod, Validators.required],
+  //     'motorKW': [psatInputs.motor_field_power, motorKwValidators],
+  //     'motorAmps': [psatInputs.motor_field_current, motorAmpsValidators],
+  //     'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
+  //     'optimizeCalculation': [psatInputs.optimize_calculation],
+  //     'implementationCosts': [psatInputs.implementationCosts],
+  //     'fluidType': [psatInputs.fluidType],
+  //     'fluidTemperature': [psatInputs.fluidTemperature, Validators.required]
+  //   })
   // }
 
-  // isMotorFormValid(form: FormGroup) {
-  //   if (
-  //     form.controls.frequency.status == 'VALID' &&
-  //     form.controls.horsePower.status == 'VALID' &&
-  //     form.controls.motorRPM.status == 'VALID' &&
-  //     form.controls.efficiencyClass.status == 'VALID' &&
-  //     form.controls.motorVoltage.status == 'VALID' &&
-  //     form.controls.fullLoadAmps.status == 'VALID'
-  //   ) {
-  //     if (form.controls.efficiencyClass.value != 'Specified') {
-  //       return true;
-  //     } else {
-  //       if (form.controls.efficiency.value > 0 && form.controls.efficiency.value <= 100) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     }
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
+  // getPsatInputsFromForm(form: FormGroup): PsatInputs {
 
-  // isFieldDataFormValid(form: FormGroup) {
-  //   if (
-  //     form.controls.operatingFraction.status == 'VALID' &&
-  //     form.controls.flowRate.status == 'VALID' &&
-  //     form.controls.head.status == 'VALID' &&
-  //     form.controls.loadEstimatedMethod.status == 'VALID' &&
-  //     form.controls.measuredVoltage.status == 'VALID' &&
-  //     form.controls.costKwHr.status == 'VALID' &&
-  //     form.controls.motorKW.status == 'VALID' &&
-  //     form.controls.motorAmps.status == 'VALID'
-  //   ) {
-  //     //TODO check motorAMPS or motorKW
-  //     return true
-  //   }
-  //   else {
-  //     return false;
-  //   }
+  //   let efficiency = this.getEfficiencyFromForm(form);
+  //   let lineFreqEnum = this.getLineFreqEnum(form.controls.frequency.value);
+  //   let pumpStyleEnum = this.getPumpStyleEnum(form.controls.pumpType.value);
+  //   let efficiencyClassEnum = this.getEfficienyClassEnum(form.controls.efficiencyClass.value);
+  //   let driveEnum = this.getDriveEnum(form.controls.drive.value);
+  //   let fixedSpeedEnum = this.getFixedSpeedEmum(form.controls.fixedSpeed.value);
+  //   let loadEstMethodEnum = this.getLoadEstimationEnum(form.controls.loadEstimatedMethod.value);
+  //   let tmpPsatInputs: PsatInputs = {
+  //     pump_style: pumpStyleEnum,
+  //     pump_specified: form.controls.specifiedPumpEfficiency.value,
+  //     pump_rated_speed: form.controls.pumpRPM.value,
+  //     drive: driveEnum,
+  //     specifiedDriveEfficiency: form.controls.specifiedDriveEfficiency.value,
+  //     kinematic_viscosity: form.controls.viscosity.value,
+  //     specific_gravity: form.controls.gravity.value,
+  //     stages: form.controls.stages.value,
+  //     fixed_speed: fixedSpeedEnum,
+  //     line_frequency: lineFreqEnum,
+  //     motor_rated_power: form.controls.horsePower.value,
+  //     motor_rated_speed: form.controls.motorRPM.value,
+  //     efficiency_class: efficiencyClassEnum,
+  //     efficiency: efficiency,
+  //     motor_rated_voltage: form.controls.motorVoltage.value,
+  //     load_estimation_method: loadEstMethodEnum,
+  //     motor_rated_fla: form.controls.fullLoadAmps.value,
+  //     margin: form.controls.sizeMargin.value,
+  //     operating_fraction: form.controls.operatingFraction.value,
+  //     flow_rate: form.controls.flowRate.value,
+  //     head: form.controls.head.value,
+  //     motor_field_power: form.controls.motorKW.value,
+  //     motor_field_current: form.controls.motorAmps.value,
+  //     motor_field_voltage: form.controls.measuredVoltage.value,
+  //     cost_kw_hour: form.controls.costKwHr.value,
+  //     cost: form.controls.costKwHr.value,
+  //     optimize_calculation: form.controls.optimizeCalculation.value,
+  //     implementationCosts: form.controls.implementationCosts.value,
+  //     fluidType: form.controls.fluidType.value,
+  //     fluidTemperature: form.controls.fluidTemperature.value
+  //   };
+  //   return tmpPsatInputs;
   // }
 }
