@@ -356,13 +356,13 @@ export class PsatService {
 
   //specific speed
   achievableEfficiency(
-    pumpStyle: string,
+    pumpStyle: number,
     specificSpeed: number
   ) {
     let inputs: any;
-    let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
+    // let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
     inputs = {
-      pump_style: enumPumpStyle,
+      pump_style: pumpStyle,
       specific_speed: specificSpeed
     }
     return this.roundVal(psatAddon.achievableEfficiency(inputs), 2);

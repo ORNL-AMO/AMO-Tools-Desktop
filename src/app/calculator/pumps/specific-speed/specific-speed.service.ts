@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PSAT } from '../../../shared/models/psat';
+import { PSAT, PsatInputs } from '../../../shared/models/psat';
 import { SpecificSpeedInputs } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { PsatService } from '../../../psat/psat.service';
@@ -24,32 +24,31 @@ export class SpecificSpeedService {
       tmpHead = this.convertUnitsService.roundVal(tmpHead, 2)
     }
     return this.formBuilder.group({
-      pumpType: [this.psatService.getPumpStyleFromEnum(0), Validators.required],
+      pumpType: [0, Validators.required],
       pumpRPM: [1780, Validators.required],
       flowRate: [tmpFlowRate, Validators.required],
       head: [tmpHead, Validators.required],
     })
   }
 
-  initFormFromPsat(psat: PSAT): FormGroup {
+  initFormFromPsat(psatInputs: PsatInputs): FormGroup {
     return this.formBuilder.group({
-      'pumpType': [this.psatService.getPumpStyleFromEnum(psat.inputs.pump_style), Validators.required],
-      'pumpRPM': [psat.inputs.pump_rated_speed, Validators.required],
-      'flowRate': [psat.inputs.flow_rate, Validators.required],
-      'head': [psat.inputs.head, Validators.required]
+      'pumpType': [psatInputs.pump_style, Validators.required],
+      'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
+      'flowRate': [psatInputs.flow_rate, Validators.required],
+      'head': [psatInputs.head, Validators.required]
     })
   }
 
 
   initFormFromObj(obj: SpecificSpeedInputs): FormGroup {
     return this.formBuilder.group({
-      'pumpType': [this.psatService.getPumpStyleFromEnum(obj.pumpType), Validators.required],
+      'pumpType': [obj.pumpType, Validators.required],
       'pumpRPM': [obj.pumpRPM, Validators.required],
       'flowRate': [obj.flowRate, Validators.required],
       'head': [obj.head, Validators.required]
     })
   }
-
 
   getObjFromForm(form: FormGroup): SpecificSpeedInputs {
     return {

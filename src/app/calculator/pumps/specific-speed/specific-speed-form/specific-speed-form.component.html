@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
     <select name="pumpType" class="form-control" id="pumpType" formControlName="pumpType" (change)="emitCalculate()" autofocus (focus)="focusField('pumpType')">
-      <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
+      <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
     </select>
   </div>
 

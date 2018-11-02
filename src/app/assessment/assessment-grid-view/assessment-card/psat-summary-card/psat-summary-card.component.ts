@@ -34,11 +34,11 @@ export class PsatSummaryCardComponent implements OnInit {
         this.setupDone = this.assessment.psat.setupDone;
         if (this.setupDone) {
             this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
-            this.psatResults = this.getResults(JSON.parse(JSON.stringify(this.assessment.psat)), this.settings);
+            this.psatResults = this.getResults(JSON.parse(JSON.stringify(this.assessment.psat)), this.settings, true);
             if (this.assessment.psat.modifications) {
                 this.numMods = this.assessment.psat.modifications.length;
                 this.assessment.psat.modifications.forEach(mod => {
-                    mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, true);
+                    mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, false);
                     let tmpSavingCalc = this.psatResults.annual_cost - mod.psat.outputs.annual_cost;
                     let tmpSavingEnergy = this.psatResults.annual_energy - mod.psat.outputs.annual_energy;
                     if (tmpSavingCalc > this.maxCostSavings) {
@@ -52,12 +52,12 @@ export class PsatSummaryCardComponent implements OnInit {
 
 
 
-    getResults(psat: PSAT, settings: Settings, isModification?: boolean): PsatOutputs {
-        let tmpForm = this.psatService.getFormFromPsat(psat.inputs);
-        if (tmpForm.status == 'VALID') {
+    getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
+        let isPsatValid: boolean = this.psatService.isPsatValid(psat.inputs, isBaseline);
+        if (isPsatValid) {
             if (psat.inputs.optimize_calculation) {
                 return this.psatService.resultsOptimal(JSON.parse(JSON.stringify(psat.inputs)), settings);
-            } else if (!isModification) {
+            } else if (isBaseline) {
                 return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
             } else {
                 if (this.psatResults.pump_efficiency) {
