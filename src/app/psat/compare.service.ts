@@ -126,7 +126,8 @@ export class CompareService {
       modification = this.modifiedPSAT;
     }
     if (baseline && modification) {
-      if (baseline.inputs.pump_specified != modification.inputs.pump_specified) {
+      if (baseline.inputs.pump_specified != modification.inputs.pump_specified &&
+        baseline.inputs.pump_style == 11 && modification.inputs.pump_style == 11) {
         return true;
       } else {
         return false;
@@ -370,7 +371,8 @@ export class CompareService {
       modification = this.modifiedPSAT;
     }
     if (baseline && modification) {
-      if (baseline.inputs.efficiency != modification.inputs.efficiency) {
+      if (baseline.inputs.efficiency != modification.inputs.efficiency && 
+        baseline.inputs.efficiency_class == 3 && modification.inputs.efficiency_class == 3) {
         return true;
       } else {
         return false;

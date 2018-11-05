@@ -114,9 +114,8 @@ export class PsatReportGraphsComponent implements OnInit {
   // sets loss data and percentages for selected psats
   getPsatModificationData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>, baselinePumpEfficiency: number) {
     let selectedResults: PsatOutputs;
-    let selectedInputs: PsatInputs;
-    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
-    let isPsatValid: boolean = this.psatService.isPsatValid(psatInputs, false);
+    let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
     if (isPsatValid){
       if (selectedInputs.optimize_calculation) {
         selectedResults = this.psatService.resultsOptimal(selectedInputs, this.settings);
@@ -132,9 +131,8 @@ export class PsatReportGraphsComponent implements OnInit {
 
   getPsatBaselineData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>): PsatOutputs {
     let selectedResults: PsatOutputs;
-    let selectedInputs: PsatInputs;
-    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
-    let isPsatValid: boolean = this.psatService.isPsatValid(psatInputs, true);
+    let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
     if (isPsatValid) {
       selectedResults = this.psatService.resultsExisting(selectedInputs, this.settings);
       this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);

@@ -31,28 +31,18 @@ export class PumpFluidComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
+  //Arrays holding <select> form data
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
+  //TODO: create Fluid Property interface
   fluidProperties;
   fluidTypes: Array<string>;
+
   psatForm: FormGroup;
   tempUnit: string;
   idString: string;
   pumpFluidWarnings: { rpmError: string, temperatureError: string };
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.selected && !changes.selected.isFirstChange()) {
-      if (!this.selected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    }
-    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
-      this.init();
-    }
-  }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -66,26 +56,32 @@ export class PumpFluidComponent implements OnInit {
       //remove specified if baseline
       this.pumpTypes.pop();
     }
+    //initialize constants
     this.drives = driveConstants;
     this.fluidProperties = fluidProperties;
     this.fluidTypes = fluidTypes;
 
-    this.init();
-    if (this.settings.temperatureMeasurement == 'C') {
-      this.tempUnit = '&#8451;';
-    } else if (this.settings.temperatureMeasurement == 'F') {
-      this.tempUnit = '&#8457;';
-    } else if (this.settings.temperatureMeasurement == 'K') {
-      this.tempUnit = '&#8490;';
-    } else if (this.settings.temperatureMeasurement == 'R') {
-      this.tempUnit = '&#176;R';
-    }
+    this.initForm();
+    this.getTemperatureUnit();
     if (!this.selected) {
       this.disableForm();
     }
   }
 
-  init() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
+    }
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.initForm();
+    }
+  }
+
+  initForm() {
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     this.checkWarnings();
   }
@@ -100,6 +96,18 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.pumpType.enable();
     this.psatForm.controls.drive.enable();
     this.psatForm.controls.fluidType.enable();
+  }
+
+  getTemperatureUnit(){
+    if (this.settings.temperatureMeasurement == 'C') {
+      this.tempUnit = '&#8451;';
+    } else if (this.settings.temperatureMeasurement == 'F') {
+      this.tempUnit = '&#8457;';
+    } else if (this.settings.temperatureMeasurement == 'K') {
+      this.tempUnit = '&#8490;';
+    } else if (this.settings.temperatureMeasurement == 'R') {
+      this.tempUnit = '&#176;R';
+    }
   }
 
   addNum(str: string) {
@@ -173,9 +181,11 @@ export class PumpFluidComponent implements OnInit {
 
 
   save() {
-    // this.checkForm(this.psatForm);
+    //update object values from form values
     this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
+    //check warnings
     this.checkWarnings();
+    //save
     this.saved.emit(this.selected);
   }
 

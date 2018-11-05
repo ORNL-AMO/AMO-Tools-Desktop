@@ -8,8 +8,6 @@ import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
-
-import { ToastyService, ToastyConfig, ToastOptions } from 'ng2-toasty';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { CompareService } from './compare.service';
 import { SettingsService } from '../settings/settings.service';
@@ -45,14 +43,10 @@ export class PsatComponent implements OnInit {
   }
 
   assessment: Assessment;
-
-  panelView: string = 'help-panel';
-  isPanelOpen: boolean = true;
   currentTab: string = 'system-setup';
-
-  tabIndex: number = 0;
-
-
+  
+  //used for sankey
+  //TODO: move this and sankey choosing logic oput of this component
   psatOptions: Array<any>;
   psatOptionsLength: number;
   psat1: PSAT;
