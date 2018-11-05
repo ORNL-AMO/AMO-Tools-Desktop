@@ -48,6 +48,7 @@ export class ImportService {
 
     if (data.calculators) {
       data.calculators.forEach(calc => {
+        calc.selected = false;
         delete calc.id;
         calc.directoryId = workingDirectoryId;
         this.indexedDbService.addCalculator(calc).then(() => { this.calculatorDbService.setAll() });
