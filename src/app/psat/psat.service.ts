@@ -11,6 +11,9 @@ import { FormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
+import * as _ from 'lodash';
+import { pumpTypesConstant, motorEfficiencyConstants, driveConstants } from './psatConstants';
+
 @Injectable()
 export class PsatService {
   flaRange: any = {
@@ -393,29 +396,29 @@ export class PsatService {
   }
 
   motorPerformance(
-    lineFreq,
-    efficiencyClass,
-    horsePower,
-    motorRPM,
-    efficiency,
-    motorVoltage,
-    fullLoadAmps,
-    loadFactor,
-    settings
+    lineFreq: number,
+    efficiencyClass: number,
+    horsePower: number,
+    motorRPM: number,
+    efficiency: number,
+    motorVoltage: number,
+    fullLoadAmps: number,
+    loadFactor: number,
+    settings: Settings
   ) {
 
     if (settings.powerMeasurement != 'hp') {
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
     let tmpInputs: any;
-    let lineFreqEnum = this.getLineFreqEnum(lineFreq);
-    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
+    // let lineFreqEnum = this.getLineFreqEnum(lineFreq);
+    // let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
     tmpInputs = {
-      line_frequency: lineFreqEnum,
-      efficiency_class: effClassEnum,
+      line_frequency: lineFreq,
+      efficiency_class: efficiencyClass,
       motor_rated_power: horsePower,
       motor_rated_speed: motorRPM,
-      efficiency: efficiency,
+      efficiency: efficiency || 90,
       load_factor: loadFactor,
       motor_rated_voltage: motorVoltage,
       motor_rated_fla: fullLoadAmps
@@ -431,24 +434,24 @@ export class PsatService {
 
   //loadFactor hard coded to 1
   nema(
-    lineFreq,
-    motorRPM,
-    efficiencyClass,
-    efficiency,
-    horsePower,
+    lineFreq: number,
+    motorRPM: number,
+    efficiencyClass: number,
+    efficiency: number,
+    horsePower: number,
     settings: Settings
   ) {
     if (settings.powerMeasurement != 'hp') {
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
     let tmpInputs: any;
-    let lineFreqEnum = this.getLineFreqEnum(lineFreq);
-    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
+    // let lineFreqEnum = this.getLineFreqEnum(lineFreq);
+    // let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
     tmpInputs = {
-      line_frequency: lineFreqEnum,
+      line_frequency: lineFreq,
       motor_rated_speed: motorRPM,
-      efficiency_class: effClassEnum,
-      efficiency: efficiency,
+      efficiency_class: efficiencyClass,
+      efficiency: efficiency || 90,
       motor_rated_power: horsePower,
       load_factor: 1
     };
@@ -456,198 +459,142 @@ export class PsatService {
   }
 
   //ENUM HELPERS
-  getPumpStyleEnum(pumpStyle: string): number {
-    // enum class Style {
-    // END_SUCTION_SLURRY,
-    // END_SUCTION_SEWAGE,
-    // END_SUCTION_STOCK,
-    // END_SUCTION_SUBMERSIBLE_SEWAGE,
-    // API_DOUBLE_SUCTION,
-    // MULTISTAGE_BOILER_FEED,
-    // END_SUCTION_ANSI_API,
-    // AXIAL_FLOW,
-    // DOUBLE_SUCTION,
-    // VERTICAL_TURBINE,
-    // LARGE_END_SUCTION,
-    // SPECIFIED_OPTIMAL_EFFICIENCY
-    // }
-    let enumPumpStyle;
-    if (pumpStyle == 'End Suction Slurry') {
-      enumPumpStyle = 0;
-    }
-    else if (pumpStyle == 'End Suction Sewage') {
-      enumPumpStyle = 1;
-    }
-    else if (pumpStyle == 'End Suction Stock') {
-      enumPumpStyle = 2;
-    }
-    else if (pumpStyle == 'End Suction Submersible Sewage') {
-      enumPumpStyle = 3;
-    }
-    else if (pumpStyle == 'API Double Suction') {
-      enumPumpStyle = 4;
-    }
-    else if (pumpStyle == 'Multistage Boiler Feed') {
-      enumPumpStyle = 5;
-    }
-    else if (pumpStyle == 'End Suction ANSI/API') {
-      enumPumpStyle = 6;
-    }
-    else if (pumpStyle == 'Axial Flow') {
-      enumPumpStyle = 7;
-    }
-    else if (pumpStyle == 'Double Suction') {
-      enumPumpStyle = 8;
-    }
-    else if (pumpStyle == 'Vertical Turbine') {
-      enumPumpStyle = 9;
-    }
-    else if (pumpStyle == 'Large End Suction') {
-      enumPumpStyle = 10;
-    } else if (pumpStyle == 'Specified Optimal Efficiency') {
-      enumPumpStyle = 11;
-    }
-    return enumPumpStyle;
+  // getPumpStyleEnum(pumpStyle: string): number {
+  //   // enum class Style {
+  //   // END_SUCTION_SLURRY,
+  //   // END_SUCTION_SEWAGE,
+  //   // END_SUCTION_STOCK,
+  //   // END_SUCTION_SUBMERSIBLE_SEWAGE,
+  //   // API_DOUBLE_SUCTION,
+  //   // MULTISTAGE_BOILER_FEED,
+  //   // END_SUCTION_ANSI_API,
+  //   // AXIAL_FLOW,
+  //   // DOUBLE_SUCTION,
+  //   // VERTICAL_TURBINE,
+  //   // LARGE_END_SUCTION,
+  //   // SPECIFIED_OPTIMAL_EFFICIENCY
+  //   // }
+  //   let enumPumpStyle;
+  //   if (pumpStyle == 'End Suction Slurry') {
+  //     enumPumpStyle = 0;
+  //   }
+  //   else if (pumpStyle == 'End Suction Sewage') {
+  //     enumPumpStyle = 1;
+  //   }
+  //   else if (pumpStyle == 'End Suction Stock') {
+  //     enumPumpStyle = 2;
+  //   }
+  //   else if (pumpStyle == 'End Suction Submersible Sewage') {
+  //     enumPumpStyle = 3;
+  //   }
+  //   else if (pumpStyle == 'API Double Suction') {
+  //     enumPumpStyle = 4;
+  //   }
+  //   else if (pumpStyle == 'Multistage Boiler Feed') {
+  //     enumPumpStyle = 5;
+  //   }
+  //   else if (pumpStyle == 'End Suction ANSI/API') {
+  //     enumPumpStyle = 6;
+  //   }
+  //   else if (pumpStyle == 'Axial Flow') {
+  //     enumPumpStyle = 7;
+  //   }
+  //   else if (pumpStyle == 'Double Suction') {
+  //     enumPumpStyle = 8;
+  //   }
+  //   else if (pumpStyle == 'Vertical Turbine') {
+  //     enumPumpStyle = 9;
+  //   }
+  //   else if (pumpStyle == 'Large End Suction') {
+  //     enumPumpStyle = 10;
+  //   } else if (pumpStyle == 'Specified Optimal Efficiency') {
+  //     enumPumpStyle = 11;
+  //   }
+  //   return enumPumpStyle;
+  // }
+  getPumpStyleFromEnum(num: number): string {
+    let pumpStyle: string = _.find(pumpTypesConstant, (pumpStyle) => {return pumpStyle.value == num}).display;
+    return pumpStyle;
   }
-  getPumpStyleFromEnum(num: number): number {
-    // let pumpStyle;
-    // if (num == 0) {
-    //   pumpStyle = 'End Suction Slurry';
-    // }
-    // else if (num == 1) {
-    //   pumpStyle = 'End Suction Sewage';
-    // }
-    // else if (num == 2) {
-    //   pumpStyle = 'End Suction Stock';
-    // }
-    // else if (num == 3) {
-    //   pumpStyle = 'End Suction Submersible Sewage';
-    // }
-    // else if (num == 4) {
-    //   pumpStyle = 'API Double Suction';
-    // }
-    // else if (num == 5) {
-    //   pumpStyle = 'Multistage Boiler Feed';
-    // }
-    // else if (num == 6) {
-    //   pumpStyle = 'End Suction ANSI/API';
-    // }
-    // else if (num == 7) {
-    //   pumpStyle = 'Axial Flow';
-    // }
-    // else if (num == 8) {
-    //   pumpStyle = 'Double Suction';
-    // }
-    // else if (num == 9) {
-    //   pumpStyle = 'Vertical Turbine';
-    // }
-    // else if (num == 10) {
-    //   pumpStyle = 'Large End Suction';
-    // }
-    // else if (num == 11) {
-    //   pumpStyle = 'Specified Optimal Efficiency';
-    // }
-    return num;
-  }
-  getLineFreqEnum(lineFreq: string): number {
-    let lineFreqEnum: number;
-    if (lineFreq == '60 Hz') {
-      lineFreqEnum = 0;
-    } else if (lineFreq == '50 Hz') {
-      lineFreqEnum = 1;
-    }
+  // getLineFreqEnum(lineFreq: string): number {
+  //   let lineFreqEnum: number;
+  //   if (lineFreq == '60 Hz') {
+  //     lineFreqEnum = 0;
+  //   } else if (lineFreq == '50 Hz') {
+  //     lineFreqEnum = 1;
+  //   }
 
-    return lineFreqEnum;
-  }
-  getLineFreqFromEnum(num: number): string {
-    let lineFreq;
-    if (num == 0) {
-      lineFreq = '60 Hz';
-    } else if (num == 1) {
-      lineFreq = '50 Hz';
-    }
-    return lineFreq;
-  }
+  //   return lineFreqEnum;
+  // }
+  // getLineFreqFromEnum(num: number): string {
+  //   let lineFreq;
+  //   if (num == 0) {
+  //     lineFreq = '60 Hz';
+  //   } else if (num == 1) {
+  //     lineFreq = '50 Hz';
+  //   }
+  //   return lineFreq;
+  // }
 
-  getLineFreqNumValueFromEnum(num: number): number {
-    let lineFreq;
-    if (num == 0) {
-      lineFreq = 60;
-    } else if (num == 1) {
-      lineFreq = 50;
-    }
-    return lineFreq;
-  }
+  // getLineFreqNumValueFromEnum(num: number): number {
+  //   let lineFreq;
+  //   if (num == 0) {
+  //     lineFreq = 60;
+  //   } else if (num == 1) {
+  //     lineFreq = 50;
+  //   }
+  //   return lineFreq;
+  // }
 
 
-  getEfficienyClassEnum(effClass: string): number {
-    let effEnum: number;
-    if (effClass === 'Standard Efficiency') {
-      effEnum = 0;
-    } else if (effClass === 'Energy Efficient') {
-      effEnum = 1;
-    } else if (effClass === 'Premium Efficient' || effClass === 'Premium') {
-      effEnum = 2;
-    } else if (effClass === 'Specified') {
-      effEnum = 3;
-    }
-    return effEnum;
-  }
+  // getEfficienyClassEnum(effClass: string): number {
+  //   let effEnum: number;
+  //   if (effClass === 'Standard Efficiency') {
+  //     effEnum = 0;
+  //   } else if (effClass === 'Energy Efficient') {
+  //     effEnum = 1;
+  //   } else if (effClass === 'Premium Efficient' || effClass === 'Premium') {
+  //     effEnum = 2;
+  //   } else if (effClass === 'Specified') {
+  //     effEnum = 3;
+  //   }
+  //   return effEnum;
+  // }
   getEfficiencyClassFromEnum(num: number): string {
-    let effClass;
-    if (num === 0) {
-      effClass = 'Standard Efficiency';
-    } else if (num === 1) {
-      effClass = 'Energy Efficient';
-    } else if (num === 2) {
-      effClass = 'Premium Efficient';
-    } else if (num === 3) {
-      effClass = 'Specified';
-    }
+    let effClass: string = _.find(motorEfficiencyConstants, (motorStyle) => {return motorStyle.value == num}).display;
     return effClass;
   }
 
-  getDriveEnum(drive: string): number {
-    let driveEnum;
-    if (drive == 'Direct Drive') {
-      driveEnum = 0;
-    } else if (drive == 'V-Belt Drive') {
-      driveEnum = 1;
-    } else if (drive == 'Notched V-Belt Drive') {
-      driveEnum = 2;
-    } else if (drive == 'Synchronous Belt Drive') {
-      driveEnum = 3;
-    } else if (drive == 'Specified Efficiency') {
-      driveEnum = 4;
-    }
-    return driveEnum;
-  }
+  // getDriveEnum(drive: string): number {
+  //   let driveEnum;
+  //   if (drive == 'Direct Drive') {
+  //     driveEnum = 0;
+  //   } else if (drive == 'V-Belt Drive') {
+  //     driveEnum = 1;
+  //   } else if (drive == 'Notched V-Belt Drive') {
+  //     driveEnum = 2;
+  //   } else if (drive == 'Synchronous Belt Drive') {
+  //     driveEnum = 3;
+  //   } else if (drive == 'Specified Efficiency') {
+  //     driveEnum = 4;
+  //   }
+  //   return driveEnum;
+  // }
   getDriveFromEnum(num: number): string {
-    let drive;
-    if (num == 0) {
-      drive = 'Direct Drive';
-    } else if (num == 1) {
-      drive = 'V-Belt Drive';
-    } else if (num == 2) {
-      drive = 'Notched V-Belt Drive';
-    } else if (num == 3) {
-      drive = 'Synchronous Belt Drive';
-    } else if (num == 4) {
-      drive = 'Specified Efficiency';
-    }
+    let drive: string = _.find(driveConstants, (driveType) => {return driveType.value == num}).display;
     return drive;
   }
-  getFixedSpeedEmum(fixedSpeed: string): number {
-    let fixedSpeedEnum;
-    if (fixedSpeed == 'Yes') {
-      fixedSpeedEnum = 0;
-    } else if (fixedSpeed == 'No') {
-      fixedSpeedEnum = 1;
-    } else {
-      fixedSpeedEnum = 0;
-    }
-    return fixedSpeedEnum;
-  }
+  // getFixedSpeedEmum(fixedSpeed: string): number {
+  //   let fixedSpeedEnum;
+  //   if (fixedSpeed == 'Yes') {
+  //     fixedSpeedEnum = 0;
+  //   } else if (fixedSpeed == 'No') {
+  //     fixedSpeedEnum = 1;
+  //   } else {
+  //     fixedSpeedEnum = 0;
+  //   }
+  //   return fixedSpeedEnum;
+  // }
   getFixedSpeedFromEnum(num: number): string {
     let fixedSpeed;
     if (num == 0) {
@@ -660,15 +607,15 @@ export class PsatService {
     }
     return fixedSpeed;
   }
-  getLoadEstimationEnum(method: string): number {
-    let methodEnum;
-    if (method == 'Power') {
-      methodEnum = 0;
-    } else if (method == 'Current') {
-      methodEnum = 1;
-    }
-    return methodEnum;
-  }
+  // getLoadEstimationEnum(method: string): number {
+  //   let methodEnum;
+  //   if (method == 'Power') {
+  //     methodEnum = 0;
+  //   } else if (method == 'Current') {
+  //     methodEnum = 1;
+  //   }
+  //   return methodEnum;
+  // }
   getLoadEstimationFromEnum(num: number): string {
     let method;
     if (num == 0) {
@@ -678,19 +625,19 @@ export class PsatService {
     }
     return method;
   }
-  getEfficiencyFromForm(form: FormGroup) {
-    let efficiency;
-    if (form.controls.efficiencyClass.value == 'Standard Efficiency') {
-      efficiency = 0;
-    } else if (form.controls.efficiencyClass.value == 'Energy Efficient') {
-      efficiency = 1;
-    } else if (form.controls.efficiencyClass.value === 'Premium Efficient' || form.controls.efficiencyClass.value === 'Premium') {
-      efficiency = 2;
-    } else if (form.controls.efficiencyClass.value == 'Specified') {
-      efficiency = form.controls.efficiency.value;
-    }
-    return efficiency;
-  }
+  // getEfficiencyFromForm(form: FormGroup) {
+  //   let efficiency;
+  //   if (form.controls.efficiencyClass.value == 'Standard Efficiency') {
+  //     efficiency = 0;
+  //   } else if (form.controls.efficiencyClass.value == 'Energy Efficient') {
+  //     efficiency = 1;
+  //   } else if (form.controls.efficiencyClass.value === 'Premium Efficient' || form.controls.efficiencyClass.value === 'Premium') {
+  //     efficiency = 2;
+  //   } else if (form.controls.efficiencyClass.value == 'Specified') {
+  //     efficiency = form.controls.efficiency.value;
+  //   }
+  //   return efficiency;
+  // }
 
   getPsatResults(baselinePsatInputs: PsatInputs, settings: Settings, modificationPsatInputs?: PsatInputs): { baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number } {
     let baselineResults: PsatOutputs = this.emptyResults();

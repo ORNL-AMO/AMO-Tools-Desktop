@@ -56,9 +56,9 @@ export class InputSummaryComponent implements OnInit {
   }
 
 
-  getLineFreq(num: number) {
-    return this.psatService.getLineFreqFromEnum(num);
-  }
+  // getLineFreq(num: number) {
+  //   return this.psatService.getLineFreqFromEnum(num);
+  // }
 
   getEfficiencyClass(num: number) {
     return this.psatService.getEfficiencyClassFromEnum(num);
@@ -78,7 +78,8 @@ export class InputSummaryComponent implements OnInit {
     return tmpUnit.unit.name.display;
   }
   checkInputs() {
-    if (this.getEfficiencyClass(this.psat.inputs.efficiency_class) === "Specified") {
+    //specified
+    if (this.psat.inputs.efficiency_class === 3) {
       this.effClassSpecified = true;
     }
     if (this.psat.modifications) {
@@ -122,7 +123,7 @@ export class InputSummaryComponent implements OnInit {
         if (mod.psat.inputs.efficiency_class != this.psat.inputs.efficiency_class) {
           this.effClassDiff = true;
         }
-        if (this.getEfficiencyClass(mod.psat.inputs.efficiency_class) === "Specified") {
+        if (mod.psat.inputs.efficiency_class === 3) {
           this.effClassSpecified = true;
           if (mod.psat.inputs.efficiency != this.psat.inputs.efficiency) {
             this.specEffDiff = true;

@@ -52,7 +52,7 @@ export class SpecificSpeedService {
 
   getObjFromForm(form: FormGroup): SpecificSpeedInputs {
     return {
-      pumpType: this.psatService.getPumpStyleEnum(form.controls.pumpType.value),
+      pumpType: form.controls.pumpType.value,
       pumpRPM: form.controls.pumpRPM.value,
       flowRate: form.controls.flowRate.value,
       head: form.controls.head.value

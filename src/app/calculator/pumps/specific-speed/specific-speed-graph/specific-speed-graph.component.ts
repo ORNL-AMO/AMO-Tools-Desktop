@@ -73,7 +73,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
 
-  tmpPumpType: string;
+  //tmpPumpType: string;
 
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
@@ -89,7 +89,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   constructor(private psatService: PsatService, private lineChartHelperService: LineChartHelperService, private svgToPngService: SvgToPngService, private specificSpeedService: SpecificSpeedService) { }
 
   ngOnInit() {
-    this.tmpPumpType = this.speedForm.controls.pumpType.value;
+   // this.tmpPumpType = this.speedForm.controls.pumpType.value;
     this.deleteCount = 0;
     this.graphColors = graphColors;
     this.tableData = new Array<{ borderColor: string, fillColor: string, specificSpeed: string, efficiencyCorrection: string }>();
@@ -131,10 +131,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
       console.log(changes);
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
-          if (this.speedForm.controls.pumpType.value != this.tmpPumpType) {
-            this.curveChanged = true;
-          }
-          this.tmpPumpType = this.speedForm.controls.pumpType.value;
+          // if (this.speedForm.controls.pumpType.value != this.tmpPumpType) {
+          //   this.curveChanged = true;
+          // }
+          // this.tmpPumpType = this.speedForm.controls.pumpType.value;
           this.makeGraph();
           this.svg.style("display", null);
         }
@@ -291,12 +291,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   checkForm() {
+    //not specified pump efficiency
     if (
-      this.speedForm.controls.pumpType.status == 'VALID' &&
-      this.speedForm.controls.flowRate.status == 'VALID' &&
-      this.speedForm.controls.head.status == 'VALID' &&
-      this.speedForm.controls.pumpRPM.status == 'VALID' &&
-      this.speedForm.controls.pumpType.value != 'Specified Optimal Efficiency'
+      this.speedForm.valid &&
+      this.speedForm.controls.pumpType.value != 11
     ) {
       return true;
     } else {
@@ -379,7 +377,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   getData(): Array<{ x: number, y: number }> {
     let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
-    if (this.speedForm.controls.pumpType.value === "Vertical Turbine") {
+    //vertical turbine
+    if (this.speedForm.controls.pumpType.value === 9) {
 
       for (let i = 1720; i < 16350; i = i + 25) {
         let efficiencyCorrection: number = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, i);
@@ -493,7 +492,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
         }
       })
       .style("display", () => {
-        if (this.speedForm.controls.pumpType.value === "Vertical Turbine") {
+        //vertical turbine
+        if (this.speedForm.controls.pumpType.value === 9) {
           if (specificSpeed >= 1720 && specificSpeed <= 16350) {
             return null;
           } else {
