@@ -136,6 +136,7 @@ export class PumpCurveGraphComponent implements OnInit {
     this.columnTitles = new Array<string>();
     this.rowData = new Array<Array<string>>();
     this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+
   }
 
   ngAfterViewInit() {
@@ -373,6 +374,7 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.graphSystemCurve) {
       dataSystem = this.systemCurveService.getCurvePointData(this.settings, this.x, this.y, 10, this.isFan, this.staticHead, this.lossCoefficient, this.curveConstants);
       dataSystem.shift();
+      // this.calculateIntersection(1260.00);
     }
     //create axis
     this.xAxis = this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 5, null, null, null, tickFormat)
@@ -457,6 +459,10 @@ export class PumpCurveGraphComponent implements OnInit {
     }
     this.curveChanged = false;
     this.addLegend();
+
+    if (this.graphSystemCurve && this.graphPumpCurve) {
+      this.recursiveIntersection(0, this.pumpCurveForm.maxFlow, false, []);
+    }
   }
 
 
@@ -767,4 +773,71 @@ export class PumpCurveGraphComponent implements OnInit {
     }, 200);
   }
   //========== end chart resize functions ==========
+
+
+  recursiveIntersection(x: number, maxFlow: number, intersected: boolean, potentialPoints: Array<number>) {
+    if (x > maxFlow) {
+      return null;
+    }
+    //system curve variables
+    let staticHead: number = this.staticHead;
+    let lossCoefficient: number = this.lossCoefficient;
+    let lossExponent: number = this.curveConstants.form.controls.systemLossExponent.value;
+    let y_system: number;
+    y_system = staticHead + (lossCoefficient * Math.pow(x, lossExponent));
+
+    //pump curve variables
+    let constant = this.pumpCurveForm.headConstant;
+    let flow = this.pumpCurveForm.headFlow;
+    let flow2 = this.pumpCurveForm.headFlow2;
+    let flow3 = this.pumpCurveForm.headFlow3;
+    let flow4 = this.pumpCurveForm.headFlow4;
+    let flow5 = this.pumpCurveForm.headFlow5;
+    let flow6 = this.pumpCurveForm.headFlow6;
+    let y_curve: number;
+    y_curve = (flow6 * Math.pow(x, 6)) + (flow5 * Math.pow(x, 5)) + (flow4 * Math.pow(x, 4)) + (flow3 * Math.pow(x, 3)) + (flow2 * Math.pow(x, 2)) + (flow * x) + constant;
+
+    if (y_system < y_curve) {
+      if (intersected) {
+        potentialPoints.push(y_system);
+        potentialPoints.push(y_curve);
+        let avgHead = this.calculateAverage(potentialPoints);
+        let intersectFlow = this.calculateFlowFromHead(avgHead);
+        console.log('avgHead = ' + avgHead);
+        console.log('intersectFlow = ' + intersectFlow);
+      }
+      else {
+        this.recursiveIntersection(x + 10, maxFlow, intersected, potentialPoints);
+      }
+    }
+    else if (y_system > y_curve) {
+      if (intersected == false) {
+        // if (Math.abs(y_system - y_curve) < 1) {
+        potentialPoints.push(y_system);
+        potentialPoints.push(y_curve);
+        this.recursiveIntersection(x - 10, maxFlow, true, potentialPoints);
+        // potentialPoints.push(x);
+      }
+      // this.recursiveIntersection(x - 1, maxFlow, true);
+    }
+  }
+
+  calculateAverage(d: Array<number>) {
+    let avg: number = 0;
+    for (let i = 0; i < d.length; i++) {
+      avg += d[i];
+    }
+    avg = avg / d.length;
+    return avg;
+  }
+
+  calculateFlowFromHead(head: number): number {
+    let flow: number;
+    flow = Math.pow((head - this.staticHead) / this.lossCoefficient, 1 / this.curveConstants.form.controls.systemLossExponent.value);
+    return flow;
+  }
+
+
+
+
 }
