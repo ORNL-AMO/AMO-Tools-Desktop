@@ -43,10 +43,8 @@ export class TurbineService {
   initCondensingTurbineForm(settings: Settings): FormGroup {
     let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMin = this.convertUnitsService.roundVal(tmpCondensingPressureMin, 1);
-    console.log(settings.steamVacuumPressure);
     let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMax = this.convertUnitsService.roundVal(tmpCondensingPressureMax, 1);
-    console.log(tmpCondensingPressureMax)
     let tmpOperationValueRanges: { min: number, max: number } = this.getCondensingOperationRange(0);
     return this.formBuilder.group({
       isentropicEfficiency: [, [Validators.required, Validators.min(20), Validators.max(100)]],
