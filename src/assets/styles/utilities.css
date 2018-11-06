@@ -104,90 +104,67 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 }
 
 
-.form-group.indicate-different .input-group,
-.form-group.indicate-different > .form-control  {
+.psat .form-group.indicate-different .input-group,
+.psat .form-group.indicate-different > .form-control,
+.fsat .form-group.indicate-different .input-group,
+.fsat .form-group.indicate-different > .form-control   {
     border: #007bff solid 2px;
     /* box-shadow: 0px 0px 1px #007bff; */
 }
 
-/* .form-group.indicate-different label {
-    color: #007bff;
-    font-weight: bold;
-} */
-
-
-.form-group.invalid .input-group,
-.form-group.indicate-different.invalid .input-group,
-.form-group.indicate-different.error.invalid .input-group,
-.form-group.invalid > .form-control ,
-.form-group.indicate-different.invalid > .form-control ,
-.form-group.indicate-different.error.invalid > .form-control {
+.psat .form-group.invalid .input-group,
+.psat .form-group.indicate-different.invalid .input-group,
+.psat .form-group.indicate-different.error.invalid .input-group,
+.psat .form-group.invalid > .form-control ,
+.psat .form-group.indicate-different.invalid > .form-control ,
+.psat .form-group.indicate-different.error.invalid > .form-control,
+.fsat .form-group.invalid .input-group,
+.fsat .form-group.indicate-different.invalid .input-group,
+.fsat .form-group.indicate-different.error.invalid .input-group,
+.fsat .form-group.invalid > .form-control ,
+.fsat .form-group.indicate-different.invalid > .form-control ,
+.fsat .form-group.indicate-different.error.invalid > .form-control  {
     border: red solid 2px;
     /* box-shadow: 0px 0px 1px red; */
 }
 
-/* .form-group.invalid label,
-.form-group.indicate-different.invalid label,
-.form-group.indicate-different.error.invalid label {
-    color: red;
-    font-weight: bold;
-} */
-
-
-.form-group.error .input-group,
-.form-group.indicate-different.error .input-group,
-.form-group.error > .form-control,
-.form-group.indicate-different.error > .form-control {
+.psat .form-group.error .input-group,
+.psat .form-group.indicate-different.error .input-group,
+.psat .form-group.error > .form-control,
+.psat .form-group.indicate-different.error > .form-control,
+.fsat .form-group.error .input-group,
+.fsat .form-group.indicate-different.error .input-group,
+.fsat .form-group.error > .form-control,
+.fsat .form-group.indicate-different.error > .form-control {
     border: orange solid 2px;
     /* box-shadow: 0px 0px 1px orange; */
 }
 
+.phast .indicate-different {
+	border: #007bff solid 2px;
+    box-shadow: 0px 0px 5px #007bff;
+}
 
-/* .indicate-different input {
-    border: #007bff solid 2px;
-    box-shadow: 0px 0px 2px #007bff;
+.phast .indicate-different.form-control {
+    border: 2px solid #007bff;
+    box-shadow: 0px 0px 5px #007bff;
 }
- .indicate-different.form-control {
-	/* border-left: #007bff solid 5px;
-	border-right: #007bff solid 5px; *
 
-    border: #007bff solid 2px;
-    box-shadow: 0px 0px 1px #007bff;
+.phast .indicate-different.incrementor {
+    border: 2px solid #007bff;
+    box-shadow: 0px 0px 5px #007bff;
 }
- /* .indicate-different.incrementor {
-	border-left: #007bff solid 3px;
-	border-right: #007bff solid 3px;
-    /* box-shadow: 0px 0px 5px #007bff; 
-} *
- .invalid, .indicate-different.invalid, input.indicate-different.invalid{
-	 /* border-left: 5px solid red; 
-    border-right: 5px solid red; *
-    border: red solid 2px;
-    box-shadow: 0px 0px 1px red;
+
+.phast .invalid, .phast .indicate-different.invalid, .phast input.indicate-different.invalid{
+	border: red solid 2px !important;
+    box-shadow: 0px 0px 5px red !important;
 }
- input.error.ng-valid, input.indicate-different.error.ng-valid, .error input.ng-valid {
-    /* border-left: 5px solid orange; 
-    border-right: 5px solid orange;*
+
+.phast .error, .phast .indicate-different.error, .phast input.indicate-different.error {
     border: orange solid 2px;
-    box-shadow: 0px 0px 1px orange;
+    box-shadow: 0px 0px 5px orange;
 }
-.ssmt .indicate-different.ng-invalid:not(form), .ssmt .ng-invalid:not(form)  {
-    /* border-left: 5px solid red; 
-    border-right: 5px solid red; *
-    border: red solid 2px;
-    box-shadow: 0px 0px 1px red;
-  }
 
-
-.fsat .indicate-different.ng-invalid:not(form), .fsat .ng-invalid:not(form)  {
-    border: red solid 2px;
-    box-shadow: 0px 0px 1px red;
-  }
-
-  .psat .indicate-different.ng-invalid:not(form), .psat .ng-invalid:not(form), .psat .incrementor .indicate-different.ng-invalid  {
-    border: red solid 2px;
-    box-shadow: 0px 0px 1px red;
-  } */
 
 .card-item{
     box-shadow: 3px 0px 5px 2px gray;

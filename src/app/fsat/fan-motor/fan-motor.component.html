@@ -32,7 +32,7 @@
       <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !fanMotorForm.controls.motorRatedPower.pristine && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.ratedPowerError}}</span>
     </div>
 
-    <div class="form-group" [ngClass]="{'indicate-different': isMotorRpmDifferent(),'error': warnings.rpmError !== null, 'invalid': fanMotorForm.controls.fullLoadAmps.invalid}">
+    <div class="form-group" [ngClass]="{'indicate-different': isMotorRpmDifferent(),'error': warnings.rpmError !== null, 'invalid': fanMotorForm.controls.motorRpm.invalid}">
       <label for="{{'motorRpm_'+idString}}">Motor RPM</label>
       <div name="motorRpm" class="input-group">
         <input type="number" step="10" class="form-control number-input-field" id="{{'motorRpm_'+idString}}"
@@ -44,7 +44,7 @@
         <span class="alert-danger pull-right small" *ngIf="fanMotorForm.controls.motorRpm.errors.required">Value
           Required</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="warnings.rpmError !== null && !fanMotorForm.controls.motorRpm.pristine && !fanMotorForm.controls.fullLoadAmps.invalid">{{warnings.rpmError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.rpmError !== null && !fanMotorForm.controls.motorRpm.pristine && !fanMotorForm.controls.motorRpm.invalid">{{warnings.rpmError}}</span>
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isEfficiencyClassDifferent()}">
