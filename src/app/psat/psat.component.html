@@ -55,6 +55,7 @@
       [psat]="_psat"></app-specific-speed>
     <app-pump-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat" [inAssessment]="true"
       [assessment]="assessment" [pumpCurvePrimary]="true"></app-pump-curve>
+    <app-unit-converter *ngIf="calcTab == 'convert-units'" [inAssessment]="true"></app-unit-converter>
   </div>
   <!--end calculators-->
 

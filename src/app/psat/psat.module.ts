@@ -50,6 +50,7 @@ import { PsatTabService } from './psat-tab.service';
 import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
+import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 
 @NgModule({
   declarations: [
@@ -96,7 +97,8 @@ import { FieldDataService } from './field-data/field-data.service';
     HeadToolModule,
     AchievableEfficiencyModule, 
     PumpCurveModule,
-    ExploreOpportunitiesModule
+    ExploreOpportunitiesModule,
+    UtilitiesModule
   ],
   providers: [
     PsatService,

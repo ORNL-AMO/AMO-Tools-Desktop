@@ -23,6 +23,9 @@ export class ImportService {
     this.addedDirIds = new Array<number>();
     this.assessmentsAdded = new Array<ImportExportAssessment>();
     this.assessmentItems = data.assessments;
+    for (let i = 0; i < this.assessmentItems.length; i++) {
+      this.assessmentItems[i].assessment.selected = false;
+    }
     this.directoryItems = data.directories;
     let tmpAssessmentArr: Array<ImportExportAssessment> = data.assessments;
     //tmpDir to hold new data
@@ -45,6 +48,7 @@ export class ImportService {
 
     if (data.calculators) {
       data.calculators.forEach(calc => {
+        calc.selected = false;
         delete calc.id;
         calc.directoryId = workingDirectoryId;
         this.indexedDbService.addCalculator(calc).then(() => { this.calculatorDbService.setAll() });
