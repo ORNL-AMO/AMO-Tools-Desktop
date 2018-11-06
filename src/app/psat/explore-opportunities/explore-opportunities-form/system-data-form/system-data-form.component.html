@@ -136,38 +136,44 @@
     </li>
     <li>
         <div class="checkbox">
-            <label for="modifyOperatingFraction">
-                <input type="checkbox" id="modifyOperatingFraction" value="true" (focus)="focusField('operatingFraction')"
-                    (change)="toggleOperatingFraction()" [(ngModel)]="showOperatingFraction" /> Modify Operating
+            <label for="modifyOperatingHours">
+                <input type="checkbox" id="modifyOperatingHours" value="true" (focus)="focusField('operatingHours')"
+                    (change)="toggleOperatingHours()" [(ngModel)]="showOperatingHours" /> Modify Operating
                 Fraction
             </label>
         </div>
-        <form [formGroup]="baselineForm" *ngIf="showOperatingFraction">
-            <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.operatingFraction.invalid}">
-                <label for="baselineOperatingFraction">Baseline operating fractiong</label>
-                <input name="baselineOperatingFraction" type="number" step="any" id="baselineOperatingFraction" class="form-control"
-                    (focus)="focusField('operatingFraction')" (input)="calculate()" formControlName="operatingFraction" />
-                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.operatingFraction.invalid && !baselineForm.controls.operatingFraction.pristine">
-                    <span *ngIf="baselineForm.controls.operatingFraction.errors.required">Value Required</span>
-                    <span *ngIf="baselineForm.controls.operatingFraction.errors.max">Value can't be greater than
-                        {{baselineForm.controls.operatingFraction.errors.max.max}}.</span>
-                    <span *ngIf="baselineForm.controls.operatingFraction.errors.min">Value can't be less than
-                        {{baselineForm.controls.operatingFraction.errors.min.min}}.</span>
+        <form [formGroup]="baselineForm" *ngIf="showOperatingHours">
+            <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
+                <label for="baselineOperatingHours">Baseline Operating Hours per Year</label>
+                <div class="input-group">
+                    <input name="baselineOperatingHours" type="number" step="any" id="baselineOperatingHours" class="form-control"
+                        (focus)="focusField('operatingHours')" (input)="calculate()" formControlName="operatingHours" />
+                    <span class="input-group-addon units">hrs/yr</span>
+                </div>
+                <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.operatingHours.invalid && !baselineForm.controls.operatingHours.pristine">
+                    <span *ngIf="baselineForm.controls.operatingHours.errors.required">Value Required</span>
+                    <span *ngIf="baselineForm.controls.operatingHours.errors.max">Value can't be greater than
+                        {{baselineForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
+                    <span *ngIf="baselineForm.controls.operatingHours.errors.min">Value can't be less than
+                        {{baselineForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
                 </span>
             </div>
         </form>
         <form [formGroup]="modificationForm" *ngIf="showOperatingFraction">
-            <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.operatingFraction.invalid}">
-                <label for="modificationOperatingFraction">Modification operating fraction</label>
-                <input name="modificationOperatingFraction" type="number" step="0.1" min="0" max="1" id="modificationOperatingFraction"
-                    class="form-control" (focus)="focusField('operatingFraction')" (input)="calculate()"
-                    formControlName="operatingFraction" />
-                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.operatingFraction.invalid && !modificationForm.controls.operatingFraction.pristine">
-                    <span *ngIf="modificationForm.controls.operatingFraction.errors.required">Value Required</span>
-                    <span *ngIf="modificationForm.controls.operatingFraction.errors.max">Value can't be greater than
-                        {{modificationForm.controls.operatingFraction.errors.max.max}}.</span>
-                    <span *ngIf="modificationForm.controls.operatingFraction.errors.min">Value can't be less than
-                        {{modificationForm.controls.operatingFraction.errors.min.min}}.</span>
+            <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.operatingHours.invalid}">
+                <label for="modificationOperatingHours">Modification operating fraction</label>
+                <div class="input-group">
+                    <input name="modificationOperatingHours" type="number" step="0.1" min="0" max="1" id="modificationOperatingHours"
+                        class="form-control" (focus)="focusField('operatingHours')" (input)="calculate()"
+                        formControlName="operatingHours" />
+                    <span class="input-group-addon units">hrs/yr</span>
+                </div>
+                <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.operatingHours.invalid && !modificationForm.controls.operatingHours.pristine">
+                    <span *ngIf="modificationForm.controls.operatingHours.errors.required">Value Required</span>
+                    <span *ngIf="modificationForm.controls.operatingHours.errors.max">Value can't be greater than
+                        {{modificationForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
+                    <span *ngIf="modificationForm.controls.operatingHours.errors.min">Value can't be less than
+                        {{modificationForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
                 </span>
             </div>
         </form>
