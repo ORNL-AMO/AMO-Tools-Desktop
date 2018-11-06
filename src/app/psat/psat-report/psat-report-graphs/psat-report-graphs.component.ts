@@ -2,14 +2,9 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PSAT, PsatOutputs, PsatInputs } from '../../../shared/models/psat';
 import { Assessment } from '../../../shared/models/assessment';
-// import { PsatResultsData } from '../../../report-rollup/report-rollup.service';
-import { PsatReportService } from '../psat-report.service';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../psat.service';
-import { FormGroup } from '@angular/forms';
-import { PsatResultsData } from '../../../report-rollup/report-rollup.service';
 
 @Component({
   selector: 'app-psat-report-graphs',
@@ -70,7 +65,7 @@ export class PsatReportGraphsComponent implements OnInit {
   modExists: boolean = false;
   graphColors: Array<string>;
 
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private psatReportService: PsatReportService, private windowRefService: WindowRefService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -119,11 +114,9 @@ export class PsatReportGraphsComponent implements OnInit {
   // sets loss data and percentages for selected psats
   getPsatModificationData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>, baselinePumpEfficiency: number) {
     let selectedResults: PsatOutputs;
-    let selectedInputs: PsatInputs;
-    let tmpForm: FormGroup;
-    selectedInputs = JSON.parse(JSON.stringify(psat.inputs));
-    tmpForm = this.psatService.getFormFromPsat(selectedInputs);
-    if (tmpForm.status == 'VALID') {
+    let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
+    if (isPsatValid){
       if (selectedInputs.optimize_calculation) {
         selectedResults = this.psatService.resultsOptimal(selectedInputs, this.settings);
       } else {
@@ -138,11 +131,9 @@ export class PsatReportGraphsComponent implements OnInit {
 
   getPsatBaselineData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>): PsatOutputs {
     let selectedResults: PsatOutputs;
-    let selectedInputs: PsatInputs;
-    let tmpForm: FormGroup;
-    selectedInputs = JSON.parse(JSON.stringify(psat.inputs));
-    tmpForm = this.psatService.getFormFromPsat(selectedInputs);
-    if (tmpForm.status == 'VALID') {
+    let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
+    if (isPsatValid) {
       selectedResults = this.psatService.resultsExisting(selectedInputs, this.settings);
       this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
     }

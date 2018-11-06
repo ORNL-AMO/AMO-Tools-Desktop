@@ -8,8 +8,6 @@ import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
-
-import { ToastyService, ToastyConfig, ToastOptions } from 'ng2-toasty';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { CompareService } from './compare.service';
 import { SettingsService } from '../settings/settings.service';
@@ -20,6 +18,10 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { Directory } from '../shared/models/directory';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { PsatTabService } from './psat-tab.service';
+import { PumpFluidService } from './pump-fluid/pump-fluid.service';
+import { FormGroup } from '@angular/forms';
+import { MotorService } from './motor/motor.service';
+import { FieldDataService } from './field-data/field-data.service';
 
 @Component({
   selector: 'app-psat',
@@ -41,14 +43,10 @@ export class PsatComponent implements OnInit {
   }
 
   assessment: Assessment;
-
-  panelView: string = 'help-panel';
-  isPanelOpen: boolean = true;
   currentTab: string = 'system-setup';
-
-  tabIndex: number = 0;
-
-
+  
+  //used for sankey
+  //TODO: move this and sankey choosing logic oput of this component
   psatOptions: Array<any>;
   psatOptionsLength: number;
   psat1: PSAT;
@@ -76,19 +74,16 @@ export class PsatComponent implements OnInit {
     private psatService: PsatService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private jsonToCsvService: JsonToCsvService,
     private compareService: CompareService,
     private settingsService: SettingsService,
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
-    private psatTabService: PsatTabService) {
-
-    this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-right';
-    this.toastyConfig.limit = 1;
+    private psatTabService: PsatTabService,
+    private pumpFluidService: PumpFluidService,
+    private motorService: MotorService,
+    private fieldDataService: FieldDataService) {
   }
 
   ngOnInit() {
@@ -236,7 +231,7 @@ export class PsatComponent implements OnInit {
     }
   }
 
-  getSettings(update?: boolean) {
+  getSettings() {
     //get assessment settings
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
@@ -260,7 +255,6 @@ export class PsatComponent implements OnInit {
       this.indexedDbService.addSettings(tmpSettings).then(
         results => {
           this.settingsDbService.setAll().then(() => {
-            this.addToast('Settings Saved');
             this.getSettings();
           })
         })
@@ -285,14 +279,14 @@ export class PsatComponent implements OnInit {
       return true;
     }
     else if (this.stepTab == 'pump-fluid') {
-      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-      return this.psatService.isPumpFluidFormValid(tmpForm);
+      let tmpForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
+      return tmpForm.valid;
     } else if (this.stepTab == 'motor') {
-      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-      return this.psatService.isMotorFormValid(tmpForm);
+      let tmpForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
+      return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
-      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-      return this.psatService.isFieldDataFormValid(tmpForm);
+      let tmpForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+      return tmpForm.valid;
     }
   }
 
@@ -301,12 +295,10 @@ export class PsatComponent implements OnInit {
   }
 
   save() {
-    let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-    if (
-      (this.psatService.isPumpFluidFormValid(tmpForm) &&
-        this.psatService.isMotorFormValid(tmpForm) &&
-        this.psatService.isFieldDataFormValid(tmpForm)) || this.modificationExists
-    ) {
+    let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this._psat.inputs);
+    let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(this._psat.inputs);
+    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true);
+    if ((tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid) || this.modificationExists) {
       this._psat.setupDone = true;
       this.initSankeyList();
     } else {
@@ -341,16 +333,6 @@ export class PsatComponent implements OnInit {
     this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);
   }
 
-
-  addToast(msg: string) {
-    let toastOptions: ToastOptions = {
-      title: msg,
-      timeout: 4000,
-      showClose: true,
-      theme: 'default'
-    }
-    this.toastyService.success(toastOptions);
-  }
   goToReport() {
     this.psatTabService.mainTab.next('report');
   }

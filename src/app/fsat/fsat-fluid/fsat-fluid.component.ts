@@ -151,6 +151,11 @@ export class FsatFluidComponent implements OnInit {
     this.save();
   }
 
+  changeMethod(){
+    this.gasDensityForm = this.fsatFluidService.updateGasDensityForm(this.gasDensityForm);
+    this.getDensity();
+  }
+
   getDisplayUnit(unit: any) {
     if (unit) {
       let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;

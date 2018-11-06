@@ -393,7 +393,7 @@ export class Fsat203Service {
       synchronousSpeed: [obj.synchronousSpeed, Validators.required],
       powerFactorAtLoad: [obj.powerFactorAtLoad, [Validators.required, Validators.min(0), Validators.max(1)]],
       npv: [obj.npv, [Validators.required, Validators.min(0), Validators.max(20000)]],
-      fla: [obj.fla, Validators.required],
+      fullLoadAmps: [obj.fla, Validators.required],
       motorShaftPower: [obj.motorShaftPower, Validators.required],
       phase1Voltage: [obj.phase1.voltage, Validators.min(0)],
       phase1Amps: [obj.phase1.amps, Validators.min(0)],
@@ -418,7 +418,7 @@ export class Fsat203Service {
     obj.ratedHP = form.controls.ratedHP.value;
     obj.synchronousSpeed = form.controls.synchronousSpeed.value;
     obj.npv = form.controls.npv.value;
-    obj.fla = form.controls.fla.value;
+    obj.fla = form.controls.fullLoadAmps.value;
     obj.motorShaftPower = form.controls.motorShaftPower.value;
     obj.phase1 = {
       voltage: form.controls.phase1Voltage.value,
@@ -612,8 +612,8 @@ export class Fsat203Service {
           amps: undefined
         },
         driveType: 'Direct Drive',
-        efficiencyClass: 'Energy Efficient',
-        frequency: '60 Hz'
+        efficiencyClass: 1,
+        frequency: 60
       }
     };
 
@@ -739,11 +739,11 @@ export class Fsat203Service {
         amps: 105,
         driveType: "Direct Drive",
         efficiencyBelt: 100,
-        efficiencyClass: "Energy Efficient",
+        efficiencyClass: 1,
         efficiencyMotor: 100,
         efficiencyVFD: 100,
         fla: 210,
-        frequency: "60 Hz",
+        frequency: 60,
         isMethodOne: false,
         isVFD: "Yes",
         mainsDataAvailable: "Yes",
@@ -918,8 +918,8 @@ export class Fsat203Service {
           amps: 205
         },
         driveType: 'Direct Drive',
-        efficiencyClass: 'Standard Efficiency',
-        frequency: '50 Hz'
+        efficiencyClass: 1,
+        frequency: 50
       }
     };
   }

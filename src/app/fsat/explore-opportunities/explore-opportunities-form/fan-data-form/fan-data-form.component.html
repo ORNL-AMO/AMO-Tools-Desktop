@@ -12,31 +12,33 @@
           [(ngModel)]="showFanType" /> Modify Fan Type
       </label>
     </div>
-    <form *ngIf="showFanType">
+    <form [formGroup]="baselineForm" *ngIf="showFanType">
       <div class="form-group">
         <label for="baselineFanType">Baseline Fan Type</label>
-        <select class="form-control" name="fanType" [disabled]="true" id="fanType" (change)="setFanTypes()" (focus)="focusField('fanType')"
-          [(ngModel)]="fsat.fanSetup.fanType">
+        <select class="form-control" name="fanType" id="fanType" (change)="setFanTypes()" (focus)="focusField('fanType')"
+          formControlName="fanType">
           <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
         </select>
       </div>
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showFanType">
       <div class="form-group">
         <label for="modificationFanType">Modification Fan Type</label>
         <select class="form-control" name="fanType2" id="fanType2" (change)="setFanTypes()" (focus)="focusField('fanType')"
-          [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanType">
+          formControlName="fanType">
           <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
         </select>
       </div>
     </form>
   </li>
-  <li *ngIf="(fsat.modifications[exploreModIndex].fsat.fanSetup.fanType == 12) && showFanType">
+  <li *ngIf="(modificationForm.controls.fanType.value == 12) && showFanType">
     <div class="checkbox">
       <label for="modifiedFanSpecified">
         <input type="checkbox" id="modifiedFanSpecified" (focus)="focusField('fanSpecified')" [(ngModel)]="showFanSpecified" />
         Modify Fan Specified Efficiency
       </label>
     </div>
-    <form *ngIf="showFanSpecified">
+    <form [formGroup]="modificationForm" *ngIf="showFanSpecified">
       <!-- <div class="form-group">
           <label for="baselinePumpSpecified">Baseline Pump Specified Efficiency</label>
           <div class="input-group">
@@ -47,15 +49,20 @@
           </div>
           <span class="alert-danger pull-right small" *ngIf="specifiedError1 !== null">{{specifiedError1}}</span>
         </div> -->
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.fanSpecified.invalid}">
         <label for="modificationFanSpecified">Modification Fan Specified Efficiency</label>
         <div class="input-group">
-          <input name="modificationFanSpecified" [disabled]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanType != 12"
-            type="number" step="any" id="modificationFanSpecified" class="form-control" (focus)="focusField('fanSpecified')"
-            (input)="calculate()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.fanSpecified" />
+          <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control"
+            (focus)="focusField('fanSpecified')" (input)="calculate()" formControlName="fanSpecified" />
           <span class="input-group-addon units">%</span>
         </div>
-        <span class="alert-warning pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.fanSpecified.invalid && !modificationForm.controls.fanSpecified.pristine">
+          <span *ngIf="modificationForm.controls.fanSpecified.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.fanSpecified.errors.max">Value can't be greater than
+            {{modificationForm.controls.fanSpecified.errors.max.max}} %.</span>
+          <span *ngIf="modificationForm.controls.fanSpecified.errors.min">Value can't be less than
+            {{modificationForm.controls.fanSpecified.errors.min.min}} %.</span>
+        </span>
       </div>
     </form>
   </li>
@@ -66,44 +73,56 @@
           [(ngModel)]="showMotorDrive" /> Modify Motor Drive
       </label>
     </div>
-    <form *ngIf="showMotorDrive">
+    <form [formGroup]="baselineForm" *ngIf="showMotorDrive">
       <div class="form-group">
         <label for="baselineMotorDrive">Baseline Motor Drive</label>
-        <select class="form-control" name="drive" [disabled]="true" id="drive" (change)="calculate()" (focus)="focusField('drive')"
-          [(ngModel)]="fsat.fanSetup.drive">
+        <select class="form-control" name="drive" id="drive" (change)="calculate()" (focus)="focusField('drive')"
+          formControlName="drive">
           <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
         </select>
       </div>
 
-      <div class="form-group" *ngIf="fsat.fanSetup.drive == 4">
+      <div class="form-group" *ngIf="baselineForm.controls.drive.value == 4" [ngClass]="{'invalid': baselineForm.controls.specifiedDriveEfficiency.invalid}">
         <label for="baselineSpecifiedDriveEfficiency">Baseline Drive Efficiency</label>
         <div class="input-group">
-          <input [disabled]="true" type="number" name="baselineSpecifiedDriveEfficiency" step="any" class="form-control"
-            [(ngModel)]="fsat.fanSetup.specifiedDriveEfficiency" id="baselineSpecifiedDriveEfficiency" (input)="calculate()"
-            (focus)="focusField('specifiedDriveEfficiency')">
-            <span class="alert-warning pull-right small" *ngIf="baselineSpecifiedDriveEfficiencyError !== null">{{baselineSpecifiedDriveEfficiencyError}}</span>
+          <input type="number" name="baselineSpecifiedDriveEfficiency" step="any" class="form-control" formControlName="specifiedDriveEfficiency"
+            id="baselineSpecifiedDriveEfficiency" (input)="changeDriveType()" (focus)="focusField('specifiedDriveEfficiency')">
+          <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.specifiedDriveEfficiency.invalid && !baselineForm.controls.specifiedDriveEfficiency.pristine">
+          <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
+          <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
+            {{baselineForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
+          <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.min">Value can't be less than
+            {{baselineForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
+        </span>
       </div>
-
-
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showMotorDrive">
       <div class="form-group">
         <label for="modificationMotorDrive">Modification Motor Drive</label>
-        <select class="form-control" name="drive2" id="drive2" (change)="calculate()" (focus)="focusField('drive')"
-          [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.drive">
+        <select class="form-control" name="drive2" id="drive2" (change)="changeDriveType()" (focus)="focusField('drive')"
+          formControlName="drive">
           <option *ngFor="let drive2 of drives" [ngValue]="drive2.value">{{drive2.display}}</option>
         </select>
       </div>
 
-      <div class="form-group" *ngIf="fsat.modifications[exploreModIndex].fsat.fanSetup.drive == 4">
+      <div class="form-group" *ngIf="modificationForm.controls.drive.value == 4" [ngClass]="{'invalid': modificationForm.controls.specifiedDriveEfficiency.invalid}">
         <label for="modificationSpecifiedDriveEfficiency">Modification Drive Efficiency</label>
         <div class="input-group">
-          <input [disabled]="false" type="number" name="modificationSpecifiedDriveEfficiency" step="any" class="form-control"
-            [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.specifiedDriveEfficiency" id="modificationSpecifiedDriveEfficiency" (input)="calculate()"
+          <input type="number" name="modificationSpecifiedDriveEfficiency" step="any" class="form-control"
+            formControlName="specifiedDriveEfficiency" id="modificationSpecifiedDriveEfficiency" (input)="calculate()"
             (focus)="focusField('specifiedDriveEfficiency')">
+          <span class="input-group-addon units">%</span>
         </div>
-        <span class="alert-warning pull-right small" *ngIf="modificationSpecifiedDriveEfficiencyError !== null">{{modificationSpecifiedDriveEfficiencyError}}</span>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.specifiedDriveEfficiency.invalid && !modificationForm.controls.specifiedDriveEfficiency.pristine">
+          <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
+            {{modificationForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
+          <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.min">Value can't be less than
+            {{modificationForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
+        </span>
       </div>
-
     </form>
   </li>
 </ul>

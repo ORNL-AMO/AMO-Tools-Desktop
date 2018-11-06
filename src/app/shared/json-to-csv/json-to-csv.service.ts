@@ -60,7 +60,7 @@ export class JsonToCsvService {
       SpecificGravity: psat.inputs.specific_gravity,
       FixedSpeed: this.psatService.getFixedSpeedFromEnum(psat.inputs.fixed_speed),
       Stages: psat.inputs.stages,
-      LineFrequency: this.psatService.getLineFreqNumValueFromEnum(psat.inputs.line_frequency),
+      LineFrequency: psat.inputs.line_frequency,
       LineFrequencyUnit: 'Hz',
       MotorRatedPower: psat.inputs.motor_rated_power,
       MotorRatedPowerUnit: settings.powerMeasurement,

@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../../../shared/models/psat';
-import { PsatService } from '../../../psat.service';
 import { Settings } from '../../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PsatWarningService, MotorWarnings } from '../../../psat-warning.service';
+import { MotorService } from '../../../motor/motor.service';
+import { FormGroup } from '@angular/forms';
+import { motorEfficiencyConstants } from '../../../psatConstants';
+import { PsatService } from '../../../psat.service';
 @Component({
   selector: 'app-rated-motor-form',
   templateUrl: './rated-motor-form.component.html',
@@ -26,35 +28,17 @@ export class RatedMotorFormComponent implements OnInit {
   showRatedMotorData: boolean = false;
   showMotorEfficiency: boolean = false;
   showFLA: boolean = false;
-  ratedPowerError1: string = null;
-  ratedPowerError2: string = null;
-  efficiencyError1: string = null;
-  efficiencyError2: string = null;
-  flaError1: string = null;
-  flaError2: string = null;
-  tmpModificationEfficiencyClass: string;
-  tmpBaselineEfficiencyClass: string;
-  // options: Array<any>;
-  // options2: Array<any>;
-  // horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
-  // horsePowersPremium: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500];
-  // kWatts: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000];
-  // kWattsPremium: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355];
-  efficiencyClasses: Array<string> = [
-    'Standard Efficiency',
-    'Energy Efficient',
-    'Premium Efficient',
-    // When the user chooses specified, they need a place to put the efficiency value
-    'Specified'
-  ];
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private psatWarningService: PsatWarningService) { }
+
+  efficiencyClasses: Array<{ display: string, value: number }>;
+  baselineForm: FormGroup;
+  modificationForm: FormGroup;
+
+  baselineWarnings: MotorWarnings;
+  modificationWarnings: MotorWarnings;
+  constructor(private psatWarningService: PsatWarningService, private motorService: MotorService, private psatService: PsatService) { }
 
   ngOnInit() {
-    // if (this.settings.powerMeasurement == 'hp') {
-    //   this.options = this.horsePowers;
-    // } else {
-    //   this.options = this.kWatts;
-    // }
+    this.efficiencyClasses = motorEfficiencyConstants;
     this.init();
   }
 
@@ -67,8 +51,9 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   init() {
-    this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
-    this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class);
+    this.baselineForm = this.motorService.getFormFromObj(this.psat.inputs);
+    this.baselineForm.disable();
+    this.modificationForm = this.motorService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
     this.initEfficiencyClass();
     this.initMotorEfficiency();
     this.initRatedMotorPower();
@@ -78,7 +63,7 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   initEfficiencyClass() {
-    if (this.tmpBaselineEfficiencyClass != this.tmpModificationEfficiencyClass) {
+    if (this.baselineForm.controls.efficiencyClass.value != this.modificationForm.controls.efficiencyClass.value) {
       this.showEfficiencyClass = true;
     } else {
       this.showEfficiencyClass = false;
@@ -86,7 +71,7 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   initMotorEfficiency() {
-    if (this.psat.inputs.efficiency != this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency) {
+    if (this.baselineForm.controls.efficiency.value != this.modificationForm.controls.efficiency.value) {
       this.showMotorEfficiency = true;
     } else {
       this.showMotorEfficiency = false;
@@ -94,10 +79,18 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   initRatedMotorPower() {
-    if (this.psat.inputs.motor_rated_power != this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power) {
+    if (this.baselineForm.controls.horsePower.value != this.modificationForm.controls.horsePower.value) {
       this.showRatedMotorPower = true;
     } else {
       this.showRatedMotorPower = false;
+    }
+  }
+
+  initFLA() {
+    if (this.baselineForm.controls.fullLoadAmps.value != this.modificationForm.controls.fullLoadAmps.value) {
+      this.showFLA = true;
+    } else {
+      this.showFLA = false;
     }
   }
 
@@ -106,71 +99,6 @@ export class RatedMotorFormComponent implements OnInit {
       this.showRatedMotorData = true;
     } else {
       this.showRatedMotorData = false;
-    }
-  }
-
-  initFLA() {
-    if (this.psat.inputs.motor_rated_fla != this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_fla) {
-      this.showFLA = true;
-    } else {
-      this.showFLA = false;
-    }
-  }
-
-
-  calculate() {
-    this.checkWarnings();
-    this.emitCalculate.emit(true);
-  }
-
-  focusField(str: string) {
-    this.changeField.emit(str);
-  }
-  getUnit(unit: string) {
-    let tmpUnit = this.convertUnitsService.getUnit(unit);
-    let dsp = tmpUnit.unit.name.display.replace('(', '');
-    dsp = dsp.replace(')', '');
-    return dsp;
-
-  }
-
-  checkWarnings() {
-    let baselineWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
-    this.efficiencyError1 = baselineWarnings.efficiencyError;
-    this.ratedPowerError1 = baselineWarnings.ratedPowerError;
-    this.flaError1 = baselineWarnings.flaError;
-    let modifiedWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-    this.efficiencyError2 = modifiedWarnings.efficiencyError;
-    this.ratedPowerError2 = modifiedWarnings.ratedPowerError;
-    this.flaError2 = modifiedWarnings.flaError;
-  }
-
-  setEfficiencyClasses() {
-    this.checkMotorEfficiencies();
-    this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpModificationEfficiencyClass);
-    this.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpBaselineEfficiencyClass);
-    if (!this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = 90;
-    }
-    if (!this.psat.inputs.efficiency) {
-      this.psat.inputs.efficiency = 90;
-    }
-    this.calculate();
-  }
-
-  checkMotorEfficiencies() {
-    if (this.tmpModificationEfficiencyClass == 'Specified') {
-      this.showMotorEfficiency = true;
-    } else {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = null;
-    }
-    if (this.tmpBaselineEfficiencyClass == 'Specified') {
-      this.showMotorEfficiency = true;
-    } else {
-      this.psat.inputs.efficiency = null;
-    }
-    if (this.tmpBaselineEfficiencyClass != 'Specified' && this.tmpModificationEfficiencyClass != 'Specified') {
-      this.showMotorEfficiency = false;
     }
   }
 
@@ -185,64 +113,72 @@ export class RatedMotorFormComponent implements OnInit {
       this.toggleFLA();
     }
   }
+
   toggleMotorRatedPower() {
     if (this.showRatedMotorPower == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power = this.psat.inputs.motor_rated_power;
+      this.modificationForm.controls.horsePower.patchValue(this.baselineForm.controls.horsePower.value);
       this.calculate();
     }
   }
+
   toggleEfficiencyClass() {
     if (this.showEfficiencyClass == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psat.inputs.efficiency_class;
-      this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
-      // this.modifyPowerArrays(false);
+      this.modificationForm.controls.horsePower.patchValue(this.baselineForm.controls.horsePower.value);
       this.calculate();
     }
   }
+
   toggleMotorEfficiency() {
     if (this.showMotorEfficiency == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = this.psat.inputs.efficiency;
+      this.modificationForm.controls.efficiency.patchValue(this.baselineForm.controls.efficiency.value);
       this.calculate();
     }
   }
 
   toggleFLA() {
     if (this.showFLA == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_fla = this.psat.inputs.motor_rated_fla;
+      this.modificationForm.controls.fullLoadAmps.patchValue(this.baselineForm.controls.fullLoadAmps.value);
       this.calculate();
     }
   }
 
-  disableModifiedFLA() {
-    let lineFreqTest: boolean = (this.psat.modifications[this.exploreModIndex].psat.inputs.line_frequency != undefined || this.psat.modifications[this.exploreModIndex].psat.inputs.line_frequency != null);
-    if (
-      this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power &&
-      this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_speed &&
-      lineFreqTest &&
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class &&
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency &&
-      this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_voltage
-    ) {
-      return false;
-    } else {
-      return true;
-    }
+  changeBaselineEfficiencyClass() {
+    this.baselineForm = this.motorService.updateFormEfficiencyValidators(this.baselineForm);
+    this.calculate();
+  }
+
+  changeModificationEfficiencyClass() {
+    this.modificationForm = this.motorService.updateFormEfficiencyValidators(this.modificationForm);
+    this.calculate();
   }
 
   getModificationFLA() {
-    if (!this.disableModifiedFLA()) {
-      let estEfficiency = this.psatService.estFLA(
-        this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power,
-        this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_speed,
-        this.psatService.getLineFreqFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.line_frequency),
-        this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class),
-        this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency,
-        this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_voltage,
-        this.settings
-      );
-      this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_fla = estEfficiency;
+    let disableFla: boolean = this.disableFla();
+    if (!disableFla) {
+      this.modificationForm = this.psatService.setFormFullLoadAmps(this.modificationForm, this.settings);
     }
     this.calculate();
   }
 
+  disableFla() {
+    let disableFla: boolean = this.motorService.disableFLA(this.modificationForm);
+    return disableFla;
+  }
+
+  checkWarnings() {
+    this.baselineWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
+    this.modificationWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+  }
+
+  calculate() {
+    //only needed if we enable changing baseline
+    // this.psat.inputs = this.motorService.getInputsFromFrom(this.baselineForm, this.psat.inputs);
+    this.psat.modifications[this.exploreModIndex].psat.inputs = this.motorService.getInputsFromFrom(this.modificationForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
+    this.checkWarnings();
+    this.emitCalculate.emit(true);
+  }
+
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
 }

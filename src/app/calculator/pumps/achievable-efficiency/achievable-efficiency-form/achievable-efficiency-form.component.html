@@ -1,17 +1,24 @@
-<form>
+<form [formGroup]="efficiencyForm">
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
-    <select name="pumpType" class="form-control" id="pumpType" [(ngModel)]="tmpPumpType" (change)="emitChange()" autofocus>
-      <option *ngFor="let pumpType of pumpTypes">{{pumpType}}</option>
+    <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (change)="emitChange()">
+      <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
     </select>
   </div>
   <div class="form-group">
     <label for="flowRate">Flow Rate</label>
-    <div class="input-group">
-      <input name="flowRate" class="form-control" type="number" min="0" max="5000" step="any" [(ngModel)]="tmpFlowRate" id="flowRate"
-        [ngClass]="{'invalid': checkFlowRate() == false}" (input)="emitChange()" onfocus="this.select();">
-      <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+    <div class="input-group" [ngClass]="{'error': flowRateWarning !== null}">
+      <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate"
+        (input)="emitChange()" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
     </div>
-    <span class="alert-danger small" *ngIf="flowRateError !== null">{{flowRateError}}</span>
+    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.flowRate.invalid && !efficiencyForm.controls.flowRate.pristine">
+      <span *ngIf="efficiencyForm.controls.flowRate.errors.required">Value Required</span>
+      <span *ngIf="efficiencyForm.controls.flowRate.errors.max">Value can't be greater than
+        {{efficiencyForm.controls.flowRate.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+      <span *ngIf="efficiencyForm.controls.flowRate.errors.min">Value can't be less than
+        {{efficiencyForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+    </span>
+    <span class="alert-warning pull-right small" *ngIf="flowRateWarning !== null && !efficiencyForm.controls.flowRate.invalid && !efficiencyForm.controls.flowRate.pristine">{{flowRateWarning}}</span>
   </div>
 </form>
