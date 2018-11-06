@@ -49,6 +49,12 @@ export class SettingsService {
   }
 
   getFormFromSettings(settings: Settings): FormGroup {
+    if(settings.steamPressureMeasurement == 'psi'){
+      settings.steamPressureMeasurement = 'psig';
+    }
+    if(settings.steamPressureMeasurement == 'kPag'){
+      settings.steamPressureMeasurement = 'kPag';
+    }
     return this.formBuilder.group({
       'language': [settings.language, Validators.required],
       'currency': [settings.currency, Validators.required],
@@ -333,7 +339,7 @@ export class SettingsService {
       if (!settings.steamTemperatureMeasurement) {
         settings.steamTemperatureMeasurement = 'F';
       }
-      if (!settings.steamPressureMeasurement) {
+      if (!settings.steamPressureMeasurement || settings.steamPressureMeasurement == 'psi') {
         settings.steamPressureMeasurement = 'psig';
       }
       if (!settings.steamSpecificEnthalpyMeasurement) {
@@ -364,7 +370,7 @@ export class SettingsService {
       if (!settings.steamTemperatureMeasurement) {
         settings.steamTemperatureMeasurement = 'C';
       }
-      if (!settings.steamPressureMeasurement) {
+      if (!settings.steamPressureMeasurement || settings.steamPressureMeasurement == 'kPa') {
         settings.steamPressureMeasurement = 'kPag';
       }
       if (!settings.steamSpecificEnthalpyMeasurement) {
