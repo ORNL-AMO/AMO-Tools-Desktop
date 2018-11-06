@@ -32,7 +32,7 @@
           (emitSave)="saveModTurbine($event)"></app-turbine>
       </div>
       <!-- No content message -->
-      <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()">
+      <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()" [ngClass]="{'modal-open': isModalOpen == true}">
         <div class="header mr-2 ml-2">
           <h3>Modification</h3>
         </div>
