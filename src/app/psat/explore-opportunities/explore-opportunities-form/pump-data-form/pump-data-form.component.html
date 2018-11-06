@@ -34,7 +34,7 @@
         </select>
       </div>
       <!--specifiedPumpEfficiency-->
-      <div class="form-group" *ngIf="modificationForm.controls.pumpType.value == 11">
+      <div class="form-group" *ngIf="modificationForm.controls.pumpType.value == 11" [ngClass]="{'invalid':modificationForm.controls.specifiedPumpEfficiency.invalid}">
         <label for="modificationPumpSpecifiedEfficiency">Modification Pump Specified Efficiency</label>
         <div class="input-group">
           <input name="modificationPumpSpecifiedEfficiency" type="number" step="any" id="modificationPumpSpecifiedEfficiency"
@@ -70,7 +70,7 @@
         </select>
       </div>
       <!--specifiedDriveEfficiency-->
-      <div class="form-group" *ngIf="baselineForm.controls.drive.value == 4">
+      <div class="form-group" *ngIf="baselineForm.controls.drive.value == 4" [ngClass]="{'invalid':baselineForm.controls.specifiedDriveEfficiency.invalid}">
         <label for="baselineSpecifiedDriveEfficiency">Baseline Drive Efficiency</label>
         <div class="input-group">
           <input type="number" name="baselineSpecifiedDriveEfficiency" step="any" class="form-control" formControlName="specifiedDriveEfficiency"
@@ -97,7 +97,7 @@
         </select>
       </div>
       <!--specifiedDriveEfficiency-->
-      <div class="form-group" *ngIf="modificationForm.controls.drive.value == 4">
+      <div class="form-group" *ngIf="modificationForm.controls.drive.value == 4" [ngClass]="{'invalid':modificationForm.controls.specifiedDriveEfficiency.invalid}">
         <label for="modificationSpecifiedDriveEfficiency">Modification Drive Efficiency</label>
         <div class="input-group">
           <input type="number" name="modificationSpecifiedDriveEfficiency" step="any" class="form-control"

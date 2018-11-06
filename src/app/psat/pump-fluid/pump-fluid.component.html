@@ -6,18 +6,18 @@
   </div>
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isPumpStyleDifferent()}">
       <label for="{{'pumpType_'+idString}}">Pump Type</label>
       <select class="form-control" name="pumpType" formControlName="pumpType" id="{{'pumpType_'+idString}}" (change)="changePumpType()"
-        (focus)="focusField('pumpType')" [ngClass]="{'indicate-different': isPumpStyleDifferent()}">
+        (focus)="focusField('pumpType')">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
         <!-- <option *ngIf="!baseline" [ngValue]="'Specified Optimal Efficiency'">Specified Optimal Efficiency</option> -->
       </select>
     </div>
 
-    <div class="form-group" *ngIf="psatForm.controls.pumpType.value == 11">
+    <div class="form-group" *ngIf="psatForm.controls.pumpType.value == 11" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent(), 'invalid':psatForm.controls.specifiedPumpEfficiency.invalid}">
       <label for="{{'specifiedPumpEfficiency_'+idString}}">Specify Pump Efficiency</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent()}">
+      <div class="input-group">
         <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" max="100" class="form-control"
           formControlName="specifiedPumpEfficiency" id="{{'specifiedPumpEfficiency_'+idString}}" onfocus="this.select();"
           (input)="save()" (focus)="focusField('specifiedPumpEfficiency')">
@@ -32,9 +32,9 @@
       </span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': pumpFluidWarnings.rpmError !== null, 'invalid':psatForm.controls.pumpRPM.invalid}">
       <label for="{{'pumpRPM_'+idString}}">Pump Speed</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isPumpRpmDifferent(),'error': pumpFluidWarnings.rpmError !== null}">
+      <div class="input-group">
         <input [readonly]="!selected" type="number" name="pumpRPM" min="0" step="10" class="form-control"
           formControlName="pumpRPM" id="{{'pumpRPM_'+idString}}" (input)="save()" (focus)="focusField('pumpRPM')"
           onfocus="this.select();">
@@ -46,17 +46,17 @@
       <span class="alert-warning pull-right small" *ngIf="pumpFluidWarnings.rpmError !== null && !psatForm.controls.pumpRPM.invalid && !psatForm.controls.pumpRPM.pristine">{{pumpFluidWarnings.rpmError}}</span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isDriveDifferent()}">
       <label for="{{'drive_'+idString}}">Drive</label>
       <select class="form-control" name="drive" formControlName="drive" id="{{'drive_'+idString}}" (change)="changeDriveType()"
-        (focus)="focusField('drive')" [ngClass]="{'indicate-different': isDriveDifferent()}">
+        (focus)="focusField('drive')">
         <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
       </select>
     </div>
 
-    <div class="form-group" *ngIf="psatForm.controls.drive.value == 4">
+    <div class="form-group" *ngIf="psatForm.controls.drive.value == 4" [ngClass]="{'indicate-different': isSpecifiedDriveEfficiencyDifferent(), 'invalid':psatForm.controls.specifiedDriveEfficiency.invalid}">
       <label for="{{'specifiedDriveEfficiency_'+idString}}">Drive Efficiency</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isSpecifiedDriveEfficiencyDifferent()}">
+      <div class="input-group">
         <input [readonly]="!selected" type="number" name="specifiedDriveEfficiency" step="any" class="form-control"
           formControlName="specifiedDriveEfficiency" id="{{'specifiedDriveEfficiency_'+idString}}" (input)="save()"
           (focus)="focusField('specifiedDriveEfficiency')" onfocus="this.select();">
@@ -71,17 +71,17 @@
       </span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isFluidTypeDifferent()}">
       <label for="{{'fluidType_'+idString}}">Fluid Type</label>
       <select class="form-control" name="fluidType" formControlName="fluidType" id="{{'fluidType_'+idString}}" (change)="calculateSpecificGravity()"
-        (focus)="focusField('fluidType')" [ngClass]="{'indicate-different': isFluidTypeDifferent()}">
+        (focus)="focusField('fluidType')">
         <option *ngFor="let fluidType of fluidTypes" [ngValue]="fluidType">{{fluidType}}</option>
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isFluidTempDifferent(),'error': pumpFluidWarnings.temperatureError !== null, 'invalid':psatForm.controls.fluidTemperature.invalid}">
       <label for="{{'fluidTemperature_'+idString}}">Fluid Temperature</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isFluidTempDifferent(),'error': pumpFluidWarnings.temperatureError !== null}">
+      <div class="input-group">
         <input [readonly]="!selected" type="number" name="fluidTemperature" step="any" class="form-control"
           formControlName="fluidTemperature" id="{{'fluidTemperature_'+idString}}" (input)="calculateSpecificGravity()"
           (focus)="focusField('fluidTemperature')" onfocus="this.select();">
@@ -94,11 +94,11 @@
         [innerHtml]="pumpFluidWarnings.temperatureError"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isSpecificGravityDifferent(), 'invalid':psatForm.controls.gravity.invalid}">
       <label for="{{'gravity_'+idString}}">Specific Gravity</label>
       <input [readonly]="!selected" type="number" min="0" name="gravity" step="any" class="form-control"
         formControlName="gravity" id="{{'gravity_'+idString}}" (input)="save()" (focus)="focusField('specificGravity')"
-        onfocus="this.select();" [ngClass]="{'indicate-different': isSpecificGravityDifferent()}">
+        onfocus="this.select();">
       <span class="alert-danger pull-right small" *ngIf="psatForm.controls.gravity.invalid && !psatForm.controls.gravity.pristine">
         <span *ngIf="psatForm.controls.gravity.errors.required">Value Required</span>
         <span *ngIf="psatForm.controls.gravity.errors.min">Value can't be less than
@@ -106,9 +106,9 @@
       </span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isKinematicViscosityDifferent(), 'invalid':psatForm.controls.viscosity.invalid}">
       <label for="{{'viscosity_'+idString}}">Kinematic Viscosity</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isKinematicViscosityDifferent()}">
+      <div class="input-group">
         <input [readonly]="!selected" type="number" min="0" name="viscosity" step="any" class="form-control"
           formControlName="viscosity" id="{{'viscosity_'+idString}}" (input)="save()" (focus)="focusField('viscosity')"
           onfocus="this.select();">
@@ -121,9 +121,9 @@
       </span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isStagesDifferent(), 'invalid': psatForm.controls.stages.invalid}">
       <label for="{{'stages_'+idString}}">Stages</label>
-      <div name="stages" class="incrementor form-control input-group" [ngClass]="{'indicate-different': isStagesDifferent()}">
+      <div name="stages" class="incrementor form-control input-group">
         <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')">
           <i class="fa fa-minus"></i>
         </button>
