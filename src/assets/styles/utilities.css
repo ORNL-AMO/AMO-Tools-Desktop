@@ -105,7 +105,7 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 
 
 .form-group.indicate-different .input-group,
-.form-group.indicate-different > input  {
+.form-group.indicate-different > .form-control  {
     border: #007bff solid 2px;
     /* box-shadow: 0px 0px 1px #007bff; */
 }
@@ -119,9 +119,9 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .form-group.invalid .input-group,
 .form-group.indicate-different.invalid .input-group,
 .form-group.indicate-different.error.invalid .input-group,
-.form-group.invalid > input ,
-.form-group.indicate-different.invalid > input ,
-.form-group.indicate-different.error.invalid > input {
+.form-group.invalid > .form-control ,
+.form-group.indicate-different.invalid > .form-control ,
+.form-group.indicate-different.error.invalid > .form-control {
     border: red solid 2px;
     /* box-shadow: 0px 0px 1px red; */
 }
@@ -136,8 +136,8 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 
 .form-group.error .input-group,
 .form-group.indicate-different.error .input-group,
-.form-group.error > input,
-.form-group.indicate-different.error > input {
+.form-group.error > .form-control,
+.form-group.indicate-different.error > .form-control {
     border: orange solid 2px;
     /* box-shadow: 0px 0px 1px orange; */
 }

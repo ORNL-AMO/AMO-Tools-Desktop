@@ -49,7 +49,7 @@
           </div>
           <span class="alert-danger pull-right small" *ngIf="specifiedError1 !== null">{{specifiedError1}}</span>
         </div> -->
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.fanSpecified.invalid}">
         <label for="modificationFanSpecified">Modification Fan Specified Efficiency</label>
         <div class="input-group">
           <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control"
@@ -82,7 +82,7 @@
         </select>
       </div>
 
-      <div class="form-group" *ngIf="baselineForm.controls.drive.value == 4">
+      <div class="form-group" *ngIf="baselineForm.controls.drive.value == 4" [ngClass]="{'invalid': baselineForm.controls.specifiedDriveEfficiency.invalid}">
         <label for="baselineSpecifiedDriveEfficiency">Baseline Drive Efficiency</label>
         <div class="input-group">
           <input type="number" name="baselineSpecifiedDriveEfficiency" step="any" class="form-control" formControlName="specifiedDriveEfficiency"
@@ -107,7 +107,7 @@
         </select>
       </div>
 
-      <div class="form-group" *ngIf="modificationForm.controls.drive.value == 4">
+      <div class="form-group" *ngIf="modificationForm.controls.drive.value == 4" [ngClass]="{'invalid': modificationForm.controls.specifiedDriveEfficiency.invalid}">
         <label for="modificationSpecifiedDriveEfficiency">Modification Drive Efficiency</label>
         <div class="input-group">
           <input type="number" name="modificationSpecifiedDriveEfficiency" step="any" class="form-control"

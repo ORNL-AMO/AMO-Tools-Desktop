@@ -11,11 +11,11 @@
       </label>
     </div>
     <form [formGroup]="baselineForm" *ngIf="showRatedMotorPower">
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'error': baselineWarnings.ratedPowerError !== null, 'invalid': baselineForm.controls.motorRatedPower.invalid}">
         <label for="baselineMotorRatedPower">Baseline Rated Motor Power</label>
         <div class="input-group">
           <input type="number" name="baselineMotorRatedPower" class="form-control number-input-field" id="baselineMotorRatedPower"
-            (focus)="focusField('motorRatedPower')" (input)="calculate()" formControlName="motorRatedPower" [ngClass]="{'error': baselineWarnings.ratedPowerError !== null}">
+            (focus)="focusField('motorRatedPower')" (input)="calculate()" formControlName="motorRatedPower">
           <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
         </div>
         <span *ngIf="baselineForm.controls.motorRatedPower.invalid && !baselineForm.controls.motorRatedPower.pristine">
@@ -27,11 +27,11 @@
       </div>
     </form>
     <form [formGroup]="modificationForm" *ngIf="showRatedMotorPower">
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'error': modificationWarnings.ratedPowerError !== null, 'invalid': modificationForm.controls.motorRatedPower.invalid}">
         <label for="modificationMotorRatedPower">Modification Motor Rated Power</label>
         <div class="input-group">
           <input type="number" name="modificationMotorRatedPower" class="form-control number-input-field" id="modificationMotorRatedPower"
-            (focus)="focusField('motorRatedPower')" (input)="calculate()" formControlName="motorRatedPower" [ngClass]="{'error': modificationWarnings.ratedPowerError !== null}">
+            (focus)="focusField('motorRatedPower')" (input)="calculate()" formControlName="motorRatedPower">
           <span class="input-group-addon units">{{settings.fanPowerMeasurement}}</span>
         </div>
         <span *ngIf="modificationForm.controls.motorRatedPower.invalid && !modificationForm.controls.motorRatedPower.pristine">
@@ -75,7 +75,7 @@
       </label>
     </div>
     <form [formGroup]="baselineForm" *ngIf="showMotorEfficiency">
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.specifiedEfficiency.invalid}">
         <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
         <div class="input-group">
           <input name="baselineMotorEfficiency" type="number" step="any" id="baselineMotorEfficiency" class="form-control"
@@ -92,7 +92,7 @@
       </div>
     </form>
     <form [formGroup]="modificationForm" *ngIf="showMotorEfficiency">
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.specifiedEfficiency.invalid}">
         <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
         <div class="input-group">
           <input name="modificationMotorEfficiency" type="number" step="any" id="modificationMotorEfficiency" class="form-control"
@@ -115,12 +115,12 @@
           [(ngModel)]="showFLA" /> Modify Full Load Amps
       </label>
     </div>
-    <form [formGroup]="baselineForm" *ngIf="showFLA">
+    <form [formGroup]="baselineForm" *ngIf="showFLA" [ngClass]="{'error': baselineWarnings.flaError !== null, 'invalid': baselineForm.controls.fullLoadAmps.invalid}">
       <div class="form-group">
         <label for="baselineFLA">Baseline Full Load Amps</label>
         <div class="input-group">
           <input type="number" name="baselineFLA" class="form-control number-input-field" id="baselineFLA" (focus)="focusField('fullLoadAmps')"
-            (input)="calculate()" formControlName="fullLoadAmps" [ngClass]="{'error': baselineWarnings.flaError !== null}">
+            (input)="calculate()" formControlName="fullLoadAmps">
           <span class="input-group-addon units">A</span>
         </div>
         <span *ngIf="baselineForm.controls.fullLoadAmps.invalid && !baselineForm.controls.fullLoadAmps.pristine">
@@ -131,14 +131,14 @@
       </div>
     </form>
     <form [formGroup]="modificationForm" *ngIf="showFLA">
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'error': modificationWarnings.flaError !== null, 'invalid':modificationForm.controls.fullLoadAmps.invalid}">
         <label for="modificationFLA">Modification Full Load Amps
           <a class="form-text small click-link" *ngIf="!disableModifiedFLA()" id="flaHelp" (click)="getModificationFLA()">Estimate
             Full-Load Amps</a>
         </label>
         <div class="input-group">
           <input type="number" name="modificationFLA" class="form-control number-input-field" id="modificationFLA"
-            (focus)="focusField('fullLoadAmps')" (input)="calculate()" formControlName="fullLoadAmps" [ngClass]="{'error': modificationWarnings.flaError !== null}">
+            (focus)="focusField('fullLoadAmps')" (input)="calculate()" formControlName="fullLoadAmps">
           <span class="input-group-addon units">A</span>
         </div>
         <span *ngIf="modificationForm.controls.fullLoadAmps.invalid && !modificationForm.controls.fullLoadAmps.pristine">

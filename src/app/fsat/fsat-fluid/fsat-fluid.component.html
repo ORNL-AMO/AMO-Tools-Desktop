@@ -7,10 +7,10 @@
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isBarometricPressureDifferent(),'error': warnings.barometricPressureError !== null, 'invalid':gasDensityForm.controls.barometricPressure.invalid}">
       <label for="{{'barometricPressure_'+idString}}">Barometric Pressure (P
         <sub>bo</sub>)</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isBarometricPressureDifferent(),'error': warnings.barometricPressureError !== null}">
+      <div class="input-group">
         <input name="barometricPressure" type="number" step="any" class="form-control" formControlName="barometricPressure"
           id="{{'barometricPressure_'+idString}}" (input)="getDensity()" (focus)="focusField('barometricPressure')"
           onfocus="this.select();" [readonly]="!selected">
@@ -24,9 +24,9 @@
         <span [innerHTML]="getDisplayUnit(settings.fanBarometricPressure)"></span></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isGasTypeDifferent()}">
       <label for="{{'gasType_'+idString}}">Gas Type</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isGasTypeDifferent()}">
+      <div class="input-group">
         <select class="form-control" name="gasType" formControlName="gasType" id="{{'gasType_'+idString}}" (change)="getDensity()"
           (focus)="focusField('gasType')">
           <option *ngFor="let gas of gasTypes" [ngValue]="gas.value">{{gas.display}}</option>
@@ -34,18 +34,18 @@
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isInputTypeDifferent()}">
       <label for="{{'inputType_'+idString}}">Method to Establish Gas Density</label>
       <select class="form-control" name="inputType" formControlName="inputType" id="{{'inputType_'+idString}}" (change)="changeMethod()"
-        (focus)="focusField('inputType')" [ngClass]="{'indicate-different': isInputTypeDifferent()}">
+        (focus)="focusField('inputType')">
         <option *ngFor="let method of methods" [ngValue]="method.value">{{method.display}}</option>
       </select>
     </div>
 
-    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'" [ngClass]="{'indicate-different': isDryBulbTempDifferent()}">
       <label for="{{'dryBulbTemp_'+idString}}">Dry Bulb Temp (T
         <sub>do</sub>)</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isDryBulbTempDifferent()}">
+      <div class="input-group">
         <input name="dryBulbTemp" type="number" step="any" class="form-control" formControlName="dryBulbTemp" id="{{'dryBulbTemp_'+idString}}"
           (input)="getDensity()" (focus)="focusField('dryBulbTemp')" onfocus="this.select();" [readonly]="!selected">
         <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
@@ -55,29 +55,29 @@
       </div>
     </div>
 
-    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'" [ngClass]="{'indicate-different': isStaticPressureDifferent()}">
       <label for="{{'staticPressure_'+idString}}">Static Pressure (P
         <sub>so</sub>)</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isStaticPressureDifferent()}">
+      <div class="input-group">
         <input name="staticPressure" type="number" step="any" class="form-control" formControlName="staticPressure" id="{{'staticPressure_'+idString}}"
           (input)="getDensity()" (focus)="focusField('staticPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
       </div>
     </div>
 
-    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value != 'custom'" [ngClass]="{'indicate-different': isSpecificGravityDifferent()}">
       <label for="{{'specificGravity_'+idString}}">Gas Specific Gravity (G)</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isSpecificGravityDifferent()}">
+      <div class="input-group">
         <input name="specificGravity" type="number" step="any" class="form-control" formControlName="specificGravity"
           id="{{'specificGravity_'+idString}}" (input)="getDensity()" (focus)="focusField('specificGravity')" onfocus="this.select();"
           [readonly]="!selected">
       </div>
     </div>
 
-    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'" [ngClass]="{'indicate-different': isWetBulbTempDifferent()}">
       <label for="{{'wetBulbTemp_'+idString}}">Wet Bulb Temp (T
         <sub>wo</sub>)</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isWetBulbTempDifferent()}">
+      <div class="input-group">
         <input name="wetBulbTemp" type="number" step="any" class="form-control" formControlName="wetBulbTemp" id="{{'wetBulbTemp_'+idString}}"
           (input)="calcDensityWetBulb()" (focus)="focusField('wetBulbTemp')" onfocus="this.select();" [readonly]="!selected">
         <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
@@ -87,9 +87,9 @@
       </div>
     </div>
 
-    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'">
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'wetBulb'" [ngClass]="{'indicate-different': isSpecificHeatGasDifferent(), 'invalid': gasDensityForm.controls.specificHeatGas.invalid}">
       <label for="{{'specificHeatGas_'+idString}}">Specific Heat Gas</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isSpecificHeatGasDifferent()}">
+      <div class="input-group">
         <input name="specificHeatGas" type="number" step="any" class="form-control" formControlName="specificHeatGas"
           id="{{'specificHeatGas_'+idString}}" (input)="calcDensityWetBulb()" (focus)="focusField('specificHeatGas')"
           onfocus="this.select();" [readonly]="!selected">
@@ -101,9 +101,9 @@
       </span>
     </div>
 
-    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'">
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'relativeHumidity'" [ngClass]="{'indicate-different': isRelativeHumidityDifferent(), 'invalid':gasDensityForm.controls.relativeHumidity.invalid}">
       <label for="{{'relativeHumidity_'+idString}}">Relative Humidity</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isRelativeHumidityDifferent()}">
+      <div class="input-group">
         <input name="relativeHumidity" type="number" step="any" class="form-control" formControlName="relativeHumidity"
           id="{{'relativeHumidity_'+idString}}" (input)="calcDensityRelativeHumidity()" (focus)="focusField('relativeHumidity')"
           onfocus="this.select();" [readonly]="!selected">
@@ -119,10 +119,10 @@
       </span>
     </div>
 
-    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'dewPoint'">
+    <div class="form-group" *ngIf="gasDensityForm.controls.inputType.value == 'dewPoint'" [ngClass]="{'indicate-different': isDewPointDifferent()}">
       <label for="{{'dewPoint_'+idString}}">Gas Dew Point (T
         <sub>dp</sub>)</label>
-      <div class="input-group" [ngClass]="{'indicate-different': isDewPointDifferent()}">
+      <div class="input-group">
         <input name="dewPoint" type="number" step="any" class="form-control" formControlName="dewPoint" id="{{'dewPoint_'+idString}}"
           (input)="calcDensityDewPoint()" (focus)="focusField('dewPoint')" onfocus="this.select();" [readonly]="!selected">
         <span *ngIf="settings.fanTemperatureMeasurement == 'F'" class="input-group-addon units">&#8457;</span>
@@ -132,14 +132,14 @@
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'indicate-different': isGasDensityDifferent(), 'invalid':gasDensityForm.controls.gasDensity.invalid}">
       <label for="{{'gasDensity_'+idString}}">Gas Density (&rho;
         <sub>0</sub>)</label>
       <div class="small text-center" *ngIf="gasDensityForm.controls.inputType.value != 'custom'" [ngClass]="{'indicate-different': isGasDensityDifferent()}">
         {{baseGasDensity.gasDensity | sigFigs: '4'}}
         <span [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
       </div>
-      <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'" [ngClass]="{'indicate-different': isGasDensityDifferent()}">
+      <div class="input-group" *ngIf="gasDensityForm.controls.inputType.value == 'custom'">
         <input name="gasDensity" type="number" step="any" class="form-control" formControlName="gasDensity" id="{{'gasDensity_'+idString}}"
           (input)="getDensity()" (focus)="focusField('gasDensity')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.densityMeasurement)"></span>
