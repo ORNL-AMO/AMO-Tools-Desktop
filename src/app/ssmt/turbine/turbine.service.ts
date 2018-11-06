@@ -57,9 +57,9 @@ export class TurbineService {
   }
 
   getCondensingFormFromObj(obj: CondensingTurbine, settings: Settings): FormGroup {
-    let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psia').to(settings.steamPressureMeasurement);
+    let tmpCondensingPressureMin: number = this.convertUnitsService.value(.2).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMin = this.convertUnitsService.roundVal(tmpCondensingPressureMin, 1);
-    let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psia').to(settings.steamPressureMeasurement);
+    let tmpCondensingPressureMax: number = this.convertUnitsService.value(14.6).from('psia').to(settings.steamVacuumPressure);
     tmpCondensingPressureMax = this.convertUnitsService.roundVal(tmpCondensingPressureMax, 1);
     let tmpOperationValueRanges: { min: number, max: number } = this.getCondensingOperationRange(obj.operationType);
     let form: FormGroup = this.formBuilder.group({
@@ -187,7 +187,7 @@ export class TurbineService {
       if (obj.condensingTurbine) {
         if (obj.condensingTurbine.useTurbine) {
           let tmpForm: FormGroup = this.getCondensingFormFromObj(obj.condensingTurbine, settings);
-          if (tmpForm.status == 'INVALID') {
+          if (tmpForm.valid) {
             condensingTurbineValid = false;
           }
         }
@@ -195,7 +195,7 @@ export class TurbineService {
       if (obj.highToLowTurbine) {
         if (obj.highToLowTurbine.useTurbine) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToLowTurbine);
-          if (tmpForm.status == 'INVALID') {
+          if (tmpForm.valid) {
             highToLowTurbineValid = false;
           }
         }
@@ -203,7 +203,7 @@ export class TurbineService {
       if (obj.highToMediumTurbine) {
         if (obj.highToMediumTurbine.useTurbine) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToMediumTurbine);
-          if (tmpForm.status == 'INVALID') {
+          if (tmpForm.valid) {
             highToMediumTurbineValid = false;
           }
         }
@@ -211,7 +211,7 @@ export class TurbineService {
       if (obj.mediumToLowTurbine) {
         if (obj.mediumToLowTurbine.useTurbine) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.mediumToLowTurbine);
-          if (tmpForm.status == 'INVALID') {
+          if (tmpForm.valid) {
             mediumToLowTurbineValid = false;
           }
         }
