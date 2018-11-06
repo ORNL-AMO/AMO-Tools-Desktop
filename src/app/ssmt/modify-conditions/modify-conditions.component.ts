@@ -22,12 +22,12 @@ export class ModifyConditionsComponent implements OnInit {
   emitSaveAssessment = new EventEmitter<SSMT>();
   @Input()
   containerHeight: number;
-    
+
   modelTab: string;
   modelTabSub: Subscription;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
-  isModalOpen: boolean = false;
+  isModalOpen: boolean;
   modalOpenSubscription: Subscription;
   constructor(private ssmtService: SsmtService) { }
 
@@ -36,9 +36,9 @@ export class ModifyConditionsComponent implements OnInit {
       this.modelTab = val;
     })
 
-     this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(isOpen => {
-       this.isModalOpen = isOpen;
-     })
+    this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(isOpen => {
+      this.isModalOpen = isOpen;
+    })
   }
 
   ngOnChanges() {
@@ -61,6 +61,7 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   addModification() {
+    this.ssmtService.modalOpen.next(true);
     this.ssmtService.openNewModificationModal.next(true);
   }
 
@@ -73,12 +74,12 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
-  saveBaselineHeader(newHeaderInput: HeaderInput){
+  saveBaselineHeader(newHeaderInput: HeaderInput) {
     this.ssmt.headerInput = newHeaderInput;
     this.saveAssessment();
   }
 
-  saveBaselineTurbine(newTurbineInput: TurbineInput){
+  saveBaselineTurbine(newTurbineInput: TurbineInput) {
     this.ssmt.turbineInput = newTurbineInput;
     this.saveAssessment();
   }
@@ -88,12 +89,12 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
-  saveModHeader(newHeaderInput: HeaderInput){
+  saveModHeader(newHeaderInput: HeaderInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.headerInput = newHeaderInput;
     this.saveAssessment();
   }
-  
-  saveModTurbine(newTurbineInput: TurbineInput){
+
+  saveModTurbine(newTurbineInput: TurbineInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.turbineInput = newTurbineInput;
     this.saveAssessment();
   }

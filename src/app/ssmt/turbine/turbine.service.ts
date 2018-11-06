@@ -187,7 +187,7 @@ export class TurbineService {
       if (obj.condensingTurbine) {
         if (obj.condensingTurbine.useTurbine) {
           let tmpForm: FormGroup = this.getCondensingFormFromObj(obj.condensingTurbine, settings);
-          if (tmpForm.valid) {
+          if (tmpForm.invalid) {
             condensingTurbineValid = false;
           }
         }
@@ -195,7 +195,7 @@ export class TurbineService {
       if (obj.highToLowTurbine) {
         if (obj.highToLowTurbine.useTurbine) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToLowTurbine);
-          if (tmpForm.valid) {
+          if (tmpForm.invalid) {
             highToLowTurbineValid = false;
           }
         }
@@ -203,7 +203,7 @@ export class TurbineService {
       if (obj.highToMediumTurbine) {
         if (obj.highToMediumTurbine.useTurbine) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToMediumTurbine);
-          if (tmpForm.valid) {
+          if (tmpForm.invalid) {
             highToMediumTurbineValid = false;
           }
         }
@@ -211,7 +211,7 @@ export class TurbineService {
       if (obj.mediumToLowTurbine) {
         if (obj.mediumToLowTurbine.useTurbine) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.mediumToLowTurbine);
-          if (tmpForm.valid) {
+          if (tmpForm.invalid) {
             mediumToLowTurbineValid = false;
           }
         }
