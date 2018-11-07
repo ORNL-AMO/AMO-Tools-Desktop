@@ -14,14 +14,52 @@
           [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.isVFD" /> Install VFD
       </label>
     </div>
-    <app-variable-frequency-drive-form *ngIf="psat.modifications[exploreModIndex].psat.inputs.isVFD" [(psat)]="psat"
-      (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-variable-frequency-drive-form>
-    <app-pump-data-form [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" [(psat)]="psat" (changeField)="focusField($event)"
-      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-pump-data-form>
-    <app-system-data-form [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" [(psat)]="psat" (changeField)="focusField($event)"
-      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-system-data-form>
-    <app-rated-motor-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-      [exploreModIndex]="exploreModIndex"></app-rated-motor-form>
+    <app-variable-frequency-drive-form 
+        *ngIf="psat.modifications[exploreModIndex].psat.inputs.isVFD"
+        (changeField)="focusField($event)" 
+        (emitCalculate)="calculate()" 
+        [settings]="settings" 
+        [exploreModIndex]="exploreModIndex"
+        [baselinePumpFluidForm]="baselinePumpFluidForm"
+        [modificationPumpFluidForm]="modificationPumpFluidForm"
+        [baselineFieldDataForm]="baselineFieldDataForm"
+        [modificationFieldDataForm]="modificationFieldDataForm"
+        [baselineFieldDataWarnings]="baselineFieldDataWarnings"
+        [modificationFieldDataWarnings]="modificationFieldDataWarnings"  
+      ></app-variable-frequency-drive-form>
+          
+      <app-pump-data-form 
+        [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" 
+        (changeField)="focusField($event)"
+        (emitCalculate)="calculate()" 
+        [settings]="settings" 
+        [exploreModIndex]="exploreModIndex" 
+        [baselineForm]="baselinePumpFluidForm"
+        [modificationForm]="modificationPumpFluidForm"
+      ></app-pump-data-form>
+
+    <app-system-data-form 
+     [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" 
+     (changeField)="focusField($event)"
+     (emitCalculate)="calculate()"
+     [settings]="settings" 
+     [exploreModIndex]="exploreModIndex"
+     [baselineForm]="baselineFieldDataForm"
+     [modificationForm]="modificationFieldDataForm"
+     [baselineWarnings]="baselineFieldDataWarnings"
+     [modificationWarnings]="modificationFieldDataWarnings"
+    ></app-system-data-form>
+        
+    <app-rated-motor-form
+      (changeField)="focusField($event)" 
+      (emitCalculate)="calculate()" 
+      [settings]="settings"
+      [exploreModIndex]="exploreModIndex"
+      [baselineForm]="baselineMotorForm"
+      [modificationForm]="modificationMotorForm"
+      [baselineWarnings]="baselineMotorWarnings"
+      [modificationWarnings]="modificationMotorWarnings"
+      ></app-rated-motor-form>
 
     <!--
     <div class="checkbox" *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">

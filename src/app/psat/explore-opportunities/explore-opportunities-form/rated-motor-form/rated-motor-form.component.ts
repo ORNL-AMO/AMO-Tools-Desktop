@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { PsatWarningService, MotorWarnings } from '../../../psat-warning.service';
 import { MotorService } from '../../../motor/motor.service';
@@ -12,8 +11,6 @@ import { PsatService } from '../../../psat.service';
   styleUrls: ['./rated-motor-form.component.css']
 })
 export class RatedMotorFormComponent implements OnInit {
-  @Input()
-  psat: PSAT;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Output('changeField')
@@ -22,6 +19,15 @@ export class RatedMotorFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Input()
+  baselineForm: FormGroup;
+  @Input()
+  modificationForm: FormGroup;
+  @Input()
+  baselineWarnings: MotorWarnings;
+  @Input()
+  modificationWarnings: MotorWarnings;
+
 
   //showRatedMotorPower: boolean = false;
   showEfficiencyClass: boolean = false;
@@ -30,12 +36,7 @@ export class RatedMotorFormComponent implements OnInit {
   showFLA: boolean = false;
 
   efficiencyClasses: Array<{ display: string, value: number }>;
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
-
-  baselineWarnings: MotorWarnings;
-  modificationWarnings: MotorWarnings;
-  constructor(private psatWarningService: PsatWarningService, private motorService: MotorService, private psatService: PsatService) { }
+  constructor(private motorService: MotorService, private psatService: PsatService) { }
 
   ngOnInit() {
     this.efficiencyClasses = motorEfficiencyConstants;
@@ -51,15 +52,15 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   init() {
-    this.baselineForm = this.motorService.getFormFromObj(this.psat.inputs);
-    this.baselineForm.disable();
-    this.modificationForm = this.motorService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
+    // this.baselineForm = this.motorService.getFormFromObj(this.psat.inputs);
+    // this.baselineForm.disable();
+    // this.modificationForm = this.motorService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
     this.initEfficiencyClass();
     this.initMotorEfficiency();
     //this.initRatedMotorPower();
     this.initFLA();
     this.initRatedMotorData();
-    this.checkWarnings();
+    //  this.checkWarnings();
   }
 
   initEfficiencyClass() {
@@ -109,7 +110,7 @@ export class RatedMotorFormComponent implements OnInit {
       this.showMotorEfficiency = false;
       this.toggleMotorEfficiency();
       this.toggleEfficiencyClass();
-    //  this.toggleMotorRatedPower();
+      //  this.toggleMotorRatedPower();
       this.toggleFLA();
     }
   }
@@ -165,16 +166,16 @@ export class RatedMotorFormComponent implements OnInit {
     return disableFla;
   }
 
-  checkWarnings() {
-    this.baselineWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
-    this.modificationWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-  }
+  // checkWarnings() {
+  //   this.baselineWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
+  //   this.modificationWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+  // }
 
   calculate() {
     //only needed if we enable changing baseline
     // this.psat.inputs = this.motorService.getInputsFromFrom(this.baselineForm, this.psat.inputs);
-    this.psat.modifications[this.exploreModIndex].psat.inputs = this.motorService.getInputsFromFrom(this.modificationForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
-    this.checkWarnings();
+    // this.psat.modifications[this.exploreModIndex].psat.inputs = this.motorService.getInputsFromFrom(this.modificationForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
+    // this.checkWarnings();
     this.emitCalculate.emit(true);
   }
 

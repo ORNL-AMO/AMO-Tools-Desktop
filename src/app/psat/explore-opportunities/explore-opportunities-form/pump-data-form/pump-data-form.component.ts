@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { PumpFluidService } from '../../../pump-fluid/pump-fluid.service';
@@ -11,8 +10,6 @@ import { pumpTypesConstant, driveConstants } from '../../../psatConstants';
   styleUrls: ['./pump-data-form.component.css']
 })
 export class PumpDataFormComponent implements OnInit {
-  @Input()
-  psat: PSAT;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Output('changeField')
@@ -23,7 +20,11 @@ export class PumpDataFormComponent implements OnInit {
   exploreModIndex: number;
   @Input()
   isVFD: boolean;
-  
+  @Input()
+  baselineForm: FormGroup;
+  @Input()
+  modificationForm: FormGroup;
+
   showPumpData: boolean = false;
   showPumpType: boolean = false;
   showMotorDrive: boolean = false;
@@ -31,9 +32,6 @@ export class PumpDataFormComponent implements OnInit {
 
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
-
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
   constructor(private pumpFluidService: PumpFluidService) {
 
   }
@@ -53,9 +51,9 @@ export class PumpDataFormComponent implements OnInit {
   }
 
   init() {
-    this.baselineForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
-    this.baselineForm.disable();
-    this.modificationForm = this.pumpFluidService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
+    // this.baselineForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+    // this.baselineForm.disable();
+    // this.modificationForm = this.pumpFluidService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
     this.initPumpSpecifiedEfficiency();
     this.initMotorDrive();
     this.initPumpType();
@@ -142,7 +140,7 @@ export class PumpDataFormComponent implements OnInit {
   calculate() {
     //only needed if we allow modifying baseline
     // this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.modificationForm, this.psat.inputs);
-    this.psat.modifications[this.exploreModIndex].psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.modificationForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
+    // this.psat.modifications[this.exploreModIndex].psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.modificationForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
     this.emitCalculate.emit(true);
   }
 
