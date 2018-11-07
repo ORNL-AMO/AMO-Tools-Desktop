@@ -1,3 +1,91 @@
+<div *ngIf="!isVFD" class="checkbox">
+    <label class="group-label" for="modifyFlowRate">
+        <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
+            [(ngModel)]="showFlowRate" /> Reduce System Flow Rate
+    </label>
+</div>
+<li *ngIf="!isVFD && showFlowRate">
+    <form [formGroup]="baselineForm">
+        <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
+            <label for="baselineFlowRate">Baseline Flow Rate</label>
+            <div class="input-group">
+                <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control"
+                    (focus)="focusField('flowRate')" (input)="calculate()" formControlName="flowRate" />
+                <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+            </div>
+            <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
+                <span *ngIf="baselineForm.controls.flowRate.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.flowRate.errors.max">Value can't be greater than
+                    {{baselineForm.controls.flowRate.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+                <span *ngIf="baselineForm.controls.flowRate.errors.min">Value can't be less than
+                    {{baselineForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+            </span>
+            <span class="alert-warning pull-right small" *ngIf="baselineWarnings.flowError !== null && !baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">{{baselineWarnings.flowError}}</span>
+
+        </div>
+    </form>
+    <form [formGroup]="modificationForm">
+        <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.flowRate.invalid, 'error': modificationWarnings.flowError !== null}">
+            <label for="modificationFlowRate">Modification Flow Rate</label>
+            <div class="input-group">
+                <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control"
+                    (focus)="focusField('flowRate')" formControlName="flowRate" (input)="calculate()" />
+                <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+            </div>
+            <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.flowRate.invalid && !modificationForm.controls.flowRate.pristine">
+                <span *ngIf="modificationForm.controls.flowRate.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.flowRate.errors.max">Value can't be greater than
+                    {{modificationForm.controls.flowRate.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+                <span *ngIf="modificationForm.controls.flowRate.errors.min">Value can't be less than
+                    {{modificationForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+            </span>
+            <span class="alert-warning pull-right small" *ngIf="modificationWarnings.flowError !== null && !modificationForm.controls.flowRate.invalid && !modificationForm.controls.flowRate.pristine">{{modificationWarnings.flowError}}</span>
+        </div>
+    </form>
+</li>
+<div *ngIf="!isVFD" class="checkbox">
+    <label class="group-label" for="modifyHead">
+        <input type="checkbox" id="modifyHead" value="true" (focus)="focusField('head')" (change)="toggleHead()"
+            [(ngModel)]="showHead" /> Reduce System Head Requirement
+    </label>
+</div>
+
+<li *ngIf="!isVFD && showHead">
+    <form [formGroup]="baselineForm">
+        <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
+            <label for="baselineHead">Baseline head</label>
+            <div class="input-group">
+                <input name="baselineHead" type="number" step="any" id="baselineHead" class="form-control" (focus)="focusField('head')"
+                    (input)="calculate()" formControlName="head" />
+                <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+            </div>
+            <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.head.invalid && !baselineForm.controls.head.pristine">
+                <span *ngIf="baselineForm.controls.head.errors.required">Value Required</span>
+                <span *ngIf="baselineForm.controls.head.errors.max">Value can't be greater than
+                    {{baselineForm.controls.head.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
+                <span *ngIf="baselineForm.controls.head.errors.min">Value can't be less than
+                    {{baselineForm.controls.head.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
+            </span>
+        </div>
+    </form>
+    <form [formGroup]="modificationForm">
+        <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.head.invalid}">
+            <label for="modificationHead">Modification head</label>
+            <div class="input-group">
+                <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control"
+                    (focus)="focusField('head')" (input)="calculate()" formControlName="head" />
+                <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+            </div>
+            <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.head.invalid && !modificationForm.controls.head.pristine">
+                <span *ngIf="modificationForm.controls.head.errors.required">Value Required</span>
+                <span *ngIf="modificationForm.controls.head.errors.max">Value can't be greater than
+                    {{modificationForm.controls.head.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
+                <span *ngIf="modificationForm.controls.head.errors.min">Value can't be less than
+                    {{modificationForm.controls.head.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
+            </span>
+        </div>
+    </form>
+</li>
 <div class="checkbox">
     <label class="group-label" for="general">
         <input type="checkbox" id="general" value="true" (focus)="focusField('systemData')" (change)="toggleSystemData()"
@@ -91,96 +179,3 @@
         </form>
     </li>
 </ul>
-<div class="checkbox">
-    <label class="group-label" for="modifyFlowRate">
-        <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
-            [(ngModel)]="showFlowRate" /> Reduce System Flow Rate
-    </label>
-</div>
-<li>
-    <!-- <div class="checkbox">
-        <label for="modifyFlowRate">
-            <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
-                [(ngModel)]="showFlowRate" /> Modify Flow Rate
-        </label>
-    </div> -->
-    <form [formGroup]="baselineForm" *ngIf="showFlowRate">
-        <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
-            <label for="baselineFlowRate">Baseline Flow Rate</label>
-            <div class="input-group">
-                <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control"
-                    (focus)="focusField('flowRate')" (input)="calculate()" formControlName="flowRate" />
-                <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
-            </div>
-            <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">
-                <span *ngIf="baselineForm.controls.flowRate.errors.required">Value Required</span>
-                <span *ngIf="baselineForm.controls.flowRate.errors.max">Value can't be greater than
-                    {{baselineForm.controls.flowRate.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
-                <span *ngIf="baselineForm.controls.flowRate.errors.min">Value can't be less than
-                    {{baselineForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
-            </span>
-            <span class="alert-warning pull-right small" *ngIf="baselineWarnings.flowError !== null && !baselineForm.controls.flowRate.invalid && !baselineForm.controls.flowRate.pristine">{{baselineWarnings.flowError}}</span>
-
-        </div>
-    </form>
-    <form [formGroup]="modificationForm" *ngIf="showFlowRate">
-        <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.flowRate.invalid, 'error': modificationWarnings.flowError !== null}">
-            <label for="modificationFlowRate">Modification Flow Rate</label>
-            <div class="input-group">
-                <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control"
-                    (focus)="focusField('flowRate')" formControlName="flowRate" (input)="calculate()" />
-                <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
-            </div>
-            <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.flowRate.invalid && !modificationForm.controls.flowRate.pristine">
-                <span *ngIf="modificationForm.controls.flowRate.errors.required">Value Required</span>
-                <span *ngIf="modificationForm.controls.flowRate.errors.max">Value can't be greater than
-                    {{modificationForm.controls.flowRate.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
-                <span *ngIf="modificationForm.controls.flowRate.errors.min">Value can't be less than
-                    {{modificationForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
-            </span>
-            <span class="alert-warning pull-right small" *ngIf="modificationWarnings.flowError !== null && !modificationForm.controls.flowRate.invalid && !modificationForm.controls.flowRate.pristine">{{modificationWarnings.flowError}}</span>
-        </div>
-    </form>
-</li>
-<div class="checkbox">
-    <label class="group-label" for="modifyHead">
-        <input type="checkbox" id="modifyHead" value="true" (focus)="focusField('head')" (change)="toggleHead()"
-            [(ngModel)]="showHead" /> Reduce System Head Requirement
-    </label>
-</div>
-<li>
-    <form [formGroup]="baselineForm" *ngIf="showHead">
-        <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
-            <label for="baselineHead">Baseline head</label>
-            <div class="input-group">
-                <input name="baselineHead" type="number" step="any" id="baselineHead" class="form-control" (focus)="focusField('head')"
-                    (input)="calculate()" formControlName="head" />
-                <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
-            </div>
-            <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.head.invalid && !baselineForm.controls.head.pristine">
-                <span *ngIf="baselineForm.controls.head.errors.required">Value Required</span>
-                <span *ngIf="baselineForm.controls.head.errors.max">Value can't be greater than
-                    {{baselineForm.controls.head.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
-                <span *ngIf="baselineForm.controls.head.errors.min">Value can't be less than
-                    {{baselineForm.controls.head.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
-            </span>
-        </div>
-    </form>
-    <form [formGroup]="modificationForm" *ngIf="showHead">
-        <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.head.invalid}">
-            <label for="modificationHead">Modification head</label>
-            <div class="input-group">
-                <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control"
-                    (focus)="focusField('head')" (input)="calculate()" formControlName="head" />
-                <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
-            </div>
-            <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.head.invalid && !modificationForm.controls.head.pristine">
-                <span *ngIf="modificationForm.controls.head.errors.required">Value Required</span>
-                <span *ngIf="modificationForm.controls.head.errors.max">Value can't be greater than
-                    {{modificationForm.controls.head.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
-                <span *ngIf="modificationForm.controls.head.errors.min">Value can't be less than
-                    {{modificationForm.controls.head.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
-            </span>
-        </div>
-    </form>
-</li>

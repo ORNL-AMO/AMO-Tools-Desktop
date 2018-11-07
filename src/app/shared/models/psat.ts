@@ -42,6 +42,7 @@ export interface PsatInputs {
   load_factor?: number,
   optimize_calculation?: boolean,
   implementationCosts?: number,
+  isVFD?: boolean,
   fluidType: string,
   fluidTemperature: number
 }

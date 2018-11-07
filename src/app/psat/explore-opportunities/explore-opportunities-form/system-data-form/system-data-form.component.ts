@@ -21,7 +21,9 @@ export class SystemDataFormComponent implements OnInit {
     settings: Settings;
     @Input()
     exploreModIndex: number;
-
+    @Input()
+    isVFD: boolean;
+    
     showSystemData: boolean = false;
     showCost: boolean = false;
     showFlowRate: boolean = false;
@@ -104,12 +106,12 @@ export class SystemDataFormComponent implements OnInit {
     toggleSystemData() {
         if (this.showSystemData == false) {
             this.showCost = false;
-            this.showFlowRate = false;
-            this.showHead = false;
+            // this.showFlowRate = false;
+            // this.showHead = false;
             this.showOperatingHours = false;
             this.toggleCost();
-            this.toggleFlowRate();
-            this.toggleHead();
+            // this.toggleFlowRate();
+            // this.toggleHead();
             this.toggleOperatingHours();
         }
     }

@@ -21,7 +21,9 @@ export class PumpDataFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
-
+  @Input()
+  isVFD: boolean;
+  
   showPumpData: boolean = false;
   showPumpType: boolean = false;
   showMotorDrive: boolean = false;
