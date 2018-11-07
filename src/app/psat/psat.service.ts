@@ -46,6 +46,11 @@ export class PsatService {
     if (settings.temperatureMeasurement != 'F' && inputsCpy.fluidTemperature) {
       inputsCpy.fluidTemperature = this.convertUnitsService.value(inputsCpy.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
+    //TODO: remove eventually. this is here for support in removing operating_fraction from suite v0.3.2
+    if(psatInputs.operating_fraction && !psatInputs.operating_hours){
+      psatInputs.operating_hours = psatInputs.operating_fraction * 8760;
+    }
+
     return inputsCpy;
   }
 

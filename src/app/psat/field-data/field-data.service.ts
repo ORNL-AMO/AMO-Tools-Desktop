@@ -24,8 +24,13 @@ export class FieldDataService {
     } else {
       sizeMarginValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
+    //TODO: remove eventually. this is here for support in removing operating_fraction from suite v0.3.2
+    if(!psatInputs.operating_hours && psatInputs.operating_fraction){
+      psatInputs.operating_hours = psatInputs.operating_fraction * 8760;
+    }
+
     let form: FormGroup = this.formBuilder.group({
-      operatingFraction: [psatInputs.operating_fraction, [Validators.required, Validators.min(0), Validators.max(1)]],
+      operatingHours: [psatInputs.operating_hours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       costKwHr: [psatInputs.cost_kw_hour, [Validators.required, Validators.min(0), Validators.max(1)]],
       flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
       head: [psatInputs.head, [Validators.required, Validators.min(0.1)]],
@@ -47,7 +52,7 @@ export class FieldDataService {
 
 
   getPsatInputsFromForm(form: FormGroup, psatInputs: PsatInputs): PsatInputs {
-    psatInputs.operating_fraction = form.controls.operatingFraction.value;
+    psatInputs.operating_hours = form.controls.operatingHours.value;
     psatInputs.cost_kw_hour = form.controls.costKwHr.value;
     psatInputs.flow_rate = form.controls.flowRate.value;
     psatInputs.head = form.controls.head.value;
