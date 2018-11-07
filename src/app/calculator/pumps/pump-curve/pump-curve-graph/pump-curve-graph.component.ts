@@ -694,19 +694,16 @@ export class PumpCurveGraphComponent implements OnInit {
 
   deleteFromTable(i: number) {
     let iteratorShift: number = 0;
-    let deletingIntesect: boolean = false;
     if (this.modIntersect) {
       iteratorShift++;
       if (this.baselineIntersect) {
         if (i == 1) {
           this.modIntersect = false;
-          deletingIntesect = true;
         }
       }
       else {
         if (i == 0) {
           this.modIntersect = false;
-          deletingIntesect = true;
         }
       }
     }
@@ -714,7 +711,6 @@ export class PumpCurveGraphComponent implements OnInit {
       iteratorShift++;
       if (i == 0) {
         this.baselineIntersect = false;
-        deletingIntesect = true;
       }
     }
     for (let j = i; j < this.tableData.length - 1; j++) {
