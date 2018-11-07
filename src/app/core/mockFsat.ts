@@ -9,7 +9,7 @@ export const MockFsat: Assessment = {
     fsat: {
         name: "Baseline",
         fieldData: {
-            operatingFraction: 1,
+            operatingHours: 8760,
             cost: 0.06,
             flowRate: 129691,
             inletPressure: -16.36,
@@ -94,7 +94,7 @@ export const MockFsat: Assessment = {
                         fanEfficiency: 63.382393,
                     },
                     fieldData: {
-                        operatingFraction: 1,
+                        operatingHours: 8760,
                         flowRate: 86461,
                         inletPressure: -19.19,
                         outletPressure: 1.29,
@@ -157,7 +157,7 @@ export const MockFsat: Assessment = {
                         fanEfficiency: 63.382393,
                     },
                     fieldData: {
-                        operatingFraction: 1,
+                        operatingHours: 8760,
                         flowRate: 129691,
                         inletPressure: -16.36,
                         outletPressure: 1.1,
@@ -217,7 +217,7 @@ export const MockFsat: Assessment = {
                         fanEfficiency: 63.382393,
                     },
                     fieldData: {
-                        operatingFraction: 1,
+                        operatingHours: 8760,
                         flowRate: 129691,
                         inletPressure: -16.36,
                         outletPressure: 1.1,
@@ -279,7 +279,7 @@ export const MockFsat: Assessment = {
                         fanEfficiency: 63.382393,
                     },
                     fieldData: {
-                        operatingFraction: 1,
+                        operatingHours: 8760,
                         flowRate: 129691,
                         inletPressure: -16.36,
                         outletPressure: 1.1,

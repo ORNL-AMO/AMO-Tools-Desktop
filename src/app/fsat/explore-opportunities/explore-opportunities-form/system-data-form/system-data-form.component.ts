@@ -27,7 +27,7 @@ export class SystemDataFormComponent implements OnInit {
     showSystemData: boolean = false;
     showCost: boolean = false;
     showFlowRate: boolean = false;
-    showOperatingFraction: boolean = false;
+    showOperatingHours: boolean = false;
     showPressure: boolean = false;
     showName: boolean = false;
 
@@ -96,14 +96,14 @@ export class SystemDataFormComponent implements OnInit {
 
     initOpFraction() {
         if (this.baselineForm.controls.operatingFraction.value != this.modificationForm.controls.operatingFraction.value) {
-            this.showOperatingFraction = true;
+            this.showOperatingHours = true;
         } else {
-            this.showOperatingFraction = false;
+            this.showOperatingHours = false;
         }
     }
 
     initSystemData() {
-        if (this.showCost || this.showFlowRate || this.showPressure || this.showOperatingFraction) {
+        if (this.showCost || this.showFlowRate || this.showPressure || this.showOperatingHours) {
             this.showSystemData = true;
         } else {
             this.showSystemData = false;
@@ -115,11 +115,11 @@ export class SystemDataFormComponent implements OnInit {
             this.showCost = false;
             this.showFlowRate = false;
             this.showPressure = false;
-            this.showOperatingFraction = false;
+            this.showOperatingHours = false;
             this.toggleCost();
             this.toggleFlowRate();
             this.togglePressure();
-            this.toggleOperatingFraction();
+            this.toggleOperatingHours();
         }
     }
 
@@ -138,8 +138,8 @@ export class SystemDataFormComponent implements OnInit {
         }
     }
 
-    toggleOperatingFraction() {
-        if (this.showOperatingFraction == false) {
+    toggleOperatingHours() {
+        if (this.showOperatingHours == false) {
             this.modificationForm.controls.operatingFraction.patchValue(this.baselineForm.controls.operatingFraction.value);
             this.calculate();
         }
