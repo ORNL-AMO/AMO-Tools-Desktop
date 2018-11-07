@@ -23,7 +23,7 @@ export class RatedMotorFormComponent implements OnInit {
   @Input()
   exploreModIndex: number;
 
-  showRatedMotorPower: boolean = false;
+  //showRatedMotorPower: boolean = false;
   showEfficiencyClass: boolean = false;
   showRatedMotorData: boolean = false;
   showMotorEfficiency: boolean = false;
@@ -56,7 +56,7 @@ export class RatedMotorFormComponent implements OnInit {
     this.modificationForm = this.motorService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
     this.initEfficiencyClass();
     this.initMotorEfficiency();
-    this.initRatedMotorPower();
+    //this.initRatedMotorPower();
     this.initFLA();
     this.initRatedMotorData();
     this.checkWarnings();
@@ -78,13 +78,13 @@ export class RatedMotorFormComponent implements OnInit {
     }
   }
 
-  initRatedMotorPower() {
-    if (this.baselineForm.controls.horsePower.value != this.modificationForm.controls.horsePower.value) {
-      this.showRatedMotorPower = true;
-    } else {
-      this.showRatedMotorPower = false;
-    }
-  }
+  // initRatedMotorPower() {
+  //   if (this.baselineForm.controls.horsePower.value != this.modificationForm.controls.horsePower.value) {
+  //     this.showRatedMotorPower = true;
+  //   } else {
+  //     this.showRatedMotorPower = false;
+  //   }
+  // }
 
   initFLA() {
     if (this.baselineForm.controls.fullLoadAmps.value != this.modificationForm.controls.fullLoadAmps.value) {
@@ -95,7 +95,7 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   initRatedMotorData() {
-    if (this.showEfficiencyClass || this.showMotorEfficiency || this.showRatedMotorPower || this.showFLA) {
+    if (this.showEfficiencyClass || this.showMotorEfficiency || this.showFLA) {
       this.showRatedMotorData = true;
     } else {
       this.showRatedMotorData = false;
@@ -104,22 +104,22 @@ export class RatedMotorFormComponent implements OnInit {
 
   toggleRatedMotorData() {
     if (this.showRatedMotorData == false) {
-      this.showRatedMotorPower = false;
+      //this.showRatedMotorPower = false;
       this.showEfficiencyClass = false;
       this.showMotorEfficiency = false;
       this.toggleMotorEfficiency();
       this.toggleEfficiencyClass();
-      this.toggleMotorRatedPower();
+    //  this.toggleMotorRatedPower();
       this.toggleFLA();
     }
   }
 
-  toggleMotorRatedPower() {
-    if (this.showRatedMotorPower == false) {
-      this.modificationForm.controls.horsePower.patchValue(this.baselineForm.controls.horsePower.value);
-      this.calculate();
-    }
-  }
+  // toggleMotorRatedPower() {
+  //   if (this.showRatedMotorPower == false) {
+  //     this.modificationForm.controls.horsePower.patchValue(this.baselineForm.controls.horsePower.value);
+  //     this.calculate();
+  //   }
+  // }
 
   toggleEfficiencyClass() {
     if (this.showEfficiencyClass == false) {
