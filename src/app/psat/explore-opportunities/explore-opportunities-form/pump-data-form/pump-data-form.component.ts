@@ -3,6 +3,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { PumpFluidService } from '../../../pump-fluid/pump-fluid.service';
 import { pumpTypesConstant, driveConstants } from '../../../psatConstants';
+import { PsatService } from '../../../psat.service';
+import { PsatOutputs, PSAT } from '../../../../shared/models/psat';
 
 @Component({
   selector: 'app-pump-data-form',
@@ -24,21 +26,24 @@ export class PumpDataFormComponent implements OnInit {
   baselineForm: FormGroup;
   @Input()
   modificationForm: FormGroup;
+  @Input()
+  psat: PSAT;
 
   showPumpData: boolean = false;
   showPumpType: boolean = false;
   showMotorDrive: boolean = false;
-  showPumpSpecified: boolean = false;
+  // showPumpSpecified: boolean = false;
 
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
-  constructor(private pumpFluidService: PumpFluidService) {
+  constructor(private pumpFluidService: PumpFluidService, private psatService: PsatService) {
 
   }
 
   ngOnInit() {
-    this.pumpTypes = pumpTypesConstant;
-    this.drives = driveConstants;
+    this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
+    this.pumpTypes.pop();
+    this.drives = JSON.parse(JSON.stringify(driveConstants));
     this.init();
   }
 
@@ -54,7 +59,7 @@ export class PumpDataFormComponent implements OnInit {
     // this.baselineForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
     // this.baselineForm.disable();
     // this.modificationForm = this.pumpFluidService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
-    this.initPumpSpecifiedEfficiency();
+   // this.initPumpSpecifiedEfficiency();
     this.initMotorDrive();
     this.initPumpType();
     this.initPumpData();
@@ -66,6 +71,13 @@ export class PumpDataFormComponent implements OnInit {
     } else {
       this.showPumpType = false;
     }
+
+    if (this.modificationForm.controls.pumpType.value == 11) {
+      this.modificationForm.controls.pumpType.disable();
+    } else {
+      this.modificationForm.controls.specifiedPumpEfficiency.disable();
+      this.showPumpType == true;
+    }
   }
 
   initMotorDrive() {
@@ -76,17 +88,16 @@ export class PumpDataFormComponent implements OnInit {
     }
   }
 
-  initPumpSpecifiedEfficiency() {
-    if (this.baselineForm.controls.specifiedPumpEfficiency.value != this.modificationForm.controls.specifiedPumpEfficiency.value) {
-      this.showPumpSpecified = true;
-    } else {
-      this.showPumpSpecified = false;
-    }
-
-  }
+  // initPumpSpecifiedEfficiency() {
+  //   if (this.baselineForm.controls.specifiedPumpEfficiency.value != this.modificationForm.controls.specifiedPumpEfficiency.value) {
+  //     this.showPumpSpecified = true;
+  //   } else {
+  //     this.showPumpSpecified = false;
+  //   }
+  // }
 
   initPumpData() {
-    if (this.showMotorDrive || this.showPumpSpecified || this.showPumpType) {
+    if (this.showMotorDrive || this.showPumpType) {
       this.showPumpData = true;
     } else {
       this.showPumpData = false;
@@ -95,20 +106,20 @@ export class PumpDataFormComponent implements OnInit {
 
   togglePumpData() {
     if (this.showPumpData == false) {
-      this.showPumpSpecified = false;
+      // this.showPumpSpecified = false;
       this.showPumpType = false;
       this.showMotorDrive = false;
-      this.togglePumpSpecifiedEfficiency();
+     // this.togglePumpSpecifiedEfficiency();
       this.togglePumpType();
       this.toggleMotorDrive();
     }
   }
-  togglePumpSpecifiedEfficiency() {
-    if (this.showPumpSpecified == false) {
-      this.modificationForm.controls.specifiedPumpEfficiency.patchValue(this.baselineForm.controls.specifiedPumpEfficiency.value);
-      this.calculate();
-    }
-  }
+  // togglePumpSpecifiedEfficiency() {
+  //   if (this.showPumpSpecified == false) {
+  //     // this.modificationForm.controls.specifiedPumpEfficiency.patchValue(this.baselineForm.controls.specifiedPumpEfficiency.value);
+  //     this.calculate();
+  //   }
+  // }
 
   togglePumpType() {
     if (this.showPumpType == false) {
@@ -123,10 +134,34 @@ export class PumpDataFormComponent implements OnInit {
     }
   }
 
+  enablePumpType() {
+    this.modificationForm.controls.pumpType.patchValue(this.baselineForm.controls.pumpType.value);
+    this.modificationForm.controls.pumpType.enable();
+    this.getPumpEfficiency();
+  }
+
+  disablePumpType() {
+    let tmpResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
+    this.modificationForm.controls.specifiedPumpEfficiency.patchValue(tmpResults.pump_efficiency);
+    this.modificationForm.controls.specifiedPumpEfficiency.enable();
+    this.modificationForm.controls.pumpType.patchValue(11);
+    this.modificationForm.controls.pumpType.disable();
+    this.calculate();
+  }
+
+
+  getPumpEfficiency() {
+    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.modificationForm.controls.pumpType.value, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings).max;
+    this.modificationForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency);
+    this.modificationForm.controls.specifiedPumpEfficiency.disable();
+    this.calculate();
+  }
+
   setPumpTypes() {
     //only needed if we allow modifiying baseline
     //this.baselineForm = this.pumpFluidService.updateSpecifiedPumpEfficiency(this.baselineForm);
     this.modificationForm = this.pumpFluidService.updateSpecifiedPumpEfficiency(this.modificationForm);
+    this.getPumpEfficiency();
     this.calculate();
   }
 

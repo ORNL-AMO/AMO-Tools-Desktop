@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { PSAT } from '../../shared/models/psat';
+import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Modification } from '../../shared/models/psat';
 import { Subscription } from 'rxjs';
 import { PsatTabService } from '../psat-tab.service';
+import { PsatService } from '../psat.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-add-modification',
@@ -18,10 +20,14 @@ export class AddModificationComponent implements OnInit {
   save = new EventEmitter<Modification>();
   @Input()
   modificationExists: boolean;
+  @Input()
+  settings: Settings;
+
+
   newModificationName: string;
   currentTab: string;
   tabSubscription: Subscription;
-  constructor(private psatTabService: PsatTabService) { }
+  constructor(private psatTabService: PsatTabService, private psatService: PsatService) { }
 
   ngOnInit() {
     if (this.modifications) {
@@ -39,6 +45,7 @@ export class AddModificationComponent implements OnInit {
   }
 
   addModification() {
+    let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     let tmpModification: Modification = {
       psat: {
         name: this.newModificationName,
@@ -51,6 +58,9 @@ export class AddModificationComponent implements OnInit {
       },
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this.psat.inputs)));
+    tmpModification.psat.inputs.pump_style = 11;
+    tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
+    console.log(tmpModification.psat.inputs.pump_specified);
     this.save.emit(tmpModification)
   }
 }

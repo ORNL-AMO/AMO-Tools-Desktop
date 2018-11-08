@@ -55,7 +55,7 @@
         <span *ngIf="psatForm.controls.flowRate.errors.min">Value can't be less than
           {{psatForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.flowError !== null && !psatForm.controls.flowRate.invalid && !psatForm.controls.flowRate.pristine">{{fieldDataWarnings.flowError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.flowError !== null && !psatForm.controls.flowRate.invalid && !psatForm.controls.flowRate.pristine">{{fieldDataWarnings.flowError}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isHeadDifferent(), 'invalid': psatForm.controls.head.invalid}">

@@ -51,15 +51,15 @@ export class PumpFluidComponent implements OnInit {
     else {
       this.idString = 'psat_baseline';
     }
-    this.pumpTypes = pumpTypesConstant;
+    this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
     if (this.baseline) {
       //remove specified if baseline
       this.pumpTypes.pop();
     }
     //initialize constants
-    this.drives = driveConstants;
-    this.fluidProperties = fluidProperties;
-    this.fluidTypes = fluidTypes;
+    this.drives = JSON.parse(JSON.stringify(driveConstants));
+    this.fluidProperties = JSON.parse(JSON.stringify(fluidProperties));
+    this.fluidTypes = JSON.parse(JSON.stringify(fluidTypes));
 
     this.initForm();
     this.getTemperatureUnit();

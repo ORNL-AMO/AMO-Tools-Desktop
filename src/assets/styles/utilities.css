@@ -115,14 +115,18 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .psat .form-group.invalid .input-group,
 .psat .form-group.indicate-different.invalid .input-group,
 .psat .form-group.indicate-different.error.invalid .input-group,
+.psat .form-group.error.invalid .input-group,
 .psat .form-group.invalid > .form-control ,
 .psat .form-group.indicate-different.invalid > .form-control ,
 .psat .form-group.indicate-different.error.invalid > .form-control,
+.psat .form-group.error.invalid > .form-control,
 .fsat .form-group.invalid .input-group,
 .fsat .form-group.indicate-different.invalid .input-group,
 .fsat .form-group.indicate-different.error.invalid .input-group,
+.fsat .form-group.error.invalid .input-group,
 .fsat .form-group.invalid > .form-control ,
 .fsat .form-group.indicate-different.invalid > .form-control ,
+.fsat .form-group.error.invalid > .form-control,
 .fsat .form-group.indicate-different.error.invalid > .form-control  {
     border: red solid 2px;
     /* box-shadow: 0px 0px 1px red; */

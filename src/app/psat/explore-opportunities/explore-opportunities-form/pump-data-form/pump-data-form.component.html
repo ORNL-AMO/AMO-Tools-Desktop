@@ -20,7 +20,7 @@
   <!--Modification Pump Type-->
   <form [formGroup]="modificationForm">
     <!--pumpType-->
-    <div class="form-group">
+    <div class="form-group" *ngIf="!modificationForm.controls.pumpType.disabled">
       <label for="modificationPumpType">Modification Pump Type</label>
       <select class="form-control" name="modificationPumpType" id="modificationPumpType" (change)="setPumpTypes()"
         (focus)="focusField('pumpType')" formControlName="pumpType">
@@ -28,8 +28,11 @@
       </select>
     </div>
     <!--specifiedPumpEfficiency-->
-    <div class="form-group" *ngIf="modificationForm.controls.pumpType.value == 11" [ngClass]="{'invalid':modificationForm.controls.specifiedPumpEfficiency.invalid}">
-      <label for="modificationPumpSpecifiedEfficiency">Modification Pump Specified Efficiency</label>
+    <div class="form-group" [ngClass]="{'invalid':modificationForm.controls.specifiedPumpEfficiency.invalid}">
+      <label id="pumpTypeHelp" for="modificationPumpSpecifiedEfficiency">Modification Pump Efficiency
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enablePumpType()" *ngIf="modificationForm.controls.pumpType.disabled">Modify Pump Type</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()" *ngIf="modificationForm.controls.specifiedPumpEfficiency.disabled">Use Baseline Efficiency</a>
+      </label>
       <div class="input-group">
         <input name="modificationPumpSpecifiedEfficiency" type="number" step="any" id="modificationPumpSpecifiedEfficiency"
           class="form-control" (focus)="focusField('pumpSpecified')" (input)="calculate()" formControlName="specifiedPumpEfficiency" />
@@ -43,11 +46,21 @@
           {{modificationForm.controls.specifiedPumpEfficiency.errors.min.min}} %.</span>
       </span>
     </div>
+    <div class="text-center small help-text" *ngIf="modificationForm.controls.pumpType.disabled">
+      The efficiency of your pump has been calculated based on your system setup. Either directly modify your
+      efficiency or click <strong>"Modify Pump
+      Type"</strong> to estimate your pump efficiency based on a different pump type.
+    </div>
+    <div class="text-center small help-text" *ngIf="modificationForm.controls.specifiedPumpEfficiency.disabled">
+      The efficiency of your pump has been calculated based on your <strong>flow rate</strong> and selected <strong>pump type</strong>. Click <strong>"Use Baseline Efficiency"</strong>
+      to use the efficiency calculated by your system setup.
+    </div>
   </form>
 </li>
 <div *ngIf="!isVFD" class="checkbox">
   <label class="group-label" for="modifyMotorDrive">
-    <input type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()" [(ngModel)]="showMotorDrive" />
+    <input type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()"
+      [(ngModel)]="showMotorDrive" />
     Install More Efficient Drive Type
   </label>
 </div>
