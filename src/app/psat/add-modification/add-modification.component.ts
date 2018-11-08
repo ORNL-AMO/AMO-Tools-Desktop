@@ -45,7 +45,6 @@ export class AddModificationComponent implements OnInit {
   }
 
   addModification() {
-    let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     let tmpModification: Modification = {
       psat: {
         name: this.newModificationName,
@@ -59,6 +58,7 @@ export class AddModificationComponent implements OnInit {
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this.psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;
+    let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     console.log(tmpModification.psat.inputs.pump_specified);
     this.save.emit(tmpModification)
