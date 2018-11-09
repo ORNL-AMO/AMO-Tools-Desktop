@@ -181,6 +181,14 @@ export const volume = {
             }
             , to_anchor: 128
         }
+        , kgal: {
+            name: {
+                singular: 'Thousand U.S. Gallons'
+                , plural: 'Thousands U.S. Gallons' ,
+                 display:  '(kgal)'
+            }
+            , to_anchor: 128/1000
+        }
         , ft3: {
             name: {
                 singular: 'Cubic foot'
