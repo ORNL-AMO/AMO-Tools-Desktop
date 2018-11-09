@@ -9,7 +9,7 @@ import { FanFieldDataService } from '../fan-field-data/fan-field-data.service';
 import { FanSetupService } from '../fan-setup/fan-setup.service';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
 import { Settings } from '../../shared/models/settings';
-import { FanFluidWarnings, FsatWarningService, FanMotorWarnings, FanFieldDataWarnings } from '../fsat-warning.service';
+import { FsatWarningService, FanMotorWarnings, FanFieldDataWarnings } from '../fsat-warning.service';
 
 @Component({
   selector: 'app-fsat-tabs',
@@ -144,12 +144,10 @@ export class FsatTabsComponent implements OnInit {
 
   checkFluidStatus() {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
-    let fanFluidWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.fsat.baseGasDensity, this.settings);
-    let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(fanFluidWarnings);
+    // let fanFluidWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.fsat.baseGasDensity, this.settings);
+    // let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(fanFluidWarnings);
     if (!fluidValid) {
       this.fluidClassStatus = ['missing-data'];
-    } else if (checkWarnings) {
-      this.fluidClassStatus = ['input-error'];
     } else {
       this.fluidClassStatus = ['success'];
     }
