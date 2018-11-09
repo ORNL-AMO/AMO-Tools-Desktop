@@ -187,7 +187,7 @@ export const volume = {
                 , plural: 'Thousands U.S. Gallons' ,
                  display:  '(kgal)'
             }
-            , to_anchor: 128/1000
+            , to_anchor: 128*1000
         }
         , ft3: {
             name: {

@@ -242,13 +242,13 @@ export const volumeFlowRate = {
             }
             , to_anchor: 32 / 15
         }
-        , 'kgpd': {
+        , 'TGD': {
             name: {
                 singular: 'Thousand Gallons per day'
                 , plural: 'Thousands Gallons per day' ,
-                 display:  '(kgpd)'
+                 display:  '(TGD)'
             }
-            , to_anchor: (32 / 15)*(60*24/1000)
+            , to_anchor: 128000 / 86400
         },
         'MGD':
         {
