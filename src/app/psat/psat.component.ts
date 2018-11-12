@@ -87,7 +87,7 @@ export class PsatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.psatService.test();
+    // this.psatService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -387,7 +387,6 @@ export class PsatComponent implements OnInit {
     tmpModification.psat.inputs.pump_style = 11;
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this._psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
-    console.log(tmpModification.psat.inputs.pump_specified);
     this.saveNewMod(tmpModification)
   }
 }
