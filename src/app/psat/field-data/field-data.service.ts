@@ -38,7 +38,6 @@ export class FieldDataService {
       motorKW: [psatInputs.motor_field_power, motorKwValidators],
       motorAmps: [psatInputs.motor_field_current, motorAmpsValidators],
       measuredVoltage: [psatInputs.motor_field_voltage, measuredVoltageValidators],
-      optimizeCalculation: [psatInputs.optimize_calculation],
       sizeMargin: [psatInputs.margin, sizeMarginValidators],
       implementationCosts: [psatInputs.cost]
     });
@@ -60,7 +59,6 @@ export class FieldDataService {
     psatInputs.motor_field_power = form.controls.motorKW.value;
     psatInputs.motor_field_current = form.controls.motorAmps.value;
     psatInputs.motor_field_voltage = form.controls.measuredVoltage.value;
-    psatInputs.optimize_calculation = form.controls.optimizeCalculation.value;
     psatInputs.margin = form.controls.sizeMargin.value;
     psatInputs.implementationCosts = form.controls.implementationCosts.value;
     return psatInputs;

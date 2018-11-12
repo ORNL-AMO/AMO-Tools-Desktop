@@ -37,13 +37,7 @@ export class JsonToCsvService {
   getPsatCsvData(assessment: Assessment, settings: Settings, psat: PSAT) {
     let tmpResults;
     let isOptimized;
-    if (psat.inputs.optimize_calculation) {
-      isOptimized = 'Yes';
-      tmpResults = this.psatService.resultsOptimal(psat.inputs, settings);
-    } else {
-      isOptimized = 'No';
-      tmpResults = this.psatService.resultsExisting(psat.inputs, settings);
-    }
+    tmpResults = this.psatService.resultsExisting(psat.inputs, settings);
     let tmpPsatCsvData: PsatCsvData = {
       Name: assessment.name,
       CreatedDate: moment(assessment.createdDate).format("YYYY-MM-DD H:mm A"),
@@ -177,7 +171,7 @@ export interface PsatCsvData {
   AnnualEnergyUnit: string
   AnnualCost: number,
   AnnualCostUnit: string,
-  Optimized:string
+  Optimized: string
 }
 
 export const PsatCsvDataFields = [

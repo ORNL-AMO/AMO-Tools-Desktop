@@ -47,7 +47,7 @@ export class PsatService {
       inputsCpy.fluidTemperature = this.convertUnitsService.value(inputsCpy.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
     //TODO: remove eventually. this is here for support in removing operating_fraction from suite v0.3.2
-    if(inputsCpy.operating_fraction && !inputsCpy.operating_hours){
+    if (inputsCpy.operating_fraction && !inputsCpy.operating_hours) {
       inputsCpy.operating_hours = inputsCpy.operating_fraction * 8760;
     }
     //TODO: Remove after demo 11/8/18
@@ -77,21 +77,20 @@ export class PsatService {
     return tmpResults;
   }
 
-  resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
+  // resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+  //   let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
 
-    //call addon resultsOptimal
-    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(tmpInputs);
-    if (settings.powerMeasurement != 'hp') {
-      tmpResults = this.convertOutputs(tmpResults, settings);
-    }
-    tmpResults = this.roundResults(tmpResults);
-    return tmpResults
-  }
+  //   //call addon resultsOptimal
+  //   let tmpResults: PsatOutputs = psatAddon.resultsOptimal(tmpInputs);
+  //   if (settings.powerMeasurement != 'hp') {
+  //     tmpResults = this.convertOutputs(tmpResults, settings);
+  //   }
+  //   tmpResults = this.roundResults(tmpResults);
+  //   return tmpResults
+  // }
 
-  resultsModified(psatInputs: PsatInputs, settings: Settings, baseline_pump_efficiency: number): PsatOutputs {
+  resultsModified(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     let tmpInputs: any = this.convertInputs(psatInputs, settings);
-    tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
     let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
@@ -136,59 +135,6 @@ export class PsatService {
     return roundResults;
   }
 
-  resultsExistingAndOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputsExistingOptimal {
-    psatInputs = this.convertInputs(psatInputs, settings);
-
-    let tmpResults = psatAddon.resultsExistingAndOptimal(psatInputs);
-
-    if (settings.powerMeasurement != 'hp') {
-      tmpResults.motor_rated_power[0] = this.convertUnitsService.value(tmpResults.motor_rated_power[0]).from('hp').to(settings.powerMeasurement);
-      tmpResults.motor_rated_power[1] = this.convertUnitsService.value(tmpResults.motor_rated_power[1]).from('hp').to(settings.powerMeasurement);
-
-      tmpResults.motor_shaft_power[0] = this.convertUnitsService.value(tmpResults.motor_shaft_power[0]).from('hp').to(settings.powerMeasurement);
-      tmpResults.motor_shaft_power[1] = this.convertUnitsService.value(tmpResults.motor_shaft_power[1]).from('hp').to(settings.powerMeasurement);
-
-      tmpResults.pump_shaft_power[0] = this.convertUnitsService.value(tmpResults.pump_shaft_power[0]).from('hp').to(settings.powerMeasurement);
-      tmpResults.pump_shaft_power[1] = this.convertUnitsService.value(tmpResults.pump_shaft_power[1]).from('hp').to(settings.powerMeasurement);
-
-    }
-    let tmpOutputs: PsatOutputsExistingOptimal = this.parseResultsExistingOptimal(tmpResults);
-    return tmpOutputs;
-  }
-
-  parseResultsExistingOptimal(results: PsatCalcResults): PsatOutputsExistingOptimal {
-    let tmpOutputs: PsatOutputsExistingOptimal = {
-      existing: {
-        pump_efficiency: this.roundVal(results.pump_efficiency[0], 2),
-        motor_rated_power: this.roundVal(results.motor_rated_power[0], 2),
-        motor_shaft_power: this.roundVal(results.motor_shaft_power[0], 2),
-        pump_shaft_power: this.roundVal(results.pump_shaft_power[0], 2),
-        motor_efficiency: this.roundVal(results.motor_efficiency[0], 2),
-        motor_power_factor: this.roundVal(results.motor_power_factor[0], 2),
-        motor_current: this.roundVal(results.motor_current[0], 2),
-        motor_power: this.roundVal(results.motor_power[0], 2),
-        annual_energy: this.roundVal(results.annual_energy[0], 2),
-        annual_cost: this.roundVal(results.annual_cost[0], 2),
-        annual_savings_potential: this.roundVal(results.annual_savings_potential[0], 0),
-        optimization_rating: this.roundVal(results.optimization_rating[0], 2)
-      },
-      optimal: {
-        pump_efficiency: this.roundVal(results.pump_efficiency[1], 2),
-        motor_rated_power: this.roundVal(results.motor_rated_power[1], 2),
-        motor_shaft_power: this.roundVal(results.motor_shaft_power[1], 2),
-        pump_shaft_power: this.roundVal(results.pump_shaft_power[1], 2),
-        motor_efficiency: this.roundVal(results.motor_efficiency[1], 2),
-        motor_power_factor: this.roundVal(results.motor_power_factor[1], 2),
-        motor_current: this.roundVal(results.motor_current[1], 2),
-        motor_power: this.roundVal(results.motor_power[1], 2),
-        annual_energy: this.roundVal(results.annual_energy[1], 2),
-        annual_cost: this.roundVal(results.annual_cost[1], 2),
-        annual_savings_potential: this.roundVal(results.annual_savings_potential[1], 0),
-        optimization_rating: this.roundVal(results.optimization_rating[1], 2)
-      }
-    }
-    return tmpOutputs;
-  }
   //CALCULATORS
   headToolSuctionTank(
     specificGravity: number,
@@ -510,21 +456,13 @@ export class PsatService {
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(baselinePsatInputs));
     let isPsatValid: boolean = this.isPsatValid(psatInputs, true);
     if (isPsatValid) {
-      if (psatInputs.optimize_calculation) {
-        baselineResults = this.resultsOptimal(psatInputs, settings);
-      } else {
-        baselineResults = this.resultsExisting(psatInputs, settings);
-      }
+      baselineResults = this.resultsExisting(psatInputs, settings);
     }
     if (modificationPsatInputs) {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
       isPsatValid = this.isPsatValid(modInputs, false);
       if (isPsatValid) {
-        if (modInputs.optimize_calculation) {
-          modificationResults = this.resultsOptimal(modInputs, settings);
-        } else {
-          modificationResults = this.resultsModified(modInputs, settings, baselineResults.pump_efficiency);
-        }
+        modificationResults = this.resultsModified(modInputs, settings);
       }
     }
     annualSavings = baselineResults.annual_cost - modificationResults.annual_cost;

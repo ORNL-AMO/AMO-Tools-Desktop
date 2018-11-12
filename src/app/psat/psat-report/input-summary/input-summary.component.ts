@@ -40,7 +40,6 @@ export class InputSummaryComponent implements OnInit {
   ampsDiff: boolean = false;
   kwDiff: boolean = false;
   fieldVoltageDiff: boolean = false;
-  anyOptimized: boolean = false;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -163,9 +162,6 @@ export class InputSummaryComponent implements OnInit {
         // fieldVoltageDiff
         if (mod.psat.inputs.motor_field_voltage != this.psat.inputs.motor_field_voltage) {
           this.fieldVoltageDiff = true;
-        }
-        if(mod.psat.inputs.optimize_calculation){
-          this.anyOptimized = true;
         }
       })
     }

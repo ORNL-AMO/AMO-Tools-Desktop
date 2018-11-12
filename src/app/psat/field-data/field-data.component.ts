@@ -82,9 +82,6 @@ export class FieldDataComponent implements OnInit {
       } else {
         this.enableForm();
       }
-      if (!this.baseline) {
-        this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-      }
     }
     if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
       this.init();
@@ -97,9 +94,6 @@ export class FieldDataComponent implements OnInit {
     }
     this.psatForm = this.fieldDataService.getFormFromObj(this.psat.inputs, this.baseline);
     this.helpPanelService.currentField.next('operatingHours');
-    if (!this.baseline) {
-      this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-    }
     this.checkWarnings();
   }
 
@@ -174,20 +168,6 @@ export class FieldDataComponent implements OnInit {
       })
     }
     this.headToolModal.hide();
-  }
-
-  optimizeCalc(bool: boolean) {
-    if (!bool || !this.selected) {
-      this.psatForm.controls.sizeMargin.disable();
-      // this.psatForm.controls.fixedSpeed.disable();
-    } else {
-      this.psatForm.controls.sizeMargin.enable();
-      // this.psatForm.controls.fixedSpeed.enable();
-    }
-    this.psatForm.patchValue({
-      optimizeCalculation: bool
-    });
-    this.save();
   }
 
   canCompare() {

@@ -104,24 +104,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.modificationMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
   }
 
-
-  toggleOptimized() {
-    if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
-      this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
-      this.showSizeMargin = false;
-    }
-    this.calculate();
-  }
-
-  checkOptimized() {
-    if (this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-      if (this.psat.modifications[this.exploreModIndex].psat.inputs.margin != 0) {
-        this.showSizeMargin = true;
-      }
-    }
-  }
-
   addNewMod(){
     this.emitAddNewMod.emit(true);
   }

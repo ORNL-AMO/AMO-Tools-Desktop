@@ -190,12 +190,7 @@ export class ReportRollupService {
           if (val.assessment.psat.modifications.length != 0) {
             let modResultsArr = new Array<PsatOutputs>();
             val.assessment.psat.modifications.forEach(mod => {
-              let tmpResults;
-              if (mod.psat.inputs.optimize_calculation) {
-                tmpResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(mod.psat.inputs)), val.settings);
-              } else {
-                tmpResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), val.settings, baselineResults.pump_efficiency);
-              }
+              let tmpResults: PsatOutputs = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), val.settings);
               modResultsArr.push(tmpResults);
             })
             tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
@@ -217,13 +212,8 @@ export class ReportRollupService {
   getResultsFromSelected(selectedPsats: Array<PsatCompare>) {
     let tmpResultsArr = new Array<PsatResultsData>();
     selectedPsats.forEach(val => {
-      let modificationResults;
-      let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.baseline.inputs)), val.settings);
-      if (val.modification.inputs.optimize_calculation) {
-        modificationResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings);
-      } else {
-        modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings, baselineResults.pump_efficiency);
-      }
+      let baselineResults: PsatOutputs = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.baseline.inputs)), val.settings);
+      let modificationResults: PsatOutputs = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings);
       tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     })
     this.psatResults.next(tmpResultsArr);
@@ -299,8 +289,8 @@ export class ReportRollupService {
     selectedPhasts.forEach(val => {
       let baselineResults = this.executiveSummaryService.getSummary(val.baseline, false, val.settings, val.baseline);
       let modificationResults = this.executiveSummaryService.getSummary(val.modification, true, val.settings, val.baseline, baselineResults);
-      let baselineResultData = this.phastResultsService.getResults(val.baseline, val.settings, );
-      let modificationResultData = this.phastResultsService.getResults(val.modification, val.settings, );
+      let baselineResultData = this.phastResultsService.getResults(val.baseline, val.settings);
+      let modificationResultData = this.phastResultsService.getResults(val.modification, val.settings);
       tmpResultsArr.push({
         baselineResults: baselineResults,
         modificationResults: modificationResults,

@@ -34,7 +34,6 @@ export const MockPsat: Assessment = {
             motor_field_voltage: 480,
             cost_kw_hour: 0.05,
             cost: 0.05,
-            optimize_calculation: false,
             implementationCosts: null,
             fluidType: "Water",
             fluidTemperature: 68
@@ -70,7 +69,6 @@ export const MockPsat: Assessment = {
                         motor_field_voltage: 480,
                         cost_kw_hour: 0.05,
                         cost: 0.05,
-                        optimize_calculation: false,
                         implementationCosts: null,
                         fluidType: "Water",
                         fluidTemperature: 68
@@ -112,7 +110,6 @@ export const MockPsat: Assessment = {
                         motor_field_voltage: 480,
                         cost_kw_hour: 0.05,
                         cost: 0.05,
-                        optimize_calculation: true,
                         implementationCosts: null,
                         fluidType: "Water",
                         fluidTemperature: 68
@@ -154,7 +151,6 @@ export const MockPsat: Assessment = {
                         motor_field_voltage: 480,
                         cost_kw_hour: 0.05,
                         cost: 0.05,
-                        optimize_calculation: false,
                         implementationCosts: null,
                         fluidType: "Water",
                         fluidTemperature: 100
@@ -202,8 +198,7 @@ export const MockPsat: Assessment = {
                         cost_kw_hour: 0.05,
                         cost: 0.05,
                         fluidType: "Water",
-                        fluidTemperature: 68,
-                        optimize_calculation: true
+                        fluidTemperature: 68
                     },
                     name: "Opportunities Modification"
                 },
