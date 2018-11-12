@@ -1,4 +1,4 @@
-<div class="d-flex flex-column mr-3 ml-3">
+<div class="d-flex flex-column mr-3 ml-3 mb-4">
   <div class="w-100 justify-content-center p-2 d-flex">
     <button class="btn btn-primary" (click)="addNewMod()">Add New Scenario</button>
   </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
-        <input type="checkbox" id="modifyCalculationMethod" (change)="toggleOptimized()" (focus)="focusField('modifyCalculationMethod')"
+        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')"
           [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.isVFD" /> Install VFD
       </label>
     </div>

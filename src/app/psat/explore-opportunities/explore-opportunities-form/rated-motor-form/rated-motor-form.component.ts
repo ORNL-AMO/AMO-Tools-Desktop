@@ -150,6 +150,7 @@ export class RatedMotorFormComponent implements OnInit {
 
   changeModificationEfficiencyClass() {
     this.modificationForm = this.motorService.updateFormEfficiencyValidators(this.modificationForm);
+    this.getModificationFLA();
     this.calculate();
   }
 

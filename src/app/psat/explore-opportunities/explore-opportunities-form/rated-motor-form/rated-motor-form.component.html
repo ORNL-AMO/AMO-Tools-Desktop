@@ -46,7 +46,7 @@
       <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
       <div class="input-group">
         <input name="modificationMotorEfficiency" type="number" step="any" id="modificationMotorEfficiency" class="form-control"
-          (focus)="focusField('motorEfficiency')" formControlName="efficiency" (input)="calculate()" />
+          (focus)="focusField('motorEfficiency')" formControlName="efficiency" (input)="getModificationFLA()" />
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.efficiency.invalid && !modificationForm.controls.efficiency.pristine">
@@ -60,9 +60,9 @@
   </form>
 </li>
 <!--Modify Full Load Amps-->
-<li *ngIf="showRatedMotorData">
+<!-- <li *ngIf="showRatedMotorData">
   <form [formGroup]="baselineForm">
-    <!--fullLoadAmps-->
+    <!--fullLoadAmps--
     <div class="form-group" [ngClass]="{'error': baselineWarnings.flaError !== null, 'invalid': baselineForm.controls.fullLoadAmps.invalid}">
       <label for="baselineFLA">Baseline Full Load Amps</label>
       <div class="input-group">
@@ -76,9 +76,9 @@
       <span class="alert-warning small pull-right" *ngIf="baselineWarnings.flaError !== null && !baselineForm.controls.fullLoadAmps.invalid && baselineForm.controls.fullLoadAmps.pristine">{{baselineWarnings.flaError}}</span>
     </div>
   </form>
-  <!--Modification Full Load Amps-->
+  <!--Modification Full Load Amps--
   <form [formGroup]="modificationForm">
-    <!--fullLoadAmps-->
+    <!--fullLoadAmps--
     <div class="form-group" [ngClass]="{'error': modificationWarnings.flaError !== null, 'invalid': modificationForm.controls.fullLoadAmps.invalid}">
       <label for="modificationFLA">Modification Full Load Amps
         <a class="form-text small click-link" id="flaHelp" (click)="getModificationFLA()" *ngIf="!disableFla()">Estimate
@@ -95,4 +95,4 @@
       <span class="alert-warning small pull-right" *ngIf="modificationWarnings.flaError !== null && !modificationForm.controls.fullLoadAmps.invalid && !modificationForm.controls.fullLoadAmps.pristine">{{modificationWarnings.flaError}}</span>
     </div>
   </form>
-</li>
+</li> -->

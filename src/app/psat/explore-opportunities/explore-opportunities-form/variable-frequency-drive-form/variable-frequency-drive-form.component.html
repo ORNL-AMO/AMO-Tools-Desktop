@@ -39,7 +39,7 @@
 <li>
   <form [formGroup]="baselineFieldDataForm">
     <div class="form-group" [ngClass]="{'invalid': baselineFieldDataForm.controls.head.invalid}">
-      <label for="baselineHead">Baseline head</label>
+      <label for="baselineHead">Baseline Head</label>
       <div class="input-group">
         <input name="baselineHead" type="number" step="any" id="baselineHead" class="form-control" (focus)="focusField('head')"
           (input)="calculate()" formControlName="head" />
@@ -56,7 +56,7 @@
   </form>
   <form [formGroup]="modificationFieldDataForm">
     <div class="form-group" [ngClass]="{'invalid': modificationFieldDataForm.controls.head.invalid}">
-      <label for="modificationHead">Modification head</label>
+      <label for="modificationHead">Modification Head</label>
       <div class="input-group">
         <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control" (focus)="focusField('head')"
           (input)="calculate()" formControlName="head" />
@@ -72,9 +72,9 @@
     </div>
   </form>
 </li>
-<li>
+<!-- <li>
   <form [formGroup]="baselinePumpFluidForm">
-    <!--drive-->
+    <!--drive--
     <div class="form-group">
       <label for="baselineMotorDrive">Baseline Motor Drive</label>
       <select class="form-control" name="baselineMotorDrive" id="baselineMotorDrive" (change)="setMotorDrive()" (focus)="focusField('drive')"
@@ -82,7 +82,7 @@
         <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
       </select>
     </div>
-    <!--specifiedDriveEfficiency-->
+    <!--specifiedDriveEfficiency--
     <div class="form-group" *ngIf="baselinePumpFluidForm.controls.drive.value == 4" [ngClass]="{'invalid':baselinePumpFluidForm.controls.specifiedDriveEfficiency.invalid}">
       <label for="baselineSpecifiedDriveEfficiency">Baseline Drive Efficiency</label>
       <div class="input-group">
@@ -99,9 +99,9 @@
       </span>
     </div>
   </form>
-  <!--Modification Motor Drive-->
+  <!--Modification Motor Drive--
   <form [formGroup]="modificationPumpFluidForm">
-    <!--drive-->
+    <!--drive--
     <div class="form-group">
       <label for="modificationMotorDrive">Modification Motor Drive</label>
       <select class="form-control" name="modificationMotorDrive" id="modificationMotorDrive" (change)="setMotorDrive()"
@@ -109,7 +109,7 @@
         <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
       </select>
     </div>
-    <!--specifiedDriveEfficiency-->
+    <!--specifiedDriveEfficiency--
     <div class="form-group" *ngIf="modificationPumpFluidForm.controls.drive.value == 4" [ngClass]="{'invalid':modificationPumpFluidForm.controls.specifiedDriveEfficiency.invalid}">
       <label for="modificationSpecifiedDriveEfficiency">Modification Drive Efficiency</label>
       <div class="input-group">
@@ -127,4 +127,4 @@
       </span>
     </div>
   </form>
-</li>
+</li> -->
