@@ -64,6 +64,7 @@ export class SystemDataFormComponent implements OnInit {
         this.initCost();
         this.initFlowRate();
         this.initPressure();
+        this.initOperatingHours();
         // this.initOpFraction();
         this.initSystemData();
         this.checkWarnings();
@@ -94,8 +95,8 @@ export class SystemDataFormComponent implements OnInit {
         }
     }
 
-    initOpFraction() {
-        if (this.baselineForm.controls.operatingFraction.value != this.modificationForm.controls.operatingFraction.value) {
+    initOperatingHours() {
+        if (this.baselineForm.controls.operatingHours.value != this.modificationForm.controls.operatingHours.value) {
             this.showOperatingHours = true;
         } else {
             this.showOperatingHours = false;
