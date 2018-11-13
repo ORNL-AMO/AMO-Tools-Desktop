@@ -109,7 +109,7 @@ export class FsatService {
   //fsat results
   getResults(fsat: FSAT, resultType: string, settings: Settings): FsatOutput {
     if (this.checkValid(fsat)) {
-      if(!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction){
+      if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
         fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
       }
       let input: FsatInput = {
@@ -145,19 +145,10 @@ export class FsatService {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
         results = this.fanResultsExisting(input);
-      } else if (resultType == 'optimal') {
-        input.fanType = fsat.fanSetup.fanType;
-        if (fsat.fanSetup.fanType == 12) {
-          input.isSpecified = true;
-          input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
-        }
-        results = this.fanResultsOptimal(input);
       } else if (resultType == 'modified') {
         input.fanType = fsat.fanSetup.fanType;
-        if (fsat.fanSetup.fanType == 12) {
-          input.isSpecified = true;
-          input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
-        }
+        input.isSpecified = true;
+        input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
         results = this.fanResultsModified(input);
       }
       results = this.convertFsatService.convertFsatOutput(results, settings);
@@ -175,9 +166,9 @@ export class FsatService {
   fanResultsModified(input: FsatInput): FsatOutput {
     return fanAddon.fanResultsModified(input);
   }
-  fanResultsOptimal(input: FsatInput): FsatOutput {
-    return fanAddon.fanResultsOptimal(input);
-  }
+  // fanResultsOptimal(input: FsatInput): FsatOutput {
+  //   return fanAddon.fanResultsOptimal(input);
+  // }
 
   getSavingsPercentage(baselineCost: number, modificationCost: number): number {
     let tmpSavingsPercent = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));

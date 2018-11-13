@@ -64,7 +64,7 @@ export class SystemDataFormComponent implements OnInit {
         this.initCost();
         this.initFlowRate();
         this.initPressure();
-        this.initOpFraction();
+        // this.initOpFraction();
         this.initSystemData();
         this.checkWarnings();
     }

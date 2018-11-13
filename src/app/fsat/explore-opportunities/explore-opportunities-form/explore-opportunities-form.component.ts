@@ -27,7 +27,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   constructor(private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService) { }
 
   ngOnInit() {
-    this.checkOptimized();
+    //this.checkOptimized();
   }
   
 
@@ -37,26 +37,26 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.drive);
+    //console.log(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.drive);
     this.emitSave.emit(true);
   }
 
-  toggleOptimized() {
-    if (!this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.optimize) {
-      // this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.fixedSpeed = 0;
-      this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.sizeMargin = 0;
-      this.showSizeMargin = false;
-    }
-    this.calculate();
-  }
+  // toggleOptimized() {
+  //   if (!this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.optimize) {
+  //     // this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.fixedSpeed = 0;
+  //     this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.sizeMargin = 0;
+  //     this.showSizeMargin = false;
+  //   }
+  //   this.calculate();
+  // }
 
-  checkOptimized() {
-    if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.optimize) {
-      if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.sizeMargin != 0) {
-        this.showSizeMargin = true;
-      }
-    }
-  }
+  // checkOptimized() {
+  //   if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.optimize) {
+  //     if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.sizeMargin != 0) {
+  //       this.showSizeMargin = true;
+  //     }
+  //   }
+  // }
 
   focusField(str: string){
     this.helpPanelService.currentField.next(str);

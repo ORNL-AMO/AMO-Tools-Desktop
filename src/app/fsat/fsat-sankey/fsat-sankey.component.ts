@@ -113,26 +113,21 @@ export class FsatSankeyComponent implements OnInit {
 
   getResults() {
     let energyInput: number, motorLoss: number, driveLoss: number, fanLoss: number, usefulOutput: number;
-    let motorShaftPower: number, fanShaftPower: number;
+  //  let motorShaftPower: number, fanShaftPower: number;
     let resultType: string;
 
     if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name == 'Baseline') {
       resultType = 'existing';
     }
     else {
-      if (this.fsat.fanMotor.optimize) {
-        resultType = 'optimal';
-      }
-      else {
-        resultType = 'modified';
-      }
+      resultType = 'modified';
     }
 
     let tmpOutput = this.fsatService.getResults(this.fsat, resultType, this.settings);
 
     if (this.settings.fanPowerMeasurement === 'hp') {
-      motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
-      fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
+      // motorShaftPower = this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
+      // fanShaftPower = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW');
       energyInput = tmpOutput.motorPower;
       motorLoss = energyInput - this.convertUnitsService.value(tmpOutput.motorShaftPower).from('hp').to('kW');
       driveLoss = this.convertUnitsService.value(tmpOutput.motorShaftPower - tmpOutput.fanShaftPower).from('hp').to('kW');
@@ -140,8 +135,8 @@ export class FsatSankeyComponent implements OnInit {
       usefulOutput = this.convertUnitsService.value(tmpOutput.fanShaftPower).from('hp').to('kW') * (tmpOutput.fanEfficiency / 100);
     }
     else {
-      motorShaftPower = tmpOutput.motorShaftPower;
-      fanShaftPower = tmpOutput.fanShaftPower;
+      // motorShaftPower = tmpOutput.motorShaftPower;
+      // fanShaftPower = tmpOutput.fanShaftPower;
       energyInput = tmpOutput.motorPower;
       motorLoss = tmpOutput.motorPower - tmpOutput.motorShaftPower;
       driveLoss = tmpOutput.motorShaftPower - tmpOutput.fanShaftPower;

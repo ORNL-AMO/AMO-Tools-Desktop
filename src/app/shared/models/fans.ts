@@ -54,7 +54,6 @@ export interface FanMotor {
   specifiedEfficiency?: number,
   motorRatedVoltage: number,
   fullLoadAmps: number,
-  optimize?: boolean,
   sizeMargin?: number
 }
 

@@ -66,9 +66,6 @@ export class RatedMotorFormComponent implements OnInit {
     this.baselineForm = this.fanMotorService.getFormFromObj(this.fsat.fanMotor);
     this.baselineForm.disable();
     this.modificationForm = this.fanMotorService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanMotor);
-    if (this.fsat.modifications[this.exploreModIndex].fsat.fanMotor.optimize) {
-      this.modificationForm.disable();
-    }
     this.initEfficiencyClass();
     this.initMotorEfficiency();
     this.initRatedMotorPower();

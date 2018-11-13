@@ -345,12 +345,7 @@ export class ReportRollupService {
           if (val.assessment.fsat.modifications.length != 0) {
             let modResultsArr = new Array<FsatOutput>();
             val.assessment.fsat.modifications.forEach(mod => {
-              let tmpResults;
-              if (mod.fsat.fanMotor.optimize) {
-                tmpResults = this.fsatService.getResults(JSON.parse(JSON.stringify(mod.fsat)), 'optimal', val.settings);
-              } else {
-                tmpResults = this.fsatService.getResults(JSON.parse(JSON.stringify(mod.fsat)), 'modified', val.settings);
-              }
+              let tmpResults: FsatOutput = this.fsatService.getResults(JSON.parse(JSON.stringify(mod.fsat)), 'modified', val.settings);
               modResultsArr.push(tmpResults);
             })
             tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
@@ -372,13 +367,8 @@ export class ReportRollupService {
   getFsatResultsFromSelected(selectedFsats: Array<FsatCompare>) {
     let tmpResultsArr = new Array<FsatResultsData>();
     selectedFsats.forEach(val => {
-      let modificationResults;
-      let baselineResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.baseline)), 'existing', val.settings);
-      if (val.modification.fanMotor.optimize) {
-        modificationResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.modification)), 'optimal', val.settings);
-      } else {
-        modificationResults = this.fsatService.getResults(JSON.parse(JSON.stringify(val.modification)), 'modified', val.settings);
-      }
+      let baselineResults: FsatOutput = this.fsatService.getResults(JSON.parse(JSON.stringify(val.baseline)), 'existing', val.settings);
+      let modificationResults: FsatOutput = this.fsatService.getResults(JSON.parse(JSON.stringify(val.modification)), 'modified', val.settings);
       tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     })
     this.fsatResults.next(tmpResultsArr);

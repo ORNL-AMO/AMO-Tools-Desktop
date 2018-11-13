@@ -75,12 +75,7 @@ export class FsatReportSankeyComponent implements OnInit {
     }
 
     if (isMod) {
-      if (this.fsat1.fsat.fanMotor.optimize) {
-        fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'optimal', this.settings);
-      }
-      else {
-        fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'modified', this.settings);
-      }
+      fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'modified', this.settings);
     }
     else {
       fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'existing', this.settings);
@@ -109,12 +104,7 @@ export class FsatReportSankeyComponent implements OnInit {
     }
 
     if (isMod) {
-      if (this.fsat2.fsat.fanMotor.optimize) {
-        fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'optimal', this.settings);
-      }
-      else {
-        fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'modified', this.settings);
-      }
+      fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'modified', this.settings);
     }
     else {
       fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'existing', this.settings);
