@@ -141,7 +141,7 @@ export class SystemDataFormComponent implements OnInit {
 
     toggleOperatingHours() {
         if (this.showOperatingHours == false) {
-            this.modificationForm.controls.operatingFraction.patchValue(this.baselineForm.controls.operatingFraction.value);
+            this.modificationForm.controls.operatingHours.patchValue(this.baselineForm.controls.operatingHours.value);
             this.calculate();
         }
     }
