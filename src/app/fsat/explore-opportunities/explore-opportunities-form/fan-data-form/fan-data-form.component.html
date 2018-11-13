@@ -1,6 +1,7 @@
 <div class="checkbox">
   <label class="group-label" for="showFanType">
-    <input name="showFanType" type="checkbox" id="showFanType" (focus)="focusField('fanType')" (change)="toggleFanType()" [(ngModel)]="showFanType" />
+    <input name="showFanType" type="checkbox" id="showFanType" (focus)="focusField('fanType')" (change)="toggleFanType()"
+      [(ngModel)]="showFanType" />
     Install More Efficient Fan
   </label>
 </div>
@@ -20,7 +21,7 @@
       </select>
     </div>
   </form>
-  <form [formGroup]="modificationForm">
+  <form [formGroup]="modificationForm" *ngIf="!modificationForm.controls.fanType.disabled">
     <div class="form-group">
       <label for="modificationFanType">Modification Fan Type</label>
       <select class="form-control" name="fanType2" id="fanType2" (change)="setFanTypes()" (focus)="focusField('fanType')"
@@ -30,26 +31,15 @@
     </div>
   </form>
 </li>
-<li *ngIf="(modificationForm.controls.fanType.value == 12) && showFanType">
-  <div class="checkbox">
-    <label for="modifiedFanSpecified">
-      <input type="checkbox" id="modifiedFanSpecified" (focus)="focusField('fanSpecified')" [(ngModel)]="showFanSpecified" />
-      Modify Fan Specified Efficiency
-    </label>
-  </div>
-  <form [formGroup]="modificationForm" *ngIf="showFanSpecified">
-    <!-- <div class="form-group">
-          <label for="baselinePumpSpecified">Baseline Pump Specified Efficiency</label>
-          <div class="input-group">
-            <input name="baselinePumpSpecified" [disabled]="tmpBaselineFanType != 'Specified Optimal Efficiency'" type="number" step="any"
-              id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="checkEfficiency(psat.inputs.pump_specified, 1)"
-              [(ngModel)]="psat.inputs.pump_specified" />
-            <span class="input-group-addon units">%</span>
-          </div>
-          <span class="alert-danger pull-right small" *ngIf="specifiedError1 !== null">{{specifiedError1}}</span>
-        </div> -->
+<li *ngIf="showFanType">
+  <form [formGroup]="modificationForm">
     <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.fanSpecified.invalid}">
-      <label for="modificationFanSpecified">Modification Fan Specified Efficiency</label>
+      <label for="modificationFanSpecified">Modification Fan Efficiency
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.disabled">Modify
+          Fan Type</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disableFanType()" *ngIf="modificationForm.controls.fanSpecified.disabled">Use
+          Baseline Efficiency</a>
+      </label>
       <div class="input-group">
         <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control"
           (focus)="focusField('fanSpecified')" (input)="calculate()" formControlName="fanSpecified" />
@@ -64,10 +54,21 @@
       </span>
     </div>
   </form>
+  <div class="text-center small help-text" *ngIf="modificationForm.controls.fanType.disabled">
+    The efficiency of your fan has been calculated based on your system setup. Either directly modify your
+    efficiency or click <strong>"Modify Fan
+      Type"</strong> to estimate your pump efficiency based on a different pump type.
+  </div>
+  <div class="text-center small help-text" *ngIf="modificationForm.controls.fanSpecified.disabled">
+    The efficiency of your sfan has been calculated based on your selected <strong>fan
+      type</strong>. Click <strong>"Use Baseline Efficiency"</strong>
+    to use the efficiency calculated by your system setup.
+  </div>
 </li>
 <div class="checkbox">
   <label class="group-label" for="modifyMotorDrive">
-    <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()" [(ngModel)]="showMotorDrive" />
+    <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()"
+      [(ngModel)]="showMotorDrive" />
     Install More Efficient Drive Type
   </label>
 </div>

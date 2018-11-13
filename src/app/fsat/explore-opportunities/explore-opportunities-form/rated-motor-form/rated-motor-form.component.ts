@@ -25,13 +25,13 @@ export class RatedMotorFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
 
-  showRatedMotorPower: boolean = false;
+  //showRatedMotorPower: boolean = false;
   showEfficiencyClass: boolean = false;
-  showRatedMotorData: boolean = false;
+  // showRatedMotorData: boolean = false;
   showMotorEfficiency: boolean = false;
-  showFLA: boolean = false;
-  baselineWarnings: FanMotorWarnings;
-  modificationWarnings: FanMotorWarnings;
+  // showFLA: boolean = false;
+  // baselineWarnings: FanMotorWarnings;
+  // modificationWarnings: FanMotorWarnings;
   // options: Array<any>;
   // options2: Array<any>;
   // horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
@@ -68,10 +68,10 @@ export class RatedMotorFormComponent implements OnInit {
     this.modificationForm = this.fanMotorService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanMotor);
     this.initEfficiencyClass();
     this.initMotorEfficiency();
-    this.initRatedMotorPower();
-    this.initFLA();
-    this.initRatedMotorData();
-    this.checkWarnings();
+    //this.initRatedMotorPower();
+    //this.initFLA();
+    //this.initRatedMotorData();
+    //this.checkWarnings();
   }
 
   initEfficiencyClass() {
@@ -101,33 +101,33 @@ export class RatedMotorFormComponent implements OnInit {
     }
   }
 
-  initRatedMotorPower() {
-    if (this.baselineForm.controls.motorRatedPower.value != this.modificationForm.controls.motorRatedPower.value) {
-      this.showRatedMotorPower = true;
-    } else {
-      this.showRatedMotorPower = false;
-    }
-  }
+  // initRatedMotorPower() {
+  //   if (this.baselineForm.controls.motorRatedPower.value != this.modificationForm.controls.motorRatedPower.value) {
+  //     this.showRatedMotorPower = true;
+  //   } else {
+  //     this.showRatedMotorPower = false;
+  //   }
+  // }
 
-  initFLA() {
-    if (this.baselineForm.controls.fullLoadAmps.value != this.modificationForm.controls.fullLoadAmps.value) {
-      this.showFLA = true;
-    } else {
-      this.showFLA = false;
-    }
-  }
+  // initFLA() {
+  //   if (this.baselineForm.controls.fullLoadAmps.value != this.modificationForm.controls.fullLoadAmps.value) {
+  //     this.showFLA = true;
+  //   } else {
+  //     this.showFLA = false;
+  //   }
+  // }
 
-  initRatedMotorData() {
-    if (this.showEfficiencyClass || this.showMotorEfficiency || this.showRatedMotorPower || this.showFLA) {
-      this.showRatedMotorData = true;
-    } else {
-      this.showRatedMotorData = false;
-    }
-  }
+  // initRatedMotorData() {
+  //   if (this.showEfficiencyClass || this.showMotorEfficiency) {
+  //     this.showRatedMotorData = true;
+  //   } else {
+  //     this.showRatedMotorData = false;
+  //   }
+  // }
 
   calculate() {
     this.fsat.modifications[this.exploreModIndex].fsat.fanMotor = this.fanMotorService.getObjFromForm(this.modificationForm);
-    this.checkWarnings();
+    //this.checkWarnings();
     this.emitCalculate.emit(true);
   }
 
@@ -158,28 +158,28 @@ export class RatedMotorFormComponent implements OnInit {
     this.calculate();
   }
 
-  checkWarnings() {
-    this.baselineWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings);
-    this.modificationWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat.modifications[this.exploreModIndex].fsat, this.settings);
-  }
+  // checkWarnings() {
+  //   this.baselineWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings);
+  //   this.modificationWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat.modifications[this.exploreModIndex].fsat, this.settings);
+  // }
 
-  toggleRatedMotorData() {
-    if (this.showRatedMotorData == false) {
-      this.showRatedMotorPower = false;
-      this.showEfficiencyClass = false;
-      this.showMotorEfficiency = false;
-      this.toggleMotorEfficiency();
-      this.toggleEfficiencyClass();
-      this.toggleMotorRatedPower();
-      this.toggleFLA();
-    }
-  }
-  toggleMotorRatedPower() {
-    if (this.showRatedMotorPower == false) {
-      this.modificationForm.controls.motorRatedPower.patchValue(this.baselineForm.controls.motorRatedPower.value);
-      this.calculate();
-    }
-  }
+  // toggleRatedMotorData() {
+  //   if (this.showRatedMotorData == false) {
+  //     // this.showRatedMotorPower = false;
+  //     this.showEfficiencyClass = false;
+  //     this.showMotorEfficiency = false;
+  //     this.toggleMotorEfficiency();
+  //     this.toggleEfficiencyClass();
+  //     //    this.toggleMotorRatedPower();
+  //     //this.toggleFLA();
+  //   }
+  // }
+  // toggleMotorRatedPower() {
+  //   if (this.showRatedMotorPower == false) {
+  //     this.modificationForm.controls.motorRatedPower.patchValue(this.baselineForm.controls.motorRatedPower.value);
+  //     this.calculate();
+  //   }
+  // }
   toggleEfficiencyClass() {
     if (this.showEfficiencyClass == false) {
       this.modificationForm.controls.efficiencyClass.patchValue(this.baselineForm.controls.efficiencyClass.value);
@@ -194,12 +194,12 @@ export class RatedMotorFormComponent implements OnInit {
     }
   }
 
-  toggleFLA() {
-    if (this.showFLA == false) {
-      this.modificationForm.controls.fullLoadAmps.patchValue(this.baselineForm.controls.fullLoadAmps.value);
-      this.calculate();
-    }
-  }
+  // toggleFLA() {
+  //   if (this.showFLA == false) {
+  //     this.modificationForm.controls.fullLoadAmps.patchValue(this.baselineForm.controls.fullLoadAmps.value);
+  //     this.calculate();
+  //   }
+  // }
 
   disableModifiedFLA() {
     if (

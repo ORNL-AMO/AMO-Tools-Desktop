@@ -1,6 +1,6 @@
 <div class="checkbox">
   <label class="group-label" for="modifyEfficiencyClass"><input type="checkbox" id="modifyEfficiencyClass" (focus)="focusField('efficiencyClass')"
-      (change)="toggleEfficiencyClass()" [(ngModel)]="showEfficiencyClass" /> Adjust Rated Motor Data
+      (change)="toggleEfficiencyClass()" [(ngModel)]="showEfficiencyClass" /> Install More Efficient Motor
   </label>
 </div>
 <li *ngIf="showEfficiencyClass">
@@ -67,7 +67,7 @@
 </li>
 
 
-<!-- <ul *ngIf="showRatedMotorData"> -->
+<ul *ngIf="showRatedMotorData">
   <!-- <li>
     <div class="checkbox">
       <label for="modifyMotorRatedPower"><input type="checkbox" id="modifyMotorRatedPower" value="true" (change)="toggleMotorRatedPower()"
@@ -147,4 +147,4 @@
       </div>
     </form>
   </li> -->
-<!-- </ul> -->
+</ul>
