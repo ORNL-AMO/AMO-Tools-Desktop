@@ -1,3 +1,4 @@
+<!--fanType and fanEfficiency-->
 <div class="checkbox">
   <label class="group-label" for="showFanType">
     <input name="showFanType" type="checkbox" id="showFanType" (focus)="focusField('fanType')" (change)="toggleFanType()"
@@ -6,12 +7,6 @@
   </label>
 </div>
 <li *ngIf="showFanType">
-  <!-- <div class="checkbox">
-    <label for="modifyFanType">
-      <input type="checkbox" id="modifyFanType" value="true" (focus)="focusField('fanType')" (change)="toggleFanType()"
-        [(ngModel)]="showFanType" /> Modify Fan Type
-    </label>
-  </div> -->
   <form [formGroup]="baselineForm">
     <div class="form-group">
       <label for="baselineFanType">Baseline Fan Type</label>
@@ -65,6 +60,8 @@
     to use the efficiency calculated by your system setup.
   </div>
 </li>
+
+<!--driveType and specifiedDriveEfficiency-->
 <div class="checkbox">
   <label class="group-label" for="modifyMotorDrive">
     <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()"
@@ -73,12 +70,6 @@
   </label>
 </div>
 <li *ngIf="showMotorDrive">
-  <!-- <div class="checkbox">
-    <label for="modifyMotorDrive">
-      <input type="checkbox" id="modifyMotorDrive" value="true" (focus)="focusField('drive')" (change)="toggleMotorDrive()"
-        [(ngModel)]="showMotorDrive" /> Modify Motor Drive
-    </label>
-  </div> -->
   <form [formGroup]="baselineForm">
     <div class="form-group">
       <label for="baselineMotorDrive">Baseline Motor Drive</label>

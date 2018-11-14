@@ -80,6 +80,9 @@ export class PumpFluidComponent implements OnInit {
 
   initForm() {
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+    if (this.psatForm.controls.pumpType.value != 11) {
+      this.psatForm.controls.specifiedPumpEfficiency.disable();
+    }
     this.checkWarnings();
   }
 
@@ -87,15 +90,21 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.pumpType.disable();
     this.psatForm.controls.drive.disable();
     this.psatForm.controls.fluidType.disable();
+    if (this.psatForm.controls.pumpType.value != 11) {
+      this.psatForm.controls.specifiedPumpEfficiency.disable();
+    }
   }
 
   enableForm() {
     this.psatForm.controls.pumpType.enable();
     this.psatForm.controls.drive.enable();
     this.psatForm.controls.fluidType.enable();
+    if (this.psatForm.controls.pumpType.value != 11) {
+      this.psatForm.controls.specifiedPumpEfficiency.disable();
+    }
   }
 
-  getTemperatureUnit(){
+  getTemperatureUnit() {
     if (this.settings.temperatureMeasurement == 'C') {
       this.tempUnit = '&#8451;';
     } else if (this.settings.temperatureMeasurement == 'F') {
@@ -189,7 +198,7 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.specifiedPumpEfficiency.setValidators(specifiedPumpEfficiencyValidators);
     this.psatForm.controls.specifiedPumpEfficiency.reset(this.psatForm.controls.specifiedPumpEfficiency.value);
     this.psatForm.controls.specifiedPumpEfficiency.markAsDirty();
-    if(!this.baseline){
+    if (!this.baseline) {
       this.getPumpEfficiency();
     }
     this.save();
