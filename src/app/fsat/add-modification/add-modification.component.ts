@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Modification, FSAT } from '../../shared/models/fans';
+import { Modification, FSAT, FsatOutput } from '../../shared/models/fans';
 import { FsatService } from '../fsat.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-add-modification',
@@ -17,7 +18,9 @@ export class AddModificationComponent implements OnInit {
   save = new EventEmitter<Modification>();
   @Input()
   modificationExists: boolean;
-  
+  @Input()
+  settings: Settings;
+
   newModificationName: string;
   assessmentTab: string;
   assessmentTabSub: Subscription;
@@ -38,28 +41,13 @@ export class AddModificationComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.assessmentTabSub.unsubscribe();
   }
 
   addModification() {
-    let tmpModification: Modification = {
-      fsat: {
-        name: this.newModificationName,
-        notes: {
-          fieldDataNotes: '',
-          fanMotorNotes: '',
-          fanSetupNotes: '',
-          fluidNotes: ''
-        }
-      },
-      exploreOpportunities: (this.assessmentTab == 'explore-opportunities')
-    }
-    let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this.fsat)));
-    tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
-    tmpModification.fsat.fanMotor = fsatCopy.fanMotor;
-    tmpModification.fsat.fanSetup = fsatCopy.fanSetup;
-    tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    let tmpModification: Modification = this.fsatService.getNewMod(this.fsat, this.settings);
+    tmpModification.fsat.name = this.newModificationName;
     this.save.emit(tmpModification)
   }
 }

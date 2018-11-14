@@ -26,10 +26,10 @@ export class FanDataFormComponent implements OnInit {
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
-  showFanData: boolean = false;
+  //showFanData: boolean = false;
   showFanType: boolean = false;
   showMotorDrive: boolean = false;
-  showFanSpecified: boolean = false;
+  //showFanSpecified: boolean = false;
   baselineForm: FormGroup;
   modificationForm: FormGroup;
   baselineFanEfficiency: number;
@@ -55,10 +55,10 @@ export class FanDataFormComponent implements OnInit {
     this.modificationForm = this.fanSetupService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup);
     this.baselineFanEfficiency = this.fsatService.getResults(this.fsat, 'existing', this.settings).fanEfficiency;
     this.baselineFanEfficiency = this.convertUnitsService.roundVal(this.baselineFanEfficiency, 2);
-    this.initFanSpecified();
+   // this.initFanSpecified();
     this.initMotorDrive();
     this.initFanType();
-    this.initFanData();
+    //this.initFanData();
   }
   initFanType() {
     if (this.modificationForm.controls.fanType.value == 12) {
@@ -84,44 +84,43 @@ export class FanDataFormComponent implements OnInit {
     }
   }
 
-  initFanSpecified() {
-    if (this.modificationForm.controls.fanEfficiency.value != this.baselineForm.controls.fanEfficiency.value) {
-      this.showFanSpecified = true;
-    } else {
-      this.showFanSpecified = false;
-    }
+  // initFanSpecified() {
+  //   if (this.modificationForm.controls.fanEfficiency.value != this.baselineForm.controls.fanEfficiency.value) {
+  //     this.showFanSpecified = true;
+  //   } else {
+  //     this.showFanSpecified = false;
+  //   }
 
-  }
+  // }
 
-  initFanData() {
-    if (this.showMotorDrive || this.showFanSpecified || this.showFanType) {
-      this.showFanData = true;
-    } else {
-      this.showFanData = false;
-    }
-  }
+  // initFanData() {
+  //   if (this.showMotorDrive || this.showFanType) {
+  //     this.showFanData = true;
+  //   } else {
+  //     this.showFanData = false;
+  //   }
+  // }
 
-  toggleFanData() {
-    if (this.showFanData == false) {
-      this.showFanSpecified = false;
-      this.showFanType = false;
-      this.showMotorDrive = false;
-      this.toggleFanSpecified();
-      this.toggleFanType();
-      this.toggleMotorDrive();
-    }
-  }
-  toggleFanSpecified() {
-    if (this.showFanSpecified == false) {
-      this.modificationForm.controls.fanEfficiency.patchValue(this.baselineForm.controls.fanEfficiency.value);
-      this.calculate();
-    }
-  }
+  // toggleFanData() {
+  //   if (this.showFanData == false) {
+  //     //this.showFanSpecified = false;
+  //     this.showFanType = false;
+  //     this.showMotorDrive = false;
+  //     //this.toggleFanSpecified();
+  //     this.toggleFanType();
+  //     this.toggleMotorDrive();
+  //   }
+  // }
+  // toggleFanSpecified() {
+  //   if (this.showFanSpecified == false) {
+  //     this.modificationForm.controls.fanEfficiency.patchValue(this.baselineForm.controls.fanEfficiency.value);
+  //     this.calculate();
+  //   }
+  // }
 
   toggleFanType() {
     if (this.showFanType == false) {
       this.disableFanType();
-      this.calculate();
     }
   }
 
@@ -132,21 +131,23 @@ export class FanDataFormComponent implements OnInit {
     }
   }
 
-  setFanTypes() {
-    if (this.modificationForm.controls.fanType.value == 12 || this.baselineForm.controls.fanType.value == 12) {
-      this.showFanSpecified = true;
-    } else {
-      this.showFanSpecified = false;
-    }
-    if (!this.modificationForm.controls.fanEfficiency.value) {
-      this.modificationForm.controls.fanEfficiency.patchValue(90);
-    }
-    if (!this.baselineForm.controls.fanEfficiency.value) {
-      this.baselineForm.controls.fanEfficiency.patchValue(90);
-    }
-    this.modificationForm = this.fanSetupService.changeFanType(this.modificationForm);
-    this.calculate();
-  }
+  // setFanTypes() {
+  //   // if (this.modificationForm.controls.fanType.value == 12 || this.baselineForm.controls.fanType.value == 12) {
+  //   //   this.showFanSpecified = true;
+  //   // } else {
+  //   //   this.showFanSpecified = false;
+  //   // }
+  //   if (!this.modificationForm.controls.fanEfficiency.value) {
+  //     this.modificationForm.controls.fanEfficiency.patchValue(90);
+  //   }
+  //   if (!this.baselineForm.controls.fanEfficiency.value) {
+  //     this.baselineForm.controls.fanEfficiency.patchValue(90);
+  //   }
+  //   this.modificationForm = this.fanSetupService.changeFanType(this.modificationForm);
+  //   if(this.modifica)
+  //   this.getFanEfficiency();
+  //   this.calculate();
+  // }
 
 
   enableFanType() {
@@ -158,7 +159,7 @@ export class FanDataFormComponent implements OnInit {
   disableFanType() {
     this.modificationForm.controls.fanEfficiency.patchValue(this.baselineFanEfficiency);
     this.modificationForm.controls.fanEfficiency.enable();
-    this.modificationForm.controls.fanType.patchValue(11);
+    this.modificationForm.controls.fanType.patchValue(12);
     this.modificationForm.controls.fanType.disable();
     this.calculate();
   }
@@ -179,9 +180,6 @@ export class FanDataFormComponent implements OnInit {
     this.modificationForm.controls.fanEfficiency.disable();
     this.calculate();
   }
-
-
-
 
   changeDriveType() {
     this.modificationForm = this.fanSetupService.changeDriveType(this.modificationForm);

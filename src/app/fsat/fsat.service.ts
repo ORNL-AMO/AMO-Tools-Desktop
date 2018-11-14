@@ -254,5 +254,32 @@ export class FsatService {
     }
     return fanAddon.compressibilityFactor(inputCpy);
   }
+
+
+  getNewMod(fsat: FSAT, settings: Settings): Modification {
+    let modName: string = 'Scenario ' + (fsat.modifications.length + 1);
+    let tmpModification: Modification = {
+      fsat: {
+        name: modName,
+        notes: {
+          fieldDataNotes: '',
+          fanMotorNotes: '',
+          fanSetupNotes: '',
+          fluidNotes: ''
+        }
+      },
+      exploreOpportunities: (this.assessmentTab.value == 'explore-opportunities')
+    }
+    let tmpBaselineResults: FsatOutput = this.getResults(fsat, 'existing', settings);
+    let fsatCopy: FSAT = (JSON.parse(JSON.stringify(fsat)));
+    tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
+    tmpModification.fsat.fanMotor = fsatCopy.fanMotor;
+    tmpModification.fsat.fanSetup = fsatCopy.fanSetup;
+    //specified, set effeciency to calculated baseline efficiency
+    tmpModification.fsat.fanSetup.fanType = 12;
+    tmpModification.fsat.fanSetup.fanEfficiency = this.convertUnitsService.roundVal(tmpBaselineResults.fanEfficiency, 2);
+    tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    return tmpModification
+  }
 }
 

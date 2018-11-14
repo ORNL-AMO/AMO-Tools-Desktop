@@ -24,7 +24,7 @@
   <form [formGroup]="modificationForm" *ngIf="!modificationForm.controls.fanType.disabled">
     <div class="form-group">
       <label for="modificationFanType">Modification Fan Type</label>
-      <select class="form-control" name="fanType2" id="fanType2" (change)="setFanTypes()" (focus)="focusField('fanType')"
+      <select class="form-control" name="fanType2" id="fanType2" (change)="getFanEfficiency()" (focus)="focusField('fanType')"
         formControlName="fanType">
         <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
       </select>
