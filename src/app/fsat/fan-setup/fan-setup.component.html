@@ -13,20 +13,20 @@
       </select>
     </div>
 
-    <div class="form-group" *ngIf="fanForm.controls.fanType.value == 12" [ngClass]="{'indicate-different': isFanSpecifiedDifferent(), 'invalid': fanForm.controls.fanSpecified.invalid}">
-      <label for="{{'fanSpecified_'+idString}}">Specify Fan Efficiency</label>
+    <div class="form-group" *ngIf="fanForm.controls.fanType.value == 12" [ngClass]="{'indicate-different': isFanSpecifiedDifferent(), 'invalid': fanForm.controls.fanEfficiency.invalid}">
+      <label for="{{'fanEfficiency_'+idString}}">Specify Fan Efficiency</label>
       <div class="input-group">
-        <input name="fanSpecified" type="number" min="0" step="any" class="form-control" formControlName="fanSpecified"
-          id="{{'fanSpecified_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('fanSpecified')"
+        <input name="fanEfficiency" type="number" min="0" step="any" class="form-control" formControlName="fanEfficiency"
+          id="{{'fanEfficiency_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('fanEfficiency')"
           [readonly]="!selected">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="fanForm.controls.fanSpecified.invalid && !fanForm.controls.fanSpecified.pristine">
-        <span *ngIf="fanForm.controls.fanSpecified.errors.required">Value Required</span>
-        <span *ngIf="fanForm.controls.fanSpecified.errors.max">Value can't be greater than
-          {{fanForm.controls.fanSpecified.errors.max.max}} %.</span>
-        <span *ngIf="fanForm.controls.fanSpecified.errors.min">Value can't be less than
-          {{fanForm.controls.fanSpecified.errors.min.min}} %.</span>
+      <span class="alert-danger pull-right small" *ngIf="fanForm.controls.fanEfficiency.invalid && !fanForm.controls.fanEfficiency.pristine">
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.required">Value Required</span>
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.max">Value can't be greater than
+          {{fanForm.controls.fanEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.min">Value can't be less than
+          {{fanForm.controls.fanEfficiency.errors.min.min}} %.</span>
       </span>
     </div>
 

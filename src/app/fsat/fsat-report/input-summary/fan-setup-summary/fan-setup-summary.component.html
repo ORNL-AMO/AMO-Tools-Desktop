@@ -59,14 +59,14 @@
           </tr>
 
           <tr>
-            <td [ngClass]="{'indicate-report-field-different':fanSpecifiedDiff[0] == true}">
+            <td [ngClass]="{'indicate-report-field-different':fanEfficiencyDiff[0] == true}">
               Fan Specified
             </td>
-            <td [ngClass]="{'indicate-report-field-different':fanSpecifiedDiff[0] == true}">
-              {{fanSetup.baseline.fanSpecified}}
+            <td [ngClass]="{'indicate-report-field-different':fanEfficiencyDiff[0] == true}">
+              {{fanSetup.baseline.fanEfficiency}}
             </td>
-            <td *ngFor="let mod of fanSetup.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanSpecified, mod.fanSpecified, 'fanSpecifiedDiff', 0)}">
-              {{mod.fanSpecified}}
+            <td *ngFor="let mod of fanSetup.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanEfficiency, mod.fanEfficiency, 'fanEfficiencyDiff', 0)}">
+              {{mod.fanEfficiency}}
             </td>
           </tr>
 

@@ -92,13 +92,13 @@ export class FanSetupComponent implements OnInit {
 
   changeFanType() {
     if (this.fanForm.controls.fanType.value == 12) {
-      this.fanForm.controls.fanSpecified.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-      this.fanForm.controls.fanSpecified.reset(this.fanForm.controls.fanSpecified.value);
-      this.fanForm.controls.fanSpecified.markAsDirty();
+      this.fanForm.controls.fanEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      this.fanForm.controls.fanEfficiency.reset(this.fanForm.controls.fanEfficiency.value);
+      this.fanForm.controls.fanEfficiency.markAsDirty();
     }else{
-      this.fanForm.controls.fanSpecified.setValidators([]);
-      this.fanForm.controls.fanSpecified.reset(this.fanForm.controls.fanSpecified.value);
-      this.fanForm.controls.fanSpecified.markAsDirty();
+      this.fanForm.controls.fanEfficiency.setValidators([]);
+      this.fanForm.controls.fanEfficiency.reset(this.fanForm.controls.fanEfficiency.value);
+      this.fanForm.controls.fanEfficiency.markAsDirty();
     }
     this.save();
   }
@@ -126,6 +126,7 @@ export class FanSetupComponent implements OnInit {
 
   save() {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
+    console.log(this.fanSetup.fanEfficiency);
     if (this.fanSetup.drive != 4) {
       this.fanSetup.specifiedDriveEfficiency = 100;
     }

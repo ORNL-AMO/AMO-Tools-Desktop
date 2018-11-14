@@ -62,7 +62,6 @@ export interface FanSetup {
   fanSpeed: number,
   drive: number,
   specifiedDriveEfficiency?: number,
-  fanSpecified?: number,
   fanEfficiency?: number
 }
 //
@@ -276,7 +275,6 @@ export interface FsatInput {
   //modified, optimal
   fanEfficiency?: number
   fanType?: number,
-  isSpecified: boolean
 };
 
 

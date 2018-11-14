@@ -126,7 +126,7 @@ export class SystemDataFormComponent implements OnInit {
 
     toggleCost() {
         if (this.showCost == false) {
-            this.modificationForm.controls.cost.patchValue(this.baselineForm.controls.cost);
+            this.modificationForm.controls.cost.patchValue(this.baselineForm.controls.cost.value);
             this.calculate();
         }
     }

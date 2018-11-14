@@ -4,11 +4,11 @@ import { FSAT } from '../../../../shared/models/fans';
 import { FanTypes, Drives } from '../../../fanOptions';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
-import { FsatWarningService } from '../../../fsat-warning.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { FanSetupService } from '../../../fan-setup/fan-setup.service';
 import { FsatService } from '../../../fsat.service';
 import { FanEfficiencyInputs } from '../../../../calculator/fans/fan-efficiency/fan-efficiency.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-fan-data-form',
   templateUrl: './fan-data-form.component.html',
@@ -33,7 +33,7 @@ export class FanDataFormComponent implements OnInit {
   baselineForm: FormGroup;
   modificationForm: FormGroup;
   baselineFanEfficiency: number;
-  constructor(private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService, private helpPanelService: HelpPanelService, private fanSetupService: FanSetupService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService, private helpPanelService: HelpPanelService, private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
     this.drives = Drives;
@@ -54,6 +54,7 @@ export class FanDataFormComponent implements OnInit {
     this.baselineForm.disable();
     this.modificationForm = this.fanSetupService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup);
     this.baselineFanEfficiency = this.fsatService.getResults(this.fsat, 'existing', this.settings).fanEfficiency;
+    this.baselineFanEfficiency = this.convertUnitsService.roundVal(this.baselineFanEfficiency, 2);
     this.initFanSpecified();
     this.initMotorDrive();
     this.initFanType();
@@ -62,7 +63,7 @@ export class FanDataFormComponent implements OnInit {
   initFanType() {
     if (this.modificationForm.controls.fanType.value == 12) {
       this.modificationForm.controls.fanType.disable();
-      if (this.modificationForm.controls.fanSpecified.value != this.baselineFanEfficiency) {
+      if (this.modificationForm.controls.fanEfficiency.value != this.baselineFanEfficiency) {
         this.showFanType = true;
       }
     } else {
@@ -71,7 +72,7 @@ export class FanDataFormComponent implements OnInit {
       } else {
         this.showFanType = false;
       }
-      this.modificationForm.controls.fanSpecified.disable();
+      this.modificationForm.controls.fanEfficiency.disable();
     }
   }
 
@@ -84,7 +85,7 @@ export class FanDataFormComponent implements OnInit {
   }
 
   initFanSpecified() {
-    if (this.modificationForm.controls.fanSpecified.value != this.baselineForm.controls.fanSpecified.value) {
+    if (this.modificationForm.controls.fanEfficiency.value != this.baselineForm.controls.fanEfficiency.value) {
       this.showFanSpecified = true;
     } else {
       this.showFanSpecified = false;
@@ -112,7 +113,7 @@ export class FanDataFormComponent implements OnInit {
   }
   toggleFanSpecified() {
     if (this.showFanSpecified == false) {
-      this.modificationForm.controls.fanSpecified.patchValue(this.baselineForm.controls.fanSpecified.value);
+      this.modificationForm.controls.fanEfficiency.patchValue(this.baselineForm.controls.fanEfficiency.value);
       this.calculate();
     }
   }
@@ -137,11 +138,11 @@ export class FanDataFormComponent implements OnInit {
     } else {
       this.showFanSpecified = false;
     }
-    if (!this.modificationForm.controls.fanSpecified) {
-      this.modificationForm.controls.fanSpecified.patchValue(90);
+    if (!this.modificationForm.controls.fanEfficiency.value) {
+      this.modificationForm.controls.fanEfficiency.patchValue(90);
     }
-    if (!this.baselineForm.controls.fanSpecified) {
-      this.baselineForm.controls.fanSpecified.patchValue(90);
+    if (!this.baselineForm.controls.fanEfficiency.value) {
+      this.baselineForm.controls.fanEfficiency.patchValue(90);
     }
     this.modificationForm = this.fanSetupService.changeFanType(this.modificationForm);
     this.calculate();
@@ -155,8 +156,8 @@ export class FanDataFormComponent implements OnInit {
   }
 
   disableFanType() {
-    this.modificationForm.controls.fanSpecified.patchValue(this.baselineFanEfficiency);
-    this.modificationForm.controls.fanSpecified.enable();
+    this.modificationForm.controls.fanEfficiency.patchValue(this.baselineFanEfficiency);
+    this.modificationForm.controls.fanEfficiency.enable();
     this.modificationForm.controls.fanType.patchValue(11);
     this.modificationForm.controls.fanType.disable();
     this.calculate();
@@ -173,8 +174,9 @@ export class FanDataFormComponent implements OnInit {
       compressibility: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.compressibilityFactor
     }
     let tmpEfficiency: number = this.fsatService.optimalFanEfficiency(inputs, this.settings);
-    this.modificationForm.controls.fanSpecified.patchValue(tmpEfficiency);
-    this.modificationForm.controls.fanSpecified.disable();
+    tmpEfficiency = this.convertUnitsService.roundVal(tmpEfficiency, 2);
+    this.modificationForm.controls.fanEfficiency.patchValue(tmpEfficiency);
+    this.modificationForm.controls.fanEfficiency.disable();
     this.calculate();
   }
 

@@ -46,7 +46,6 @@ export class FsatResultsPanelComponent implements OnInit {
     this.baselineResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
     if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length != 0) {
       this.showModification = true;
-      this.fsat.modifications[this.modificationIndex].fsat.fanSetup.fanEfficiency = this.baselineResults.fanEfficiency;
       this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
       this.modificationResults = this.fsatService.getResults(this.fsat.modifications[this.modificationIndex].fsat, 'modified', this.settings);
       this.modificationResults.energySavings = this.baselineResults.annualEnergy - this.modificationResults.annualEnergy;

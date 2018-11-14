@@ -362,7 +362,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.fanSpecified != modification.fanSetup.fanSpecified) {
+      if (baseline.fanSetup.fanEfficiency != modification.fanSetup.fanEfficiency) {
         return true;
       } else {
         return false;

@@ -120,7 +120,7 @@ export class FsatService {
         motorRatedPower: fsat.fanMotor.motorRatedPower,
         motorRpm: fsat.fanMotor.motorRpm,
         efficiencyClass: fsat.fanMotor.efficiencyClass,
-        fanEfficiency: fsat.fanSetup.fanEfficiency | 0,
+        fanEfficiency: fsat.fanSetup.fanEfficiency,
         //motor
         specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
         motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,
@@ -135,8 +135,7 @@ export class FsatService {
         compressibilityFactor: fsat.fieldData.compressibilityFactor,
         operatingHours: fsat.fieldData.operatingHours,
         unitCost: fsat.fieldData.cost,
-        airDensity: fsat.baseGasDensity.gasDensity,
-        isSpecified: false
+        airDensity: fsat.baseGasDensity.gasDensity
       };
 
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
@@ -147,8 +146,6 @@ export class FsatService {
         results = this.fanResultsExisting(input);
       } else if (resultType == 'modified') {
         input.fanType = fsat.fanSetup.fanType;
-        input.isSpecified = true;
-        input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
         results = this.fanResultsModified(input);
       }
       results = this.convertFsatService.convertFsatOutput(results, settings);

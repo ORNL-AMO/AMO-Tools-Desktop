@@ -51,7 +51,7 @@ export class ResultsSummaryComponent implements OnInit {
     this.baselineResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
     if (this.fsat.modifications && this.fsat.modifications.length != 0) {
       this.fsat.modifications.forEach(mod => {
-        mod.fsat.fanSetup.fanEfficiency = this.baselineResults.fanEfficiency;
+        // mod.fsat.fanSetup.fanEfficiency = this.baselineResults.fanEfficiency;
         let modResult: FsatOutput = this.fsatService.getResults(mod.fsat, 'modified', this.settings);
         modResult.percentSavings = this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, modResult.annualCost);
         modResult.energySavings = this.baselineResults.annualEnergy - modResult.annualEnergy;

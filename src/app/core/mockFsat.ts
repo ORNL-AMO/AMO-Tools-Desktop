@@ -1,5 +1,4 @@
 import { Assessment } from "../shared/models/assessment";
-import { Calculator } from "../shared/models/calculators";
 import { Settings } from "../shared/models/settings"
 
 export const MockFsat: Assessment = {
@@ -30,8 +29,7 @@ export const MockFsat: Assessment = {
             fullLoadAmps: 683.25
         },
         fanSetup: {
-            fanType: 4,
-            fanSpecified: null,
+            fanType: 0,
             fanSpeed: 1180,
             drive: 1
         },
@@ -86,11 +84,10 @@ export const MockFsat: Assessment = {
                         sizeMargin: 0,
                     },
                     fanSetup: {
-                        fanType: 4,
-                        fanSpecified: null,
+                        fanType: 12,
                         fanSpeed: 1180,
                         drive: 1,
-                        fanEfficiency: 63.382393,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
                         operatingHours: 8760,
@@ -148,11 +145,10 @@ export const MockFsat: Assessment = {
                         sizeMargin: null
                     },
                     fanSetup: {
-                        fanType: 4,
-                        fanSpecified: null,
+                        fanType: 12,
                         fanSpeed: 1180,
                         drive: 1,
-                        fanEfficiency: 63.382393,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
                         operatingHours: 8760,
@@ -208,11 +204,10 @@ export const MockFsat: Assessment = {
                         fullLoadAmps: 683.25,
                     },
                     fanSetup: {
-                        fanType: 4,
-                        fanSpecified: null,
+                        fanType: 12,
                         fanSpeed: 1180,
                         drive: 0,
-                        fanEfficiency: 63.382393,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
                         operatingHours: 8760,
@@ -269,11 +264,10 @@ export const MockFsat: Assessment = {
                         sizeMargin: null
                     },
                     fanSetup: {
-                        fanType: 5,
-                        fanSpecified: null,
+                        fanType: 12,
                         fanSpeed: 1180,
                         drive: 1,
-                        fanEfficiency: 63.382393,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
                         operatingHours: 8760,

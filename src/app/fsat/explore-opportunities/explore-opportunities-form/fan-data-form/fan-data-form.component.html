@@ -33,24 +33,24 @@
 </li>
 <li *ngIf="showFanType">
   <form [formGroup]="modificationForm">
-    <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.fanSpecified.invalid}">
+    <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.fanEfficiency.invalid}">
       <label for="modificationFanSpecified">Modification Fan Efficiency
         <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.disabled">Modify
           Fan Type</a>
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disableFanType()" *ngIf="modificationForm.controls.fanSpecified.disabled">Use
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disableFanType()" *ngIf="modificationForm.controls.fanEfficiency.disabled">Use
           Baseline Efficiency</a>
       </label>
       <div class="input-group">
         <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control"
-          (focus)="focusField('fanSpecified')" (input)="calculate()" formControlName="fanSpecified" />
+          (focus)="focusField('fanEfficiency')" (input)="calculate()" formControlName="fanEfficiency" />
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.fanSpecified.invalid && !modificationForm.controls.fanSpecified.pristine">
-        <span *ngIf="modificationForm.controls.fanSpecified.errors.required">Value Required</span>
-        <span *ngIf="modificationForm.controls.fanSpecified.errors.max">Value can't be greater than
-          {{modificationForm.controls.fanSpecified.errors.max.max}} %.</span>
-        <span *ngIf="modificationForm.controls.fanSpecified.errors.min">Value can't be less than
-          {{modificationForm.controls.fanSpecified.errors.min.min}} %.</span>
+      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.fanEfficiency.invalid && !modificationForm.controls.fanEfficiency.pristine">
+        <span *ngIf="modificationForm.controls.fanEfficiency.errors.required">Value Required</span>
+        <span *ngIf="modificationForm.controls.fanEfficiency.errors.max">Value can't be greater than
+          {{modificationForm.controls.fanEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="modificationForm.controls.fanEfficiency.errors.min">Value can't be less than
+          {{modificationForm.controls.fanEfficiency.errors.min.min}} %.</span>
       </span>
     </div>
   </form>
@@ -59,7 +59,7 @@
     efficiency or click <strong>"Modify Fan
       Type"</strong> to estimate your pump efficiency based on a different pump type.
   </div>
-  <div class="text-center small help-text" *ngIf="modificationForm.controls.fanSpecified.disabled">
+  <div class="text-center small help-text" *ngIf="modificationForm.controls.fanEfficiency.disabled">
     The efficiency of your sfan has been calculated based on your selected <strong>fan
       type</strong>. Click <strong>"Use Baseline Efficiency"</strong>
     to use the efficiency calculated by your system setup.

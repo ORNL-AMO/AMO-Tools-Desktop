@@ -9,9 +9,9 @@ export class FanSetupService {
 
 
   getFormFromObj(obj: FanSetup): FormGroup {
-    let fanSpecifiedValidators: Array<ValidatorFn> = [];
+    let fanEfficiencyValidators: Array<ValidatorFn> = [];
     if (obj.fanType == 12) {
-      fanSpecifiedValidators = [Validators.required, Validators.min(0), Validators.max(100)];
+      fanEfficiencyValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
     let specifiedDriveValidators: Array<ValidatorFn> = [];
     if (obj.drive == 4) {
@@ -19,11 +19,10 @@ export class FanSetupService {
     }
     let form: FormGroup = this.formBuilder.group({
       fanType: [obj.fanType, Validators.required],
-      fanSpecified: [obj.fanSpecified, fanSpecifiedValidators],
+      fanEfficiency: [obj.fanEfficiency, fanEfficiencyValidators],
       fanSpeed: [obj.fanSpeed, Validators.required],
       drive: [obj.drive, Validators.required],
-      specifiedDriveEfficiency: [obj.specifiedDriveEfficiency, specifiedDriveValidators],
-      fanEfficiency: [obj.fanEfficiency]
+      specifiedDriveEfficiency: [obj.specifiedDriveEfficiency, specifiedDriveValidators]
     })
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
@@ -33,13 +32,13 @@ export class FanSetupService {
 
   changeFanType(form: FormGroup): FormGroup {
     if (form.controls.fanType.value == 12) {
-      form.controls.fanSpecified.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-      form.controls.fanSpecified.reset(form.controls.fanSpecified.value);
-      form.controls.fanSpecified.markAsDirty();
+      form.controls.fanEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      form.controls.fanEfficiency.reset(form.controls.fanEfficiency.value);
+      form.controls.fanEfficiency.markAsDirty();
     }else{
-      form.controls.fanSpecified.setValidators([]);
-      form.controls.fanSpecified.reset(form.controls.fanSpecified.value);
-      form.controls.fanSpecified.markAsDirty();
+      form.controls.fanEfficiency.setValidators([]);
+      form.controls.fanEfficiency.reset(form.controls.fanEfficiency.value);
+      form.controls.fanEfficiency.markAsDirty();
     }
     return form;
   }
@@ -61,11 +60,10 @@ export class FanSetupService {
   getObjFromForm(form: FormGroup): FanSetup {
     let obj: FanSetup = {
       fanType: form.controls.fanType.value,
-      fanSpecified: form.controls.fanSpecified.value,
+      fanEfficiency: form.controls.fanEfficiency.value,
       fanSpeed: form.controls.fanSpeed.value,
       drive: form.controls.drive.value,
-      specifiedDriveEfficiency: form.controls.specifiedDriveEfficiency.value,
-      fanEfficiency: form.controls.fanEfficiency.value
+      specifiedDriveEfficiency: form.controls.specifiedDriveEfficiency.value
     }
     return obj;
   }
