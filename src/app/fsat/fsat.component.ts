@@ -362,7 +362,7 @@ export class FsatComponent implements OnInit {
   }
 
   checkSetupDone(fsat: FSAT): boolean {
-    return this.fsatService.checkValid(fsat);
+    return this.fsatService.checkValid(fsat, true);
   }
 
   selectModificationModal() {
@@ -387,7 +387,7 @@ export class FsatComponent implements OnInit {
         return false;
       }
     } else if (this.stepTab == 'fan-setup') {
-      let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup);
+      let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup, true);
       if (isValid) {
         return true;
       } else {

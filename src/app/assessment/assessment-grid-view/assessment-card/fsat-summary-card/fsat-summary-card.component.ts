@@ -49,13 +49,9 @@ export class FsatSummaryCardComponent implements OnInit {
   }
 
   getResults(fsat: FSAT, settings: Settings, isModification?: boolean): FsatOutput {
-    let isValid: boolean = this.fsatService.checkValid(fsat);
+    let isValid: boolean = this.fsatService.checkValid(fsat, !isModification);
     if (isValid) {
-      if (!isModification) {
-        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'existing', settings);
-      } else {
-        return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), 'modified', settings);
-      }
+      return this.fsatService.getResults(JSON.parse(JSON.stringify(fsat)), !isModification, settings);
     } else {
       return this.fsatService.getEmptyResults();
     }

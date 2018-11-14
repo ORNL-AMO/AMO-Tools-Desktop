@@ -43,11 +43,11 @@ export class FsatResultsPanelComponent implements OnInit {
   }
 
   getResults() {
-    this.baselineResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
+    this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
     if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length != 0) {
       this.showModification = true;
       this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
-      this.modificationResults = this.fsatService.getResults(this.fsat.modifications[this.modificationIndex].fsat, 'modified', this.settings);
+      this.modificationResults = this.fsatService.getResults(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
       this.modificationResults.energySavings = this.baselineResults.annualEnergy - this.modificationResults.annualEnergy;
       this.modificationResults.annualSavings = this.baselineResults.annualCost - this.modificationResults.annualCost;
       this.modificationResults.percentSavings = this.fsatService.getSavingsPercentage(this.baselineResults.annualCost, this.modificationResults.annualCost);

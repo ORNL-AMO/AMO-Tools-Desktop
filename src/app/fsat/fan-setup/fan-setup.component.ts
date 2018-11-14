@@ -76,7 +76,7 @@ export class FanSetupComponent implements OnInit {
     else {
       this.fanSetup.specifiedDriveEfficiency = this.fanSetup.specifiedDriveEfficiency || 100;
     }
-    this.fanForm = this.fanSetupService.getFormFromObj(this.fanSetup);
+    this.fanForm = this.fanSetupService.getFormFromObj(this.fanSetup, !this.baseline);
     if (this.fanForm.controls.fanType.value != 12) {
       this.fanForm.controls.fanEfficiency.disable();
     }
@@ -152,7 +152,7 @@ export class FanSetupComponent implements OnInit {
   }
 
   disableFanType() {
-    let calculatedEfficiency: number = this.fsatService.getResults(this.compareService.baselineFSAT, 'existing', this.settings).fanEfficiency;
+    let calculatedEfficiency: number = this.fsatService.getResults(this.compareService.baselineFSAT, true, this.settings).fanEfficiency;
     calculatedEfficiency = this.convertUnitsService.roundVal(calculatedEfficiency, 2);
     this.fanForm.controls.fanEfficiency.patchValue(calculatedEfficiency);
     this.fanForm.controls.fanEfficiency.enable();

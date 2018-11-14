@@ -107,8 +107,8 @@ export class FsatService {
   }
 
   //fsat results
-  getResults(fsat: FSAT, resultType: string, settings: Settings): FsatOutput {
-    if (this.checkValid(fsat)) {
+  getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
+    if (this.checkValid(fsat, isBaseline)) {
       if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
         fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
       }
@@ -140,11 +140,11 @@ export class FsatService {
 
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let results: FsatOutput;
-      if (resultType == 'existing') {
+      if (isBaseline) {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
         results = this.fanResultsExisting(input);
-      } else if (resultType == 'modified') {
+      } else {
         input.fanType = fsat.fanSetup.fanType;
         results = this.fanResultsModified(input);
       }
@@ -172,10 +172,10 @@ export class FsatService {
     return tmpSavingsPercent;
   }
 
-  checkValid(fsat: FSAT): boolean {
+  checkValid(fsat: FSAT, isBaseline: boolean): boolean {
     let fsatFluidValid: boolean = this.checkFsatFluidValid(fsat);
     let fieldDataValid: boolean = this.checkFieldDataValid(fsat);
-    let fanSetupValid: boolean = this.checkFanSetupValid(fsat);
+    let fanSetupValid: boolean = this.checkFanSetupValid(fsat, isBaseline);
     let fanMotorValid: boolean = this.checkFanMotorValid(fsat);
     return (fieldDataValid && fanSetupValid && fanMotorValid && fsatFluidValid);
   }
@@ -185,8 +185,8 @@ export class FsatService {
     return (fanFieldDataForm.status == 'VALID');
   }
 
-  checkFanSetupValid(fsat: FSAT): boolean {
-    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup);
+  checkFanSetupValid(fsat: FSAT, isBaseline: boolean): boolean {
+    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup, isBaseline);
     return (fanSetupForm.status == 'VALID');
   }
 
@@ -270,7 +270,7 @@ export class FsatService {
       },
       exploreOpportunities: (this.assessmentTab.value == 'explore-opportunities')
     }
-    let tmpBaselineResults: FsatOutput = this.getResults(fsat, 'existing', settings);
+    let tmpBaselineResults: FsatOutput = this.getResults(fsat, true, settings);
     let fsatCopy: FSAT = (JSON.parse(JSON.stringify(fsat)));
     tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
     tmpModification.fsat.fanMotor = fsatCopy.fanMotor;

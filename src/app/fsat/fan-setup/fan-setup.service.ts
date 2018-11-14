@@ -8,9 +8,9 @@ export class FanSetupService {
   constructor(private formBuilder: FormBuilder) { }
 
 
-  getFormFromObj(obj: FanSetup): FormGroup {
+  getFormFromObj(obj: FanSetup, isBaseline: boolean): FormGroup {
     let fanEfficiencyValidators: Array<ValidatorFn> = [];
-    if (obj.fanType == 12) {
+    if (!isBaseline) {
       fanEfficiencyValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
     let specifiedDriveValidators: Array<ValidatorFn> = [];
@@ -68,8 +68,8 @@ export class FanSetupService {
     return obj;
   }
 
-  isFanSetupValid(obj: FanSetup): boolean {
-    let form: FormGroup = this.getFormFromObj(obj);
+  isFanSetupValid(obj: FanSetup, isModification: boolean): boolean {
+    let form: FormGroup = this.getFormFromObj(obj, isModification);
     if (form.status == 'VALID') {
       return true;
     } else {

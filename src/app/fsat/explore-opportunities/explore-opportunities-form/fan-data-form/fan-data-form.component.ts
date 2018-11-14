@@ -48,10 +48,10 @@ export class FanDataFormComponent implements OnInit {
   }
 
   init() {
-    this.baselineForm = this.fanSetupService.getFormFromObj(this.fsat.fanSetup);
+    this.baselineForm = this.fanSetupService.getFormFromObj(this.fsat.fanSetup, false);
     this.baselineForm.disable();
-    this.modificationForm = this.fanSetupService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup);
-    this.baselineFanEfficiency = this.fsatService.getResults(this.fsat, 'existing', this.settings).fanEfficiency;
+    this.modificationForm = this.fanSetupService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup, true);
+    this.baselineFanEfficiency = this.fsatService.getResults(this.fsat, true, this.settings).fanEfficiency;
     this.baselineFanEfficiency = this.convertUnitsService.roundVal(this.baselineFanEfficiency, 2);
     this.initMotorDrive();
     this.initFanType();

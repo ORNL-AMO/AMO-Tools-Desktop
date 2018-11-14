@@ -65,7 +65,7 @@ export class FsatReportSankeyComponent implements OnInit {
     let isMod;
     let baseFsatResults: FsatOutput;
     let fsat1Results: FsatOutput;
-    baseFsatResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
+    baseFsatResults = this.fsatService.getResults(this.fsat, false, this.settings);
 
     if (this.fsat1.name == this.fsat.name) {
       isMod = false;
@@ -75,10 +75,10 @@ export class FsatReportSankeyComponent implements OnInit {
     }
 
     if (isMod) {
-      fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'modified', this.settings);
+      fsat1Results = this.fsatService.getResults(this.fsat1.fsat, false, this.settings);
     }
     else {
-      fsat1Results = this.fsatService.getResults(this.fsat1.fsat, 'existing', this.settings);
+      fsat1Results = this.fsatService.getResults(this.fsat1.fsat, true, this.settings);
     }
 
     let annualSavingsPotential = baseFsatResults.annualCost - fsat1Results.annualCost;
@@ -94,7 +94,7 @@ export class FsatReportSankeyComponent implements OnInit {
     let isMod;
     let baseFsatResults: FsatOutput;
     let fsat2Results: FsatOutput;
-    baseFsatResults = this.fsatService.getResults(this.fsat, 'existing', this.settings);
+    baseFsatResults = this.fsatService.getResults(this.fsat, true, this.settings);
 
     if (this.fsat2.name == this.fsat.name) {
       isMod = false;
@@ -104,10 +104,10 @@ export class FsatReportSankeyComponent implements OnInit {
     }
 
     if (isMod) {
-      fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'modified', this.settings);
+      fsat2Results = this.fsatService.getResults(this.fsat2.fsat, false, this.settings);
     }
     else {
-      fsat2Results = this.fsatService.getResults(this.fsat2.fsat, 'existing', this.settings);
+      fsat2Results = this.fsatService.getResults(this.fsat2.fsat, true, this.settings);
     }
 
     let annualSavingsPotential = baseFsatResults.annualCost - fsat2Results.annualCost;

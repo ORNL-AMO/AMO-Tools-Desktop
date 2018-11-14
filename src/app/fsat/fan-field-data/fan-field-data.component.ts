@@ -174,7 +174,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   calculateCompressibility() {
-    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, 'existing', this.settings);
+    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, true, this.settings);
     //todo
     let inputs: CompressibilityFactor = {
       moverShaftPower: tmpResults.motorShaftPower,
