@@ -26,6 +26,7 @@
         [modificationFieldDataForm]="modificationFieldDataForm"
         [baselineFieldDataWarnings]="baselineFieldDataWarnings"
         [modificationFieldDataWarnings]="modificationFieldDataWarnings"
+        (openHeadToolModal)="showHeadToolModal()"
       ></app-variable-frequency-drive-form>
           
       <app-pump-data-form 
@@ -49,6 +50,7 @@
      [modificationForm]="modificationFieldDataForm"
      [baselineWarnings]="baselineFieldDataWarnings"
      [modificationWarnings]="modificationFieldDataWarnings"
+     (openHeadToolModal)="showHeadToolModal()"
     ></app-system-data-form>
         
     <app-rated-motor-form
@@ -61,24 +63,25 @@
       [baselineWarnings]="baselineMotorWarnings"
       [modificationWarnings]="modificationMotorWarnings"
       ></app-rated-motor-form>
-
-    <!--
-    <div class="checkbox" *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
-      <label for="showSizeMargin">
-        <input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')" [(ngModel)]="showSizeMargin"
-        /> Size Margin
-      </label>
-    </div>
-    <form *ngIf="showSizeMargin">
-      <div class="form-group">
-      </div>
-      <div class="form-group">
-        <div name="sizeMargin" class="input-group">
-          <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.margin"
-            (input)="calculate()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-    </form>-->
   </div>
+</div>
+
+
+
+<!-- HEAD TOOL MODAL -->
+<div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
+    aria-hidden="true" [config]="{backdrop: 'fixed'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <app-head-tool [headToolResults]="headToolResults" [psat]="psat.modifications[this.exploreModIndex].psat"
+                    [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true" [assessmentId]="assessmentId"></app-head-tool>
+            </div>
+        </div>
+    </div>
 </div>

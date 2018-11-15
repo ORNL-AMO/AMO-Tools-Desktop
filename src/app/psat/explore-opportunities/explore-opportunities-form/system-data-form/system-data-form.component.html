@@ -53,7 +53,7 @@
 <li *ngIf="!isVFD && showHead">
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.head.invalid}">
-            <label for="baselineHead">Baseline head</label>
+            <label for="baselineHead">Baseline Head</label>
             <div class="input-group">
                 <input name="baselineHead" type="number" step="any" id="baselineHead" class="form-control" (focus)="focusField('head')"
                     (input)="calculate()" formControlName="head" />
@@ -70,7 +70,10 @@
     </form>
     <form [formGroup]="modificationForm">
         <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.head.invalid}">
-            <label for="modificationHead">Modification head</label>
+            <label for="modificationHead">Modification Head
+                <a class="form-text small click-link" (click)="showHeadToolModal()">Calculate
+                    Head</a>
+            </label>
             <div class="input-group">
                 <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control"
                     (focus)="focusField('head')" (input)="calculate()" formControlName="head" />

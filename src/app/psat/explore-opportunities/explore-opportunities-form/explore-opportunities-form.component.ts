@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
-import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { FieldDataWarnings, PsatWarningService, MotorWarnings } from '../../psat-warning.service';
 import { FieldDataService } from '../../field-data/field-data.service';
 import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
 import { MotorService } from '../../motor/motor.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { PsatService } from '../../psat.service';
 @Component({
   selector: 'app-explore-opportunities-form',
   templateUrl: './explore-opportunities-form.component.html',
@@ -28,25 +28,38 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
+  @Input()
+  assessmentId: number;
 
+
+
+  @ViewChild('headToolModal') public headToolModal: ModalDirective;
+  headToolResults: any = {
+    differentialElevationHead: 0.0,
+    differentialPressureHead: 0.0,
+    differentialVelocityHead: 0.0,
+    estimatedSuctionFrictionHead: 0.0,
+    estimatedDischargeFrictionHead: 0.0,
+    pumpHead: 0.0
+  };
 
   showSizeMargin: boolean;
 
   baselinePumpFluidForm: FormGroup;
   modificationPumpFluidForm: FormGroup;
-  
+
   baselineMotorForm: FormGroup;
   modificationMotorForm: FormGroup;
-  
+
   baselineMotorWarnings: MotorWarnings;
   modificationMotorWarnings: MotorWarnings;
-  
+
   baselineFieldDataForm: FormGroup;
   modificationFieldDataForm: FormGroup;
-  
+
   baselineFieldDataWarnings: FieldDataWarnings;
   modificationFieldDataWarnings: FieldDataWarnings;
-  constructor(private fieldDataService: FieldDataService, private pumpFluidService: PumpFluidService, private psatWarningService: PsatWarningService, private motorService: MotorService) { }
+  constructor(private psatService: PsatService, private fieldDataService: FieldDataService, private pumpFluidService: PumpFluidService, private psatWarningService: PsatWarningService, private motorService: MotorService) { }
 
 
   ngOnInit() {
@@ -62,7 +75,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
 
-  initForms(){
+  initForms() {
     this.baselineMotorForm = this.motorService.getFormFromObj(this.psat.inputs);
     this.baselineMotorForm.disable();
     this.modificationMotorForm = this.motorService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
@@ -96,7 +109,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.emitSave.emit(true);
   }
 
-  checkWarnings(){
+  checkWarnings() {
     this.baselineFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
     this.modificationFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
 
@@ -104,8 +117,23 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.modificationMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
   }
 
-  addNewMod(){
+  addNewMod() {
     this.emitAddNewMod.emit(true);
   }
+
+
+  showHeadToolModal() {
+    this.psatService.modalOpen.next(true);
+
+    //   this.openHeadTool.emit(true);
+    this.headToolModal.show();
+  }
+
+  hideHeadToolModal() {
+    this.modificationFieldDataForm.controls.head.patchValue(this.psat.modifications[this.exploreModIndex].psat.inputs.head)
+    this.psatService.modalOpen.next(false);    
+    this.headToolModal.hide();
+  }
+
 
 }

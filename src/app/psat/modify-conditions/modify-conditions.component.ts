@@ -6,6 +6,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';
 import { PsatTabService } from '../psat-tab.service';
+import { PsatService } from '../psat.service';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -38,7 +39,8 @@ export class ModifyConditionsComponent implements OnInit {
   showNotes: boolean = false;
   isModalOpen: boolean = false;
   modifyConditionsSub: Subscription;
-  constructor(private assessmentService: AssessmentService, private compareService: CompareService, private psatTabService: PsatTabService) { }
+  modalOpenSub: Subscription;
+  constructor(private assessmentService: AssessmentService, private compareService: CompareService, private psatTabService: PsatTabService, private psatService: PsatService) { }
 
   ngOnInit() {
     let tmpTab = this.assessmentService.getSubTab();
@@ -49,10 +51,15 @@ export class ModifyConditionsComponent implements OnInit {
     this.modifyConditionsSub = this.psatTabService.modifyConditionsTab.subscribe(val => {
       this.modifyTab = val;
     })
+
+    this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
+      this.isModalOpen = isOpen;
+    })
   }
 
   ngOnDestroy(){
     this.modifyConditionsSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();
   }
 
   save() {
@@ -69,13 +76,6 @@ export class ModifyConditionsComponent implements OnInit {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }
-  }
-
-  modalOpen() {
-    this.isModalOpen = true;
-  }
-  modalClose() {
-    this.isModalOpen = false;
   }
 
   addModification() {

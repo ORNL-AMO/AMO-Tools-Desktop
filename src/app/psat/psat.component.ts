@@ -68,6 +68,7 @@ export class PsatComponent implements OnInit {
   showAdd: boolean;
   stepTabSubscription: Subscription;
   stepTab: string;
+  modalOpenSub: Subscription;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -160,6 +161,10 @@ export class PsatComponent implements OnInit {
 
       this.stepTabSubscription = this.psatTabService.stepTab.subscribe(val => {
         this.stepTab = val;
+      })
+
+      this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
+        this.isModalOpen = isOpen;
       })
     })
   }
@@ -337,12 +342,12 @@ export class PsatComponent implements OnInit {
     this.psatTabService.mainTab.next('report');
   }
 
-  modalOpen() {
-    this.isModalOpen = true;
-  }
-  modalClose() {
-    this.isModalOpen = false;
-  }
+  // modalOpen() {
+  //   this.isModalOpen = true;
+  // }
+  // modalClose() {
+  //   this.isModalOpen = false;
+  // }
 
   selectModificationModal() {
     this.isModalOpen = true;

@@ -19,9 +19,12 @@ export class PsatService {
   };
 
   getResults: BehaviorSubject<boolean>;
+  modalOpen: BehaviorSubject<boolean>;
   constructor(private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService,
     private motorService: MotorService, private fieldDataService: FieldDataService) {
     this.getResults = new BehaviorSubject<boolean>(true);
+    this.modalOpen = new BehaviorSubject<boolean>(true);
+
   }
 
   test() {

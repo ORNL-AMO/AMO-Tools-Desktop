@@ -27,7 +27,8 @@ export class SystemDataFormComponent implements OnInit {
     baselineForm: FormGroup;
     @Input()
     modificationForm: FormGroup;
-
+    @Output('openHeadToolModal')
+    openHeadToolModal = new EventEmitter<boolean>();
 
     showSystemData: boolean = false;
     showCost: boolean = false;
@@ -167,6 +168,10 @@ export class SystemDataFormComponent implements OnInit {
         let dsp = tmpUnit.unit.name.display.replace('(', '');
         dsp = dsp.replace(')', '');
         return dsp;
+    }
+
+    showHeadToolModal(){
+        this.openHeadToolModal.emit(true);
     }
 
 }

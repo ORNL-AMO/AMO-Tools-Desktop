@@ -27,7 +27,7 @@ export class HeadToolComponent implements OnInit {
   @Input()
   inAssessment: boolean;
   @Input()
-  assessment: Assessment;
+  assessmentId: number;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -65,7 +65,8 @@ export class HeadToolComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
     if (this.inAssessment) {
-      this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+      this.calculator = this.calculatorDbService.getByAssessmentId(this.assessmentId);
+      console.log(this.calculator)
       if (this.calculator) {
         if (this.calculator.headTool) {
           this.isSavedCalc = true;
@@ -186,7 +187,7 @@ export class HeadToolComponent implements OnInit {
           headTool: this.headToolService.getHeadToolFromForm(this.headToolForm),
           headToolSuction: this.headToolService.getHeadToolSuctionFromForm(this.headToolSuctionForm),
           headToolType: this.headToolType,
-          assessmentId: this.assessment.id
+          assessmentId: this.assessmentId
         }
         this.indexedDbService.addCalculator(this.calculator).then(() => {
           this.calculatorDbService.setAll().then(() => {

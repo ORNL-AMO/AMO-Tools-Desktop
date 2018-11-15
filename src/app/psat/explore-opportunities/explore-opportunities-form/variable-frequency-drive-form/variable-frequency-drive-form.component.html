@@ -56,7 +56,10 @@
   </form>
   <form [formGroup]="modificationFieldDataForm">
     <div class="form-group" [ngClass]="{'invalid': modificationFieldDataForm.controls.head.invalid}">
-      <label for="modificationHead">Modification Head</label>
+      <label for="modificationHead">Modification Head
+        <a class="form-text small click-link" (click)="showHeadToolModal()">Calculate
+          Head</a>
+      </label>
       <div class="input-group">
         <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control" (focus)="focusField('head')"
           (input)="calculate()" formControlName="head" />

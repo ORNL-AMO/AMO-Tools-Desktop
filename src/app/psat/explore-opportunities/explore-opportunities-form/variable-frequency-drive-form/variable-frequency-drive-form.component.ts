@@ -31,6 +31,10 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('openHeadToolModal')
+  openHeadToolModal = new EventEmitter<boolean>();
+
+
 
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
@@ -51,21 +55,25 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
     // this.psat.modifications[this.exploreModIndex].psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.modificationFieldDataForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
     // this.checkWarnings();
     this.emitCalculate.emit(true);
-}
+  }
 
-focusField(str: string) {
+  focusField(str: string) {
     this.changeField.emit(str);
-}
+  }
 
-// checkWarnings() {
-//     this.baselineFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
-//     this.modificationFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-// }
+  // checkWarnings() {
+  //     this.baselineFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
+  //     this.modificationFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+  // }
 
-getDisplayUnit(unit: string) {
+  getDisplayUnit(unit: string) {
     let tmpUnit = this.convertUnitsService.getUnit(unit);
     let dsp = tmpUnit.unit.name.display.replace('(', '');
     dsp = dsp.replace(')', '');
     return dsp;
-}
+  }
+
+  showHeadToolModal() {
+    this.openHeadToolModal.emit(true);
+  }
 }
