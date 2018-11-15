@@ -8,8 +8,17 @@
       <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.name"
         (input)="calculate()" />
     </div>
+    <div class="checkbox">
+      <label class="group-label" for="modifyCalculationMethod">
+        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.isVFD" />
+        Install VFD
+      </label>
+    </div>
+    <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].fsat.fanSetup.isVFD"></app-variable-frequency-drive-form>
     <app-fan-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-fan-data-form>
-    <app-rated-motor-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-rated-motor-form>
-    <app-system-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"></app-system-data-form>
+    <app-rated-motor-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+      [(fsat)]="fsat"></app-rated-motor-form>
+    <app-system-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+      [(fsat)]="fsat"></app-system-data-form>
   </div>
 </div>

@@ -59,7 +59,6 @@ export class HeadToolComponent implements OnInit {
   constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, private settingsService: SettingsService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    console.log('init')
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -113,7 +112,6 @@ export class HeadToolComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-      console.log(this.headerHeight);
     }
   }
 
