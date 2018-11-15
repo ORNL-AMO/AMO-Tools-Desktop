@@ -14,7 +14,14 @@
         Install VFD
       </label>
     </div>
-    <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].fsat.fanSetup.isVFD"></app-variable-frequency-drive-form>
+    <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].fsat.fanSetup.isVFD"
+    [baselineMotorForm]="baselineMotorForm" [modificationMotorForm]="modificationMotorForm"
+    [baselineFanSetupForm]="baselineFanSetupForm" [modificationFanSetupForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"
+    [baselineFieldDataForm]="baselineFieldDataForm" [modificationFieldDataForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
+    [modificationWarnings]="modificationFanFieldDataWarnings"
+    (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+    
+    ></app-variable-frequency-drive-form>
 
     <app-fan-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"
       [baselineForm]="baselineFanSetupForm" [modificationForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"></app-fan-data-form>
