@@ -78,7 +78,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body p-0">
+            <div class="modal-body p-0" *ngIf="showHeadTool">
                 <app-head-tool [headToolResults]="headToolResults" [psat]="psat.modifications[this.exploreModIndex].psat"
                     [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true" [assessmentId]="assessmentId"></app-head-tool>
             </div>

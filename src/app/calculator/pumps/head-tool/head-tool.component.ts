@@ -5,7 +5,6 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsService } from '../../../settings/settings.service';
 import { FormGroup } from '@angular/forms';
-import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -53,7 +52,6 @@ export class HeadToolComponent implements OnInit {
   headToolSuctionForm: FormGroup;
   headToolType: string = "Suction tank elevation";
   tabSelect: string = 'results';
-  showSettings: boolean = false;
   settingsForm: FormGroup;
   canSave: boolean = false;
   isSavedCalc: boolean = false;
@@ -61,15 +59,15 @@ export class HeadToolComponent implements OnInit {
   constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, private settingsService: SettingsService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    console.log('init')
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     if (this.inAssessment) {
       this.calculator = this.calculatorDbService.getByAssessmentId(this.assessmentId);
-      console.log(this.calculator)
       if (this.calculator) {
+        this.isSavedCalc = true;
         if (this.calculator.headTool) {
-          this.isSavedCalc = true;
           this.headToolForm = this.headToolService.getHeadToolFormFromObj(this.calculator.headTool);
           this.headToolSuctionForm = this.headToolService.getHeadToolSuctionFormFromObj(this.calculator.headToolSuction);
           this.headToolType = this.calculator.headToolType;
@@ -105,7 +103,6 @@ export class HeadToolComponent implements OnInit {
   }
 
   btnResetData() {
-    console.log('btnResetData()');
     this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
     this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
     this.calculateHeadTool();
@@ -116,6 +113,7 @@ export class HeadToolComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      console.log(this.headerHeight);
     }
   }
 
@@ -145,10 +143,6 @@ export class HeadToolComponent implements OnInit {
     }
   }
 
-  editSettings() {
-    this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-    this.showSettings = true;
-  }
 
   setTab(str: string) {
     this.tabSelect = str;
@@ -156,14 +150,6 @@ export class HeadToolComponent implements OnInit {
 
   closeTool() {
     this.close.emit(true);
-  }
-
-  applySettings() {
-    this.settings = this.settingsService.getSettingsFromForm(this.settingsForm)
-    this.showSettings = false;
-  }
-  cancelSettings() {
-    this.showSettings = false;
   }
 
   changeField(str: string) {

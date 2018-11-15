@@ -98,7 +98,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initSystemData() {
-        if (this.showCost || this.showFlowRate || this.showHead || this.showOperatingHours) {
+        if (this.showCost || this.showOperatingHours) {
             this.showSystemData = true;
         } else {
             this.showSystemData = false;

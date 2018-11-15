@@ -43,8 +43,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     pumpHead: 0.0
   };
 
-  showSizeMargin: boolean;
-
   baselinePumpFluidForm: FormGroup;
   modificationPumpFluidForm: FormGroup;
 
@@ -59,6 +57,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   baselineFieldDataWarnings: FieldDataWarnings;
   modificationFieldDataWarnings: FieldDataWarnings;
+  showHeadTool: boolean = false;
   constructor(private psatService: PsatService, private fieldDataService: FieldDataService, private pumpFluidService: PumpFluidService, private psatWarningService: PsatWarningService, private motorService: MotorService) { }
 
 
@@ -124,15 +123,17 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   showHeadToolModal() {
     this.psatService.modalOpen.next(true);
-
-    //   this.openHeadTool.emit(true);
     this.headToolModal.show();
+    this.showHeadTool = true;
   }
 
   hideHeadToolModal() {
     this.modificationFieldDataForm.controls.head.patchValue(this.psat.modifications[this.exploreModIndex].psat.inputs.head)
+    this.save();
     this.psatService.modalOpen.next(false);    
     this.headToolModal.hide();
+
+    this.showHeadTool = false;
   }
 
 
