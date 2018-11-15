@@ -23,14 +23,18 @@ export class FanDataFormComponent implements OnInit {
   fsat: FSAT;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+  @Input()
+  baselineForm: FormGroup;
+  @Input()
+  modificationForm: FormGroup;
+  @Input()
+  baselineFanEfficiency: number;
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   showFanType: boolean = false;
   showMotorDrive: boolean = false;
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
-  baselineFanEfficiency: number;
+  
   constructor(private convertUnitsService: ConvertUnitsService, private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService, private helpPanelService: HelpPanelService, private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
@@ -48,14 +52,10 @@ export class FanDataFormComponent implements OnInit {
   }
 
   init() {
-    this.baselineForm = this.fanSetupService.getFormFromObj(this.fsat.fanSetup, false);
-    this.baselineForm.disable();
-    this.modificationForm = this.fanSetupService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup, true);
-    this.baselineFanEfficiency = this.fsatService.getResults(this.fsat, true, this.settings).fanEfficiency;
-    this.baselineFanEfficiency = this.convertUnitsService.roundVal(this.baselineFanEfficiency, 2);
     this.initMotorDrive();
     this.initFanType();
   }
+
   initFanType() {
     if (this.modificationForm.controls.fanType.value == 12) {
       this.modificationForm.controls.fanType.disable();
@@ -130,7 +130,6 @@ export class FanDataFormComponent implements OnInit {
   }
 
   calculate() {
-    this.fsat.modifications[this.exploreModIndex].fsat.fanSetup = this.fanSetupService.getObjFromForm(this.modificationForm);
     this.emitCalculate.emit(true);
   }
 

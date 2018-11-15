@@ -40,12 +40,6 @@
     </form>
 </li>
 
-<!-- <div class="checkbox">
-    <label for="modifyPressure">
-        <input type="checkbox" id="modifyPressure" value="true" (focus)="focusField('inletPressure')" (change)="togglePressure()"
-            [(ngModel)]="showPressure" /> Modify Pressure
-    </label>
-</div> -->
 <div class="checkbox">
     <label class="group-label" for="modifyPressure">
         <input type="checkbox" id="modifyPressure" (focus)="focusField('inletPressure')" (change)="togglePressure()"
@@ -119,12 +113,6 @@
     </label>
 </div>
 <li *ngIf="showSystemData">
-    <!-- <div class="checkbox">
-            <label for="modifyCost">
-                <input type="checkbox" id="modifyCost" value="true" (focus)="focusField('cost')" (change)="toggleCost()"
-                    [(ngModel)]="showCost" /> Modify Cost
-            </label>
-        </div> -->
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'error': baselineWarnings.costError !== null, 'invalid':baselineForm.controls.cost.invalid}">
             <label for="baselineCost">Baseline Cost</label>
@@ -161,13 +149,6 @@
     </form>
 </li>
 <li *ngIf="showSystemData">
-    <!-- <div class="checkbox">
-            <label for="modifyOperatingHours">
-                <input type="checkbox" id="modifyOperatingHours" value="true" (focus)="focusField('operatingHours')"
-                    (change)="toggleOperatingHours()" [(ngModel)]="showOperatingHours" /> Modify Operating
-                Hours
-            </label>
-        </div> -->
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
             <label for="baselineOperatingHours">Baseline Operating Hours</label>
