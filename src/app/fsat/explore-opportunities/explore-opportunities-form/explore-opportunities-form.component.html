@@ -10,27 +10,27 @@
     </div>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
-        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.fanSetup.isVFD" />
+        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" (change)="save()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.isVFD" />
         Install VFD
       </label>
     </div>
-    <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].fsat.fanSetup.isVFD"
-    [baselineMotorForm]="baselineMotorForm" [modificationMotorForm]="modificationMotorForm"
-    [baselineFanSetupForm]="baselineFanSetupForm" [modificationFanSetupForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"
-    [baselineFieldDataForm]="baselineFieldDataForm" [modificationFieldDataForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
-    [modificationWarnings]="modificationFanFieldDataWarnings"
-    (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"
-    
-    ></app-variable-frequency-drive-form>
+    <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].fsat.isVFD"
+      [baselineMotorForm]="baselineMotorForm" [modificationMotorForm]="modificationMotorForm" [baselineFanSetupForm]="baselineFanSetupForm"
+      [modificationFanSetupForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"
+      [baselineFieldDataForm]="baselineFieldDataForm" [modificationFieldDataForm]="modificationFieldDataForm"
+      [baselineWarnings]="baselineFanFieldDataWarnings" [modificationWarnings]="modificationFanFieldDataWarnings"
+      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" (showPressureModal)="openPressureModal($event)"></app-variable-frequency-drive-form>
 
     <app-fan-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"
-      [baselineForm]="baselineFanSetupForm" [modificationForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"></app-fan-data-form>
+      [baselineForm]="baselineFanSetupForm" [modificationForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"
+      [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD"></app-fan-data-form>
 
     <app-rated-motor-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"
       [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"></app-rated-motor-form>
 
-    <app-system-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"
-      [baselineForm]="baselineFieldDataForm" [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
+    <app-system-data-form [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD" (emitCalculate)="calculate()"
+      [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
+      [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
       [modificationWarnings]="modificationFanFieldDataWarnings" (showPressureModal)="openPressureModal($event)"></app-system-data-form>
   </div>
 </div>
@@ -45,10 +45,10 @@
         </button>
       </div>
       <div #modalBody class="modal-body p-0">
-        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet'" [settings]="settings"
-          [inletPressureData]="inletPressureCopy" (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-inlet-pressure>
-        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet'" [settings]="settings"
-          [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
+        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet'" [settings]="settings" [inletPressureData]="inletPressureCopy"
+          (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-inlet-pressure>
+        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet'" [settings]="settings" [outletPressureData]="outletPressureCopy"
+          (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
         <!-- <app-calculate-flow-pressures *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings" [fsat]="fsatCopy"
           (saveFlowAndPressure)="saveFsatCopy($event)" [bodyHeight]="bodyHeight"></app-calculate-flow-pressures> -->
       </div>

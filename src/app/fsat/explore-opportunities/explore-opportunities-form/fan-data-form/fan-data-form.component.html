@@ -1,12 +1,74 @@
+<!--driveType and specifiedDriveEfficiency-->
+<div class="checkbox" *ngIf="!isVFD">
+  <label class="group-label" for="modifyMotorDrive">
+    <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()"
+      [(ngModel)]="showMotorDrive" />
+    Install More Efficient Drive Type
+  </label>
+</div>
+<li *ngIf="showMotorDrive || isVFD">
+  <form [formGroup]="baselineForm">
+    <div class="form-group">
+      <label for="baselineMotorDrive">Baseline Motor Drive</label>
+      <select class="form-control" name="drive" id="drive" (change)="calculate()" (focus)="focusField('drive')"
+        formControlName="drive">
+        <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="baselineForm.controls.drive.value == 4" [ngClass]="{'invalid': baselineForm.controls.specifiedDriveEfficiency.invalid}">
+      <label for="baselineSpecifiedDriveEfficiency">Baseline Drive Efficiency</label>
+      <div class="input-group">
+        <input type="number" name="baselineSpecifiedDriveEfficiency" step="any" class="form-control" formControlName="specifiedDriveEfficiency"
+          id="baselineSpecifiedDriveEfficiency" (input)="changeDriveType()" (focus)="focusField('specifiedDriveEfficiency')">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.specifiedDriveEfficiency.invalid && !baselineForm.controls.specifiedDriveEfficiency.pristine">
+        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
+        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
+          {{baselineForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.min">Value can't be less than
+          {{baselineForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
+      </span>
+    </div>
+  </form>
+  <form [formGroup]="modificationForm || isVFD">
+    <div class="form-group">
+      <label for="modificationMotorDrive">Modification Motor Drive</label>
+      <select class="form-control" name="drive2" id="drive2" (change)="changeDriveType()" (focus)="focusField('drive')"
+        formControlName="drive">
+        <option *ngFor="let drive2 of drives" [ngValue]="drive2.value">{{drive2.display}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="modificationForm.controls.drive.value == 4" [ngClass]="{'invalid': modificationForm.controls.specifiedDriveEfficiency.invalid}">
+      <label for="modificationSpecifiedDriveEfficiency">Modification Drive Efficiency</label>
+      <div class="input-group">
+        <input type="number" name="modificationSpecifiedDriveEfficiency" step="any" class="form-control"
+          formControlName="specifiedDriveEfficiency" id="modificationSpecifiedDriveEfficiency" (input)="calculate()"
+          (focus)="focusField('specifiedDriveEfficiency')">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.specifiedDriveEfficiency.invalid && !modificationForm.controls.specifiedDriveEfficiency.pristine">
+        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
+        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
+          {{modificationForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.min">Value can't be less than
+          {{modificationForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
+      </span>
+    </div>
+  </form>
+</li>
+
 <!--fanType and fanEfficiency-->
-<div class="checkbox">
+<div class="checkbox" *ngIf="!isVFD">
   <label class="group-label" for="showFanType">
     <input name="showFanType" type="checkbox" id="showFanType" (focus)="focusField('fanType')" (change)="toggleFanType()"
       [(ngModel)]="showFanType" />
     Install More Efficient Fan
   </label>
 </div>
-<li *ngIf="showFanType">
+<li *ngIf="showFanType || isVFD">
   <form [formGroup]="baselineForm">
     <div class="form-group">
       <label for="baselineFanType">Baseline Fan Type</label>
@@ -26,7 +88,7 @@
     </div>
   </form>
 </li>
-<li *ngIf="showFanType">
+<li *ngIf="showFanType || isVFD">
   <form [formGroup]="modificationForm">
     <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.fanEfficiency.invalid}">
       <label for="modificationFanSpecified">Modification Fan Efficiency
@@ -59,66 +121,4 @@
       type</strong>. Click <strong>"Use Baseline Efficiency"</strong>
     to use the efficiency calculated by your system setup.
   </div>
-</li>
-
-<!--driveType and specifiedDriveEfficiency-->
-<div class="checkbox">
-  <label class="group-label" for="modifyMotorDrive">
-    <input name="modifyMotorDrive" type="checkbox" id="modifyMotorDrive" (focus)="focusField('drive')" (change)="toggleMotorDrive()"
-      [(ngModel)]="showMotorDrive" />
-    Install More Efficient Drive Type
-  </label>
-</div>
-<li *ngIf="showMotorDrive">
-  <form [formGroup]="baselineForm">
-    <div class="form-group">
-      <label for="baselineMotorDrive">Baseline Motor Drive</label>
-      <select class="form-control" name="drive" id="drive" (change)="calculate()" (focus)="focusField('drive')"
-        formControlName="drive">
-        <option *ngFor="let drive of drives" [ngValue]="drive.value">{{drive.display}}</option>
-      </select>
-    </div>
-
-    <div class="form-group" *ngIf="baselineForm.controls.drive.value == 4" [ngClass]="{'invalid': baselineForm.controls.specifiedDriveEfficiency.invalid}">
-      <label for="baselineSpecifiedDriveEfficiency">Baseline Drive Efficiency</label>
-      <div class="input-group">
-        <input type="number" name="baselineSpecifiedDriveEfficiency" step="any" class="form-control" formControlName="specifiedDriveEfficiency"
-          id="baselineSpecifiedDriveEfficiency" (input)="changeDriveType()" (focus)="focusField('specifiedDriveEfficiency')">
-        <span class="input-group-addon units">%</span>
-      </div>
-      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.specifiedDriveEfficiency.invalid && !baselineForm.controls.specifiedDriveEfficiency.pristine">
-        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
-        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
-          {{baselineForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
-        <span *ngIf="baselineForm.controls.specifiedDriveEfficiency.errors.min">Value can't be less than
-          {{baselineForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
-      </span>
-    </div>
-  </form>
-  <form [formGroup]="modificationForm">
-    <div class="form-group">
-      <label for="modificationMotorDrive">Modification Motor Drive</label>
-      <select class="form-control" name="drive2" id="drive2" (change)="changeDriveType()" (focus)="focusField('drive')"
-        formControlName="drive">
-        <option *ngFor="let drive2 of drives" [ngValue]="drive2.value">{{drive2.display}}</option>
-      </select>
-    </div>
-
-    <div class="form-group" *ngIf="modificationForm.controls.drive.value == 4" [ngClass]="{'invalid': modificationForm.controls.specifiedDriveEfficiency.invalid}">
-      <label for="modificationSpecifiedDriveEfficiency">Modification Drive Efficiency</label>
-      <div class="input-group">
-        <input type="number" name="modificationSpecifiedDriveEfficiency" step="any" class="form-control"
-          formControlName="specifiedDriveEfficiency" id="modificationSpecifiedDriveEfficiency" (input)="calculate()"
-          (focus)="focusField('specifiedDriveEfficiency')">
-        <span class="input-group-addon units">%</span>
-      </div>
-      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.specifiedDriveEfficiency.invalid && !modificationForm.controls.specifiedDriveEfficiency.pristine">
-        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.required">Value Required</span>
-        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.max">Value can't be greater than
-          {{modificationForm.controls.specifiedDriveEfficiency.errors.max.max}} %.</span>
-        <span *ngIf="modificationForm.controls.specifiedDriveEfficiency.errors.min">Value can't be less than
-          {{modificationForm.controls.specifiedDriveEfficiency.errors.min.min}} %.</span>
-      </span>
-    </div>
-  </form>
 </li>

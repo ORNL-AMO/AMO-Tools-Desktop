@@ -8,7 +8,8 @@ export interface FSAT {
   baseGasDensity?: BaseGasDensity,
   notes: Notes,
   implementationCosts?: number,
-  setupDone?: boolean
+  setupDone?: boolean,
+  isVFD?: boolean
 }
 
 export interface Modification {
@@ -62,8 +63,7 @@ export interface FanSetup {
   fanSpeed: number,
   drive: number,
   specifiedDriveEfficiency?: number,
-  fanEfficiency?: number,
-  isVFD?: boolean
+  fanEfficiency?: number
 }
 //
 

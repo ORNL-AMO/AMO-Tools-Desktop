@@ -1,11 +1,11 @@
-<div class="checkbox">
+<div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyFlowRate">
         <input type="checkbox" id="modifyFlowRate" (focus)="focusField('flowRate')" (change)="toggleFlowRate()"
             [(ngModel)]="showFlowRate" />
         Reduce System Flow Rate
     </label>
 </div>
-<li *ngIf="showFlowRate">
+<li *ngIf="showFlowRate && !isVFD">
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.flowRate.invalid}">
             <label for="baselineFlowRate">Baseline Flow Rate</label>
@@ -43,14 +43,14 @@
     </form>
 </li>
 
-<div class="checkbox">
+<div class="checkbox" *ngIf="!isVFD">
     <label class="group-label" for="modifyPressure">
         <input type="checkbox" id="modifyPressure" (focus)="focusField('inletPressure')" (change)="togglePressure()"
             [(ngModel)]="showPressure" />
         Reduce System Pressure
     </label>
 </div>
-<li *ngIf="showPressure">
+<li *ngIf="showPressure && !isVFD">
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.inletPressure.invalid}">
             <label for="baselinePressure">Baseline Inlet Pressure</label>

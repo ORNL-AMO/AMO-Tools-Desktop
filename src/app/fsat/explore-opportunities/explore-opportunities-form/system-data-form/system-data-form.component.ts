@@ -31,7 +31,9 @@ export class SystemDataFormComponent implements OnInit {
     baselineWarnings: FanFieldDataWarnings;
     @Output('showPressureModal')
     showPressureModal = new EventEmitter<string>();
-
+    @Input()
+    isVFD: boolean;
+    
     showSystemData: boolean = false;
     showCost: boolean = false;
     showFlowRate: boolean = false;

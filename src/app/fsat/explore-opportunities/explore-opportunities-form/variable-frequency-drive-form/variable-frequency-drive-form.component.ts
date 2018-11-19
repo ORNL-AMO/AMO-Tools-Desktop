@@ -39,7 +39,8 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
   fsat: FSAT;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-
+  @Output('showPressureModal')
+  showPressureModal = new EventEmitter<string>();
 
   constructor(private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService) { }
 
@@ -60,4 +61,12 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
     dsp = dsp.replace(')', '');
     return dsp;
   }
+
+  showInletPressureModal(){
+    this.showPressureModal.emit('inlet')
+}
+
+showOutletPressureModal(){
+    this.showPressureModal.emit('outlet');
+}
 }

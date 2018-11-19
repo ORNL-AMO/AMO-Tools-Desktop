@@ -29,7 +29,9 @@ export class FanDataFormComponent implements OnInit {
   modificationForm: FormGroup;
   @Input()
   baselineFanEfficiency: number;
-
+  @Input()
+  isVFD: boolean;
+  
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   showFanType: boolean = false;

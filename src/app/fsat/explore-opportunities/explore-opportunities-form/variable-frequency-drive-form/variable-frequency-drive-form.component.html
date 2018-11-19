@@ -63,7 +63,10 @@
   </form>
   <form [formGroup]="modificationFieldDataForm">
     <div class="form-group" [ngClass]="{'invalid': modificationFieldDataForm.controls.inletPressure.invalid}">
-      <label for="modificationInletPressure">Modification Inlet Pressure</label>
+      <label for="modificationInletPressure">Modification Inlet Pressure
+          <a class="form-text small click-link" (click)="showInletPressureModal()">Estimate
+              Inlet Pressure</a>
+      </label>
       <div class="input-group">
         <input name="modificationInletPressure" type="number" step="any" id="modificationInletPressure" class="form-control"
           (focus)="focusField('inletPressure')" (input)="calculate()" formControlName="inletPressure" />
@@ -74,7 +77,10 @@
       </span>
     </div>
     <div class="form-group" [ngClass]="{'error': modificationWarnings.outletPressureError !== null, 'invalid': modificationFieldDataForm.controls.outletPressure.invalid}">
-      <label for="modificationOutletPressure">Modification Outlet Pressure</label>
+      <label for="modificationOutletPressure">Modification Outlet Pressure
+          <a class="form-text small click-link" (click)="showOutletPressureModal()">Estimate
+              Outlet Pressure</a>
+      </label>
       <div class="input-group">
         <input name="modificationOutletPressure" type="number" step="any" id="modificationOutletPressure" class="form-control"
           (focus)="focusField('outletPressure')" (input)="calculate()" formControlName="outletPressure" />
