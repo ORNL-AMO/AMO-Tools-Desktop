@@ -14,6 +14,7 @@ import { HelpPanelModule } from '../help-panel/help-panel.module';
 import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
 import { VariableFrequencyDriveFormComponent } from './explore-opportunities-form/variable-frequency-drive-form/variable-frequency-drive-form.component';
 import { CalculatePressuresModule } from '../calculate-pressures/calculate-pressures.module';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { CalculatePressuresModule } from '../calculate-pressures/calculate-press
     FsatResultsModule,
     HelpPanelModule,
     FsatSankeyModule,
-    CalculatePressuresModule
+    CalculatePressuresModule,
+    ModalModule
   ],
   declarations: [
     ExploreOpportunitiesComponent,

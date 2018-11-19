@@ -29,7 +29,9 @@ export class SystemDataFormComponent implements OnInit {
     modificationWarnings: FanFieldDataWarnings;
     @Input()
     baselineWarnings: FanFieldDataWarnings;
-    
+    @Output('showPressureModal')
+    showPressureModal = new EventEmitter<string>();
+
     showSystemData: boolean = false;
     showCost: boolean = false;
     showFlowRate: boolean = false;
@@ -51,7 +53,7 @@ export class SystemDataFormComponent implements OnInit {
             if (!changes.exploreModIndex.isFirstChange()) {
                 this.init()
             }
-        }
+        }   
     }
 
     init() {
@@ -155,5 +157,13 @@ export class SystemDataFormComponent implements OnInit {
         let dsp = tmpUnit.unit.name.display.replace('(', '');
         dsp = dsp.replace(')', '');
         return dsp;
+    }
+
+    showInletPressureModal(){
+        this.showPressureModal.emit('inlet')
+    }
+
+    showOutletPressureModal(){
+        this.showPressureModal.emit('outlet');
     }
 }
