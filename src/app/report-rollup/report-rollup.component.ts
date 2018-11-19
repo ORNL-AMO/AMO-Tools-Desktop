@@ -40,7 +40,8 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('phastRollupModal') public phastRollupModal: ModalDirective;
   @ViewChild('fsatRollupModal') public fsatRollupModal: ModalDirective;
-  @ViewChild('reportHeader') reportHeader: ElementRef;  
+  @ViewChild('reportHeader') reportHeader: ElementRef;
+  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
 
   numPhasts: number = 0;
   numPsats: number = 0;
@@ -54,9 +55,32 @@ export class ReportRollupComponent implements OnInit {
   selectedPhastSub: Subscription;
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
+
+  showPrint: boolean = false;
+  showPrintDiv: boolean = false;
+  selectAll: boolean = false;
+  printReportGraphs: boolean = false;
+  printReportSankey: boolean = false;
+  printResults: boolean = false;
+  //phast options
+  printEnergyUsed: boolean = false;
+  printExecutiveSummary: boolean = false;
+
+  printInputData: boolean = false;
+  printPsatRollup: boolean = false;
+  printPhastRollup: boolean = false;
+  printFsatRollup: boolean = false;
+  // printViewSelection: { results: boolean, inputData: boolean, reportGraphs: boolean, reportSankey: boolean} = {
+  //   results: true,
+  //   inputData: false,
+  //   reportGraphs: true,
+  //   reportSankey: true
+  // };
+
   constructor(private activatedRoute: ActivatedRoute, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.initPrintLogic();
     let url = this.activatedRoute.url;
     console.log(url);
     console.log(this.activatedRoute);
@@ -212,12 +236,104 @@ export class ReportRollupComponent implements OnInit {
     }, 100);
   }
 
+  initPrintLogic() {
+    this.selectAll = false;
+    this.printPsatRollup = false;
+    this.printPhastRollup = false;
+    this.printFsatRollup = false;
+    this.printReportGraphs = false;
+    this.printReportSankey = false;
+    this.printResults = false;
+    this.printInputData = false;
+    this.printEnergyUsed = false;
+    this.printExecutiveSummary = false;
+  }
+
+  resetPrintSelection() {
+    this.selectAll = false;
+    this.printReportGraphs = false;
+    this.printReportSankey = false;
+    this.printResults = false;
+    this.printInputData = false;
+  }
+
+  togglePrint(section: string): void {
+    switch (section) {
+      case "selectAll": {
+        this.selectAll = !this.selectAll;
+        if (this.selectAll) {
+          this.printPsatRollup = true;
+          this.printPhastRollup = true;
+          this.printFsatRollup = true;
+          this.printReportGraphs = true;
+          this.printReportSankey = true;
+          this.printResults = true;
+          this.printInputData = true;
+          this.printExecutiveSummary = true;
+          this.printEnergyUsed = true;
+        }
+        else {
+          this.printPsatRollup = false;
+          this.printPhastRollup = false;
+          this.printFsatRollup = false;
+          this.printResults = false;
+          this.printReportGraphs = false;
+          this.printReportSankey = false;
+          this.printInputData = false;
+          this.printExecutiveSummary = false;
+          this.printEnergyUsed = false;
+        }
+        break;
+      }
+      case "psatRollup": {
+        this.printPsatRollup = !this.printPsatRollup;
+        break;
+      }
+      case "phastRollup": {
+        this.printPhastRollup = !this.printPhastRollup;
+        break;
+      }
+      case "fsatRollup": {
+        this.printFsatRollup = !this.printFsatRollup;
+        break;
+      }
+      case "reportGraphs": {
+        this.printReportGraphs = !this.printReportGraphs;
+        break;
+      }
+      case "reportSankey": {
+        this.printReportSankey = !this.printReportSankey;
+        break;
+      }
+      case "results": {
+        this.printResults = !this.printResults;
+        break;
+      }
+      case "inputData": {
+        this.printInputData = !this.printInputData;
+        break;
+      }
+      case "energyUsed": {
+        this.printEnergyUsed = !this.printEnergyUsed;
+        break;
+      }
+      case "executiveSummary": {
+        this.printExecutiveSummary = !this.printExecutiveSummary;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
   print() {
+    this.closePrintModal(false);
     // let win = this.windowRefService.nativeWindow;
     // let doc = this.windowRefService.getDoc();
     // win.print();
     //this.printView = true;
-    this.phastReportService.showPrint.next(true);
+    // this.phastReportService.showPrint.next(true);
 
 
     //eventually add logic for modal or something to say "building print view"
@@ -229,7 +345,7 @@ export class ReportRollupComponent implements OnInit {
       let doc = this.windowRefService.getDoc();
       win.print();
       //after printing hide content again
-      this.phastReportService.showPrint.next(false);
+      // this.phastReportService.showPrint.next(false);
       this.printView = false;
     }, 5000);
   }
@@ -238,7 +354,7 @@ export class ReportRollupComponent implements OnInit {
     this.emitCloseReport.emit(true);
   }
 
-  setFocused(assessment: Assessment){
+  setFocused(assessment: Assessment) {
     this.focusedAssessment = assessment;
   }
 
@@ -255,7 +371,7 @@ export class ReportRollupComponent implements OnInit {
     if (this.reportHeader && scrollAmount) {
       this._reportAssessments.forEach(item => {
         let element = doc.getElementById('assessment_' + item.assessment.id);
-        let diff = Math.abs(Math.abs(this.reportHeader.nativeElement.clientHeight- element.offsetTop) - scrollAmount);
+        let diff = Math.abs(Math.abs(this.reportHeader.nativeElement.clientHeight - element.offsetTop) - scrollAmount);
         if (diff > 0 && diff < 50) {
           this.focusedAssessment = item.assessment;
         }
@@ -293,5 +409,17 @@ export class ReportRollupComponent implements OnInit {
 
   hideFsatModal() {
     this.fsatRollupModal.hide();
+  }
+
+  showPrintModal(): void {
+    this.printMenuModal.show();
+  }
+
+  closePrintModal(reset: boolean): void {
+    if (reset) {
+      // this.resetPrintSelection();
+      this.initPrintLogic();
+    }
+    this.printMenuModal.hide();
   }
 }

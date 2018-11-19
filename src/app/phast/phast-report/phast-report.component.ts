@@ -35,6 +35,20 @@ export class PhastReportComponent implements OnInit {
   quickReport: boolean;
   @Input()
   containerHeight: number;
+  @Input()
+  printView: boolean;
+  @Input()
+  printInputSummary: boolean;
+  @Input()
+  printResultsData: boolean;
+  @Input()
+  printReportGraphs: boolean;
+  @Input()
+  printReportSankey: boolean;
+  @Input()
+  printEnergyUsed: boolean;
+  @Input()
+  printExecutiveSummary: boolean;
 
   @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
 
@@ -50,13 +64,6 @@ export class PhastReportComponent implements OnInit {
   showPrintDiv: boolean = false;
 
   selectAll: boolean = false;
-  // printFacilityInfo: boolean = false;
-  printEnergyUsed: boolean = false;
-  printExecutiveSummary: boolean = false;
-  printResultsData: boolean = false;
-  printReportGraphs: boolean = false;
-  printReportSankey: boolean = false;
-  printInputSummary: boolean = false;
   reportContainerHeight: number;
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private phastReportService: PhastReportService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
@@ -86,24 +93,30 @@ export class PhastReportComponent implements OnInit {
       this.phast.operatingHours.hoursPerYear = 8736;
     }
 
-    //subscribe to print event
-    this.phastReportService.showPrint.subscribe(printVal => {
-      //shows loading print view
-      this.showPrintDiv = printVal;
-      if (printVal == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
+    if (this.inRollup) {
+      this.showPrint = this.printView;
+    }
+    else {
+      //subscribe to print event
+      this.phastReportService.showPrint.subscribe(printVal => {
+        //shows loading print view
+        this.showPrintDiv = printVal;
+        if (printVal == true) {
+          //use delay to show loading before print payload starts
+          setTimeout(() => {
+            this.showPrint = printVal;
+          }, 20)
+        } else {
           this.showPrint = printVal;
-        }, 20)
-      } else {
-        this.showPrint = printVal;
-      }
-    });
+        }
+      });
+    }
+
   }
 
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.containerHeight && !changes.containerHeight.firstChange){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
     }
   }
@@ -111,17 +124,17 @@ export class PhastReportComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    },100)
+    }, 100)
   }
 
-  getContainerHeight(){
+  getContainerHeight() {
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight-btnHeight-headerHeight-25;
+    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
   }
 
   initPrintLogic() {
-    if (this.inRollup) {
+    if (!this.inRollup) {
       this.printEnergyUsed = true;
       this.printExecutiveSummary = true;
       this.printResultsData = true;
@@ -177,7 +190,7 @@ export class PhastReportComponent implements OnInit {
       }
     }
   }
-  
+
   showModal(): void {
     this.printMenuModal.show();
   }

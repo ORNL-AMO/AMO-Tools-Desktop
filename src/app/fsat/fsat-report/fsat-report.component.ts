@@ -39,6 +39,14 @@ export class FsatReportComponent implements OnInit {
   @Input()
   printView: boolean;
   @Input()
+  printInputData: boolean;
+  @Input()
+  printResults: boolean;
+  @Input()
+  printReportGraphs: boolean;
+  @Input()
+  printReportSankey: boolean;
+  @Input()
   containerHeight: number;
 
   @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
@@ -48,10 +56,6 @@ export class FsatReportComponent implements OnInit {
   showPrint: boolean = false;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
-  printReportGraphs: boolean;
-  printReportSankey: boolean;
-  printResults: boolean;
-  printInputData: boolean;
 
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
@@ -62,6 +66,7 @@ export class FsatReportComponent implements OnInit {
   constructor(private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService, private fsatReportService: FsatReportService) { }
 
   ngOnInit() {
+
     this.initPrintLogic();
     this.createdDate = new Date();
     if (this.assessment.fsat && this.settings && !this.fsat) {
@@ -83,24 +88,23 @@ export class FsatReportComponent implements OnInit {
       this.fsat.modifications = new Array();
     }
 
-    //subscribe to print event
-    this.fsatReportService.showPrint.subscribe(printVal => {
-      //shows loading print view
-      this.showPrintDiv = printVal;
-      if (printVal == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
+    if (this.inRollup) {
+      this.showPrint = this.printView;
+    }
+    else {
+      //subscribe to print event
+      this.fsatReportService.showPrint.subscribe(printVal => {
+        //shows loading print view
+        this.showPrintDiv = printVal;
+        if (printVal == true) {
+          //use delay to show loading before print payload starts
+          setTimeout(() => {
+            this.showPrint = printVal;
+          }, 20)
+        } else {
           this.showPrint = printVal;
-        }, 20)
-      } else {
-        this.showPrint = printVal;
-      }
-    });
-
-    if (this.printView !== undefined) {
-      if (this.printView) {
-        this.showPrint = true;
-      }
+        }
+      });
     }
   }
 
@@ -163,7 +167,7 @@ export class FsatReportComponent implements OnInit {
 
 
   initPrintLogic() {
-    if (this.inRollup) {
+    if (!this.inRollup) {
       this.printReportGraphs = true;
       this.printReportSankey = true;
       this.printResults = true;

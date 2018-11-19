@@ -40,6 +40,15 @@ export class PsatReportComponent implements OnInit {
   @Input()
   printView: boolean;
   @Input()
+  printInputData: boolean;
+  @Input()
+  printResults: boolean;
+  @Input()
+  printReportGraphs: boolean;
+  @Input()
+  printReportSankey: boolean;
+  // printViewSelection: { results: boolean, inputData: boolean, reportGraphs: boolean, reportSankey: boolean}
+  @Input()
   containerHeight: number;
 
   @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
@@ -49,11 +58,6 @@ export class PsatReportComponent implements OnInit {
   showPrint: boolean = false;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
-  printReportGraphs: boolean;
-  printReportSankey: boolean;
-  printResults: boolean;
-  printInputData: boolean;
-
 
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
@@ -110,6 +114,9 @@ export class PsatReportComponent implements OnInit {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
     }
+    if (changes.printViewSelection && !changes.printViewSelection.firstChange) {
+      this.initPrintLogic();
+    }
   }
 
   ngAfterViewInit() {
@@ -165,11 +172,11 @@ export class PsatReportComponent implements OnInit {
 
 
   initPrintLogic() {
-    if (this.inRollup) {
-      this.printReportGraphs = true;
-      this.printReportSankey = true;
-      this.printResults = true;
-      this.printInputData = true;
+    if (!this.inRollup) {
+      this.printReportGraphs = false;
+      this.printReportSankey = false;
+      this.printResults = false;
+      this.printInputData = false;
     }
   }
 
