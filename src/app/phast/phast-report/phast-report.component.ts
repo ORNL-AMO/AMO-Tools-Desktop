@@ -135,11 +135,11 @@ export class PhastReportComponent implements OnInit {
 
   initPrintLogic() {
     if (!this.inRollup) {
-      this.printEnergyUsed = true;
-      this.printExecutiveSummary = true;
-      this.printResultsData = true;
-      this.printReportGraphs = true;
-      this.printReportSankey = true;
+      this.printEnergyUsed = false;
+      this.printExecutiveSummary = false;
+      this.printResultsData = false;
+      this.printReportGraphs = false;
+      this.printReportSankey = false;
       this.printInputSummary = false;
     }
   }

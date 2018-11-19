@@ -168,9 +168,10 @@ export class FsatReportComponent implements OnInit {
 
   initPrintLogic() {
     if (!this.inRollup) {
-      this.printReportGraphs = true;
-      this.printReportSankey = true;
-      this.printResults = true;
+      this.selectAll = false;
+      this.printReportGraphs = false;
+      this.printReportSankey = false;
+      this.printResults = false;
       this.printInputData = false;
     }
   }

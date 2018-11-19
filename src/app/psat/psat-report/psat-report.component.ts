@@ -47,7 +47,6 @@ export class PsatReportComponent implements OnInit {
   printReportGraphs: boolean;
   @Input()
   printReportSankey: boolean;
-  // printViewSelection: { results: boolean, inputData: boolean, reportGraphs: boolean, reportSankey: boolean}
   @Input()
   containerHeight: number;
 
