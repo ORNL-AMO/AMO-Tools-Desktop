@@ -58,13 +58,28 @@
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
-            <a class="click-item" (click)="showTool('receiver-tank')">Receiver Tank Calculations</a>
+            <a class="click-item" (click)="showTool('receiver-tank')">Receiver Tank Sizing Calculator</a>
             <p>
-              The receiver tank is used to store a supply of compressed air and assure a steady supply without
-              excessive line pulsations
-              or frequent loading and unloading of the compressor. There are four methods to calculate the required
-              size
-              of the receiver tank.
+              This calculator uses one of four methods to calculate the required size of the receiver tank.
+              The receiver tank is used to store a supply of compressed air and assure a steady
+              supply without excessive line pulsations or frequent loading and unloading of the compressor. There are
+              four methods to calculate the required size of the receiver tank.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png" class="calc-img"
+                (click)="showTool('receiver-tank-usable-air')">
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a class="click-item" (click)="showTool('receiver-tank-usable-air')">Usable Air Capacity Calculator</a>
+            <p>
+              This calculator computes the quantity of compressed air that is actually available for use. When air
+              receivers are installed, the system's pressure profile and lack of storage limit the effectiveness of
+              compressed air energy storage. Hence this calculator proves useful in such a context.
             </p>
           </div>
         </div>
