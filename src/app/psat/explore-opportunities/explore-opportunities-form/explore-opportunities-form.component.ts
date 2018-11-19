@@ -120,6 +120,17 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.emitAddNewMod.emit(true);
   }
 
+  setVFD(){
+    if(this.psat.modifications[this.exploreModIndex].psat.inputs.isVFD){
+      this.modificationPumpFluidForm.controls.drive.patchValue(4);
+      this.modificationPumpFluidForm.controls.specifiedDriveEfficiency.patchValue(95);
+    }else{
+      this.modificationPumpFluidForm.controls.drive.patchValue(this.baselinePumpFluidForm.controls.drive.value);
+      this.modificationPumpFluidForm.controls.specifiedDriveEfficiency.patchValue(95);
+    }
+    this.calculate();
+  }
+
 
   showHeadToolModal() {
     this.psatService.modalOpen.next(true);

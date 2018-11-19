@@ -11,7 +11,7 @@
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
         <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')"
-          [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.isVFD" /> Install VFD
+          [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.isVFD" (change)="setVFD()" /> Install VFD
       </label>
     </div>
     <app-variable-frequency-drive-form 
