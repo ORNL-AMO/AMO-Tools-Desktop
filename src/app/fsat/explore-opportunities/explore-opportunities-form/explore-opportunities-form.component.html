@@ -10,7 +10,7 @@
     </div>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
-        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" (change)="save()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.isVFD" />
+        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.isVFD" />
         Install VFD
       </label>
     </div>

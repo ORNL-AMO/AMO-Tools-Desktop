@@ -32,8 +32,8 @@
       </span>
     </div>
   </form>
-  <form [formGroup]="modificationForm || isVFD">
-    <div class="form-group">
+  <form [formGroup]="modificationForm">
+    <div class="form-group" *ngIf="!isVFD">
       <label for="modificationMotorDrive">Modification Motor Drive</label>
       <select class="form-control" name="drive2" id="drive2" (change)="changeDriveType()" (focus)="focusField('drive')"
         formControlName="drive">

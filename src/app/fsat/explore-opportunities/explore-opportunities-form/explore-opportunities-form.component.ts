@@ -99,7 +99,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.emitSave.emit(true);
   }
 
-
   saveFieldData() {
     let tmpInletPressureData: InletPressureData = this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData;
     let tmpOutletPressureData: OutletPressureData = this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressureData;
@@ -137,7 +136,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.modificationFanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat.modifications[this.exploreModIndex].fsat, this.settings);
   }
 
-
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
     this.modifyConditionsService.modifyConditionsTab.next('fan-field-data')
@@ -146,6 +144,18 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   addNewMod() {
     this.emitAddNewMod.emit(true);
   }
+
+  setVFD(){
+    if(this.fsat.modifications[this.exploreModIndex].fsat.isVFD){
+      this.modificationFanSetupForm.controls.drive.patchValue(4);
+      this.modificationFanSetupForm.controls.specifiedDriveEfficiency.patchValue(95);
+    }else{
+      this.modificationFanSetupForm.controls.drive.patchValue(this.baselineFanSetupForm.controls.drive.value);
+      this.modificationFanSetupForm.controls.specifiedDriveEfficiency.patchValue(95);
+    }
+    this.save();
+  }
+
 
   openPressureModal(str: string) {
     if (this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData) {

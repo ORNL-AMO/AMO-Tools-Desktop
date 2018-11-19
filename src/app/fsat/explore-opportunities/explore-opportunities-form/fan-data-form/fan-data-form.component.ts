@@ -31,7 +31,7 @@ export class FanDataFormComponent implements OnInit {
   baselineFanEfficiency: number;
   @Input()
   isVFD: boolean;
-  
+
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   showFanType: boolean = false;
@@ -49,6 +49,12 @@ export class FanDataFormComponent implements OnInit {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
         this.init()
+      }
+    }
+
+    if(changes.isVFD){
+      if(!changes.isVFD.isFirstChange()){
+        this.init();
       }
     }
   }
