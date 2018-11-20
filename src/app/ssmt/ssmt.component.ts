@@ -14,6 +14,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
+import { SteamService } from '../calculator/steam/steam.service';
 @Component({
   selector: 'app-ssmt',
   templateUrl: './ssmt.component.html',
@@ -69,10 +70,12 @@ export class SsmtComponent implements OnInit {
     private settingsService: SettingsService,
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
-    private compareService: CompareService
+    private compareService: CompareService,
+    private steamService: SteamService
   ) { }
 
   ngOnInit() {
+    this.steamService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
