@@ -183,9 +183,126 @@ export class RunModelService {
 
     //7. Calculate Forced Excess Steam, if positive: open vent
 
+    let forcedExcessSteamMediumPressure: number = _ssmtOutputData.highPressureSteamGasToMediumPressure.massFlow - mediumPressureHeaderInput.processSteamUsage;
 
-    //return daSteamDifference prvSteamRequirement
-    return
+    let forcedExcessSteamLowPressure: number =
+      _ssmtOutputData.mediumPressureSteamGasToLowPressure.massFlow
+      + _ssmtOutputData.blowdownGasToLowPressure.massFlow
+      - _ssmtOutputData.deaeratorOutput.inletSteamMassFlow
+      - lowPressureHeaderInput.processSteamUsage;
+
+    if (_inputData.turbineInput.highToMediumTurbine.useTurbine) {
+      if (_inputData.turbineInput.highToMediumTurbine.operationType != 2) {
+        //if operation type isn't "Balance Header"
+        forcedExcessSteamMediumPressure = forcedExcessSteamMediumPressure + _inputData.turbineInput.highToLowTurbine.operationValue1;
+      }
+    }
+
+    if (_inputData.turbineInput.mediumToLowTurbine.useTurbine) {
+      if (_inputData.turbineInput.mediumToLowTurbine.operationType != 2) {
+        forcedExcessSteamMediumPressure = forcedExcessSteamMediumPressure - _inputData.turbineInput.mediumToLowTurbine.operationValue1;
+        forcedExcessSteamLowPressure = forcedExcessSteamLowPressure + _inputData.turbineInput.mediumToLowTurbine.operationValue1;
+      }
+    }
+
+    if (_inputData.turbineInput.highToLowTurbine.useTurbine) {
+      if (_inputData.turbineInput.highToLowTurbine.operationType != 2) {
+        forcedExcessSteamLowPressure = forcedExcessSteamLowPressure + _inputData.turbineInput.highToLowTurbine.operationValue1;
+      }
+    }
+
+
+    if (forcedExcessSteamMediumPressure > 0) {
+      let forcedSteamThroughTurbine = 0;
+      let forcedSteamThroughPRV = forcedExcessSteamMediumPressure;
+      //operationType = "Balance Headers"
+      if (_inputData.turbineInput.mediumToLowTurbine.useTurbine && _inputData.turbineInput.mediumToLowTurbine.operationType == 2) {
+        forcedSteamThroughTurbine = forcedExcessSteamMediumPressure;
+        forcedSteamThroughPRV = 0;
+      }
+      //operationType == "Power Range" or "Flow Range"
+      if (_inputData.turbineInput.mediumToLowTurbine.useTurbine && _inputData.turbineInput.mediumToLowTurbine.operationType == 3 || _inputData.turbineInput.mediumToLowTurbine.operationType == 4) {
+        //max flow - min flow
+        let forcedPrvMediumPressureLowPressureRemaining: number = forcedExcessSteamMediumPressure - _inputData.turbineInput.mediumToLowTurbine.operationValue2 + _inputData.turbineInput.mediumToLowTurbine.operationValue1;
+        if (forcedPrvMediumPressureLowPressureRemaining > 0) {
+          forcedSteamThroughTurbine = _inputData.turbineInput.mediumToLowTurbine.operationValue2 - _inputData.turbineInput.mediumToLowTurbine.operationValue1
+          forcedSteamThroughPRV = forcedExcessSteamMediumPressure - forcedSteamThroughTurbine;
+        } else {
+          forcedSteamThroughTurbine = forcedExcessSteamMediumPressure;
+          forcedSteamThroughPRV = 0;
+        }
+      }
+      //operationType == "Power Generation" or "Steam Flow"
+      if (_inputData.turbineInput.mediumToLowTurbine.useTurbine && _inputData.turbineInput.mediumToLowTurbine.operationType == 0 || _inputData.turbineInput.mediumToLowTurbine.operationType == 1) {
+        forcedSteamThroughTurbine = 0;
+        forcedSteamThroughPRV = forcedExcessSteamMediumPressure;
+      }
+
+      if (forcedSteamThroughPRV > 0 && lowPressureHeaderInput.desuperheatSteamIntoNextHighest == true) {
+        let forcedPrvMediumPressureLowPressureSteam: SteamPropertiesOutput = _ssmtOutputData.mediumPressureHeader.remainingSteam;
+        //set mass flow
+        forcedPrvMediumPressureLowPressureSteam.massFlow = forcedSteamThroughPRV;
+        let forcedMediumPressureLowPressurePRV = this.steamService.prvWithDesuperheating(
+          {
+            inletPressure: forcedPrvMediumPressureLowPressureSteam.pressure,
+            thermodynamicQuantity: 1,
+            quantityValue: forcedPrvMediumPressureLowPressureSteam.specificEnthalpy,
+            inletMassFlow: forcedPrvMediumPressureLowPressureSteam.massFlow,
+            outletPressure: lowPressureHeaderInput.pressure,
+            feedwaterPressure: _ssmtOutputData.feedwater.pressure,
+            feedwaterThermodynamicQuantity: 1,
+            feedwaterQuantityValue: _ssmtOutputData.feedwater.specificEnthalpy,
+            desuperheatingTemp: lowPressureHeaderInput.desuperheatSteamTemperature
+          },
+          _settings
+        );
+        forcedSteamThroughPRV = forcedMediumPressureLowPressurePRV.outletMassFlow;
+      }
+      forcedExcessSteamLowPressure = forcedExcessSteamLowPressure + forcedSteamThroughTurbine + forcedSteamThroughPRV;
+    }
+
+    let lowPressureSteamVent: number = 0;
+    if (forcedExcessSteamLowPressure > 0) {
+      lowPressureSteamVent = forcedExcessSteamLowPressure;
+    }
+
+    _ssmtOutputData.lowPressureSteamNeed =
+      lowPressureHeaderInput.processSteamUsage
+      + _ssmtOutputData.deaeratorOutput.inletSteamMassFlow
+      - _ssmtOutputData.mediumPressureSteamGasToLowPressure.massFlow
+      - _ssmtOutputData.blowdownGasToLowPressure.massFlow;
+
+    if (forcedExcessSteamMediumPressure > _ssmtOutputData.lowPressureSteamNeed) {
+      _ssmtOutputData.lowPressureSteamNeed = forcedExcessSteamMediumPressure;
+    }
+
+    _ssmtOutputData = this.balanceTurbinesService.balanceTurbines(_inputData.turbineInput, _ssmtOutputData);
+
+    _ssmtOutputData.lowPressurePRVneed = _ssmtOutputData.mediumPressureSteamNeed - _ssmtOutputData.highPressureToLowPressureTurbine.massFlow - _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow;
+    //UNUSED
+    //let remainingSteam: number = _ssmtOutputData.mediumPressureToLowPressurePrv.inletMassFlow - _ssmtOutputData.lowPressurePRVneed;
+
+    let lowPressureBalance: number =
+      lowPressureHeaderInput.processSteamUsage
+      + _ssmtOutputData.deaeratorOutput.inletSteamMassFlow
+      - _ssmtOutputData.mediumPressureSteamGasToLowPressure.massFlow
+      - _ssmtOutputData.blowdownGasToLowPressure.massFlow
+      - _ssmtOutputData.highPressureToLowPressureTurbine.massFlow
+      - _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow
+      - _ssmtOutputData.mediumPressureToLowPressurePrv.outletMassFlow
+      + lowPressureSteamVent;
+
+    let daSteamDifference: number = _ssmtOutputData.deaeratorOutput.inletSteamMassFlow - _ssmtOutputData.steamToDeaerator;
+
+    if (lowPressureBalance > 0) {
+      daSteamDifference = daSteamDifference + lowPressureBalance;
+    }
+    _ssmtOutputData.ventedSteam = _ssmtOutputData.lowPressureHeader.finalHeaderSteam;
+    _ssmtOutputData.ventedSteam.massFlow = _ssmtOutputData.lowPressureSteamVent;
+    //next in the php there is a set of calculations for a "steamRequirements" array but none of it seems to be used.
+    //some of this section is used to logging
+
+    return { outputData: _ssmtOutputData, adjustment: daSteamDifference }
   }
 
   //****** BOILER FUNCTIONS *********/
