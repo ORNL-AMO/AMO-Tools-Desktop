@@ -95,14 +95,8 @@
             [(ngModel)]="showSystemData" /> Adjust Operational Data
     </label>
 </div>
-<!-- <ul *ngIf="showSystemData"> -->
+
 <li *ngIf="showSystemData">
-    <!-- <div class="checkbox">
-            <label for="modifyCost">
-                <input type="checkbox" id="modifyCost" value="true" (focus)="focusField('modifyCost')" (change)="toggleCost()"
-                    [(ngModel)]="showCost" /> Operating Cost
-            </label>
-        </div> -->
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.costKwHr.invalid}">
             <label for="baselineCost">Baseline Cost</label>
@@ -139,12 +133,6 @@
     </form>
 </li>
 <li *ngIf="showSystemData">
-    <!-- <div class="checkbox">
-            <label for="modifyOperatingHours">
-                <input type="checkbox" id="modifyOperatingHours" value="true" (focus)="focusField('operatingHours')"
-                    (change)="toggleOperatingHours()" [(ngModel)]="showOperatingHours" /> Operating Hours
-            </label>
-        </div> -->
     <form [formGroup]="baselineForm">
         <div class="form-group" [ngClass]="{'invalid': baselineForm.controls.operatingHours.invalid}">
             <label for="baselineOperatingHours">Baseline Operating Hours</label>
@@ -166,7 +154,7 @@
         <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.operatingHours.invalid}">
             <label for="modificationOperatingHours">Modification Operating Hours</label>
             <div class="input-group">
-                <input name="modificationOperatingHours" type="number" step="0.1" min="0" max="1" id="modificationOperatingHours"
+                <input name="modificationOperatingHours" type="number" step="1" min="0" max="8760" id="modificationOperatingHours"
                     class="form-control" (focus)="focusField('operatingHours')" (input)="calculate()" formControlName="operatingHours" />
                 <span class="input-group-addon units">hrs/yr</span>
             </div>
@@ -180,4 +168,3 @@
         </div>
     </form>
 </li>
-<!-- </ul> -->

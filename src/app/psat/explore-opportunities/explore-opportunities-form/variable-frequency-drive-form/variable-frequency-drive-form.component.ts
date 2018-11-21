@@ -44,27 +44,15 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
   ngOnInit() {
     this.pumpTypes = pumpTypesConstant;
     this.drives = driveConstants;
-    // this.initForms();
-    // this.checkWarnings();
   }
 
   calculate() {
-    //not needed unless we enable baseline editing
-    //this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.baselineForm, this.psat.inputs);
-    // this.psat.modifications[this.exploreModIndex].psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.modificationPumpFluidForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
-    // this.psat.modifications[this.exploreModIndex].psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.modificationFieldDataForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
-    // this.checkWarnings();
     this.emitCalculate.emit(true);
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
-  // checkWarnings() {
-  //     this.baselineFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
-  //     this.modificationFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-  // }
 
   getDisplayUnit(unit: string) {
     let tmpUnit = this.convertUnitsService.getUnit(unit);

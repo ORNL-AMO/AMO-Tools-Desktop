@@ -28,11 +28,9 @@ export class PumpDataFormComponent implements OnInit {
   modificationForm: FormGroup;
   @Input()
   psat: PSAT;
-
-  // showPumpData: boolean = false;
+  
   showPumpType: boolean = false;
   showMotorDrive: boolean = false;
-  // showPumpSpecified: boolean = false;
 
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
@@ -71,13 +69,8 @@ export class PumpDataFormComponent implements OnInit {
   }
 
   init() {
-    // this.baselineForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
-    // this.baselineForm.disable();
-    // this.modificationForm = this.pumpFluidService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
-   // this.initPumpSpecifiedEfficiency();
     this.initMotorDrive();
     this.initPumpType();
-   // this.initPumpData();
   }
 
   initPumpType() {
@@ -104,39 +97,6 @@ export class PumpDataFormComponent implements OnInit {
       this.showMotorDrive = false;
     }
   }
-
-  // initPumpSpecifiedEfficiency() {
-  //   if (this.baselineForm.controls.specifiedPumpEfficiency.value != this.modificationForm.controls.specifiedPumpEfficiency.value) {
-  //     this.showPumpSpecified = true;
-  //   } else {
-  //     this.showPumpSpecified = false;
-  //   }
-  // }
-
-  // initPumpData() {
-  //   if (this.showMotorDrive || this.showPumpType) {
-  //     this.showPumpData = true;
-  //   } else {
-  //     this.showPumpData = false;
-  //   }
-  // }
-
-  // togglePumpData() {
-  //   if (this.showPumpData == false) {
-  //     // this.showPumpSpecified = false;
-  //     this.showPumpType = false;
-  //     this.showMotorDrive = false;
-  //    // this.togglePumpSpecifiedEfficiency();
-  //     this.togglePumpType();
-  //     this.toggleMotorDrive();
-  //   }
-  // }
-  // togglePumpSpecifiedEfficiency() {
-  //   if (this.showPumpSpecified == false) {
-  //     // this.modificationForm.controls.specifiedPumpEfficiency.patchValue(this.baselineForm.controls.specifiedPumpEfficiency.value);
-  //     this.calculate();
-  //   }
-  // }
 
   togglePumpType() {
     if (this.showPumpType == false) {
