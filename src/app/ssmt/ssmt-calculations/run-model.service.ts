@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ModelerUtilitiesService } from './modeler-utilities.service';
 import { SSMTInputs, Header } from '../../shared/models/steam/ssmt';
-import { SSMTOutput, BoilerOutput, HeaderOutputObj, SteamPropertiesOutput, PrvOutput } from '../../shared/models/steam/steam-outputs';
+import { SSMTOutput, BoilerOutput, HeaderOutputObj, SteamPropertiesOutput, PrvOutput, DeaeratorOutput } from '../../shared/models/steam/steam-outputs';
 import { BalanceTurbinesService } from './balance-turbines.service';
 import { SteamService } from '../../calculator/steam/steam.service';
 import { Settings } from '../../shared/models/settings';
@@ -98,92 +98,37 @@ export class RunModelService {
     //calculate makeup water mass flow
     _ssmtOutputData.makeupWater.massFlow = this.getMakeupWaterMassFlow(_ssmtOutputData, _inputData);
 
-    //calculate makeup water and condensate properties (makeupWaterHeated in php)
+    //calculate makeup water and condensate properties ("makeupWaterHeated" in php)
     //start with makeup water properties
     _ssmtOutputData.makeupWaterAndCondensate = _ssmtOutputData.makeupWater;
 
     if (_inputData.boilerInput.preheatMakeupWater == true) {
-      //inlet steam properties for heat exchanger from blowdown
-      let blowdownInlet: SteamPropertiesOutput
-      if (_inputData.boilerInput.blowdownFlashed) {
-        //if blowdown is flashed then set properties to outlet liquid of flowdown flash tank
-        blowdownInlet =
-          {
-            pressure: _ssmtOutputData.blowdownFlashTank.outletLiquidPressure,
-            temperature: _ssmtOutputData.blowdownFlashTank.outletLiquidTemperature,
-            specificEnthalpy: _ssmtOutputData.blowdownFlashTank.outletLiquidSpecificEnthalpy,
-            specificEntropy: _ssmtOutputData.blowdownFlashTank.outletLiquidSpecificEntropy,
-            quality: _ssmtOutputData.blowdownFlashTank.outletLiquidQuality,
-            specificVolume: _ssmtOutputData.blowdownFlashTank.outletLiquidVolume,
-            massFlow: _ssmtOutputData.blowdownFlashTank.outletLiquidMassFlow,
-            energyFlow: _ssmtOutputData.blowdownFlashTank.outletLiquidEnergyFlow,
-          }
-      } else {
-        //blowdown not flashed so just use properties from blowdown
-        blowdownInlet = _ssmtOutputData.blowdown;
-      }
-      //Next you will have to call the "HeatExchanger"
-      //it was added later and doesn't have a binding for me to do it hear in the desktop
-      //the HeatExchanger has hotOutlet and coldOutlet steam properties
-      //set the makeupWaterAndCondensate output to the coldOutlet properties
-      //Would look something like this if it was available here..
-      //let heatExchangerResults = HeatExchanger()
-      //_ssmtOutputData.makeupWaterAndCondensate = heatExchangerResults.coldOutlet
+      //currently this function just returns the original makeupWaterAndCondensate
+      //need to have HeatExchanger() support in desktop before this will work properly here. Should be do-able in C++
+      _ssmtOutputData.makeupWaterAndCondensate = this.calculateMakeupWaterFromHeatExchanger(_ssmtOutputData, _inputData);
     }
 
     //6. Model Deaerator
-    // the daWaterFeed may need to be set to one of the output objects.
-    //steam to dearator (daWaterFeed in php), header calcuator using:
-    //input deaerator pressure
-    //Array of:
-    //_ssmtOutputData.makeupWaterAndCondensate 
-    //_ssmtOutputData.condensate
-    //_ssmtOutputData.turbineCondensateSteamCooled
-    let daWaterFeed: SteamPropertiesOutput = this.steamService.header(
-      {
-        headerPressure: _inputData.boilerInput.deaeratorPressure,
-        inlets: [
-          {
-            pressure: _ssmtOutputData.makeupWaterAndCondensate.pressure,
-            thermodynamicQuantity: 1,
-            quantityValue: _ssmtOutputData.makeupWaterAndCondensate.specificEnthalpy,
-            massFlow: _ssmtOutputData.makeupWaterAndCondensate.massFlow
-          },
-          {
-            pressure: _ssmtOutputData.condensate.pressure,
-            thermodynamicQuantity: 1,
-            quantityValue: _ssmtOutputData.condensate.specificEnthalpy,
-            massFlow: _ssmtOutputData.condensate.massFlow
-          },
-          {
-            pressure: _ssmtOutputData.turbineCondensateSteamCooled.pressure,
-            thermodynamicQuantity: 1,
-            quantityValue: _ssmtOutputData.turbineCondensateSteamCooled.specificEnthalpy,
-            massFlow: _ssmtOutputData.turbineCondensateSteamCooled.massFlow
-          }
-        ]
-      },
-      _settings
-    ).header.finalHeaderSteam;
-    _ssmtOutputData.steamToDeaerator = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow;
-    _ssmtOutputData.deaeratorOutput = this.steamService.deaerator(
-      {
-        deaeratorPressure: _inputData.boilerInput.deaeratorPressure,
-        ventRate: _inputData.boilerInput.deaeratorVentRate / 100,
-        feedwaterMassFlow: _ssmtOutputData.feedwater.massFlow,
-        waterPressure: daWaterFeed.pressure,
-        waterThermodynamicQuantity: 1,
-        waterQuantityValue: daWaterFeed.specificEnthalpy,
-        steamPressure: _ssmtOutputData.lowPressureHeader.remainingSteam.pressure,
-        steamThermodynamicQuantity: 1,
-        steamQuantityValue: _ssmtOutputData.lowPressureHeader.remainingSteam.specificEnthalpy
-      },
-      _settings
-    )
+    //set steam to dearator value as the remaining steam from the low pressure header  
+    _ssmtOutputData.steamToDeaerator = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow;    
+    //calculate deaerator output object
+    _ssmtOutputData.deaeratorOutput = this.calculateDeaeratorOutputObject(_ssmtOutputData, _inputData, _settings);    
 
     //7. Calculate Forced Excess Steam, if positive: open vent
+    //turbine info
+    //Operation Type ENUM
+    // 0: Fixed "Steam" Flow
+    // 1: Fixed "Power" Generation
+    // 2: Balance Header
+    // 3: Power Range
+    // 4: Flow Range
 
-    let forcedExcessSteamMediumPressure: number = _ssmtOutputData.highPressureSteamGasToMediumPressure.massFlow - mediumPressureHeaderInput.processSteamUsage;
+    //operationValue1: minFlow or minPower or fixedFlow or fixedPower
+    //operationValue2: maxFlow or maxPower
+
+    let forcedExcessSteamMediumPressure: number =
+      _ssmtOutputData.highPressureSteamGasToMediumPressure.massFlow
+      - mediumPressureHeaderInput.processSteamUsage;
 
     let forcedExcessSteamLowPressure: number =
       _ssmtOutputData.mediumPressureSteamGasToLowPressure.massFlow
@@ -279,7 +224,7 @@ export class RunModelService {
     _ssmtOutputData = this.balanceTurbinesService.balanceTurbines(_inputData.turbineInput, _ssmtOutputData);
 
     _ssmtOutputData.lowPressurePRVneed = _ssmtOutputData.mediumPressureSteamNeed - _ssmtOutputData.highPressureToLowPressureTurbine.massFlow - _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow;
-    //UNUSED
+    //UNUSED but in php
     //let remainingSteam: number = _ssmtOutputData.mediumPressureToLowPressurePrv.inletMassFlow - _ssmtOutputData.lowPressurePRVneed;
 
     let lowPressureBalance: number =
@@ -299,8 +244,9 @@ export class RunModelService {
     }
     _ssmtOutputData.ventedSteam = _ssmtOutputData.lowPressureHeader.finalHeaderSteam;
     _ssmtOutputData.ventedSteam.massFlow = _ssmtOutputData.lowPressureSteamVent;
+
     //next in the php there is a set of calculations for a "steamRequirements" array but none of it seems to be used.
-    //some of this section is used to logging
+    //that section is used for logging in the php.
 
     return { outputData: _ssmtOutputData, adjustment: daSteamDifference }
   }
@@ -749,4 +695,83 @@ export class RunModelService {
     return makeupWaterMassFlow;
   }
 
+
+  calculateMakeupWaterFromHeatExchanger(_ssmtOutputData: SSMTOutput, _inputData: SSMTInputs): SteamPropertiesOutput {
+    //set the inlet steam properties for heat exchanger from blowdown
+    let blowdownInlet: SteamPropertiesOutput
+    if (_inputData.boilerInput.blowdownFlashed) {
+      //if blowdown is flashed then set properties to outlet liquid of flowdown flash tank
+      blowdownInlet = {
+        pressure: _ssmtOutputData.blowdownFlashTank.outletLiquidPressure,
+        temperature: _ssmtOutputData.blowdownFlashTank.outletLiquidTemperature,
+        specificEnthalpy: _ssmtOutputData.blowdownFlashTank.outletLiquidSpecificEnthalpy,
+        specificEntropy: _ssmtOutputData.blowdownFlashTank.outletLiquidSpecificEntropy,
+        quality: _ssmtOutputData.blowdownFlashTank.outletLiquidQuality,
+        specificVolume: _ssmtOutputData.blowdownFlashTank.outletLiquidVolume,
+        massFlow: _ssmtOutputData.blowdownFlashTank.outletLiquidMassFlow,
+        energyFlow: _ssmtOutputData.blowdownFlashTank.outletLiquidEnergyFlow,
+      }
+    } else {
+      //blowdown not flashed so just use properties from blowdown
+      blowdownInlet = _ssmtOutputData.blowdown;
+    }
+    //Next you will have to call the "HeatExchanger"
+    //it was added later and doesn't have a binding for me to do it here in the desktop
+    //the HeatExchanger results have hotOutlet and coldOutlet steam properties
+    //set the makeupWaterAndCondensate output to the coldOutlet properties
+    //Would look something like this if it was available here..
+    //let heatExchangerResults = HeatExchanger()
+    //return heatExchangerResults.coldOutlet
+    return _ssmtOutputData.makeupWaterAndCondensate;
+  }
+
+  calculateDeaeratorOutputObject(_ssmtOutputData: SSMTOutput, _inputData: SSMTInputs, _settings: Settings): DeaeratorOutput{
+// the daWaterFeed may need to be set to one of the output objects.
+    //steam to dearator (daWaterFeed in php), header calculator using:
+    //input deaerator pressure
+    //Array of:
+    //_ssmtOutputData.makeupWaterAndCondensate 
+    //_ssmtOutputData.condensate
+    //_ssmtOutputData.turbineCondensateSteamCooled
+    let daWaterFeed: SteamPropertiesOutput = this.steamService.header(
+      {
+        headerPressure: _inputData.boilerInput.deaeratorPressure,
+        inlets: [
+          {
+            pressure: _ssmtOutputData.makeupWaterAndCondensate.pressure,
+            thermodynamicQuantity: 1,
+            quantityValue: _ssmtOutputData.makeupWaterAndCondensate.specificEnthalpy,
+            massFlow: _ssmtOutputData.makeupWaterAndCondensate.massFlow
+          },
+          {
+            pressure: _ssmtOutputData.condensate.pressure,
+            thermodynamicQuantity: 1,
+            quantityValue: _ssmtOutputData.condensate.specificEnthalpy,
+            massFlow: _ssmtOutputData.condensate.massFlow
+          },
+          {
+            pressure: _ssmtOutputData.turbineCondensateSteamCooled.pressure,
+            thermodynamicQuantity: 1,
+            quantityValue: _ssmtOutputData.turbineCondensateSteamCooled.specificEnthalpy,
+            massFlow: _ssmtOutputData.turbineCondensateSteamCooled.massFlow
+          }
+        ]
+      },
+      _settings
+    ).header.finalHeaderSteam;
+    return this.steamService.deaerator(
+      {
+        deaeratorPressure: _inputData.boilerInput.deaeratorPressure,
+        ventRate: _inputData.boilerInput.deaeratorVentRate / 100,
+        feedwaterMassFlow: _ssmtOutputData.feedwater.massFlow,
+        waterPressure: daWaterFeed.pressure,
+        waterThermodynamicQuantity: 1,
+        waterQuantityValue: daWaterFeed.specificEnthalpy,
+        steamPressure: _ssmtOutputData.lowPressureHeader.remainingSteam.pressure,
+        steamThermodynamicQuantity: 1,
+        steamQuantityValue: _ssmtOutputData.lowPressureHeader.remainingSteam.specificEnthalpy
+      },
+      _settings
+    )
+  }
 }
