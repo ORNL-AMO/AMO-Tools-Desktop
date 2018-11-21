@@ -33,7 +33,7 @@ export class SystemDataFormComponent implements OnInit {
     showPressureModal = new EventEmitter<string>();
     @Input()
     isVFD: boolean;
-    
+
     showSystemData: boolean = false;
     showCost: boolean = false;
     showFlowRate: boolean = false;
@@ -55,7 +55,12 @@ export class SystemDataFormComponent implements OnInit {
             if (!changes.exploreModIndex.isFirstChange()) {
                 this.init()
             }
-        }   
+        }
+        if (changes.isVFD) {
+            if (!changes.isVFD.isFirstChange()) {
+                this.init();
+            }
+        }
     }
 
     init() {
@@ -161,11 +166,11 @@ export class SystemDataFormComponent implements OnInit {
         return dsp;
     }
 
-    showInletPressureModal(){
+    showInletPressureModal() {
         this.showPressureModal.emit('inlet')
     }
 
-    showOutletPressureModal(){
+    showOutletPressureModal() {
         this.showPressureModal.emit('outlet');
     }
 }

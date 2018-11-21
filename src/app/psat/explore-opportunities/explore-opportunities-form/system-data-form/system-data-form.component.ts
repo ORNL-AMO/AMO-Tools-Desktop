@@ -46,6 +46,11 @@ export class SystemDataFormComponent implements OnInit {
                 this.init()
             }
         }
+        if(changes.isVFD){
+            if(!changes.isVFD.isFirstChange()){
+                this.init();
+            }
+        }
     }
 
     init() {
