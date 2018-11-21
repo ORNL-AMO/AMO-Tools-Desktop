@@ -42,6 +42,7 @@ export class ReceiverTankComponent implements OnInit {
 
   currentField: string = 'default';
   currentForm: string;
+  toggleResetData: boolean = false;
   constructor(private compressedAirService: CompressedAirService) {
   }
 
@@ -60,6 +61,12 @@ export class ReceiverTankComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    this.toggleResetData = !this.toggleResetData;
+    this.method = 0;
+    this.setCurrentForm();
   }
 
   resizeTabs() {

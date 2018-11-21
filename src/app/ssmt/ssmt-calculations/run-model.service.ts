@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ModelerUtilitiesService } from './modeler-utilities.service';
-import { SSMTInputs, Header } from '../../shared/models/steam/ssmt';
+import { SSMTInputs, HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
 import { SSMTOutput, BoilerOutput, HeaderOutputObj, SteamPropertiesOutput, PrvOutput, DeaeratorOutput } from '../../shared/models/steam/steam-outputs';
 import { BalanceTurbinesService } from './balance-turbines.service';
 import { SteamService } from '../../calculator/steam/steam.service';
@@ -12,9 +12,9 @@ export class RunModelService {
   constructor(private modelerUtilitiesService: ModelerUtilitiesService, private balanceTurbinesService: BalanceTurbinesService, private steamService: SteamService) { }
 
   runModel(_additionalSteamFlow: number, _inputData: SSMTInputs, _ssmtOutputData: SSMTOutput, _settings: Settings, _steamProduction?: number): { adjustment: number, outputData: SSMTOutput } {
-    let lowPressureHeaderInput: Header = _inputData.headerInput[2];
-    let mediumPressureHeaderInput: Header = _inputData.headerInput[1];
-    let highPressureHeaderInput: Header = _inputData.headerInput[0];
+    let lowPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput[2];
+    let mediumPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput[1];
+    let highPressureHeaderInput: HeaderWithHighestPressure = _inputData.headerInput[0];
 
     let tmpSteamProduction: number;
     //1a. Estimate steam production
@@ -267,7 +267,7 @@ export class RunModelService {
       _settings)
   }
 
-  updateBlowdownFlashTankModel(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  updateBlowdownFlashTankModel(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     //use the ssmtOutputData.highPressureHeader instead of pressure from input data here?
     _ssmtOutputData = this.modelerUtilitiesService.setBlowdownFlashTankModel(_ssmtOutputData, _lowPressureHeaderInput.pressure, _settings);
     _ssmtOutputData.blowdownGasToLowPressure = {
@@ -291,7 +291,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
   //****** HIGH PRESSURE HEADER FUNCTIONS *********/
-  updateHighPressureHeader(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  updateHighPressureHeader(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     _ssmtOutputData.highPressureHeader = this.steamService.header(
       {
         headerPressure: _lowPressureHeaderInput.pressure,
@@ -309,7 +309,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  adjustHighPressureHeaderMassFlow(_highPressureHeaderOutput: HeaderOutputObj, _highPressureHeaderInput: Header): HeaderOutputObj {
+  adjustHighPressureHeaderMassFlow(_highPressureHeaderOutput: HeaderOutputObj, _highPressureHeaderInput: HeaderWithHighestPressure): HeaderOutputObj {
     //no idea what the fixed usage stuff is..
     // if (this.energyUsageFixed) {
     //   this.highPressureSteamUsage = this.setSetEnergyUsageHP * 100 / (_ssmtOutputData.highPressureHeader.re.outletSpecificEnthalpy - this.highPressureSaturatedLiquidEnthalpy);
@@ -319,7 +319,7 @@ export class RunModelService {
     return _highPressureHeaderOutput;
   }
 
-  adjustHighPressureTurbineSteamUsage(_ssmtOutputData: SSMTOutput, _highPressureHeaderInput: Header): SSMTOutput {
+  adjustHighPressureTurbineSteamUsage(_ssmtOutputData: SSMTOutput, _highPressureHeaderInput: HeaderWithHighestPressure): SSMTOutput {
     //subtract condensing turbine
     _ssmtOutputData.highPressureHeader.remainingSteam.massFlow = _ssmtOutputData.highPressureHeader.remainingSteam.massFlow - _ssmtOutputData.condensingTurbine.massFlow;
     //subtract high to low pressure turbine
@@ -334,13 +334,13 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  calculateHighPressureCondensate(_ssmtOutputData: SSMTOutput, _highPressureHeaderInput: Header, _mediumPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  calculateHighPressureCondensate(_ssmtOutputData: SSMTOutput, _highPressureHeaderInput: HeaderWithHighestPressure, _mediumPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     _ssmtOutputData.initialHighPressureCondensate.massFlow = _highPressureHeaderInput.processSteamUsage * (_highPressureHeaderInput.condensationRecoveryRate / 100);
     _ssmtOutputData.finalHighPressureCondensate = _ssmtOutputData.initialHighPressureCondensate;
     return _ssmtOutputData;
   }
 
-  flashHighPressureCondensate(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  flashHighPressureCondensate(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     _ssmtOutputData.condensateFlashTank = this.steamService.flashTank(
       {
         inletWaterPressure: _ssmtOutputData.finalHighPressureCondensate.pressure,
@@ -372,7 +372,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  updateHighPressureToLowPressurePRV(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: Header, _settings): PrvOutput {
+  updateHighPressureToLowPressurePRV(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: HeaderNotHighestPressure, _settings): PrvOutput {
     if (_mediumPressureHeaderInput.desuperheatSteamIntoNextHighest) {
       //medium pressure input or medium pressure header in ouput?
       return this.steamService.prvWithDesuperheating(
@@ -410,7 +410,7 @@ export class RunModelService {
   }
 
   //****** MEDIUM PRESSURE HEADER FUNCTIONS *********/
-  updateMediumPressureHeader(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  updateMediumPressureHeader(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     _ssmtOutputData.mediumPressureHeader = this.steamService.header(
       {
         headerPressure: _mediumPressureHeaderInput.pressure,
@@ -440,7 +440,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  adjustMediumPressureHeaderSteamUsage(_mediumPressureHeaderOutput: HeaderOutputObj, _mediumPressureHeaderInput: Header): HeaderOutputObj {
+  adjustMediumPressureHeaderSteamUsage(_mediumPressureHeaderOutput: HeaderOutputObj, _mediumPressureHeaderInput: HeaderNotHighestPressure): HeaderOutputObj {
     //no idea what the fixed usage stuff is..
     // if (this.energyUsageFixed) {
     //   this.highPressureSteamUsage = this.setSetEnergyUsageHP * 100 / (_ssmtOutputData.mediumPressureHeader.re.outletSpecificEnthalpy - this.highPressureSaturatedLiquidEnthalpy);
@@ -460,7 +460,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  adjustMediumPressureTurbineSteamUsage(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: Header): SSMTOutput {
+  adjustMediumPressureTurbineSteamUsage(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: HeaderNotHighestPressure): SSMTOutput {
     //remove mass flow from header into medium to low turbine
     _ssmtOutputData.mediumPressureHeader.remainingSteam.massFlow = _ssmtOutputData.mediumPressureHeader.remainingSteam.massFlow - _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow;
     _ssmtOutputData.mediumPressureSteamNeed = _mediumPressureHeaderInput.processSteamUsage + _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow - _ssmtOutputData.highPressureSteamGasToMediumPressure.massFlow;
@@ -475,7 +475,7 @@ export class RunModelService {
   }
 
 
-  calculateMediumPressureCondensate(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: Header, _lowPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  calculateMediumPressureCondensate(_ssmtOutputData: SSMTOutput, _mediumPressureHeaderInput: HeaderNotHighestPressure, _lowPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     //set mass flow
     _ssmtOutputData.intitialMediumPressureCondensate.massFlow = _mediumPressureHeaderInput.processSteamUsage * (_mediumPressureHeaderInput.condensationRecoveryRate / 100);
     //calculate high and low steam mixture
@@ -501,7 +501,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  flashMediumToLowPressureCondensate(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  flashMediumToLowPressureCondensate(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     _ssmtOutputData.mediumPressureCondensateFlashTank = this.steamService.flashTank(
       {
         inletWaterPressure: _ssmtOutputData.finalMediumPressureCondensate.pressure,
@@ -533,7 +533,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  updateMediumToLowPressurePRV(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: Header, _settings: Settings): PrvOutput {
+  updateMediumToLowPressurePRV(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): PrvOutput {
     if (_lowPressureHeaderInput.desuperheatSteamIntoNextHighest) {
       _ssmtOutputData.mediumPressureToLowPressurePrv = this.steamService.prvWithDesuperheating(
         {
@@ -569,7 +569,7 @@ export class RunModelService {
   }
 
   //****** LOW PRESSURE HEADER FUNCTIONS *********/
-  updateLowPressureHeaderModel(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  updateLowPressureHeaderModel(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     _ssmtOutputData.lowPressureHeader = this.steamService.header(
       {
         headerPressure: _lowPressureHeaderInput.pressure,
@@ -614,7 +614,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  adjustLowPressureHeaderSteamUsage(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: Header): SSMTOutput {
+  adjustLowPressureHeaderSteamUsage(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: HeaderNotHighestPressure): SSMTOutput {
     //no idea what the fixed usage stuff is..
     // if (this.energyUsageFixed) {
     //   this.highPressureSteamUsage = this.setSetEnergyUsageHP * 100 / (_ssmtOutputData.mediumPressureHeader.re.outletSpecificEnthalpy - this.highPressureSaturatedLiquidEnthalpy);
@@ -627,7 +627,7 @@ export class RunModelService {
     return _ssmtOutputData;
   }
 
-  calculateLowPressureCondensate(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: Header, _settings: Settings): SSMTOutput {
+  calculateLowPressureCondensate(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
     _ssmtOutputData.initialLowPressureCondensate.massFlow = _lowPressureHeaderInput.processSteamUsage * (_lowPressureHeaderInput.condensationRecoveryRate / 100)
     _ssmtOutputData.finalLowPressureCondensate = this.steamService.header(
       {

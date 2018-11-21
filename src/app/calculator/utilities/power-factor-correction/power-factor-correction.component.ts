@@ -46,6 +46,16 @@ export class PowerFactorCorrectionComponent implements OnInit {
     this.powerFactorCorrectionService.inputData = this.inputData;
   }
 
+  btnResetData() {
+    this.inputData = {
+      existingDemand: 100,
+      currentPowerFactor: 0.5,
+      proposedPowerFactor: 0.95
+    };
+    this.powerFactorCorrectionService.inputData = this.inputData;
+    this.calculate(this.inputData);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

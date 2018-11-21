@@ -49,6 +49,11 @@ export class ReplaceRewindComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.inputs = this.replaceRewindService.initReplaceRewindData();
+    this.calculate(this.inputs);
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;

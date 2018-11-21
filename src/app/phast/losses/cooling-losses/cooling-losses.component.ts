@@ -42,6 +42,7 @@ export class CoolingLossesComponent implements OnInit {
   lossesLocked: boolean = false;
   disableType: boolean = false;
   total: number;
+  idString: string;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -59,6 +60,12 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_';
+    }
+    else {
+      this.idString = '_baseline_';
+    }
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {

@@ -9,12 +9,17 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SSMT, Modification, BoilerInput } from '../shared/models/steam/ssmt';
+import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
 import { SteamService } from '../calculator/steam/steam.service';
+import { HeaderService } from './header/header.service';
+import { TurbineService } from './turbine/turbine.service';
+import { BoilerService } from './boiler/boiler.service';
+import { AssessmentService } from '../assessment/assessment.service';
+
 @Component({
   selector: 'app-ssmt',
   templateUrl: './ssmt.component.html',
@@ -71,7 +76,11 @@ export class SsmtComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
-    private steamService: SteamService
+    private steamService: SteamService,
+    private headerService: HeaderService,
+    private turbineService: TurbineService,
+    private boilerService: BoilerService,
+    private assessmentService: AssessmentService
   ) { }
 
   ngOnInit() {
@@ -97,6 +106,10 @@ export class SsmtComponent implements OnInit {
           this.compareService.setCompareVals(this._ssmt);
         }
         this.getSettings();
+        let tmpTab = this.assessmentService.getTab();
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       });
     });
     this.subscribeTabs();
@@ -135,7 +148,7 @@ export class SsmtComponent implements OnInit {
     }, 100)
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.mainTabSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
     this.modelTabSubscription.unsubscribe();
@@ -143,6 +156,11 @@ export class SsmtComponent implements OnInit {
     this.selectedModSubscription.unsubscribe();
     this.openModificationSelectSubscription.unsubscribe();
     this.modalOpenSubscription.unsubscribe();
+    this.addNewModificationSubscription.unsubscribe();
+    this.ssmtService.mainTab.next('system-setup');
+    this.ssmtService.stepTab.next('system-basics');
+    this.ssmtService.assessmentTab.next('explore-opportunities');
+    this.ssmtService.steamModelTab.next('operations');
   }
 
   subscribeTabs() {
@@ -220,23 +238,50 @@ export class SsmtComponent implements OnInit {
     } else {
       this.modificationExists = false;
     }
+    this.checkSetupDone();
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         console.log('saved');
-        // this.fsatService.updateData.next(true);
+        this.ssmtService.updateData.next(true);
       })
     })
   }
 
-  saveBoiler(boilerData: BoilerInput){
+  checkSetupDone() {
+    if (this.modificationExists) {
+      this._ssmt.setupDone = true;
+    } else {
+      let isBoilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
+      let isHeaderValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
+      let isTurbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this.settings);
+      if (isBoilerValid && isHeaderValid && isTurbineValid) {
+        this._ssmt.setupDone = true;
+      } else {
+        this._ssmt.setupDone = false;
+      }
+    }
+  }
+
+  saveBoiler(boilerData: BoilerInput) {
     this._ssmt.boilerInput = boilerData;
     this.save();
   }
 
-  saveSsmt() {
+  saveHeaderData(headerInput: HeaderInput) {
+    this._ssmt.headerInput = headerInput;
+    this.save();
+  }
 
+  saveTurbineData(turbineData: TurbineInput) {
+    this._ssmt.turbineInput = turbineData;
+    this.save();
+  }
+
+  saveSsmt(newSSMT: SSMT) {
+    this._ssmt = newSSMT;
+    this.save();
   }
 
   back() {
@@ -266,34 +311,59 @@ export class SsmtComponent implements OnInit {
   }
 
   getCanContinue() {
-    return true;
+    let boilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this.settings);
+    if (this.stepTab == 'operations' || this.stepTab == 'system-basics') {
+      return true;
+    } else if (this.stepTab == 'boiler') {
+      if (boilerValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab == 'header') {
+      if (boilerValid && headerValid) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (this.stepTab == 'turbine') {
+      if (boilerValid && headerValid && turbineValid) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   showAddNewModal() {
-    this.isModalOpen = true;
     this.addNewModal.show();
   }
+
   closeAddNewModal() {
-    this.isModalOpen = false;
+    this.ssmtService.modalOpen.next(false);
     this.ssmtService.openNewModificationModal.next(false);
     this.addNewModal.hide();
   }
 
   saveNewMod(modification: Modification) {
     this._ssmt.modifications.push(modification);
-    this.compareService.setCompareVals(this._ssmt, this._ssmt.modifications.length - 1);
+    this.modificationIndex = this._ssmt.modifications.length - 1;
     this.save();
     this.closeAddNewModal();
   }
+
   selectModificationModal() {
-    this.isModalOpen = true;
+    this.ssmtService.modalOpen.next(true);
     this.changeModificationModal.show();
   }
+
   closeSelectModification() {
-    this.isModalOpen = false;
+    this.ssmtService.modalOpen.next(false);
     this.ssmtService.openModificationSelectModal.next(false);
     this.changeModificationModal.hide();
-    // this.fsatService.updateData.next(true);
+    this.ssmtService.updateData.next(true);
   }
 
   getContainerHeight() {

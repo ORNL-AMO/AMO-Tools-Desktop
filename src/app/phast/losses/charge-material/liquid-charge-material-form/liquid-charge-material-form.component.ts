@@ -35,6 +35,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -43,6 +45,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   warnings: LiquidMaterialWarnings;
   showModal: boolean = false;
+  idString: string;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -58,6 +61,12 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = 'phast_modification_solid_' + this.lossIndex;
+    }
+    else {
+      this.idString = 'phast_baseline_solid_' + this.lossIndex;
+    }
     this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value != '') {

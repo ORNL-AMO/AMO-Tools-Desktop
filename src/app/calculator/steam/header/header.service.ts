@@ -14,7 +14,8 @@ export class HeaderService {
     let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
     let tmpForm: FormGroup = this.formBuilder.group({
       headerPressure: ['', [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
-    })
+      numInlets: [3, [Validators.required]]
+    });
     return tmpForm;
   }
 
@@ -33,7 +34,8 @@ export class HeaderService {
     let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
     let tmpForm: FormGroup = this.formBuilder.group({
       headerPressure: [inputObj.headerPressure, [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
-    })
+      numInlets: [inputObj.numberOfInlets]
+    });
     return tmpForm;
   }
 
@@ -51,7 +53,8 @@ export class HeaderService {
   getObjFromForm(headerForm: FormGroup, inletForms: Array<FormGroup>): HeaderInput {
     let input: HeaderInput = {
       headerPressure: headerForm.controls.headerPressure.value,
-      inlets: new Array<HeaderInputObj>()
+      inlets: new Array<HeaderInputObj>(),
+      numberOfInlets: headerForm.controls.numInlets.value
     }
     inletForms.forEach(form => {
       let tmpObj: HeaderInputObj = this.getInletObjFromForm(form);
@@ -72,8 +75,8 @@ export class HeaderService {
   getInletRangeValues(settings: Settings, thermodynamicQuantity: number): InletRanges {
     let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
     let ranges: InletRanges = {
-      pressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      pressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      pressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      pressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       quantityMin: quantityMinMax.min,
       quantityMax: quantityMinMax.max,
       massFlowMin: 0,
@@ -83,8 +86,8 @@ export class HeaderService {
   }
 
   getPressureRangeValues(settings: Settings): { min: number, max: number } {
-    let min: number = Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0));
-    let max: number = Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0));
+    let min: number = Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3));
+    let max: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3));
     return { min: min, max: max };
   }
 }

@@ -1,0 +1,92 @@
+<div class="pr-2 pl-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Lighting Replacement
+    <br>
+    <small class="text-muted">This calculator can be used to calculate the energy savings of typical energy savings
+      opportunities:
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        Reduce the operation time of lighting equipment.
+        <hr class="mt-1 mb-1">Convert to a lower power use fixture.
+        <hr class="mt-1 mb-1">Reduce the number of lighting fixtures.
+        <hr class="mt-1 mb-1">Turn off the lights when people are not present.
+        <hr class="mt-1 mb-1">
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'hoursPerDay'">
+    <h6>
+      Hours per Day
+      <small class="text-muted">
+        <br>
+        Number of hours per day the lighting is on. This is not necessarily how long the shift is. Be sure to include
+        normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'daysPerMonth'">
+    <h6>
+      Days per Month
+      <small class="text-muted">
+        <br>
+        Number of days per month the lighting is on. This is not necessarily how many days the facility is operating.
+        Be sure to include normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'monthsPerYear'">
+    <h6>
+      Months per Year
+      <small class="text-muted">
+        <br>
+        Number of months per year.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'wattsPerLamp'">
+    <h6>
+      Watts per Lamp
+      <small class="text-muted">
+        <br>
+        Power used by each lamp or bulb in the fixture. Be sure to include the ballast’s power use, if applicable.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'lumensPerLamp'">
+    <h6>
+      Lumens per Lamp
+      <small class="text-muted">
+        <br>
+        Light output for each lamp. (Optional)
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'lampsPerFixture'">
+    <h6>
+      Lamps per Fixture
+      <small class="text-muted">
+        <br>
+        Number of lamps or bulbs in the fixture.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'numberOfFixtures'">
+    <h6>
+      Number of Fixtures
+      <small class="text-muted">
+        <br>
+        Total number of fixtures
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>

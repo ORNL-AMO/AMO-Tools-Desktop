@@ -17,8 +17,10 @@
     </div>
     <div *ngIf="tabSelect == 'help'" class="pr-1 pl-2">
         <app-system-basics-help *ngIf="stepTab == 'system-basics'"></app-system-basics-help>
-        <app-operations-help *ngIf="stepTab == 'operations'"></app-operations-help>
+        <app-operations-help *ngIf="stepTab == 'operations'" [currentField]="currentField"></app-operations-help>
         <app-boiler-help *ngIf="stepTab == 'boiler'" [currentField]="currentField"></app-boiler-help>
+        <app-header-help *ngIf="stepTab == 'header'" [currentField]="currentField"></app-header-help>
+        <app-turbine-help *ngIf="stepTab == 'turbine'" [currentField]="currentField"></app-turbine-help>        
     </div>
 
 

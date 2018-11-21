@@ -12,6 +12,11 @@
       <app-energy-equivalency-form [(energyEquivalencyElectric)]="energyEquivalencyElectric" [(energyEquivalencyFuel)]="energyEquivalencyFuel"
         (calculateFuel)="calculateFuel()" (calculateElectric)="calculateElectric()" [energyEquivalencyElectricOutput]="energyEquivalencyElectricOutput"
         [energyEquivalencyFuelOutput]="energyEquivalencyFuelOutput" (changeField)="setCurrentField($event)" [settings]="settings"></app-energy-equivalency-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
+      </div>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">

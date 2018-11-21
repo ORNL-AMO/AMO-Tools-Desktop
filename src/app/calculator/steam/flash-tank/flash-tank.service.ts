@@ -49,14 +49,14 @@ export class FlashTankService {
   getRangeValues(settings: Settings, thermodynamicQuantity: number): FlashTankRanges {
     let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
     let ranges: FlashTankRanges = {
-      inletWaterPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      inletWaterPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      inletWaterPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      inletWaterPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       quantityValueMin: quantityMinMax.min,
       quantityValueMax: quantityMinMax.max,
       inletWaterMassFlowMin: 0,
       inletWaterMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
-      tankPressureMin: -14.5,
-      tankPressureMax: 3185
+      tankPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      tankPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3))
     }
     return ranges;
   }

@@ -34,6 +34,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
   firstChange: boolean = true;
@@ -41,11 +43,12 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   materialTypes: Array<AtmosphereSpecificHeat>;
   showModal: boolean = false;
+  idString: string;
   constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereLossesService: AtmosphereLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.baselineSelected){
-      if(!changes.baselineSelected.firstChange){
+    if (changes.baselineSelected) {
+      if (!changes.baselineSelected.firstChange) {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
@@ -56,6 +59,12 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
     if (!this.baselineSelected) {
       this.disableForm();

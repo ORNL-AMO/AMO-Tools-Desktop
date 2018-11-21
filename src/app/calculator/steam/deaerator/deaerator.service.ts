@@ -62,18 +62,18 @@ export class DeaeratorService {
     let steamQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, steamThermodynamicQuantity);
     let waterQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, waterThermodynamicQuantity);
     let ranges: DeaeratorRanges = {
-      deaeratorPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      deaeratorPressureMax: Number(this.convertUnitsService.value(3185.4).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      deaeratorPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      deaeratorPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       ventRateMin: 0,
       ventRateMax: 10,
       feedwaterMassFlowMin: 0,
       feedwaterMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
-      waterPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      waterPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      waterPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      waterPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       waterQuantityValueMin: waterQuantityMinMax.min,
       waterQuantityValueMax: waterQuantityMinMax.max,
-      steamPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      steamPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      steamPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      steamPressureMax: Number(this.convertUnitsService.value(22064 ).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       steamQuantityValueMin: steamQuantityMinMax.min,
       steamQuantityValueMax: steamQuantityMinMax.max
     }

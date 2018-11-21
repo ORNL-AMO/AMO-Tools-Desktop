@@ -31,14 +31,22 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-
+  @Input()
+  isBaseline: boolean;
 
   combustionTempWarning: string = null;
   heatWarning: string = null;
   firstChange: boolean = true;
+  idString: string;
   constructor(private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService, private energyInputExhaustGasService: EnergyInputExhaustGasService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.checkWarnings();
   }
 

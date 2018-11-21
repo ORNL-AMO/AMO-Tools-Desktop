@@ -226,7 +226,7 @@ export const MockPsatSettings: Settings = {
     energyResultUnit: "MMBtu",
     temperatureMeasurement: "F",
     steamTemperatureMeasurement: "F",
-    steamPressureMeasurement: "psi",
+    steamPressureMeasurement: "psig",
     steamSpecificEnthalpyMeasurement: "btuLb",
     steamSpecificEntropyMeasurement: "btulbF",
     steamSpecificVolumeMeasurement: "ft3lb",

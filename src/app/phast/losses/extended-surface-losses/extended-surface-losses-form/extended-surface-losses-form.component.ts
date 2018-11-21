@@ -28,16 +28,25 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   warnings: ExtendedSurfaceWarnings;
+  idString: string;
   constructor(private extendedSurfaceCompareService: ExtendedSurfaceCompareService, private extendedLossesSurfaceService: ExtendedSurfaceLossesService) { }
 
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.checkWarnings();
   }
 
-  checkWarnings(){
+  checkWarnings() {
     let tmpLoss: ExtendedSurface = this.extendedLossesSurfaceService.getSurfaceLossFromForm(this.lossesForm);
     this.warnings = this.extendedLossesSurfaceService.checkWarnings(tmpLoss);
     let hasWarning: boolean = this.extendedLossesSurfaceService.checkWarningsExist(this.warnings);

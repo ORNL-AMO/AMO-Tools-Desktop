@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { SsmtService } from '../ssmt.service';
-import { SSMT, BoilerInput } from '../../shared/models/steam/ssmt';
+import { SSMT, BoilerInput, HeaderInput, TurbineInput } from '../../shared/models/steam/ssmt';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 
@@ -22,12 +22,12 @@ export class ModifyConditionsComponent implements OnInit {
   emitSaveAssessment = new EventEmitter<SSMT>();
   @Input()
   containerHeight: number;
-    
+
   modelTab: string;
   modelTabSub: Subscription;
   baselineSelected: boolean = false;
   modifiedSelected: boolean = true;
-  isModalOpen: boolean = false;
+  isModalOpen: boolean;
   modalOpenSubscription: Subscription;
   constructor(private ssmtService: SsmtService) { }
 
@@ -36,9 +36,9 @@ export class ModifyConditionsComponent implements OnInit {
       this.modelTab = val;
     })
 
-     this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(isOpen => {
-       this.isModalOpen = isOpen;
-     })
+    this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(isOpen => {
+      this.isModalOpen = isOpen;
+    })
   }
 
   ngOnChanges() {
@@ -61,6 +61,7 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   addModification() {
+    this.ssmtService.modalOpen.next(true);
     this.ssmtService.openNewModificationModal.next(true);
   }
 
@@ -73,43 +74,28 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
-  // saveBaselineFanSetup(newSetup: FanSetup) {
-  //   this.assessment.fsat.fanSetup = newSetup;
-  //   this.saveAssessment();
-  // }
+  saveBaselineHeader(newHeaderInput: HeaderInput) {
+    this.ssmt.headerInput = newHeaderInput;
+    this.saveAssessment();
+  }
 
-  // saveBaselineFanMotor(newFanMotor: FanMotor) {
-  //   this.assessment.fsat.fanMotor = newFanMotor;
-  //   this.saveAssessment();
-  // }
-
-  // saveBaselineFieldData(newFieldData: FieldData) {
-  //   this.assessment.fsat.fieldData = newFieldData;
-  //   this.saveAssessment();
-  // }
+  saveBaselineTurbine(newTurbineInput: TurbineInput) {
+    this.ssmt.turbineInput = newTurbineInput;
+    this.saveAssessment();
+  }
 
   saveModBoiler(newBoiler: BoilerInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.boilerInput = newBoiler;
     this.saveAssessment();
   }
 
-  // saveModFanSetup(newSetup: FanSetup) {
-  //   this.assessment.fsat.modifications[this.modificationIndex].fsat.fanSetup = newSetup;
-  //   this.saveAssessment();
-  // }
+  saveModHeader(newHeaderInput: HeaderInput) {
+    this.ssmt.modifications[this.modificationIndex].ssmt.headerInput = newHeaderInput;
+    this.saveAssessment();
+  }
 
-  // saveModFanMotor(newFanMotor: FanMotor) {
-  //   this.assessment.fsat.modifications[this.modificationIndex].fsat.fanMotor = newFanMotor;
-  //   this.saveAssessment();
-  // }
-
-  // saveModFieldData(newFieldData: FieldData) {
-  //   this.assessment.fsat.modifications[this.modificationIndex].fsat.fieldData = newFieldData;
-  //   this.saveAssessment();
-  // }
-
-  // saveModExtra(newFsat: FSAT) {
-  //   this.assessment.fsat.modifications[this.modificationIndex].fsat = newFsat;
-  //   this.saveAssessment();
-  // }
+  saveModTurbine(newTurbineInput: TurbineInput) {
+    this.ssmt.modifications[this.modificationIndex].ssmt.turbineInput = newTurbineInput;
+    this.saveAssessment();
+  }
 }

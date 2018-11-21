@@ -42,9 +42,14 @@ export class SteamSettingsComponent implements OnInit {
     this.steamVacuumPreasureMeasurements = new Array();
     //pressureMeasurements
     let tmpList = [
-      'kPa',
-      'psi',
-      'bar'
+      'kPaa',
+      'kPag',
+      'psia',
+      'psig',
+      'barg',
+      'bara',
+      'MPa',
+      'MPaa'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
@@ -154,10 +159,15 @@ export class SteamSettingsComponent implements OnInit {
     })
 
     //steam vacuum
-    //should be bara and psia
     tmpList = [
-      'psi',
-      'bar',
+      'kPaa',
+      'kPag',
+      'psia',
+      'psig',
+      'barg',
+      'bara',
+      'MPa',
+      'MPaa'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {

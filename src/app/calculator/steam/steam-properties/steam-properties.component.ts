@@ -5,6 +5,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamPropertiesInput } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
 import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 
 @Component({
@@ -41,7 +42,8 @@ export class SteamPropertiesComponent implements OnInit {
 
   plotReady: boolean = false;
   ranges: { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number }
-  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
+  toggleResetData: boolean = false;
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService, private changeDetectorRef: ChangeDetectorRef, private steamService: SteamService) { }
 
   ngOnInit() {
     this.graphToggleForm = this.formBuilder.group({
@@ -70,6 +72,14 @@ export class SteamPropertiesComponent implements OnInit {
     }, 100);
   }
 
+  btnResetData() {
+    this.steamService.steamPropertiesInput = null;
+    this.steamPropertiesOutput = this.getEmptyResults();
+    this.getForm(0);
+    this.calculate(this.steamPropertiesForm);
+    this.toggleResetData = !this.toggleResetData;
+  }
+
   getForm(quantityValue: number) {
     this.ranges = this.getRanges(quantityValue);
     if (this.steamService.steamPropertiesInput) {
@@ -94,6 +104,11 @@ export class SteamPropertiesComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+    setTimeout(() => {
+      this.getChartWidth();
+      this.getChartHeight();
+      this.changeDetectorRef.detectChanges();
+    }, 50)
   }
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -163,18 +178,9 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
   getRanges(quantityValue: number): { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number } {
-    let minPressure: number, maxPressure: number;
     let quantityRanges: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, quantityValue);
-    if (this.settings.steamPressureMeasurement == 'psi') {
-      minPressure = 0.2;
-      maxPressure = 14503.7;
-    } else if (this.settings.steamPressureMeasurement == 'kPa') {
-      minPressure = 1;
-      maxPressure = 100000;
-    } else if (this.settings.steamPressureMeasurement == 'bar') {
-      minPressure = 0.01;
-      maxPressure = 1000;
-    }
+    let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
+    let maxPressure: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     return { minQuantityValue: quantityRanges.min, maxQuantityValue: quantityRanges.max, minPressure: minPressure, maxPressure: maxPressure }
   }
 }

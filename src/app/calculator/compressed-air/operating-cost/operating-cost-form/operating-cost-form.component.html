@@ -6,13 +6,13 @@
         <div class="input-group">
           <input name="motorBhp" class="form-control" type="number" step="any" [(ngModel)]="inputs.motorBhp" id="motorBhp" (input)="emitChange()"
             onfocus="this.select();" (focus)="changeField('motorBhp')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">hp</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
         </div>
       </div>
       <div class="form-group">
         <label for="bhpUnloaded">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp </span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'">hp </span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kW </span>
           when Un-loaded</label>
         <div class="input-group">

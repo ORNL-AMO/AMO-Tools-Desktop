@@ -42,9 +42,16 @@ export class FlueGasLossesComponent implements OnInit {
   showError: boolean = false;
   disableType: boolean = false;
   lossesLocked: boolean = false;
+  idString: string;
   constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification';
+    }
+    else {
+      this.idString = '_baseline';
+    }
     if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {

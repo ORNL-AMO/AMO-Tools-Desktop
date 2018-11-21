@@ -10,6 +10,11 @@
     </div>
     <div class="d-flex flex-column m-4">
       <app-motor-drive-form [data]="motorDriveData" (emitCalculate)="calculate($event)" (changeField)="changeField($event)"></app-motor-drive-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
+      </div>
     </div>
   </div>
   <div class="d-flex flex-column w-50 mh-100 scroll-item">
@@ -39,9 +44,12 @@
             Note
             <br>
             <small class="text-muted">
-              Synchronous belts are the most efficient choice. However, notched belts may be a better choice when vibration damping is
-              needed, retrofit of a synchronous belt is not cost effective, or shock loads cause abrupt torque changes that
-              could shear a synchronous belt’s teeth. Consider the application and contact equipment manufacturer before
+              Synchronous belts are the most efficient choice. However, notched belts may be a better choice when
+              vibration damping is
+              needed, retrofit of a synchronous belt is not cost effective, or shock loads cause abrupt torque changes
+              that
+              could shear a synchronous belt’s teeth. Consider the application and contact equipment manufacturer
+              before
               deciding to replace any belt.
             </small>
           </h6>

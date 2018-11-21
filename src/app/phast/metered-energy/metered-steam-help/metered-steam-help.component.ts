@@ -10,6 +10,13 @@ export class MeteredSteamHelpComponent implements OnInit {
   currentField: string;
   @Input()
   inPreAssessment: boolean;
+  @Input()
+  showSteam: boolean;
+  @Input()
+  showElectricity: boolean;
+  @Input()
+  showFuel: boolean;
+  
   constructor() { }
 
   ngOnInit() {

@@ -34,6 +34,8 @@ export class FixtureLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -41,11 +43,12 @@ export class FixtureLossesFormComponent implements OnInit {
   feedRateWarning: string = null;
   materials: Array<any>;
   showModal: boolean = false;
+  idString: string;
   constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private fixtureLossesService: FixtureLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.baselineSelected){
-      if(!changes.baselineSelected.firstChange){
+    if (changes.baselineSelected) {
+      if (!changes.baselineSelected.firstChange) {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
@@ -56,6 +59,12 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
     if (!this.baselineSelected) {
       this.disableForm();
@@ -108,8 +117,8 @@ export class FixtureLossesFormComponent implements OnInit {
       return false;
     }
   }
-  
-  checkWarnings(){
+
+  checkWarnings() {
     let fixtureLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(this.lossesForm);
     let tmpWarnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(fixtureLoss);
     this.specificHeatWarning = tmpWarnings.specificHeatWarning;

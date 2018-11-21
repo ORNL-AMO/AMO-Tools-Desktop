@@ -20,7 +20,7 @@ import { SystemCurveHelpComponent } from './system-curve-help/system-curve-help.
     SystemCurveComponent,
     SystemCurveFormComponent,
     SystemCurveGraphComponent,
-    SystemCurveHelpComponent
+    SystemCurveHelpComponent,
   ],
   exports: [
     SystemCurveComponent,
