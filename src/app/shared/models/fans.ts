@@ -286,6 +286,7 @@ export interface FsatOutput {
   motorPowerFactor: number,
   motorCurrent: number,
   motorPower: number,
+  loadFactor: number,
   annualEnergy: number,
   annualCost: number,
   fanEnergyIndex: number,

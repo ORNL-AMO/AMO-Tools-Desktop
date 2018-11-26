@@ -103,6 +103,7 @@ export class PsatService {
       motor_power_factor: 0,
       motor_current: 0,
       motor_power: 0,
+      load_factor: 0,
       annual_energy: 0,
       annual_cost: 0,
       annual_savings_potential: 0,
