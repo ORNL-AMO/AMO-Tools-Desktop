@@ -12,38 +12,38 @@ export class SettingsService {
     this.setDontShow = new BehaviorSubject<boolean>(false);
   }
 
-  getSettingsForm(): FormGroup {
-    return this.formBuilder.group({
-      'language': ['', Validators.required],
-      'currency': ['', Validators.required],
-      'unitsOfMeasure': ['', Validators.required],
-      'distanceMeasurement': [''],
-      'flowMeasurement': [''],
-      'powerMeasurement': [''],
-      'pressureMeasurement': [''],
-      'steamPressureMeasurement': [''],
-      'steamTemperatureMeasurement': [''],
-      'steamSpecificEnthalpyMeasurement': [''],
-      'steamSpecificEntropyMeasurement': [''],
-      'steamSpecificVolumeMeasurement': [''],
-      'steamPowerMeasurement': [''],
-      'steamMassFlowMeasurement': [''],
-      'currentMeasurement': [''],
-      'viscosityMeasurement': [''],
-      'voltageMeasurement': [''],
-      'energySourceType': [''],
-      'furnaceType': [''],
-      'energyResultUnit': [''],
-      'customFurnaceName': [''],
-      'temperatureMeasurement': [''],
-      'phastRollupUnit': [''],
-      'defaultPanelTab': [''],
-      'fuelCost': [3.99],
-      'steamCost': [4.69],
-      'electricityCost': [.066],
-      'densityMeasurement': ['']
-    });
-  }
+  // getSettingsForm(): FormGroup {
+  //   return this.formBuilder.group({
+  //     'language': ['', Validators.required],
+  //     'currency': ['', Validators.required],
+  //     'unitsOfMeasure': ['', Validators.required],
+  //     'distanceMeasurement': [''],
+  //     'flowMeasurement': [''],
+  //     'powerMeasurement': [''],
+  //     'pressureMeasurement': [''],
+  //     'steamPressureMeasurement': [''],
+  //     'steamTemperatureMeasurement': [''],
+  //     'steamSpecificEnthalpyMeasurement': [''],
+  //     'steamSpecificEntropyMeasurement': [''],
+  //     'steamSpecificVolumeMeasurement': [''],
+  //     'steamPowerMeasurement': [''],
+  //     'steamMassFlowMeasurement': [''],
+  //     'currentMeasurement': [''],
+  //     'viscosityMeasurement': [''],
+  //     'voltageMeasurement': [''],
+  //     'energySourceType': [''],
+  //     'furnaceType': [''],
+  //     'energyResultUnit': [''],
+  //     'customFurnaceName': [''],
+  //     'temperatureMeasurement': [''],
+  //     'phastRollupUnit': [''],
+  //     'defaultPanelTab': [''],
+  //     'fuelCost': [3.99],
+  //     'steamCost': [4.69],
+  //     'electricityCost': [.066],
+  //     'densityMeasurement': ['']
+  //   });
+  // }
 
   getFormFromSettings(settings: Settings): FormGroup {
     return this.formBuilder.group({
@@ -86,7 +86,18 @@ export class SettingsService {
       'fanSpecificHeatGas': [settings.fanSpecificHeatGas || 'btulbF'],
       'fanPowerMeasurement': [settings.fanPowerMeasurement || 'hp'],
       'fanTemperatureMeasurement': [settings.fanTemperatureMeasurement || 'F'],
-      'steamEnergyMeasurement': [settings.steamEnergyMeasurement || 'MMBtu']
+      'steamEnergyMeasurement': [settings.steamEnergyMeasurement || 'MMBtu'],
+      'disableTutorial': settings.disableTutorial || false,
+      'disableDashboardTutorial': settings.disableDashboardTutorial || false,
+      'disablePsatSetupTutorial': settings.disablePsatSetupTutorial || false,
+      'disablePsatAssessmentTutorial': settings.disablePsatAssessmentTutorial || false,
+      'disablePsatReportTutorial': settings.disablePsatReportTutorial || false,
+      'disablePhastSetupTutorial': settings.disablePhastSetupTutorial || false,
+      'disablePhastAssessmentTutorial': settings.disablePhastAssessmentTutorial || false,
+      'disablePhastReportTutorial': settings.disablePhastReportTutorial || false,    
+      'disableFsatSetupTutorial': settings.disableFsatSetupTutorial || false,
+      'disableFsatAssessmentTutorial': settings.disableFsatAssessmentTutorial || false,
+      'disableFsatReportTutorial': settings.disableFsatReportTutorial || false
     });
   }
 
@@ -132,7 +143,18 @@ export class SettingsService {
       fanSpecificHeatGas: form.controls.fanSpecificHeatGas.value,
       fanPowerMeasurement: form.controls.fanPowerMeasurement.value,
       fanTemperatureMeasurement: form.controls.fanTemperatureMeasurement.value,
-      steamEnergyMeasurement: form.controls.steamEnergyMeasurement.value
+      steamEnergyMeasurement: form.controls.steamEnergyMeasurement.value,
+      disableTutorial: form.controls.disableTutorial.value,
+      disableDashboardTutorial: form.controls.disableDashboardTutorial.value,
+      disablePsatSetupTutorial: form.controls.disablePsatSetupTutorial.value,
+      disablePsatAssessmentTutorial: form.controls.disablePsatAssessmentTutorial.value,
+      disablePsatReportTutorial: form.controls.disablePsatReportTutorial.value,
+      disablePhastSetupTutorial: form.controls.disablePhastSetupTutorial.value,
+      disablePhastAssessmentTutorial: form.controls.disablePhastAssessmentTutorial.value,
+      disablePhastReportTutorial: form.controls.disablePhastReportTutorial.value,
+      disableFsatSetupTutorial: form.controls.disableFsatSetupTutorial.value,
+      disableFsatAssessmentTutorial: form.controls.disableFsatAssessmentTutorial.value,
+      disableFsatReportTutorial: form.controls.disableFsatReportTutorial.value,
     };
     return tmpSettings;
   }
@@ -177,7 +199,18 @@ export class SettingsService {
       fanSpecificHeatGas: settings.fanSpecificHeatGas || 'btulbF',
       fanPowerMeasurement: settings.fanPowerMeasurement || 'hp',
       fanTemperatureMeasurement: settings.fanTemperatureMeasurement || 'F',
-      steamEnergyMeasurement: settings.steamEnergyMeasurement || 'kWh'
+      steamEnergyMeasurement: settings.steamEnergyMeasurement || 'kWh',
+      disableTutorial: settings.disableTutorial,
+      disableDashboardTutorial: settings.disableDashboardTutorial,
+      disablePsatSetupTutorial: settings.disablePsatSetupTutorial,
+      disablePsatAssessmentTutorial: settings.disablePsatAssessmentTutorial,
+      disablePsatReportTutorial: settings.disablePsatReportTutorial,
+      disablePhastSetupTutorial: settings.disablePhastSetupTutorial,
+      disablePhastAssessmentTutorial: settings.disablePhastAssessmentTutorial,
+      disablePhastReportTutorial: settings.disablePhastReportTutorial,    
+      disableFsatSetupTutorial: settings.disableFsatSetupTutorial,
+      disableFsatAssessmentTutorial: settings.disableFsatAssessmentTutorial,
+      disableFsatReportTutorial: settings.disableFsatReportTutorial
     }
     return newSettings;
   }

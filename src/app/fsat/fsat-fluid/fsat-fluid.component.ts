@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { Fsat203Service } from '../../calculator/fans/fsat-203/fsat-203.service';
 import { FsatService } from '../fsat.service';
 import { FormGroup } from '@angular/forms';
 import { BaseGasDensity, FSAT } from '../../shared/models/fans';
@@ -8,7 +7,6 @@ import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { CompareService } from '../compare.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FsatWarningService, FanFluidWarnings } from '../fsat-warning.service';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -48,11 +46,9 @@ export class FsatFluidComponent implements OnInit {
     { display: 'Air', value: 'AIR' },
     { display: 'Other Gas', value: 'OTHER' }
   ]
-  //need error string for each warning (nameOfInputField + 'Error')
-  //initialize to null
-  warnings: FanFluidWarnings;
+
   idString: string;
-  constructor(private fsatWarningService: FsatWarningService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -82,7 +78,6 @@ export class FsatFluidComponent implements OnInit {
 
   init() {
     this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(this.baseGasDensity);
-    this.checkForWarnings();
   }
 
   disableForm() {
@@ -100,16 +95,11 @@ export class FsatFluidComponent implements OnInit {
   save() {
     //save is always called on input so add check for warnings call here
     this.baseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.checkForWarnings();
     this.emitSave.emit(this.baseGasDensity);
   }
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
-  }
-
-  checkForWarnings() {
-    this.warnings = this.fsatWarningService.checkFanFluidWarnings(this.baseGasDensity, this.settings);
   }
 
   getDensity() {

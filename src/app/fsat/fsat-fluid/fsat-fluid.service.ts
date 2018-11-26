@@ -17,7 +17,7 @@ export class FsatFluidService {
       conditionLocation: [obj.conditionLocation],
       dryBulbTemp: [obj.dryBulbTemp, gasDensityValidators.dryBulbTempValidators],
       staticPressure: [obj.staticPressure, gasDensityValidators.staticPressureValidators],
-      barometricPressure: [obj.barometricPressure, Validators.required],
+      barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(0)]],
       specificGravity: [obj.specificGravity, gasDensityValidators.specificGravityValidators],
       wetBulbTemp: [obj.wetBulbTemp, gasDensityValidators.wetBulbTempValidators],
       relativeHumidity: [obj.relativeHumidity, gasDensityValidators.relativeHumidityValidators],
