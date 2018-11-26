@@ -13,7 +13,6 @@ export class InitializePropertiesService {
 
 
   initializeSteamProperties(_ssmtOutputData: SSMTOutput, _inputData: SSMTInputs, _settings: Settings): SSMTOutput {
-    console.log('initilize steam');
     if (!_ssmtOutputData) {
       _ssmtOutputData = this.initializeOutputDataObject();
     }
@@ -29,11 +28,10 @@ export class InitializePropertiesService {
     _ssmtOutputData.lowPressureSteamVent = 0;
 
     _ssmtOutputData.mediumPressureSteamNeed = mediumPressureHeaderInput.processSteamUsage;
-    _ssmtOutputData.lowPressureSteamNeed = lowPressureHeaderInput.processSteamUsage;
+    _ssmtOutputData.lowPressureSteamNeed = _ssmtOutputData.steamToDeaerator + lowPressureHeaderInput.processSteamUsage;
 
     //1. Initialize Boiler
     _ssmtOutputData = this.initializeBoilerModel(_inputData.boilerInput, highPressureHeaderInput, _ssmtOutputData, _settings);
-    console.log(_ssmtOutputData);
     //2. Initialize blowdown from boiler
     _ssmtOutputData = this.modelerUtilitiesService.setBlowdown(_ssmtOutputData);
     _ssmtOutputData.blowdownFlashLiquid = _ssmtOutputData.blowdown;

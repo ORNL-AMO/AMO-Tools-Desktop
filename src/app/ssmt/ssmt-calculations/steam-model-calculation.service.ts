@@ -27,8 +27,6 @@ export class SteamModelCalculationService {
   constructor(private runModelService: RunModelService, private initializePropertiesService: InitializePropertiesService) { }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
-    console.log(_ssmt);
-    console.log('get inputs')
     let inputData: SSMTInputs = {
       operationsInput: {
         sitePowerImport: _ssmt.generalSteamOperations.sitePowerImport,
@@ -65,9 +63,8 @@ export class SteamModelCalculationService {
   }
 
   iterateModel(): number {
-    console.log('iterate model');
     let additionalSteamFlow: number = this.steamToDeaerator;
-    if (additionalSteamFlow == 0) {
+    if (additionalSteamFlow == 0 || !additionalSteamFlow) {
       additionalSteamFlow = 1;
     }
     if (this.additionalSteamFlow) {
@@ -142,8 +139,6 @@ export class SteamModelCalculationService {
   }
 
   convergeAdjustment(additionalSteamFlow: number, requiredVal?: number): number {
-    console.log('converge adjustment');
-    console.log('additional steam flow = ' +additionalSteamFlow );
     let requirement: number = .5;
     if (requiredVal) {
       requirement = requiredVal;
@@ -158,7 +153,9 @@ export class SteamModelCalculationService {
       Math.abs(adjustment) != Math.abs(adjustmentLast)
     ) {
       adjustmentLast = adjustment;
-      this.runModelService.runModel(additionalSteamFlow, this.inputData, this.ssmtOutputData, this.settings);
+      let results:  { adjustment: number, outputData: SSMTOutput } = this.runModelService.runModel(additionalSteamFlow, this.inputData, this.ssmtOutputData, this.settings);
+      this.ssmtOutputData = results.outputData;
+      adjustment = results.adjustment;
       if (isNaN(adjustment)) {
         break
       }

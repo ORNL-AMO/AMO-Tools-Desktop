@@ -110,9 +110,9 @@ export class SsmtComponent implements OnInit {
         }
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
-        if (tmpTab) {
-          this.ssmtService.mainTab.next(tmpTab);
-        }
+        // if (tmpTab) {
+        //   this.ssmtService.mainTab.next(tmpTab);
+        // }
       });
     });
     this.subscribeTabs();
@@ -246,7 +246,6 @@ export class SsmtComponent implements OnInit {
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
 
     if (this._ssmt.setupDone) {
-      console.log('call calculated');
       let outputData: SSMTOutput = this.steamModelCalculationService.calculate(this._ssmt, this.settings);
       console.log(outputData);
     }

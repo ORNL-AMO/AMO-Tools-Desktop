@@ -12,6 +12,7 @@ export class RunModelService {
   constructor(private modelerUtilitiesService: ModelerUtilitiesService, private balanceTurbinesService: BalanceTurbinesService, private steamService: SteamService) { }
 
   runModel(_additionalSteamFlow: number, _inputData: SSMTInputs, _ssmtOutputData: SSMTOutput, _settings: Settings, _steamProduction?: number): { adjustment: number, outputData: SSMTOutput } {
+    console.log('run model addtional steam flow = ' + _additionalSteamFlow);
     let lowPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput.lowPressure;
     let mediumPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput.mediumPressure;
     let highPressureHeaderInput: HeaderWithHighestPressure = _inputData.headerInput.highPressure;
@@ -28,7 +29,6 @@ export class RunModelService {
     _ssmtOutputData.boilerOutput = this.updateBoilerModel(_ssmtOutputData.boilerOutput, tmpSteamProduction, _inputData, _settings);
     _ssmtOutputData = this.modelerUtilitiesService.setBlowdown(_ssmtOutputData);
     _ssmtOutputData = this.modelerUtilitiesService.setFeedwater(_ssmtOutputData);
-
     //1c. Model flash tank from boiler blowdown
     if (_inputData.boilerInput.blowdownFlashed) {
       _ssmtOutputData = this.updateBlowdownFlashTankModel(_ssmtOutputData, lowPressureHeaderInput, _settings)
@@ -80,9 +80,10 @@ export class RunModelService {
     //4. Low Pressure Header
     //4a. Setup low pressure header
     _ssmtOutputData = this.updateLowPressureHeaderModel(_ssmtOutputData, lowPressureHeaderInput, _settings);
-
+    // console.log('low p header remaining mass flow = ' + _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow);
     //4b. Adjust Low Pressure Header Mass Flow by removing low pressure header steam usage
     _ssmtOutputData = this.adjustLowPressureHeaderSteamUsage(_ssmtOutputData, lowPressureHeaderInput);
+    // console.log('low p header adjusted remaining mass flow = ' + _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow);
 
     //4c. process low pressure header condensate
     _ssmtOutputData = this.calculateLowPressureCondensate(_ssmtOutputData, lowPressureHeaderInput, _settings);
@@ -111,9 +112,10 @@ export class RunModelService {
     //6. Model Deaerator
     //set steam to dearator value as the remaining steam from the low pressure header  
     _ssmtOutputData.steamToDeaerator = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow;
+    console.log('steam to deaerator = ' + _ssmtOutputData.steamToDeaerator)
     //calculate deaerator output object
     _ssmtOutputData.deaeratorOutput = this.calculateDeaeratorOutputObject(_ssmtOutputData, _inputData, _settings);
-
+    console.log('deaeratorOutput inlet steam mass flow = ' + _ssmtOutputData.deaeratorOutput.inletSteamMassFlow)
     //7. Calculate Forced Excess Steam, if positive: open vent
     //turbine info
     //Operation Type ENUM
@@ -238,7 +240,7 @@ export class RunModelService {
       + lowPressureSteamVent;
 
     let daSteamDifference: number = _ssmtOutputData.deaeratorOutput.inletSteamMassFlow - _ssmtOutputData.steamToDeaerator;
-
+    //console.log('da steam difference =' + daSteamDifference );
     if (lowPressureBalance > 0) {
       daSteamDifference = daSteamDifference + lowPressureBalance;
     }
@@ -255,7 +257,7 @@ export class RunModelService {
   updateBoilerModel(_currentBoilerModel: BoilerOutput, _newMassFlow: number, _inputData: SSMTInputs, _settings: Settings): BoilerOutput {
     //I used the input data where there wasn't corresponding data in the BoilerOutput
     //use enthalpy
-    return this.steamService.boiler({
+    let boilerResults: BoilerOutput = this.steamService.boiler({
       deaeratorPressure: _inputData.boilerInput.deaeratorPressure,
       combustionEfficiency: _inputData.boilerInput.combustionEfficiency,
       blowdownRate: _inputData.boilerInput.blowdownRate,
@@ -265,6 +267,7 @@ export class RunModelService {
       steamMassFlow: _newMassFlow
     },
       _settings)
+    return boilerResults;
   }
 
   updateBlowdownFlashTankModel(_ssmtOutputData: SSMTOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _settings: Settings): SSMTOutput {
@@ -609,8 +612,10 @@ export class RunModelService {
     ).header;
     //setup heat loss values
     _ssmtOutputData.lowPressureHeader = this.modelerUtilitiesService.setHeatLoss(_ssmtOutputData.lowPressureHeader, _lowPressureHeaderInput.heatLoss, _settings);
+    console.log(_ssmtOutputData.lowPressureHeader.remainingSteam.massFlow)
     //low pressure steam vent may come from deaerator "Vented Steam"
     if (_ssmtOutputData.deaeratorOutput) {
+      console.log('vented steam mass flow =' + _ssmtOutputData.deaeratorOutput.ventedSteamMassFlow)
       _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow - _ssmtOutputData.deaeratorOutput.ventedSteamMassFlow;
     }
     return _ssmtOutputData;
@@ -624,8 +629,8 @@ export class RunModelService {
     _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow - _lowPressureHeaderInput.processSteamUsage;
     _ssmtOutputData.lowPressureHeader.massFlow = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow;
 
-    _ssmtOutputData.lowPressureHeaderSteam = _ssmtOutputData.lowPressureHeader.remainingSteam;
-    _ssmtOutputData.lowPressureHeaderSteam.massFlow = _lowPressureHeaderInput.processSteamUsage;
+    // _ssmtOutputData.lowPressureHeaderSteam = _ssmtOutputData.lowPressureHeader.remainingSteam;
+    // _ssmtOutputData.lowPressureHeaderSteam.massFlow = _lowPressureHeaderInput.processSteamUsage;
     return _ssmtOutputData;
   }
 
@@ -760,11 +765,11 @@ export class RunModelService {
         ]
       },
       _settings
-    ).header.finalHeaderSteam;
-    return this.steamService.deaerator(
+    ).header;
+    let tmpDearatorData = this.steamService.deaerator(
       {
         deaeratorPressure: _inputData.boilerInput.deaeratorPressure,
-        ventRate: _inputData.boilerInput.deaeratorVentRate / 100,
+        ventRate: _inputData.boilerInput.deaeratorVentRate,
         feedwaterMassFlow: _ssmtOutputData.feedwater.massFlow,
         waterPressure: daWaterFeed.pressure,
         waterThermodynamicQuantity: 1,
@@ -775,5 +780,6 @@ export class RunModelService {
       },
       _settings
     )
+    return tmpDearatorData;
   }
 }
