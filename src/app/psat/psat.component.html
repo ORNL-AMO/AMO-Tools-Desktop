@@ -138,7 +138,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-add-modification *ngIf="showAdd" [psat]="_psat" [modifications]="_psat.modifications" (save)="saveNewMod($event)"></app-add-modification>
+        <app-add-modification *ngIf="showAdd" [psat]="_psat" [modifications]="_psat.modifications" (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
       </div>
     </div>
   </div>

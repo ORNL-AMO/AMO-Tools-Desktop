@@ -10,6 +10,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { SystemDataFormComponent } from './explore-opportunities-form/system-data-form/system-data-form.component';
 import { RatedMotorFormComponent } from './explore-opportunities-form/rated-motor-form/rated-motor-form.component';
 import { PumpDataFormComponent } from './explore-opportunities-form/pump-data-form/pump-data-form.component';
+import { VariableFrequencyDriveFormComponent } from './explore-opportunities-form/variable-frequency-drive-form/variable-frequency-drive-form.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { PumpDataFormComponent } from './explore-opportunities-form/pump-data-fo
     ExploreOpportunitiesSankeyComponent,
     SystemDataFormComponent,
     RatedMotorFormComponent,
-    PumpDataFormComponent
+    PumpDataFormComponent,
+    VariableFrequencyDriveFormComponent
   ],
   exports: [ExploreOpportunitiesComponent, ExploreOpportunitiesResultsComponent]
 })

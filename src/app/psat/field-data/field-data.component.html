@@ -55,7 +55,7 @@
         <span *ngIf="psatForm.controls.flowRate.errors.min">Value can't be less than
           {{psatForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.flowError !== null && !psatForm.controls.flowRate.invalid && !psatForm.controls.flowRate.pristine">{{fieldDataWarnings.flowError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.flowError !== null && !psatForm.controls.flowRate.invalid && !psatForm.controls.flowRate.pristine">{{fieldDataWarnings.flowError}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isHeadDifferent(), 'invalid': psatForm.controls.head.invalid}">
@@ -129,12 +129,12 @@
     </div>
   </div>
   <div class="pl-3 pr-3" *ngIf="!baseline">
-    <div class="form-group opt-group">
+    <!-- <div class="form-group opt-group">
       <label>
         <span *ngIf="!psatForm.controls.optimizeCalculation.value" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
         <span *ngIf="psatForm.controls.optimizeCalculation.value" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
         Optimize Pump and Motor combination for a Fixed Specific Speed</label>
-    </div>
+    </div> -->
     <div class="form-group" [ngClass]="{'invalid': psatForm.controls.sizeMargin.invalid}">
       <label for="{{'sizeMargin_'+idString}}">Size Margin</label>
       <div class="input-group">

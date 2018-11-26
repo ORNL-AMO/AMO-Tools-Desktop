@@ -112,16 +112,12 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   // sets loss data and percentages for selected psats
-  getPsatModificationData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>, baselinePumpEfficiency: number) {
+  getPsatModificationData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>) {
     let selectedResults: PsatOutputs;
     let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
     let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
-    if (isPsatValid){
-      if (selectedInputs.optimize_calculation) {
-        selectedResults = this.psatService.resultsOptimal(selectedInputs, this.settings);
-      } else {
-        selectedResults = this.psatService.resultsModified(selectedInputs, this.settings, baselinePumpEfficiency);
-      }
+    if (isPsatValid) {
+      selectedResults = this.psatService.resultsModified(selectedInputs, this.settings);
       this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
     }
     else {
@@ -224,7 +220,6 @@ export class PsatReportGraphsComponent implements OnInit {
     let tmpPieValues = new Array<number>();
     let tmpBarValues = new Array<number>();
     let tmpPsat = this.psatOptions[0].psat;
-    let tmpBaselineResults: PsatOutputs = this.getPsatBaselineData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
     allPieLabels.push(tmpPieLabels);
     allPieValues.push(tmpPieValues);
     allBarValues.push(tmpBarValues);
@@ -234,7 +229,7 @@ export class PsatReportGraphsComponent implements OnInit {
       tmpPieValues = new Array<number>();
       tmpBarValues = new Array<number>();
       tmpPsat = this.psatOptions[i].psat;
-      this.getPsatModificationData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues, tmpBaselineResults.pump_efficiency);
+      this.getPsatModificationData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
       allPieLabels.push(tmpPieLabels);
       allPieValues.push(tmpPieValues);
       allBarValues.push(tmpBarValues);

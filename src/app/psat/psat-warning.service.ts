@@ -33,13 +33,19 @@ export class PsatWarningService {
   checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings) {
     let tmpFlowRate: number;
     //convert
+    //get min max
+    let flowRateRange = this.getFlowRateMinMax(pumpStyle);
+    
     if (settings.flowMeasurement != 'gpm') {
       tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.min = this.convertUnitsService.roundVal(flowRateRange.min, 2);
+      flowRateRange.max = this.convertUnitsService.value(flowRateRange.max).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.max = this.convertUnitsService.roundVal(flowRateRange.max, 2);
+
     } else {
       tmpFlowRate = flowRate;
     }
-    //get min max
-    let flowRateRange = this.getFlowRateMinMax(pumpStyle);
     //check in range
     if (tmpFlowRate >= flowRateRange.min && tmpFlowRate <= flowRateRange.max) {
       return null;

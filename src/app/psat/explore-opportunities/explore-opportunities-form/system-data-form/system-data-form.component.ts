@@ -1,18 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { PsatWarningService, FieldDataWarnings } from '../../../psat-warning.service';
+import { FieldDataWarnings } from '../../../psat-warning.service';
 import { FormGroup } from '@angular/forms';
-import { FieldDataService } from '../../../field-data/field-data.service';
 @Component({
     selector: 'app-system-data-form',
     templateUrl: './system-data-form.component.html',
     styleUrls: ['./system-data-form.component.css']
 })
 export class SystemDataFormComponent implements OnInit {
-    @Input()
-    psat: PSAT;
     @Output('emitCalculate')
     emitCalculate = new EventEmitter<boolean>();
     @Output('changeField')
@@ -21,6 +17,17 @@ export class SystemDataFormComponent implements OnInit {
     settings: Settings;
     @Input()
     exploreModIndex: number;
+    @Input()
+    isVFD: boolean;
+    @Input()
+    baselineWarnings: FieldDataWarnings;
+    @Input()
+    modificationWarnings: FieldDataWarnings;
+    @Input()
+    baselineForm: FormGroup;
+    @Input()
+    modificationForm: FormGroup;
+
 
     showSystemData: boolean = false;
     showCost: boolean = false;
@@ -29,11 +36,7 @@ export class SystemDataFormComponent implements OnInit {
     showHead: boolean = false;
     showName: boolean = false;
 
-    baselineForm: FormGroup;
-    modificationForm: FormGroup;
-    baselineWarnings: FieldDataWarnings;
-    modificationWarnings: FieldDataWarnings;
-    constructor(private convertUnitsService: ConvertUnitsService, private psatWarningService: PsatWarningService, private fieldDataService: FieldDataService) {
+    constructor(private convertUnitsService: ConvertUnitsService) {
 
     }
 
@@ -50,10 +53,10 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     init() {
-        this.baselineForm = this.fieldDataService.getFormFromObj(this.psat.inputs, true);
-        this.baselineForm.disable();
-        this.modificationForm = this.fieldDataService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs, false);
-        this.checkWarnings();
+        // this.baselineForm = this.fieldDataService.getFormFromObj(this.psat.inputs, true);
+        // this.baselineForm.disable();
+        // this.modificationForm = this.fieldDataService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs, false);
+        //this.checkWarnings();
         this.initCost();
         this.initFlowRate();
         this.initHead();
@@ -104,12 +107,12 @@ export class SystemDataFormComponent implements OnInit {
     toggleSystemData() {
         if (this.showSystemData == false) {
             this.showCost = false;
-            this.showFlowRate = false;
-            this.showHead = false;
+            // this.showFlowRate = false;
+            // this.showHead = false;
             this.showOperatingHours = false;
             this.toggleCost();
-            this.toggleFlowRate();
-            this.toggleHead();
+            // this.toggleFlowRate();
+            // this.toggleHead();
             this.toggleOperatingHours();
         }
     }
@@ -145,8 +148,8 @@ export class SystemDataFormComponent implements OnInit {
     calculate() {
         //not needed unless we enable baseline editing
         //this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.baselineForm, this.psat.inputs);
-        this.psat.modifications[this.exploreModIndex].psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.modificationForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
-        this.checkWarnings();
+        // this.psat.modifications[this.exploreModIndex].psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.modificationForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
+        // this.checkWarnings();
         this.emitCalculate.emit(true);
     }
 
@@ -154,10 +157,10 @@ export class SystemDataFormComponent implements OnInit {
         this.changeField.emit(str);
     }
 
-    checkWarnings() {
-        this.baselineWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
-        this.modificationWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-    }
+    // checkWarnings() {
+    //     this.baselineWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
+    //     this.modificationWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+    // }
 
     getDisplayUnit(unit: string) {
         let tmpUnit = this.convertUnitsService.getUnit(unit);

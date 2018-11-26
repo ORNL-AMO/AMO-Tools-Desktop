@@ -40,8 +40,9 @@ export interface PsatInputs {
   cost_kw_hour?: number
   cost?: number,
   load_factor?: number,
-  optimize_calculation?: boolean,
+  // optimize_calculation?: boolean,
   implementationCosts?: number,
+  isVFD?: boolean,
   fluidType: string,
   fluidTemperature: number
 }

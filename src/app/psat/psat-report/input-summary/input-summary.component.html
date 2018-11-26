@@ -193,13 +193,11 @@
       <tr *ngIf="anyOptimized">
         <td>Fixed specifc speed?</td>
         <td>&mdash;</td>
-        <td *ngFor="let modification of psat.modifications">
-          <span *ngIf="modification.psat.inputs.optimize_calculation == true">
+        <td *ngFor="let modification of psat.modifications">>
           {{getFixedSpeed(modification.psat.inputs.fixed_speed)}}
-          </span>
-          <span *ngIf="modification.psat.inputs.optimize_calculation != true">
+          <!-- <span *ngIf="modification.psat.inputs.optimize_calculation != true">
             &mdash;
-          </span>
+          </span> -->
         </td>
       </tr>
 
@@ -207,12 +205,12 @@
         <td>Size Margin</td>
         <td>&mdash;</td>
         <td *ngFor="let modification of psat.modifications">
-          <span *ngIf="modification.psat.inputs.optimize_calculation == true">
+          <!-- <span *ngIf="modification.psat.inputs.optimize_calculation == true"> -->
           {{modification.psat.inputs.margin | number:'1.2-2'}}
-          </span>
-          <span *ngIf="modification.psat.inputs.optimize_calculation != true">
+          <!-- </span> -->
+          <!-- <span *ngIf="modification.psat.inputs.optimize_calculation != true">
             &mdash;
-          </span>
+          </span> -->
         </td>
       </tr>
     </tbody>
