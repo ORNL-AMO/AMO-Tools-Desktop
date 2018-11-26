@@ -20,6 +20,7 @@ import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.componen
 import { LineChartHelperService } from './line-chart-helper/line-chart-helper.service';
 import { ExportableTableComponent } from './exportable-table/exportable-table.component';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
+import { PrintOptionsMenuComponent } from './print-options-menu/print-options-menu.component';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
     PhonePipe,
     SimpleTooltipComponent,
     ExportableTableComponent,
-    TabsTooltipComponent
+    TabsTooltipComponent,
+    PrintOptionsMenuComponent
   ],
   exports: [
     ControlMessagesComponent,
