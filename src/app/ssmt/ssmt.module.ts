@@ -29,6 +29,11 @@ import { SsmtDiagramComponent } from './ssmt-diagram/ssmt-diagram.component';
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
 import { SharedModule } from '../shared/shared.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
+import { BalanceTurbinesService } from './ssmt-calculations/balance-turbines.service';
+import { InitializePropertiesService } from './ssmt-calculations/initialize-properties.service';
+import { ModelerUtilitiesService } from './ssmt-calculations/modeler-utilities.service';
+import { RunModelService } from './ssmt-calculations/run-model.service';
+import { SteamModelCalculationService } from './ssmt-calculations/steam-model-calculation.service';
 
 @NgModule({
   imports: [
@@ -67,7 +72,12 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     CompareService,
     BoilerService,
     HeaderService,
-    TurbineService
+    TurbineService,
+    BalanceTurbinesService,
+    InitializePropertiesService,
+    ModelerUtilitiesService,
+    RunModelService,
+    SteamModelCalculationService
   ]
 })
 export class SsmtModule { }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SSMTOutput, SteamPropertiesOutput } from '../../shared/models/steam/steam-outputs';
-import { SSMTInputs, Header, BoilerInput, CondensingTurbine, PressureTurbine, OperationsInput } from '../../shared/models/steam/ssmt';
+import { SSMTInputs, BoilerInput, CondensingTurbine, PressureTurbine, OperationsInput, HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
 import { SteamService } from '../../calculator/steam/steam.service';
 import { Settings } from '../../shared/models/settings';
 import { BalanceTurbinesService } from './balance-turbines.service';
@@ -13,11 +13,15 @@ export class InitializePropertiesService {
 
 
   initializeSteamProperties(_ssmtOutputData: SSMTOutput, _inputData: SSMTInputs, _settings: Settings): SSMTOutput {
+    console.log('initilize steam');
+    if (!_ssmtOutputData) {
+      _ssmtOutputData = this.initializeOutputDataObject();
+    }
     //constants needed for this function
     //headers from UI
-    let lowPressureHeaderInput: Header = _inputData.headerInput[2];
-    let mediumPressureHeaderInput: Header = _inputData.headerInput[1];
-    let highPressureHeaderInput: Header = _inputData.headerInput[0];
+    let lowPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput.lowPressure;
+    let mediumPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput.mediumPressure;
+    let highPressureHeaderInput: HeaderWithHighestPressure = _inputData.headerInput.highPressure;
     let initialSteamUsageGuess: number = lowPressureHeaderInput.processSteamUsage + highPressureHeaderInput.processSteamUsage + mediumPressureHeaderInput.processSteamUsage;
     //intialize data constants
     _ssmtOutputData.steamToDeaerator = initialSteamUsageGuess * .1;
@@ -29,6 +33,7 @@ export class InitializePropertiesService {
 
     //1. Initialize Boiler
     _ssmtOutputData = this.initializeBoilerModel(_inputData.boilerInput, highPressureHeaderInput, _ssmtOutputData, _settings);
+    console.log(_ssmtOutputData);
     //2. Initialize blowdown from boiler
     _ssmtOutputData = this.modelerUtilitiesService.setBlowdown(_ssmtOutputData);
     _ssmtOutputData.blowdownFlashLiquid = _ssmtOutputData.blowdown;
@@ -131,7 +136,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData;
   }
 
-  initializeBoilerModel(boilerInput: BoilerInput, highPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeBoilerModel(boilerInput: BoilerInput, highPressureHeaderInput: HeaderWithHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     _ssmtOutputData.boilerOutput = this.steamService.boiler(
       {
         steamPressure: highPressureHeaderInput.pressure,
@@ -154,7 +159,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData;
   }
 
-  initializeMediumPressureCondensateProperties(_mediumPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeMediumPressureCondensateProperties(_mediumPressureHeaderInput: HeaderNotHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     //get the steam properties based off medium pressure header from UI
     _ssmtOutputData.intitialMediumPressureCondensate = this.steamService.steamProperties(
       {
@@ -168,7 +173,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData;
   }
 
-  initializeLowPressureCondensateProperties(_lowPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeLowPressureCondensateProperties(_lowPressureHeaderInput: HeaderNotHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     //get the steam properties based off low pressure header from UI
     _ssmtOutputData.initialLowPressureCondensate = this.steamService.steamProperties(
       {
@@ -182,7 +187,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData;
   }
 
-  initializeReturnCondensateProperties(_lowPressureHeaderInput: Header, _mediumPressureHeaderInput: Header, _highPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeReturnCondensateProperties(_lowPressureHeaderInput: HeaderNotHighestPressure, _mediumPressureHeaderInput: HeaderNotHighestPressure, _highPressureHeaderInput: HeaderWithHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     //calculate the return condensate and mass flow..what php has
     _ssmtOutputData.inititialReturnCondensate = this.steamService.steamProperties(
       {
@@ -199,7 +204,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData
   }
 
-  initializeReturnSteamFlashTank(_boilerInput: BoilerInput, _lowPressureHeaderInput: Header, _mediumPressureHeaderInput: Header, _highPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeReturnSteamFlashTank(_boilerInput: BoilerInput, _lowPressureHeaderInput: HeaderNotHighestPressure, _mediumPressureHeaderInput: HeaderNotHighestPressure, _highPressureHeaderInput: HeaderWithHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     _ssmtOutputData.condensateFlashTank = this.steamService.flashTank(
       {
         inletWaterPressure: _lowPressureHeaderInput.pressure,
@@ -217,7 +222,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData;
   }
 
-  initializeHighPressureHeader(highPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeHighPressureHeader(highPressureHeaderInput: HeaderWithHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     //get header calculation results   
     //I DON"T THINK THIS IS CORRECT...
     //are we still using the header input when we get to this step?
@@ -279,7 +284,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData;
   }
 
-  initializeHighPressureToLowPressureTurbine(_highToLowPressureTurbine: PressureTurbine, _highPressureSteam: SteamPropertiesOutput, _lowPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeHighPressureToLowPressureTurbine(_highToLowPressureTurbine: PressureTurbine, _highPressureSteam: SteamPropertiesOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     //TODO: highToLowPressureTurbine.operationType to set turbine property and corresponding
     //massFlowOrPowerOutValue.. 
     //operationType options: "Steam Flow", "Power Generation", "Balance Header", "Power Range", "Flow Range"
@@ -304,7 +309,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData;
   }
 
-  initializeHighPressureToMediumPressureTurbine(_highToMediumPressureTurbine: PressureTurbine, _highPressureSteam: SteamPropertiesOutput, _mediumPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeHighPressureToMediumPressureTurbine(_highToMediumPressureTurbine: PressureTurbine, _highPressureSteam: SteamPropertiesOutput, _mediumPressureHeaderInput: HeaderNotHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     //TODO: highToMediumPressureTurbine.operationType to set turbine property and corresponding
     //massFlowOrPowerOutValue.. 
     //operationType options: "Steam Flow", "Power Generation", "Balance Header", "Power Range", "Flow Range"
@@ -329,7 +334,7 @@ export class InitializePropertiesService {
     return _ssmtOutputData;
   }
 
-  initializeMediumPressureToLowPressureTurbine(_mediumToLowPressureTurbine: PressureTurbine, _mediumPressureSteam: SteamPropertiesOutput, _lowPressureHeaderInput: Header, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
+  initializeMediumPressureToLowPressureTurbine(_mediumToLowPressureTurbine: PressureTurbine, _mediumPressureSteam: SteamPropertiesOutput, _lowPressureHeaderInput: HeaderNotHighestPressure, _ssmtOutputData: SSMTOutput, _settings: Settings): SSMTOutput {
     //TODO: mediumToLowPressureTurbine.operationType to set turbine property and corresponding
     //massFlowOrPowerOutValue.. 
     //operationType options: "Steam Flow", "Power Generation", "Balance Header", "Power Range", "Flow Range"
@@ -370,5 +375,77 @@ export class InitializePropertiesService {
       _settings
     )
     return _ssmtOutputData;
+  }
+
+
+  initializeOutputDataObject(): SSMTOutput {
+    return {
+      //1 always
+      operationsOutput: undefined,
+      boilerOutput: undefined,
+      deaeratorOutput: undefined,
+      feedwater: undefined,
+      highPressureHeader: undefined,
+      highPressureHeaderSteam: undefined,
+      blowdown: undefined,
+      condensate: undefined,
+      makeupWater: undefined,
+      makeupWaterAndCondensate: undefined,
+      highPressureProcessSteamUsage: undefined,
+      //Optional
+      //0-4
+      condensingTurbine: undefined,
+      highPressureToMediumPressureTurbine: undefined,
+      highPressureToLowPressureTurbine: undefined,
+      mediumPressureToLowPressureTurbine: undefined,
+      //additional headers
+      mediumPressureHeader: undefined,
+      mediumPressureHeaderSteam: undefined,
+      lowPressureHeaderSteam: undefined,
+      lowPressureHeader: undefined,
+      //0-2 PRV
+      highPressureToMediumPressurePrv: undefined,
+      mediumPressureToLowPressurePrv: undefined,
+      //0-4 flash tanks
+      blowdownFlashTank: undefined,
+      condensateFlashTank: undefined,
+      highPressureCondensateFlashTank: undefined,
+      mediumPressureCondensateFlashTank: undefined,
+      //TODO: Heat Exchange
+      //heatExchange?: HeatExchange
+      //vented steam
+      ventedSteam: undefined,
+
+
+      //additions may not be needed for results but used for calculations
+      steamToDeaerator: undefined,
+      lowPressurePRVneed: undefined,
+      lowPressureSteamVent: undefined,
+
+      mediumPressureSteamNeed: undefined,
+      lowPressureSteamNeed: undefined,
+      blowdownFlashLiquid: undefined,
+      blowdownGasToLowPressure: undefined,
+      condensateReturnVent: undefined,
+      inititialReturnCondensate: undefined,
+      initialHighPressureCondensate: undefined,
+      highPressureSaturatedLiquidEnthalpy: undefined,
+      intitialMediumPressureCondensate: undefined,
+      mediumPressureSaturatedLiquidEnthalpy: undefined,
+      initialLowPressureCondensate: undefined,
+      lowPressureSaturatedLiquidEnthalpy: undefined,
+      highPressureToLowPressureTurbineFlow: undefined,
+      highPressureToMediumPressureTurbineFlow: undefined,
+      mediumPressureToLowPressureTurbineModelFlow: undefined,
+      mediumPressureSteamRemaining: undefined,
+      turbineCondensateSteamCooled: undefined,
+      siteTotalPowerCost: undefined,
+
+      finalHighPressureCondensate: undefined,
+      finalMediumPressureCondensate: undefined,
+      finalLowPressureCondensate: undefined,
+      highPressureSteamGasToMediumPressure: undefined,
+      mediumPressureSteamGasToLowPressure: undefined
+    }
   }
 }

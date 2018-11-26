@@ -12,9 +12,9 @@ export class RunModelService {
   constructor(private modelerUtilitiesService: ModelerUtilitiesService, private balanceTurbinesService: BalanceTurbinesService, private steamService: SteamService) { }
 
   runModel(_additionalSteamFlow: number, _inputData: SSMTInputs, _ssmtOutputData: SSMTOutput, _settings: Settings, _steamProduction?: number): { adjustment: number, outputData: SSMTOutput } {
-    let lowPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput[2];
-    let mediumPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput[1];
-    let highPressureHeaderInput: HeaderWithHighestPressure = _inputData.headerInput[0];
+    let lowPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput.lowPressure;
+    let mediumPressureHeaderInput: HeaderNotHighestPressure = _inputData.headerInput.mediumPressure;
+    let highPressureHeaderInput: HeaderWithHighestPressure = _inputData.headerInput.highPressure;
 
     let tmpSteamProduction: number;
     //1a. Estimate steam production
@@ -110,9 +110,9 @@ export class RunModelService {
 
     //6. Model Deaerator
     //set steam to dearator value as the remaining steam from the low pressure header  
-    _ssmtOutputData.steamToDeaerator = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow;    
+    _ssmtOutputData.steamToDeaerator = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow;
     //calculate deaerator output object
-    _ssmtOutputData.deaeratorOutput = this.calculateDeaeratorOutputObject(_ssmtOutputData, _inputData, _settings);    
+    _ssmtOutputData.deaeratorOutput = this.calculateDeaeratorOutputObject(_ssmtOutputData, _inputData, _settings);
 
     //7. Calculate Forced Excess Steam, if positive: open vent
     //turbine info
@@ -465,7 +465,7 @@ export class RunModelService {
     _ssmtOutputData.mediumPressureHeader.remainingSteam.massFlow = _ssmtOutputData.mediumPressureHeader.remainingSteam.massFlow - _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow;
     _ssmtOutputData.mediumPressureSteamNeed = _mediumPressureHeaderInput.processSteamUsage + _ssmtOutputData.mediumPressureToLowPressureTurbine.massFlow - _ssmtOutputData.highPressureSteamGasToMediumPressure.massFlow;
     //if there is inlet mass flow update steam need
-    if (_ssmtOutputData.mediumPressureToLowPressurePrv.inletMassFlow) {
+    if (_ssmtOutputData.mediumPressureToLowPressurePrv && _ssmtOutputData.mediumPressureToLowPressurePrv.inletMassFlow) {
       _ssmtOutputData.mediumPressureSteamNeed = _ssmtOutputData.mediumPressureSteamNeed + _ssmtOutputData.mediumPressureToLowPressurePrv.inletMassFlow;
     }
     //update header steam values
@@ -610,7 +610,9 @@ export class RunModelService {
     //setup heat loss values
     _ssmtOutputData.lowPressureHeader = this.modelerUtilitiesService.setHeatLoss(_ssmtOutputData.lowPressureHeader, _lowPressureHeaderInput.heatLoss, _settings);
     //low pressure steam vent may come from deaerator "Vented Steam"
-    _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow - _ssmtOutputData.deaeratorOutput.ventedSteamMassFlow;
+    if (_ssmtOutputData.deaeratorOutput) {
+      _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow = _ssmtOutputData.lowPressureHeader.remainingSteam.massFlow - _ssmtOutputData.deaeratorOutput.ventedSteamMassFlow;
+    }
     return _ssmtOutputData;
   }
 
@@ -725,8 +727,8 @@ export class RunModelService {
     return _ssmtOutputData.makeupWaterAndCondensate;
   }
 
-  calculateDeaeratorOutputObject(_ssmtOutputData: SSMTOutput, _inputData: SSMTInputs, _settings: Settings): DeaeratorOutput{
-// the daWaterFeed may need to be set to one of the output objects.
+  calculateDeaeratorOutputObject(_ssmtOutputData: SSMTOutput, _inputData: SSMTInputs, _settings: Settings): DeaeratorOutput {
+    // the daWaterFeed may need to be set to one of the output objects.
     //steam to dearator (daWaterFeed in php), header calculator using:
     //input deaerator pressure
     //Array of:

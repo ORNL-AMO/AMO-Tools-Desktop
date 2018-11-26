@@ -9,7 +9,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput } from '../shared/models/steam/ssmt';
+import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput, SSMTInputs } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
@@ -19,6 +19,8 @@ import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
 import { AssessmentService } from '../assessment/assessment.service';
+import { SteamModelCalculationService } from './ssmt-calculations/steam-model-calculation.service';
+import { SSMTOutput } from '../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-ssmt',
@@ -80,11 +82,12 @@ export class SsmtComponent implements OnInit {
     private headerService: HeaderService,
     private turbineService: TurbineService,
     private boilerService: BoilerService,
-    private assessmentService: AssessmentService
+    private assessmentService: AssessmentService,
+    private steamModelCalculationService: SteamModelCalculationService
   ) { }
 
   ngOnInit() {
-    this.steamService.test();
+    //this.steamService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -241,6 +244,14 @@ export class SsmtComponent implements OnInit {
     this.checkSetupDone();
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
+
+    if (this._ssmt.setupDone) {
+      console.log('call calculated');
+      let outputData: SSMTOutput = this.steamModelCalculationService.calculate(this._ssmt, this.settings);
+      console.log(outputData);
+    }
+
+
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         console.log('saved');
