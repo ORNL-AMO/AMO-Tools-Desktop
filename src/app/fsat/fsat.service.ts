@@ -109,6 +109,9 @@ export class FsatService {
   //fsat results
   getResults(fsat: FSAT, resultType: string, settings: Settings): FsatOutput {
     if (this.checkValid(fsat)) {
+      if(!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction){
+        fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
+      }
       let input: FsatInput = {
         fanSpeed: fsat.fanSetup.fanSpeed,
         drive: fsat.fanSetup.drive,
@@ -130,7 +133,7 @@ export class FsatService {
         inletPressure: fsat.fieldData.inletPressure,
         outletPressure: fsat.fieldData.outletPressure,
         compressibilityFactor: fsat.fieldData.compressibilityFactor,
-        operatingFraction: fsat.fieldData.operatingFraction,
+        operatingHours: fsat.fieldData.operatingHours,
         unitCost: fsat.fieldData.cost,
         airDensity: fsat.baseGasDensity.gasDensity,
         isSpecified: false

@@ -138,7 +138,7 @@ export class InputSummaryComponent implements OnInit {
         // if (mod.psat.inputs.margin != this.psat.inputs.margin) {
         //   this.marginDiff = true;
         // }
-        if (mod.psat.inputs.operating_fraction != this.psat.inputs.operating_fraction) {
+        if (mod.psat.inputs.operating_hours != this.psat.inputs.operating_hours) {
           this.opFracDiff = true;
         }
         if (mod.psat.inputs.cost_kw_hour != this.psat.inputs.cost_kw_hour) {

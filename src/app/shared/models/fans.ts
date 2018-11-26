@@ -26,7 +26,10 @@ export interface Notes {
 
 //fsat Data
 export interface FieldData {
-  operatingFraction: number,
+  //TODO: remove operatingFraction support
+  //removed from suit v0.3.2
+  operatingFraction?: number,
+  operatingHours: number,
   cost: number,
   flowRate: number,
   inletPressure: number,
@@ -263,7 +266,8 @@ export interface FsatInput {
   inletPressure: number,
   outletPressure: number,
   compressibilityFactor: number,
-  operatingFraction: number,
+  // operatingFraction: number,
+  operatingHours: number,
   unitCost: number,
   airDensity: number,
   userInputFanEfficiency?: number,
