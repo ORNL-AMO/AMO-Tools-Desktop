@@ -1,9 +1,10 @@
-<div bsModal #printMenuModal="bs-modal" class="modal fade hide-print" tabindex="-1" role="dialog" aria-labelledby="printMenuLabelModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+<div bsModal #printMenuModal="bs-modal" class="modal fade hide-print" tabindex="-1" role="dialog" aria-labelledby="printMenuLabelModal"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md hide-print">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Print Report</h3>
-                <button class="close" (click)="closePrintModal(false)">
+                <button class="close" (click)="closePrintModal(true)">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -31,7 +32,8 @@
                         PSAT Rollup Summary
                     </div>
                 </div>
-                <div class="row toggle-btn pad-top-10" *ngIf="showPhastReportOptions && showRollupReportOptions" (click)="togglePrint('phastRollup')">
+                <div class="row toggle-btn pad-top-10" *ngIf="showPhastReportOptions && showRollupReportOptions"
+                    (click)="togglePrint('phastRollup')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printPhastRollup"></app-animated-checkmark>
                     </div>
@@ -80,11 +82,11 @@
                         Input Summary
                     </div>
                 </div>
-                <div *ngIf="_phastAssessments.length > 0" class="row pad-top-10 pad-bottom-10">
+                <div *ngIf="showPhastReportOptions" class="row pad-top-10 pad-bottom-10">
                     <div class="col-2 bottom-divider"></div>
                     <div class="col-10 bottom-divider">Process Heating Options</div>
                 </div>
-                <div *ngIf="_phastAssessments.length > 0" class="row toggle-btn pad-top-10" (click)="togglePrint('energyUsed')">
+                <div *ngIf="showPhastReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('energyUsed')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printEnergyUsed"></app-animated-checkmark>
                     </div>
@@ -92,7 +94,7 @@
                         Energy Used
                     </div>
                 </div>
-                <div *ngIf="_phastAssessments.length > 0" class="row toggle-btn pad-top-10" (click)="togglePrint('executiveSummary')">
+                <div *ngIf="showPhastReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('executiveSummary')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printExecutiveSummary"></app-animated-checkmark>
                     </div>
@@ -103,8 +105,10 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary" (click)="setPrintViewThenPrint()" data-dismiss="modal">Print</button>
-                <button type="button" class="btn btn-default btn-secondary" (click)="closePrintModal(false)" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default btn-primary" (click)="print()"
+                    data-dismiss="modal">Print</button>
+                <button type="button" class="btn btn-default btn-secondary" (click)="closePrintModal(true)"
+                    data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

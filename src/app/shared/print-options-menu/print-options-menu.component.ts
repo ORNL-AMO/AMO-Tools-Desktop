@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, EventEmitter, TemplateRef, SimpleChanges } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-print-options-menu',
@@ -8,33 +9,70 @@ import { ModalDirective } from 'ngx-bootstrap';
 })
 export class PrintOptionsMenuComponent implements OnInit {
   @Input()
+  showRollupReportOptions: boolean;
+  @Input()
   showPsatReportOptions: boolean;
   @Input()
   showFsatReportOptions: boolean;
   @Input()
   showPhastReportOptions: boolean;
   @Input()
-  showRollupReportOptions: boolean;
+  selectAll: boolean;
+  @Input()
+  printReportGraphs: boolean;
+  @Input()
+  printReportSankey: boolean;
+  @Input()
+  printResults: boolean;
+  @Input()
+  printInputData: boolean;
+  @Input()
+  printPsatRollup: boolean;
+  @Input()
+  printFsatRollup: boolean;
+  @Input()
+  printPhastRollup: boolean;
+  
+  //---- phast-specific options --------
+  @Input()
+  printEnergyUsed: boolean;
+  @Input()
+  printExecutiveSummary: boolean;
+  //---- end phast-specific options ----
+
+  @Output('emitTogglePrint')
+  emitTogglePrint = new EventEmitter<string>();
+  @Output('emitClosePrintMenu')
+  emitClosePrintMenu = new EventEmitter<boolean>();
+  @Output('emitPrint')
+  emitPrint = new EventEmitter<void>();
 
   @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
-
-  selectAll: boolean = false;
-  printReportGraphs: boolean = false;
-  printReportSankey: boolean = false;
-  printResults: boolean = false;
-  printInputData: boolean = false;
-  printPsatRollup: boolean = false;
-  printPhastRollup: boolean = false;
-  printFsatRollup: boolean = false;
-
-  //phast options
-  printEnergyUsed: boolean = false;
-  printExecutiveSummary: boolean = false;
-
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  ngAfterViewInit() {
+    this.showPrintModal();
+  }
+
+  togglePrint(option: string) {
+    this.emitTogglePrint.emit(option);
+  }
+
+  showPrintModal(): void {
+    this.printMenuModal.show();
+  }
+
+  closePrintModal(reset: boolean): void {
+    this.printMenuModal.hide();
+    this.emitClosePrintMenu.emit(reset);
+  }
+
+  print(): void {
+    this.emitPrint.emit();
+    this.closePrintModal(false);
+  }
 }

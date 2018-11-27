@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
 
 import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
@@ -27,7 +28,8 @@ import { PrintOptionsMenuComponent } from './print-options-menu/print-options-me
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ClipboardModule
+    ClipboardModule,
+    ModalModule
     // ChartsModule
   ],
   declarations: [
@@ -53,7 +55,8 @@ import { PrintOptionsMenuComponent } from './print-options-menu/print-options-me
     PhonePipe,
     SimpleTooltipComponent,
     ExportableTableComponent,
-    TabsTooltipComponent
+    TabsTooltipComponent,
+    PrintOptionsMenuComponent
   ],
   providers: [
     ValidationService,
