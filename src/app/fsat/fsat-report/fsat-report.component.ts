@@ -54,6 +54,7 @@ export class FsatReportComponent implements OnInit {
   @ViewChild('reportHeader') reportHeader: ElementRef;
 
   showPrint: boolean = false;
+  showPrintMenu: boolean = false;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
 
@@ -177,14 +178,14 @@ export class FsatReportComponent implements OnInit {
   }
 
   showModal(): void {
-    this.printMenuModal.show();
+    this.showPrintMenu = true;
   }
 
   closeModal(reset: boolean): void {
     if (reset) {
       this.resetPrintSelection();
     }
-    this.printMenuModal.hide();
+    this.showPrintMenu = false;
   }
 
   resetPrintSelection() {
@@ -197,7 +198,7 @@ export class FsatReportComponent implements OnInit {
 
   togglePrint(section: string): void {
     switch (section) {
-      case "select-all": {
+      case "selectAll": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
           this.printReportGraphs = true;

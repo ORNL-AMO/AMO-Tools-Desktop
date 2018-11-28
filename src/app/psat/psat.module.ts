@@ -73,7 +73,7 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     PsatReportSankeyComponent,
     PsatReportGraphsComponent,
     PsatBarChartComponent,
-    PsatReportGraphsPrintComponent
+    PsatReportGraphsPrintComponent,
   ],
   exports: [
     PsatReportComponent
@@ -84,7 +84,6 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    // ChartsModule,
     ModalModule.forRoot(),
     SettingsModule,
     ToastyModule,

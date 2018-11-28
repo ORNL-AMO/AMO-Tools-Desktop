@@ -56,9 +56,6 @@ export class ReportRollupComponent implements OnInit {
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
 
-
-
-
   showPrint: boolean = false;
   showPrintMenu: boolean = false;
 

@@ -61,6 +61,7 @@ export class PhastReportComponent implements OnInit {
   assessmentDirectories: Array<Directory>;
   createdDate: Date;
   showPrint: boolean = false;
+  showPrintMenu: boolean = false;
   showPrintDiv: boolean = false;
 
   selectAll: boolean = false;
@@ -192,15 +193,14 @@ export class PhastReportComponent implements OnInit {
   }
 
   showModal(): void {
-    this.printMenuModal.show();
+    this.showPrintMenu = true;
   }
-
 
   closeModal(reset: boolean): void {
     if (reset) {
       this.resetPrintSelection();
     }
-    this.printMenuModal.hide();
+    this.showPrintMenu = false;
   }
 
   resetPrintSelection() {
@@ -215,7 +215,7 @@ export class PhastReportComponent implements OnInit {
 
   togglePrint(section: string): void {
     switch (section) {
-      case "select-all": {
+      case "selectAll": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
           this.printEnergyUsed = true;
@@ -233,27 +233,27 @@ export class PhastReportComponent implements OnInit {
         }
         break;
       }
-      case "energy-used": {
+      case "energyUsed": {
         this.printEnergyUsed = !this.printEnergyUsed;
         break;
       }
-      case "executive-summary": {
+      case "executiveSummary": {
         this.printExecutiveSummary = !this.printExecutiveSummary;
         break;
       }
-      case "results-data": {
+      case "results": {
         this.printResultsData = !this.printResultsData;
         break;
       }
-      case "report-graphs": {
+      case "reportGraphs": {
         this.printReportGraphs = !this.printReportGraphs;
         break;
       }
-      case "report-sankey": {
+      case "reportSankey": {
         this.printReportSankey = !this.printReportSankey;
         break;
       }
-      case "input-summary": {
+      case "inputData": {
         this.printInputSummary = !this.printInputSummary;
         break;
       }
