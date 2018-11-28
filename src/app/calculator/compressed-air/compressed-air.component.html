@@ -7,7 +7,8 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/compressed-air-icons/leakage-loss-estimator.png" class="calc-img" (click)="showTool('bag-method')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/leakage-loss-estimator.png" class="calc-img"
+                (click)="showTool('bag-method')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
@@ -34,14 +35,17 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-air-requirement.png" class="calc-img" (click)="showTool('pneumatic-air')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-air-requirement.png" class="calc-img"
+                (click)="showTool('pneumatic-air')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('pneumatic-air')">Pneumatic Air Requirement</a>
             <p>
-              This calculator helps in computing the quantity of air required by a specific single acting or a double acting piston cylinder
-              compressor. The design specs of the compressor are entered in the calculator and the quantity of air needed
+              This calculator helps in computing the quantity of air required by a specific single acting or a double
+              acting piston cylinder
+              compressor. The design specs of the compressor are entered in the calculator and the quantity of air
+              needed
               is generated.
             </p>
           </div>
@@ -49,15 +53,33 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png" class="calc-img" (click)="showTool('receiver-tank')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png" class="calc-img"
+                (click)="showTool('receiver-tank')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
-            <a class="click-item" (click)="showTool('receiver-tank')">Receiver Tank Calculations</a>
+            <a class="click-item" (click)="showTool('receiver-tank')">Receiver Tank Sizing Calculator</a>
             <p>
-              The receiver tank is used to store a supply of compressed air and assure a steady supply without excessive line pulsations
-              or frequent loading and unloading of the compressor. There are four methods to calculate the required size
-              of the receiver tank.
+              This calculator uses one of four methods to calculate the required size of the receiver tank.
+              The receiver tank is used to store a supply of compressed air and assure a steady
+              supply without excessive line pulsations or frequent loading and unloading of the compressor. There are
+              four methods to calculate the required size of the receiver tank.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/compressed-air-icons/receiver-tank-calculation.png" class="calc-img"
+                (click)="showTool('receiver-tank-usable-air')">
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a class="click-item" (click)="showTool('receiver-tank-usable-air')">Usable Air Capacity Calculator</a>
+            <p>
+              This calculator computes the quantity of compressed air that is actually available for use. When air
+              receivers are installed, the system's pressure profile and lack of storage limit the effectiveness of
+              compressed air energy storage. Hence this calculator proves useful in such a context.
             </p>
           </div>
         </div>
@@ -70,7 +92,8 @@
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('pipe-sizing')">Pipe Sizing</a>
             <p>
-              This calculator helps in finding the pipe diameter, when the volumetric flow velocity, pressure, and design velocity are
+              This calculator helps in finding the pipe diameter, when the volumetric flow velocity, pressure, and
+              design velocity are
               known.
             </p>
           </div>
@@ -78,27 +101,32 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/compressed-air-icons/velocity-in-piping.png" class="calc-img" (click)="showTool('air-velocity')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/velocity-in-piping.png" class="calc-img"
+                (click)="showTool('air-velocity')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('air-velocity')">Velocity in the Piping</a>
             <p>
-              This calculator helps in finding the velocity of compressed air through all the different piping involved in the system.
+              This calculator helps in finding the velocity of compressed air through all the different piping involved
+              in the system.
             </p>
           </div>
         </div>
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/compressed-air-icons/air-system-capacity.png" class="calc-img" (click)="showTool('system-capacity')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/air-system-capacity.png" class="calc-img"
+                (click)="showTool('system-capacity')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('system-capacity')">System - Capacity</a>
             <p>
-              This is used to find the total air quantity that the compressed air system can contain at any instant of time, including
-              the air in the pipes and receivers. The total capacity of the compressed air system can be obtained by adding
+              This is used to find the total air quantity that the compressed air system can contain at any instant of
+              time, including
+              the air in the pipes and receivers. The total capacity of the compressed air system can be obtained by
+              adding
               the volumes of pipes and receivers.
             </p>
           </div>
@@ -106,13 +134,15 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/compressed-air-icons/operation-cost.png" class="calc-img" (click)="showTool('operation-cost')">
+              <img src="assets/images/calculator-icons/compressed-air-icons/operation-cost.png" class="calc-img"
+                (click)="showTool('operation-cost')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('operation-cost')">Operation Cost Calculations</a>
             <p>
-              This calculator helps in finding the cost of operation of the compressor in both fully and partially load instances.
+              This calculator helps in finding the cost of operation of the compressor in both fully and partially load
+              instances.
             </p>
           </div>
         </div>
@@ -132,7 +162,10 @@
   <app-pneumatic-air [settings]="settings"></app-pneumatic-air>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'receiver-tank'">
-  <app-receiver-tank [settings]="settings"></app-receiver-tank>
+  <app-receiver-tank [settings]="settings" [calcType]="'size-calculations'"></app-receiver-tank>
+</div>
+<div class="stand-alone-calc" *ngIf="selectedTool == 'receiver-tank-usable-air'">
+  <app-receiver-tank [settings]="settings" [calcType]="'usable-air'"></app-receiver-tank>
 </div>
 <div class="stand-alone-calc" *ngIf="selectedTool == 'pipe-sizing'">
   <app-pipe-sizing [settings]="settings"></app-pipe-sizing>
