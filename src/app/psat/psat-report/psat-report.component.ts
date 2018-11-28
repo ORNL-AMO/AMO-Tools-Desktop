@@ -40,19 +40,23 @@ export class PsatReportComponent implements OnInit {
   @Input()
   printView: boolean;
   @Input()
+  printInputData: boolean;
+  @Input()
+  printResults: boolean;
+  @Input()
+  printReportGraphs: boolean;
+  @Input()
+  printReportSankey: boolean;
+  @Input()
   containerHeight: number;
 
-  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
   @ViewChild('reportBtns') reportBtns: ElementRef;
   @ViewChild('reportHeader') reportHeader: ElementRef;
 
   showPrint: boolean = false;
+  showPrintMenu: boolean = false;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
-  printReportGraphs: boolean;
-  printReportSankey: boolean;
-  printResults: boolean;
-  printInputData: boolean;
 
 
   assessmentDirectories: Directory[];
@@ -110,6 +114,9 @@ export class PsatReportComponent implements OnInit {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
     }
+    if (changes.printViewSelection && !changes.printViewSelection.firstChange) {
+      this.initPrintLogic();
+    }
   }
 
   ngAfterViewInit() {
@@ -165,23 +172,23 @@ export class PsatReportComponent implements OnInit {
 
 
   initPrintLogic() {
-    if (this.inRollup) {
-      this.printReportGraphs = true;
-      this.printReportSankey = true;
-      this.printResults = true;
-      this.printInputData = true;
+    if (!this.inRollup) {
+      this.printReportGraphs = false;
+      this.printReportSankey = false;
+      this.printResults = false;
+      this.printInputData = false;
     }
   }
 
   showModal(): void {
-    this.printMenuModal.show();
+    this.showPrintMenu = true;
   }
 
   closeModal(reset: boolean): void {
     if (reset) {
       this.resetPrintSelection();
     }
-    this.printMenuModal.hide();
+    this.showPrintMenu = false;
   }
 
   resetPrintSelection() {
@@ -194,7 +201,7 @@ export class PsatReportComponent implements OnInit {
 
   togglePrint(section: string): void {
     switch (section) {
-      case "select-all": {
+      case "selectAll": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
           this.printReportGraphs = true;
