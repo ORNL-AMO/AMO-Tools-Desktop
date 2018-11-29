@@ -149,6 +149,9 @@ export class ConvertFsatService {
     if (oldSettings.fanSpecificHeatGas != newSettings.fanSpecificHeatGas) {
       inputCpy.baseGasDensity.specificHeatGas = this.convertNum(inputCpy.baseGasDensity.specificHeatGas, oldSettings.fanSpecificHeatGas, newSettings.fanSpecificHeatGas);
     }
+    if (oldSettings.fanPowerMeasurement != newSettings.fanPowerMeasurement) {
+      inputCpy.fanMotor.motorRatedPower = this.convertNum(inputCpy.fanMotor.motorRatedPower, oldSettings.fanPowerMeasurement, newSettings.fanPowerMeasurement);
+    }
     // if (oldSettings.powerMeasurement != newSettings.powerMeasurement) {
     //   inputCpy.fieldData.motorPower = this.convertMotorPower(inputCpy.fieldData.motorPower, oldSettings.powerMeasurement, newSettings.powerMeasurement)
     // }

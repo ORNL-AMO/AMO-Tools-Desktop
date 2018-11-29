@@ -235,6 +235,7 @@ export class SettingsService {
         phastRollupElectricityUnit: 'MMBtu',
         phastRollupSteamUnit: 'MMBtu',
         densityMeasurement: 'lbscf',
+        fanPowerMeasurement: 'hp',
         fanFlowRate: 'ft3/min',
         fanPressureMeasurement: 'inH2o',
         fanBarometricPressure: 'inHg',
@@ -266,6 +267,7 @@ export class SettingsService {
         phastRollupElectricityUnit: 'GJ',
         phastRollupSteamUnit: 'GJ',
         densityMeasurement: 'kgNm3',
+        fanPowerMeasurement: 'kW',
         fanFlowRate: 'm3/s',
         fanPressureMeasurement: 'Pa',
         fanBarometricPressure: 'kPa',
@@ -413,6 +415,9 @@ export class SettingsService {
       if (!settings.fanTemperatureMeasurement) {
         settings.fanTemperatureMeasurement = 'C';
       }
+      if (!settings.fanPowerMeasurement) {
+        settings.fanPowerMeasurement = 'kW';
+      }
     } else {
       if (!settings.densityMeasurement) {
         settings.densityMeasurement = 'lbscf';
@@ -432,10 +437,9 @@ export class SettingsService {
       if (!settings.fanTemperatureMeasurement) {
         settings.fanTemperatureMeasurement = 'F';
       }
-    }
-
-    if (!settings.fanPowerMeasurement) {
-      settings.fanPowerMeasurement = 'hp';
+      if (!settings.fanPowerMeasurement) {
+        settings.fanPowerMeasurement = 'hp';
+      }
     }
     return settings;
   }
