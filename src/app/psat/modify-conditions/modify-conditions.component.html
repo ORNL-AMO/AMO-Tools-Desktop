@@ -13,7 +13,7 @@
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()" [settings]="settings"
           [baseline]="true"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [(psat)]="psat" (saved)="save()" [settings]="settings"
-          (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()" [baseline]="true"
+          (saved)="save()" [settings]="settings" [baseline]="true"
           [assessment]="assessment"></app-field-data>
       </div>
     </div>
@@ -34,7 +34,7 @@
         <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [(psat)]="psat.modifications[modificationIndex].psat"
           (saved)="save()" [settings]="settings" [modificationIndex]="modificationIndex"></app-motor>
         <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat.modifications[modificationIndex].psat" [selected]="modifiedSelected"
-          (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()" [assessment]="assessment"
+          (saved)="save()" [settings]="settings" [assessment]="assessment"
           [modificationIndex]="modificationIndex"></app-field-data>
       </div>
     </div>

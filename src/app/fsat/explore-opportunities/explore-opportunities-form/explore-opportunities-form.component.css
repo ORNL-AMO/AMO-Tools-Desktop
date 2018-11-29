@@ -24,3 +24,21 @@ form{
 	padding-top: 6.5px;
 	padding-bottom: 6.5px;
 }
+
+
+.btn{
+    padding: 6px;
+}
+
+.modal-dialog{
+    top: 1rem;
+}
+
+.modal-header, .modal-footer{
+    padding: 6px;
+}
+
+
+.modal-content{
+    height: 85vh;
+}

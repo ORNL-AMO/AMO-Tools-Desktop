@@ -12,6 +12,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FsatResultsModule } from '../fsat-results/fsat-results.module';
 import { HelpPanelModule } from '../help-panel/help-panel.module';
 import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
+import { VariableFrequencyDriveFormComponent } from './explore-opportunities-form/variable-frequency-drive-form/variable-frequency-drive-form.component';
+import { CalculatePressuresModule } from '../calculate-pressures/calculate-pressures.module';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
@@ -20,7 +23,9 @@ import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
     ReactiveFormsModule,
     FsatResultsModule,
     HelpPanelModule,
-    FsatSankeyModule
+    FsatSankeyModule,
+    CalculatePressuresModule,
+    ModalModule
   ],
   declarations: [
     ExploreOpportunitiesComponent,
@@ -29,7 +34,8 @@ import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
     ExploreOpportunitiesSankeyComponent,
     SystemDataFormComponent,
     RatedMotorFormComponent,
-    FanDataFormComponent
+    FanDataFormComponent,
+    VariableFrequencyDriveFormComponent
     ],
   providers: [ExploreOpportunitiesService],
   exports: [ExploreOpportunitiesComponent]

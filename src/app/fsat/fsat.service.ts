@@ -107,8 +107,11 @@ export class FsatService {
   }
 
   //fsat results
-  getResults(fsat: FSAT, resultType: string, settings: Settings): FsatOutput {
-    if (this.checkValid(fsat)) {
+  getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
+    if (this.checkValid(fsat, isBaseline)) {
+      if (!fsat.fieldData.operatingHours && fsat.fieldData.operatingFraction) {
+        fsat.fieldData.operatingHours = fsat.fieldData.operatingFraction * 8760;
+      }
       let input: FsatInput = {
         fanSpeed: fsat.fanSetup.fanSpeed,
         drive: fsat.fanSetup.drive,
@@ -117,7 +120,7 @@ export class FsatService {
         motorRatedPower: fsat.fanMotor.motorRatedPower,
         motorRpm: fsat.fanMotor.motorRpm,
         efficiencyClass: fsat.fanMotor.efficiencyClass,
-        fanEfficiency: fsat.fanSetup.fanEfficiency | 0,
+        fanEfficiency: fsat.fanSetup.fanEfficiency,
         //motor
         specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
         motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,
@@ -130,31 +133,19 @@ export class FsatService {
         inletPressure: fsat.fieldData.inletPressure,
         outletPressure: fsat.fieldData.outletPressure,
         compressibilityFactor: fsat.fieldData.compressibilityFactor,
-        operatingFraction: fsat.fieldData.operatingFraction,
+        operatingHours: fsat.fieldData.operatingHours,
         unitCost: fsat.fieldData.cost,
-        airDensity: fsat.baseGasDensity.gasDensity,
-        isSpecified: false
+        airDensity: fsat.baseGasDensity.gasDensity
       };
 
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let results: FsatOutput;
-      if (resultType == 'existing') {
+      if (isBaseline) {
         input.loadEstimationMethod = fsat.fieldData.loadEstimatedMethod;
         input.measuredPower = fsat.fieldData.motorPower;
         results = this.fanResultsExisting(input);
-      } else if (resultType == 'optimal') {
+      } else {
         input.fanType = fsat.fanSetup.fanType;
-        if (fsat.fanSetup.fanType == 12) {
-          input.isSpecified = true;
-          input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
-        }
-        results = this.fanResultsOptimal(input);
-      } else if (resultType == 'modified') {
-        input.fanType = fsat.fanSetup.fanType;
-        if (fsat.fanSetup.fanType == 12) {
-          input.isSpecified = true;
-          input.userInputFanEfficiency = fsat.fanSetup.fanSpecified;
-        }
         results = this.fanResultsModified(input);
       }
       results = this.convertFsatService.convertFsatOutput(results, settings);
@@ -172,19 +163,19 @@ export class FsatService {
   fanResultsModified(input: FsatInput): FsatOutput {
     return fanAddon.fanResultsModified(input);
   }
-  fanResultsOptimal(input: FsatInput): FsatOutput {
-    return fanAddon.fanResultsOptimal(input);
-  }
+  // fanResultsOptimal(input: FsatInput): FsatOutput {
+  //   return fanAddon.fanResultsOptimal(input);
+  // }
 
   getSavingsPercentage(baselineCost: number, modificationCost: number): number {
     let tmpSavingsPercent = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));
     return tmpSavingsPercent;
   }
 
-  checkValid(fsat: FSAT): boolean {
+  checkValid(fsat: FSAT, isBaseline: boolean): boolean {
     let fsatFluidValid: boolean = this.checkFsatFluidValid(fsat);
     let fieldDataValid: boolean = this.checkFieldDataValid(fsat);
-    let fanSetupValid: boolean = this.checkFanSetupValid(fsat);
+    let fanSetupValid: boolean = this.checkFanSetupValid(fsat, isBaseline);
     let fanMotorValid: boolean = this.checkFanMotorValid(fsat);
     return (fieldDataValid && fanSetupValid && fanMotorValid && fsatFluidValid);
   }
@@ -194,8 +185,8 @@ export class FsatService {
     return (fanFieldDataForm.status == 'VALID');
   }
 
-  checkFanSetupValid(fsat: FSAT): boolean {
-    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup);
+  checkFanSetupValid(fsat: FSAT, isBaseline: boolean): boolean {
+    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup, isBaseline);
     return (fanSetupForm.status == 'VALID');
   }
 
@@ -233,6 +224,7 @@ export class FsatService {
       motorPowerFactor: 0,
       motorCurrent: 0,
       motorPower: 0,
+      loadFactor: 0,
       annualEnergy: 0,
       annualCost: 0,
       fanEnergyIndex: 0,
@@ -262,6 +254,33 @@ export class FsatService {
       inputCpy.moverShaftPower = this.convertUnitsService.value(inputCpy.moverShaftPower).from('hp').to(settings.fanPowerMeasurement);
     }
     return fanAddon.compressibilityFactor(inputCpy);
+  }
+
+
+  getNewMod(fsat: FSAT, settings: Settings): Modification {
+    let modName: string = 'Scenario ' + (fsat.modifications.length + 1);
+    let tmpModification: Modification = {
+      fsat: {
+        name: modName,
+        notes: {
+          fieldDataNotes: '',
+          fanMotorNotes: '',
+          fanSetupNotes: '',
+          fluidNotes: ''
+        }
+      },
+      exploreOpportunities: (this.assessmentTab.value == 'explore-opportunities')
+    }
+    let tmpBaselineResults: FsatOutput = this.getResults(fsat, true, settings);
+    let fsatCopy: FSAT = (JSON.parse(JSON.stringify(fsat)));
+    tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
+    tmpModification.fsat.fanMotor = fsatCopy.fanMotor;
+    tmpModification.fsat.fanSetup = fsatCopy.fanSetup;
+    //specified, set effeciency to calculated baseline efficiency
+    tmpModification.fsat.fanSetup.fanType = 12;
+    tmpModification.fsat.fanSetup.fanEfficiency = this.convertUnitsService.roundVal(tmpBaselineResults.fanEfficiency, 2);
+    tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    return tmpModification
   }
 }
 

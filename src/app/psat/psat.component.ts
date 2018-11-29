@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
-import { PSAT, Modification } from '../shared/models/psat';
+import { PSAT, Modification, PsatOutputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -68,6 +68,7 @@ export class PsatComponent implements OnInit {
   showAdd: boolean;
   stepTabSubscription: Subscription;
   stepTab: string;
+  modalOpenSub: Subscription;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -87,7 +88,7 @@ export class PsatComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.psatService.test();
+    // this.psatService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -160,6 +161,10 @@ export class PsatComponent implements OnInit {
 
       this.stepTabSubscription = this.psatTabService.stepTab.subscribe(val => {
         this.stepTab = val;
+      })
+
+      this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
+        this.isModalOpen = isOpen;
       })
     })
   }
@@ -337,12 +342,12 @@ export class PsatComponent implements OnInit {
     this.psatTabService.mainTab.next('report');
   }
 
-  modalOpen() {
-    this.isModalOpen = true;
-  }
-  modalClose() {
-    this.isModalOpen = false;
-  }
+  // modalOpen() {
+  //   this.isModalOpen = true;
+  // }
+  // modalClose() {
+  //   this.isModalOpen = false;
+  // }
 
   selectModificationModal() {
     this.isModalOpen = true;
@@ -384,6 +389,9 @@ export class PsatComponent implements OnInit {
       },
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
+    tmpModification.psat.inputs.pump_style = 11;
+    let baselineResults: PsatOutputs = this.psatService.resultsExisting(this._psat.inputs, this.settings);
+    tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     this.saveNewMod(tmpModification)
   }
 }

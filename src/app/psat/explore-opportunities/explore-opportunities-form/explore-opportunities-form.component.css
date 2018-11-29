@@ -12,3 +12,25 @@
 	padding-top: 6.5px;
 	padding-bottom: 6.5px;
 }
+
+
+
+.modal-dialog{
+    top: 0;
+    max-width: none;
+    margin: 15px;
+}
+
+
+.modal-body{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: #ececec;
+    height: 75vh;
+}
+
+.modal-header{
+    background-color: #2980b9;
+}
