@@ -40,7 +40,6 @@ export class InputSummaryComponent implements OnInit {
   ampsDiff: boolean = false;
   kwDiff: boolean = false;
   fieldVoltageDiff: boolean = false;
-  anyOptimized: boolean = false;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -138,7 +137,7 @@ export class InputSummaryComponent implements OnInit {
         // if (mod.psat.inputs.margin != this.psat.inputs.margin) {
         //   this.marginDiff = true;
         // }
-        if (mod.psat.inputs.operating_fraction != this.psat.inputs.operating_fraction) {
+        if (mod.psat.inputs.operating_hours != this.psat.inputs.operating_hours) {
           this.opFracDiff = true;
         }
         if (mod.psat.inputs.cost_kw_hour != this.psat.inputs.cost_kw_hour) {
@@ -163,9 +162,6 @@ export class InputSummaryComponent implements OnInit {
         // fieldVoltageDiff
         if (mod.psat.inputs.motor_field_voltage != this.psat.inputs.motor_field_voltage) {
           this.fieldVoltageDiff = true;
-        }
-        if(mod.psat.inputs.optimize_calculation){
-          this.anyOptimized = true;
         }
       })
     }

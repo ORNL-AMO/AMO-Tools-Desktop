@@ -23,14 +23,14 @@
           <tbody>
 
           <tr>
-            <td [ngClass]="{'indicate-report-field-different':operatingFractionDiff[0] == true}">
+            <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
               Operating Fraction
             </td>
-            <td [ngClass]="{'indicate-report-field-different':operatingFractionDiff[0] == true}">
-              {{fieldData.baseline.operatingFraction}}
+            <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
+              {{fieldData.baseline.operatingHours}}
             </td>
-            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.operatingFraction, mod.operatingFraction, 'operatingFractionDiff', 0)}">
-              {{mod.operatingFraction}}
+            <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.operatingHours, mod.operatingHours, 'operatingHoursDiff', 0)}">
+              {{mod.operatingHours}}
             </td>
           </tr>
 

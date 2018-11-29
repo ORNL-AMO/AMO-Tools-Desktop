@@ -88,7 +88,7 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isOperatingFractionDifferent(baseline, modification) ||
+        this.isOperatingHoursDifferent(baseline, modification) ||
         this.isCostKwhrDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
         this.isHeadDifferent(baseline, modification)
@@ -453,8 +453,8 @@ export class CompareService {
       return false;
     }
   }
-  //operating fraction
-  isOperatingFractionDifferent(baseline?: PSAT, modification?: PSAT) {
+  //operating hours
+  isOperatingHoursDifferent(baseline?: PSAT, modification?: PSAT) {
     if (!baseline) {
       baseline = this.baselinePSAT;
     }
@@ -462,7 +462,7 @@ export class CompareService {
       modification = this.modifiedPSAT;
     }
     if (baseline && modification) {
-      if (baseline.inputs.operating_fraction != modification.inputs.operating_fraction) {
+      if (baseline.inputs.operating_hours != modification.inputs.operating_hours) {
         return true;
       } else {
         return false;

@@ -9,8 +9,11 @@ export class FanFieldDataService {
 
 
   getFormFromObj(obj: FieldData): FormGroup {
+    if(!obj.operatingHours && obj.operatingFraction){
+        obj.operatingHours = obj.operatingFraction * 8760;
+    }
     let form: FormGroup = this.formBuilder.group({
-      operatingFraction: [obj.operatingFraction, [Validators.required, Validators.min(0), Validators.max(1)]],
+      operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       flowRate: [obj.flowRate, [Validators.required, Validators.min(0)]],
       inletPressure: [obj.inletPressure, Validators.required],
       outletPressure: [obj.outletPressure, Validators.required],
@@ -29,7 +32,7 @@ export class FanFieldDataService {
 
   getObjFromForm(form: FormGroup): FieldData {
     let newData: FieldData = {
-      operatingFraction: form.controls.operatingFraction.value,
+      operatingHours: form.controls.operatingHours.value,
       flowRate: form.controls.flowRate.value,
       inletPressure: form.controls.inletPressure.value,
       outletPressure: form.controls.outletPressure.value,

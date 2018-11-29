@@ -32,12 +32,7 @@ import { CompareService } from './compare.service';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { ModifyFieldDataFormComponent } from './modify-conditions/modify-field-data-form/modify-field-data-form.component';
 import { FsatResultsModule } from './fsat-results/fsat-results.module';
-import { CalculateInletPressureComponent } from './fan-field-data/calculate-inlet-pressure/calculate-inlet-pressure.component';
-import { CalculateOutletPressureComponent } from './fan-field-data/calculate-outlet-pressure/calculate-outlet-pressure.component';
 import { FsatReportModule } from './fsat-report/fsat-report.module';
-import { CalculateFlowPressuresComponent } from './fan-field-data/calculate-flow-pressures/calculate-flow-pressures.component';
-import { FlowPressuresFormComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/flow-pressures-form.component';
-import { FanBasicsComponent } from './fan-field-data/calculate-flow-pressures/flow-pressures-form/fan-basics/fan-basics.component';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 // import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat-report-sankey.component';
 
@@ -51,6 +46,7 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
 import { ToastyModule } from '../../../node_modules/ng2-toasty';
 import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
 import { FsatWarningService } from './fsat-warning.service';
+import { CalculatePressuresModule } from './calculate-pressures/calculate-pressures.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -72,7 +68,8 @@ import { FsatWarningService } from './fsat-warning.service';
     MotorPerformanceModule,
     PumpCurveModule,
     FanEfficiencyModule,
-    ToastyModule
+    ToastyModule,
+    CalculatePressuresModule
   ],
   declarations: [
     FsatComponent,
@@ -90,11 +87,6 @@ import { FsatWarningService } from './fsat-warning.service';
     AddModificationComponent,
     ModificationListComponent,
     ModifyFieldDataFormComponent,
-    CalculateInletPressureComponent,
-    CalculateOutletPressureComponent,
-    CalculateFlowPressuresComponent,
-    FlowPressuresFormComponent,
-    FanBasicsComponent,
     FsatDiagramComponent,
     // FsatReportSankeyComponent  
   ],

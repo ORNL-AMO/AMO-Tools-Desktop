@@ -19,7 +19,7 @@
       <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
         [baseline]="true" [inSetup]="true"></app-motor>
       <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
-        [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()" [assessment]="assessment"></app-field-data>
+        [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
     </div>
     <div class="w-50" [ngClass]="{'pl-0': stepTab == 'field-data'}">
       <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
@@ -138,7 +138,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-add-modification *ngIf="showAdd" [psat]="_psat" [modifications]="_psat.modifications" (save)="saveNewMod($event)"></app-add-modification>
+        <app-add-modification *ngIf="showAdd" [psat]="_psat" [modifications]="_psat.modifications" (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
       </div>
     </div>
   </div>

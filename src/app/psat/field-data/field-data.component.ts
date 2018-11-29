@@ -9,6 +9,7 @@ import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
 import { FieldDataService } from './field-data.service';
+import { PsatService } from '../psat.service';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -35,6 +36,7 @@ export class FieldDataComponent implements OnInit {
   assessment: Assessment;
   @Input()
   modificationIndex: number;
+  @ViewChild('headToolModal') public headToolModal: ModalDirective;
 
   formValid: boolean;
   headToolResults: any = {
@@ -59,7 +61,7 @@ export class FieldDataComponent implements OnInit {
   psatForm: FormGroup;
   fieldDataWarnings: FieldDataWarnings;
   idString: string;
-  constructor(private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
+  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -82,9 +84,6 @@ export class FieldDataComponent implements OnInit {
       } else {
         this.enableForm();
       }
-      if (!this.baseline) {
-        this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-      }
     }
     if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
       this.init();
@@ -96,10 +95,7 @@ export class FieldDataComponent implements OnInit {
       this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
     }
     this.psatForm = this.fieldDataService.getFormFromObj(this.psat.inputs, this.baseline);
-    this.helpPanelService.currentField.next('operatingFraction');
-    if (!this.baseline) {
-      this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-    }
+    this.helpPanelService.currentField.next('operatingHours');
     this.checkWarnings();
   }
 
@@ -158,36 +154,21 @@ export class FieldDataComponent implements OnInit {
   }
 
 
-  @ViewChild('headToolModal') public headToolModal: ModalDirective;
   showHeadToolModal() {
     if (this.selected) {
-      this.openHeadTool.emit(true);
+      this.psatService.modalOpen.next(true);
       this.headToolModal.show();
     }
   }
 
   hideHeadToolModal() {
-    this.closeHeadTool.emit(true);
+    this.psatService.modalOpen.next(true);
     if (this.psatForm.controls.head.value != this.psat.inputs.head) {
       this.psatForm.patchValue({
         head: this.psat.inputs.head
       })
     }
     this.headToolModal.hide();
-  }
-
-  optimizeCalc(bool: boolean) {
-    if (!bool || !this.selected) {
-      this.psatForm.controls.sizeMargin.disable();
-      // this.psatForm.controls.fixedSpeed.disable();
-    } else {
-      this.psatForm.controls.sizeMargin.enable();
-      // this.psatForm.controls.fixedSpeed.enable();
-    }
-    this.psatForm.patchValue({
-      optimizeCalculation: bool
-    });
-    this.save();
   }
 
   canCompare() {
@@ -198,9 +179,9 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  isOperatingFractionDifferent() {
+  isOperatingHoursDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isOperatingFractionDifferent();
+      return this.compareService.isOperatingHoursDifferent();
     } else {
       return false;
     }

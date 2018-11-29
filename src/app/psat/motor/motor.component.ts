@@ -37,7 +37,7 @@ export class MotorComponent implements OnInit {
 
   psatForm: FormGroup;
   motorWarnings: MotorWarnings;
-  disableFLAOptimized: boolean = false;
+  //disableFLAOptimized: boolean = false;
   idString: string;
   constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private helpPanelService: HelpPanelService, private motorService: MotorService) { }
 
@@ -50,9 +50,7 @@ export class MotorComponent implements OnInit {
       this.idString = 'psat_baseline';
     }
     this.init();
-    if (this.psat.inputs.optimize_calculation) {
-      this.disableOptimized();
-    }
+
     if (!this.selected) {
       this.disableForm();
     }
@@ -111,19 +109,7 @@ export class MotorComponent implements OnInit {
   }
 
   disableFLA() {
-    if (!this.disableFLAOptimized) {
-      return this.motorService.disableFLA(this.psatForm);
-    } else {
-      return true;
-    }
-  }
-
-  disableOptimized() {
-    this.psatForm.controls.horsePower.disable();
-    this.psatForm.controls.efficiencyClass.disable();
-    this.psatForm.controls.efficiency.disable();
-    this.psatForm.controls.fullLoadAmps.disable();
-    this.disableFLAOptimized = true;
+    return this.motorService.disableFLA(this.psatForm);
   }
 
   disableForm() {
@@ -137,9 +123,6 @@ export class MotorComponent implements OnInit {
     this.psatForm.controls.frequency.enable();
     this.psatForm.controls.horsePower.enable();
     this.psatForm.controls.efficiencyClass.enable();
-    if (this.psat.inputs.optimize_calculation) {
-      this.disableOptimized();
-    }
   }
 
   focusField(str: string) {

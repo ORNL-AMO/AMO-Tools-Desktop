@@ -58,10 +58,10 @@ export class PumpFluidService {
 
   updateSpecifiedDriveEfficiency(form: FormGroup): FormGroup {
     let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.getSpecifiedDriveEfficiency(form.controls.drive.value);
-    form.controls.drive.setValidators(specifiedDriveEfficiencyValidators);
-    form.controls.drive.reset(form.controls.drive.value);
-    if (form.controls.drive.value) {
-      form.controls.drive.markAsDirty();
+    form.controls.specifiedDriveEfficiency.setValidators(specifiedDriveEfficiencyValidators);
+    form.controls.specifiedDriveEfficiency.reset(form.controls.specifiedDriveEfficiency.value);
+    if (form.controls.specifiedDriveEfficiency.value) {
+      form.controls.specifiedDriveEfficiency.markAsDirty();
     }
     return form;
   }

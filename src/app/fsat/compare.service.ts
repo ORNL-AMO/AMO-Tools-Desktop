@@ -362,7 +362,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.fanSpecified != modification.fanSetup.fanSpecified) {
+      if (baseline.fanSetup.fanEfficiency != modification.fanSetup.fanEfficiency) {
         return true;
       } else {
         return false;
@@ -383,7 +383,7 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isOperatingFractionDifferent(baseline, modification) ||
+        this.isOperatingHoursDifferent(baseline, modification) ||
         this.isCostDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
         this.isInletPressureDifferent(baseline, modification) ||
@@ -396,7 +396,7 @@ export class CompareService {
     }
   }
 
-  isOperatingFractionDifferent(baseline?: FSAT, modification?: FSAT) {
+  isOperatingHoursDifferent(baseline?: FSAT, modification?: FSAT) {
     if (!baseline) {
       baseline = this.baselineFSAT;
     }
@@ -404,7 +404,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.operatingFraction != modification.fieldData.operatingFraction) {
+      if (baseline.fieldData.operatingHours != modification.fieldData.operatingHours) {
         return true;
       } else {
         return false;

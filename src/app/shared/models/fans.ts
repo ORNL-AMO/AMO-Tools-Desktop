@@ -8,7 +8,8 @@ export interface FSAT {
   baseGasDensity?: BaseGasDensity,
   notes: Notes,
   implementationCosts?: number,
-  setupDone?: boolean
+  setupDone?: boolean,
+  isVFD?: boolean
 }
 
 export interface Modification {
@@ -26,7 +27,10 @@ export interface Notes {
 
 //fsat Data
 export interface FieldData {
-  operatingFraction: number,
+  //TODO: remove operatingFraction support
+  //removed from suit v0.3.2
+  operatingFraction?: number,
+  operatingHours: number,
   cost: number,
   flowRate: number,
   inletPressure: number,
@@ -51,7 +55,6 @@ export interface FanMotor {
   specifiedEfficiency?: number,
   motorRatedVoltage: number,
   fullLoadAmps: number,
-  optimize?: boolean,
   sizeMargin?: number
 }
 
@@ -60,7 +63,6 @@ export interface FanSetup {
   fanSpeed: number,
   drive: number,
   specifiedDriveEfficiency?: number,
-  fanSpecified?: number,
   fanEfficiency?: number
 }
 //
@@ -263,7 +265,8 @@ export interface FsatInput {
   inletPressure: number,
   outletPressure: number,
   compressibilityFactor: number,
-  operatingFraction: number,
+  // operatingFraction: number,
+  operatingHours: number,
   unitCost: number,
   airDensity: number,
   userInputFanEfficiency?: number,
@@ -273,7 +276,6 @@ export interface FsatInput {
   //modified, optimal
   fanEfficiency?: number
   fanType?: number,
-  isSpecified: boolean
 };
 
 
@@ -286,6 +288,7 @@ export interface FsatOutput {
   motorPowerFactor: number,
   motorCurrent: number,
   motorPower: number,
+  loadFactor: number,
   annualEnergy: number,
   annualCost: number,
   fanEnergyIndex: number,

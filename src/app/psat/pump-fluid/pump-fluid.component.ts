@@ -51,15 +51,12 @@ export class PumpFluidComponent implements OnInit {
     else {
       this.idString = 'psat_baseline';
     }
-    this.pumpTypes = pumpTypesConstant;
-    if (this.baseline) {
-      //remove specified if baseline
-      this.pumpTypes.pop();
-    }
+    this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
+    this.pumpTypes.pop();
     //initialize constants
-    this.drives = driveConstants;
-    this.fluidProperties = fluidProperties;
-    this.fluidTypes = fluidTypes;
+    this.drives = JSON.parse(JSON.stringify(driveConstants));
+    this.fluidProperties = JSON.parse(JSON.stringify(fluidProperties));
+    this.fluidTypes = JSON.parse(JSON.stringify(fluidTypes));
 
     this.initForm();
     this.getTemperatureUnit();
@@ -83,6 +80,9 @@ export class PumpFluidComponent implements OnInit {
 
   initForm() {
     this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+    if (this.psatForm.controls.pumpType.value != 11) {
+      this.psatForm.controls.specifiedPumpEfficiency.disable();
+    }
     this.checkWarnings();
   }
 
@@ -90,15 +90,21 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.pumpType.disable();
     this.psatForm.controls.drive.disable();
     this.psatForm.controls.fluidType.disable();
+    if (this.psatForm.controls.pumpType.value != 11) {
+      this.psatForm.controls.specifiedPumpEfficiency.disable();
+    }
   }
 
   enableForm() {
     this.psatForm.controls.pumpType.enable();
     this.psatForm.controls.drive.enable();
     this.psatForm.controls.fluidType.enable();
+    if (this.psatForm.controls.pumpType.value != 11) {
+      this.psatForm.controls.specifiedPumpEfficiency.disable();
+    }
   }
 
-  getTemperatureUnit(){
+  getTemperatureUnit() {
     if (this.settings.temperatureMeasurement == 'C') {
       this.tempUnit = '&#8451;';
     } else if (this.settings.temperatureMeasurement == 'F') {
@@ -134,6 +140,30 @@ export class PumpFluidComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
+  enablePumpType() {
+    this.psatForm.controls.pumpType.patchValue(this.compareService.baselinePSAT.inputs.pump_style);
+    this.psatForm.controls.pumpType.enable();
+    this.getPumpEfficiency();
+  }
+
+  disablePumpType() {
+    let baselinePumpEfficiency: number = this.psatService.resultsExisting(this.compareService.baselinePSAT.inputs, this.settings).pump_efficiency;
+    this.psatForm.controls.specifiedPumpEfficiency.patchValue(baselinePumpEfficiency);
+    this.psatForm.controls.specifiedPumpEfficiency.enable();
+    this.psatForm.controls.pumpType.patchValue(11);
+    this.psatForm.controls.pumpType.disable();
+    this.save();
+  }
+
+
+  getPumpEfficiency() {
+    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.psatForm.controls.pumpType.value, this.psat.inputs.flow_rate, this.settings).max;
+    this.psatForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency);
+    this.psatForm.controls.specifiedPumpEfficiency.disable();
+    this.save();
+  }
+
+
   calculateSpecificGravity() {
     let fluidType = this.psatForm.controls.fluidType.value;
     let t = this.psatForm.controls.fluidTemperature.value;
@@ -168,6 +198,9 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.specifiedPumpEfficiency.setValidators(specifiedPumpEfficiencyValidators);
     this.psatForm.controls.specifiedPumpEfficiency.reset(this.psatForm.controls.specifiedPumpEfficiency.value);
     this.psatForm.controls.specifiedPumpEfficiency.markAsDirty();
+    if (!this.baseline) {
+      this.getPumpEfficiency();
+    }
     this.save();
   }
 

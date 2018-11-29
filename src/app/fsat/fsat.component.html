@@ -117,7 +117,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-add-modification *ngIf="showAdd" [fsat]="_fsat" [modifications]="_fsat.modifications" (save)="saveNewMod($event)"></app-add-modification>
+        <app-add-modification *ngIf="showAdd" [fsat]="_fsat" [modifications]="_fsat.modifications" (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
       </div>
     </div>
   </div>
@@ -134,7 +134,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [fsat]="_fsat" (save)="save()" [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
+        <app-modification-list [fsat]="_fsat" (save)="save()" [modificationIndex]="modificationIndex" (close)="closeSelectModification()" [settings]="settings"></app-modification-list>
       </div>
     </div>
   </div>
