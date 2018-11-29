@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FSAT, Modification } from '../../shared/models/fans';
+import { FSAT, Modification, FsatOutput } from '../../shared/models/fans';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
 import { FsatService } from '../fsat.service';
 import * as _ from 'lodash';
 import { ModifyConditionsService } from '../modify-conditions/modify-conditions.service';
+import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-modification-list',
   templateUrl: './modification-list.component.html',
@@ -19,6 +20,8 @@ export class ModificationListComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Output('close')
   close = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   newModificationName: string;
   dropdown: Array<boolean>;
@@ -35,7 +38,7 @@ export class ModificationListComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.assessmentTabSubscription.unsubscribe();
   }
 
@@ -129,23 +132,8 @@ export class ModificationListComponent implements OnInit {
     if (!fsat) {
       fsat = this.fsat;
     }
-    let tmpModification: Modification = {
-      fsat: {
-        name: this.newModificationName,
-        notes: {
-          fieldDataNotes: '',
-          fanMotorNotes: '',
-          fanSetupNotes: '',
-          fluidNotes: ''
-        }
-      },
-      exploreOpportunities: (this.assessmentTab == 'explore-opportunities')
-    }
-    let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this.fsat)));
-    tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
-    tmpModification.fsat.fanMotor = fsatCopy.fanMotor;
-    tmpModification.fsat.fanSetup = fsatCopy.fanSetup;
-    tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    let tmpModification: Modification = this.fsatService.getNewMod(fsat, this.settings);
+    tmpModification.fsat.name = this.newModificationName;
     this.dropdown.push(false);
     this.rename.push(false);
     this.deleteArr.push(false);

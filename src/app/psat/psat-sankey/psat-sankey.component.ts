@@ -125,15 +125,10 @@ export class PsatSankeyComponent implements OnInit {
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
     let isPsatValid: boolean = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
     if (isPsatValid) {
-      if (this.selectedInputs.optimize_calculation) {
-        this.selectedResults = this.psatService.resultsOptimal(this.selectedInputs, this.settings);
+      if (this.isBaseline) {
+        this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
       } else {
-        if (this.isBaseline) {
-          this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
-        } else {
-          let existingResults: PsatOutputs = this.psatService.resultsExisting(JSON.parse(JSON.stringify(this.baseline.inputs)), this.settings);
-          this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings, existingResults.pump_efficiency);
-        }
+        this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings);
       }
     } else {
       this.selectedResults = this.psatService.emptyResults();

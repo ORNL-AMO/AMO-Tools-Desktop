@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HelpPanelService } from '../../help-panel/help-panel.service';
 
 @Component({
@@ -26,27 +26,27 @@ export class ModifyFieldDataFormComponent implements OnInit {
   baseline: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<FSAT>();
-  
+
   modifyFieldDataForm: FormGroup;
   marginError: string = null;
   constructor(private formBuilder: FormBuilder, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.getForm();
-    this.optimizeCalc(this.modifyFieldDataForm.controls.optimizeCalculation.value);
+    //this.optimizeCalc(this.modifyFieldDataForm.controls.optimizeCalculation.value);
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.modificationIndex && !changes.modificationIndex.firstChange){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
       this.getForm();
     }
   }
 
-  getForm(){
+  getForm() {
     this.modifyFieldDataForm = this.formBuilder.group({
-      sizeMargin: [this.fsat.fanMotor.sizeMargin],
+      sizeMargin: [this.fsat.fanMotor.sizeMargin, [Validators.min(0), Validators.max(100)]],
       implementationCosts: [this.fsat.implementationCosts],
-      optimizeCalculation: [this.fsat.fanMotor.optimize]
+      //optimizeCalculation: [this.fsat.fanMotor.optimize]
     })
   }
 
@@ -55,42 +55,42 @@ export class ModifyFieldDataFormComponent implements OnInit {
   }
 
 
-  optimizeCalc(bool: boolean) {
-    if (!bool || !this.selected) {
-      this.modifyFieldDataForm.controls.sizeMargin.disable();
-      // this.modifyFieldDataForm.controls.fixedSpeed.disable();
-    } else {
-      this.modifyFieldDataForm.controls.sizeMargin.enable();
-      // this.modifyFieldDataForm.controls.fixedSpeed.enable();
-    }
-    this.modifyFieldDataForm.patchValue({
-      optimizeCalculation: bool
-    });
-    this.save();
-  }
+  // optimizeCalc(bool: boolean) {
+  //   if (!bool || !this.selected) {
+  //     this.modifyFieldDataForm.controls.sizeMargin.disable();
+  //     // this.modifyFieldDataForm.controls.fixedSpeed.disable();
+  //   } else {
+  //     this.modifyFieldDataForm.controls.sizeMargin.enable();
+  //     // this.modifyFieldDataForm.controls.fixedSpeed.enable();
+  //   }
+  //   this.modifyFieldDataForm.patchValue({
+  //     optimizeCalculation: bool
+  //   });
+  //   this.save();
+  // }
 
-  save(){
+  save() {
     this.fsat.implementationCosts = this.modifyFieldDataForm.controls.implementationCosts.value;
     this.fsat.fanMotor.sizeMargin = this.modifyFieldDataForm.controls.sizeMargin.value;
-    this.fsat.fanMotor.optimize = this.modifyFieldDataForm.controls.optimizeCalculation.value;
+    // this.fsat.fanMotor.optimize = this.modifyFieldDataForm.controls.optimizeCalculation.value;
     this.emitSave.emit(this.fsat);
   }
-  checkMargin(bool?: boolean) {
-    if (!bool) {
-      this.save();
-    }
-    if (this.modifyFieldDataForm.controls.sizeMargin.value > 100) {
-      this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
-      return false;
-    }
-    else if (this.modifyFieldDataForm.controls.sizeMargin.value < 0) {
-      this.marginError = "Shouldn't have negative size margin";
-      return false;
-    }
-    else {
-      this.marginError = null;
-      return true;
-    }
-  }
+  // checkMargin(bool?: boolean) {
+  //   if (!bool) {
+  //     this.save();
+  //   }
+  //   if (this.modifyFieldDataForm.controls.sizeMargin.value > 100) {
+  //     this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
+  //     return false;
+  //   }
+  //   else if (this.modifyFieldDataForm.controls.sizeMargin.value < 0) {
+  //     this.marginError = "Shouldn't have negative size margin";
+  //     return false;
+  //   }
+  //   else {
+  //     this.marginError = null;
+  //     return true;
+  //   }
+  // }
 
 }

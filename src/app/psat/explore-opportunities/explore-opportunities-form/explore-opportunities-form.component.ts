@@ -1,8 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
-import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
+import { FieldDataWarnings, PsatWarningService, MotorWarnings } from '../../psat-warning.service';
+import { FieldDataService } from '../../field-data/field-data.service';
+import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
+import { MotorService } from '../../motor/motor.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { PsatService } from '../../psat.service';
 @Component({
   selector: 'app-explore-opportunities-form',
   templateUrl: './explore-opportunities-form.component.html',
@@ -23,15 +28,64 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
+  @Input()
+  assessmentId: number;
 
 
-  showSizeMargin: boolean;
-  counter: any;
 
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  @ViewChild('headToolModal') public headToolModal: ModalDirective;
+  headToolResults: any = {
+    differentialElevationHead: 0.0,
+    differentialPressureHead: 0.0,
+    differentialVelocityHead: 0.0,
+    estimatedSuctionFrictionHead: 0.0,
+    estimatedDischargeFrictionHead: 0.0,
+    pumpHead: 0.0
+  };
+
+  baselinePumpFluidForm: FormGroup;
+  modificationPumpFluidForm: FormGroup;
+
+  baselineMotorForm: FormGroup;
+  modificationMotorForm: FormGroup;
+
+  baselineMotorWarnings: MotorWarnings;
+  modificationMotorWarnings: MotorWarnings;
+
+  baselineFieldDataForm: FormGroup;
+  modificationFieldDataForm: FormGroup;
+
+  baselineFieldDataWarnings: FieldDataWarnings;
+  modificationFieldDataWarnings: FieldDataWarnings;
+  showHeadTool: boolean = false;
+  constructor(private psatService: PsatService, private fieldDataService: FieldDataService, private pumpFluidService: PumpFluidService, private psatWarningService: PsatWarningService, private motorService: MotorService) { }
+
 
   ngOnInit() {
-    this.checkOptimized();
+    this.initForms();
+    this.checkWarnings();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
+        this.initForms();
+      }
+    }
+  }
+
+  initForms() {
+    this.baselineMotorForm = this.motorService.getFormFromObj(this.psat.inputs);
+    this.baselineMotorForm.disable();
+    this.modificationMotorForm = this.motorService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
+
+    this.baselineFieldDataForm = this.fieldDataService.getFormFromObj(this.psat.inputs, true);
+    this.baselineFieldDataForm.disable();
+    this.modificationFieldDataForm = this.fieldDataService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs, false);
+
+    this.baselinePumpFluidForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+    this.baselinePumpFluidForm.disable();
+    this.modificationPumpFluidForm = this.pumpFluidService.getFormFromObj(this.psat.modifications[this.exploreModIndex].psat.inputs);
   }
 
   focusField(str: string) {
@@ -42,33 +96,56 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     if (str == 'fixedSpecificSpeed') {
       this.focusField('fixedSpecificSpeed');
     }
-    this.startSavePolling();
+    this.save();
     this.emitCalculate.emit(true);
   }
 
-  startSavePolling() {
+  save() {
+    this.psat.modifications[this.exploreModIndex].psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.modificationPumpFluidForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
+    this.psat.modifications[this.exploreModIndex].psat.inputs = this.motorService.getInputsFromFrom(this.modificationMotorForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
+    this.psat.modifications[this.exploreModIndex].psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.modificationFieldDataForm, this.psat.modifications[this.exploreModIndex].psat.inputs);
+    this.checkWarnings();
     this.emitSave.emit(true);
   }
 
-  toggleOptimized() {
-    if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
-      this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
-      this.showSizeMargin = false;
+  checkWarnings() {
+    this.baselineFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
+    this.modificationFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+
+    this.baselineMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
+    this.modificationMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+  }
+
+  addNewMod() {
+    this.emitAddNewMod.emit(true);
+  }
+
+  setVFD(){
+    if(this.psat.modifications[this.exploreModIndex].psat.inputs.isVFD){
+      this.modificationPumpFluidForm.controls.drive.patchValue(4);
+      this.modificationPumpFluidForm.controls.specifiedDriveEfficiency.patchValue(95);
+    }else{
+      this.modificationPumpFluidForm.controls.drive.patchValue(this.baselinePumpFluidForm.controls.drive.value);
+      this.modificationPumpFluidForm.controls.specifiedDriveEfficiency.patchValue(95);
     }
     this.calculate();
   }
 
-  checkOptimized() {
-    if (this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-      if (this.psat.modifications[this.exploreModIndex].psat.inputs.margin != 0) {
-        this.showSizeMargin = true;
-      }
-    }
+
+  showHeadToolModal() {
+    this.psatService.modalOpen.next(true);
+    this.headToolModal.show();
+    this.showHeadTool = true;
   }
 
-  addNewMod(){
-    this.emitAddNewMod.emit(true);
+  hideHeadToolModal() {
+    this.modificationFieldDataForm.controls.head.patchValue(this.psat.modifications[this.exploreModIndex].psat.inputs.head)
+    this.save();
+    this.psatService.modalOpen.next(false);    
+    this.headToolModal.hide();
+
+    this.showHeadTool = false;
   }
+
 
 }

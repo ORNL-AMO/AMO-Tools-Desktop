@@ -6,17 +6,20 @@
   </div>
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
-    <div class="form-group" [ngClass]="{'indicate-different': isOperatingFractionDifferent(), 'invalid': psatForm.controls.operatingFraction.invalid}">
-      <label for="{{'operatingFraction_'+idString}}">Operating Fraction</label>
-      <input [readonly]="!selected" name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control"
-        formControlName="operatingFraction" id="{{'operatingFraction_'+idString}}" (input)="save()" (focus)="focusField('operatingFraction')"
-        onfocus="this.select();">
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.operatingFraction.invalid && !psatForm.controls.operatingFraction.pristine">
-        <span *ngIf="psatForm.controls.operatingFraction.errors.required">Value Required</span>
-        <span *ngIf="psatForm.controls.operatingFraction.errors.max">Value can't be greater than
-          {{psatForm.controls.operatingFraction.errors.max.max}}.</span>
-        <span *ngIf="psatForm.controls.operatingFraction.errors.min">Value can't be less than
-          {{psatForm.controls.operatingFraction.errors.min.min}}.</span>
+    <div class="form-group" [ngClass]="{'indicate-different': isOperatingHoursDifferent(), 'invalid': psatForm.controls.operatingHours.invalid}">
+      <label for="{{'operatingHours_'+idString}}">Operating Hours</label>
+      <div class="input-group">
+        <input [readonly]="!selected" name="operatingHours" type="number" min="0" max="1" step="any" class="form-control"
+          formControlName="operatingHours" id="{{'operatingHours_'+idString}}" (input)="save()" (focus)="focusField('operatingHours')"
+          onfocus="this.select();">
+          <span class="input-group-addon units">hrs/yr</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.operatingHours.invalid && !psatForm.controls.operatingHours.pristine">
+        <span *ngIf="psatForm.controls.operatingHours.errors.required">Value Required</span>
+        <span *ngIf="psatForm.controls.operatingHours.errors.max">Value can't be greater than
+          {{psatForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
+        <span *ngIf="psatForm.controls.operatingHours.errors.min">Value can't be less than
+          {{psatForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
       </span>
     </div>
 
@@ -52,7 +55,7 @@
         <span *ngIf="psatForm.controls.flowRate.errors.min">Value can't be less than
           {{psatForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
       </span>
-      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.flowError !== null && !psatForm.controls.flowRate.invalid && !psatForm.controls.flowRate.pristine">{{fieldDataWarnings.flowError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="fieldDataWarnings.flowError !== null && !psatForm.controls.flowRate.invalid && !psatForm.controls.flowRate.pristine">{{fieldDataWarnings.flowError}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isHeadDifferent(), 'invalid': psatForm.controls.head.invalid}">
@@ -126,12 +129,12 @@
     </div>
   </div>
   <div class="pl-3 pr-3" *ngIf="!baseline">
-    <div class="form-group opt-group">
+    <!-- <div class="form-group opt-group">
       <label>
         <span *ngIf="!psatForm.controls.optimizeCalculation.value" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
         <span *ngIf="psatForm.controls.optimizeCalculation.value" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
         Optimize Pump and Motor combination for a Fixed Specific Speed</label>
-    </div>
+    </div> -->
     <div class="form-group" [ngClass]="{'invalid': psatForm.controls.sizeMargin.invalid}">
       <label for="{{'sizeMargin_'+idString}}">Size Margin</label>
       <div class="input-group">
@@ -172,7 +175,7 @@
       </div>
       <div class="modal-body p-0">
         <app-head-tool [headToolResults]="headToolResults" [psat]="psat" [settings]="settings" (close)="hideHeadToolModal()"
-          [inAssessment]="true" [assessment]="assessment"></app-head-tool>
+          [inAssessment]="true" [assessmentId]="assessment.id"></app-head-tool>
       </div>
     </div>
   </div>

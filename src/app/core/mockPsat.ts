@@ -26,7 +26,7 @@ export const MockPsat: Assessment = {
             load_estimation_method: 0,
             motor_rated_fla: 228.57,
             margin: 0,
-            operating_fraction: 1,
+            operating_hours: 8760,
             flow_rate: 1840,
             head: 174.85,
             motor_field_power: 80,
@@ -34,7 +34,6 @@ export const MockPsat: Assessment = {
             motor_field_voltage: 480,
             cost_kw_hour: 0.05,
             cost: 0.05,
-            optimize_calculation: false,
             implementationCosts: null,
             fluidType: "Water",
             fluidTemperature: 68
@@ -46,7 +45,7 @@ export const MockPsat: Assessment = {
                     name: "Improve Belt, Motor and Pump Eff",
                     inputs: {
                         pump_style: 11,
-                        pump_specified: 90,
+                        pump_specified: 85.2,
                         pump_rated_speed: 1780,
                         drive: 1,
                         kinematic_viscosity: 1.107,
@@ -62,7 +61,7 @@ export const MockPsat: Assessment = {
                         load_estimation_method: 0,
                         motor_rated_fla: 224,
                         margin: 0,
-                        operating_fraction: 1,
+                        operating_hours: 8760,
                         flow_rate: 1840,
                         head: 174.85,
                         motor_field_power: 80,
@@ -70,7 +69,6 @@ export const MockPsat: Assessment = {
                         motor_field_voltage: 480,
                         cost_kw_hour: 0.05,
                         cost: 0.05,
-                        optimize_calculation: false,
                         implementationCosts: null,
                         fluidType: "Water",
                         fluidTemperature: 68
@@ -87,8 +85,8 @@ export const MockPsat: Assessment = {
                 psat: {
                     name: "PSAT Optimization",
                     inputs: {
-                        pump_style: 6,
-                        pump_specified: null,
+                        pump_style: 11,
+                        pump_specified: 85.2,
                         pump_rated_speed: 1780,
                         drive: 1,
                         kinematic_viscosity: 1.107,
@@ -104,7 +102,7 @@ export const MockPsat: Assessment = {
                         load_estimation_method: 0,
                         motor_rated_fla: 228.57,
                         margin: 0,
-                        operating_fraction: 1,
+                        operating_hours: 8760,
                         flow_rate: 1840,
                         head: 174.85,
                         motor_field_power: 80,
@@ -112,7 +110,6 @@ export const MockPsat: Assessment = {
                         motor_field_voltage: 480,
                         cost_kw_hour: 0.05,
                         cost: 0.05,
-                        optimize_calculation: true,
                         implementationCosts: null,
                         fluidType: "Water",
                         fluidTemperature: 68
@@ -129,8 +126,8 @@ export const MockPsat: Assessment = {
                 psat: {
                     name: "Adjust Fluid Temperature",
                     inputs: {
-                        pump_style: 6,
-                        pump_specified: null,
+                        pump_style: 11,
+                        pump_specified: 85.2,
                         pump_rated_speed: 1780,
                         drive: 1,
                         kinematic_viscosity: 0.891,
@@ -146,7 +143,7 @@ export const MockPsat: Assessment = {
                         load_estimation_method: 0,
                         motor_rated_fla: 228.57,
                         margin: 0,
-                        operating_fraction: 1,
+                        operating_hours: 8760,
                         flow_rate: 1840,
                         head: 174.85,
                         motor_field_power: 80,
@@ -154,7 +151,6 @@ export const MockPsat: Assessment = {
                         motor_field_voltage: 480,
                         cost_kw_hour: 0.05,
                         cost: 0.05,
-                        optimize_calculation: false,
                         implementationCosts: null,
                         fluidType: "Water",
                         fluidTemperature: 100
@@ -176,8 +172,8 @@ export const MockPsat: Assessment = {
                 },
                 psat: {
                     inputs: {
-                        pump_style: 6,
-                        pump_specified: null,
+                        pump_style: 11,
+                        pump_specified: 85.2,
                         pump_rated_speed: 1780,
                         drive: 0,
                         kinematic_viscosity: 1.107,
@@ -193,7 +189,7 @@ export const MockPsat: Assessment = {
                         load_estimation_method: 0,
                         motor_rated_fla: 225,
                         margin: 0,
-                        operating_fraction: 1,
+                        operating_hours: 8760,
                         flow_rate: 1840,
                         head: 174.85,
                         motor_field_power: 80,
@@ -202,8 +198,7 @@ export const MockPsat: Assessment = {
                         cost_kw_hour: 0.05,
                         cost: 0.05,
                         fluidType: "Water",
-                        fluidTemperature: 68,
-                        optimize_calculation: true
+                        fluidTemperature: 68
                     },
                     name: "Opportunities Modification"
                 },

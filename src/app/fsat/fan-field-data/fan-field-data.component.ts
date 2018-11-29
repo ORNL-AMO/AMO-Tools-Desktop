@@ -174,7 +174,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   calculateCompressibility() {
-    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, 'existing', this.settings);
+    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, true, this.settings);
     //todo
     let inputs: CompressibilityFactor = {
       moverShaftPower: tmpResults.motorShaftPower,
@@ -283,9 +283,9 @@ export class FanFieldDataComponent implements OnInit {
     }
   }
 
-  isOperatingFractionDifferent() {
+  isOperatingHoursDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isOperatingFractionDifferent();
+      return this.compareService.isOperatingHoursDifferent();
     } else {
       return false;
     }

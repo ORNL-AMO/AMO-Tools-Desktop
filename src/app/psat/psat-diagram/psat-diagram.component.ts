@@ -42,12 +42,10 @@ export class PsatDiagramComponent implements OnInit {
   }
 
   getResults(psat: PSAT, settings: Settings, isModification?: boolean): PsatOutputs {
-    if (psat.inputs.optimize_calculation) {
-      return this.psatService.resultsOptimal(JSON.parse(JSON.stringify(psat.inputs)), settings);
-    } else if (!isModification) {
+    if (!isModification) {
       return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
     } else {
-      return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings, this.psat.outputs.pump_efficiency);
+      return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings);
     }
   }
 }

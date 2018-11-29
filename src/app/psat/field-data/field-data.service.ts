@@ -24,8 +24,13 @@ export class FieldDataService {
     } else {
       sizeMarginValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
+    //TODO: remove eventually. this is here for support in removing operating_fraction from suite v0.3.2
+    if(!psatInputs.operating_hours && psatInputs.operating_fraction){
+      psatInputs.operating_hours = psatInputs.operating_fraction * 8760;
+    }
+
     let form: FormGroup = this.formBuilder.group({
-      operatingFraction: [psatInputs.operating_fraction, [Validators.required, Validators.min(0), Validators.max(1)]],
+      operatingHours: [psatInputs.operating_hours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       costKwHr: [psatInputs.cost_kw_hour, [Validators.required, Validators.min(0), Validators.max(1)]],
       flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
       head: [psatInputs.head, [Validators.required, Validators.min(0.1)]],
@@ -33,7 +38,6 @@ export class FieldDataService {
       motorKW: [psatInputs.motor_field_power, motorKwValidators],
       motorAmps: [psatInputs.motor_field_current, motorAmpsValidators],
       measuredVoltage: [psatInputs.motor_field_voltage, measuredVoltageValidators],
-      optimizeCalculation: [psatInputs.optimize_calculation],
       sizeMargin: [psatInputs.margin, sizeMarginValidators],
       implementationCosts: [psatInputs.cost]
     });
@@ -47,7 +51,7 @@ export class FieldDataService {
 
 
   getPsatInputsFromForm(form: FormGroup, psatInputs: PsatInputs): PsatInputs {
-    psatInputs.operating_fraction = form.controls.operatingFraction.value;
+    psatInputs.operating_hours = form.controls.operatingHours.value;
     psatInputs.cost_kw_hour = form.controls.costKwHr.value;
     psatInputs.flow_rate = form.controls.flowRate.value;
     psatInputs.head = form.controls.head.value;
@@ -55,7 +59,6 @@ export class FieldDataService {
     psatInputs.motor_field_power = form.controls.motorKW.value;
     psatInputs.motor_field_current = form.controls.motorAmps.value;
     psatInputs.motor_field_voltage = form.controls.measuredVoltage.value;
-    psatInputs.optimize_calculation = form.controls.optimizeCalculation.value;
     psatInputs.margin = form.controls.sizeMargin.value;
     psatInputs.implementationCosts = form.controls.implementationCosts.value;
     return psatInputs;

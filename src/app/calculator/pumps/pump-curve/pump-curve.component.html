@@ -5,8 +5,9 @@
         <img src="assets/images/calculator-icons/pump-curve.png" class="ico-size">
       </div>
       <div class="pl-2">
-        <h3 *ngIf="!isFan">Pump Curve Calculator</h3>
-        <h3 *ngIf="isFan">Fan Curve Calculator</h3>
+        <h3 *ngIf="!isFan && pumpCurvePrimary">Pump Curve Calculator</h3>
+        <h3 *ngIf="!pumpCurvePrimary">System Curve Calculator</h3>
+        <h3 *ngIf="isFan && pumpCurvePrimary">Fan Curve Calculator</h3>
       </div>
     </div>
 
