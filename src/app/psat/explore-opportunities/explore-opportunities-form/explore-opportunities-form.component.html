@@ -1,4 +1,4 @@
-<div class="d-flex flex-column mr-3 ml-3">
+<div class="d-flex flex-column mr-3 ml-3 mb-4">
   <div class="w-100 justify-content-center p-2 d-flex">
     <button class="btn btn-primary" (click)="addNewMod()">Add New Scenario</button>
   </div>
@@ -8,34 +8,49 @@
       <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="psat.modifications[exploreModIndex].psat.name"
         (input)="calculate()" />
     </div>
-    <app-system-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-      [exploreModIndex]="exploreModIndex"></app-system-data-form>
-    <app-rated-motor-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-      [exploreModIndex]="exploreModIndex"></app-rated-motor-form>
-    <app-pump-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-      [exploreModIndex]="exploreModIndex"></app-pump-data-form>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
-        <input type="checkbox" id="modifyCalculationMethod" value="true" (change)="toggleOptimized()" (focus)="focusField('modifyCalculationMethod')"
-          [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation" /> Optimize Pump and Motor Combination for a Fixed Specific Speed
+        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.isVFD"
+          (change)="setVFD()" /> Install VFD
       </label>
     </div>
-    <div class="checkbox" *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
-      <label for="showSizeMargin">
-        <input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')" [(ngModel)]="showSizeMargin"
-        /> Size Margin
-      </label>
+    <app-variable-frequency-drive-form *ngIf="psat.modifications[exploreModIndex].psat.inputs.isVFD" (changeField)="focusField($event)"
+      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselinePumpFluidForm]="baselinePumpFluidForm"
+      [modificationPumpFluidForm]="modificationPumpFluidForm" [baselineFieldDataForm]="baselineFieldDataForm"
+      [modificationFieldDataForm]="modificationFieldDataForm" [baselineFieldDataWarnings]="baselineFieldDataWarnings"
+      [modificationFieldDataWarnings]="modificationFieldDataWarnings" (openHeadToolModal)="showHeadToolModal()"></app-variable-frequency-drive-form>
+
+    <app-pump-data-form [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" (changeField)="focusField($event)"
+      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselinePumpFluidForm"
+      [modificationForm]="modificationPumpFluidForm" [psat]="psat"></app-pump-data-form>
+
+    <app-system-data-form [isVFD]="psat.modifications[exploreModIndex].psat.inputs.isVFD" (changeField)="focusField($event)"
+      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
+      [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFieldDataWarnings"
+      [modificationWarnings]="modificationFieldDataWarnings" (openHeadToolModal)="showHeadToolModal()"></app-system-data-form>
+
+    <app-rated-motor-form (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+      [exploreModIndex]="exploreModIndex" [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"
+      [baselineWarnings]="baselineMotorWarnings" [modificationWarnings]="modificationMotorWarnings"></app-rated-motor-form>
+  </div>
+</div>
+
+
+
+<!-- HEAD TOOL MODAL -->
+<div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0" *ngIf="showHeadTool">
+        <app-head-tool [headToolResults]="headToolResults" [psat]="psat.modifications[this.exploreModIndex].psat"
+          [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true" [assessmentId]="assessmentId"></app-head-tool>
+      </div>
     </div>
-    <form *ngIf="showSizeMargin">
-      <div class="form-group">
-      </div>
-      <div class="form-group">
-        <div name="sizeMargin" class="input-group">
-          <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.margin"
-            (input)="calculate()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-    </form>
   </div>
 </div>

@@ -47,8 +47,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   helpHeight: number;
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService,
-    private pumpFluidService: PumpFluidService, private fieldDataService: FieldDataService, private motorService: MotorService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService) { }
 
   ngOnInit() {
     let globalSettings = this.settingsDbService.globalSettings;

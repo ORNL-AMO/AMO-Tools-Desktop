@@ -5,7 +5,49 @@
     </div>
   </div>
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
-    <div class="form-group" [ngClass]="{'indicate-different': isFanTypeDifferent()}">
+    <div *ngIf="fanForm.controls.fanType.value != 12" class="form-group" [ngClass]="{'indicate-different': isFanTypeDifferent()}">
+      <label for="{{'fanType_'+idString}}">Pump Type</label>
+      <select class="form-control" name="fanType" formControlName="fanType" id="{{'fanType_'+idString}}" (change)="getFanEfficiency()"
+        (focus)="focusField('fanType')">
+        <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="!baseline" [ngClass]="{'indicate-different': isFanSpecifiedDifferent(), 'invalid':fanForm.controls.fanEfficiency.invalid}">
+      <label for="{{'fanEfficiency_'+idString}}">Fan Efficiency
+        <a class="form-text small click-link" id="fanTypeHelp" (click)="enableFanType()" *ngIf="fanForm.controls.fanType.value == 12">Modify
+          Fan Type</a>
+        <a class="form-text small click-link" id="fanTypeHelp" (click)="disableFanType()" *ngIf="fanForm.controls.fanType.value != 12">Use
+          Baseline Efficiency</a>
+      </label>
+      <div class="input-group">
+        <input [readonly]="!selected" name="fanEfficiency" type="number" min="0" step="any" max="100" class="form-control"
+          formControlName="fanEfficiency" id="{{'fanEfficiency_'+idString}}" onfocus="this.select();" (input)="save()"
+          (focus)="focusField('fanEfficiency')">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="fanForm.controls.fanEfficiency.invalid && !fanForm.controls.fanEfficiency.pristine">
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.required">Value Required</span>
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.max">Value can't be greater than
+          {{fanForm.controls.fanEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.min">Value can't be less than
+          {{fanForm.controls.fanEfficiency.errors.min.min}} %.</span>
+      </span>
+    </div>
+
+    <div class="text-center small help-text" *ngIf="fanForm.controls.fanType.value == 12 && !baseline">
+      The efficiency of your fan has been calculated based on your system setup. Either directly modify your
+      efficiency or click <strong>"Modify Fan
+        Type"</strong> to estimate your pump efficiency based on a different pump type.
+    </div>
+    <div class="text-center small help-text" *ngIf="fanForm.controls.fanType.value != 12 && !baseline">
+      The efficiency of your fan has been calculated based on your selected <strong>fan
+        type</strong>. Click <strong>"Use Baseline Efficiency"</strong>
+      to use the efficiency calculated by your system setup.
+    </div>
+
+
+    <!-- <div class="form-group" [ngClass]="{'indicate-different': isFanTypeDifferent()}">
       <label for="{{'fanType_'+idString}}">Fan Type</label>
       <select class="form-control" name="fanType" formControlName="fanType" id="{{'fanType_'+idString}}" (change)="changeFanType()"
         (focus)="focusField('fanType')">
@@ -13,22 +55,22 @@
       </select>
     </div>
 
-    <div class="form-group" *ngIf="fanForm.controls.fanType.value == 12" [ngClass]="{'indicate-different': isFanSpecifiedDifferent(), 'invalid': fanForm.controls.fanSpecified.invalid}">
-      <label for="{{'fanSpecified_'+idString}}">Specify Fan Efficiency</label>
+    <div class="form-group" *ngIf="fanForm.controls.fanType.value == 12" [ngClass]="{'indicate-different': isFanSpecifiedDifferent(), 'invalid': fanForm.controls.fanEfficiency.invalid}">
+      <label for="{{'fanEfficiency_'+idString}}">Specify Fan Efficiency</label>
       <div class="input-group">
-        <input name="fanSpecified" type="number" min="0" step="any" class="form-control" formControlName="fanSpecified"
-          id="{{'fanSpecified_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('fanSpecified')"
+        <input name="fanEfficiency" type="number" min="0" step="any" class="form-control" formControlName="fanEfficiency"
+          id="{{'fanEfficiency_'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('fanEfficiency')"
           [readonly]="!selected">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="fanForm.controls.fanSpecified.invalid && !fanForm.controls.fanSpecified.pristine">
-        <span *ngIf="fanForm.controls.fanSpecified.errors.required">Value Required</span>
-        <span *ngIf="fanForm.controls.fanSpecified.errors.max">Value can't be greater than
-          {{fanForm.controls.fanSpecified.errors.max.max}} %.</span>
-        <span *ngIf="fanForm.controls.fanSpecified.errors.min">Value can't be less than
-          {{fanForm.controls.fanSpecified.errors.min.min}} %.</span>
+      <span class="alert-danger pull-right small" *ngIf="fanForm.controls.fanEfficiency.invalid && !fanForm.controls.fanEfficiency.pristine">
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.required">Value Required</span>
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.max">Value can't be greater than
+          {{fanForm.controls.fanEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="fanForm.controls.fanEfficiency.errors.min">Value can't be less than
+          {{fanForm.controls.fanEfficiency.errors.min.min}} %.</span>
       </span>
-    </div>
+    </div> -->
 
     <div class="form-group" [ngClass]="{'indicate-different': isFanSpeedDifferent(),'error': fanSpeedError !== null, 'invalid':fanForm.controls.fanSpeed.invalid}">
       <label for="{{'fanSpeed_'+idString}}">Fan Speed</label>

@@ -4,9 +4,11 @@ import { FSAT } from '../../../../shared/models/fans';
 import { FanTypes, Drives } from '../../../fanOptions';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
-import { FsatWarningService } from '../../../fsat-warning.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { FanSetupService } from '../../../fan-setup/fan-setup.service';
+import { FsatService } from '../../../fsat.service';
+import { FanEfficiencyInputs } from '../../../../calculator/fans/fan-efficiency/fan-efficiency.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-fan-data-form',
   templateUrl: './fan-data-form.component.html',
@@ -21,17 +23,21 @@ export class FanDataFormComponent implements OnInit {
   fsat: FSAT;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+  @Input()
+  baselineForm: FormGroup;
+  @Input()
+  modificationForm: FormGroup;
+  @Input()
+  baselineFanEfficiency: number;
+  @Input()
+  isVFD: boolean;
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
-  showFanData: boolean = false;
   showFanType: boolean = false;
   showMotorDrive: boolean = false;
-  showFanSpecified: boolean = false;
-  baselineForm: FormGroup;
-  modificationForm: FormGroup;
-
-  constructor(private modifyConditionsService: ModifyConditionsService, private helpPanelService: HelpPanelService, private fanSetupService: FanSetupService) { }
+  
+  constructor(private convertUnitsService: ConvertUnitsService, private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService, private helpPanelService: HelpPanelService, private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
     this.drives = Drives;
@@ -45,23 +51,32 @@ export class FanDataFormComponent implements OnInit {
         this.init()
       }
     }
+
+    if(changes.isVFD){
+      if(!changes.isVFD.isFirstChange()){
+        this.init();
+      }
+    }
   }
 
   init() {
-    this.baselineForm = this.fanSetupService.getFormFromObj(this.fsat.fanSetup);
-    this.baselineForm.disable();
-    this.modificationForm = this.fanSetupService.getFormFromObj(this.fsat.modifications[this.exploreModIndex].fsat.fanSetup);
-
-    this.initFanSpecified();
     this.initMotorDrive();
-    this.initPumpType();
-    this.initFanData();
+    this.initFanType();
   }
-  initPumpType() {
-    if (this.baselineForm.controls.fanType.value != this.modificationForm.controls.fanType.value) {
-      this.showFanType = true;
+
+  initFanType() {
+    if (this.modificationForm.controls.fanType.value == 12) {
+      this.modificationForm.controls.fanType.disable();
+      if (this.modificationForm.controls.fanEfficiency.value != this.baselineFanEfficiency) {
+        this.showFanType = true;
+      }
     } else {
-      this.showFanType = false;
+      if (this.baselineForm.controls.fanType.value != this.modificationForm.controls.fanType.value) {
+        this.showFanType = true;
+      } else {
+        this.showFanType = false;
+      }
+      this.modificationForm.controls.fanEfficiency.disable();
     }
   }
 
@@ -73,46 +88,13 @@ export class FanDataFormComponent implements OnInit {
     }
   }
 
-  initFanSpecified() {
-    if (this.modificationForm.controls.fanSpecified.value != this.baselineForm.controls.fanSpecified.value) {
-      this.showFanSpecified = true;
-    } else {
-      this.showFanSpecified = false;
-    }
-
-  }
-
-  initFanData() {
-    if (this.showMotorDrive || this.showFanSpecified || this.showFanType) {
-      this.showFanData = true;
-    } else {
-      this.showFanData = false;
-    }
-  }
-
-  toggleFanData() {
-    if (this.showFanData == false) {
-      this.showFanSpecified = false;
-      this.showFanType = false;
-      this.showMotorDrive = false;
-      this.toggleFanSpecified();
-      this.toggleFanType();
-      this.toggleMotorDrive();
-    }
-  }
-  toggleFanSpecified() {
-    if (this.showFanSpecified == false) {
-      this.modificationForm.controls.fanSpecified.patchValue(this.baselineForm.controls.fanSpecified.value);
-      this.calculate();
-    }
-  }
 
   toggleFanType() {
     if (this.showFanType == false) {
-      this.modificationForm.controls.fanType.patchValue(this.baselineForm.controls.fanType.value);
-      this.calculate();
+      this.disableFanType();
     }
   }
+
   toggleMotorDrive() {
     if (this.showMotorDrive === false) {
       this.modificationForm.controls.drive.patchValue(this.baselineForm.controls.drive.value);
@@ -120,19 +102,33 @@ export class FanDataFormComponent implements OnInit {
     }
   }
 
-  setFanTypes() {
-    if (this.modificationForm.controls.fanType.value == 10 || this.baselineForm.controls.fanType.value == 10) {
-      this.showFanSpecified = true;
-    }else{
-       this.showFanSpecified = false;
+  enableFanType() {
+    this.modificationForm.controls.fanType.patchValue(this.baselineForm.controls.fanType.value);
+    this.modificationForm.controls.fanType.enable();
+    this.getFanEfficiency();
+  }
+
+  disableFanType() {
+    this.modificationForm.controls.fanEfficiency.patchValue(this.baselineFanEfficiency);
+    this.modificationForm.controls.fanEfficiency.enable();
+    this.modificationForm.controls.fanType.patchValue(12);
+    this.modificationForm.controls.fanType.disable();
+    this.calculate();
+  }
+
+  getFanEfficiency() {
+    let inputs: FanEfficiencyInputs = {
+      fanType: this.modificationForm.controls.fanType.value,
+      fanSpeed: this.fsat.modifications[this.exploreModIndex].fsat.fanSetup.fanSpeed,
+      inletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressure,
+      outletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressure,
+      flowRate: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.flowRate,
+      compressibility: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.compressibilityFactor
     }
-    if (!this.modificationForm.controls.fanSpecified) {
-      this.modificationForm.controls.fanSpecified.patchValue(90);
-    }
-    if (!this.baselineForm.controls.fanSpecified) {
-      this.baselineForm.controls.fanSpecified.patchValue(90);
-    }    
-    this.modificationForm = this.fanSetupService.changeFanType(this.modificationForm);
+    let tmpEfficiency: number = this.fsatService.optimalFanEfficiency(inputs, this.settings);
+    tmpEfficiency = this.convertUnitsService.roundVal(tmpEfficiency, 2);
+    this.modificationForm.controls.fanEfficiency.patchValue(tmpEfficiency);
+    this.modificationForm.controls.fanEfficiency.disable();
     this.calculate();
   }
 
@@ -142,7 +138,6 @@ export class FanDataFormComponent implements OnInit {
   }
 
   calculate() {
-    this.fsat.modifications[this.exploreModIndex].fsat.fanSetup = this.fanSetupService.getObjFromForm(this.modificationForm);
     this.emitCalculate.emit(true);
   }
 

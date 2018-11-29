@@ -1,5 +1,4 @@
 import { Assessment } from "../shared/models/assessment";
-import { Calculator } from "../shared/models/calculators";
 import { Settings } from "../shared/models/settings"
 
 export const MockFsat: Assessment = {
@@ -9,7 +8,7 @@ export const MockFsat: Assessment = {
     fsat: {
         name: "Baseline",
         fieldData: {
-            operatingFraction: 1,
+            operatingHours: 8760,
             cost: 0.06,
             flowRate: 129691,
             inletPressure: -16.36,
@@ -30,8 +29,7 @@ export const MockFsat: Assessment = {
             fullLoadAmps: 683.25
         },
         fanSetup: {
-            fanType: 4,
-            fanSpecified: null,
+            fanType: 0,
             fanSpeed: 1180,
             drive: 1
         },
@@ -83,18 +81,16 @@ export const MockFsat: Assessment = {
                         specifiedEfficiency: 100,
                         motorRatedVoltage: 460,
                         fullLoadAmps: 683.25,
-                        optimize: false,
                         sizeMargin: 0,
                     },
                     fanSetup: {
-                        fanType: 4,
-                        fanSpecified: null,
+                        fanType: 12,
                         fanSpeed: 1180,
                         drive: 1,
-                        fanEfficiency: 63.382393,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
-                        operatingFraction: 1,
+                        operatingHours: 8760,
                         flowRate: 86461,
                         inletPressure: -19.19,
                         outletPressure: 1.29,
@@ -146,18 +142,16 @@ export const MockFsat: Assessment = {
                         specifiedEfficiency: 100,
                         motorRatedVoltage: 460,
                         fullLoadAmps: 683.25,
-                        sizeMargin: null,
-                        optimize: true,
+                        sizeMargin: null
                     },
                     fanSetup: {
-                        fanType: 4,
-                        fanSpecified: null,
+                        fanType: 12,
                         fanSpeed: 1180,
                         drive: 1,
-                        fanEfficiency: 63.382393,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
-                        operatingFraction: 1,
+                        operatingHours: 8760,
                         flowRate: 129691,
                         inletPressure: -16.36,
                         outletPressure: 1.1,
@@ -210,14 +204,13 @@ export const MockFsat: Assessment = {
                         fullLoadAmps: 683.25,
                     },
                     fanSetup: {
-                        fanType: 4,
-                        fanSpecified: null,
+                        fanType: 12,
                         fanSpeed: 1180,
                         drive: 0,
-                        fanEfficiency: 63.382393,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
-                        operatingFraction: 1,
+                        operatingHours: 8760,
                         flowRate: 129691,
                         inletPressure: -16.36,
                         outletPressure: 1.1,
@@ -268,18 +261,16 @@ export const MockFsat: Assessment = {
                         specifiedEfficiency: 100,
                         motorRatedVoltage: 460,
                         fullLoadAmps: 683.25,
-                        sizeMargin: null,
-                        optimize: true,
+                        sizeMargin: null
                     },
                     fanSetup: {
-                        fanType: 5,
-                        fanSpecified: null,
+                        fanType: 12,
                         fanSpeed: 1180,
                         drive: 1,
-                        fanEfficiency: 63.382393,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
-                        operatingFraction: 1,
+                        operatingHours: 8760,
                         flowRate: 129691,
                         inletPressure: -16.36,
                         outletPressure: 1.1,
