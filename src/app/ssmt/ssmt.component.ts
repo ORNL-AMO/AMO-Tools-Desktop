@@ -21,6 +21,7 @@ import { BoilerService } from './boiler/boiler.service';
 import { AssessmentService } from '../assessment/assessment.service';
 import { SteamModelCalculationService } from './ssmt-calculations/steam-model-calculation.service';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
+import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -83,7 +84,8 @@ export class SsmtComponent implements OnInit {
     private turbineService: TurbineService,
     private boilerService: BoilerService,
     private assessmentService: AssessmentService,
-    private steamModelCalculationService: SteamModelCalculationService
+    private steamModelCalculationService: SteamModelCalculationService,
+    private calculateModelService: CalculateModelService
   ) { }
 
   ngOnInit() {
@@ -245,10 +247,10 @@ export class SsmtComponent implements OnInit {
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
 
-    if (this._ssmt.setupDone) {
-      let outputData: SSMTOutput = this.steamModelCalculationService.calculate(this._ssmt, this.settings);
-      console.log(outputData);
-    }
+    // if (this._ssmt.setupDone) {
+    //   this.calculateModelService.iterateModel(this._ssmt, this.settings);
+    //   //console.log(outputData);
+    // }
 
 
     this.indexedDbService.putAssessment(this.assessment).then(results => {
@@ -258,6 +260,8 @@ export class SsmtComponent implements OnInit {
       })
     })
   }
+
+
 
   checkSetupDone() {
     if (this.modificationExists) {
