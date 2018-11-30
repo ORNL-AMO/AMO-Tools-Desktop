@@ -155,7 +155,7 @@ export class AssessmentService {
   getNewFsat(): FSAT {
     let newFsat: FSAT = {
       fieldData: {
-        operatingHours: 1,
+        operatingHours: 8760,
         flowRate: null,
         inletPressure: null,
         outletPressure: null,
