@@ -291,6 +291,7 @@ export class PsatService {
     settings: Settings
   ) {
     if (settings.powerMeasurement != 'hp') {
+      // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
     let inputs: any = {
