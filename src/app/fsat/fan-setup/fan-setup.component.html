@@ -6,7 +6,7 @@
   </div>
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <div *ngIf="fanForm.controls.fanType.value != 12" class="form-group" [ngClass]="{'indicate-different': isFanTypeDifferent()}">
-      <label for="{{'fanType_'+idString}}">Pump Type</label>
+      <label for="{{'fanType_'+idString}}">Fan Type</label>
       <select class="form-control" name="fanType" formControlName="fanType" id="{{'fanType_'+idString}}" (change)="getFanEfficiency()"
         (focus)="focusField('fanType')">
         <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
