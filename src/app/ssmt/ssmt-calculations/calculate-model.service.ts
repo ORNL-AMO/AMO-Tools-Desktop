@@ -932,15 +932,19 @@ export class CalculateModelService {
 
   //6. Calculate Deaerator
   calculateDearator() {
+    //6A. Get Feedwater Details and Inlet header
     let feedwaterMassFlow: number = this.boilerFeedwater.massFlow
     let inletHeader: HeaderOutputObj = this.highPressureHeader;
-    if (this.inputData.headerInput.numberOfHeaders > 1 && isNaN(this.lowPressurePRV.feedwaterMassFlow) == false) {
-      feedwaterMassFlow = feedwaterMassFlow + this.lowPressurePRV.feedwaterMassFlow;
+    if (this.inputData.headerInput.numberOfHeaders > 1) {
+      if (isNaN(this.lowPressurePRV.feedwaterMassFlow) == false) {
+        feedwaterMassFlow = feedwaterMassFlow + this.lowPressurePRV.feedwaterMassFlow;
+      }
       inletHeader = this.lowPressureHeader;
     }
     if (this.inputData.headerInput.numberOfHeaders == 3 && isNaN(this.highToMediumPressurePRV.feedwaterMassFlow) == false) {
       feedwaterMassFlow = feedwaterMassFlow + this.highToMediumPressurePRV.feedwaterMassFlow;
     }
+    //6B. Calculate Deaerator
     this.deaerator = this.steamService.deaerator(
       {
         deaeratorPressure: this.inputData.boilerInput.deaeratorPressure,
@@ -955,6 +959,7 @@ export class CalculateModelService {
       },
       this.settings
     )
+    
     this.steamToDeaerator = inletHeader.massFlow;
     this.deaeratorFeedwater = {
       pressure: this.deaerator.feedwaterPressure,
