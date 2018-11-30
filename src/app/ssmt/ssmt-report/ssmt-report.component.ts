@@ -55,9 +55,40 @@ export class SsmtReportComponent implements OnInit {
 
   getResults(){
     this.calculateModelService.iterateModel(this.ssmt, this.settings);
+  }
+
+  getData(){
     this.inputData = this.calculateModelService.inputData;
     this.boiler = this.calculateModelService.boiler;
-    this.deaerator = this.calculateModelService.deaerator;
-    
+    this.deaerator = this.calculateModelService.deaerator; 
+    this.blowdown = this.calculateModelService.blowdown; 
+    this.boilerFeedwater = this.calculateModelService.boilerFeedwater; 
+    this.deaeratorFeedwater = this.calculateModelService.deaeratorFeedwater; 
+  
+    this.highPressureHeader = this.calculateModelService.highPressureHeader; 
+    this.highToMediumPressurePRV = this.calculateModelService.highToMediumPressurePRV; 
+    this.highPressureToMediumPressureTurbine = this.calculateModelService.highPressureToMediumPressureTurbine; 
+    this.highPressureFlashTank = this.calculateModelService.highPressureFlashTank; 
+    this.highPressureCondensate = this.calculateModelService.highPressureCondensate; 
+  
+    this.mediumPressureHeader = this.calculateModelService.mediumPressureHeader; 
+    this.lowPressurePRV = this.calculateModelService.lowPressurePRV; 
+    this.mediumPressureCondensate = this.calculateModelService.mediumPressureCondensate; 
+  
+    this.highToLowPressureTurbine = this.calculateModelService.highToLowPressureTurbine; 
+    this.mediumToLowPressureTurbine = this.calculateModelService.mediumToLowPressureTurbine; 
+    this.mediumPressureFlashTank = this.calculateModelService.mediumPressureFlashTank; 
+    this.blowdownFlashTank = this.calculateModelService.blowdownFlashTank; 
+  
+    this.lowPressureHeader = this.calculateModelService.lowPressureHeader; 
+    this.lowPressureCondensate = this.calculateModelService.lowPressureCondensate; 
+  
+    this.condensateFlashTank = this.calculateModelService.condensateFlashTank; 
+    this.returnCondensate = this.calculateModelService.returnCondensate; 
+    this.makeupWater = this.calculateModelService.makeupWater; 
+    this.makeupWaterAndCondensateHeader = this.calculateModelService.makeupWaterAndCondensateHeader; 
+    this.condensingTurbine = this.calculateModelService.condensingTurbine; 
+    this.steamToDeaerator = this.calculateModelService.steamToDeaerator; 
+    this.additionalSteamFlow = this.calculateModelService.additionalSteamFlow; 
   }
 }

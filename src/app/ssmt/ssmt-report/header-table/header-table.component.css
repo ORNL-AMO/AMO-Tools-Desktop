@@ -16,3 +16,7 @@ tbody{
 .group-label{
     font-weight: bold;
 }
+
+.table{
+    width: auto;
+}

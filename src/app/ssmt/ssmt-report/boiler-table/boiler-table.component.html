@@ -1,0 +1,168 @@
+<div class="d-flex">
+  <div class="p-1">
+    <label class="group-label">Steam</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td>Pressure</td>
+          <td>{{boiler.steamPressure | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Temperature</td>
+          <td>{{boiler.steamTemperature}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Saturated</td>
+          <td>
+            {{boiler.steamQuality}}
+            <!-- <span *ngIf="boiler.inletQuality == 0">Liquid</span>
+              <span *ngIf="boiler.inletQuality == 1">Gas</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Mass Flow</td>
+          <td>{{boiler.steamMassFlow | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Specific Enthalpy</td>
+          <td>{{boiler.steamSpecificEnthalpy | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Specific Entropy</td>
+          <td>{{boiler.steamSpecificEntropy | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Energy Flow</td>
+          <td>{{boiler.steamEnergyFlow | sigFigs:'6'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-1">
+    <label class="group-label">Boiler</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td>Blowdown Rate</td>
+          <td> {{inputData.boilerInput.blowdownRate}} %</td>
+        </tr>
+        <tr>
+          <td>Boiler Energy</td>
+          <td> {{boiler.boilerEnergy | sigFigs:'6'}} </td>
+        </tr>
+        <tr>
+          <td>Combustion Efficiency</td>
+          <td> {{inputData.boilerInput.combustionEfficiency}} %</td>
+        </tr>
+        <tr>
+          <td>Fuel Energy</td>
+          <td>{{boiler.fuelEnergy | sigFigs:'6'}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-1">
+    <label class="group-label">Blowdown</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td>Pressure</td>
+          <td>{{boiler.blowdownPressure | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Temperature</td>
+          <td>{{boiler.blowdownTemperature | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Saturated</td>
+          <td>
+            {{boiler.blowdownQuality}}
+          </td>
+        </tr>
+        <tr>
+          <td>Mass Flow</td>
+          <td>{{boiler.blowdownMassFlow | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Specific Enthalpy</td>
+          <td>{{boiler.blowdownSpecificEnthalpy | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Specific Entropy</td>
+          <td>{{boiler.blowdownSpecificEntropy | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Energy Flow</td>
+          <td>{{boiler.blowdownEnergyFlow | sigFigs:'6'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-1">
+    <label class="group-label">Feedwater</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td>Pressure</td>
+          <td>{{boiler.feedwaterPressure | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Temperature</td>
+          <td>{{boiler.feedwaterTemperature | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Saturated</td>
+          <td>
+            {{boiler.feedwaterQuality}}
+          </td>
+        </tr>
+        <tr>
+          <td>Mass Flow</td>
+          <td>{{boiler.feedwaterMassFlow | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Specific Enthalpy</td>
+          <td>{{boiler.feedwaterSpecificEnthalpy | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Specific Entropy</td>
+          <td>{{boiler.feedwaterSpecificEntropy | sigFigs:'6'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td>Energy Flow</td>
+          <td>{{boiler.feedwaterEnergyFlow | sigFigs:'6'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
