@@ -1,14 +1,47 @@
-<div class="d-flex flex-column p-4 justify-content-center">
-  <div class="d-flex justify-content-between">
+<div class="d-flex flex-column p-4 justify-content-center" *ngIf="dataCalculated">
+  <!-- <div class="d-flex justify-content-between">
     <button class="btn btn-primary" (click)="getResults()" [disabled]="!ssmt.setupDone">Run Modeler</button>
     <button class="btn btn-secondary" (click)="getData()">Get Data</button>
-  </div>
-  <div class="pt-2" *ngIf="boiler">
+  </div> -->
+  <div class="pt-2">
     <h4>Boiler Data</h4>
     <app-boiler-table [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
   </div>
-  <div class="pt-2" *ngIf="highPressureHeader">
-    <h4>High Pressure Header Data</h4>
-    <app-header-table [header]="highPressureHeader"></app-header-table>
+  <div class="pt-2">
+    <h4>Header Data</h4>
+    <div class="d-flex">
+      <div class="p-1">
+        <app-header-table [header]="highPressureHeader" [name]="'High Pressure Header'"></app-header-table>
+      </div>
+      <div class="p-1">
+        <app-header-table *ngIf="mediumPressureHeader" [header]="mediumPressureHeader" [name]="'Medium Pressure Header'"></app-header-table>
+      </div>
+      <div class="p-1">
+        <app-header-table *ngIf="lowPressureHeader" [header]="lowPressureHeader" [name]="'Low Pressure Header'"></app-header-table>
+      </div>
+      <div class="p-1">
+        <app-header-table *ngIf="makeupWaterAndCondensateHeader" [header]="makeupWaterAndCondensateHeader" [name]="'Make-up Water and Condensate'"></app-header-table>
+      </div>
+    </div>
+  </div>
+  <div class="pt-2" *ngIf="condensingTurbine">
+    <h4>Condensing Turbine Data</h4>
+    <app-turbine-table [turbine]="condensingTurbine"></app-turbine-table>
+  </div>
+  <div class="pt-2" *ngIf="highPressureToMediumPressureTurbine">
+    <h4>High to Medium Turbine Data</h4>
+    <app-turbine-table [turbine]="highPressureToMediumPressureTurbine"></app-turbine-table>
+  </div>
+  <div class="pt-2" *ngIf="highToLowPressureTurbine">
+    <h4>High to Low Turbine Data</h4>
+    <app-turbine-table [turbine]="highToLowPressureTurbine"></app-turbine-table>
+  </div>
+  <div class="pt-2" *ngIf="mediumToLowPressureTurbine">
+    <h4>Medium to Low Turbine Data</h4>
+    <app-turbine-table [turbine]="mediumToLowPressureTurbine"></app-turbine-table>
+  </div>
+  <div class="pt-2" *ngIf="deaerator">
+    <h4>Deaerator Data</h4>
+    <app-deaerator-table [deaerator]="deaerator"></app-deaerator-table>
   </div>
 </div>

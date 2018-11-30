@@ -38,6 +38,8 @@ import { CalculateModelService } from './ssmt-calculations/calculate-model.servi
 import { SsmtReportComponent } from './ssmt-report/ssmt-report.component';
 import { BoilerTableComponent } from './ssmt-report/boiler-table/boiler-table.component';
 import { HeaderTableComponent } from './ssmt-report/header-table/header-table.component';
+import { TurbineTableComponent } from './ssmt-report/turbine-table/turbine-table.component';
+import { DeaeratorTableComponent } from './ssmt-report/deaerator-table/deaerator-table.component';
 
 @NgModule({
   imports: [
@@ -72,7 +74,9 @@ import { HeaderTableComponent } from './ssmt-report/header-table/header-table.co
     SsmtSankeyComponent,
     SsmtReportComponent,
     BoilerTableComponent,
-    HeaderTableComponent
+    HeaderTableComponent,
+    TurbineTableComponent,
+    DeaeratorTableComponent
   ],
   providers: [
     SsmtService,

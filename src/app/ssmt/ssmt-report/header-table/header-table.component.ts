@@ -9,10 +9,14 @@ import { HeaderOutputObj } from '../../../shared/models/steam/steam-outputs';
 export class HeaderTableComponent implements OnInit {
   @Input()
   header: HeaderOutputObj;
+  @Input()
+  name: string;
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.name);
+    console.log(this.header);
   }
 
 }

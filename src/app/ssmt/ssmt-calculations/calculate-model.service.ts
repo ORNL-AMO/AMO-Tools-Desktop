@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SteamService } from '../../calculator/steam/steam.service';
 import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, HeatLossOutput, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput } from '../../shared/models/steam/steam-outputs';
 import { Settings } from '../../shared/models/settings';
-import { SSMTInputs, SSMT, HeaderInput, HeaderNotHighestPressure } from '../../shared/models/steam/ssmt';
+import { SSMTInputs, SSMT, HeaderNotHighestPressure } from '../../shared/models/steam/ssmt';
 import { HeaderInputObj } from '../../shared/models/steam/steam-inputs';
 
 @Injectable()
@@ -297,6 +297,7 @@ export class CalculateModelService {
       massFlow: highPressureHeaderHeatLoss.outletMassFlow,
       energyFlow: highPressureHeaderHeatLoss.outletEnergyFlow
     }
+    console.log(this.highPressureHeader.remainingSteam.massFlow);
   }
 
   //2C. Calculate High Pressure Condensate
@@ -304,7 +305,7 @@ export class CalculateModelService {
     //Calculate mass flow = steam usage * (recovery rate / 100);
     let calculatedMassFlow: number = this.inputData.headerInput.highPressure.processSteamUsage * (this.inputData.headerInput.highPressure.condensationRecoveryRate / 100);
     //calculate energy flow = mass flow * condensate enthalpy / 1000
-    let calcualtedEnergyFlow: number = calculatedMassFlow * this.blowdown.specificEnthalpy / 1000;
+    let calcualtedEnergyFlow: number = calculatedMassFlow * this.blowdown.specificEnthalpy / 10;
     this.highPressureCondensate = {
       pressure: this.blowdown.pressure,
       temperature: this.blowdown.temperature,
@@ -482,7 +483,7 @@ export class CalculateModelService {
     let calculatedMassFlow: number = this.inputData.headerInput.mediumPressure.processSteamUsage * (this.inputData.headerInput.mediumPressure.condensationRecoveryRate / 100);
     if (this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true) {
       calculatedMassFlow = calculatedMassFlow + this.highPressureFlashTank.outletLiquidMassFlow;
-      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureFlashTank.outletLiquidSpecificEnthalpy / 1000;
+      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureFlashTank.outletLiquidSpecificEnthalpy / 10;
       this.mediumPressureCondensate = {
         pressure: this.highPressureFlashTank.outletLiquidPressure,
         temperature: this.highPressureFlashTank.outletLiquidTemperature,
@@ -496,7 +497,7 @@ export class CalculateModelService {
     }
     else {
       calculatedMassFlow = calculatedMassFlow + this.highPressureCondensate.massFlow;
-      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureCondensate.specificEnthalpy / 1000;
+      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureCondensate.specificEnthalpy / 10;
       this.mediumPressureCondensate = {
         pressure: this.highPressureCondensate.pressure,
         temperature: this.highPressureCondensate.temperature,
@@ -755,7 +756,7 @@ export class CalculateModelService {
       }
       //combine flow from current header and liquid from higher pressure flash tank
       calculatedMassFlow = calculatedMassFlow + flashTank.outletLiquidMassFlow;
-      let calcualtedEnergyFlow: number = calculatedMassFlow * this.mediumPressureFlashTank.outletLiquidSpecificEnthalpy / 1000;
+      let calcualtedEnergyFlow: number = calculatedMassFlow * this.mediumPressureFlashTank.outletLiquidSpecificEnthalpy / 10;
       this.lowPressureCondensate = {
         pressure: flashTank.outletLiquidPressure,
         temperature: flashTank.outletLiquidTemperature,
@@ -776,7 +777,7 @@ export class CalculateModelService {
         //if 2 headers, next highest is high pressure
         inletCondensate = this.highPressureCondensate;
       }
-      let calcualtedEnergyFlow: number = calculatedMassFlow * inletCondensate.specificEnthalpy / 1000;
+      let calcualtedEnergyFlow: number = calculatedMassFlow * inletCondensate.specificEnthalpy / 10;
       this.lowPressureCondensate = {
         pressure: inletCondensate.pressure,
         temperature: inletCondensate.temperature,
@@ -808,17 +809,7 @@ export class CalculateModelService {
   //5A. Get inlets for makeup water and condensate header
   getMakeupWaterAndCondensateInlets(): Array<HeaderInputObj> {
     let inlets: Array<HeaderInputObj> = new Array<HeaderInputObj>();
-    //5A1. Calculate makeup water properties
-    this.calculateMakeupWater();
-    //add makeup water to inlets
-    inlets.push(
-      {
-        pressure: this.makeupWater.pressure,
-        thermodynamicQuantity: 1, //specificEnthalpy
-        quantityValue: this.makeupWater.specificEnthalpy,
-        massFlow: this.makeupWater.massFlow
-      }
-    );
+
     //5A2. Calculate condendsing turbine if exists
     if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
       this.calculateCondensingTurbine();
@@ -831,6 +822,7 @@ export class CalculateModelService {
           massFlow: this.condensingTurbine.massFlow
         }
       )
+      console.log(inlets);
     }
     //5A3. Calculate return condensate from headers
     this.calculateReturnCondensate();
@@ -843,6 +835,18 @@ export class CalculateModelService {
         massFlow: this.returnCondensate.massFlow
       }
     )
+    //5A1. Calculate makeup water properties
+    this.calculateMakeupWater();
+    let makeupWaterMassFlow: number = this.calculateMakeupWaterMassFlow();
+    //add makeup water to inlets
+    inlets.push(
+      {
+        pressure: this.makeupWater.pressure,
+        thermodynamicQuantity: 1, //specificEnthalpy
+        quantityValue: this.makeupWater.specificEnthalpy,
+        massFlow: makeupWaterMassFlow
+      }
+    );
     return inlets;
   }
 
@@ -862,6 +866,28 @@ export class CalculateModelService {
     if (this.inputData.boilerInput.preheatMakeupWater == true) {
       this.runHeatExchanger();
     }
+  }
+
+  calculateMakeupWaterMassFlow(): number {
+    let makeupWaterMassFlow: number = this.boilerFeedwater.massFlow;
+    if (this.inputData.headerInput.numberOfHeaders > 1) {
+      if (this.inputData.headerInput.numberOfHeaders == 3 && isNaN(this.highToMediumPressurePRV.feedwaterMassFlow) == false) {
+        makeupWaterMassFlow = makeupWaterMassFlow + this.highToMediumPressurePRV.feedwaterMassFlow;
+      }
+      if (isNaN(this.lowPressurePRV.feedwaterMassFlow) == false) {
+        makeupWaterMassFlow = makeupWaterMassFlow + this.lowPressurePRV.feedwaterMassFlow;
+      }
+    }
+    makeupWaterMassFlow = makeupWaterMassFlow * (1 + this.inputData.boilerInput.deaeratorVentRate / 100);
+
+    makeupWaterMassFlow = makeupWaterMassFlow - this.returnCondensate.massFlow;
+    if (this.inputData.headerInput.numberOfHeaders > 1) {
+      makeupWaterMassFlow = makeupWaterMassFlow - this.lowPressureHeader.massFlow;
+    }
+    if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
+      makeupWaterMassFlow = makeupWaterMassFlow - this.condensingTurbine.massFlow;
+    }
+    return makeupWaterMassFlow;
   }
 
   //5A1b. Run Heat Exchanger
@@ -959,7 +985,7 @@ export class CalculateModelService {
       },
       this.settings
     )
-    
+
     this.steamToDeaerator = inletHeader.massFlow;
     this.deaeratorFeedwater = {
       pressure: this.deaerator.feedwaterPressure,
@@ -973,5 +999,42 @@ export class CalculateModelService {
     }
   }
 
+
+  initResults() {
+    this.inputData = undefined;
+
+    this.boiler = undefined;
+    this.blowdown = undefined;
+    this.boilerFeedwater = undefined;
+    this.deaeratorFeedwater = undefined;
+
+    this.highPressureHeader = undefined;
+    this.highToMediumPressurePRV = undefined;
+    this.highPressureToMediumPressureTurbine = undefined;
+    this.highPressureFlashTank = undefined;
+    this.highPressureCondensate = undefined;
+
+    this.mediumPressureHeader = undefined;
+    this.lowPressurePRV = undefined;
+    this.mediumPressureCondensate = undefined;
+
+    this.highToLowPressureTurbine = undefined;
+    this.mediumToLowPressureTurbine = undefined;
+    this.mediumPressureFlashTank = undefined;
+    this.blowdownFlashTank = undefined;
+
+    this.lowPressureHeader = undefined;
+    this.lowPressureCondensate = undefined;
+
+    this.condensateFlashTank = undefined;
+    this.returnCondensate = undefined;
+    this.makeupWater = undefined;
+    this.makeupWaterAndCondensateHeader = undefined;
+    this.condensingTurbine = undefined;
+    this.deaerator = undefined;
+
+    this.steamToDeaerator = undefined;
+    this.additionalSteamFlow = undefined;
+  }
 
 }
