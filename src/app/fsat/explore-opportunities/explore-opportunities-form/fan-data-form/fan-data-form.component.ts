@@ -36,7 +36,7 @@ export class FanDataFormComponent implements OnInit {
   fanTypes: Array<{ display: string, value: number }>;
   showFanType: boolean = false;
   showMotorDrive: boolean = false;
-  
+
   constructor(private convertUnitsService: ConvertUnitsService, private modifyConditionsService: ModifyConditionsService, private fsatService: FsatService, private helpPanelService: HelpPanelService, private fanSetupService: FanSetupService) { }
 
   ngOnInit() {
@@ -52,8 +52,8 @@ export class FanDataFormComponent implements OnInit {
       }
     }
 
-    if(changes.isVFD){
-      if(!changes.isVFD.isFirstChange()){
+    if (changes.isVFD) {
+      if (!changes.isVFD.isFirstChange()) {
         this.init();
       }
     }
@@ -71,11 +71,7 @@ export class FanDataFormComponent implements OnInit {
         this.showFanType = true;
       }
     } else {
-      if (this.baselineForm.controls.fanType.value != this.modificationForm.controls.fanType.value) {
-        this.showFanType = true;
-      } else {
-        this.showFanType = false;
-      }
+      this.showFanType = true;
       this.modificationForm.controls.fanEfficiency.disable();
     }
   }
