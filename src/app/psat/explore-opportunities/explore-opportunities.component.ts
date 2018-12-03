@@ -74,6 +74,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.getContainerHeight();
       }
     }
+    if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
+      this.getResults();
+    }
   }
 
   getContainerHeight() {
