@@ -1,0 +1,51 @@
+<label class="group-label">{{name}}</label>
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td>Pressure</td>
+      <td>{{steamProperties.pressure |sigFigs: '6'}}
+        <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
+      </td>
+    </tr>
+    <tr>
+      <td>Temperature</td>
+      <td>{{steamProperties.temperature |sigFigs: '6'}}
+        <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
+      </td>
+    </tr>
+    <tr>
+      <td>Phase</td>
+      <td>
+        <span *ngIf="steamProperties.quality == 0">Liquid</span>
+        <span *ngIf="steamProperties.quality == 1">Gas</span>
+        <span *ngIf="steamProperties.quality != 0 && steamProperties.quality != 1">{{steamProperties.quality}}</span>
+      </td>
+    </tr>
+    <tr>
+      <td>Mass Flow</td>
+      <td>{{steamProperties.massFlow |sigFigs: '6'}}
+        <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
+      </td>
+    </tr>
+    <tr>
+      <td>Specific Enthalpy</td>
+      <td>{{steamProperties.specificEnthalpy |sigFigs: '6'}}
+        <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
+      </td>
+    </tr>
+    <tr>
+      <td>Specific Entropy</td>
+      <td>{{steamProperties.specificEntropy |sigFigs: '6'}}
+        <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
+      </td>
+    </tr>
+    <tr>
+      <td>Energy Flow</td>
+      <td>{{steamProperties.energyFlow |sigFigs: '6'}}</td>
+    </tr>
+    <tr>
+      <td>Mass Flow</td>
+      <td>{{steamProperties.massFlow |sigFigs: '6'}}</td>
+    </tr>
+  </tbody>
+</table>

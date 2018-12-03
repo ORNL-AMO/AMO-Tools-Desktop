@@ -15,8 +15,6 @@ export class HeaderTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.name);
-    console.log(this.header);
   }
 
 }
