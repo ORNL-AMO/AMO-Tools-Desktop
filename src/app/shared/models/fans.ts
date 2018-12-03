@@ -123,7 +123,6 @@ export interface BaseGasDensity {
   barometricPressure?: number;
   gasDensity?: number;
   gasType?: string;
-  conditionLocation?: number,
   specificGravity?: number;
   // used for gasDensity Calculations
   inputType?: string; // relativeHumidity, dewPoint, or wetBulb are the options

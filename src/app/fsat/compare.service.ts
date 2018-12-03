@@ -44,7 +44,7 @@ export class CompareService {
         this.isBarometricPressureDifferent(baseline, modification) ||
         this.isGasDensityDifferent(baseline, modification) ||
         this.isGasTypeDifferent(baseline, modification) ||
-        this.isConditionLocationDifferent(baseline, modification) ||
+       // this.isConditionLocationDifferent(baseline, modification) ||
         this.isSpecificGravityDifferent(baseline, modification) ||
         this.isInputTypeDifferent(baseline, modification) ||
         this.isDewPointDifferent(baseline, modification) ||
@@ -143,23 +143,7 @@ export class CompareService {
       return false;
     }
   }
-  isConditionLocationDifferent(baseline?: FSAT, modification?: FSAT) {
-    if (!baseline) {
-      baseline = this.baselineFSAT;
-    }
-    if (!modification) {
-      modification = this.modifiedFSAT;
-    }
-    if (baseline && modification) {
-      if (baseline.baseGasDensity.conditionLocation != modification.baseGasDensity.conditionLocation) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
+
   isSpecificGravityDifferent(baseline?: FSAT, modification?: FSAT) {
     if (!baseline) {
       baseline = this.baselineFSAT;

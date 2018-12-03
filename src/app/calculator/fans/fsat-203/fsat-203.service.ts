@@ -52,7 +52,6 @@ export class Fsat203Service {
       upDownStream: form.controls.upDownStream.value,
       traversePlanes: form.controls.traversePlanes.value,
       globalBarometricPressure: form.controls.globalBarometricPressure.value
-      //  planarBarometricPressure: form.controls.planarBarometricPressure.value
     }
     return obj;
   }
@@ -62,8 +61,6 @@ export class Fsat203Service {
     let form = this.formBuilder.group({
       inputType: [obj.inputType, Validators.required],
       gasType: [obj.gasType, Validators.required],
-      // humidityData: ['Yes', Validators.required],
-      conditionLocation: [obj.conditionLocation, Validators.required],
       dryBulbTemp: [obj.dryBulbTemp, [Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]],
       staticPressure: [obj.staticPressure, [Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]],
       barometricPressure: [obj.barometricPressure, [Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
@@ -246,8 +243,6 @@ export class Fsat203Service {
     let fanGasDensity: BaseGasDensity = {
       inputType: form.controls.inputType.value,
       gasType: form.controls.gasType.value,
-      //  humidityData: form.controls.humidityData.value,
-      conditionLocation: form.controls.conditionLocation.value,
       dryBulbTemp: form.controls.dryBulbTemp.value,
       staticPressure: form.controls.staticPressure.value,
       barometricPressure: form.controls.barometricPressure.value,
@@ -575,7 +570,6 @@ export class Fsat203Service {
         gasType: 'AIR',
         //Mark Additions
         inputType: 'custom',
-        conditionLocation: 4,
         //Method 2 variables
         specificGravity: undefined,
         wetBulbTemp: undefined,
@@ -723,7 +717,6 @@ export class Fsat203Service {
       },
       BaseGasDensity: {
         barometricPressure: 26.57,
-        conditionLocation: 4,
         dewPoint: null,
         dryBulbTemp: 123,
         gasDensity: 0.05972908666857927,
@@ -881,7 +874,6 @@ export class Fsat203Service {
         gasType: 'AIR',
         //Mark Additions
         inputType: 'relativeHumidity',
-        conditionLocation: 4,
         //Method 2 variables
         specificGravity: 1,
         wetBulbTemp: 119,

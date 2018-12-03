@@ -189,7 +189,6 @@ export class AssessmentService {
         gasType: 'AIR',
         //Mark Additions
         inputType: 'custom',
-        conditionLocation: 4,
         //Method 2 variables
         specificGravity: 1,
         wetBulbTemp: 119,
