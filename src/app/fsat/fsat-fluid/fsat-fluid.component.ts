@@ -198,13 +198,13 @@ export class FsatFluidComponent implements OnInit {
       return false;
     }
   }
-  isConditionLocationDifferent() {
-    if (this.canCompare()) {
-      return this.compareService.isConditionLocationDifferent();
-    } else {
-      return false;
-    }
-  }
+  // isConditionLocationDifferent() {
+  //   if (this.canCompare()) {
+  //     return this.compareService.isConditionLocationDifferent();
+  //   } else {
+  //     return false;
+  //   }
+  // }
   isSpecificGravityDifferent() {
     if (this.canCompare()) {
       return this.compareService.isSpecificGravityDifferent();

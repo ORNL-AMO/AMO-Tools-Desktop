@@ -35,7 +35,7 @@ export class FieldDataSummaryComponent implements OnInit {
   specificHeatRatioDiff: Array<boolean>;
   compressibilityFactorDiff: Array<boolean>;
   measuredVoltageDiff: Array<boolean>;
-  pressureCalcResultTypeDiff: Array<boolean>;
+  // pressureCalcResultTypeDiff: Array<boolean>;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -50,7 +50,7 @@ export class FieldDataSummaryComponent implements OnInit {
     this.specificHeatRatioDiff = new Array<boolean>();
     this.compressibilityFactorDiff = new Array<boolean>();
     this.measuredVoltageDiff = new Array<boolean>();
-    this.pressureCalcResultTypeDiff = new Array<boolean>();
+    //this.pressureCalcResultTypeDiff = new Array<boolean>();
 
     if (this.fsat.fieldData) {
 
@@ -77,7 +77,7 @@ export class FieldDataSummaryComponent implements OnInit {
           this.specificHeatRatioDiff.push(false);
           this.compressibilityFactorDiff.push(false);
           this.measuredVoltageDiff.push(false);
-          this.pressureCalcResultTypeDiff.push(false);
+          //this.pressureCalcResultTypeDiff.push(false);
 
 
         }
@@ -109,11 +109,7 @@ export class FieldDataSummaryComponent implements OnInit {
     }
   }
 
-
-
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
-
-
 }

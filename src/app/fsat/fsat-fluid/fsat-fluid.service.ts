@@ -13,8 +13,6 @@ export class FsatFluidService {
     let form = this.formBuilder.group({
       inputType: [obj.inputType, Validators.required],
       gasType: [obj.gasType, Validators.required],
-      // humidityData: ['Yes', Validators.required],
-      conditionLocation: [obj.conditionLocation],
       dryBulbTemp: [obj.dryBulbTemp, gasDensityValidators.dryBulbTempValidators],
       staticPressure: [obj.staticPressure, gasDensityValidators.staticPressureValidators],
       barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(0)]],
@@ -121,8 +119,6 @@ export class FsatFluidService {
     let fanGasDensity: BaseGasDensity = {
       inputType: form.controls.inputType.value,
       gasType: form.controls.gasType.value,
-      //  humidityData: form.controls.humidityData.value,
-      conditionLocation: form.controls.conditionLocation.value,
       dryBulbTemp: form.controls.dryBulbTemp.value,
       staticPressure: form.controls.staticPressure.value,
       barometricPressure: form.controls.barometricPressure.value,

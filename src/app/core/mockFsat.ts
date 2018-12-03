@@ -36,7 +36,6 @@ export const MockFsat: Assessment = {
         baseGasDensity: {
             inputType: "custom",
             gasType: "AIR",
-            conditionLocation: 4,
             dryBulbTemp: null,
             staticPressure: null,
             barometricPressure: 29.36,
@@ -62,8 +61,7 @@ export const MockFsat: Assessment = {
                     baseGasDensity: {
                         inputType: "custom",
                         gasType: "AIR",
-                        conditionLocation: 4,
-                        dryBulbTemp: null,
+                                    dryBulbTemp: null,
                         staticPressure: null,
                         barometricPressure: 29.36,
                         specificGravity: 1,
@@ -123,8 +121,7 @@ export const MockFsat: Assessment = {
                     baseGasDensity: {
                         inputType: "custom",
                         gasType: "AIR",
-                        conditionLocation: 4,
-                        dryBulbTemp: null,
+                                    dryBulbTemp: null,
                         staticPressure: null,
                         barometricPressure: 29.36,
                         specificGravity: 1,
@@ -183,8 +180,7 @@ export const MockFsat: Assessment = {
                     baseGasDensity: {
                         inputType: "custom",
                         gasType: "AIR",
-                        conditionLocation: 4,
-                        dryBulbTemp: null,
+                                    dryBulbTemp: null,
                         staticPressure: null,
                         barometricPressure: 29.36,
                         specificGravity: 1,
@@ -242,8 +238,7 @@ export const MockFsat: Assessment = {
                     baseGasDensity: {
                         inputType: "custom",
                         gasType: "AIR",
-                        conditionLocation: 4,
-                        dryBulbTemp: null,
+                                    dryBulbTemp: null,
                         staticPressure: null,
                         barometricPressure: 29.36,
                         specificGravity: 1,
