@@ -28,7 +28,7 @@ export class PumpDataFormComponent implements OnInit {
   modificationForm: FormGroup;
   @Input()
   psat: PSAT;
-  
+
   showPumpType: boolean = false;
   showMotorDrive: boolean = false;
 
@@ -55,11 +55,11 @@ export class PumpDataFormComponent implements OnInit {
       }
     }
 
-    if(changes.isVFD && !changes.isVFD.isFirstChange()){
-      if(this.isVFD == true){
+    if (changes.isVFD && !changes.isVFD.isFirstChange()) {
+      if (this.isVFD == true) {
         this.modificationForm.controls.drive.patchValue(4);
         this.setMotorDrive();
-      }else{
+      } else {
         this.modificationForm.controls.drive.patchValue(this.baselineForm.controls.drive.value);
         this.showMotorDrive = false;
         this.setMotorDrive();
@@ -77,15 +77,11 @@ export class PumpDataFormComponent implements OnInit {
 
     if (this.modificationForm.controls.pumpType.value == 11) {
       this.modificationForm.controls.pumpType.disable();
-      if(this.modificationForm.controls.specifiedPumpEfficiency.value != this.baselinePumpEfficiency){
+      if (this.modificationForm.controls.specifiedPumpEfficiency.value != this.baselinePumpEfficiency) {
         this.showPumpType = true;
       }
     } else {
-      if (this.baselineForm.controls.pumpType.value != this.modificationForm.controls.pumpType.value) {
-        this.showPumpType = true;
-      } else {
-        this.showPumpType = false;
-      }  
+      this.showPumpType = true;
       this.modificationForm.controls.specifiedPumpEfficiency.disable();
     }
   }

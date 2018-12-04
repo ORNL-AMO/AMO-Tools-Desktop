@@ -32,6 +32,11 @@ export class FanSetupComponent implements OnInit {
   fsat: FSAT;
   @Input()
   baseline: boolean;
+  @Input()
+  containerHeight: number;
+
+  condenseDropDown: boolean;
+
 
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
@@ -40,7 +45,8 @@ export class FanSetupComponent implements OnInit {
   fanSpeedError: string = null;
   // specifiedDriveEfficiencyError: string = null;
   idString: string;
-  constructor(private fsatWarningService: FsatWarningService, private fsatService: FsatService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) { }
+  constructor(private fsatWarningService: FsatWarningService, private fsatService: FsatService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) {
+  }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -56,7 +62,12 @@ export class FanSetupComponent implements OnInit {
       this.disableForm();
     }
   }
+
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight) {
+      this.initCondenseDropDown();
+      // console.log('containerHeight = ' + this.containerHeight);
+    }
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected) {
         this.enableForm();
@@ -66,6 +77,15 @@ export class FanSetupComponent implements OnInit {
     }
     if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
       this.init();
+    }
+  }
+
+  initCondenseDropDown() {
+    if (this.containerHeight < 325) {
+      this.condenseDropDown = true;
+    }
+    else {
+      this.condenseDropDown = false;
     }
   }
 
