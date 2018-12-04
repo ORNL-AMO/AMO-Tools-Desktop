@@ -118,7 +118,14 @@ export class FanMotorComponent implements OnInit {
   }
 
   checkWarnings() {
-    this.warnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings);
+    let isMod: boolean;
+    if (this.fsat.modifications !== undefined && this.fsat.modifications !== null) {
+      isMod = false;
+    }
+    else {
+      isMod = true;
+    }
+    this.warnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings, isMod);
   }
 
   calcFla(): number {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { PsatService } from './psat.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { PSAT } from '../shared/models/psat';
+import { PSAT, PsatOutputs } from '../shared/models/psat';
 import { fluidProperties } from './psatConstants';
 
 
@@ -35,7 +35,7 @@ export class PsatWarningService {
     //convert
     //get min max
     let flowRateRange = this.getFlowRateMinMax(pumpStyle);
-    
+
     if (settings.flowMeasurement != 'gpm') {
       tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
       flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from(settings.flowMeasurement).to('gpm');
@@ -136,11 +136,12 @@ export class PsatWarningService {
   }
   //MOTOR
   //checks for warnings in motor setup form
-  checkMotorWarnings(psat: PSAT, settings: Settings): MotorWarnings {
+  checkMotorWarnings(psat: PSAT, settings: Settings, isModification: boolean): MotorWarnings {
     let rpmError: string = this.checkMotorRpm(psat);
     let voltageError: string = this.checkMotorVoltage(psat);
     let flaError: string = this.checkFLA(psat, settings);
-    let ratedPowerError: string = this.checkMotorRatedPower(psat, settings);
+    let ratedPowerError: string;
+    ratedPowerError = this.checkMotorRatedPower(psat, settings, isModification);
     return {
       rpmError: rpmError,
       voltageError: voltageError,
@@ -190,7 +191,7 @@ export class PsatWarningService {
     }
   }
   //Motor Warning: ratedPowerError
-  checkMotorRatedPower(psat: PSAT, settings: Settings) {
+  checkMotorRatedPower(psat: PSAT, settings: Settings, isModification: boolean) {
     let motorFieldPower;
     let inputTypeStr: string;
     if (psat.inputs.load_estimation_method == 0) {
@@ -203,21 +204,47 @@ export class PsatWarningService {
 
     let min: number = 5;
     let max: number = 10000;
+    let isModificationValid: boolean;
     if (psat.inputs.motor_rated_power < this.convertUnitsService.value(min).from('hp').to(settings.powerMeasurement)) {
       return 'Rated motor power is too small.';
     } else if (psat.inputs.motor_rated_power > this.convertUnitsService.value(max).from('hp').to(settings.powerMeasurement)) {
       return 'Rated motor power is too large.';
     } else {
+
       if (motorFieldPower && psat.inputs.motor_rated_power) {
         let val, compare;
         if (settings.powerMeasurement == 'hp') {
           val = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(settings.powerMeasurement).to('kW');
-          compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
+          if (isModification) {
+            isModificationValid = this.psatService.isPsatValid(psat.inputs, false);
+            if (isModificationValid) {
+              let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
+              compare = modificationResults.motor_power;
+            } else {
+              compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
+            }
+          }
+          else {
+            compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
+          }
         } else {
           val = psat.inputs.motor_rated_power;
-          compare = motorFieldPower;
+          if (isModification) {
+            isModificationValid = this.psatService.isPsatValid(psat.inputs, false);
+            if (isModificationValid) {
+              let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
+              compare = modificationResults.motor_power;
+            } else {
+              compare = motorFieldPower;
+            }
+          }
+          else {
+            compare = motorFieldPower;
+          }
         }
         val = val * 1.5;
+        // console.log('val = ' + val);
+        // console.log('compare = ' + compare);
         if (compare > val) {
           return 'The ' + inputTypeStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
         } else {

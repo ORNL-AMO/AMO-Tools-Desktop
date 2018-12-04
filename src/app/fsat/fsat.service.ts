@@ -106,6 +106,37 @@ export class FsatService {
     return fanAddon.fanCurve();
   }
 
+  getInput(fsat: FSAT, settings: Settings) {
+    let input: FsatInput = {
+      fanSpeed: fsat.fanSetup.fanSpeed,
+      drive: fsat.fanSetup.drive,
+      specifiedDriveEfficiency: fsat.fanSetup.specifiedDriveEfficiency | 100,
+      lineFrequency: fsat.fanMotor.lineFrequency,
+      motorRatedPower: fsat.fanMotor.motorRatedPower,
+      motorRpm: fsat.fanMotor.motorRpm,
+      efficiencyClass: fsat.fanMotor.efficiencyClass,
+      fanEfficiency: fsat.fanSetup.fanEfficiency,
+      //motor
+      specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
+      motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,
+      fullLoadAmps: fsat.fanMotor.fullLoadAmps,
+      sizeMargin: fsat.fanMotor.sizeMargin | 0,
+      measuredVoltage: fsat.fieldData.measuredVoltage,
+      //???????
+      measuredAmps: fsat.fieldData.motorPower,
+      flowRate: fsat.fieldData.flowRate,
+      inletPressure: fsat.fieldData.inletPressure,
+      outletPressure: fsat.fieldData.outletPressure,
+      compressibilityFactor: fsat.fieldData.compressibilityFactor,
+      operatingHours: fsat.fieldData.operatingHours,
+      unitCost: fsat.fieldData.cost,
+      airDensity: fsat.baseGasDensity.gasDensity
+    };
+
+    input = this.convertFsatService.convertInputDataForCalculations(input, settings);
+    return input;
+  }
+
   //fsat results
   getResults(fsat: FSAT, isBaseline: boolean, settings: Settings): FsatOutput {
     if (this.checkValid(fsat, isBaseline)) {
