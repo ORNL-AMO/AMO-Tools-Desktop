@@ -73,9 +73,13 @@ export class PsatService {
     let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
     //call results existing
     let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
+
+
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
+    console.log('resultsExisting()');
+    console.log(tmpResults);
     tmpResults = this.roundResults(tmpResults);
     return tmpResults;
   }
@@ -98,6 +102,8 @@ export class PsatService {
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
+    console.log('resultsModified()');
+    console.log(tmpResults);
     tmpResults = this.roundResults(tmpResults);
     return tmpResults;
   }
@@ -113,6 +119,7 @@ export class PsatService {
       motor_current: 0,
       motor_power: 0,
       load_factor: 0,
+      drive_efficiency: 0,
       annual_energy: 0,
       annual_cost: 0,
       annual_savings_potential: 0,
@@ -131,6 +138,8 @@ export class PsatService {
       motor_power_factor: this.roundVal(psatResults.motor_power_factor, 2),
       motor_current: this.roundVal(psatResults.motor_current, 2),
       motor_power: this.roundVal(psatResults.motor_power, 2),
+      load_factor: this.roundVal(psatResults.load_factor, 2),
+      drive_efficiency: this.roundVal(psatResults.drive_efficiency, 2),
       annual_energy: this.roundVal(psatResults.annual_energy, 2),
       annual_cost: this.roundVal(psatResults.annual_cost, 2),
       annual_savings_potential: this.roundVal(psatResults.annual_savings_potential, 0),
