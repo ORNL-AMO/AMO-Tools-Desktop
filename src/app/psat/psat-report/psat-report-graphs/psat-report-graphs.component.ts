@@ -90,7 +90,6 @@ export class PsatReportGraphsComponent implements OnInit {
     //push baseline first
     this.psatOptions.push({ name: 'Baseline', psat: this.psat, index: 0 });
     this.selectedPsat1 = this.psatOptions[0];
-
     if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
       this.modExists = true;
       let i = 1;
@@ -220,6 +219,7 @@ export class PsatReportGraphsComponent implements OnInit {
     let tmpPieValues = new Array<number>();
     let tmpBarValues = new Array<number>();
     let tmpPsat = this.psatOptions[0].psat;
+    this.getPsatBaselineData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
     allPieLabels.push(tmpPieLabels);
     allPieValues.push(tmpPieValues);
     allBarValues.push(tmpBarValues);
