@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
-import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput } from '../../shared/models/steam/steam-outputs';
+import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, HeatLossOutput } from '../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -51,6 +51,7 @@ export class SsmtReportComponent implements OnInit {
   deaerator: DeaeratorOutput;
   steamToDeaerator: number;
   additionalSteamFlow: number;
+  highPressureProcessSteamUsage: SteamPropertiesOutput;
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
@@ -98,6 +99,7 @@ export class SsmtReportComponent implements OnInit {
     this.condensingTurbine = this.calculateModelService.condensingTurbine;
     this.steamToDeaerator = this.calculateModelService.steamToDeaerator;
     this.additionalSteamFlow = this.calculateModelService.additionalSteamFlow;
+    this.highPressureProcessSteamUsage = this.calculateModelService.highPressureProcessSteamUsage;
     console.log('got data');
     this.dataCalculated = true;
   }

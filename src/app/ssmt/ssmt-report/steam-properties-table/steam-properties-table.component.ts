@@ -11,9 +11,12 @@ export class SteamPropertiesTableComponent implements OnInit {
   steamProperties: SteamPropertiesOutput;
   @Input()
   name: string;
+
+  volumeFlow: number;
   constructor() { }
 
   ngOnInit() {
+    this.volumeFlow = this.steamProperties.specificVolume * this.steamProperties.massFlow;
   }
 
 }

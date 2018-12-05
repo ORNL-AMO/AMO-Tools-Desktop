@@ -24,6 +24,14 @@
       </div>
     </div>
   </div>
+  <!-- <div class="pt-2">
+    <h4>High Pressure Process Steam Usage (Heat Loss) Data</h4>
+    <div class="d-flex">
+      <div class="p-1">
+        <app-heat-loss-table [heatLoss]="highPressureProcessSteamUsage"></app-heat-loss-table>
+      </div>
+    </div>
+  </div> -->
   <div class="pt-2" *ngIf="condensingTurbine">
     <h4>Condensing Turbine Data</h4>
     <app-turbine-table [turbine]="condensingTurbine"></app-turbine-table>
@@ -96,6 +104,9 @@
       <div class="p-1">
         <app-steam-properties-table *ngIf="deaeratorFeedwater" [steamProperties]="deaeratorFeedwater" [name]="'Deaerator Feedwater'"></app-steam-properties-table>
       </div>
+      <!-- <div class="p-1">
+        <app-steam-properties-table *ngIf="highPressureProcessSteamUsage" [steamProperties]="highPressureProcessSteamUsage" [name]="'High Pressure Steam Process Usage'"></app-steam-properties-table>
+      </div> -->
     </div>
   </div>
 </div>

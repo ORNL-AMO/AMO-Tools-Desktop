@@ -5,13 +5,13 @@
       <tbody>
         <tr>
           <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{deaerator.feedwaterPressure |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.feedwaterPressure |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{deaerator.feedwaterTemperature |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.feedwaterTemperature |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
           </td>
         </tr>
@@ -25,25 +25,25 @@
         </tr>
         <tr>
           <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{deaerator.feedwaterMassFlow |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.feedwaterMassFlow |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{deaerator.feedwaterSpecificEnthalpy |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.feedwaterSpecificEnthalpy |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{deaerator.feedwaterSpecificEntropy |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.feedwaterSpecificEntropy |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{deaerator.feedwaterEnergyFlow |sigFigs: '6'}} </td>
+          <td class="text-center w-50">{{deaerator.feedwaterEnergyFlow |number:'2.0-2'}} </td>
         </tr>
       </tbody>
     </table>
@@ -54,13 +54,13 @@
       <tbody>
         <tr>
           <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamPressure |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.ventedSteamPressure |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamTemperature |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.ventedSteamTemperature |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
           </td>
         </tr>
@@ -74,25 +74,25 @@
         </tr>
         <tr>
           <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamMassFlow |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.ventedSteamMassFlow |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamSpecificEnthalpy |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.ventedSteamSpecificEnthalpy |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamSpecificEntropy |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.ventedSteamSpecificEntropy |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamEnergyFlow |sigFigs: '6'}} </td>
+          <td class="text-center w-50">{{deaerator.ventedSteamEnergyFlow |number:'2.0-2'}} </td>
         </tr>
       </tbody>
     </table>
@@ -103,13 +103,13 @@
       <tbody>
         <tr>
           <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{deaerator.inletWaterPressure |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletWaterPressure |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{deaerator.inletWaterTemperature |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletWaterTemperature |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
           </td>
         </tr>
@@ -123,25 +123,25 @@
         </tr>
         <tr>
           <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{deaerator.inletWaterMassFlow |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletWaterMassFlow |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{deaerator.inletWaterSpecificEnthalpy |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletWaterSpecificEnthalpy |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{deaerator.inletWaterSpecificEntropy |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletWaterSpecificEntropy |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{deaerator.inletWaterEnergyFlow |sigFigs: '6'}} </td>
+          <td class="text-center w-50">{{deaerator.inletWaterEnergyFlow |number:'2.0-2'}} </td>
         </tr>
       </tbody>
     </table>
@@ -152,13 +152,13 @@
       <tbody>
         <tr>
           <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{deaerator.inletSteamPressure |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletSteamPressure |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{deaerator.inletSteamTemperature |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletSteamTemperature |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
           </td>
         </tr>
@@ -172,25 +172,25 @@
         </tr>
         <tr>
           <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{deaerator.inletSteamMassFlow |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletSteamMassFlow |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{deaerator.inletSteamSpecificEnthalpy |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletSteamSpecificEnthalpy |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{deaerator.inletSteamSpecificEntropy |sigFigs: '6'}}
+          <td class="text-center w-50">{{deaerator.inletSteamSpecificEntropy |number:'2.0-2'}}
             <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
           </td>
         </tr>
         <tr>
           <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{deaerator.inletSteamEnergyFlow |sigFigs: '6'}} </td>
+          <td class="text-center w-50">{{deaerator.inletSteamEnergyFlow |number:'2.0-2'}} </td>
         </tr>
       </tbody>
     </table>

@@ -1,8 +1,5 @@
 td{
-    font-size: small;
-}
-
-td{
+    width: 50%;
     font-size: small;
     border-right: solid 1px darkgray;
     border-left: solid 1px darkgray;

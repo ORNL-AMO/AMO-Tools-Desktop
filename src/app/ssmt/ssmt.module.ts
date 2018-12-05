@@ -43,6 +43,7 @@ import { DeaeratorTableComponent } from './ssmt-report/deaerator-table/deaerator
 import { FlashTankTableComponent } from './ssmt-report/flash-tank-table/flash-tank-table.component';
 import { PrvTableComponent } from './ssmt-report/prv-table/prv-table.component';
 import { SteamPropertiesTableComponent } from './ssmt-report/steam-properties-table/steam-properties-table.component';
+import { HeatLossTableComponent } from './ssmt-report/heat-loss-table/heat-loss-table.component';
 
 @NgModule({
   imports: [
@@ -82,7 +83,8 @@ import { SteamPropertiesTableComponent } from './ssmt-report/steam-properties-ta
     DeaeratorTableComponent,
     FlashTankTableComponent,
     PrvTableComponent,
-    SteamPropertiesTableComponent
+    SteamPropertiesTableComponent,
+    HeatLossTableComponent
   ],
   providers: [
     SsmtService,

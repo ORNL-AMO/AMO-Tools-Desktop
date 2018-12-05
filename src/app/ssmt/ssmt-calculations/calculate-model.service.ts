@@ -42,6 +42,8 @@ export class CalculateModelService {
 
   steamToDeaerator: number;
   additionalSteamFlow: number;
+
+  highPressureProcessSteamUsage: SteamPropertiesOutput;
   constructor(private steamService: SteamService) { }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
@@ -164,13 +166,13 @@ export class CalculateModelService {
 
   calculateModel(massFlow: number): number {
     let steamProduction: number = massFlow + this.inputData.headerInput.highPressure.processSteamUsage;
-    if(this.inputData.headerInput.numberOfHeaders > 1){
+    if (this.inputData.headerInput.numberOfHeaders > 1) {
       steamProduction = steamProduction + this.inputData.headerInput.lowPressure.processSteamUsage;
-      if(this.inputData.headerInput.numberOfHeaders == 3){
+      if (this.inputData.headerInput.numberOfHeaders == 3) {
         steamProduction = steamProduction + this.inputData.headerInput.mediumPressure.processSteamUsage;
       }
     }
-    console.log('mass flow: ' +massFlow);
+    console.log('mass flow: ' + massFlow);
     console.log('process steam usage: ' + this.inputData.headerInput.highPressure.processSteamUsage);
     console.log('steam production ' + steamProduction);
 
@@ -180,7 +182,7 @@ export class CalculateModelService {
     //1B. Set Blowdown Properties
     this.setBoilerBlowdown();
     //1C. Set Feedwater Properties
-    this.setBoilerFeedwater();
+    //this.setBoilerFeedwater();
 
     //2. Calculate High Pressure Header
     //2A. Model High Pressure Header
@@ -259,18 +261,18 @@ export class CalculateModelService {
   }
 
   //1C. Set Boiler Feedwater
-  setBoilerFeedwater() {
-    this.boilerFeedwater = {
-      pressure: this.boiler.feedwaterPressure,
-      temperature: this.boiler.feedwaterTemperature,
-      specificEnthalpy: this.boiler.feedwaterSpecificEnthalpy,
-      specificEntropy: this.boiler.feedwaterSpecificEntropy,
-      quality: this.boiler.feedwaterQuality,
-      specificVolume: this.boiler.feedwaterVolume,
-      massFlow: this.boiler.feedwaterMassFlow,
-      energyFlow: this.boiler.feedwaterEnergyFlow
-    }
-  }
+  // setBoilerFeedwater() {
+  //   this.boilerFeedwater = {
+  //     pressure: this.boiler.feedwaterPressure,
+  //     temperature: this.boiler.feedwaterTemperature,
+  //     specificEnthalpy: this.boiler.feedwaterSpecificEnthalpy,
+  //     specificEntropy: this.boiler.feedwaterSpecificEntropy,
+  //     quality: this.boiler.feedwaterQuality,
+  //     specificVolume: this.boiler.feedwaterVolume,
+  //     massFlow: this.boiler.feedwaterMassFlow,
+  //     energyFlow: this.boiler.feedwaterEnergyFlow
+  //   }
+  // }
 
   //2A. Calculate High Pressure Header
   calculateHighPressureHeader() {
@@ -293,25 +295,19 @@ export class CalculateModelService {
 
   //2B. Calculate Heat Loss for Remaining Steam in High Pressure Header
   calculateHeatLossForHighPressureHeader() {
-    let highPressureHeaderHeatLoss: HeatLossOutput = this.steamService.heatLoss(
-      {
-        inletPressure: this.highPressureHeader.pressure,
-        thermodynamicQuantity: 1, //specificEnthalpy
-        quantityValue: this.highPressureHeader.specificEnthalpy,
-        inletMassFlow: this.highPressureHeader.massFlow,
-        percentHeatLoss: this.inputData.headerInput.highPressure.heatLoss
-      },
-      this.settings
-    );
-    this.highPressureHeader.remainingSteam = {
-      pressure: highPressureHeaderHeatLoss.outletPressure,
-      temperature: highPressureHeaderHeatLoss.outletTemperature,
-      specificEnthalpy: highPressureHeaderHeatLoss.outletSpecificEnthalpy,
-      specificEntropy: highPressureHeaderHeatLoss.outletSpecificEntropy,
-      quality: highPressureHeaderHeatLoss.outletQuality,
-      massFlow: highPressureHeaderHeatLoss.outletMassFlow,
-      energyFlow: highPressureHeaderHeatLoss.outletEnergyFlow
-    }
+    // this.highPressureProcessSteamUsage = this.steamService.heatLoss(
+    //   {
+    //     inletPressure: this.highPressureHeader.pressure,
+    //     thermodynamicQuantity: 1, //specificEnthalpy
+    //     quantityValue: this.highPressureHeader.specificEnthalpy,
+    //     inletMassFlow: this.inputData.headerInput.highPressure.processSteamUsage * (this.inputData.headerInput.highPressure.condensationRecoveryRate / 100),
+    //     percentHeatLoss: this.inputData.headerInput.highPressure.heatLoss
+    //   },
+    //   this.settings
+    // );
+    this.highPressureProcessSteamUsage = JSON.parse(JSON.stringify(this.blowdown));
+    this.highPressureProcessSteamUsage. massFlow = this.inputData.headerInput.highPressure.processSteamUsage * (this.inputData.headerInput.highPressure.condensationRecoveryRate / 100);
+    this.highPressureHeader.remainingSteam = JSON.parse(JSON.stringify(this.highPressureProcessSteamUsage));
     //console.log(this.highPressureHeader.remainingSteam.massFlow);
   }
 
@@ -320,7 +316,7 @@ export class CalculateModelService {
     //Calculate mass flow = steam usage * (recovery rate / 100);
     let calculatedMassFlow: number = this.inputData.headerInput.highPressure.processSteamUsage * (this.inputData.headerInput.highPressure.condensationRecoveryRate / 100);
     //calculate energy flow = mass flow * condensate enthalpy / 1000
-    let calcualtedEnergyFlow: number = calculatedMassFlow * this.blowdown.specificEnthalpy / 10;
+    let calcualtedEnergyFlow: number = calculatedMassFlow * this.blowdown.specificEnthalpy / 1000;
     this.highPressureCondensate = {
       pressure: this.blowdown.pressure,
       temperature: this.blowdown.temperature,
@@ -402,9 +398,9 @@ export class CalculateModelService {
           quantityValue: this.highPressureHeader.remainingSteam.specificEnthalpy,
           inletMassFlow: this.highPressureHeader.remainingSteam.massFlow,
           outletPressure: this.inputData.headerInput.mediumPressure.pressure,
-          feedwaterPressure: this.boilerFeedwater.pressure,
+          feedwaterPressure: this.boiler.feedwaterPressure,
           feedwaterThermodynamicQuantity: 1,//1 is enthalpy
-          feedwaterQuantityValue: this.boilerFeedwater.specificEnthalpy,
+          feedwaterQuantityValue: this.boiler.feedwaterSpecificEnthalpy,
           desuperheatingTemp: this.inputData.headerInput.mediumPressure.desuperheatSteamTemperature
         },
         this.settings
@@ -498,7 +494,7 @@ export class CalculateModelService {
     let calculatedMassFlow: number = this.inputData.headerInput.mediumPressure.processSteamUsage * (this.inputData.headerInput.mediumPressure.condensationRecoveryRate / 100);
     if (this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true) {
       calculatedMassFlow = calculatedMassFlow + this.highPressureFlashTank.outletLiquidMassFlow;
-      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureFlashTank.outletLiquidSpecificEnthalpy / 10;
+      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureFlashTank.outletLiquidSpecificEnthalpy / 1000;
       this.mediumPressureCondensate = {
         pressure: this.highPressureFlashTank.outletLiquidPressure,
         temperature: this.highPressureFlashTank.outletLiquidTemperature,
@@ -512,7 +508,7 @@ export class CalculateModelService {
     }
     else {
       calculatedMassFlow = calculatedMassFlow + this.highPressureCondensate.massFlow;
-      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureCondensate.specificEnthalpy / 10;
+      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureCondensate.specificEnthalpy;
       this.mediumPressureCondensate = {
         pressure: this.highPressureCondensate.pressure,
         temperature: this.highPressureCondensate.temperature,
@@ -642,9 +638,9 @@ export class CalculateModelService {
           quantityValue: headerObj.remainingSteam.specificEnthalpy,
           inletMassFlow: headerObj.remainingSteam.massFlow,
           outletPressure: this.inputData.headerInput.lowPressure.pressure,
-          feedwaterPressure: this.boilerFeedwater.pressure,
+          feedwaterPressure: this.boiler.feedwaterPressure,
           feedwaterThermodynamicQuantity: 1,//1 is enthalpy
-          feedwaterQuantityValue: this.boilerFeedwater.specificEnthalpy,
+          feedwaterQuantityValue: this.boiler.feedwaterSpecificEnthalpy,
           desuperheatingTemp: this.inputData.headerInput.lowPressure.desuperheatSteamTemperature
         },
         this.settings
@@ -771,7 +767,7 @@ export class CalculateModelService {
       }
       //combine flow from current header and liquid from higher pressure flash tank
       calculatedMassFlow = calculatedMassFlow + flashTank.outletLiquidMassFlow;
-      let calcualtedEnergyFlow: number = calculatedMassFlow * this.mediumPressureFlashTank.outletLiquidSpecificEnthalpy / 10;
+      let calcualtedEnergyFlow: number = calculatedMassFlow * this.mediumPressureFlashTank.outletLiquidSpecificEnthalpy / 1000;
       this.lowPressureCondensate = {
         pressure: flashTank.outletLiquidPressure,
         temperature: flashTank.outletLiquidTemperature,
@@ -792,7 +788,7 @@ export class CalculateModelService {
         //if 2 headers, next highest is high pressure
         inletCondensate = this.highPressureCondensate;
       }
-      let calcualtedEnergyFlow: number = calculatedMassFlow * inletCondensate.specificEnthalpy / 10;
+      let calcualtedEnergyFlow: number = calculatedMassFlow * inletCondensate.specificEnthalpy;
       this.lowPressureCondensate = {
         pressure: inletCondensate.pressure,
         temperature: inletCondensate.temperature,
@@ -811,6 +807,7 @@ export class CalculateModelService {
   calculateMakeupWaterAndCondensateHeader() {
     //5A. Get inlets for makeup water and condensate header
     let inlets: Array<HeaderInputObj> = this.getMakeupWaterAndCondensateInlets();
+    console.log(inlets);
     //console.log(inlets);
     //notice .header at the end (need .header obj for makeupWaterAndCondensateHeader)
     this.makeupWaterAndCondensateHeader = this.steamService.header(
@@ -855,7 +852,7 @@ export class CalculateModelService {
     this.calculateMakeupWater();
     let makeupWaterMassFlow: number = this.calculateMakeupWaterMassFlow();
     this.makeupWater.massFlow = makeupWaterMassFlow;
-    this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 10;
+    this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 1000;
     //add makeup water to inlets
     inlets.push(
       {
@@ -887,7 +884,8 @@ export class CalculateModelService {
   }
 
   calculateMakeupWaterMassFlow(): number {
-    let makeupWaterMassFlow: number = this.boilerFeedwater.massFlow;
+    //debugger
+    let makeupWaterMassFlow: number = this.boiler.feedwaterMassFlow;
     if (this.inputData.headerInput.numberOfHeaders > 1) {
       if (this.inputData.headerInput.numberOfHeaders == 3 && isNaN(this.highToMediumPressurePRV.feedwaterMassFlow) == false) {
         makeupWaterMassFlow = makeupWaterMassFlow + this.highToMediumPressurePRV.feedwaterMassFlow;
@@ -901,6 +899,10 @@ export class CalculateModelService {
     makeupWaterMassFlow = makeupWaterMassFlow - this.returnCondensate.massFlow;
     if (this.inputData.headerInput.numberOfHeaders > 1) {
       makeupWaterMassFlow = makeupWaterMassFlow - this.lowPressureHeader.remainingSteam.massFlow;
+    } else {
+      //makeupWaterMassFlow = makeupWaterMassFlow - this.highPressureHeader.remainingSteam.massFlow;
+      console.log(this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage)
+      makeupWaterMassFlow = makeupWaterMassFlow - (this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage);
     }
     if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
       makeupWaterMassFlow = makeupWaterMassFlow - this.condensingTurbine.massFlow;
@@ -935,6 +937,10 @@ export class CalculateModelService {
 
   //5A3. Calculate Return Condensate
   calculateReturnCondensate() {
+    //get
+
+
+
     //5A3a. Set return condensate to condensate from lowest pressure header
     //set return condnesate to high pressure condensate if only high pressure header
     if (this.inputData.headerInput.numberOfHeaders == 1) {
@@ -977,7 +983,7 @@ export class CalculateModelService {
   //6. Calculate Deaerator
   calculateDearator() {
     //6A. Get Feedwater Details and Inlet header
-    let feedwaterMassFlow: number = this.boilerFeedwater.massFlow
+    let feedwaterMassFlow: number = this.boiler.feedwaterMassFlow
     let inletHeader: HeaderOutputObj = this.highPressureHeader;
     if (this.inputData.headerInput.numberOfHeaders > 1) {
       if (isNaN(this.lowPressurePRV.feedwaterMassFlow) == false) {
@@ -1005,16 +1011,16 @@ export class CalculateModelService {
     )
 
     this.steamToDeaerator = inletHeader.massFlow;
-    this.deaeratorFeedwater = {
-      pressure: this.deaerator.feedwaterPressure,
-      temperature: this.deaerator.feedwaterTemperature,
-      specificEnthalpy: this.deaerator.feedwaterSpecificEnthalpy,
-      specificEntropy: this.deaerator.feedwaterSpecificEntropy,
-      quality: this.deaerator.feedwaterQuality,
-      specificVolume: this.deaerator.feedwaterVolume,
-      massFlow: this.deaerator.feedwaterMassFlow,
-      energyFlow: this.deaerator.feedwaterEnergyFlow
-    }
+    // this.deaeratorFeedwater = {
+    //   pressure: this.deaerator.feedwaterPressure,
+    //   temperature: this.deaerator.feedwaterTemperature,
+    //   specificEnthalpy: this.deaerator.feedwaterSpecificEnthalpy,
+    //   specificEntropy: this.deaerator.feedwaterSpecificEntropy,
+    //   quality: this.deaerator.feedwaterQuality,
+    //   specificVolume: this.deaerator.feedwaterVolume,
+    //   massFlow: this.deaerator.feedwaterMassFlow,
+    //   energyFlow: this.deaerator.feedwaterEnergyFlow
+    // }
   }
 
 
