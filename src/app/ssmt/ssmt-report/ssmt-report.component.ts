@@ -15,7 +15,7 @@ export class SsmtReportComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  massFlow: number = 488.9;
+  massFlow: number = 401.7;
 
   dataCalculated: boolean = false;
 
@@ -45,7 +45,7 @@ export class SsmtReportComponent implements OnInit {
   lowPressureCondensate: SteamPropertiesOutput;
 
   condensateFlashTank: FlashTankOutput;
-  returnCondensate: SteamPropertiesOutput;
+  combinedCondensate: SteamPropertiesOutput;
   makeupWater: SteamPropertiesOutput;
   makeupWaterAndCondensateHeader: HeaderOutputObj;
   condensingTurbine: TurbineOutput;
@@ -58,6 +58,7 @@ export class SsmtReportComponent implements OnInit {
   highPressureSteamHeatLoss: HeatLossOutput;
   mediumPressureSteamHeatLoss: HeatLossOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
+  returnCondensate: SteamPropertiesOutput;
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
@@ -99,7 +100,7 @@ export class SsmtReportComponent implements OnInit {
     this.lowPressureCondensate = this.calculateModelService.lowPressureCondensate;
 
     this.condensateFlashTank = this.calculateModelService.condensateFlashTank;
-    this.returnCondensate = this.calculateModelService.returnCondensate;
+    this.combinedCondensate = this.calculateModelService.combinedCondensate;
     this.makeupWater = this.calculateModelService.makeupWater;
     this.makeupWaterAndCondensateHeader = this.calculateModelService.makeupWaterAndCondensateHeader;
     this.condensingTurbine = this.calculateModelService.condensingTurbine;
@@ -109,8 +110,9 @@ export class SsmtReportComponent implements OnInit {
     this.highPressureSteamHeatLoss = this.calculateModelService.highPressureSteamHeatLoss;
     this.mediumPressureProcessSteamUsage = this.calculateModelService.mediumPressureProcessSteamUsage;
     this.mediumPressureSteamHeatLoss = this.calculateModelService.mediumPressureSteamHeatLoss;
-    this.lowPressureProcessSteamUsage = this.calculateModelService.highPressureProcessSteamUsage;
+    this.lowPressureProcessSteamUsage = this.calculateModelService.lowPressureProcessSteamUsage;
     this.lowPressureSteamHeatLoss = this.calculateModelService.lowPressureSteamHeatLoss;
+    this.returnCondensate = this.calculateModelService.returnCondensate;
     console.log('got data');
     this.dataCalculated = true;
   }

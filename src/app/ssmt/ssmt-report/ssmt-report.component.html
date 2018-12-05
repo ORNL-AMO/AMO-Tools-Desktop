@@ -54,8 +54,19 @@
           <app-steam-properties-table *ngIf="lowPressureCondensate" [steamProperties]="lowPressureCondensate" [name]="'Low Pressure Condensate'"></app-steam-properties-table>
         </div>
       </div>
-      <div class="p-1">
-        <app-header-table *ngIf="makeupWaterAndCondensateHeader" [header]="makeupWaterAndCondensateHeader" [name]="'Make-up Water and Condensate'"></app-header-table>
+      <div class="d-flex">
+        <div class="p-1">
+          <app-header-table *ngIf="combinedCondensate" [header]="combinedCondensate" [name]="'Combined Condensate'"></app-header-table>
+        </div>
+        <div class="p-1">
+          <app-steam-properties-table *ngIf="returnCondensate" [steamProperties]="returnCondensate" [name]="'Return Condensate Details'"></app-steam-properties-table>
+        </div>
+        <div class="p-1">
+          <app-steam-properties-table *ngIf="makeupWater" [steamProperties]="makeupWater" [name]="'Make-up Water Details'"></app-steam-properties-table>
+        </div>
+        <div class="p-1">
+          <app-header-table *ngIf="makeupWaterAndCondensateHeader" [header]="makeupWaterAndCondensateHeader" [name]="'Make-up Water and Condensate'"></app-header-table>
+        </div>
       </div>
     </div>
   </div>
@@ -140,12 +151,12 @@
       <!-- <div class="p-1">
         <app-steam-properties-table *ngIf="lowPressureCondensate" [steamProperties]="lowPressureCondensate" [name]="'Low Pressure Condensate'"></app-steam-properties-table>
       </div> -->
-      <div class="p-1">
+      <!-- <div class="p-1">
         <app-steam-properties-table *ngIf="returnCondensate" [steamProperties]="returnCondensate" [name]="'Return Pressure Condensate'"></app-steam-properties-table>
-      </div>
-      <div class="p-1">
+      </div> -->
+      <!-- <div class="p-1">
         <app-steam-properties-table *ngIf="makeupWater" [steamProperties]="makeupWater" [name]="'Make-up Water'"></app-steam-properties-table>
-      </div>
+      </div> -->
       <div class="p-1">
         <app-steam-properties-table *ngIf="blowdown" [steamProperties]="blowdown" [name]="'Blowdown'"></app-steam-properties-table>
       </div>
