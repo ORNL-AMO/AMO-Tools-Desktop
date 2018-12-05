@@ -179,7 +179,14 @@ export class FsatTabsComponent implements OnInit {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
     let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, true);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
-    let motorWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings);
+    let isMod: boolean;
+    if (this.fsat.modifications !== undefined && this.fsat.modifications !== null) {
+      isMod = false;
+    }
+    else {
+      isMod = true;
+    }
+    let motorWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings, isMod);
     let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(motorWarnings);
     if (!fluidValid || !fanValid) {
       this.motorClassStatus = ['disabled'];

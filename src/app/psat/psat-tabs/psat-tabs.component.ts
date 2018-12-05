@@ -151,7 +151,14 @@ export class PsatTabsComponent implements OnInit {
   checkMotorStatus() {
     let pumpFluidInvalid: boolean = this.checkPumpFluidInvalid();
     let motorInvalid: boolean = this.checkMotorInvalid();
-    let motorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
+    let isMod: boolean;
+    if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
+      isMod = false;
+    }
+    else {
+      isMod = true;
+    }
+    let motorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, isMod);
     let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(motorWarnings);
     if (pumpFluidInvalid) {
       this.motorClassStatus = ['disabled'];

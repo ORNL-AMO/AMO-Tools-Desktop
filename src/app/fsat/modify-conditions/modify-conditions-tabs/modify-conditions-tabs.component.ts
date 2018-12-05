@@ -222,14 +222,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   checkMotorWarnings() {
     let hasWarning: boolean = false;
-    let baselineWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.baselineFSAT, this.settings);
+    let baselineWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.baselineFSAT, this.settings, false);
     for (var key in baselineWarnings) {
       if (baselineWarnings[key] !== null) {
         hasWarning = true;
       }
     }
     if (this.compareService.modifiedFSAT && !hasWarning) {
-      let modifiedWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.modifiedFSAT, this.settings);
+      let modifiedWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.modifiedFSAT, this.settings, true);
       for (var key in modifiedWarnings) {
         if (modifiedWarnings[key] !== null) {
           hasWarning = true;
