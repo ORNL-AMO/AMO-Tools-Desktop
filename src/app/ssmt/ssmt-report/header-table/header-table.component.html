@@ -18,7 +18,7 @@
       <td class="text-center w-50">
         <span *ngIf="header.quality == 0">Liquid</span>
         <span *ngIf="header.quality == 1">Gas</span>
-        <span *ngIf="header.quality != 0 && header.quality != 1">{{header.quality}}</span>
+        <span *ngIf="header.quality != 0 && header.quality != 1">{{header.quality |number:'2.0-2'}}</span>
       </td>
     </tr>
     <tr>

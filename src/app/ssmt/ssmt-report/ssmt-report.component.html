@@ -4,34 +4,85 @@
     <button class="btn btn-secondary" (click)="getData()">Get Data</button>
   </div> -->
   <div class="pt-2">
+    <div class="form-group">
+      <label for="massFlow">Set Mass Flow</label>
+      <input name="massFlow" type="number" step="any" class="form-control" id="massFlow" (input)="calculateResults()"
+        [(ngModel)]="massFlow">
+    </div>
+  </div>
+  <div class="pt-2">
     <h4>Boiler Data</h4>
     <app-boiler-table [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
   </div>
   <div class="pt-2">
     <h4>Header Data</h4>
-    <div class="d-flex">
-      <div class="p-1">
-        <app-header-table [header]="highPressureHeader" [name]="'High Pressure Header'"></app-header-table>
+    <div class="d-flex flex-column">
+      <div class="d-flex">
+        <div class="p-1">
+          <app-header-table [header]="highPressureHeader" [name]="'High Pressure Header'"></app-header-table>
+        </div>
+        <div class="p-1">
+          <app-steam-usage-table *ngIf="highPressureProcessSteamUsage" [processSteamUsage]="highPressureProcessSteamUsage"
+            [name]="'High Pressure Steam Process Usage'"></app-steam-usage-table>
+        </div>
+        <div class="p-1">
+          <app-steam-properties-table [steamProperties]="highPressureCondensate" [name]="'High Pressure Condensate'"></app-steam-properties-table>
+        </div>
       </div>
-      <div class="p-1">
-        <app-header-table *ngIf="mediumPressureHeader" [header]="mediumPressureHeader" [name]="'Medium Pressure Header'"></app-header-table>
+      <div class="d-flex" *ngIf="mediumPressureHeader">
+        <div class="p-1">
+          <app-header-table [header]="mediumPressureHeader" [name]="'Medium Pressure Header'"></app-header-table>
+        </div>
+        <div class="p-1">
+          <app-steam-usage-table *ngIf="mediumPressureProcessSteamUsage" [processSteamUsage]="mediumPressureProcessSteamUsage"
+            [name]="'Medium Pressure Steam Process Usage'"></app-steam-usage-table>
+        </div>
+        <div class="p-1">
+          <app-steam-properties-table *ngIf="mediumPressureCondensate" [steamProperties]="mediumPressureCondensate"
+            [name]="'Medium Pressure Condensate'"></app-steam-properties-table>
+        </div>
       </div>
-      <div class="p-1">
-        <app-header-table *ngIf="lowPressureHeader" [header]="lowPressureHeader" [name]="'Low Pressure Header'"></app-header-table>
+      <div class="d-flex" *ngIf="lowPressureHeader">
+        <div class="p-1">
+          <app-header-table [header]="lowPressureHeader" [name]="'Low Pressure Header'"></app-header-table>
+        </div>
+        <div class="p-1">
+          <app-steam-usage-table *ngIf="lowPressureProcessSteamUsage" [processSteamUsage]="lowPressureProcessSteamUsage"
+            [name]="'Low Pressure Steam Process Usage'"></app-steam-usage-table>
+        </div>
+        <div class="p-1">
+          <app-steam-properties-table *ngIf="lowPressureCondensate" [steamProperties]="lowPressureCondensate" [name]="'Low Pressure Condensate'"></app-steam-properties-table>
+        </div>
       </div>
       <div class="p-1">
         <app-header-table *ngIf="makeupWaterAndCondensateHeader" [header]="makeupWaterAndCondensateHeader" [name]="'Make-up Water and Condensate'"></app-header-table>
       </div>
     </div>
   </div>
-  <!-- <div class="pt-2">
-    <h4>High Pressure Process Steam Usage (Heat Loss) Data</h4>
+  <div class="pt-2">
+    <h4>High Pressure Steam Heat Loss Data</h4>
     <div class="d-flex">
       <div class="p-1">
-        <app-heat-loss-table [heatLoss]="highPressureProcessSteamUsage"></app-heat-loss-table>
+        <app-heat-loss-table [heatLoss]="highPressureSteamHeatLoss"></app-heat-loss-table>
       </div>
     </div>
-  </div> -->
+  </div>
+  <div class="pt-2" *ngIf="mediumPressureSteamHeatLoss">
+    <h4>Medium Pressure Steam Heat Loss Data</h4>
+    <div class="d-flex">
+      <div class="p-1">
+        <app-heat-loss-table [heatLoss]="mediumPressureSteamHeatLoss"></app-heat-loss-table>
+      </div>
+    </div>
+  </div>
+  <div class="pt-2" *ngIf="lowPressureSteamHeatLoss">
+    <h4>Low Pressure Steam Heat Loss Data</h4>
+    <div class="d-flex">
+      <div class="p-1">
+        <app-heat-loss-table [heatLoss]="lowPressureSteamHeatLoss"></app-heat-loss-table>
+      </div>
+    </div>
+  </div>
   <div class="pt-2" *ngIf="condensingTurbine">
     <h4>Condensing Turbine Data</h4>
     <app-turbine-table [turbine]="condensingTurbine"></app-turbine-table>
@@ -79,16 +130,16 @@
   <div class="pt-2" *ngIf="highPressureCondensate">
     <h4>Condensate Properties</h4>
     <div class="d-flex flex-wrap">
-      <div class="p-1">
+      <!-- <div class="p-1">
         <app-steam-properties-table [steamProperties]="highPressureCondensate" [name]="'High Pressure Condensate'"></app-steam-properties-table>
-      </div>
-      <div class="p-1">
+      </div> -->
+      <!-- <div class="p-1">
         <app-steam-properties-table *ngIf="mediumPressureCondensate" [steamProperties]="mediumPressureCondensate"
           [name]="'Medium Pressure Condensate'"></app-steam-properties-table>
-      </div>
-      <div class="p-1">
+      </div> -->
+      <!-- <div class="p-1">
         <app-steam-properties-table *ngIf="lowPressureCondensate" [steamProperties]="lowPressureCondensate" [name]="'Low Pressure Condensate'"></app-steam-properties-table>
-      </div>
+      </div> -->
       <div class="p-1">
         <app-steam-properties-table *ngIf="returnCondensate" [steamProperties]="returnCondensate" [name]="'Return Pressure Condensate'"></app-steam-properties-table>
       </div>

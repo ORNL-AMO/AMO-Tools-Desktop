@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
-import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, HeatLossOutput } from '../../shared/models/steam/steam-outputs';
+import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, HeatLossOutput, ProcessSteamUsage } from '../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -15,6 +15,7 @@ export class SsmtReportComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  massFlow: number = 488.9;
 
   dataCalculated: boolean = false;
 
@@ -51,7 +52,12 @@ export class SsmtReportComponent implements OnInit {
   deaerator: DeaeratorOutput;
   steamToDeaerator: number;
   additionalSteamFlow: number;
-  highPressureProcessSteamUsage: SteamPropertiesOutput;
+  highPressureProcessSteamUsage: ProcessSteamUsage;
+  mediumPressureProcessSteamUsage: ProcessSteamUsage;
+  lowPressureProcessSteamUsage: ProcessSteamUsage;
+  highPressureSteamHeatLoss: HeatLossOutput;
+  mediumPressureSteamHeatLoss: HeatLossOutput;
+  lowPressureSteamHeatLoss: HeatLossOutput;
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
@@ -62,7 +68,7 @@ export class SsmtReportComponent implements OnInit {
   }
 
   calculateResults() {
-    this.calculateModelService.iterateModel(this.ssmt, this.settings);
+    this.calculateModelService.iterateModel(this.ssmt, this.settings, this.massFlow);
     this.getResults();
   }
 
@@ -100,6 +106,11 @@ export class SsmtReportComponent implements OnInit {
     this.steamToDeaerator = this.calculateModelService.steamToDeaerator;
     this.additionalSteamFlow = this.calculateModelService.additionalSteamFlow;
     this.highPressureProcessSteamUsage = this.calculateModelService.highPressureProcessSteamUsage;
+    this.highPressureSteamHeatLoss = this.calculateModelService.highPressureSteamHeatLoss;
+    this.mediumPressureProcessSteamUsage = this.calculateModelService.mediumPressureProcessSteamUsage;
+    this.mediumPressureSteamHeatLoss = this.calculateModelService.mediumPressureSteamHeatLoss;
+    this.lowPressureProcessSteamUsage = this.calculateModelService.highPressureProcessSteamUsage;
+    this.lowPressureSteamHeatLoss = this.calculateModelService.lowPressureSteamHeatLoss;
     console.log('got data');
     this.dataCalculated = true;
   }

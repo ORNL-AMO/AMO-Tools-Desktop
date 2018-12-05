@@ -44,6 +44,7 @@ import { FlashTankTableComponent } from './ssmt-report/flash-tank-table/flash-ta
 import { PrvTableComponent } from './ssmt-report/prv-table/prv-table.component';
 import { SteamPropertiesTableComponent } from './ssmt-report/steam-properties-table/steam-properties-table.component';
 import { HeatLossTableComponent } from './ssmt-report/heat-loss-table/heat-loss-table.component';
+import { SteamUsageTableComponent } from './ssmt-report/steam-usage-table/steam-usage-table.component';
 
 @NgModule({
   imports: [
@@ -84,7 +85,8 @@ import { HeatLossTableComponent } from './ssmt-report/heat-loss-table/heat-loss-
     FlashTankTableComponent,
     PrvTableComponent,
     SteamPropertiesTableComponent,
-    HeatLossTableComponent
+    HeatLossTableComponent,
+    SteamUsageTableComponent
   ],
   providers: [
     SsmtService,
