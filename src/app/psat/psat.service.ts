@@ -78,8 +78,6 @@ export class PsatService {
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
-    console.log('resultsExisting()');
-    console.log(tmpResults);
     tmpResults = this.roundResults(tmpResults);
     return tmpResults;
   }
@@ -102,8 +100,6 @@ export class PsatService {
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
-    console.log('resultsModified()');
-    console.log(tmpResults);
     tmpResults = this.roundResults(tmpResults);
     return tmpResults;
   }

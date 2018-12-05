@@ -225,6 +225,7 @@ export class FsatService {
       motorCurrent: 0,
       motorPower: 0,
       loadFactor: 0,
+      driveEfficiency: 0,
       annualEnergy: 0,
       annualCost: 0,
       fanEnergyIndex: 0,

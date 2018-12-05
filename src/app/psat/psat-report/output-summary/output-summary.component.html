@@ -69,8 +69,6 @@
           <span *ngIf="!modification.psat.outputs.motor_power_factor">&mdash;</span>
         </td>
       </tr>
-
-
       <tr>
         <td>Load factor (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.load_factor | number:'2.0-1'}}</td>
@@ -79,7 +77,6 @@
           <span *ngIf="!modification.psat.outputs.load_factor">&mdash;</span>
         </td>
       </tr>
-
       <tr>
         <td>Drive efficiency (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.drive_efficiency | number:'2.0-1'}}</td>
@@ -88,7 +85,6 @@
           <span *ngIf="!modification.psat.outputs.drive_efficiency">&mdash;</span>
         </td>
       </tr>
-
       <tr>
         <td>Motor current (amps)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.motor_current | number:'2.0-1'}}</td>
