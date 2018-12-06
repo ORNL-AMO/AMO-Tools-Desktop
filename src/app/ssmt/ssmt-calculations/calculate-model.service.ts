@@ -53,6 +53,8 @@ export class CalculateModelService {
   mediumPressureProcessSteamUsage: ProcessSteamUsage;
 
   returnCondensate: SteamPropertiesOutput;
+  feedwater: SteamPropertiesOutput;
+
   constructor(private steamService: SteamService) { }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
@@ -185,6 +187,14 @@ export class CalculateModelService {
     console.log('process steam usage: ' + this.inputData.headerInput.highPressure.processSteamUsage);
     console.log('steam production ' + steamProduction);
 
+    this.feedwater = this.steamService.steamProperties(
+      {
+        pressure: this.inputData.boilerInput.deaeratorPressure,
+        thermodynamicQuantity: 3, //quality
+        quantityValue: 0
+      },
+      this.settings
+    );
     //1. Calculate Boiler
     //1A. Model Boiler with massFlow
     this.calculateBoiler(massFlow);
@@ -450,9 +460,9 @@ export class CalculateModelService {
           quantityValue: this.highPressureHeader.specificEnthalpy,
           inletMassFlow: prvMassFlow,
           outletPressure: this.inputData.headerInput.mediumPressure.pressure,
-          feedwaterPressure: this.boiler.feedwaterPressure,
+          feedwaterPressure: this.feedwater.pressure,
           feedwaterThermodynamicQuantity: 1,//1 is enthalpy
-          feedwaterQuantityValue: this.boiler.feedwaterSpecificEnthalpy,
+          feedwaterQuantityValue: this.feedwater.specificEnthalpy,
           desuperheatingTemp: this.inputData.headerInput.mediumPressure.desuperheatSteamTemperature
         },
         this.settings
@@ -1071,7 +1081,7 @@ export class CalculateModelService {
           massFlow: this.highPressureCondensate.massFlow
         }
       );
-    } else if(!this.mediumPressureFlashTank) {
+    } else if (!this.mediumPressureFlashTank) {
       inlets.push(
         {
           pressure: this.highPressureFlashTank.outletLiquidPressure,
@@ -1146,10 +1156,10 @@ export class CalculateModelService {
   flashCondensateReturn() {
     this.condensateFlashTank = this.steamService.flashTank(
       {
-        inletWaterPressure: this.combinedCondensate.pressure,
-        quantityValue: this.combinedCondensate.specificEnthalpy,
+        inletWaterPressure: this.returnCondensate.pressure,
+        quantityValue: this.returnCondensate.specificEnthalpy,
         thermodynamicQuantity: 1,
-        inletWaterMassFlow: this.combinedCondensate.massFlow,
+        inletWaterMassFlow: this.returnCondensate.massFlow,
         tankPressure: this.inputData.boilerInput.deaeratorPressure
       },
       this.settings
