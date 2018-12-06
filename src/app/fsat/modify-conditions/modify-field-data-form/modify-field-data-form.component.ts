@@ -44,7 +44,7 @@ export class ModifyFieldDataFormComponent implements OnInit {
 
   getForm() {
     this.modifyFieldDataForm = this.formBuilder.group({
-      sizeMargin: [this.fsat.fanMotor.sizeMargin, [Validators.min(0), Validators.max(100)]],
+      // sizeMargin: [this.fsat.fanMotor.sizeMargin, [Validators.min(0), Validators.max(100)]],
       implementationCosts: [this.fsat.implementationCosts],
       //optimizeCalculation: [this.fsat.fanMotor.optimize]
     })
@@ -71,7 +71,7 @@ export class ModifyFieldDataFormComponent implements OnInit {
 
   save() {
     this.fsat.implementationCosts = this.modifyFieldDataForm.controls.implementationCosts.value;
-    this.fsat.fanMotor.sizeMargin = this.modifyFieldDataForm.controls.sizeMargin.value;
+    // this.fsat.fanMotor.sizeMargin = this.modifyFieldDataForm.controls.sizeMargin.value;
     // this.fsat.fanMotor.optimize = this.modifyFieldDataForm.controls.optimizeCalculation.value;
     this.emitSave.emit(this.fsat);
   }

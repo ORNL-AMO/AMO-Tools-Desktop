@@ -6,7 +6,7 @@
         <span *ngIf="modifyFieldDataForm.controls.optimizeCalculation.value" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
         Optimize Pump and Motor combination for a Fixed Specific Speed</label>
     </div> -->
-    <div class="form-group" [ngClass]="{'invalid': modifyFieldDataForm.controls.sizeMargin.invalid}">
+    <!-- <div class="form-group" [ngClass]="{'invalid': modifyFieldDataForm.controls.sizeMargin.invalid}">
       <label for="sizeMargin">Size Margin</label>
       <div class="input-group">
         <input [readonly]="!selected" name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control"
@@ -20,7 +20,7 @@
         <span *ngIf="modifyFieldDataForm.controls.sizeMargin.errors.min">Value can't be less than
           {{modifyFieldDataForm.controls.sizeMargin.errors.min.min}} %.</span>
       </span>
-    </div>
+    </div> -->
     <!--<div class="form-group">-->
     <!--<label>Fixed specific speed?</label>-->
     <!--<div name="fixedSpeed" class="form-check">-->
