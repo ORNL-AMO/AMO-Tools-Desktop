@@ -200,9 +200,15 @@ export class CalculateModelService {
     this.calculateHeatLossForHighPressureHeader();
     //2C. Calculate High Pressure Condensate
     this.calculateHighPressureCondensate();
+    if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+      this.calculateHighToLowSteamTurbine();
+    }
 
     //if medium pressure header exists
     if (this.inputData.headerInput.numberOfHeaders == 3) {
+      if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
+        this.calculateHighToMediumPressureSteamTurbine();
+      }
       //3. Calculate Medium Pressure Header
       //3A. Model Medium Pressure Header
       this.calculateMediumPressureHeader();
@@ -210,6 +216,10 @@ export class CalculateModelService {
       this.calculateHeatLossForMediumPressureHeader();
       //3C. Calculate Medium Pressure Condensate
       this.calculateMediumPressureCondensate();
+
+      if (this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
+        this.calculateMediumToLowSteamTurbine();
+      }
     }
 
     //if low pressure header exists
@@ -370,6 +380,20 @@ export class CalculateModelService {
   //3A1. Get inlets for medium pressure header
   getMediumPressureInlets(): Array<HeaderInputObj> {
     let inlets: Array<HeaderInputObj> = new Array<HeaderInputObj>();
+
+    //3A1b. Calculate high to medium turbine if in use
+    if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
+      //this.calculateHighToMediumPressureSteamTurbine();
+      //add turbine to inlets
+      inlets.push(
+        {
+          pressure: this.highPressureToMediumPressureTurbine.outletPressure,
+          thermodynamicQuantity: 1, //specificEnthalpy
+          quantityValue: this.highPressureToMediumPressureTurbine.outletSpecificEnthalpy,
+          massFlow: this.highPressureToMediumPressureTurbine.massFlow
+        }
+      );
+    }
     //3A1a. Calculate Medium pressure PRV 
     //PRV always exists
     this.calculateHighToMediumPRV();
@@ -382,19 +406,6 @@ export class CalculateModelService {
         massFlow: this.highToMediumPressurePRV.outletMassFlow
       }
     );
-    //3A1b. Calculate high to medium turbine if in use
-    if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
-      this.calculateHighToMediumPressureSteamTurbine();
-      //add turbine to inlets
-      inlets.push(
-        {
-          pressure: this.highPressureToMediumPressureTurbine.outletPressure,
-          thermodynamicQuantity: 1, //specificEnthalpy
-          quantityValue: this.highPressureToMediumPressureTurbine.outletSpecificEnthalpy,
-          massFlow: this.highPressureToMediumPressureTurbine.massFlow
-        }
-      );
-    }
     //3A1c. Calculate high pressure flash tank if flashing condensate into header
     if (this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true) {
       this.calculateHighPressureFlashTank();
@@ -415,6 +426,15 @@ export class CalculateModelService {
   //3A1a. Calculate High to Medium PRV
   calculateHighToMediumPRV() {
     let prvMassFlow: number = this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
+    if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+      prvMassFlow = prvMassFlow - this.highToLowPressureTurbine.massFlow;
+    }
+    if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
+      prvMassFlow = prvMassFlow - this.highPressureToMediumPressureTurbine.massFlow;
+    }
+    if (prvMassFlow < 0) {
+      prvMassFlow = 0;
+    }
     if (this.inputData.headerInput.mediumPressure.desuperheatSteamIntoNextHighest == true) {
       this.highToMediumPressurePRV = this.steamService.prvWithDesuperheating(
         {
@@ -450,16 +470,20 @@ export class CalculateModelService {
 
   //3A1b. Calculate High to Medium Steam Turbine
   calculateHighToMediumPressureSteamTurbine() {
+    let massFlow: number = this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
+    if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+      massFlow = massFlow - this.highToLowPressureTurbine.massFlow;
+    }
     this.highPressureToMediumPressureTurbine = this.steamService.turbine(
       {
         solveFor: 0,
         inletPressure: this.highPressureHeader.pressure,
         inletQuantity: 1,
         inletQuantityValue: this.highPressureHeader.specificEnthalpy,
-        turbineProperty: this.inputData.turbineInput.highToMediumTurbine.operationType,
+        turbineProperty: 0, //massFlow
         isentropicEfficiency: this.inputData.turbineInput.highToMediumTurbine.isentropicEfficiency,
         generatorEfficiency: this.inputData.turbineInput.highToMediumTurbine.generationEfficiency,
-        massFlowOrPowerOut: 0, //mass flow
+        massFlowOrPowerOut: massFlow,
         outletSteamPressure: this.inputData.headerInput.mediumPressure.pressure,
         outletQuantity: 0,
         outletQuantityValue: 0
@@ -572,6 +596,33 @@ export class CalculateModelService {
   //4A1. Get Inlets for low pressure header
   getLowPressureHeaderInlets(): Array<HeaderInputObj> {
     let inlets: Array<HeaderInputObj> = new Array<HeaderInputObj>();
+
+    //4A1b. Calcualte high to low pressure turbine if in use
+    if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+      //this.calculateHighToLowSteamTurbine();
+      //add outlet steam to inlets
+      inlets.push(
+        {
+          pressure: this.highToLowPressureTurbine.outletPressure,
+          thermodynamicQuantity: 1, //specificEnthalpy
+          quantityValue: this.highToLowPressureTurbine.outletSpecificEnthalpy,
+          massFlow: this.highToLowPressureTurbine.massFlow
+        }
+      )
+    }
+    //4A1e. Calculate Medium to Low Pressure Turbine: if medium pressure header, and turbine from medium to low pressure exists.
+    if (this.inputData.headerInput.numberOfHeaders == 3 && this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
+      //this.calculateMediumToLowSteamTurbine();
+      //add outlet steam to inlets
+      inlets.push(
+        {
+          pressure: this.mediumToLowPressureTurbine.outletPressure,
+          thermodynamicQuantity: 1, //specificEnthalpy
+          quantityValue: this.mediumToLowPressureTurbine.outletSpecificEnthalpy,
+          massFlow: this.mediumToLowPressureTurbine.massFlow
+        }
+      )
+    }
     //4A1a. Calculate low pressure PRV
     //PRV always exists
     this.calculateLowPressurePRV();
@@ -583,19 +634,6 @@ export class CalculateModelService {
         massFlow: this.lowPressurePRV.outletMassFlow
       }
     );
-    //4A1b. Calcualte high to low pressure turbine if in use
-    if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
-      this.calculateHighToLowSteamTurbine();
-      //add outlet steam to inlets
-      inlets.push(
-        {
-          pressure: this.highToLowPressureTurbine.outletPressure,
-          thermodynamicQuantity: 1, //specificEnthalpy
-          quantityValue: this.highToLowPressureTurbine.outletSpecificEnthalpy,
-          massFlow: this.highToLowPressureTurbine.massFlow
-        }
-      )
-    }
     //4A1c. Calculate flashed steam if flashing condensate into header
     if (this.inputData.headerInput.lowPressure.flashCondensateIntoHeader == true) {
       //if medium pressure header exists, flash medium pressure condensate
@@ -637,19 +675,7 @@ export class CalculateModelService {
         }
       )
     }
-    //4A1e. Calculate Medium to Low Pressure Turbine: if medium pressure header, and turbine from medium to low pressure exists.
-    if (this.inputData.headerInput.numberOfHeaders == 3 && this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
-      this.calculateMediumToLowSteamTurbine();
-      //add outlet steam to inlets
-      inlets.push(
-        {
-          pressure: this.mediumToLowPressureTurbine.outletPressure,
-          thermodynamicQuantity: 1, //specificEnthalpy
-          quantityValue: this.mediumToLowPressureTurbine.outletSpecificEnthalpy,
-          massFlow: this.mediumToLowPressureTurbine.massFlow
-        }
-      )
-    }
+
     return inlets;
   }
 
@@ -662,12 +688,20 @@ export class CalculateModelService {
       //if 2 headers, next highest is high pressure
       headerObj = this.highPressureHeader;
       prvMassFlow = headerObj.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
+      if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+        prvMassFlow = prvMassFlow - this.highToLowPressureTurbine.massFlow;
+      }
     } else if (this.inputData.headerInput.numberOfHeaders == 3) {
       //if 3 headers, next highest is medium pressure
       headerObj = this.mediumPressureHeader;
       prvMassFlow = headerObj.massFlow - this.inputData.headerInput.mediumPressure.processSteamUsage;
+      if (this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
+        prvMassFlow = prvMassFlow - this.mediumToLowPressureTurbine.massFlow;
+      }
     }
-
+    if (prvMassFlow < 0) {
+      prvMassFlow = 0;
+    }
     if (this.inputData.headerInput.lowPressure.desuperheatSteamIntoNextHighest == true) {
       this.lowPressurePRV = this.steamService.prvWithDesuperheating(
         {
@@ -703,16 +737,21 @@ export class CalculateModelService {
 
   //4A1b. Calculate High to Low Steam Turbine
   calculateHighToLowSteamTurbine() {
+    let massFlow: number = this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
+    if (this.inputData.headerInput.numberOfHeaders == 3) {
+      massFlow = massFlow - this.inputData.headerInput.mediumPressure.processSteamUsage;
+    }
+
     this.highToLowPressureTurbine = this.steamService.turbine(
       {
         solveFor: 0,
         inletPressure: this.highPressureHeader.pressure,
         inletQuantity: 1,
         inletQuantityValue: this.highPressureHeader.specificEnthalpy,
-        turbineProperty: this.inputData.turbineInput.highToLowTurbine.operationType,
+        turbineProperty: 0, //massFlow
         isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
         generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
-        massFlowOrPowerOut: 0, //mass flow
+        massFlowOrPowerOut: massFlow,
         outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
         outletQuantity: 0,
         outletQuantityValue: 0
@@ -756,10 +795,10 @@ export class CalculateModelService {
         inletPressure: this.mediumPressureHeader.pressure,
         inletQuantity: 1,
         inletQuantityValue: this.mediumPressureHeader.specificEnthalpy,
-        turbineProperty: this.inputData.turbineInput.mediumToLowTurbine.operationType,
+        turbineProperty: 0, //massFlow
         isentropicEfficiency: this.inputData.turbineInput.mediumToLowTurbine.isentropicEfficiency,
         generatorEfficiency: this.inputData.turbineInput.mediumToLowTurbine.generationEfficiency,
-        massFlowOrPowerOut: 0, //mass flow
+        massFlowOrPowerOut: this.mediumPressureHeader.massFlow - this.inputData.headerInput.mediumPressure.processSteamUsage,
         outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
         outletQuantity: 0,
         outletQuantityValue: 0

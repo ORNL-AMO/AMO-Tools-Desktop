@@ -56,10 +56,10 @@
       </div>
       <div class="d-flex">
         <div class="p-1">
-          <app-header-table *ngIf="combinedCondensate" [header]="combinedCondensate" [name]="'Combined Condensate'"></app-header-table>
+          <app-header-table *ngIf="combinedCondensate" [header]="combinedCondensate" [name]="'All Condensate'"></app-header-table>
         </div>
         <div class="p-1">
-          <app-steam-properties-table *ngIf="returnCondensate" [steamProperties]="returnCondensate" [name]="'Return Condensate Details'"></app-steam-properties-table>
+          <app-steam-properties-table *ngIf="returnCondensate" [steamProperties]="returnCondensate" [name]="'Combined Return Condensate Details'"></app-steam-properties-table>
         </div>
         <div class="p-1">
           <app-steam-properties-table *ngIf="makeupWater" [steamProperties]="makeupWater" [name]="'Make-up Water Details'"></app-steam-properties-table>
