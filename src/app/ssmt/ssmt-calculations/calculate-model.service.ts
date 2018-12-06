@@ -558,33 +558,16 @@ export class CalculateModelService {
   //3C. Calculate Medium Pressure Condensate
   calculateMediumPressureCondensate() {
     let calculatedMassFlow: number = this.inputData.headerInput.mediumPressure.processSteamUsage * (this.inputData.headerInput.mediumPressure.condensationRecoveryRate / 100);
-    if (this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true) {
-      calculatedMassFlow = calculatedMassFlow + this.highPressureFlashTank.outletLiquidMassFlow;
-      let calcualtedEnergyFlow: number = calculatedMassFlow * this.highPressureFlashTank.outletLiquidSpecificEnthalpy / 1000;
-      this.mediumPressureCondensate = {
-        pressure: this.highPressureFlashTank.outletLiquidPressure,
-        temperature: this.highPressureFlashTank.outletLiquidTemperature,
-        specificEnthalpy: this.highPressureFlashTank.outletLiquidSpecificEnthalpy,
-        specificEntropy: this.highPressureFlashTank.outletLiquidSpecificEntropy,
-        quality: this.highPressureFlashTank.outletLiquidQuality,
-        energyFlow: calcualtedEnergyFlow,
-        specificVolume: this.highPressureFlashTank.outletLiquidVolume,
-        massFlow: calculatedMassFlow
-      }
-    }
-    else {
-      this.mediumPressureCondensate = this.steamService.steamProperties(
-        {
-          pressure: this.inputData.headerInput.mediumPressure.pressure,
-          quantityValue: 0,
-          thermodynamicQuantity: 3
-        },
-        this.settings
-      );
-
-      this.mediumPressureCondensate.massFlow = calculatedMassFlow;
-      this.mediumPressureCondensate.energyFlow = this.mediumPressureCondensate.massFlow * this.mediumPressureCondensate.specificEnthalpy / 1000;
-    }
+    this.mediumPressureCondensate = this.steamService.steamProperties(
+      {
+        pressure: this.inputData.headerInput.mediumPressure.pressure,
+        quantityValue: 0,
+        thermodynamicQuantity: 3
+      },
+      this.settings
+    );
+    this.mediumPressureCondensate.massFlow = calculatedMassFlow;
+    this.mediumPressureCondensate.energyFlow = this.mediumPressureCondensate.massFlow * this.mediumPressureCondensate.specificEnthalpy / 1000;
   }
 
   //4A. Model Low Pressure Header
@@ -771,12 +754,56 @@ export class CalculateModelService {
   }
   //4A1c. Calculate Medium Pressure Flash Tank
   calculateMediumPressureFlashTank() {
+    let tmpHighMediumPressureMix: HeaderOutputObj;
+    if (!this.highPressureFlashTank) {
+      tmpHighMediumPressureMix = this.steamService.header(
+        {
+          headerPressure: this.inputData.headerInput.lowPressure.pressure,
+          inlets: [
+            {
+              pressure: this.highPressureCondensate.pressure,
+              thermodynamicQuantity: 1, //specificEnthalpy
+              quantityValue: this.highPressureCondensate.specificEnthalpy,
+              massFlow: this.highPressureCondensate.massFlow
+            },
+            {
+              pressure: this.mediumPressureCondensate.pressure,
+              thermodynamicQuantity: 1, //specificEnthalpy
+              quantityValue: this.mediumPressureCondensate.specificEnthalpy,
+              massFlow: this.mediumPressureCondensate.massFlow
+            }
+          ]
+        },
+        this.settings
+      ).header;
+    } else {
+      tmpHighMediumPressureMix = this.steamService.header(
+        {
+          headerPressure: this.inputData.headerInput.lowPressure.pressure,
+          inlets: [
+            {
+              pressure: this.highPressureFlashTank.outletLiquidPressure,
+              thermodynamicQuantity: 1, //specificEnthalpy
+              quantityValue: this.highPressureFlashTank.outletLiquidSpecificEnthalpy,
+              massFlow: this.highPressureFlashTank.outletLiquidMassFlow
+            },
+            {
+              pressure: this.mediumPressureCondensate.pressure,
+              thermodynamicQuantity: 1, //specificEnthalpy
+              quantityValue: this.mediumPressureCondensate.specificEnthalpy,
+              massFlow: this.mediumPressureCondensate.massFlow
+            }
+          ]
+        },
+        this.settings
+      ).header;
+    };
     this.mediumPressureFlashTank = this.steamService.flashTank(
       {
-        inletWaterPressure: this.mediumPressureCondensate.pressure,
-        quantityValue: this.mediumPressureCondensate.specificEnthalpy,
+        inletWaterPressure: tmpHighMediumPressureMix.pressure,
+        quantityValue: tmpHighMediumPressureMix.specificEnthalpy,
         thermodynamicQuantity: 1,
-        inletWaterMassFlow: this.mediumPressureCondensate.massFlow,
+        inletWaterMassFlow: tmpHighMediumPressureMix.massFlow,
         tankPressure: this.inputData.headerInput.lowPressure.pressure
       },
       this.settings
@@ -851,43 +878,16 @@ export class CalculateModelService {
   //4C. Calculate Low Pressure Condensate
   calculateLowPressureCondensate() {
     let calculatedMassFlow: number = this.inputData.headerInput.lowPressure.processSteamUsage * (this.inputData.headerInput.lowPressure.condensationRecoveryRate / 100);
-    //if flashing condnesate into header (will have already been flashed by this step)
-    //use outlet liquid from flash tank
-    if (this.inputData.headerInput.lowPressure.flashCondensateIntoHeader == true) {
-      let flashTank: FlashTankOutput;
-      if (this.inputData.headerInput.numberOfHeaders == 3) {
-        //if 3 headers, next highest is medium
-        flashTank = this.mediumPressureFlashTank;
-      } else {
-        //if 2 headers, next highest is high pressure
-        flashTank = this.highPressureFlashTank;
-      }
-      //combine flow from current header and liquid from higher pressure flash tank
-      calculatedMassFlow = calculatedMassFlow + flashTank.outletLiquidMassFlow;
-      let calcualtedEnergyFlow: number = calculatedMassFlow * this.mediumPressureFlashTank.outletLiquidSpecificEnthalpy / 1000;
-      this.lowPressureCondensate = {
-        pressure: flashTank.outletLiquidPressure,
-        temperature: flashTank.outletLiquidTemperature,
-        specificEnthalpy: flashTank.outletLiquidSpecificEnthalpy,
-        specificEntropy: flashTank.outletLiquidSpecificEntropy,
-        quality: flashTank.outletLiquidQuality,
-        energyFlow: calcualtedEnergyFlow,
-        specificVolume: flashTank.outletLiquidVolume,
-        massFlow: calculatedMassFlow
-      }
-    } else {
-      this.lowPressureCondensate = this.steamService.steamProperties(
-        {
-          pressure: this.inputData.headerInput.lowPressure.pressure,
-          quantityValue: 0,
-          thermodynamicQuantity: 3
-        },
-        this.settings
-      );
-
-      this.lowPressureCondensate.massFlow = calculatedMassFlow;
-      this.lowPressureCondensate.energyFlow = this.lowPressureCondensate.massFlow * this.lowPressureCondensate.specificEnthalpy / 1000;
-    }
+    this.lowPressureCondensate = this.steamService.steamProperties(
+      {
+        pressure: this.inputData.headerInput.lowPressure.pressure,
+        quantityValue: 0,
+        thermodynamicQuantity: 3
+      },
+      this.settings
+    );
+    this.lowPressureCondensate.massFlow = calculatedMassFlow;
+    this.lowPressureCondensate.energyFlow = this.lowPressureCondensate.massFlow * this.lowPressureCondensate.specificEnthalpy / 1000;
   }
 
   //5. Calculate Makeup Water and Condensate Header
@@ -1062,14 +1062,25 @@ export class CalculateModelService {
 
   getCombinedCondensateInlets(): Array<HeaderInputObj> {
     let inlets: Array<HeaderInputObj> = new Array<HeaderInputObj>();
-    inlets.push(
-      {
-        pressure: this.highPressureCondensate.pressure,
-        thermodynamicQuantity: 1, //specificEnthalpy
-        quantityValue: this.highPressureCondensate.specificEnthalpy,
-        massFlow: this.highPressureCondensate.massFlow
-      }
-    );
+    if (!this.highPressureFlashTank && !this.mediumPressureFlashTank) {
+      inlets.push(
+        {
+          pressure: this.highPressureCondensate.pressure,
+          thermodynamicQuantity: 1, //specificEnthalpy
+          quantityValue: this.highPressureCondensate.specificEnthalpy,
+          massFlow: this.highPressureCondensate.massFlow
+        }
+      );
+    } else if(!this.mediumPressureFlashTank) {
+      inlets.push(
+        {
+          pressure: this.highPressureFlashTank.outletLiquidPressure,
+          thermodynamicQuantity: 1, //specificEnthalpy
+          quantityValue: this.highPressureFlashTank.outletLiquidSpecificEnthalpy,
+          massFlow: this.highPressureFlashTank.outletLiquidMassFlow
+        }
+      );
+    }
 
     if (this.inputData.headerInput.numberOfHeaders > 1) {
       inlets.push(
@@ -1082,14 +1093,25 @@ export class CalculateModelService {
       );
     }
     if (this.inputData.headerInput.numberOfHeaders == 3) {
-      inlets.push(
-        {
-          pressure: this.mediumPressureCondensate.pressure,
-          thermodynamicQuantity: 1, //specificEnthalpy
-          quantityValue: this.mediumPressureCondensate.specificEnthalpy,
-          massFlow: this.mediumPressureCondensate.massFlow
-        }
-      );
+      if (!this.mediumPressureFlashTank) {
+        inlets.push(
+          {
+            pressure: this.mediumPressureCondensate.pressure,
+            thermodynamicQuantity: 1, //specificEnthalpy
+            quantityValue: this.mediumPressureCondensate.specificEnthalpy,
+            massFlow: this.mediumPressureCondensate.massFlow
+          }
+        );
+      } else {
+        inlets.push(
+          {
+            pressure: this.mediumPressureFlashTank.outletLiquidPressure,
+            thermodynamicQuantity: 1, //specificEnthalpy
+            quantityValue: this.mediumPressureFlashTank.outletLiquidSpecificEnthalpy,
+            massFlow: this.mediumPressureFlashTank.outletLiquidMassFlow
+          }
+        );
+      }
     }
     return inlets;
   }
