@@ -15,7 +15,7 @@ export class SsmtReportComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  massFlow: number = 401.7;
+  massFlow: number = 700.4;
 
   dataCalculated: boolean = false;
 
