@@ -19,6 +19,8 @@ export class CoreService {
         MockPsat.directoryId = 2;
         this.indexedDbService.addAssessment(MockPsat).then(() => {
           MockPsatCalculator.assessmentId = 2;
+          console.log('MockPsatCalculator.systemCurve = ');
+          console.log(MockPsatCalculator.systemCurve);
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
             MockFsat.directoryId = 2;
             this.indexedDbService.addAssessment(MockFsat).then(() => {
