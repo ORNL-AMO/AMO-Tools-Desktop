@@ -186,7 +186,7 @@ export class FsatService {
   }
 
   checkFanSetupValid(fsat: FSAT, isBaseline: boolean): boolean {
-    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup, isBaseline);
+    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup, !isBaseline);
     return (fanSetupForm.status == 'VALID');
   }
 
