@@ -192,6 +192,8 @@ export class FsatService {
     return fanAddon.fanResultsExisting(input);
   }
   fanResultsModified(input: FsatInput): FsatOutput {
+    console.log('input = ');
+    console.log(input);
     return fanAddon.fanResultsModified(input);
   }
   // fanResultsOptimal(input: FsatInput): FsatOutput {
