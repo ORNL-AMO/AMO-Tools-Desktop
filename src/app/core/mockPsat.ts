@@ -3,12 +3,10 @@ import { Calculator } from "../shared/models/calculators";
 import { Settings } from "../shared/models/settings";
 
 export const MockPsat: Assessment = {
-    isExample: true,
     name: "Basic Pump Example",
     type: "PSAT",
     appVersion: "0.3.1-beta",
     psat: {
-        name: "Baseline",
         inputs: {
             pump_style: 6,
             pump_specified: null,
@@ -24,8 +22,9 @@ export const MockPsat: Assessment = {
             efficiency_class: 0,
             efficiency: 95,
             motor_rated_voltage: 460,
-            load_estimation_method: 0,
-            motor_rated_fla: 228.57,
+            load_estimation_method: 1,
+            motor_rated_fla: 172.64,
+            margin: 0,
             operating_hours: 8760,
             flow_rate: 2500,
             head: 137,
@@ -33,12 +32,11 @@ export const MockPsat: Assessment = {
             motor_field_current: 130.3,
             motor_field_voltage: 460,
             cost_kw_hour: 0.066,
-            implementationCosts: null,
-            specifiedDriveEfficiency: null,
             fluidType: "Water",
-            fluidTemperature: 68
+            fluidTemperature: 68,
+            specifiedDriveEfficiency: null,
+            implementationCosts: null
         },
-        setupDone: true,
         modifications: [
             {
                 psat: {
@@ -58,8 +56,9 @@ export const MockPsat: Assessment = {
                         efficiency_class: 2,
                         efficiency: 95,
                         motor_rated_voltage: 460,
-                        load_estimation_method: 0,
-                        motor_rated_fla: 224,
+                        load_estimation_method: 1,
+                        motor_rated_fla: 168.61,
+                        margin: 0,
                         operating_hours: 8760,
                         flow_rate: 2499.99,
                         head: 137.01,
@@ -67,10 +66,10 @@ export const MockPsat: Assessment = {
                         motor_field_current: 130.3,
                         motor_field_voltage: 460,
                         cost_kw_hour: 0.066,
-                        specifiedDriveEfficiency: null,
-                        implementationCosts: null,
                         fluidType: "Water",
-                        fluidTemperature: 68
+                        fluidTemperature: 68,
+                        specifiedDriveEfficiency: null,
+                        implementationCosts: null
                     },
                     outputs: {
                         pump_efficiency: 87.52,
@@ -81,8 +80,6 @@ export const MockPsat: Assessment = {
                         motor_power_factor: 83.43,
                         motor_current: 120.23,
                         motor_power: 79.91,
-                        load_factor: 0.69,
-                        drive_efficiency: 95.91,
                         annual_energy: 700.05,
                         annual_cost: 46203.14,
                         annual_savings_potential: 0,
@@ -90,10 +87,10 @@ export const MockPsat: Assessment = {
                     }
                 },
                 notes: {
-                    systemBasicsNotes: '',
-                    pumpFluidNotes: '',
-                    motorNotes: '',
-                    fieldDataNotes: ''
+                    fieldDataNotes: "",
+                    motorNotes: "",
+                    pumpFluidNotes: "",
+                    systemBasicsNotes: ""
                 }
             },
             {
@@ -114,8 +111,9 @@ export const MockPsat: Assessment = {
                         efficiency_class: 0,
                         efficiency: 95,
                         motor_rated_voltage: 460,
-                        load_estimation_method: 0,
-                        motor_rated_fla: 228.57,
+                        load_estimation_method: 1,
+                        motor_rated_fla: 172.63,
+                        margin: 0,
                         operating_hours: 8760,
                         flow_rate: 842,
                         head: 63,
@@ -137,8 +135,6 @@ export const MockPsat: Assessment = {
                         motor_power_factor: 44.67,
                         motor_current: 54.92,
                         motor_power: 19.54,
-                        load_factor: 0.15,
-                        drive_efficiency: 95.52,
                         annual_energy: 171.21,
                         annual_cost: 11299.56,
                         annual_savings_potential: 0,
@@ -146,10 +142,10 @@ export const MockPsat: Assessment = {
                     }
                 },
                 notes: {
-                    systemBasicsNotes: '',
-                    pumpFluidNotes: '',
-                    motorNotes: '',
-                    fieldDataNotes: ''
+                    fieldDataNotes: "",
+                    motorNotes: "",
+                    pumpFluidNotes: "",
+                    systemBasicsNotes: ""
                 }
             },
             {
@@ -170,8 +166,9 @@ export const MockPsat: Assessment = {
                         efficiency_class: 0,
                         efficiency: 95,
                         motor_rated_voltage: 460,
-                        load_estimation_method: 0,
-                        motor_rated_fla: 228.57,
+                        load_estimation_method: 1,
+                        motor_rated_fla: 172.63,
+                        margin: 0,
                         operating_hours: 8760,
                         flow_rate: 1475,
                         head: 50,
@@ -193,8 +190,6 @@ export const MockPsat: Assessment = {
                         motor_power_factor: 47.47,
                         motor_current: 55.82,
                         motor_power: 21.11,
-                        load_factor: 0.16,
-                        drive_efficiency: 95.55,
                         annual_energy: 184.96,
                         annual_cost: 12207.29,
                         annual_savings_potential: 0,
@@ -202,56 +197,87 @@ export const MockPsat: Assessment = {
                     }
                 },
                 notes: {
-                    systemBasicsNotes: '',
-                    pumpFluidNotes: '',
-                    motorNotes: '',
-                    fieldDataNotes: ''
+                    fieldDataNotes: "",
+                    motorNotes: "",
+                    pumpFluidNotes: "",
+                    systemBasicsNotes: ""
                 }
             },
             {
-                notes: {
-                    systemBasicsNotes: '',
-                    pumpFluidNotes: '',
-                    motorNotes: '',
-                    fieldDataNotes: ''
-                },
                 psat: {
+                    name: "New",
                     inputs: {
-                        pump_style: 11,
-                        pump_specified: 85.2,
-                        pump_rated_speed: 1780,
-                        drive: 0,
+                        pump_style: 6,
+                        pump_specified: 87.52,
+                        pump_rated_speed: 1785,
+                        drive: 1,
                         kinematic_viscosity: 1.107,
                         specific_gravity: 1.002,
-                        stages: 2,
+                        stages: 1,
                         fixed_speed: 0,
-                        line_frequency: 50,
-                        motor_rated_power: 200,
-                        motor_rated_speed: 1780,
-                        efficiency_class: 0,
-                        efficiency: 93,
+                        line_frequency: 60,
+                        motor_rated_power: 150.01,
+                        motor_rated_speed: 1785,
+                        efficiency_class: 2,
+                        efficiency: 95,
                         motor_rated_voltage: 460,
-                        load_estimation_method: 0,
-                        motor_rated_fla: 225,
+                        load_estimation_method: 1,
+                        motor_rated_fla: 168.62,
+                        margin: 0,
                         operating_hours: 8760,
-                        flow_rate: 1840,
-                        head: 174.85,
-                        motor_field_power: 80,
-                        motor_field_current: null,
-                        motor_field_voltage: 480,
-                        cost_kw_hour: 0.05,
-                        cost: 0.05,
+                        flow_rate: 2500,
+                        head: 137,
+                        motor_field_power: 88.2,
+                        motor_field_current: 130.3,
+                        motor_field_voltage: 460,
+                        cost_kw_hour: 0.066,
                         fluidType: "Water",
-                        fluidTemperature: 68
+                        fluidTemperature: 68,
+                        specifiedDriveEfficiency: null,
+                        implementationCosts: null
                     },
-                    name: "Opportunities Modification"
+                    outputs: {
+                        pump_efficiency: 87.52,
+                        motor_rated_power: 150.01,
+                        motor_shaft_power: 103.2,
+                        pump_shaft_power: 98.99,
+                        motor_efficiency: 96.35,
+                        motor_power_factor: 83.42,
+                        motor_current: 120.22,
+                        motor_power: 79.91,
+                        annual_energy: 700,
+                        annual_cost: 46199.95,
+                        annual_savings_potential: 0,
+                        optimization_rating: 0
+                    }
+                },
+                notes: {
+                    fieldDataNotes: "",
+                    motorNotes: "",
+                    pumpFluidNotes: "",
+                    systemBasicsNotes: ""
                 },
                 exploreOpportunities: true
             }
-        ]
-    },
-    selected: false,
-    directoryId: 2,
+        ],
+        name: "Baseline",
+        setupDone: true,
+        outputs: {
+            pump_efficiency: 81.81,
+            motor_rated_power: 150,
+            motor_shaft_power: 110.39,
+            pump_shaft_power: 105.9,
+            motor_efficiency: 93.36,
+            motor_power_factor: 84.97,
+            motor_current: 130.3,
+            motor_power: 88.21,
+            annual_energy: 772.7,
+            annual_cost: 50998.15,
+            annual_savings_potential: 0,
+            optimization_rating: 0,
+            percent_annual_savings: 0
+        }
+    }
 }
 
 export const MockPsatSettings: Settings = {
@@ -280,11 +306,11 @@ export const MockPsatSettings: Settings = {
     appVersion: "0.3.1-beta",
     fanCurveType: null,
     fanConvertedConditions: null,
-    phastRollupUnit: 'MMBtu',
-    phastRollupFuelUnit: 'MMBtu',
-    phastRollupElectricityUnit: 'kWh',
-    phastRollupSteamUnit: 'MMBtu',
-    defaultPanelTab: 'help',
+    phastRollupUnit: "MMBtu",
+    phastRollupFuelUnit: "MMBtu",
+    phastRollupElectricityUnit: "MMBtu",
+    phastRollupSteamUnit: "MMBtu",
+    defaultPanelTab: "help",
     fuelCost: 3.99,
     steamCost: 4.69,
     electricityCost: 0.066,
@@ -420,7 +446,7 @@ export const MockPsatCalculator: Calculator = {
                 modName: "Reduce Pump Speed to 80%",
                 flowRate: 2000,
                 head: 87.6
-            },
+            }
         ],
         selectedP1Name: "Baseline1",
         selectedP2Name: "Baseline"
