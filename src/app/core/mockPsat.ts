@@ -83,6 +83,8 @@ export const MockPsat: Assessment = {
                         motor_power_factor: 83.43,
                         motor_current: 120.23,
                         motor_power: 79.91,
+                        load_factor: 0.69,
+                        drive_efficiency: 95.91,
                         annual_energy: 700.05,
                         annual_cost: 46203.14,
                         annual_savings_potential: 0,
