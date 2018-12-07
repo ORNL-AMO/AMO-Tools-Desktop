@@ -55,7 +55,6 @@ export interface FanMotor {
   specifiedEfficiency?: number,
   motorRatedVoltage: number,
   fullLoadAmps: number,
-  sizeMargin?: number
 }
 
 export interface FanSetup {

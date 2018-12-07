@@ -156,7 +156,6 @@ export class FsatService {
         specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
         motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,
         fullLoadAmps: fsat.fanMotor.fullLoadAmps,
-        sizeMargin: fsat.fanMotor.sizeMargin | 0,
         measuredVoltage: fsat.fieldData.measuredVoltage,
         //???????
         measuredAmps: fsat.fieldData.motorPower,
@@ -166,7 +165,8 @@ export class FsatService {
         compressibilityFactor: fsat.fieldData.compressibilityFactor,
         operatingHours: fsat.fieldData.operatingHours,
         unitCost: fsat.fieldData.cost,
-        airDensity: fsat.baseGasDensity.gasDensity
+        airDensity: fsat.baseGasDensity.gasDensity,
+        sizeMargin: 1
       };
 
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);

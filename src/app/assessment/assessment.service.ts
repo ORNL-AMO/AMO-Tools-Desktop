@@ -89,7 +89,6 @@ export class AssessmentService {
       motor_rated_voltage: 460,
       load_estimation_method: 0,
       motor_rated_fla: null,
-      margin: 0,
       operating_hours: 8760,
       flow_rate: null,
       head: 277,
@@ -173,8 +172,7 @@ export class AssessmentService {
         efficiencyClass: 1,
         specifiedEfficiency: 100,
         motorRatedVoltage: 460,
-        fullLoadAmps: null,
-        sizeMargin: 1
+        fullLoadAmps: null
       },
       fanSetup: {
         fanType: 0,

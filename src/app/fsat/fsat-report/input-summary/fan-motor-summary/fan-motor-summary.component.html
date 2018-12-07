@@ -115,32 +115,6 @@
                 {{mod.fullLoadAmps}}
               </td>
             </tr>
-            <!--
-          <!- - Optimize - ->
-          <tr>
-            <td [ngClass]="{'indicate-report-field-different':optimizeDiff[0] == true}">
-              Optimize
-            </td>
-            <td [ngClass]="{'indicate-report-field-different':optimizeDiff[0] == true}">
-              {{fanMotor.baseline.optimize}}
-            </td>
-            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.optimize, mod.optimize, 'optimizeDiff', 0)}">
-              {{mod.optimize}}
-            </td>
-          </tr>
-          <!- - Size Margin - ->
-          <tr>
-            <td [ngClass]="{'indicate-report-field-different':sizeMarginDiff[0] == true}">
-              Size Margin
-            </td>
-            <td [ngClass]="{'indicate-report-field-different':sizeMarginDiff[0] == true}">
-              {{fanMotor.baseline.sizeMargin}}
-            </td>
-            <td *ngFor="let mod of fanMotor.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanMotor.baseline.sizeMargin, mod.sizeMargin, 'sizeMarginDiff', 0)}">
-              {{mod.sizeMargin}}
-            </td>
-          </tr>
-          -->
           </tbody>
         </table>
       </div>
