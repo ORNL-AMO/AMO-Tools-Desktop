@@ -11,9 +11,12 @@
       Fan Type
       <br>
       <small class="text-muted">
-        Fan Type represents what style of fan is being used based off the listings in the AMCA 201 Standard. This value will be used
-        to estimate achievable fan efficiencies based on fan style and operating conditions when automatically optimizing.
-        The Specified Efficiency option allows the user to input a fan efficiency to use when optimizing, this does not affect
+        Fan Type represents what style of fan is being used based off the listings in the AMCA 201 Standard. This value
+        will be used
+        to estimate achievable fan efficiencies based on fan style and operating conditions when automatically
+        optimizing.
+        The Specified Efficiency option allows the user to input a fan efficiency to use when optimizing, this does not
+        affect
         the efficiency calculated for the baseline.
         <hr>
       </small>
@@ -53,13 +56,52 @@
       </div>
     </div>
   </div>
+
+  <div class="my-2" *ngIf="currentField == 'fanEfficiency'">
+    <h6>
+      Fan Efficiency
+      <br>
+      <small class="text-muted">
+        Efficiency of the fan in the modified scenario calculations. The default value for a modification's fan
+        efficiency is the efficiency value calculated in the baseline.
+        <hr>
+        There are several reasons to model a change to the fan’s efficiency. Installing a more efficient fan,
+        restoring the existing fan, or changing the impeller size can all result in changes to the fan efficiency.
+        Changing the fans operating conditions (pressure, flow) can also result in a change to fan efficiency. Use your
+        fan curve and the affinity laws to determine your fan efficiency at the new conditions and enter the value
+        here.
+        <hr>
+        Clicking “Optimize Fan" will provide an estimate of a top-of-the-line, commercially available fan’s
+        efficiency at the modification’s flow rate for the fan type (using curves developed in the Hydraulic
+        Institute’s ANSI/HI 1.3 standard).
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 %</td>
+            <td class="text-center">100 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="my-2" *ngIf="currentField == 'fanSpeed'">
     <h6>
       Fan Speed
       <br>
       <small class="text-muted">
-        Description: The operating or nameplate speed at which the fan is running at. Used along with the measure/required flow rate,
-        pressure, and number of stages, to calculate the fan specific speed. The specific speed is used to determine efficiency
+        Description: The operating or nameplate speed at which the fan is running at. Used along with the
+        measure/required flow rate,
+        pressure, and number of stages, to calculate the fan specific speed. The specific speed is used to determine
+        efficiency
         penalty associated with the fan application, when using the optimization capability.
         <hr>
       </small>
@@ -92,10 +134,14 @@
       Drive
       <br>
       <small class="text-muted">
-        This drop-down selection menu allows the user to define whether the fan is direct driven by the motor or belt-driven. There
-        are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt drives
-        are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient belts.
-        <hr> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be used if
+        This drop-down selection menu allows the user to define whether the fan is direct driven by the motor or
+        belt-driven. There
+        are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt
+        drives
+        are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient
+        belts.
+        <hr> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be
+        used if
         adjustable frequency drives are used.
         <hr> Options include:
         <u>Direct Drive</u>,
