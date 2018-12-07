@@ -44,7 +44,8 @@ export interface PsatInputs {
   implementationCosts?: number,
   isVFD?: boolean,
   fluidType: string,
-  fluidTemperature: number
+  fluidTemperature: number,
+  useCustomEfficiency?: boolean
 }
 
 export interface PsatOutputs {

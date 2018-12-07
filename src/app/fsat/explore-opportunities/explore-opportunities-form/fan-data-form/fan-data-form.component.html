@@ -78,10 +78,10 @@
       </select>
     </div>
   </form>
-  <form [formGroup]="modificationForm" *ngIf="!modificationForm.controls.fanType.disabled">
+  <form [formGroup]="modificationForm" *ngIf="modificationForm.controls.fanType.value != 12">
     <div class="form-group">
       <label for="modificationFanType">Modification Fan Type</label>
-      <select class="form-control" name="fanType2" id="fanType2" (change)="getFanEfficiency()" (focus)="focusField('fanType')"
+      <select class="form-control" name="modificationFanType" id="modificationFanType" (change)="getFanEfficiency()" (focus)="focusField('fanType')"
         formControlName="fanType">
         <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
       </select>
@@ -92,13 +92,16 @@
   <form [formGroup]="modificationForm">
     <div class="form-group" [ngClass]="{'invalid': modificationForm.controls.fanEfficiency.invalid}">
       <label for="modificationFanSpecified">Modification Fan Efficiency
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.disabled">Optimize Fan</a>
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disableFanType()" *ngIf="modificationForm.controls.fanEfficiency.disabled">Known Efficiency</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enableFanType()" *ngIf="modificationForm.controls.fanType.value == 12">Optimize Fan</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disableFanType()" *ngIf="modificationForm.controls.fanType.value != 12">Known Efficiency</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" *ngIf="modificationForm.controls.fanType.value == 12">
         <input name="modificationFanSpecified" type="number" step="any" id="modificationFanSpecified" class="form-control"
           (focus)="focusField('fanEfficiency')" (input)="calculate()" formControlName="fanEfficiency" />
         <span class="input-group-addon units">%</span>
+      </div>
+      <div class="small text-center" *ngIf="modificationForm.controls.fanType.value != 12">
+        {{modificationForm.controls.fanEfficiency.value | number:'1.0-2'}} %
       </div>
       <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.fanEfficiency.invalid && !modificationForm.controls.fanEfficiency.pristine">
         <span *ngIf="modificationForm.controls.fanEfficiency.errors.required">Value Required</span>
@@ -109,11 +112,11 @@
       </span>
     </div>
   </form>
-  <div class="text-center small help-text" *ngIf="modificationForm.controls.fanType.disabled">
+  <div class="text-center small help-text" *ngIf="modificationForm.controls.fanType.value == 12">
     The efficiency of your fan has been calculated based on your system setup. Either directly modify your
     efficiency or click <strong>"Optimize Fan"</strong> to estimate your pump efficiency based on a different pump type.
   </div>
-  <div class="text-center small help-text" *ngIf="modificationForm.controls.fanEfficiency.disabled">
+  <div class="text-center small help-text" *ngIf="modificationForm.controls.fanType.value != 12">
     The efficiency of your fan has been calculated based on your selected <strong>fan
       type</strong>. Click <strong>"Known Efficiency"</strong>
     to use the efficiency calculated by your system setup.

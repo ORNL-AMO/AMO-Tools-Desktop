@@ -21,11 +21,14 @@
         <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()" *ngIf="psatForm.controls.pumpType.value != 11">Use
           Baseline Efficiency</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" *ngIf="psatForm.controls.pumpType.value == 11">
         <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" max="100" class="form-control"
           formControlName="specifiedPumpEfficiency" id="{{'specifiedPumpEfficiency_'+idString}}" onfocus="this.select();"
           (input)="save()" (focus)="focusField('specifiedPumpEfficiency')">
         <span class="input-group-addon units">%</span>
+      </div>
+      <div class="small text-center" *ngIf="psatForm.controls.pumpType.value != 11">
+        {{psatForm.controls.specifiedPumpEfficiency.value | number:'1.0-2'}} %
       </div>
       <span class="alert-danger pull-right small" *ngIf="psatForm.controls.specifiedPumpEfficiency.invalid && !psatForm.controls.specifiedPumpEfficiency.pristine">
         <span *ngIf="psatForm.controls.specifiedPumpEfficiency.errors.required">Value Required</span>
