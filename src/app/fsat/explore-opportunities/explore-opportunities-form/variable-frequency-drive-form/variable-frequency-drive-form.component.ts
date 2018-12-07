@@ -2,10 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FanFieldDataWarnings } from '../../../fsat-warning.service';
 import { FSAT } from '../../../../shared/models/fans';
-import { Settings } from 'electron';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-variable-frequency-drive-form',
