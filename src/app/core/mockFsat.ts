@@ -78,8 +78,7 @@ export const MockFsat: Assessment = {
                         efficiencyClass: 1,
                         specifiedEfficiency: 100,
                         motorRatedVoltage: 460,
-                        fullLoadAmps: 683.25,
-                        sizeMargin: 0,
+                        fullLoadAmps: 683.25
                     },
                     fanSetup: {
                         fanType: 12,
@@ -138,8 +137,7 @@ export const MockFsat: Assessment = {
                         efficiencyClass: 1,
                         specifiedEfficiency: 100,
                         motorRatedVoltage: 460,
-                        fullLoadAmps: 683.25,
-                        sizeMargin: null
+                        fullLoadAmps: 683.25
                     },
                     fanSetup: {
                         fanType: 12,
@@ -255,8 +253,7 @@ export const MockFsat: Assessment = {
                         efficiencyClass: 1,
                         specifiedEfficiency: 100,
                         motorRatedVoltage: 460,
-                        fullLoadAmps: 683.25,
-                        sizeMargin: null
+                        fullLoadAmps: 683.25
                     },
                     fanSetup: {
                         fanType: 12,

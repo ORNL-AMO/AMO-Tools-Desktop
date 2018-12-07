@@ -82,20 +82,9 @@ export class PsatService {
     return tmpResults;
   }
 
-  // resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-  //   let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
-
-  //   //call addon resultsOptimal
-  //   let tmpResults: PsatOutputs = psatAddon.resultsOptimal(tmpInputs);
-  //   if (settings.powerMeasurement != 'hp') {
-  //     tmpResults = this.convertOutputs(tmpResults, settings);
-  //   }
-  //   tmpResults = this.roundResults(tmpResults);
-  //   return tmpResults
-  // }
-
   resultsModified(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     let tmpInputs: any = this.convertInputs(psatInputs, settings);
+    tmpInputs.margin = 1;
     let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);

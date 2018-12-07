@@ -134,9 +134,6 @@ export class InputSummaryComponent implements OnInit {
         if (mod.psat.inputs.motor_rated_fla != this.psat.inputs.motor_rated_fla) {
           this.flaDiff = true;
         }
-        // if (mod.psat.inputs.margin != this.psat.inputs.margin) {
-        //   this.marginDiff = true;
-        // }
         if (mod.psat.inputs.operating_hours != this.psat.inputs.operating_hours) {
           this.opFracDiff = true;
         }

@@ -435,24 +435,6 @@ export class CompareService {
       return false;
     }
   }
-  //margin
-  isMarginDifferent(baseline?: PSAT, modification?: PSAT) {
-    if (!baseline) {
-      baseline = this.baselinePSAT;
-    }
-    if (!modification) {
-      modification = this.modifiedPSAT;
-    }
-    if (baseline && modification) {
-      if (baseline.inputs.margin != modification.inputs.margin) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
   //operating hours
   isOperatingHoursDifferent(baseline?: PSAT, modification?: PSAT) {
     if (!baseline) {
