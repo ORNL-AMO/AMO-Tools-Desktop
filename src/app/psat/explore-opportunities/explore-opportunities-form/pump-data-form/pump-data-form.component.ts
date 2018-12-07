@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { PumpFluidService } from '../../../pump-fluid/pump-fluid.service';
@@ -35,7 +35,7 @@ export class PumpDataFormComponent implements OnInit {
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
   baselinePumpEfficiency: number;
-  constructor(private pumpFluidService: PumpFluidService, private psatService: PsatService) {
+  constructor(private pumpFluidService: PumpFluidService, private psatService: PsatService, private cd: ChangeDetectorRef) {
 
   }
 
@@ -74,15 +74,16 @@ export class PumpDataFormComponent implements OnInit {
   }
 
   initPumpType() {
-
     if (this.modificationForm.controls.pumpType.value == 11) {
-      this.modificationForm.controls.pumpType.disable();
+      this.cd.detectChanges();
       if (this.modificationForm.controls.specifiedPumpEfficiency.value != this.baselinePumpEfficiency) {
         this.showPumpType = true;
+      } else {
+        this.showPumpType = false;
       }
     } else {
       this.showPumpType = true;
-      this.modificationForm.controls.specifiedPumpEfficiency.disable();
+      this.cd.detectChanges();
     }
   }
 
@@ -115,9 +116,7 @@ export class PumpDataFormComponent implements OnInit {
 
   disablePumpType() {
     this.modificationForm.controls.specifiedPumpEfficiency.patchValue(this.baselinePumpEfficiency);
-    this.modificationForm.controls.specifiedPumpEfficiency.enable();
     this.modificationForm.controls.pumpType.patchValue(11);
-    this.modificationForm.controls.pumpType.disable();
     this.calculate();
   }
 
@@ -125,7 +124,6 @@ export class PumpDataFormComponent implements OnInit {
   getPumpEfficiency() {
     let tmpEfficiency: number = this.psatService.pumpEfficiency(this.modificationForm.controls.pumpType.value, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings).max;
     this.modificationForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency);
-    this.modificationForm.controls.specifiedPumpEfficiency.disable();
     this.calculate();
   }
 
