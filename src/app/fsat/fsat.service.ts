@@ -120,7 +120,7 @@ export class FsatService {
       specifiedEfficiency: fsat.fanMotor.specifiedEfficiency,
       motorRatedVoltage: fsat.fanMotor.motorRatedVoltage,
       fullLoadAmps: fsat.fanMotor.fullLoadAmps,
-      sizeMargin: fsat.fanMotor.sizeMargin | 0,
+      sizeMargin: 1,
       measuredVoltage: fsat.fieldData.measuredVoltage,
       //???????
       measuredAmps: fsat.fieldData.motorPower,
