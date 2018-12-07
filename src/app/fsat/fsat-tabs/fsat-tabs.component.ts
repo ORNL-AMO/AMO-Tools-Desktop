@@ -106,7 +106,7 @@ export class FsatTabsComponent implements OnInit {
 
   changeStepTab(str: string) {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
-    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, true);
+    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
     if (str == 'fan-setup') {
       if (fluidValid) {
@@ -158,7 +158,7 @@ export class FsatTabsComponent implements OnInit {
 
   checkFanStatus() {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
-    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, true);
+    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let warnings: { fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.fsat.fanSetup);
     let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(warnings);
     if (!fluidValid) {
@@ -177,7 +177,7 @@ export class FsatTabsComponent implements OnInit {
 
   checkMotorStatus() {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
-    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, true);
+    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
     let motorWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings);
     let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(motorWarnings);
@@ -197,7 +197,7 @@ export class FsatTabsComponent implements OnInit {
 
   checkFieldDataSatus() {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
-    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, true);
+    let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
     let fieldDataValid: boolean = this.fanFieldDataService.isFanFieldDataValid(this.fsat.fieldData);
     let fieldDataWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings);

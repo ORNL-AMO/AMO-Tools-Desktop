@@ -387,7 +387,7 @@ export class FsatComponent implements OnInit {
         return false;
       }
     } else if (this.stepTab == 'fan-setup') {
-      let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup, true);
+      let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup, false);
       if (isValid) {
         return true;
       } else {
