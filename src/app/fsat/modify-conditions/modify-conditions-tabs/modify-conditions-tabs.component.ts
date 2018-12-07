@@ -107,14 +107,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   checkFieldDataWarnings() {
     let hasWarning: boolean = false;
-    let baselineWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.baselineFSAT, this.settings);
+    let baselineWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.baselineFSAT, this.settings, false);
     for (var key in baselineWarnings) {
       if (baselineWarnings[key] !== null) {
         hasWarning = true;
       }
     }
     if (this.compareService.modifiedFSAT && !hasWarning) {
-      let modifiedWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.modifiedFSAT, this.settings);
+      let modifiedWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.modifiedFSAT, this.settings, true);
       for (var key in modifiedWarnings) {
         if (modifiedWarnings[key] !== null) {
           hasWarning = true;

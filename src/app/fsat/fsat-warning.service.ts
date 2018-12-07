@@ -10,19 +10,12 @@ export class FsatWarningService {
 
   constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private fsatService: FsatService) { }
 
-  checkFieldDataWarnings(fsat: FSAT, settings: Settings): FanFieldDataWarnings {
-    let isMod: boolean;
-    if (fsat.modifications !== undefined && fsat.modifications !== null) {
-      isMod = false;
-    }
-    else {
-      isMod = true;
-    }
+  checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
     return {
       // flowRateError: this.checkFlowRate(fsat),
       costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
-      ratedPowerError: this.checkRatedPower(fsat, settings, isMod),
+      ratedPowerError: this.checkRatedPower(fsat, settings, isModification),
       outletPressureError: this.checkOutletPressure(fsat),
       //specificHeatRatioError: this.checkSpecificHeatRatio(fsat)
     }
