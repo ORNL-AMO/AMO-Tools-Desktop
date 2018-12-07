@@ -24,9 +24,8 @@ export const MockPsat: Assessment = {
             efficiency_class: 0,
             efficiency: 95,
             motor_rated_voltage: 460,
-            load_estimation_method: 1,
-            motor_rated_fla: 172.64,
-            margin: 0,
+            load_estimation_method: 0,
+            motor_rated_fla: 228.57,
             operating_hours: 8760,
             flow_rate: 2500,
             head: 137,
@@ -59,9 +58,8 @@ export const MockPsat: Assessment = {
                         efficiency_class: 2,
                         efficiency: 95,
                         motor_rated_voltage: 460,
-                        load_estimation_method: 1,
-                        motor_rated_fla: 168.61,
-                        margin: 0,
+                        load_estimation_method: 0,
+                        motor_rated_fla: 224,
                         operating_hours: 8760,
                         flow_rate: 2499.99,
                         head: 137.01,
@@ -116,9 +114,8 @@ export const MockPsat: Assessment = {
                         efficiency_class: 0,
                         efficiency: 95,
                         motor_rated_voltage: 460,
-                        load_estimation_method: 1,
-                        motor_rated_fla: 172.63,
-                        margin: 0,
+                        load_estimation_method: 0,
+                        motor_rated_fla: 228.57,
                         operating_hours: 8760,
                         flow_rate: 842,
                         head: 63,
@@ -173,9 +170,14 @@ export const MockPsat: Assessment = {
                         efficiency_class: 0,
                         efficiency: 95,
                         motor_rated_voltage: 460,
+<<<<<<< HEAD
                         load_estimation_method: 1,
                         motor_rated_fla: 172.63,
                         margin: 0,
+=======
+                        load_estimation_method: 0,
+                        motor_rated_fla: 228.57,
+>>>>>>> develop
                         operating_hours: 8760,
                         flow_rate: 1475,
                         head: 50,
@@ -212,6 +214,49 @@ export const MockPsat: Assessment = {
                     fieldDataNotes: ''
                 }
             },
+<<<<<<< HEAD
+=======
+            {
+                notes: {
+                    systemBasicsNotes: '',
+                    pumpFluidNotes: '',
+                    motorNotes: '',
+                    fieldDataNotes: ''
+                },
+                psat: {
+                    inputs: {
+                        pump_style: 11,
+                        pump_specified: 85.2,
+                        pump_rated_speed: 1780,
+                        drive: 0,
+                        kinematic_viscosity: 1.107,
+                        specific_gravity: 1.002,
+                        stages: 2,
+                        fixed_speed: 0,
+                        line_frequency: 50,
+                        motor_rated_power: 200,
+                        motor_rated_speed: 1780,
+                        efficiency_class: 0,
+                        efficiency: 93,
+                        motor_rated_voltage: 460,
+                        load_estimation_method: 0,
+                        motor_rated_fla: 225,
+                        operating_hours: 8760,
+                        flow_rate: 1840,
+                        head: 174.85,
+                        motor_field_power: 80,
+                        motor_field_current: null,
+                        motor_field_voltage: 480,
+                        cost_kw_hour: 0.05,
+                        cost: 0.05,
+                        fluidType: "Water",
+                        fluidTemperature: 68
+                    },
+                    name: "Opportunities Modification"
+                },
+                exploreOpportunities: true
+            }
+>>>>>>> develop
         ]
     },
     selected: false,

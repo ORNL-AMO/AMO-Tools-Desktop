@@ -86,8 +86,124 @@ export const MockFsat: Assessment = {
                         fanType: 0,
                         fanSpeed: 1180,
                         drive: 1,
-                        fanEfficiency: 75.66,
-                        specifiedDriveEfficiency: 100
+                        fanEfficiency: 63.38,
+                    },
+                    fieldData: {
+                        operatingHours: 8760,
+                        flowRate: 86461,
+                        inletPressure: -19.19,
+                        outletPressure: 1.29,
+                        loadEstimatedMethod: 0,
+                        motorPower: 450,
+                        cost: 0.06,
+                        specificHeatRatio: 1.4,
+                        compressibilityFactor: 0.988,
+                        measuredVoltage: 460,
+                        
+                    },
+                    implementationCosts: null,
+                    notes: {
+                        fieldDataNotes:"",
+                        fanMotorNotes:"",
+                        fanSetupNotes:"",
+                        fluidNotes:""
+                    },
+                },
+                notes: {
+                    fieldDataNotes: "",
+                    fanMotorNotes: "",
+                    fanSetupNotes: "",
+                    fluidNotes: ""
+                },
+            },
+            {
+                fsat: {
+                    name: "Optimize",
+                    baseGasDensity: {
+                        inputType: "custom",
+                        gasType: "AIR",
+                                    dryBulbTemp: null,
+                        staticPressure: null,
+                        barometricPressure: 29.36,
+                        specificGravity: 1,
+                        wetBulbTemp: 119,
+                        relativeHumidity: 0,
+                        dewPoint: 0,
+                        gasDensity: 0.0308,
+                        specificHeatGas: 0.24
+                    },
+                    fanMotor: {
+                        lineFrequency: 60,
+                        motorRatedPower: 600,
+                        motorRpm: 1180,
+                        efficiencyClass: 1,
+                        specifiedEfficiency: 100,
+                        motorRatedVoltage: 460,
+                        fullLoadAmps: 683.25
+                    },
+                    fanSetup: {
+                        fanType: 12,
+                        fanSpeed: 1180,
+                        drive: 1,
+                        fanEfficiency: 63.38,
+                    },
+                    fieldData: {
+                        operatingHours: 8760,
+                        flowRate: 129691,
+                        inletPressure: -16.36,
+                        outletPressure: 1.1,
+                        loadEstimatedMethod: 0,
+                        motorPower: 450,
+                        cost: 0.06,
+                        specificHeatRatio: 1.4,
+                        compressibilityFactor: 0.988,
+                        measuredVoltage: 460,
+                    },
+                    implementationCosts: null,
+                    notes: {
+                        fieldDataNotes:"",
+                        fanMotorNotes:"",
+                        fanSetupNotes:"",
+                        fluidNotes:""
+                    },
+                },
+                notes: {
+                    fieldDataNotes: "",
+                    fanMotorNotes: "",
+                    fanSetupNotes: "",
+                    fluidNotes: ""
+                }
+            },
+            {
+                fsat: {
+                    name: "Motor Belt Drive",
+                    baseGasDensity: {
+                        inputType: "custom",
+                        gasType: "AIR",
+                                    dryBulbTemp: null,
+                        staticPressure: null,
+                        barometricPressure: 29.36,
+                        specificGravity: 1,
+                        wetBulbTemp: 119,
+                        relativeHumidity: 0,
+                        dewPoint: 0,
+                        gasDensity: 0.0308,
+                        specificHeatGas: 0.24,
+                    },
+                    fanMotor: {
+                        lineFrequency: 60,
+                        motorRatedPower: 600,
+                        motorRpm: 1180,
+                        efficiencyClass: 1,
+                        specifiedEfficiency: 100,
+                        motorRatedVoltage: 460,
+                        fullLoadAmps: 683.25,
+                    },
+                    fanSetup: {
+                        fanType: 12,
+                        fanSpeed: 1180,
+                        drive: 0,
+                        fanEfficiency: 63.38,
                     },
                     fieldData: {
                         operatingHours: 8760,

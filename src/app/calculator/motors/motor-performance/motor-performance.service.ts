@@ -15,7 +15,7 @@ export class MotorPerformanceService {
       efficiencyClass: [psat.inputs.efficiency_class, [Validators.required]],
       motorVoltage: [psat.inputs.motor_rated_voltage, [Validators.required]],
       fullLoadAmps: [psat.inputs.motor_rated_fla, [Validators.required]],
-      sizeMargin: [psat.inputs.margin, [Validators.required]],
+      sizeMargin: [1, [Validators.required]],
       efficiency: [psat.inputs.efficiency, [Validators.min(0), Validators.max(100)]]
     });
   }
@@ -41,7 +41,7 @@ export class MotorPerformanceService {
       efficiencyClass: [inputs.efficiencyClass, [Validators.required]],
       motorVoltage: [inputs.motorVoltage, [Validators.required]],
       fullLoadAmps: [inputs.fullLoadAmps, [Validators.required]],
-      sizeMargin: [inputs.sizeMargin, [Validators.required]],
+      sizeMargin: [1, [Validators.required]],
       efficiency: [inputs.efficiency, [Validators.min(0), Validators.max(100)]]
     })
   }

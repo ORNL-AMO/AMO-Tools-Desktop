@@ -66,13 +66,11 @@ export class FanDataFormComponent implements OnInit {
 
   initFanType() {
     if (this.modificationForm.controls.fanType.value == 12) {
-      this.modificationForm.controls.fanType.disable();
       if (this.modificationForm.controls.fanEfficiency.value != this.baselineFanEfficiency) {
         this.showFanType = true;
       }
     } else {
       this.showFanType = true;
-      this.modificationForm.controls.fanEfficiency.disable();
     }
   }
 
@@ -100,15 +98,12 @@ export class FanDataFormComponent implements OnInit {
 
   enableFanType() {
     this.modificationForm.controls.fanType.patchValue(this.baselineForm.controls.fanType.value);
-    this.modificationForm.controls.fanType.enable();
     this.getFanEfficiency();
   }
 
   disableFanType() {
     this.modificationForm.controls.fanEfficiency.patchValue(this.baselineFanEfficiency);
-    this.modificationForm.controls.fanEfficiency.enable();
     this.modificationForm.controls.fanType.patchValue(12);
-    this.modificationForm.controls.fanType.disable();
     this.calculate();
   }
 
@@ -124,7 +119,6 @@ export class FanDataFormComponent implements OnInit {
     let tmpEfficiency: number = this.fsatService.optimalFanEfficiency(inputs, this.settings);
     tmpEfficiency = this.convertUnitsService.roundVal(tmpEfficiency, 2);
     this.modificationForm.controls.fanEfficiency.patchValue(tmpEfficiency);
-    this.modificationForm.controls.fanEfficiency.disable();
     this.calculate();
   }
 

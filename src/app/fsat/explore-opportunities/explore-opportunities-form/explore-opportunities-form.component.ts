@@ -40,10 +40,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
   bodyHeight: number;
 
-
-
-  showSizeMargin: boolean;
-
   baselineFieldDataForm: FormGroup;
   modificationFieldDataForm: FormGroup;
 

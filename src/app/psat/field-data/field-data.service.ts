@@ -12,7 +12,6 @@ export class FieldDataService {
     let motorKwValidators: Array<ValidatorFn> = [];
     let motorAmpsValidators: Array<ValidatorFn> = [];
     let measuredVoltageValidators: Array<ValidatorFn> = [];
-    let sizeMarginValidators: Array<ValidatorFn> = [];
     if (isBaseline) {
       loadEstimationMethodValidators = [Validators.required];
       measuredVoltageValidators = [Validators.required];
@@ -21,11 +20,9 @@ export class FieldDataService {
       } else if (psatInputs.load_estimation_method == 1) {
         motorAmpsValidators = [Validators.required]
       }
-    } else {
-      sizeMarginValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
     //TODO: remove eventually. this is here for support in removing operating_fraction from suite v0.3.2
-    if(!psatInputs.operating_hours && psatInputs.operating_fraction){
+    if (!psatInputs.operating_hours && psatInputs.operating_fraction) {
       psatInputs.operating_hours = psatInputs.operating_fraction * 8760;
     }
 
@@ -38,7 +35,6 @@ export class FieldDataService {
       motorKW: [psatInputs.motor_field_power, motorKwValidators],
       motorAmps: [psatInputs.motor_field_current, motorAmpsValidators],
       measuredVoltage: [psatInputs.motor_field_voltage, measuredVoltageValidators],
-      sizeMargin: [psatInputs.margin, sizeMarginValidators],
       implementationCosts: [psatInputs.cost]
     });
     for (let key in form.controls) {
@@ -59,7 +55,6 @@ export class FieldDataService {
     psatInputs.motor_field_power = form.controls.motorKW.value;
     psatInputs.motor_field_current = form.controls.motorAmps.value;
     psatInputs.motor_field_voltage = form.controls.measuredVoltage.value;
-    psatInputs.margin = form.controls.sizeMargin.value;
     psatInputs.implementationCosts = form.controls.implementationCosts.value;
     return psatInputs;
 

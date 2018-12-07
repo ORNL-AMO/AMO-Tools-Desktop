@@ -129,28 +129,6 @@
     </div>
   </div>
   <div class="pl-3 pr-3" *ngIf="!baseline">
-    <!-- <div class="form-group opt-group">
-      <label>
-        <span *ngIf="!psatForm.controls.optimizeCalculation.value" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
-        <span *ngIf="psatForm.controls.optimizeCalculation.value" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
-        Optimize Pump and Motor combination for a Fixed Specific Speed</label>
-    </div> -->
-    <div class="form-group" [ngClass]="{'invalid': psatForm.controls.sizeMargin.invalid}">
-      <label for="{{'sizeMargin_'+idString}}">Size Margin</label>
-      <div class="input-group">
-        <input [readonly]="!selected" name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control"
-          id="{{'sizeMargin_'+idString}}" formControlName="sizeMargin" (input)="save()" (focus)="focusField('sizeMargin')"
-          onfocus="this.select();">
-        <span class="input-group-addon units">%</span>
-      </div>
-      <span class="alert-danger pull-right small" *ngIf="psatForm.controls.sizeMargin.invalid && !psatForm.controls.sizeMargin.pristine">
-        <span *ngIf="psatForm.controls.sizeMargin.errors.required">Value Required</span>
-        <span *ngIf="psatForm.controls.sizeMargin.errors.max">Value can't be greater than
-          {{psatForm.controls.sizeMargin.errors.max.max}} %.</span>
-        <span *ngIf="psatForm.controls.sizeMargin.errors.min">Value can't be less than
-          {{psatForm.controls.sizeMargin.errors.min.min}} %.</span>
-      </span>
-    </div>
     <div class="form-group">
       <label for="{{'implementationCosts_'+idString}}">Implementation Costs</label>
       <div class="input-group">

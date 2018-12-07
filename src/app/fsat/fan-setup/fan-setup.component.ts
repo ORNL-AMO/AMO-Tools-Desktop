@@ -97,9 +97,6 @@ export class FanSetupComponent implements OnInit {
       this.fanSetup.specifiedDriveEfficiency = this.fanSetup.specifiedDriveEfficiency || 100;
     }
     this.fanForm = this.fanSetupService.getFormFromObj(this.fanSetup, !this.baseline);
-    if (this.fanForm.controls.fanType.value != 12) {
-      this.fanForm.controls.fanEfficiency.disable();
-    }
     this.checkForWarnings();
   }
   disableForm() {
@@ -113,9 +110,6 @@ export class FanSetupComponent implements OnInit {
   enableForm() {
     this.fanForm.controls.fanType.enable();
     this.fanForm.controls.drive.enable();
-    if (this.fanForm.controls.fanType.value != 12) {
-      this.fanForm.controls.fanEfficiency.disable();
-    }
   }
 
   focusField(str: string) {
@@ -175,16 +169,13 @@ export class FanSetupComponent implements OnInit {
     let calculatedEfficiency: number = this.fsatService.getResults(this.compareService.baselineFSAT, true, this.settings).fanEfficiency;
     calculatedEfficiency = this.convertUnitsService.roundVal(calculatedEfficiency, 2);
     this.fanForm.controls.fanEfficiency.patchValue(calculatedEfficiency);
-    this.fanForm.controls.fanEfficiency.enable();
     this.fanForm.controls.fanType.patchValue(12);
-    this.fanForm.controls.fanType.disable();
     this.save();
   }
 
   getFanEfficiency() {
     let tmpEfficiency: number = this.calcFanEfficiency();
     this.fanForm.controls.fanEfficiency.patchValue(tmpEfficiency);
-    this.fanForm.controls.fanEfficiency.disable();
     this.save();
   }
 

@@ -15,8 +15,8 @@
 
     <div *ngIf="fanForm.controls.fanType.value != 12 && condenseDropDown" class="form-group" [ngClass]="{'indicate-different': isFanTypeDifferent()}">
       <label for="{{'fanType_'+idString}}">Fan Type</label>
-      <select size="4" class="form-control" name="fanType" formControlName="fanType" id="{{'fanType_'+idString}}" (change)="getFanEfficiency()"
-        (focus)="focusField('fanType')">
+      <select size="4" class="form-control" name="fanType" formControlName="fanType" id="{{'fanType_'+idString}}"
+        (change)="getFanEfficiency()" (focus)="focusField('fanType')">
         <option *ngFor="let fanType of fanTypes" [ngValue]="fanType.value">{{fanType.display}}</option>
       </select>
     </div>
@@ -29,11 +29,14 @@
         <a class="form-text small click-link" id="fanTypeHelp" (click)="disableFanType()" *ngIf="fanForm.controls.fanType.value != 12">Use
           Baseline Efficiency</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" *ngIf="fanForm.controls.fanType.value == 12">
         <input [readonly]="!selected" name="fanEfficiency" type="number" min="0" step="any" max="100" class="form-control"
           formControlName="fanEfficiency" id="{{'fanEfficiency_'+idString}}" onfocus="this.select();" (input)="save()"
           (focus)="focusField('fanEfficiency')">
         <span class="input-group-addon units">%</span>
+      </div>
+      <div class="small text-center" *ngIf="fanForm.controls.fanType.value != 12">
+        {{fanForm.controls.fanEfficiency.value | number:'1.0-2'}} %
       </div>
       <span class="alert-danger pull-right small" *ngIf="fanForm.controls.fanEfficiency.invalid && !fanForm.controls.fanEfficiency.pristine">
         <span *ngIf="fanForm.controls.fanEfficiency.errors.required">Value Required</span>

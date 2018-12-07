@@ -85,7 +85,7 @@
   <!--Modification Pump Type-->
   <form [formGroup]="modificationForm">
     <!--pumpType-->
-    <div class="form-group" *ngIf="!modificationForm.controls.pumpType.disabled">
+    <div class="form-group" *ngIf="modificationForm.controls.pumpType.value != 11">
       <label for="modificationPumpType">Modification Pump Type</label>
       <select class="form-control" name="modificationPumpType" id="modificationPumpType" (change)="setPumpTypes()"
         (focus)="focusField('pumpType')" formControlName="pumpType">
@@ -95,13 +95,18 @@
     <!--specifiedPumpEfficiency-->
     <div class="form-group" [ngClass]="{'invalid':modificationForm.controls.specifiedPumpEfficiency.invalid}">
       <label id="pumpTypeHelp" for="modificationPumpSpecifiedEfficiency">Modification Pump Efficiency
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enablePumpType()" *ngIf="modificationForm.controls.pumpType.disabled">Optimize Pump</a>
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()" *ngIf="modificationForm.controls.specifiedPumpEfficiency.disabled">Known Efficiency</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enablePumpType()" *ngIf="modificationForm.controls.pumpType.value == 11">Optimize
+          Pump</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()" *ngIf="modificationForm.controls.pumpType.value != 11">Known
+          Efficiency</a>
       </label>
-      <div class="input-group">
+      <div class="input-group" *ngIf="modificationForm.controls.pumpType.value == 11">
         <input name="modificationPumpSpecifiedEfficiency" type="number" step="any" id="modificationPumpSpecifiedEfficiency"
           class="form-control" (focus)="focusField('pumpSpecified')" (input)="calculate()" formControlName="specifiedPumpEfficiency" />
         <span class="input-group-addon units">%</span>
+      </div>
+      <div class="small text-center" *ngIf="modificationForm.controls.pumpType.value != 11">
+        {{modificationForm.controls.specifiedPumpEfficiency.value | number:'1.0-2'}} %
       </div>
       <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.specifiedPumpEfficiency.invalid && !modificationForm.controls.specifiedPumpEfficiency.pristine">
         <span *ngIf="modificationForm.controls.specifiedPumpEfficiency.errors.required">Value Required</span>
@@ -111,11 +116,12 @@
           {{modificationForm.controls.specifiedPumpEfficiency.errors.min.min}} %.</span>
       </span>
     </div>
-    <div class="text-center small help-text" *ngIf="modificationForm.controls.pumpType.disabled">
+    <div class="text-center small help-text" *ngIf="modificationForm.controls.pumpType.value == 11">
       The efficiency of your pump has been calculated based on your system setup. Either directly modify your
-      efficiency or click <strong>"Optimize Pump"</strong> to estimate your pump efficiency based on a different pump type.
+      efficiency or click <strong>"Optimize Pump"</strong> to estimate your pump efficiency based on a different pump
+      type.
     </div>
-    <div class="text-center small help-text" *ngIf="modificationForm.controls.specifiedPumpEfficiency.disabled">
+    <div class="text-center small help-text" *ngIf="modificationForm.controls.pumpType.value != 11">
       The efficiency of your pump has been calculated based on your <strong>flow rate</strong> and selected <strong>pump
         type</strong>. Click <strong>"Known Efficiency"</strong>
       to use the efficiency calculated by your system setup.
