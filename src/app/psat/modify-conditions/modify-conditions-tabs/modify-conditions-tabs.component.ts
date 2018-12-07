@@ -169,14 +169,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   checkMotorInputError() {
     let hasWarning: boolean = false;
-    let baselineMotorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.compareService.baselinePSAT, this.settings);
+    let baselineMotorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.compareService.baselinePSAT, this.settings, false);
     for (var key in baselineMotorWarnings) {
       if (baselineMotorWarnings[key] !== null) {
         hasWarning = true;
       }
     }
     if (this.compareService.modifiedPSAT && !hasWarning) {
-      let modifiedMotorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.compareService.modifiedPSAT, this.settings);
+      let modifiedMotorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.compareService.modifiedPSAT, this.settings, true);
       for (var key in modifiedMotorWarnings) {
         if (modifiedMotorWarnings[key] !== null) {
           hasWarning = true;

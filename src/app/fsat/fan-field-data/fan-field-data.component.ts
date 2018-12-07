@@ -155,7 +155,8 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   checkForWarnings() {
-    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings);
+    console.log('this.baseline = ' + this.baseline);
+    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, this.baseline);
   }
 
 

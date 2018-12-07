@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { FSAT, FanSetup, BaseGasDensity } from '../shared/models/fans';
+import { FSAT, FanSetup, BaseGasDensity, FsatOutput, FsatInput } from '../shared/models/fans';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PsatService } from '../psat/psat.service';
+import { FsatService } from './fsat.service';
 
 @Injectable()
 export class FsatWarningService {
 
-  constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private fsatService: FsatService) { }
 
-  checkFieldDataWarnings(fsat: FSAT, settings: Settings): FanFieldDataWarnings {
+  checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
     return {
       // flowRateError: this.checkFlowRate(fsat),
       costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
-      ratedPowerError: this.checkRatedPower(fsat, settings),
+      ratedPowerError: this.checkRatedPower(fsat, settings, isModification),
       outletPressureError: this.checkOutletPressure(fsat),
       //specificHeatRatioError: this.checkSpecificHeatRatio(fsat)
     }
@@ -71,7 +72,7 @@ export class FsatWarningService {
     }
   }
 
-  checkRatedPower(fsat: FSAT, settings: Settings) {
+  checkRatedPower(fsat: FSAT, settings: Settings, isModification: boolean) {
     let motorPowerStr: string;
     if (fsat.fieldData.loadEstimatedMethod == 0) {
       motorPowerStr = 'Motor Power';
@@ -91,10 +92,36 @@ export class FsatWarningService {
         let val, compare;
         if (settings.fanPowerMeasurement == 'hp') {
           val = this.convertUnitsService.value(tmpVal).from(settings.fanPowerMeasurement).to('kW');
-          compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
+          if (isModification) {
+            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification);
+            if (isModValid) {
+              let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
+              let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
+              compare = fsatOutput.motorPower;
+            }
+            else {
+              compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
+            }
+          }
+          else {
+            compare = this.convertUnitsService.value(fsat.fieldData.motorPower).from(settings.fanPowerMeasurement).to('kW');
+          }
         } else {
           val = tmpVal;
-          compare = fsat.fieldData.motorPower;
+          if (isModification) {
+            let isModValid: boolean = this.fsatService.checkValid(fsat, isModification);
+            if (isModValid) {
+              let fsatInput: FsatInput = this.fsatService.getInput(fsat, settings);
+              let fsatOutput: FsatOutput = this.fsatService.fanResultsModified(fsatInput);
+              compare = fsatOutput.motorPower;
+            }
+            else {
+              compare = fsat.fieldData.motorPower;
+            }
+          }
+          else {
+            compare = fsat.fieldData.motorPower;
+          }
         }
         val = val * 1.5;
         if (val < compare) {
@@ -119,7 +146,7 @@ export class FsatWarningService {
   }
 
   //MOTOR
-  checkMotorWarnings(fsat: FSAT, settings: Settings): FanMotorWarnings {
+  checkMotorWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanMotorWarnings {
     let efficiencyError: string = null;
     if (fsat.fanMotor.efficiencyClass == 3) {
       efficiencyError = this.checkEfficiency(fsat);
@@ -129,7 +156,7 @@ export class FsatWarningService {
       voltageError: this.checkMotorVoltage(fsat),
       flaError: this.checkFLA(fsat, settings),
       efficiencyError: efficiencyError,
-      ratedPowerError: this.checkRatedPower(fsat, settings)
+      ratedPowerError: this.checkRatedPower(fsat, settings, isModification)
     }
   }
 

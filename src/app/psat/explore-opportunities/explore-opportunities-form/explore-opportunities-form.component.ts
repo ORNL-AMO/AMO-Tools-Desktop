@@ -112,8 +112,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.baselineFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
     this.modificationFieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
 
-    this.baselineMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings);
-    this.modificationMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings);
+    this.baselineMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, false);
+    this.modificationMotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat.modifications[this.exploreModIndex].psat, this.settings, true);
   }
 
   addNewMod() {

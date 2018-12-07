@@ -179,7 +179,7 @@ export class FsatTabsComponent implements OnInit {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
     let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
-    let motorWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings);
+    let motorWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings, false);
     let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(motorWarnings);
     if (!fluidValid || !fanValid) {
       this.motorClassStatus = ['disabled'];
@@ -200,7 +200,7 @@ export class FsatTabsComponent implements OnInit {
     let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
     let fieldDataValid: boolean = this.fanFieldDataService.isFanFieldDataValid(this.fsat.fieldData);
-    let fieldDataWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings);
+    let fieldDataWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, false);
     let checkWarnings: boolean = this.fsatWarningService.checkWarningsExist(fieldDataWarnings);
     if (!fluidValid || !motorValid || !fanValid) {
       this.fieldDataClassStatus = ['disabled'];
