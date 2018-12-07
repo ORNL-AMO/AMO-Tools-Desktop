@@ -99,8 +99,8 @@ export class CoreComponent implements OnInit {
       this.indexedDbService.getAllDirectories().then(val => {
         if (val.length == 0) {
           this.coreService.createDirectory().then(() => {
-            this.coreService.createDirectorySettings().then(() => {
-              this.coreService.createExamples().then(() => {
+            this.coreService.createExamples().then(() => {
+              this.coreService.createDirectorySettings().then(() => {
                 this.setAllDbData();
               });
             });

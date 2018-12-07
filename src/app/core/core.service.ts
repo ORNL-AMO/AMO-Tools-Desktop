@@ -5,24 +5,38 @@ import { Settings } from '../shared/models/settings';
 declare const packageJson;
 import { MockPhast, MockPhastSettings } from './mockPhast';
 import { MockPsat, MockPsatCalculator, MockPsatSettings } from './mockPsat';
-import { MockFsat, MockFsatSettings} from './mockFsat';
+import { MockFsat, MockFsatSettings, MockFsatCalculator } from './mockFsat';
 
 @Injectable()
 export class CoreService {
 
+  exampleDirectoryId: number;
+  examplePhastId: number;
+  examplePsatId: number;
+  exampleFsatId: number;
   constructor(private indexedDbService: IndexedDbService) { }
 
   createExamples(): Promise<any> {
     return new Promise((resolve, reject) => {
-      MockPhast.directoryId = 2;
-      this.indexedDbService.addAssessment(MockPhast).then(() => {
-        MockPsat.directoryId = 2;
-        this.indexedDbService.addAssessment(MockPsat).then(() => {
-          MockPsatCalculator.assessmentId = 2;
+      MockPhast.directoryId = this.exampleDirectoryId;
+      this.indexedDbService.addAssessment(MockPhast).then(phastId => {
+        
+        this.examplePhastId = phastId;
+        MockPsat.directoryId = this.exampleDirectoryId;
+        this.indexedDbService.addAssessment(MockPsat).then(psatId => {
+          
+          this.examplePsatId = psatId;
+          MockPsatCalculator.assessmentId = this.examplePsatId;
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
-            MockFsat.directoryId = 2;
-            this.indexedDbService.addAssessment(MockFsat).then(() => {
-              resolve(true);
+          
+            MockFsat.directoryId = this.exampleDirectoryId;
+            this.indexedDbService.addAssessment(MockFsat).then(fsatId => {
+              this.exampleFsatId = fsatId;
+              MockFsatCalculator.assessmentId = fsatId;
+              this.indexedDbService.addCalculator(MockFsatCalculator).then(() => {
+          
+                resolve(true);
+              });
             });
           });
         });
@@ -36,16 +50,20 @@ export class CoreService {
       tmpSettings.directoryId = 1;
       delete tmpSettings.facilityInfo;
       this.indexedDbService.addSettings(tmpSettings).then(() => {
+
         MockPhastSettings.facilityInfo.date = new Date().toDateString();
-        MockPhastSettings.directoryId = 2;
+        MockPhastSettings.directoryId = this.exampleDirectoryId;
         this.indexedDbService.addSettings(MockPhastSettings).then(() => {
+
           delete MockPhastSettings.directoryId;
-          MockPhastSettings.assessmentId = 1;
+          MockPhastSettings.assessmentId = this.examplePhastId;
           this.indexedDbService.addSettings(MockPhastSettings).then(() => {
-            MockPsatSettings.assessmentId = 2;
+
+            MockPsatSettings.assessmentId = this.examplePsatId;
             MockPsatSettings.facilityInfo.date = new Date().toDateString();
             this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-              MockFsatSettings.assessmentId = 3;
+            
+              MockFsatSettings.assessmentId = this.exampleFsatId;
               MockFsatSettings.facilityInfo.date = new Date().toDateString();
               this.indexedDbService.addSettings(MockFsatSettings).then(() => {
                 resolve(true);
@@ -70,7 +88,8 @@ export class CoreService {
           tmpDirectory.parentDirectoryId = results;
           tmpDirectory.name = 'Examples';
           tmpDirectory.isExample = true;
-          this.indexedDbService.addDirectory(tmpDirectory).then(() => {
+          this.indexedDbService.addDirectory(tmpDirectory).then(dirId => {
+            this.exampleDirectoryId = dirId;
             resolve(true);
           })
         })
