@@ -148,18 +148,12 @@ export class SystemCurveService {
 
     for (var i = 0; i <= x.domain()[1]; i += increment) {
       var head = staticHead + lossCoefficient * Math.pow(i, curveConstants.form.controls.systemLossExponent.value);
-      // if (head > y.domain()[1]) {
-      //   console.log('head > y.domain()[1]');
-      //   console.log('setting y.domain to =');
-      //   console.log((head + (head / 9)));
-      //   y.domain([0, (head + (head / 9))]);
-      // }
       if (head >= 0) {
         let tmpFluidPower: number;
         if (isFan) {
-          tmpFluidPower = this.getFanFluidPower(staticHead, i, curveConstants.form.controls.specificGravity.value);
+          tmpFluidPower = this.getFanFluidPower(head, i, curveConstants.form.controls.specificGravity.value);
         } else {
-          tmpFluidPower = this.getPumpFluidPower(staticHead, i, curveConstants.form.controls.specificGravity.value);
+          tmpFluidPower = this.getPumpFluidPower(head, i, curveConstants.form.controls.specificGravity.value);
         }
         if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
@@ -183,9 +177,9 @@ export class SystemCurveService {
     if (head >= 0) {
       let tmpFluidPower: number;
       if (isFan) {
-        tmpFluidPower = this.getFanFluidPower(staticHead, x.domain()[1], curveConstants.form.controls.specificGravity.value);
+        tmpFluidPower = this.getFanFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value);
       } else {
-        tmpFluidPower = this.getPumpFluidPower(staticHead, x.domain()[1], curveConstants.form.controls.specificGravity.value);;
+        tmpFluidPower = this.getPumpFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value);;
       }
       if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);

@@ -8,6 +8,16 @@
   </h5>
   <hr class="my-1 hr-spacer">
 
+  <div class="my-2" *ngIf="psat.modifications.length == 0 || psat.modifications === undefined || psat.modifications === null">
+    <h6>
+      <small class="text-muted">
+        First determine if your pump’s operating conditions (head, flow) are correct for your system needs. If they are
+        not, consider the effects of changing your pump’s operating conditions to meet demand, using your manufacturers
+        pump curve. Your pumping system can also be modified by improving pump or motor efficiency, or drive type.
+      </small>
+    </h6>
+  </div>
+
 
   <div class="my-2" *ngIf="currentField == 'systemData'">
     <h6>
@@ -54,7 +64,8 @@
         Flow Rate represents either the
         <u>measured</u> or
         <u>required</u> rate of flow.
-        <br> The Flow Rate value is used by the software to calculate the fluid power and to estimate the optimal pump operating
+        <br> The Flow Rate value is used by the software to calculate the fluid power and to estimate the optimal pump
+        operating
         efficiency.
         <hr>
       </small>
@@ -132,7 +143,8 @@
       Efficiency Class
       <br>
       <small class="text-muted">
-        Efficiency Class is the classification of efficiency given to motor. This can be found either on the nameplate or based on
+        Efficiency Class is the classification of efficiency given to motor. This can be found either on the nameplate
+        or based on
         how the motor compares with the NEMA MG 1-2003.
         <hr> Efficiency Class options include
         <u>
@@ -157,9 +169,12 @@
       Motor Efficiency
       <br>
       <small class="text-muted">
-        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it consumes
-        to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric motor
-        efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
+        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power
+        it consumes
+        to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric
+        motor
+        efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality,
+        and
         operating conditions. Enter this value as a percentage.
         <hr>
       </small>
@@ -197,7 +212,8 @@
       Operating Fraction
       <br>
       <small class="text-muted">
-        Operating Fraction represents the fraction of calender hours the equipment is running. It is used in calculating the annual
+        Operating Fraction represents the fraction of calender hours the equipment is running. It is used in
+        calculating the annual
         cost results.
         <hr>
       </small>
@@ -224,8 +240,10 @@
       Pump Type
       <br>
       <small class="text-muted">
-        Pump Type represents what style of pump is being used based off of the listings in the standard ANSI/HI 1.3-2000.
-        <br> This value will be used to estimate achievable pump efficiencies based on pump style and operating conditions.
+        Pump Type represents what style of pump is being used based off of the listings in the standard ANSI/HI
+        1.3-2000.
+        <br> This value will be used to estimate achievable pump efficiencies based on pump style and operating
+        conditions.
         <hr>
       </small>
     </h6>
@@ -282,10 +300,14 @@
       Drive
       <br>
       <small class="text-muted">
-        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or belt-driven. There
-        are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt drives
-        are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient belts.
-        <br> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be used if
+        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or
+        belt-driven. There
+        are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt
+        drives
+        are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient
+        belts.
+        <br> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be
+        used if
         adjustable frequency drives are used.
         <hr> Drive options include
         <u>Direct Drive</u>,
@@ -296,14 +318,15 @@
     </h6>
   </div>
 
-  
+
   <div class="my-2" *ngIf="currentField == 'pumpSpecified'">
     <h6>
       Pump Specified
       <br>
       <small class="text-muted">
         The specified pump efficiency input should only be used when the pump style is "Selected optimal eff (below)".
-        <br> The input value would normally be the pump efficiency at the specified operating conditions (under the Field data
+        <br> The input value would normally be the pump efficiency at the specified operating conditions (under the
+        Field data
         section), as opposed to the best efficiency point flow rate.
         <hr>
       </small>
@@ -330,11 +353,14 @@
       Optimization
       <br>
       <small class="text-muted">
-        This enables the tool to replace the modified condition with the estimate of the top of the line, commercially available
+        This enables the tool to replace the modified condition with the estimate of the top of the line, commercially
+        available
         equipment (pump and motor) performance for the input parameters.
-        <br> The optimal pump is estimated based on the efficiency estimating algorithms contained in Hydraulic Institute Standard
+        <br> The optimal pump is estimated based on the efficiency estimating algorithms contained in Hydraulic
+        Institute Standard
         HI 1.3-2000, Centrifugal Pump Design and Application and the calculated fluid power.
-        <br> The optimal motor is based on the specified flow rate, head, and specific gravity values, along with the HI 1.3
+        <br> The optimal motor is based on the specified flow rate, head, and specific gravity values, along with the
+        HI 1.3
         achievable efficiency algorithms.
       </small>
     </h6>
@@ -347,7 +373,8 @@
       <br>
       <small class="text-muted">
         Kinematic Viscosity is the viscosity of the fluid being pumped, in centistokes.
-        <br> This is used, in conjunction with algorithms from ANSI/HI 1.3-2000 to estimate reductions in achievable efficiency
+        <br> This is used, in conjunction with algorithms from ANSI/HI 1.3-2000 to estimate reductions in achievable
+        efficiency
         associated with elevated fluid viscosity. This value can be found through fluid property tables.
         <hr>
       </small>
@@ -374,9 +401,11 @@
       Fixed Specific Speed
       <br>
       <small class="text-muted">
-        The Fixed specific speed switch allows the user to specify whether a specific speed penalty that is a part of the HI achievable
+        The Fixed specific speed switch allows the user to specify whether a specific speed penalty that is a part of
+        the HI achievable
         efficiency algorithm sequence, is actually imposed.
-        <br> Generally speaking, it is more conservative to select YES. If, however, the basic pump design can be changed (such
+        <br> Generally speaking, it is more conservative to select YES. If, however, the basic pump design can be
+        changed (such
         as number of stages adjusted) in an effort to improve achievable efficiency, NO may be chosen.
         <hr> Fixed Specific Speed options include
         <u>

@@ -217,7 +217,7 @@ export class FsatService {
   }
 
   checkFanSetupValid(fsat: FSAT, isBaseline: boolean): boolean {
-    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup, isBaseline);
+    let fanSetupForm: FormGroup = this.fanSetupService.getFormFromObj(fsat.fanSetup, !isBaseline);
     return (fanSetupForm.status == 'VALID');
   }
 
@@ -256,6 +256,7 @@ export class FsatService {
       motorCurrent: 0,
       motorPower: 0,
       loadFactor: 0,
+      driveEfficiency: 0,
       annualEnergy: 0,
       annualCost: 0,
       fanEnergyIndex: 0,

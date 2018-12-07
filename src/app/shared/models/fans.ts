@@ -28,7 +28,7 @@ export interface Notes {
 //fsat Data
 export interface FieldData {
   //TODO: remove operatingFraction support
-  //removed from suit v0.3.2
+  //removed from suite v0.3.2
   operatingFraction?: number,
   operatingHours: number,
   cost: number,
@@ -288,6 +288,7 @@ export interface FsatOutput {
   motorCurrent: number,
   motorPower: number,
   loadFactor: number,
+  driveEfficiency: number,
   annualEnergy: number,
   annualCost: number,
   fanEnergyIndex: number,
