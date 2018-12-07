@@ -63,7 +63,7 @@ export class FanFieldDataComponent implements OnInit {
   constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
-    if (!this.baseline) {
+    if (this.baseline === false) {
       this.idString = 'fsat_modification_' + this.modificationIndex;
     }
     else {
@@ -155,9 +155,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   checkForWarnings() {
-    console.log('this.baseline = ' + this.baseline);
-    console.log(this.fsat);
-    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, this.baseline);
+    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, !this.baseline);
   }
 
   calculateCompressibility() {

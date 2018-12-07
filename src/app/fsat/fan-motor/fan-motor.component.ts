@@ -57,7 +57,7 @@ export class FanMotorComponent implements OnInit {
   constructor(private compareService: CompareService, private fanMotorService: FanMotorService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
-    if (!this.baseline) {
+    if (this.baseline === false) {
       this.idString = 'fsat_modification_' + this.modificationIndex;
     }
     else {
@@ -118,14 +118,7 @@ export class FanMotorComponent implements OnInit {
   }
 
   checkWarnings() {
-    let isMod: boolean;
-    if (this.fsat.modifications !== undefined && this.fsat.modifications !== null) {
-      isMod = false;
-    }
-    else {
-      isMod = true;
-    }
-    this.warnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings, isMod);
+    this.warnings = this.fsatWarningService.checkMotorWarnings(this.fsat, this.settings, !this.baseline);
   }
 
   calcFla(): number {

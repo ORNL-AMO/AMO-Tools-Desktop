@@ -177,7 +177,9 @@ export class AssessmentService {
       fanSetup: {
         fanType: 0,
         fanSpeed: 1180,
-        drive: 0
+        drive: 0,
+        fanEfficiency: null,
+        specifiedDriveEfficiency: null
       },
       baseGasDensity: {
         dryBulbTemp: null,

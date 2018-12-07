@@ -170,14 +170,8 @@ export const MockPsat: Assessment = {
                         efficiency_class: 0,
                         efficiency: 95,
                         motor_rated_voltage: 460,
-<<<<<<< HEAD
-                        load_estimation_method: 1,
-                        motor_rated_fla: 172.63,
-                        margin: 0,
-=======
                         load_estimation_method: 0,
                         motor_rated_fla: 228.57,
->>>>>>> develop
                         operating_hours: 8760,
                         flow_rate: 1475,
                         head: 50,
@@ -214,8 +208,6 @@ export const MockPsat: Assessment = {
                     fieldDataNotes: ''
                 }
             },
-<<<<<<< HEAD
-=======
             {
                 notes: {
                     systemBasicsNotes: '',
@@ -256,7 +248,6 @@ export const MockPsat: Assessment = {
                 },
                 exploreOpportunities: true
             }
->>>>>>> develop
         ]
     },
     selected: false,
