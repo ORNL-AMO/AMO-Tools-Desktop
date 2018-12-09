@@ -25,7 +25,9 @@ export class FanSetupService {
       specifiedDriveEfficiency: [obj.specifiedDriveEfficiency, specifiedDriveValidators]
     })
     for (let key in form.controls) {
-      form.controls[key].markAsDirty();
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
     }
     return form;
   }
@@ -35,7 +37,7 @@ export class FanSetupService {
       form.controls.fanEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.fanEfficiency.reset(form.controls.fanEfficiency.value);
       form.controls.fanEfficiency.markAsDirty();
-    }else{
+    } else {
       form.controls.fanEfficiency.setValidators([]);
       form.controls.fanEfficiency.reset(form.controls.fanEfficiency.value);
       form.controls.fanEfficiency.markAsDirty();
@@ -48,7 +50,7 @@ export class FanSetupService {
       form.controls.specifiedDriveEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.specifiedDriveEfficiency.reset(form.controls.specifiedDriveEfficiency.value);
       form.controls.specifiedDriveEfficiency.markAsDirty();
-    }else{
+    } else {
       form.controls.specifiedDriveEfficiency.setValidators([]);
       form.controls.specifiedDriveEfficiency.reset(form.controls.specifiedDriveEfficiency.value);
       form.controls.specifiedDriveEfficiency.markAsDirty();

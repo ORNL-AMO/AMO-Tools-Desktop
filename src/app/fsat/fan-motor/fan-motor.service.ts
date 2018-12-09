@@ -19,7 +19,9 @@ export class FanMotorService {
       fullLoadAmps: [obj.fullLoadAmps, Validators.required]
     })
     for (let key in form.controls) {
-      form.controls[key].markAsDirty();
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
     }
     return form;
   }

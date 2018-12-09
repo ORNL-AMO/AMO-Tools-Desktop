@@ -11,14 +11,21 @@ export class FsatWarningService {
   constructor(private convertUnitsService: ConvertUnitsService, private psatService: PsatService, private fsatService: FsatService) { }
 
   checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
-    return {
+    let ratedPowerWarning: string = null;
+    if(!isModification){
+      ratedPowerWarning = this.checkRatedPower(fsat, settings, isModification);
+    }
+    
+    let warnings: FanFieldDataWarnings = {
       // flowRateError: this.checkFlowRate(fsat),
       costError: this.checkCost(fsat),
       voltageError: this.checkVoltage(fsat),
-      ratedPowerError: this.checkRatedPower(fsat, settings, isModification),
+      ratedPowerError: ratedPowerWarning,
       outletPressureError: this.checkOutletPressure(fsat),
       //specificHeatRatioError: this.checkSpecificHeatRatio(fsat)
     }
+
+    return warnings;
   }
 
   //REQUIRED?

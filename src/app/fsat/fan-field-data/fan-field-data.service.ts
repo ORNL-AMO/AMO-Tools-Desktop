@@ -9,8 +9,8 @@ export class FanFieldDataService {
 
 
   getFormFromObj(obj: FieldData): FormGroup {
-    if(!obj.operatingHours && obj.operatingFraction){
-        obj.operatingHours = obj.operatingFraction * 8760;
+    if (!obj.operatingHours && obj.operatingFraction) {
+      obj.operatingHours = obj.operatingFraction * 8760;
     }
     let form: FormGroup = this.formBuilder.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
@@ -25,7 +25,9 @@ export class FanFieldDataService {
       measuredVoltage: [obj.measuredVoltage, Validators.required]
     })
     for (let key in form.controls) {
-      form.controls[key].markAsDirty();
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
     }
     return form;
   }
