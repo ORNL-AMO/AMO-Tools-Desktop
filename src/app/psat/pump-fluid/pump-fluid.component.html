@@ -16,10 +16,8 @@
 
     <div class="form-group" *ngIf="!baseline" [ngClass]="{'indicate-different': isSpecifiedEfficiencyDifferent(), 'invalid':psatForm.controls.specifiedPumpEfficiency.invalid}">
       <label for="{{'specifiedPumpEfficiency_'+idString}}">Pump Efficiency
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enablePumpType()" *ngIf="psatForm.controls.pumpType.value == 11">Modify
-          Pump Type</a>
-        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()" *ngIf="psatForm.controls.pumpType.value != 11">Use
-          Baseline Efficiency</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="enablePumpType()" *ngIf="psatForm.controls.pumpType.value == 11">Optimize Pump</a>
+        <a class="form-text small click-link" id="pumpTypeHelp" (click)="disablePumpType()" *ngIf="psatForm.controls.pumpType.value != 11">Known Efficiency</a>
       </label>
       <div class="input-group" *ngIf="psatForm.controls.pumpType.value == 11">
         <input [readonly]="!selected" name="specifiedPumpEfficiency" type="number" min="0" step="any" max="100" class="form-control"
@@ -41,12 +39,11 @@
 
     <div class="text-center small help-text" *ngIf="psatForm.controls.pumpType.value == 11 && !baseline">
       The efficiency of your pump has been calculated based on your system setup. Either directly modify your
-      efficiency or click <strong>"Modify Pump
-        Type"</strong> to estimate your pump efficiency based on a different pump type.
+      efficiency or click <strong>"Optimize Pump"</strong> to estimate your pump efficiency based on a different pump type.
     </div>
     <div class="text-center small help-text" *ngIf="psatForm.controls.pumpType.value != 11 && !baseline">
       The efficiency of your pump has been calculated based on your <strong>flow rate</strong> and selected <strong>pump
-        type</strong>. Click <strong>"Use Baseline Efficiency"</strong>
+        type</strong>. Click <strong>"Known Efficiency"</strong>
       to use the efficiency calculated by your system setup.
     </div>
 

@@ -97,6 +97,7 @@ export class FanMotorComponent implements OnInit {
 
   init() {
     this.fanMotorForm = this.fanMotorService.getFormFromObj(this.fanMotor)
+    console.log(this.fanMotorForm);
     this.checkWarnings();
   }
 

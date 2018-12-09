@@ -24,10 +24,9 @@
 
     <div class="form-group" *ngIf="!baseline" [ngClass]="{'indicate-different': isFanSpecifiedDifferent(), 'invalid':fanForm.controls.fanEfficiency.invalid}">
       <label for="{{'fanEfficiency_'+idString}}">Fan Efficiency
-        <a class="form-text small click-link" id="fanTypeHelp" (click)="enableFanType()" *ngIf="fanForm.controls.fanType.value == 12">Modify
-          Fan Type</a>
-        <a class="form-text small click-link" id="fanTypeHelp" (click)="disableFanType()" *ngIf="fanForm.controls.fanType.value != 12">Use
-          Baseline Efficiency</a>
+        <a class="form-text small click-link" id="fanTypeHelp" (click)="enableFanType()" *ngIf="fanForm.controls.fanType.value == 12">Optimize
+          Fan</a>
+        <a class="form-text small click-link" id="fanTypeHelp" (click)="disableFanType()" *ngIf="fanForm.controls.fanType.value != 12">Known Efficiency</a>
       </label>
       <div class="input-group" *ngIf="fanForm.controls.fanType.value == 12">
         <input [readonly]="!selected" name="fanEfficiency" type="number" min="0" step="any" max="100" class="form-control"
@@ -49,12 +48,11 @@
 
     <div class="text-center small help-text" *ngIf="fanForm.controls.fanType.value == 12 && !baseline">
       The efficiency of your fan has been calculated based on your system setup. Either directly modify your
-      efficiency or click <strong>"Modify Fan
-        Type"</strong> to estimate your pump efficiency based on a different pump type.
+      efficiency or click <strong>"Optimize Fan"</strong> to estimate your pump efficiency based on a different pump type.
     </div>
     <div class="text-center small help-text" *ngIf="fanForm.controls.fanType.value != 12 && !baseline">
       The efficiency of your fan has been calculated based on your selected <strong>fan
-        type</strong>. Click <strong>"Use Baseline Efficiency"</strong>
+        type</strong>. Click <strong>"Known Efficiency"</strong>
       to use the efficiency calculated by your system setup.
     </div>
 

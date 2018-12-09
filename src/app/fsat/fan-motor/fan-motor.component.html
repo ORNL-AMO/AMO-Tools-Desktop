@@ -72,7 +72,7 @@
       </span>
     </div>
 
-    <div class="form-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': warnings.voltageError !== null, 'invalid':fanMotorForm.controls.motorVoltage.invalid}">
+    <div class="form-group" [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': warnings.voltageError !== null, 'invalid':fanMotorForm.controls.motorRatedVoltage.invalid}">
       <label for="{{'motorRatedVoltage_'+idString}}">Rated Voltage</label>
       <div class="input-group">
         <input name="motorRatedVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="{{'motorRatedVoltage_'+idString}}"
