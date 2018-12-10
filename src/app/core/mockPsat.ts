@@ -434,18 +434,38 @@ export const MockPsatCalculator: Calculator = {
             },
             {
                 modName: "Optimize Pump & Motor Combo",
-                flowRate: 2500,
-                head: 137
+                flowRate: 2499.99,
+                head: 137.01
             },
             {
-                modName: "Reduce Pump Speed to 80%1",
+                modName: "Reduce speed to 60% with Static head1",
                 flowRate: 0,
                 head: 0
             },
             {
-                modName: "Reduce Pump Speed to 80%",
-                flowRate: 2000,
-                head: 87.6
+                modName: "Reduce speed to 60% with Static head",
+                flowRate: 842,
+                head: 63
+            },
+            {
+                modName: "Reduce speed to 60%1",
+                flowRate: 0,
+                head: 0
+            },
+            {
+                modName: "Reduce speed to 60%",
+                flowRate: 1475,
+                head: 50
+            },
+            {
+                modName: "New1",
+                flowRate: 0,
+                head: 0
+            },
+            {
+                modName: "New",
+                flowRate: 2500,
+                head: 137
             }
         ],
         selectedP1Name: "Baseline1",
