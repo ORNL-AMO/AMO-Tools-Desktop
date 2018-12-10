@@ -76,12 +76,7 @@ export class MotorComponent implements OnInit {
   }
 
   checkWarnings() {
-    if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
-      this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, false);
-    }
-    else {
-      this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, true);
-    }
+    this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, !this.baseline);
   }
 
   changeEfficiencyClass() {
@@ -136,12 +131,7 @@ export class MotorComponent implements OnInit {
 
   save() {
     this.psat.inputs = this.motorService.getInputsFromFrom(this.psatForm, this.psat.inputs);
-    if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
-      this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, false);
-    }
-    else {
-      this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, true);
-    }
+    this.motorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, !this.baseline);
     this.saved.emit(this.selected);
   }
 
