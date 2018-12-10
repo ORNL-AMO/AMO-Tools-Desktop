@@ -74,8 +74,8 @@
       </tr>
       <tr>
         <td>Load factor (%)</td>
-        <td>{{baselineResults.loadFactor | number:'2.0-1'}}</td>
-        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.loadFactor
+        <td>{{baselineResults.loadFactor*100 | number:'2.0-1'}}</td>
+        <td *ngFor="let modResults of modificationResults; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modResults.loadFactor*100
           | number:'2.0-1'}}</td>
       </tr>
       <tr>
