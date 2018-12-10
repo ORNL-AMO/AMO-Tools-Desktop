@@ -487,17 +487,36 @@ export class CalculateModelService {
 
   //3A1b. Calculate High to Medium Steam Turbine
   calculateHighToMediumPressureSteamTurbine() {
+    let turbineProperty: number = 0;
     let massFlow: number = this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
     if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
       massFlow = massFlow - this.highToLowPressureTurbine.massFlow;
     }
+
+    if (this.inputData.turbineInput.highToMediumTurbine.operationType != 2) {
+      if (this.inputData.turbineInput.highToMediumTurbine.operationType == 1 || this.inputData.turbineInput.highToMediumTurbine.operationType == 3) {
+        turbineProperty = 1; //powerOut
+      }
+      if (this.inputData.turbineInput.highToMediumTurbine.operationType == 1 || this.inputData.turbineInput.highToMediumTurbine.operationType == 0) {
+        massFlow = this.inputData.turbineInput.highToMediumTurbine.operationValue1;
+      } else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 3) {
+        //TODO: Power range
+      } else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 4) {
+        if (massFlow < this.inputData.turbineInput.highToMediumTurbine.operationValue1) {
+          massFlow = this.inputData.turbineInput.highToMediumTurbine.operationValue1;
+        } else if (massFlow > this.inputData.turbineInput.highToMediumTurbine.operationValue2) {
+          massFlow = this.inputData.turbineInput.highToMediumTurbine.operationValue2;
+        }
+      }
+    }
+
     this.highPressureToMediumPressureTurbine = this.steamService.turbine(
       {
         solveFor: 0,
         inletPressure: this.highPressureHeader.pressure,
         inletQuantity: 1,
         inletQuantityValue: this.highPressureHeader.specificEnthalpy,
-        turbineProperty: 0, //massFlow
+        turbineProperty: turbineProperty,
         isentropicEfficiency: this.inputData.turbineInput.highToMediumTurbine.isentropicEfficiency,
         generatorEfficiency: this.inputData.turbineInput.highToMediumTurbine.generationEfficiency,
         massFlowOrPowerOut: massFlow,
@@ -741,8 +760,27 @@ export class CalculateModelService {
   //4A1b. Calculate High to Low Steam Turbine
   calculateHighToLowSteamTurbine() {
     let massFlow: number = this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
+    let turbineProperty: number = 0; //massFlow
+
     if (this.inputData.headerInput.numberOfHeaders == 3) {
       massFlow = massFlow - this.inputData.headerInput.mediumPressure.processSteamUsage;
+    }
+
+    if (this.inputData.turbineInput.highToLowTurbine.operationType != 2) {
+      if (this.inputData.turbineInput.highToLowTurbine.operationType == 1 || this.inputData.turbineInput.highToLowTurbine.operationType == 3) {
+        turbineProperty = 1; //powerOut
+      }
+      if (this.inputData.turbineInput.highToLowTurbine.operationType == 1 || this.inputData.turbineInput.highToLowTurbine.operationType == 0) {
+        massFlow = this.inputData.turbineInput.highToLowTurbine.operationValue1;
+      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 3) {
+        //TODO: Power range
+      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 4) {
+        if (massFlow < this.inputData.turbineInput.highToLowTurbine.operationValue1) {
+          massFlow = this.inputData.turbineInput.highToLowTurbine.operationValue1;
+        } else if (massFlow > this.inputData.turbineInput.highToLowTurbine.operationValue2) {
+          massFlow = this.inputData.turbineInput.highToLowTurbine.operationValue2;
+        }
+      }
     }
 
     this.highToLowPressureTurbine = this.steamService.turbine(
@@ -751,7 +789,7 @@ export class CalculateModelService {
         inletPressure: this.highPressureHeader.pressure,
         inletQuantity: 1,
         inletQuantityValue: this.highPressureHeader.specificEnthalpy,
-        turbineProperty: 0, //massFlow
+        turbineProperty: turbineProperty,
         isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
         generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
         massFlowOrPowerOut: massFlow,
@@ -836,16 +874,34 @@ export class CalculateModelService {
 
   //4A1e. Calculate Medium to Low Steam Turbine
   calculateMediumToLowSteamTurbine() {
+    let massFlow: number = this.mediumPressureHeader.massFlow - this.inputData.headerInput.mediumPressure.processSteamUsage;
+    let turbineProperty: number = 0; //massFlow
+    if (this.inputData.turbineInput.mediumToLowTurbine.operationType != 2) {
+      if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 1 || this.inputData.turbineInput.mediumToLowTurbine.operationType == 3) {
+        turbineProperty = 1; //powerOut
+      }
+      if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 1 || this.inputData.turbineInput.mediumToLowTurbine.operationType == 0) {
+        massFlow = this.inputData.turbineInput.mediumToLowTurbine.operationValue1;
+      } else if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 3) {
+        //TODO: Power range
+      } else if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 4) {
+        if (massFlow < this.inputData.turbineInput.mediumToLowTurbine.operationValue1) {
+          massFlow = this.inputData.turbineInput.mediumToLowTurbine.operationValue1;
+        } else if (massFlow > this.inputData.turbineInput.mediumToLowTurbine.operationValue2) {
+          massFlow = this.inputData.turbineInput.mediumToLowTurbine.operationValue2;
+        }
+      }
+    }
     this.mediumToLowPressureTurbine = this.steamService.turbine(
       {
         solveFor: 0,
         inletPressure: this.mediumPressureHeader.pressure,
         inletQuantity: 1,
         inletQuantityValue: this.mediumPressureHeader.specificEnthalpy,
-        turbineProperty: 0, //massFlow
+        turbineProperty: turbineProperty,
         isentropicEfficiency: this.inputData.turbineInput.mediumToLowTurbine.isentropicEfficiency,
         generatorEfficiency: this.inputData.turbineInput.mediumToLowTurbine.generationEfficiency,
-        massFlowOrPowerOut: this.mediumPressureHeader.massFlow - this.inputData.headerInput.mediumPressure.processSteamUsage,
+        massFlowOrPowerOut: massFlow,
         outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
         outletQuantity: 0,
         outletQuantityValue: 0
@@ -904,8 +960,6 @@ export class CalculateModelService {
   calculateMakeupWaterAndCondensateHeader() {
     //5A. Get inlets for makeup water and condensate header
     let inlets: Array<HeaderInputObj> = this.getMakeupWaterAndCondensateInlets();
-    console.log(inlets);
-    //console.log(inlets);
     //notice .header at the end (need .header obj for makeupWaterAndCondensateHeader)
     this.makeupWaterAndCondensateHeader = this.steamService.header(
       {
