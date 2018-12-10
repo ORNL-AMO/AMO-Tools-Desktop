@@ -5,7 +5,8 @@ import { Settings } from "../shared/models/settings";
 export const MockPsat: Assessment = {
     name: "Basic Pump Example",
     type: "PSAT",
-    appVersion: "0.3.1-beta",
+    appVersion: "0.3.2-beta",
+    isExample: true,
     psat: {
         inputs: {
             pump_style: 6,
