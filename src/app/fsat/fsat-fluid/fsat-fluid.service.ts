@@ -24,7 +24,9 @@ export class FsatFluidService {
       specificHeatGas: [obj.specificHeatGas, gasDensityValidators.specificHeatGasValidators]
     })
     for (let key in form.controls) {
-      form.controls[key].markAsDirty();
+      if (form.controls[key].value) {
+        form.controls[key].markAsDirty();
+      }
     }
     return form;
   }

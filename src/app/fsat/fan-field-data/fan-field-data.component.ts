@@ -155,8 +155,7 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   checkForWarnings() {
-    console.log('this.baseline = ' + this.baseline);
-    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, this.baseline);
+    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, !this.baseline);
   }
 
   calculateCompressibility() {
