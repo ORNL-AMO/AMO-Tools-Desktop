@@ -75,12 +75,12 @@ export class PumpDataFormComponent implements OnInit {
 
   initPumpType() {
     if (this.modificationForm.controls.pumpType.value == 11) {
-      this.cd.detectChanges();
       if (this.modificationForm.controls.specifiedPumpEfficiency.value != this.baselinePumpEfficiency) {
         this.showPumpType = true;
       } else {
         this.showPumpType = false;
       }
+      this.cd.detectChanges();
     } else {
       this.showPumpType = true;
       this.cd.detectChanges();
