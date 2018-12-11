@@ -155,26 +155,11 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   checkForWarnings() {
-    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings);
-  }
-
-
-  optimizeCalc(bool: boolean) {
-    if (!bool || !this.selected) {
-      this.fieldDataForm.controls.sizeMargin.disable();
-      // this.fieldDataForm.controls.fixedSpeed.disable();
-    } else {
-      this.fieldDataForm.controls.sizeMargin.enable();
-      // this.fieldDataForm.controls.fixedSpeed.enable();
-    }
-    this.fieldDataForm.patchValue({
-      optimizeCalculation: bool
-    });
-    this.save();
+    this.warnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings, !this.baseline);
   }
 
   calculateCompressibility() {
-    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, 'existing', this.settings);
+    let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, true, this.settings);
     //todo
     let inputs: CompressibilityFactor = {
       moverShaftPower: tmpResults.motorShaftPower,
@@ -283,9 +268,9 @@ export class FanFieldDataComponent implements OnInit {
     }
   }
 
-  isOperatingFractionDifferent() {
+  isOperatingHoursDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isOperatingFractionDifferent();
+      return this.compareService.isOperatingHoursDifferent();
     } else {
       return false;
     }

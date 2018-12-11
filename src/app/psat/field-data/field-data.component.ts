@@ -1,7 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
-import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -9,6 +8,8 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
+import { FieldDataService } from './field-data.service';
+import { PsatService } from '../psat.service';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -17,10 +18,6 @@ import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
 export class FieldDataComponent implements OnInit {
   @Input()
   psat: PSAT;
-  @Output('isValid')
-  isValid = new EventEmitter<boolean>();
-  @Output('isInvalid')
-  isInvalid = new EventEmitter<boolean>();
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Input()
@@ -39,6 +36,7 @@ export class FieldDataComponent implements OnInit {
   assessment: Assessment;
   @Input()
   modificationIndex: number;
+  @ViewChild('headToolModal') public headToolModal: ModalDirective;
 
   formValid: boolean;
   headToolResults: any = {
@@ -50,17 +48,20 @@ export class FieldDataComponent implements OnInit {
     pumpHead: 0.0
   };
 
-  //Create your array of options
-  //first item in array will be default selected, can modify that functionality later if desired
-  loadEstimateMethods: Array<string> = [
-    'Power',
-    'Current'
+  loadEstimateMethods: Array<{ display: string, value: number }> = [
+    {
+      display: 'Power',
+      value: 0
+    },
+    {
+      display: 'Current',
+      value: 1
+    }
   ];
   psatForm: FormGroup;
-  isFirstChange: boolean = true;
   fieldDataWarnings: FieldDataWarnings;
   idString: string;
-  constructor(private psatWarningService: PsatWarningService, private psatService: PsatService, private compareService: CompareService, private cd: ChangeDetectorRef, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -77,23 +78,15 @@ export class FieldDataComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (changes.selected) {
-        if (!this.selected) {
-          this.disableForm();
-        } else {
-          this.enableForm();
-        }
-        if (!this.baseline) {
-          this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-        }
-      }
-      if (changes.modificationIndex) {
-        this.init();
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
       }
     }
-    else {
-      this.isFirstChange = false;
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.init();
     }
   }
 
@@ -101,12 +94,8 @@ export class FieldDataComponent implements OnInit {
     if (!this.psat.inputs.cost_kw_hour) {
       this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
     }
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
-    this.helpPanelService.currentField.next('operatingFraction');
-    if (!this.baseline) {
-      this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-    }
+    this.psatForm = this.fieldDataService.getFormFromObj(this.psat.inputs, this.baseline);
+    this.helpPanelService.currentField.next('operatingHours');
     this.checkWarnings();
   }
 
@@ -131,18 +120,8 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  checkForm(form: FormGroup) {
-    this.formValid = this.psatService.isFieldDataFormValid(form);
-    if (this.formValid) {
-      this.isValid.emit(true)
-    } else {
-      this.isInvalid.emit(true)
-    }
-  }
-
   save() {
-    this.checkForm(this.psatForm);
-    this.psat.inputs = this.psatService.getPsatInputsFromForm(this.psatForm);
+    this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
     this.checkWarnings();
     this.saved.emit(true);
   }
@@ -155,7 +134,7 @@ export class FieldDataComponent implements OnInit {
     let motorAmpsValidators: Array<ValidatorFn> = new Array();
     let motorKWValidators: Array<ValidatorFn> = new Array();
 
-    if (this.psatForm.controls.loadEstimatedMethod.value == 'Power') {
+    if (this.psatForm.controls.loadEstimatedMethod.value == 0) {
       motorKWValidators = [Validators.required];
     } else {
       motorAmpsValidators = [Validators.required];
@@ -175,36 +154,21 @@ export class FieldDataComponent implements OnInit {
   }
 
 
-  @ViewChild('headToolModal') public headToolModal: ModalDirective;
   showHeadToolModal() {
     if (this.selected) {
-      this.openHeadTool.emit(true);
+      this.psatService.modalOpen.next(true);
       this.headToolModal.show();
     }
   }
 
   hideHeadToolModal() {
-    this.closeHeadTool.emit(true);
+    this.psatService.modalOpen.next(true);
     if (this.psatForm.controls.head.value != this.psat.inputs.head) {
       this.psatForm.patchValue({
         head: this.psat.inputs.head
       })
     }
     this.headToolModal.hide();
-  }
-
-  optimizeCalc(bool: boolean) {
-    if (!bool || !this.selected) {
-      this.psatForm.controls.sizeMargin.disable();
-      // this.psatForm.controls.fixedSpeed.disable();
-    } else {
-      this.psatForm.controls.sizeMargin.enable();
-      // this.psatForm.controls.fixedSpeed.enable();
-    }
-    this.psatForm.patchValue({
-      optimizeCalculation: bool
-    });
-    this.save();
   }
 
   canCompare() {
@@ -215,9 +179,9 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  isOperatingFractionDifferent() {
+  isOperatingHoursDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isOperatingFractionDifferent();
+      return this.compareService.isOperatingHoursDifferent();
     } else {
       return false;
     }

@@ -1,16 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { PsatWarningService, FieldDataWarnings } from '../../../psat-warning.service';
+import { FieldDataWarnings } from '../../../psat-warning.service';
+import { FormGroup } from '@angular/forms';
 @Component({
     selector: 'app-system-data-form',
     templateUrl: './system-data-form.component.html',
     styleUrls: ['./system-data-form.component.css']
 })
 export class SystemDataFormComponent implements OnInit {
-    @Input()
-    psat: PSAT;
     @Output('emitCalculate')
     emitCalculate = new EventEmitter<boolean>();
     @Output('changeField')
@@ -19,25 +17,24 @@ export class SystemDataFormComponent implements OnInit {
     settings: Settings;
     @Input()
     exploreModIndex: number;
+    @Input()
+    isVFD: boolean;
+    @Input()
+    baselineWarnings: FieldDataWarnings;
+    @Input()
+    modificationWarnings: FieldDataWarnings;
+    @Input()
+    baselineForm: FormGroup;
+    @Input()
+    modificationForm: FormGroup;
+    @Output('openHeadToolModal')
+    openHeadToolModal = new EventEmitter<boolean>();
 
     showSystemData: boolean = false;
-    showCost: boolean = false;
     showFlowRate: boolean = false;
-    showOperatingFraction: boolean = false;
     showHead: boolean = false;
-    showName: boolean = false;
 
-    costError1: string = null;
-    costError2: string = null;
-    flowRateError1: string = null;
-    flowRateError2: string = null;
-    opFractionError1: string = null;
-    opFractionError2: string = null;
-
-    tmpBaselineName: string = 'Baseline';
-    constructor(private convertUnitsService: ConvertUnitsService, private psatWarningService: PsatWarningService) {
-
-    }
+    constructor(private convertUnitsService: ConvertUnitsService) { }
 
     ngOnInit() {
         this.init();
@@ -49,26 +46,21 @@ export class SystemDataFormComponent implements OnInit {
                 this.init()
             }
         }
-    }
-
-    init() {
-        this.initCost();
-        this.initFlowRate();
-        this.initHead();
-        this.initOpFraction();
-        this.initSystemData();
-    }
-
-    initCost() {
-        if (this.psat.inputs.cost_kw_hour != this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour) {
-            this.showCost = true;
-        } else {
-            this.showCost = false;
+        if(changes.isVFD){
+            if(!changes.isVFD.isFirstChange()){
+                this.init();
+            }
         }
     }
 
+    init() {
+        this.initFlowRate();
+        this.initHead();
+        this.initSystemData();
+    }
+
     initFlowRate() {
-        if (this.psat.inputs.flow_rate != this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
+        if (this.baselineForm.controls.flowRate.value != this.modificationForm.controls.flowRate.value) {
             this.showFlowRate = true;
         } else {
             this.showFlowRate = false;
@@ -76,23 +68,16 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initHead() {
-        if (this.psat.inputs.head != this.psat.modifications[this.exploreModIndex].psat.inputs.head) {
+        if (this.baselineForm.controls.head.value != this.modificationForm.controls.head.value) {
             this.showHead = true;
         } else {
             this.showHead = false;
         }
     }
 
-    initOpFraction() {
-        if (this.psat.inputs.operating_fraction != this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction) {
-            this.showOperatingFraction = true;
-        } else {
-            this.showOperatingFraction = false;
-        }
-    }
-
     initSystemData() {
-        if (this.showCost || this.showFlowRate || this.showHead || this.showOperatingFraction) {
+        if (this.baselineForm.controls.costKwHr.value != this.modificationForm.controls.costKwHr.value
+            || this.baselineForm.controls.operatingHours.value != this.modificationForm.controls.operatingHours.value) {
             this.showSystemData = true;
         } else {
             this.showSystemData = false;
@@ -101,47 +86,27 @@ export class SystemDataFormComponent implements OnInit {
 
     toggleSystemData() {
         if (this.showSystemData == false) {
-            this.showCost = false;
-            this.showFlowRate = false;
-            this.showHead = false;
-            this.showOperatingFraction = false;
-            this.toggleCost();
-            this.toggleFlowRate();
-            this.toggleHead();
-            this.toggleOperatingFraction();
-        }
-    }
-
-    toggleCost() {
-        if (this.showCost == false) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour = this.psat.inputs.cost_kw_hour;
+            this.modificationForm.controls.operatingHours.patchValue(this.baselineForm.controls.operatingHours.value);
+            this.modificationForm.controls.costKwHr.patchValue(this.baselineForm.controls.costKwHr.value);
             this.calculate();
         }
     }
 
     toggleHead() {
         if (this.showHead == false) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.head = this.psat.inputs.head;
-            this.calculate();
-        }
-    }
-
-    toggleOperatingFraction() {
-        if (this.showOperatingFraction == false) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction = this.psat.inputs.operating_fraction;
+            this.modificationForm.controls.head.patchValue(this.baselineForm.controls.head.value);
             this.calculate();
         }
     }
 
     toggleFlowRate() {
         if (this.showFlowRate == false) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate = this.psat.inputs.flow_rate;
+            this.modificationForm.controls.flowRate.patchValue(this.baselineForm.controls.flowRate.value);
             this.calculate();
         }
     }
 
     calculate() {
-        this.checkWarnings();
         this.emitCalculate.emit(true);
     }
 
@@ -149,23 +114,15 @@ export class SystemDataFormComponent implements OnInit {
         this.changeField.emit(str);
     }
 
-    checkWarnings() {
-        let baselineWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings);
-        this.opFractionError1 = baselineWarnings.opFractionError;
-        this.flowRateError1 = baselineWarnings.flowError;
-        this.costError1 = baselineWarnings.costError;
-        let modificationWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.psat.modifications[this.exploreModIndex].psat, this.settings);
-        this.opFractionError2 = modificationWarnings.opFractionError;
-        this.flowRateError2 = modificationWarnings.flowError;
-        this.costError2 = modificationWarnings.costError;
-    }
-
-    getUnit(unit: string) {
+    getDisplayUnit(unit: string) {
         let tmpUnit = this.convertUnitsService.getUnit(unit);
         let dsp = tmpUnit.unit.name.display.replace('(', '');
         dsp = dsp.replace(')', '');
         return dsp;
+    }
 
+    showHeadToolModal() {
+        this.openHeadToolModal.emit(true);
     }
 
 }

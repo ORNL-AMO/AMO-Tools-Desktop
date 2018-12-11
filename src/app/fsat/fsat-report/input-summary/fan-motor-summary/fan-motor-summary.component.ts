@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import {FanMotor, FSAT} from '../../../../shared/models/fans';
 import { Settings } from '../../../../shared/models/settings';
+import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-fan-motor-summary',
@@ -32,9 +34,13 @@ export class FanMotorSummaryComponent implements OnInit {
   //optimizeDiff: Array<boolean>;
   //sizeMarginDiff: Array<boolean>;
 
+  efficiencyClasses: Array<{ value: number, display: string }>;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.efficiencyClasses = motorEfficiencyConstants;
+
     this.lineFrequencyDiff = new Array<boolean>();
     this.motorRatedPowerDiff = new Array<boolean>();
     this.motorRpmDiff = new Array<boolean>();
@@ -44,7 +50,7 @@ export class FanMotorSummaryComponent implements OnInit {
     this.fullLoadAmpsDiff = new Array<boolean>();
     //this.optimizeDiff = new Array<boolean>();
     //this.sizeMarginDiff = new Array<boolean>();
-
+  
     if (this.fsat.fanMotor) {
       let mods = new Array<FanMotor>();
       if (this.fsat.modifications) {
@@ -91,6 +97,15 @@ export class FanMotorSummaryComponent implements OnInit {
       return true;
     } else {
       return false;
+    }
+  }
+
+  getEfficiencyClass(classEnum: number): string {
+    let efficiencyClass: { value: number, display: string } = _.find(this.efficiencyClasses, (val) => { return val.value == classEnum });
+    if (efficiencyClass) {
+      return efficiencyClass.display;
+    } else {
+      return
     }
   }
 }

@@ -35,7 +35,7 @@
       <span *ngIf="modificationForm.controls.condenserPressure.errors.required">Value Required</span>
       <span *ngIf="modificationForm.controls.condenserPressure.errors.max">Value can't be greater than
         {{modificationForm.controls.condenserPressure.errors.max.max}} {{settings.steamVacuumPressure}}.</span>
-      <span *ngIf="turbineForm.controls.condenserPressure.errors.min">Value can't be less than
+      <span *ngIf="modificationForm.controls.condenserPressure.errors.min">Value can't be less than
         {{modificationForm.controls.condenserPressure.errors.min.min}} {{settings.steamVacuumPressure}}.</span>
     </span>
   </form>

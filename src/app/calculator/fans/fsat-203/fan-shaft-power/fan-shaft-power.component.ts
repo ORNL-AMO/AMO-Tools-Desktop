@@ -105,11 +105,12 @@ export class FanShaftPowerComponent implements OnInit {
 
   estimateFla() {
     let tmpObj: FanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
-    let tmpEfficiency: number = this.psatService.getEfficiencyFromForm(this.shaftPowerForm);
-    let estFla = this.psatService.estFLA(tmpObj.ratedHP, tmpObj.synchronousSpeed, tmpObj.frequency, tmpObj.efficiencyClass, tmpEfficiency, tmpObj.npv, this.settings);
-    this.shaftPowerForm.patchValue({
-      fla: estFla
-    })
+    // let tmpEfficiency: number = this.psatService.getEfficiencyFromForm(this.shaftPowerForm);
+    // let estFla = this.psatService.estFLA(tmpObj.ratedHP, tmpObj.synchronousSpeed, tmpObj.frequency, tmpObj.efficiencyClass, tmpEfficiency, tmpObj.npv, this.settings);
+    // this.shaftPowerForm.patchValue({
+    //   fla: estFla
+    // })
+    this.shaftPowerForm = this.psatService.setFormFullLoadAmps(this.shaftPowerForm, this.settings);
     this.save();
   }
 

@@ -18,3 +18,7 @@ a:not([href]):not([tabindex]){
 .fa.fa-lightbulb-o{
     font-size: -webkit-xxx-large;
 }
+
+.calc-icon-div:hover{
+    cursor: pointer;
+}

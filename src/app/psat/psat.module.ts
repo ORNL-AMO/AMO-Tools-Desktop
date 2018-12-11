@@ -47,6 +47,10 @@ import { PsatBarChartComponent } from './psat-report/psat-report-graphs/psat-bar
 import { PsatReportGraphsPrintComponent } from './psat-report/psat-report-graphs/psat-report-graphs-print/psat-report-graphs-print.component';
 import { PsatWarningService } from './psat-warning.service';
 import { PsatTabService } from './psat-tab.service';
+import { PumpFluidService } from './pump-fluid/pump-fluid.service';
+import { MotorService } from './motor/motor.service';
+import { FieldDataService } from './field-data/field-data.service';
+import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 
 @NgModule({
   declarations: [
@@ -69,7 +73,7 @@ import { PsatTabService } from './psat-tab.service';
     PsatReportSankeyComponent,
     PsatReportGraphsComponent,
     PsatBarChartComponent,
-    PsatReportGraphsPrintComponent
+    PsatReportGraphsPrintComponent,
   ],
   exports: [
     PsatReportComponent
@@ -80,7 +84,6 @@ import { PsatTabService } from './psat-tab.service';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    // ChartsModule,
     ModalModule.forRoot(),
     SettingsModule,
     ToastyModule,
@@ -93,14 +96,18 @@ import { PsatTabService } from './psat-tab.service';
     HeadToolModule,
     AchievableEfficiencyModule, 
     PumpCurveModule,
-    ExploreOpportunitiesModule
+    ExploreOpportunitiesModule,
+    UtilitiesModule
   ],
   providers: [
     PsatService,
     CompareService,
     PsatReportService,
     PsatWarningService,
-    PsatTabService
+    PsatTabService,
+    PumpFluidService,
+    MotorService,
+    FieldDataService
   ]
 })
 

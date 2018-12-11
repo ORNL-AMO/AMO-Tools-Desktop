@@ -25,7 +25,7 @@ export class FieldDataSummaryComponent implements OnInit {
   collapse: boolean = true;
   numMods: number = 0;
 
-  operatingFractionDiff: Array<boolean>;
+  operatingHoursDiff: Array<boolean>;
   costDiff: Array<boolean>;
   flowRateDiff: Array<boolean>;
   inletPressureDiff: Array<boolean>;
@@ -35,12 +35,12 @@ export class FieldDataSummaryComponent implements OnInit {
   specificHeatRatioDiff: Array<boolean>;
   compressibilityFactorDiff: Array<boolean>;
   measuredVoltageDiff: Array<boolean>;
-  pressureCalcResultTypeDiff: Array<boolean>;
+  // pressureCalcResultTypeDiff: Array<boolean>;
 
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.operatingFractionDiff = new Array<boolean>();
+    this.operatingHoursDiff = new Array<boolean>();
     this.costDiff = new Array<boolean>();
     this.flowRateDiff = new Array<boolean>();
     this.inletPressureDiff = new Array<boolean>();
@@ -50,7 +50,7 @@ export class FieldDataSummaryComponent implements OnInit {
     this.specificHeatRatioDiff = new Array<boolean>();
     this.compressibilityFactorDiff = new Array<boolean>();
     this.measuredVoltageDiff = new Array<boolean>();
-    this.pressureCalcResultTypeDiff = new Array<boolean>();
+    //this.pressureCalcResultTypeDiff = new Array<boolean>();
 
     if (this.fsat.fieldData) {
 
@@ -67,7 +67,7 @@ export class FieldDataSummaryComponent implements OnInit {
             mods.push(this.fsat.modifications[i].fsat.fieldData);
           }
 
-          this.operatingFractionDiff.push(false);
+          this.operatingHoursDiff.push(false);
           this.costDiff.push(false);
           this.flowRateDiff.push(false);
           this.inletPressureDiff.push(false);
@@ -77,7 +77,7 @@ export class FieldDataSummaryComponent implements OnInit {
           this.specificHeatRatioDiff.push(false);
           this.compressibilityFactorDiff.push(false);
           this.measuredVoltageDiff.push(false);
-          this.pressureCalcResultTypeDiff.push(false);
+          //this.pressureCalcResultTypeDiff.push(false);
 
 
         }
@@ -109,11 +109,7 @@ export class FieldDataSummaryComponent implements OnInit {
     }
   }
 
-
-
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
-
-
 }

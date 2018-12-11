@@ -127,85 +127,16 @@
 </div>
 
 
-<div bsModal #printMenuModal="bs-modal" class="modal fade hide-print" tabindex="-1" role="dialog" aria-labelledby="printMenuLabelModal"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md hide-print">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Print Report</h3>
-                <button class="close" (click)="closeModal(true)">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12">
-                        <p>
-                            Select all report items you would like to include in your printed report.
-                        </p>
-                    </div>
-                </div>
-                <div class="row toggle-btn" (click)="togglePrint('select-all')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="selectAll"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bold-bottom-divider">
-                        Select All
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" (click)="togglePrint('energy-used')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printEnergyUsed"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Energy Used
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" (click)="togglePrint('executive-summary')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printExecutiveSummary"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Executive Summary
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" (click)="togglePrint('results-data')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printResultsData"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Results Data
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" (click)="togglePrint('report-graphs')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printReportGraphs"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Report Graphs
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" (click)="togglePrint('report-sankey')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printReportSankey"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bold-bottom-divider">
-                        Report Sankey
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" (click)="togglePrint('input-summary')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printInputSummary"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8">
-                        Input Summary
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary" (click)="print()" data-dismiss="modal">Print</button>
-                <button type="button" class="btn btn-default btn-secondary" (click)="closeModal(true)" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
+<app-print-options-menu *ngIf="showPrintMenu && !inRollup"
+    [showPhastReportOptions]="true"
+    [selectAll]="selectAll"
+    [printReportGraphs]="printReportGraphs"
+    [printReportSankey]="printReportSankey"
+    [printResults]="printResultsData"
+    [printInputData]="printInputSummary"
+    [printExecutiveSummary]="printExecutiveSummary"
+    [printEnergyUsed]="printEnergyUsed"
+    (emitClosePrintModal)="closeModal($event)"
+    (emitTogglePrint)="togglePrint($event)"
+    (emitPrint)="print()">
+</app-print-options-menu>

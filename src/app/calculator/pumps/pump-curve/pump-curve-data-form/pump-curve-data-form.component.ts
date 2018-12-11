@@ -29,16 +29,49 @@ export class PumpCurveDataFormComponent implements OnInit {
   ]
   //regEquation: string = null;
   //rSq: string = null;
+  maxFlowWarnings: Array<string> = [];
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.initMaxFlowWarnings();
+  }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
+  checkFlow(index: number) {
+    let calculate = true;
+    if (this.pumpCurveForm.dataRows[index].flow > 1000000) {
+      this.maxFlowWarnings[index] = "Value must not be greater than 1,000,000.";
+    }
+    else {
+      this.maxFlowWarnings[index] = null;
+    }
+    for (let i = 0; i < this.maxFlowWarnings.length; i++) {
+      if (this.maxFlowWarnings[i] != null) {
+        calculate = false;
+      }
+    }
+    if (calculate) {
+      this.emitCalculateChanges();
+    }
+  }
+
+  initMaxFlowWarnings() {
+    for (let i = 0; i < this.pumpCurveForm.dataRows.length; i++) {
+      if (this.pumpCurveForm.dataRows[i].flow > 1000000) {
+        this.maxFlowWarnings.push("Value must not be greater than 1,000,000.");
+      }
+      else {
+        this.maxFlowWarnings.push(null);
+      }
+    }
+  }
+
   removeRow(num: number) {
     this.pumpCurveForm.dataRows.splice(num, 1);
+    this.maxFlowWarnings.splice(num, 1);
     this.emitCalculateChanges();
   }
 
@@ -46,11 +79,12 @@ export class PumpCurveDataFormComponent implements OnInit {
     this.calculate.emit(true);
   }
 
-  addRow(){
+  addRow() {
+    this.maxFlowWarnings.push(null);
     this.emitAddRow.emit(true);
   }
 
-  
+
   getDisplayUnit(unit: string) {
     if (unit) {
       let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;

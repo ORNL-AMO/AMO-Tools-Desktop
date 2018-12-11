@@ -99,7 +99,7 @@ export class FolderSummaryComponent implements OnInit {
         else if (assessment.type == 'FSAT') {
           if (assessment.fsat.setupDone) {
             let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-            let result = this.fsatService.getResults(assessment.fsat, 'existing', this.directorySettings);
+            let result = this.fsatService.getResults(assessment.fsat, true, this.directorySettings);
             this.fsatEnergyUsed = result.annualEnergy + this.fsatEnergyUsed;
             this.fsatEnergyCost = result.annualCost + this.fsatEnergyCost;
           }

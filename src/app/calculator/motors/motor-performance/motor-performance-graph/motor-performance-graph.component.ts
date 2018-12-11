@@ -314,17 +314,16 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   calculateEfficiency(loadFactor: number) {
     if (this.checkForm()) {
-      let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
+      // let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
       let results = this.psatService.motorPerformance(
         this.performanceForm.controls.frequency.value,
         this.performanceForm.controls.efficiencyClass.value,
         this.performanceForm.controls.horsePower.value,
         this.performanceForm.controls.motorRPM.value,
-        efficiency,
+        this.performanceForm.controls.efficiency.value,
         this.performanceForm.controls.motorVoltage.value,
         this.performanceForm.controls.fullLoadAmps.value,
         loadFactor,
-
         this.settings
       );
       return results.efficiency;
@@ -333,13 +332,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   calculateCurrent(loadFactor: number) {
     if (this.checkForm()) {
-      let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
+      // let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
       let results = this.psatService.motorPerformance(
         this.performanceForm.controls.frequency.value,
         this.performanceForm.controls.efficiencyClass.value,
         this.performanceForm.controls.horsePower.value,
         this.performanceForm.controls.motorRPM.value,
-        efficiency,
+        this.performanceForm.controls.efficiency.value,
         this.performanceForm.controls.motorVoltage.value,
         this.performanceForm.controls.fullLoadAmps.value,
         loadFactor,
@@ -353,13 +352,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   calculatePowerFactor(loadFactor: number) {
     if (this.checkForm()) {
-      let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
+      // let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
       let results = this.psatService.motorPerformance(
         this.performanceForm.controls.frequency.value,
         this.performanceForm.controls.efficiencyClass.value,
         this.performanceForm.controls.horsePower.value,
         this.performanceForm.controls.motorRPM.value,
-        efficiency,
+        this.performanceForm.controls.efficiency.value,
         this.performanceForm.controls.motorVoltage.value,
         this.performanceForm.controls.fullLoadAmps.value,
         loadFactor,
@@ -372,7 +371,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.performanceForm.status == 'VALID') {
+    if (this.performanceForm.valid) {
       return true
     }
     else {
