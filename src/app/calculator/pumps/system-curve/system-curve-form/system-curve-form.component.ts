@@ -59,31 +59,33 @@ export class SystemCurveFormComponent implements OnInit {
   ngOnInit() {
     this.options = new Array<PSAT | FSAT>();
     if (this.psat) {
+      this.psat.name = "Baseline";
       this.options.push(this.psat);
       if (this.psat.modifications) {
         this.psat.modifications.forEach(mod => {
           this.options.push(mod.psat);
         })
       }
-    }else if(this.fsat){
+    } else if (this.fsat) {
+      this.fsat.name = "Baseline";
       this.options.push(this.fsat);
-      if(this.fsat.modifications) {
+      if (this.fsat.modifications) {
         this.fsat.modifications.forEach(mod => {
           this.options.push(mod.fsat);
         })
       }
-    }else {
+    } else {
       this.p1Option = 'Point 1';
       this.p2Option = 'Point 2';
     }
   }
 
-  saveChanges(){
+  saveChanges() {
     this.save.emit(true)
   }
 
   setFormValues() {
-    if(this.inAssessment){
+    if (this.inAssessment) {
       this.setVals.emit(true);
     }
   }
@@ -112,7 +114,7 @@ export class SystemCurveFormComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.changeField.emit(str);
   }
 

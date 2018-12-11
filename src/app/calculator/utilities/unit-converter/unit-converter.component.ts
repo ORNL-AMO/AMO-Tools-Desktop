@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { length } from '../../../shared/convert-units/definitions/length';
 import { UnitConverterService } from './unit-converter.service';
@@ -9,6 +9,9 @@ import { UnitConverterService } from './unit-converter.service';
   styleUrls: ['./unit-converter.component.css']
 })
 export class UnitConverterComponent implements OnInit {
+  @Input()
+  inAssessment: boolean;
+
   possibilities: Array<any> = [];
   measure: any = 'length';
   from: string;

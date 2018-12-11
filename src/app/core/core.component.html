@@ -23,7 +23,7 @@
     </div>
 
     <router-outlet></router-outlet>
-    <app-update-modal *ngIf="showUpdateModal" (closeModal)="closeModal()"></app-update-modal>
+    <app-update-modal *ngIf="showUpdateModal" (closeModal)="closeModal()" [updateError]="updateError"></app-update-modal>
 </div>
 <!-- </div> -->
 <!-- <div bsModal #tutorialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tutorialModalLabel"

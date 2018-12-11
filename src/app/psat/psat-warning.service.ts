@@ -1,48 +1,51 @@
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { PsatService } from './psat.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { PSAT } from '../shared/models/psat';
+import { PSAT, PsatOutputs } from '../shared/models/psat';
 import { fluidProperties } from './psatConstants';
+
+
+//PSAT Warnings are messages for input fields
+//will display if unrelistic data is entered
+//they do not stop calculations.
 
 @Injectable()
 export class PsatWarningService {
 
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
   //FIELD DATA
-  checkFieldData(psat: PSAT, settings: Settings, baseline?: boolean): FieldDataWarnings {
-    let flowError = this.checkFlowRate(psat.inputs.pump_style, psat.inputs.flow_rate, settings);
-    let voltageError = this.checkVoltage(psat);
-    let costError = this.checkCost(psat);
-    let opFractionError = this.checkOpFraction(psat);
-    let ratedPowerError = null;
-    if (baseline) {
-      ratedPowerError = this.checkRatedPower(psat, settings);
+  //warnings for field data form
+  checkFieldData(psat: PSAT, settings: Settings, isBaseline?: boolean): FieldDataWarnings {
+    let flowError: string = this.checkFlowRate(psat.inputs.pump_style, psat.inputs.flow_rate, settings);
+    let voltageError: string = this.checkVoltage(psat);
+    let ratedPowerError: string = null;
+    if (isBaseline) {
+      ratedPowerError = this.checkRatedPower(psat);
     }
-    let marginError = this.checkMargin(psat);
-    let headError = this.checkHead(psat);
     return {
       flowError: flowError,
       voltageError: voltageError,
-      costError: costError,
-      opFractionError: opFractionError,
       ratedPowerError: ratedPowerError,
-      marginError: marginError,
-      headError: headError
     }
   }
-
+  //Field data warning: flowError
   checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings) {
     let tmpFlowRate: number;
     //convert
+    //get min max
+    let flowRateRange = this.getFlowRateMinMax(pumpStyle);
+
     if (settings.flowMeasurement != 'gpm') {
       tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.min = this.convertUnitsService.roundVal(flowRateRange.min, 2);
+      flowRateRange.max = this.convertUnitsService.value(flowRateRange.max).from(settings.flowMeasurement).to('gpm');
+      flowRateRange.max = this.convertUnitsService.roundVal(flowRateRange.max, 2);
+
     } else {
       tmpFlowRate = flowRate;
     }
-    //get min max
-    let flowRateRange = this.getFlowRateMinMax(pumpStyle);
     //check in range
     if (tmpFlowRate >= flowRateRange.min && tmpFlowRate <= flowRateRange.max) {
       return null;
@@ -54,7 +57,7 @@ export class PsatWarningService {
       return null;
     }
   }
-
+  //used by checkFlowRate()
   getFlowRateMinMax(pumpStyle: number): { min: number, max: number } {
     //min/max values from Daryl
     let flowRate = {
@@ -98,7 +101,7 @@ export class PsatWarningService {
       return flowRate;
     }
   }
-
+  //Field Data Warning: voltageError
   checkVoltage(psat: PSAT) {
     if (psat.inputs.motor_field_voltage < 1) {
       return "Voltage shouldn't be less than 1 V";
@@ -108,18 +111,8 @@ export class PsatWarningService {
       return null;
     }
   }
-  //REQUIRED?
-  checkCost(psat: PSAT) {
-    if (psat.inputs.cost_kw_hour < 0) {
-      return 'Should not have negative cost';
-    } else if (psat.inputs.cost_kw_hour > 1) {
-      return "Cost shouldn't be greater than 1";
-    } else {
-      return null;
-    }
-  }
-
-  checkRatedPower(psat: PSAT, settings: Settings) {
+  //Field Data Warning: ratedPowerError
+  checkRatedPower(psat: PSAT) {
     let tmpVal: number;
     if (psat.inputs.load_estimation_method == 0) {
       tmpVal = psat.inputs.motor_field_power;
@@ -141,55 +134,22 @@ export class PsatWarningService {
       return null;
     }
   }
-  //REQUIRED?
-  checkMargin(psat: PSAT) {
-    if (psat.inputs.margin > 100) {
-      return "Unrealistic size margin, shouldn't be greater then 100%";
-    } else if (psat.inputs.margin < 0) {
-      return "Shouldn't have negative size margin";
-    } else {
-      return null;
-    }
-  }
-  //REQUIRED?
-  checkOpFraction(psat: PSAT) {
-    if (psat.inputs.operating_fraction > 1) {
-      return 'Operating fraction needs to be between 0 - 1';
-    } else if (psat.inputs.operating_fraction < 0) {
-      return "Cannot have negative operating fraction";
-    } else {
-      return null;
-    }
-  }
-
-  //REQUIRED?
-  checkHead(psat: PSAT) {
-    if (psat.inputs.head < 0) {
-      return 'Head cannot be negative';
-    } else {
-      return null;
-    }
-  }
-
   //MOTOR
-  checkMotorWarnings(psat: PSAT, settings: Settings): MotorWarnings {
-    let rpmError = this.checkMotorRpm(psat);
-    let voltageError = this.checkMotorVoltage(psat);
-    let flaError = this.checkFLA(psat, settings);
-    let ratedPowerError = this.checkMotorRatedPower(psat, settings);
-    let efficiencyError = null;
-    if (psat.inputs.efficiency_class == 3) {
-      efficiencyError = this.checkEfficiency(psat);
-    }
+  //checks for warnings in motor setup form
+  checkMotorWarnings(psat: PSAT, settings: Settings, isModification: boolean): MotorWarnings {
+    let rpmError: string = this.checkMotorRpm(psat);
+    let voltageError: string = this.checkMotorVoltage(psat);
+    let flaError: string = this.checkFLA(psat, settings);
+    let ratedPowerError: string;
+    ratedPowerError = this.checkMotorRatedPower(psat, settings, isModification);
     return {
       rpmError: rpmError,
       voltageError: voltageError,
       flaError: flaError,
-      efficiencyError: efficiencyError,
       ratedPowerError: ratedPowerError
     }
   }
-
+  //Motor Warning: rpmError
   checkMotorRpm(psat: PSAT) {
     let range: { min: number, max: number } = this.getMotorRpmMinMax(psat.inputs.line_frequency, psat.inputs.efficiency_class)
     if (psat.inputs.motor_rated_speed < range.min) {
@@ -220,7 +180,7 @@ export class PsatWarningService {
     }
     return rpmRange;
   }
-
+  //Motor Warning: voltageError
   checkMotorVoltage(psat: PSAT) {
     if (psat.inputs.motor_rated_voltage < 208) {
       return "Voltage should be greater than 208 V."
@@ -230,8 +190,8 @@ export class PsatWarningService {
       return null;
     }
   }
-
-  checkMotorRatedPower(psat: PSAT, settings: Settings) {
+  //Motor Warning: ratedPowerError
+  checkMotorRatedPower(psat: PSAT, settings: Settings, isModification: boolean) {
     let motorFieldPower;
     let inputTypeStr: string;
     if (psat.inputs.load_estimation_method == 0) {
@@ -244,21 +204,47 @@ export class PsatWarningService {
 
     let min: number = 5;
     let max: number = 10000;
+    let isModificationValid: boolean;
     if (psat.inputs.motor_rated_power < this.convertUnitsService.value(min).from('hp').to(settings.powerMeasurement)) {
       return 'Rated motor power is too small.';
     } else if (psat.inputs.motor_rated_power > this.convertUnitsService.value(max).from('hp').to(settings.powerMeasurement)) {
       return 'Rated motor power is too large.';
     } else {
+
       if (motorFieldPower && psat.inputs.motor_rated_power) {
         let val, compare;
         if (settings.powerMeasurement == 'hp') {
           val = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(settings.powerMeasurement).to('kW');
-          compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
+          if (isModification) {
+            isModificationValid = this.psatService.isPsatValid(psat.inputs, false);
+            if (isModificationValid) {
+              let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
+              compare = modificationResults.motor_power;
+            } else {
+              compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
+            }
+          }
+          else {
+            compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
+          }
         } else {
           val = psat.inputs.motor_rated_power;
-          compare = motorFieldPower;
+          if (isModification) {
+            isModificationValid = this.psatService.isPsatValid(psat.inputs, false);
+            if (isModificationValid) {
+              let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
+              compare = modificationResults.motor_power;
+            } else {
+              compare = motorFieldPower;
+            }
+          }
+          else {
+            compare = motorFieldPower;
+          }
         }
         val = val * 1.5;
+        // console.log('val = ' + val);
+        // console.log('compare = ' + compare);
         if (compare > val) {
           return 'The ' + inputTypeStr + ' is too high compared to the Rated Motor Power, please adjust the input values.';
         } else {
@@ -269,7 +255,7 @@ export class PsatWarningService {
       }
     }
   }
-
+  //Motor Warning: flaError
   checkFLA(psat: PSAT, settings: Settings) {
     let lineFreqTest: boolean = (psat.inputs.line_frequency != undefined || psat.inputs.line_frequency != null);
     if (
@@ -283,8 +269,8 @@ export class PsatWarningService {
       let estEfficiency = this.psatService.estFLA(
         psat.inputs.motor_rated_power,
         psat.inputs.motor_rated_speed,
-        this.psatService.getLineFreqFromEnum(psat.inputs.line_frequency),
-        this.psatService.getEfficiencyClassFromEnum(psat.inputs.efficiency_class),
+        psat.inputs.line_frequency,
+        psat.inputs.efficiency_class,
         psat.inputs.efficiency,
         psat.inputs.motor_rated_voltage,
         settings
@@ -303,43 +289,17 @@ export class PsatWarningService {
     }
   }
 
-  //REQUIRED?
-  checkEfficiency(psat: PSAT) {
-    if (psat.inputs.efficiency > 100) {
-      return "Unrealistic efficiency, shouldn't be greater then 100%";
-    }
-    else if (psat.inputs.efficiency == 0) {
-      return "Cannot have 0% efficiency";
-    }
-    else if (psat.inputs.efficiency < 0) {
-      return "Cannot have negative efficiency";
-    }
-    else {
-      return null;
-    }
-  }
-
-
-  //Pump Fluid
+  //PUMP FLUID
+  //warnings for pump fluid form
   checkPumpFluidWarnings(psat: PSAT, settings: Settings): PumpFluidWarnings {
-    let rpmError = this.checkPumpRpm(psat);
-    let temperatureError = this.checkTemperatureError(psat, settings);
-    let pumpEfficiencyError = null;
-    let specifiedDriveEfficiencyError = null;
-    if (psat.inputs.pump_style == 11) {
-      pumpEfficiencyError = this.checkPumpEfficiency(psat);
-    }
-    if (psat.inputs.drive == 4) {
-      specifiedDriveEfficiencyError = this.checkSpecifiedDriveEfficiency(psat);
-    }
+    let rpmError: string = this.checkPumpRpm(psat);
+    let temperatureError: string = this.checkTemperatureError(psat, settings);
     return {
       rpmError: rpmError,
-      temperatureError: temperatureError,
-      pumpEfficiencyError: pumpEfficiencyError,
-      specifiedDriveEfficiencyError: specifiedDriveEfficiencyError
+      temperatureError: temperatureError
     }
   }
-
+  //Pump Fluid Warning: rpmError
   checkPumpRpm(psat: PSAT): string {
     let min = 1;
     let max = 0;
@@ -351,14 +311,14 @@ export class PsatWarningService {
       max = Infinity;
     }
     if (psat.inputs.pump_rated_speed < min) {
-      return 'Pump Speed should be greater than' + min + ' rpm';
+      return 'Pump Speed should be greater than ' + min + ' rpm';
     } else if (psat.inputs.pump_rated_speed > max) {
-      return 'Pump Speed should be greater than ' + max + ' rpm';
+      return 'Pump Speed should be less than ' + max + ' rpm';
     } else {
       return null;
     }
   }
-
+  //Pump Fluid Warning: temperatureError
   checkTemperatureError(psat: PSAT, settings: Settings): string {
     let property = fluidProperties[psat.inputs.fluidType];
     let tempUnit: string;
@@ -394,36 +354,7 @@ export class PsatWarningService {
     }
   }
 
-  checkPumpEfficiency(psat: PSAT) {
-    if (psat.inputs.pump_specified > 100) {
-      return "Unrealistic efficiency, shouldn't be greater then 100%";
-    }
-    else if (psat.inputs.pump_specified == 0) {
-      return "Cannot have 0% efficiency";
-    }
-    else if (psat.inputs.pump_specified < 0) {
-      return "Cannot have negative efficiency";
-    }
-    else {
-      return null;
-    }
-  }
-
-  checkSpecifiedDriveEfficiency(psat: PSAT) {
-    if (psat.inputs.specifiedDriveEfficiency > 100) {
-      return "Unrealistic efficiency, shouldn't be greater then 100%";
-    }
-    else if (psat.inputs.specifiedDriveEfficiency == 0) {
-      return "Cannot have 0% efficiency";
-    }
-    else if (psat.inputs.specifiedDriveEfficiency < 0) {
-      return "Cannot have negative efficiency";
-    }
-    else {
-      return null;
-    }
-  }
-
+  //Iterates warnings objects to see if any warnings are not null
   checkWarningsExist(warnings: FieldDataWarnings | MotorWarnings | PumpFluidWarnings): boolean {
     let hasWarning: boolean = false;
     for (var key in warnings) {
@@ -437,26 +368,19 @@ export class PsatWarningService {
 }
 
 export interface FieldDataWarnings {
-  flowError: string,
-  voltageError: string,
-  costError: string,
-  opFractionError: string,
-  ratedPowerError: string,
-  marginError: string,
-  headError: string
+  flowError: string;
+  voltageError: string;
+  ratedPowerError: string;
 }
 
 export interface MotorWarnings {
   rpmError: string;
   voltageError: string;
   flaError: string;
-  efficiencyError: string;
   ratedPowerError: string;
 }
 
 export interface PumpFluidWarnings {
-  rpmError: string,
-  temperatureError: string,
-  pumpEfficiencyError: string,
-  specifiedDriveEfficiencyError: string
+  rpmError: string;
+  temperatureError: string;
 }

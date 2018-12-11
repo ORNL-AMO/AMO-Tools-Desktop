@@ -33,6 +33,7 @@ export class StackLossComponent implements OnInit {
   flueGasByMass: FlueGasByMass;
 
   stackLossPercent: number = 0;
+  boilerEfficiency: number = 0;
   constructor(private settingsDbService: SettingsDbService, private flueGasLossesService: FlueGasLossesService, private stackLossService: StackLossService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -125,9 +126,11 @@ export class StackLossComponent implements OnInit {
       this.stackLossService.stackLossInput.flueGasByVolume = this.flueGasByVolume;
       if (form.status == 'VALID') {
         const availableHeat = this.phastService.flueGasByVolume(this.flueGasByVolume, this.settings);
+        this.boilerEfficiency = availableHeat * 100;
         this.stackLossPercent = (1 - availableHeat) * 100;
       } else {
         this.stackLossPercent = 0;
+        this.boilerEfficiency = 0;
       }
     } else if (this.method == "mass") {
       this.flueGasByMass = this.stackLossService.buildByMassLossFromForm(form);
@@ -135,9 +138,11 @@ export class StackLossComponent implements OnInit {
       this.stackLossService.stackLossInput.flueGasByMass = this.flueGasByMass;
       if (form.status == 'VALID') {
         const availableHeat = this.phastService.flueGasByMass(this.flueGasByMass, this.settings);
+        this.boilerEfficiency = availableHeat * 100;
         this.stackLossPercent = (1 - availableHeat) * 100;
       } else {
         this.stackLossPercent = 0;
+        this.boilerEfficiency = 0;
       }
     }
   }

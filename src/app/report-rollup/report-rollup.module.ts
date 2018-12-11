@@ -85,7 +85,8 @@ import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-r
     FsatRollupFanSummaryComponent,
     FsatRollupFanSummaryTableComponent,
     FsatRollupGraphsComponent,
-    FsatRollupPrintComponent
+    FsatRollupPrintComponent,
+
   ],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]

@@ -2,14 +2,9 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PSAT, PsatOutputs, PsatInputs } from '../../../shared/models/psat';
 import { Assessment } from '../../../shared/models/assessment';
-// import { PsatResultsData } from '../../../report-rollup/report-rollup.service';
-import { PsatReportService } from '../psat-report.service';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../psat.service';
-import { FormGroup } from '@angular/forms';
-import { PsatResultsData } from '../../../report-rollup/report-rollup.service';
 
 @Component({
   selector: 'app-psat-report-graphs',
@@ -70,7 +65,7 @@ export class PsatReportGraphsComponent implements OnInit {
   modExists: boolean = false;
   graphColors: Array<string>;
 
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private psatReportService: PsatReportService, private windowRefService: WindowRefService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -95,7 +90,6 @@ export class PsatReportGraphsComponent implements OnInit {
     //push baseline first
     this.psatOptions.push({ name: 'Baseline', psat: this.psat, index: 0 });
     this.selectedPsat1 = this.psatOptions[0];
-
     if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
       this.modExists = true;
       let i = 1;
@@ -117,18 +111,12 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   // sets loss data and percentages for selected psats
-  getPsatModificationData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>, baselinePumpEfficiency: number) {
+  getPsatModificationData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>) {
     let selectedResults: PsatOutputs;
-    let selectedInputs: PsatInputs;
-    let tmpForm: FormGroup;
-    selectedInputs = JSON.parse(JSON.stringify(psat.inputs));
-    tmpForm = this.psatService.getFormFromPsat(selectedInputs);
-    if (tmpForm.status == 'VALID') {
-      if (selectedInputs.optimize_calculation) {
-        selectedResults = this.psatService.resultsOptimal(selectedInputs, this.settings);
-      } else {
-        selectedResults = this.psatService.resultsModified(selectedInputs, this.settings, baselinePumpEfficiency);
-      }
+    let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
+    if (isPsatValid) {
+      selectedResults = this.psatService.resultsModified(selectedInputs, this.settings);
       this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
     }
     else {
@@ -138,11 +126,9 @@ export class PsatReportGraphsComponent implements OnInit {
 
   getPsatBaselineData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>): PsatOutputs {
     let selectedResults: PsatOutputs;
-    let selectedInputs: PsatInputs;
-    let tmpForm: FormGroup;
-    selectedInputs = JSON.parse(JSON.stringify(psat.inputs));
-    tmpForm = this.psatService.getFormFromPsat(selectedInputs);
-    if (tmpForm.status == 'VALID') {
+    let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
+    if (isPsatValid) {
       selectedResults = this.psatService.resultsExisting(selectedInputs, this.settings);
       this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
     }
@@ -233,7 +219,7 @@ export class PsatReportGraphsComponent implements OnInit {
     let tmpPieValues = new Array<number>();
     let tmpBarValues = new Array<number>();
     let tmpPsat = this.psatOptions[0].psat;
-    let tmpBaselineResults: PsatOutputs = this.getPsatBaselineData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
+    this.getPsatBaselineData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
     allPieLabels.push(tmpPieLabels);
     allPieValues.push(tmpPieValues);
     allBarValues.push(tmpBarValues);
@@ -243,7 +229,7 @@ export class PsatReportGraphsComponent implements OnInit {
       tmpPieValues = new Array<number>();
       tmpBarValues = new Array<number>();
       tmpPsat = this.psatOptions[i].psat;
-      this.getPsatModificationData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues, tmpBaselineResults.pump_efficiency);
+      this.getPsatModificationData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
       allPieLabels.push(tmpPieLabels);
       allPieValues.push(tmpPieValues);
       allBarValues.push(tmpBarValues);

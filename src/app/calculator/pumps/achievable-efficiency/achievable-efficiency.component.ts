@@ -39,30 +39,7 @@ export class AchievableEfficiencyComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    if (!this.psat) {
-      this.efficiencyForm = this.psatService.initForm();
-      //patch default/starter values for stand alone calculator
-      if (this.achievableEfficiencyService.flowRate && this.achievableEfficiencyService.pumpType) {
-        this.efficiencyForm.patchValue({
-          pumpType: this.achievableEfficiencyService.pumpType,
-          flowRate: this.achievableEfficiencyService.flowRate
-        })
-      }
-      else {
-        this.efficiencyForm.patchValue({
-          pumpType: this.psatService.getPumpStyleFromEnum(6),
-          flowRate: 2000
-        })
-        if (this.settings.flowMeasurement != 'gpm') {
-          let tmpVal = this.convertUnitsService.value(this.efficiencyForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
-          this.efficiencyForm.patchValue({
-            flowRate: this.psatService.roundVal(tmpVal, 2)
-          })
-        }
-      }
-    } else {
-      this.efficiencyForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    }
+    this.initForm();
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -82,24 +59,27 @@ export class AchievableEfficiencyComponent implements OnInit {
     }
   }
 
-  btnResetData() {
+  initForm() {
     if (!this.psat) {
-      this.efficiencyForm = this.psatService.initForm();
-      this.achievableEfficiencyService.flowRate = 2000;
-      this.achievableEfficiencyService.pumpType = this.psatService.getPumpStyleFromEnum(6);
-      this.efficiencyForm.patchValue({
-        pumpType: this.achievableEfficiencyService.pumpType,
-        flowRate: this.achievableEfficiencyService.flowRate
-      });
-      if (this.settings.flowMeasurement != 'gpm') {
-        let tmpVal = this.convertUnitsService.value(this.efficiencyForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
-        this.efficiencyForm.patchValue({
-          flowRate: this.psatService.roundVal(tmpVal, 2)
-        });
+      //patch default/starter values for stand alone calculator
+      if (this.achievableEfficiencyService.flowRate && this.achievableEfficiencyService.pumpType) {
+        this.efficiencyForm = this.achievableEfficiencyService.getForm(this.achievableEfficiencyService.pumpType, this.achievableEfficiencyService.flowRate);
+      }
+      else {
+        let tmpFlowRate: number = 2000;
+        if (this.settings.flowMeasurement != 'gpm') {
+          tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement);
+          tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2)
+        }
+        this.efficiencyForm = this.achievableEfficiencyService.getForm(6, tmpFlowRate);
       }
     } else {
-      this.efficiencyForm = this.psatService.getFormFromPsat(this.psat.inputs);
+      this.efficiencyForm = this.achievableEfficiencyService.getForm(this.psat.inputs.pump_style, this.psat.inputs.flow_rate);
     }
+  }
+
+  btnResetData() {
+    this.initForm();
     this.toggleResetData = !this.toggleResetData;
     this.calculate();
   }

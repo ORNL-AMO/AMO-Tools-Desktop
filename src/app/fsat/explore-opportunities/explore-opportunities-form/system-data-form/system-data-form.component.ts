@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
-import { FsatService } from '../../../fsat.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
-import { FsatWarningService, FanFieldDataWarnings } from '../../../fsat-warning.service';
+import { FanFieldDataWarnings } from '../../../fsat-warning.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-system-data-form',
@@ -21,18 +21,29 @@ export class SystemDataFormComponent implements OnInit {
     fsat: FSAT;
     @Output('emitCalculate')
     emitCalculate = new EventEmitter<boolean>();
+    @Input()
+    baselineForm: FormGroup;
+    @Input()
+    modificationForm: FormGroup;
+    @Input()
+    modificationWarnings: FanFieldDataWarnings;
+    @Input()
+    baselineWarnings: FanFieldDataWarnings;
+    @Output('showPressureModal')
+    showPressureModal = new EventEmitter<string>();
+    @Input()
+    isVFD: boolean;
 
     showSystemData: boolean = false;
     showCost: boolean = false;
     showFlowRate: boolean = false;
-    showOperatingFraction: boolean = false;
+    showOperatingHours: boolean = false;
     showPressure: boolean = false;
-    showName: boolean = false;
 
-    modificationWarnings: FanFieldDataWarnings;
-    baselineWarnings: FanFieldDataWarnings;
-    tmpBaselineName: string = 'Baseline';
-    constructor(private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private modifyConditionsService: ModifyConditionsService, private fsatWarningService: FsatWarningService) {
+    constructor(
+        private convertUnitsService: ConvertUnitsService,
+        private helpPanelService: HelpPanelService,
+        private modifyConditionsService: ModifyConditionsService) {
     }
 
     ngOnInit() {
@@ -45,19 +56,23 @@ export class SystemDataFormComponent implements OnInit {
                 this.init()
             }
         }
+        if (changes.isVFD) {
+            if (!changes.isVFD.isFirstChange()) {
+                this.init();
+            }
+        }
     }
 
     init() {
         this.initCost();
         this.initFlowRate();
         this.initPressure();
-        this.initOpFraction();
+        this.initOperatingHours();
         this.initSystemData();
-        this.checkWarnings();
     }
 
     initCost() {
-        if (this.fsat.fieldData.cost != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.cost) {
+        if (this.baselineForm.controls.cost.value != this.modificationForm.controls.cost.value) {
             this.showCost = true;
         } else {
             this.showCost = false;
@@ -65,7 +80,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initFlowRate() {
-        if (this.fsat.fieldData.flowRate != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.flowRate) {
+        if (this.baselineForm.controls.flowRate.value != this.modificationForm.controls.flowRate.value) {
             this.showFlowRate = true;
         } else {
             this.showFlowRate = false;
@@ -73,24 +88,24 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initPressure() {
-        if (this.fsat.fieldData.inletPressure != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressure ||
-            this.fsat.fieldData.outletPressure != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressure) {
+        if (this.baselineForm.controls.inletPressure.value != this.modificationForm.controls.inletPressure.value ||
+            this.baselineForm.controls.outletPressure.value != this.modificationForm.controls.outletPressure.value) {
             this.showPressure = true;
         } else {
             this.showPressure = false;
         }
     }
 
-    initOpFraction() {
-        if (this.fsat.fieldData.operatingFraction != this.fsat.modifications[this.exploreModIndex].fsat.fieldData.operatingFraction) {
-            this.showOperatingFraction = true;
+    initOperatingHours() {
+        if (this.baselineForm.controls.operatingHours.value != this.modificationForm.controls.operatingHours.value) {
+            this.showOperatingHours = true;
         } else {
-            this.showOperatingFraction = false;
+            this.showOperatingHours = false;
         }
     }
 
     initSystemData() {
-        if (this.showCost || this.showFlowRate || this.showPressure || this.showOperatingFraction) {
+        if (this.showCost || this.showOperatingHours) {
             this.showSystemData = true;
         } else {
             this.showSystemData = false;
@@ -100,64 +115,62 @@ export class SystemDataFormComponent implements OnInit {
     toggleSystemData() {
         if (this.showSystemData == false) {
             this.showCost = false;
-            this.showFlowRate = false;
-            this.showPressure = false;
-            this.showOperatingFraction = false;
+            this.showOperatingHours = false;
             this.toggleCost();
-            this.toggleFlowRate();
-            this.togglePressure();
-            this.toggleOperatingFraction();
+            this.toggleOperatingHours();
         }
     }
 
     toggleCost() {
         if (this.showCost == false) {
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.cost = this.fsat.fieldData.cost;
+            this.modificationForm.controls.cost.patchValue(this.baselineForm.controls.cost.value);
             this.calculate();
         }
     }
 
     togglePressure() {
         if (this.showPressure == false) {
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressure = this.fsat.fieldData.inletPressure;
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressure = this.fsat.fieldData.outletPressure;
+            this.modificationForm.controls.inletPressure.patchValue(this.baselineForm.controls.inletPressure.value);
+            this.modificationForm.controls.outletPressure.patchValue(this.baselineForm.controls.outletPressure.value);
             this.calculate();
         }
     }
 
-    toggleOperatingFraction() {
-        if (this.showOperatingFraction == false) {
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.operatingFraction = this.fsat.fieldData.operatingFraction;
+    toggleOperatingHours() {
+        if (this.showOperatingHours == false) {
+            this.modificationForm.controls.operatingHours.patchValue(this.baselineForm.controls.operatingHours.value);
             this.calculate();
         }
     }
 
     toggleFlowRate() {
         if (this.showFlowRate == false) {
-            this.fsat.modifications[this.exploreModIndex].fsat.fieldData.flowRate = this.fsat.fieldData.flowRate;
+            this.modificationForm.controls.flowRate.patchValue(this.baselineForm.controls.flowRate.value);
             this.calculate();
         }
     }
 
     calculate() {
         this.emitCalculate.emit(true);
-        this.checkWarnings();
     }
 
     focusField(str: string) {
         this.helpPanelService.currentField.next(str);
-        this.modifyConditionsService.modifyConditionsTab.next('fan-field-data')
+        this.modifyConditionsService.modifyConditionsTab.next('fan-field-data');
     }
 
-    checkWarnings() {
-        this.baselineWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat, this.settings);
-        this.modificationWarnings = this.fsatWarningService.checkFieldDataWarnings(this.fsat.modifications[this.exploreModIndex].fsat, this.settings);
-    }
-
-    getUnit(unit: string) {
+    getDisplayUnit(unit: string) {
         let tmpUnit = this.convertUnitsService.getUnit(unit);
         let dsp = tmpUnit.unit.name.display.replace('(', '');
         dsp = dsp.replace(')', '');
         return dsp;
+    }
+
+    showInletPressureModal() {
+        this.showPressureModal.emit('inlet')
+    }
+
+    showOutletPressureModal() {
+        this.showPressureModal.emit('outlet');
     }
 }

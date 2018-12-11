@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
 
 import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
@@ -20,13 +21,15 @@ import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.componen
 import { LineChartHelperService } from './line-chart-helper/line-chart-helper.service';
 import { ExportableTableComponent } from './exportable-table/exportable-table.component';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
+import { PrintOptionsMenuComponent } from './print-options-menu/print-options-menu.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ClipboardModule
+    ClipboardModule,
+    ModalModule
     // ChartsModule
   ],
   declarations: [
@@ -39,7 +42,8 @@ import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
     PhonePipe,
     SimpleTooltipComponent,
     ExportableTableComponent,
-    TabsTooltipComponent
+    TabsTooltipComponent,
+    PrintOptionsMenuComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -51,7 +55,8 @@ import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
     PhonePipe,
     SimpleTooltipComponent,
     ExportableTableComponent,
-    TabsTooltipComponent
+    TabsTooltipComponent,
+    PrintOptionsMenuComponent
   ],
   providers: [
     ValidationService,

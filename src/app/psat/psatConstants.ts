@@ -1,25 +1,77 @@
-export const pumpTypes: Array<string> = [
-    'End Suction Slurry',
-    'End Suction Sewage',
-    'End Suction Stock',
-    'End Suction Submersible Sewage',
-    'API Double Suction',
-    'Multistage Boiler Feed',
-    'End Suction ANSI/API',
-    'Axial Flow',
-    'Double Suction',
-    'Vertical Turbine',
-    'Large End Suction',
+export const pumpTypesConstant: Array<{ value: number, display: string }> = [
+    {
+        value: 0,
+        display: 'End Suction Slurry'
+    },
+    {
+        value: 1,
+        display: 'End Suction Sewage'
+    },
+    {
+        value: 2,
+        display: 'End Suction Stock'
+    },
+    {
+        value: 3,
+        display: 'End Suction Submersible Sewage'
+    },
+    {
+        value: 4,
+        display: 'API Double Suction'
+    },
+    {
+        value: 5,
+        display: 'Multistage Boiler Feed'
+    },
+    {
+        value: 6,
+        display: 'End Suction ANSI/API'
+    },
+    {
+        value: 7,
+        display: 'Axial Flow'
+    },
+    {
+        value: 8,
+        display: 'Double Suction'
+    },
+    {
+        value: 9,
+        display: 'Vertical Turbine'
+    },
+    {
+        value: 10,
+        display: 'Large End Suction'
+    },
+    {
+        value: 11,
+        display: 'Specified Optimal Efficiency'
+    }
     // When user selects below they need a way to provide the optimal efficiency
     // 'Specified Optimal Efficiency'
 ];
 
-export const drives: Array<string> = [
-    'Direct Drive',
-    'V-Belt Drive',
-    'Notched V-Belt Drive',
-    'Synchronous Belt Drive',
-    'Specified Efficiency'
+export const driveConstants: Array<{ value: number, display: string }> = [
+    {
+        value: 0,
+        display: 'Direct Drive'
+    },
+    {
+        value: 1,
+        display: 'V-Belt Drive'
+    },
+    {
+        value: 2,
+        display: 'Notched V-Belt Drive'
+    },
+    {
+        value: 3,
+        display: 'Synchronous Belt Drive'
+    },
+    {
+        value: 4,
+        display: 'Specified Efficiency'
+    }
 ];
 
 export const fluidProperties = {
@@ -51,3 +103,22 @@ export const fluidTypes: Array<string> = [
     'Petroleum',
     'Water'
 ];
+
+export const motorEfficiencyConstants: Array<{ value: number, display: string }> = [
+    {
+        value: 0,
+        display: 'Standard Efficiency'
+    },
+    {
+        value: 1,
+        display: 'Energy Efficient'
+    },
+    {
+        value: 2,
+        display: 'Premium Efficient'
+    },
+    {
+        value: 3,
+        display: 'Specified'
+    }
+]

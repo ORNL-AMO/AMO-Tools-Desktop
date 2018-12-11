@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PSAT } from '../../shared/models/psat';
+import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
 import { PsatService } from '../psat.service';
 import * as _ from 'lodash';
 import { Modification } from '../../shared/models/psat';
 import { PsatTabService } from '../psat-tab.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-modification-list',
@@ -21,6 +22,8 @@ export class ModificationListComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Output('close')
   close = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   newModificationName: string;
   dropdown: Array<boolean>;
@@ -147,11 +150,12 @@ export class ModificationListComponent implements OnInit {
       tmpModification.exploreOpportunities = true;
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(psat.inputs)));
+    let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
+    tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     this.dropdown.push(false);
     this.rename.push(false);
     this.deleteArr.push(false);
     this.psat.modifications.push(tmpModification);
-    console.log(this.psat.modifications);
     this.save.emit(true);
     this.selectModification(this.psat.modifications.length - 1);
     this.newModificationName = undefined;

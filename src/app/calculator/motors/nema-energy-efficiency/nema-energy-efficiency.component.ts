@@ -119,9 +119,9 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     } else {
       this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
       if (this.settings.powerMeasurement != 'hp') {
-        if (this.nemaForm.controls.horsePower.value == '200') {
+        if (this.nemaForm.controls.horsePower.value == 200) {
           this.nemaForm.patchValue({
-            horsePower: '150'
+            horsePower: 150
           })
         }
       }
@@ -164,13 +164,13 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   }
 
   calculate() {
-    if (this.nemaForm.status == 'VALID') {
-      const efficiency = this.psatService.getEfficiencyFromForm(this.nemaForm);
+    if (this.nemaForm.valid) {
+      // const efficiency = this.psatService.getEfficiencyFromForm(this.nemaForm);
       this.tefcValue = this.psatService.nema(
         this.nemaForm.controls.frequency.value,
         this.nemaForm.controls.motorRPM.value,
         this.nemaForm.controls.efficiencyClass.value,
-        efficiency,
+        this.nemaForm.controls.efficiency.value,
         this.nemaForm.controls.horsePower.value,
         this.settings
       );

@@ -28,7 +28,10 @@ export interface PsatInputs {
   load_estimation_method?: number,
   motor_rated_fla?: number,
   margin?: number,
+  //TODO: remove operatingFraction support
+  //removed from suit v0.3.2
   operating_fraction?: number,
+  operating_hours: number,
   flow_rate?: number,
   head?: number,
   motor_field_power?: number,
@@ -37,10 +40,12 @@ export interface PsatInputs {
   cost_kw_hour?: number
   cost?: number,
   load_factor?: number,
-  optimize_calculation?: boolean,
+  // optimize_calculation?: boolean,
   implementationCosts?: number,
+  isVFD?: boolean,
   fluidType: string,
-  fluidTemperature: number
+  fluidTemperature: number,
+  useCustomEfficiency?: boolean
 }
 
 export interface PsatOutputs {
@@ -52,6 +57,8 @@ export interface PsatOutputs {
   motor_power_factor?: number,
   motor_current?: number,
   motor_power?: number,
+  load_factor?: number,
+  drive_efficiency?: number,
   annual_energy?: number,
   annual_cost?: number,
   annual_savings_potential?: number,
@@ -73,6 +80,8 @@ export interface PsatCalcResults {
   motor_power_factor?: number[],
   motor_current?: number[],
   motor_power?: number[],
+  load_factor?: number[],
+  drive_efficiency?: number[],
   annual_energy?: number[],
   annual_cost?: number[],
   annual_savings_potential?: number[],

@@ -1,9 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
-import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SpecificSpeedService } from './specific-speed.service';
@@ -44,7 +42,7 @@ export class SpecificSpeedComponent implements OnInit {
   calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
-  constructor(private psatService: PsatService, private specificSpeedService: SpecificSpeedService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService,
+  constructor(private specificSpeedService: SpecificSpeedService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -107,7 +105,7 @@ export class SpecificSpeedComponent implements OnInit {
       if (this.calculator.specificSpeedInputs) {
         this.speedForm = this.specificSpeedService.initFormFromObj(this.calculator.specificSpeedInputs)
       } else {
-        this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat);
+        this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
         let tmpSpecificSpeedInputs: SpecificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
         this.calculator.specificSpeedInputs = tmpSpecificSpeedInputs;
         this.saveCalculator();
@@ -119,7 +117,7 @@ export class SpecificSpeedComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat);
+    this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
     let tmpSpecificSpeedInputs: SpecificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
@@ -136,7 +134,7 @@ export class SpecificSpeedComponent implements OnInit {
         this.speedForm = this.specificSpeedService.initFormFromObj(this.specificSpeedService.specificSpeedInputs);
       }
     } else {
-      this.speedForm = this.psatService.getFormFromPsat(this.psat.inputs);
+      this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
     }
   }
 

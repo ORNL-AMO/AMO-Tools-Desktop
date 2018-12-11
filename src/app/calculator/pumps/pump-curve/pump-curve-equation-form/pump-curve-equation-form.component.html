@@ -1,7 +1,7 @@
 <label class="group-label" *ngIf="!isFan">
   Head Equation Coefficients</label>
-  <label class="group-label" *ngIf="isFan">
-    Pressure Equation Coefficients</label>
+<label class="group-label" *ngIf="isFan">
+  Pressure Equation Coefficients</label>
 
 <div class="form-group">
   <label for="maxFlow">Max Flow</label>
@@ -12,6 +12,9 @@
       id="maxFlow" onfocus="this.select();" (focus)="focusField('fanMaxFlow')" *ngIf="isFan">
     <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
     <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+    <span class="alert-danger pull-right small" *ngIf="maxFlowWarning !== null">
+      {{maxFlowWarning}}
+    </span>
   </div>
 </div>
 
@@ -30,10 +33,12 @@
 
 <div class="form-group">
   <label for="headConstant">Constant</label>
-  <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headConstant" onfocus="this.select();" (focus)="focusField('headConstant')" *ngIf="!isFan">
-  <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headConstant" onfocus="this.select();" (focus)="focusField('pressureConstant')" *ngIf="isFan">
+  <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control"
+    (input)="emitCalculateChanges()" id="headConstant" onfocus="this.select();" (focus)="focusField('headConstant')"
+    *ngIf="!isFan">
+  <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control"
+    (input)="emitCalculateChanges()" id="headConstant" onfocus="this.select();" (focus)="focusField('pressureConstant')"
+    *ngIf="isFan">
   <span class="alert-danger pull-right small" *ngIf="constantWarning !== null">
     {{constantWarning}}
   </span>

@@ -1,7 +1,7 @@
-import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import {FSAT, FanSetup, FieldData} from '../../../../shared/models/fans';
-import { FanTypes } from '../../../fanOptions';
+import { FSAT, FanSetup, FieldData } from '../../../../shared/models/fans';
+import { FanTypes, Drives } from '../../../fanOptions';
 import * as _ from 'lodash';
 
 @Component({
@@ -27,44 +27,38 @@ export class FanSetupSummaryComponent implements OnInit {
   fanTypeDiff = new Array<boolean>();
   fanSpeedDiff = new Array<boolean>();
   driveDiff = new Array<boolean>();
-  fanSpecifiedDiff = new Array<boolean>();
+  // specifiedDriveEfficiencyDiff = new Array<boolean>();
   fanEfficiencyDiff = new Array<boolean>();
   fanTypes: Array<{ display: string, value: number }>;
+  drives: Array<{ display: string, value: number }>;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.fanTypes = FanTypes;
+    this.drives = Drives;
     this.fanTypeDiff = new Array<boolean>();
     this.fanSpeedDiff = new Array<boolean>();
     this.driveDiff = new Array<boolean>();
-    this.fanSpecifiedDiff = new Array<boolean>();
+    //this.specifiedDriveEfficiencyDiff = new Array<boolean>();
     this.fanEfficiencyDiff = new Array<boolean>();
 
     if (this.fsat.fanSetup) {
-
       let mods = new Array<FanSetup>();
-
       if (this.fsat.modifications) {
-
         this.numMods = this.fsat.modifications.length;
-
         for (let i = 0; i < this.fsat.modifications.length; i++) {
-
           if (this.fsat.modifications[i].fsat.fanSetup) {
             // fanSetup changes
             mods.push(this.fsat.modifications[i].fsat.fanSetup);
           }
-
         }
         this.fanTypeDiff.push(false)
         this.fanSpeedDiff.push(false);
         this.driveDiff.push(false)
-        this.fanSpecifiedDiff.push(false)
+        // this.specifiedDriveEfficiencyDiff.push(false)
         this.fanEfficiencyDiff.push(false)
-
-
       }
-
       this.fanSetup = {
         baseline: this.fsat.fanSetup,
         modifications: mods
@@ -97,8 +91,21 @@ export class FanSetupSummaryComponent implements OnInit {
   }
 
 
-  getFanType(fanTypeEnum: number): string{
-    let fanDisplay: string = _.find(this.fanTypes, (val)=> {return val.value == fanTypeEnum }).display;
-    return fanDisplay;
+  getFanType(fanTypeEnum: number): string {
+    let fanType: { value: number, display: string } = _.find(this.fanTypes, (val) => { return val.value == fanTypeEnum });
+    if (fanType) {
+      return fanType.display;
+    } else {
+      return
+    }
+  }
+
+  getDriveType(driveTypeEnum: number): string {
+    let driveType: { value: number, display: string } = _.find(this.drives, (val) => { return val.value == driveTypeEnum });
+    if (driveType) {
+      return driveType.display;
+    } else {
+      return
+    }
   }
 }

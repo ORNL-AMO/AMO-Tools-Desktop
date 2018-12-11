@@ -81,14 +81,19 @@ export class PumpCurveGraphComponent implements OnInit {
   tooltipPointer: any;
   tooltipData: Array<{ label: string, value: number, unit: string, formatX: boolean }>;
 
-
-
   graphColors: Array<string>;
   tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string }>;
   tablePointsPump: Array<d3.Selection<any>>;
   tablePointsPumpMod: Array<d3.Selection<any>>;
   tablePointsSystem: Array<d3.Selection<any>>;
   deleteCount: number = 0;
+
+  dIntersectBaseline: { x: number, y: number };
+  dIntersectMod: { x: number, y: number };
+  focusBaselineIntersect: d3.Selection<any>;
+  focusModIntersect: d3.Selection<any>;
+  baselineIntersect: boolean = false;
+  modIntersect: boolean = false;
 
   firstChange: boolean = true;
 
@@ -136,6 +141,7 @@ export class PumpCurveGraphComponent implements OnInit {
     this.columnTitles = new Array<string>();
     this.rowData = new Array<Array<string>>();
     this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+
   }
 
   ngAfterViewInit() {
@@ -241,10 +247,12 @@ export class PumpCurveGraphComponent implements OnInit {
     if (!this.firstChange) {
       //pump-curve.component toggles the toggleCalculate value when calculating
       //check for changes to toggleCalculate
-      if (changes.toggleCalculate || changes.lossCoefficient || changes.staticHead || changes.graphSystemCurve || changes.graphPumpCurve) {
+      if (changes.toggleCalculate || changes.lossCoefficient || changes.staticHead || changes.graphSystemCurve || changes.graphPumpCurve || changes.selectedFormView) {
         this.curveChanged = true;
         //if changes draw new graph
         if (this.checkForm() && this.margin) {
+          this.baselineIntersect = false;
+          this.modIntersect = false;
           this.checkGraphModificationCurve();
           this.initTooltipData();
           this.makeGraph();
@@ -429,6 +437,39 @@ export class PumpCurveGraphComponent implements OnInit {
       allD.push(this.dSystem);
       allFocus.push(this.focusSystem);
     }
+
+    if (this.graphSystemCurve && this.graphPumpCurve) {
+      let maxFlow = this.pumpCurveForm.maxFlow;
+      if (this.selectedFormView == 'Data') {
+        maxFlow = _.maxBy(this.pumpCurveForm.dataRows, (row) => {
+          return row.flow;
+        }).flow;
+      }
+      this.dIntersectBaseline = this.findIntersection(data, dataSystem, maxFlow, 1);
+      if (this.graphModificationCurve) {
+        let ratio = (this.pumpCurveForm.modifiedMeasurement / this.pumpCurveForm.baselineMeasurement);
+        this.dIntersectMod = this.findIntersection(dataModification, dataSystem, maxFlow * ratio, ratio);
+      }
+      else {
+        this.dIntersectMod = {
+          x: null,
+          y: null
+        };
+      }
+      this.addIntersectionsToTable();
+    }
+    else {
+      this.dIntersectBaseline = {
+        x: null,
+        y: null
+      };
+      this.dIntersectMod = {
+        x: null,
+        y: null
+      };
+    }
+
+
     this.detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
     this.detailBoxPointer = this.lineChartHelperService.appendDetailBoxPointer(this.ngChart);
     let format = d3.format(",.2f");
@@ -457,6 +498,7 @@ export class PumpCurveGraphComponent implements OnInit {
     }
     this.curveChanged = false;
     this.addLegend();
+
   }
 
 
@@ -467,14 +509,15 @@ export class PumpCurveGraphComponent implements OnInit {
     let format: any = d3.format(",.2f");
     let dArray: Array<any> = this.lineChartHelperService.getDArray();
     let dSystemIndex: number = 0;
+    let dIndex: number = 0;
     if (this.graphPumpCurve) {
-      this.dPump = dArray[0];
+      this.dPump = dArray[dIndex];
       let tableFocusPump: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPump-" + this.tablePointsPump.length, this.graphColors[i % this.graphColors.length], this.graphColors[borderColorIndex % this.graphColors.length], this.x(this.dPump.x), this.y(this.dPump.y));
       this.focusDPump.push(this.dPump);
       this.tablePointsPump.push(tableFocusPump);
       dSystemIndex++;
       if (this.graphModificationCurve) {
-        this.dPumpMod = dArray[1];
+        this.dPumpMod = dArray[dIndex + 1];
         let tableFocusPumpMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPumpMod-" + this.tablePointsPumpMod.length, this.graphColors[i % this.graphColors.length], this.graphColors[borderColorIndex % this.graphColors.length], this.x(this.dPumpMod.x), this.y(this.dPumpMod.y));
         this.focusDPumpMod.push(this.dPumpMod);
         this.tablePointsPumpMod.push(tableFocusPumpMod);
@@ -499,7 +542,8 @@ export class PumpCurveGraphComponent implements OnInit {
     let modHeadOrPressure = "&mdash;";
     let systemHeadOrPressure = "&mdash;";
     let fluidPower = "&mdash;";
-    let data: Array<string> = [flowRate];
+    let data: Array<string> = new Array<string>();
+    data.push(flowRate);
     if (this.graphPumpCurve) {
       if (this.dPump.x > maxX - 10) {
         baseHeadOrPressure = format(this.dPump.y).toString();
@@ -550,42 +594,142 @@ export class PumpCurveGraphComponent implements OnInit {
     this.rowData = new Array<Array<string>>();
     this.deleteCount = 0;
     this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.addIntersectionsToTable();
+  }
+
+  addIntersectionsToTable() {
+    let format: any = d3.format(",.2f");
+    if (this.dIntersectMod !== undefined) {
+      if (this.dIntersectMod.x !== null && this.dIntersectMod.y !== null) {
+        this.modIntersect = true;
+        let dataPiece: { borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string };
+        let data: Array<string> = new Array<string>();
+        data.push(format(this.dIntersectMod.x).toString());
+        data.push("&mdash;");
+        data.push(format(this.dIntersectMod.y).toString());
+        data.push(format(this.dIntersectMod.y).toString());
+        data.push("0");
+        dataPiece = {
+          borderColor: "#000",
+          fillColor: "#000",
+          flowRate: format(this.dIntersectMod.x).toString(),
+          baseHeadOrPressure: "&mdash;",
+          modHeadOrPressure: format(this.dIntersectMod.y).toString(),
+          systemHeadOrPressure: format(this.dIntersectMod.y).toString(),
+          fluidPower: "0"
+        };
+        let colors = {
+          borderColor: "#000",
+          fillColor: "#000"
+        }
+        this.keyColors.unshift(colors);
+        this.rowData.unshift(data);
+        this.tableData.unshift(dataPiece);
+        this.focusModIntersect = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectMod.x), this.y(this.dIntersectMod.y));
+      }
+    }
+    if (this.dIntersectBaseline !== undefined) {
+      if (this.dIntersectBaseline.x !== null && this.dIntersectBaseline.y !== null) {
+        this.baselineIntersect = true;
+        let dataPiece: { borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string };
+        let data: Array<string> = new Array<string>();
+        data.push(format(this.dIntersectBaseline.x).toString());
+        data.push(format(this.dIntersectBaseline.y).toString());
+        if (this.graphModificationCurve) {
+          data.push("&mdash;");
+        }
+        data.push(format(this.dIntersectBaseline.y).toString());
+        data.push("0");
+        dataPiece = {
+          borderColor: "#000",
+          fillColor: "#000",
+          flowRate: format(this.dIntersectBaseline.x).toString(),
+          baseHeadOrPressure: format(this.dIntersectBaseline.y).toString(),
+          modHeadOrPressure: "&mdash;",
+          systemHeadOrPressure: format(this.dIntersectBaseline.y).toString(),
+          fluidPower: "0"
+        };
+        let colors = {
+          borderColor: "#000",
+          fillColor: "#000"
+        }
+        this.keyColors.unshift(colors);
+        this.rowData.unshift(data);
+        this.tableData.unshift(dataPiece);
+        this.focusBaselineIntersect = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectBaseline.x), this.y(this.dIntersectBaseline.y));
+      }
+    }
   }
 
   //dynamic table
   replaceFocusPoints() {
     this.svg.selectAll('.tablePoint').remove();
+
+    let iteratorShift: number = 0;
+    if (this.baselineIntersect) {
+      let tableFocusIntersectBaseline: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectBaseline.x), this.y(this.dIntersectBaseline.y));
+      iteratorShift++;
+    }
+    if (this.modIntersect) {
+      let tableFocusIntersectMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectMod", "#000", "#000", this.x(this.dIntersectMod.x), this.y(this.dIntersectMod.y));
+      iteratorShift++;
+    }
+
     if (this.graphPumpCurve) {
-      for (let i = 0; i < this.rowData.length; i++) {
-        let tableFocusPump: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPump-" + i, this.tableData[i].fillColor, this.tableData[i].borderColor, this.x(this.focusDPump[i].x), this.y(this.focusDPump[i].y));
+      for (let i = 0; i < this.rowData.length - iteratorShift; i++) {
+        let tableFocusPump: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPump-" + i, this.tableData[i + iteratorShift].fillColor, this.tableData[i + iteratorShift].borderColor, this.x(this.focusDPump[i].x), this.y(this.focusDPump[i].y));
       }
       if (this.graphModificationCurve) {
-        for (let i = 0; i < this.rowData.length; i++) {
-          let tableFocusPumpMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPumpMod-" + i, this.tableData[i].fillColor, this.tableData[i].borderColor, this.x(this.focusDPumpMod[i].x), this.y(this.focusDPumpMod[i].y));
+        for (let i = 0; i < this.rowData.length - iteratorShift; i++) {
+          let tableFocusPumpMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPumpMod-" + i, this.tableData[i + iteratorShift].fillColor, this.tableData[i + iteratorShift].borderColor, this.x(this.focusDPumpMod[i].x), this.y(this.focusDPumpMod[i].y));
         }
       }
     }
     if (this.graphSystemCurve) {
-      for (let i = 0; i < this.rowData.length; i++) {
-        let tableFocusSystem: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointSystem-" + i, this.tableData[i].fillColor, this.tableData[i].borderColor, this.x(this.focusDSystem[i].x), this.y(this.focusDSystem[i].y));
+      for (let i = 0; i < this.rowData.length - iteratorShift; i++) {
+        let tableFocusSystem: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointSystem-" + i, this.tableData[i + iteratorShift].fillColor, this.tableData[i + iteratorShift].borderColor, this.x(this.focusDSystem[i].x), this.y(this.focusDSystem[i].y));
       }
     }
   }
 
   deleteFromTable(i: number) {
+    let iteratorShift: number = 0;
+    if (this.modIntersect) {
+      iteratorShift++;
+      if (this.baselineIntersect) {
+        if (i == 1) {
+          this.modIntersect = false;
+        }
+      }
+      else {
+        if (i == 0) {
+          this.modIntersect = false;
+        }
+      }
+    }
+    if (this.baselineIntersect) {
+      iteratorShift++;
+      if (i == 0) {
+        this.baselineIntersect = false;
+      }
+    }
     for (let j = i; j < this.tableData.length - 1; j++) {
       this.tableData[j] = this.tableData[j + 1];
       if (this.graphPumpCurve) {
-        this.tablePointsPump[j] = this.tablePointsPump[j + 1];
-        this.focusDPump[j] = this.focusDPump[j + 1];
-        if (this.graphModificationCurve) {
-          this.tablePointsPumpMod[j] = this.tablePointsPumpMod[j + 1];
-          this.focusDPumpMod[j] = this.focusDPumpMod[j + 1];
+        if (i >= iteratorShift) {
+          this.tablePointsPump[j - iteratorShift] = this.tablePointsPump[j + 1 - iteratorShift];
+          this.focusDPump[j - iteratorShift] = this.focusDPump[j + 1 - iteratorShift];
+          if (this.graphModificationCurve) {
+            this.tablePointsPumpMod[j - iteratorShift] = this.tablePointsPumpMod[j + 1 - iteratorShift];
+            this.focusDPumpMod[j - iteratorShift] = this.focusDPumpMod[j + 1 - iteratorShift];
+          }
         }
       }
       if (this.graphSystemCurve) {
-        this.tablePointsSystem[j] = this.tablePointsSystem[j + 1];
-        this.focusDSystem[j] = this.focusDSystem[j + 1];
+        if (i >= iteratorShift) {
+          this.tablePointsSystem[j - iteratorShift] = this.tablePointsSystem[j + 1 - iteratorShift];
+          this.focusDSystem[j - iteratorShift] = this.focusDSystem[j + 1 - iteratorShift];
+        }
       }
       this.rowData[j] = this.rowData[j + 1];
       this.keyColors[j] = this.keyColors[j + 1];
@@ -595,16 +739,20 @@ export class PumpCurveGraphComponent implements OnInit {
     }
     this.tableData.pop();
     if (this.graphPumpCurve) {
-      this.tablePointsPump.pop();
-      this.focusDPump.pop();
-      if (this.graphModificationCurve) {
-        this.tablePointsPumpMod.pop();
-        this.focusDPumpMod.pop();
+      if (i >= iteratorShift) {
+        this.tablePointsPump.pop();
+        this.focusDPump.pop();
+        if (this.graphModificationCurve) {
+          this.tablePointsPumpMod.pop();
+          this.focusDPumpMod.pop();
+        }
       }
     }
     if (this.graphSystemCurve) {
-      this.tablePointsSystem.pop();
-      this.focusDSystem.pop();
+      if (i >= iteratorShift) {
+        this.tablePointsSystem.pop();
+        this.focusDSystem.pop();
+      }
     }
     this.rowData.pop();
     this.keyColors.pop();
@@ -613,21 +761,75 @@ export class PumpCurveGraphComponent implements OnInit {
 
   highlightPoint(i: number) {
     let ids: Array<string> = new Array<string>();
-    if (this.graphPumpCurve) {
-      ids.push("#tablePointPump-" + i);
-      if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + i); }
+    let iteratorShift: number = 0;
+    if (this.baselineIntersect) {
+      iteratorShift++;
     }
-    if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + i); }
+    if (this.modIntersect) {
+      iteratorShift++;
+    }
+    if (this.baselineIntersect && i == 0) {
+      ids.push("#intersectBaseline");
+    }
+    else if (this.modIntersect) {
+      if (i == 0 && !this.baselineIntersect) {
+        ids.push("#intersectMod");
+      }
+      else if (i == 1) {
+        ids.push("#intersectMod");
+      }
+      else {
+        if (this.graphPumpCurve) {
+          ids.push("#tablePointPump-" + (i - iteratorShift));
+          if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + (i - iteratorShift)); }
+        }
+        if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + (i - iteratorShift)); }
+      }
+    }
+    else {
+      if (this.graphPumpCurve) {
+        ids.push("#tablePointPump-" + (i - iteratorShift));
+        if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + (i - iteratorShift)); }
+      }
+      if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + (i - iteratorShift)); }
+    }
     this.lineChartHelperService.tableHighlightPointHelper(this.svg, ids);
   }
 
   unhighlightPoint(i: number) {
     let ids: Array<string> = new Array<string>();
-    if (this.graphPumpCurve) {
-      ids.push("#tablePointPump-" + i);
-      if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + i); }
+    let iteratorShift: number = 0;
+    if (this.baselineIntersect) {
+      iteratorShift++;
     }
-    if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + i); }
+    if (this.modIntersect) {
+      iteratorShift++;
+    }
+    if (this.baselineIntersect && i == 0) {
+      ids.push("#intersectBaseline");
+    }
+    else if (this.modIntersect) {
+      if (i == 0 && !this.baselineIntersect) {
+        ids.push("#intersectMod");
+      }
+      else if (i == 1) {
+        ids.push("#intersectMod");
+      }
+      else {
+        if (this.graphPumpCurve) {
+          ids.push("#tablePointPump-" + (i - iteratorShift));
+          if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + (i - iteratorShift)); }
+        }
+        if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + (i - iteratorShift)); }
+      }
+    }
+    else {
+      if (this.graphPumpCurve) {
+        ids.push("#tablePointPump-" + (i - iteratorShift));
+        if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + (i - iteratorShift)); }
+      }
+      if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + (i - iteratorShift)); }
+    }
     this.lineChartHelperService.tableUnhighlightPointHelper(this.svg, ids);
     this.replaceFocusPoints();
   }
@@ -766,4 +968,64 @@ export class PumpCurveGraphComponent implements OnInit {
     }, 200);
   }
   //========== end chart resize functions ==========
+
+  findIntersection(pumpData: Array<{ x: number, y: number }>, systemData: Array<{ x: number, y: number, fluidPower: number }>, maxFlow: number, ratio: number): { x: number, y: number } {
+    let intersected: boolean = false;
+    let pumpStartGreater: boolean = false;
+    let intersectPoint: number = 0;
+    let intersect: { x: number, y: number } = {
+      x: null,
+      y: null
+    };
+    if (pumpData[0].y > systemData[0].y) {
+      pumpStartGreater = true;
+    }
+    if (pumpStartGreater) {
+      for (let i = 1; i < pumpData.length; i++) {
+        if (pumpData[i].y < systemData[i].y) {
+          intersectPoint = i;
+          intersected = true;
+          break;
+        }
+      }
+    }
+    else {
+      for (let i = 1; i < pumpData.length; i++) {
+        if (pumpData[i].y > systemData[i].y) {
+          intersectPoint = i;
+          intersected = true;
+          break;
+        }
+      }
+    }
+
+    if (intersected) {
+      let pumpHead1 = pumpData[intersectPoint - 1].y;
+      let pumpHead2 = pumpData[intersectPoint].y;
+      let systemHead1 = systemData[intersectPoint - 1].y;
+      let systemHead2 = systemData[intersectPoint].y;
+      let avgHead = this.calculateAverage([pumpHead1, pumpHead2, systemHead1, systemHead2]);
+      let avgFlow = this.calculateFlowFromHead(avgHead);
+      intersect = {
+        x: avgFlow,
+        y: avgHead
+      };
+    }
+    return intersect;
+  }
+
+  calculateAverage(d: Array<number>) {
+    let avg: number = 0;
+    for (let i = 0; i < d.length; i++) {
+      avg += d[i];
+    }
+    avg = avg / d.length;
+    return avg;
+  }
+
+  calculateFlowFromHead(head: number): number {
+    let flow: number;
+    flow = Math.pow((head - this.staticHead) / this.lossCoefficient, 1 / this.curveConstants.form.controls.systemLossExponent.value);
+    return flow;
+  }
 }

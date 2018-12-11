@@ -37,13 +37,7 @@ export class JsonToCsvService {
   getPsatCsvData(assessment: Assessment, settings: Settings, psat: PSAT) {
     let tmpResults;
     let isOptimized;
-    if (psat.inputs.optimize_calculation) {
-      isOptimized = 'Yes';
-      tmpResults = this.psatService.resultsOptimal(psat.inputs, settings);
-    } else {
-      isOptimized = 'No';
-      tmpResults = this.psatService.resultsExisting(psat.inputs, settings);
-    }
+    tmpResults = this.psatService.resultsExisting(psat.inputs, settings);
     let tmpPsatCsvData: PsatCsvData = {
       Name: assessment.name,
       CreatedDate: moment(assessment.createdDate).format("YYYY-MM-DD H:mm A"),
@@ -60,7 +54,7 @@ export class JsonToCsvService {
       SpecificGravity: psat.inputs.specific_gravity,
       FixedSpeed: this.psatService.getFixedSpeedFromEnum(psat.inputs.fixed_speed),
       Stages: psat.inputs.stages,
-      LineFrequency: this.psatService.getLineFreqNumValueFromEnum(psat.inputs.line_frequency),
+      LineFrequency: psat.inputs.line_frequency,
       LineFrequencyUnit: 'Hz',
       MotorRatedPower: psat.inputs.motor_rated_power,
       MotorRatedPowerUnit: settings.powerMeasurement,
@@ -74,8 +68,7 @@ export class JsonToCsvService {
       LoadEstimationMethod: this.psatService.getLoadEstimationFromEnum(psat.inputs.load_estimation_method),
       MotorRatedFullLoadAmps: psat.inputs.motor_rated_fla,
       MotorRatedFullLoadAmpsUnit: 'A',
-      Margin: psat.inputs.margin,
-      OperatingFraction: psat.inputs.operating_fraction,
+      OperatingHours: psat.inputs.operating_hours,
       FlowRate: psat.inputs.flow_rate,
       FlowRateUnit: settings.flowMeasurement,
       Head: psat.inputs.head,
@@ -144,8 +137,7 @@ export interface PsatCsvData {
   LoadEstimationMethod: string,
   MotorRatedFullLoadAmps: number,
   MotorRatedFullLoadAmpsUnit: string,
-  Margin: number,
-  OperatingFraction: number,
+  OperatingHours: number,
   FlowRate: number,
   FlowRateUnit: string,
   Head: number,
@@ -177,7 +169,7 @@ export interface PsatCsvData {
   AnnualEnergyUnit: string
   AnnualCost: number,
   AnnualCostUnit: string,
-  Optimized:string
+  Optimized: string
 }
 
 export const PsatCsvDataFields = [
@@ -210,8 +202,7 @@ export const PsatCsvDataFields = [
   "LoadEstimationMethod",
   "MotorRatedFullLoadAmps",
   "MotorRatedFullLoadAmpsUnit",
-  "Margin",
-  "OperatingFraction",
+  "OperatingHours",
   "FlowRate",
   "FlowRateUnit",
   "Head",

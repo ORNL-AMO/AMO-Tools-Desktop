@@ -43,11 +43,12 @@
     <div class="form-group">
       <label for="efficiencyClass">Efficiency Class</label>
       <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (change)="modifyPowerArrays()" (focus)="focusField('efficiencyClass')">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
       </select>
     </div>
 
-    <div class="form-group" *ngIf="nemaForm.controls.efficiencyClass.value == 'Specified'">
+    <!--specified efficiency class-->
+    <div class="form-group" *ngIf="nemaForm.controls.efficiencyClass.value == 3">
       <label for="efficiency">Efficiency</label>
       <div class="input-group calc-addon-group">
         <input type="number" min="0" step="any" max="100" class="form-control addon-input" id="efficiency" formControlName="efficiency"
