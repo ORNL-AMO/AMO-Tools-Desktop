@@ -36,16 +36,17 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   ngOnInit() {
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
     this.initForm();
+
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.showFormToggle && !changes.showFormToggle.isFirstChange()){
-      if(this.showFormToggle == false){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.showFormToggle && !changes.showFormToggle.isFirstChange()) {
+      if (this.showFormToggle == false) {
         this.showOperation = false;
         this.showCondenserPressure = false;
       }
     }
-    if(changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()){
+    if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
       this.showOperation = false;
       this.showCondenserPressure = false;
       this.initForm();
@@ -126,7 +127,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
     // this.exploreOpportunitiesService.currentField.next('default');
   }
 
-  focusOperation(operationValue: number){
+  focusOperation(operationValue: number) {
     this.ssmtService.turbineOperationValue.next(operationValue);
     this.focusField('operationValue')
   }
