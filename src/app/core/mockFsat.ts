@@ -175,7 +175,7 @@ export const MockFsatSettings: Settings = {
     flowMeasurement: "gpm",
     powerMeasurement: "hp",
     pressureMeasurement: "psi",
-    steamPressureMeasurement: "kPa",
+    steamPressureMeasurement: "kPag",
     steamTemperatureMeasurement: "C",
     steamSpecificEnthalpyMeasurement: "kJkg",
     steamSpecificEntropyMeasurement: "kJkgK",
