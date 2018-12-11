@@ -5,7 +5,7 @@
       <div class="input-group">
         <input name="airFlow" class="form-control" type="number" step="any" [(ngModel)]="inputs.airFlow" id="airFlow" (input)="emitChange()"
           onfocus="this.select();" (focus)="changeField('airFlow')">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">SCFM</span>
         <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup>/min</span>
       </div>
     </div>
@@ -14,8 +14,8 @@
       <div class="input-group">
         <input name="pipePressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.pipePressure" id="pipePressure"
           (input)="emitChange()" onfocus="this.select();" (focus)="changeField('pipePressure')">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa g</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">psi</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
       </div>
     </div>
     <div class="form-group">
@@ -23,8 +23,8 @@
       <div class="input-group">
         <input name="atmosphericPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.atmosphericPressure"
           id="atmosphericPressure" (input)="emitChange()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psi</span>
-        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Metric'">psia</span>
+        <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPaa</span>
       </div>
     </div>
     <label class="group-label pt-3">Compressed Air Velocity in the Piping</label>
@@ -41,7 +41,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.oneHalf">
               <strong>{{outputs.oneHalf | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.oneHalf">
@@ -57,7 +57,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.threeFourths">
               <strong>{{outputs.threeFourths | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.threeFourths">
@@ -70,7 +70,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.one">
               <strong>{{outputs.one | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.one">
@@ -86,7 +86,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.oneAndOneFourth">
               <strong>{{outputs.oneAndOneFourth | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.oneAndOneFourth">
@@ -102,7 +102,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.oneAndOneHalf">
               <strong>{{outputs.oneAndOneHalf | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.one">
@@ -115,7 +115,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.two">
               <strong>{{outputs.two | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.two">
@@ -136,7 +136,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.twoAndOneHalf">
               <strong>{{outputs.twoAndOneHalf | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.twoAndOneHalf">
@@ -149,7 +149,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.three">
               <strong>{{outputs.three | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.three">
@@ -165,7 +165,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.threeAndOneHalf">
               <strong>{{outputs.threeAndOneHalf | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.threeAndOneHalf">
@@ -178,7 +178,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.four">
               <strong>{{outputs.four | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.four">
@@ -191,7 +191,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.five">
               <strong>{{outputs.five | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.five">
@@ -204,7 +204,7 @@
           <div class="text-center small">
             <span *ngIf="outputs.six">
               <strong>{{outputs.six | number:'1.0-2'}} </strong>
-              <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in/s</strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in/s</strong>
               <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm/s</strong>
             </span>
             <span *ngIf="!outputs.six">

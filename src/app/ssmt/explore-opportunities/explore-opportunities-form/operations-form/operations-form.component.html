@@ -1,0 +1,153 @@
+<div class="checkbox">
+  <label class="group-label" for="adjustGeneralOperations">
+    <input type="checkbox" id="adjustGeneralOperations" value="true" (focus)="focusField('hoursPerYear')" (change)="toggleOperationsData()"
+      [(ngModel)]="showOperationsData" /> Adjust General Operations
+  </label>
+</div>
+<ul *ngIf="showOperationsData">
+  <li>
+    <div class="checkbox">
+      <label for="modifyOperatingHours">
+        <input type="checkbox" id="modifyOperatingHours" value="true" (focus)="focusField('hoursPerYear')" (change)="toggleHoursPerYear()"
+          [(ngModel)]="showHoursPerYear" /> Modify Operating Hours
+      </label>
+    </div>
+    <form *ngIf="showHoursPerYear">
+      <div class="form-group">
+        <label for="baselineOperatingHours">Baseline Operating Hours</label>
+        <div class="input-group">
+          <input name="baselineOperatingHours" type="number" step="any" id="baselineOperatingHours" class="form-control"
+            (focus)="focusField('hoursPerYear')" (input)="setBaselineOperatingHours()" [(ngModel)]="ssmt.operatingHours.hoursPerYear"
+            [disabled]="true" />
+          <span class="input-group-addon units">hrs/yr</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationOperatingHours">Modification Operating Hours</label>
+        <div class="input-group">
+          <input name="modificationOperatingHours" type="number" step="any" id="modificationOperatingHours" class="form-control"
+            (focus)="focusField('hoursPerYear')" (input)="setModificationOperatingHours()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingHours.hoursPerYear" />
+          <span class="input-group-addon units">hrs/yr</span>
+        </div>
+      </div>
+    </form>
+  </li>
+  <li>
+    <div class="checkbox">
+      <label for="modifyMakeupWater">
+        <input type="checkbox" id="modifyMakeupWater" value="true" (focus)="focusField('makeUpWaterTemperature')"
+          (change)="toggleMakeupWaterTemp()" [(ngModel)]="showMakeupWaterTemp" /> Modify Make-up Water Temperature
+      </label>
+    </div>
+    <form *ngIf="showMakeupWaterTemp">
+      <div class="form-group">
+        <label for="baselineMakeupWaterTemp">Baseline Make-up Water Temperature</label>
+        <div class="input-group">
+          <input name="baselineMakeupWaterTemp" type="number" step="any" id="baselineOperatingHours" class="form-control"
+            (focus)="focusField('makeUpWaterTemperature')" (input)="save()" [(ngModel)]="ssmt.generalSteamOperations.makeUpWaterTemperature"
+            [disabled]="true" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationMakeupWaterTemp">Modification Make-up Water Temperature</label>
+        <div class="input-group">
+          <input name="modificationMakeupWaterTemp" type="number" step="any" id="modificationMakeupWaterTemp" class="form-control"
+            (focus)="focusField('makeUpWaterTemperature')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.generalSteamOperations.makeUpWaterTemperature" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+      </div>
+    </form>
+  </li>
+</ul>
+
+
+<div class="checkbox">
+  <label class="group-label" for="adjustUnitCosts">
+    <input type="checkbox" id="adjustUnitCosts" value="true" (focus)="focusField('electricityCost')" (change)="toggleUnitCosts()"
+      [(ngModel)]="showUnitCosts" /> Adjust Unit Costs
+  </label>
+</div>
+<ul *ngIf="showUnitCosts">
+  <li>
+    <div class="checkbox">
+      <label for="modifyElectricityCost">
+        <input type="checkbox" id="modifyElectricityCost" value="true" (focus)="focusField('electricityCost')" (change)="toggleElectricityCost()"
+          [(ngModel)]="showElectricityCost" /> Modify Electricity Unit Cost
+      </label>
+    </div>
+    <form *ngIf="showElectricityCost">
+      <div class="form-group">
+        <label for="baselineElectricityCost">Baseline Electricity Unit Cost</label>
+        <div class="input-group">
+          <input name="baselineElectricityCost" type="number" step="any" id="baselineElectricityCost" class="form-control"
+            (focus)="focusField('electricityCost')" (input)="save()" [(ngModel)]="ssmt.operatingCosts.electricityCost"
+            [disabled]="true" />
+          <span class="input-group-addon units">$/kWh</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationElectricityCost">Modification Electricity Unit Cost</label>
+        <div class="input-group">
+          <input name="modificationElectricityCost" type="number" step="any" id="modificationElectricityCost" class="form-control"
+            (focus)="focusField('electricityCost')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.electricityCost" />
+          <span class="input-group-addon units">$/kWh</span>
+        </div>
+      </div>
+    </form>
+  </li>
+  <li>
+    <div class="checkbox">
+      <label for="modifyFuelCost">
+        <input type="checkbox" id="modifyFuelCost" value="true" (focus)="focusField('fuelCost')" (change)="toggleFuelCost()"
+          [(ngModel)]="showFuelCost" /> Modify Fuel Cost
+      </label>
+    </div>
+    <form *ngIf="showFuelCost">
+      <div class="form-group">
+        <label for="baselineFuelCost">Baseline Fuel Cost</label>
+        <div class="input-group">
+          <input name="baselineFuelCost" type="number" step="any" id="baselineFuelCost" class="form-control" (focus)="focusField('fuelCost')"
+            (input)="save()" [(ngModel)]="ssmt.operatingCosts.fuelCost" [disabled]="true" />
+          <span class="input-group-addon units">$/{{settings.steamEnergyMeasurement}}</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationFuelCost">Modification Fuel Cost</label>
+        <div class="input-group">
+          <input name="modificationFuelCost" type="number" step="any" id="modificationFuelCost" class="form-control"
+            (focus)="focusField('fuelCost')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.fuelCost" />
+          <span class="input-group-addon units">$/{{settings.steamEnergyMeasurement}}</span>
+        </div>
+      </div>
+    </form>
+  </li>
+  <li>
+    <div class="checkbox">
+      <label for="modifyMakeupWaterCost">
+        <input type="checkbox" id="modifyMakeupWaterCost" value="true" (focus)="focusField('makeUpWaterCost')" (change)="toggleMakeupWaterCost()"
+          [(ngModel)]="showMakeupWaterCost" /> Modify Make-up Water Cost
+      </label>
+    </div>
+    <form *ngIf="showMakeupWaterCost">
+      <div class="form-group">
+        <label for="baselineMakeupWaterCost">Baseline Make-up Water Cost</label>
+        <div class="input-group">
+          <input name="baselineMakeupWaterCost" type="number" step="any" id="baselineMakeupWaterCost" class="form-control" (focus)="focusField('makeUpWaterCost')"
+            (input)="save()" [(ngModel)]="ssmt.operatingCosts.makeUpWaterCost" [disabled]="true" />
+          <span class="input-group-addon units">$/{{settings.steamVolumeMeasurement}}</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="modificationMakeupWaterCost">Modification Make-up Water Cost</label>
+        <div class="input-group">
+          <input name="modificationMakeupWaterCost" type="number" step="any" id="modificationMakeupWaterCost" class="form-control"
+            (focus)="focusField('makeUpWaterTemperature')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.operatingCosts.makeUpWaterCost" />
+          <span class="input-group-addon units">$/{{settings.steamVolumeMeasurement}}</span>
+        </div>
+      </div>
+    </form>
+  </li>
+</ul>

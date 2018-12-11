@@ -6,7 +6,7 @@
         <div class="input-group">
           <input name="airFlow" class="form-control" type="number" step="any" [(ngModel)]="inputs.airFlow" id="airFlow" (input)="emitChange()"
             onfocus="this.select();" (focus)="changeField('airFlow')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/min</span>
         </div>
       </div>
@@ -15,7 +15,7 @@
         <div class="input-group">
           <input name="airlinePressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.airlinePressure" id="airlinePressure"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('airlinePressure')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <div class="input-group">
           <input name="designVelocity" class="form-control" type="number" step="any" [(ngModel)]="inputs.designVelocity" id="designVelocity"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('designVelocity')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft/s</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft/s</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m/s</span>
         </div>
       </div>
@@ -33,8 +33,8 @@
         <div class="input-group">
           <input name="atmosphericPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.atmosphericPressure"
             id="atmosphericPressure" (input)="emitChange()" onfocus="this.select();" (focus)="changeField('atmosphericPressure')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
         </div>
       </div>
     </div>
@@ -44,7 +44,7 @@
         <div class="text-center small">
           <span *ngIf="outputs.crossSectionalArea">
             <strong>{{outputs.crossSectionalArea | number:'1.0-2'}} </strong>
-            <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in<sup>2</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in<sup>2</sup></strong>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm<sup>2</sup></strong>
           </span>
           <span *ngIf="!outputs.crossSectionalArea">
@@ -57,7 +57,7 @@
         <div class="text-center small">
           <span *ngIf="outputs.pipeDiameter">
             <strong>{{outputs.pipeDiameter | number:'1.0-2'}} </strong>
-            <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">in</strong>
+            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">in</strong>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">cm</strong>
           </span>
           <span *ngIf="!outputs.pipeDiameter">

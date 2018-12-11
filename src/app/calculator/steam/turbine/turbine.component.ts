@@ -3,8 +3,9 @@ import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
-import { TurbineInput, TurbineOutput } from '../../../shared/models/steam';
+import { TurbineInput } from '../../../shared/models/steam/steam-inputs';
 import { TurbineService } from './turbine.service';
+import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-turbine',
@@ -110,7 +111,15 @@ export class TurbineComponent implements OnInit {
       outletSpecificEnthalpy: 0,
       outletSpecificEntropy: 0,
       outletTemperature: 0,
-      powerOut: 0
+      powerOut: 0,
+      inletVolume: 0,
+      outletVolume: 0,
+      outletIdealPressure: 0,
+      outletIdealTemperature: 0,
+      outletIdealSpecificEnthalpy: 0,
+      outletIdealSpecificEntropy: 0,
+      outletIdealQuality: 0,
+      outletIdealVolume: 0
     }
     return emptyResults;
   }

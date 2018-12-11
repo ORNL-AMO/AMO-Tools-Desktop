@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { PHAST, OperatingCosts } from '../../shared/models/phast/phast';
+import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-energy-costs',

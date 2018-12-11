@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PrvOutput } from '../../../../shared/models/steam';
+import { PrvOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 

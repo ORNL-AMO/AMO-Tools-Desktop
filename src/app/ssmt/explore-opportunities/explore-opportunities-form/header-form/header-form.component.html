@@ -1,0 +1,283 @@
+<app-condensate-handling-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"
+  [baselineHighPressureForm]="baselineHighPressureForm" [modificationHighPressureForm]="modificationHighPressureForm"
+  [baselineMediumPressureForm]="baselineMediumPressureForm" [modificationMediumPressureForm]="modificationMediumPressureForm"
+  [baselineLowPressureForm]="baselineLowPressureForm" [modificationLowPressureForm]="modificationLowPressureForm"></app-condensate-handling-form>
+
+<!--HEAT LOSS-->
+<div class="checkbox">
+  <label class="group-label" for="adjustHeatLossPrecentages">
+    <input type="checkbox" id="adjustHeatLossPrecentages" (focus)="focusField('default')" (change)="toggleHeatLoss()"
+      [(ngModel)]="showHeatLoss" /> Adjust Heat Loss Percentages
+  </label>
+</div>
+<ul *ngIf="showHeatLoss">
+  <li>
+    <div class="checkbox">
+      <label for="modifyHighPressureHeatLoss">
+        <input type="checkbox" id="modifyHighPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggleHighPressureHeatLoss()"
+          [(ngModel)]="showHighPressureHeatLoss" /> Adjust High Pressure Heat Loss
+      </label>
+    </div>
+    <form [formGroup]="baselineHighPressureForm" *ngIf="showHighPressureHeatLoss">
+      <div class="form-group">
+        <label for="baselineHPHeatLoss">Baseline Heat Loss</label>
+        <div class="input-group">
+          <input name="baselineHPHeatLoss" type="number" step="any" id="baselineHPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.heatLoss.invalid && !baselineHighPressureForm.controls.heatLoss.pristine">
+          <span *ngIf="baselineHighPressureForm.controls.heatLoss.errors.required">Value Required</span>
+          <span *ngIf="baselineHighPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+            {{baselineHighPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+          <span *ngIf="baselineHighPressureForm.controls.heatLoss.errors.min">Value can't be less than
+            {{baselineHighPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationHighPressureForm" *ngIf="showHighPressureHeatLoss">
+      <div class="form-group">
+        <label for="modificationHPHeatLoss">Modification Heat Loss</label>
+        <div class="input-group">
+          <input name="modificationHPHeatLoss" type="number" step="any" id="modificationHPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.heatLoss.invalid && !modificationHighPressureForm.controls.heatLoss.pristine">
+          <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.required">Value Required</span>
+          <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+            {{modificationHighPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+          <span *ngIf="modificationHighPressureForm.controls.heatLoss.errors.min">Value can't be less than
+            {{modificationHighPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="ssmt.headerInput.numberOfHeaders == 3">
+    <div class="checkbox">
+      <label for="modifyMediumPressureHeatLoss">
+        <input type="checkbox" id="modifyMediumPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggleMediumPressureHeatLoss()"
+          [(ngModel)]="showMediumPressureHeatLoss" /> Adjust Medium Pressure Heat Loss
+      </label>
+    </div>
+    <form [formGroup]="baselineMediumPressureForm" *ngIf="showMediumPressureHeatLoss">
+      <div class="form-group">
+        <label for="baselineMPHeatLoss">Baseline Heat Loss</label>
+        <div class="input-group">
+          <input name="baselineMPHeatLoss" type="number" step="any" id="baselineMPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineMediumPressureForm.controls.heatLoss.invalid && !baselineMediumPressureForm.controls.heatLoss.pristine">
+          <span *ngIf="baselineMediumPressureForm.controls.heatLoss.errors.required">Value Required</span>
+          <span *ngIf="baselineMediumPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+            {{baselineMediumPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+          <span *ngIf="baselineMediumPressureForm.controls.heatLoss.errors.min">Value can't be less than
+            {{baselineMediumPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationMediumPressureForm" *ngIf="showMediumPressureHeatLoss">
+      <div class="form-group">
+        <label for="modificationMPHeatLoss">Modification Heat Loss</label>
+        <div class="input-group">
+          <input name="modificationMPHeatLoss" type="number" step="any" id="modificationMPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.heatLoss.invalid && !modificationMediumPressureForm.controls.heatLoss.pristine">
+          <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.required">Value Required</span>
+          <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+            {{modificationMediumPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+          <span *ngIf="modificationMediumPressureForm.controls.heatLoss.errors.min">Value can't be less than
+            {{modificationMediumPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="ssmt.headerInput.numberOfHeaders != 1">
+    <div class="checkbox">
+      <label for="modifyLowPressureHeatLoss">
+        <input type="checkbox" id="modifyLowPressureHeatLoss" (focus)="focusField('heatLoss')" (change)="toggleLowPressureHeatLoss()"
+          [(ngModel)]="showLowPressureHeatLoss" /> Adjust Low Pressure Heat Loss
+      </label>
+    </div>
+    <form [formGroup]="baselineLowPressureForm" *ngIf="showLowPressureHeatLoss">
+      <div class="form-group">
+        <label for="baselineLPHeatLoss">Baseline Heat Loss</label>
+        <div class="input-group">
+          <input name="baselineLPHeatLoss" type="number" step="any" id="baselineLPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineLowPressureForm.controls.heatLoss.invalid && !baselineLowPressureForm.controls.heatLoss.pristine">
+          <span *ngIf="baselineLowPressureForm.controls.heatLoss.errors.required">Value Required</span>
+          <span *ngIf="baselineLowPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+            {{baselineLowPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+          <span *ngIf="baselineLowPressureForm.controls.heatLoss.errors.min">Value can't be less than
+            {{baselineLowPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationLowPressureForm" *ngIf="showLowPressureHeatLoss">
+      <div class="form-group">
+        <label for="modificationLPHeatLoss">Modification Heat Loss</label>
+        <div class="input-group">
+          <input name="modificationLPHeatLoss" type="number" step="any" id="modificationLPHeatLoss" class="form-control"
+            (focus)="focusField('heatLoss')" (input)="save()" formControlName="heatLoss" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.heatLoss.invalid && !modificationLowPressureForm.controls.heatLoss.pristine">
+          <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.required">Value Required</span>
+          <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.max">Value can't be greater than
+            {{modificationLowPressureForm.controls.heatLoss.errors.max.max}} %.</span>
+          <span *ngIf="modificationLowPressureForm.controls.heatLoss.errors.min">Value can't be less than
+            {{modificationLowPressureForm.controls.heatLoss.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+</ul>
+
+<!--STEAM USAGE-->
+<div class="checkbox">
+  <label class="group-label" for="adjustSteamUsage">
+    <input type="checkbox" id="adjustSteamUsage" (focus)="focusField('default')" (change)="toggleSteamUsage()"
+      [(ngModel)]="showSteamUsage" /> Adjust Steam Demand/Usage
+  </label>
+</div>
+<ul *ngIf="showSteamUsage">
+  <li>
+    <div class="checkbox">
+      <label for="modifyHighPressureSteamUsage">
+        <input type="checkbox" id="modifyHighPressureSteamUsage" (focus)="focusField('processSteamUsage')" (change)="toggleHighPressureSteamUsage()"
+          [(ngModel)]="showHighPressureSteamUsage" /> Adjust High Pressure Steam Usage
+      </label>
+    </div>
+    <form [formGroup]="baselineHighPressureForm" *ngIf="showHighPressureSteamUsage">
+      <div class="form-group">
+        <label for="baselineHPSteamUsage">Baseline Steam Usage</label>
+        <div class="input-group">
+          <input name="baselineHPSteamUsage" type="number" step="any" id="baselineHPSteamUsage" class="form-control"
+            (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.processSteamUsage.invalid && !baselineHighPressureForm.controls.processSteamUsage.pristine">
+          <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+          <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+            {{baselineHighPressureForm.controls.processSteamUsage.errors.max.max}} {{settings.steamMassFlowMeasurement}}.</span>
+          <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+            {{baselineHighPressureForm.controls.processSteamUsage.errors.min.min}} {{settings.steamMassFlowMeasurement}}.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationHighPressureForm" *ngIf="showHighPressureSteamUsage">
+      <div class="form-group">
+        <label for="modificationHPSteamUsage">Modification Steam Usage</label>
+        <div class="input-group">
+          <input name="modificationHPSteamUsage" type="number" step="any" id="modificationHPSteamUsage" class="form-control"
+            (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.processSteamUsage.invalid && !modificationHighPressureForm.controls.processSteamUsage.pristine">
+          <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+          <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+            {{modificationHighPressureForm.controls.processSteamUsage.errors.max.max}} {{settings.steamMassFlowMeasurement}}.</span>
+          <span *ngIf="modificationHighPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+            {{modificationHighPressureForm.controls.processSteamUsage.errors.min.min}} {{settings.steamMassFlowMeasurement}}.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="ssmt.headerInput.numberOfHeaders == 3">
+    <div class="checkbox">
+      <label for="modifyMediumPressureSteamUsage">
+        <input type="checkbox" id="modifyMediumPressureSteamUsage" (focus)="focusField('processSteamUsage')" (change)="toggleMediumPressureSteamUsage()"
+          [(ngModel)]="showMediumPressureSteamUsage" /> Adjust Medium Pressure Steam Usage
+      </label>
+    </div>
+    <form [formGroup]="baselineMediumPressureForm" *ngIf="showMediumPressureSteamUsage">
+      <div class="form-group">
+        <label for="baselineMPSteamUsage">Baseline Steam Usage</label>
+        <div class="input-group">
+          <input name="baselineMPSteamUsage" type="number" step="any" id="baselineMPSteamUsage" class="form-control"
+            (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineMediumPressureForm.controls.processSteamUsage.invalid && !baselineMediumPressureForm.controls.processSteamUsage.pristine">
+          <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+          <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+            {{baselineMediumPressureForm.controls.processSteamUsage.errors.max.max}} {{settings.steamMassFlowMeasurement}}.</span>
+          <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+            {{baselineMediumPressureForm.controls.processSteamUsage.errors.min.min}} {{settings.steamMassFlowMeasurement}}.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationMediumPressureForm" *ngIf="showMediumPressureSteamUsage">
+      <div class="form-group">
+        <label for="modificationMPSteamUsage">Modification Steam Usage</label>
+        <div class="input-group">
+          <input name="modificationMPSteamUsage" type="number" step="any" id="modificationMPSteamUsage" class="form-control"
+            (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.processSteamUsage.invalid && !modificationMediumPressureForm.controls.processSteamUsage.pristine">
+          <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+          <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.max">Value can't be greater
+            than
+            {{modificationMediumPressureForm.controls.processSteamUsage.errors.max.max}}
+            {{settings.steamMassFlowMeasurement}}.</span>
+          <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+            {{modificationMediumPressureForm.controls.processSteamUsage.errors.min.min}}
+            {{settings.steamMassFlowMeasurement}}.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+  <li *ngIf="ssmt.headerInput.numberOfHeaders != 1">
+    <div class="checkbox">
+      <label for="modifyLowPressureSteamUsage">
+        <input type="checkbox" id="modifyLowPressureSteamUsage" (focus)="focusField('processSteamUsage')" (change)="toggleLowPressureSteamUsage()"
+          [(ngModel)]="showLowPressureSteamUsage" /> Adjust Low Pressure Steam Usage
+      </label>
+    </div>
+    <form [formGroup]="baselineLowPressureForm" *ngIf="showLowPressureSteamUsage">
+      <div class="form-group">
+        <label for="baselineLPSteamUsage">Baseline Steam Usage</label>
+        <div class="input-group">
+          <input name="baselineLPSteamUsage" type="number" step="any" id="baselineLPSteamUsage" class="form-control"
+            (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineLowPressureForm.controls.processSteamUsage.invalid && !baselineLowPressureForm.controls.processSteamUsage.pristine">
+          <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+          <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+            {{baselineLowPressureForm.controls.processSteamUsage.errors.max.max}}
+            {{settings.steamMassFlowMeasurement}}.</span>
+          <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+            {{baselineLowPressureForm.controls.processSteamUsage.errors.min.min}}
+            {{settings.steamMassFlowMeasurement}}.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationLowPressureForm" *ngIf="showLowPressureSteamUsage">
+      <div class="form-group">
+        <label for="modificationLPSteamUsage">Modification Steam Usage</label>
+        <div class="input-group">
+          <input name="modificationLPSteamUsage" type="number" step="any" id="modificationLPSteamUsage" class="form-control"
+            (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
+          <span class="input-group-addon units">{{settings.steamMassFlowMeasurement}}</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.processSteamUsage.invalid && !modificationLowPressureForm.controls.processSteamUsage.pristine">
+          <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
+          <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
+            {{modificationLowPressureForm.controls.processSteamUsage.errors.max.max}}
+            {{settings.steamMassFlowMeasurement}}.</span>
+          <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
+            {{modificationLowPressureForm.controls.processSteamUsage.errors.min.min}}
+            {{settings.steamMassFlowMeasurement}}.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+</ul>

@@ -6,7 +6,7 @@
         <div class="input-group">
           <input name="inletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.inletPressure" id="inletPressure"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('inletPressure')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
         </div>
       </div>
@@ -15,7 +15,7 @@
         <div class="input-group">
           <input name="outletPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.outletPressure" id="outletPressure"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('outletPressure')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
         </div>
       </div>
@@ -26,7 +26,7 @@
         <div class="input-group">
           <input name="flowRate" class="form-control" type="number" step="any" [(ngModel)]="inputs.flowRate" id="flowRate" (input)="emitChange()"
             onfocus="this.select();" (focus)="changeField('flowRate')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">SCFM</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/min</span>
         </div>
       </div>
@@ -38,7 +38,7 @@
         </label>
         <div class="text-center small bold">
           {{inputs.flowRate | number:'1.0-2'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'"> SCFM</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'"> Nm<sup>3</sup>/min</span>
         </div>
       </div>
@@ -46,7 +46,7 @@
         <label class="bold">Valve Flow Factor</label>
         <div class="text-center small bold">
           {{ valveFlowFactor | sigFigs:'6'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> SCFM</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'"> SCFM</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'"> Nm<sup>3</sup>/min</span>
         </div>
       </div>

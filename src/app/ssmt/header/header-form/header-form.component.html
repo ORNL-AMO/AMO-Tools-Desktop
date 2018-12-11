@@ -1,0 +1,155 @@
+<label class="group-label">
+  <span *ngIf="pressureLevel == 'highPressure'">High Pressure Header</span>
+  <span *ngIf="pressureLevel == 'mediumPressure'">Medium Pressure Header</span>
+  <span *ngIf="pressureLevel == 'lowPressure'">Low Pressure Header</span>
+</label>
+<form [formGroup]="headerForm">
+  <div class="form-group">
+    <label for="{{idString+pressureLevel+'_pressure'}}">Pressure</label>
+    <div class="input-group">
+      <input name="pressure" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_pressure'}}"
+        (input)="save()" [readonly]="!selected" formControlName="pressure" (focus)="focusField('pressure')" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': isPressureDifferent()}">
+      <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.pressure.invalid && !headerForm.controls.pressure.pristine">
+      <span *ngIf="headerForm.controls.pressure.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.pressure.errors.max">Value can't be greater than
+        {{headerForm.controls.pressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="headerForm.controls.pressure.errors.min">Value can't be less than
+        {{headerForm.controls.pressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="{{idString+pressureLevel+'_processSteamUsage'}}">Process Steam Usage</label>
+    <div class="input-group">
+      <input name="processSteamUsage" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_processSteamUsage'}}"
+        (input)="save()" [readonly]="!selected" formControlName="processSteamUsage" (focus)="focusField('processSteamUsage')"
+        (blur)="focusOut()" [ngClass]="{'indicate-different': isProcessSteamUsageDifferent()}">
+      <span class="units input-group-addon">{{settings.steamMassFlowMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.processSteamUsage.invalid && !headerForm.controls.processSteamUsage.pristine">
+      <span *ngIf="headerForm.controls.processSteamUsage.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.processSteamUsage.errors.max">Value can't be greater than
+        {{headerForm.controls.processSteamUsage.errors.max.max}} {{settings.steamMassFlowMeasurement}}.</span>
+      <span *ngIf="headerForm.controls.processSteamUsage.errors.min">Value can't be less than
+        {{headerForm.controls.processSteamUsage.errors.min.min}} {{settings.steamMassFlowMeasurement}}.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="{{idString+pressureLevel+'_condensationRecoveryRate'}}">Condensate Recovery Rate</label>
+    <div class="input-group">
+      <input name="condensationRecoveryRate" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_condensationRecoveryRate'}}"
+        (input)="save()" [readonly]="!selected" formControlName="condensationRecoveryRate" (focus)="focusField('condensationRecoveryRate')"
+        (blur)="focusOut()" [ngClass]="{'indicate-different': isCondensationRecoveryRateDifferent()}">
+      <span class="units input-group-addon">%</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.condensationRecoveryRate.invalid && !headerForm.controls.condensationRecoveryRate.pristine">
+      <span *ngIf="headerForm.controls.condensationRecoveryRate.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.condensationRecoveryRate.errors.max">Value can't be greater than
+        {{headerForm.controls.condensationRecoveryRate.errors.max.max}} %.</span>
+      <span *ngIf="headerForm.controls.condensationRecoveryRate.errors.min">Value can't be less than
+        {{headerForm.controls.condensationRecoveryRate.errors.min.min}} %.</span>
+    </span>
+  </div>
+
+  <!--Highest Pressure-->
+  <div class="form-group" *ngIf="pressureLevel == 'highPressure'">
+    <label for="{{idString+pressureLevel+'_condensateReturnTemperature'}}">Condensate Return Temperature</label>
+    <div class="input-group">
+      <input name="condensateReturnTemperature" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_condensateReturnTemperature'}}"
+        (input)="save()" [readonly]="!selected" formControlName="condensateReturnTemperature" (focus)="focusField('condensateReturnTemperature')"
+        (blur)="focusOut()" [ngClass]="{'indicate-different': isCondensateReturnTemperatureDifferent()}">
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.condensateReturnTemperature.invalid && !headerForm.controls.condensateReturnTemperature.pristine">
+      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.max">Value can't be greater than
+        {{headerForm.controls.condensateReturnTemperature.errors.max.max}}
+        <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+        <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.min">Value can't be less than
+        {{headerForm.controls.condensateReturnTemperature.errors.min.min}}
+        <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+        <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+    </span>
+  </div>
+
+  <div class="form-group" *ngIf="pressureLevel == 'highPressure'">
+    <label for="{{idString+pressureLevel+'_flashCondensateReturn'}}">Flash Condensate Return</label>
+    <select name="flashCondensateReturn" class="form-control" id="{{idString+pressureLevel+'_flashCondensateReturn'}}"
+      (change)="save()" (focus)="focusField('flashCondensateReturn')" (blur)="focusOut()" formControlName="flashCondensateReturn"
+      [ngClass]="{'indicate-different': isFlashCondensateReturnDifferent()}">
+      <option [ngValue]=true>Yes</option>
+      <option [ngValue]=false>No</option>
+    </select>
+  </div>
+
+  <!--Non Highest Pressure-->
+  <div class="form-group" *ngIf="pressureLevel != 'highPressure'">
+    <label for="{{idString+pressureLevel+'_flashCondensateIntoHeader'}}">Flash Condensate Into Header</label>
+    <select name="flashCondensateIntoHeader" class="form-control" id="{{idString+pressureLevel+'_flashCondensateIntoHeader'}}"
+      (change)="save()" (focus)="focusField('flashCondensateIntoHeader')" (blur)="focusOut()" formControlName="flashCondensateIntoHeader"
+      [ngClass]="{'indicate-different': isFlashCondensateIntoHeaderDifferent()}">
+      <option [ngValue]=true>Yes</option>
+      <option [ngValue]=false>No</option>
+    </select>
+  </div>
+
+  <!--ALL Headers-->
+  <div class="form-group">
+    <label for="heatLoss">Heat Loss</label>
+    <div class="input-group">
+      <input name="{{idString+pressureLevel+'_heatLoss'}}" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_heatLoss'}}"
+        (input)="save()" [readonly]="!selected" formControlName="heatLoss" (focus)="focusField('heatLoss')" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': isHeatLossDifferent()}">
+      <span class="units input-group-addon">%</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.heatLoss.invalid && !headerForm.controls.heatLoss.pristine">
+      <span *ngIf="headerForm.controls.heatLoss.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.heatLoss.errors.max">Value can't be greater than
+        {{headerForm.controls.heatLoss.errors.max.max}} %.</span>
+      <span *ngIf="headerForm.controls.heatLoss.errors.min">Value can't be less than
+        {{headerForm.controls.heatLoss.errors.min.min}} %.</span>
+    </span>
+  </div>
+
+  <!--Non Highest Pressure-->
+  <div class="form-group" *ngIf="pressureLevel != 'highPressure'">
+    <label for="{{idString+pressureLevel+'_desuperheatSteamIntoNextHighest'}}">Desuperheat Steam Into
+      <span *ngIf="numberOfHeaders == 2 && pressureLevel == 'lowPressure' || numberOfHeaders == 3 && pressureLevel == 'mediumPressure'">Highest
+        Pressure</span>
+      <span *ngIf="numberOfHeaders == 3 && pressureLevel == 'lowPressure'">Medium Pressure</span>
+      Header</label>
+    <select name="desuperheatSteamIntoNextHighest" class="form-control" id="{{idString+pressureLevel+'_desuperheatSteamIntoNextHighest'}}"
+      (change)="setDesuperheatSteam()" (focus)="focusField('desuperheatSteamIntoNextHighest')" (blur)="focusOut()" formControlName="desuperheatSteamIntoNextHighest"
+      [ngClass]="{'indicate-different': isDesuperheatSteamIntoNextHighestDifferent()}">
+      <option [ngValue]=true>Yes</option>
+      <option [ngValue]=false>No</option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="pressureLevel != 'highPressure' && headerForm.controls.desuperheatSteamIntoNextHighest.value == true">
+    <label for="{{idString+pressureLevel+'_desuperheatSteamTemperature'}}">Desuperheat Temperature</label>
+    <div class="input-group">
+      <input name="desuperheatSteamTemperature" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_desuperheatSteamTemperature'}}"
+        (input)="save()" [readonly]="!selected" formControlName="desuperheatSteamTemperature" (focus)="focusField('desuperheatSteamTemperature')"
+        (blur)="focusOut()" [ngClass]="{'indicate-different': isDesuperheatSteamTemperatureDifferent()}">
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+      <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="headerForm.controls.desuperheatSteamTemperature.invalid && !headerForm.controls.desuperheatSteamTemperature.pristine">
+      <span *ngIf="headerForm.controls.desuperheatSteamTemperature.errors.required">Value Required</span>
+      <span *ngIf="headerForm.controls.desuperheatSteamTemperature.errors.max">Value can't be greater than
+        {{headerForm.controls.desuperheatSteamTemperature.errors.max.max}}
+        <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+        <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+      <span *ngIf="headerForm.controls.desuperheatSteamTemperature.errors.min">Value can't be less than
+        {{headerForm.controls.desuperheatSteamTemperature.errors.min.min}}
+        <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+        <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+    </span>
+  </div>
+</form>

@@ -3,8 +3,9 @@ import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamService } from '../steam.service';
-import { DeaeratorInput, DeaeratorOutput } from '../../../shared/models/steam';
+import { DeaeratorInput } from '../../../shared/models/steam/steam-inputs';
 import { DeaeratorService } from './deaerator.service';
+import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-deaerator',
@@ -88,6 +89,7 @@ export class DeaeratorComponent implements OnInit {
       feedwaterSpecificEnthalpy: 0,
       feedwaterSpecificEntropy: 0,
       feedwaterTemperature: 0,
+      feedwaterVolume: 0,
       inletSteamEnergyFlow: 0,
       inletSteamMassFlow: 0,
       inletSteamPressure: 0,
@@ -108,7 +110,10 @@ export class DeaeratorComponent implements OnInit {
       ventedSteamQuality: 0,
       ventedSteamSpecificEnthalpy: 0,
       ventedSteamSpecificEntropy: 0,
-      ventedSteamTemperature: 0
+      ventedSteamTemperature: 0,
+      ventedSteamVolume: 0,
+      inletSteamVolume: 0,
+      inletWaterVolume: 0
     }
     return emptyResults;
   }

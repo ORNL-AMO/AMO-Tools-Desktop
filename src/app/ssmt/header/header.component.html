@@ -1,0 +1,31 @@
+<div class="d-flex flex-column">
+  <div *ngIf="inSetup" class="header mr-2 ml-2">
+    <h3>Boiler Details</h3>
+  </div>
+  <div class="p-3">
+    <form>
+      <div class="form-group">
+        <label for="{{idString+'numberOfHeaders'}}">Number Of Headers</label>
+        <select [disabled]="!inSetup || !selected || modificationExists" name="numberOfHeaders" class="form-control" id="numberOfHeaders"
+          (change)="save()" (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerInput.numberOfHeaders">
+          <option [ngValue]="1">1</option>
+          <option [ngValue]="2">2</option>
+          <option [ngValue]="3">3</option>
+          <!-- <option [ngValue]="4">4</option>
+          <option [ngValue]="5">5</option> -->
+        </select>
+      </div>
+      <span class="alert alert-warning w-100 text-center pull-right small" *ngIf="inSetup && modificationExists">Delete
+        Modifications to Adjust Number of Headers</span>
+    </form>
+    <!--high pressure header-->
+    <app-header-form [headerForm]="highPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
+      (emitSave)="saveHighPressure($event)" [pressureLevel]="'highPressure'" [inSetup]="inSetup" [idString]="idString"></app-header-form>
+    <!--medium pressure header-->
+    <app-header-form *ngIf="headerInput.numberOfHeaders == 3" [headerForm]="mediumPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
+      (emitSave)="saveMediumPressure($event)" [pressureLevel]="'mediumPressure'" [inSetup]="inSetup" [idString]="idString"></app-header-form>
+    <!--low pressure header-->
+    <app-header-form [headerForm]="lowPressureForm" [settings]="settings" [selected]="selected" [numberOfHeaders]="headerInput.numberOfHeaders"
+      (emitSave)="saveLowPressure($event)" [pressureLevel]="'lowPressure'" *ngIf="headerInput.numberOfHeaders > 1" [inSetup]="inSetup" [idString]="idString"></app-header-form>
+  </div>
+</div>

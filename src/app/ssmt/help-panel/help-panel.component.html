@@ -1,0 +1,39 @@
+<div class="d-flex flex-column w-100 fsat position-sticky" *ngIf="!inSetup" #resultTabs>
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+            <a class="border-left-0" (click)="setTab('results')">Results</a>
+        </div>
+        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+            <a (click)="setTab('help')">Help</a>
+        </div>
+        <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'notes'}" *ngIf="!inSetup">
+            <a (click)="setTab('notes')">Notes</a>
+        </div>
+    </div>
+</div>
+<div class="scroll-item mr-2 ml-2" [ngStyle]="{'height.px': helpHeight}">
+    <div *ngIf="inSetup" class="header">
+        <h3>Help</h3>
+    </div>
+    <div *ngIf="tabSelect == 'help'" class="pr-1 pl-2">
+        <app-system-basics-help *ngIf="stepTab == 'system-basics'"></app-system-basics-help>
+        <app-operations-help *ngIf="stepTab == 'operations'" [currentField]="currentField"></app-operations-help>
+        <app-boiler-help *ngIf="stepTab == 'boiler'" [currentField]="currentField"></app-boiler-help>
+        <app-header-help *ngIf="stepTab == 'header'" [currentField]="currentField"></app-header-help>
+        <app-turbine-help *ngIf="stepTab == 'turbine'" [currentField]="currentField"></app-turbine-help>        
+    </div>
+
+
+    <div *ngIf="tabSelect == 'notes' && !inSetup">
+        <div *ngIf="ssmt">
+            <app-modify-conditions-notes [(notes)]="ssmt.modifications[modificationIndex].ssmt.notes" [currentTab]="stepTab" (emitSave)="save()"></app-modify-conditions-notes>
+        </div>
+        <div class="col-11 mx-auto pt-1" *ngIf="!ssmt">
+            You must add a modification to take notes on it.
+        </div>
+    </div>
+
+    <div *ngIf="tabSelect == 'results' && !inSetup">
+        <!-- <app-fsat-results-panel [fsat]="fsat" [settings]="settings" [modificationIndex]="modificationIndex" [inSetup]="inSetup"></app-fsat-results-panel> -->
+    </div>
+</div>

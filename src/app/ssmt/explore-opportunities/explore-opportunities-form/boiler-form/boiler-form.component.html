@@ -1,0 +1,350 @@
+<div class="checkbox">
+  <label class="group-label" for="adjustBoilerData">
+    <input type="checkbox" id="adjustBoilerData" (focus)="focusField('default')" (change)="toggleBoilerData()"
+      [(ngModel)]="showBoilerData" /> Adjust Boiler Operation
+  </label>
+</div>
+<ul *ngIf="showBoilerData">
+  <li>
+    <div class="checkbox">
+      <label for="modifyCombustionEfficiency">
+        <input type="checkbox" id="modifyCombustionEfficiency" (focus)="focusField('combustionEfficiency')" (change)="toggleCombustionEfficiency()"
+          [(ngModel)]="showCombustionEfficiency" /> Adjust Boiler Combustion
+        Efficiency
+      </label>
+    </div>
+    <form [formGroup]="baselineForm" *ngIf="showCombustionEfficiency">
+      <div class="form-group">
+        <label for="baselineCombustionEfficiency">Baseline Combustion Efficiency</label>
+        <div class="input-group">
+          <input name="baselineCombustionEfficiency" type="number" step="any" id="baselineCombustionEfficiency" class="form-control"
+            (focus)="focusField('combustionEfficiency')" (input)="save()" formControlName="combustionEfficiency" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.combustionEfficiency.invalid && !baselineForm.controls.combustionEfficiency.pristine">
+          <span *ngIf="baselineForm.controls.combustionEfficiency.errors.required">Value Required</span>
+          <span *ngIf="baselineForm.controls.combustionEfficiency.errors.max">Value can't be greater than
+            {{baselineForm.controls.combustionEfficiency.errors.max.max}} %.</span>
+          <span *ngIf="baselineForm.controls.combustionEfficiency.errors.min">Value can't be less than
+            {{baselineForm.controls.combustionEfficiency.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showCombustionEfficiency">
+      <div class="form-group">
+        <label for="modificationCombustionEfficiency">Modification Combustion Efficiency</label>
+        <div class="input-group">
+          <input name="modificationCombustionEfficiency" type="number" step="any" id="modificationCombustionEfficiency"
+            class="form-control" (focus)="focusField('combustionEfficiency')" (input)="save()" formControlName="combustionEfficiency" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.combustionEfficiency.invalid && !modificationForm.controls.combustionEfficiency.pristine">
+          <span *ngIf="modificationForm.controls.combustionEfficiency.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.combustionEfficiency.errors.max">Value can't be greater than
+            {{modificationForm.controls.combustionEfficiency.errors.max.max}} %.</span>
+          <span *ngIf="modificationForm.controls.combustionEfficiency.errors.min">Value can't be less than
+            {{modificationForm.controls.combustionEfficiency.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+  <li>
+    <div class="checkbox">
+      <label for="modifyFuelType">
+        <input type="checkbox" id="modifyFuelType" (focus)="focusField('fuel')" (change)="toggleFuelType()" [(ngModel)]="showFuelType" />
+        Change Fuel Type
+      </label>
+    </div>
+    <form [formGroup]="baselineForm" *ngIf="showFuelType">
+      <div class="form-group">
+        <label for="baselineFuelType">Baseline Fuel Type</label>
+        <select name="baselineFuelType" id="baselineFuelType" class="form-control" (focus)="focusField('fuelType')"
+          (change)="setFuelTypes(true)" formControlName="fuelType">
+          <option [ngValue]="0">Solid/Liquid</option>
+          <option [ngValue]="1">Gas</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="baselineFuel">Baseline Fuel</label>
+        <select name="baselineFuel" id="baselineFuel" class="form-control" (focus)="focusField('fuel')" (change)="save()"
+          formControlName="fuel">
+          <option *ngFor="let option of baselineFuelOptions" [ngValue]="option.id">{{option.substance}}</option>
+        </select>
+      </div>
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showFuelType">
+      <div class="form-group">
+        <label for="modificationFuelType">Modification Fuel Type</label>
+        <select name="modificationFuelType" id="modificationFuelType" class="form-control" (focus)="focusField('fuelType')"
+          (change)="setFuelTypes(true)" formControlName="fuelType">
+          <option [ngValue]="0">Solid/Liquid</option>
+          <option [ngValue]="1">Gas</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationFuel">Modification Fuel</label>
+        <select name="modificationFuel" id="modificationFuel" class="form-control" (focus)="focusField('fuel')"
+          (change)="save()" formControlName="fuel">
+          <option *ngFor="let option of modificationFuelOptions" [ngValue]="option.id">{{option.substance}}</option>
+        </select>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifyBlowdownRate">
+        <input type="checkbox" id="modifyBlowdownRate" (focus)="focusField('blowdownRate')" (change)="toggleBlowdownRate()"
+          [(ngModel)]="showBlowdownRate" /> Adjust Blowdown Rate
+      </label>
+    </div>
+    <form [formGroup]="baselineForm" *ngIf="showBlowdownRate">
+      <div class="form-group">
+        <label for="baselineBlowdownRate">Baseline Blowdown Rate</label>
+        <div class="input-group">
+          <input name="baselineBlowdownRate" type="number" step="any" id="baselineBlowdownRate" class="form-control"
+            (focus)="focusField('blowdownRate')" (input)="save()" formControlName="blowdownRate" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.blowdownRate.invalid && !baselineForm.controls.blowdownRate.pristine">
+          <span *ngIf="baselineForm.controls.blowdownRate.errors.required">Value Required</span>
+          <span *ngIf="baselineForm.controls.blowdownRate.errors.max">Value can't be greater than
+            {{baselineForm.controls.blowdownRate.errors.max.max}} %.</span>
+          <span *ngIf="baselineForm.controls.blowdownRate.errors.min">Value can't be less than
+            {{baselineForm.controls.blowdownRate.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showBlowdownRate">
+      <div class="form-group">
+        <label for="modificationBlowdownRate">Modification Blowdown Rate</label>
+        <div class="input-group">
+          <input name="modificationBlowdownRate" type="number" step="any" id="modificationBlowdownRate" class="form-control"
+            (focus)="focusField('blowdownRate')" (input)="save()" formControlName="blowdownRate" />
+          <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.blowdownRate.invalid && !modificationForm.controls.blowdownRate.pristine">
+          <span *ngIf="modificationForm.controls.blowdownRate.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.blowdownRate.errors.max">Value can't be greater than
+            {{modificationForm.controls.blowdownRate.errors.max.max}} %.</span>
+          <span *ngIf="modificationForm.controls.blowdownRate.errors.min">Value can't be less than
+            {{modificationForm.controls.blowdownRate.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifyBlowdownFlashed">
+        <input type="checkbox" id="modifyBlowdownFlashed" (focus)="focusField('blowdownFlashed')" (change)="toggleBlowdownFlashed()"
+          [(ngModel)]="showBlowdownFlashed" /> Blowdown Flash to Low Pressure
+      </label>
+    </div>
+    <form [formGroup]="baselineForm" *ngIf="showBlowdownFlashed">
+      <div class="form-group">
+        <label for="baselineBlowdownFlashed">Baseline Blowdown Flashed</label>
+        <select name="baselineBlowdownFlashed" id="baselineBlowdownFlashed" class="form-control" (focus)="focusField('blowdownFlashed')"
+          (change)="save()" formControlName="blowdownFlashed">
+          <option [ngValue]="1">Yes</option>
+          <option [ngValue]="0">No</option>
+        </select>
+      </div>
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showBlowdownFlashed">
+      <div class="form-group">
+        <label for="modificationBlowdownFlashed">Modification Blowdown Flashed</label>
+        <select name="modificationBlowdownFlashed" id="modificationBlowdownFlashed" class="form-control" (focus)="focusField('blowdownFlashed')"
+          (change)="save()" formControlName="blowdownFlashed">
+          <option [ngValue]="1">Yes</option>
+          <option [ngValue]="0">No</option>
+        </select>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifyPreheatMakeupWater">
+        <input type="checkbox" id="modifyPreheatMakeupWater" (focus)="focusField('preheatMakeupWater')" (change)="togglePreheatBlowdownWater()"
+          [(ngModel)]="showPreheatBlowdownWater" /> Preheat Makeup Water with Blowdown
+      </label>
+    </div>
+    <form [formGroup]="baselineForm" *ngIf="showPreheatBlowdownWater">
+      <div class="form-group">
+        <label for="baselinePreheatBlowdownWater">Baseline Preheat Make-up Water</label>
+        <select name="baselinePreheatBlowdownWater" id="baselinePreheatBlowdownWater" class="form-control" (focus)="focusField('preheatMakeupWater')"
+          (change)="save()" formControlName="preheatMakeupWater">
+          <option [ngValue]="1">Yes</option>
+          <option [ngValue]="0">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="baselineApproachTemperature">Baseline Approach Temperature</label>
+        <div class="input-group">
+          <input name="baselineApproachTemperature" type="number" step="any" id="baselineApproachTemperature" class="form-control"
+            (focus)="focusField('approachTemperature')" (input)="save()" formControlName="approachTemperature" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.approachTemperature.invalid && !baselineForm.controls.approachTemperature.pristine">
+          <span *ngIf="baselineForm.controls.approachTemperature.errors.min">Value can't be less than
+            {{baselineForm.controls.approachTemperature.errors.min.min}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showPreheatBlowdownWater">
+      <div class="form-group">
+        <label for="modificationPreheatBlowdownWater">Modification Preheat Make-up Water</label>
+        <select name="modificationPreheatBlowdownWater" id="modificationPreheatBlowdownWater" class="form-control"
+          (focus)="focusField('preheatMakeupWater')" (change)="save()" formControlName="preheatMakeupWater">
+          <option [ngValue]="1">Yes</option>
+          <option [ngValue]="0">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="modificationApproachTemperature">Modification Approach Temperature</label>
+        <div class="input-group">
+          <input name="modificationApproachTemperature" type="number" step="any" id="modificationApproachTemperature"
+            class="form-control" (focus)="focusField('approachTemperature')" (input)="save()" formControlName="approachTemperature" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.approachTemperature.invalid && !modificationForm.controls.approachTemperature.pristine">
+          <span *ngIf="modificationForm.controls.approachTemperature.errors.min">Value can't be less than
+            {{modificationForm.controls.approachTemperature.errors.min.min}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifySteamTemperature">
+        <input type="checkbox" id="modifySteamTemperature" (focus)="focusField('steamTemperature')" (change)="toggleInitialSteamTemperature()"
+          [(ngModel)]="showInitialSteampTemperature" /> Change Steam Generation Conditions
+      </label>
+    </div>
+    <form [formGroup]="baselineForm" *ngIf="showInitialSteampTemperature">
+      <div class="form-group">
+        <label for="baselineSteamTemperature">Baseline Initial Steam Temperature</label>
+        <div class="input-group">
+          <input name="baselineSteamTemperature" type="number" step="any" id="baselineSteamTemperature" class="form-control"
+            (focus)="focusField('steamTemperature')" (input)="save()" formControlName="steamTemperature" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.steamTemperature.invalid && !baselineForm.controls.steamTemperature.pristine">
+          <span *ngIf="boilerForm.controls.steamTemperature.errors.required">Value Required</span>
+          <span *ngIf="boilerForm.controls.steamTemperature.errors.max">Value can't be greater than
+            {{baselineForm.controls.steamTemperature.errors.max.max}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+          <span *ngIf="baselineForm.controls.steamTemperature.errors.min">Value can't be less than
+            {{baselineForm.controls.steamTemperature.errors.min.min}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showInitialSteampTemperature">
+      <div class="form-group">
+        <label for="modificationSteamTemperature">Modification Initial Steam Temperature</label>
+        <div class="input-group">
+          <input name="modificationSteamTemperature" type="number" step="any" id="modificationSteamTemperature" class="form-control"
+            (focus)="focusField('steamTemperature')" (input)="save()" formControlName="steamTemperature" />
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.steamTemperature.invalid && !modificationForm.controls.steamTemperature.pristine">
+          <span *ngIf="modificationForm.controls.steamTemperature.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.steamTemperature.errors.max">Value can't be greater than
+            {{modificationForm.controls.steamTemperature.errors.max.max}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+          <span *ngIf="modificationForm.controls.steamTemperature.errors.min">Value can't be less than
+            {{modificationForm.controls.steamTemperature.errors.min.min}}
+            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
+            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+        </span>
+      </div>
+    </form>
+  </li>
+
+  <li>
+    <div class="checkbox">
+      <label for="modifyDeaeratorConditions">
+        <input type="checkbox" id="modifyDeaeratorConditions" (focus)="focusField('deaeratorPressure')" (change)="toggleDeaeratorConditions()"
+          [(ngModel)]="showDeaeratorConditions" /> Change Deaerator Operating Conditions
+      </label>
+    </div>
+    <form [formGroup]="baselineForm" *ngIf="showDeaeratorConditions">
+      <div class="form-group">
+        <label for="baselineDeaeratorPressure">Baseline Deaerator Pressure</label>
+        <div class="input-group">
+          <input name="baselineDeaeratorPressure" type="number" step="any" id="baselineDeaeratorPressure" class="form-control"
+            (focus)="focusField('deaeratorPressure')" (input)="save()" formControlName="deaeratorPressure" />
+          <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.deaeratorPressure.invalid && !baselineForm.controls.deaeratorPressure.pristine">
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.required">Value Required</span>
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.max">Value can't be greater than
+            {{baselineForm.controls.deaeratorPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+          <span *ngIf="baselineForm.controls.deaeratorPressure.errors.min">Value can't be less than
+            {{baselineForm.controls.deaeratorPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="baselineDeaeratorVentRate">Baseline Deaerator Vent Rate</label>
+        <div class="input-group">
+          <input name="baselineDeaeratorVentRate" type="number" step="any" id="baselineDeaeratorVentRate" class="form-control"
+            (focus)="focusField('deaeratorVentRate')" (input)="save()" formControlName="deaeratorVentRate" />
+          <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.deaeratorVentRate.invalid && !baselineForm.controls.deaeratorVentRate.pristine">
+          <span *ngIf="baselineForm.controls.deaeratorVentRate.errors.required">Value Required</span>
+          <span *ngIf="baselineForm.controls.deaeratorVentRate.errors.max">Value can't be greater than
+            {{baselineForm.controls.deaeratorVentRate.errors.max.max}} %.</span>
+          <span *ngIf="baselineForm.controls.deaeratorVentRate.errors.min">Value can't be less than
+            {{baselineForm.controls.deaeratorVentRate.errors.min.min}} %.</span>
+        </span>
+      </div>
+    </form>
+    <form [formGroup]="modificationForm" *ngIf="showDeaeratorConditions">
+      <div class="form-group">
+        <label for="modificationDeaeratorPressure">Modification Deaerator Pressure</label>
+        <div class="input-group">
+          <input name="modificationDeaeratorPressure" type="number" step="any" id="modificationDeaeratorPressure" class="form-control"
+            (focus)="focusField('deaeratorPressure')" (input)="save()" formControlName="deaeratorPressure" />
+          <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.deaeratorPressure.invalid && !modificationForm.controls.deaeratorPressure.pristine">
+          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.required">Value Required</span>
+          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.max">Value can't be greater than
+            {{modificationForm.controls.deaeratorPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+          <span *ngIf="modificationForm.controls.deaeratorPressure.errors.min">Value can't be less than
+            {{modificationForm.controls.deaeratorPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="modificationDeaeratorVentRate">Modification Deaerator Vent Rate</label>
+        <div class="input-group">
+          <input name="modificationDeaeratorVentRate" type="number" step="any" id="modificationDeaeratorVentRate" class="form-control"
+            (focus)="focusField('deaeratorVentRate')" (input)="save()" formControlName="deaeratorVentRate" />
+          <span class="units input-group-addon">%</span>
+        </div>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.deaeratorVentRate.invalid && !modificationForm.controls.deaeratorVentRate.pristine">
+        <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.required">Value Required</span>
+        <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.max">Value can't be greater than
+          {{modificationForm.controls.deaeratorVentRate.errors.max.max}} %.</span>
+        <span *ngIf="modificationForm.controls.deaeratorVentRate.errors.min">Value can't be less than
+          {{modificationForm.controls.deaeratorVentRate.errors.min.min}} %.</span>
+      </span>
+    </form>
+  </li>
+</ul>
