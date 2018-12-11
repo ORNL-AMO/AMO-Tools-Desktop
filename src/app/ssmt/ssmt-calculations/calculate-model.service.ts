@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SteamService } from '../../calculator/steam/steam.service';
-import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, HeatLossOutput, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage } from '../../shared/models/steam/steam-outputs';
+import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, HeatLossOutput, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, HeaderOutput } from '../../shared/models/steam/steam-outputs';
 import { Settings } from '../../shared/models/settings';
 import { SSMTInputs, SSMT, HeaderNotHighestPressure } from '../../shared/models/steam/ssmt';
 import { HeaderInputObj, HeaderInput } from '../../shared/models/steam/steam-inputs';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class CalculateModelService {
@@ -55,7 +56,7 @@ export class CalculateModelService {
   returnCondensate: SteamPropertiesOutput;
   feedwater: SteamPropertiesOutput;
 
-  constructor(private steamService: SteamService) { }
+  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
     let inputData: SSMTInputs = {
@@ -961,13 +962,14 @@ export class CalculateModelService {
     //5A. Get inlets for makeup water and condensate header
     let inlets: Array<HeaderInputObj> = this.getMakeupWaterAndCondensateInlets();
     //notice .header at the end (need .header obj for makeupWaterAndCondensateHeader)
-    this.makeupWaterAndCondensateHeader = this.steamService.header(
+    let tmpHeader: HeaderOutput = this.steamService.header(
       {
         headerPressure: this.inputData.boilerInput.deaeratorPressure,
         inlets: inlets
       },
       this.settings
-    ).header;
+    );
+    this.makeupWaterAndCondensateHeader = tmpHeader.header;
   }
 
   //5A. Get inlets for makeup water and condensate header
@@ -976,13 +978,23 @@ export class CalculateModelService {
 
     //5A2. Calculate condendsing turbine if exists
     if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
+      let condenserPressure: number = this.convertUnitsService.value(this.inputData.turbineInput.condensingTurbine.condenserPressure).from(this.settings.steamVacuumPressure).to(this.settings.steamPressureMeasurement);
+
+      let tmpTurbineCondSteamCooled: SteamPropertiesOutput = this.steamService.steamProperties(
+        {
+          pressure: condenserPressure,
+          thermodynamicQuantity: 3, //quality
+          quantityValue: 0
+        },
+        this.settings
+      )
       //this.calculateCondensingTurbine();
       //add outlet condensate from condensing turbine to inlets
       inlets.push(
         {
-          pressure: this.condensingTurbine.outletPressure,
+          pressure: tmpTurbineCondSteamCooled.pressure,
           thermodynamicQuantity: 1, //specificEnthalpy
-          quantityValue: this.condensingTurbine.outletSpecificEnthalpy,
+          quantityValue: tmpTurbineCondSteamCooled.specificEnthalpy,
           massFlow: this.condensingTurbine.massFlow
         }
       )
@@ -1048,11 +1060,9 @@ export class CalculateModelService {
     }
     makeupWaterMassFlow = makeupWaterMassFlow - this.returnCondensate.massFlow - inletHeaderFlow;
 
-    // if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
-    //   makeupWaterMassFlow = makeupWaterMassFlow - this.condensingTurbine.massFlow;
-    //   console.log('condensing turbine flow: ' + this.condensingTurbine.massFlow);
-    //   console.log('subtracted condensing turbine: ' + makeupWaterMassFlow);
-    // }
+    if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
+      makeupWaterMassFlow = makeupWaterMassFlow - this.condensingTurbine.massFlow;
+    }
     return makeupWaterMassFlow;
   }
 
@@ -1073,6 +1083,9 @@ export class CalculateModelService {
     // if (massFlow < 0) {
     //   massFlow = 0;
     // }
+
+    let condenserPressure: number = this.convertUnitsService.value(this.inputData.turbineInput.condensingTurbine.condenserPressure).from(this.settings.steamVacuumPressure).to(this.settings.steamPressureMeasurement);
+
     this.condensingTurbine = this.steamService.turbine(
       {
         solveFor: 0,
@@ -1083,7 +1096,7 @@ export class CalculateModelService {
         isentropicEfficiency: this.inputData.turbineInput.condensingTurbine.isentropicEfficiency,
         generatorEfficiency: this.inputData.turbineInput.condensingTurbine.generationEfficiency,
         massFlowOrPowerOut: this.inputData.turbineInput.condensingTurbine.operationValue,
-        outletSteamPressure: this.inputData.turbineInput.condensingTurbine.condenserPressure,
+        outletSteamPressure: condenserPressure,
         outletQuantity: 0,
         outletQuantityValue: 0
       },
@@ -1240,7 +1253,7 @@ export class CalculateModelService {
         deaeratorPressure: this.inputData.boilerInput.deaeratorPressure,
         ventRate: this.inputData.boilerInput.deaeratorVentRate,
         feedwaterMassFlow: feedwaterMassFlow,
-        waterPressure: this.makeupWaterAndCondensateHeader.massFlow,
+        waterPressure: this.makeupWaterAndCondensateHeader.pressure,
         waterThermodynamicQuantity: 1, //specificEnthalpy
         waterQuantityValue: this.makeupWaterAndCondensateHeader.specificEnthalpy,
         steamPressure: inletHeader.pressure,
