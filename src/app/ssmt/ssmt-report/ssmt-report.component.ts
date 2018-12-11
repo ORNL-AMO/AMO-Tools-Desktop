@@ -69,7 +69,8 @@ export class SsmtReportComponent implements OnInit {
   }
 
   calculateResults() {
-    this.calculateModelService.iterateModel(this.ssmt, this.settings, this.massFlow);
+    this.calculateModelService.initData(this.ssmt, this.settings);
+    this.calculateModelService.iterateModel();
     this.getResults();
   }
 

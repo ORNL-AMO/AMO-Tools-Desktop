@@ -56,6 +56,7 @@ export class CalculateModelService {
   returnCondensate: SteamPropertiesOutput;
   feedwater: SteamPropertiesOutput;
 
+  initialSteamUsageGuess: number;
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
@@ -75,82 +76,95 @@ export class CalculateModelService {
     return inputData;
   }
 
-  iterateModel(_ssmt: SSMT, _settings: Settings, _massFlow: number): number {
+  initData(_ssmt: SSMT, _settings: Settings): void {
     this.inputData = this.getInputDataFromSSMT(_ssmt);
+    if (this.inputData.headerInput.numberOfHeaders == 1) {
+      this.initialSteamUsageGuess = this.inputData.headerInput.highPressure.processSteamUsage * 1.2 + 1;
+    } else if (this.inputData.headerInput.numberOfHeaders == 2) {
+      this.initialSteamUsageGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage) * 1.2 + 1;
+    } else if (this.inputData.headerInput.numberOfHeaders == 3) {
+      this.initialSteamUsageGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage) * 1.2 + 1;
+    }
+    this.steamToDeaerator = this.initialSteamUsageGuess * .1;
+    console.log('init steam to deaerator: ' + this.steamToDeaerator);
     this.settings = _settings;
-    this.calculateModel(_massFlow);
-    return 0;
-    // let additionalSteamFlow: number = this.steamToDeaerator;
-    // if (additionalSteamFlow == 0 || !additionalSteamFlow) {
-    //   additionalSteamFlow = 1;
-    // }
-    // if (this.additionalSteamFlow) {
-    //   additionalSteamFlow = this.additionalSteamFlow;
-    // }
-    // let adjustment: number = this.convergeAdjustment(additionalSteamFlow, .01);
-    // let cc: number = 0;
-    // while (Math.abs(adjustment) > 1e-5 && cc++ < 50) {
-    //   adjustment = this.convergeAdjustment(additionalSteamFlow);
-    //   let y1, y2, yNew, x1, x2, xNew: number;
-    //   let lastSlope: number;
-    //   switch (cc) {f
-    //     case 1: {
-    //       y1 = additionalSteamFlow;
-    //       x1 = adjustment;
-    //       break;
-    //     }
-    //     case 2: {
-    //       y2 = additionalSteamFlow;
-    //       x2 = adjustment;
-    //       break;
-    //     }
-    //     default: {
-    //       //set new test point
-    //       yNew = additionalSteamFlow;
-    //       xNew = adjustment;
-    //       //select closest old test point
-    //       let y1Diff: number = Math.abs(y1 - yNew);
-    //       let y2Diff: number = Math.abs(y2 - yNew);
-    //       if (y1Diff < y2Diff) {
-    //         y2 = yNew;
-    //         x2 = xNew;
-    //       } else {
-    //         y2 = y1;
-    //         x2 = x1;
-    //         y1 = yNew;
-    //         x1 = xNew;
-    //       }
-    //       break;
-    //     }
-    //   }
+  }
 
-    //   //use linear interpolation to determin new adjustment
-    //   if (y1 && y2) {
-    //     if (x2 == x1) {
-    //       additionalSteamFlow = additionalSteamFlow + adjustment;
-    //       adjustment == this.convergeAdjustment(additionalSteamFlow);
-    //       break;
-    //     }
-    //     let slope: number = (y2 - y1) / (x2 - x1);
-    //     let yIntercept: number = y2 - (x2 * slope);
+  iterateModel(): number {
+    let additionalSteamFlow: number = this.steamToDeaerator;
+    if (additionalSteamFlow == 0 || !additionalSteamFlow) {
+      additionalSteamFlow = 1;
+    }
+    if (this.additionalSteamFlow) {
+      additionalSteamFlow = this.additionalSteamFlow;
+    }
+    let adjustment: number = this.convergeAdjustment(additionalSteamFlow, .01);
+    additionalSteamFlow = additionalSteamFlow + adjustment;
+    let cc: number = 0;
+    while (Math.abs(adjustment) > 1e-5 && cc++ < 50) {
+      adjustment = this.convergeAdjustment(additionalSteamFlow);
+      additionalSteamFlow = additionalSteamFlow + adjustment;
+      let y1, y2, yNew, x1, x2, xNew: number;
+      let lastSlope: number;
+      switch (cc) {
+        case 1: {
+          y1 = additionalSteamFlow;
+          x1 = adjustment;
+          break;
+        }
+        case 2: {
+          y2 = additionalSteamFlow;
+          x2 = adjustment;
+          break;
+        }
+        default: {
+          //set new test point
+          yNew = additionalSteamFlow;
+          xNew = adjustment;
+          //select closest old test point
+          let y1Diff: number = Math.abs(y1 - yNew);
+          let y2Diff: number = Math.abs(y2 - yNew);
+          if (y1Diff < y2Diff) {
+            y2 = yNew;
+            x2 = xNew;
+          } else {
+            y2 = y1;
+            x2 = x1;
+            y1 = yNew;
+            x1 = xNew;
+          }
+          break;
+        }
+      }
 
-    //     if (
-    //       (cc > 10 && (cc % 5) == 0) ||
-    //       (lastSlope && (slope == 0 || lastSlope / slope < 0))
-    //     ) {
-    //       additionalSteamFlow = additionalSteamFlow + adjustment;
-    //     } else {
-    //       additionalSteamFlow = yIntercept;
-    //     }
-    //     lastSlope = slope;
-    //   } else {
-    //     additionalSteamFlow = additionalSteamFlow + adjustment;
-    //   }
-    //   if (isNaN(adjustment)) {
-    //     break;
-    //   }
-    // }
-    // return additionalSteamFlow;
+      //use linear interpolation to determin new adjustment
+      if (y1 && y2) {
+        if (x2 == x1) {
+          additionalSteamFlow = additionalSteamFlow + adjustment;
+          adjustment == this.convergeAdjustment(additionalSteamFlow);
+          break;
+        }
+        let slope: number = (y2 - y1) / (x2 - x1);
+        let yIntercept: number = y2 - (x2 * slope);
+
+        if (
+          (cc > 10 && (cc % 5) == 0) ||
+          (lastSlope && (slope == 0 || lastSlope / slope < 0))
+        ) {
+          additionalSteamFlow = additionalSteamFlow + adjustment;
+        } else {
+          additionalSteamFlow = yIntercept;
+        }
+        lastSlope = slope;
+      } else {
+        additionalSteamFlow = additionalSteamFlow + adjustment;
+      }
+      if (isNaN(adjustment)) {
+        break;
+      }
+    }
+    console.log('final steam flow: ' + additionalSteamFlow);
+    return additionalSteamFlow;
   }
 
   convergeAdjustment(additionalSteamFlow: number, requiredVal?: number): number {
@@ -169,6 +183,7 @@ export class CalculateModelService {
     ) {
       adjustmentLast = adjustment;
       adjustment = this.calculateModel(additionalSteamFlow);
+      additionalSteamFlow = additionalSteamFlow + adjustment;
       if (isNaN(adjustment)) {
         break
       }
@@ -176,17 +191,15 @@ export class CalculateModelService {
     return adjustment;
   }
 
-  calculateModel(massFlow: number): number {
-    let steamProduction: number = massFlow + this.inputData.headerInput.highPressure.processSteamUsage;
+  calculateModel(additionalSteamFlow: number): number {
+    console.log('addtional steam flow in: ' + additionalSteamFlow);
+    let steamProduction: number = additionalSteamFlow + this.inputData.headerInput.highPressure.processSteamUsage;
     if (this.inputData.headerInput.numberOfHeaders > 1) {
       steamProduction = steamProduction + this.inputData.headerInput.lowPressure.processSteamUsage;
       if (this.inputData.headerInput.numberOfHeaders == 3) {
         steamProduction = steamProduction + this.inputData.headerInput.mediumPressure.processSteamUsage;
       }
     }
-    console.log('mass flow: ' + massFlow);
-    console.log('process steam usage: ' + this.inputData.headerInput.highPressure.processSteamUsage);
-    console.log('steam production ' + steamProduction);
 
     this.feedwater = this.steamService.steamProperties(
       {
@@ -196,9 +209,10 @@ export class CalculateModelService {
       },
       this.settings
     );
+    console.log('steam production: ' + steamProduction);
     //1. Calculate Boiler
     //1A. Model Boiler with massFlow
-    this.calculateBoiler(massFlow);
+    this.calculateBoiler(steamProduction);
     //1B. Set Blowdown Properties
     this.setBoilerBlowdown();
     //1C. Set Feedwater Properties
@@ -256,11 +270,11 @@ export class CalculateModelService {
 
     //7. Calculate difference
     //steamToDearator = massFlow in lowest pressure header
-    console.log('inlet steam mass flow: ' + this.deaerator.inletSteamMassFlow);
-    console.log('steam to deaerator: ' + this.steamToDeaerator);
-    console.log('======');
     let daSteamDifference: number = this.deaerator.inletSteamMassFlow - this.steamToDeaerator;
-    //console.log('difference: ' + daSteamDifference);
+    // console.log('deaerator feedwater: ' +this.deaerator.feedwaterMassFlow);
+    // console.log('boiler feedwater: ' +this.boiler.feedwaterMassFlow);
+    // console.log('difference: ' + (this.boiler.feedwaterMassFlow - this.deaerator.feedwaterMassFlow))
+    console.log('da steam diff: ' + daSteamDifference);
     return daSteamDifference;
   }
 
