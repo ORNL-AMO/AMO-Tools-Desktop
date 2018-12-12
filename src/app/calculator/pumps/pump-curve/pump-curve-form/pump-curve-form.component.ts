@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+import { FormGroup } from '@angular/forms';
 import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import * as regression from 'regression';
 import { PumpCurveService } from '../pump-curve.service';
@@ -16,8 +16,12 @@ import { Settings } from '../../../../shared/models/settings';
 export class PumpCurveFormComponent implements OnInit {
   @Input()
   psat: PSAT;
+
   @Input()
-  pumpCurveForm: PumpCurveForm;
+  pumpCurveForm: FormGroup;
+
+  // @Input()
+  // pumpCurveForm: PumpCurveForm;
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Output('emitCalculate')

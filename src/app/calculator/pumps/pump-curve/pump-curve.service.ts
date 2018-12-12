@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PumpCurveForm, PumpCurveDataRow } from '../../../shared/models/calculators';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import * as regression from 'regression';
 import * as _ from 'lodash';
@@ -24,10 +24,67 @@ export class PumpCurveService {
   calcMethod: BehaviorSubject<string>;
   regEquation: BehaviorSubject<string>;
   rSquared: BehaviorSubject<string>;
-  constructor(private convertUnitsService: ConvertUnitsService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
     this.calcMethod = new BehaviorSubject<string>('Equation');
     this.regEquation = new BehaviorSubject<string>(null);
   }
+
+  // newInitForm(settings: Settings): FormGroup {
+
+  // }
+
+  // initEquationForm(settings: Settings): FormGroup {
+
+  // }
+
+  initEquationForm(): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      maxFlow: [1020, [Validators.required, Validators.min(0)]],
+      dataOrder: [1],
+      headConstant: [356.96, [Validators.required, Validators.min(0)]],
+      measurementOption: [1],
+      baselineMeasurement: [1800, [Validators.required, Validators.min(0)]],
+      modifiedMeasurement: [1800, [Validators.required, Validators.min(0)]],
+      headFlow: [-0.0686, Validators.required],
+      headFlow2: [0.000005, Validators.required],
+      headFlow3: [-0.00000008, Validators.required]
+    });
+    return tmpForm;
+  }
+
+  getEquationFormFromObj(inputObj: PumpCurveForm, settings: Settings): FormGroup {
+    let dataOrder = inputObj.dataOrder - 2;
+    let measurementOption = 1;
+    if (inputObj.measurementOption == 'Diameter') {
+      measurementOption = 0;
+    }
+
+    let tmpForm: FormGroup = this.formBuilder.group({
+      maxFlow: [inputObj.maxFlow, [Validators.required, Validators.min(0)]],
+      dataOrder: [dataOrder],
+      headConstant: [inputObj.headConstant, [Validators.required, Validators.min(0)]],
+      measurementOption: [measurementOption],
+      baselineMeasurement: [inputObj.baselineMeasurement, [Validators.required, Validators.min(0)]],
+      modifiedMeasurement: [inputObj.modifiedMeasurement, [Validators.required, Validators.min(0)]],
+      headFlow: [inputObj.headFlow, Validators.required],
+      headFlow2: [inputObj.headFlow2, Validators.required]
+    });
+
+    if (inputObj.dataOrder > 2) {
+      tmpForm.addControl('headFlow3', new FormControl(inputObj.headFlow3, Validators.required));
+      if (inputObj.dataOrder > 3) {
+        tmpForm.addControl('headFlow4', new FormControl(inputObj.headFlow4, Validators.required));
+        if (inputObj.dataOrder > 4) {
+          tmpForm.addControl('headFlow5', new FormControl(inputObj.headFlow5, Validators.required));
+          if (inputObj.dataOrder > 5) {
+            tmpForm.addControl('headFlow6', new FormControl(inputObj.headFlow6, Validators.required));
+          }
+        }
+      }
+    }
+    return tmpForm;
+  }
+
 
   initForm(): PumpCurveForm {
     return {

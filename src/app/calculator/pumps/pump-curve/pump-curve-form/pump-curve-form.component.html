@@ -2,9 +2,13 @@
   <div class="d-flex flex-column">
     <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
       (changeField)="focusField($event)" [settings]="settings" (emitAddRow)="addRow()" [isFan]="isFan"></app-pump-curve-data-form>
-    <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
+    <!-- <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
+      (changeField)="focusField($event)" [settings]="settings" [isFan]="isFan"></app-pump-curve-equation-form> -->
+
+      <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [pumpCurveForm]="pumpCurveForm"
       (changeField)="focusField($event)" [settings]="settings" [isFan]="isFan"></app-pump-curve-equation-form>
-    <div class="d-flex">
+
+      <div class="d-flex">
       <div class="d-flex flex-column w-50 pr-1">
         <label class="group-label w-auto">Baseline Condition</label>
         <div class="form-group">

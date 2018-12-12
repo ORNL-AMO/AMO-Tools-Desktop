@@ -25,28 +25,28 @@ export class SpecificSpeedService {
     }
     return this.formBuilder.group({
       pumpType: [0, Validators.required],
-      pumpRPM: [1780, Validators.required],
-      flowRate: [tmpFlowRate, Validators.required],
-      head: [tmpHead, Validators.required],
+      pumpRPM: [1780, [Validators.required, Validators.min(0)]],
+      flowRate: [tmpFlowRate, [Validators.required, Validators.min(0)]],
+      head: [tmpHead, [Validators.required, Validators.min(0)]],
     })
   }
 
   initFormFromPsat(psatInputs: PsatInputs): FormGroup {
     return this.formBuilder.group({
-      'pumpType': [psatInputs.pump_style, Validators.required],
-      'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
-      'flowRate': [psatInputs.flow_rate, Validators.required],
-      'head': [psatInputs.head, Validators.required]
+      pumpType: [psatInputs.pump_style, Validators.required],
+      pumpRPM: [psatInputs.pump_rated_speed, [Validators.required, Validators.min(0)]],
+      flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
+      head: [psatInputs.head, [Validators.required, Validators.min(0)]]
     })
   }
 
 
   initFormFromObj(obj: SpecificSpeedInputs): FormGroup {
     return this.formBuilder.group({
-      'pumpType': [obj.pumpType, Validators.required],
-      'pumpRPM': [obj.pumpRPM, Validators.required],
-      'flowRate': [obj.flowRate, Validators.required],
-      'head': [obj.head, Validators.required]
+      pumpType: [obj.pumpType, Validators.required],
+      pumpRPM: [obj.pumpRPM, Validators.required],
+      flowRate: [obj.flowRate, Validators.required],
+      head: [obj.head, Validators.required]
     })
   }
 
