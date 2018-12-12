@@ -3,11 +3,16 @@
     <button class="btn btn-primary" (click)="getResults()" [disabled]="!ssmt.setupDone">Run Modeler</button>
     <button class="btn btn-secondary" (click)="getData()">Get Data</button>
   </div> -->
-  <div class="pt-2">
-    <div class="form-group">
-      <label for="massFlow">Set Mass Flow</label>
-      <input name="massFlow" type="number" step="any" class="form-control" id="massFlow" (input)="calculateResults()"
-        [(ngModel)]="massFlow">
+  <div class="d-flex justify-content-between pt-2">
+    <div class="pr-2">
+      <div class="form-group">
+        <label class="bold large" for="massFlow">Define Boiler Steam Mass Flow for Calculation</label>
+        <input name="massFlow" type="number" step="any" class="form-control" id="massFlow" (input)="calculateResultsGivenMassFlow()"
+          [(ngModel)]="massFlow">
+      </div>
+    </div>
+    <div class="pl-2">
+      <button class="btn btn-primary" (click)="calculateResults()">Iterate Model For Results</button>
     </div>
   </div>
   <div class="pt-2">

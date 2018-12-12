@@ -73,7 +73,15 @@ export class SsmtReportComponent implements OnInit {
     let results: number = this.calculateModelService.marksIterator();
     console.log('Addtional Mass flow: ' + results);
     this.getResults();
+    this.massFlow = this.boiler.steamMassFlow;
   }
+
+  calculateResultsGivenMassFlow() {
+    this.calculateModelService.initData(this.ssmt, this.settings);
+    this.calculateModelService.calculateModel(this.massFlow, false);
+    this.getResults();
+  }
+
 
   getResults() {
     this.inputData = this.calculateModelService.inputData;
