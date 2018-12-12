@@ -57,6 +57,7 @@ export class CalculateModelService {
   feedwater: SteamPropertiesOutput;
 
   initialSteamUsageGuess: number;
+  iterateCC: number;
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
@@ -86,40 +87,42 @@ export class CalculateModelService {
       this.initialSteamUsageGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage) * 1.2 + 1;
     }
     this.steamToDeaerator = this.initialSteamUsageGuess * .1;
-    console.log('init steam to deaerator: ' + this.steamToDeaerator);
     this.settings = _settings;
   }
 
   iterateModel(): number {
-    let additionalSteamFlow: number = this.steamToDeaerator;
-    if (additionalSteamFlow == 0 || !additionalSteamFlow) {
-      additionalSteamFlow = 1;
-    }
-    if (this.additionalSteamFlow) {
-      additionalSteamFlow = this.additionalSteamFlow;
-    }
-    let adjustment: number = this.convergeAdjustment(additionalSteamFlow, .01);
-    additionalSteamFlow = additionalSteamFlow + adjustment;
-    let cc: number = 0;
-    while (Math.abs(adjustment) > 1e-5 && cc++ < 50) {
-      adjustment = this.convergeAdjustment(additionalSteamFlow);
-      additionalSteamFlow = additionalSteamFlow + adjustment;
+    //debugger
+    //initialize 
+    this.additionalSteamFlow = this.steamToDeaerator;
+    //find initial adjustment
+    console.log('calling init')
+    let adjustment: number = this.convergeAdjustment(this.additionalSteamFlow, .1);
+    this.iterateCC = 0;
+    //debugger
+    while (Math.abs(adjustment) > 1e-5 && this.iterateCC < 50) {
+      console.log('in while loop')
+      adjustment = this.calculateModel(this.additionalSteamFlow);
       let y1, y2, yNew, x1, x2, xNew: number;
       let lastSlope: number;
-      switch (cc) {
+      console.log('iterate cc ' + this.iterateCC)
+      switch (this.iterateCC ) {
         case 1: {
-          y1 = additionalSteamFlow;
+          console.log('case 1');
+          y1 = this.additionalSteamFlow;
           x1 = adjustment;
           break;
         }
         case 2: {
-          y2 = additionalSteamFlow;
+          console.log('case 2');
+          y2 = this.additionalSteamFlow;
           x2 = adjustment;
           break;
         }
         default: {
+          console.log('default');
+
           //set new test point
-          yNew = additionalSteamFlow;
+          yNew = this.additionalSteamFlow;
           xNew = adjustment;
           //select closest old test point
           let y1Diff: number = Math.abs(y1 - yNew);
@@ -140,31 +143,36 @@ export class CalculateModelService {
       //use linear interpolation to determin new adjustment
       if (y1 && y2) {
         if (x2 == x1) {
-          additionalSteamFlow = additionalSteamFlow + adjustment;
-          adjustment == this.convergeAdjustment(additionalSteamFlow);
+          this.additionalSteamFlow = this.additionalSteamFlow + adjustment;
+          console.log('calling: x2 == x1');
+          adjustment == this.calculateModel(this.additionalSteamFlow);
           break;
         }
         let slope: number = (y2 - y1) / (x2 - x1);
         let yIntercept: number = y2 - (x2 * slope);
 
         if (
-          (cc > 10 && (cc % 5) == 0) ||
+          (this.iterateCC > 10 && (this.iterateCC % 5) == 0) ||
           (lastSlope && (slope == 0 || lastSlope / slope < 0))
         ) {
-          additionalSteamFlow = additionalSteamFlow + adjustment;
+          this.additionalSteamFlow = this.additionalSteamFlow + adjustment;
+          console.log('update steam flow adjustment')
         } else {
-          additionalSteamFlow = yIntercept;
+          this.additionalSteamFlow = yIntercept;
+          console.log('update steam flow y intercept')
         }
         lastSlope = slope;
       } else {
-        additionalSteamFlow = additionalSteamFlow + adjustment;
+        this.additionalSteamFlow = this.additionalSteamFlow + adjustment;
+        console.log('update steam flow ajdustment else')
       }
       if (isNaN(adjustment)) {
         break;
       }
+      this.iterateCC++;
     }
-    console.log('final steam flow: ' + additionalSteamFlow);
-    return additionalSteamFlow;
+    // console.log('additional steam flow: ' + additionalSteamFlow);
+    return this.additionalSteamFlow;
   }
 
   convergeAdjustment(additionalSteamFlow: number, requiredVal?: number): number {
@@ -182,8 +190,10 @@ export class CalculateModelService {
       Math.abs(adjustment) != Math.abs(adjustmentLast)
     ) {
       adjustmentLast = adjustment;
+      console.log('calling: ' + cc)
       adjustment = this.calculateModel(additionalSteamFlow);
-      additionalSteamFlow = additionalSteamFlow + adjustment;
+      console.log('return: ' + cc)
+      //additionalSteamFlow = additionalSteamFlow + Math.abs(adjustment);
       if (isNaN(adjustment)) {
         break
       }
@@ -191,15 +201,31 @@ export class CalculateModelService {
     return adjustment;
   }
 
-  calculateModel(additionalSteamFlow: number): number {
-    console.log('addtional steam flow in: ' + additionalSteamFlow);
-    let steamProduction: number = additionalSteamFlow + this.inputData.headerInput.highPressure.processSteamUsage;
-    if (this.inputData.headerInput.numberOfHeaders > 1) {
-      steamProduction = steamProduction + this.inputData.headerInput.lowPressure.processSteamUsage;
-      if (this.inputData.headerInput.numberOfHeaders == 3) {
-        steamProduction = steamProduction + this.inputData.headerInput.mediumPressure.processSteamUsage;
-      }
+  marksIterator(){
+    let addtionalMassFlow: number = 0;
+    let iterateValue: number = this.calculateModel(addtionalMassFlow);
+    while(iterateValue > 1e-5){
+      addtionalMassFlow = addtionalMassFlow + iterateValue;
+      iterateValue = this.calculateModel(addtionalMassFlow);
+      console.log(iterateValue);
     }
+    return addtionalMassFlow;
+  }
+
+
+  calculateModel(additionalSteamFlow: number): number {
+    console.log('===============')
+    console.log('additional steam flow : ' + additionalSteamFlow);
+    let steamProduction: number;
+    if (this.inputData.headerInput.numberOfHeaders == 1) {
+      steamProduction = this.inputData.headerInput.highPressure.processSteamUsage;
+    } else if (this.inputData.headerInput.numberOfHeaders == 2) {
+      steamProduction = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage);
+    } else if (this.inputData.headerInput.numberOfHeaders == 3) {
+      steamProduction = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage);
+    }
+
+    steamProduction = steamProduction + additionalSteamFlow;
 
     this.feedwater = this.steamService.steamProperties(
       {
@@ -209,7 +235,7 @@ export class CalculateModelService {
       },
       this.settings
     );
-    console.log('steam production: ' + steamProduction);
+
     //1. Calculate Boiler
     //1A. Model Boiler with massFlow
     this.calculateBoiler(steamProduction);
@@ -270,12 +296,24 @@ export class CalculateModelService {
 
     //7. Calculate difference
     //steamToDearator = massFlow in lowest pressure header
-    let daSteamDifference: number = this.deaerator.inletSteamMassFlow - this.steamToDeaerator;
-    // console.log('deaerator feedwater: ' +this.deaerator.feedwaterMassFlow);
-    // console.log('boiler feedwater: ' +this.boiler.feedwaterMassFlow);
-    // console.log('difference: ' + (this.boiler.feedwaterMassFlow - this.deaerator.feedwaterMassFlow))
-    console.log('da steam diff: ' + daSteamDifference);
-    return daSteamDifference;
+
+    let processSteamUsage: number = this.getProcessSteamUsage();
+    let inletAndUsageSteam: number = processSteamUsage + this.deaerator.inletSteamMassFlow;
+    let steamProductionAdjustment: number = inletAndUsageSteam - (steamProduction + this.boiler.blowdownMassFlow);
+    console.log('steam production adjustment = ' + steamProductionAdjustment);
+    console.log('===============')
+    return steamProductionAdjustment;
+  }
+
+  getProcessSteamUsage(): number{
+    let steamUsage: number = this.highPressureProcessSteamUsage.massFlow;
+    if(this.inputData.headerInput.numberOfHeaders > 1){
+      steamUsage = steamUsage + this.lowPressureProcessSteamUsage.massFlow;
+      if(this.inputData.headerInput.numberOfHeaders == 3){
+        steamUsage = steamUsage + this.mediumPressureProcessSteamUsage.massFlow;
+      }
+    }
+    return steamUsage;
   }
 
   //1A. Calculate Boiler
@@ -1277,7 +1315,7 @@ export class CalculateModelService {
       this.settings
     )
 
-    this.steamToDeaerator = inletHeader.massFlow;
+
     // this.deaeratorFeedwater = {
     //   pressure: this.deaerator.feedwaterPressure,
     //   temperature: this.deaerator.feedwaterTemperature,
@@ -1287,6 +1325,30 @@ export class CalculateModelService {
     //   specificVolume: this.deaerator.feedwaterVolume,
     //   massFlow: this.deaerator.feedwaterMassFlow,
     //   energyFlow: this.deaerator.feedwaterEnergyFlow
+    // }
+  }
+
+
+  getLowPressureBalance(){
+    let lowPressureSteamUsage: number = this.inputData.headerInput.highPressure.processSteamUsage;
+    let condensateMassFlow: number = this.highPressureCondensate.massFlow;
+    let turbineMassFlow: number = 0;
+    let prvMassFlow: number = 0;
+    if(this.inputData.headerInput.numberOfHeaders > 1){
+      if(this.inputData.turbineInput.highToLowTurbine.useTurbine == true){
+        turbineMassFlow = this.highToLowPressureTurbine.massFlow;
+      }
+      if(this.lowPressurePRV){
+        prvMassFlow = this.lowPressurePRV.outletMassFlow;
+      }
+      lowPressureSteamUsage = this.inputData.headerInput.lowPressure.processSteamUsage;
+      condensateMassFlow = this.lowPressureCondensate.massFlow;
+    }
+    
+    let lowPressureBalance: number = lowPressureSteamUsage + this.deaerator.inletSteamMassFlow - condensateMassFlow - turbineMassFlow - prvMassFlow;
+    return lowPressureBalance
+    // if(this.mediumPressureCondensate){
+    //   lowPressureBalance = lowPressureBalance - this.mediumPressureCondensate.massFlow;
     // }
   }
 

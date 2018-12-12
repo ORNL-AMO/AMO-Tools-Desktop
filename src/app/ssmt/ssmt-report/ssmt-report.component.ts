@@ -15,7 +15,7 @@ export class SsmtReportComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  massFlow: number = 169.6;
+  massFlow: number = 0;
 
   dataCalculated: boolean = false;
 
@@ -69,8 +69,9 @@ export class SsmtReportComponent implements OnInit {
   }
 
   calculateResults() {
-    this.calculateModelService.initData(this.ssmt, this.settings);
-    this.calculateModelService.iterateModel();
+    this.calculateModelService.initData(this.ssmt, this.settings)
+    let results: number = this.calculateModelService.marksIterator();
+    console.log('Addtional Mass flow: ' + results);
     this.getResults();
   }
 
