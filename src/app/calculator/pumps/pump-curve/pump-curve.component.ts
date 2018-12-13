@@ -5,7 +5,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
 import { PumpCurveService } from './pump-curve.service';
-import { PumpCurveForm, PumpCurveDataRow, Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
+import { PumpCurve, PumpCurveDataRow, Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
 import { Assessment } from '../../../shared/models/assessment';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -75,7 +75,9 @@ export class PumpCurveComponent implements OnInit {
   graphSystemCurve: boolean;
   graphPumpCurve: boolean;
 
-  pumpCurveForm: PumpCurveForm;
+  pumpCurve: PumpCurve;
+  pumpCurveForm: FormGroup;
+
   toggleCalculate: boolean = false;
   currentField: string = 'maxFlow';
   selectedFormView: string;
@@ -112,9 +114,10 @@ export class PumpCurveComponent implements OnInit {
       this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
       if (this.calculator) {
         this.calcExists = true;
-        if (this.calculator.pumpCurveForm) {
+        if (this.calculator.pumpCurve) {
           this.pumpFormExists = true;
-          this.pumpCurveForm = this.calculator.pumpCurveForm;
+          this.pumpCurve = this.calculator.pumpCurve;
+          this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
           this.subscribe();
         }
         else {
@@ -182,12 +185,12 @@ export class PumpCurveComponent implements OnInit {
   ngOnDestroy() {
     // this.pumpCurveService.calcMethod.next('Equation')
     if (!this.inAssessment && !this.isFan) {
-      this.pumpCurveService.pumpCurveData = this.pumpCurveForm;
+      this.pumpCurveService.pumpCurveData = this.pumpCurve;
       this.pumpCurveService.pumpCurveConstants = this.curveConstants;
       this.pumpCurveService.pumpPointOne = this.pointOne;
       this.pumpCurveService.pumpPointTwo = this.pointTwo;
     } else if (!this.inAssessment && this.isFan) {
-      this.pumpCurveService.fanCurveData = this.pumpCurveForm;
+      this.pumpCurveService.fanCurveData = this.pumpCurve;
       this.pumpCurveService.fanCurveConstants = this.curveConstants;
       this.pumpCurveService.fanPointOne = this.pointOne;
       this.pumpCurveService.fanPointTwo = this.pointTwo;
@@ -211,25 +214,31 @@ export class PumpCurveComponent implements OnInit {
   }
 
   btnResetPumpCurveData() {
-    this.pumpCurveForm = this.pumpCurveService.initForm();
-    this.calculate();
+    this.pumpCurve = this.pumpCurveService.initPumpCurve();
+    this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
+    this.calculate(this.pumpCurveForm);
   }
 
   initForm() {
+    console.log('initForm()');
     if (this.pumpCurveService.pumpCurveData && !this.inAssessment && !this.isFan) {
-      this.pumpCurveForm = this.pumpCurveService.pumpCurveData;
+      console.log('if');
+      this.pumpCurve = this.pumpCurveService.pumpCurveData;
       this.curveConstants = this.pumpCurveService.pumpCurveConstants;
       this.pointOne = this.pumpCurveService.pumpPointOne;
       this.pointTwo = this.pumpCurveService.pumpPointTwo;
     }
     else if (this.pumpCurveService.fanCurveData && !this.inAssessment && this.isFan) {
-      this.pumpCurveForm = this.pumpCurveService.fanCurveData;
+      console.log('else if');
+      this.pumpCurve = this.pumpCurveService.fanCurveData;
       this.curveConstants = this.pumpCurveService.fanCurveConstants;
       this.pointOne = this.pumpCurveService.fanPointOne;
       this.pointTwo = this.pumpCurveService.fanPointTwo;
     }
     else {
-      this.pumpCurveForm = this.pumpCurveService.initForm();
+      console.log('else');
+      this.pumpCurve = this.pumpCurveService.initPumpCurve();
+      this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
       this.initDefault();
       if (!this.isFan) {
         this.convertPumpDefaults(this.settings);
@@ -255,7 +264,7 @@ export class PumpCurveComponent implements OnInit {
     this.regEquationSubscription = this.pumpCurveService.regEquation.subscribe(val => {
       if (val) {
         this.regEquation = val;
-        for (let i = 0; i < this.pumpCurveForm.dataOrder; i++) {
+        for (let i = 0; i < this.pumpCurve.dataOrder; i++) {
           this.regEquation = this.regEquation.replace(/x/, '(flow)');
           this.regEquation = this.regEquation.replace('+ -', '- ');
         }
@@ -266,21 +275,21 @@ export class PumpCurveComponent implements OnInit {
         this.regEquation = this.regEquation.replace('^5', '&#x2075;');
         this.regEquation = this.regEquation.replace('^6', '&#x2076;');
       } else {
-        let tmpStr = this.pumpCurveForm.headFlow2 + '(flow)&#x00B2; + ' + this.pumpCurveForm.headFlow + ('(flow) +') + this.pumpCurveForm.headConstant;
-        if (this.pumpCurveForm.headOrder > 2 && this.pumpCurveForm.headFlow3) {
-          tmpStr = this.pumpCurveForm.headFlow3 + '(flow)&#x00B3; + ' + tmpStr;
+        let tmpStr = this.pumpCurve.headFlow2 + '(flow)&#x00B2; + ' + this.pumpCurve.headFlow + ('(flow) +') + this.pumpCurve.headConstant;
+        if (this.pumpCurve.headOrder > 2 && this.pumpCurve.headFlow3) {
+          tmpStr = this.pumpCurve.headFlow3 + '(flow)&#x00B3; + ' + tmpStr;
         }
-        if (this.pumpCurveForm.headOrder > 3 && this.pumpCurveForm.headFlow4) {
-          tmpStr = this.pumpCurveForm.headFlow4 + '(flow)&#x2074; + ' + tmpStr;
+        if (this.pumpCurve.headOrder > 3 && this.pumpCurve.headFlow4) {
+          tmpStr = this.pumpCurve.headFlow4 + '(flow)&#x2074; + ' + tmpStr;
         }
-        if (this.pumpCurveForm.headOrder > 4 && this.pumpCurveForm.headFlow5) {
-          tmpStr = this.pumpCurveForm.headFlow5 + '(flow)&#x2075; + ' + tmpStr;
+        if (this.pumpCurve.headOrder > 4 && this.pumpCurve.headFlow5) {
+          tmpStr = this.pumpCurve.headFlow5 + '(flow)&#x2075; + ' + tmpStr;
         }
-        if (this.pumpCurveForm.headOrder > 5 && this.pumpCurveForm.headFlow6) {
-          tmpStr = this.pumpCurveForm.headFlow6 + '(flow)&#x2076; + ' + tmpStr;
+        if (this.pumpCurve.headOrder > 5 && this.pumpCurve.headFlow6) {
+          tmpStr = this.pumpCurve.headFlow6 + '(flow)&#x2076; + ' + tmpStr;
         }
         this.regEquation = headOrPressure + ' = ' + tmpStr;
-        for (let i = 0; i < this.pumpCurveForm.headOrder; i++) {
+        for (let i = 0; i < this.pumpCurve.headOrder; i++) {
           this.regEquation = this.regEquation.replace('+ -', '- ');
         }
       }
@@ -297,9 +306,13 @@ export class PumpCurveComponent implements OnInit {
   }
 
 
-  calculate() {
-    if (this.pumpCurveForm.modifiedMeasurement != this.pumpCurveForm.baselineMeasurement) {
-      if (this.pumpCurveForm.modifiedMeasurement != 0 && this.pumpCurveForm.baselineMeasurement != 0) {
+  calculate(pumpCurveForm: FormGroup) {
+    console.log('calculate(), pumpCurveForm = ');
+    console.log(pumpCurveForm);
+    this.pumpCurveForm = pumpCurveForm;
+    this.pumpCurve = this.pumpCurveService.getObjFromForm(this.pumpCurveForm);
+    if (this.pumpCurve.modifiedMeasurement != this.pumpCurve.baselineMeasurement) {
+      if (this.pumpCurve.modifiedMeasurement != 0 && this.pumpCurve.baselineMeasurement != 0) {
         this.toggleCalculate = !this.toggleCalculate;
       }
     } else {
@@ -326,7 +339,7 @@ export class PumpCurveComponent implements OnInit {
     }
     if (!this.saving || this.calcExists) {
       if (this.calcExists) {
-        this.calculator.pumpCurveForm = this.pumpCurveForm;
+        this.calculator.pumpCurve = this.pumpCurve;
         this.indexedDbService.putCalculator(this.calculator).then(() => {
           this.calculatorDbService.setAll();
         });
@@ -334,7 +347,7 @@ export class PumpCurveComponent implements OnInit {
         this.saving = true;
         this.calculator = {
           assessmentId: this.assessment.id,
-          pumpCurveForm: this.pumpCurveForm
+          pumpCurve: this.pumpCurve
         }
         this.indexedDbService.addCalculator(this.calculator).then((result) => {
           this.calculatorDbService.setAll().then(() => {
@@ -349,7 +362,7 @@ export class PumpCurveComponent implements OnInit {
 
   setFormView(str: string) {
     this.selectedFormView = str;
-    this.calculate();
+    this.calculate(this.pumpCurveForm);
   }
 
 

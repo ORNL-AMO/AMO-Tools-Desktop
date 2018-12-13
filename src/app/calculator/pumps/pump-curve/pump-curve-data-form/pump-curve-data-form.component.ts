@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
+import { PumpCurve, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
@@ -9,7 +9,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class PumpCurveDataFormComponent implements OnInit {
   @Input()
-  pumpCurveForm: PumpCurveForm;
+  pumpCurve: PumpCurve;
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Output('calculate')
@@ -42,7 +42,7 @@ export class PumpCurveDataFormComponent implements OnInit {
 
   checkFlow(index: number) {
     let calculate = true;
-    if (this.pumpCurveForm.dataRows[index].flow > 1000000) {
+    if (this.pumpCurve.dataRows[index].flow > 1000000) {
       this.maxFlowWarnings[index] = "Value must not be greater than 1,000,000.";
     }
     else {
@@ -59,8 +59,8 @@ export class PumpCurveDataFormComponent implements OnInit {
   }
 
   initMaxFlowWarnings() {
-    for (let i = 0; i < this.pumpCurveForm.dataRows.length; i++) {
-      if (this.pumpCurveForm.dataRows[i].flow > 1000000) {
+    for (let i = 0; i < this.pumpCurve.dataRows.length; i++) {
+      if (this.pumpCurve.dataRows[i].flow > 1000000) {
         this.maxFlowWarnings.push("Value must not be greater than 1,000,000.");
       }
       else {
@@ -70,7 +70,7 @@ export class PumpCurveDataFormComponent implements OnInit {
   }
 
   removeRow(num: number) {
-    this.pumpCurveForm.dataRows.splice(num, 1);
+    this.pumpCurve.dataRows.splice(num, 1);
     this.maxFlowWarnings.splice(num, 1);
     this.emitCalculateChanges();
   }

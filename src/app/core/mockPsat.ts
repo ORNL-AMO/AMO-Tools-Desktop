@@ -358,7 +358,7 @@ export const MockPsatSettings: Settings = {
 }
 
 export const MockPsatCalculator: Calculator = {
-    pumpCurveForm: {
+    pumpCurve: {
         dataRows: [
             {
                 flow: 0,

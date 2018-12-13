@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { PumpCurveForm, PumpCurveDataRow } from '../../../shared/models/calculators';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { PumpCurve, PumpCurveDataRow } from '../../../shared/models/calculators';
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, FormArray } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import * as regression from 'regression';
 import * as _ from 'lodash';
@@ -10,12 +10,12 @@ import * as _ from 'lodash';
 @Injectable()
 export class PumpCurveService {
 
-  pumpCurveData: PumpCurveForm;
+  pumpCurveData: PumpCurve;
   pumpPointOne: { form: FormGroup, fluidPower: number };
   pumpPointTwo: { form: FormGroup, fluidPower: number };
   pumpCurveConstants: { form: FormGroup };
 
-  fanCurveData: PumpCurveForm;
+  fanCurveData: PumpCurve;
   fanPointOne: { form: FormGroup, fluidPower: number };
   fanPointTwo: { form: FormGroup, fluidPower: number };
   fanCurveConstants: { form: FormGroup };
@@ -29,64 +29,102 @@ export class PumpCurveService {
     this.regEquation = new BehaviorSubject<string>(null);
   }
 
-  // newInitForm(settings: Settings): FormGroup {
 
-  // }
-
-  // initEquationForm(settings: Settings): FormGroup {
-
-  // }
-
-  initEquationForm(): FormGroup {
-    let tmpForm: FormGroup = this.formBuilder.group({
-      maxFlow: [1020, [Validators.required, Validators.min(0)]],
-      dataOrder: [1],
-      headConstant: [356.96, [Validators.required, Validators.min(0)]],
-      measurementOption: [1],
-      baselineMeasurement: [1800, [Validators.required, Validators.min(0)]],
-      modifiedMeasurement: [1800, [Validators.required, Validators.min(0)]],
-      headFlow: [-0.0686, Validators.required],
-      headFlow2: [0.000005, Validators.required],
-      headFlow3: [-0.00000008, Validators.required]
-    });
-    return tmpForm;
-  }
-
-  getEquationFormFromObj(inputObj: PumpCurveForm, settings: Settings): FormGroup {
-    let dataOrder = inputObj.dataOrder - 2;
+  getFormFromObj(inputObj: PumpCurve): FormGroup {
+    let headOrder = inputObj.headOrder - 2;
     let measurementOption = 1;
     if (inputObj.measurementOption == 'Diameter') {
       measurementOption = 0;
     }
 
+    let tmpFormArray: FormArray = new FormArray([]);
+    if (inputObj.dataRows !== undefined && inputObj.dataRows !== null) {
+      //iterate through dataRows and create controls for them
+      for (let i = 0; i < inputObj.dataRows.length; i++) {
+        let tmpDataRowForm = this.formBuilder.group({
+          flow: [inputObj.dataRows[i].flow, [Validators.required, Validators.min(0)]],
+          head: [inputObj.dataRows[i].head, [Validators.required, Validators.min(0)]]
+        });
+        tmpFormArray.push(tmpDataRowForm);
+      }
+    }
+    
     let tmpForm: FormGroup = this.formBuilder.group({
-      maxFlow: [inputObj.maxFlow, [Validators.required, Validators.min(0)]],
-      dataOrder: [dataOrder],
+      dataRows: [tmpFormArray],
+      dataOrder: [inputObj.dataRows.length || null],
+      maxFlow: [inputObj.maxFlow, [Validators.required, Validators.min(0), Validators.max(1000000)]],
+      headOrder: [headOrder],
       headConstant: [inputObj.headConstant, [Validators.required, Validators.min(0)]],
       measurementOption: [measurementOption],
+      measurementOption2: [measurementOption, [{disabled: true}]],
       baselineMeasurement: [inputObj.baselineMeasurement, [Validators.required, Validators.min(0)]],
       modifiedMeasurement: [inputObj.modifiedMeasurement, [Validators.required, Validators.min(0)]],
       headFlow: [inputObj.headFlow, Validators.required],
-      headFlow2: [inputObj.headFlow2, Validators.required]
+      headFlow2: [inputObj.headFlow2, Validators.required],
+      headFlow3: [inputObj.headFlow3, Validators.required],
+      headFlow4: [inputObj.headFlow4, Validators.required],
+      headFlow5: [inputObj.headFlow5, Validators.required],
+      headFlow6: [inputObj.headFlow6, Validators.required],
+      pumpEfficiencyOrder: [inputObj.pumpEfficiencyOrder],
+      pumpEfficiencyConstant: [inputObj.pumpEfficiencyConstant],
+      exploreLine: [inputObj.exploreLine],
+      exploreHead: [inputObj.exploreHead],
+      exploreFlow: [inputObj.exploreFlow],
+      explorePumpEfficiency: [inputObj.explorePumpEfficiency]
     });
-
-    if (inputObj.dataOrder > 2) {
-      tmpForm.addControl('headFlow3', new FormControl(inputObj.headFlow3, Validators.required));
-      if (inputObj.dataOrder > 3) {
-        tmpForm.addControl('headFlow4', new FormControl(inputObj.headFlow4, Validators.required));
-        if (inputObj.dataOrder > 4) {
-          tmpForm.addControl('headFlow5', new FormControl(inputObj.headFlow5, Validators.required));
-          if (inputObj.dataOrder > 5) {
-            tmpForm.addControl('headFlow6', new FormControl(inputObj.headFlow6, Validators.required));
-          }
-        }
-      }
-    }
     return tmpForm;
   }
 
+  getObjFromForm(form: FormGroup): PumpCurve {
+    let pumpCurve: PumpCurve;
+    let dataRows = new Array<PumpCurveDataRow>();
+    // let formDataRows = form.controls.dataRows.value;
+    for (let i = 0; i < form.controls.dataRows.value.length; i++) {
+      let dataRow: PumpCurveDataRow = {
+        head: form.controls.dataRows.value.controls[i].controls.head.value,
+        flow: form.controls.dataRows.value.controls[i].controls.flow.value
+      };
+      dataRows.push(dataRow);
+    }
+    let headOrder = form.controls.headOrder.value + 2;
 
-  initForm(): PumpCurveForm {
+    pumpCurve = {
+      dataRows: dataRows,
+      dataOrder: dataRows.length,
+      measurementOption: form.controls.measurementOption.value == 1 ? "Speed" : "Diameter",
+      baselineMeasurement: form.controls.baselineMeasurement.value,
+      modifiedMeasurement: form.controls.modifiedMeasurement.value,
+      exploreLine: form.controls.exploreLine.value,
+      exploreHead: form.controls.exploreHead.value,
+      exploreFlow: form.controls.exploreFlow.value,
+      explorePumpEfficiency: form.controls.explorePumpEfficiency.value,
+      headOrder: headOrder,
+      headConstant: form.controls.headConstant.value,
+      headFlow: form.controls.headFlow.value,
+      headFlow2: form.controls.headFlow2.value,
+      headFlow3: form.controls.headFlow3.value,
+      headFlow4: form.controls.headFlow4.value,
+      headFlow5: form.controls.headFlow5.value,
+      headFlow6: form.controls.headFlow6.value,
+      pumpEfficiencyOrder: form.controls.pumpEfficiencyOrder.value,
+      pumpEfficiencyConstant: form.controls.pumpEfficiencyConstant.value,
+      maxFlow: form.controls.maxFlow.value
+    };
+    return pumpCurve;
+  }
+
+  addDataRowToForm(row: PumpCurveDataRow, form: FormGroup): FormGroup {
+    let formDataRows = form.controls.dataRows as FormArray;
+    let tmpDataRowForm = this.formBuilder.group({
+      flow: [row.flow, [Validators.required, Validators.min(0)]],
+      head: [row.head, [Validators.required, Validators.min(0)]]
+    });
+    formDataRows.push(tmpDataRowForm);
+    form.controls.dataRows.patchValue(formDataRows);
+    return form;
+  }
+
+  initPumpCurve(): PumpCurve {
     return {
       dataRows: new Array<PumpCurveDataRow>(
         { flow: 0, head: 355 },
@@ -235,15 +273,15 @@ export class PumpCurveService {
     return tooltipData;
   }
 
-  getData(pumpCurveForm: PumpCurveForm, selectedFormView: string): Array<{ x: number, y: number }> {
+  getData(pumpCurve: PumpCurve, selectedFormView: string): Array<{ x: number, y: number }> {
     let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     if (selectedFormView == 'Data') {
-      let maxDataFlow = _.maxBy(pumpCurveForm.dataRows, (val) => { return val.flow });
+      let maxDataFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
       let tmpArr = new Array<any>();
-      pumpCurveForm.dataRows.forEach(val => {
+      pumpCurve.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);
       })
-      let results = regression.polynomial(tmpArr, { order: pumpCurveForm.dataOrder, precision: 10 });
+      let results = regression.polynomial(tmpArr, { order: pumpCurve.dataOrder, precision: 10 });
       this.regEquation.next(results.string);
       for (let i = 0; i <= maxDataFlow.flow; i = i + 10) {
         let yVal = results.predict(i);
@@ -256,8 +294,8 @@ export class PumpCurveService {
       }
     } else if (selectedFormView == 'Equation') {
       this.regEquation.next(null);
-      for (let i = 0; i <= pumpCurveForm.maxFlow + 10; i = i + 10) {
-        let yVal = this.calculateY(pumpCurveForm, i);
+      for (let i = 0; i <= pumpCurve.maxFlow + 10; i = i + 10) {
+        let yVal = this.calculateY(pumpCurve, i);
         if (yVal > 0) {
           data.push({
             x: i,
@@ -269,18 +307,18 @@ export class PumpCurveService {
     return data;
   }
 
-  getModifiedData(pumpCurveForm: PumpCurveForm, selectedFormView: string, baseline: number, modified: number): Array<{ x: number, y: number }> {
+  getModifiedData(pumpCurve: PumpCurve, selectedFormView: string, baseline: number, modified: number): Array<{ x: number, y: number }> {
     let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let ratio = modified / baseline;
     let maxDataFlow: number;
     if (selectedFormView == 'Data') {
-      let tmpDataFlow = _.maxBy(pumpCurveForm.dataRows, (val) => { return val.flow });
+      let tmpDataFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
       maxDataFlow = tmpDataFlow.flow;
       let tmpArr = new Array<any>();
-      pumpCurveForm.dataRows.forEach(val => {
+      pumpCurve.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);
       })
-      let results = regression.polynomial(tmpArr, { order: pumpCurveForm.dataOrder, precision: 10 });
+      let results = regression.polynomial(tmpArr, { order: pumpCurve.dataOrder, precision: 10 });
       for (let i = 0; i <= maxDataFlow; i = i + 10) {
         let yVal = results.predict(i);
         if (yVal[1] > 0) {
@@ -291,13 +329,13 @@ export class PumpCurveService {
         }
       }
     } else if (selectedFormView == 'Equation') {
-      maxDataFlow = pumpCurveForm.maxFlow;
+      maxDataFlow = pumpCurve.maxFlow;
       data.push({
         x: 0 * ratio,
-        y: this.calculateY(pumpCurveForm, 0) * Math.pow(ratio, 2)
+        y: this.calculateY(pumpCurve, 0) * Math.pow(ratio, 2)
       });
       for (let i = 10; i <= maxDataFlow + 10; i = i + 10) {
-        let yVal = this.calculateY(pumpCurveForm, i);
+        let yVal = this.calculateY(pumpCurve, i);
         if (yVal > 0) {
           data.push({
             x: i * ratio,
@@ -311,7 +349,7 @@ export class PumpCurveService {
       data2.push([data[i].x, data[i].y]);
     }
     let data3 = new Array<any>();
-    let results = regression.polynomial(data2, { order: pumpCurveForm.dataOrder, precision: 10 });
+    let results = regression.polynomial(data2, { order: pumpCurve.dataOrder, precision: 10 });
     for (let i = 0; i <= maxDataFlow * ratio; i = i + 10) {
       let yVal = results.predict(i)
       if (yVal[1] > 0) {
@@ -324,9 +362,9 @@ export class PumpCurveService {
     return data3;
   }
 
-  calculateY(formData: PumpCurveForm, flow: number): number {
+  calculateY(data: PumpCurve, flow: number): number {
     let result = 0;
-    result = formData.headConstant + (formData.headFlow * flow) + (formData.headFlow2 * Math.pow(flow, 2)) + (formData.headFlow3 * Math.pow(flow, 3)) + (formData.headFlow4 * Math.pow(flow, 4)) + (formData.headFlow5 * Math.pow(flow, 5)) + (formData.headFlow6 * Math.pow(flow, 6));
+    result = data.headConstant + (data.headFlow * flow) + (data.headFlow2 * Math.pow(flow, 2)) + (data.headFlow3 * Math.pow(flow, 3)) + (data.headFlow4 * Math.pow(flow, 4)) + (data.headFlow5 * Math.pow(flow, 5)) + (data.headFlow6 * Math.pow(flow, 6));
     return result;
   }
 
