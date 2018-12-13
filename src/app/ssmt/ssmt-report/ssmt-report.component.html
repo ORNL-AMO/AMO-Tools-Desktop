@@ -27,8 +27,8 @@
           <app-header-table [header]="highPressureHeader" [name]="'Header Details'"></app-header-table>
         </div>
         <div class="p-1">
-          <app-steam-usage-table *ngIf="highPressureProcessSteamUsage" [processSteamUsage]="highPressureProcessSteamUsage"
-            [name]="'Process Steam Usage'"></app-steam-usage-table>
+          <app-steam-usage-table [calculatedHeader]="highPressureHeader" [name]="'Process Steam Usage'"
+            [headerSteamUsage]="inputData.headerInput.highPressure.processSteamUsage"></app-steam-usage-table>
         </div>
         <div class="p-1">
           <app-steam-properties-table [steamProperties]="highPressureCondensate" [name]="'Condensate'"></app-steam-properties-table>
@@ -70,8 +70,8 @@
           <app-header-table [header]="mediumPressureHeader" [name]="'Header Details'"></app-header-table>
         </div>
         <div class="p-1">
-          <app-steam-usage-table *ngIf="mediumPressureProcessSteamUsage" [processSteamUsage]="mediumPressureProcessSteamUsage"
-            [name]="'Process Steam Usage'"></app-steam-usage-table>
+          <app-steam-usage-table [calculatedHeader]="mediumPressureHeader" [name]="'Process Steam Usage'"
+            [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"></app-steam-usage-table>
         </div>
         <div class="p-1">
           <app-steam-properties-table *ngIf="mediumPressureCondensate" [steamProperties]="mediumPressureCondensate"
@@ -108,8 +108,8 @@
           <app-header-table [header]="lowPressureHeader" [name]="'Header Details'"></app-header-table>
         </div>
         <div class="p-1">
-          <app-steam-usage-table *ngIf="lowPressureProcessSteamUsage" [processSteamUsage]="lowPressureProcessSteamUsage"
-            [name]="'Process Steam Usage'"></app-steam-usage-table>
+          <app-steam-usage-table [calculatedHeader]="lowPressureHeader" [name]="'Process Steam Usage'"
+            [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"></app-steam-usage-table>
         </div>
         <div class="p-1">
           <app-steam-properties-table *ngIf="lowPressureCondensate" [steamProperties]="lowPressureCondensate" [name]="'Condensate'"></app-steam-properties-table>

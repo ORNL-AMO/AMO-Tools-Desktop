@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ProcessSteamUsage } from '../../../shared/models/steam/steam-outputs';
+import { ProcessSteamUsage, HeaderOutputObj } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-steam-usage-table',
@@ -8,13 +8,31 @@ import { ProcessSteamUsage } from '../../../shared/models/steam/steam-outputs';
 })
 export class SteamUsageTableComponent implements OnInit {
   @Input()
-  processSteamUsage: ProcessSteamUsage;
+  calculatedHeader: HeaderOutputObj;
+  @Input()
+  headerSteamUsage: number;
   @Input()
   name: string;
-  
+
+  processSteamUsage: ProcessSteamUsage;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+
+  ngOnChanges() {
+    if (this.calculatedHeader) {
+      let processSteamUsageEnergyFlow: number = this.headerSteamUsage * this.calculatedHeader.specificEnthalpy / 1000;
+      //TODO: Calculate processUsage
+      this.processSteamUsage = {
+        pressure: this.calculatedHeader.pressure,
+        temperature: this.calculatedHeader.temperature,
+        energyFlow: processSteamUsageEnergyFlow,
+        massFlow: this.headerSteamUsage,
+        processUsage: 0
+      };
+    }
+  }
 }

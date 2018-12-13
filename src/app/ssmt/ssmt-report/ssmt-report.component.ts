@@ -108,11 +108,11 @@ export class SsmtReportComponent implements OnInit {
     this.makeupWaterAndCondensateHeader = this.calculateModelService.makeupWaterAndCondensateHeader;
     this.condensingTurbine = this.calculateModelService.condensingTurbine;
 
-    this.highPressureProcessSteamUsage = this.calculateModelService.highPressureProcessSteamUsage;
+    //this.highPressureProcessSteamUsage = this.calculateModelService.highPressureProcessSteamUsage;
     this.highPressureSteamHeatLoss = this.calculateModelService.highPressureSteamHeatLoss;
-    this.mediumPressureProcessSteamUsage = this.calculateModelService.mediumPressureProcessSteamUsage;
+    //this.mediumPressureProcessSteamUsage = this.calculateModelService.mediumPressureProcessSteamUsage;
     this.mediumPressureSteamHeatLoss = this.calculateModelService.mediumPressureSteamHeatLoss;
-    this.lowPressureProcessSteamUsage = this.calculateModelService.lowPressureProcessSteamUsage;
+    //this.lowPressureProcessSteamUsage = this.calculateModelService.lowPressureProcessSteamUsage;
     this.lowPressureSteamHeatLoss = this.calculateModelService.lowPressureSteamHeatLoss;
     this.returnCondensate = this.calculateModelService.returnCondensate;
     console.log('got data');

@@ -14,7 +14,6 @@ export class CalculateModelService {
   boilerOutput: BoilerOutput;
 
   highPressureHeader: HeaderOutputObj;
-  highPressureProcessSteamUsage: ProcessSteamUsage;
   highPressureSteamHeatLoss: HeatLossOutput;
 
   lowPressurePRV: PrvOutput;
@@ -26,14 +25,12 @@ export class CalculateModelService {
 
   lowPressureHeader: HeaderOutputObj;
   lowPressureSteamHeatLoss: HeatLossOutput;
-  lowPressureProcessSteamUsage: ProcessSteamUsage;
 
   mediumToLowPressureTurbine: TurbineOutput;
   mediumPressureCondensateFlashTank: FlashTankOutput;
 
   mediumPressureHeader: HeaderOutputObj;
   mediumPressureSteamHeatLoss: HeatLossOutput;
-  mediumPressureProcessSteamUsage: ProcessSteamUsage;
 
   blowdownFlashTank: FlashTankOutput;
 
@@ -117,11 +114,11 @@ export class CalculateModelService {
   }
 
   getProcessSteamUsage(): number {
-    let steamUsage: number = this.highPressureProcessSteamUsage.massFlow;
+    let steamUsage: number = this.inputData.headerInput.highPressure.processSteamUsage;
     if (this.inputData.headerInput.numberOfHeaders > 1) {
-      steamUsage = steamUsage + this.lowPressureProcessSteamUsage.massFlow;
+      steamUsage = steamUsage + this.inputData.headerInput.lowPressure.processSteamUsage;
       if (this.inputData.headerInput.numberOfHeaders == 3) {
-        steamUsage = steamUsage + this.mediumPressureProcessSteamUsage.massFlow;
+        steamUsage = steamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage;
       }
     }
     if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
@@ -139,25 +136,22 @@ export class CalculateModelService {
     if (this.inputData.boilerInput.blowdownFlashed == true) {
       this.calculateBlowdownFlashTank();
     }
-    //2. Calculate High Pressure Header
-    //first model header and then calculate all equipment coming off of header (high to **)
-    //2A. Model High Pressure Header
+    //2. Model High Pressure Header
+    //2A. Calculate High Pressure Header
     this.calculateHighPressureHeader();
     //2B. Calculate Heat Loss of steam in high pressure header
     this.calculateHeatLossForHighPressureHeader();
-    //2C. Calculate process steam usage of high pressure header
-    this.calculateHighPressureProcessSteamUsage()
-    //2D. Calculate High Pressure Condensate
+    //2C. Calculate High Pressure Condensate
     this.calculateHighPressureCondensate();
-    //2E. Calculate high to low steam turbine if in use
+    //2D. Calculate high to low steam turbine if in use
     if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
       this.calculateHighToLowSteamTurbine();
     }
-    //2F. Calculate high to medium steam turbine if in use
+    //2E. Calculate high to medium steam turbine if in use
     if (this.inputData.headerInput.numberOfHeaders == 3 && this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
       this.calculateHighToMediumPressureSteamTurbine();
     }
-    //2G. Calcuate condensing turbine
+    //2F. Calcuate condensing turbine
     if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
       this.calculateCondensingTurbine();
     }
@@ -175,11 +169,9 @@ export class CalculateModelService {
       this.calculateMediumPressureHeader();
       //3D. Calculate Heat Loss for Remain Steam in Medium Pressure Header
       this.calculateHeatLossForMediumPressureHeader();
-      //3E. Calculate medium pressure process steam usage
-      this.calculateMediumPressureProcessSteamUsage()
-      //3F. Calculate Medium Pressure Condensate
+      //3E. Calculate Medium Pressure Condensate
       this.calculateMediumPressureCondensate();
-      //3G. Calculate medium to low steam turbine if in use
+      //3F. Calculate medium to low steam turbine if in use
       if (this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
         this.calculateMediumToLowSteamTurbine();
       }
@@ -202,9 +194,7 @@ export class CalculateModelService {
       this.calculateLowPressureHeader();
       //4D. Calculate Heat Loss for Remaining Steam in Low Pressure Header
       this.calculateHeatLossForLowPressureHeader();
-      //4E. Calculate Low Pressure Process Steam Usage
-      this.calculateLowPressureProcessSteamUsage()
-      //4F. Calculate Low Pressure Condensate
+      //4E. Calculate Low Pressure Condensate
       this.calculateLowPressureCondensate();
     }
 
@@ -314,20 +304,8 @@ export class CalculateModelService {
 
     }
   }
-  //2C. Calculate process steam usage of high pressure header
-  calculateHighPressureProcessSteamUsage() {
-    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.highPressure.processSteamUsage * this.highPressureHeader.specificEnthalpy / 1000;
-    //TODO: Calculate processUsage
-    this.highPressureProcessSteamUsage = {
-      pressure: this.highPressureHeader.pressure,
-      temperature: this.highPressureHeader.temperature,
-      energyFlow: processSteamUsageEnergyFlow,
-      massFlow: this.inputData.headerInput.highPressure.processSteamUsage,
-      processUsage: 0
-    };
-  }
 
-  //2D. Calculate High Pressure Condensate
+  //2C. Calculate High Pressure Condensate
   //has same properties as blowdown with updated mass and energy flows
   calculateHighPressureCondensate() {
     //Calculate mass flow = steam usage * (recovery rate / 100);
@@ -346,7 +324,7 @@ export class CalculateModelService {
     }
   }
 
-  //2E. Calculate High to Low Steam Turbine
+  //2D. Calculate High to Low Steam Turbine
   calculateHighToLowSteamTurbine() {
     let turbineProperty: number = 0; //0: massFlow, 1: powerOut
     //massFlow = (flow from current header) - (process steam usage in connected header)
@@ -393,7 +371,7 @@ export class CalculateModelService {
   }
 
 
-  //2F. Calculate High to Medium Steam Turbine
+  //2E. Calculate High to Medium Steam Turbine
   calculateHighToMediumPressureSteamTurbine() {
     let turbineProperty: number = 0; //0: massFlow, 1: powerOut
     //massFlow = (flow from current header) - (process steam usage in connected header)
@@ -439,7 +417,7 @@ export class CalculateModelService {
     );
   }
 
-  //2G. Calculate Condensing Turbine
+  //2F. Calculate Condensing Turbine
   calculateCondensingTurbine() {
     //convert condenser pressure (absolute -> gauge), (will convert before sending to the suite c++)
     let condenserPressure: number = this.convertUnitsService.value(this.inputData.turbineInput.condensingTurbine.condenserPressure).from(this.settings.steamVacuumPressure).to(this.settings.steamPressureMeasurement);
@@ -611,20 +589,7 @@ export class CalculateModelService {
     }
   }
 
-  //3E. Calculate medium pressure process steam usage
-  calculateMediumPressureProcessSteamUsage() {
-    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.mediumPressure.processSteamUsage * this.mediumPressureHeader.specificEnthalpy / 1000;
-    //TODO: Calculate process usage
-    this.mediumPressureProcessSteamUsage = {
-      pressure: this.mediumPressureHeader.pressure,
-      temperature: this.mediumPressureHeader.temperature,
-      energyFlow: processSteamUsageEnergyFlow,
-      massFlow: this.inputData.headerInput.mediumPressure.processSteamUsage,
-      processUsage: 0
-    };
-  }
-
-  //3F. Calculate Medium Pressure Condensate
+  //3E. Calculate Medium Pressure Condensate
   calculateMediumPressureCondensate() {
     let calculatedMassFlow: number = this.inputData.headerInput.mediumPressure.processSteamUsage * (this.inputData.headerInput.mediumPressure.condensationRecoveryRate / 100);
     this.mediumPressureCondensate = this.steamService.steamProperties(
@@ -639,7 +604,7 @@ export class CalculateModelService {
     this.mediumPressureCondensate.energyFlow = this.mediumPressureCondensate.massFlow * this.mediumPressureCondensate.specificEnthalpy / 1000;
   }
 
-  //3G. Calculate Medium to Low Steam Turbine
+  //3F. Calculate Medium to Low Steam Turbine
   calculateMediumToLowSteamTurbine() {
     let turbineProperty: number = 0; //massFlow
     //0: massFlow, 1: powerOut
@@ -917,19 +882,6 @@ export class CalculateModelService {
     }
   }
 
-  //4E. Calculate Low Pressure Process Steam Usage
-  calculateLowPressureProcessSteamUsage() {
-    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.lowPressure.processSteamUsage * this.lowPressureHeader.specificEnthalpy / 1000;
-    //Calculate process usage
-    this.lowPressureProcessSteamUsage = {
-      pressure: this.lowPressureHeader.pressure,
-      temperature: this.lowPressureHeader.temperature,
-      energyFlow: processSteamUsageEnergyFlow,
-      massFlow: this.inputData.headerInput.lowPressure.processSteamUsage,
-      processUsage: 0
-    };
-  }
-
   //4F. Calculate Low Pressure Condensate
   calculateLowPressureCondensate() {
     let calculatedMassFlow: number = this.inputData.headerInput.lowPressure.processSteamUsage * (this.inputData.headerInput.lowPressure.condensationRecoveryRate / 100);
@@ -1201,12 +1153,12 @@ export class CalculateModelService {
     this.makeupWaterAndCondensateHeader = undefined;
     this.condensingTurbine = undefined;
     this.deaeratorOutput = undefined;
-    this.highPressureProcessSteamUsage = undefined;
+    //this.highPressureProcessSteamUsage = undefined;
     this.highPressureSteamHeatLoss = undefined;
     this.lowPressureSteamHeatLoss = undefined;
-    this.lowPressureProcessSteamUsage = undefined;
+    //this.lowPressureProcessSteamUsage = undefined;
     this.mediumPressureSteamHeatLoss = undefined;
-    this.mediumPressureProcessSteamUsage = undefined;
+    //this.mediumPressureProcessSteamUsage = undefined;
   }
 
 }
