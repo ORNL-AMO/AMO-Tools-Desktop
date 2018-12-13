@@ -15,16 +15,13 @@ export class SsmtReportComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  massFlow: number = 0;
+  massFlow: number = 127;
 
   dataCalculated: boolean = false;
 
   inputData: SSMTInputs;
 
   boiler: BoilerOutput;
-  blowdown: SteamPropertiesOutput;
-  boilerFeedwater: SteamPropertiesOutput;
-  deaeratorFeedwater: SteamPropertiesOutput;
 
   highPressureHeader: HeaderOutputObj;
   highToMediumPressurePRV: PrvOutput;
@@ -50,8 +47,6 @@ export class SsmtReportComponent implements OnInit {
   makeupWaterAndCondensateHeader: HeaderOutputObj;
   condensingTurbine: TurbineOutput;
   deaerator: DeaeratorOutput;
-  steamToDeaerator: number;
-  additionalSteamFlow: number;
   highPressureProcessSteamUsage: ProcessSteamUsage;
   mediumPressureProcessSteamUsage: ProcessSteamUsage;
   lowPressureProcessSteamUsage: ProcessSteamUsage;
@@ -64,7 +59,7 @@ export class SsmtReportComponent implements OnInit {
   ngOnInit() {
     this.calculateModelService.initResults();
     if (this.ssmt.setupDone) {
-      this.calculateResults();
+      this.calculateResultsGivenMassFlow();
     }
   }
 
@@ -78,23 +73,21 @@ export class SsmtReportComponent implements OnInit {
 
   calculateResultsGivenMassFlow() {
     this.calculateModelService.initData(this.ssmt, this.settings);
-    this.calculateModelService.calculateModel(this.massFlow, false);
+    this.calculateModelService.calculateModel(this.massFlow);
     this.getResults();
   }
 
 
   getResults() {
     this.inputData = this.calculateModelService.inputData;
-    this.boiler = this.calculateModelService.boiler;
-    this.deaerator = this.calculateModelService.deaerator;
-    this.blowdown = this.calculateModelService.blowdown;
-    this.boilerFeedwater = this.calculateModelService.boilerFeedwater;
-    this.deaeratorFeedwater = this.calculateModelService.deaeratorFeedwater;
+    this.boiler = this.calculateModelService.boilerOutput;
+    this.deaerator = this.calculateModelService.deaeratorOutput;
+
 
     this.highPressureHeader = this.calculateModelService.highPressureHeader;
     this.highToMediumPressurePRV = this.calculateModelService.highToMediumPressurePRV;
     this.highPressureToMediumPressureTurbine = this.calculateModelService.highPressureToMediumPressureTurbine;
-    this.highPressureFlashTank = this.calculateModelService.highPressureFlashTank;
+    this.highPressureFlashTank = this.calculateModelService.highPressureCondensateFlashTank;
     this.highPressureCondensate = this.calculateModelService.highPressureCondensate;
 
     this.mediumPressureHeader = this.calculateModelService.mediumPressureHeader;
@@ -103,7 +96,7 @@ export class SsmtReportComponent implements OnInit {
 
     this.highToLowPressureTurbine = this.calculateModelService.highToLowPressureTurbine;
     this.mediumToLowPressureTurbine = this.calculateModelService.mediumToLowPressureTurbine;
-    this.mediumPressureFlashTank = this.calculateModelService.mediumPressureFlashTank;
+    this.mediumPressureFlashTank = this.calculateModelService.mediumPressureCondensateFlashTank;
     this.blowdownFlashTank = this.calculateModelService.blowdownFlashTank;
 
     this.lowPressureHeader = this.calculateModelService.lowPressureHeader;
@@ -114,8 +107,7 @@ export class SsmtReportComponent implements OnInit {
     this.makeupWater = this.calculateModelService.makeupWater;
     this.makeupWaterAndCondensateHeader = this.calculateModelService.makeupWaterAndCondensateHeader;
     this.condensingTurbine = this.calculateModelService.condensingTurbine;
-    this.steamToDeaerator = this.calculateModelService.steamToDeaerator;
-    this.additionalSteamFlow = this.calculateModelService.additionalSteamFlow;
+
     this.highPressureProcessSteamUsage = this.calculateModelService.highPressureProcessSteamUsage;
     this.highPressureSteamHeatLoss = this.calculateModelService.highPressureSteamHeatLoss;
     this.mediumPressureProcessSteamUsage = this.calculateModelService.mediumPressureProcessSteamUsage;
