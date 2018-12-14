@@ -78,9 +78,16 @@ export class PumpCurveFormComponent implements OnInit {
       head: 0,
       flow: 0
     }
+    console.log('this.pumpCurveForm pre push = ');
+    console.log(this.pumpCurveForm);
     this.pumpCurveForm = this.pumpCurveService.addDataRowToForm(tmpRow, this.pumpCurveForm);
     console.log('addRow(), pumpCurveForm = ');
     console.log(this.pumpCurveForm);
+    this.calculate();
+  }
+
+  removeRow(index: number) {
+    this.pumpCurveForm = this.pumpCurveService.removeDataRowFromForm(index, this.pumpCurveForm);
     this.calculate();
   }
 

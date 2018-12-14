@@ -1,10 +1,8 @@
 <form class="pump-curve-form" [formGroup]="pumpCurveForm">
   <div class="d-flex flex-column">
-    <!-- <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" (calculate)="calculate()" [pumpCurve]="pumpCurveForm"
-      (changeField)="focusField($event)" [settings]="settings" (emitAddRow)="addRow()" [isFan]="isFan"></app-pump-curve-data-form> -->
-    <!-- <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
-      (changeField)="focusField($event)" [settings]="settings" [isFan]="isFan"></app-pump-curve-equation-form> -->
 
+    <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" (calculate)="calculate()" [pumpCurveForm]="pumpCurveForm"
+      (changeField)="focusField($event)" [settings]="settings" (emitAddRow)="addRow()" (emitRemoveRow)="removeRow($event)" [isFan]="isFan"></app-pump-curve-data-form>
     <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [pumpCurveForm]="pumpCurveForm"
       (changeField)="focusField($event)" [settings]="settings" [isFan]="isFan"></app-pump-curve-equation-form>
 
@@ -62,7 +60,7 @@
             <span *ngIf="pumpCurveForm.controls.modifiedMeasurement.invalid && !pumpCurveForm.controls.modifiedMeasurement.pristine">
               <span *ngIf="pumpCurveForm.controls.modifiedMeasurement.errors.required">Value required.</span>
               <span *ngIf="pumpCurveForm.controls.modifiedMeasurement.errors.min">Value can't be less than
-                {{pumpCurveForm.controls.modifiedMeasurement.erros.min.min}} 
+                {{pumpCurveForm.controls.modifiedMeasurement.errors.min.min}}
                 <span *ngIf="pumpCurveForm.controls.measurementOption.value == 0" class="input-group-addon units">{{smallUnit}}</span>
                 <span *ngIf="pumpCurveForm.controls.measurementOption.value == 1" class="input-group-addon units">rpm</span>.
               </span>

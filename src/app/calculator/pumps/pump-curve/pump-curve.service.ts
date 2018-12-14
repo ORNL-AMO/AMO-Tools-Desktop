@@ -42,7 +42,7 @@ export class PumpCurveService {
       //iterate through dataRows and create controls for them
       for (let i = 0; i < inputObj.dataRows.length; i++) {
         let tmpDataRowForm = this.formBuilder.group({
-          flow: [inputObj.dataRows[i].flow, [Validators.required, Validators.min(0)]],
+          flow: [inputObj.dataRows[i].flow, [Validators.required, Validators.max(1000000)]],
           head: [inputObj.dataRows[i].head, [Validators.required, Validators.min(0)]]
         });
         tmpFormArray.push(tmpDataRowForm);
@@ -56,7 +56,7 @@ export class PumpCurveService {
       headOrder: [headOrder],
       headConstant: [inputObj.headConstant, [Validators.required, Validators.min(0)]],
       measurementOption: [measurementOption],
-      measurementOption2: [measurementOption, [{disabled: true}]],
+      measurementOption2: [measurementOption],
       baselineMeasurement: [inputObj.baselineMeasurement, [Validators.required, Validators.min(0)]],
       modifiedMeasurement: [inputObj.modifiedMeasurement, [Validators.required, Validators.min(0)]],
       headFlow: [inputObj.headFlow, Validators.required],
@@ -78,7 +78,6 @@ export class PumpCurveService {
   getObjFromForm(form: FormGroup): PumpCurve {
     let pumpCurve: PumpCurve;
     let dataRows = new Array<PumpCurveDataRow>();
-    // let formDataRows = form.controls.dataRows.value;
     for (let i = 0; i < form.controls.dataRows.value.length; i++) {
       let dataRow: PumpCurveDataRow = {
         head: form.controls.dataRows.value.controls[i].controls.head.value,
@@ -114,13 +113,17 @@ export class PumpCurveService {
   }
 
   addDataRowToForm(row: PumpCurveDataRow, form: FormGroup): FormGroup {
-    let formDataRows = form.controls.dataRows as FormArray;
     let tmpDataRowForm = this.formBuilder.group({
-      flow: [row.flow, [Validators.required, Validators.min(0)]],
+      flow: [row.flow, [Validators.required, Validators.max(1000000)]],
       head: [row.head, [Validators.required, Validators.min(0)]]
     });
-    formDataRows.push(tmpDataRowForm);
-    form.controls.dataRows.patchValue(formDataRows);
+    form.controls.dataRows.value.controls.push(tmpDataRowForm);
+    return form;
+  }
+
+  removeDataRowFromForm(index: number, form: FormGroup): FormGroup {
+    console.log('index received = ' + index);
+    form.controls.dataRows.value.removeAt(index);
     return form;
   }
 

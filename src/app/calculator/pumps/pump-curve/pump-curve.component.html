@@ -34,8 +34,6 @@
             <app-pump-curve-form [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate($event)"
               (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form>
 
-            <!-- <app-pump-curve-form [isFan]="isFan" [(pumpCurve)]="pumpCurve" [settings]="settings"
-              (emitCalculate)="calculate()" (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form> -->
             <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetPumpCurveData()">Reset
                 Data</button>
