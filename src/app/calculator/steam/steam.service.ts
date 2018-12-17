@@ -483,7 +483,9 @@ export class SteamService {
     inputCpy.inletPressure = this.convertSteamPressureInput(inputCpy.inletPressure, settings);
     inputCpy.outletSteamPressure = this.convertSteamPressureInput(inputCpy.outletSteamPressure, settings);
     if (inputCpy.turbineProperty == 0) {
-      inputCpy.massFlowOrPowerOut = this.convertSteamMassFlowInput(inputCpy.massFlowOrPowerOut, settings);
+      inputCpy.massFlowOrPowerOut = this.convertUnitsService.value(inputCpy.massFlowOrPowerOut).from(settings.steamMassFlowMeasurement).to('kg');
+    }else{
+      inputCpy.massFlowOrPowerOut = this.convertUnitsService.value(inputCpy.massFlowOrPowerOut).from('kW').to('MJh');
     }
     if (inputCpy.inletQuantity == 0) {
       inputCpy.inletQuantityValue = this.convertSteamTemperatureInput(inputCpy.inletQuantityValue, settings);
@@ -506,8 +508,10 @@ export class SteamService {
     results.massFlow = this.convertUnitsService.value(results.massFlow).from('tonne').to(settings.steamMassFlowMeasurement);
     results.outletEnergyFlow = this.convertEnergyFlowOutput(results.outletEnergyFlow, settings);
     results.inletEnergyFlow = this.convertEnergyFlowOutput(results.inletEnergyFlow, settings);
-    results.energyOut = this.convertEnergyFlowOutput(results.energyOut, settings);
-    results.powerOut = this.convertUnitsService.value(results.powerOut).from('MJ').to(settings.steamPowerMeasurement);
+    results.energyOut = this.convertUnitsService.value(results.energyOut).from('kWh').to(settings.steamEnergyMeasurement);
+    //console.log('Power out: ' +results.powerOut);
+    //console.log(settings.steamPowerMeasurement);
+    results.powerOut = this.convertUnitsService.value(results.powerOut).from('MJh').to('kW');
     results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);
     results.inletPressure = this.convertSteamPressureOutput(results.inletPressure, settings);
     results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.outletSpecificEnthalpy, settings);

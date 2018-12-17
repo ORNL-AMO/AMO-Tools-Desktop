@@ -328,6 +328,8 @@ export class CalculateModelService {
   calculateHighToLowSteamTurbine() {
     let turbineProperty: number = 0; //0: massFlow, 1: powerOut
     //massFlow = (flow from current header) - (process steam usage in connected header)
+    let inletPressure: number = this.convertUnitsService.value(this.highPressureHeader.pressure).from(this.settings.steamVacuumPressure).to(this.settings.steamPressureMeasurement);
+    let outletPressure: number = this.convertUnitsService.value(this.inputData.headerInput.lowPressure.pressure).from(this.settings.steamVacuumPressure).to(this.settings.steamPressureMeasurement);
     let massFlow: number = this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
     if (this.inputData.headerInput.numberOfHeaders == 3) {
       massFlow = massFlow - this.inputData.headerInput.mediumPressure.processSteamUsage;
@@ -355,14 +357,14 @@ export class CalculateModelService {
     this.highToLowPressureTurbine = this.steamService.turbine(
       {
         solveFor: 0,
-        inletPressure: this.highPressureHeader.pressure,
+        inletPressure: inletPressure,
         inletQuantity: 1,
         inletQuantityValue: this.highPressureHeader.specificEnthalpy,
         turbineProperty: turbineProperty,
         isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
         generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
         massFlowOrPowerOut: massFlow,
-        outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
+        outletSteamPressure: outletPressure,
         outletQuantity: 0,
         outletQuantityValue: 0
       },

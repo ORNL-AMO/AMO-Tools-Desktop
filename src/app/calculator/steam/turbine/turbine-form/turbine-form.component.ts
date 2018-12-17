@@ -42,6 +42,7 @@ export class TurbineFormComponent implements OnInit {
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
+    console.log(this.settings.steamPressureMeasurement);
     this.thermoOptions = ThermodynamicQuantityOptions;
     this.setValidators();
   }
