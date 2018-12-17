@@ -220,25 +220,20 @@ export class PumpCurveComponent implements OnInit {
   }
 
   initForm() {
-    console.log('initForm()');
     if (this.pumpCurveService.pumpCurveData && !this.inAssessment && !this.isFan) {
-      console.log('if');
       this.pumpCurve = this.pumpCurveService.pumpCurveData;
       this.curveConstants = this.pumpCurveService.pumpCurveConstants;
       this.pointOne = this.pumpCurveService.pumpPointOne;
       this.pointTwo = this.pumpCurveService.pumpPointTwo;
     }
     else if (this.pumpCurveService.fanCurveData && !this.inAssessment && this.isFan) {
-      console.log('else if');
       this.pumpCurve = this.pumpCurveService.fanCurveData;
       this.curveConstants = this.pumpCurveService.fanCurveConstants;
       this.pointOne = this.pumpCurveService.fanPointOne;
       this.pointTwo = this.pumpCurveService.fanPointTwo;
     }
     else {
-      console.log('else');
       this.pumpCurve = this.pumpCurveService.initPumpCurve();
-      this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
       this.initDefault();
       if (!this.isFan) {
         this.convertPumpDefaults(this.settings);
@@ -246,6 +241,7 @@ export class PumpCurveComponent implements OnInit {
         this.convertFanDefaults(this.settings);
       }
     }
+    this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
   }
 
   subscribe() {
@@ -307,8 +303,6 @@ export class PumpCurveComponent implements OnInit {
 
 
   calculate(pumpCurveForm: FormGroup) {
-    console.log('calculate(), pumpCurveForm = ');
-    console.log(pumpCurveForm);
     this.pumpCurveForm = pumpCurveForm;
     this.pumpCurve = this.pumpCurveService.getObjFromForm(this.pumpCurveForm);
     if (this.pumpCurve.modifiedMeasurement != this.pumpCurve.baselineMeasurement) {

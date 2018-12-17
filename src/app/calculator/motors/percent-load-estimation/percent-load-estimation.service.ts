@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable()
 export class PercentLoadEstimationService {
@@ -19,7 +20,7 @@ export class PercentLoadEstimationService {
     powerFactor: 0
   };
   loadEstimationMethod: number = 0;
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
 
   initSlipMethodInputs(): SlipMethod {
     this.slipMethodInputs = {
@@ -28,6 +29,42 @@ export class PercentLoadEstimationService {
       nameplateFullLoadSpeed: 0
     };
     return this.slipMethodInputs;
+  }
+
+  initSlipMethodForm(): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      synchronousSpeed: [0],
+      measuredSpeed: [0, [Validators.required]],
+      nameplateFullLoadSpeed: [0, [Validators.required]]
+    });
+    return tmpForm;
+  }
+
+  getSlipMethodFormFromObj(inputObj: SlipMethod, lineFrequency: number): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      lineFrequency: [lineFrequency],
+      synchronousSpeed: [inputObj.synchronousSpeed],
+      measuredSpeed: [inputObj.measuredSpeed, [Validators.required]],
+      nameplateFullLoadSpeed: [inputObj.nameplateFullLoadSpeed, [Validators.required]]
+    });
+    return tmpForm;
+  }
+
+  // getSlipMethodObjFromForm(form: FormGroup): SlipMethod {
+  //   let tmpSlipMethodInputs = {
+  //     measuredSpeed: form.controls.measuredSpeed.value,
+  //     nameplateFullLoadSpeed: form.controls.nameplateFullLoadSpeed.value
+  //   };
+  //   return tmpSlipMethodInputs;
+  // }
+
+  updateSlipMethodValidation(synchronousSpeeds: Array<number>, form: FormGroup): FormGroup {
+    let tmpForm = form;
+    tmpForm.controls.nameplateFullLoadSpeed.clearValidators();
+    tmpForm.controls.measuredSpeed.clearValidators();
+    tmpForm.controls.nameplateFullLoadSpeed.setValidators([Validators.required, Validators.max(synchronousSpeeds[synchronousSpeeds.length - 1])]);
+    tmpForm.controls.measuredSpeed.setValidators([Validators.required, Validators.max(synchronousSpeeds[synchronousSpeeds.length - 1])]);
+    return tmpForm;
   }
 
   initFieldMeasurementInputs(): FieldMeasurementInputs {
@@ -43,6 +80,29 @@ export class PercentLoadEstimationService {
       powerFactor: 0
     }
     return this.fieldMeasurementInputs;
+  }
+
+  initFieldMeasurementForm(): FormGroup {
+    let tmpForm = this.formBuilder.group({
+
+    });
+    return tmpForm;
+  }
+
+  getFieldMeasurementFormFromObj(inputObj: FieldMeasurementInputs): FormGroup {
+    let tmpForm = this.formBuilder.group({
+      phase1Voltage: [inputObj.phase1Voltage, [Validators.required]],
+      phase1Amps: [inputObj.phase1Amps, [Validators.required]],
+      phase2Voltage: [inputObj.phase2Voltage, [Validators.required]],
+      phase2Amps: [inputObj.phase2Amps, [Validators.required]],
+      phase3Voltage: [inputObj.phase3Voltage, [Validators.required]],
+      phase3Amps: [inputObj.phase3Amps, [Validators.required]],
+      ratedCurrent: [inputObj.ratedCurrent, [Validators.required, Validators.min(0)]],
+      ratedVoltage: [inputObj.ratedVoltage, [Validators.required]],
+      powerFactor: [inputObj.powerFactor, [Validators.required]]
+    });
+
+    return tmpForm;
   }
 
   getResults(data: FieldMeasurementInputs): FieldMeasurementOutputs {

@@ -326,11 +326,11 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   getXScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Flow: number, systemPoint2Flow: number) {
-    return this.pumpCurveService.getXScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, dataBaseline, dataModification, systemPoint1Flow, systemPoint2Flow);
+    return this.pumpCurveService.getXScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, this.pumpCurve, dataBaseline, dataModification, systemPoint1Flow, systemPoint2Flow);
   }
 
   getYScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Head: number, systemPoint2Head: number) {
-    return this.pumpCurveService.getYScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, dataBaseline, dataModification, systemPoint1Head, systemPoint2Head);
+    return this.pumpCurveService.getYScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, this.pumpCurve, dataBaseline, dataModification, systemPoint1Head, systemPoint2Head);
   }
 
 

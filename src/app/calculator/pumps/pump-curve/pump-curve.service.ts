@@ -48,7 +48,7 @@ export class PumpCurveService {
         tmpFormArray.push(tmpDataRowForm);
       }
     }
-    
+
     let tmpForm: FormGroup = this.formBuilder.group({
       dataRows: [tmpFormArray],
       dataOrder: [inputObj.dataRows.length || null],
@@ -122,7 +122,6 @@ export class PumpCurveService {
   }
 
   removeDataRowFromForm(index: number, form: FormGroup): FormGroup {
-    console.log('index received = ' + index);
     form.controls.dataRows.value.removeAt(index);
     return form;
   }
@@ -371,13 +370,27 @@ export class PumpCurveService {
     return result;
   }
 
-  getXScaleMax(graphPumpCurve: boolean, graphModificationCurve: boolean, graphSystemCurve: boolean, dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Flow: number, systemPoint2Flow: number) {
+  getXScaleMax(graphPumpCurve: boolean, graphModificationCurve: boolean, graphSystemCurve: boolean, pumpCurve: PumpCurve, dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Flow: number, systemPoint2Flow: number) {
     let max: { x: number, y: number };
     let maxX: { x: number, y: number } = { x: 0, y: 0 };
     if (graphPumpCurve) {
       maxX = _.maxBy(dataBaseline, (val) => { return val.x });
+      if (maxX === undefined) {
+        let maxFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
+        maxX = {
+          x: maxFlow.flow,
+          y: maxFlow.head
+        };
+      }
       if (graphModificationCurve) {
         let modMaxX = _.maxBy(dataModification, (val) => { return val.x });
+        if (modMaxX === undefined) {
+          let modMaxFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
+          modMaxX = {
+            x: modMaxFlow.flow,
+            y: modMaxFlow.head
+          };
+        }
         if (maxX.x < modMaxX.x) {
           maxX = modMaxX;
         }
@@ -399,22 +412,34 @@ export class PumpCurveService {
     return max;
   }
 
-  getYScaleMax(graphPumpCurve: boolean, graphModificationCurve: boolean, graphSystemCurve: boolean, dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Head: number, systemPoint2Head: number) {
+  getYScaleMax(graphPumpCurve: boolean, graphModificationCurve: boolean, graphSystemCurve: boolean, pumpCurve: PumpCurve, dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Head: number, systemPoint2Head: number) {
     let max: { x: number, y: number };
     let maxY: { x: number, y: number } = { x: 0, y: 0 };
     let tmpDataBaseline = dataBaseline;
     if (graphPumpCurve) {
       // let baseMaxY = _.maxBy(dataBaseline, (val) => { return val.y });
       let baseMaxY = _.maxBy(tmpDataBaseline, (val) => { return val.y });
+      if (baseMaxY === undefined) {
+        let maxHead = _.maxBy(pumpCurve.dataRows, (val) => { return val.head });
+        baseMaxY = {
+          x: maxHead.flow,
+          y: maxHead.head
+        };
+      }
       maxY = baseMaxY;
       if (graphModificationCurve) {
         let tmpDataMod = dataModification;
-        // let modMaxY = _.maxBy(dataModification, (mod) => { return mod.y });
         let modMaxY = _.maxBy(tmpDataMod, (mod) => { return mod.y });
+        if (modMaxY === undefined) {
+          let modHead = _.maxBy(pumpCurve.dataRows, (mod) => { return mod.head });
+          modMaxY = {
+            x: modHead.flow,
+            y: modHead.head
+          };
+        }
         if (modMaxY.y > maxY.y) {
           maxY.y = modMaxY.y;
         }
-        // maxY.y = Math.max(modMaxY.y, maxY.y);
       }
     }
     if (graphSystemCurve) {
@@ -428,8 +453,6 @@ export class PumpCurveService {
           maxY.y = systemPoint2Head;
         }
       }
-      // maxY.y = Math.max(systemPoint1Head, maxY.y);
-      // maxY.y = Math.max(systemPoint2Head, maxY.y);
     }
     max = maxY;
     return max;
@@ -444,7 +467,6 @@ export class PumpCurveService {
       return dispUnit;
     }
   }
-
 }
 
 

@@ -44,7 +44,6 @@ export class PumpCurveDataFormComponent implements OnInit {
 
 
   removeRow(index: number) {
-    console.log('index = ' + index);
     this.emitRemoveRow.emit(index);
   }
 

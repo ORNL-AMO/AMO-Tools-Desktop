@@ -46,8 +46,6 @@ export class PumpCurveFormComponent implements OnInit {
   constructor(private pumpCurveService: PumpCurveService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    console.log('pump-curve-form init, pumpCurveForm = ');
-    console.log(this.pumpCurveForm);
     this.setSmallUnit();
   }
 
@@ -78,11 +76,7 @@ export class PumpCurveFormComponent implements OnInit {
       head: 0,
       flow: 0
     }
-    console.log('this.pumpCurveForm pre push = ');
-    console.log(this.pumpCurveForm);
     this.pumpCurveForm = this.pumpCurveService.addDataRowToForm(tmpRow, this.pumpCurveForm);
-    console.log('addRow(), pumpCurveForm = ');
-    console.log(this.pumpCurveForm);
     this.calculate();
   }
 
@@ -94,8 +88,6 @@ export class PumpCurveFormComponent implements OnInit {
   calculate() {
     this.checkWarnings();
     if (this.modWarning == null) {
-      console.log('emitCalculate, this.pumpCurveForm = ');
-      console.log(this.pumpCurveForm);
       this.emitCalculate.emit(this.pumpCurveForm);
     }
   }
