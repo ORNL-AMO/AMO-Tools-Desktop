@@ -23,6 +23,8 @@ export class TurbineComponent implements OnInit {
   selected: boolean;
   @Input()
   isBaseline: boolean;
+  @Input()
+  numberOfHeaders: number;
 
   condensingTurbineForm: FormGroup;
   highToLowTurbineForm: FormGroup;
