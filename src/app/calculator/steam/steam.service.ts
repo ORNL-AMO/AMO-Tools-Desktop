@@ -426,7 +426,7 @@ export class SteamService {
     return results;
   }
   prvWithDesuperheating(input: PrvInput, settings: Settings): PrvOutput {
-    let inputCpy = JSON.parse(JSON.stringify(input));
+    let inputCpy: PrvInput = JSON.parse(JSON.stringify(input));
     //convert inputs
     inputCpy.inletPressure = this.convertSteamPressureInput(inputCpy.inletPressure, settings);
     inputCpy.inletMassFlow = this.convertSteamMassFlowInput(inputCpy.inletMassFlow, settings);

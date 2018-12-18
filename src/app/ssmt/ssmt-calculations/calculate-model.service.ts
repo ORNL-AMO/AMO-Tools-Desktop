@@ -467,8 +467,8 @@ export class CalculateModelService {
           inletMassFlow: prvMassFlow,
           outletPressure: this.inputData.headerInput.mediumPressure.pressure,
           feedwaterPressure: this.boilerOutput.feedwaterPressure,
-          feedwaterThermodynamicQuantity: 1,//1 is enthalpy
-          feedwaterQuantityValue: this.boilerOutput.feedwaterSpecificEnthalpy,
+          feedwaterThermodynamicQuantity: 3,//3 is quality
+          feedwaterQuantityValue: 0,
           desuperheatingTemp: this.inputData.headerInput.mediumPressure.desuperheatSteamTemperature
         },
         this.settings
@@ -686,8 +686,8 @@ export class CalculateModelService {
           inletMassFlow: prvMassFlow,
           outletPressure: this.inputData.headerInput.lowPressure.pressure,
           feedwaterPressure: this.boilerOutput.feedwaterPressure,
-          feedwaterThermodynamicQuantity: 1,//1 is enthalpy
-          feedwaterQuantityValue: this.boilerOutput.feedwaterSpecificEnthalpy,
+          feedwaterThermodynamicQuantity: 3,//3 is quality
+          feedwaterQuantityValue: 0,
           desuperheatingTemp: this.inputData.headerInput.lowPressure.desuperheatSteamTemperature
         },
         this.settings
