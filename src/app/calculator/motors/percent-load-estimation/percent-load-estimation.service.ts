@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+
+import { ValueNotInListValidator } from '../../../shared/validators/value-not-in-list';
+import { LessThanValidator } from '../../../shared/validators/less-than';
 
 @Injectable()
 export class PercentLoadEstimationService {
@@ -33,6 +36,7 @@ export class PercentLoadEstimationService {
 
   initSlipMethodForm(): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
+      lineFrequency: [60],
       synchronousSpeed: [0],
       measuredSpeed: [0, [Validators.required]],
       nameplateFullLoadSpeed: [0, [Validators.required]]
@@ -40,23 +44,30 @@ export class PercentLoadEstimationService {
     return tmpForm;
   }
 
-  getSlipMethodFormFromObj(inputObj: SlipMethod, lineFrequency: number): FormGroup {
+  updateMeasuredSpeedValidator(form: FormGroup, val: number): FormGroup {
+    form.controls.measuredSpeed.clearValidators();
+    form.controls.measuredSpeed.setValidators([Validators.required, LessThanValidator.lessThan(val)]);
+    return form;
+  }
+
+  getSlipMethodFormFromObj(inputObj: SlipMethod, lineFrequency: number, synchronousSpeeds: Array<number>): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
       lineFrequency: [lineFrequency],
       synchronousSpeed: [inputObj.synchronousSpeed],
-      measuredSpeed: [inputObj.measuredSpeed, [Validators.required]],
-      nameplateFullLoadSpeed: [inputObj.nameplateFullLoadSpeed, [Validators.required]]
+      measuredSpeed: [inputObj.measuredSpeed, [Validators.required, LessThanValidator.lessThan(synchronousSpeeds[synchronousSpeeds.length - 1])]],
+      nameplateFullLoadSpeed: [inputObj.nameplateFullLoadSpeed, [Validators.required, ValueNotInListValidator.valueNotInList(synchronousSpeeds), LessThanValidator.lessThan(synchronousSpeeds[synchronousSpeeds.length - 1])]]
     });
     return tmpForm;
   }
 
-  // getSlipMethodObjFromForm(form: FormGroup): SlipMethod {
-  //   let tmpSlipMethodInputs = {
-  //     measuredSpeed: form.controls.measuredSpeed.value,
-  //     nameplateFullLoadSpeed: form.controls.nameplateFullLoadSpeed.value
-  //   };
-  //   return tmpSlipMethodInputs;
-  // }
+  getSlipMethodObjFromForm(form: FormGroup): SlipMethod {
+    let tmpSlipMethodInputs = {
+      synchronousSpeed: form.controls.synchronousSpeed.value,
+      measuredSpeed: form.controls.measuredSpeed.value,
+      nameplateFullLoadSpeed: form.controls.nameplateFullLoadSpeed.value
+    };
+    return tmpSlipMethodInputs;
+  }
 
   updateSlipMethodValidation(synchronousSpeeds: Array<number>, form: FormGroup): FormGroup {
     let tmpForm = form;
@@ -99,10 +110,27 @@ export class PercentLoadEstimationService {
       phase3Amps: [inputObj.phase3Amps, [Validators.required]],
       ratedCurrent: [inputObj.ratedCurrent, [Validators.required, Validators.min(0)]],
       ratedVoltage: [inputObj.ratedVoltage, [Validators.required]],
-      powerFactor: [inputObj.powerFactor, [Validators.required]]
+      powerFactor: [inputObj.powerFactor, [Validators.required]],
+      amps: ['Amps', {disabled: true}],
+      volts: ['Volts', {disabled: true}]
     });
 
     return tmpForm;
+  }
+
+  getFieldMeasurementObjFromForm(form: FormGroup): FieldMeasurementInputs {
+    this.fieldMeasurementInputs = {
+      phase1Voltage: form.controls.phase1Voltage.value,
+      phase1Amps: form.controls.phase1Amps.value,
+      phase2Voltage: form.controls.phase2Voltage.value,
+      phase2Amps: form.controls.phase2Amps.value,
+      phase3Voltage: form.controls.phase3Voltage.value,
+      phase3Amps: form.controls.phase3Amps.value,
+      ratedVoltage: form.controls.ratedVoltage.value,
+      ratedCurrent: form.controls.ratedCurrent.value,
+      powerFactor: form.controls.powerFactor.value
+    }
+    return this.fieldMeasurementInputs;
   }
 
   getResults(data: FieldMeasurementInputs): FieldMeasurementOutputs {

@@ -26,10 +26,8 @@ export class SlipMethodFormComponent implements OnInit {
   constructor(private percentLoadEstimationService: PercentLoadEstimationService) { }
 
   ngOnInit() {
-    this.form = this.percentLoadEstimationService.getSlipMethodFormFromObj(this.data, this.lineFrequency);
+    this.form = this.percentLoadEstimationService.initSlipMethodForm();
     this.updateSynchronousSpeeds(false);
-    this.form = this.percentLoadEstimationService.updateSlipMethodValidation(this.synchronousSpeeds, this.form);
-
   }
 
   updateSynchronousSpeeds(calculate: boolean) {
@@ -53,6 +51,8 @@ export class SlipMethodFormComponent implements OnInit {
         3600
       ];
     }
+    //update form for validation with new synchronous speed list
+    this.form = this.percentLoadEstimationService.getSlipMethodFormFromObj(this.data, this.lineFrequency, this.synchronousSpeeds);
     if (calculate) {
       this.calculate();
     }
@@ -60,22 +60,10 @@ export class SlipMethodFormComponent implements OnInit {
 
   calculate() {
     this.synchronousSpeedError = this.nameplateFullLoadSpeedError = this.measuredSpeedError = null;
-
-    //need to update data object with values from form and update validation in form
-
-
-    //now handled in form validation
-    // if (this.data.nameplateFullLoadSpeed >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
-    //   this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
-    // }
-    // if (this.data.measuredSpeed >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
-    //   this.measuredSpeedError = 'Measured Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
-    // }
-
     for (let i = 0; i < this.synchronousSpeeds.length; i++) {
       if (this.synchronousSpeeds[i] > this.form.controls.nameplateFullLoadSpeed.value) {
         this.form.controls.synchronousSpeed.patchValue(this.synchronousSpeeds[i]);
-
+        this.form = this.percentLoadEstimationService.updateMeasuredSpeedValidator(this.form, this.synchronousSpeeds[i]);
         if (this.synchronousSpeeds[i] <= this.form.controls.measuredSpeed.value) {
           this.measuredSpeedError = 'Measured Speed must be less than the synchronous speed';
         }
@@ -85,15 +73,7 @@ export class SlipMethodFormComponent implements OnInit {
         this.synchronousSpeedError = 'Nameplate Full Load Speed cannot equal the Synchronous Speed of ' + this.synchronousSpeeds[i];
       }
     }
-
-    // if (!this.value.nameplateFullLoadSpeed) {
-    //   this.showSynchronousSpeed = false;
-    // } else {
-    //   this.showSynchronousSpeed = true;
-    // }
-
+    this.data = this.percentLoadEstimationService.getSlipMethodObjFromForm(this.form);
     this.emitCalculate.emit(this.data);
   }
-
-
 }
