@@ -1,103 +1,5 @@
 <div class="d-flex">
   <div class="p-1">
-    <label class="group-label">Feedwater</label>
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{deaerator.feedwaterPressure |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{deaerator.feedwaterTemperature |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Saturated</td>
-          <td class="text-center w-50">
-            {{deaerator.feedwaterQuality}}
-            <!-- <span *ngIf="deaerator.inletQuality == 0">Liquid</span>
-              <span *ngIf="deaerator.inletQuality == 1">Gas</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{deaerator.feedwaterMassFlow |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{deaerator.feedwaterSpecificEnthalpy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{deaerator.feedwaterSpecificEntropy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{deaerator.feedwaterEnergyFlow |number:'2.0-2'}} </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
-    <label class="group-label">Vented Steam</label>
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamPressure |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamTemperature |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Saturated</td>
-          <td class="text-center w-50">
-            {{deaerator.ventedSteamQuality}}
-            <!-- <span *ngIf="deaerator.inletQuality == 0">Liquid</span>
-              <span *ngIf="deaerator.inletQuality == 1">Gas</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamMassFlow |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamSpecificEnthalpy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamSpecificEntropy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{deaerator.ventedSteamEnergyFlow |number:'2.0-2'}} </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
     <label class="group-label">Inlet Water</label>
     <table class="table table-hover table-striped">
       <tbody>
@@ -191,6 +93,104 @@
         <tr>
           <td class="bold w-50">Energy Flow</td>
           <td class="text-center w-50">{{deaerator.inletSteamEnergyFlow |number:'2.0-2'}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-1">
+    <label class="group-label">Vented Steam</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold w-50">Pressure</td>
+          <td class="text-center w-50">{{deaerator.ventedSteamPressure |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Temperature</td>
+          <td class="text-center w-50">{{deaerator.ventedSteamTemperature |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Saturated</td>
+          <td class="text-center w-50">
+            {{deaerator.ventedSteamQuality}}
+            <!-- <span *ngIf="deaerator.inletQuality == 0">Liquid</span>
+              <span *ngIf="deaerator.inletQuality == 1">Gas</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Mass Flow</td>
+          <td class="text-center w-50">{{deaerator.ventedSteamMassFlow |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Specific Enthalpy</td>
+          <td class="text-center w-50">{{deaerator.ventedSteamSpecificEnthalpy |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Specific Entropy</td>
+          <td class="text-center w-50">{{deaerator.ventedSteamSpecificEntropy |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Energy Flow</td>
+          <td class="text-center w-50">{{deaerator.ventedSteamEnergyFlow |number:'2.0-2'}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-1">
+    <label class="group-label">Feedwater</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold w-50">Pressure</td>
+          <td class="text-center w-50">{{deaerator.feedwaterPressure |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Temperature</td>
+          <td class="text-center w-50">{{deaerator.feedwaterTemperature |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Saturated</td>
+          <td class="text-center w-50">
+            {{deaerator.feedwaterQuality}}
+            <!-- <span *ngIf="deaerator.inletQuality == 0">Liquid</span>
+              <span *ngIf="deaerator.inletQuality == 1">Gas</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Mass Flow</td>
+          <td class="text-center w-50">{{deaerator.feedwaterMassFlow |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Specific Enthalpy</td>
+          <td class="text-center w-50">{{deaerator.feedwaterSpecificEnthalpy |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Specific Entropy</td>
+          <td class="text-center w-50">{{deaerator.feedwaterSpecificEntropy |number:'2.0-2'}}
+            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Energy Flow</td>
+          <td class="text-center w-50">{{deaerator.feedwaterEnergyFlow |number:'2.0-2'}} </td>
         </tr>
       </tbody>
     </table>
