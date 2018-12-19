@@ -1,4 +1,27 @@
-<div class="d-flex">
+<div class="d-flex flex-column justify-content-center align-items-center">
+  <div class="p-1">
+    Inlet Steam Mass Flow: {{turbine.massFlow | number:'1.0-2'}}
+  </div>
+  <div class="p-1 d-flex justify-content-center">
+    <img src="assets/images/calculator-icons/steam-icons/steam-turbine.png" class="turbine-img">
+  </div>
+  <div class="p-1">
+    Outlet Steam Mass Flow: {{turbine.massFlow | number:'1.0-2'}}
+  </div>
+  <div class="p-1">
+    Power Out: {{turbine.powerOut |number:'1.0-2'}}
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="d-flex" *ngIf="showData">
   <div class="p-1">
     <label class="group-label">Inlet Steam</label>
     <table class="table table-hover table-striped">

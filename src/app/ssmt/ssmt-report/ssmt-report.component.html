@@ -1,8 +1,4 @@
-<div class="d-flex flex-column p-4 justify-content-center" *ngIf="dataCalculated">
-  <!-- <div class="d-flex justify-content-between">
-    <button class="btn btn-primary" (click)="getResults()" [disabled]="!ssmt.setupDone">Run Modeler</button>
-    <button class="btn btn-secondary" (click)="getData()">Get Data</button>
-  </div> -->
+<!-- <div class="d-flex flex-column p-4 justify-content-center" *ngIf="dataCalculated">
   <div class="d-flex justify-content-between pt-2">
     <div class="pr-2">
       <div class="form-group">
@@ -171,19 +167,73 @@
     <h4>Condensate Flash Tank Data</h4>
     <app-flash-tank-table [flashTank]="condensateFlashTank"></app-flash-tank-table>
   </div>
+</div> -->
 
-  <!-- <div class="pt-2" *ngIf="highPressureCondensate">
-    <h4>Condensate Properties</h4>
-    <div class="d-flex flex-wrap">
-      <div class="p-1">
-        <app-steam-properties-table *ngIf="blowdown" [steamProperties]="blowdown" [name]="'Blowdown'"></app-steam-properties-table>
+
+<div class="d-flex flex-column w-100 h-100">
+  <div class="d-flex flex-fill">
+    <div class="feedwater p-1">
+      Feedwater
+    </div>
+    <div class="d-flex flex-column flex-fill align-content-stretch">
+      <div class="boiler p-1">
+        <app-boiler-table [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
       </div>
-      <div class="p-1">
-        <app-steam-properties-table *ngIf="boilerFeedwater" [steamProperties]="boilerFeedwater" [name]="'Boiler Feedwater'"></app-steam-properties-table>
-      </div>
-      <div class="p-1">
-        <app-steam-properties-table *ngIf="deaeratorFeedwater" [steamProperties]="deaeratorFeedwater" [name]="'Deaerator Feedwater'"></app-steam-properties-table>
+      <div class="d-flex justify-content-between">
+        <div class="d-flex flex-column justify-content-between flex-fill">
+          <div class="high-pressure-header p-1">
+            High Pressure Header
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex align-content-center high-pressure-prv p-1">
+              <app-prv-table [prv]="highToMediumPressurePRV"></app-prv-table>
+            </div>
+            <div class="condensing-turbine p-1">
+              <app-turbine-table [turbine]="condensingTurbine"></app-turbine-table>
+            </div>
+            <div class="high-to-medium-turbine p-1">
+              <app-turbine-table [turbine]="highPressureToMediumPressureTurbine"></app-turbine-table>
+            </div>
+            <div class="high-to-low-turbine p-1">
+              <app-turbine-table [turbine]="highToLowPressureTurbine"></app-turbine-table>
+            </div>
+            <div class="high-pressure-flash-tank p-1">
+              <app-flash-tank-table [flashTank]="highPressureFlashTank"></app-flash-tank-table>
+            </div>
+          </div>
+          <div class="medium-pressure-header p-1">
+            medium pressure header
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex align-content-center low-pressure-prv p-1">
+              <app-prv-table [prv]="lowPressurePRV"></app-prv-table>
+            </div>
+            <div class="medium-to-low-turbine p-1">
+              <app-turbine-table [turbine]="mediumToLowPressureTurbine"></app-turbine-table>
+            </div>
+            <div class="medium-pressure-flash-tank p-1">
+              <app-flash-tank-table [flashTank]="mediumPressureFlashTank"></app-flash-tank-table>
+            </div>
+          </div>
+          <div class="low-pressure-header p-1">
+            low pressure header
+          </div>
+        </div>
+        <!-- <div class="condensate p-1">
+          condensate
+        </div> -->
       </div>
     </div>
-  </div> -->
+  </div>
+  <div class="d-flex justify-content-between">
+    <div class="deaerator p-1">
+      Deaerator
+    </div>
+    <div class="makeup-water-condensate p-1">
+      Makeup water condensate
+    </div>
+    <div class="blowdown-flash-tank p-1">
+      <app-flash-tank-table [flashTank]="blowdownFlashTank"></app-flash-tank-table>
+    </div>
+  </div>
 </div>
