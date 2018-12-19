@@ -14,6 +14,7 @@ import { BoilerDiagramComponent } from './boiler-diagram/boiler-diagram.componen
 import { PrvDiagramComponent } from './prv-diagram/prv-diagram.component';
 import { TurbineDiagramComponent } from './turbine-diagram/turbine-diagram.component';
 import { FlashTankDiagramComponent } from './flash-tank-diagram/flash-tank-diagram.component';
+import { HeaderDiagramComponent } from './header-diagram/header-diagram.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { FlashTankDiagramComponent } from './flash-tank-diagram/flash-tank-diagr
     BoilerDiagramComponent,
     PrvDiagramComponent,
     TurbineDiagramComponent,
-    FlashTankDiagramComponent
+    FlashTankDiagramComponent,
+    HeaderDiagramComponent
   ],
   exports: [
     SsmtDiagramComponent

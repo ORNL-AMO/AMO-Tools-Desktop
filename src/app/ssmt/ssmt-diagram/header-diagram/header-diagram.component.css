@@ -1,0 +1,16 @@
+.highPressure {
+    background-color: #C0392B;
+    height: 30px;
+    border-top-left-radius: 25px;
+}
+
+.mediumPressure {
+    background-color: #FFA726;
+    height: 30px;
+}
+
+.lowPressure{
+    background-color: #FFEB3B;
+    border-bottom-left-radius: 25px;
+    height: 30px;
+}

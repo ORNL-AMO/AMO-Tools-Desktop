@@ -1,18 +1,18 @@
 <div class="d-flex flex-column justify-content-center align-items-center w-100">
   <div class="d-flex p-1 flex-column text-right w-100">
     <div class="p-0 chevron-one">
-      <span class="fa fa-chevron-down high-pressure-steam"></span>
+      <span class="fa fa-chevron-down" [ngClass]="inletSteam"></span>
     </div>
     <div class="p-0">
-      <span class="fa fa-chevron-down high-pressure-steam"></span>
+      <span class="fa fa-chevron-down" [ngClass]="inletSteam"></span>
     </div>
     <div class="p-0">
       {{prv.inletMassFlow | number:'1.0-2'}}
     </div>
   </div>
-  <div class="d-flex align-content-center">
+  <div class="d-flex align-content-center w-100 justify-content-end">
     <div class="flex-column p-0 align-self-center" *ngIf="prv.feedwaterMassFlow">
-      {{prv.feedwaterMassFlow | number:'1.0-2'}} <span class="fa fa-chevron-right feedwater"></span> <span class="fa fa-chevron-right feedwater"></span>
+      <span class="fa fa-chevron-right feedwater"></span> <span class="fa fa-chevron-right feedwater"></span> {{prv.feedwaterMassFlow | number:'1.0-2'}}
     </div>
     <div class="p-0 d-flex justify-content-center">
       <img src="assets/images/calculator-icons/steam-icons/prv.png" class="prv-img">
@@ -23,10 +23,10 @@
       {{prv.outletTemperature | number:'1.0-2'}}
     </div>
     <div class="p-0 chevron-one">
-      <span class="fa fa-chevron-down medium-pressure-steam"></span>
+      <span class="fa fa-chevron-down" [ngClass]="outletSteam"></span>
     </div>
     <div class="p-0">
-      <span class="fa fa-chevron-down medium-pressure-steam"></span>
+      <span class="fa fa-chevron-down" [ngClass]="outletSteam"></span>
     </div>
   </div>
 </div>

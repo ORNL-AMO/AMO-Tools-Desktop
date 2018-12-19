@@ -9,18 +9,22 @@
     padding-top: 2px;
 }
 
-.medium-pressure-steam{
+.mediumPressure{
     color: #FFA726;
     border-left: #FFA726 solid 3px;
     border-right: #FFA726 solid 3px;
 }
 
-.high-pressure-steam{
+.highPressure{
     color: #C0392B;
     border-left: #C0392B solid 3px;
     border-right: #C0392B solid 3px;
 }
-
+.lowPressure{
+    color: #FFEB3B;
+    border-left: #FFEB3B solid 3px;
+    border-right: #FFEB3B solid 3px;
+}
 .chevron-one{
     margin-bottom: -12px;
 }

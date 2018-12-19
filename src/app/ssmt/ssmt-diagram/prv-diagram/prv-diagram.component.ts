@@ -9,7 +9,10 @@ import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 export class PrvDiagramComponent implements OnInit {
   @Input()
   prv: PrvOutput;
-
+  @Input()
+  inletSteam: string;
+  @Input()
+  outletSteam: string;
   constructor() { }
 
   ngOnInit() {

@@ -64,3 +64,7 @@ tbody{
 .low-pressure-header{
     background-color: #FFEB3B;
 }
+
+.header-width{
+    width: 84%;
+}

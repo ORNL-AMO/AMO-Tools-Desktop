@@ -6,44 +6,54 @@
       </div>
       <div class="d-flex justify-content-between">
         <div class="d-flex flex-column justify-content-between flex-fill">
-          <div class="high-pressure-header p-0">
-            High Pressure Header
+          <div class="p-0 d-flex justify-content-end">
+            <div class="header-width">
+              <app-header-diagram [header]="highPressureHeader" [pressureLevel]="'highPressure'"></app-header-diagram>
+            </div>
           </div>
           <div class="d-flex w-100">
-            <div class="d-flex justify-content-between flex-fill pr-4">
-              <div class="p-0">
-                <app-prv-diagram [prv]="highToMediumPressurePRV"></app-prv-diagram>
+            <div class="d-flex w-75">
+              <div class="p-0 w-25">
+                <app-prv-diagram [prv]="highToMediumPressurePRV" [inletSteam]="'highPressure'" [outletSteam]="'mediumPressure'"></app-prv-diagram>
               </div>
-              <div class="p-0">
+              <div class="p-0 w-25">
                 <app-turbine-diagram [turbine]="condensingTurbine" [inletColor]="'highPressure'" [outletColor]="'condensation'"></app-turbine-diagram>
               </div>
-              <div class="p-0">
-                <app-turbine-diagram [turbine]="highPressureToMediumPressureTurbine" [inletColor]="'highPressure'" [outletColor]="'mediumPressure'"></app-turbine-diagram>
+              <div class="p-0 w-25">
+                <app-turbine-diagram [turbine]="highPressureToMediumPressureTurbine" [inletColor]="'highPressure'"
+                  [outletColor]="'mediumPressure'"></app-turbine-diagram>
               </div>
-              <div class="p-0">
+              <div class="p-0 w-25">
                 <app-turbine-diagram [turbine]="highToLowPressureTurbine" [inletColor]="'highPressure'" [outletColor]="'lowPressure'"></app-turbine-diagram>
               </div>
             </div>
-            <div class="p-0">
+            <div class="p-0 w-25">
               <app-flash-tank-diagram [flashTank]="highPressureFlashTank" [steamPressure]="'mediumPressure'"></app-flash-tank-diagram>
             </div>
           </div>
-          <div class="medium-pressure-header p-0">
-            medium pressure header
+          <div class="p-0 d-flex justify-content-end">
+            <div class="header-width">
+              <app-header-diagram [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'"></app-header-diagram>
+            </div>
           </div>
-          <div class="d-flex justify-content-between">
-            <div class="d-flex align-content-center low-pressure-prv p-0">
-              <app-prv-diagram [prv]="lowPressurePRV"></app-prv-diagram>
+          <div class="d-flex">
+            <div class="d-flex w-75">
+              <div class="p-0 w-25">
+                <app-prv-diagram [prv]="lowPressurePRV" [inletSteam]="'mediumPressure'" [outletSteam]="'lowPressure'"></app-prv-diagram>
+              </div>
+              <div class="p-0 w-25">
+                <app-turbine-diagram [turbine]="mediumToLowPressureTurbine" [inletColor]="'mediumPressure'"
+                  [outletColor]="'lowPressure'"></app-turbine-diagram>
+              </div>
             </div>
-            <div class="medium-to-low-turbine p-0">
-              <app-turbine-diagram [turbine]="mediumToLowPressureTurbine" [inletColor]="'mediumPressure'" [outletColor]="'lowPressure'"></app-turbine-diagram>
-            </div>
-            <div class="medium-pressure-flash-tank p-0">
+            <div class="p-0 w-25">
               <app-flash-tank-diagram [flashTank]="mediumPressureFlashTank" [steamPressure]="'lowPressure'"></app-flash-tank-diagram>
             </div>
           </div>
-          <div class="low-pressure-header p-0">
-            low pressure header
+          <div class="p-0 d-flex justify-content-end">
+            <div class="header-width">
+              <app-header-diagram [header]="lowPressureHeader" [pressureLevel]="'lowPressure'"></app-header-diagram>
+            </div>
           </div>
         </div>
         <!-- <div class="condensate p-1">
