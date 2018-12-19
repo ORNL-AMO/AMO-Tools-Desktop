@@ -1,0 +1,66 @@
+td{
+    font-size: small;
+}
+
+td{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+}
+
+tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.group-label{
+    font-weight: bold;
+}
+
+.modeler{
+    background-color: #F39C12;
+}
+
+.feedwater{
+    background-color: purple;
+}
+
+/* .boiler{
+    background-color: red;
+} */
+
+
+.high-pressure-header{
+    background-color: lightcoral;
+}
+
+/* .high-pressure-prv, .low-pressure-prv{
+    background-color: turquoise;
+} */
+
+/* .condensing-turbine, .high-to-medium-turbine, .high-to-low-turbine, .medium-to-low-turbine{
+    background-color: blue;
+    border: solid 1px black;
+} */
+
+/* .medium-pressure-flash-tank, .high-pressure-flash-tank, .blowdown-flash-tank{
+    background-color: lightblue;
+} */
+
+.medium-pressure-header{
+    background-color: orange;
+}
+.deaerator{
+    background-color: burlywood;
+}
+.condensate{
+    background-color: darkmagenta;
+}
+
+.makeup-water-condensate{
+    background-color: green
+}
+
+.low-pressure-header{
+    background-color: yellow;
+}

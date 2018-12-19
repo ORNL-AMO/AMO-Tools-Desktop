@@ -1,0 +1,34 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SsmtDiagramComponent } from './ssmt-diagram.component';
+import { HeaderTableComponent } from './header-table/header-table.component';
+import { FlashTankTableComponent } from './flash-tank-table/flash-tank-table.component';
+import { DeaeratorTableComponent } from './deaerator-table/deaerator-table.component';
+import { BoilerTableComponent } from './boiler-table/boiler-table.component';
+import { HeatLossTableComponent } from './heat-loss-table/heat-loss-table.component';
+import { PrvTableComponent } from './prv-table/prv-table.component';
+import { SteamPropertiesTableComponent } from './steam-properties-table/steam-properties-table.component';
+import { TurbineTableComponent } from './turbine-table/turbine-table.component';
+import { SharedModule } from '../../shared/shared.module';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    SharedModule
+  ],
+  declarations: [
+    SsmtDiagramComponent,
+    BoilerTableComponent,
+    DeaeratorTableComponent,
+    FlashTankTableComponent,
+    HeaderTableComponent,
+    HeatLossTableComponent,
+    PrvTableComponent,
+    SteamPropertiesTableComponent,
+    TurbineTableComponent
+  ],
+  exports: [
+    SsmtDiagramComponent
+  ]
+})
+export class SsmtDiagramModule { }

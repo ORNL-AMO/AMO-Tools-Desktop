@@ -25,7 +25,6 @@ import { HeaderFormComponent } from './header/header-form/header-form.component'
 import { TurbineService } from './turbine/turbine.service';
 import { CondensingTurbineFormComponent } from './turbine/condensing-turbine-form/condensing-turbine-form.component';
 import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pressure-turbine-form.component';
-import { SsmtDiagramComponent } from './ssmt-diagram/ssmt-diagram.component';
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
 import { SharedModule } from '../shared/shared.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
@@ -36,16 +35,7 @@ import { RunModelService } from './ssmt-calculations/run-model.service';
 import { SteamModelCalculationService } from './ssmt-calculations/steam-model-calculation.service';
 import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
 import { SsmtReportComponent } from './ssmt-report/ssmt-report.component';
-import { BoilerTableComponent } from './ssmt-report/boiler-table/boiler-table.component';
-import { HeaderTableComponent } from './ssmt-report/header-table/header-table.component';
-import { TurbineTableComponent } from './ssmt-report/turbine-table/turbine-table.component';
-import { DeaeratorTableComponent } from './ssmt-report/deaerator-table/deaerator-table.component';
-import { FlashTankTableComponent } from './ssmt-report/flash-tank-table/flash-tank-table.component';
-import { PrvTableComponent } from './ssmt-report/prv-table/prv-table.component';
-import { SteamPropertiesTableComponent } from './ssmt-report/steam-properties-table/steam-properties-table.component';
-import { HeatLossTableComponent } from './ssmt-report/heat-loss-table/heat-loss-table.component';
-import { SteamUsageTableComponent } from './ssmt-report/steam-usage-table/steam-usage-table.component';
-
+import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -57,7 +47,8 @@ import { SteamUsageTableComponent } from './ssmt-report/steam-usage-table/steam-
     ModalModule,
     SuiteDbModule,
     SharedModule,
-    HelpPanelModule
+    HelpPanelModule,
+    SsmtDiagramModule
   ],
   declarations: [
     SsmtComponent,
@@ -75,18 +66,8 @@ import { SteamUsageTableComponent } from './ssmt-report/steam-usage-table/steam-
     HeaderFormComponent,
     CondensingTurbineFormComponent,
     PressureTurbineFormComponent,
-    SsmtDiagramComponent,
     SsmtSankeyComponent,
-    SsmtReportComponent,
-    BoilerTableComponent,
-    HeaderTableComponent,
-    TurbineTableComponent,
-    DeaeratorTableComponent,
-    FlashTankTableComponent,
-    PrvTableComponent,
-    SteamPropertiesTableComponent,
-    HeatLossTableComponent,
-    SteamUsageTableComponent
+    SsmtReportComponent
   ],
   providers: [
     SsmtService,
