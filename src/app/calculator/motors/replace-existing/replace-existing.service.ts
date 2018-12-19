@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ReplaceExistingData, ReplaceExistingResults } from './replace-existing.component';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable()
 export class ReplaceExistingService {
@@ -12,7 +13,46 @@ export class ReplaceExistingService {
     newEfficiency: 96,
     purchaseCost: 13000
   };
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
+
+  initForm(): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      operatingHours: [5200, [Validators.required, Validators.min(0)]],
+      motorSize: [150, [Validators.required, Validators.min(0)]],
+      existingEfficiency: [92, [Validators.required, Validators.min(0), Validators.max(100)]],
+      load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
+      electricityCost: [0.12, [Validators.required, Validators.min(0)]],
+      newEfficiency: [96, [Validators.required, Validators.min(0), Validators.max(100)]],
+      purchaseCost: [1300, [Validators.required, Validators.min(0)]]
+    });
+    return tmpForm;
+  }
+
+  getFormFromObj(inputObj: ReplaceExistingData): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
+      motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
+      existingEfficiency: [inputObj.existingEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
+      newEfficiency: [inputObj.newEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      purchaseCost: [inputObj.purchaseCost, [Validators.required, Validators.min(0)]]
+    });
+    return tmpForm;
+  }
+
+  getObjFromForm(form: FormGroup): ReplaceExistingData {
+    this.replaceExistingData = {
+      operatingHours: form.controls.operatingHours.value,
+      motorSize: form.controls.motorSize.value,
+      existingEfficiency: form.controls.existingEfficiency.value,
+      load: form.controls.load.value,
+      electricityCost: form.controls.electricityCost.value,
+      newEfficiency: form.controls.newEfficiency.value,
+      purchaseCost: form.controls.purchaseCost.value,
+    }
+    return this.replaceExistingData;
+  }
 
   initReplaceExistingData(): ReplaceExistingData {
     this.replaceExistingData = {
