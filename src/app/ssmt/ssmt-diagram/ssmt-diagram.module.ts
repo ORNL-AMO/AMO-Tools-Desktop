@@ -10,6 +10,8 @@ import { PrvTableComponent } from './prv-table/prv-table.component';
 import { SteamPropertiesTableComponent } from './steam-properties-table/steam-properties-table.component';
 import { TurbineTableComponent } from './turbine-table/turbine-table.component';
 import { SharedModule } from '../../shared/shared.module';
+import { BoilerDiagramComponent } from './boiler-diagram/boiler-diagram.component';
+import { PrvDiagramComponent } from './prv-diagram/prv-diagram.component';
 
 @NgModule({
   imports: [
@@ -25,7 +27,9 @@ import { SharedModule } from '../../shared/shared.module';
     HeatLossTableComponent,
     PrvTableComponent,
     SteamPropertiesTableComponent,
-    TurbineTableComponent
+    TurbineTableComponent,
+    BoilerDiagramComponent,
+    PrvDiagramComponent
   ],
   exports: [
     SsmtDiagramComponent

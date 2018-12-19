@@ -1,0 +1,19 @@
+
+.prv-img{
+    height: 100px;
+}
+.feedwater{
+    color: #8E44AD;
+}
+
+.medium-pressure-steam{
+    color: #FFA726;
+}
+
+.high-pressure-steam{
+    color: #C0392B;
+}
+
+.chevron-one{
+    margin-bottom: -12px;
+}

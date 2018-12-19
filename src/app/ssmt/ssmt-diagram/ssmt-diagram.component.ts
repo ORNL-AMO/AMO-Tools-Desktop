@@ -54,12 +54,14 @@ export class SsmtDiagramComponent implements OnInit {
   mediumPressureSteamHeatLoss: HeatLossOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
   returnCondensate: SteamPropertiesOutput;
+  tabSelect: string = 'results';
+
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
     this.calculateModelService.initResults();
     if (this.ssmt.setupDone) {
-      this.calculateResultsGivenMassFlow();
+      this.calculateResults();
     }
   }
 
@@ -117,5 +119,9 @@ export class SsmtDiagramComponent implements OnInit {
     this.returnCondensate = this.calculateModelService.returnCondensate;
     console.log('got data');
     this.dataCalculated = true;
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
   }
 }
