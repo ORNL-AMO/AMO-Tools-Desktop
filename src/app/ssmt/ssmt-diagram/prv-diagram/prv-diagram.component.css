@@ -4,14 +4,21 @@
 }
 .feedwater{
     color: #8E44AD;
+    border-top: #8E44AD solid 3px;
+    border-bottom: #8E44AD solid 3px;
+    padding-top: 2px;
 }
 
 .medium-pressure-steam{
     color: #FFA726;
+    border-left: #FFA726 solid 3px;
+    border-right: #FFA726 solid 3px;
 }
 
 .high-pressure-steam{
     color: #C0392B;
+    border-left: #C0392B solid 3px;
+    border-right: #C0392B solid 3px;
 }
 
 .chevron-one{

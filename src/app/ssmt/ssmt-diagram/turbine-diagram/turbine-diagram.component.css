@@ -1,0 +1,33 @@
+
+.turbine-img{
+    height: 100px;
+}
+
+.mediumPressure{
+    color: #FFA726;
+    border-left: #FFA726 solid 3px;
+    border-right: #FFA726 solid 3px;
+}
+
+.highPressure{
+    color: #C0392B;
+    border-left: #C0392B solid 3px;
+    border-right: #C0392B solid 3px;
+}
+
+.chevron-one{
+    margin-bottom: -12px;
+}
+
+.condensation{
+    color: #43A047;
+    border-left: #43A047 solid 3px;
+    border-right: #43A047 solid 3px;
+}
+
+
+.lowPressure{
+    color: #FFEB3B;
+    border-left: #FFEB3B solid 3px;
+    border-right: #FFEB3B solid 3px;
+}

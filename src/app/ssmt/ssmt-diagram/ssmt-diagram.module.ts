@@ -12,6 +12,8 @@ import { TurbineTableComponent } from './turbine-table/turbine-table.component';
 import { SharedModule } from '../../shared/shared.module';
 import { BoilerDiagramComponent } from './boiler-diagram/boiler-diagram.component';
 import { PrvDiagramComponent } from './prv-diagram/prv-diagram.component';
+import { TurbineDiagramComponent } from './turbine-diagram/turbine-diagram.component';
+import { FlashTankDiagramComponent } from './flash-tank-diagram/flash-tank-diagram.component';
 
 @NgModule({
   imports: [
@@ -29,7 +31,9 @@ import { PrvDiagramComponent } from './prv-diagram/prv-diagram.component';
     SteamPropertiesTableComponent,
     TurbineTableComponent,
     BoilerDiagramComponent,
-    PrvDiagramComponent
+    PrvDiagramComponent,
+    TurbineDiagramComponent,
+    FlashTankDiagramComponent
   ],
   exports: [
     SsmtDiagramComponent

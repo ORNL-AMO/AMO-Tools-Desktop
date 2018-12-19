@@ -31,7 +31,7 @@ tbody{
 
 
 .high-pressure-header{
-    background-color: lightcoral;
+    background-color: #C0392B;
 }
 
 /* .high-pressure-prv, .low-pressure-prv{
@@ -48,7 +48,7 @@ tbody{
 } */
 
 .medium-pressure-header{
-    background-color: orange;
+    background-color: #FFA726;
 }
 .deaerator{
     background-color: burlywood;
@@ -62,5 +62,5 @@ tbody{
 }
 
 .low-pressure-header{
-    background-color: yellow;
+    background-color: #FFEB3B;
 }

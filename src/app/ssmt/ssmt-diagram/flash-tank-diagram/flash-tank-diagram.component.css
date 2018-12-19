@@ -1,0 +1,25 @@
+.flash-tank-img{
+    height: 100px;
+}
+
+.mediumPressure{
+    color: #FFA726;
+    border-top: #FFA726 solid 3px;
+    border-bottom: #FFA726 solid 3px;
+}
+
+.lowPressure{
+    color: #FFEB3B;
+    border-top: #FFEB3B solid 3px;
+    border-bottom: #FFEB3B solid 3px;
+}
+
+.chevron-one{
+    margin-bottom: -12px;
+}
+
+.condensate{
+    color: #283593;
+    border-left: #283593 solid 3px;
+    border-right: #283593 solid 3px;
+}

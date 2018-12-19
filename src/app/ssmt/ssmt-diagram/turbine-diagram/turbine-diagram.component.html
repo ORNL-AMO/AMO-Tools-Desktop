@@ -1,0 +1,27 @@
+<div class="d-flex flex-column justify-content-center align-items-center">
+  <div class="d-flex flex-column text-left">
+    <div class="p-0 chevron-one">
+      <span class="fa fa-chevron-down high-pressure-steam" [ngClass]="inletColor"></span>
+    </div>
+    <div class="p-0">
+      <span class="fa fa-chevron-down high-pressure-steam" [ngClass]="inletColor"></span>
+    </div>
+    <div class="p-0">
+      {{turbine.massFlow | number:'1.0-2'}}
+    </div>
+  </div>
+  <div class="p-1 d-flex justify-content-center">
+    <img src="assets/images/calculator-icons/steam-icons/steam-turbine.png" class="turbine-img">
+  </div>
+  <div class="d-flex flex-column text-right">
+    <div class="p-0">
+      {{turbine.powerOut |number:'1.0-2'}}
+    </div>
+    <div class="p-0 chevron-one">
+      <span class="fa fa-chevron-down medium-pressure-steam" [ngClass]="outletColor"></span>
+    </div>
+    <div class="p-0">
+      <span class="fa fa-chevron-down medium-pressure-steam" [ngClass]="outletColor"></span>
+    </div>
+  </div>
+</div>

@@ -5,13 +5,22 @@
 
 .feedwater{
     color: #8E44AD;
+    padding-top: 2px;
+    border-top: #8E44AD solid 3px;
+    border-bottom: #8E44AD solid 3px;
 }
 
 
 .blowdown{
+    padding-top: 2px;
     color: #5D4037;
+    border-top: #5D4037 solid 3px;
+    border-bottom: #5D4037 solid 3px;
 }
 
 .high-pressure-steam{
+    padding-top: 2px;
     color: #C0392B;
+    border-top: #C0392B solid 3px;
+    border-bottom: #C0392B solid 3px;
 }
