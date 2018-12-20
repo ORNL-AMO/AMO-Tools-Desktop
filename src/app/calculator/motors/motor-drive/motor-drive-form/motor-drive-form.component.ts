@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MotorDriveInputs } from '../motor-drive.component';
 import { FormGroup } from '@angular/forms';
 import { MotorDriveService } from '../motor-drive.service';
@@ -24,6 +24,12 @@ export class MotorDriveFormComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.motorDriveServce.getFormFromObj(this.data);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data) {
+      this.form = this.motorDriveServce.getFormFromObj(this.data);
+    }
   }
 
 

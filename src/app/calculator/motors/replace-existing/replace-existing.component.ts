@@ -48,6 +48,7 @@ export class ReplaceExistingComponent implements OnInit {
     }, 100);
   }
 
+
   btnResetData() {
     this.inputs = this.replaceExistingService.initReplaceExistingData();
     this.calculate(this.inputs);

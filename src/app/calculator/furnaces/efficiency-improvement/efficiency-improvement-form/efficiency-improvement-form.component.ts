@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../../shared/models/phast/efficiencyImprovement';
 import { Settings } from '../../../../shared/models/settings';
+import { EfficiencyImprovementService } from '../efficiency-improvement.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-efficiency-improvement-form',
   templateUrl: './efficiency-improvement-form.component.html',
@@ -23,9 +25,18 @@ export class EfficiencyImprovementFormComponent implements OnInit {
     newCombAirTemp: null
   };
 
-  constructor() { }
+  form: FormGroup;
+
+  constructor(private efficiencyImprovementService: EfficiencyImprovementService) { }
 
   ngOnInit() {
+    this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.efficiencyImprovementInputs) {
+      this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
+    }
   }
 
 
