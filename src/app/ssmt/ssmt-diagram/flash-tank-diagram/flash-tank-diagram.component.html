@@ -1,33 +1,42 @@
 <div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
-  <div class="d-flex flex-column text-right w-100">
+  <!-- <div class="p-0 chevron-two">
+ <div class="d-flex flex-column text-right w-100">
     <div class="p-0 chevron-one">
       <span class="fa fa-chevron-down condensate"></span>
     </div>
     <!-- <div class="p-0 chevron-two">
       <span class="fa fa-chevron-down condensate"></span>
     </div> -->
-    <div class="p-0">
+  <!-- <div class="p-0">
       {{flashTank.inletWaterMassFlow | number:'1.0-2'}}
-    </div>
-  </div>
-  <div class="d-flex align-content-center w-100 justify-content-end flex-fill">
-    <div class="flex-column p-0 align-self-center">
-      <span class="fa fa-chevron-left" [ngClass]="steamPressure"></span>
+    </div> --
+  </div>-->
+  <div class="d-flex align-content-center w-100 justify-content-end flex-fill h-100">
+    <div class="flex-column align-self-center outletGas" [ngClass]="steamPressure">
+      <span class="fa fa-chevron-left"></span>
       {{flashTank.outletGasMassFlow | number:'1.0-2'}}
     </div>
-    <div class="p-0 d-flex justify-content-center">
-      <img src="assets/images/calculator-icons/steam-icons/flash-tank.png" class="flash-tank-img">
+    <div class="flex-column p-0 h-100">
+      <div class="d-flex justify-content-end chevron-one text-right flex-fill">
+        <span class="fa fa-chevron-down condensate"></span>
+      </div>
+      <div class="p-0 d-flex justify-content-center flex-fill">
+        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-flash-tank.png" class="flash-tank-img">
+      </div>
+      <div class="d-flex justify-content-end chevron-one flex-fill">
+        <span class="fa fa-chevron-down condensate"></span>
+      </div>
     </div>
   </div>
-  <div class="d-flex flex-column text-right w-100">
-    <div class="p-0">
+  <!-- <div class="d-flex w-100">
+    <!-- <div class="p-0">
       {{flashTank.outletLiquidMassFlow | number:'1.0-2'}}
-    </div>
+    </div> --
     <div class="p-0 chevron-one">
       <span class="fa fa-chevron-down condensate"></span>
     </div>
     <!-- <div class="p-0 chevron-two">
       <span class="fa fa-chevron-down condensate"></span>
-    </div> -->
-  </div>
+    </div> --
+  </div> -->
 </div>

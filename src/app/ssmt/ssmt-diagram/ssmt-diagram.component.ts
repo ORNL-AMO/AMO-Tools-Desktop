@@ -55,7 +55,7 @@ export class SsmtDiagramComponent implements OnInit {
   lowPressureSteamHeatLoss: HeatLossOutput;
   returnCondensate: SteamPropertiesOutput;
   tabSelect: string = 'results';
-
+  selectedTable: string = 'boiler';
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
@@ -123,5 +123,10 @@ export class SsmtDiagramComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+
+  selectTable(str: string){
+    this.selectedTable = str;
   }
 }

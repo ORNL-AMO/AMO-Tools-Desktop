@@ -1,5 +1,5 @@
 td{
-    width: 50%;
+    width: 25%;
     font-size: small;
     border-right: solid 1px darkgray;
     border-left: solid 1px darkgray;
@@ -12,6 +12,7 @@ tbody{
 
 .group-label{
     font-weight: bold;
+    font-size: larger;
 }
 
 

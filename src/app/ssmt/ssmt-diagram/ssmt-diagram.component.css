@@ -66,7 +66,7 @@ tbody{
 }
 
 .header-width{
-    width: 84%;
+    width: 83.4%;
 }
 
 
@@ -74,4 +74,14 @@ tbody{
     background: #fff;
     box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
     z-index: 2;
+    width: 60% !important;
+}
+
+
+.diagram-help-panel{
+    width: 40%;
+}
+
+.boiler:hover, .turbineDiagram:hover{
+    cursor: pointer;
 }

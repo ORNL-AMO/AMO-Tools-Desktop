@@ -1,14 +1,15 @@
 <div class="d-flex h-100">
-  <div class="d-flex flex-column w-75 h-100 p-3 diagram-container">
+  <div class="d-flex flex-column h-100 p-3 diagram-container">
     <div class="d-flex flex-column flex-fill align-content-stretch">
-      <div class="boiler p-0">
+      <div class="boiler p-0" (click)="selectTable('boiler')">
         <app-boiler-diagram [boiler]="boiler" [inputData]="inputData"></app-boiler-diagram>
       </div>
       <div class="d-flex justify-content-between">
         <div class="d-flex flex-column justify-content-between flex-fill">
           <div class="p-0 d-flex justify-content-end">
             <div class="header-width">
-              <app-header-diagram [header]="highPressureHeader" [pressureLevel]="'highPressure'" [condensate]="highPressureCondensate" [headerSteamUsage]="inputData.headerInput.highPressure.processSteamUsage"></app-header-diagram>
+              <app-header-diagram [header]="highPressureHeader" [pressureLevel]="'highPressure'" [condensate]="highPressureCondensate"
+                [headerSteamUsage]="inputData.headerInput.highPressure.processSteamUsage"></app-header-diagram>
             </div>
           </div>
           <div class="d-flex w-100">
@@ -16,14 +17,14 @@
               <div class="p-0 w-25">
                 <app-prv-diagram [prv]="highToMediumPressurePRV" [inletSteam]="'highPressure'" [outletSteam]="'mediumPressure'"></app-prv-diagram>
               </div>
-              <div class="p-0 w-25">
+              <div class="p-0 w-25 turbineDiagram" (click)="selectTable('condensingTurbine')">
                 <app-turbine-diagram [turbine]="condensingTurbine" [inletColor]="'highPressure'" [outletColor]="'condensation'"></app-turbine-diagram>
               </div>
-              <div class="p-0 w-25">
+              <div class="p-0 w-25 turbineDiagram" (click)="selectTable('highPressureToMediumPressureTurbine')">
                 <app-turbine-diagram [turbine]="highPressureToMediumPressureTurbine" [inletColor]="'highPressure'"
                   [outletColor]="'mediumPressure'"></app-turbine-diagram>
               </div>
-              <div class="p-0 w-25">
+              <div class="p-0 w-25 turbineDiagram" (click)="selectTable('highToLowPressureTurbine')">
                 <app-turbine-diagram [turbine]="highToLowPressureTurbine" [inletColor]="'highPressure'" [outletColor]="'lowPressure'"></app-turbine-diagram>
               </div>
             </div>
@@ -33,8 +34,8 @@
           </div>
           <div class="p-0 d-flex justify-content-end">
             <div class="header-width">
-              <app-header-diagram [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'"
-              [condensate]="mediumPressureCondensate" [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"></app-header-diagram>
+              <app-header-diagram [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'" [condensate]="mediumPressureCondensate"
+                [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"></app-header-diagram>
             </div>
           </div>
           <div class="d-flex">
@@ -45,12 +46,12 @@
               <div class="p-0 w-25">
 
               </div>
-              <div class="p-0 w-25">
+              <div class="p-0 w-25 turbineDiagram" (click)="selectTable('mediumToLowPressureTurbine')">
                 <app-turbine-diagram [turbine]="mediumToLowPressureTurbine" [inletColor]="'mediumPressure'"
                   [outletColor]="'lowPressure'"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25">
-                
+
               </div>
             </div>
             <div class="p-0 w-25">
@@ -59,8 +60,8 @@
           </div>
           <div class="p-0 d-flex justify-content-end">
             <div class="header-width">
-              <app-header-diagram [header]="lowPressureHeader" [pressureLevel]="'lowPressure'"
-              [condensate]="lowPressureCondensate" [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"></app-header-diagram>
+              <app-header-diagram [header]="lowPressureHeader" [pressureLevel]="'lowPressure'" [condensate]="lowPressureCondensate"
+                [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"></app-header-diagram>
             </div>
           </div>
         </div>
@@ -81,7 +82,7 @@
       </div> -->
     </div>
   </div>
-  <div class="d-flex flex-column w-25 h-100">
+  <div class="d-flex flex-column h-100 diagram-help-panel">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
@@ -94,8 +95,18 @@
         </a>
       </div>
     </div>
-    <div class="d-flex justify-content-center">
-        <app-boiler-table [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
+    <div class="d-flex justify-content-center mr-2 ml-2">
+      <div class="pt-4" *ngIf="tabSelect == 'results'">
+        <app-cost-table *ngIf="selectedTable == 'cost'"></app-cost-table>
+        <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
+        <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low'" [turbine]="highToLowPressureTurbine"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'" [turbineName]="'High to Medium'" [turbine]="highPressureToMediumPressureTurbine"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'" [turbineName]="'Medium to Low'" [turbine]="mediumToLowPressureTurbine"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'condensingTurbine'" [turbineName]="'Condensing'" [turbine]="condensingTurbine"></app-turbine-table>
+      </div>
+      <div *ngIf="tabSelect == 'help'">
+        <app-diagram-help></app-diagram-help>
+      </div>
     </div>
   </div>
 </div>

@@ -1,58 +1,6 @@
-
-
-
 <div class="d-flex flex-column">
   <div class="p-1">
-    <label class="group-label">Steam</label>
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{boiler.steamPressure | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{boiler.steamTemperature}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Saturated</td>
-          <td class="text-center w-50">
-            {{boiler.steamQuality}}
-            <!-- <span *ngIf="boiler.inletQuality == 0">Liquid</span>
-              <span *ngIf="boiler.inletQuality == 1">Gas</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{boiler.steamMassFlow | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{boiler.steamSpecificEnthalpy | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{boiler.steamSpecificEntropy | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{boiler.steamEnergyFlow | number:'2.0-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
-    <label class="group-label">Boiler</label>
+    <label class="group-label">Boiler Properties</label>
     <table class="table table-hover table-striped">
       <tbody>
         <tr>
@@ -61,7 +9,7 @@
         </tr>
         <tr>
           <td class="bold w-50">Boiler Energy</td>
-          <td class="text-center w-50"> {{boiler.boilerEnergy | number:'2.0-2'}} </td>
+          <td class="text-center w-50"> {{boiler.boilerEnergy | number:'1.0-2'}} </td>
         </tr>
         <tr>
           <td class="bold w-50">Combustion Efficiency</td>
@@ -69,101 +17,69 @@
         </tr>
         <tr>
           <td class="bold w-50">Fuel Energy</td>
-          <td class="text-center w-50">{{boiler.fuelEnergy | number:'2.0-2'}} </td>
+          <td class="text-center w-50">{{boiler.fuelEnergy | number:'1.0-2'}} </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="p-1">
-    <label class="group-label">Blowdown</label>
     <table class="table table-hover table-striped">
       <tbody>
         <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{boiler.blowdownPressure | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
+          <td></td>
+          <td class="bold text-center">Feedwater</td>
+          <td class="bold text-center">Blowdown</td>
+          <td class="bold text-center">Steam</td>
         </tr>
         <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{boiler.blowdownTemperature | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
+          <td class="bold">Pressure</td>
+          <td class="text-center">{{boiler.feedwaterPressure | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.blowdownPressure | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.steamPressure | number:'1.0-2'}}</td>
         </tr>
         <tr>
-          <td class="bold w-50">Saturated</td>
-          <td class="text-center w-50">
-            {{boiler.blowdownQuality}}
-          </td>
+          <td class="bold">Temperature</td>
+          <td class="text-center">{{boiler.feedwaterTemperature | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.blowdownTemperature | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.steamTemperature}}</td>
         </tr>
         <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{boiler.blowdownMassFlow | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{boiler.blowdownSpecificEnthalpy | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{boiler.blowdownSpecificEntropy | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{boiler.blowdownEnergyFlow | number:'2.0-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
-    <label class="group-label">Feedwater</label>
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{boiler.feedwaterPressure | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{boiler.feedwaterTemperature | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Saturated</td>
-          <td class="text-center w-50">
+          <td class="bold">Saturated</td>
+          <td class="text-center">
             {{boiler.feedwaterQuality}}
           </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{boiler.feedwaterMassFlow | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
+          <td class="text-center">
+            {{boiler.blowdownQuality}}
+          </td>
+          <td class="text-center">
+            {{boiler.steamQuality}}
+            <!-- <span *ngIf="boiler.inletQuality == 0">Liquid</span>
+              <span *ngIf="boiler.inletQuality == 1">Gas</span> -->
           </td>
         </tr>
         <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{boiler.feedwaterSpecificEnthalpy | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
+          <td class="bold">Mass Flow</td>
+          <td class="text-center">{{boiler.feedwaterMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.blowdownMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.steamMassFlow | number:'1.0-2'}}</td>
         </tr>
         <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{boiler.feedwaterSpecificEntropy | number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
+          <td class="bold">Specific Enthalpy</td>
+          <td class="text-center">{{boiler.feedwaterSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.blowdownSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.steamSpecificEnthalpy | number:'1.0-2'}}</td>
         </tr>
         <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{boiler.feedwaterEnergyFlow | number:'2.0-2'}}</td>
+          <td class="bold">Specific Entropy</td>
+          <td class="text-center">{{boiler.feedwaterSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.blowdownSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.steamSpecificEntropy | number:'1.0-2'}}</td>
+        </tr>
+        <tr>
+          <td class="bold">Energy Flow</td>
+          <td class="text-center">{{boiler.feedwaterEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.blowdownEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{boiler.steamEnergyFlow | number:'1.0-2'}}</td>
         </tr>
       </tbody>
     </table>

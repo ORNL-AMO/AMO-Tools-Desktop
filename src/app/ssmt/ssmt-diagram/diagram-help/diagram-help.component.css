@@ -1,0 +1,38 @@
+
+
+.blowdown{
+    background-color: #5D4037;
+    padding: .25rem;
+    color: white;
+}
+.feedwater{
+    background-color: #8E44AD;
+    padding: .25rem;
+    color: white;
+}
+.condensate{
+    background-color: #283593;
+    padding: .25rem;
+    color: white;
+}
+.makeupWater{
+    background-color: #43A047;
+    padding: .25rem;
+}
+.highPressure{
+    background-color: #C0392B;
+    padding: .25rem;
+    color: white;
+}
+.mediumPressure{
+    background-color: #FFA726;
+    padding: .25rem;
+}
+.lowPressure{
+    background-color: #FFEB3B;
+    padding: .25rem;
+}
+
+li{
+    list-style: none;
+}

@@ -3,37 +3,41 @@
     height: 75px;
 }
 .feedwater{
-    color: #8E44AD;
-    border-top: #8E44AD solid 3px;
-    border-bottom: #8E44AD solid 3px;
+    background-color: #8E44AD;
+    color: white;
+    /* border-top: #8E44AD solid 3px;
+    border-bottom: #8E44AD solid 3px; */
     padding-top: 2px;
 }
 
 .mediumPressure{
-    color: #FFA726;
-    border-left: #FFA726 solid 3px;
-    border-right: #FFA726 solid 3px;
+    background-color: #FFA726;
+    /* border-left: #FFA726 solid 3px;
+    border-right: #FFA726 solid 3px; */
 }
 
 .highPressure{
-    color: #C0392B;
-    border-left: #C0392B solid 3px;
-    border-right: #C0392B solid 3px;
+    background-color: #C0392B;
+    color: white;
+    /* border-left: #C0392B solid 3px;
+    border-right: #C0392B solid 3px; */
 }
 .lowPressure{
-    color: #FFEB3B;
-    border-left: #FFEB3B solid 3px;
-    border-right: #FFEB3B solid 3px;
+    background-color: #FFEB3B;
+    /* border-left: #FFEB3B solid 3px;
+    border-right: #FFEB3B solid 3px; */
 }
 .chevron-one{
     /* margin-bottom: -12px; */
 }
 
 .chevron-one .fa-chevron-down{
-    border-top: 7px solid;
-    border-bottom: 7px solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
 }
 
-.chevron-two .fa-chevron-down{
+/* .chevron-two .fa-chevron-down{
     border-bottom: 15px solid;
-}
+} */

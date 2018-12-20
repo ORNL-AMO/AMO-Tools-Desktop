@@ -9,6 +9,8 @@ import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
 export class TurbineTableComponent implements OnInit {
   @Input()
   turbine: TurbineOutput;
+  @Input()
+  turbineName: string;
   constructor() { }
 
   ngOnInit() {

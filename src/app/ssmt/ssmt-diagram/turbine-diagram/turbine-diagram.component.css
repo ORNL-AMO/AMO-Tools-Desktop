@@ -4,15 +4,16 @@
 }
 
 .mediumPressure{
-    color: #FFA726;
-    border-left: #FFA726 solid 3px;
-    border-right: #FFA726 solid 3px;
+    background-color: #FFA726;
+    /* border-left: #FFA726 solid 3px;
+    border-right: #FFA726 solid 3px; */
 }
 
 .highPressure{
-    color: #C0392B;
-    border-left: #C0392B solid 3px;
-    border-right: #C0392B solid 3px;
+    background-color: #C0392B;
+    color: white;
+    /* border-left: #C0392B solid 3px;
+    border-right: #C0392B solid 3px; */
 }
 
 .chevron-one{
@@ -20,8 +21,12 @@
 }
 
 .chevron-one .fa-chevron-down{
-    border-top: 7px solid;
-    border-bottom: 7px solid;
+    /* border-top: 7px solid;
+    border-bottom: 7px solid; */
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
 }
 
 .chevron-two .fa-chevron-down{
@@ -29,14 +34,14 @@
 }
 
 .condensation{
-    color: #43A047;
-    border-left: #43A047 solid 3px;
-    border-right: #43A047 solid 3px;
+    background-color: #43A047;
+    /* border-left: #43A047 solid 3px;
+    border-right: #43A047 solid 3px; */
 }
 
 
 .lowPressure{
-    color: #FFEB3B;
-    border-left: #FFEB3B solid 3px;
-    border-right: #FFEB3B solid 3px;
+    background-color: #FFEB3B;
+    /* border-left: #FFEB3B solid 3px;
+    border-right: #FFEB3B solid 3px; */
 }

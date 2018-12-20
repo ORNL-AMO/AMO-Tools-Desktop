@@ -1,35 +1,45 @@
 .flash-tank-img{
-    height: 75px;
+    height: 80px;
+    margin-right: -50%;
+    margin-top: -9px;
+    margin-bottom: -15px;
 }
 
 .mediumPressure{
-    color: #FFA726;
-    border-top: #FFA726 solid 3px;
-    border-bottom: #FFA726 solid 3px;
+    background-color: #FFA726;
+    /* border-top: #FFA726 solid 3px;
+    border-bottom: #FFA726 solid 3px; */
 }
 
 .lowPressure{
-    color: #FFEB3B;
-    border-top: #FFEB3B solid 3px;
-    border-bottom: #FFEB3B solid 3px;
-}
-
-.chevron-one{
-    /* margin-bottom: -12px; */
+    background-color: #FFEB3B;
+    /* border-top: #FFEB3B solid 3px;
+    border-bottom: #FFEB3B solid 3px; */
 }
 
 .chevron-one .fa-chevron-down{
-    border-top: 7px solid;
-    border-bottom: 7px solid;
-
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
 }
 
-.chevron-two .fa-chevron-down{
-    border-bottom: 7px solid;
+.fa-chevron-left{
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
+
 
 .condensate{
-    color: #283593;
-    border-left: #283593 solid 3px;
-    border-right: #283593 solid 3px;
+    background-color: #283593;
+    /* border-left: #283593 solid 3px;
+    border-right: #283593 solid 3px; */
+    color: white;
+}
+
+.outletGas{
+    margin-right: -14px;
+    padding-right: 15px;
 }

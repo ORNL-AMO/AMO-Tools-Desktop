@@ -15,6 +15,8 @@ import { PrvDiagramComponent } from './prv-diagram/prv-diagram.component';
 import { TurbineDiagramComponent } from './turbine-diagram/turbine-diagram.component';
 import { FlashTankDiagramComponent } from './flash-tank-diagram/flash-tank-diagram.component';
 import { HeaderDiagramComponent } from './header-diagram/header-diagram.component';
+import { DiagramHelpComponent } from './diagram-help/diagram-help.component';
+import { CostTableComponent } from './cost-table/cost-table.component';
 
 @NgModule({
   imports: [
@@ -35,7 +37,9 @@ import { HeaderDiagramComponent } from './header-diagram/header-diagram.componen
     PrvDiagramComponent,
     TurbineDiagramComponent,
     FlashTankDiagramComponent,
-    HeaderDiagramComponent
+    HeaderDiagramComponent,
+    DiagramHelpComponent,
+    CostTableComponent
   ],
   exports: [
     SsmtDiagramComponent
