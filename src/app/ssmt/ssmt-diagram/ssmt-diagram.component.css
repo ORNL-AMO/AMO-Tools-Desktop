@@ -68,3 +68,10 @@ tbody{
 .header-width{
     width: 84%;
 }
+
+
+.diagram-container{
+    background: #fff;
+    box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+    z-index: 2;
+}

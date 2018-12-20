@@ -1,6 +1,6 @@
 
 .prv-img{
-    height: 100px;
+    height: 75px;
 }
 .feedwater{
     color: #8E44AD;
@@ -26,11 +26,12 @@
     border-right: #FFEB3B solid 3px;
 }
 .chevron-one{
-    margin-bottom: -12px;
+    /* margin-bottom: -12px; */
 }
 
 .chevron-one .fa-chevron-down{
-    border-top: 15px solid;
+    border-top: 7px solid;
+    border-bottom: 7px solid;
 }
 
 .chevron-two .fa-chevron-down{

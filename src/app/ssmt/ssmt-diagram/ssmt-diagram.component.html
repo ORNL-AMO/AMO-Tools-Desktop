@@ -1,5 +1,5 @@
-<div class="d-flex">
-  <div class="d-flex flex-column w-75 h-100 p-3">
+<div class="d-flex h-100">
+  <div class="d-flex flex-column w-75 h-100 p-3 diagram-container">
     <div class="d-flex flex-column flex-fill align-content-stretch">
       <div class="boiler p-0">
         <app-boiler-diagram [boiler]="boiler" [inputData]="inputData"></app-boiler-diagram>
@@ -43,8 +43,14 @@
                 <app-prv-diagram [prv]="lowPressurePRV" [inletSteam]="'mediumPressure'" [outletSteam]="'lowPressure'"></app-prv-diagram>
               </div>
               <div class="p-0 w-25">
+
+              </div>
+              <div class="p-0 w-25">
                 <app-turbine-diagram [turbine]="mediumToLowPressureTurbine" [inletColor]="'mediumPressure'"
                   [outletColor]="'lowPressure'"></app-turbine-diagram>
+              </div>
+              <div class="p-0 w-25">
+                
               </div>
             </div>
             <div class="p-0 w-25">
@@ -62,7 +68,7 @@
           condensate
         </div> -->
       </div>
-      <div class="d-flex justify-content-between">
+      <!-- <div class="d-flex justify-content-between">
         <div class="deaerator p-0">
           Deaerator
         </div>
@@ -72,7 +78,7 @@
         <div class="blowdown-flash-tank p-0">
           <app-flash-tank-table [flashTank]="blowdownFlashTank"></app-flash-tank-table>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="d-flex flex-column w-25 h-100">
@@ -88,8 +94,8 @@
         </a>
       </div>
     </div>
-    <div class="d-flex">
-      Data Table
+    <div class="d-flex justify-content-center">
+        <app-boiler-table [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
     </div>
   </div>
 </div>

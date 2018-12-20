@@ -1,6 +1,6 @@
 
 .turbine-img{
-    height: 100px;
+    height: 75px;
 }
 
 .mediumPressure{
@@ -16,11 +16,12 @@
 }
 
 .chevron-one{
-    margin-bottom: -12px;
+    /* margin-bottom: -12px; */
 }
 
 .chevron-one .fa-chevron-down{
-    border-top: 15px solid;
+    border-top: 7px solid;
+    border-bottom: 7px solid;
 }
 
 .chevron-two .fa-chevron-down{
