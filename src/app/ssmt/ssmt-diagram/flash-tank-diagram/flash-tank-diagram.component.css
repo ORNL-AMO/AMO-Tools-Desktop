@@ -18,6 +18,14 @@
     margin-bottom: -12px;
 }
 
+.chevron-one .fa-chevron-down{
+    border-top: 15px solid;
+}
+
+.chevron-two .fa-chevron-down{
+    border-bottom: 15px solid;
+}
+
 .condensate{
     color: #283593;
     border-left: #283593 solid 3px;

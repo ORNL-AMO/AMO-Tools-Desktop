@@ -1,10 +1,10 @@
 <div class="d-flex flex-column justify-content-center align-items-center">
   <div class="d-flex flex-column text-left">
     <div class="p-0 chevron-one">
-      <span class="fa fa-chevron-down high-pressure-steam" [ngClass]="inletColor"></span>
+      <span class="fa fa-chevron-down" [ngClass]="inletColor"></span>
     </div>
-    <div class="p-0">
-      <span class="fa fa-chevron-down high-pressure-steam" [ngClass]="inletColor"></span>
+    <div class="p-0 chevron-two">
+      <span class="fa fa-chevron-down" [ngClass]="inletColor"></span>
     </div>
     <div class="p-0">
       {{turbine.massFlow | number:'1.0-2'}}
@@ -18,10 +18,10 @@
       {{turbine.powerOut |number:'1.0-2'}}
     </div>
     <div class="p-0 chevron-one">
-      <span class="fa fa-chevron-down medium-pressure-steam" [ngClass]="outletColor"></span>
+      <span class="fa fa-chevron-down" [ngClass]="outletColor"></span>
     </div>
-    <div class="p-0">
-      <span class="fa fa-chevron-down medium-pressure-steam" [ngClass]="outletColor"></span>
+    <div class="p-0 chevron-two">
+      <span class="fa fa-chevron-down" [ngClass]="outletColor"></span>
     </div>
   </div>
 </div>

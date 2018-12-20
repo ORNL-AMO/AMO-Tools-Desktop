@@ -1,17 +1,18 @@
 <div class="d-flex">
-    <div class="p-1 d-flex flex-column">
-      <div class="mt-auto"> <span class="fa fa-chevron-right feedwater"></span><span class="fa fa-chevron-right feedwater"></span>{{boiler.feedwaterMassFlow | number:'2.0-2'}}</div>
+  <div class="p-1 d-flex flex-column">
+    <div class="mt-auto"> <span class="fa fa-chevron-right feedwater"></span><span class="fa fa-chevron-right feedwater"></span>{{boiler.feedwaterMassFlow
+      | number:'2.0-2'}}</div>
+  </div>
+  <div class="p-1">
+    <img src="assets/images/calculator-icons/steam-icons/boiler.png" class="boiler-img">
+  </div>
+  <div class="p-1 d-flex flex-column">
+    <div class="p-0">
+      {{boiler.steamMassFlow | number:'2.0-2'}} <span class="fa fa-chevron-right high-pressure-steam"></span><span
+        class="fa fa-chevron-right high-pressure-steam"></span>
     </div>
-    <div class="p-1">
-      <img src="assets/images/calculator-icons/steam-icons/boiler.png" class="boiler-img">
-    </div>
-    <div class="p-1 d-flex flex-column">
-      <div class="p-0">
-        {{boiler.steamMassFlow | number:'2.0-2'}} <span class="fa fa-chevron-right high-pressure-steam"></span><span class="fa fa-chevron-right high-pressure-steam"></span>
-      </div>
-      <div class="p-0 mt-auto">
-        {{boiler.blowdownMassFlow | number:'2.0-2'}} <span class="fa fa-chevron-right blowdown"></span><span class="fa fa-chevron-right blowdown"></span>
-      </div>
+    <div class="p-0 mt-auto">
+      {{boiler.blowdownMassFlow | number:'2.0-2'}} <span class="fa fa-chevron-right blowdown"></span><span class="fa fa-chevron-right blowdown"></span>
     </div>
   </div>
-  
+</div>

@@ -8,7 +8,7 @@
         <div class="d-flex flex-column justify-content-between flex-fill">
           <div class="p-0 d-flex justify-content-end">
             <div class="header-width">
-              <app-header-diagram [header]="highPressureHeader" [pressureLevel]="'highPressure'"></app-header-diagram>
+              <app-header-diagram [header]="highPressureHeader" [pressureLevel]="'highPressure'" [condensate]="highPressureCondensate" [headerSteamUsage]="inputData.headerInput.highPressure.processSteamUsage"></app-header-diagram>
             </div>
           </div>
           <div class="d-flex w-100">
@@ -33,7 +33,8 @@
           </div>
           <div class="p-0 d-flex justify-content-end">
             <div class="header-width">
-              <app-header-diagram [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'"></app-header-diagram>
+              <app-header-diagram [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'"
+              [condensate]="mediumPressureCondensate" [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"></app-header-diagram>
             </div>
           </div>
           <div class="d-flex">
@@ -52,7 +53,8 @@
           </div>
           <div class="p-0 d-flex justify-content-end">
             <div class="header-width">
-              <app-header-diagram [header]="lowPressureHeader" [pressureLevel]="'lowPressure'"></app-header-diagram>
+              <app-header-diagram [header]="lowPressureHeader" [pressureLevel]="'lowPressure'"
+              [condensate]="lowPressureCondensate" [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"></app-header-diagram>
             </div>
           </div>
         </div>

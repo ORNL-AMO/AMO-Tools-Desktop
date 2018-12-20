@@ -1,16 +1,52 @@
-.highPressure {
+.highPressure .header-tube{
     background-color: #C0392B;
     height: 30px;
     border-top-left-radius: 25px;
+    color: white;
 }
 
-.mediumPressure {
+.mediumPressure .header-tube{
     background-color: #FFA726;
     height: 30px;
 }
 
-.lowPressure{
+.lowPressure .header-tube{
     background-color: #FFEB3B;
     border-bottom-left-radius: 25px;
     height: 30px;
+}
+
+.highPressure .processUsage{
+    border-top: #C0392B solid 3px;
+    border-bottom: #C0392B solid 3px;
+    height: 30px;
+}
+.mediumPressure .processUsage{
+    border-top: #FFA726 solid 3px;
+    border-bottom: #FFA726 solid 3px;
+    height: 30px;
+}
+.lowPressure .processUsage{
+    border-top: #FFEB3B solid 3px;
+    border-bottom: #FFEB3B solid 3px;
+    height: 30px;
+}
+
+
+.condensate{
+    
+    background-color: #283593;
+    height: 30px;
+    /* color: #283593;
+    border-top: #283593 solid 3px;
+    border-bottom: #283593 solid 3px; */
+    color: white;
+}
+
+.highPressure .condensate {
+    border-top-right-radius: 25px;
+}
+
+.lowPressure .condensate {
+    border-bottom-right-radius: 25px;
 }
