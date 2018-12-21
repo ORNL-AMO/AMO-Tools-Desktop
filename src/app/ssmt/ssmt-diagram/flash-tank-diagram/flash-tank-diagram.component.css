@@ -1,8 +1,9 @@
 .flash-tank-img{
-    height: 80px;
-    margin-right: -50%;
-    margin-top: -9px;
-    margin-bottom: -15px;
+    height: 74px;
+    margin-right: -55%;
+    margin-top: -55%;
+    margin-bottom: -62%;
+    z-index: +1;
 }
 
 .mediumPressure{
@@ -31,6 +32,10 @@
     padding-bottom: 3px;
 }
 
+.down-pipe{
+    height: 58%;
+    border-top-left-radius: 25px;
+}
 
 .condensate{
     background-color: #283593;

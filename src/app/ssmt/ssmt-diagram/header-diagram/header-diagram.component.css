@@ -4,6 +4,10 @@
     color: white;
 }
 
+.header-tube{
+    width: 85%; 
+}
+
 .mediumPressure .header-tube{
     background-color: #FFA726;
 }
@@ -42,4 +46,8 @@
 
 .lowPressure .condensate {
     border-bottom-right-radius: 25px;
+}
+
+.border-padding{
+    padding-top: 3px;
 }

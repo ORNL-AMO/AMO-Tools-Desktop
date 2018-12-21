@@ -1,19 +1,18 @@
 <div class="d-flex w-100" [ngClass]="pressureLevel">
-  <div class="d-flex w-75 header-tube">
+  <div class="d-flex header-tube align-content-center border-padding">
     <div class="flex-fill text-center">
     {{header.pressure | number:'1.0-2'}}
     </div>
     <div class="text-right">
-       {{header.massFlow | number:'2.0-2'}}  <span class="fa fa-chevron-right"></span><span class="fa fa-chevron-right pr-1"></span>
+       {{header.massFlow | number:'2.0-2'}}  <span class="fa fa-chevron-right pr-1"></span>
     </div>
   </div>
-  <div class="d-flex w-25">
+  <div class="d-flex flex-fill align-content-center">
     <div class="w-50 processUsage text-center">
       {{steamUsage.energyFlow | number:'1.0-2'}}
     </div>
-    <div class="w-50 condensate text-center">
-      <div class="mt-auto"> <span class="fa fa-chevron-right"></span><span class="fa fa-chevron-right pr-1"></span>{{condensate.massFlow
-        | number:'2.0-2'}}</div>
+    <div class="w-50 condensate text-center border-padding">
+      <span class="fa fa-chevron-right pr-1"></span>{{condensate.massFlow| number:'2.0-2'}}
     </div>
   </div>
 </div>

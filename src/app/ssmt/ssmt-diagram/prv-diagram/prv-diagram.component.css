@@ -1,13 +1,17 @@
 
 .prv-img{
-    height: 75px;
+    height: 55px;
+    margin-left: -30%;
+    margin-top: -50%;
+    margin-bottom: -50%;
+    z-index: +1;
 }
 .feedwater{
     background-color: #8E44AD;
     color: white;
     /* border-top: #8E44AD solid 3px;
     border-bottom: #8E44AD solid 3px; */
-    padding-top: 2px;
+    /* padding-top: 2px; */
 }
 
 .mediumPressure{

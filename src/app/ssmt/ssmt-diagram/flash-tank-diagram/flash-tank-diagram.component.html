@@ -1,42 +1,46 @@
-<div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
-  <!-- <div class="p-0 chevron-two">
- <div class="d-flex flex-column text-right w-100">
-    <div class="p-0 chevron-one">
-      <span class="fa fa-chevron-down condensate"></span>
-    </div>
-    <!-- <div class="p-0 chevron-two">
-      <span class="fa fa-chevron-down condensate"></span>
-    </div> -->
-  <!-- <div class="p-0">
-      {{flashTank.inletWaterMassFlow | number:'1.0-2'}}
-    </div> --
-  </div>-->
+<!-- <div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
   <div class="d-flex align-content-center w-100 justify-content-end flex-fill h-100">
     <div class="flex-column align-self-center outletGas" [ngClass]="steamPressure">
       <span class="fa fa-chevron-left"></span>
       {{flashTank.outletGasMassFlow | number:'1.0-2'}}
     </div>
-    <div class="flex-column p-0 h-100">
-      <div class="d-flex justify-content-end chevron-one text-right flex-fill">
+    <div class="flex-column p-0 h-100 justify-content-between">
+      <div class="d-flex justify-content-end chevron-one align-self-stretch">
         <span class="fa fa-chevron-down condensate"></span>
       </div>
       <div class="p-0 d-flex justify-content-center flex-fill">
         <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-flash-tank.png" class="flash-tank-img">
       </div>
-      <div class="d-flex justify-content-end chevron-one flex-fill">
+      <div class="d-flex justify-content-end chevron-one align-self-stretch">
         <span class="fa fa-chevron-down condensate"></span>
       </div>
     </div>
   </div>
-  <!-- <div class="d-flex w-100">
-    <!-- <div class="p-0">
-      {{flashTank.outletLiquidMassFlow | number:'1.0-2'}}
-    </div> --
-    <div class="p-0 chevron-one">
+</div> -->
+
+<div class="d-flex h-100 w-100">
+  <div class="d-flex flex-column justify-content-end h-100">
+    <div class="d-flex chevron-one down-pipe justify-content-center" [ngClass]="steamPressure">
+      <span class="fa fa-chevron-down"></span>
+    </div>
+  </div>
+  <div class="d-flex flex-column h-100 flex-fill">
+    <div class="d-flex align-self-end chevron-one flex-fill">
       <span class="fa fa-chevron-down condensate"></span>
     </div>
-    <!-- <div class="p-0 chevron-two">
+
+    <div class="d-flex align-self-end align-items-center flex-fill w-100">
+      <div class="d-flex outletGas h-100 w-100 justify-content-center" [ngClass]="steamPressure">
+        <span class="fa fa-chevron-left"></span>
+        {{flashTank.outletGasMassFlow | number:'1.0-2'}}
+      </div>
+      <div class="d-flex justify-content-center">
+        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-flash-tank.png" class="flash-tank-img">
+      </div>
+    </div>
+
+    <div class="d-flex align-self-end chevron-one flex-fill">
       <span class="fa fa-chevron-down condensate"></span>
-    </div> --
-  </div> -->
+    </div>
+  </div>
 </div>
