@@ -1,6 +1,6 @@
 
 .turbine-img{
-    height: 75px;
+    height: 90px;
 }
 
 .mediumPressure{
@@ -20,7 +20,7 @@
     /* margin-bottom: -12px; */
 }
 
-.chevron-one .fa-chevron-down{
+.chevron-one .fa-chevron-down, .chevron-two .fa-chevron-down{
     /* border-top: 7px solid;
     border-bottom: 7px solid; */
     padding-top: 5px;
@@ -29,8 +29,13 @@
     padding-left: 3px;
 }
 
-.chevron-two .fa-chevron-down{
-    border-bottom: 15px solid;
+.chevron-one  .fa-chevron-down{
+    margin-right: 17px;
+}
+
+
+.chevron-two  .fa-chevron-down{
+    margin-left: 33px;
 }
 
 .condensation{
