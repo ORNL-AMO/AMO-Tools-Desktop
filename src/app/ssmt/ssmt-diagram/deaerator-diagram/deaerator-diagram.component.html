@@ -1,0 +1,35 @@
+<div class="d-flex">
+  <div class="d-flex flex-column pt-3 w-100">
+    <div class="d-flex justify-content-center w-100">
+      <div class="blowdown">
+        <span class="fa fa-chevron-up"></span>
+      </div>
+
+    </div>
+    <div class="d-flex align-items-center w-100">
+      <div class="d-flex justify-content-center flex-fill">
+        <div class="w-100 feedwater">
+          <span class="fa fa-chevron-left"></span>{{deaerator.feedwaterMassFlow |number:'1.0-2'}}
+        </div>
+      </div>
+      <div class="d-flex">
+        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-deaerator.png" class="deaerator-img">
+      </div>
+      <div class="d-flex justify-content-center flex-fill">
+        <div class="w-100 inlet-pressure-tube" [ngClass]="inletPressure">
+          <span class="fa fa-chevron-left"></span> {{deaerator.inletSteamMassFlow |number:'1.0-2'}}
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center w-100">
+      <div class="makeupWater">
+        <span class="fa fa-chevron-up"></span>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-column pt-3 low-pressure-column">
+    <div class="d-flex low-pressure-tube" [ngClass]="inletPressure">
+      <span class="fa fa-chevron-down"></span>
+    </div>
+  </div>
+</div>

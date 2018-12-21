@@ -17,6 +17,7 @@ import { FlashTankDiagramComponent } from './flash-tank-diagram/flash-tank-diagr
 import { HeaderDiagramComponent } from './header-diagram/header-diagram.component';
 import { DiagramHelpComponent } from './diagram-help/diagram-help.component';
 import { CostTableComponent } from './cost-table/cost-table.component';
+import { DeaeratorDiagramComponent } from './deaerator-diagram/deaerator-diagram.component';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { CostTableComponent } from './cost-table/cost-table.component';
     FlashTankDiagramComponent,
     HeaderDiagramComponent,
     DiagramHelpComponent,
-    CostTableComponent
+    CostTableComponent,
+    DeaeratorDiagramComponent
   ],
   exports: [
     SsmtDiagramComponent

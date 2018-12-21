@@ -1,0 +1,68 @@
+.highPressure{
+    background-color: #c0392b;
+    color: white;
+}
+
+.lowPressure{
+    background-color: #FFEB3B;
+    text-align: center;
+}
+
+.inlet-pressure-tube{
+    margin-top: 27px;
+    margin-left: -5px;
+}
+
+
+
+.feedwater{
+    background-color: #8E44AD;
+    color: white;
+    margin-top: 27px;
+    margin-right: -10px;
+    text-align: center;
+}
+
+.blowdown{
+    background-color: #5D4037;
+    color: white;
+    margin-bottom: -5px;
+    margin-left: 5px;
+}
+
+.fa-chevron-left{
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.fa-chevron-up, .fa-chevron-down{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
+.makeupWater{
+    background-color: #43A047;
+    color: white;
+    margin-top: -2px;
+    margin-left: 4px;
+}
+
+.deaerator-img{
+    height: 75px;
+    z-index: +1;
+}
+
+
+.low-pressure-tube{
+    height: 73.5%;
+    border-bottom-right-radius: 35px;
+}
+
+.low-pressure-column{
+    margin-top: -1rem;
+    margin-left: -5px;
+}
