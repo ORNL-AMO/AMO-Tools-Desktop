@@ -3,6 +3,8 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { Settings } from '../../../shared/models/settings';
 import { EfficiencyImprovementInputs } from '../../../shared/models/phast/efficiencyImprovement';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { LessThanValidator } from '../../../shared/validators/less-than';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class EfficiencyImprovementService {
@@ -11,11 +13,11 @@ export class EfficiencyImprovementService {
 
   getFormFromObj(inputObj: EfficiencyImprovementInputs): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
-      currentFlueGasOxygen: [inputObj.currentFlueGasOxygen, [Validators.required]],
-      newFlueGasOxygen: [inputObj.newFlueGasOxygen, [Validators.required]],
+      currentFlueGasOxygen: [inputObj.currentFlueGasOxygen, [Validators.required, Validators.min(0), Validators.max(100)]],
+      newFlueGasOxygen: [inputObj.newFlueGasOxygen, [Validators.required, Validators.min(0), Validators.max(100)]],
       currentFlueGasTemp: [inputObj.currentFlueGasTemp, [Validators.required]],
-      currentCombustionAirTemp: [inputObj.currentCombustionAirTemp, [Validators.required]],
-      newCombustionAirTemp: [inputObj.newCombustionAirTemp, [Validators.required]],
+      currentCombustionAirTemp: [inputObj.currentCombustionAirTemp, [Validators.required, LessThanValidator.lessThan(inputObj.currentFlueGasTemp)]],
+      newCombustionAirTemp: [inputObj.newCombustionAirTemp, [Validators.required, LessThanValidator.lessThan(inputObj.newFlueGasTemp)]],
       currentEnergyInput: [inputObj.currentEnergyInput, [Validators.required]],
       newFlueGasTemp: [inputObj.newFlueGasTemp, [Validators.required]]
     });
@@ -33,6 +35,11 @@ export class EfficiencyImprovementService {
       newFlueGasTemp: form.controls.newFlueGasTemp.value,
     }
     return this.efficiencyImprovementInputs;
+  }
+  
+  updateFormValidators(form: FormGroup, inputObj: EfficiencyImprovementInputs): void {
+    form.controls.currentCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.currentFlueGasTemp)]);
+    form.controls.newCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.newFlueGasTemp)]);
   }
 
   initDefaultValues(settings: Settings): EfficiencyImprovementInputs {
