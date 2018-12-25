@@ -1,0 +1,14 @@
+.fa-chevron-left{
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.condensation{
+    background-color: #43A047;
+    color: white;
+    border-bottom-right-radius: 25px;
+    margin-left: 8%;
+    border-bottom-left-radius: 25px;
+}

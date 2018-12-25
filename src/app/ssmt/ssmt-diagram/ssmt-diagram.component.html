@@ -18,14 +18,16 @@
                 <app-prv-diagram [prv]="highToMediumPressurePRV" [inletSteam]="'highPressure'" [outletSteam]="'mediumPressure'"></app-prv-diagram>
               </div>
               <div class="p-0 w-25 turbineDiagram" (click)="selectTable('condensingTurbine')">
-                <app-turbine-diagram [noOutletConnection]="true" [turbine]="condensingTurbine" [inletColor]="'highPressure'" [outletColor]="'condensation'"></app-turbine-diagram>
+                <app-turbine-diagram [noOutletConnection]="true" [turbine]="condensingTurbine" [inletColor]="'highPressure'"
+                  [outletColor]="'condensation'"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25 turbineDiagram" (click)="selectTable('highPressureToMediumPressureTurbine')">
-                <app-turbine-diagram [noOutletConnection]="false" [turbine]="highPressureToMediumPressureTurbine" [inletColor]="'highPressure'"
-                  [outletColor]="'mediumPressure'"></app-turbine-diagram>
+                <app-turbine-diagram [noOutletConnection]="false" [turbine]="highPressureToMediumPressureTurbine"
+                  [inletColor]="'highPressure'" [outletColor]="'mediumPressure'"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25 turbineDiagram" (click)="selectTable('highToLowPressureTurbine')">
-                <app-turbine-diagram [noOutletConnection]="true" [turbine]="highToLowPressureTurbine" [inletColor]="'highPressure'" [outletColor]="'lowPressure'"></app-turbine-diagram>
+                <app-turbine-diagram [noOutletConnection]="true" [turbine]="highToLowPressureTurbine" [inletColor]="'highPressure'"
+                  [outletColor]="'lowPressure'"></app-turbine-diagram>
               </div>
             </div>
             <div class="w-25">
@@ -51,7 +53,7 @@
                   [outletColor]="'lowPressure'"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25">
-                  <app-turbine-connector [noOutletConnection]="false" [inletColor]="'lowPressure'"></app-turbine-connector>
+                <app-turbine-connector [noOutletConnection]="false" [inletColor]="'lowPressure'"></app-turbine-connector>
               </div>
             </div>
             <div class="w-25">
@@ -70,15 +72,28 @@
         </div> -->
       </div>
       <div class="d-flex w-100">
+        <div class="d-flex flex-fill">
+          <div class="p-0 w-25">
+            <app-deaerator-diagram [deaerator]="deaerator" [inletPressure]="'lowPressure'"></app-deaerator-diagram>
+          </div>
+          <div class="p-0 w-25">
+            <app-turbine-connector [noOutletConnection]="false" [inletColor]="'condensation'"></app-turbine-connector>
+          </div>
+          <div class="p-0 w-25">
+
+          </div>
+          <div class="p-0 w-25">
+
+          </div>
+        </div>
         <div class="w-25">
-          <app-deaerator-diagram [deaerator]="deaerator" [inletPressure]="'lowPressure'"></app-deaerator-diagram>
+          <app-condensate-flash-tank [flashTank]="condensateFlashTank"></app-condensate-flash-tank>
         </div>
-        <!-- <div class="makeup-water-condensate p-0">
-          Makeup water condensate
+      </div>
+      <div class="p-0 d-flex justify-content-end">
+        <div class="w-100">
+          <app-return-condensate-header [makeupWaterAndCondensateHeader]="makeupWaterAndCondensateHeader"></app-return-condensate-header>
         </div>
-        <div class="blowdown-flash-tank p-0">
-          <app-flash-tank-table [flashTank]="blowdownFlashTank"></app-flash-tank-table>
-        </div> -->
       </div>
     </div>
   </div>
@@ -100,8 +115,10 @@
         <app-cost-table *ngIf="selectedTable == 'cost'"></app-cost-table>
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
         <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low'" [turbine]="highToLowPressureTurbine"></app-turbine-table>
-        <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'" [turbineName]="'High to Medium'" [turbine]="highPressureToMediumPressureTurbine"></app-turbine-table>
-        <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'" [turbineName]="'Medium to Low'" [turbine]="mediumToLowPressureTurbine"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'" [turbineName]="'High to Medium'"
+          [turbine]="highPressureToMediumPressureTurbine"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'" [turbineName]="'Medium to Low'"
+          [turbine]="mediumToLowPressureTurbine"></app-turbine-table>
         <app-turbine-table *ngIf="selectedTable == 'condensingTurbine'" [turbineName]="'Condensing'" [turbine]="condensingTurbine"></app-turbine-table>
       </div>
       <div *ngIf="tabSelect == 'help'">

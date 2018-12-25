@@ -19,6 +19,8 @@ import { DiagramHelpComponent } from './diagram-help/diagram-help.component';
 import { CostTableComponent } from './cost-table/cost-table.component';
 import { DeaeratorDiagramComponent } from './deaerator-diagram/deaerator-diagram.component';
 import { TurbineConnectorComponent } from './turbine-connector/turbine-connector.component';
+import { CondensateFlashTankComponent } from './condensate-flash-tank/condensate-flash-tank.component';
+import { ReturnCondensateHeaderComponent } from './return-condensate-header/return-condensate-header.component';
 
 @NgModule({
   imports: [
@@ -43,7 +45,9 @@ import { TurbineConnectorComponent } from './turbine-connector/turbine-connector
     DiagramHelpComponent,
     CostTableComponent,
     DeaeratorDiagramComponent,
-    TurbineConnectorComponent
+    TurbineConnectorComponent,
+    CondensateFlashTankComponent,
+    ReturnCondensateHeaderComponent
   ],
   exports: [
     SsmtDiagramComponent

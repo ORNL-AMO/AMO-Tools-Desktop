@@ -40,6 +40,7 @@
 
 .condensation{
     background-color: #43A047;
+    color: white;
     /* border-left: #43A047 solid 3px;
     border-right: #43A047 solid 3px; */
 }
@@ -49,4 +50,10 @@
     background-color: #FFEB3B;
     /* border-left: #FFEB3B solid 3px;
     border-right: #FFEB3B solid 3px; */
+}
+
+
+.condensation{
+    background-color: #43A047;
+    color: white;
 }
