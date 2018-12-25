@@ -18,6 +18,7 @@
 .makeupWater{
     background-color: #43A047;
     padding: .25rem;
+    color: white;
 }
 .highPressure{
     background-color: #C0392B;

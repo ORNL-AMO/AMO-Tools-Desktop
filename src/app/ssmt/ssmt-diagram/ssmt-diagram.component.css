@@ -74,13 +74,13 @@ tbody{
     background: #fff;
     box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
     z-index: 2;
-    width: 60% !important;
+    width: 70% !important;
     font-size: small;
 }
 
 
 .diagram-help-panel{
-    width: 40%;
+    width: 30%;
 }
 
 .boiler:hover, .turbineDiagram:hover{

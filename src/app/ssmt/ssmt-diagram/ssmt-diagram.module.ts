@@ -21,6 +21,7 @@ import { DeaeratorDiagramComponent } from './deaerator-diagram/deaerator-diagram
 import { TurbineConnectorComponent } from './turbine-connector/turbine-connector.component';
 import { CondensateFlashTankComponent } from './condensate-flash-tank/condensate-flash-tank.component';
 import { ReturnCondensateHeaderComponent } from './return-condensate-header/return-condensate-header.component';
+import { MakeupWaterDiagramComponent } from './makeup-water-diagram/makeup-water-diagram.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { ReturnCondensateHeaderComponent } from './return-condensate-header/retu
     DeaeratorDiagramComponent,
     TurbineConnectorComponent,
     CondensateFlashTankComponent,
-    ReturnCondensateHeaderComponent
+    ReturnCondensateHeaderComponent,
+    MakeupWaterDiagramComponent
   ],
   exports: [
     SsmtDiagramComponent
