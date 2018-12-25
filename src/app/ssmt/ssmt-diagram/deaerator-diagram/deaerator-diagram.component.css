@@ -9,7 +9,7 @@
 }
 
 .inlet-pressure-tube{
-    margin-top: 27px;
+    margin-top: 23px;
     margin-left: -5px;
 }
 
@@ -18,7 +18,7 @@
 .feedwater{
     background-color: #8E44AD;
     color: white;
-    margin-top: 27px;
+    margin-top: 23px;
     margin-right: -10px;
     text-align: center;
 }
@@ -52,13 +52,13 @@
 }
 
 .deaerator-img{
-    height: 75px;
+    height: 60px;
     z-index: +1;
 }
 
 
 .low-pressure-tube{
-    height: 73.5%;
+    height: 74.5%;
     border-bottom-right-radius: 35px;
 }
 

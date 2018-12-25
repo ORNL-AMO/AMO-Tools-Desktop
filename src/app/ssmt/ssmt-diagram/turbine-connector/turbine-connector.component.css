@@ -1,0 +1,38 @@
+
+.mediumPressure{
+    background-color: #FFA726;
+}
+
+.highPressure{
+    background-color: #C0392B;
+    color: white;
+}
+
+.chevron-one{
+    /* margin-bottom: -12px; */
+}
+
+.chevron-one .fa-chevron-down, .chevron-two .fa-chevron-down{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
+.chevron-one  .fa-chevron-down{
+    margin-right: 17px;
+}
+
+
+.chevron-two  .fa-chevron-down{
+    margin-left: 33px;
+}
+
+.condensation{
+    background-color: #43A047;
+}
+
+
+.lowPressure{
+    background-color: #FFEB3B;
+}

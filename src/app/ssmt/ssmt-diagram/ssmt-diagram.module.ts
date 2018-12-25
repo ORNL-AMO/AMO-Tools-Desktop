@@ -18,6 +18,7 @@ import { HeaderDiagramComponent } from './header-diagram/header-diagram.componen
 import { DiagramHelpComponent } from './diagram-help/diagram-help.component';
 import { CostTableComponent } from './cost-table/cost-table.component';
 import { DeaeratorDiagramComponent } from './deaerator-diagram/deaerator-diagram.component';
+import { TurbineConnectorComponent } from './turbine-connector/turbine-connector.component';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { DeaeratorDiagramComponent } from './deaerator-diagram/deaerator-diagram
     HeaderDiagramComponent,
     DiagramHelpComponent,
     CostTableComponent,
-    DeaeratorDiagramComponent
+    DeaeratorDiagramComponent,
+    TurbineConnectorComponent
   ],
   exports: [
     SsmtDiagramComponent

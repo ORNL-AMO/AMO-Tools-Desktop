@@ -13,6 +13,8 @@ export class TurbineDiagramComponent implements OnInit {
   inletColor: string;
   @Input()
   outletColor: string;
+  @Input()
+  noOutletConnection: boolean;
   
   constructor() { }
 
