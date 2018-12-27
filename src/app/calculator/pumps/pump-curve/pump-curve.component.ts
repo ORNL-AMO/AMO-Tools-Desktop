@@ -168,7 +168,7 @@ export class PumpCurveComponent implements OnInit {
       this.currentField = 'fanMaxFlow';
     }
     this.calculateValues();
-    this.calculate();
+    this.calculate(this.pumpCurveForm);
   }
 
   ngAfterViewInit() {
