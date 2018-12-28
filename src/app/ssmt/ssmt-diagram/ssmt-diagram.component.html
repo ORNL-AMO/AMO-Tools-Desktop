@@ -15,54 +15,59 @@
           <div class="d-flex w-100">
             <div class="d-flex flex-fill">
               <div class="p-0 w-25">
-                <app-prv-diagram [prv]="highToMediumPressurePRV" [inletSteam]="'high-pressure'" [outletSteam]="'medium-pressure'"></app-prv-diagram>
+                <app-prv-diagram *ngIf="highToMediumPressurePRV" [prv]="highToMediumPressurePRV" [inletSteam]="'high-pressure'" [outletSteam]="'medium-pressure'"></app-prv-diagram>
+                <app-prv-diagram *ngIf="lowPressurePRV && !highToMediumPressurePRV" [prv]="lowPressurePRV" [inletSteam]="'high-pressure'" [outletSteam]="'low-pressure'"></app-prv-diagram>
+                <app-one-header-connector *ngIf="!mediumPressureHeader && !lowPressureHeader"></app-one-header-connector>
               </div>
               <div class="p-0 w-25 turbineDiagram" (click)="selectTable('condensingTurbine')">
-                <app-turbine-diagram [noOutletConnection]="true" [turbine]="condensingTurbine" [inletColor]="'high-pressure'"
+                <app-turbine-diagram *ngIf="condensingTurbine" [noOutletConnection]="lowPressureHeader != undefined" [turbine]="condensingTurbine" [inletColor]="'high-pressure'"
                   [outletColor]="'makeup-water'"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25 turbineDiagram" (click)="selectTable('highPressureToMediumPressureTurbine')">
-                <app-turbine-diagram [noOutletConnection]="false" [turbine]="highPressureToMediumPressureTurbine"
+                <app-turbine-diagram *ngIf="highPressureToMediumPressureTurbine" [noOutletConnection]="false" [turbine]="highPressureToMediumPressureTurbine"
                   [inletColor]="'high-pressure'" [outletColor]="'medium-pressure'"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25 turbineDiagram" (click)="selectTable('highToLowPressureTurbine')">
-                <app-turbine-diagram [noOutletConnection]="true" [turbine]="highToLowPressureTurbine" [inletColor]="'high-pressure'"
+                <app-turbine-diagram *ngIf="highToLowPressureTurbine" [noOutletConnection]="mediumPressureHeader != undefined" [turbine]="highToLowPressureTurbine" [inletColor]="'high-pressure'"
                   [outletColor]="'low-pressure'"></app-turbine-diagram>
               </div>
             </div>
             <div class="w-25">
-              <app-flash-tank-diagram [flashTank]="highPressureFlashTank" [steamPressure]="'medium-pressure'"></app-flash-tank-diagram>
+              <app-flash-tank-diagram *ngIf="highPressureFlashTank && mediumPressureHeader" [flashTank]="highPressureFlashTank" [steamPressure]="'medium-pressure'"></app-flash-tank-diagram>
+              <app-flash-tank-diagram *ngIf="highPressureFlashTank && !mediumPressureHeader" [flashTank]="highPressureFlashTank" [steamPressure]="'low-pressure'"></app-flash-tank-diagram>
+              <app-condensate-connector *ngIf="!highPressureFlashTank"></app-condensate-connector>
             </div>
           </div>
           <div class="p-0 d-flex justify-content-end">
             <div class="w-100">
-              <app-header-diagram [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'" [condensate]="mediumPressureCondensate"
+              <app-header-diagram *ngIf="mediumPressureHeader" [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'" [condensate]="mediumPressureCondensate"
                 [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"></app-header-diagram>
             </div>
           </div>
           <div class="d-flex w-100">
             <div class="d-flex flex-fill">
               <div class="p-0 w-25">
-                <app-prv-diagram [prv]="lowPressurePRV" [inletSteam]="'medium-pressure'" [outletSteam]="'low-pressure'"></app-prv-diagram>
+                <app-prv-diagram *ngIf="lowPressurePRV && highToMediumPressurePRV" [prv]="lowPressurePRV" [inletSteam]="'medium-pressure'" [outletSteam]="'low-pressure'"></app-prv-diagram>
               </div>
               <div class="p-0 w-25">
-                <app-turbine-connector [noOutletConnection]="true" [inletColor]="'makeup-water'"></app-turbine-connector>
+                <app-turbine-connector *ngIf="condensingTurbine && mediumPressureHeader" [noOutletConnection]="true" [inletColor]="'makeup-water'"></app-turbine-connector>
               </div>
               <div class="p-0 w-25 turbineDiagram" (click)="selectTable('mediumToLowPressureTurbine')">
-                <app-turbine-diagram [noOutletConnection]="false" [turbine]="mediumToLowPressureTurbine" [inletColor]="'medium-pressure'"
+                <app-turbine-diagram *ngIf="mediumToLowPressureTurbine" [noOutletConnection]="false" [turbine]="mediumToLowPressureTurbine" [inletColor]="'medium-pressure'"
                   [outletColor]="'low-pressure'"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25">
-                <app-turbine-connector [noOutletConnection]="false" [inletColor]="'low-pressure'"></app-turbine-connector>
+                <app-turbine-connector *ngIf="highToLowPressureTurbine && mediumPressureHeader" [noOutletConnection]="false" [inletColor]="'low-pressure'"></app-turbine-connector>
               </div>
             </div>
             <div class="w-25">
-              <app-flash-tank-diagram [flashTank]="mediumPressureFlashTank" [steamPressure]="'low-pressure'"></app-flash-tank-diagram>
+              <app-flash-tank-diagram *ngIf="mediumPressureFlashTank" [flashTank]="mediumPressureFlashTank" [steamPressure]="'low-pressure'"></app-flash-tank-diagram>
+              <app-condensate-connector *ngIf="!mediumPressureFlashTank && mediumPressureHeader"></app-condensate-connector>
             </div>
           </div>
           <div class="p-0 d-flex justify-content-end">
             <div class="w-100">
-              <app-header-diagram [header]="lowPressureHeader" [pressureLevel]="'lowPressure'" [condensate]="lowPressureCondensate"
+              <app-header-diagram *ngIf="lowPressureHeader" [header]="lowPressureHeader" [pressureLevel]="'lowPressure'" [condensate]="lowPressureCondensate"
                 [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"></app-header-diagram>
             </div>
           </div>
@@ -74,20 +79,22 @@
       <div class="d-flex w-100">
         <div class="d-flex flex-fill">
           <div class="p-0 w-25">
-            <app-deaerator-diagram [deaerator]="deaerator" [inletPressure]="'low-pressure'"></app-deaerator-diagram>
+            <app-deaerator-diagram *ngIf="lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'low-pressure'"></app-deaerator-diagram>
+            <app-deaerator-diagram *ngIf="!lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'high-pressure'"></app-deaerator-diagram>
           </div>
           <div class="p-0 w-25">
-            <app-turbine-connector [noOutletConnection]="false" [inletColor]="'condensate'"></app-turbine-connector>
+            <app-turbine-connector *ngIf="condensingTurbine" [noOutletConnection]="false" [inletColor]="'makeup-water'"></app-turbine-connector>
           </div>
           <div class="p-0 w-25">
 
           </div>
           <div class="p-0 w-25">
-            <app-blowdown-flash-tank [flashTank]="blowdownFlashTank"></app-blowdown-flash-tank>
+            <app-blowdown-flash-tank *ngIf="blowdownFlashTank" [flashTank]="blowdownFlashTank"></app-blowdown-flash-tank>
           </div>
         </div>
         <div class="w-25">
-          <app-condensate-flash-tank [flashTank]="condensateFlashTank"></app-condensate-flash-tank>
+          <app-condensate-flash-tank *ngIf="condensateFlashTank" [flashTank]="condensateFlashTank"></app-condensate-flash-tank>
+          <app-condensate-connector *ngIf="!condensateFlashTank"></app-condensate-connector>
         </div>
       </div>
       <div class="p-0 d-flex">

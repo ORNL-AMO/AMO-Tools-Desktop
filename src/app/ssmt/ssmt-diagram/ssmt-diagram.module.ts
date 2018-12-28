@@ -23,6 +23,8 @@ import { CondensateFlashTankComponent } from './condensate-flash-tank/condensate
 import { ReturnCondensateHeaderComponent } from './return-condensate-header/return-condensate-header.component';
 import { MakeupWaterDiagramComponent } from './makeup-water-diagram/makeup-water-diagram.component';
 import { BlowdownFlashTankComponent } from './blowdown-flash-tank/blowdown-flash-tank.component';
+import { CondensateConnectorComponent } from './condensate-connector/condensate-connector.component';
+import { OneHeaderConnectorComponent } from './one-header-connector/one-header-connector.component';
 
 @NgModule({
   imports: [
@@ -51,7 +53,9 @@ import { BlowdownFlashTankComponent } from './blowdown-flash-tank/blowdown-flash
     CondensateFlashTankComponent,
     ReturnCondensateHeaderComponent,
     MakeupWaterDiagramComponent,
-    BlowdownFlashTankComponent
+    BlowdownFlashTankComponent,
+    CondensateConnectorComponent,
+    OneHeaderConnectorComponent
   ],
   exports: [
     SsmtDiagramComponent
