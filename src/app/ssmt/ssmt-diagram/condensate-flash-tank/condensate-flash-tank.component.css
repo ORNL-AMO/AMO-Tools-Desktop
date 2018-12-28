@@ -24,22 +24,11 @@
     border-top-left-radius: 25px;
 }
 
-.condensate{
-    background-color: #283593;
-    color: white;
-}
-
 .outletGas{
     margin-right: -14px;
     padding-right: 15px;
 }
 
-.vents{
-    background-color: #ABB2B9;
-}
-
-.makeupWater{
-    background-color: #43A047;
-    color: white;
+.makeup-water{
     padding-bottom: 5px;
 }

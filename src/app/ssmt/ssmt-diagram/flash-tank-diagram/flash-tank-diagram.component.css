@@ -6,18 +6,6 @@
     z-index: +1;
 }
 
-.mediumPressure{
-    background-color: #FFA726;
-    /* border-top: #FFA726 solid 3px;
-    border-bottom: #FFA726 solid 3px; */
-}
-
-.lowPressure{
-    background-color: #FFEB3B;
-    /* border-top: #FFEB3B solid 3px;
-    border-bottom: #FFEB3B solid 3px; */
-}
-
 .chevron-one .fa-chevron-down{
     padding-top: 5px;
     /* padding-bottom: 5px; */
@@ -35,13 +23,6 @@
 .down-pipe{
     height: 56.5%;
     border-top-left-radius: 25px;
-}
-
-.condensate{
-    background-color: #283593;
-    /* border-left: #283593 solid 3px;
-    border-right: #283593 solid 3px; */
-    color: white;
 }
 
 .outletGas{

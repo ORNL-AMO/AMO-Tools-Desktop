@@ -56,7 +56,8 @@
               "src/assets/styles/utilities.css",
               "src/assets/styles/graphs.css",
               "src/assets/styles/forms.css",
-              "src/assets/styles/help.css"
+              "src/assets/styles/help.css",
+              "src/assets/styles/ssmt-diagram.css"
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.bundle.min.js",

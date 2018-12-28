@@ -1,16 +1,4 @@
 
-.mediumPressure{
-    background-color: #FFA726;
-}
-
-.highPressure{
-    background-color: #C0392B;
-    color: white;
-}
-
-.chevron-one{
-    /* margin-bottom: -12px; */
-}
 
 .chevron-one .fa-chevron-down, .chevron-two .fa-chevron-down{
     padding-top: 5px;
@@ -26,14 +14,4 @@
 
 .chevron-two  .fa-chevron-down{
     margin-left: 33px;
-}
-
-.condensation{
-    background-color: #43A047;
-    color: white;
-}
-
-
-.lowPressure{
-    background-color: #FFEB3B;
 }

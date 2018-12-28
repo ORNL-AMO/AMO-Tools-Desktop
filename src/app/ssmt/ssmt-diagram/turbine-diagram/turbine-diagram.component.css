@@ -9,20 +9,9 @@
     border-right: #FFA726 solid 3px; */
 }
 
-.highPressure{
-    background-color: #C0392B;
-    color: white;
-    /* border-left: #C0392B solid 3px;
-    border-right: #C0392B solid 3px; */
-}
 
-.chevron-one{
-    /* margin-bottom: -12px; */
-}
 
 .chevron-one .fa-chevron-down, .chevron-two .fa-chevron-down{
-    /* border-top: 7px solid;
-    border-bottom: 7px solid; */
     padding-top: 5px;
     padding-bottom: 5px;
     padding-right: 3px;
@@ -36,24 +25,4 @@
 
 .chevron-two  .fa-chevron-down{
     margin-left: 33px;
-}
-
-.condensation{
-    background-color: #43A047;
-    color: white;
-    /* border-left: #43A047 solid 3px;
-    border-right: #43A047 solid 3px; */
-}
-
-
-.lowPressure{
-    background-color: #FFEB3B;
-    /* border-left: #FFEB3B solid 3px;
-    border-right: #FFEB3B solid 3px; */
-}
-
-
-.condensation{
-    background-color: #43A047;
-    color: white;
 }

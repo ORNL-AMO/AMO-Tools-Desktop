@@ -17,36 +17,26 @@
     border-bottom-left-radius: 25px;
 }
 
-.highPressure .processUsage{
+.highPressure .process-usage{
     border: #C0392B solid 3px;
-    /* border-bottom: #C0392B solid 3px; */
-}
-.mediumPressure .processUsage{
-    border: #FFA726 solid 3px;
-    /* border-bottom: #FFA726 solid 3px; */
-}
-.lowPressure .processUsage{
-    border: #FFEB3B solid 3px;
-    /* border-bottom: #FFEB3B solid 3px; */
 }
 
+.mediumPressure .process-usage{
+    border: #FFA726 solid 3px;
+}
+
+.lowPressure .process-usage{
+    border: #FFEB3B solid 3px;
+}
 
 .condensate{
-    
     background-color: #283593;
-    /* color: #283593;
-    border-top: #283593 solid 3px;
-    border-bottom: #283593 solid 3px; */
     color: white;
 }
 
 .highPressure .condensate {
     border-top-right-radius: 25px;
 }
-
-/* .lowPressure .condensate {
-    border-bottom-right-radius: 25px;
-} */
 
 .border-padding{
     padding-top: 3px;

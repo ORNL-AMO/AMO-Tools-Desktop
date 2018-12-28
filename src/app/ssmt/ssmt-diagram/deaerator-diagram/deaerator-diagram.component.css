@@ -1,30 +1,14 @@
-.highPressure{
-    background-color: #c0392b;
-    color: white;
-}
-
-.lowPressure{
-    background-color: #FFEB3B;
-    text-align: center;
-}
-
 .inlet-pressure-tube{
     margin-top: 23px;
     margin-left: -5px;
 }
 
-
-
 .feedwater{
-    background-color: #8E44AD;
-    color: white;
     margin-top: 23px;
     margin-right: -10px;
-    text-align: center;
 }
 
 .vents{
-    background-color: #ABB2B9;
     margin-bottom: -5px;
     margin-left: 5px;
 }
@@ -43,9 +27,7 @@
     padding-left: 3px;
 }
 
-.makeupWater{
-    background-color: #43A047;
-    color: white;
+.makeup-water{
     margin-top: -2px;
     margin-left: 4px;
 }
@@ -54,7 +36,6 @@
     height: 60px;
     z-index: +1;
 }
-
 
 .low-pressure-tube{
     height: 74.5%;
