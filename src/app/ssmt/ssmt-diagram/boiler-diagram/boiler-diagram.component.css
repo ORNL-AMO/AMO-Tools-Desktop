@@ -59,3 +59,8 @@
     border-top-right-radius: 25px;
     margin-bottom: -1rem;
 }
+
+.fa-arrow-circle-right{
+    font-size: 18px;
+    padding-left: 2px;
+}

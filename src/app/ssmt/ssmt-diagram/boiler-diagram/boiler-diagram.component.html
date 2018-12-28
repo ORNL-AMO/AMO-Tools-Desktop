@@ -21,8 +21,11 @@
     </div>
   </div>
   <div class="d-flex flex-column outlet-column ml-0">
-    <div class="mt-auto blowdown text-center ml-1">
-      {{boiler.blowdownMassFlow | number:'1.0-2'}} <span class="fa fa-chevron-right"></span>
+    <div class="d-flex mt-auto ml-1">
+      <div class="d-flex flex-fill blowdown justify-content-center">
+          {{boiler.blowdownMassFlow | number:'1.0-2'}} <span class="fa fa-chevron-right"></span>
+      </div>
+      <span class="fa fa-arrow-circle-right"></span>
     </div>
   </div>
 </div>

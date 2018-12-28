@@ -22,6 +22,7 @@ import { TurbineConnectorComponent } from './turbine-connector/turbine-connector
 import { CondensateFlashTankComponent } from './condensate-flash-tank/condensate-flash-tank.component';
 import { ReturnCondensateHeaderComponent } from './return-condensate-header/return-condensate-header.component';
 import { MakeupWaterDiagramComponent } from './makeup-water-diagram/makeup-water-diagram.component';
+import { BlowdownFlashTankComponent } from './blowdown-flash-tank/blowdown-flash-tank.component';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { MakeupWaterDiagramComponent } from './makeup-water-diagram/makeup-water
     TurbineConnectorComponent,
     CondensateFlashTankComponent,
     ReturnCondensateHeaderComponent,
-    MakeupWaterDiagramComponent
+    MakeupWaterDiagramComponent,
+    BlowdownFlashTankComponent
   ],
   exports: [
     SsmtDiagramComponent
