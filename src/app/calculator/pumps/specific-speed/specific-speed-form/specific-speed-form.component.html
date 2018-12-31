@@ -1,7 +1,8 @@
 <form [formGroup]="speedForm">
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
-    <select name="pumpType" class="form-control" id="pumpType" formControlName="pumpType" (change)="emitCalculate()" autofocus (focus)="focusField('pumpType')">
+    <select name="pumpType" class="form-control" id="pumpType" formControlName="pumpType" (change)="emitCalculate()"
+      autofocus (focus)="focusField('pumpType')">
       <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType.value">{{pumpType.display}}</option>
     </select>
   </div>
@@ -9,10 +10,15 @@
   <div class="form-group">
     <label for="pumpRPM">Pump Speed</label>
     <div class="input-group calc-addon-group">
-      <input name="pumpRPM" type="number" step="any" class="form-control addon-input" id="pumpRPM" formControlName="pumpRPM" (input)="emitCalculate()"
-        onfocus="this.select();" (focus)="focusField('pumpRPM')">
+      <input name="pumpRPM" type="number" step="any" class="form-control addon-input" id="pumpRPM" formControlName="pumpRPM"
+        (input)="emitCalculate()" onfocus="this.select();" (focus)="focusField('pumpRPM')">
       <span class="input-group-addon units">rpm</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="speedForm.controls.pumpRPM.invalid && !speedForm.controls.pumpRPM.pristine">
+      <span *ngIf="speedForm.controls.pumpRPM.errors.required">Value required.</span>
+      <span *ngIf="speedForm.controls.pumpRPM.errors.min">Value can't be less than
+        {{speedForm.controls.pumpRPM.errors.min.min}} rpm.</span>
+    </span>
   </div>
 
   <div class="form-group">
@@ -22,14 +28,24 @@
         (input)="emitCalculate()" onfocus="this.select();" (focus)="focusField('flowRate')">
       <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="speedForm.controls.flowRate.invalid && !speedForm.controls.flowRate.pristine">
+      <span *ngIf="speedForm.controls.flowRate.errors.required">Value required.</span>
+      <span *ngIf="speedForm.controls.flowRate.errors.min">Value can't be less than
+        {{speedForm.controls.flowRate.errors.min.min}} {{settings.flowMeasurement}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
     <label for="head">Head</label>
     <div class="input-group calc-addon-group">
-      <input name="head" type="number" step="any" class="form-control addon-input" formControlName="head" id="head" (input)="emitCalculate()"
-        onfocus="this.select();" (focus)="focusField('head')">
+      <input name="head" type="number" step="any" class="form-control addon-input" formControlName="head" id="head"
+        (input)="emitCalculate()" onfocus="this.select();" (focus)="focusField('head')">
       <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="speedForm.controls.head.invalid && !speedForm.controls.head.pristine">
+      <span *ngIf="speedForm.controls.head.errors.required">Value required.</span>
+      <span *ngIf="speedForm.controls.head.errors.min">Value can't be less than
+        {{speedForm.controls.head.errors.min.min}} {{settings.distanceMeasurement}}.</span>
+    </span>
   </div>
 </form>

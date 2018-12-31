@@ -12,7 +12,7 @@
           <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.o2CombAir.invalid && !o2Form.controls.o2CombAir.pristine">
-          <span *ngIf="o2Form.controls.o2CombAir.errors.required">Value Required</span>
+          <span *ngIf="o2Form.controls.o2CombAir.errors.required">Value required.</span>
           <span *ngIf="o2Form.controls.o2CombAir.errors.max">Value can't be greater than
             {{o2Form.controls.o2CombAir.errors.max.max}} %.</span>
           <span *ngIf="o2Form.controls.o2CombAir.errors.min">Value can't be less than
@@ -29,7 +29,7 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.combAirTemp.invalid && !o2Form.controls.combAirTemp.pristine">
-          <span *ngIf="o2Form.controls.combAirTemp.errors.required">Value Required</span>
+          <span *ngIf="o2Form.controls.combAirTemp.errors.required">Value required.</span>
           <span *ngIf="o2Form.controls.combAirTemp.errors.max">Value can't be greater than
             {{o2Form.controls.combAirTemp.errors.max.max}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
@@ -52,7 +52,7 @@
           <span class="input-group-addon units">% Dry</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.o2FlueGas.invalid && !o2Form.controls.o2FlueGas.pristine">
-          <span *ngIf="o2Form.controls.o2FlueGas.errors.required">Value Required</span>
+          <span *ngIf="o2Form.controls.o2FlueGas.errors.required">Value required.</span>
           <span *ngIf="o2Form.controls.o2FlueGas.errors.max">Value can't be greater than
             {{o2Form.controls.o2FlueGas.errors.max.max}} %.</span>
           <span *ngIf="o2Form.controls.o2FlueGas.errors.min">Value can't be less than
@@ -70,7 +70,7 @@
 
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.flueGasTemp.invalid && !o2Form.controls.flueGasTemp.pristine">
-          <span *ngIf="o2Form.controls.flueGasTemp.errors.required">Value Required</span>
+          <span *ngIf="o2Form.controls.flueGasTemp.errors.required">Value required.</span>
           <span *ngIf="o2Form.controls.flueGasTemp.errors.max">Value can't be greater than
             {{o2Form.controls.flueGasTemp.errors.max.max}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
@@ -92,6 +92,9 @@
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="o2Form.controls.fuelConsumption.invalid && !o2Form.controls.fuelConsumption.pristine">
+          <span *ngIf="o2Form.controls.fuelConsumption.errors.required">Value required.</span>
+        </span>
       </div>
 
     </div>
@@ -108,7 +111,7 @@
           <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.o2CombAirEnriched.invalid && !o2Form.controls.o2CombAirEnriched.pristine">
-          <span *ngIf="o2Form.controls.o2CombAirEnriched.errors.required">Value Required</span>
+          <span *ngIf="o2Form.controls.o2CombAirEnriched.errors.required">Value required.</span>
           <span *ngIf="o2Form.controls.o2CombAirEnriched.errors.max">Value can't be greater than
             {{o2Form.controls.o2CombAirEnriched.errors.max.max}} %.</span>
           <span *ngIf="o2Form.controls.o2CombAirEnriched.errors.min">Value can't be less than
@@ -126,7 +129,7 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.combAirTempEnriched.invalid && !o2Form.controls.combAirTempEnriched.pristine">
-          <span *ngIf="o2Form.controls.combAirTempEnriched.errors.required">Value Required</span>
+          <span *ngIf="o2Form.controls.combAirTempEnriched.errors.required">Value required.</span>
           <span *ngIf="o2Form.controls.combAirTempEnriched.errors.max">Value can't be greater than
             {{o2Form.controls.combAirTempEnriched.errors.max.max}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
@@ -149,7 +152,7 @@
           <span class="input-group-addon units">% Dry</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.o2FlueGasEnriched.invalid && !o2Form.controls.o2FlueGasEnriched.pristine">
-          <span *ngIf="o2Form.controls.o2FlueGasEnriched.errors.required">Value Required</span>
+          <span *ngIf="o2Form.controls.o2FlueGasEnriched.errors.required">Value required.</span>
           <span *ngIf="o2Form.controls.o2FlueGasEnriched.errors.max">Value can't be greater than
             {{o2Form.controls.o2FlueGasEnriched.errors.max.max}} %.</span>
           <span *ngIf="o2Form.controls.o2FlueGasEnriched.errors.min">Value can't be less than
@@ -167,7 +170,7 @@
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="o2Form.controls.flueGasTempEnriched.invalid && !o2Form.controls.flueGasTempEnriched.pristine">
-          <span *ngIf="o2Form.controls.flueGasTempEnriched.errors.required">Value Required</span>
+          <span *ngIf="o2Form.controls.flueGasTempEnriched.errors.required">Value required.</span>
           <span *ngIf="o2Form.controls.flueGasTempEnriched.errors.max">Value can't be greater than
             {{o2Form.controls.flueGasTempEnriched.errors.max.max}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>

@@ -1,8 +1,9 @@
-<form>
+<form [formGroup]="form">
   <label class="group-label">Operating Conditions</label>
   <div class="form-group">
     <label for="horsePower">Motor Power</label>
-    <select name="horsePower" class="form-control" id="horsePower" [(ngModel)]="data.motorPower" (change)="calculate()" (focus)="focusField('motorPower')">
+    <select name="horsePower" class="form-control" id="horsePower" formControlName="motorPower" (change)="calculate()"
+      (focus)="focusField('motorPower')">
       <option *ngFor="let horsePower of horsePowers" [ngValue]="horsePower">{{horsePower}} hp</option>
     </select>
   </div>
@@ -11,19 +12,25 @@
     <label for="annualOperatingHours">Annual Operating Hours</label>
     <div class="input-group calc-addon-group">
       <input name="annualOperatingHours" type="number" min="0" step="any" class="form-control" id="annualOperatingHours"
-        [(ngModel)]="data.annualOperatingHours" (input)="calculate()" onfocus="this.select();" (focus)="focusField('annualOperatingHours')">
+        formControlName="annualOperatingHours" (input)="calculate()" onfocus="this.select();" (focus)="focusField('annualOperatingHours')">
       <span class="units">hrs/yr</span>
     </div>
-    <!-- <span class="alert-danger small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span> -->
+    <span class="alert-danger pull-right small" *ngIf="form.controls.annualOperatingHours.invalid && !form.controls.annualOperatingHours.pristine">
+      <span *ngIf="form.controls.annualOperatingHours.errors.required">Value required.</span>
+      <span *ngIf="form.controls.annualOperatingHours.errors.min">Value cannot not be lower than {{form.controls.annualOperatingHours.errors.min.min}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
     <label for="averageMotorLoad">Average Motor Load</label>
     <div class="input-group calc-addon-group">
       <input name="averageMotorLoad" type="number" min="0" step="any" max="100" class="form-control" id="averageMotorLoad"
-        [(ngModel)]="data.averageMotorLoad" (input)="calculate()" onfocus="this.select();" (focus)="focusField('averageMotorLoad')">
+        formControlName="averageMotorLoad" (input)="calculate()" onfocus="this.select();" (focus)="focusField('averageMotorLoad')">
       <span class="units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.averageMotorLoad.invalid && !form.controls.averageMotorLoad.pristine">
+      <span *ngIf="form.controls.averageMotorLoad.errors.required">Value required.</span>
+    </span>
     <!-- <span class="alert-danger small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span> -->
   </div>
 
@@ -31,9 +38,13 @@
     <label for="electricityCost">Electricity Cost</label>
     <div class="input-group calc-addon-group">
       <input name="electricityCost" type="number" min="0" step="any" class="form-control" id="electricityCost"
-        [(ngModel)]="data.electricityCost" (input)="calculate()" onfocus="this.select();" (focus)="focusField('electricityCost')">
+        formControlName="electricityCost" (input)="calculate()" onfocus="this.select();" (focus)="focusField('electricityCost')">
       <span class="units">$/kWh</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
+      <span *ngIf="form.controls.electricityCost.errors.required">Value required.</span>
+      <span *ngIf="form.controls.electricityCost.errors.min">Value cannot not be lower than {{form.controls.electricityCost.errors.min.min}}.</span>
+    </span>
     <!-- <span class="alert-danger small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span> -->
   </div>
 </form>

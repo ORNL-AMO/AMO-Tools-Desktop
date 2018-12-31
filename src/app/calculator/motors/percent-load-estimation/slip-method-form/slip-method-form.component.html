@@ -1,12 +1,12 @@
-<form>
+<form [formGroup]="form">
 
   <div class="form-group">
     <label for="lineFrequency">Line Frequency</label>
     <div class="input-group calc-addon-group">
-      <select name="lineFrequency" class="form-control" [(ngModel)]="lineFrequency" id="lineFrequency" (change)="updateSynchronousSpeeds()"
+      <select name="lineFrequency" class="form-control" formControlName="lineFrequency" id="lineFrequency" (change)="updateSynchronousSpeeds(true)"
         autofocus>
-        <option value=60>60 Hz</option>
-        <option value=50>50 Hz</option>
+        <option [ngValue]=60>60 Hz</option>
+        <option [ngValue]=50>50 Hz</option>
       </select>
     </div>
   </div>
@@ -22,26 +22,32 @@
 
   <div class="form-group">
     <label for="nameplateFullLoadSpeed">Nameplate Full Load Speed</label>
-    <input name="nameplateFullLoadSpeed" type="number" step="10" min="0" max="3600" class="form-control" [(ngModel)]="data.nameplateFullLoadSpeed"
-      id="nameplateFullLoadSpeed" (input)="calculate()" onfocus="this.select();">
-    <span class="alert-danger pull-right small" *ngIf="nameplateFullLoadSpeedError !== null">{{nameplateFullLoadSpeedError}}</span>
+    <input name="nameplateFullLoadSpeed" type="number" step="10" min="0" max="3600" class="form-control"
+      formControlName="nameplateFullLoadSpeed" id="nameplateFullLoadSpeed" (input)="calculate()" onfocus="this.select();">
+    <span class="alert-danger pull-right small" *ngIf="form.controls.nameplateFullLoadSpeed.invalid && !form.controls.nameplateFullLoadSpeed.pristine">
+      <span *ngIf="form.controls.nameplateFullLoadSpeed.errors.required">Value required.</span>
+      <span *ngIf="form.controls.nameplateFullLoadSpeed.errors.valueNotInList">{{synchronousSpeedError}}.</span>
+      <span *ngIf="form.controls.nameplateFullLoadSpeed.errors.lessThan">{{synchronousSpeedError}}.</span>
+    </span>
   </div>
 
   <div class="form-group form-section">
     <label for="measuredSpeed">Measured Speed</label>
-    <input name="measuredSpeed" type="number" step="10" min="0" class="form-control" [(ngModel)]="data.measuredSpeed"
-      id="measuredSpeed" (input)="calculate()" onfocus="this.select();" autofocus>
-    <span class="alert-danger pull-right small" *ngIf="measuredSpeedError !== null">{{measuredSpeedError}}</span>
+    <input name="measuredSpeed" type="number" step="10" min="0" class="form-control" formControlName="measuredSpeed" id="measuredSpeed"
+      (input)="calculate()" onfocus="this.select();" autofocus>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.measuredSpeed.invalid && !form.controls.measuredSpeed.pristine">
+      <span *ngIf="form.controls.measuredSpeed.errors.required">Value required.</span>
+      <span *ngIf="form.controls.measuredSpeed.errors.lessThan">{{measuredSpeedError}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
     <label class="bold" for="synchronousSpeed">Synchronous Speed</label>
-    <div class="text-center small" *ngIf="data.synchronousSpeed && showSynchronousSpeed">
-      <strong>{{data.synchronousSpeed}}</strong>
+    <div class="text-center small" *ngIf="form.controls.synchronousSpeed.value && form.controls.nameplateFullLoadSpeed.valid">
+      <strong>{{form.controls.synchronousSpeed.value}}</strong>
     </div>
-    <div class="text-center small" *ngIf="!data.synchronousSpeed || !showSynchronousSpeed">
+    <div class="text-center small" *ngIf="!form.controls.synchronousSpeed.value || !form.controls.nameplateFullLoadSpeed.valid">
       <strong>&mdash; &mdash;</strong>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="synchronousSpeedError !== null">{{synchronousSpeedError}}</span>
   </div>
 </form>

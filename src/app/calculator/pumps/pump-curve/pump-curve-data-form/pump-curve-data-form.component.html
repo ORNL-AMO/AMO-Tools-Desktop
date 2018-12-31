@@ -2,59 +2,77 @@
   Pump Data</label>
 <label class="group-label" *ngIf="isFan">
   Fan Data</label>
-<div class="row">
-  <div class="col-12">
-    <label>Order</label>
-  </div>
-</div>
-<div class="row">
-  <div class="form-group col-6">
-    <select id="dataOrder" name="dataOrder" class="form-control" [(ngModel)]="pumpCurveForm.dataOrder" (focus)="focusField('dataOrder')"
-      (change)="emitCalculateChanges()" *ngIf="!isFan">
-      <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
-    </select>
-    <select id="dataOrder" name="dataOrder" class="form-control" [(ngModel)]="pumpCurveForm.dataOrder" (focus)="focusField('fanDataOrder')"
-      (change)="emitCalculateChanges()" *ngIf="isFan">
-      <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
-    </select>
-  </div>
-  <div class="col-6">
-    <span class="add-link small pull-right" (click)="addRow()">+Add Row</span>
-  </div>
-</div>
 
-<div *ngFor="let dataRow of pumpCurveForm.dataRows; let index = index;">
-  <div class="row align-items-end">
-    <div class="form-group col-5">
-      <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
-      <div class="input-group">
-        <input name="flow" [(ngModel)]="dataRow.flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
-          (focus)="focusField('flow')" (input)="checkFlow(index)" *ngIf="!isFan">
-        <input name="flow" [(ngModel)]="dataRow.flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
-          (focus)="focusField('fanFlow')" (input)="checkFlow(index)" *ngIf="isFan">
-        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
-        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
-        <span class="alert-danger pull-right small" *ngIf="maxFlowWarnings[index] !== null">
-          {{maxFlowWarnings[index]}}
-        </span>
-      </div>
-    </div>
-    <div class="form-group col-5">
-      <label class="section-label" *ngIf="index == 0 && !isFan" for="head">Head</label>
-      <label class="section-label" *ngIf="index == 0 && isFan" for="head">Pressure</label>
-      <div class="input-group">
-        <input name="head" [(ngModel)]="dataRow.head" type="number" step="any" class="form-control" id="head" onfocus="this.select();"
-          (focus)="focusField('head')" (input)="emitCalculateChanges()" *ngIf="!isFan">
-        <input name="head" [(ngModel)]="dataRow.head" type="number" step="any" class="form-control" id="head" onfocus="this.select();"
-          (focus)="focusField('pressure')" (input)="emitCalculateChanges()" *ngIf="isFan">
-        <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
-        <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
-      </div>
-    </div>
-    <div class="col-2" style="height: 100%;">
-      <span class="float-right" *ngIf="pumpCurveForm.dataRows.length != 1">
-        <i class="fa fa-times-circle" (click)="removeRow(index)"></i>
-      </span>
+<form [formGroup]="pumpCurveForm">
+  <div class="row">
+    <div class="col-12">
+      <label>Order</label>
     </div>
   </div>
-</div>
+  <div class="row">
+    <div class="form-group col-6">
+      <select id="dataOrder" name="dataOrder" class="form-control" formControlName="dataOrder" (focus)="focusField('dataOrder')"
+        (change)="emitCalculateChanges()" *ngIf="!isFan">
+        <option *ngFor="let order of orderOptions; let i = index" [ngValue]="i">{{order}}</option>
+      </select>
+      <select id="dataOrder" name="dataOrder" class="form-control" formControlName="dataOrder" (focus)="focusField('fanDataOrder')"
+        (change)="emitCalculateChanges()" *ngIf="isFan">
+        <option *ngFor="let order of orderOptions; let i = index" [ngValue]="i">{{order}}</option>
+      </select>
+    </div>
+    <div class="col-6">
+      <span class="add-link small pull-right" (click)="addRow()">+Add Row</span>
+    </div>
+  </div>
+
+
+  <div *ngFor="let control of pumpCurveForm.controls.dataRows.value.controls; let i = index;">
+    <form [formGroup]="control">
+      <div class="row align-items-end">
+        <div class="form-group col-5">
+          <label class="section-label" *ngIf="index == 0" for="flow">Flow</label>
+          <div class="input-group">
+            <input name="flow" formControlName="flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
+              (focus)="focusField('flow')" *ngIf="!isFan">
+            <input name="flow" formControlName="flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
+              (focus)="focusField('fanFlow')" *ngIf="isFan">
+            <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+            <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="control.controls.flow.invalid && !control.controls.flow.pristine">
+            <span *ngIf="control.controls.flow.errors.required">Value required.</span>
+            <span *ngIf="control.controls.flow.errors.max">Value cannot be greater than 1,000,000
+              <span *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+              <span *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>.
+            </span>
+          </span>
+        </div>
+        <div class="form-group col-5">
+          <label class="section-label" *ngIf="index == 0 && !isFan" for="head">Head</label>
+          <label class="section-label" *ngIf="index == 0 && isFan" for="head">Pressure</label>
+          <div class="input-group">
+            <input name="head" formControlName="head" type="number" step="any" class="form-control" id="head" onfocus="this.select();"
+              (focus)="focusField('head')" (input)="emitCalculateChanges()" *ngIf="!isFan">
+            <input name="head" formControlName="head" type="number" step="any" class="form-control" id="head" onfocus="this.select();"
+              (focus)="focusField('pressure')" (input)="emitCalculateChanges()" *ngIf="isFan">
+            <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+            <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="control.controls.head.invalid && !control.controls.head.pristine">
+            <span *ngIf="control.controls.head.errors.required">Value required.</span>
+            <span *ngIf="control.controls.head.errors.min">Value must be greater than
+              {{control.controls.head.errors.min.min}}
+              <span *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+              <span *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>.
+            </span>
+          </span>
+        </div>
+        <div class="col-2" style="height: 100%;">
+          <span class="float-right" *ngIf="pumpCurveForm.controls.dataRows.value.controls.length > 1">
+            <i class="fa fa-times-circle" (click)="removeRow(i)"></i>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</form>

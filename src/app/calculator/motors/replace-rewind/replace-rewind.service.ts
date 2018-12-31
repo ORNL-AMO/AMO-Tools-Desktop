@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ReplaceRewindData, ReplaceRewindResults } from './replace-rewind.component';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable()
 export class ReplaceRewindService {
@@ -14,7 +15,52 @@ export class ReplaceRewindService {
     newEfficiency: 95.7,
     purchaseCost: 33163,
   };
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
+
+  initForm(): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      operatingHours: [6000, [Validators.required, Validators.min(0)]],
+      motorSize: [350, [Validators.required, Validators.min(0)]],
+      load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
+      electricityCost: [0.08, [Validators.required, Validators.min(0)]],
+      currentEfficiency: [94.4, [Validators.required, Validators.min(0), Validators.max(100)]],
+      rewindEfficiencyLoss: [0.5, [Validators.required, Validators.min(0), Validators.max(100)]],
+      costOfRewind: [8384, [Validators.required, Validators.min(0)]],
+      newEfficiency: [95.7, [Validators.required, Validators.min(0), Validators.max(100)]],
+      purchaseCost: [33163, [Validators.required, Validators.min(0)]]
+    });
+    return tmpForm;
+  }
+
+  getFormFromObj(inputObj: ReplaceRewindData): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
+      motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
+      load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
+      currentEfficiency: [inputObj.currentEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      rewindEfficiencyLoss: [inputObj.rewindEfficiencyLoss, [Validators.required, Validators.min(0), Validators.max(100)]],
+      costOfRewind: [inputObj.costOfRewind, [Validators.required, Validators.min(0)]],
+      newEfficiency: [inputObj.newEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      purchaseCost: [inputObj.purchaseCost, [Validators.required, Validators.min(0)]]
+    });
+    return tmpForm;
+  }
+
+  getObjFromForm(form: FormGroup): ReplaceRewindData {
+    this.replaceRewindData = {
+      operatingHours: form.controls.operatingHours.value,
+      motorSize: form.controls.motorSize.value,
+      load: form.controls.load.value,
+      electricityCost: form.controls.electricityCost.value,
+      currentEfficiency: form.controls.currentEfficiency.value,
+      rewindEfficiencyLoss: form.controls.rewindEfficiencyLoss.value,
+      costOfRewind: form.controls.costOfRewind.value,
+      newEfficiency: form.controls.newEfficiency.value,
+      purchaseCost: form.controls.purchaseCost.value
+    }
+    return this.replaceRewindData;
+  }
 
   initReplaceRewindData(): ReplaceRewindData {
     this.replaceRewindData = {

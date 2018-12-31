@@ -24,6 +24,8 @@ export class MotorPerformanceFormComponent implements OnInit {
     60
   ];
   efficiencyClasses: Array<{ display: string, value: number }>;
+  calcFLAError: boolean = false;
+
   constructor(private psatService: PsatService) {
   }
 
@@ -46,25 +48,29 @@ export class MotorPerformanceFormComponent implements OnInit {
   }
 
   emitChange() {
+    this.calcFLAError = false;
     this.calculate.emit(true);
   }
 
-  calculateFullLoadAmps() {
-    // let tmpFullLoadAmps: number = this.psatService.estFLA(
-    //   this.performanceForm.controls.horsePower.value,
-    //   this.performanceForm.controls.motorRPM.value,
-    //   this.performanceForm.controls.frequency.value,
-    //   this.performanceForm.controls.efficiencyClass.value,
-    //   this.performanceForm.controls.efficiency.value,
-    //   this.performanceForm.controls.motorVoltage.value,
-    //   this.settings
-    // );
-    // this.performanceForm.patchValue({
-    //   fullLoadAmps: tmpFullLoadAmps
-    // })
+  canCalculateFullLoadAmps(): boolean {
+    return this.performanceForm.controls.frequency.valid
+      && this.performanceForm.controls.horsePower.valid
+      && this.performanceForm.controls.motorRPM.valid
+      && this.performanceForm.controls.motorVoltage.valid
+      && this.performanceForm.controls.efficiencyClass.valid
+      && ((this.performanceForm.controls.efficiencyClass.value == 3 && this.performanceForm.controls.efficiency.valid)
+        || this.performanceForm.controls.efficiencyClass.value != 3);
 
-    this.performanceForm = this.psatService.setFormFullLoadAmps(this.performanceForm, this.settings);
-    this.emitChange();
+  }
+
+  calculateFullLoadAmps() {
+    if (this.canCalculateFullLoadAmps()) {
+      this.performanceForm = this.psatService.setFormFullLoadAmps(this.performanceForm, this.settings);
+      this.emitChange();
+    }
+    else {
+      this.calcFLAError = true;
+    }
   }
 
   setRpmValidation() {

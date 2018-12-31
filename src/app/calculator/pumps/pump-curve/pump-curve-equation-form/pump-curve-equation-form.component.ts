@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, NgModel, FormsModule } from '@angular/forms';
-import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
+import { PumpCurve, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
@@ -11,13 +11,13 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class PumpCurveEquationFormComponent implements OnInit {
   @Input()
-  pumpCurveForm: PumpCurveForm;
+  pumpCurveForm: FormGroup;
   @Input()
   settings: Settings;
   @Input()
   inPsat: boolean;
   @Output('calculate')
-  calculate = new EventEmitter<boolean>();
+  calculate = new EventEmitter<FormGroup>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Input()
@@ -42,40 +42,40 @@ export class PumpCurveEquationFormComponent implements OnInit {
   }
 
   emitCalculateChanges() {
-    this.checkWarnings();
+    // this.checkWarnings();
     if (this.constantWarning == null && this.maxFlowWarning == null) {
-      this.calculate.emit(true);
+      this.calculate.emit(this.pumpCurveForm);
     }
   }
 
 
   checkWarnings() {
-    if (this.pumpCurveForm.headConstant <= 0) {
-      this.constantWarning = "Value must be greater than 0.";
-    }
-    else {
-      this.constantWarning = null;
-    }
-    if (this.pumpCurveForm.maxFlow > 1000000) {
-      this.maxFlowWarning = "Value must not be greater than 1,000,000.";
-    }
-    else {
-      this.maxFlowWarning = null;
-    }
+    // if (this.pumpCurveForm.controls.headConstant.value <= 0) {
+    //   this.constantWarning = "Value must be greater than 0.";
+    // }
+    // else {
+    //   this.constantWarning = null;
+    // }
+    // if (this.pumpCurveForm.controls.maxFlow > 1000000) {
+    //   this.maxFlowWarning = "Value must not be greater than 1,000,000.";
+    // }
+    // else {
+    //   this.maxFlowWarning = null;
+    // }
   }
 
   setOrder() {
-    if (this.pumpCurveForm.headOrder < 3) {
-      this.pumpCurveForm.headFlow3 = 0;
+    if (this.pumpCurveForm.controls.headOrder.value + 2 < 3) {
+      this.pumpCurveForm.controls.headFlow3.patchValue(0);
     }
-    if (this.pumpCurveForm.headOrder < 4) {
-      this.pumpCurveForm.headFlow4 = 0;
+    if (this.pumpCurveForm.controls.headOrder.value + 2 < 4) {
+      this.pumpCurveForm.controls.headFlow4.patchValue(0);
     }
-    if (this.pumpCurveForm.headOrder < 5) {
-      this.pumpCurveForm.headFlow5 = 0;
+    if (this.pumpCurveForm.controls.headOrder.value + 2 < 5) {
+      this.pumpCurveForm.controls.headFlow5.patchValue(0);
     }
-    if (this.pumpCurveForm.headOrder < 6) {
-      this.pumpCurveForm.headFlow6 = 0;
+    if (this.pumpCurveForm.controls.headOrder.value + 2 < 6) {
+      this.pumpCurveForm.controls.headFlow6.patchValue(0);
     }
     this.emitCalculateChanges();
   }

@@ -240,7 +240,7 @@ origin: "AMO-TOOLS-DESKTOP"
 */
 
 export const MockFsatCalculator: Calculator = {
-    pumpCurveForm: {
+    pumpCurve: {
         dataRows: [
             {
                 head: 22.3,

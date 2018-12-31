@@ -50,13 +50,13 @@ export class MotorDriveComponent implements OnInit {
   }
 
   btnResetData() {
-    let initMotorDriveData: MotorDriveInputs = {
+    this.motorDriveData = {
       motorPower: 5,
       annualOperatingHours: 8760,
       averageMotorLoad: 50,
       electricityCost: this.settings.electricityCost
     }
-    this.calculate(initMotorDriveData);
+    this.calculate(this.motorDriveData);
   }
 
   resizeTabs() {
