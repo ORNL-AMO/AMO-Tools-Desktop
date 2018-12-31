@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
@@ -9,10 +9,17 @@ import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 export class CondensateFlashTankComponent implements OnInit {
   @Input()
   flashTank: FlashTankOutput;
+  @Output('emitSetHover')
+  emitSetHover = new EventEmitter<string>();
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+
+  hoverEquipment(str: string) {
+    this.emitSetHover.emit(str);
   }
 
 }

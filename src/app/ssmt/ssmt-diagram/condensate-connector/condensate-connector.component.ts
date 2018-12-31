@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-condensate-connector',
@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./condensate-connector.component.css']
 })
 export class CondensateConnectorComponent implements OnInit {
-
+  @Output('emitSetHover')
+  emitSetHover = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
   }
 
+
+  hoverEquipment(str: string){
+    this.emitSetHover.emit(str);
+  }
 }

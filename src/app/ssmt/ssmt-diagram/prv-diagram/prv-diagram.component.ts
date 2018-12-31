@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
@@ -13,9 +13,31 @@ export class PrvDiagramComponent implements OnInit {
   inletSteam: string;
   @Input()
   outletSteam: string;
+  @Output('emitSetHover')
+  emitSetHover = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  hoverEquipment(str: string) {
+    this.emitSetHover.emit(str);
+  }
+
+  hoverInlet() {
+    if (this.inletSteam == 'medium-pressure') {
+      this.emitSetHover.emit('mediumPressureHovered');
+    } else if (this.inletSteam == 'high-pressure') {
+      this.emitSetHover.emit('highPressureHovered');
+    }
+  }
+
+  hoverOutlet() {
+    if (this.outletSteam == 'low-pressure') {
+      this.emitSetHover.emit('lowPressureHovered');
+    } else if (this.outletSteam == 'medium-pressure') {
+      this.emitSetHover.emit('mediumPressureHovered');
+    }
+  }
 }

@@ -15,6 +15,8 @@ export class SsmtDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
 
+
+
   massFlow: number = 408.7;
 
   dataCalculated: boolean = false;
@@ -56,6 +58,7 @@ export class SsmtDiagramComponent implements OnInit {
   returnCondensate: SteamPropertiesOutput;
   tabSelect: string = 'results';
   selectedTable: string = 'boiler';
+  hoveredEquipment: string = 'default';
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
@@ -125,7 +128,10 @@ export class SsmtDiagramComponent implements OnInit {
     this.tabSelect = str;
   }
 
-
+  setHover(str: string){
+    this.hoveredEquipment = str;
+  }
+  
   selectTable(str: string){
     this.selectedTable = str;
   }

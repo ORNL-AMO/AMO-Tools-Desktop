@@ -2,55 +2,76 @@
     background-color: #5D4037;
     color: white;
 }
+.ssmt-diagram.blowdownHovered .blowdown{
+    box-shadow: 0px 0px 10px 0px #5D4037;
+    cursor: pointer;
+}
 
 .ssmt-diagram .feedwater{
     background-color: #8E44AD;
     color: white;
+}
+.ssmt-diagram.feedwaterHovered .feedwater{
+    box-shadow: 0px 0px 10px 0px #8E44AD;
+    cursor: pointer;
 }
 
 .ssmt-diagram .condensate{
     background-color: #283593;
     color: white;
 }
+.ssmt-diagram.condensateHovered .condensate{
+    box-shadow: 0px 0px 10px 0px #283593;
+    cursor: pointer;
+}
 
 .ssmt-diagram .makeup-water{
     background-color: #43A047;
     color: white;
 }
-
-.ssmt-diagram .turbineDiagram:hover .makeup-water{
+.ssmt-diagram.makeupWaterHovered .makeup-water{
     box-shadow: 0px 0px 10px 0px #43A047;
-}
-
-.ssmt-diagram .turbineDiagram:hover .low-pressure{
-    box-shadow: 0px 0px 10px 0px #FFEB3B;
-}
-
-.ssmt-diagram .turbineDiagram:hover .medium-pressure{
-    box-shadow: 0px 0px 10px 0px #FFA726;
-}
-
-.ssmt-diagram .turbineDiagram:hover .high-pressure{
-    box-shadow: 0px 0px 10px 0px #C0392B;
+    cursor: pointer;
 }
 
 .ssmt-diagram .high-pressure{
     background-color: #C0392B;
     color: white;
 }
+.ssmt-diagram.highPressureHovered .high-pressure, 
+.ssmt-diagram.highPressureHovered .highPressure .header-tube,
+.ssmt-diagram.highPressureProcessSteamHovered .highPressure .process-usage {
+    box-shadow: 0px 0px 10px 0px #C0392B;
+    cursor: pointer;
+}
 
 .ssmt-diagram .medium-pressure{
     background-color: #FFA726;
+}
+.ssmt-diagram.mediumPressureHovered .medium-pressure,
+.ssmt-diagram.mediumPressureHovered .mediumPressure .header-tube, 
+.ssmt-diagram.mediumPressureProcessSteamHovered .mediumPressure .process-usage{
+    box-shadow: 0px 0px 10px 0px #FFA726;
+    cursor: pointer;
 }
 
 .ssmt-diagram .low-pressure{
     background-color: #FFEB3B;
 }
+.ssmt-diagram.lowPressureHovered .low-pressure,
+.ssmt-diagram.lowPressureHovered .lowPressure .header-tube, 
+.ssmt-diagram.lowPressureProcessSteamHovered .lowPressure .process-usage {
+    box-shadow: 0px 0px 10px 0px #FFEB3B;
+    cursor: pointer;
+}
 
 .ssmt-diagram .vents{
     background-color: #ABB2B9;
 }
-
+.ssmt-diagram.ventsHovered .vents{
+    box-shadow: 0px 0px 10px 0px #ABB2B9;
+    cursor: pointer;
+}
 
 .ssmt-diagram .fa-chevron-down, .ssmt-diagram .fa-chevron-up{
     padding-top: 5px;

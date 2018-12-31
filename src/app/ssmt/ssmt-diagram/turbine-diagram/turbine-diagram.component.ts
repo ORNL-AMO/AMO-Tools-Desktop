@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
@@ -15,10 +15,40 @@ export class TurbineDiagramComponent implements OnInit {
   outletColor: string;
   @Input()
   noOutletConnection: boolean;
-  
+  @Output('emitSetHover')
+  emitSetHover = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  hoverEquipment(str: string) {
+    this.emitSetHover.emit(str);
+  }
+
+  hoverInlet() {
+    if (this.inletColor == 'makeup-water') {
+      this.emitSetHover.emit('makeupWaterHovered');
+    } else if (this.inletColor == 'low-pressure') {
+      this.emitSetHover.emit('lowPressureHovered');
+    } else if (this.inletColor == 'medium-pressure') {
+      this.emitSetHover.emit('mediumPressureHovered');
+    } else if (this.inletColor == 'high-pressure') {
+      this.emitSetHover.emit('highPressureHovered');
+    }
+  }
+
+  hoverOutlet() {
+    if (this.outletColor == 'makeup-water') {
+      this.emitSetHover.emit('makeupWaterHovered');
+    } else if (this.outletColor == 'low-pressure') {
+      this.emitSetHover.emit('lowPressureHovered');
+    } else if (this.outletColor == 'medium-pressure') {
+      this.emitSetHover.emit('mediumPressureHovered');
+    } else if (this.outletColor == 'high-pressure') {
+      this.emitSetHover.emit('highPressureHovered');
+    }
   }
 
 }

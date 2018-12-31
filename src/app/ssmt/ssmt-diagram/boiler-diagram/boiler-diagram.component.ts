@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 
@@ -12,10 +12,15 @@ export class BoilerDiagramComponent implements OnInit {
   boiler: BoilerOutput;
   @Input()
   inputData: SSMTInputs;
+  @Output('emitSetHover')
+  emitSetHover = new EventEmitter<string>();
   
   constructor() { }
 
   ngOnInit() {
   }
 
+  hoverEquipment(str: string){
+    this.emitSetHover.emit(str);
+  }
 }

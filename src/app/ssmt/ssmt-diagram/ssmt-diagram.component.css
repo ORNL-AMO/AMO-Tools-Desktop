@@ -86,3 +86,8 @@ tbody{
 .boiler:hover, .turbineDiagram:hover{
     cursor: pointer;
 }
+
+.mid-width-container{
+    min-width: 750px;
+    overflow-x: auto;
+}

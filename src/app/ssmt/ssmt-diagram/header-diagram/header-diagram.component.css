@@ -1,28 +1,31 @@
+
+.header-tube{
+    width: 85%; 
+}
+
 .highPressure .header-tube{
     background-color: #C0392B;
     border-top-left-radius: 25px;
     color: white;
 }
 
-.header-tube{
-    width: 85%; 
-}
-
-.mediumPressure .header-tube{
-    background-color: #FFA726;
-}
-
-.lowPressure .header-tube{
-    background-color: #FFEB3B;
-    border-bottom-left-radius: 25px;
-}
 
 .highPressure .process-usage{
     border: #C0392B solid 3px;
 }
 
+
+.mediumPressure .header-tube{
+    background-color: #FFA726;
+}
+
 .mediumPressure .process-usage{
     border: #FFA726 solid 3px;
+}
+
+.lowPressure .header-tube{
+    background-color: #FFEB3B;
+    border-bottom-left-radius: 25px;
 }
 
 .lowPressure .process-usage{

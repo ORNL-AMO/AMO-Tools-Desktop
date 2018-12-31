@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { HeaderOutputObj, ProcessSteamUsage, SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
@@ -15,6 +15,9 @@ export class HeaderDiagramComponent implements OnInit {
   headerSteamUsage: number;
   @Input()
   condensate: SteamPropertiesOutput;
+  @Output('emitSetHover')
+  emitSetHover = new EventEmitter<string>();
+
 
   steamUsage: ProcessSteamUsage;
 
@@ -32,4 +35,19 @@ export class HeaderDiagramComponent implements OnInit {
     };
   }
 
+  hoverEquipment(str: string) {
+    this.emitSetHover.emit(str);
+  }
+
+  hoverCondensate() {
+    this.emitSetHover.emit('condensateHovered');
+  }
+
+  hoverHeader() {
+    this.emitSetHover.emit(this.pressureLevel+'Hovered');
+  }
+
+  hoverProcessUsage() {
+    this.emitSetHover.emit(this.pressureLevel+'ProcessSteamHovered');
+  }
 }

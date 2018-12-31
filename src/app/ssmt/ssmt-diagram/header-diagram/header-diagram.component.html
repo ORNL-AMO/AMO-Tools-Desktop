@@ -1,5 +1,5 @@
 <div class="d-flex w-100" [ngClass]="pressureLevel">
-  <div class="d-flex header-tube align-content-center border-padding">
+  <div class="d-flex header-tube align-content-center border-padding" (mouseenter)="hoverHeader()" (mouseleave)="hoverEquipment('default')">
     <div class="flex-fill text-center">
     {{header.pressure | number:'1.0-2'}}
     </div>
@@ -8,10 +8,10 @@
     </div>
   </div>
   <div class="d-flex flex-fill align-content-center">
-    <div class="w-50 process-usage text-center">
+    <div class="w-50 process-usage text-center" (mouseenter)="hoverProcessUsage()" (mouseleave)="hoverEquipment('default')">
       {{steamUsage.energyFlow | number:'1.0-2'}}
     </div>
-    <div class="w-50 condensate text-center border-padding">
+    <div class="w-50 condensate text-center border-padding" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
       <span class="fa fa-chevron-right pr-1"></span>{{condensate.massFlow| number:'2.0-2'}}
     </div>
   </div>

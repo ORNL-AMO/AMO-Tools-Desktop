@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HeaderOutputObj } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
@@ -9,9 +9,17 @@ import { HeaderOutputObj } from '../../../shared/models/steam/steam-outputs';
 export class ReturnCondensateHeaderComponent implements OnInit {
   @Input()
   makeupWaterAndCondensateHeader: HeaderOutputObj;
+  @Output('emitSetHover')
+  emitSetHover = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+
+  hoverEquipment(str: string) {
+    this.emitSetHover.emit(str);
   }
 
 }

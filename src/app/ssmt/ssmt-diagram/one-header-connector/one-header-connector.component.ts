@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-one-header-connector',
@@ -6,10 +6,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./one-header-connector.component.css']
 })
 export class OneHeaderConnectorComponent implements OnInit {
+  @Output('emitSetHover')
+  emitSetHover = new EventEmitter<string>();
 
   constructor() { }
 
   ngOnInit() {
   }
 
+
+  hoverEquipment(str: string) {
+    this.emitSetHover.emit(str);
+  }
 }
