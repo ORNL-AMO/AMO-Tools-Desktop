@@ -1,17 +1,3 @@
-
-
-.chevron-one .fa-chevron-down, .chevron-two .fa-chevron-down{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 3px;
-    padding-left: 3px;
-}
-
-.chevron-one  .fa-chevron-down{
-    margin-right: 17px;
-}
-
-
-.chevron-two  .fa-chevron-down{
+.chevron-one {
     margin-left: 33px;
 }

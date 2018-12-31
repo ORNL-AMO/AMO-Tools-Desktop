@@ -22,19 +22,6 @@
     margin-top: 14px;
 }
 
-.fa-chevron-right{
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-right: 5px;
-    padding-left: 5px;
-}
-.fa-chevron-down{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 3px;
-    padding-left: 3px;
-}
-
 .outlet-column{
     width: 12%;
     margin-left: -5px;

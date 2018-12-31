@@ -52,3 +52,17 @@
 }
 
 
+.ssmt-diagram .fa-chevron-down, .ssmt-diagram .fa-chevron-up{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
+
+.ssmt-diagram .fa-chevron-right, .ssmt-diagram .fa-chevron-left{
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}

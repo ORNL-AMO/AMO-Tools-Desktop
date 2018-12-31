@@ -3,20 +3,12 @@
     height: 90px;
 }
 
-.mediumPressure{
+/* .mediumPressure{
     background-color: #FFA726;
     /* border-left: #FFA726 solid 3px;
-    border-right: #FFA726 solid 3px; */
-}
+    border-right: #FFA726 solid 3px; 
+} */
 
-
-
-.chevron-one .fa-chevron-down, .chevron-two .fa-chevron-down{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 3px;
-    padding-left: 3px;
-}
 
 .chevron-one  .fa-chevron-down{
     margin-right: 17px;

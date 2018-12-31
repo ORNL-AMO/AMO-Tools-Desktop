@@ -10,7 +10,8 @@ export class TurbineConnectorComponent implements OnInit {
   inletColor: string;
   @Input()
   noOutletConnection: boolean;
-
+  @Input()
+  noInletConnection: boolean;
   constructor() { }
 
   ngOnInit() {

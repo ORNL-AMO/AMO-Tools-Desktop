@@ -50,14 +50,14 @@
                 <app-prv-diagram *ngIf="lowPressurePRV && highToMediumPressurePRV" [prv]="lowPressurePRV" [inletSteam]="'medium-pressure'" [outletSteam]="'low-pressure'"></app-prv-diagram>
               </div>
               <div class="p-0 w-25">
-                <app-turbine-connector *ngIf="condensingTurbine && mediumPressureHeader" [noOutletConnection]="true" [inletColor]="'makeup-water'"></app-turbine-connector>
+                <app-turbine-connector *ngIf="condensingTurbine && mediumPressureHeader" [noOutletConnection]="true" [noInletConnection]="lowPressureHeader != undefined" [inletColor]="'makeup-water'"></app-turbine-connector>
               </div>
               <div class="p-0 w-25 turbineDiagram" (click)="selectTable('mediumToLowPressureTurbine')">
                 <app-turbine-diagram *ngIf="mediumToLowPressureTurbine" [noOutletConnection]="false" [turbine]="mediumToLowPressureTurbine" [inletColor]="'medium-pressure'"
                   [outletColor]="'low-pressure'"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25">
-                <app-turbine-connector *ngIf="highToLowPressureTurbine && mediumPressureHeader" [noOutletConnection]="false" [inletColor]="'low-pressure'"></app-turbine-connector>
+                <app-turbine-connector *ngIf="highToLowPressureTurbine && mediumPressureHeader" [noOutletConnection]="false" [inletColor]="'low-pressure'" [noInletConnection]="true"></app-turbine-connector>
               </div>
             </div>
             <div class="w-25">
@@ -83,7 +83,7 @@
             <app-deaerator-diagram *ngIf="!lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'high-pressure'"></app-deaerator-diagram>
           </div>
           <div class="p-0 w-25">
-            <app-turbine-connector *ngIf="condensingTurbine" [noOutletConnection]="false" [inletColor]="'makeup-water'"></app-turbine-connector>
+            <app-turbine-connector *ngIf="condensingTurbine" [noOutletConnection]="false" [noInletConnection]="lowPressureHeader != undefined" [inletColor]="'makeup-water'"></app-turbine-connector>
           </div>
           <div class="p-0 w-25">
 
