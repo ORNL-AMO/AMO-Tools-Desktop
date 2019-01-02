@@ -14,7 +14,8 @@ export class BoilerDiagramComponent implements OnInit {
   inputData: SSMTInputs;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
-  
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
@@ -22,5 +23,9 @@ export class BoilerDiagramComponent implements OnInit {
 
   hoverEquipment(str: string){
     this.emitSetHover.emit(str);
+  }
+
+  selectEquipment(str: string){
+    this.emitSelectEquipment.emit(str);
   }
 }

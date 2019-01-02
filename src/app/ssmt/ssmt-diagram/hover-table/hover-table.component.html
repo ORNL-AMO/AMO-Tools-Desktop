@@ -8,5 +8,9 @@
     <app-hover-header-table *ngIf="hoveredEquipment == 'highPressureHovered'" [headerPressure]="'highPressure'"></app-hover-header-table>
     <app-hover-header-table *ngIf="hoveredEquipment == 'mediumPressureHovered'" [headerPressure]="'mediumPressure'"></app-hover-header-table>
     <app-hover-header-table *ngIf="hoveredEquipment == 'lowPressureHovered'" [headerPressure]="'lowPressure'"></app-hover-header-table>
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'condensingTurbineHovered'" [turbineType]="'condensing'"></app-hover-turbine-table>
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'highToLowTurbineHovered'" [turbineType]="'highToLow'"></app-hover-turbine-table>
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'highToMediumTurbineHovered'" [turbineType]="'highToMedium'"></app-hover-turbine-table>
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'mediumToLowTurbineHovered'" [turbineType]="'mediumToLow'"></app-hover-turbine-table>  
   </div>
 </div>

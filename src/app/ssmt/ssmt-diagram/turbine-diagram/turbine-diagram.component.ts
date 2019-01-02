@@ -17,10 +17,27 @@ export class TurbineDiagramComponent implements OnInit {
   noOutletConnection: boolean;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
+  @Input()
+  turbineType: string;
 
+  turbineLabel: string;
   constructor() { }
 
   ngOnInit() {
+    if (this.turbineType == 'condensing') {
+      this.turbineLabel = 'Condensing Turbine';
+    } else if (this.turbineType == 'mediumToLow') {
+      this.turbineLabel = 'MP to LP Turbine';
+
+    } else if (this.turbineType == 'highToLow') {
+      this.turbineLabel = 'HP to LP Turbine';
+
+    } else if (this.turbineType == 'highToMedium') {
+      this.turbineLabel = 'HP to MP Turbine';
+
+    }
   }
 
   hoverEquipment(str: string) {
@@ -51,4 +68,12 @@ export class TurbineDiagramComponent implements OnInit {
     }
   }
 
+  selectEquipment() {
+    this.emitSelectEquipment.emit();
+  }
+
+
+  hoverTurbine() {
+    this.emitSetHover.emit(this.turbineType + 'TurbineHovered');
+  }
 }

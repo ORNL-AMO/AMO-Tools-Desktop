@@ -4,10 +4,14 @@
   </div>
 
   <div class="d-flex justify-content-center">
-    <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-turbine.png" class="turbine-img">
+    <div class="d-flex turbine-img-holder" (click)="selectEquipment()" (mouseenter)="hoverTurbine()" (mouseleave)="hoverEquipment('default')">
+      <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-turbine.png" class="turbine-img">
+      <span class="turbine-label">{{turbineLabel}}</span>
+    </div>
   </div>
 
-  <div class="d-flex chevron-two justify-content-center flex-fill" [ngClass]="{'mb-1': noOutletConnection}" (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')">
+  <div class="d-flex chevron-two justify-content-center flex-fill" [ngClass]="{'mb-1': noOutletConnection}"
+    (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')">
     <span class="fa fa-chevron-down" [ngClass]="outletColor"></span>
   </div>
 </div>

@@ -4,15 +4,18 @@
       {{boiler.feedwaterMassFlow| number:'1.0-2'}} klb/hr<span class="fa fa-chevron-right"></span>
     </div>
   </div>
-  <div class="d-flex">
-    <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-boiler.png" class="boiler-img" (mouseenter)="hoverEquipment('boilerHovered')"
-      (mouseleave)="hoverEquipment('default')">
+  <div class="d-flex boiler-img-holder" (click)="selectEquipment('boiler')">
+    <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-boiler.png" class="boiler-img" (mouseleave)="hoverEquipment('default')"
+      (mouseenter)="hoverEquipment('boilerHovered')">
+    <span class="boiler-label" (mouseleave)="hoverEquipment('default')" (mouseenter)="hoverEquipment('boilerHovered')">Boiler</span>
   </div>
   <div class="d-flex flex-column outlet-column">
     <div class="high-pressure text-center pl-2" (mouseenter)="hoverEquipment('highPressureHovered')" (mouseleave)="hoverEquipment('default')">
-      <span class="boiler-steam" (mouseenter)="hoverEquipment('boilerSteamHovered')">{{boiler.steamMassFlow | number:'1.0-2'}} klb/hr<span class="fa fa-chevron-right"></span></span>
+      <span class="boiler-steam" (mouseenter)="hoverEquipment('boilerSteamHovered')">{{boiler.steamMassFlow |
+        number:'1.0-2'}} klb/hr<span class="fa fa-chevron-right"></span></span>
     </div>
-    <div class="blowdown blowdown-one text-center mr-1 pl-2" (mouseenter)="hoverEquipment('blowdownHovered')" (mouseleave)="hoverEquipment('default')">
+    <div class="blowdown blowdown-one text-center mr-1 pl-2" (mouseenter)="hoverEquipment('blowdownHovered')"
+      (mouseleave)="hoverEquipment('default')">
       <span class="fa fa-chevron-right"></span>
     </div>
   </div>

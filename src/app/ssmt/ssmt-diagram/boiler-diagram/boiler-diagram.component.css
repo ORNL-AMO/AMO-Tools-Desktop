@@ -55,3 +55,26 @@
 .min-110{
     min-width: 110px;
 }
+
+
+.boiler-img-holder{
+    position: relative;
+}
+
+.boiler-img-holder .boiler-label{
+    position: absolute;
+    top: 35%;
+    left: 33%;
+    z-index: +1;
+    font-size: large;
+    background-color: white;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    font-weight: bolder;
+}
+
+
+.boiler-img-holder .boiler-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}

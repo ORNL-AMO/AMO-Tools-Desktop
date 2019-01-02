@@ -6,7 +6,8 @@
     <div class="d-flex flex-column flex-fill align-content-stretch">
       <div class="d-flex boiler-table-height">
         <div class="d-flex boiler" (click)="selectTable('boiler')">
-          <app-boiler-diagram [boiler]="boiler" [inputData]="inputData" (emitSetHover)="setHover($event)"></app-boiler-diagram>
+          <app-boiler-diagram [boiler]="boiler" [inputData]="inputData" (emitSetHover)="setHover($event)"
+            (emitSelectEquipment)="selectTable($event)"></app-boiler-diagram>
         </div>
         <div class="d-flex hover-equipment-table justify-content-center">
           <app-hover-table [hoveredEquipment]="hoveredEquipment"></app-hover-table>
@@ -31,15 +32,18 @@
               </div>
               <div class="p-0 w-25 turbineDiagram">
                 <app-turbine-diagram *ngIf="condensingTurbine" [noOutletConnection]="lowPressureHeader != undefined"
-                  [turbine]="condensingTurbine" [inletColor]="'high-pressure'" [outletColor]="'makeup-water'" (emitSetHover)="setHover($event)"></app-turbine-diagram>
+                  [turbine]="condensingTurbine" [inletColor]="'high-pressure'" [outletColor]="'makeup-water'"
+                  (emitSetHover)="setHover($event)" [turbineType]="'condensing'" (emitSelectEquipment)="selectTable('condensingTurbine')"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25 turbineDiagram">
                 <app-turbine-diagram *ngIf="highPressureToMediumPressureTurbine" [noOutletConnection]="false" [turbine]="highPressureToMediumPressureTurbine"
-                  [inletColor]="'high-pressure'" [outletColor]="'medium-pressure'" (emitSetHover)="setHover($event)"></app-turbine-diagram>
+                  [inletColor]="'high-pressure'" [outletColor]="'medium-pressure'" (emitSetHover)="setHover($event)"
+                  [turbineType]="'highToMedium'" (emitSelectEquipment)="selectTable('highPressureToMediumPressureTurbine')"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25 turbineDiagram">
                 <app-turbine-diagram *ngIf="highToLowPressureTurbine" [noOutletConnection]="mediumPressureHeader != undefined"
-                  [turbine]="highToLowPressureTurbine" [inletColor]="'high-pressure'" [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)"></app-turbine-diagram>
+                  [turbine]="highToLowPressureTurbine" [inletColor]="'high-pressure'" [outletColor]="'low-pressure'"
+                  (emitSetHover)="setHover($event)" [turbineType]="'highToLow'" (emitSelectEquipment)="selectTable('highToLowPressureTurbine')"></app-turbine-diagram>
               </div>
             </div>
             <div class="w-25">
@@ -53,7 +57,8 @@
           <div class="p-0 d-flex justify-content-end">
             <div class="w-100">
               <app-header-diagram *ngIf="mediumPressureHeader" [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'"
-                [condensate]="mediumPressureCondensate" [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage" (emitSetHover)="setHover($event)"></app-header-diagram>
+                [condensate]="mediumPressureCondensate" [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"
+                (emitSetHover)="setHover($event)"></app-header-diagram>
             </div>
           </div>
           <div class="d-flex w-100">
@@ -68,7 +73,8 @@
               </div>
               <div class="p-0 w-25 turbineDiagram">
                 <app-turbine-diagram *ngIf="mediumToLowPressureTurbine" [noOutletConnection]="false" [turbine]="mediumToLowPressureTurbine"
-                  [inletColor]="'medium-pressure'" [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)"></app-turbine-diagram>
+                  [inletColor]="'medium-pressure'" [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)"
+                  [turbineType]="'mediumToLow'" (emitSelectEquipment)="selectTable('mediumToLowPressureTurbine')"></app-turbine-diagram>
               </div>
               <div class="p-0 w-25">
                 <app-turbine-connector *ngIf="highToLowPressureTurbine && mediumPressureHeader" [noOutletConnection]="false"
@@ -84,7 +90,8 @@
           <div class="p-0 d-flex justify-content-end">
             <div class="w-100">
               <app-header-diagram *ngIf="lowPressureHeader" [header]="lowPressureHeader" [pressureLevel]="'lowPressure'"
-                [condensate]="lowPressureCondensate" [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage" (emitSetHover)="setHover($event)"></app-header-diagram>
+                [condensate]="lowPressureCondensate" [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"
+                (emitSetHover)="setHover($event)"></app-header-diagram>
             </div>
           </div>
         </div>
@@ -95,8 +102,10 @@
       <div class="d-flex w-100 pl-4">
         <div class="d-flex flex-fill">
           <div class="p-0 w-25 deaerator-margin">
-            <app-deaerator-diagram *ngIf="lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'low-pressure'" (emitSetHover)="setHover($event)"></app-deaerator-diagram>
-            <app-deaerator-diagram *ngIf="!lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'high-pressure'" (emitSetHover)="setHover($event)"></app-deaerator-diagram>
+            <app-deaerator-diagram *ngIf="lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'low-pressure'"
+              (emitSetHover)="setHover($event)"></app-deaerator-diagram>
+            <app-deaerator-diagram *ngIf="!lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'high-pressure'"
+              (emitSetHover)="setHover($event)"></app-deaerator-diagram>
           </div>
           <div class="w-25 deaerator-condensate-padding">
             <app-turbine-connector *ngIf="condensingTurbine" [noOutletConnection]="false" [noInletConnection]="lowPressureHeader != undefined"
@@ -116,7 +125,8 @@
       </div>
       <div class="p-0 d-flex">
         <div class="w-100">
-          <app-return-condensate-header [makeupWaterAndCondensateHeader]="makeupWaterAndCondensateHeader" (emitSetHover)="setHover($event)"></app-return-condensate-header>
+          <app-return-condensate-header [makeupWaterAndCondensateHeader]="makeupWaterAndCondensateHeader"
+            (emitSetHover)="setHover($event)"></app-return-condensate-header>
         </div>
       </div>
       <div class="p-0 d-flex">
@@ -143,10 +153,11 @@
       <div class="pt-4" *ngIf="tabSelect == 'results'">
         <app-cost-table *ngIf="selectedTable == 'cost'"></app-cost-table>
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
-        <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low'" [turbine]="highToLowPressureTurbine"></app-turbine-table>
-        <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'" [turbineName]="'High to Medium'"
+        <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
+          [turbine]="highToLowPressureTurbine"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'" [turbineName]="'High to Medium Pressure'"
           [turbine]="highPressureToMediumPressureTurbine"></app-turbine-table>
-        <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'" [turbineName]="'Medium to Low'"
+        <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'" [turbineName]="'Medium to Low Pressure'"
           [turbine]="mediumToLowPressureTurbine"></app-turbine-table>
         <app-turbine-table *ngIf="selectedTable == 'condensingTurbine'" [turbineName]="'Condensing'" [turbine]="condensingTurbine"></app-turbine-table>
       </div>
