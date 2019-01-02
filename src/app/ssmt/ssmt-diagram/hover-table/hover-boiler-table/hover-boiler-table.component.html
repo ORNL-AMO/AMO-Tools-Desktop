@@ -1,0 +1,19 @@
+<div class="p-1">
+  <label class="group-label">Boiler Properties</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold pr-2 pl-2">Fuel Energy</td>
+        <td class="text-center pr-2 pl-2">{{boiler.fuelEnergy | number:'1.0-2'}} </td>
+        <td class="bold pr-2 pl-2">Combustion Efficiency</td>
+        <td class="text-center pr-2 pl-2"> {{boilerInput.combustionEfficiency}} %</td>
+      </tr>
+      <tr>
+        <td class="bold pr-2 pl-2">Steam Temperature</td>
+        <td class="text-center pr-2 pl-2"> {{boilerInput.steamTemperature}}</td>
+        <td class="bold pr-2 pl-2">Blowdown Rate</td>
+        <td class="text-center pr-2 pl-2"> {{boilerInput.blowdownRate | number:'1.0-2'}} %</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

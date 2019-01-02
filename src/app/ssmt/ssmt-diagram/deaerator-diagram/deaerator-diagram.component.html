@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="d-flex margin-left-less">
   <div class="d-flex flex-column pt-3 w-100">
     <div class="d-flex justify-content-center w-100">
       <div class="vents" (mouseenter)="hoverEquipment('ventsHovered')" (mouseleave)="hoverEquipment('default')">
@@ -10,7 +10,7 @@
       <div class="d-flex justify-content-center flex-fill">
         <div class="w-100 feedwater" (mouseenter)="hoverEquipment('feedwaterHovered')" (mouseleave)="hoverEquipment('default')">
           <span class="fa fa-chevron-left"></span>
-          <!-- {{deaerator.feedwaterMassFlow |number:'1.0-2'}} -->
+          {{deaerator.feedwaterMassFlow |number:'1.0-2'}}
         </div>
       </div>
       <div class="d-flex">
@@ -18,7 +18,7 @@
       </div>
       <div class="d-flex justify-content-center flex-fill">
         <div class="w-100 inlet-pressure-tube" [ngClass]="inletPressure" (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')">
-          <span class="fa fa-chevron-left"></span> 
+          <span class="fa fa-chevron-left"></span>
           <!-- {{deaerator.inletSteamMassFlow |number:'1.0-2'}} -->
         </div>
       </div>

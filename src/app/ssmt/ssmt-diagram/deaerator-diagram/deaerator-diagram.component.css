@@ -4,8 +4,9 @@
 }
 
 .feedwater{
-    margin-top: 23px;
-    margin-right: -10px;
+    width: 100px;
+    margin-top: 17px;
+    margin-right: -7px;
 }
 
 .vents{
@@ -31,4 +32,8 @@
 .low-pressure-column{
     margin-top: -1rem;
     margin-left: -5px;
+}
+
+.margin-left-less{
+    margin-left: -7px;
 }

@@ -25,6 +25,13 @@ import { MakeupWaterDiagramComponent } from './makeup-water-diagram/makeup-water
 import { BlowdownFlashTankComponent } from './blowdown-flash-tank/blowdown-flash-tank.component';
 import { CondensateConnectorComponent } from './condensate-connector/condensate-connector.component';
 import { OneHeaderConnectorComponent } from './one-header-connector/one-header-connector.component';
+import { HoverTableComponent } from './hover-table/hover-table.component';
+import { HoverBoilerTableComponent } from './hover-table/hover-boiler-table/hover-boiler-table.component';
+import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
+import { HoverTurbineTableComponent } from './hover-table/hover-turbine-table/hover-turbine-table.component';
+import { HoverBoilerSteamTableComponent } from './hover-table/hover-boiler-steam-table/hover-boiler-steam-table.component';
+import { HoverHeaderTableComponent } from './hover-table/hover-header-table/hover-header-table.component';
+import { FeedwaterDiagramComponent } from './feedwater-diagram/feedwater-diagram.component';
 
 @NgModule({
   imports: [
@@ -55,10 +62,19 @@ import { OneHeaderConnectorComponent } from './one-header-connector/one-header-c
     MakeupWaterDiagramComponent,
     BlowdownFlashTankComponent,
     CondensateConnectorComponent,
-    OneHeaderConnectorComponent
+    OneHeaderConnectorComponent,
+    HoverTableComponent,
+    HoverBoilerTableComponent,
+    HoverTurbineTableComponent,
+    HoverBoilerSteamTableComponent,
+    HoverHeaderTableComponent,
+    FeedwaterDiagramComponent
   ],
   exports: [
     SsmtDiagramComponent
+  ],
+  providers:[
+    CalculateModelService
   ]
 })
 export class SsmtDiagramModule { }

@@ -94,3 +94,22 @@
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
+
+
+.ssmt-diagram td{
+    /* width: 25%; */
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+}
+
+.ssmt-diagram tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.ssmt-diagram .group-label{
+    font-weight: bold;
+    font-size: larger;
+}

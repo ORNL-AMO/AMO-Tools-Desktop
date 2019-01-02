@@ -33,7 +33,6 @@ import { InitializePropertiesService } from './ssmt-calculations/initialize-prop
 import { ModelerUtilitiesService } from './ssmt-calculations/modeler-utilities.service';
 import { RunModelService } from './ssmt-calculations/run-model.service';
 import { SteamModelCalculationService } from './ssmt-calculations/steam-model-calculation.service';
-import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
 import { SsmtReportComponent } from './ssmt-report/ssmt-report.component';
 import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
 @NgModule({
@@ -67,7 +66,7 @@ import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
     CondensingTurbineFormComponent,
     PressureTurbineFormComponent,
     SsmtSankeyComponent,
-    SsmtReportComponent
+    SsmtReportComponent,
   ],
   providers: [
     SsmtService,
@@ -79,8 +78,7 @@ import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
     InitializePropertiesService,
     ModelerUtilitiesService,
     RunModelService,
-    SteamModelCalculationService,
-    CalculateModelService
+    SteamModelCalculationService
   ]
 })
 export class SsmtModule { }
