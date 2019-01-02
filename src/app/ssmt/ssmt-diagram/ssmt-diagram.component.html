@@ -92,13 +92,13 @@
           condensate
         </div> -->
       </div>
-      <div class="d-flex w-100">
+      <div class="d-flex w-100 pl-4">
         <div class="d-flex flex-fill">
-          <div class="p-0 w-25">
+          <div class="p-0 w-25 deaerator-margin">
             <app-deaerator-diagram *ngIf="lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'low-pressure'" (emitSetHover)="setHover($event)"></app-deaerator-diagram>
             <app-deaerator-diagram *ngIf="!lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'high-pressure'" (emitSetHover)="setHover($event)"></app-deaerator-diagram>
           </div>
-          <div class="pl-4 w-25">
+          <div class="w-25 deaerator-condensate-padding">
             <app-turbine-connector *ngIf="condensingTurbine" [noOutletConnection]="false" [noInletConnection]="lowPressureHeader != undefined"
               [inletColor]="'makeup-water'" (emitSetHover)="setHover($event)"></app-turbine-connector>
           </div>

@@ -1,6 +1,6 @@
-<div class="d-flex margin-left-less">
+<div class="d-flex">
   <div class="d-flex flex-column pt-3 w-100">
-    <div class="d-flex justify-content-center w-100">
+    <div class="d-flex justify-content-center w-100 makeup-water-padding">
       <div class="vents" (mouseenter)="hoverEquipment('ventsHovered')" (mouseleave)="hoverEquipment('default')">
         <span class="fa fa-chevron-up"></span>
       </div>
@@ -8,9 +8,9 @@
     </div>
     <div class="d-flex align-items-center w-100">
       <div class="d-flex justify-content-center flex-fill">
-        <div class="w-100 feedwater" (mouseenter)="hoverEquipment('feedwaterHovered')" (mouseleave)="hoverEquipment('default')">
+        <div class="feedwater text-center" (mouseenter)="hoverEquipment('feedwaterHovered')" (mouseleave)="hoverEquipment('default')">
           <span class="fa fa-chevron-left"></span>
-          {{deaerator.feedwaterMassFlow |number:'1.0-2'}}
+          <!-- {{deaerator.feedwaterMassFlow |number:'1.0-2'}} -->
         </div>
       </div>
       <div class="d-flex">
@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-center w-100">
+    <div class="d-flex justify-content-center w-100 makeup-water-padding">
       <div class="makeup-water" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')" (mouseleave)="hoverEquipment('default')">
         <span class="fa fa-chevron-up"></span>
       </div>
