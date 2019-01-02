@@ -9,6 +9,9 @@ import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 export class FlashTankTableComponent implements OnInit {
   @Input()
   flashTank: FlashTankOutput;
+  @Input()
+  flashTankType: string;
+  
   constructor() { }
 
   ngOnInit() {

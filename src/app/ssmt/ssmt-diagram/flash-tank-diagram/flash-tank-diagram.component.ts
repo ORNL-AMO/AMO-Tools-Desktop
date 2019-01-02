@@ -13,11 +13,16 @@ export class FlashTankDiagramComponent implements OnInit {
   steamPressure: string;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
+  @Input()
+  flashTankType: string;
 
   constructor() { }
 
   ngOnInit() {
   }
+
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }
@@ -27,12 +32,26 @@ export class FlashTankDiagramComponent implements OnInit {
   }
 
   hoverHeader() {
-    if (this.steamPressure == 'high-pressure') {
-      this.emitSetHover.emit('highPressureHovered');
-    } else if (this.steamPressure == 'medium-pressure') {
+    if (this.steamPressure == 'medium-pressure') {
       this.emitSetHover.emit('mediumPressureHovered');
     } else if (this.steamPressure == 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
+    }
+  }
+
+  selectEquipment() {
+    if (this.flashTankType == 'highPressure') {
+      this.emitSelectEquipment.emit('highPressureFlashTank');
+    } else if (this.flashTankType == 'mediumPressure') {
+      this.emitSelectEquipment.emit('mediumPressureFlashTank');
+    }
+  }
+
+  hoverFlashTank() {
+    if (this.flashTankType == 'highPressure') {
+      this.emitSetHover.emit('highPressureFlashTankHovered');
+    } else if (this.flashTankType == 'mediumPressure') {
+      this.emitSetHover.emit('mediumPressureFlashTankHovered');
     }
   }
 }

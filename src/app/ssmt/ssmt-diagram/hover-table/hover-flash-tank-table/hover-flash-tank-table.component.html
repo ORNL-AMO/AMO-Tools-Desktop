@@ -1,0 +1,19 @@
+<div class="p-1">
+    <label class="group-label">{{flashTankType}} Condensate Flash Tank</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold pr-2 pl-2">Pressure</td>
+          <td class="text-center pr-2 pl-2">{{flashTank.outletGasPressure | number:'1.0-2'}} </td>
+          <td class="bold pr-2 pl-2">Inlet Mass Flow</td>
+          <td class="text-center pr-2 pl-2"> {{flashTank.inletWaterMassFlow | number:'1.0-2'}}</td>
+        </tr>
+        <tr>
+          <td class="bold pr-2 pl-2">Gas Mass Flow</td>
+          <td class="text-center pr-2 pl-2"> {{flashTank.outletGasMassFlow | number:'1.0-2'}}</td>
+          <td class="bold pr-2 pl-2">Liquid Mass Flow</td>
+          <td class="text-center pr-2 pl-2"> {{flashTank.outletLiquidMassFlow | number:'1.0-2'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

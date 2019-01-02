@@ -11,6 +11,9 @@
     <app-hover-turbine-table *ngIf="hoveredEquipment == 'condensingTurbineHovered'" [turbineType]="'condensing'"></app-hover-turbine-table>
     <app-hover-turbine-table *ngIf="hoveredEquipment == 'highToLowTurbineHovered'" [turbineType]="'highToLow'"></app-hover-turbine-table>
     <app-hover-turbine-table *ngIf="hoveredEquipment == 'highToMediumTurbineHovered'" [turbineType]="'highToMedium'"></app-hover-turbine-table>
-    <app-hover-turbine-table *ngIf="hoveredEquipment == 'mediumToLowTurbineHovered'" [turbineType]="'mediumToLow'"></app-hover-turbine-table>  
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'mediumToLowTurbineHovered'" [turbineType]="'mediumToLow'"></app-hover-turbine-table>
+    <app-hover-flash-tank-table *ngIf="hoveredEquipment == 'highPressureFlashTankHovered'" [flashTankType]="'High Pressure'"></app-hover-flash-tank-table>
+    <app-hover-flash-tank-table *ngIf="hoveredEquipment == 'mediumPressureFlashTankHovered'" [flashTankType]="'Medium Pressure'"></app-hover-flash-tank-table>
+
   </div>
 </div>

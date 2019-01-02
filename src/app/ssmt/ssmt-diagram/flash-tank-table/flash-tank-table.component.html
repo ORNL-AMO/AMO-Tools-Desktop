@@ -1,154 +1,64 @@
-<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="d-flex flex-column">
   <div class="p-1">
-    Inlet Water Mass Flow: {{flashTank.inletWaterMassFlow | number:'1.0-2'}}
-  </div>
-  <div class="p-1 d-flex justify-content-center">
-    <img src="assets/images/calculator-icons/steam-icons/flash-tank.png" class="flash-tank-img">
-  </div>
-  <div class="p-1">
-    Outlet Steam Mass Flow: {{flashTank.outletGasMassFlow | number:'1.0-2'}}
-  </div>
-  <div class="p-1">
-    Outlet Condensate: {{flashTank.outletLiquidMassFlow |number:'1.0-2'}}
-  </div>
-</div>
-
-
-
-<div class="d-flex" *ngIf="showData">
-  <div class="p-1">
-    <label class="group-label">Inlet Water</label>
+    <label class="group-label">{{flashTankType}} Pressure Condensate Flash Tank Properties</label>
     <table class="table table-hover table-striped">
       <tbody>
         <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{flashTank.inletWaterPressure |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
+          <td></td>
+          <td class="bold text-center">Inlet</td>
+          <td class="bold text-center">Steam Out</td>
+          <td class="bold text-center">Liquid Out</td>
         </tr>
         <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{flashTank.inletWaterTemperature |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
+          <td class="bold">Pressure</td>
+          <td class="text-center">{{flashTank.inletWaterPressure | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasPressure | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidPressure | number:'1.0-2'}}</td>
         </tr>
         <tr>
-          <td class="bold w-50">Saturated</td>
-          <td class="text-center w-50">{{flashTank.inletWaterQuality}}</td>
+          <td class="bold">Temperature</td>
+          <td class="text-center">{{flashTank.inletWaterTemperature | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasTemperature | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidTemperature | number:'1.0-2'}}</td>
+        </tr>
 
+        <tr>
+          <td class="bold">Specific Enthalpy</td>
+          <td class="text-center">{{flashTank.inletWaterSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidSpecificEnthalpy | number:'1.0-2'}}</td>
         </tr>
         <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{flashTank.inletWaterMassFlow |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
+          <td class="bold">Specific Entropy</td>
+          <td class="text-center">{{flashTank.inletWaterSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidSpecificEntropy | number:'1.0-2'}}</td>
+        </tr>
+        <tr>
+          <td class="bold">Phast / Quality</td>
+          <td class="text-center">
+            {{flashTank.inletWaterQuality | number:'1.0-2'}}
+          </td>
+          <td class="text-center">
+            {{flashTank.outletGasQuality | number:'1.0-2'}}
+          </td>
+          <td class="text-center">
+            {{flashTank.outletLiquidQuality | number:'1.0-2'}}
+            <!-- <span *ngIf="flashTank.inletQuality == 0">Liquid</span>
+                  <span *ngIf="flashTank.inletQuality == 1">Gas</span> -->
           </td>
         </tr>
         <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{flashTank.inletWaterSpecificEnthalpy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
+          <td class="bold">Mass Flow</td>
+          <td class="text-center">{{flashTank.inletWaterMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidMassFlow | number:'1.0-2'}}</td>
         </tr>
         <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{flashTank.inletWaterSpecificEntropy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{flashTank.inletWaterEnergyFlow |number:'2.0-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
-
-    <label class="group-label">Outlet Gas</label>
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{flashTank.outletGasPressure |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{flashTank.outletGasTemperature |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Saturated</td>
-          <td class="text-center w-50">{{flashTank.outletGasQuality}}</td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{flashTank.outletGasMassFlow |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{flashTank.outletGasSpecificEnthalpy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{flashTank.outletGasSpecificEntropy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{flashTank.outletGasEnergyFlow |number:'2.0-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
-    <label class="group-label">Outlet Liquid</label>
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{flashTank.outletLiquidPressure |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{flashTank.outletLiquidTemperature |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Saturated</td>
-          <td class="text-center w-50">{{flashTank.outletLiquidQuality}}</td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{flashTank.outletLiquidMassFlow |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{flashTank.outletLiquidSpecificEnthalpy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{flashTank.outletLiquidSpecificEntropy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{flashTank.outletLiquidEnergyFlow |number:'2.0-2'}}</td>
+          <td class="bold">Energy Flow</td>
+          <td class="text-center">{{flashTank.inletWaterEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidEnergyFlow | number:'1.0-2'}}</td>
         </tr>
       </tbody>
     </table>

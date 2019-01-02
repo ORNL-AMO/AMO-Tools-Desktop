@@ -25,3 +25,27 @@
 .chevron-margin{
     margin-bottom: -5px;
 }
+
+.flash-tank-img-holder{
+    position: relative;
+    margin-right: -55%;
+}
+
+.flash-tank-img-holder .flash-tank-label{
+    position: absolute;
+    z-index: +1;
+    background-color: white;
+    font-weight: bolder;
+    width: 50px;
+    opacity: 0.7;
+    text-align: center;
+    right: 25%;
+    font-size: smaller;
+}
+
+
+.flash-tank-img-holder .flash-tank-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 1;
+}
