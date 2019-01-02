@@ -29,7 +29,7 @@ export class TurbineDiagramComponent implements OnInit {
 
   hoverInlet() {
     if (this.inletColor == 'makeup-water') {
-      this.emitSetHover.emit('makeupWaterHovered');
+      this.emitSetHover.emit('makeupWaterCondensateHovered');
     } else if (this.inletColor == 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
     } else if (this.inletColor == 'medium-pressure') {
@@ -41,7 +41,7 @@ export class TurbineDiagramComponent implements OnInit {
 
   hoverOutlet() {
     if (this.outletColor == 'makeup-water') {
-      this.emitSetHover.emit('makeupWaterHovered');
+      this.emitSetHover.emit('makeupWaterCondensateHovered');
     } else if (this.outletColor == 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
     } else if (this.outletColor == 'medium-pressure') {

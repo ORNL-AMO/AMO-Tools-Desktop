@@ -29,7 +29,14 @@
     background-color: #43A047;
     color: white;
 }
-.ssmt-diagram.makeupWaterHovered .makeup-water{
+
+.ssmt-diagram .makeup-water-box{
+    border: #43A047 solid 3px;
+}
+
+.ssmt-diagram.makeupWaterCondensateHovered .makeup-water,
+.ssmt-diagram.makeupWaterHovered .makeup-water-box
+{
     box-shadow: 0px 0px 10px 0px #43A047;
     cursor: pointer;
 }
