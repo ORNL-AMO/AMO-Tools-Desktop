@@ -15,6 +15,8 @@ export class PrvDiagramComponent implements OnInit {
   outletSteam: string;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
 
   constructor() { }
 
@@ -40,4 +42,29 @@ export class PrvDiagramComponent implements OnInit {
       this.emitSetHover.emit('mediumPressureHovered');
     }
   }
+
+  selectEquipment(){
+    if(this.inletSteam == 'high-pressure'){
+      if(this.outletSteam == 'medium-pressure'){
+        this.emitSelectEquipment.emit('highToMediumPressurePRV');
+      }else{
+        this.emitSelectEquipment.emit('lowPressurePRV');
+      }
+    }else if(this.inletSteam == 'medium-pressure'){
+      this.emitSelectEquipment.emit('lowPressurePRV');
+    }
+  }
+
+  hoverPRV(){
+    if(this.inletSteam == 'high-pressure'){
+      if(this.outletSteam == 'medium-pressure'){
+        this.emitSetHover.emit('highToMediumPressurePRVHovered');
+      }else{
+        this.emitSetHover.emit('lowPressurePRVHovered');
+      }
+    }else if(this.inletSteam == 'medium-pressure'){
+      this.emitSetHover.emit('lowPressurePRVHovered');
+    }
+  }
+  
 }

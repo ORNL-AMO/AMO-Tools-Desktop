@@ -12,7 +12,7 @@
     <!-- <div class="d-flex outletGas h-100 w-100 text-center" [ngClass]="steamPressure">
       <span class="fa fa-chevron-right feedwater"></span> {{prv.feedwaterMassFlow | number:'1.0-2'}}
     </div> -->
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center" (click)="selectEquipment()" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
       <div class="prv-img-holder">
           <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
         <span class="prv-label">PRV</span>

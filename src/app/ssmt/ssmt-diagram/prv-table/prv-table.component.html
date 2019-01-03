@@ -1,200 +1,72 @@
-
-
-<div class="d-flex" *ngIf="showData">
+<div class="d-flex flex-column">
   <div class="p-1">
-    <label class="group-label">Inlet</label>
+    <label class="group-label">PRV</label>
     <table class="table table-hover table-striped">
       <tbody>
         <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{prv.inletPressure |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
+          <td></td>
+          <td class="bold text-center">Steam In</td>
+          <td class="bold text-center">Steam Out</td>
+          <td class="bold text-center" *ngIf="prv.feedwaterMassFlow">Feedwater</td>
         </tr>
         <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{prv.inletTemperature |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
+          <td class="bold">Pressure</td>
+          <td class="text-center">{{prv.inletPressure | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletPressure | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterPressure |number:'2.0-2'}}</td>
+
         </tr>
         <tr>
-          <td class="bold w-50">Phase</td>
-          <td class="text-center w-50">
+          <td class="bold">Temperature</td>
+          <td class="text-center">{{prv.inletTemperature | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletTemperature | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterTemperature |number:'2.0-2'}}</td>
+
+        </tr>
+
+        <tr>
+          <td class="bold">Specific Enthalpy</td>
+          <td class="text-center">{{prv.inletSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterSpecificEnthalpy |number:'2.0-2'}}</td>
+
+        </tr>
+        <tr>
+          <td class="bold">Specific Entropy</td>
+          <td class="text-center">{{prv.inletSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterSpecificEntropy |number:'2.0-2'}}</td>
+
+        </tr>
+        <tr>
+          <td class="bold">Phast / Quality</td>
+          <td class="text-center">
             <span *ngIf="prv.inletQuality == 0">Liquid</span>
             <span *ngIf="prv.inletQuality == 1">Gas</span>
             <span *ngIf="prv.inletQuality != 0 && prv.inletQuality != 1">{{prv.inletQuality}}</span>
           </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{prv.inletMassFlow |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{prv.inletSpecificEnthalpy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{prv.inletSpecificEntropy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{prv.inletEnergyFlow |number:'2.0-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
-
-    <label class="group-label">Outlet</label>
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{prv.outletPressure |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{prv.outletTemperature |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Phase</td>
-          <td class="text-center w-50">
+          <td class="text-center">
             <span *ngIf="prv.outletQuality == 0">Liquid</span>
             <span *ngIf="prv.outletQuality == 1">Gas</span>
             <span *ngIf="prv.outletQuality != 0 && prv.outletQuality != 1">{{prv.outletQuality}}</span>
           </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{prv.outletMassFlow |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{prv.outletSpecificEnthalpy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{prv.outletSpecificEntropy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{prv.outletEnergyFlow |number:'2.0-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
-
-    <label class="group-label" *ngIf="isSuperHeating">Feedwater</label>
-    <table class="table table-hover table-striped" *ngIf="isSuperHeating">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{prv.feedwaterPressure |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{prv.feedwaterTemperature |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Phase</td>
-          <td class="text-center w-50">
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">
             <span *ngIf="prv.feedwaterQuality == 0">Liquid</span>
             <span *ngIf="prv.feedwaterQuality == 1">Gas</span>
             <span *ngIf="prv.feedwaterQuality != 0 && prv.feedwaterQuality != 1">{{prv.feedwaterQuality}}</span>
           </td>
         </tr>
         <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{prv.feedwaterMassFlow |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
+          <td class="bold">Mass Flow</td>
+          <td class="text-center">{{prv.inletMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterMassFlow |number:'2.0-2'}}</td>
         </tr>
         <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{prv.feedwaterSpecificEnthalpy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{prv.feedwaterSpecificEntropy |number:'2.0-2'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{prv.feedwaterEnergyFlow |number:'2.0-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-1">
-    <label>Feedwater</label>
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <td class="bold w-50">Pressure</td>
-          <td class="text-center w-50">{{prv.feedwaterPressure |sigFigs: '6'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Temperature</td>
-          <td class="text-center w-50">{{prv.feedwaterTemperature |sigFigs: '6'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Phase</td>
-          <td class="text-center w-50">
-            <span *ngIf="prv.feedwaterQuality == 0">Liquid</span>
-            <span *ngIf="prv.feedwaterQuality == 1">Gas</span>
-            <span *ngIf="prv.feedwaterQuality != 0 && prv.feedwaterQuality != 1">{{prv.feedwaterQuality}}</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Mass Flow</td>
-          <td class="text-center w-50">{{prv.feedwaterMassFlow |sigFigs: '6'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamMassFlowMeasurement)">/hr</span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Enthalpy</td>
-          <td class="text-center w-50">{{prv.feedwaterSpecificEnthalpy |sigFigs: '6'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEnthalpyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Specific Entropy</td>
-          <td class="text-center w-50">{{prv.feedwaterSpecificEntropy |sigFigs: '6'}}
-            <!-- <span [innerHTML]="getDisplayUnit(settings.steamSpecificEntropyMeasurement)"></span> -->
-          </td>
-        </tr>
-        <tr>
-          <td class="bold w-50">Energy Flow</td>
-          <td class="text-center w-50">{{prv.feedwaterEnergyFlow |sigFigs: '6'}}</td>
+          <td class="bold">Energy Flow</td>
+          <td class="text-center">{{prv.inletEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterEnergyFlow |number:'2.0-2'}}</td>
         </tr>
       </tbody>
     </table>

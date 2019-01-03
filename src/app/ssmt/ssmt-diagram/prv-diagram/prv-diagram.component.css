@@ -7,6 +7,10 @@
     z-index: +1;
 }
 
+.prv-img:hover{
+    cursor: pointer;
+}
+
 .prv-diagram{
     min-height: 100px;
 }
@@ -32,6 +36,11 @@
 }
 
 
+.prv-label:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .outlet-temp-holder .outlet-temp{
     position: absolute;
     top: 10px;
@@ -48,3 +57,18 @@
     z-index: +1;
     left: 25px;
 }
+
+/* .prv-img-holder  .feedwater-inlet{
+    position: relative;
+    left: 40px;
+    top: 0px;
+    width: 100px;
+}
+
+
+.prv-img-holder  .feedwater-inlet .feedwater-mass-flow{
+    position: relative;
+    left: 40px;
+    top: 25px;
+    width: 100px;
+} */

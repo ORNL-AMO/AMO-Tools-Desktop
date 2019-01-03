@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
+import { PrvOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-prv-hover-table',
@@ -6,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./prv-hover-table.component.css']
 })
 export class PrvHoverTableComponent implements OnInit {
+  @Input()
+  prvType: string;
 
-  constructor() { }
+  prv: PrvOutput;
+  constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
+    if(this.prvType == 'highToMediumPressurePRV'){
+      this.prv = this.calculateModelService.highToMediumPressurePRV;
+    }else if(this.prvType == 'lowPressurePRV'){
+      this.prv = this.calculateModelService.lowPressurePRV;
+    }
   }
 
 }
