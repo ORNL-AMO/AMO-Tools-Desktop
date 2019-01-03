@@ -1,5 +1,10 @@
 <div class="d-flex flex-column h-100 w-100 justify-content-center">
   <div class="d-flex chevron-one justify-content-center flex-fill" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')">
+    <div class="inlet-mass-flow-holder">
+      <span class="inlet-mass-flow">
+        {{turbine.massFlow | number:'1.0-2'}} klb/hr
+      </span>
+    </div>
     <span class="fa fa-chevron-down" [ngClass]="inletColor"></span>
   </div>
 
@@ -12,6 +17,11 @@
 
   <div class="d-flex chevron-two justify-content-center flex-fill" [ngClass]="{'mb-1': noOutletConnection}"
     (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')">
+    <div class="outlet-power-holder">
+      <span class="outlet-power">
+        {{turbine.powerOut | number:'1.0-2'}} kW
+      </span>
+    </div>
     <span class="fa fa-chevron-down" [ngClass]="outletColor"></span>
   </div>
 </div>

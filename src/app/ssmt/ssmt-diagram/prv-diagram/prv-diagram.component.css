@@ -1,7 +1,7 @@
 
 .prv-img{
-    height: 55px;
-    margin-left: -30%;
+    height: 70px;
+    margin-left: -7.5px;
     margin-top: -50%;
     margin-bottom: -50%;
     z-index: +1;
@@ -9,4 +9,42 @@
 
 .prv-diagram{
     min-height: 100px;
+}
+
+
+.prv-img-holder, .outlet-temp-holder, .inlet-mass-flow-holder{
+    position: relative;
+}
+
+.prv-img-holder .prv-label{
+    position: absolute;
+    z-index: +1;
+    background-color: white;
+    font-weight: bolder;
+    /* width: 40px; */
+    opacity: 0.9;
+    text-align: center;
+    right: 0px;
+    /* font-size: smaller; */
+    bottom: 32px;
+    width: 35px;
+    text-align: center;
+}
+
+
+.outlet-temp-holder .outlet-temp{
+    position: absolute;
+    top: 10px;
+    width: 100px;
+    z-index: +1;
+    left: 25px;
+}
+
+
+.inlet-mass-flow-holder .inlet-mass-flow{
+    position: absolute;
+    top: 5px;
+    width: 100px;
+    z-index: +1;
+    left: 25px;
 }

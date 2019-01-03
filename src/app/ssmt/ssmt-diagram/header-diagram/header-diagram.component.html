@@ -1,5 +1,5 @@
 <div class="d-flex w-100" [ngClass]="pressureLevel">
-  <div class="d-flex header-tube align-content-center border-padding" (mouseenter)="hoverHeader()" (mouseleave)="hoverEquipment('default')">
+  <div class="d-flex header-tube align-content-center" (mouseenter)="hoverHeader()" (mouseleave)="hoverEquipment('default')">
     <div class="flex-fill">
       <span class="header-pressure">
         {{header.pressure | number:'1.0-2'}} psig
@@ -21,7 +21,7 @@
         </span>
       </div>
     </div>
-    <div class="flex-fill condensate text-center border-padding" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
+    <div class="flex-fill condensate text-center" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
       <div class="condensate-holder">
         <span class="fa fa-chevron-right pr-1"></span>
         <span class="condensate-mass-flow">

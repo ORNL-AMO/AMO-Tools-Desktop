@@ -1,5 +1,10 @@
 <div class="d-flex flex-column h-100 w-100 prv-diagram">
   <div class="d-flex chevron-one flex-fill">
+    <div class="inlet-mass-flow-holder">
+      <span class="inlet-mass-flow">
+        {{prv.inletMassFlow | number:'1.0-1'}} klb/hr
+      </span>
+    </div>
     <span class="fa fa-chevron-down pb-1" [ngClass]="inletSteam" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')"></span>
   </div>
 
@@ -8,11 +13,19 @@
       <span class="fa fa-chevron-right feedwater"></span> {{prv.feedwaterMassFlow | number:'1.0-2'}}
     </div> -->
     <div class="d-flex justify-content-center">
-      <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
+      <div class="prv-img-holder">
+          <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
+        <span class="prv-label">PRV</span>
+      </div>
     </div>
   </div>
 
   <div class="d-flex chevron-one flex-fill">
+    <div class="outlet-temp-holder">
+      <span class="outlet-temp">
+        {{prv.outletTemperature | number:'1.0-2'}} &#8457;
+      </span>
+    </div>
     <span class="fa fa-chevron-down" [ngClass]="outletSteam" (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')"></span>
   </div>
 </div>

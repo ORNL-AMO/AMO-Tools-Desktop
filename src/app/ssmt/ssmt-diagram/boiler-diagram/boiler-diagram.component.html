@@ -20,7 +20,7 @@
       <div class="boiler-steam-holder" (mouseenter)="hoverEquipment('boilerSteamHovered')">
         <span class="boiler-mass-flow">{{boiler.steamMassFlow | number:'1.0-2'}} klb/hr</span>
         <span class="fa fa-chevron-right hidden-chevron"></span>
-        <span class="boiler-temperature">{{boiler.steamMassFlow | number:'1.0-2'}} &#8457;</span>
+        <span class="boiler-temperature">{{boiler.steamTemperature | number:'1.0-2'}} &#8457;</span>
       </div>
     </div>
     <div class="blowdown blowdown-one text-center mr-1 pl-2" (mouseenter)="hoverEquipment('blowdownHovered')"

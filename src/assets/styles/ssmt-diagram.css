@@ -45,6 +45,10 @@
     cursor: pointer;
 }
 
+.makeup-water .hidden-chevron{
+    color: #43A047;
+}
+
 .ssmt-diagram .high-pressure{
     background-color: #C0392B;
     color: white;
