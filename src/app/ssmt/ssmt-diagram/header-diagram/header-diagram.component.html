@@ -1,18 +1,33 @@
 <div class="d-flex w-100" [ngClass]="pressureLevel">
   <div class="d-flex header-tube align-content-center border-padding" (mouseenter)="hoverHeader()" (mouseleave)="hoverEquipment('default')">
-    <div class="flex-fill text-center">
-    {{header.pressure | number:'1.0-2'}}
+    <div class="flex-fill">
+      <span class="header-pressure">
+        {{header.pressure | number:'1.0-2'}} psig
+      </span>
     </div>
     <div class="text-right">
-       {{header.massFlow | number:'2.0-2'}}  <span class="fa fa-chevron-right pr-1"></span>
+      <div class="header-data-holder">
+        <span class="header-mass-flow">{{steamUsage.massFlow | number:'2.0-2'}} klb/hr</span>
+        <span class="header-energy-flow">{{steamUsage.processUsage | number:'2.0-2'}} MMBtu/hr</span>
+      </div>
+      <span class="fa fa-chevron-right header-data-chevron"></span>
     </div>
   </div>
-  <div class="d-flex flex-fill align-content-center">
-    <div class="w-50 process-usage text-center" (mouseenter)="hoverProcessUsage()" (mouseleave)="hoverEquipment('default')">
-      {{steamUsage.energyFlow | number:'1.0-2'}}
+  <div class="d-flex flex-fill">
+    <div class="text-center process-usage-width" (mouseenter)="hoverProcessUsage()" (mouseleave)="hoverEquipment('default')">
+      <div class="process-usage-holder">
+        <span class="process-usage">
+          Process Usage
+        </span>
+      </div>
     </div>
-    <div class="w-50 condensate text-center border-padding" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
-      <span class="fa fa-chevron-right pr-1"></span>{{condensate.massFlow| number:'2.0-2'}}
+    <div class="flex-fill condensate text-center border-padding" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
+      <div class="condensate-holder">
+        <span class="fa fa-chevron-right pr-1"></span>
+        <span class="condensate-mass-flow">
+          {{condensate.massFlow| number:'2.0-2'}} klb/hr
+        </span>
+      </div>
     </div>
   </div>
 </div>

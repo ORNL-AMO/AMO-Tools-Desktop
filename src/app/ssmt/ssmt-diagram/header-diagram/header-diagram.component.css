@@ -1,6 +1,6 @@
 
 .header-tube{
-    width: 85%; 
+    width: 82%; 
 }
 
 .highPressure .header-tube{
@@ -10,7 +10,7 @@
 }
 
 
-.highPressure .process-usage{
+.highPressure .process-usage-holder .process-usage{
     border: #C0392B solid 3px;
 }
 
@@ -19,7 +19,7 @@
     background-color: #FFA726;
 }
 
-.mediumPressure .process-usage{
+.mediumPressure .process-usage-holder .process-usage{
     border: #FFA726 solid 3px;
 }
 
@@ -28,8 +28,8 @@
     border-bottom-left-radius: 25px;
 }
 
-.lowPressure .process-usage{
-    border: #FFEB3B solid 3px;
+.lowPressure .process-usage-holder .process-usage{
+     border: #FFEB3B solid 3px; 
 }
 
 .condensate{
@@ -43,4 +43,83 @@
 
 .border-padding{
     padding-top: 3px;
+}
+
+.header-pressure{
+    padding-left: 30px;
+}
+
+
+.header-data-holder, .process-usage-holder, .condensate-holder{
+    position: relative;
+}
+
+.highPressure .header-data-holder .header-mass-flow{
+    position: absolute;
+    top: -35px;
+    width: 100px;
+    z-index: +1;
+    color: black;
+    left: -60px;
+}
+
+.highPressure .header-data-holder .header-energy-flow{
+    position: absolute;
+    top: -20px;
+    width: 100px;
+    z-index: +1;
+    left: -60px;
+    color: black;
+}
+
+.mediumPressure .header-data-holder .header-mass-flow,
+.lowPressure .header-data-holder .header-mass-flow{
+    position: absolute;
+    top: 20px;
+    width: 100px;
+    z-index: +1;
+    color: black;
+    left: -60px;
+}
+
+.mediumPressure .header-data-holder .header-energy-flow,
+.lowPressure .header-data-holder .header-energy-flow{
+    position: absolute;
+    top: 35px;
+    width: 100px;
+    z-index: +1;
+    left: -60px;
+    color: black;
+}
+
+
+.process-usage-holder .process-usage{
+    position: absolute;
+    width: 65px;
+    height: 45px;
+    z-index: +1;
+    color: black;
+    background: white;
+    border-color: solid 3px;
+    bottom: -30px;
+    right: 0px;
+}
+
+.process-usage-width{
+    width: 65px;
+}
+
+
+.header-data-chevron{
+    padding-right: 30px;
+}
+
+
+.condensate-mass-flow{
+    position: absolute;
+    width: 100px;
+    z-index: +1;
+    color: black;
+    bottom: -25px;
+    right: 0;
 }

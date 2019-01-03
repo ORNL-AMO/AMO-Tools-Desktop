@@ -25,6 +25,10 @@
     cursor: pointer;
 }
 
+.condensate .hidden-chevron{
+    color: #283593;
+}
+
 .ssmt-diagram .makeup-water{
     background-color: #43A047;
     color: white;
@@ -52,6 +56,10 @@
     cursor: pointer;
 }
 
+.high-pressure .hidden-chevron{
+    color: #C0392B;
+}
+
 .ssmt-diagram .medium-pressure{
     background-color: #FFA726;
 }
@@ -62,6 +70,10 @@
     cursor: pointer;
 }
 
+.medium-pressure .hidden-chevron{
+    color:#FFA726;
+}
+
 .ssmt-diagram .low-pressure{
     background-color: #FFEB3B;
 }
@@ -70,6 +82,10 @@
 .ssmt-diagram.lowPressureProcessSteamHovered .lowPressure .process-usage {
     box-shadow: 0px 0px 10px 0px #FFEB3B;
     cursor: pointer;
+}
+
+.low-pressure .hidden-chevron{
+    color: #FFEB3B;
 }
 
 .ssmt-diagram .vents{

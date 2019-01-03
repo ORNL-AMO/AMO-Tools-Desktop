@@ -7,7 +7,7 @@
 }
 
 .down-pipe{
-    height: 56.5%;
+    height: 55.5%;
     border-top-left-radius: 25px;
 }
 
@@ -37,10 +37,11 @@
     background-color: white;
     font-weight: bolder;
     width: 50px;
-    opacity: 0.7;
+    opacity: 0.9;
     text-align: center;
-    right: 25%;
+    right: 5px;
     font-size: smaller;
+    bottom: 5px;
 }
 
 

@@ -1,19 +1,25 @@
 <div class="d-flex pb-2 h-100 flex-fill w-100">
   <div class="d-flex flex-column feedwater-column">
     <div class="feedwater text-center pl-2" (mouseenter)="hoverEquipment('feedwaterHovered')" (mouseleave)="hoverEquipment('default')">
-      {{boiler.feedwaterMassFlow| number:'1.0-2'}} klb/hr<span class="fa fa-chevron-right"></span>
+      <div class="feedwater-holder">
+        <span class="feedwater-mass-flow">
+          {{boiler.feedwaterMassFlow| number:'1.0-2'}} klb/hr
+        </span>
+        <span class="fa fa-chevron-right"></span>
+      </div>
     </div>
   </div>
   <div class="d-flex boiler-img-holder" (click)="selectEquipment('boiler')">
     <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-boiler.png" class="boiler-img" (mouseleave)="hoverEquipment('default')"
       (mouseenter)="hoverEquipment('boilerHovered')">
     <span class="boiler-label" (mouseleave)="hoverEquipment('default')" (mouseenter)="hoverEquipment('boilerHovered')">Boiler</span>
+    <span class="fuel-energy">{{boiler.fuelEnergy | number:'1.0-1'}} MMBtu/hr</span>
   </div>
   <div class="d-flex flex-column outlet-column">
     <div class="high-pressure text-center pl-2" (mouseenter)="hoverEquipment('highPressureHovered')" (mouseleave)="hoverEquipment('default')">
       <div class="boiler-steam-holder" (mouseenter)="hoverEquipment('boilerSteamHovered')">
         <span class="boiler-mass-flow">{{boiler.steamMassFlow | number:'1.0-2'}} klb/hr</span>
-        <span class="fa fa-chevron-right"></span>
+        <span class="fa fa-chevron-right hidden-chevron"></span>
         <span class="boiler-temperature">{{boiler.steamMassFlow | number:'1.0-2'}} &#8457;</span>
       </div>
     </div>
@@ -24,16 +30,20 @@
   </div>
   <div class="d-flex flex-column">
     <div class="d-flex h-100 high-pressure down-pipe" (mouseenter)="hoverEquipment('highPressureHovered')" (mouseleave)="hoverEquipment('default')">
-      <span class="fa fa-chevron-down mt-auto mb-1"></span>
+      <span class="fa fa-chevron-down mb-1 pt-3"></span>
     </div>
   </div>
   <div class="d-flex flex-column">
     <div class="d-flex ml-1 blowdown-two">
       <div class="d-flex flex-fill blowdown justify-content-center pl-2" (mouseenter)="hoverEquipment('blowdownHovered')"
         (mouseleave)="hoverEquipment('default')">
-        {{boiler.blowdownMassFlow | number:'1.0-2'}} klb/hr<span class="fa fa-chevron-right"></span>
+        <div class="blowdown-holder">
+          <span class="blowdown-mass-flow">
+            {{boiler.blowdownMassFlow | number:'1.0-2'}} klb/hr
+          </span>
+          <span class="fa fa-chevron-right"></span>
+        </div>
       </div>
-      <span class="fa fa-arrow-circle-right"></span>
     </div>
   </div>
 </div>
