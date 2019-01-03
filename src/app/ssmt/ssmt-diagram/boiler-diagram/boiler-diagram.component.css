@@ -42,11 +42,6 @@
     padding-left: 2px;
 }
 
-.boiler-steam:hover{
-    opacity: .5;
-}
-
-
 .min-100{
     min-width: 100px;
 }
@@ -77,4 +72,30 @@
 .boiler-img-holder .boiler-label:hover{
     text-decoration: underline;
     cursor: pointer;
+}
+
+.boiler-steam-holder{
+    position: relative;
+}
+
+.boiler-steam-holder .boiler-mass-flow{
+    position: absolute;
+    bottom: 22px;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    left: -19px;
+}
+
+.boiler-steam-holder .boiler-temperature{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    left: 30px;
+    top: 15px;
+}
+
+.boiler-steam-holder:hover{
+    opacity: .5;
 }
