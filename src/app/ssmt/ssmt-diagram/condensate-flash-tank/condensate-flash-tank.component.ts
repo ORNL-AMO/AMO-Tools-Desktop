@@ -11,7 +11,8 @@ export class CondensateFlashTankComponent implements OnInit {
   flashTank: FlashTankOutput;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
-
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
@@ -20,6 +21,10 @@ export class CondensateFlashTankComponent implements OnInit {
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
+  }
+
+  selectEquipment() {
+    this.emitSelectEquipment.emit('condensateFlashTank');
   }
 
 }

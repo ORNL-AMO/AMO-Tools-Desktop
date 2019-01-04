@@ -122,7 +122,7 @@
           </div>
         </div>
         <div class="w-25">
-          <app-condensate-flash-tank *ngIf="condensateFlashTank" [flashTank]="condensateFlashTank" (emitSetHover)="setHover($event)"></app-condensate-flash-tank>
+          <app-condensate-flash-tank *ngIf="condensateFlashTank" [flashTank]="condensateFlashTank" (emitSetHover)="setHover($event)" (emitSelectEquipment)="selectTable($event)"></app-condensate-flash-tank>
           <app-condensate-connector *ngIf="!condensateFlashTank" (emitSetHover)="setHover($event)"></app-condensate-connector>
         </div>
       </div>
@@ -167,6 +167,8 @@
           [flashTankType]="'High'"></app-flash-tank-table>
         <app-flash-tank-table *ngIf="selectedTable == 'mediumPressureFlashTank'" [flashTank]="mediumPressureFlashTank"
           [flashTankType]="'Medium'"></app-flash-tank-table>
+          <app-flash-tank-table *ngIf="selectedTable == 'condensateFlashTank'" [flashTank]="condensateFlashTank"
+          [flashTankType]="'Condensate'"></app-flash-tank-table>
         <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prvType]="'highToMediumPressurePRV'"></app-prv-table>
         <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'"></app-prv-table>
       </div>

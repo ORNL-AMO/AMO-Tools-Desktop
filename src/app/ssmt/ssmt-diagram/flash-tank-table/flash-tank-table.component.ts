@@ -15,6 +15,9 @@ export class FlashTankTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if(this.flashTankType != 'Condensate'){
+      this.flashTankType = this.flashTankType + ' Pressure Condensate';
+    }
   }
 
 }
