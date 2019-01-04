@@ -18,5 +18,8 @@
     <app-hover-prv-table *ngIf="hoveredEquipment == 'lowPressurePRVHovered'" [prvType]="'lowPressurePRV'"></app-hover-prv-table>
     <app-hover-flash-tank-table  *ngIf="hoveredEquipment == 'condensateFlashTankHovered'" [flashTankType]="'Condensate'"></app-hover-flash-tank-table>
     <app-hover-condensate-table *ngIf="hoveredEquipment == 'condensateHovered'"></app-hover-condensate-table>
+    <app-hover-makeup-water *ngIf="hoveredEquipment == 'makeupWaterHovered'" [combined]="false"></app-hover-makeup-water>
+    <app-hover-makeup-water *ngIf="hoveredEquipment == 'makeupWaterCondensateHovered'" [combined]="true"></app-hover-makeup-water>
+
   </div>
 </div>

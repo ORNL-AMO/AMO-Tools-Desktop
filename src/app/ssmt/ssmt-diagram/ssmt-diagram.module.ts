@@ -35,6 +35,7 @@ import { FeedwaterDiagramComponent } from './feedwater-diagram/feedwater-diagram
 import { HoverFlashTankTableComponent } from './hover-table/hover-flash-tank-table/hover-flash-tank-table.component';
 import { HoverPrvTableComponent } from './hover-table/hover-prv-table/hover-prv-table.component';
 import { HoverCondensateTableComponent } from './hover-table/hover-condensate-table/hover-condensate-table.component';
+import { HoverMakeupWaterComponent } from './hover-table/hover-makeup-water/hover-makeup-water.component';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { HoverCondensateTableComponent } from './hover-table/hover-condensate-ta
     FeedwaterDiagramComponent,
     HoverFlashTankTableComponent,
     HoverPrvTableComponent,
-    HoverCondensateTableComponent
+    HoverCondensateTableComponent,
+    HoverMakeupWaterComponent
   ],
   exports: [
     SsmtDiagramComponent

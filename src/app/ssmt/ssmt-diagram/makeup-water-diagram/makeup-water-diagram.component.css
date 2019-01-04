@@ -1,3 +1,28 @@
 .up-pipe{
     border-bottom-left-radius: 25px;
 }
+
+
+.makeup-water-holder{
+    position: relative;
+}
+
+.makeup-water-holder .makeup-water-label{
+    position: absolute;
+    width: 65px;
+    height: 38px;
+    z-index: +1;
+    color: black;
+    background: #D7EDFB;
+    border-color: solid 3px;
+    bottom: -17px;
+    right: -10px;
+    text-align: center;
+}
+
+.makeup-water-label:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    box-shadow: 0px 0px 10px 0px #91cef4;
+
+}

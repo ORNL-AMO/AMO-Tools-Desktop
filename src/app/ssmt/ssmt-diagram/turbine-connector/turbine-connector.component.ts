@@ -26,7 +26,7 @@ export class TurbineConnectorComponent implements OnInit {
 
   hoverConnector() {
     if (this.inletColor == 'makeup-water') {
-      this.emitSetHover.emit('makeupWaterHovered');
+      this.emitSetHover.emit('makeupWaterCondensateHovered');
     } else if (this.inletColor == 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
     }

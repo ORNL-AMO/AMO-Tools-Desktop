@@ -1,4 +1,4 @@
-<div class="d-flex w-100 justify-content-end">
+<div class="d-flex w-100 justify-content-end pt-4">
   <div class="d-flex makeup-water up-pipe" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')" (mouseleave)="hoverEquipment('default')">
     <span class="fa fa-chevron-up"></span>
   </div>
@@ -9,7 +9,9 @@
   </div>
   <div class="d-flex pt-2 w-25" (mouseenter)="hoverEquipment('makeupWaterHovered')" (mouseleave)="hoverEquipment('default')">
     <div class="d-flex makeup-water-box justify-content-center p-1">
-      Makeup Water
+      <div class="makeup-water-holder">
+        <span class="makeup-water-label">Make-Up Water</span>
+      </div>
     </div>
   </div>
 </div>
