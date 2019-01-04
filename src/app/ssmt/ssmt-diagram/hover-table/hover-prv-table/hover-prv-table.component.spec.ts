@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrvHoverTableComponent } from './prv-hover-table.component';
+import { HoverPrvTableComponent } from './hover-prv-table.component';
 
-describe('PrvHoverTableComponent', () => {
-  let component: PrvHoverTableComponent;
-  let fixture: ComponentFixture<PrvHoverTableComponent>;
+describe('HoverPrvTableComponent', () => {
+  let component: HoverPrvTableComponent;
+  let fixture: ComponentFixture<HoverPrvTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrvHoverTableComponent ]
+      declarations: [ HoverPrvTableComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrvHoverTableComponent);
+    fixture = TestBed.createComponent(HoverPrvTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

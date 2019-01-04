@@ -3,22 +3,29 @@ import { CalculateModelService } from '../../../ssmt-calculations/calculate-mode
 import { PrvOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-prv-hover-table',
-  templateUrl: './prv-hover-table.component.html',
-  styleUrls: ['./prv-hover-table.component.css']
+  selector: 'app-hover-prv-table',
+  templateUrl: './hover-prv-table.component.html',
+  styleUrls: ['./hover-prv-table.component.css']
 })
-export class PrvHoverTableComponent implements OnInit {
+export class HoverPrvTableComponent implements OnInit {
   @Input()
   prvType: string;
 
   prv: PrvOutput;
+  prvLabel: string;
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
     if(this.prvType == 'highToMediumPressurePRV'){
       this.prv = this.calculateModelService.highToMediumPressurePRV;
+      this.prvLabel = 'High to Medium';
     }else if(this.prvType == 'lowPressurePRV'){
       this.prv = this.calculateModelService.lowPressurePRV;
+      if(this.calculateModelService.inputData.headerInput.numberOfHeaders == 3){
+        this.prvLabel = 'Medium to Low';
+      }else{
+        this.prvLabel = 'High to Low';
+      }
     }
   }
 

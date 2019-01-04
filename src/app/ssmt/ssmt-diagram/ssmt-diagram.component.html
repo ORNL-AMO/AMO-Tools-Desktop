@@ -167,8 +167,8 @@
           [flashTankType]="'High'"></app-flash-tank-table>
         <app-flash-tank-table *ngIf="selectedTable == 'mediumPressureFlashTank'" [flashTank]="mediumPressureFlashTank"
           [flashTankType]="'Medium'"></app-flash-tank-table>
-        <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prv]="highToMediumPressurePRV"></app-prv-table>
-        <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prv]="lowPressurePRV"></app-prv-table>
+        <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prvType]="'highToMediumPressurePRV'"></app-prv-table>
+        <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'"></app-prv-table>
       </div>
       <div *ngIf="tabSelect == 'help'">
         <app-diagram-help></app-diagram-help>
