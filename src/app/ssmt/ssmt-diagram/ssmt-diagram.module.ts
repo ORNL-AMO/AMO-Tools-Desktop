@@ -37,6 +37,7 @@ import { HoverPrvTableComponent } from './hover-table/hover-prv-table/hover-prv-
 import { HoverCondensateTableComponent } from './hover-table/hover-condensate-table/hover-condensate-table.component';
 import { HoverMakeupWaterComponent } from './hover-table/hover-makeup-water/hover-makeup-water.component';
 import { HoverBlowdownTableComponent } from './hover-table/hover-blowdown-table/hover-blowdown-table.component';
+import { HoverProcessUsageComponent } from './hover-table/hover-process-usage/hover-process-usage.component';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { HoverBlowdownTableComponent } from './hover-table/hover-blowdown-table/
     HoverPrvTableComponent,
     HoverCondensateTableComponent,
     HoverMakeupWaterComponent,
-    HoverBlowdownTableComponent
+    HoverBlowdownTableComponent,
+    HoverProcessUsageComponent
   ],
   exports: [
     SsmtDiagramComponent
