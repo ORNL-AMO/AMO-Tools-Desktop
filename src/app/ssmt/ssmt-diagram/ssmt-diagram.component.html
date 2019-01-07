@@ -118,7 +118,8 @@
 
           </div>
           <div class="p-0 w-25">
-            <app-blowdown-flash-tank *ngIf="blowdownFlashTank" [flashTank]="blowdownFlashTank" (emitSetHover)="setHover($event)" (emitSelectEquipment)="selectTable($event)"></app-blowdown-flash-tank>
+            <app-blowdown-flash-tank *ngIf="blowdownFlashTank" [flashTank]="blowdownFlashTank" (emitSetHover)="setHover($event)"
+              (emitSelectEquipment)="selectTable($event)"></app-blowdown-flash-tank>
           </div>
         </div>
         <div class="w-25">
@@ -130,7 +131,7 @@
       <div class="p-0 d-flex">
         <div class="w-100">
           <app-return-condensate-header [makeupWaterAndCondensateHeader]="makeupWaterAndCondensateHeader"
-            (emitSetHover)="setHover($event)"></app-return-condensate-header>
+            [returnCondensate]="returnCondensate" [condensateFlashTank]="condensateFlashTank" (emitSetHover)="setHover($event)"></app-return-condensate-header>
         </div>
       </div>
       <div class="p-0 d-flex">

@@ -1,5 +1,21 @@
 <div class="d-flex w-100">
-  <div class="d-flex flex-fill makeup-water justify-content-center" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')" (mouseleave)="hoverEquipment('default')">
-    <span class="fa fa-chevron-left"></span>
+  <div class="d-flex flex-fill makeup-water">
+    <div class="d-flex w-25 pl-4">
+      <div class="combined-return-holder">
+        <span class="combined-mass-flow">
+          {{makeupWaterAndCondensateHeader.massFlow | number:'1.0-2'}} klb/hr
+        </span>
+        <span class="fa fa-chevron-left"></span>
+      </div>
+    </div>
+    <div class="d-flex flex-fill justify-content-end pr-4" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
+      (mouseleave)="hoverEquipment('default')">
+      <div class="return-condensate-holder">
+        <span class="return-condensate">
+          {{condensateMassFlow | number:'1.0-2'}} klb/hr
+        </span>
+        <span class="fa fa-chevron-left"></span>
+      </div>
+    </div>
   </div>
 </div>
