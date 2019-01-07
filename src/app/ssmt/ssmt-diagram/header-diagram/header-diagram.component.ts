@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { HeaderOutputObj, ProcessSteamUsage, SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-header-diagram',
@@ -30,7 +31,7 @@ export class HeaderDiagramComponent implements OnInit {
       pressure: this.header.pressure,
       temperature: this.header.temperature,
       energyFlow: processSteamUsageEnergyFlow,
-      massFlow: this.header.massFlow,
+      massFlow: this.headerSteamUsage,
       processUsage: 0
     };
   }

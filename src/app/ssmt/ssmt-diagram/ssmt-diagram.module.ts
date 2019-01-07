@@ -38,11 +38,14 @@ import { HoverCondensateTableComponent } from './hover-table/hover-condensate-ta
 import { HoverMakeupWaterComponent } from './hover-table/hover-makeup-water/hover-makeup-water.component';
 import { HoverBlowdownTableComponent } from './hover-table/hover-blowdown-table/hover-blowdown-table.component';
 import { HoverProcessUsageComponent } from './hover-table/hover-process-usage/hover-process-usage.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     SsmtDiagramComponent,

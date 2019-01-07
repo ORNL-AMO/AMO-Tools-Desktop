@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { HeaderOutputObj, SteamPropertiesOutput, FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
+import { HeaderOutputObj, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-return-condensate-header',
@@ -15,7 +15,9 @@ export class ReturnCondensateHeaderComponent implements OnInit {
   condensateFlashTank: FlashTankOutput;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
-
+  @Input()
+  deaerator: DeaeratorOutput;
+  
   condensateMassFlow: number;
   constructor() { }
 

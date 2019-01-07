@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
@@ -59,7 +59,7 @@ export class SsmtDiagramComponent implements OnInit {
   tabSelect: string = 'results';
   selectedTable: string = 'boiler';
   hoveredEquipment: string = 'default';
-  constructor(private calculateModelService: CalculateModelService) { }
+  constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.calculateModelService.initResults();
@@ -77,6 +77,8 @@ export class SsmtDiagramComponent implements OnInit {
   }
 
   calculateResultsGivenMassFlow() {
+    this.dataCalculated = false;
+    this.cd.detectChanges();
     this.calculateModelService.initData(this.ssmt, this.settings);
     this.calculateModelService.calculateModel(this.massFlow);
     this.getResults();
@@ -122,6 +124,7 @@ export class SsmtDiagramComponent implements OnInit {
     this.returnCondensate = this.calculateModelService.returnCondensate;
     console.log('got data');
     this.dataCalculated = true;
+    this.cd.detectChanges();
   }
 
   setTab(str: string) {
