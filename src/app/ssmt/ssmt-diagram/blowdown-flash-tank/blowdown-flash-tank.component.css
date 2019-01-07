@@ -6,6 +6,31 @@
     margin-top: -18%;
 }
 
+.flash-tank-img-holder{
+    position: relative;
+}
+
+.flash-tank-img-holder .flash-tank-label{
+    position: absolute;
+    z-index: +1;
+    background-color: white;
+    font-weight: bolder;
+    width: 50px;
+    opacity: 0.9;
+    text-align: center;
+    right: 0;
+    font-size: smaller;
+    top: 5px;
+}
+
+
+.flash-tank-img-holder .flash-tank-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 1;
+}
+
+
 .fa-arrow-circle-left{
     font-size: 18px;
     padding-left: 2px;
@@ -13,4 +38,37 @@
 
 .low-pressure-margin{
     margin-right: 18px;
+}
+
+.inlet-blowdown-holder, .outlet-steam-holder, .outlet-blowdown-holder{
+    position: relative;
+}
+
+.blowdown{
+    width: 50px;
+}
+
+.inlet-blowdown-holder .inlet-blowdown{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    left: 45px;
+}
+
+.outlet-steam-holder .outlet-steam-mass-flow{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    right: -10px;
+    top: 15px;
+}
+
+.outlet-blowdown-holder .outlet-blowdown{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    right: 0px;
 }

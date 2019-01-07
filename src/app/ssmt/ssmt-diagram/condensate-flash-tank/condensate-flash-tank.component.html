@@ -11,8 +11,13 @@
     <div class="d-flex align-self-end align-items-center flex-fill">
       <div class="d-flex outletGas h-100 justify-content-center vents" (mouseenter)="hoverEquipment('ventsHovered')"
         (mouseleave)="hoverEquipment('default')">
-        <span class="fa fa-chevron-left pl-2 pr-2"></span>
-        {{flashTank.outletGasMassFlow | number:'1.0-2'}} klb/hr
+        <div class="vented-steam-holder">
+          <span class="fa fa-chevron-left"></span>
+          <span class="vented-steam">
+            {{flashTank.outletGasMassFlow | number:'1.0-2'}} klb/hr
+          </span>
+        </div>
+
       </div>
       <div class="d-flex justify-content-center" (click)="selectEquipment()">
         <div class="flash-tank-img-holder">

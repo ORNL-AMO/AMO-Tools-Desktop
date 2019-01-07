@@ -23,6 +23,8 @@ export class HoverFlashTankTableComponent implements OnInit {
       this.flashTankType = this.flashTankType + ' Condensate';
     } else if (this.flashTankType == 'Condensate') {
       this.flashTank = this.calculateModelService.condensateFlashTank;
+    } else if (this.flashTankType == 'Blowdown') {
+      this.flashTank = this.calculateModelService.blowdownFlashTank;
     }
   }
 

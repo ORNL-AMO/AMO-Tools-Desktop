@@ -11,6 +11,8 @@ export class BlowdownFlashTankComponent implements OnInit {
   flashTank: FlashTankOutput;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
 
   constructor() { }
 
@@ -19,5 +21,8 @@ export class BlowdownFlashTankComponent implements OnInit {
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
+  }
+  selectEquipment() {
+    this.emitSelectEquipment.emit('blowdownFlashTank');
   }
 }

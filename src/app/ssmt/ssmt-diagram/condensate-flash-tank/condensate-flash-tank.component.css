@@ -38,7 +38,7 @@
     text-align: center;
     right: 5px;
     font-size: smaller;
-    bottom: 5px;
+    bottom: -5px;
 }
 
 
@@ -48,7 +48,7 @@
     opacity: 1;
 }
 
-.inlet-temp-holder{
+.inlet-temp-holder, .vented-steam-holder{
     position: relative;
 }
 
@@ -59,4 +59,18 @@
     color: black;
     width: 38px;
     left: -42px;
+}
+
+
+.vented-steam-holder .vented-steam{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 80px;
+    right: 0px;
+    top: 20px;
+}
+
+.vents{
+    width: 50px;
 }

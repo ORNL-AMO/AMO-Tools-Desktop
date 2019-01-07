@@ -20,6 +20,7 @@
     <app-hover-condensate-table *ngIf="hoveredEquipment == 'condensateHovered'"></app-hover-condensate-table>
     <app-hover-makeup-water *ngIf="hoveredEquipment == 'makeupWaterHovered'" [combined]="false"></app-hover-makeup-water>
     <app-hover-makeup-water *ngIf="hoveredEquipment == 'makeupWaterCondensateHovered'" [combined]="true"></app-hover-makeup-water>
-
+    <app-hover-blowdown-table *ngIf="hoveredEquipment == 'boilerBlowdownHovered'"></app-hover-blowdown-table>
+    <app-hover-flash-tank-table *ngIf="hoveredEquipment == 'blowdownFlashTankHovered'" [flashTankType]="'Blowdown'"></app-hover-flash-tank-table>
   </div>
 </div>

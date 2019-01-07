@@ -116,6 +116,6 @@
     width: 100px;
     z-index: +1;
     color: black;
-    bottom: -25px;
-    right: 20%;
+    bottom: 25px;
+    right: 0;
 }
