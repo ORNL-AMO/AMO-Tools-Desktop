@@ -13,6 +13,8 @@ export class DeaeratorDiagramComponent implements OnInit {
   inletPressure: string;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
 
   constructor() { }
 
@@ -30,5 +32,9 @@ export class DeaeratorDiagramComponent implements OnInit {
     } else if (this.inletPressure == 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
     }
+  }
+
+  selectEquipment(){
+    this.emitSelectEquipment.emit('deaerator');
   }
 }

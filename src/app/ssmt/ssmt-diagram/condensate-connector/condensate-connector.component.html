@@ -15,7 +15,7 @@
 <div class="d-flex h-100 w-100 justify-content-end">
   <div class="d-flex condensate align-items-center" (mouseenter)="hoverEquipment('condensateHovered')" (mouseleave)="hoverEquipment('default')">
     <div class="condensate-holder">
-      <span class="condensate-temp" *ngIf="returnCondensate">{{returnCondensate.temperature | number:'1.0-2'}} &#8457;</span>
+      <span class="condensate-temp" *ngIf="returnCondensate">{{returnCondensate.temperature | number:'1.0-1'}} &#8457;</span>
       <span class="fa fa-chevron-down" [ngClass]="{'hidden-chevron': returnCondensate == undefined}"></span>
     </div>
   </div>

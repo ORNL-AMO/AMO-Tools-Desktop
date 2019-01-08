@@ -39,3 +39,24 @@
 .makeup-water-padding{
     padding-left: 1.5rem;
 }
+
+
+.deaerator-img-holder{
+    position: relative;
+}
+
+.deaerator-img-holder .deaerator-label{
+    position: absolute;
+    top: 30px;
+    left: 14px;
+    z-index: +1;
+    background-color: white;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    font-weight: bolder;
+}
+
+.deaerator-img-holder .deaerator-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}

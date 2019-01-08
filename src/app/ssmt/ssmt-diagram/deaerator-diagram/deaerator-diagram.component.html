@@ -14,7 +14,11 @@
         </div>
       </div>
       <div class="d-flex">
-        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-deaerator.png" class="deaerator-img">
+        <div class="deaerator-img-holder">
+          <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-deaerator.png" class="deaerator-img"
+            (mouseenter)="hoverEquipment('deaeratorHovered')" (mouseleave)="hoverEquipment('default')">
+          <span class="deaerator-label" (click)="selectEquipment()" (mouseenter)="hoverEquipment('deaeratorHovered')" (mouseleave)="hoverEquipment('default')">Deaerator</span>
+        </div>
       </div>
       <div class="d-flex justify-content-center flex-fill">
         <div class="w-100 inlet-pressure-tube" [ngClass]="inletPressure" (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')">

@@ -3,7 +3,7 @@
     <div class="d-flex align-self-end chevron-one flex-fill condensate inlet-condensate" (mouseenter)="hoverEquipment('condensateHovered')"
       (mouseleave)="hoverEquipment('default')">
       <div class="inlet-temp-holder">
-        <span class="inlet-temp">{{flashTank.inletWaterTemperature | number:'1.0-2'}} &#8457;</span>
+        <span class="inlet-temp">{{flashTank.inletWaterTemperature | number:'1.0-1'}} &#8457;</span>
       </div>
       <span class="fa fa-chevron-down hidden-chevron"></span>
     </div>
@@ -14,7 +14,7 @@
         <div class="vented-steam-holder">
           <span class="fa fa-chevron-left"></span>
           <span class="vented-steam">
-            {{flashTank.outletGasMassFlow | number:'1.0-2'}} klb/hr
+            {{flashTank.outletGasMassFlow | number:'1.0-1'}} klb/hr
           </span>
         </div>
 

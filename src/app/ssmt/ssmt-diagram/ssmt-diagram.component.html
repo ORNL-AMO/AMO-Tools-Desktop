@@ -106,9 +106,9 @@
         <div class="d-flex flex-fill">
           <div class="p-0 w-25 deaerator-margin">
             <app-deaerator-diagram *ngIf="lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'low-pressure'"
-              (emitSetHover)="setHover($event)"></app-deaerator-diagram>
+              (emitSetHover)="setHover($event)" (emitSelectEquipment)="selectTable($event)"></app-deaerator-diagram>
             <app-deaerator-diagram *ngIf="!lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'high-pressure'"
-              (emitSetHover)="setHover($event)"></app-deaerator-diagram>
+              (emitSetHover)="setHover($event)" (emitSelectEquipment)="selectTable($event)"></app-deaerator-diagram>
           </div>
           <div class="w-25 deaerator-condensate-padding">
             <app-turbine-connector *ngIf="condensingTurbine" [noOutletConnection]="false" [noInletConnection]="lowPressureHeader != undefined"
@@ -176,6 +176,7 @@
           [flashTankType]="'Blowdown'"></app-flash-tank-table>
         <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prvType]="'highToMediumPressurePRV'"></app-prv-table>
         <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'"></app-prv-table>
+        <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="deaerator"></app-deaerator-table>
         <div class="d-flex mt-auto">
           <label class="bold large" for="massFlow">Define Boiler Steam Mass Flow for Calculation</label>
           <input name="massFlow" type="number" step="any" class="form-control" id="massFlow" (input)="calculateResultsGivenMassFlow()"
