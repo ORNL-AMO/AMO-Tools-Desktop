@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-feedwater-diagram',
@@ -6,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./feedwater-diagram.component.css']
 })
 export class FeedwaterDiagramComponent implements OnInit {
-
+  @Input()
+  deaerator: DeaeratorOutput;
   constructor() { }
 
   ngOnInit() {

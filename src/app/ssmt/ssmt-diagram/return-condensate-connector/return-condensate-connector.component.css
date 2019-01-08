@@ -8,3 +8,17 @@
 .border-top-left{
     border-top-left-radius: 25px;
 }
+
+.return-condensate-holder{
+    text-align: center;
+    position: relative;
+}
+
+.return-condensate-holder .return-condensate{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    top: 25px;
+    width: 100px;
+    left: 0;
+}

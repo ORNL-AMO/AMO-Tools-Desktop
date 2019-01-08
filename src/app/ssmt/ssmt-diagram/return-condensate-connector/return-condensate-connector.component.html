@@ -2,14 +2,14 @@
   <div class="d-flex h-100" [ngStyle]="{'width.px': (deaeratorWidth*.95)}">
     <div class="d-flex makeup-water vertical-chevron h-100" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
       (mouseleave)="hoverEquipment('default')">
-      <span class="fa fa-chevron-up"></span>
+      <span class="fa fa-chevron-up hidden-chevron"></span>
     </div>
     <div class="d-flex flex-fill align-items-end" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
       (mouseleave)="hoverEquipment('default')">
       <div class="return-condensate-holder makeup-water w-100">
-        <!-- <span class="return-condensate">
-      {{condensateMassFlow | number:'1.0-2'}} klb/hr
-    </span> -->
+        <span class="return-condensate">
+          {{deaerator.inletWaterMassFlow | number:'1.0-2'}} klb/hr
+        </span>
         <span class="fa fa-chevron-left"></span>
       </div>
     </div>

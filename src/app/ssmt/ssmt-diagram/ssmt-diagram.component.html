@@ -1,7 +1,7 @@
 <div class="d-flex h-100 ssmt-diagram" [ngClass]="hoveredEquipment">
   <div class="d-flex p-3 diagram-container min-width-container" *ngIf="dataCalculated == true">
     <div class="d-flex h-100">
-      <app-feedwater-diagram></app-feedwater-diagram>
+      <app-feedwater-diagram [deaerator]="deaerator"></app-feedwater-diagram>
     </div>
     <div class="d-flex flex-column flex-fill align-content-stretch">
       <div class="d-flex boiler-table-height">
@@ -130,7 +130,8 @@
       </div>
       <div class="d-flex">
         <div class="w-25" *ngIf="deaeratorWidth">
-          <app-return-condensate-connector [deaeratorWidth]="deaeratorWidth"></app-return-condensate-connector>
+          <app-return-condensate-connector [deaeratorWidth]="deaeratorWidth" (emitSetHover)="setHover($event)"
+            [deaerator]="deaerator"></app-return-condensate-connector>
         </div>
         <div class="w-75">
           <app-return-condensate-header [makeupWaterAndCondensateHeader]="makeupWaterAndCondensateHeader"

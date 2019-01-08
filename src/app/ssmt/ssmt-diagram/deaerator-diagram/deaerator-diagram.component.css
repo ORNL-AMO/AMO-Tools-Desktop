@@ -47,7 +47,7 @@
 }
 
 
-.deaerator-img-holder{
+.deaerator-img-holder, .inlet-pressure-holder{
     position: relative;
 }
 
@@ -65,4 +65,13 @@
 .deaerator-img-holder .deaerator-label:hover{
     text-decoration: underline;
     cursor: pointer;
+}
+
+
+.inlet-pressure-holder .inlet-pressure-mass-flow{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    right: -15px;
 }

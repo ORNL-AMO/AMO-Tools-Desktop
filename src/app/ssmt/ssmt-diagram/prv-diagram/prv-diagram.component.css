@@ -72,3 +72,7 @@
     top: 25px;
     width: 100px;
 } */
+
+.chevron-one, .chevron-two{
+    min-height: 40px;
+}

@@ -16,6 +16,11 @@
     cursor: pointer;
 }
 
+.feedwater .hidden-chevron{
+    color: #8E44AD;
+}
+
+
 .ssmt-diagram .condensate{
     background-color: #283593;
     color: white;
