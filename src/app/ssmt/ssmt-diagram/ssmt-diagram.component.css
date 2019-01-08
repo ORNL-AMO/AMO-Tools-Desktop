@@ -25,7 +25,7 @@
 }
 
 .min-width-container{
-    min-width: 750px;
+    min-width: 800px;
     /* min-height: 800px; */
     overflow-x: auto;
     /* overflow-y: auto; */
@@ -36,9 +36,9 @@
 }
 
 .deaerator-margin{
-    margin-left: -2rem;
+    margin-left: -1.5rem;
 }
 
 .deaerator-condensate-padding{
-    padding-left: 4rem;
+    padding-left: 3rem;
 }

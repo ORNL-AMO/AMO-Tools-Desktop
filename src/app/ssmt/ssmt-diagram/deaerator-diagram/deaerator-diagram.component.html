@@ -1,4 +1,4 @@
-<div class="d-flex">
+<!-- <div class="d-flex">
   <div class="d-flex flex-column pt-3 w-100">
     <div class="d-flex justify-content-center w-100 makeup-water-padding">
       <div class="vents" (mouseenter)="hoverEquipment('ventsHovered')" (mouseleave)="hoverEquipment('default')">
@@ -10,20 +10,26 @@
       <div class="d-flex justify-content-center flex-fill">
         <div class="feedwater text-center" (mouseenter)="hoverEquipment('feedwaterHovered')" (mouseleave)="hoverEquipment('default')">
           <span class="fa fa-chevron-left"></span>
-          <!-- {{deaerator.feedwaterMassFlow |number:'1.0-2'}} -->
+          <!-- {{deaerator.feedwaterMassFlow |number:'1.0-2'}} --
         </div>
       </div>
       <div class="d-flex">
         <div class="deaerator-img-holder">
           <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-deaerator.png" class="deaerator-img"
             (mouseenter)="hoverEquipment('deaeratorHovered')" (mouseleave)="hoverEquipment('default')">
-          <span class="deaerator-label" (click)="selectEquipment()" (mouseenter)="hoverEquipment('deaeratorHovered')" (mouseleave)="hoverEquipment('default')">Deaerator</span>
+          <span class="deaerator-label" (click)="selectEquipment()" (mouseenter)="hoverEquipment('deaeratorHovered')"
+            (mouseleave)="hoverEquipment('default')">Deaerator</span>
         </div>
       </div>
-      <div class="d-flex justify-content-center flex-fill">
-        <div class="w-100 inlet-pressure-tube" [ngClass]="inletPressure" (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')">
+      <div class="d-flex">
+        <div class="inlet-pressure-tube" [ngClass]="inletPressure" (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')">
           <span class="fa fa-chevron-left"></span>
-          <!-- {{deaerator.inletSteamMassFlow |number:'1.0-2'}} -->
+          <!-- {{deaerator.inletSteamMassFlow |number:'1.0-2'}} --
+        </div>
+        <div class="d-flex flex-fill">
+          <div class="d-flex low-pressure-tube" [ngClass]="inletPressure" (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')">
+            <span class="fa fa-chevron-down"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -33,9 +39,53 @@
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column pt-3 low-pressure-column">
+
+</div> -->
+
+<div class="d-flex h-100">
+  <!--feedwater-->
+  <div class="d-flex h-100 align-items-center flex-fill feedwater-column">
+    <div class="feedwater text-center w-100" (mouseenter)="hoverEquipment('feedwaterHovered')" (mouseleave)="hoverEquipment('default')">
+      <span class="fa fa-chevron-left"></span>
+      <!-- {{deaerator.feedwaterMassFlow |number:'1.0-2'}} -->
+    </div>
+  </div>
+  <!--image / vent / condensate-->
+  <div class="d-flex flex-column justify-content-center">
+    <!--vent-->
+    <div class="d-flex justify-content-center">
+      <div class="d-flex vents" (mouseenter)="hoverEquipment('ventsHovered')" (mouseleave)="hoverEquipment('default')">
+        <span class="fa fa-chevron-up"></span>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="deaerator-img-holder">
+        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-deaerator.png" class="deaerator-img"
+          (mouseenter)="hoverEquipment('deaeratorHovered')" (mouseleave)="hoverEquipment('default')">
+        <span class="deaerator-label" (click)="selectEquipment()" (mouseenter)="hoverEquipment('deaeratorHovered')"
+          (mouseleave)="hoverEquipment('default')">Deaerator</span>
+      </div>
+    </div>
+    <!--condensate-->
+    <!-- <div class="d-flex justify-content-center">
+      <div class="d-flex makeup-water" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')" (mouseleave)="hoverEquipment('default')">
+        <span class="fa fa-chevron-up"></span>
+      </div>
+    </div> -->
+  </div>
+
+  <!--inlet pressure-->
+  <div class="d-flex h-100 flex-fill inlet-pressure-column">
+    <div class="d-flex h-100 align-items-center inlet-pressure-tube flex-fill">
+      <div class="d-flex w-100" [ngClass]="inletPressure" (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')">
+        <span class="fa fa-chevron-left hidden-chevron"></span>
+      </div>
+      <!-- {{deaerator.inletSteamMassFlow |number:'1.0-2'}} -->
+    </div>
     <div class="d-flex low-pressure-tube" [ngClass]="inletPressure" (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')">
       <span class="fa fa-chevron-down"></span>
     </div>
   </div>
+
 </div>

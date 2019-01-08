@@ -1,5 +1,9 @@
 .feedwater{
-    margin-top: 72px;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
+}
+
+.feedwater-column{
+    padding-top: 72px;
+    padding-bottom: 141px;
 }

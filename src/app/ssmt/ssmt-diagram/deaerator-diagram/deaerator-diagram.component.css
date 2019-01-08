@@ -1,24 +1,34 @@
-.inlet-pressure-tube{
-    margin-top: 23px;
+.inlet-pressure-column{
     margin-left: -5px;
+}
+
+.inlet-pressure-tube{
+    margin-top: 22px;
+    min-width: 50px;
+}
+
+.feedwater-column{
+    margin-right: -5px;
 }
 
 .feedwater{
     padding-left: .75rem;
     padding-right: .75rem;
-    margin-top: 17px;
-    margin-right: -7px;
+    margin-top: 40px;
+    min-width: 50px;
 }
 
 .vents{
     margin-bottom: -5px;
     margin-left: 5px;
+    height: 25px;
 }
 
 .makeup-water{
     margin-top: -2px;
     margin-left: 4px;
     padding-bottom: 5px;
+    height: 25px;
 }
 
 .deaerator-img{
@@ -27,13 +37,9 @@
 }
 
 .low-pressure-tube{
-    height: 74.5%;
-    border-bottom-right-radius: 35px;
-}
-
-.low-pressure-column{
+    height: 111.5%;
     margin-top: -1rem;
-    margin-left: -5px;
+    border-bottom-right-radius: 35px;
 }
 
 .makeup-water-padding{

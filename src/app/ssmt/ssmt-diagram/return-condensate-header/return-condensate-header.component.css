@@ -1,8 +1,6 @@
 
 .makeup-water{
     border-bottom-right-radius: 25px;
-    border-bottom-left-radius: 25px;
-    margin-left: 8.5%;
 }
 
 
@@ -24,7 +22,7 @@
     position: absolute;
     z-index: +1;
     width: 100px;
-    right: -30px;
+    right: 0px;
     top: 20px;
     color: black;
 }

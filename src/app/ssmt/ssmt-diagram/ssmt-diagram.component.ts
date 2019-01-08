@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
@@ -15,6 +15,12 @@ export class SsmtDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  @ViewChild('deaeratorContainer')
+  deaeratorContainer: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getDeaeratorWidth();
+  }
 
 
   massFlow: number = 408.7;
@@ -59,6 +65,7 @@ export class SsmtDiagramComponent implements OnInit {
   tabSelect: string = 'results';
   selectedTable: string = 'boiler';
   hoveredEquipment: string = 'default';
+  deaeratorWidth: number;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -66,6 +73,10 @@ export class SsmtDiagramComponent implements OnInit {
     if (this.ssmt.setupDone) {
       this.calculateResults();
     }
+  }
+
+  ngAfterViewInit(){
+    this.getDeaeratorWidth();
   }
 
   calculateResults() {
@@ -82,8 +93,16 @@ export class SsmtDiagramComponent implements OnInit {
     this.calculateModelService.initData(this.ssmt, this.settings);
     this.calculateModelService.calculateModel(this.massFlow);
     this.getResults();
+    console.log(this.deaeratorContainer);
   }
 
+
+  getDeaeratorWidth(){
+    if(this.deaeratorContainer){
+      this.deaeratorWidth = this.deaeratorContainer.nativeElement.offsetWidth;
+      this.cd.detectChanges();
+    }
+  }
 
   getResults() {
     this.inputData = this.calculateModelService.inputData;
@@ -131,11 +150,11 @@ export class SsmtDiagramComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  setHover(str: string){
+  setHover(str: string) {
     this.hoveredEquipment = str;
   }
-  
-  selectTable(str: string){
+
+  selectTable(str: string) {
     this.selectedTable = str;
   }
 }
