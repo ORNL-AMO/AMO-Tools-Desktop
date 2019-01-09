@@ -1,0 +1,18 @@
+.results{
+    padding-top: 20px;
+    overflow-x: auto;
+}
+
+.assessment-title{
+    font-size: 22px;
+    margin-top: 10px;
+    margin-bottom: -14px;
+}
+
+
+.date-modified{
+    color: #999;
+    font-size: 12px;
+    margin-top: 15px;
+    margin-left: 0;
+}

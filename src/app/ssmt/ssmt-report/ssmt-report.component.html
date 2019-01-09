@@ -1,170 +1,161 @@
-<!-- <div class="d-flex flex-column p-4 justify-content-center" *ngIf="dataCalculated">
-  <div class="d-flex justify-content-between pt-2">
-    <div class="pr-2">
-      <div class="form-group">
-        <label class="bold large" for="massFlow">Define Boiler Steam Mass Flow for Calculation</label>
-        <input name="massFlow" type="number" step="any" class="form-control" id="massFlow" (input)="calculateResultsGivenMassFlow()"
-          [(ngModel)]="massFlow">
-      </div>
+<div class="assessment-report report-in-ssmt ssmt" *ngIf="assessment && settings" [ngClass]="{'assessment-report-padding': inSSMT, 'report-in-rollup': inRollup}">
+
+
+  <div *ngIf="inSSMT" class="report-cover">
+    <img src="assets/images/DOE-banner-color.png" class="doe-logo">
+
+    <div class="report-title">
+      <h4>Steam System Efficiency Report:</h4>
+      <h4>{{assessment.name}}</h4>
+      <h5>{{settings.createdDate| date:'medium'}}</h5>
     </div>
-    <div class="pl-2">
-      <button class="btn btn-primary" (click)="calculateResults()">Iterate Model For Results</button>
+
+    <!-- <p class="report-notes">{{reportNotes}}</p> -->
+  </div>
+
+  <div #reportHeader class="report-header" [ngClass]="{'hide-print': inSSMT}">
+
+    <div class="btn-group hide-print">
+      <button class="btn btn-secondary" (click)="showModal()" [disabled]="true">Print</button>
+      <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
     </div>
-  </div>
-  <div class="pt-2">
-    <h4>Boiler Data</h4>
-    <app-boiler-table [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
-  </div>
-  <div class="pt-2">
-    <h4>High Pressure Header</h4>
-    <div class="d-flex flex-column">
-      <div class="d-flex">
-        <div class="p-1">
-          <app-header-table [header]="highPressureHeader" [name]="'Header Details'"></app-header-table>
-        </div>
-        <div class="p-1">
-          <app-steam-usage-table [calculatedHeader]="highPressureHeader" [name]="'Process Steam Usage'"
-            [headerSteamUsage]="inputData.headerInput.highPressure.processSteamUsage"></app-steam-usage-table>
-        </div>
-        <div class="p-1">
-          <app-steam-properties-table [steamProperties]="highPressureCondensate" [name]="'Condensate'"></app-steam-properties-table>
-        </div>
+    <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
+
+    <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+
+    <div *ngIf="assessment" class="row assessment-name">
+      <div class="col-12">
+        <h2 class="assessment-title">
+          <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
+            {{directory.name}} /
+          </span>
+          {{assessment.name}}
+
+        </h2>
       </div>
-    </div>
-  </div>
-
-  <div class="pt-2">
-    <h4>High Pressure Steam Heat Loss</h4>
-    <div class="d-flex">
-      <div class="p-1">
-        <app-heat-loss-table [heatLoss]="highPressureSteamHeatLoss"></app-heat-loss-table>
+      <div class="col-12">
+        <h2 class="date-modified">
+          <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+        </h2>
       </div>
-    </div>
-  </div>
 
-  <div class="pt-2" *ngIf="highToLowPressureTurbine">
-    <h4>High to Low Turbine</h4>
-    <app-turbine-table [turbine]="highToLowPressureTurbine"></app-turbine-table>
-  </div>
+      <!--<button *ngIf="inFsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+      <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
 
-
-  <div class="pt-2" *ngIf="highPressureToMediumPressureTurbine">
-    <h4>High to Medium Turbine</h4>
-    <app-turbine-table [turbine]="highPressureToMediumPressureTurbine"></app-turbine-table>
-  </div>
-
-  <div class="pt-2" *ngIf="highToMediumPressurePRV">
-    <h4>High to Medium Pressure PRV Data</h4>
-    <app-prv-table [prv]="highToMediumPressurePRV"></app-prv-table>
-  </div>
-
-  <div class="pt-2" *ngIf="mediumPressureHeader">
-    <h4>Medium Pressure Header</h4>
-    <div class="d-flex flex-column">
-      <div class="d-flex">
-        <div class="p-1">
-          <app-header-table [header]="mediumPressureHeader" [name]="'Header Details'"></app-header-table>
-        </div>
-        <div class="p-1">
-          <app-steam-usage-table [calculatedHeader]="mediumPressureHeader" [name]="'Process Steam Usage'"
-            [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"></app-steam-usage-table>
-        </div>
-        <div class="p-1">
-          <app-steam-properties-table *ngIf="mediumPressureCondensate" [steamProperties]="mediumPressureCondensate"
-            [name]="'Condensate'"></app-steam-properties-table>
-        </div>
-      </div>
     </div>
   </div>
+  <!-- End .report-header -->
 
-  <div class="pt-2" *ngIf="mediumPressureSteamHeatLoss">
-    <h4>Medium Pressure Steam Heat Loss</h4>
-    <div class="d-flex">
-      <div class="p-1">
-        <app-heat-loss-table [heatLoss]="mediumPressureSteamHeatLoss"></app-heat-loss-table>
+  <!-- <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
+      <div class="col-12 print-col">
+          <h4>Building Print View</h4>
+          <h5>One Moment Please</h5>
+          <span class="fa fa-print"></span>
+          <div class="spinner">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+          </div>
       </div>
+  </div> -->
+
+  <div class="report-data" *ngIf="assessment.ssmt.setupDone">
+
+    <ul #reportBtns class="tabs primary hide-print">
+      <li (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary'}">
+        <a>Executive Summary</a>
+      </li>
+      <li (click)="setTab('energySummary')" [ngClass]="{'active': currentTab == 'energySummary'}">
+        <a>Energy Summary</a>
+      </li>
+      <li (click)="setTab('losses')" [ngClass]="{'active': currentTab == 'losses'}">
+        <a>Losses</a>
+      </li>
+      <li (click)="setTab('diagram')" [ngClass]="{'active': currentTab == 'diagram'}">
+        <a>Diagram</a>
+      </li>
+      <!--
+        -->
+      <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+        <a>Report Graphs</a>
+      </li>
+      <!--
+        -->
+      <!-- <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+        <a>Sankey</a>
+      </li> -->
+      <!--
+        -->
+      <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+        <a>Input Summary</a>
+      </li>
+      <!--
+        -->
+      <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+        <a>Facility Info</a>
+      </li>
+    </ul>
+    <div class="results scroll-item" *ngIf="currentTab == 'executiveSummary'" [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-executive-summary></app-executive-summary>
     </div>
-  </div>
-
-  <div class="pt-2" *ngIf="mediumToLowPressureTurbine">
-    <h4>Medium to Low Turbine</h4>
-    <app-turbine-table [turbine]="mediumToLowPressureTurbine"></app-turbine-table>
-  </div>
-
-  <div class="pt-2" *ngIf="lowPressurePRV">
-    <h4>Low Pressure PRV Data</h4>
-    <app-prv-table [prv]="lowPressurePRV"></app-prv-table>
-  </div>
-
-  <div class="pt-2" *ngIf="lowPressureHeader">
-    <h4>Low Pressure Header</h4>
-    <div class="d-flex flex-column">
-      <div class="d-flex">
-        <div class="p-1">
-          <app-header-table [header]="lowPressureHeader" [name]="'Header Details'"></app-header-table>
-        </div>
-        <div class="p-1">
-          <app-steam-usage-table [calculatedHeader]="lowPressureHeader" [name]="'Process Steam Usage'"
-            [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"></app-steam-usage-table>
-        </div>
-        <div class="p-1">
-          <app-steam-properties-table *ngIf="lowPressureCondensate" [steamProperties]="lowPressureCondensate" [name]="'Condensate'"></app-steam-properties-table>
-
-        </div>
-      </div>
+    <div class="results scroll-item" *ngIf="currentTab == 'energySummary'" [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-energy-summary></app-energy-summary>
     </div>
-  </div>
-
-  <div class="pt-2" *ngIf="lowPressureSteamHeatLoss">
-    <h4>Low Pressure Steam Heat Loss</h4>
-    <div class="d-flex">
-      <div class="p-1">
-        <app-heat-loss-table [heatLoss]="lowPressureSteamHeatLoss"></app-heat-loss-table>
-      </div>
+    <div class="results scroll-item" *ngIf="currentTab == 'losses'" [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-losses-summary></app-losses-summary>
     </div>
-  </div>
-
-  <div class="pt-2" *ngIf="condensingTurbine">
-    <h4>Condensing Turbine</h4>
-    <app-turbine-table [turbine]="condensingTurbine"></app-turbine-table>
-  </div>
-
-  <div class="pt-2">
-    <h4>Condensate</h4>
-    <div class="d-flex">
-      <div class="p-1">
-        <app-header-table *ngIf="combinedCondensate" [header]="combinedCondensate" [name]="'All Condensate'"></app-header-table>
-      </div>
-      <div class="p-1">
-        <app-steam-properties-table *ngIf="returnCondensate" [steamProperties]="returnCondensate" [name]="'Combined Return Condensate Details'"></app-steam-properties-table>
-      </div>
-      <div class="p-1">
-        <app-steam-properties-table *ngIf="makeupWater" [steamProperties]="makeupWater" [name]="'Make-up Water Details'"></app-steam-properties-table>
-      </div>
-      <div class="p-1">
-        <app-header-table *ngIf="makeupWaterAndCondensateHeader" [header]="makeupWaterAndCondensateHeader" [name]="'Make-up Water and Condensate'"></app-header-table>
-      </div>
+    <div class="results scroll-item" *ngIf="currentTab == 'diagram'" [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-report-diagram></app-report-diagram>
     </div>
-  </div>
+    <div class="results scroll-item" *ngIf="currentTab == 'reportGraphs'" [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-report-graphs></app-report-graphs>
+    </div>
+    <div class="results scroll-item" *ngIf="currentTab == 'inputData'" [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-input-summary></app-input-summary>
+    </div>
+    <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo'" [ngStyle]="{'height.px':reportContainerHeight}">
+    
+    </div>
+    <!-- <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrint" [ngStyle]="{'height.px':reportContainerHeight}">
+          <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+      </div>
+      <div class="input-data results scroll-item print-height" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)"
+          [ngStyle]="{'height.px':reportContainerHeight}">
+          <app-input-summary [fsat]="fsat" [settings]="settings" [printView]="printInputData"></app-input-summary>
+      </div>
+      <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)"
+          [ngStyle]="{'height.px':reportContainerHeight}">
+          <app-results-summary [fsat]="fsat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
+          </app-results-summary>
+      </div>
+      <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))"
+          [ngStyle]="{'height.px':reportContainerHeight}">
+          <app-fsat-report-graphs [fsat]="fsat" [settings]="settings" [assessment]="assessment" [printView]="showPrint" [printSankey]="printReportSankey"
+          [printGraphs]="printReportGraphs"></app-fsat-report-graphs>
+      </div>
+      <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)"
+          [ngStyle]="{'height.px':reportContainerHeight}">
+          <app-fsat-report-sankey [fsat]="fsat" [settings]="settings" [assessment]="assessment" [printView]="showPrint"></app-fsat-report-sankey>
+      </div> -->
 
-  <div class="pt-2" *ngIf="deaerator">
-    <h4>Deaerator Data</h4>
-    <app-deaerator-table [deaerator]="deaerator"></app-deaerator-table>
   </div>
-  <div class="pt-2" *ngIf="highPressureFlashTank">
-    <h4>High Pressure Flash Tank Data</h4>
-    <app-flash-tank-table [flashTank]="highPressureFlashTank"></app-flash-tank-table>
-  </div>
-  <div class="pt-2" *ngIf="mediumPressureFlashTank">
-    <h4>Medium Pressure Flash Tank Data</h4>
-    <app-flash-tank-table [flashTank]="mediumPressureFlashTank"></app-flash-tank-table>
-  </div>
-  <div class="pt-2" *ngIf="blowdownFlashTank">
-    <h4>Blowdown Flash Tank Data</h4>
-    <app-flash-tank-table [flashTank]="blowdownFlashTank"></app-flash-tank-table>
-  </div>
-  <div class="pt-2" *ngIf="condensateFlashTank">
-    <h4>Condensate Flash Tank Data</h4>
-    <app-flash-tank-table [flashTank]="condensateFlashTank"></app-flash-tank-table>
-  </div>
-</div> -->
+  <!-- End .report-data -->
+
+  <!-- <div *ngIf="!fsat.setupDone">
+      <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
+  </div> -->
+
+
+</div>
+
+<!-- <app-print-options-menu *ngIf="showPrintMenu && !inRollup"
+  [showFsatReportOptions]="true"
+  [selectAll]="selectAll"
+  [printReportGraphs]="printReportGraphs"
+  [printReportSankey]="printReportSankey"
+  [printResults]="printResults"
+  [printInputData]="printInputData"
+  (emitClosePrintModal)="closeModal($event)"
+  (emitTogglePrint)="togglePrint($event)"
+  (emitPrint)="print()">
+</app-print-options-menu> -->
