@@ -20,7 +20,6 @@
       <div class="boiler-steam-holder" (mouseenter)="hoverEquipment('boilerSteamHovered')">
         <span class="boiler-mass-flow">{{boiler.steamMassFlow | number:'1.0-1'}} klb/hr</span>
         <span class="fa fa-chevron-right hidden-chevron"></span>
-        <span class="boiler-temperature">{{boiler.steamTemperature | number:'1.0-1'}} &#8457;</span>
       </div>
     </div>
     <div class="blowdown blowdown-one text-center mr-1 pl-2" (mouseenter)="hoverEquipment('blowdownHovered')"
@@ -30,7 +29,10 @@
   </div>
   <div class="d-flex flex-column">
     <div class="d-flex h-100 high-pressure down-pipe" (mouseenter)="hoverEquipment('highPressureHovered')" (mouseleave)="hoverEquipment('default')">
-      <span class="fa fa-chevron-down mb-1 pt-3"></span>
+      <div class="d-flex boiler-temp-holder mb-auto">
+        <span class="fa fa-chevron-down"></span>
+        <span class="boiler-temperature">{{boiler.steamTemperature | number:'1.0-1'}} &#8457;</span>
+      </div>
     </div>
   </div>
   <div class="d-flex flex-column">

@@ -180,8 +180,8 @@
         <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prvType]="'highToMediumPressurePRV'"></app-prv-table>
         <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'"></app-prv-table>
         <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="deaerator"></app-deaerator-table>
-        <div class="d-flex mt-auto">
-          <label class="bold large" for="massFlow">Define Boiler Steam Mass Flow for Calculation</label>
+        <div class="d-flex pt-3">
+          <label for="massFlow">Define Boiler Steam Mass Flow for Calculation</label>
           <input name="massFlow" type="number" step="any" class="form-control" id="massFlow" (input)="calculateResultsGivenMassFlow()"
             [(ngModel)]="massFlow">
         </div>

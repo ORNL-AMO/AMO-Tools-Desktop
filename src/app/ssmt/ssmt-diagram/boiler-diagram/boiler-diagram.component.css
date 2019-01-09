@@ -47,8 +47,12 @@
 }
 
 
-.boiler-steam-holder, .feedwater-holder, .boiler-img-holder, .blowdown-holder{
+.boiler-steam-holder, .feedwater-holder, .boiler-img-holder, .blowdown-holder, .boiler-temp-holder{
     position: relative;
+}
+
+.boiler-temp-holder{
+    padding-top: 20px;
 }
 
 .boiler-img-holder .boiler-label{
@@ -87,19 +91,13 @@
     left: -19px;
 }
 
-.boiler-steam-holder .boiler-temperature{
+.boiler-temp-holder .boiler-temperature{
     position: absolute;
     z-index: +1;
     color: black;
     width: 75px;
-    left: 50px;
-    top: 15px;
+    left: 30px;
 }
-
-.boiler-steam-holder:hover{
-    opacity: .5;
-}
-
 
 .feedwater-holder .feedwater-mass-flow{
     position: absolute;
