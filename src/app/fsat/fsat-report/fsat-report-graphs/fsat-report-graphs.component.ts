@@ -131,14 +131,14 @@ export class FsatReportGraphsComponent implements OnInit {
       let tmpPieValues = new Array<number>();
       let tmpBarValues = new Array<number>();
       let tmpFsat = this.fsatOptions[i].fsat;
-      let resultType: string;
+      let isBaseline: boolean;
       if (i == 0 || (i != 0 && (this.fsatOptions[i].fsat.modifications !== undefined && this.fsatOptions[i].fsat.modifications.length > 0))) {
-        resultType = 'existing';
+        isBaseline = true;
       }
       else {
-        resultType = 'modified';
+        isBaseline = false;
       }
-      let tmpOutput = this.fsatService.getResults(this.fsatOptions[i].fsat, resultType, this.settings);
+      let tmpOutput = this.fsatService.getResults(this.fsatOptions[i].fsat, isBaseline, this.settings);
 
       if (this.settings.fanPowerMeasurement === 'hp') {
 

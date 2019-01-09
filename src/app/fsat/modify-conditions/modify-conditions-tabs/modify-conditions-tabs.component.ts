@@ -8,7 +8,7 @@ import { FanFieldDataService } from '../../fan-field-data/fan-field-data.service
 import { FanSetupService } from '../../fan-setup/fan-setup.service';
 import { FSAT } from '../../../shared/models/fans';
 import { FsatService } from '../../fsat.service';
-import { FsatWarningService, FanFieldDataWarnings, FanMotorWarnings, FanFluidWarnings } from '../../fsat-warning.service';
+import { FsatWarningService, FanFieldDataWarnings, FanMotorWarnings } from '../../fsat-warning.service';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -107,14 +107,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   checkFieldDataWarnings() {
     let hasWarning: boolean = false;
-    let baselineWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.baselineFSAT, this.settings);
+    let baselineWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.baselineFSAT, this.settings, false);
     for (var key in baselineWarnings) {
       if (baselineWarnings[key] !== null) {
         hasWarning = true;
       }
     }
     if (this.compareService.modifiedFSAT && !hasWarning) {
-      let modifiedWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.modifiedFSAT, this.settings);
+      let modifiedWarnings: FanFieldDataWarnings = this.fsatWarningService.checkFieldDataWarnings(this.compareService.modifiedFSAT, this.settings, true);
       for (var key in modifiedWarnings) {
         if (modifiedWarnings[key] !== null) {
           hasWarning = true;
@@ -133,43 +133,41 @@ export class ModifyConditionsTabsComponent implements OnInit {
       validModTest = this.fsatFluidService.isFanFluidValid(modification.baseGasDensity);
       isDifferent = this.compareService.checkFluidDifferent();
     }
-    let inputError = this.checkFanFluidWarnings();
+    //let inputError = this.checkFanFluidWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
-    } else if (inputError) {
-      badgeStr = ['input-error'];
     } else if (isDifferent) {
       badgeStr = ['loss-different'];
     }
     return badgeStr;
   }
 
-  checkFanFluidWarnings() {
-    let hasWarning: boolean = false;
-    let baselineWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.compareService.baselineFSAT.baseGasDensity, this.settings);
-    for (var key in baselineWarnings) {
-      if (baselineWarnings[key] !== null) {
-        hasWarning = true;
-      }
-    }
-    if (this.compareService.modifiedFSAT && !hasWarning) {
-      let modifiedWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.compareService.modifiedFSAT.baseGasDensity, this.settings);
-      for (var key in modifiedWarnings) {
-        if (modifiedWarnings[key] !== null) {
-          hasWarning = true;
-        }
-      }
-    }
-    return hasWarning;
-  }
+  // checkFanFluidWarnings() {
+  //   let hasWarning: boolean = false;
+  //   let baselineWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.compareService.baselineFSAT.baseGasDensity, this.settings);
+  //   for (var key in baselineWarnings) {
+  //     if (baselineWarnings[key] !== null) {
+  //       hasWarning = true;
+  //     }
+  //   }
+  //   if (this.compareService.modifiedFSAT && !hasWarning) {
+  //     let modifiedWarnings: FanFluidWarnings = this.fsatWarningService.checkFanFluidWarnings(this.compareService.modifiedFSAT.baseGasDensity, this.settings);
+  //     for (var key in modifiedWarnings) {
+  //       if (modifiedWarnings[key] !== null) {
+  //         hasWarning = true;
+  //       }
+  //     }
+  //   }
+  //   return hasWarning;
+  // }
 
   setFanSetupBadgeClass(baseline: FSAT, modification?: FSAT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.fanSetupService.isFanSetupValid(baseline.fanSetup);
+    let validBaselineTest = this.fanSetupService.isFanSetupValid(baseline.fanSetup, false);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      validModTest = this.fanSetupService.isFanSetupValid(modification.fanSetup);
+      validModTest = this.fanSetupService.isFanSetupValid(modification.fanSetup, true);
       isDifferent = this.compareService.checkFanSetupDifferent();
     }
     let inputError = this.checkFanSetupWarnings();
@@ -185,14 +183,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   checkFanSetupWarnings() {
     let hasWarning: boolean = false;
-    let baselineWarnings: { fanEfficiencyError: string, fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.baselineFSAT.fanSetup);
+    let baselineWarnings: { fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.baselineFSAT.fanSetup);
     for (var key in baselineWarnings) {
       if (baselineWarnings[key] !== null) {
         hasWarning = true;
       }
     }
     if (this.compareService.modifiedFSAT && !hasWarning) {
-      let modifiedWarnings: { fanEfficiencyError: string, fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.modifiedFSAT.fanSetup);
+      let modifiedWarnings: { fanSpeedError: string } = this.fsatWarningService.checkFanWarnings(this.compareService.modifiedFSAT.fanSetup);
       for (var key in modifiedWarnings) {
         if (modifiedWarnings[key] !== null) {
           hasWarning = true;
@@ -224,14 +222,14 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   checkMotorWarnings() {
     let hasWarning: boolean = false;
-    let baselineWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.baselineFSAT, this.settings);
+    let baselineWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.baselineFSAT, this.settings, false);
     for (var key in baselineWarnings) {
       if (baselineWarnings[key] !== null) {
         hasWarning = true;
       }
     }
     if (this.compareService.modifiedFSAT && !hasWarning) {
-      let modifiedWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.modifiedFSAT, this.settings);
+      let modifiedWarnings: FanMotorWarnings = this.fsatWarningService.checkMotorWarnings(this.compareService.modifiedFSAT, this.settings, true);
       for (var key in modifiedWarnings) {
         if (modifiedWarnings[key] !== null) {
           hasWarning = true;

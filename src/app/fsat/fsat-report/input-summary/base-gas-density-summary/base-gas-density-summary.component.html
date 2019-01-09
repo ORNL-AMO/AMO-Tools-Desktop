@@ -6,7 +6,6 @@
   </div>
 
   <div *ngIf="!collapse || printView">
-    <!-- <div class="card-body" *ngFor="let data of fieldData; let index = index;"> -->
     <div class="card-body">
       <div class="output-summary">
         <table class="table table-hover table-striped">
@@ -22,17 +21,17 @@
             </tr>
           </thead>
           <tbody>
-          <tr>
-            <td [ngClass]="{'indicate-report-field-different':barometricPressureDiff[0] == true}">
-              Barometric Pressure
-            </td>
-            <td [ngClass]="{'indicate-report-field-different':barometricPressureDiff[0] == true}">
-              {{baseGasDensity.baseline.barometricPressure}}
-            </td>
-            <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.barometricPressure, mod.barometricPressure, 'barometricPressureDiff', 0)}">
-              {{mod.barometricPressure}}
-            </td>
-          </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':barometricPressureDiff[0] == true}">
+                Barometric Pressure
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':barometricPressureDiff[0] == true}">
+                {{baseGasDensity.baseline.barometricPressure}}
+              </td>
+              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.barometricPressure, mod.barometricPressure, 'barometricPressureDiff', 0)}">
+                {{mod.barometricPressure}}
+              </td>
+            </tr>
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':gasTypeDiff[0] == true}">
@@ -47,68 +46,8 @@
             </tr>
 
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':gasDensityDiff[0] == true}">
-                Gas Density
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':gasDensityDiff[0] == true}">
-                {{baseGasDensity.baseline.gasDensity}}
-              </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.gasDensity, mod.gasDensity, 'gasDensityDiff', 0)}">
-                {{mod.gasDensity}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':staticPressureDiff[0] == true}">
-                Static Pressure
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':staticPressureDiff[0] == true}">
-                {{baseGasDensity.baseline.staticPressure}}
-              </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.staticPressure, mod.staticPressure, 'staticPressureDiff', 0)}">
-                {{mod.staticPressure}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[0] == true}">
-                Specific Gravity
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[0] == true}">
-                {{baseGasDensity.baseline.specificGravity}}
-              </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.specificGravity, mod.specificGravity, 'specificGravityDiff', 0)}">
-                {{mod.specificGravity}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':dryBulbTempDiff[0] == true}">
-                Dry Bulb Temperature
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':dryBulbTempDiff[0] == true}">
-                {{baseGasDensity.baseline.dryBulbTemp}}
-              </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.dryBulbTemp, mod.dryBulbTemp, 'dryBulbTempDiff', 0)}">
-                {{mod.dryBulbTemp}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':conditionLocationDiff[0] == true}">
-                Condition Location
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':conditionLocationDiff[0] == true}">
-                {{baseGasDensity.baseline.conditionLocation}}
-              </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.conditionLocation, mod.conditionLocation, 'conditionLocationDiff', 0)}">
-                {{mod.conditionLocation}}
-              </td>
-            </tr>
-
-            <tr>
               <td [ngClass]="{'indicate-report-field-different':inputTypeDiff[0] == true}">
-                Input Type
+                Method to Establish Gas Density
               </td>
               <td [ngClass]="{'indicate-report-field-different':inputTypeDiff[0] == true}">
                 {{formatInputType(baseGasDensity.baseline.inputType)}}
@@ -119,26 +58,68 @@
             </tr>
 
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':relativeHumidityDiff[0] == true}">
-                Relative Humidity
+              <td [ngClass]="{'indicate-report-field-different':dryBulbTempDiff[0] == true}">
+                Dry Bulb Temperature
               </td>
-              <td [ngClass]="{'indicate-report-field-different':relativeHumidityDiff[0] == true}">
-                {{baseGasDensity.baseline.relativeHumidity}}
+              <td [ngClass]="{'indicate-report-field-different':dryBulbTempDiff[0] == true}">
+                <span *ngIf="baseGasDensity.baseline.inputType != 'custom'">
+                  {{baseGasDensity.baseline.dryBulbTemp}}
+                </span>
+                <span *ngIf="baseGasDensity.baseline.inputType == 'custom'">
+                  &mdash; &mdash;
+                </span>
               </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.relativeHumidity, mod.relativeHumidity, 'relativeHumidityDiff', 0)}">
-                {{mod.relativeHumidity}}
+              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.dryBulbTemp, mod.dryBulbTemp, 'dryBulbTempDiff', 0)}">
+                <span *ngIf="mod.inputType != 'custom'">
+                  {{mod.dryBulbTemp}}
+                </span>
+                <span *ngIf="mod.inputType == 'custom'">
+                  &mdash; &mdash;
+                </span>
               </td>
             </tr>
 
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':dewPointDiff[0] == true}">
-                Dew Point
+              <td [ngClass]="{'indicate-report-field-different':staticPressureDiff[0] == true}">
+                Static Pressure
               </td>
-              <td [ngClass]="{'indicate-report-field-different':dewPointDiff[0] == true}">
-                {{baseGasDensity.baseline.dewPoint}}
+              <td [ngClass]="{'indicate-report-field-different':staticPressureDiff[0] == true}">
+                <span *ngIf="baseGasDensity.baseline.inputType != 'custom'">
+                  {{baseGasDensity.baseline.staticPressure}}
+                </span>
+                <span *ngIf="baseGasDensity.baseline.inputType == 'custom'">
+                  &mdash; &mdash;
+                </span>
               </td>
-              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.dewPoint, mod.dewPoint, 'dewPointDiff', 0)}">
-                {{mod.dewPoint}}
+              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.staticPressure, mod.staticPressure, 'staticPressureDiff', 0)}">
+                <span *ngIf="mod.inputType != 'custom'">
+                  {{mod.staticPressure}}
+                </span>
+                <span *ngIf="mod.inputType == 'custom'">
+                  &mdash; &mdash;
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[0] == true}">
+                Specific Gravity
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[0] == true}">
+                <span *ngIf="baseGasDensity.baseline.inputType != 'custom'">
+                  {{baseGasDensity.baseline.specificGravity}}
+                </span>
+                <span *ngIf="baseGasDensity.baseline.inputType == 'custom'">
+                  &mdash; &mdash;
+                </span>
+              </td>
+              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.specificGravity, mod.specificGravity, 'specificGravityDiff', 0)}">
+                <span *ngIf="mod.inputType != 'custom'">
+                  {{mod.specificGravity}}
+                </span>
+                <span *ngIf="mod.inputType == 'custom'">
+                  &mdash; &mdash;
+                </span>
               </td>
             </tr>
 
@@ -147,10 +128,20 @@
                 Wet Bulb Temperature
               </td>
               <td [ngClass]="{'indicate-report-field-different':wetBulbTempDiff[0] == true}">
-                {{baseGasDensity.baseline.wetBulbTemp}}
+                <span *ngIf="baseGasDensity.baseline.inputType == 'wetBulb'">
+                  {{baseGasDensity.baseline.wetBulbTemp}}
+                </span>
+                <span *ngIf="baseGasDensity.baseline.inputType != 'wetBulb'">
+                  &mdash; &mdash;
+                </span>
               </td>
               <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.wetBulbTemp, mod.wetBulbTemp, 'wetBulbTempDiff', 0)}">
-                {{mod.wetBulbTemp}}
+                <span *ngIf="mod.inputType == 'wetBulb'">
+                  {{mod.wetBulbTemp}}
+                </span>
+                <span *ngIf="mod.inputType != 'wetBulb'">
+                  &mdash; &mdash;
+                </span>
               </td>
             </tr>
 
@@ -159,13 +150,78 @@
                 Specific Heat of Gas
               </td>
               <td [ngClass]="{'indicate-report-field-different':specificHeatGasDiff[0] == true}">
-                {{baseGasDensity.baseline.specificHeatGas}}
+                <span *ngIf="baseGasDensity.baseline.inputType == 'wetBulb'">
+                  {{baseGasDensity.baseline.specificHeatGas}}
+                </span>
+                <span *ngIf="baseGasDensity.baseline.inputType != 'wetBulb'">
+                  &mdash; &mdash;
+                </span>
               </td>
               <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.specificHeatGas, mod.specificHeatGas, 'specificHeatGasDiff', 0)}">
-                {{mod.specificHeatGas}}
+                <span *ngIf="mod.inputType == 'wetBulb'">
+                  {{mod.specificHeatGas}}
+                </span>
+                <span *ngIf="mod.inputType != 'wetBulb'">
+                  &mdash; &mdash;
+                </span>
               </td>
             </tr>
 
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':relativeHumidityDiff[0] == true}">
+                Relative Humidity
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':relativeHumidityDiff[0] == true}">
+                <span *ngIf="baseGasDensity.baseline.inputType == 'relativeHumidity'">
+                  {{baseGasDensity.baseline.relativeHumidity}}
+                </span>
+                <span *ngIf="baseGasDensity.baseline.inputType != 'relativeHumidity'">
+                  &mdash; &mdash;
+                </span>
+              </td>
+              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.relativeHumidity, mod.relativeHumidity, 'relativeHumidityDiff', 0)}">
+                <span *ngIf="mod.inputType == 'relativeHumidity'">
+                  {{mod.relativeHumidity}}
+                </span>
+                <span *ngIf="mod.inputType != 'relativeHumidity'">
+                  &mdash; &mdash;
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':dewPointDiff[0] == true}">
+                Gas Dew Point
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':dewPointDiff[0] == true}">
+                <span *ngIf="baseGasDensity.baseline.inputType == 'dewPoint'">
+                  {{baseGasDensity.baseline.dewPoint}}
+                </span>
+                <span *ngIf="baseGasDensity.baseline.inputType != 'dewPoint'">
+                  &mdash; &mdash;
+                </span>
+              </td>
+              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.dewPoint, mod.dewPoint, 'dewPointDiff', 0)}">
+                <span *ngIf="mod.inputType == 'dewPoint'">
+                  {{mod.dewPoint}}
+                </span>
+                <span *ngIf="mod.inputType != 'dewPoint'">
+                  &mdash; &mdash;
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':gasDensityDiff[0] == true}">
+                Gas Density
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':gasDensityDiff[0] == true}">
+                {{baseGasDensity.baseline.gasDensity}}
+              </td>
+              <td *ngFor="let mod of baseGasDensity.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseGasDensity.baseline.gasDensity, mod.gasDensity, 'gasDensityDiff', 0)}">
+                {{mod.gasDensity}}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

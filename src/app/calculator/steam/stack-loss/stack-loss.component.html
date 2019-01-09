@@ -18,8 +18,12 @@
       <app-stack-loss-form *ngIf="stackLossForm" [method]="method" [stackLossForm]="stackLossForm" [settings]="settings"
         (emitChangeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-stack-loss-form>
       <div class="form-group">
-        <label class="small bold">Slack Loss</label>
+        <label class="small bold">Stack Loss</label>
         <div class="small bold text-center">{{stackLossPercent | sigFigs:'3'}} %</div>
+      </div>
+      <div class="form-group">
+        <label class="small bold">Boiler Combustion Efficiency</label>
+        <div class="small bold text-center">{{boilerEfficiency | sigFigs:'3'}} %</div>
       </div>
       <div class="w-100 justify-content-center btn-group btn-group-sm">
         <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">

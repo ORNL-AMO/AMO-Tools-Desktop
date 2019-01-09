@@ -10,6 +10,8 @@ import { Settings } from '../../../shared/models/settings';
 export class ReceiverTankComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  calcType: string;
   
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 

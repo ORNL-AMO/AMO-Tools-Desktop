@@ -97,39 +97,52 @@ export class HelpPanelComponent implements OnInit {
     this.tabSelect = str;
   }
 
-
   getResults() {
-    //create copies of inputs to use for calcs
-    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let tmpForm = this.psatService.getFormFromPsat(psatInputs);
-    if (tmpForm.status == 'VALID') {
-      if (psatInputs.optimize_calculation) {
-        this.baselineResults = this.psatService.resultsOptimal(psatInputs, this.settings);
-      } else {
-        this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
-      }
-    } else {
-      this.baselineResults = this.psatService.emptyResults();
-    }
-    if (this.modification) {
+    let psatResults: {baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number};
+    if(this.modification){
       this.modificationName = this.modification.psat.name;
-      let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.modification.psat.inputs));
-      tmpForm = this.psatService.getFormFromPsat(modInputs);
-      if (tmpForm.status == 'VALID') {
-        if (modInputs.optimize_calculation) {
-          this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
-        } else {
-          this.modificationResults = this.psatService.resultsModified(modInputs, this.settings, this.baselineResults.pump_efficiency);
-        }
-      } else {
-        this.modificationResults = this.psatService.emptyResults();
-      }
-    } else {
-      this.modificationResults = this.psatService.emptyResults();
+      psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.modification.psat.inputs)
+    }else{
+      psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings);
     }
-    this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
-    this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));
+    this.baselineResults = psatResults.baselineResults;
+    this.modificationResults = psatResults.modificationResults;
+    this.annualSavings = psatResults.annualSavings;
+    this.percentSavings = psatResults.percentSavings;
   }
+
+  // getResults() {
+  //   //create copies of inputs to use for calcs
+  //   let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+  //   let tmpForm = this.psatService.getFormFromPsat(psatInputs);
+  //   if (tmpForm.status == 'VALID') {
+  //     if (psatInputs.optimize_calculation) {
+  //       this.baselineResults = this.psatService.resultsOptimal(psatInputs, this.settings);
+  //     } else {
+  //       this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
+  //     }
+  //   } else {
+  //     this.baselineResults = this.psatService.emptyResults();
+  //   }
+  //   if (this.modification) {
+  //     this.modificationName = this.modification.psat.name;
+  //     let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.modification.psat.inputs));
+  //     tmpForm = this.psatService.getFormFromPsat(modInputs);
+  //     if (tmpForm.status == 'VALID') {
+  //       if (modInputs.optimize_calculation) {
+  //         this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
+  //       } else {
+  //         this.modificationResults = this.psatService.resultsModified(modInputs, this.settings, this.baselineResults.pump_efficiency);
+  //       }
+  //     } else {
+  //       this.modificationResults = this.psatService.emptyResults();
+  //     }
+  //   } else {
+  //     this.modificationResults = this.psatService.emptyResults();
+  //   }
+  //   this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
+  //   this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));
+  // }
 
 
   save() {

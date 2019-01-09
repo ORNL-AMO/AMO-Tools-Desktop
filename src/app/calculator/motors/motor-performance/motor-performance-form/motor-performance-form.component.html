@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="frequency">Line Frequency</label>
     <select name="frequency" class="form-control" id="frequency" formControlName="frequency" (change)="emitChange()" (focus)="focusField('frequency')">
-      <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
+      <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
     </select>
   </div>
 
@@ -35,11 +35,11 @@
   <div class="form-group">
     <label for="efficiencyClass">Efficiency Class</label>
     <select name="efficiencyClass" class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (change)="changePowerArrays()">
-      <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+      <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
     </select>
   </div>
-
-  <div class="form-group" *ngIf="performanceForm.controls.efficiencyClass.value == 'Specified'">
+  <!--specified efficiency-->
+  <div class="form-group" *ngIf="performanceForm.controls.efficiencyClass.value == 3">
     <label for="efficiency">Efficiency</label>
     <div class="input-group calc-addon-group">
       <input name="efficiency" type="number" min="0" step="any" max="100" class="form-control" id="efficiency" formControlName="efficiency"

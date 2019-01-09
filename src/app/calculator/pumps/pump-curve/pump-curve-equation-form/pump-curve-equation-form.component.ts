@@ -28,6 +28,7 @@ export class PumpCurveEquationFormComponent implements OnInit {
   ]
 
   constantWarning: string = null;
+  maxFlowWarning: string = null;
 
   // maxFlow
   constructor(private convertUnitsService: ConvertUnitsService) { }
@@ -42,11 +43,11 @@ export class PumpCurveEquationFormComponent implements OnInit {
 
   emitCalculateChanges() {
     this.checkWarnings();
-    if (this.constantWarning == null) {
+    if (this.constantWarning == null && this.maxFlowWarning == null) {
       this.calculate.emit(true);
     }
-
   }
+
 
   checkWarnings() {
     if (this.pumpCurveForm.headConstant <= 0) {
@@ -54,6 +55,12 @@ export class PumpCurveEquationFormComponent implements OnInit {
     }
     else {
       this.constantWarning = null;
+    }
+    if (this.pumpCurveForm.maxFlow > 1000000) {
+      this.maxFlowWarning = "Value must not be greater than 1,000,000.";
+    }
+    else {
+      this.maxFlowWarning = null;
     }
   }
 

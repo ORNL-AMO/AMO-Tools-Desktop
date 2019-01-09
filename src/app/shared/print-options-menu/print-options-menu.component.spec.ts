@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FanCurveDataComponent } from './fan-curve-data.component';
+import { PrintOptionsMenuComponent } from './print-options-menu.component';
 
-describe('FanCurveDataComponent', () => {
-  let component: FanCurveDataComponent;
-  let fixture: ComponentFixture<FanCurveDataComponent>;
+describe('PrintOptionsMenuComponent', () => {
+  let component: PrintOptionsMenuComponent;
+  let fixture: ComponentFixture<PrintOptionsMenuComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FanCurveDataComponent ]
+      declarations: [ PrintOptionsMenuComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FanCurveDataComponent);
+    fixture = TestBed.createComponent(PrintOptionsMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

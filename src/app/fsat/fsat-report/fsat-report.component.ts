@@ -39,6 +39,14 @@ export class FsatReportComponent implements OnInit {
   @Input()
   printView: boolean;
   @Input()
+  printInputData: boolean;
+  @Input()
+  printResults: boolean;
+  @Input()
+  printReportGraphs: boolean;
+  @Input()
+  printReportSankey: boolean;
+  @Input()
   containerHeight: number;
 
   @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
@@ -46,12 +54,9 @@ export class FsatReportComponent implements OnInit {
   @ViewChild('reportHeader') reportHeader: ElementRef;
 
   showPrint: boolean = false;
+  showPrintMenu: boolean = false;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
-  printReportGraphs: boolean;
-  printReportSankey: boolean;
-  printResults: boolean;
-  printInputData: boolean;
 
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
@@ -62,6 +67,7 @@ export class FsatReportComponent implements OnInit {
   constructor(private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService, private fsatReportService: FsatReportService) { }
 
   ngOnInit() {
+
     this.initPrintLogic();
     this.createdDate = new Date();
     if (this.assessment.fsat && this.settings && !this.fsat) {
@@ -83,24 +89,23 @@ export class FsatReportComponent implements OnInit {
       this.fsat.modifications = new Array();
     }
 
-    //subscribe to print event
-    this.fsatReportService.showPrint.subscribe(printVal => {
-      //shows loading print view
-      this.showPrintDiv = printVal;
-      if (printVal == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
+    if (this.inRollup) {
+      this.showPrint = this.printView;
+    }
+    else {
+      //subscribe to print event
+      this.fsatReportService.showPrint.subscribe(printVal => {
+        //shows loading print view
+        this.showPrintDiv = printVal;
+        if (printVal == true) {
+          //use delay to show loading before print payload starts
+          setTimeout(() => {
+            this.showPrint = printVal;
+          }, 20)
+        } else {
           this.showPrint = printVal;
-        }, 20)
-      } else {
-        this.showPrint = printVal;
-      }
-    });
-
-    if (this.printView !== undefined) {
-      if (this.printView) {
-        this.showPrint = true;
-      }
+        }
+      });
     }
   }
 
@@ -163,23 +168,24 @@ export class FsatReportComponent implements OnInit {
 
 
   initPrintLogic() {
-    if (this.inRollup) {
-      this.printReportGraphs = true;
-      this.printReportSankey = true;
-      this.printResults = true;
+    if (!this.inRollup) {
+      this.selectAll = false;
+      this.printReportGraphs = false;
+      this.printReportSankey = false;
+      this.printResults = false;
       this.printInputData = false;
     }
   }
 
   showModal(): void {
-    this.printMenuModal.show();
+    this.showPrintMenu = true;
   }
 
   closeModal(reset: boolean): void {
     if (reset) {
       this.resetPrintSelection();
     }
-    this.printMenuModal.hide();
+    this.showPrintMenu = false;
   }
 
   resetPrintSelection() {
@@ -192,7 +198,7 @@ export class FsatReportComponent implements OnInit {
 
   togglePrint(section: string): void {
     switch (section) {
-      case "select-all": {
+      case "selectAll": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
           this.printReportGraphs = true;

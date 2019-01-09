@@ -5,8 +5,9 @@
         <img src="assets/images/calculator-icons/pump-curve.png" class="ico-size">
       </div>
       <div class="pl-2">
-        <h3 *ngIf="!isFan">Pump Curve Calculator</h3>
-        <h3 *ngIf="isFan">Fan Curve Calculator</h3>
+        <h3 *ngIf="!isFan && pumpCurvePrimary">Pump Curve Calculator</h3>
+        <h3 *ngIf="!pumpCurvePrimary">System Curve Calculator</h3>
+        <h3 *ngIf="isFan && pumpCurvePrimary">Fan Curve Calculator</h3>
       </div>
     </div>
 
@@ -31,7 +32,7 @@
             </div>
             <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings"
               (emitCalculate)="calculate()" (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form>
-            <div class="w-100 justify-content-center btn-group btn-group-sm">
+            <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetPumpCurveData()">Reset
                 Data</button>
             </div>
@@ -49,7 +50,7 @@
           <app-system-curve-form *ngIf="systemCurveCollapsed == 'open'" [psat]="psat" [fsat]="fsat" [isFan]="isFan"
             [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
             (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment" (changeField)="setField($event, 'system-curve')"></app-system-curve-form>
-          <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
             <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetSystemCurveData()">Reset
               Data</button>
           </div>
@@ -66,7 +67,7 @@
           <app-system-curve-form *ngIf="systemCurveCollapsed == 'open'" [psat]="psat" [fsat]="fsat" [isFan]="isFan"
             [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
             (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment" (changeField)="setField($event, 'system-curve')"></app-system-curve-form>
-          <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
             <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetSystemCurveData()">Reset
               Data</button>
           </div>
@@ -91,7 +92,7 @@
               (emitCalculate)="calculate()" (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form>
 
           </div>
-          <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
             <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetPumpCurveData()">Reset
               Data</button>
           </div>

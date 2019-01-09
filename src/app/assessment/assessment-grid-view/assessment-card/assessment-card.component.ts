@@ -9,6 +9,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { Calculator } from '../../../shared/models/calculators';
 
 @Component({
   selector: 'app-assessment-card',
@@ -36,10 +38,12 @@ export class AssessmentCardComponent implements OnInit {
   dropdownOpen: boolean = false;
   assessmentCopy: Assessment;
   settingsCopy: Settings;
-  copyModifications: boolean = false;
+  assessmentCalculatorCopy: Calculator;
+  calculatorId: number;
   constructor(private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
-    private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
+    private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService) { }
 
 
   ngOnInit() {
@@ -48,6 +52,14 @@ export class AssessmentCardComponent implements OnInit {
     }
     this.assessmentCopy = JSON.parse(JSON.stringify(this.assessment));
     delete this.assessmentCopy.id;
+
+    let tmpCalculator: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+  
+    if (tmpCalculator) {
+      this.assessmentCalculatorCopy = JSON.parse(JSON.stringify(tmpCalculator));
+      this.calculatorId = this.assessmentCalculatorCopy.id;
+      delete this.assessmentCalculatorCopy.id;
+    }
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
     this.settingsCopy = JSON.parse(JSON.stringify(tmpSettings));
     delete this.settingsCopy.id;
@@ -92,7 +104,8 @@ export class AssessmentCardComponent implements OnInit {
       this.copyForm = this.formBuilder.group({
         'name': [this.assessment.name + ' (copy)', Validators.required],
         'directoryId': [this.assessment.directoryId, Validators.required],
-        'copyModifications': [false]
+        'copyModifications': [false],
+        'copyCalculators': [false]
       })
       this.copyModal.show();
     })
@@ -108,10 +121,10 @@ export class AssessmentCardComponent implements OnInit {
     this.assessmentCopy.createdDate = new Date();
     this.assessmentCopy.modifiedDate = new Date();
 
-    if(this.copyForm.controls.copyModifications.value == false){
-      if(this.assessmentCopy.type == 'PHAST'){
+    if (this.copyForm.controls.copyModifications.value == false) {
+      if (this.assessmentCopy.type == 'PHAST') {
         this.assessmentCopy.phast.modifications = new Array();
-      }else if(this.assessmentCopy.type == 'PSAT'){
+      } else if (this.assessmentCopy.type == 'PSAT') {
         this.assessmentCopy.psat.modifications = new Array();
       }
     }
@@ -121,8 +134,18 @@ export class AssessmentCardComponent implements OnInit {
       this.indexedDbService.addSettings(this.settingsCopy).then(() => {
         this.settingsDbService.setAll().then(() => {
           this.assessmentDbService.setAll().then(() => {
-            this.changeDirectory.emit(true);
-            this.hideCopyModal();
+            if (this.copyForm.controls.copyCalculators.value == true) {
+              this.assessmentCalculatorCopy.assessmentId = newAssessmentId;
+              this.indexedDbService.addCalculator(this.assessmentCalculatorCopy).then(() => {
+                this.calculatorDbService.setAll().then(() => {
+                  this.changeDirectory.emit(true);
+                  this.hideCopyModal();
+                })
+              })
+            } else {
+              this.changeDirectory.emit(true);
+              this.hideCopyModal();
+            }
           })
         })
       })
@@ -171,9 +194,18 @@ export class AssessmentCardComponent implements OnInit {
       this.indexedDbService.deleteSettings(deleteSettings.id).then(() => {
         this.assessmentDbService.setAll().then(() => {
           this.settingsDbService.setAll().then(() => {
-            console.log('delete')
-            this.hideDeleteModal();
-            this.assessmentService.updateSidebarData.next(true);
+            if (this.assessmentCalculatorCopy) {
+              this.indexedDbService.deleteCalculator(this.calculatorId).then(() => {
+                this.calculatorDbService.setAll().then(() => {
+                  this.hideDeleteModal();
+                  this.assessmentService.updateSidebarData.next(true);
+                })
+              })
+            } else {
+              console.log('delete')
+              this.hideDeleteModal();
+              this.assessmentService.updateSidebarData.next(true);
+            }
           })
         })
       })

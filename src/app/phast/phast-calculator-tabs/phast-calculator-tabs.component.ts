@@ -18,6 +18,7 @@ export class PhastCalculatorTabsComponent implements OnInit {
   }
 
   changeCalcTab(str: string) {
+    console.log('changeCalcTab str = ' + str);
     this.phastService.calcTab.next(str);
   }
 }

@@ -11,7 +11,7 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
-import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
+import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOutput } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -361,7 +361,7 @@ export class FsatComponent implements OnInit {
   }
 
   checkSetupDone(fsat: FSAT): boolean {
-    return this.fsatService.checkValid(fsat);
+    return this.fsatService.checkValid(fsat, true);
   }
 
   selectModificationModal() {
@@ -386,7 +386,7 @@ export class FsatComponent implements OnInit {
         return false;
       }
     } else if (this.stepTab == 'fan-setup') {
-      let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup);
+      let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup, false);
       if (isValid) {
         return true;
       } else {
@@ -432,24 +432,7 @@ export class FsatComponent implements OnInit {
   }
 
   addNewMod() {
-    let modName: string = 'Scenario ' + (this._fsat.modifications.length + 1);
-    let tmpModification: Modification = {
-      fsat: {
-        name: modName,
-        notes: {
-          fieldDataNotes: '',
-          fanMotorNotes: '',
-          fanSetupNotes: '',
-          fluidNotes: ''
-        }
-      },
-      exploreOpportunities: (this.assessmentTab == 'explore-opportunities')
-    }
-    let fsatCopy: FSAT = (JSON.parse(JSON.stringify(this._fsat)));
-    tmpModification.fsat.baseGasDensity = fsatCopy.baseGasDensity;
-    tmpModification.fsat.fanMotor = fsatCopy.fanMotor;
-    tmpModification.fsat.fanSetup = fsatCopy.fanSetup;
-    tmpModification.fsat.fieldData = fsatCopy.fieldData;
+    let tmpModification: Modification = this.fsatService.getNewMod(this._fsat, this.settings);
     this.saveNewMod(tmpModification)
   }
 

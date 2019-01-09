@@ -392,7 +392,7 @@ export class Fsat203Component implements OnInit {
 
   initCalculator(): Calculator {
     let tmpFans203Inputs: Fan203Inputs = this.fsat203Service.getDefaultData();
-    tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+    tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       fan203Inputs: tmpFans203Inputs

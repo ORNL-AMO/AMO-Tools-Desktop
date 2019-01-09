@@ -31,6 +31,8 @@ export class CondensingTurbineFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('settings = ');
+    console.log(this.settings);
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
     if (this.selected == false) {
       this.disableForm();

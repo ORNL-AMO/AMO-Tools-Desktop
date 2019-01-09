@@ -57,16 +57,16 @@
     </span>
   </div>
   <div class="form-group">
-    <label for="fla">Full Load Amps
+    <label for="fullLoadAmps">Full Load Amps
       <a class="form-text small click-link" id="flaHelp" (click)="estimateFla()">Estimate Full-Load Amps</a>
     </label>
     <div class="input-group">
-      <input name="fla" type="number" step="any" class="form-control" formControlName="fla" id="fla" (input)="save()" (focus)="focusField('fla')"
+      <input name="fullLoadAmps" type="number" step="any" class="form-control" formControlName="fullLoadAmps" id="fullLoadAmps" (input)="save()" (focus)="focusField('fla')"
         onfocus="this.select();">
       <span class="input-group-addon units">A</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.fla.invalid && !shaftPowerForm.controls.fla.pristine">
-      <span *ngIf="shaftPowerForm.controls.fla.errors.required">Value Required</span>
+    <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.fullLoadAmps.invalid && !shaftPowerForm.controls.fullLoadAmps.pristine">
+      <span *ngIf="shaftPowerForm.controls.fullLoadAmps.errors.required">Value Required</span>
     </span>
   </div>
   <div class="form-group">

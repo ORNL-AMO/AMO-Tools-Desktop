@@ -9,9 +9,6 @@ import { FanFieldDataHelpComponent } from './fan-field-data-help/fan-field-data-
 import { FanMotorHelpComponent } from './fan-motor-help/fan-motor-help.component';
 import { FanSetupHelpComponent } from './fan-setup-help/fan-setup-help.component';
 import { FsatFluidHelpComponent } from './fsat-fluid-help/fsat-fluid-help.component';
-import { CalculateInletPressureHelpComponent } from '../fan-field-data/calculate-inlet-pressure/calculate-inlet-pressure-help/calculate-inlet-pressure-help.component';
-import { CalculateOutletPressureHelpComponent } from '../fan-field-data/calculate-outlet-pressure/calculate-outlet-pressure-help/calculate-outlet-pressure-help.component';
-import { FlowPressuresHelpComponent } from '../fan-field-data/calculate-flow-pressures/flow-pressures-help/flow-pressures-help.component';
 import { ModifyConditionsNotesComponent } from './modify-conditions-notes/modify-conditions-notes.component';
 import { FsatResultsModule } from '../fsat-results/fsat-results.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -32,9 +29,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     FanMotorHelpComponent,
     FanSetupHelpComponent,
     FsatFluidHelpComponent,
-    CalculateInletPressureHelpComponent,
-    CalculateOutletPressureHelpComponent,
-    FlowPressuresHelpComponent,
     ModifyConditionsNotesComponent
   ],
   providers: [
@@ -49,9 +43,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     FanMotorHelpComponent,
     FanSetupHelpComponent,
     FsatFluidHelpComponent,
-    CalculateInletPressureHelpComponent,
-    CalculateOutletPressureHelpComponent,
-    FlowPressuresHelpComponent,
     ModifyConditionsNotesComponent
   ]
 })

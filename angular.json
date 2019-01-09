@@ -57,7 +57,8 @@
               "src/assets/styles/graphs.css",
               "src/assets/styles/forms.css",
               "src/assets/styles/help.css",
-              "src/assets/styles/ssmt-diagram.css"
+              "src/assets/styles/ssmt-diagram.css",
+              "src/assets/styles/toggle-switch.css"
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.bundle.min.js",
