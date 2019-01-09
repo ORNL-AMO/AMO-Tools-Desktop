@@ -40,8 +40,8 @@
     </div>
   </div>
   <!--diagram-->
-  <div class="tab-content" *ngIf="mainTab == 'diagram'">
-    <app-ssmt-diagram [settings]="settings" [ssmt]="_ssmt"></app-ssmt-diagram>
+  <div class="tab-content" [ngStyle]="{'height.px': containerHeight}" *ngIf="mainTab == 'diagram'">
+    <app-ssmt-diagram [settings]="settings" [ssmt]="_ssmt" [containerHeight]="containerHeight"></app-ssmt-diagram>
   </div>
   <!--calculators-->
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">

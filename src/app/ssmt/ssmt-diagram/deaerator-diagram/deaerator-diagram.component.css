@@ -75,7 +75,6 @@
 
 .inlet-pressure-holder .inlet-pressure-mass-flow{
     position: absolute;
-    z-index: -1;
     color: black;
     width: 100px;
     right: -15px;

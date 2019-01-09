@@ -120,6 +120,7 @@
     border-right: solid 1px darkgray;
     border-left: solid 1px darkgray;
     padding: 3px;
+    vertical-align: middle;
 }
 
 .ssmt-diagram tbody{

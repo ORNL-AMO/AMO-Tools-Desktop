@@ -50,7 +50,6 @@
 
 .inlet-blowdown-holder .inlet-blowdown{
     position: absolute;
-    z-index: -1;
     color: black;
     width: 100px;
     left: 45px;
@@ -58,7 +57,6 @@
 
 .outlet-steam-holder .outlet-steam-mass-flow{
     position: absolute;
-    z-index: -1;
     color: black;
     width: 100px;
     right: -10px;
@@ -67,7 +65,6 @@
 
 .outlet-blowdown-holder .outlet-blowdown{
     position: absolute;
-    z-index: -1;
     color: black;
     width: 100px;
     right: 0px;

@@ -14,7 +14,9 @@ export class SsmtDiagramComponent implements OnInit {
   ssmt: SSMT;
   @Input()
   settings: Settings;
-
+  @Input()
+  containerHeight: number;
+  
   massFlow: number = 408.7;
 
   dataCalculated: boolean = false;
@@ -55,7 +57,7 @@ export class SsmtDiagramComponent implements OnInit {
   lowPressureSteamHeatLoss: HeatLossOutput;
   returnCondensate: SteamPropertiesOutput;
   tabSelect: string = 'results';
-  selectedTable: string = 'boiler';
+  selectedTable: string = 'cost';
   hoveredEquipment: string = 'default';
   deaeratorWidth: number;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }

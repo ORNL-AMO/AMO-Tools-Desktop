@@ -12,23 +12,15 @@
 
 
 .diagram-container{
-    background: #fff;
-    box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
-    z-index: 2;
     width: 70% !important;
     font-size: small;
+    min-width: 800px;
+    overflow-x: auto;
 }
 
 
 .diagram-help-panel{
     width: 30%;
-}
-
-.min-width-container{
-    min-width: 800px;
-    /* min-height: 800px; */
-    overflow-x: auto;
-    /* overflow-y: auto; */
 }
 
 .boiler-table-height{
