@@ -1,6 +1,6 @@
 <div class="d-flex ssmt modify-conditions panel-container ssmt-diagram">
-  <div class="panel-column scroll-item diagram-container" [ngClass]="hoveredEquipment" [ngStyle]="{'height.px': containerHeight}">
-    <div class="d-flex p-3 align-self-center" *ngIf="dataCalculated == true">
+  <div class="panel-column scroll-item diagram-container" [ngClass]="hoveredEquipment" [ngStyle]="{'height.px': containerHeight}" *ngIf="dataCalculated == true">
+    <div class="d-flex p-3 align-self-center">
       <div class="d-flex flex-grow">
         <app-feedwater-diagram [deaerator]="deaerator"></app-feedwater-diagram>
       </div>
@@ -167,7 +167,7 @@
         <div class="d-flex w-100 pb-2" *ngIf="selectedTable != 'cost'">
           <a class="click-link small" (click)="selectTable('cost')">View Cost Summary</a>
         </div>
-        <app-cost-table *ngIf="selectedTable == 'cost'"></app-cost-table>
+        <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [powerGenerated]="powerGenerated" [boiler]="boiler"></app-cost-table>
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
         <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
           [turbine]="highToLowPressureTurbine"></app-turbine-table>
