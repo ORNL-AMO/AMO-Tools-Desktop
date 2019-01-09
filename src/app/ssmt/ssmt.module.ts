@@ -28,13 +28,10 @@ import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pr
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
 import { SharedModule } from '../shared/shared.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
-import { BalanceTurbinesService } from './ssmt-calculations/balance-turbines.service';
-import { InitializePropertiesService } from './ssmt-calculations/initialize-properties.service';
-import { ModelerUtilitiesService } from './ssmt-calculations/modeler-utilities.service';
-import { RunModelService } from './ssmt-calculations/run-model.service';
-import { SteamModelCalculationService } from './ssmt-calculations/steam-model-calculation.service';
+
 import { SsmtReportComponent } from './ssmt-report/ssmt-report.component';
 import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -73,12 +70,7 @@ import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
     CompareService,
     BoilerService,
     HeaderService,
-    TurbineService,
-    BalanceTurbinesService,
-    InitializePropertiesService,
-    ModelerUtilitiesService,
-    RunModelService,
-    SteamModelCalculationService
+    TurbineService
   ]
 })
 export class SsmtModule { }

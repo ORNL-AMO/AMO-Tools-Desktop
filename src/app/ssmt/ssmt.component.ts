@@ -19,8 +19,6 @@ import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
 import { AssessmentService } from '../assessment/assessment.service';
-import { SteamModelCalculationService } from './ssmt-calculations/steam-model-calculation.service';
-import { SSMTOutput } from '../shared/models/steam/steam-outputs';
 import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
 
 @Component({
@@ -83,9 +81,7 @@ export class SsmtComponent implements OnInit {
     private headerService: HeaderService,
     private turbineService: TurbineService,
     private boilerService: BoilerService,
-    private assessmentService: AssessmentService,
-    private steamModelCalculationService: SteamModelCalculationService,
-    private calculateModelService: CalculateModelService
+    private assessmentService: AssessmentService
   ) { }
 
   ngOnInit() {
