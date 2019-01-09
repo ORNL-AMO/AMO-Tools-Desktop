@@ -14,11 +14,11 @@
     </div> -->
     <div class="d-flex justify-content-center" (click)="selectEquipment()" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
       <div class="prv-img-holder">
-        <div class="feedwater" *ngIf="prv.feedwaterMassFlow">
+        <div class="feedwater" *ngIf="prv.feedwaterMassFlow != undefined">
           <span class="fa fa-chevron-right"></span>
         </div>
-        <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow">
-            {{prv.feedwaterMassFlow | number:'1.0-2'}} klb/hr
+        <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined">
+            {{prv.feedwaterMassFlow | number:'1.0-1'}} klb/hr
         </span>
         <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
         <span class="prv-label">PRV</span>

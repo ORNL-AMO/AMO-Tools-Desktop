@@ -1,8 +1,7 @@
 .flash-tank-img{
-    height: 74px;
-    margin-right: -55%;
-    margin-top: -55%;
-    margin-bottom: -62%;
+    height: 55px;
+    margin-top: -14px;
+    margin-bottom: -17px;
     z-index: +1;
 }
 
@@ -41,7 +40,7 @@
     text-align: center;
     right: 5px;
     font-size: smaller;
-    bottom: 5px;
+    bottom: 0px;
 }
 
 

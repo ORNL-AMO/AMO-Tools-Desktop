@@ -4,7 +4,6 @@
 }
 .ssmt-diagram.blowdownHovered .blowdown{
     box-shadow: 0px 0px 10px 0px #5D4037;
-    cursor: pointer;
 }
 
 .ssmt-diagram .feedwater{
@@ -13,7 +12,6 @@
 }
 .ssmt-diagram.feedwaterHovered .feedwater{
     box-shadow: 0px 0px 10px 0px #8E44AD;
-    cursor: pointer;
 }
 
 .feedwater .hidden-chevron{
@@ -27,7 +25,6 @@
 }
 .ssmt-diagram.condensateHovered .condensate{
     box-shadow: 0px 0px 10px 0px #283593;
-    cursor: pointer;
 }
 
 .condensate .hidden-chevron{
@@ -47,7 +44,6 @@
 .ssmt-diagram.makeupWaterHovered .makeup-water-box
 {
     box-shadow: 0px 0px 10px 0px #43A047;
-    cursor: pointer;
 }
 
 .makeup-water .hidden-chevron{
@@ -62,7 +58,6 @@
 .ssmt-diagram.highPressureHovered .highPressure .header-tube,
 .ssmt-diagram.highPressureProcessSteamHovered .highPressure .process-usage {
     box-shadow: 0px 0px 10px 0px #C0392B;
-    cursor: pointer;
 }
 
 .high-pressure .hidden-chevron{
@@ -76,7 +71,6 @@
 .ssmt-diagram.mediumPressureHovered .mediumPressure .header-tube, 
 .ssmt-diagram.mediumPressureProcessSteamHovered .mediumPressure .process-usage{
     box-shadow: 0px 0px 10px 0px #FFA726;
-    cursor: pointer;
 }
 
 .medium-pressure .hidden-chevron{
@@ -90,7 +84,6 @@
 .ssmt-diagram.lowPressureHovered .lowPressure .header-tube, 
 .ssmt-diagram.lowPressureProcessSteamHovered .lowPressure .process-usage {
     box-shadow: 0px 0px 10px 0px #FFEB3B;
-    cursor: pointer;
 }
 
 .low-pressure .hidden-chevron{
@@ -102,7 +95,6 @@
 }
 .ssmt-diagram.ventsHovered .vents{
     box-shadow: 0px 0px 10px 0px #ABB2B9;
-    cursor: pointer;
 }
 
 .ssmt-diagram .fa-chevron-down, .ssmt-diagram .fa-chevron-up{
@@ -136,4 +128,13 @@
 
 .ssmt-diagram .group-label{
     font-weight: bold;
+}
+
+
+.ssmt-diagram .fa-chevron-down:not(.hidden-chevron):hover, 
+.ssmt-diagram .fa-chevron-left:not(.hidden-chevron):hover, 
+.ssmt-diagram .fa-chevron-right:not(.hidden-chevron):hover, 
+.ssmt-diagram .fa-chevron-up:not(.hidden-chevron):hover{
+    background: grey;
+    /* cursor: pointer; */
 }

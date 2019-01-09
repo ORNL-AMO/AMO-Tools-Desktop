@@ -4,8 +4,10 @@
 
 
 .horizontal-pipe{
-    padding-top: 3px;
-    padding-bottom: 3px;
     border-bottom-left-radius: 25px;
     border-top-right-radius: 25px;
+}
+
+.pipe-holder{
+    
 }

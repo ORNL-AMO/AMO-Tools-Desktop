@@ -38,7 +38,7 @@
 }
 
 .low-pressure-tube{
-    height: 99.5%;
+    height: 106.5%;
     margin-top: -1rem;
     border-bottom-right-radius: 35px;
 }
@@ -75,9 +75,14 @@
 
 .inlet-pressure-holder .inlet-pressure-mass-flow{
     position: absolute;
-    z-index: +1;
+    z-index: -1;
     color: black;
     width: 100px;
     right: -15px;
     bottom: 0;
+}
+
+.horizontal-pipe{
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
 }

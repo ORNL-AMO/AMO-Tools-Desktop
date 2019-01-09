@@ -87,9 +87,10 @@
 
 .feedwater-mass-flow{
     position: absolute;
-    /* width: 68px; */
     z-index: +1;
     top: 30px;
     color: black;
-    left: -50px;
+    left: -55px;
+    width: 50px;
+    text-align: center;
 }
