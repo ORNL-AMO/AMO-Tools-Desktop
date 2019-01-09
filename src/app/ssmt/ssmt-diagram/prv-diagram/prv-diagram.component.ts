@@ -21,6 +21,7 @@ export class PrvDiagramComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.prv.feedwaterMassFlow);
   }
 
   hoverEquipment(str: string) {

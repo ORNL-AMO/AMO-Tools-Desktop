@@ -39,21 +39,21 @@
 
         </tr>
         <tr>
-          <td class="bold">Phast / Quality</td>
+          <td class="bold">Phase / Quality</td>
           <td class="text-center">
             <span *ngIf="prv.inletQuality == 0">Liquid</span>
             <span *ngIf="prv.inletQuality == 1">Gas</span>
-            <span *ngIf="prv.inletQuality != 0 && prv.inletQuality != 1">{{prv.inletQuality}}</span>
+            <span *ngIf="prv.inletQuality != 0 && prv.inletQuality != 1">{{prv.inletQuality |number:'2.0-2'}}</span>
           </td>
           <td class="text-center">
             <span *ngIf="prv.outletQuality == 0">Liquid</span>
             <span *ngIf="prv.outletQuality == 1">Gas</span>
-            <span *ngIf="prv.outletQuality != 0 && prv.outletQuality != 1">{{prv.outletQuality}}</span>
+            <span *ngIf="prv.outletQuality != 0 && prv.outletQuality != 1">{{prv.outletQuality |number:'2.0-2'}}</span>
           </td>
           <td class="text-center" *ngIf="prv.feedwaterMassFlow">
             <span *ngIf="prv.feedwaterQuality == 0">Liquid</span>
             <span *ngIf="prv.feedwaterQuality == 1">Gas</span>
-            <span *ngIf="prv.feedwaterQuality != 0 && prv.feedwaterQuality != 1">{{prv.feedwaterQuality}}</span>
+            <span *ngIf="prv.feedwaterQuality != 0 && prv.feedwaterQuality != 1">{{prv.feedwaterQuality |number:'2.0-2'}}</span>
           </td>
         </tr>
         <tr>

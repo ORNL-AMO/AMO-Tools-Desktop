@@ -15,14 +15,6 @@ export class SsmtDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('deaeratorContainer')
-  deaeratorContainer: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.getDeaeratorWidth();
-  }
-
-
   massFlow: number = 408.7;
 
   dataCalculated: boolean = false;
@@ -75,10 +67,6 @@ export class SsmtDiagramComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(){
-    this.getDeaeratorWidth();
-  }
-
   calculateResults() {
     this.calculateModelService.initData(this.ssmt, this.settings)
     let results: number = this.calculateModelService.marksIterator();
@@ -93,15 +81,6 @@ export class SsmtDiagramComponent implements OnInit {
     this.calculateModelService.initData(this.ssmt, this.settings);
     this.calculateModelService.calculateModel(this.massFlow);
     this.getResults();
-    console.log(this.deaeratorContainer);
-  }
-
-
-  getDeaeratorWidth(){
-    if(this.deaeratorContainer){
-      this.deaeratorWidth = this.deaeratorContainer.nativeElement.offsetWidth;
-      this.cd.detectChanges();
-    }
   }
 
   getResults() {

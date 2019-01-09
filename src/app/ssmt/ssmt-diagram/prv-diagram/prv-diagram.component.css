@@ -76,3 +76,20 @@
 .chevron-one, .chevron-two{
     min-height: 40px;
 }
+
+.feedwater{
+    position: absolute;
+    width: 60px;
+    bottom: 13px;
+    right: 25px;
+    text-align: center;
+}
+
+.feedwater-mass-flow{
+    position: absolute;
+    /* width: 68px; */
+    z-index: +1;
+    top: 30px;
+    color: black;
+    left: -50px;
+}
