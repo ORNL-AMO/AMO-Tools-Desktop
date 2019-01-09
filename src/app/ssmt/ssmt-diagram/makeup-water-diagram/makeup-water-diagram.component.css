@@ -6,6 +6,7 @@
 
 .makeup-water-holder{
     position: relative;
+    padding-right: 50px;
 }
 
 .makeup-water-holder .makeup-water-label{
@@ -44,7 +45,7 @@
     position: absolute;
     z-index: +1;
     color: black;
-    top: 25px;
+    top: 20px;
     width: 100px;
-    right: -25px;
+    right: 0px;
 }

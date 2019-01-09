@@ -2,7 +2,7 @@
 .vertical-chevron{
     border-bottom-left-radius: 25px;
     min-height: 50px;
-    margin-top: -2px;
+    margin-top: -10px;
 }
 
 .border-top-left{
@@ -18,7 +18,13 @@
     position: absolute;
     z-index: +1;
     color: black;
-    top: 25px;
+    top: 20px;
     width: 100px;
-    left: 0;
+    right: 0;
+}
+
+
+
+.condensate-padding-left{
+    padding-left: 90px;
 }

@@ -3,7 +3,7 @@
 }
 
 .inlet-pressure-tube{
-    margin-top: 22px;
+    margin-top: 26px;
     min-width: 50px;
 }
 
@@ -14,7 +14,7 @@
 .feedwater{
     padding-left: .75rem;
     padding-right: .75rem;
-    margin-top: 40px;
+    margin-top: 50px;
     min-width: 50px;
 }
 
@@ -34,10 +34,11 @@
 .deaerator-img{
     height: 60px;
     z-index: +1;
+    margin-bottom: -10px;
 }
 
 .low-pressure-tube{
-    height: 111.5%;
+    height: 99.5%;
     margin-top: -1rem;
     border-bottom-right-radius: 35px;
 }
@@ -49,6 +50,10 @@
 
 .deaerator-img-holder, .inlet-pressure-holder{
     position: relative;
+}
+
+.inlet-pressure-holder{
+    padding-top: 25px;
 }
 
 .deaerator-img-holder .deaerator-label{
@@ -74,4 +79,5 @@
     color: black;
     width: 100px;
     right: -15px;
+    bottom: 0;
 }

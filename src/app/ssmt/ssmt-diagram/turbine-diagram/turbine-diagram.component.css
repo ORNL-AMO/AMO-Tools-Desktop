@@ -37,10 +37,10 @@
 
 .outlet-power{
     position: absolute;
-    top: 5px;
     z-index: +1;
-    left: -40px;
+    left: -45px;
     width: 75px;
+    bottom: 0px;
 }
 
 

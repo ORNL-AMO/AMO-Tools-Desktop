@@ -43,7 +43,7 @@
 
 .outlet-temp-holder .outlet-temp{
     position: absolute;
-    top: 10px;
+    bottom: 0;
     width: 100px;
     z-index: +1;
     left: 25px;

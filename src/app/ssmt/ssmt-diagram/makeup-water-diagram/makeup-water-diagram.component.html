@@ -1,10 +1,10 @@
-<div class="d-flex w-100 justify-content-end pt-4 pb-4">
+<div class="d-flex w-100 justify-content-end pb-4">
   <div class="d-flex makeup-water up-pipe" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')" (mouseleave)="hoverEquipment('default')">
     <span class="fa fa-chevron-up hidden-chevron"></span>
   </div>
   <div class="d-flex pt-2 w-50 h-100 align-self-end" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
     (mouseleave)="hoverEquipment('default')">
-    <div class="d-flex w-100 makeup-water justify-content-end pr-4">
+    <div class="d-flex w-100 makeup-water justify-content-end">
       <div class="makeup-water-holder">
         <span class="fa fa-chevron-left"></span>
         <span class="makeup-water-mass-flow">{{makeupWater.massFlow | number:'1.0-1'}} klb/hr</span>

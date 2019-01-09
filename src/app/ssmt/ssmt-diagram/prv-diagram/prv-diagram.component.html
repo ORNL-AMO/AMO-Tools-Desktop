@@ -14,18 +14,20 @@
     </div> -->
     <div class="d-flex justify-content-center" (click)="selectEquipment()" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
       <div class="prv-img-holder">
-          <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
+        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
         <span class="prv-label">PRV</span>
       </div>
     </div>
   </div>
 
-  <div class="d-flex chevron-one align-items-end flex-fill">
-    <div class="outlet-temp-holder">
-      <span class="outlet-temp">
-        {{prv.outletTemperature | number:'1.0-1'}} &#8457;
-      </span>
+  <div class="d-flex chevron-one">
+    <div class="d-flex align-items-end" [ngClass]="outletSteam">
+      <div class="d-flex flex-fill outlet-temp-holder">
+        <span class="outlet-temp">
+          {{prv.outletTemperature | number:'1.0-1'}} &#8457;
+        </span>
+        <span class="fa fa-chevron-down" (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')"></span>
+      </div>
     </div>
-    <span class="fa fa-chevron-down" [ngClass]="outletSteam" (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')"></span>
   </div>
 </div>
