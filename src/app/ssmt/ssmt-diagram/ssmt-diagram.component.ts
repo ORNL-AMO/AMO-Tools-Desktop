@@ -59,6 +59,11 @@ export class SsmtDiagramComponent implements OnInit {
   //additions 1/10/19
   powerGenerated: number;
   makeupWaterVolumeFlow: number;
+  annualMakeupWaterFlow: number;
+  makeupWaterCost: number;
+  boilerFuelCost: number;
+  powerGenerationCost: number;
+  totalOperatingCost: number;
 
   tabSelect: string = 'results';
   selectedTable: string = 'cost';
@@ -128,6 +133,11 @@ export class SsmtDiagramComponent implements OnInit {
     this.returnCondensate = this.calculateModelService.returnCondensate;
     this.powerGenerated = this.calculateModelService.powerGenerated;
     this.makeupWaterVolumeFlow = this.calculateModelService.makeupWaterVolumeFlow;
+    this.annualMakeupWaterFlow = this.calculateModelService.annualMakeupWaterFlow;
+    this.makeupWaterCost = this.calculateModelService.makeupWaterCost;
+    this.boilerFuelCost = this.calculateModelService.boilerFuelCost;
+    this.powerGenerationCost = this.calculateModelService.powerGenerationCost;
+    this.totalOperatingCost = this.calculateModelService.totalOperatingCost;
     console.log('got data');
     this.dataCalculated = true;
     this.cd.detectChanges();

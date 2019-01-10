@@ -16,7 +16,16 @@ export class CostTableComponent implements OnInit {
   boiler: BoilerOutput;
   @Input()
   makeupWaterVolumeFlow: number;
-
+  @Input()
+  annualMakeupWaterFlow: number;
+  @Input()
+  makeupWaterCost: number;
+  @Input()
+  boilerFuelCost: number;
+  @Input()
+  powerGenerationCost: number;
+  @Input()
+  totalOperatingCost: number;
   constructor() { }
 
   ngOnInit() {
