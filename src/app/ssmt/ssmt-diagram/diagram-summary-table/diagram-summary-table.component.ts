@@ -1,21 +1,19 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
+import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 
 @Component({
-  selector: 'app-cost-table',
-  templateUrl: './cost-table.component.html',
-  styleUrls: ['./cost-table.component.css']
+  selector: 'app-diagram-summary-table',
+  templateUrl: './diagram-summary-table.component.html',
+  styleUrls: ['./diagram-summary-table.component.css']
 })
-export class CostTableComponent implements OnInit {
+export class DiagramSummaryTableComponent implements OnInit {
   @Input()
   inputData: SSMTInputs;
   @Input()
   powerGenerated: number;
   @Input()
   boiler: BoilerOutput;
-  @Input()
-  makeupWaterVolumeFlow: number;
   @Input()
   annualMakeupWaterFlow: number;
   @Input()
@@ -26,9 +24,13 @@ export class CostTableComponent implements OnInit {
   powerGenerationCost: number;
   @Input()
   totalOperatingCost: number;
+  @Input()
+  boilerFuelUsage: number;
+
   constructor() { }
 
   ngOnInit() {
+    
   }
 
 }

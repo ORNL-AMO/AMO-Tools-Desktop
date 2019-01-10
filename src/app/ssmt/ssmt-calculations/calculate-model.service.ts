@@ -47,6 +47,17 @@ export class CalculateModelService {
   condensingTurbine: TurbineOutput;
   deaeratorOutput: DeaeratorOutput;
 
+  // 1/10/2019 additions for cost
+  powerGenerated: number;
+  boilerFuelCost: number;
+  makeupWaterCost: number;
+  totalOperatingCost: number;
+  totalEnergyUse: number;
+  powerGenerationCost: number;
+  boilerFuelUsage: number;
+
+  makeupWaterVolumeFlow: number;
+  annualMakeupWaterFlow: number;
   //heatExchanger: HeatExchanger
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -211,6 +222,7 @@ export class CalculateModelService {
     this.calculateMakeupWater();
     //5E. Calculate makeup water mass flow
     this.calculateMakeupWaterMassFlow();
+    this.calculateMakeupWaterVolumeFlow()
     //5F. Run heat exchange if pre heating makeup water
     if (this.inputData.boilerInput.preheatMakeupWater == true) {
       this.runHeatExchanger();
@@ -220,6 +232,20 @@ export class CalculateModelService {
 
     //6. Calculate Deaerator
     this.calculateDearator();
+
+    //7. Calculate Energy and Cost Values
+    //Power Generated
+    this.calculatePowerGenerated();
+    this.calculatePowerGenerationCost();
+    //Boiler Fuel Cost
+    this.calculateBoilerFuelCost();
+    //Makeup Water Cost
+    this.calculateMakeupWaterCost();
+    //Total Cost
+    this.calculateTotalOperatingCost();
+    // totalEnergyUse
+    //Boiler fuel Usage
+    this.calculateBoilerFuelUsage();
   }
 
 
@@ -340,9 +366,9 @@ export class CalculateModelService {
       }
       if (this.inputData.turbineInput.highToLowTurbine.operationType == 1 || this.inputData.turbineInput.highToLowTurbine.operationType == 0) {
         massFlowOrPowerOut = this.inputData.turbineInput.highToLowTurbine.operationValue1;
-      }else if(this.inputData.turbineInput.highToLowTurbine.operationType == 3){
+      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 3) {
         massFlowOrPowerOut = this.inputData.turbineInput.highToLowTurbine.operationValue2;
-      }     
+      }
       else if (this.inputData.turbineInput.highToLowTurbine.operationType == 4) {
         if (massFlowOrPowerOut < this.inputData.turbineInput.highToLowTurbine.operationValue1) {
           massFlowOrPowerOut = this.inputData.turbineInput.highToLowTurbine.operationValue1;
@@ -388,9 +414,9 @@ export class CalculateModelService {
       }
       if (this.inputData.turbineInput.highToMediumTurbine.operationType == 1 || this.inputData.turbineInput.highToMediumTurbine.operationType == 0) {
         massFlowOrPowerOut = this.inputData.turbineInput.highToMediumTurbine.operationValue1;
-      }else if(this.inputData.turbineInput.highToMediumTurbine.operationType == 3){
+      } else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 3) {
         massFlowOrPowerOut = this.inputData.turbineInput.highToMediumTurbine.operationValue2;
-      }     
+      }
       else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 4) {
         if (massFlowOrPowerOut < this.inputData.turbineInput.highToMediumTurbine.operationValue1) {
           massFlowOrPowerOut = this.inputData.turbineInput.highToMediumTurbine.operationValue1;
@@ -620,9 +646,9 @@ export class CalculateModelService {
       }
       if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 1 || this.inputData.turbineInput.mediumToLowTurbine.operationType == 0) {
         massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue1;
-      }else if(this.inputData.turbineInput.mediumToLowTurbine.operationType == 3){
+      } else if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 3) {
         massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue2;
-      }     
+      }
       else if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 4) {
         if (massFlowOrPowerOut < this.inputData.turbineInput.mediumToLowTurbine.operationValue1) {
           massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue1;
@@ -1040,7 +1066,7 @@ export class CalculateModelService {
       }
     }
 
-    if(this.inputData.turbineInput.condensingTurbine.useTurbine == true){
+    if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
       makeupWaterMassFlow = makeupWaterMassFlow - this.condensingTurbine.massFlow;
     }
 
@@ -1048,6 +1074,13 @@ export class CalculateModelService {
     this.makeupWater.massFlow = makeupWaterMassFlow;
     this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 1000;
   }
+
+  calculateMakeupWaterVolumeFlow() {
+    //calculate volume flow in gpm
+    this.makeupWaterVolumeFlow = this.makeupWater.massFlow * 1000 * (1 / 8.33) * (1 / 60);
+    this.annualMakeupWaterFlow = this.makeupWaterVolumeFlow * 60 * this.inputData.operationsInput.operatingHoursPerYear;
+  }
+
 
   //5F. Run Heat Exchanger
   runHeatExchanger() {
@@ -1136,6 +1169,47 @@ export class CalculateModelService {
       },
       this.settings
     )
+
+
+
+  }
+  //Cost and Energy Calculations
+  calculatePowerGenerated() {
+    //sum power generated by turbine
+    let powerGenerated: number = 0;
+    if (this.condensingTurbine) {
+      powerGenerated = powerGenerated + this.condensingTurbine.powerOut;
+    }
+    if (this.highToLowPressureTurbine) {
+      powerGenerated = powerGenerated + this.highToLowPressureTurbine.powerOut;
+    }
+    if (this.highPressureToMediumPressureTurbine) {
+      powerGenerated = powerGenerated + this.highPressureToMediumPressureTurbine.powerOut;
+    }
+    if (this.mediumToLowPressureTurbine) {
+      powerGenerated = powerGenerated + this.mediumToLowPressureTurbine.powerOut;
+    }
+    this.powerGenerated = powerGenerated;
+  }
+
+  calculatePowerGenerationCost() {
+    this.powerGenerationCost = this.inputData.operationsInput.sitePowerImport * this.inputData.operationsInput.electricityCosts * this.inputData.operationsInput.operatingHoursPerYear;
+  }
+
+  calculateBoilerFuelCost() {
+    this.boilerFuelCost = this.boilerOutput.fuelEnergy * this.inputData.operationsInput.operatingHoursPerYear * this.inputData.operationsInput.fuelCosts;
+  }
+
+  calculateMakeupWaterCost() {
+    this.makeupWaterCost = this.inputData.operationsInput.makeUpWaterCosts * this.annualMakeupWaterFlow;
+  }
+
+  calculateTotalOperatingCost() {
+    this.totalOperatingCost = this.powerGenerationCost + this.boilerFuelCost + this.makeupWaterCost;
+  }
+
+  calculateBoilerFuelUsage(){
+    this.boilerFuelUsage = this.boilerOutput.fuelEnergy * this.inputData.operationsInput.operatingHoursPerYear;
   }
 
   initResults() {
@@ -1166,6 +1240,14 @@ export class CalculateModelService {
     this.lowPressureSteamHeatLoss = undefined;
     //this.lowPressureProcessSteamUsage = undefined;
     this.mediumPressureSteamHeatLoss = undefined;
+    this.powerGenerated = undefined;
+    this.makeupWaterVolumeFlow = undefined;
+    this.annualMakeupWaterFlow = undefined;
+    this.totalOperatingCost = undefined;
+    this.powerGenerationCost = undefined;
+    this.boilerFuelCost = undefined;
+    this.makeupWaterCost = undefined;
+    this.boilerFuelUsage = undefined;
     //this.mediumPressureProcessSteamUsage = undefined;
   }
 

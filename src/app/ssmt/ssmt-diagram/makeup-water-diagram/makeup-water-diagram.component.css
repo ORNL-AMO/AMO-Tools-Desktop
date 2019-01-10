@@ -48,3 +48,12 @@
     width: 100px;
     right: 0px;
 }
+.makeup-water-holder .makeup-water-volume-flow{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    bottom: 20px;
+    width: 100px;
+    right: 0px;
+}
+

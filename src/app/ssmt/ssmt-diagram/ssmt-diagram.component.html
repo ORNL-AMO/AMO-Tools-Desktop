@@ -1,6 +1,7 @@
 <div class="d-flex ssmt modify-conditions panel-container ssmt-diagram">
-  <div class="panel-column scroll-item diagram-container" [ngClass]="hoveredEquipment" [ngStyle]="{'height.px': containerHeight}">
-    <div class="d-flex p-3 align-self-center" *ngIf="dataCalculated == true">
+  <div class="panel-column scroll-item diagram-container" [ngClass]="hoveredEquipment" [ngStyle]="{'height.px': containerHeight}"
+    *ngIf="dataCalculated == true">
+    <div class="d-flex p-3 align-self-center">
       <div class="d-flex flex-grow">
         <app-feedwater-diagram [deaerator]="deaerator"></app-feedwater-diagram>
       </div>
@@ -143,7 +144,8 @@
         </div>
         <div class="p-0 d-flex">
           <div class="w-100 ">
-            <app-makeup-water-diagram [makeupWater]="makeupWater" (emitSetHover)="setHover($event)"></app-makeup-water-diagram>
+            <app-makeup-water-diagram [makeupWater]="makeupWater" [makeupWaterVolumeFlow]="makeupWaterVolumeFlow"
+              (emitSetHover)="setHover($event)"></app-makeup-water-diagram>
           </div>
         </div>
       </div>
@@ -164,10 +166,20 @@
     </div>
     <div class="d-flex justify-content-center mr-2 ml-2">
       <div class="pt-4" *ngIf="tabSelect == 'results'">
-        <div class="d-flex w-100 pb-2" *ngIf="selectedTable != 'cost'">
-          <a class="click-link small" (click)="selectTable('cost')">View Cost Summary</a>
+        <div class="d-flex w-100 pb-2 justify-content-center" *ngIf="selectedTable != 'default'">
+          <a class="click-link small" (click)="selectTable('default')">Back to General Summary</a>
         </div>
-        <app-cost-table *ngIf="selectedTable == 'cost'"></app-cost-table>
+        <app-diagram-summary-table *ngIf="selectedTable == 'default'" [inputData]="inputData" [powerGenerated]="powerGenerated"
+          [boiler]="boiler" [annualMakeupWaterFlow]="annualMakeupWaterFlow" [makeupWaterCost]="makeupWaterCost"
+          [boilerFuelCost]="boilerFuelCost" [powerGenerationCost]="powerGenerationCost" [totalOperatingCost]="totalOperatingCost"
+          [boilerFuelUsage]="boilerFuelUsage"></app-diagram-summary-table>
+        <div class="d-flex w-100 pb-2 justify-content-center" *ngIf="selectedTable == 'default'">
+          <a class="click-link small" (click)="selectTable('cost')">View More Cost Details</a>
+        </div>
+        <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [powerGenerated]="powerGenerated"
+          [boiler]="boiler" [makeupWaterVolumeFlow]="makeupWaterVolumeFlow" [annualMakeupWaterFlow]="annualMakeupWaterFlow"
+          [makeupWaterCost]="makeupWaterCost" [boilerFuelCost]="boilerFuelCost" [powerGenerationCost]="powerGenerationCost"
+          [totalOperatingCost]="totalOperatingCost"></app-cost-table>
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
         <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
           [turbine]="highToLowPressureTurbine"></app-turbine-table>
