@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-cost-table',
@@ -6,6 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cost-table.component.css']
 })
 export class CostTableComponent implements OnInit {
+  @Input()
+  inputData: SSMTInputs;
+  @Input()
+  powerGenerated: number;
+  @Input()
+  boiler: BoilerOutput;
 
   constructor() { }
 

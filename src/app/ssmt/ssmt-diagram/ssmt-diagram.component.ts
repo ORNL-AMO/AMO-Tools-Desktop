@@ -56,6 +56,9 @@ export class SsmtDiagramComponent implements OnInit {
   mediumPressureSteamHeatLoss: HeatLossOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
   returnCondensate: SteamPropertiesOutput;
+  powerGenerated: number;
+
+
   tabSelect: string = 'results';
   selectedTable: string = 'cost';
   hoveredEquipment: string = 'default';
@@ -122,6 +125,7 @@ export class SsmtDiagramComponent implements OnInit {
     //this.lowPressureProcessSteamUsage = this.calculateModelService.lowPressureProcessSteamUsage;
     this.lowPressureSteamHeatLoss = this.calculateModelService.lowPressureSteamHeatLoss;
     this.returnCondensate = this.calculateModelService.returnCondensate;
+    this.powerGenerated = this.calculateModelService.powerGenerated;
     console.log('got data');
     this.dataCalculated = true;
     this.cd.detectChanges();
