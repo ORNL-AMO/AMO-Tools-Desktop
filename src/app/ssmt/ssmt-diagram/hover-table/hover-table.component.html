@@ -3,6 +3,7 @@
     Click-on and mouse-over equipment and components for more details.
   </div>
   <div class="d-flex">
+    <!-- <app-default-summary-table *ngIf="hoveredEquipment == 'default'"></app-default-summary-table> -->
     <app-hover-boiler-table *ngIf="hoveredEquipment == 'boilerHovered'"></app-hover-boiler-table>
     <app-hover-boiler-steam-table *ngIf="hoveredEquipment == 'boilerSteamHovered'"></app-hover-boiler-steam-table>
     <app-hover-header-table *ngIf="hoveredEquipment == 'highPressureHovered'" [headerPressure]="'highPressure'"></app-hover-header-table>

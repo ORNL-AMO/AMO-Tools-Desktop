@@ -54,6 +54,7 @@ export class CalculateModelService {
   totalOperatingCost: number;
   totalEnergyUse: number;
   powerGenerationCost: number;
+  boilerFuelUsage: number;
 
   makeupWaterVolumeFlow: number;
   annualMakeupWaterFlow: number;
@@ -243,6 +244,8 @@ export class CalculateModelService {
     //Total Cost
     this.calculateTotalOperatingCost();
     // totalEnergyUse
+    //Boiler fuel Usage
+    this.calculateBoilerFuelUsage();
   }
 
 
@@ -1205,6 +1208,10 @@ export class CalculateModelService {
     this.totalOperatingCost = this.powerGenerationCost + this.boilerFuelCost + this.makeupWaterCost;
   }
 
+  calculateBoilerFuelUsage(){
+    this.boilerFuelUsage = this.boilerOutput.fuelEnergy * this.inputData.operationsInput.operatingHoursPerYear;
+  }
+
   initResults() {
     this.inputData = undefined;
     this.boilerOutput = undefined;
@@ -1240,6 +1247,7 @@ export class CalculateModelService {
     this.powerGenerationCost = undefined;
     this.boilerFuelCost = undefined;
     this.makeupWaterCost = undefined;
+    this.boilerFuelUsage = undefined;
     //this.mediumPressureProcessSteamUsage = undefined;
   }
 

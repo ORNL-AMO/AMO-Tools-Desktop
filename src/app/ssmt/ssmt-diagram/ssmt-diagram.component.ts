@@ -64,9 +64,10 @@ export class SsmtDiagramComponent implements OnInit {
   boilerFuelCost: number;
   powerGenerationCost: number;
   totalOperatingCost: number;
+  boilerFuelUsage: number;
 
   tabSelect: string = 'results';
-  selectedTable: string = 'cost';
+  selectedTable: string = 'default';
   hoveredEquipment: string = 'default';
   deaeratorWidth: number;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
@@ -138,6 +139,7 @@ export class SsmtDiagramComponent implements OnInit {
     this.boilerFuelCost = this.calculateModelService.boilerFuelCost;
     this.powerGenerationCost = this.calculateModelService.powerGenerationCost;
     this.totalOperatingCost = this.calculateModelService.totalOperatingCost;
+    this.boilerFuelUsage = this.calculateModelService.boilerFuelUsage;
     console.log('got data');
     this.dataCalculated = true;
     this.cd.detectChanges();
