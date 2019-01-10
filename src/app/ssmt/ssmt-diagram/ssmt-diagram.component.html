@@ -143,7 +143,7 @@
         </div>
         <div class="p-0 d-flex">
           <div class="w-100 ">
-            <app-makeup-water-diagram [makeupWater]="makeupWater" (emitSetHover)="setHover($event)"></app-makeup-water-diagram>
+            <app-makeup-water-diagram [makeupWater]="makeupWater" [makeupWaterVolumeFlow]="makeupWaterVolumeFlow" (emitSetHover)="setHover($event)"></app-makeup-water-diagram>
           </div>
         </div>
       </div>
@@ -167,7 +167,7 @@
         <div class="d-flex w-100 pb-2" *ngIf="selectedTable != 'cost'">
           <a class="click-link small" (click)="selectTable('cost')">View Cost Summary</a>
         </div>
-        <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [powerGenerated]="powerGenerated" [boiler]="boiler"></app-cost-table>
+        <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [powerGenerated]="powerGenerated" [boiler]="boiler" [makeupWaterVolumeFlow]="makeupWaterVolumeFlow"></app-cost-table>
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="boiler" [inputData]="inputData"></app-boiler-table>
         <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
           [turbine]="highToLowPressureTurbine"></app-turbine-table>

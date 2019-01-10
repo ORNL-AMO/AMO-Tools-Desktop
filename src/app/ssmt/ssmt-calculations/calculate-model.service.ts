@@ -47,8 +47,14 @@ export class CalculateModelService {
   condensingTurbine: TurbineOutput;
   deaeratorOutput: DeaeratorOutput;
 
-
+  // 1/10/2019 additions for cost
   powerGenerated: number;
+  boilerFuelCost: number;
+  makeupWaterCost: number;
+  totalOperatingCost: number;
+  totalEnergyUse: number;
+
+  makeupWaterVolumeFlow: number;
   //heatExchanger: HeatExchanger
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -213,6 +219,7 @@ export class CalculateModelService {
     this.calculateMakeupWater();
     //5E. Calculate makeup water mass flow
     this.calculateMakeupWaterMassFlow();
+    this.calculateMakeupWaterVolumeFlow()
     //5F. Run heat exchange if pre heating makeup water
     if (this.inputData.boilerInput.preheatMakeupWater == true) {
       this.runHeatExchanger();
@@ -224,7 +231,14 @@ export class CalculateModelService {
     this.calculateDearator();
 
     //7. Calculate Energy and Cost Values
+    //Power Generated
     this.calculatePowerGenerated();
+    //Boiler Fuel Cost
+    this.calculateBoilerFuelCost();
+    //Makeup Water Cost
+    this.calculateMakeupWaterCost();
+    //totalOperatingCost
+    // totalEnergyUse
   }
 
 
@@ -1054,6 +1068,12 @@ export class CalculateModelService {
     this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 1000;
   }
 
+  calculateMakeupWaterVolumeFlow() {
+    //calculate volume flow in gpm
+    this.makeupWaterVolumeFlow = this.makeupWater.massFlow * 1000 * (1 / 8.33) * (1 / 60);
+  }
+
+
   //5F. Run Heat Exchanger
   runHeatExchanger() {
     //TODO: need bindings to HeatExchanger() in the suite before doing this step..
@@ -1163,6 +1183,23 @@ export class CalculateModelService {
     }
     this.powerGenerated = powerGenerated;
   }
+
+  calculateBoilerFuelCost() {
+    this.boilerFuelCost = this.boilerOutput.fuelEnergy * this.inputData.operationsInput.operatingHoursPerYear * this.inputData.operationsInput.fuelCosts;
+  }
+
+  calculateMakeupWaterCost() {
+
+    //this.makeupWaterCost = this.inputData.operationsInput.makeUpWaterCosts * this.inputData.operationsInput.operatingHoursPerYear * this.makeupWater.volumeFlow;
+  }
+
+  calculateTotalOperatingCost() {
+    // let increasedGenerationg: number = this.powerGenerated - this.initial
+    // let newSitePowerImport: number =
+    // let powerImportCost: number = this.inputData.operationsInput.electricityCosts 
+    // this.totalOperatingCost = this.boilerFuelCost + this.makeupWaterCost
+  }
+
   initResults() {
     this.inputData = undefined;
     this.boilerOutput = undefined;
@@ -1192,6 +1229,7 @@ export class CalculateModelService {
     //this.lowPressureProcessSteamUsage = undefined;
     this.mediumPressureSteamHeatLoss = undefined;
     this.powerGenerated = undefined;
+    this.makeupWaterVolumeFlow = undefined;
     //this.mediumPressureProcessSteamUsage = undefined;
   }
 

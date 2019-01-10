@@ -14,6 +14,8 @@ export class CostTableComponent implements OnInit {
   powerGenerated: number;
   @Input()
   boiler: BoilerOutput;
+  @Input()
+  makeupWaterVolumeFlow: number;
 
   constructor() { }
 
