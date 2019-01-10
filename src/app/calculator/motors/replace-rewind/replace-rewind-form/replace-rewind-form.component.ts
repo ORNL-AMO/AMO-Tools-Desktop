@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { ReplaceRewindData } from '../replace-rewind.component';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+import { ReplaceRewindService } from '../replace-rewind.service';
 
 @Component({
   selector: 'app-replace-rewind-form',
@@ -17,16 +19,26 @@ export class ReplaceRewindFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  constructor() { }
+  form: FormGroup;
+
+  constructor(private replaceRewindService: ReplaceRewindService) { }
 
   ngOnInit() {
+    this.form = this.replaceRewindService.getFormFromObj(this.inputs);
   }
 
-  focusField(str: string){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.inputs) {
+      this.form = this.replaceRewindService.getFormFromObj(this.inputs);
+    }
+  }
+
+  focusField(str: string) {
     this.emitChangeField.emit(str);
   }
 
-  calculate(){
+  calculate() {
+    this.inputs = this.replaceRewindService.getObjFromForm(this.form);
     this.emitCalculate.emit(this.inputs);
   }
 

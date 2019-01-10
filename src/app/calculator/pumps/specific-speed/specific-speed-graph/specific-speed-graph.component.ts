@@ -127,8 +127,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
       if (changes.resetData) {
         this.resetTableData();
       }
-      console.log('changes = ');
-      console.log(changes);
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
           // if (this.speedForm.controls.pumpType.value != this.tmpPumpType) {

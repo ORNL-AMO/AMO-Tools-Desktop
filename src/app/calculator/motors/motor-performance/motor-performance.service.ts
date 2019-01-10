@@ -23,7 +23,7 @@ export class MotorPerformanceService {
   initForm():FormGroup{
    return this.formBuilder.group({
       frequency: [50, [Validators.required]],
-      horsePower: [200, [Validators.required]],
+      horsePower: [200, [Validators.required, Validators.min(0)]],
       motorRPM: [1780, [Validators.required]],
       efficiencyClass: [1, [Validators.required]],
       motorVoltage: [460, [Validators.required]],

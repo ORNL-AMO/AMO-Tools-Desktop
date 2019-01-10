@@ -1,60 +1,79 @@
-<form class="pump-curve-form">
+<form class="pump-curve-form" [formGroup]="pumpCurveForm">
   <div class="d-flex flex-column">
-    <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
-      (changeField)="focusField($event)" [settings]="settings" (emitAddRow)="addRow()" [isFan]="isFan"></app-pump-curve-data-form>
-    <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
+
+    <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" (calculate)="calculate()" [pumpCurveForm]="pumpCurveForm"
+      (changeField)="focusField($event)" [settings]="settings" (emitAddRow)="addRow()" (emitRemoveRow)="removeRow($event)"
+      [isFan]="isFan"></app-pump-curve-data-form>
+    <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [pumpCurveForm]="pumpCurveForm"
       (changeField)="focusField($event)" [settings]="settings" [isFan]="isFan"></app-pump-curve-equation-form>
+
     <div class="d-flex">
       <div class="d-flex flex-column w-50 pr-1">
         <label class="group-label w-auto">Baseline Condition</label>
         <div class="form-group">
           <select id="measurementOption" name="measurementOption" class="form-control" (change)="changeMeasurementOption()"
-            [(ngModel)]="pumpCurveForm.measurementOption" (focus)="focusField('measurementOption')" *ngIf="!isFan">
-            <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
+            formControlName="measurementOption" (focus)="focusField('measurementOption')" *ngIf="!isFan">
+            <option *ngFor="let option of options; let i = index" [ngValue]="i">{{option}}</option>
           </select>
           <select id="measurementOption" name="measurementOption" class="form-control" (change)="changeMeasurementOption()"
-            [(ngModel)]="pumpCurveForm.measurementOption" (focus)="focusField('fanMeasurementOption')" *ngIf="isFan">
-            <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
+            formControlName="measurementOption" (focus)="focusField('fanMeasurementOption')" *ngIf="isFan">
+            <option *ngFor="let option of options; let i = index" [ngValue]="i">{{option}}</option>
           </select>
         </div>
         <div class="form-group">
           <div class="input-group">
-            <input name="baselineMeasurement" [(ngModel)]="pumpCurveForm.baselineMeasurement" type="number" step="any"
-              class="form-control" id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('baselineMeasurement')"
-              (input)="calculate()" *ngIf="!isFan">
-            <input name="baselineMeasurement" [(ngModel)]="pumpCurveForm.baselineMeasurement" type="number" step="any"
-              class="form-control" id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('fanBaselineMeasurement')"
-              (input)="calculate()" *ngIf="isFan">
-            <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">{{smallUnit}}</span>
-            <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">rpm</span>
+            <input name="baselineMeasurement" formControlName="baselineMeasurement" type="number" step="any" class="form-control"
+              id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('baselineMeasurement')" (input)="calculate()"
+              *ngIf="!isFan">
+            <input name="baselineMeasurement" formControlName="baselineMeasurement" type="number" step="any" class="form-control"
+              id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('fanBaselineMeasurement')" (input)="calculate()"
+              *ngIf="isFan">
+            <span *ngIf="pumpCurveForm.controls.measurementOption.value == 0" class="input-group-addon units">{{smallUnit}}</span>
+            <span *ngIf="pumpCurveForm.controls.measurementOption.value == 1" class="input-group-addon units">rpm</span>
           </div>
+          <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.baselineMeasurement.invalid && !pumpCurveForm.controls.baselineMeasurement.pristine">
+            <span *ngIf="pumpCurveForm.controls.baselineMeasurement.errors.required">Value required.</span>
+            <span *ngIf="pumpCurveForm.controls.baselineMeasurement.errors.min">Value can't be less than
+              {{pumpCurveForm.controls.baselineMeasurement.errors.min.min}}
+              <span *ngIf="pumpCurveForm.controls.measurementOption.value == 0" class="input-group-addon units">{{smallUnit}}</span>
+              <span *ngIf="pumpCurveForm.controls.measurementOption.value == 1" class="input-group-addon units">rpm</span>.
+            </span>
+          </span>
         </div>
       </div>
       <div class="d-flex flex-column w-50 pl-1">
         <label class="group-label w-auto">Modified Condition</label>
         <div class="form-group">
           <select id="measurementOption2" name="measurementOption2" class="form-control" disabled="disabled"
-            [(ngModel)]="pumpCurveForm.measurementOption" (focus)="focusField('measurementOption')" *ngIf="!isFan">
-            <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
+            formControlName="measurementOption2" (focus)="focusField('measurementOption')" *ngIf="!isFan">
+            <option *ngFor="let option of options; let i = index" [ngValue]="i">{{options[pumpCurveForm.controls.measurementOption.value]}}</option>
           </select>
           <select id="measurementOption2" name="measurementOption2" class="form-control" disabled="disabled"
-            [(ngModel)]="pumpCurveForm.measurementOption" (focus)="focusField('fanMeasurementOption')" *ngIf="isFan">
-            <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
+            formControlName="measurementOption2" (focus)="focusField('fanMeasurementOption')" *ngIf="isFan">
+            <option *ngFor="let option of options; let i = index" [ngValue]="i">{{options[pumpCurveForm.controls.measurementOption.value]}}</option>
           </select>
         </div>
         <div class="form-group">
           <div class="input-group">
-            <input name="modifiedMeasurement" [(ngModel)]="pumpCurveForm.modifiedMeasurement" type="number" step="any"
-              class="form-control" id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('modifiedMeasurement')"
-              (input)="calculate()" *ngIf="!isFan">
-            <input name="modifiedMeasurement" [(ngModel)]="pumpCurveForm.modifiedMeasurement" type="number" step="any"
-              class="form-control" id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('fanModifiedMeasurement')"
-              (input)="calculate()" *ngIf="isFan">
-            <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">{{smallUnit}}</span>
-            <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">rpm</span>
+            <input name="modifiedMeasurement" formControlName="modifiedMeasurement" type="number" step="any" class="form-control"
+              id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('modifiedMeasurement')" (input)="calculate()"
+              *ngIf="!isFan">
+            <input name="modifiedMeasurement" formControlName="modifiedMeasurement" type="number" step="any" class="form-control"
+              id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('fanModifiedMeasurement')" (input)="calculate()"
+              *ngIf="isFan">
+            <span *ngIf="pumpCurveForm.controls.measurementOption.value == 0" class="input-group-addon units">{{smallUnit}}</span>
+            <span *ngIf="pumpCurveForm.controls.measurementOption.value == 1" class="input-group-addon units">rpm</span>
           </div>
           <span class="alert-danger pull-right small" *ngIf="modWarning !== null">
-            {{modWarning}}
+            <span *ngIf="modWarning !== null">{{modWarning}}</span>
+          </span>
+          <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.modifiedMeasurement.invalid && !pumpCurveForm.controls.modifiedMeasurement.pristine">
+            <span *ngIf="pumpCurveForm.controls.modifiedMeasurement.errors.required">Value required.</span>
+            <span *ngIf="pumpCurveForm.controls.modifiedMeasurement.errors.min">Value can't be less than
+              {{pumpCurveForm.controls.modifiedMeasurement.errors.min.min}}
+              <span *ngIf="pumpCurveForm.controls.measurementOption.value == 0" class="input-group-addon units">{{smallUnit}}</span>
+              <span *ngIf="pumpCurveForm.controls.measurementOption.value == 1" class="input-group-addon units">rpm</span>.
+            </span>
           </span>
         </div>
       </div>

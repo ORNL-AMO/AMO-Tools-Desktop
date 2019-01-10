@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FieldMeasurementInputs, SlipMethod, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -27,7 +28,7 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   slipMethodData: SlipMethod;
 
-  fieldMeasurementData: FieldMeasurementInputs
+  fieldMeasurementData: FieldMeasurementInputs;
   fieldMeasurementResults: FieldMeasurementOutputs;
   constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService) { }
 
@@ -55,6 +56,7 @@ export class PercentLoadEstimationComponent implements OnInit {
     this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
   }
 
+
   btnResetData() {
     this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
     this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
@@ -75,8 +77,8 @@ export class PercentLoadEstimationComponent implements OnInit {
   calculateSlipMethod(data: SlipMethod) {
     this.slipMethodData = data;
     this.percentLoadEstimationService.slipMethodInputs = this.slipMethodData;
-    this.percentLoadEstimation = ((data.synchronousSpeed - data.measuredSpeed)
-      / (data.synchronousSpeed - data.nameplateFullLoadSpeed)) * 100;
+    this.percentLoadEstimation = ((this.slipMethodData.synchronousSpeed - this.slipMethodData.measuredSpeed)
+      / (this.slipMethodData.synchronousSpeed - this.slipMethodData.nameplateFullLoadSpeed)) * 100;
   }
 
   calculateFieldMeasurementMethod(data: FieldMeasurementInputs) {

@@ -1,8 +1,8 @@
-<form>
+<form [formGroup]="form">
   <div class="form-group">
     <label class="small" for="gasType">Select Gas</label>
     <div class="input-group">
-      <select id="gasType" name="gasType" class="form-control" [(ngModel)]="flowCalculations.gasType" (focus)="focusField('gasType')"
+      <select id="gasType" name="gasType" class="form-control" formControlName="gasType" (focus)="focusField('gasType')"
         (change)="setHHVandSG()">
         <option *ngFor="let option of gasType" [ngValue]="option.value">{{option.name}}</option>
       </select>
@@ -11,84 +11,111 @@
   <div class="form-group">
     <label class="small" for="operatingTime">Operating Time</label>
     <div class="input-group">
-      <input name="operatingTime" [(ngModel)]="flowCalculations.operatingTime" type="number" step="any" class="form-control" id="operatingTime"
+      <input name="operatingTime" formControlName="operatingTime" type="number" step="any" class="form-control" id="operatingTime"
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingTime')">
       <span class="input-group-addon units">hrs</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.operatingTime.invalid && !form.controls.operatingTime.pristine">
+      <span *ngIf="form.controls.operatingTime.errors.required">Value required.</span>
+      <span *ngIf="form.controls.operatingTime.errors.min">Value cannot not be lower than
+        {{form.controls.operatingTime.errors.min.min}}.</span>
+    </span>
   </div>
   <label class="group-label">Orifice Properties</label>
   <div class="form-group">
     <label class="small" for="orificeDiameter">Orifice Diameter</label>
     <div class="input-group">
-      <input name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
-        id="orificeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')">
+      <input name="orificeDiameter" formControlName="orificeDiameter" type="number" step="any" class="form-control" id="orificeDiameter"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.orificeDiameter.invalid && !form.controls.orificeDiameter.pristine">
+      <span *ngIf="form.controls.orificeDiameter.errors.required">Value required.</span>
+      <span *ngIf="form.controls.orificeDiameter.errors.min">Value cannot not be lower than
+        {{form.controls.orificeDiameter.errors.min.min}}.</span>
+    </span>
   </div>
 
   <div class="form-group">
     <label class="small" for="insidePipeDiameter">Inner Diameter of Pipe</label>
     <div class="input-group">
-      <input name="insidePipeDiameter" [(ngModel)]="flowCalculations.insidePipeDiameter" type="number" step="any" class="form-control"
+      <input name="insidePipeDiameter" formControlName="insidePipeDiameter" type="number" step="any" class="form-control"
         id="insidePipeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('insidePipeDiameter')">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="insidePipeDiameterError !== null">{{insidePipeDiameterError}}</span>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.insidePipeDiameter.invalid && !form.controls.insidePipeDiameter.pristine">
+      <span *ngIf="form.controls.insidePipeDiameter.errors.required">Value required.</span>
+      <span *ngIf="form.controls.insidePipeDiameter.errors.min">Value cannot not be lower than
+        {{form.controls.insidePipeDiameter.errors.min.min}}.</span>
+      <span *ngIf="insidePipeDiameterError !== null">{{insidePipeDiameterError}}</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="small" for="orificePressureDrop">Orifice Pressure Drop</label>
     <div class="input-group">
-      <input name="orificePressureDrop" [(ngModel)]="flowCalculations.orificePressureDrop" type="number" step="any" class="form-control"
+      <input name="orificePressureDrop" formControlName="orificePressureDrop" type="number" step="any" class="form-control"
         id="orificePressureDrop" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificePressureDrop')">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in W.C.</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">cm W.C.</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.orificePressureDrop.invalid && !form.controls.orificePressureDrop.pristine">
+      <span *ngIf="form.controls.orificePressureDrop.errors.required">Value required.</span>
+    </span>
   </div>
 
   <div class="form-group">
     <label class="small" for="sectionType">Type of Orifice</label>
     <div class="input-group">
-      <select id="sectionType" name="sectionType" class="form-control" [(ngModel)]="flowCalculations.sectionType" (focus)="focusField('sectionType')"
+      <select id="sectionType" name="sectionType" class="form-control" formControlName="sectionType" (focus)="focusField('sectionType')"
         (change)="setDischargeCoefficient()">
         <option *ngFor="let option of sectionOptions" [ngValue]="option.value">{{option.name}}</option>
       </select>
     </div>
   </div>
-  
+
   <label class="group-label">Gas Properties</label>
   <div class="form-group">
     <label class="small" for="gasTemperature">Temperature of Gas</label>
     <div class="input-group">
-      <input name="gasTemperature" [(ngModel)]="flowCalculations.gasTemperature" type="number" step="any" class="form-control"
-        id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')">
+      <input name="gasTemperature" formControlName="gasTemperature" type="number" step="any" class="form-control" id="gasTemperature"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.gasTemperature.invalid && !form.controls.gasTemperature.pristine">
+      <span *ngIf="form.controls.gasTemperature.errors.required">Value required.</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="small" for="gasPressure">Pressure of Gas</label>
     <div class="input-group">
-      <input name="gasPressure" [(ngModel)]="flowCalculations.gasPressure" type="number" step="any" class="form-control" id="gasPressure"
+      <input name="gasPressure" formControlName="gasPressure" type="number" step="any" class="form-control" id="gasPressure"
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasPressure')">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kPa</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.gasPressure.invalid && !form.controls.gasPressure.pristine">
+      <span *ngIf="form.controls.gasPressure.errors.required">Value required.</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="small" for="dischargeCoefficient">Coefficient of Discharge</label>
     <div class="input-group">
-      <input name="dischargeCoefficient" [(ngModel)]="flowCalculations.dischargeCoefficient" type="number" step=".1" class="form-control"
+      <input name="dischargeCoefficient" formControlName="dischargeCoefficient" type="number" step=".1" class="form-control"
         id="dischargeCoefficient" (input)="calculate()" onfocus="this.select();" (focus)="focusField('dischargeCoefficient')">
     </div>
-    <span class="alert-danger pull-right small" *ngIf="dischargeCoefficientError !== null">{{dischargeCoefficientError}}</span>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.dischargeCoefficient.invalid && !form.controls.dischargeCoefficient.pristine">
+      <span *ngIf="form.controls.dischargeCoefficient.errors.required">Value required.</span>
+      <span *ngIf="dischargeCoefficientError !== null">{{dischargeCoefficientError}}</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="small" for="gasHeatingValue">Heating Value of Gas - HHV</label>
     <div class="input-group">
-      <input name="gasHeatingValue" [(ngModel)]="flowCalculations.gasHeatingValue" type="number" step="any" class="form-control"
-        id="gasHeatingValue" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasHeatingValue')">
+      <input name="gasHeatingValue" formControlName="gasHeatingValue" type="number" step="any" class="form-control" id="gasHeatingValue"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasHeatingValue')">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">
         <span>Btu/ft
           <sup>3</sup>
@@ -100,13 +127,19 @@
         </span>
       </span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.gasHeatingValue.invalid && !form.controls.gasHeatingValue.pristine">
+      <span *ngIf="form.controls.gasHeatingValue.errors.required">Value required.</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="small" for="specificGravity">Specific Gravity</label>
     <!--Todo: Air == 1 help-->
     <div class="input-group">
-      <input name="specificGravity" [(ngModel)]="flowCalculations.specificGravity" type="number" step="any" class="form-control"
-        id="specificGravity" (input)="calculate()" onfocus="this.select();" (focus)="focusField('specificGravity')">
+      <input name="specificGravity" formControlName="specificGravity" type="number" step="any" class="form-control" id="specificGravity"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('specificGravity')">
     </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.specificGravity.invalid && !form.controls.specificGravity.pristine">
+      <span *ngIf="form.controls.specificGravity.errors.required">Value required.</span>
+    </span>
   </div>
 </form>
