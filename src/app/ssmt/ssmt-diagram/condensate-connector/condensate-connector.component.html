@@ -1,0 +1,22 @@
+<!-- <div class="d-flex flex-column h-100 w-100 justify-content-center">
+    <div class="d-flex chevron-two justify-content-center flex-fill h-100">
+      <div class="d-flex flex-column h-100 justify-content-between">
+        <div class="d-flex flex-fill mt-1">
+          <span class="fa fa-chevron-down c"></span>
+        </div>
+        <div class="d-flex flex-fill" [ngClass]="{'mb-1': noOutletConnection}">
+          <span class="fa fa-chevron-down" [ngClass]="inletColor"></span>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+
+<div class="d-flex h-100 w-100 justify-content-end" [ngClass]="{'set-height': returnCondensate != undefined}">
+  <div class="d-flex condensate align-items-center" (mouseenter)="hoverEquipment('condensateHovered')" (mouseleave)="hoverEquipment('default')">
+    <div class="condensate-holder">
+      <span class="condensate-temp" *ngIf="returnCondensate">{{returnCondensate.temperature | number:'1.0-1'}} &#8457;</span>
+      <span class="fa fa-chevron-down" [ngClass]="{'hidden-chevron': returnCondensate == undefined}"></span>
+    </div>
+  </div>
+</div>

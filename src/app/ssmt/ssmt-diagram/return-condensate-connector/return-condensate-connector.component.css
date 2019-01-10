@@ -1,0 +1,30 @@
+
+.vertical-chevron{
+    border-bottom-left-radius: 25px;
+    min-height: 50px;
+    margin-top: -12px;
+}
+
+.border-top-left{
+    border-top-left-radius: 25px;
+}
+
+.return-condensate-holder{
+    text-align: center;
+    position: relative;
+}
+
+.return-condensate-holder .return-condensate{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    top: 20px;
+    width: 100px;
+    right: 0;
+}
+
+
+
+.condensate-padding-left{
+    padding-left: 90px;
+}

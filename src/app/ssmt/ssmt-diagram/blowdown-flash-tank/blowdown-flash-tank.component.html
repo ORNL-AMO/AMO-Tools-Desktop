@@ -1,0 +1,36 @@
+<div class="d-flex h-100 flex-column justify-content-center">
+  <div class="d-flex align-self-center flex-fill low-pressure" (mouseenter)="hoverEquipment('lowPressureHovered')"
+    (mouseleave)="hoverEquipment('default')">
+    <div class="outlet-steam-holder">
+      <span class="fa fa-chevron-up"></span>
+      <span class="outlet-steam-mass-flow">{{flashTank.outletGasMassFlow | number:'1.0-1'}} klb/hr</span>
+
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-center">
+    <div class="d-flex blowdown justify-content-center" (mouseenter)="hoverEquipment('blowdownHovered')" (mouseleave)="hoverEquipment('default')">
+      <div class="outlet-blowdown-holder">
+        <span class="outlet-blowdown">
+          {{flashTank.outletLiquidMassFlow | number:'1.0-1'}} klb/hr
+        </span>
+        <span class="fa fa-chevron-left"></span>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="flash-tank-img-holder" (click)="selectEquipment()">
+        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-flash-tank.png" class="flash-tank-img"
+          (mouseenter)="hoverEquipment('blowdownFlashTankHovered')" (mouseleave)="hoverEquipment('default')">
+        <span class="flash-tank-label" (mouseenter)="hoverEquipment('blowdownFlashTankHovered')" (mouseleave)="hoverEquipment('default')">Flash
+          Tank</span>
+      </div>
+    </div>
+    <div class="d-flex blowdown justify-content-center" (mouseenter)="hoverEquipment('blowdownHovered')" (mouseleave)="hoverEquipment('default')">
+      <div class="inlet-blowdown-holder">
+        <span class="inlet-blowdown">{{flashTank.inletWaterMassFlow | number:'1.0-1'}} klb/hr</span>
+        <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('boilerBlowdownHovered')"></span>
+
+      </div>
+    </div>
+  </div>
+</div>

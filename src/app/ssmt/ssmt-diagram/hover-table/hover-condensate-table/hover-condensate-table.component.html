@@ -1,0 +1,23 @@
+<div class="p-1">
+  <label class="group-label">Combined Return Condensate</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold pr-2 pl-2">Temperature</td>
+        <td class="text-center pr-2 pl-2">{{returnCondensate.temperature | number:'1.0-2'}} </td>
+        <td class="bold pr-2 pl-2">Mass Flow</td>
+        <td class="text-center pr-2 pl-2">{{returnCondensate.massFlow | number:'1.0-2'}} </td>
+      </tr>
+      <tr>
+        <td class="bold pr-2 pl-2">Pressure</td>
+        <td class="text-center pr-2 pl-2"> {{returnCondensate.pressure | number:'1.0-2'}}</td>
+        <td class="bold pr-2 pl-2">Energy Flow</td>
+        <td class="text-center pr-2 pl-2">{{returnCondensate.energyFlow | number:'1.0-2'}} </td>
+      </tr>
+      <tr>
+        <td class="bold pr-2 pl-2">Volume Flow</td>
+        <td class="text-center pr-2 pl-2">{{returnCondensate.volumeFlow | number:'1.0-2'}} </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,30 @@
+<div class="d-flex w-100 justify-content-center">
+  <div class="d-flex text-center" *ngIf="hoveredEquipment == 'default'">
+    Click-on and mouse-over equipment and components for more details.
+  </div>
+  <div class="d-flex">
+    <app-hover-boiler-table *ngIf="hoveredEquipment == 'boilerHovered'"></app-hover-boiler-table>
+    <app-hover-boiler-steam-table *ngIf="hoveredEquipment == 'boilerSteamHovered'"></app-hover-boiler-steam-table>
+    <app-hover-header-table *ngIf="hoveredEquipment == 'highPressureHovered'" [headerPressure]="'highPressure'"></app-hover-header-table>
+    <app-hover-header-table *ngIf="hoveredEquipment == 'mediumPressureHovered'" [headerPressure]="'mediumPressure'"></app-hover-header-table>
+    <app-hover-header-table *ngIf="hoveredEquipment == 'lowPressureHovered'" [headerPressure]="'lowPressure'"></app-hover-header-table>
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'condensingTurbineHovered'" [turbineType]="'condensing'"></app-hover-turbine-table>
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'highToLowTurbineHovered'" [turbineType]="'highToLow'"></app-hover-turbine-table>
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'highToMediumTurbineHovered'" [turbineType]="'highToMedium'"></app-hover-turbine-table>
+    <app-hover-turbine-table *ngIf="hoveredEquipment == 'mediumToLowTurbineHovered'" [turbineType]="'mediumToLow'"></app-hover-turbine-table>
+    <app-hover-flash-tank-table *ngIf="hoveredEquipment == 'highPressureFlashTankHovered'" [flashTankType]="'High Pressure'"></app-hover-flash-tank-table>
+    <app-hover-flash-tank-table *ngIf="hoveredEquipment == 'mediumPressureFlashTankHovered'" [flashTankType]="'Medium Pressure'"></app-hover-flash-tank-table>
+    <app-hover-prv-table *ngIf="hoveredEquipment == 'highToMediumPressurePRVHovered'" [prvType]="'highToMediumPressurePRV'"></app-hover-prv-table>
+    <app-hover-prv-table *ngIf="hoveredEquipment == 'lowPressurePRVHovered'" [prvType]="'lowPressurePRV'"></app-hover-prv-table>
+    <app-hover-flash-tank-table *ngIf="hoveredEquipment == 'condensateFlashTankHovered'" [flashTankType]="'Condensate'"></app-hover-flash-tank-table>
+    <app-hover-condensate-table *ngIf="hoveredEquipment == 'condensateHovered'"></app-hover-condensate-table>
+    <app-hover-makeup-water *ngIf="hoveredEquipment == 'makeupWaterHovered'" [combined]="false"></app-hover-makeup-water>
+    <app-hover-makeup-water *ngIf="hoveredEquipment == 'makeupWaterCondensateHovered'" [combined]="true"></app-hover-makeup-water>
+    <app-hover-blowdown-table *ngIf="hoveredEquipment == 'boilerBlowdownHovered'"></app-hover-blowdown-table>
+    <app-hover-flash-tank-table *ngIf="hoveredEquipment == 'blowdownFlashTankHovered'" [flashTankType]="'Blowdown'"></app-hover-flash-tank-table>
+    <app-hover-process-usage *ngIf="hoveredEquipment == 'lowPressureProcessSteamHovered'" [pressureLevel]="'Low'"></app-hover-process-usage>
+    <app-hover-process-usage *ngIf="hoveredEquipment == 'mediumPressureProcessSteamHovered'" [pressureLevel]="'Medium'"></app-hover-process-usage>
+    <app-hover-process-usage *ngIf="hoveredEquipment == 'highPressureProcessSteamHovered'" [pressureLevel]="'High'"></app-hover-process-usage>
+    <app-hover-deaerator-table *ngIf="hoveredEquipment == 'deaeratorHovered'"></app-hover-deaerator-table>
+  </div>
+</div>

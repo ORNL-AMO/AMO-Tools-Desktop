@@ -154,6 +154,7 @@ export class SteamSettingsComponent implements OnInit {
       }
       if (unit == 'kWh') {
         tmpPossibility.display = 'Kilowatts';
+        tmpPossibility.unit = 'kW';
       }
       this.steamPowerMeasurements.push(tmpPossibility);
     })

@@ -1,0 +1,66 @@
+<div class="d-flex flex-column">
+  <div class="p-1">
+    <label class="group-label">{{flashTankType}} Flash Tank</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="bold text-center">Inlet</td>
+          <td class="bold text-center">Steam Out</td>
+          <td class="bold text-center">Liquid Out</td>
+        </tr>
+        <tr>
+          <td class="bold">Pressure</td>
+          <td class="text-center">{{flashTank.inletWaterPressure | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasPressure | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidPressure | number:'1.0-2'}}</td>
+        </tr>
+        <tr>
+          <td class="bold">Temperature</td>
+          <td class="text-center">{{flashTank.inletWaterTemperature | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasTemperature | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidTemperature | number:'1.0-2'}}</td>
+        </tr>
+
+        <tr>
+          <td class="bold">Specific Enthalpy</td>
+          <td class="text-center">{{flashTank.inletWaterSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidSpecificEnthalpy | number:'1.0-2'}}</td>
+        </tr>
+        <tr>
+          <td class="bold">Specific Entropy</td>
+          <td class="text-center">{{flashTank.inletWaterSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidSpecificEntropy | number:'1.0-2'}}</td>
+        </tr>
+        <tr>
+          <td class="bold">Phast / Quality</td>
+          <td class="text-center">
+            {{flashTank.inletWaterQuality | number:'1.0-2'}}
+          </td>
+          <td class="text-center">
+            {{flashTank.outletGasQuality | number:'1.0-2'}}
+          </td>
+          <td class="text-center">
+            {{flashTank.outletLiquidQuality | number:'1.0-2'}}
+            <!-- <span *ngIf="flashTank.inletQuality == 0">Liquid</span>
+                  <span *ngIf="flashTank.inletQuality == 1">Gas</span> -->
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Mass Flow</td>
+          <td class="text-center">{{flashTank.inletWaterMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidMassFlow | number:'1.0-2'}}</td>
+        </tr>
+        <tr>
+          <td class="bold">Energy Flow</td>
+          <td class="text-center">{{flashTank.inletWaterEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletGasEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidEnergyFlow | number:'1.0-2'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

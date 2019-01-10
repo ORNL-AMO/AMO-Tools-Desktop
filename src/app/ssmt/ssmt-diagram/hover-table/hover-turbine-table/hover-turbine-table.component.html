@@ -1,0 +1,23 @@
+<div class="p-1">
+  <label class="group-label" *ngIf="turbineType == 'condensing'">Condensing Turbine Details</label>
+  <label class="group-label" *ngIf="turbineType == 'highToLow'">High to Low Pressure Turbine Details</label>
+  <label class="group-label" *ngIf="turbineType == 'highToMedium'">High to Medium Pressure Turbine Details</label>
+  <label class="group-label" *ngIf="turbineType == 'mediumToLow'">Medium to Low Pressure Turbine Details</label>
+
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold pr-2 pl-2">Isentropic Efficiency</td>
+        <td class="text-center pr-2 pl-2">{{turbine.isentropicEfficiency |number:'1.0-2'}} % </td>
+        <td class="bold pr-2 pl-2">Energy Out</td>
+        <td class="text-center pr-2 pl-2">{{turbine.energyOut | number:'1.0-2'}} </td>
+      </tr>
+      <tr>
+        <td class="bold pr-2 pl-2">Generation Efficiency</td>
+        <td class="text-center pr-2 pl-2">{{turbine.generatorEfficiency |number:'1.0-2'}} % </td>
+        <td class="bold pr-2 pl-2">Power Out</td>
+        <td class="text-center pr-2 pl-2">{{turbine.powerOut |number:'1.0-2'}} </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

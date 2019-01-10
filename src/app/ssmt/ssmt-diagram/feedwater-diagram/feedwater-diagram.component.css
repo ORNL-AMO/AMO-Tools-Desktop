@@ -1,0 +1,24 @@
+.feedwater{
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding-bottom: 30px;
+}
+
+.feedwater-column{
+    padding-top: 72px;
+    padding-bottom: 106px;
+}
+
+
+.deaerator-mass-flow-holder{
+    position: relative;
+}
+.deaerator-mass-flow-holder .deaerator-mass-flow{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    /* right: -15px; */
+    left: 25px;
+    bottom: 0px;
+}
