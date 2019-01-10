@@ -171,7 +171,8 @@
         </div>
         <app-diagram-summary-table *ngIf="selectedTable == 'default'" [inputData]="inputData" [powerGenerated]="powerGenerated"
           [boiler]="boiler" [annualMakeupWaterFlow]="annualMakeupWaterFlow" [makeupWaterCost]="makeupWaterCost"
-          [boilerFuelCost]="boilerFuelCost" [powerGenerationCost]="powerGenerationCost" [totalOperatingCost]="totalOperatingCost" [boilerFuelUsage]="boilerFuelUsage"></app-diagram-summary-table>
+          [boilerFuelCost]="boilerFuelCost" [powerGenerationCost]="powerGenerationCost" [totalOperatingCost]="totalOperatingCost"
+          [boilerFuelUsage]="boilerFuelUsage"></app-diagram-summary-table>
         <div class="d-flex w-100 pb-2 justify-content-center" *ngIf="selectedTable == 'default'">
           <a class="click-link small" (click)="selectTable('cost')">View More Cost Details</a>
         </div>
@@ -199,13 +200,13 @@
         <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'"></app-prv-table>
         <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="deaerator"></app-deaerator-table>
 
-        <!-- <div class="d-flex pt-3">
+        <div class="d-flex pt-3">
           <div class="form-group">
             <label for="massFlow">Define Boiler Steam Mass Flow for Calculation</label>
             <input name="massFlow" type="number" step="any" class="form-control" id="massFlow" (input)="calculateResultsGivenMassFlow()"
               [(ngModel)]="massFlow">
           </div>
-        </div> -->
+        </div>
       </div>
       <div *ngIf="tabSelect == 'help'">
         <app-diagram-help></app-diagram-help>
