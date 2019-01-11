@@ -11,7 +11,8 @@ export class MakeupWaterDiagramComponent implements OnInit {
   makeupWater: SteamPropertiesOutput;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
-
+  @Input()
+  makeupWaterVolumeFlow: number;
   constructor() { }
 
   ngOnInit() {

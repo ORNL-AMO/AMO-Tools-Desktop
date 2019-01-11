@@ -223,21 +223,49 @@ export class AssessmentService {
         hoursPerYear: 8736
       },
       operatingCosts: {
-        fuelCost: undefined,
+        fuelCost: 5.78,
         makeUpWaterCost: 0,
-        electricityCost: undefined
+        electricityCost: .05
       },
       generalSteamOperations: {
-        sitePowerImport: undefined,
-        makeUpWaterTemperature: undefined
+        sitePowerImport: 5000,
+        makeUpWaterTemperature: 50
       },
       implementationCosts: 0.0,
       equipmentNotes: '',
       turbineInput: {
-        condensingTurbine: undefined,
-        highToLowTurbine: undefined,
-        highToMediumTurbine: undefined,
-        mediumToLowTurbine: undefined
+        condensingTurbine: {
+          isentropicEfficiency: undefined,
+          generationEfficiency: undefined,
+          condenserPressure: undefined,
+          operationType: 0,
+          operationValue: undefined,
+          useTurbine: false
+        },
+        highToLowTurbine: {
+          isentropicEfficiency: undefined,
+          generationEfficiency: undefined,
+          operationType: 0,
+          operationValue1: undefined,
+          operationValue2: undefined,
+          useTurbine: false
+        },
+        highToMediumTurbine: {
+          isentropicEfficiency: undefined,
+          generationEfficiency: undefined,
+          operationType: 0,
+          operationValue1: undefined,
+          operationValue2: undefined,
+          useTurbine: false
+        },
+        mediumToLowTurbine: {
+          isentropicEfficiency: undefined,
+          generationEfficiency: undefined,
+          operationType: 0,
+          operationValue1: undefined,
+          operationValue2: undefined,
+          useTurbine: false
+        }
       }
     }
   }

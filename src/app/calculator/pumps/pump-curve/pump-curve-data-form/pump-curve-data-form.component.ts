@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
+import { PumpCurve, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-pump-curve-data-form',
   templateUrl: './pump-curve-data-form.component.html',
@@ -9,17 +10,19 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class PumpCurveDataFormComponent implements OnInit {
   @Input()
-  pumpCurveForm: PumpCurveForm;
+  pumpCurveForm: FormGroup;
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Output('calculate')
-  calculate = new EventEmitter<boolean>();
+  calculate = new EventEmitter<FormGroup>();
   @Input()
   settings: Settings;
   @Input()
   inPsat: boolean;
   @Output('emitAddRow')
-  emitAddRow = new EventEmitter<boolean>();
+  emitAddRow = new EventEmitter<FormGroup>();
+  @Output('emitRemoveRow')
+  emitRemoveRow = new EventEmitter<number>();
   @Input()
   isFan: boolean;
 
@@ -33,55 +36,23 @@ export class PumpCurveDataFormComponent implements OnInit {
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.initMaxFlowWarnings();
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  checkFlow(index: number) {
-    let calculate = true;
-    if (this.pumpCurveForm.dataRows[index].flow > 1000000) {
-      this.maxFlowWarnings[index] = "Value must not be greater than 1,000,000.";
-    }
-    else {
-      this.maxFlowWarnings[index] = null;
-    }
-    for (let i = 0; i < this.maxFlowWarnings.length; i++) {
-      if (this.maxFlowWarnings[i] != null) {
-        calculate = false;
-      }
-    }
-    if (calculate) {
-      this.emitCalculateChanges();
-    }
-  }
 
-  initMaxFlowWarnings() {
-    for (let i = 0; i < this.pumpCurveForm.dataRows.length; i++) {
-      if (this.pumpCurveForm.dataRows[i].flow > 1000000) {
-        this.maxFlowWarnings.push("Value must not be greater than 1,000,000.");
-      }
-      else {
-        this.maxFlowWarnings.push(null);
-      }
-    }
-  }
-
-  removeRow(num: number) {
-    this.pumpCurveForm.dataRows.splice(num, 1);
-    this.maxFlowWarnings.splice(num, 1);
-    this.emitCalculateChanges();
+  removeRow(index: number) {
+    this.emitRemoveRow.emit(index);
   }
 
   emitCalculateChanges() {
-    this.calculate.emit(true);
+    this.calculate.emit(this.pumpCurveForm);
   }
 
   addRow() {
-    this.maxFlowWarnings.push(null);
-    this.emitAddRow.emit(true);
+    this.emitAddRow.emit(this.pumpCurveForm);
   }
 
 

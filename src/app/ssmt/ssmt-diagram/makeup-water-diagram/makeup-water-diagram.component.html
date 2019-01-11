@@ -6,6 +6,7 @@
     (mouseleave)="hoverEquipment('default')">
     <div class="d-flex w-100 makeup-water justify-content-end">
       <div class="makeup-water-holder">
+        <span class="makeup-water-volume-flow">{{makeupWaterVolumeFlow | number:'1.0-1'}} gpm</span>
         <span class="fa fa-chevron-left"></span>
         <span class="makeup-water-mass-flow">{{makeupWater.massFlow | number:'1.0-1'}} klb/hr</span>
       </div>

@@ -13,7 +13,7 @@
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.flowRate.invalid && !efficiencyForm.controls.flowRate.pristine">
-      <span *ngIf="efficiencyForm.controls.flowRate.errors.required">Value Required</span>
+      <span *ngIf="efficiencyForm.controls.flowRate.errors.required">Value required.</span>
       <span *ngIf="efficiencyForm.controls.flowRate.errors.max">Value can't be greater than
         {{efficiencyForm.controls.flowRate.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
       <span *ngIf="efficiencyForm.controls.flowRate.errors.min">Value can't be less than

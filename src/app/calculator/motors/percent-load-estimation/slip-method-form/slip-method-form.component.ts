@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { SlipMethod } from '../percent-load-estimation.service';
+import { SlipMethod, PercentLoadEstimationService } from '../percent-load-estimation.service';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -13,6 +14,8 @@ export class SlipMethodFormComponent implements OnInit {
   @Input()
   data: SlipMethod;
 
+  form: FormGroup;
+
   lineFrequency: number = 60;
   showSynchronousSpeed: boolean = false;
   measuredSpeedError: string = null;
@@ -20,15 +23,15 @@ export class SlipMethodFormComponent implements OnInit {
   nameplateFullLoadSpeedError: string = null;
   synchronousSpeeds: Array<number>;
 
-  constructor() { }
+  constructor(private percentLoadEstimationService: PercentLoadEstimationService) { }
 
   ngOnInit() {
-    this.updateSynchronousSpeeds();
-    this.calculate();
+    this.form = this.percentLoadEstimationService.initSlipMethodForm();
+    this.updateSynchronousSpeeds(false);
   }
 
-  updateSynchronousSpeeds() {
-    if (this.lineFrequency == 50) {
+  updateSynchronousSpeeds(calculate: boolean) {
+    if (this.form.controls.lineFrequency.value == 50) {
       this.synchronousSpeeds = [
         500,
         600,
@@ -38,7 +41,7 @@ export class SlipMethodFormComponent implements OnInit {
         3000
       ];
     }
-    else if (this.lineFrequency == 60) {
+    else if (this.form.controls.lineFrequency.value == 60) {
       this.synchronousSpeeds = [
         600,
         720,
@@ -48,41 +51,29 @@ export class SlipMethodFormComponent implements OnInit {
         3600
       ];
     }
-    this.calculate();
+    //update form for validation with new synchronous speed list
+    this.form = this.percentLoadEstimationService.getSlipMethodFormFromObj(this.data, this.lineFrequency, this.synchronousSpeeds);
+    if (calculate) {
+      this.calculate();
+    }
   }
 
   calculate() {
     this.synchronousSpeedError = this.nameplateFullLoadSpeedError = this.measuredSpeedError = null;
-
-    if (this.data.nameplateFullLoadSpeed >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
-      this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
-    }
-    if (this.data.measuredSpeed >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
-      this.measuredSpeedError = 'Measured Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
-    }
-
     for (let i = 0; i < this.synchronousSpeeds.length; i++) {
-      if (this.synchronousSpeeds[i] > this.data.nameplateFullLoadSpeed) {
-        this.data.synchronousSpeed = this.synchronousSpeeds[i];
-
-        if (this.synchronousSpeeds[i] <= this.data.measuredSpeed) {
+      if (this.synchronousSpeeds[i] > this.form.controls.nameplateFullLoadSpeed.value) {
+        this.form.controls.synchronousSpeed.patchValue(this.synchronousSpeeds[i]);
+        this.form = this.percentLoadEstimationService.updateMeasuredSpeedValidator(this.form, this.synchronousSpeeds[i]);
+        if (this.synchronousSpeeds[i] <= this.form.controls.measuredSpeed.value) {
           this.measuredSpeedError = 'Measured Speed must be less than the synchronous speed';
         }
         break;
       }
-      if (this.data.nameplateFullLoadSpeed === this.synchronousSpeeds[i]) {
+      if (this.form.controls.nameplateFullLoadSpeed.value === this.synchronousSpeeds[i]) {
         this.synchronousSpeedError = 'Nameplate Full Load Speed cannot equal the Synchronous Speed of ' + this.synchronousSpeeds[i];
       }
     }
-
-    if (!this.data.nameplateFullLoadSpeed) {
-      this.showSynchronousSpeed = false;
-    } else {
-      this.showSynchronousSpeed = true;
-    }
-
+    this.data = this.percentLoadEstimationService.getSlipMethodObjFromForm(this.form);
     this.emitCalculate.emit(this.data);
   }
-
-
 }

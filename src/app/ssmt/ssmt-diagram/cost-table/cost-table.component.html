@@ -7,24 +7,24 @@
           <td class="bold text-center" colspan="2">Power Balance</td>
         </tr>
         <tr>
-          <td class="text-center">Generation</td>
-          <td class="text-center">{{powerGenerated | number:'1.0-1'}} kW</td>
+          <td class="text-center w-50">Generation</td>
+          <td class="text-center w-50">{{powerGenerated | number:'1.0-1'}} kW</td>
         </tr>
         <tr>
-          <td class="text-center">Demand</td>
-          <td class="text-center">{{inputData.operationsInput.sitePowerImport + powerGenerated | number:'1.0-1'}} kW</td>
+          <td class="text-center w-50">Demand</td>
+          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport + powerGenerated | number:'1.0-1'}} kW</td>
         </tr>
         <tr>
-          <td class="text-center">Import</td>
-          <td class="text-center">{{inputData.operationsInput.sitePowerImport | number:'1.0-1'}} kW</td>
+          <td class="text-center w-50">Import</td>
+          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport | number:'1.0-1'}} kW</td>
         </tr>
         <tr>
-          <td class="text-center">Unit Cost</td>
-          <td class="text-center">{{inputData.operationsInput.electricityCosts | currency:'USD'}} /kWh</td>
+          <td class="text-center w-50">Unit Cost</td>
+          <td class="text-center w-50">{{inputData.operationsInput.electricityCosts | currency:'USD'}} /kWh</td>
         </tr>
         <tr>
-          <td class="bold text-center">Total $'000s/yr</td>
-          <td class="text-center">$0,000.00</td>
+          <td class="bold text-center w-50">Total $/yr</td>
+          <td class="text-center w-50">{{powerGenerationCost | currency:'USD'}}</td>
         </tr>
       </tbody>
     </table>
@@ -36,16 +36,16 @@
           <td class="bold text-center" colspan="2">Fuel Balance</td>
         </tr>
         <tr>
-          <td class="text-center">Boiler</td>
-          <td class="text-center">{{boiler.fuelEnergy | number:'1.0-2'}} MMBtu/hr</td>
+          <td class="text-center w-50">Boiler</td>
+          <td class="text-center w-50">{{boiler.fuelEnergy | number:'1.0-2'}} MMBtu/hr</td>
         </tr>
         <tr>
-          <td class="text-center">Unit Cost</td>
-          <td class="text-center">{{inputData.operationsInput.fuelCosts | currency:'USD'}} /MMBtu</td>
+          <td class="text-center w-50">Unit Cost</td>
+          <td class="text-center w-50">{{inputData.operationsInput.fuelCosts | currency:'USD'}} /MMBtu</td>
         </tr>
         <tr>
-          <td class="bold text-center">Total $'000s/yr</td>
-          <td class="text-center">$0,000.00</td>
+          <td class="bold text-center w-50">Total $/yr</td>
+          <td class="text-center w-50">{{boilerFuelCost | currency:'USD'}}</td>
         </tr>
       </tbody>
     </table>
@@ -57,19 +57,19 @@
           <td class="bold text-center" colspan="2">Make-Up Water</td>
         </tr>
         <tr>
-          <td class="text-center">Flow</td>
-          <td class="text-center">
-            365.9 gpm <br>
-            175,618.089 gal
+          <td class="text-center w-50">Flow</td>
+          <td class="text-center w-50">
+            {{makeupWaterVolumeFlow | number:'1.0-2'}} gpm <br>
+            {{annualMakeupWaterFlow | number:'1.0-2'}} gal
           </td>
         </tr>
         <tr>
-          <td class="text-center">Unit Cost</td>
-          <td class="text-center">{{inputData.operationsInput.makeUpWaterCosts | currency:'USD'}} /gal</td>
+          <td class="text-center w-50">Unit Cost</td>
+          <td class="text-center w-50">${{inputData.operationsInput.makeUpWaterCosts | number:'1.2-4'}} /gal</td>
         </tr>
         <tr>
-          <td class="bold text-center">Total $'000s/yr</td>
-          <td class="text-center">$0,000.00</td>
+          <td class="bold text-center w-50">Total $/yr</td>
+          <td class="text-center w-50">{{makeupWaterCost | currency:'USD'}}</td>
         </tr>
       </tbody>
     </table>
@@ -82,7 +82,7 @@
           <td class="bold text-center" colspan="2">Total Operating Cost</td>
         </tr>
         <tr>
-          <td class="text-center">$31,915.11</td>
+          <td class="text-center">{{totalOperatingCost | currency:'USD'}}</td>
         </tr>
       </tbody>
     </table>
@@ -95,16 +95,16 @@
     <table class="table table-hover table-striped">
       <tbody>
         <tr>
-          <td class="text-center">High Pressure</td>
-          <td class="text-center">$0.00 /klb</td>
+          <td class="text-center w-50">High Pressure</td>
+          <td class="text-center w-50">$0.00 /klb</td>
         </tr>
         <tr>
-          <td class="text-center">Medium Pressure</td>
-          <td class="text-center">$0.00 /klb</td>
+          <td class="text-center w-50">Medium Pressure</td>
+          <td class="text-center w-50">$0.00 /klb</td>
         </tr>
         <tr>
-          <td class="text-center">Low Pressure</td>
-          <td class="text-center">$0.00 /klb</td>
+          <td class="text-center w-50">Low Pressure</td>
+          <td class="text-center w-50">$0.00 /klb</td>
         </tr>
       </tbody>
     </table>

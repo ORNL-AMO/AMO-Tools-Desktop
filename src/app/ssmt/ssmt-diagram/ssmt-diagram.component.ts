@@ -56,11 +56,18 @@ export class SsmtDiagramComponent implements OnInit {
   mediumPressureSteamHeatLoss: HeatLossOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
   returnCondensate: SteamPropertiesOutput;
+  //additions 1/10/19
   powerGenerated: number;
-
+  makeupWaterVolumeFlow: number;
+  annualMakeupWaterFlow: number;
+  makeupWaterCost: number;
+  boilerFuelCost: number;
+  powerGenerationCost: number;
+  totalOperatingCost: number;
+  boilerFuelUsage: number;
 
   tabSelect: string = 'results';
-  selectedTable: string = 'cost';
+  selectedTable: string = 'default';
   hoveredEquipment: string = 'default';
   deaeratorWidth: number;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
@@ -126,6 +133,13 @@ export class SsmtDiagramComponent implements OnInit {
     this.lowPressureSteamHeatLoss = this.calculateModelService.lowPressureSteamHeatLoss;
     this.returnCondensate = this.calculateModelService.returnCondensate;
     this.powerGenerated = this.calculateModelService.powerGenerated;
+    this.makeupWaterVolumeFlow = this.calculateModelService.makeupWaterVolumeFlow;
+    this.annualMakeupWaterFlow = this.calculateModelService.annualMakeupWaterFlow;
+    this.makeupWaterCost = this.calculateModelService.makeupWaterCost;
+    this.boilerFuelCost = this.calculateModelService.boilerFuelCost;
+    this.powerGenerationCost = this.calculateModelService.powerGenerationCost;
+    this.totalOperatingCost = this.calculateModelService.totalOperatingCost;
+    this.boilerFuelUsage = this.calculateModelService.boilerFuelUsage;
     console.log('got data');
     this.dataCalculated = true;
     this.cd.detectChanges();

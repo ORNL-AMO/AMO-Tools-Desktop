@@ -41,6 +41,8 @@ import { HoverProcessUsageComponent } from './hover-table/hover-process-usage/ho
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HoverDeaeratorTableComponent } from './hover-table/hover-deaerator-table/hover-deaerator-table.component';
 import { ReturnCondensateConnectorComponent } from './return-condensate-connector/return-condensate-connector.component';
+import { DefaultSummaryTableComponent } from './hover-table/default-summary-table/default-summary-table.component';
+import { DiagramSummaryTableComponent } from './diagram-summary-table/diagram-summary-table.component';
 
 @NgModule({
   imports: [
@@ -87,7 +89,9 @@ import { ReturnCondensateConnectorComponent } from './return-condensate-connecto
     HoverBlowdownTableComponent,
     HoverProcessUsageComponent,
     HoverDeaeratorTableComponent,
-    ReturnCondensateConnectorComponent
+    ReturnCondensateConnectorComponent,
+    DefaultSummaryTableComponent,
+    DiagramSummaryTableComponent
   ],
   exports: [
     SsmtDiagramComponent
