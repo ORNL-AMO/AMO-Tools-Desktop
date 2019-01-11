@@ -49,15 +49,18 @@ export class SsmtDiagramComponent implements OnInit {
   makeupWaterAndCondensateHeader: HeaderOutputObj;
   condensingTurbine: TurbineOutput;
   deaerator: DeaeratorOutput;
-  highPressureProcessSteamUsage: ProcessSteamUsage;
-  mediumPressureProcessSteamUsage: ProcessSteamUsage;
-  lowPressureProcessSteamUsage: ProcessSteamUsage;
   highPressureSteamHeatLoss: HeatLossOutput;
   mediumPressureSteamHeatLoss: HeatLossOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
   returnCondensate: SteamPropertiesOutput;
 
   //additions 1/10/19
+  highPressureProcessUsage: ProcessSteamUsage;
+  mediumPressureProcessUsage: ProcessSteamUsage;
+  lowPressureProcessUsage: ProcessSteamUsage;
+
+
+
   powerGenerated: number;
   makeupWaterVolumeFlow: number;
   annualMakeupWaterFlow: number;
@@ -126,11 +129,11 @@ export class SsmtDiagramComponent implements OnInit {
     this.makeupWaterAndCondensateHeader = this.calculateModelService.makeupWaterAndCondensateHeader;
     this.condensingTurbine = this.calculateModelService.condensingTurbine;
 
-    //this.highPressureProcessSteamUsage = this.calculateModelService.highPressureProcessSteamUsage;
+    this.highPressureProcessUsage = this.calculateModelService.highPressureProcessUsage;
     this.highPressureSteamHeatLoss = this.calculateModelService.highPressureSteamHeatLoss;
-    //this.mediumPressureProcessSteamUsage = this.calculateModelService.mediumPressureProcessSteamUsage;
+    this.mediumPressureProcessUsage = this.calculateModelService.mediumPressureProcessUsage;
     this.mediumPressureSteamHeatLoss = this.calculateModelService.mediumPressureSteamHeatLoss;
-    //this.lowPressureProcessSteamUsage = this.calculateModelService.lowPressureProcessSteamUsage;
+    this.lowPressureProcessUsage = this.calculateModelService.lowPressureProcessUsage;
     this.lowPressureSteamHeatLoss = this.calculateModelService.lowPressureSteamHeatLoss;
     this.returnCondensate = this.calculateModelService.returnCondensate;
 

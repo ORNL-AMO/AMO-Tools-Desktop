@@ -20,7 +20,7 @@
             <div class="p-0 d-flex justify-content-end">
               <div class="w-100">
                 <app-header-diagram [header]="highPressureHeader" [pressureLevel]="'highPressure'" [condensate]="highPressureCondensate"
-                  [headerSteamUsage]="inputData.headerInput.highPressure.processSteamUsage" (emitSetHover)="setHover($event)" [settings]="settings"></app-header-diagram>
+                  [steamUsage]="highPressureProcessUsage" (emitSetHover)="setHover($event)" [settings]="settings"></app-header-diagram>
               </div>
             </div>
             <div class="d-flex w-100">
@@ -62,8 +62,8 @@
             <div class="p-0 d-flex justify-content-end">
               <div class="w-100">
                 <app-header-diagram *ngIf="mediumPressureHeader" [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'"
-                  [condensate]="mediumPressureCondensate" [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"
-                  (emitSetHover)="setHover($event)" [settings]="settings"></app-header-diagram>
+                  [condensate]="mediumPressureCondensate" [steamUsage]="mediumPressureProcessUsage" (emitSetHover)="setHover($event)"
+                  [settings]="settings"></app-header-diagram>
               </div>
             </div>
             <div class="d-flex w-100">
@@ -97,8 +97,8 @@
             <div class="p-0 d-flex justify-content-end">
               <div class="w-100">
                 <app-header-diagram *ngIf="lowPressureHeader" [header]="lowPressureHeader" [pressureLevel]="'lowPressure'"
-                  [condensate]="lowPressureCondensate" [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"
-                  (emitSetHover)="setHover($event)" [settings]="settings"></app-header-diagram>
+                  [condensate]="lowPressureCondensate" [steamUsage]="lowPressureProcessUsage" (emitSetHover)="setHover($event)"
+                  [settings]="settings"></app-header-diagram>
               </div>
             </div>
           </div>

@@ -15,39 +15,19 @@ export class HoverProcessUsageComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  headerSteamUsage: number;
-  calculatedHeader: HeaderOutputObj;
   processSteamUsage: ProcessSteamUsage;
-  condensate: SteamPropertiesOutput;
   constructor(private calculateModelService: CalculateModelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.pressureLevel == 'Low') {
-      this.headerSteamUsage = this.calculateModelService.inputData.headerInput.lowPressure.processSteamUsage;
-      this.calculatedHeader = this.calculateModelService.lowPressureHeader;
-      this.condensate = this.calculateModelService.lowPressureCondensate;
+      this.processSteamUsage = this.calculateModelService.lowPressureProcessUsage;
     } else if (this.pressureLevel == 'Medium') {
-      this.headerSteamUsage = this.calculateModelService.inputData.headerInput.mediumPressure.processSteamUsage;
-      this.calculatedHeader = this.calculateModelService.mediumPressureHeader;
-      this.condensate = this.calculateModelService.mediumPressureCondensate;
+      this.processSteamUsage = this.calculateModelService.mediumPressureProcessUsage;
+
     } else if (this.pressureLevel == 'High') {
-      this.headerSteamUsage = this.calculateModelService.inputData.headerInput.highPressure.processSteamUsage;
-      this.calculatedHeader = this.calculateModelService.highPressureHeader;
-      this.condensate = this.calculateModelService.highPressureCondensate;
+      this.processSteamUsage = this.calculateModelService.highPressureProcessUsage;
+
     }
-    let processSteamUsageEnergyFlow: number = this.headerSteamUsage * this.calculatedHeader.specificEnthalpy / 1000;
-    let processUsage: number = (this.headerSteamUsage) * (this.calculatedHeader.specificEnthalpy - this.condensate.specificEnthalpy);
-    processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamMassFlowMeasurement).to('kg');
-    processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
-    processUsage = this.convertUnitsService.value(processUsage).from('kJ').to(this.settings.steamEnergyMeasurement);
-    //TODO: Calculate processUsage
-    this.processSteamUsage = {
-      pressure: this.calculatedHeader.pressure,
-      temperature: this.calculatedHeader.temperature,
-      energyFlow: processSteamUsageEnergyFlow,
-      massFlow: this.headerSteamUsage,
-      processUsage: processUsage
-    };
   }
 
 }

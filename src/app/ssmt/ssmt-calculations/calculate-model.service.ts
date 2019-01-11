@@ -48,6 +48,10 @@ export class CalculateModelService {
   deaeratorOutput: DeaeratorOutput;
 
   // 1/10/2019 additions for cost
+  highPressureProcessUsage: ProcessSteamUsage;
+  mediumPressureProcessUsage: ProcessSteamUsage;
+  lowPressureProcessUsage: ProcessSteamUsage;
+
   powerGenerated: number;
   boilerFuelCost: number;
   makeupWaterCost: number;
@@ -135,6 +139,16 @@ export class CalculateModelService {
     if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
       steamUsage = steamUsage + this.condensingTurbine.massFlow;
     }
+
+    // if(this.inputData.turbineInput.highToLowTurbine.useTurbine == true){
+    //   steamUsage = steamUsage + this.highToLowPressureTurbine.massFlow;
+    // }
+    // if(this.inputData.turbineInput.highToMediumTurbine.useTurbine == true){
+    //   steamUsage = steamUsage + this.highPressureToMediumPressureTurbine.massFlow;
+    // }
+    // if(this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true){
+    //   steamUsage = steamUsage + this.mediumToLowPressureTurbine.massFlow;
+    // }
 
     return steamUsage;
   }
@@ -232,6 +246,15 @@ export class CalculateModelService {
 
     //6. Calculate Deaerator
     this.calculateDearator();
+
+    //calculate process steam usage
+    this.calculateHighPressureProcessUsage();
+    if(this.inputData.headerInput.numberOfHeaders > 1){
+      this.calculateLowPressureProcessUsage();
+    }
+    if(this.inputData.headerInput.numberOfHeaders == 3){
+      this.calculateMediumPressureProcessUsage();
+    }
 
     //7. Calculate Energy and Cost Values
     //Power Generated
@@ -1173,6 +1196,61 @@ export class CalculateModelService {
 
 
   }
+
+  //Process Usage
+  calculateHighPressureProcessUsage(){
+    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.highPressure.processSteamUsage * this.highPressureHeader.specificEnthalpy / 1000;
+    let processUsage: number = (this.inputData.headerInput.highPressure.processSteamUsage) * (this.highPressureHeader.specificEnthalpy - this.highPressureCondensate.specificEnthalpy);
+    processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamMassFlowMeasurement).to('kg');
+    processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
+    processUsage = this.convertUnitsService.value(processUsage).from('kJ').to(this.settings.steamEnergyMeasurement);
+    //TODO: Calculate processUsage
+    this.highPressureProcessUsage = {
+      pressure: this.highPressureHeader.pressure,
+      temperature: this.highPressureHeader.temperature,
+      energyFlow: processSteamUsageEnergyFlow,
+      massFlow: this.inputData.headerInput.highPressure.processSteamUsage,
+      processUsage: processUsage
+    };
+  }
+
+  calculateMediumPressureProcessUsage(){
+    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.mediumPressure.processSteamUsage * this.mediumPressureHeader.specificEnthalpy / 1000;
+    let processUsage: number = (this.inputData.headerInput.mediumPressure.processSteamUsage) * (this.mediumPressureHeader.specificEnthalpy - this.mediumPressureCondensate.specificEnthalpy);
+    processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamMassFlowMeasurement).to('kg');
+    processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
+    processUsage = this.convertUnitsService.value(processUsage).from('kJ').to(this.settings.steamEnergyMeasurement);
+    //TODO: Calculate processUsage
+    this.mediumPressureProcessUsage = {
+      pressure: this.mediumPressureHeader.pressure,
+      temperature: this.mediumPressureHeader.temperature,
+      energyFlow: processSteamUsageEnergyFlow,
+      massFlow: this.inputData.headerInput.mediumPressure.processSteamUsage,
+      processUsage: processUsage
+    };
+  }
+
+
+  calculateLowPressureProcessUsage(){
+    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.lowPressure.processSteamUsage * this.lowPressureHeader.specificEnthalpy / 1000;
+    let processUsage: number = (this.inputData.headerInput.lowPressure.processSteamUsage) * (this.lowPressureHeader.specificEnthalpy - this.lowPressureCondensate.specificEnthalpy);
+    processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamMassFlowMeasurement).to('kg');
+    processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
+    processUsage = this.convertUnitsService.value(processUsage).from('kJ').to(this.settings.steamEnergyMeasurement);
+    //TODO: Calculate processUsage
+    this.lowPressureProcessUsage = {
+      pressure: this.lowPressureHeader.pressure,
+      temperature: this.lowPressureHeader.temperature,
+      energyFlow: processSteamUsageEnergyFlow,
+      massFlow: this.inputData.headerInput.lowPressure.processSteamUsage,
+      processUsage: processUsage
+    };
+  }
+
+
+
+
+
   //Cost and Energy Calculations
   calculatePowerGenerated() {
     //sum power generated by turbine
