@@ -56,6 +56,7 @@ export class SsmtDiagramComponent implements OnInit {
   mediumPressureSteamHeatLoss: HeatLossOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
   returnCondensate: SteamPropertiesOutput;
+
   //additions 1/10/19
   powerGenerated: number;
   makeupWaterVolumeFlow: number;
@@ -132,6 +133,7 @@ export class SsmtDiagramComponent implements OnInit {
     //this.lowPressureProcessSteamUsage = this.calculateModelService.lowPressureProcessSteamUsage;
     this.lowPressureSteamHeatLoss = this.calculateModelService.lowPressureSteamHeatLoss;
     this.returnCondensate = this.calculateModelService.returnCondensate;
+
     this.powerGenerated = this.calculateModelService.powerGenerated;
     this.makeupWaterVolumeFlow = this.calculateModelService.makeupWaterVolumeFlow;
     this.annualMakeupWaterFlow = this.calculateModelService.annualMakeupWaterFlow;
