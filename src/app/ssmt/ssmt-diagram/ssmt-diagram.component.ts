@@ -17,7 +17,7 @@ export class SsmtDiagramComponent implements OnInit {
   @Input()
   containerHeight: number;
   
-  massFlow: number = 408.7;
+  massFlow: number = 396.6;
 
   dataCalculated: boolean = false;
 
@@ -74,6 +74,7 @@ export class SsmtDiagramComponent implements OnInit {
   selectedTable: string = 'default';
   hoveredEquipment: string = 'default';
   deaeratorWidth: number;
+  ventedLowPressureSteam: number;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -145,7 +146,7 @@ export class SsmtDiagramComponent implements OnInit {
     this.powerGenerationCost = this.calculateModelService.powerGenerationCost;
     this.totalOperatingCost = this.calculateModelService.totalOperatingCost;
     this.boilerFuelUsage = this.calculateModelService.boilerFuelUsage;
-    console.log('got data');
+    //this.ventedLowPressureSteam = this.calculateModelService.ventedLowPressureSteam;
     this.dataCalculated = true;
     this.cd.detectChanges();
   }

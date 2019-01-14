@@ -75,6 +75,12 @@
     left: -13px;
 }
 
+.boiler-img-holder .stack-loss{
+    position: absolute;
+    width: 100px;
+    z-index: +1;
+    right: 80px;
+}
 
 .boiler-img-holder .boiler-label:hover{
     text-decoration: underline;
