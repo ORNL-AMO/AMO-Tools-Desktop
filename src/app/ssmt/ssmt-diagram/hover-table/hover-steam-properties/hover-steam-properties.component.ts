@@ -78,8 +78,25 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.condensateFlashTankInletHovered();
     } else if (this.hoveredProperty == 'condensateFlashTankVentHovered') {
       this.condensateFlashTankVentHovered();
+    } else if (this.hoveredProperty == 'boilerBlowdownFlashedLiquidHovered') {
+      this.boilerBlowdownFlashedLiquidHovered();
+    } else if (this.hoveredProperty == 'boilerBlowdownFlashedHovered') {
+      this.boilerBlowdownFlashedHovered();
     }
   }
+
+  boilerBlowdownFlashedLiquidHovered(){
+    this.label = 'Boiler Blowdown Drain';
+    let flashTank: FlashTankOutput = this.calculateModelService.blowdownFlashTank;
+    this.setFlashTankOutletCondensate(flashTank);
+  }
+
+  boilerBlowdownFlashedHovered(){
+    this.label = 'Blowdown Flashed';
+    let flashTank: FlashTankOutput = this.calculateModelService.blowdownFlashTank;
+    this.setFlashTankSteam(flashTank);
+  }
+
   condensateFlashTankVentHovered() {
     this.label = 'Condensate Flashed';
     let flashTank: FlashTankOutput = this.calculateModelService.condensateFlashTank;

@@ -3,22 +3,23 @@
   <table class="table table-hover table-striped">
     <tbody>
       <tr>
-        <td class="bold pr-2 pl-2">Temperature</td>
-        <td class="text-center pr-2 pl-2">{{boiler.blowdownTemperature | number:'1.0-2'}} </td>
+        <td class="bold pr-2 pl-2">Blowdown Rate</td>
+        <td class="text-center pr-2 pl-2">{{boilerInput.blowdownRate | number:'1.0-2'}} </td>
         <td class="bold pr-2 pl-2">Mass Flow</td>
         <td class="text-center pr-2 pl-2">{{boiler.blowdownMassFlow | number:'1.0-2'}} </td>
       </tr>
       <tr>
-        <td class="bold pr-2 pl-2">Pressure</td>
-        <td class="text-center pr-2 pl-2"> {{boiler.blowdownPressure | number:'1.0-2'}}</td>
-        <td class="bold pr-2 pl-2">Specific Enthalpy</td>
-        <td class="text-center pr-2 pl-2">{{boiler.blowdownSpecificEnthalpy | number:'1.0-2'}} </td>
+        <td class="bold pr-2 pl-2">Temperature</td>
+        <td class="text-center pr-2 pl-2"> {{boiler.blowdownTemperature | number:'1.0-2'}}</td>
+        <td class="bold pr-2 pl-2">Energy Flow</td>
+        <td class="text-center pr-2 pl-2">{{boiler.blowdownEnergyFlow | number:'1.0-2'}} </td>
       </tr>
       <tr>
-        <td class="bold pr-2 pl-2">Phase</td>
-        <td class="text-center pr-2 pl-2">{{boiler.blowdownQuality | number:'1.0-2'}} </td>
-        <td class="bold pr-2 pl-2">Specific Entropy</td>
-        <td class="text-center pr-2 pl-2">{{boiler.blowdownSpecificEntropy | number:'1.0-2'}} </td>
+        <td class="bold pr-2 pl-2">Flash Blowdown</td>
+        <td class="text-center pr-2 pl-2">
+          <span *ngIf="boilerInput.blowdownFlashed">Yes</span>
+          <span *ngIf="!boilerInput.blowdownFlashed">Yes</span>
+        </td>
       </tr>
     </tbody>
   </table>
