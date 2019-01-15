@@ -1,0 +1,30 @@
+<div class="p-1">
+  <label class="group-label">{{label}}</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold pr-2 pl-2">Temperature</td>
+        <td class="text-center pr-2 pl-2">{{steam.temperature | number:'1.0-2'}} </td>
+        <td class="bold pr-2 pl-2">Mass Flow</td>
+        <td class="text-center pr-2 pl-2">{{steam.massFlow | number:'1.0-2'}} </td>
+      </tr>
+      <tr>
+        <td class="bold pr-2 pl-2">Pressure</td>
+        <td class="text-center pr-2 pl-2"> {{steam.pressure | number:'1.0-2'}}</td>
+        <td class="bold pr-2 pl-2">Specific Enthalpy</td>
+        <td class="text-center pr-2 pl-2">{{steam.specificEnthalpy | number:'1.0-2'}} </td>
+      </tr>
+      <tr>
+        <td class="bold pr-2 pl-2">Phase</td>
+        <td class="text-center pr-2 pl-2">
+          <span *ngIf="steam.quality == 0">Liquid</span>
+          <span *ngIf="steam.quality == 1">Gas</span>
+          <span *ngIf="steam.quality != 1 && steam.quality != 0"> {{steam.quality | number:'1.1-2'}}
+          </span>
+        </td>
+        <td class="bold pr-2 pl-2">Specific Entropy</td>
+        <td class="text-center pr-2 pl-2">{{steam.specificEntropy | number:'1.0-2'}} </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
