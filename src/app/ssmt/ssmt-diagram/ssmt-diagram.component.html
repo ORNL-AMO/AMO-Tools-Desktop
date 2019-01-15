@@ -3,7 +3,7 @@
     *ngIf="dataCalculated == true">
     <div class="d-flex p-3 align-self-center">
       <div class="d-flex flex-grow">
-        <app-feedwater-diagram [deaerator]="deaerator"></app-feedwater-diagram>
+        <app-feedwater-diagram [deaerator]="deaerator" (emitSetHover)="setHover($event)"></app-feedwater-diagram>
       </div>
       <div class="d-flex flex-column flex-fill align-content-stretch">
         <div class="d-flex boiler-table-height">

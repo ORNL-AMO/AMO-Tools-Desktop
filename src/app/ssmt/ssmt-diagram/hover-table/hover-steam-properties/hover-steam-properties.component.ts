@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
-import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-hover-steam-properties',
@@ -88,6 +88,50 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.returnCondensateHovered();
     } else if (this.hoveredProperty == 'makeupWaterCondensatePropertiesHovered') {
       this.makeupWaterCondensatePropertiesHovered();
+    } else if (this.hoveredProperty == 'deaeratorInletSteamHovered') {
+      this.deaeratorInletSteamHovered();
+    } else if (this.hoveredProperty == 'deaeratorVentHovered') {
+      this.deaeratorVentHovered();
+    } else if (this.hoveredProperty == 'deaeratorFeedwaterHovered') {
+      this.deaeratorFeedwaterHovered();
+    } else if (this.hoveredProperty == 'feedwaterHovered'){
+      this.boilerFeedwaterHovered();
+    }
+  }
+  deaeratorFeedwaterHovered() {
+    this.label = 'Deaerator Feedwater';
+    let deaerator: DeaeratorOutput = this.calculateModelService.deaeratorOutput;
+    this.steam = {
+      pressure: deaerator.feedwaterPressure,
+      temperature: deaerator.feedwaterTemperature,
+      specificEnthalpy: deaerator.feedwaterSpecificEnthalpy,
+      specificEntropy: deaerator.feedwaterSpecificEntropy,
+      quality: deaerator.feedwaterQuality,
+      massFlow: deaerator.feedwaterMassFlow
+    }
+  }
+  deaeratorInletSteamHovered() {
+    this.label = 'Deaerator Steam Use';
+    let deaerator: DeaeratorOutput = this.calculateModelService.deaeratorOutput;
+    this.steam = {
+      pressure: deaerator.inletSteamPressure,
+      temperature: deaerator.inletSteamTemperature,
+      specificEnthalpy: deaerator.inletSteamSpecificEnthalpy,
+      specificEntropy: deaerator.inletSteamSpecificEntropy,
+      quality: deaerator.inletSteamQuality,
+      massFlow: deaerator.inletSteamMassFlow
+    }
+  }
+  deaeratorVentHovered() {
+    this.label = 'Deaerator Vented Steam';
+    let deaerator: DeaeratorOutput = this.calculateModelService.deaeratorOutput;
+    this.steam = {
+      pressure: deaerator.ventedSteamPressure,
+      temperature: deaerator.ventedSteamTemperature,
+      specificEnthalpy: deaerator.ventedSteamSpecificEnthalpy,
+      specificEntropy: deaerator.ventedSteamSpecificEntropy,
+      quality: deaerator.ventedSteamQuality,
+      massFlow: deaerator.ventedSteamMassFlow
     }
   }
   makeupWaterCondensatePropertiesHovered() {
@@ -382,7 +426,11 @@ export class HoverSteamPropertiesComponent implements OnInit {
   }
 
   boilerFeedwaterHovered() {
-    this.label = 'Boiler Feedwater';
+    if(this.hoveredProperty == 'boilerFeedwaterHovered'){
+      this.label = 'Boiler Feedwater';
+    }else if(this.hoveredProperty == 'feedwaterHovered'){
+      this.label = 'Feedwater';
+    }
     let boilerOutput: BoilerOutput = this.calculateModelService.boilerOutput;
     this.setFeedwaterProperties(boilerOutput);
   }

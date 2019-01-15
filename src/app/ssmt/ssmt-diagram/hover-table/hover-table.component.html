@@ -30,6 +30,7 @@
       [settings]="settings"></app-hover-process-usage>
     <app-hover-deaerator-table *ngIf="hoveredEquipment == 'deaeratorHovered'"></app-hover-deaerator-table>
 
+
     <!--steam properties-->
     <app-hover-steam-properties *ngIf="hoveredEquipment == 'boilerSteamHovered'" [hoveredProperty]="'boilerSteamHovered'"></app-hover-steam-properties>
     <app-hover-steam-properties *ngIf="hoveredEquipment == 'boilerFeedwaterHovered'" [hoveredProperty]="'boilerFeedwaterHovered'"></app-hover-steam-properties>
@@ -82,5 +83,11 @@
     <app-hover-steam-properties *ngIf="hoveredEquipment == 'makeupWaterPropertiesHovered'" [hoveredProperty]="'makeupWaterPropertiesHovered'"></app-hover-steam-properties>
     <app-hover-steam-properties *ngIf="hoveredEquipment == 'returnCondensateHovered'" [hoveredProperty]="'returnCondensateHovered'"></app-hover-steam-properties>    
     <app-hover-steam-properties *ngIf="hoveredEquipment == 'makeupWaterCondensatePropertiesHovered'" [hoveredProperty]="'makeupWaterCondensatePropertiesHovered'"></app-hover-steam-properties>    
+    
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'deaeratorInletSteamHovered'" [hoveredProperty]="'deaeratorInletSteamHovered'"></app-hover-steam-properties>    
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'deaeratorVentHovered'" [hoveredProperty]="'deaeratorVentHovered'"></app-hover-steam-properties>  
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'deaeratorFeedwaterHovered'" [hoveredProperty]="'deaeratorFeedwaterHovered'"></app-hover-steam-properties>  
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'feedwaterHovered'" [hoveredProperty]="'feedwaterHovered'"></app-hover-steam-properties>  
   </div>
 </div>
