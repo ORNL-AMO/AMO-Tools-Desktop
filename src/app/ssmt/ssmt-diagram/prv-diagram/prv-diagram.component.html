@@ -1,11 +1,13 @@
 <div class="d-flex flex-column h-100 w-100 prv-diagram">
   <div class="d-flex chevron-one flex-fill">
-    <div class="inlet-mass-flow-holder">
-      <span class="inlet-mass-flow">
-        {{prv.inletMassFlow | number:'1.0-1'}} klb/hr
-      </span>
+    <div class="d-flex" [ngClass]="inletSteam">
+      <div class="inlet-mass-flow-holder">
+        <span class="inlet-mass-flow">
+          {{prv.inletMassFlow | number:'1.0-1'}} klb/hr
+        </span>
+      </div>
+      <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')"></span>
     </div>
-    <span class="fa fa-chevron-down pb-1" [ngClass]="inletSteam" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')"></span>
   </div>
 
   <div class="d-flex align-items-center flex-fill w-100">
@@ -15,10 +17,10 @@
     <div class="d-flex justify-content-center" (click)="selectEquipment()" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
       <div class="prv-img-holder">
         <div class="feedwater" *ngIf="prv.feedwaterMassFlow != undefined">
-          <span class="fa fa-chevron-right"></span>
+          <span class="fa fa-chevron-right" (mouseenter)="hoverFeedwater()" (mouseleave)="hoverEquipment('default')"></span>
         </div>
         <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined">
-            {{prv.feedwaterMassFlow | number:'1.0-1'}} klb/hr
+          {{prv.feedwaterMassFlow | number:'1.0-1'}} klb/hr
         </span>
         <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
         <span class="prv-label">PRV</span>
