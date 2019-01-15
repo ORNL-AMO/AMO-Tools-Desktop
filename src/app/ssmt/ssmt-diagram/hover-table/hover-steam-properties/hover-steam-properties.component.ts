@@ -82,16 +82,37 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.boilerBlowdownFlashedLiquidHovered();
     } else if (this.hoveredProperty == 'boilerBlowdownFlashedHovered') {
       this.boilerBlowdownFlashedHovered();
+    } else if (this.hoveredProperty == 'makeupWaterPropertiesHovered') {
+      this.makeupWaterPropertiesHovered();
+    } else if (this.hoveredProperty == 'returnCondensateHovered') {
+      this.returnCondensateHovered();
+    } else if (this.hoveredProperty == 'makeupWaterCondensatePropertiesHovered') {
+      this.makeupWaterCondensatePropertiesHovered();
     }
   }
+  makeupWaterCondensatePropertiesHovered() {
+    this.label = 'Condensate and Make-Up Water';
+    let headerObj: HeaderOutputObj = this.calculateModelService.makeupWaterAndCondensateHeader;
+    this.setSteamProperties(headerObj);
+  }
+  returnCondensateHovered() {
+    this.label = 'Condensate Returned';
+    let returnedCondensate: SteamPropertiesOutput = this.calculateModelService.returnCondensate;
+    this.setSteamProperties(returnedCondensate);
+  }
+  makeupWaterPropertiesHovered() {
+    this.label = 'Make-Up Water';
+    let makeupWater: SteamPropertiesOutput = this.calculateModelService.makeupWater;
+    this.setSteamProperties(makeupWater);
+  }
 
-  boilerBlowdownFlashedLiquidHovered(){
+  boilerBlowdownFlashedLiquidHovered() {
     this.label = 'Boiler Blowdown Drain';
     let flashTank: FlashTankOutput = this.calculateModelService.blowdownFlashTank;
     this.setFlashTankOutletCondensate(flashTank);
   }
 
-  boilerBlowdownFlashedHovered(){
+  boilerBlowdownFlashedHovered() {
     this.label = 'Blowdown Flashed';
     let flashTank: FlashTankOutput = this.calculateModelService.blowdownFlashTank;
     this.setFlashTankSteam(flashTank);
