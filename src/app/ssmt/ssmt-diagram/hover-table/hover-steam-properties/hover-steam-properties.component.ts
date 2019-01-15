@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
-import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-hover-steam-properties',
@@ -52,8 +52,44 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.highToLowTurbineOutletHovered();
     } else if (this.hoveredProperty == 'highToMediumTurbineOutletHovered') {
       this.highToMediumTurbineOutletHovered();
+    } else if (this.hoveredProperty == 'lowPressureProcessSteamInletHovered') {
+      this.lowPressureProcessSteamInletHovered();
+    } else if (this.hoveredProperty == 'mediumPressureProcessSteamInletHovered') {
+      this.mediumPressureProcessSteamInletHovered();
+    } else if (this.hoveredProperty == 'highPressureProcessSteamInletHovered') {
+      this.highPressureProcessSteamInletHovered();
     }
   }
+
+  lowPressureProcessSteamInletHovered() {
+    this.label = 'Low Pressure Process Steam';
+    let header: HeaderOutputObj = this.calculateModelService.lowPressureHeader;
+    this.setHeaderSteam(header);
+  }
+
+  mediumPressureProcessSteamInletHovered() {
+    this.label = 'Medium Pressure Process Steam';
+    let header: HeaderOutputObj = this.calculateModelService.mediumPressureHeader;
+    this.setHeaderSteam(header);
+  }
+
+  highPressureProcessSteamInletHovered() {
+    this.label = 'High Pressure Process Steam';
+    let header: HeaderOutputObj = this.calculateModelService.highPressureHeader;
+    this.setHeaderSteam(header);
+  }
+
+  setHeaderSteam(header: HeaderOutputObj) {
+    this.steam = {
+      pressure: header.pressure,
+      temperature: header.temperature,
+      specificEnthalpy: header.specificEnthalpy,
+      specificEntropy: header.specificEntropy,
+      quality: header.quality,
+      massFlow: header.massFlow
+    }
+  }
+
   condensingTurbineOutletHovered() {
     this.label = 'Condensing Turbine Outlet';
     let turbine: TurbineOutput = this.calculateModelService.condensingTurbine;

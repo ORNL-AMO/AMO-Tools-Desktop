@@ -23,26 +23,9 @@ export class HeaderDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  //steamUsage: ProcessSteamUsage;
-
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor() { }
 
   ngOnInit() {
-    // let processSteamUsageEnergyFlow: number = this.headerSteamUsage * this.header.specificEnthalpy / 1000;
-
-    // let processUsage: number = (this.headerSteamUsage) * (this.header.specificEnthalpy - this.condensate.specificEnthalpy);
-    // processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamMassFlowMeasurement).to('kg');
-    // processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
-    // processUsage = this.convertUnitsService.value(processUsage).from('kJ').to(this.settings.steamEnergyMeasurement);
-
-    // //TODO: Calculate processUsage
-    // this.steamUsage = {
-    //   pressure: this.header.pressure,
-    //   temperature: this.header.temperature,
-    //   energyFlow: processSteamUsageEnergyFlow,
-    //   massFlow: this.headerSteamUsage,
-    //   processUsage: processUsage
-    // };
   }
 
   hoverEquipment(str: string) {
@@ -59,5 +42,9 @@ export class HeaderDiagramComponent implements OnInit {
 
   hoverProcessUsage() {
     this.emitSetHover.emit(this.pressureLevel+'ProcessSteamHovered');
+  }
+
+  hoverProcessUsageInlet(){
+    this.emitSetHover.emit(this.pressureLevel+'ProcessSteamInletHovered');
   }
 }

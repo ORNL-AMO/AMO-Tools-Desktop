@@ -10,7 +10,7 @@
         <span class="header-mass-flow">{{steamUsage.massFlow | number:'1.0-1'}} klb/hr</span>
         <span class="header-energy-flow">{{steamUsage.processUsage | number:'1.0-1'}} MMBtu/hr</span>
       </div>
-      <span class="fa fa-chevron-right"></span>
+      <span class="fa fa-chevron-right" (mouseenter)="hoverProcessUsageInlet()" (mouseleave)="hoverEquipment('default')"></span>
     </div>
   </div>
   <div class="d-flex flex-fill">
