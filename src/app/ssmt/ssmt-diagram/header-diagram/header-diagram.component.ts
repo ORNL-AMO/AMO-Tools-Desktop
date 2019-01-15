@@ -33,7 +33,7 @@ export class HeaderDiagramComponent implements OnInit {
   }
 
   hoverCondensate() {
-    this.emitSetHover.emit('condensateHovered');
+    this.emitSetHover.emit(this.pressureLevel+'CondensateHovered');
   }
 
   hoverHeader() {

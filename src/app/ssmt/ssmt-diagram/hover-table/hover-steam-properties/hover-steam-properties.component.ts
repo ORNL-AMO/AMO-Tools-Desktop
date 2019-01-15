@@ -58,36 +58,59 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.mediumPressureProcessSteamInletHovered();
     } else if (this.hoveredProperty == 'highPressureProcessSteamInletHovered') {
       this.highPressureProcessSteamInletHovered();
+    } else if (this.hoveredProperty == 'lowPressureCondensateHovered') {
+      this.lowPressureCondensateHovered();
+    } else if (this.hoveredProperty == 'mediumPressureCondensateHovered') {
+      this.mediumPressureCondensateHovered();
+    } else if (this.hoveredProperty == 'highPressureCondensateHovered') {
+      this.highPressureCondensateHovered();
     }
   }
+
+  highPressureCondensateHovered(){
+    this.label = 'High Pressure Condensate';
+    let condensate: SteamPropertiesOutput = this.calculateModelService.highPressureCondensate;
+    this.setSteamProperties(condensate);
+  }
+  mediumPressureCondensateHovered(){
+    this.label = 'Medium Pressure Condensate';
+    let condensate: SteamPropertiesOutput = this.calculateModelService.mediumPressureCondensate;
+    this.setSteamProperties(condensate);
+  }
+  lowPressureCondensateHovered(){
+    this.label = 'Low Pressure Condensate';
+    let condensate: SteamPropertiesOutput = this.calculateModelService.lowPressureCondensate;
+    this.setSteamProperties(condensate);
+  }
+
+  setSteamProperties(steamData: SteamPropertiesOutput | HeaderOutputObj){
+    this.steam = {
+      pressure: steamData.pressure,
+      temperature: steamData.temperature,
+      specificEnthalpy: steamData.specificEnthalpy,
+      specificEntropy: steamData.specificEntropy,
+      quality: steamData.quality,
+      massFlow: steamData.massFlow
+    }
+  }
+
 
   lowPressureProcessSteamInletHovered() {
     this.label = 'Low Pressure Process Steam';
     let header: HeaderOutputObj = this.calculateModelService.lowPressureHeader;
-    this.setHeaderSteam(header);
+    this.setSteamProperties(header);
   }
 
   mediumPressureProcessSteamInletHovered() {
     this.label = 'Medium Pressure Process Steam';
     let header: HeaderOutputObj = this.calculateModelService.mediumPressureHeader;
-    this.setHeaderSteam(header);
+    this.setSteamProperties(header);
   }
 
   highPressureProcessSteamInletHovered() {
     this.label = 'High Pressure Process Steam';
     let header: HeaderOutputObj = this.calculateModelService.highPressureHeader;
-    this.setHeaderSteam(header);
-  }
-
-  setHeaderSteam(header: HeaderOutputObj) {
-    this.steam = {
-      pressure: header.pressure,
-      temperature: header.temperature,
-      specificEnthalpy: header.specificEnthalpy,
-      specificEntropy: header.specificEntropy,
-      quality: header.quality,
-      massFlow: header.massFlow
-    }
+    this.setSteamProperties(header);
   }
 
   condensingTurbineOutletHovered() {
