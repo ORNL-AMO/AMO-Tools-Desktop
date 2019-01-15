@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
-import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-hover-steam-properties',
@@ -64,26 +64,97 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.mediumPressureCondensateHovered();
     } else if (this.hoveredProperty == 'highPressureCondensateHovered') {
       this.highPressureCondensateHovered();
+    } else if (this.hoveredProperty == 'highPressureFlashTankOutletSteamHovered') {
+      this.highPressureFlashTankOutletSteamHovered();
+    } else if (this.hoveredProperty == 'mediumPressureFlashTankOutletSteamHovered') {
+      this.mediumPressureFlashTankOutletSteamHovered();
+    } else if (this.hoveredProperty == 'mediumPressureFlashTankInletCondensateHovered') {
+      this.mediumPressureFlashTankInletCondensateHovered();
+    } else if (this.hoveredProperty == 'highPressureFlashTankOutletCondensateHovered') {
+      this.highPressureFlashTankOutletCondensateHovered();
+    } else if (this.hoveredProperty == 'mediumPressureFlashTankOutletCondensateHovered') {
+      this.mediumPressureFlashTankOutletCondensateHovered();
+    }
+  }
+  mediumPressureFlashTankInletCondensateHovered() {
+    this.label = 'High and Medium Pressure Condensate';
+    let flashTank: FlashTankOutput = this.calculateModelService.mediumPressureCondensateFlashTank;
+    this.setFlashTankInletCondensate(flashTank);
+  }
+
+  highPressureFlashTankOutletCondensateHovered() {
+    this.label = 'Remaining High Pressure Condensate';
+    let flashTank: FlashTankOutput = this.calculateModelService.highPressureCondensateFlashTank;
+    this.setFlashTankOutletCondensate(flashTank);
+  }
+
+  mediumPressureFlashTankOutletCondensateHovered() {
+    this.label = 'Remaining High and Medium Pressure Condensate';
+    let flashTank: FlashTankOutput = this.calculateModelService.mediumPressureCondensateFlashTank;
+    this.setFlashTankOutletCondensate(flashTank);
+  }
+
+  setFlashTankOutletCondensate(flashTank: FlashTankOutput) {
+    this.steam = {
+      pressure: flashTank.outletLiquidPressure,
+      temperature: flashTank.outletLiquidTemperature,
+      specificEnthalpy: flashTank.outletLiquidSpecificEnthalpy,
+      specificEntropy: flashTank.outletLiquidSpecificEntropy,
+      quality: flashTank.outletLiquidQuality,
+      massFlow: flashTank.outletLiquidMassFlow
     }
   }
 
-  highPressureCondensateHovered(){
+  setFlashTankInletCondensate(flashTank: FlashTankOutput) {
+    this.steam = {
+      pressure: flashTank.inletWaterPressure,
+      temperature: flashTank.inletWaterTemperature,
+      specificEnthalpy: flashTank.inletWaterSpecificEnthalpy,
+      specificEntropy: flashTank.inletWaterSpecificEntropy,
+      quality: flashTank.inletWaterQuality,
+      massFlow: flashTank.inletWaterMassFlow
+    }
+  }
+
+  mediumPressureFlashTankOutletSteamHovered() {
+    this.label = 'Medium Pressure Condensate Flashed';
+    let flashTank: FlashTankOutput = this.calculateModelService.mediumPressureCondensateFlashTank;
+    this.setFlashTankSteam(flashTank);
+  }
+
+  highPressureFlashTankOutletSteamHovered() {
+    this.label = 'High Pressure Condensate Flashed';
+    let flashTank: FlashTankOutput = this.calculateModelService.highPressureCondensateFlashTank;
+    this.setFlashTankSteam(flashTank);
+  }
+
+  setFlashTankSteam(flashTank: FlashTankOutput) {
+    this.steam = {
+      pressure: flashTank.outletGasPressure,
+      temperature: flashTank.outletGasTemperature,
+      specificEnthalpy: flashTank.outletGasSpecificEnthalpy,
+      specificEntropy: flashTank.outletGasSpecificEntropy,
+      quality: flashTank.outletGasQuality,
+      massFlow: flashTank.outletGasMassFlow
+    }
+  }
+  highPressureCondensateHovered() {
     this.label = 'High Pressure Condensate';
     let condensate: SteamPropertiesOutput = this.calculateModelService.highPressureCondensate;
     this.setSteamProperties(condensate);
   }
-  mediumPressureCondensateHovered(){
+  mediumPressureCondensateHovered() {
     this.label = 'Medium Pressure Condensate';
     let condensate: SteamPropertiesOutput = this.calculateModelService.mediumPressureCondensate;
     this.setSteamProperties(condensate);
   }
-  lowPressureCondensateHovered(){
+  lowPressureCondensateHovered() {
     this.label = 'Low Pressure Condensate';
     let condensate: SteamPropertiesOutput = this.calculateModelService.lowPressureCondensate;
     this.setSteamProperties(condensate);
   }
 
-  setSteamProperties(steamData: SteamPropertiesOutput | HeaderOutputObj){
+  setSteamProperties(steamData: SteamPropertiesOutput | HeaderOutputObj) {
     this.steam = {
       pressure: steamData.pressure,
       temperature: steamData.temperature,
