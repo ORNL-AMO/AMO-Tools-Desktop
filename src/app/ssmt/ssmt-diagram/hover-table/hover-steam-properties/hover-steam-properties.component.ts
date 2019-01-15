@@ -74,8 +74,23 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.highPressureFlashTankOutletCondensateHovered();
     } else if (this.hoveredProperty == 'mediumPressureFlashTankOutletCondensateHovered') {
       this.mediumPressureFlashTankOutletCondensateHovered();
+    } else if (this.hoveredProperty == 'condensateFlashTankInletHovered') {
+      this.condensateFlashTankInletHovered();
+    } else if (this.hoveredProperty == 'condensateFlashTankVentHovered') {
+      this.condensateFlashTankVentHovered();
     }
   }
+  condensateFlashTankVentHovered() {
+    this.label = 'Condensate Flashed';
+    let flashTank: FlashTankOutput = this.calculateModelService.condensateFlashTank;
+    this.setFlashTankSteam(flashTank);
+  }
+  condensateFlashTankInletHovered() {
+    this.label = 'All Condensate Condensate';
+    let flashTank: FlashTankOutput = this.calculateModelService.condensateFlashTank;
+    this.setFlashTankInletCondensate(flashTank)
+  }
+
   mediumPressureFlashTankInletCondensateHovered() {
     this.label = 'High and Medium Pressure Condensate';
     let flashTank: FlashTankOutput = this.calculateModelService.mediumPressureCondensateFlashTank;

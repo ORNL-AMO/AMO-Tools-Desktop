@@ -5,14 +5,15 @@
       <div class="inlet-temp-holder">
         <span class="inlet-temp">{{flashTank.inletWaterTemperature | number:'1.0-1'}} &#8457;</span>
       </div>
-      <span class="fa fa-chevron-down hidden-chevron"></span>
+      <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverEquipment('condensateFlashTankInletHovered')"
+        (mouseleave)="hoverEquipment('condensateHovered')"></span>
     </div>
 
     <div class="d-flex align-self-end align-items-center flex-fill">
       <div class="d-flex outletGas h-100 justify-content-center vents" (mouseenter)="hoverEquipment('ventsHovered')"
         (mouseleave)="hoverEquipment('default')">
         <div class="vented-steam-holder">
-          <span class="fa fa-chevron-left"></span>
+          <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('condensateFlashTankVentHovered')" (mouseleave)="hoverEquipment('ventsHovered')"></span>
           <span class="vented-steam">
             {{flashTank.outletGasMassFlow | number:'1.0-1'}} klb/hr
           </span>
