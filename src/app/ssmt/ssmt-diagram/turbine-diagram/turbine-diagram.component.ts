@@ -30,13 +30,10 @@ export class TurbineDiagramComponent implements OnInit {
       this.turbineLabel = 'Condensing Turbine';
     } else if (this.turbineType == 'mediumToLow') {
       this.turbineLabel = 'MP to LP Turbine';
-
     } else if (this.turbineType == 'highToLow') {
       this.turbineLabel = 'HP to LP Turbine';
-
     } else if (this.turbineType == 'highToMedium') {
       this.turbineLabel = 'HP to MP Turbine';
-
     }
   }
 
@@ -45,27 +42,11 @@ export class TurbineDiagramComponent implements OnInit {
   }
 
   hoverInlet() {
-    if (this.inletColor == 'makeup-water') {
-      this.emitSetHover.emit('makeupWaterCondensateHovered');
-    } else if (this.inletColor == 'low-pressure') {
-      this.emitSetHover.emit('lowPressureHovered');
-    } else if (this.inletColor == 'medium-pressure') {
-      this.emitSetHover.emit('mediumPressureHovered');
-    } else if (this.inletColor == 'high-pressure') {
-      this.emitSetHover.emit('highPressureHovered');
-    }
+    this.emitSetHover.emit(this.turbineType + 'TurbineInletHovered');
   }
 
   hoverOutlet() {
-    if (this.outletColor == 'makeup-water') {
-      this.emitSetHover.emit('makeupWaterCondensateHovered');
-    } else if (this.outletColor == 'low-pressure') {
-      this.emitSetHover.emit('lowPressureHovered');
-    } else if (this.outletColor == 'medium-pressure') {
-      this.emitSetHover.emit('mediumPressureHovered');
-    } else if (this.outletColor == 'high-pressure') {
-      this.emitSetHover.emit('highPressureHovered');
-    }
+    this.emitSetHover.emit(this.turbineType + 'TurbineOutletHovered');
   }
 
   selectEquipment() {
