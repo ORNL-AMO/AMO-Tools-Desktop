@@ -70,5 +70,5 @@ export class TutorialSettingsComponent implements OnInit {
     this.saveTutorialChanges.emit(true);
   }
 
-
+  
 }
