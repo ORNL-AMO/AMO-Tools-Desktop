@@ -77,8 +77,9 @@
     position: absolute;
     color: black;
     width: 100px;
-    right: -15px;
     bottom: 0;
+    text-align: right;
+    right: 25px;
 }
 
 .horizontal-pipe{

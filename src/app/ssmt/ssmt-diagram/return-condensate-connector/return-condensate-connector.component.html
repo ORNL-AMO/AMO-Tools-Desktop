@@ -9,7 +9,7 @@
       <span class="return-condensate">
         {{deaerator.inletWaterMassFlow | number:'1.0-2'}} klb/hr
       </span>
-      <span class="fa fa-chevron-left"></span>
+      <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('makeupWaterCondensatePropertiesHovered')" (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')"></span>
     </div>
   </div>
   <div class="d-flex makeup-water border-top-left h-100" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"

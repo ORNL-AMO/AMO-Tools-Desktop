@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { HeaderOutputObj, ProcessSteamUsage, SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 import { HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../shared/models/steam/ssmt';
+import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-header-diagram',
@@ -13,27 +15,17 @@ export class HeaderDiagramComponent implements OnInit {
   @Input()
   pressureLevel: string;
   @Input()
-  headerSteamUsage: number;
+  steamUsage: ProcessSteamUsage;
   @Input()
   condensate: SteamPropertiesOutput;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
-
-
-  steamUsage: ProcessSteamUsage;
+  @Input()
+  settings: Settings;
 
   constructor() { }
 
   ngOnInit() {
-    let processSteamUsageEnergyFlow: number = this.headerSteamUsage * this.header.specificEnthalpy / 1000;
-    //TODO: Calculate processUsage
-    this.steamUsage = {
-      pressure: this.header.pressure,
-      temperature: this.header.temperature,
-      energyFlow: processSteamUsageEnergyFlow,
-      massFlow: this.headerSteamUsage,
-      processUsage: 0
-    };
   }
 
   hoverEquipment(str: string) {
@@ -41,7 +33,7 @@ export class HeaderDiagramComponent implements OnInit {
   }
 
   hoverCondensate() {
-    this.emitSetHover.emit('condensateHovered');
+    this.emitSetHover.emit(this.pressureLevel+'CondensateHovered');
   }
 
   hoverHeader() {
@@ -50,5 +42,9 @@ export class HeaderDiagramComponent implements OnInit {
 
   hoverProcessUsage() {
     this.emitSetHover.emit(this.pressureLevel+'ProcessSteamHovered');
+  }
+
+  hoverProcessUsageInlet(){
+    this.emitSetHover.emit(this.pressureLevel+'ProcessSteamInletHovered');
   }
 }

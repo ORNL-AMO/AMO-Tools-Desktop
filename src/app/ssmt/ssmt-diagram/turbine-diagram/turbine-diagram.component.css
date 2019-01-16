@@ -38,9 +38,10 @@
 .outlet-power{
     position: absolute;
     z-index: +1;
-    left: -45px;
-    width: 75px;
-    bottom: 0px;
+    right: -25px;
+    text-align: right;
+    width: 100px;
+    top: 2px;
 }
 
 

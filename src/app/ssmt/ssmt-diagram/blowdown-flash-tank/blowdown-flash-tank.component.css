@@ -52,20 +52,22 @@
     position: absolute;
     color: black;
     width: 100px;
-    left: 45px;
+    left: 40px;
 }
 
 .outlet-steam-holder .outlet-steam-mass-flow{
     position: absolute;
     color: black;
     width: 100px;
-    right: -10px;
+    right: 25px;
     top: 0px;
+    text-align: right;
 }
 
 .outlet-blowdown-holder .outlet-blowdown{
     position: absolute;
     color: black;
     width: 100px;
-    right: 0px;
+    text-align: right;
+    right: 40px;
 }

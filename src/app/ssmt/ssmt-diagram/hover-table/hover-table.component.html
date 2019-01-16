@@ -5,7 +5,6 @@
   <div class="d-flex">
     <!-- <app-default-summary-table *ngIf="hoveredEquipment == 'default'"></app-default-summary-table> -->
     <app-hover-boiler-table *ngIf="hoveredEquipment == 'boilerHovered'"></app-hover-boiler-table>
-    <app-hover-boiler-steam-table *ngIf="hoveredEquipment == 'boilerSteamHovered'"></app-hover-boiler-steam-table>
     <app-hover-header-table *ngIf="hoveredEquipment == 'highPressureHovered'" [headerPressure]="'highPressure'"></app-hover-header-table>
     <app-hover-header-table *ngIf="hoveredEquipment == 'mediumPressureHovered'" [headerPressure]="'mediumPressure'"></app-hover-header-table>
     <app-hover-header-table *ngIf="hoveredEquipment == 'lowPressureHovered'" [headerPressure]="'lowPressure'"></app-hover-header-table>
@@ -21,11 +20,74 @@
     <app-hover-condensate-table *ngIf="hoveredEquipment == 'condensateHovered'"></app-hover-condensate-table>
     <app-hover-makeup-water *ngIf="hoveredEquipment == 'makeupWaterHovered'" [combined]="false"></app-hover-makeup-water>
     <app-hover-makeup-water *ngIf="hoveredEquipment == 'makeupWaterCondensateHovered'" [combined]="true"></app-hover-makeup-water>
-    <app-hover-blowdown-table *ngIf="hoveredEquipment == 'boilerBlowdownHovered'"></app-hover-blowdown-table>
+    <app-hover-blowdown-table *ngIf="hoveredEquipment == 'blowdownHovered'"></app-hover-blowdown-table>
     <app-hover-flash-tank-table *ngIf="hoveredEquipment == 'blowdownFlashTankHovered'" [flashTankType]="'Blowdown'"></app-hover-flash-tank-table>
-    <app-hover-process-usage *ngIf="hoveredEquipment == 'lowPressureProcessSteamHovered'" [pressureLevel]="'Low'"></app-hover-process-usage>
-    <app-hover-process-usage *ngIf="hoveredEquipment == 'mediumPressureProcessSteamHovered'" [pressureLevel]="'Medium'"></app-hover-process-usage>
-    <app-hover-process-usage *ngIf="hoveredEquipment == 'highPressureProcessSteamHovered'" [pressureLevel]="'High'"></app-hover-process-usage>
+    <app-hover-process-usage *ngIf="hoveredEquipment == 'lowPressureProcessSteamHovered'" [pressureLevel]="'Low'"
+      [settings]="settings"></app-hover-process-usage>
+    <app-hover-process-usage *ngIf="hoveredEquipment == 'mediumPressureProcessSteamHovered'" [pressureLevel]="'Medium'"
+      [settings]="settings"></app-hover-process-usage>
+    <app-hover-process-usage *ngIf="hoveredEquipment == 'highPressureProcessSteamHovered'" [pressureLevel]="'High'"
+      [settings]="settings"></app-hover-process-usage>
     <app-hover-deaerator-table *ngIf="hoveredEquipment == 'deaeratorHovered'"></app-hover-deaerator-table>
+
+
+    <!--steam properties-->
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'boilerSteamHovered'" [hoveredProperty]="'boilerSteamHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'boilerFeedwaterHovered'" [hoveredProperty]="'boilerFeedwaterHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'boilerBlowdownHovered'" [hoveredProperty]="'boilerBlowdownHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumPressurePRVInletHovered'" [hoveredProperty]="'mediumPressurePRVInletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highPressurePRVInletHovered'" [hoveredProperty]="'highPressurePRVInletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'lowPressurePRVOutletHovered'" [hoveredProperty]="'lowPressurePRVOutletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumPressurePRVOutletHovered'" [hoveredProperty]="'mediumPressurePRVOutletHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumPressurePRVFeedwaterHovered'" [hoveredProperty]="'mediumPressurePRVFeedwaterHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'lowPressurePRVFeedwaterHovered'" [hoveredProperty]="'lowPressurePRVFeedwaterHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'condensingTurbineInletHovered'" [hoveredProperty]="'condensingTurbineInletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumToLowTurbineInletHovered'" [hoveredProperty]="'mediumToLowTurbineInletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highToLowTurbineInletHovered'" [hoveredProperty]="'highToLowTurbineInletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highToMediumTurbineInletHovered'" [hoveredProperty]="'highToMediumTurbineInletHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'condensingTurbineOutletHovered'" [hoveredProperty]="'condensingTurbineOutletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumToLowTurbineOutletHovered'" [hoveredProperty]="'mediumToLowTurbineOutletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highToLowTurbineOutletHovered'" [hoveredProperty]="'highToLowTurbineOutletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highToMediumTurbineOutletHovered'" [hoveredProperty]="'highToMediumTurbineOutletHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'lowPressureProcessSteamInletHovered'" [hoveredProperty]="'lowPressureProcessSteamInletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumPressureProcessSteamInletHovered'" [hoveredProperty]="'mediumPressureProcessSteamInletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highPressureProcessSteamInletHovered'" [hoveredProperty]="'highPressureProcessSteamInletHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'lowPressureCondensateHovered'" [hoveredProperty]="'lowPressureCondensateHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumPressureCondensateHovered'" [hoveredProperty]="'mediumPressureCondensateHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highPressureCondensateHovered'" [hoveredProperty]="'highPressureCondensateHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highPressureFlashTankOutletSteamHovered'" [hoveredProperty]="'highPressureFlashTankOutletSteamHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumPressureFlashTankOutletSteamHovered'"
+      [hoveredProperty]="'mediumPressureFlashTankOutletSteamHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumPressureFlashTankInletCondensateHovered'"
+      [hoveredProperty]="'mediumPressureFlashTankInletCondensateHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'highPressureFlashTankOutletCondensateHovered'"
+      [hoveredProperty]="'highPressureFlashTankOutletCondensateHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'mediumPressureFlashTankOutletCondensateHovered'"
+      [hoveredProperty]="'mediumPressureFlashTankOutletCondensateHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'condensateFlashTankInletHovered'" [hoveredProperty]="'condensateFlashTankInletHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'condensateFlashTankVentHovered'" [hoveredProperty]="'condensateFlashTankVentHovered'"></app-hover-steam-properties>
+
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'boilerBlowdownFlashedLiquidHovered'" [hoveredProperty]="'boilerBlowdownFlashedLiquidHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'boilerBlowdownFlashedHovered'" [hoveredProperty]="'boilerBlowdownFlashedHovered'"></app-hover-steam-properties>
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'makeupWaterPropertiesHovered'" [hoveredProperty]="'makeupWaterPropertiesHovered'"></app-hover-steam-properties>
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'returnCondensateHovered'" [hoveredProperty]="'returnCondensateHovered'"></app-hover-steam-properties>    
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'makeupWaterCondensatePropertiesHovered'" [hoveredProperty]="'makeupWaterCondensatePropertiesHovered'"></app-hover-steam-properties>    
+    
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'deaeratorInletSteamHovered'" [hoveredProperty]="'deaeratorInletSteamHovered'"></app-hover-steam-properties>    
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'deaeratorVentHovered'" [hoveredProperty]="'deaeratorVentHovered'"></app-hover-steam-properties>  
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'deaeratorFeedwaterHovered'" [hoveredProperty]="'deaeratorFeedwaterHovered'"></app-hover-steam-properties>  
+
+    <app-hover-steam-properties *ngIf="hoveredEquipment == 'feedwaterHovered'" [hoveredProperty]="'feedwaterHovered'"></app-hover-steam-properties>  
   </div>
 </div>

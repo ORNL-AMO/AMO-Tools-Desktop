@@ -54,4 +54,26 @@ export class FlashTankDiagramComponent implements OnInit {
       this.emitSetHover.emit('mediumPressureFlashTankHovered');
     }
   }
+
+  hoverOutletGas() {
+    if (this.flashTankType == 'highPressure') {
+      this.emitSetHover.emit('highPressureFlashTankOutletSteamHovered');
+    } else if (this.flashTankType == 'mediumPressure') {
+      this.emitSetHover.emit('mediumPressureFlashTankOutletSteamHovered');
+    }
+  }
+
+  hoverInlet() {
+    if (this.flashTankType == 'mediumPressure') {
+      this.emitSetHover.emit('mediumPressureFlashTankInletCondensateHovered');
+    }
+  }
+
+  hoverOutlet() {
+    if (this.flashTankType == 'highPressure') {
+      this.emitSetHover.emit('highPressureFlashTankOutletCondensateHovered');
+    } else if (this.flashTankType == 'mediumPressure') {
+      this.emitSetHover.emit('mediumPressureFlashTankOutletCondensateHovered');
+    }
+  }
 }

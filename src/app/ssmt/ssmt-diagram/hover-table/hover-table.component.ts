@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-hover-table',
@@ -8,7 +9,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class HoverTableComponent implements OnInit {
   @Input()
   hoveredEquipment: string;
-  
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {

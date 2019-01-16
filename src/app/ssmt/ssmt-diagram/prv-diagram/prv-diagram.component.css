@@ -47,6 +47,7 @@
     width: 100px;
     z-index: +1;
     left: 25px;
+    color: black;
 }
 
 
@@ -56,6 +57,7 @@
     width: 100px;
     z-index: +1;
     left: 25px;
+    color: black;
 }
 
 /* .prv-img-holder  .feedwater-inlet{

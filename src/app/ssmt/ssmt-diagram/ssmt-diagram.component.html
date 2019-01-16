@@ -1,9 +1,9 @@
-<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram">
-  <div class="panel-column scroll-item diagram-container" [ngClass]="hoveredEquipment" [ngStyle]="{'height.px': containerHeight}"
+<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram" [ngClass]="hoveredEquipment">
+  <div class="panel-column scroll-item diagram-container" [ngStyle]="{'height.px': containerHeight}"
     *ngIf="dataCalculated == true">
     <div class="d-flex p-3 align-self-center">
       <div class="d-flex flex-grow">
-        <app-feedwater-diagram [deaerator]="deaerator"></app-feedwater-diagram>
+        <app-feedwater-diagram [deaerator]="deaerator" (emitSetHover)="setHover($event)"></app-feedwater-diagram>
       </div>
       <div class="d-flex flex-column flex-fill align-content-stretch">
         <div class="d-flex boiler-table-height">
@@ -12,7 +12,7 @@
               (emitSelectEquipment)="selectTable($event)"></app-boiler-diagram>
           </div>
           <div class="d-flex hover-equipment-table justify-content-center">
-            <app-hover-table [hoveredEquipment]="hoveredEquipment"></app-hover-table>
+            <app-hover-table [hoveredEquipment]="hoveredEquipment" [settings]="settings"></app-hover-table>
           </div>
         </div>
         <div class="d-flex justify-content-between inner-system-padding">
@@ -20,7 +20,7 @@
             <div class="p-0 d-flex justify-content-end">
               <div class="w-100">
                 <app-header-diagram [header]="highPressureHeader" [pressureLevel]="'highPressure'" [condensate]="highPressureCondensate"
-                  [headerSteamUsage]="inputData.headerInput.highPressure.processSteamUsage" (emitSetHover)="setHover($event)"></app-header-diagram>
+                  [steamUsage]="highPressureProcessUsage" (emitSetHover)="setHover($event)" [settings]="settings"></app-header-diagram>
               </div>
             </div>
             <div class="d-flex w-100">
@@ -62,8 +62,8 @@
             <div class="p-0 d-flex justify-content-end">
               <div class="w-100">
                 <app-header-diagram *ngIf="mediumPressureHeader" [header]="mediumPressureHeader" [pressureLevel]="'mediumPressure'"
-                  [condensate]="mediumPressureCondensate" [headerSteamUsage]="inputData.headerInput.mediumPressure.processSteamUsage"
-                  (emitSetHover)="setHover($event)"></app-header-diagram>
+                  [condensate]="mediumPressureCondensate" [steamUsage]="mediumPressureProcessUsage" (emitSetHover)="setHover($event)"
+                  [settings]="settings"></app-header-diagram>
               </div>
             </div>
             <div class="d-flex w-100">
@@ -97,8 +97,8 @@
             <div class="p-0 d-flex justify-content-end">
               <div class="w-100">
                 <app-header-diagram *ngIf="lowPressureHeader" [header]="lowPressureHeader" [pressureLevel]="'lowPressure'"
-                  [condensate]="lowPressureCondensate" [headerSteamUsage]="inputData.headerInput.lowPressure.processSteamUsage"
-                  (emitSetHover)="setHover($event)"></app-header-diagram>
+                  [condensate]="lowPressureCondensate" [steamUsage]="lowPressureProcessUsage" (emitSetHover)="setHover($event)"
+                  [settings]="settings"></app-header-diagram>
               </div>
             </div>
           </div>
@@ -207,6 +207,9 @@
               [(ngModel)]="massFlow">
           </div>
         </div>
+        <!-- <div class="d-flex p-2">
+          {{ventedLowPressureSteam | number:'1.0-2'}}
+        </div> -->
       </div>
       <div *ngIf="tabSelect == 'help'">
         <app-diagram-help></app-diagram-help>

@@ -29,7 +29,6 @@ import { HoverTableComponent } from './hover-table/hover-table.component';
 import { HoverBoilerTableComponent } from './hover-table/hover-boiler-table/hover-boiler-table.component';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
 import { HoverTurbineTableComponent } from './hover-table/hover-turbine-table/hover-turbine-table.component';
-import { HoverBoilerSteamTableComponent } from './hover-table/hover-boiler-steam-table/hover-boiler-steam-table.component';
 import { HoverHeaderTableComponent } from './hover-table/hover-header-table/hover-header-table.component';
 import { FeedwaterDiagramComponent } from './feedwater-diagram/feedwater-diagram.component';
 import { HoverFlashTankTableComponent } from './hover-table/hover-flash-tank-table/hover-flash-tank-table.component';
@@ -43,6 +42,7 @@ import { HoverDeaeratorTableComponent } from './hover-table/hover-deaerator-tabl
 import { ReturnCondensateConnectorComponent } from './return-condensate-connector/return-condensate-connector.component';
 import { DefaultSummaryTableComponent } from './hover-table/default-summary-table/default-summary-table.component';
 import { DiagramSummaryTableComponent } from './diagram-summary-table/diagram-summary-table.component';
+import { HoverSteamPropertiesComponent } from './hover-table/hover-steam-properties/hover-steam-properties.component';
 
 @NgModule({
   imports: [
@@ -79,7 +79,6 @@ import { DiagramSummaryTableComponent } from './diagram-summary-table/diagram-su
     HoverTableComponent,
     HoverBoilerTableComponent,
     HoverTurbineTableComponent,
-    HoverBoilerSteamTableComponent,
     HoverHeaderTableComponent,
     FeedwaterDiagramComponent,
     HoverFlashTankTableComponent,
@@ -91,7 +90,8 @@ import { DiagramSummaryTableComponent } from './diagram-summary-table/diagram-su
     HoverDeaeratorTableComponent,
     ReturnCondensateConnectorComponent,
     DefaultSummaryTableComponent,
-    DiagramSummaryTableComponent
+    DiagramSummaryTableComponent,
+    HoverSteamPropertiesComponent
   ],
   exports: [
     SsmtDiagramComponent

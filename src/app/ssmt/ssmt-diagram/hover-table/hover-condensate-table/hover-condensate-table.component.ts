@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-hover-condensate-table',
@@ -8,13 +10,19 @@ import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-out
   styleUrls: ['./hover-condensate-table.component.css']
 })
 export class HoverCondensateTableComponent implements OnInit {
+  @Input()
+  settings: Settings
 
   returnCondensate: SteamPropertiesOutput;
-  constructor(private calculateModelService: CalculateModelService) { }
+  volumeFlow:number = 0;
+  constructor(private calculateModelService: CalculateModelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.returnCondensate = this.calculateModelService.returnCondensate;
+    // let tmpMassFlow: number = this.returnCondensate.massFlow;
+    // tmpMassFlow = this.convertUnitsService.value(tmpMassFlow).from('klb').to('kg');
+    // //let tmpSpecificVolume: number = this.convertUnitsService.value(this.returnCondensate.specificVolume).from('ft3lb').to('m3kg');
+    // this.volumeFlow = this.returnCondensate.specificVolume * tmpMassFlow * 1000 * (1 / 60);
+    // this.volumeFlow = this.convertUnitsService.value(this.volumeFlow).from('L/min').to('gpm');
   }
-
-
 }
