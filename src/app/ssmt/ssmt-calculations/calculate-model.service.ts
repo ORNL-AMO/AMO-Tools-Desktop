@@ -1069,31 +1069,34 @@ export class CalculateModelService {
 
   //5C. Flash Condensate Return
   flashCondensateReturn() {
+    console.log(this.returnCondensate);
+    console.log('deaerator pressure ' + this.inputData.boilerInput.deaeratorPressure);
     this.condensateFlashTank = this.steamService.flashTank(
       {
         inletWaterPressure: this.returnCondensate.pressure,
-        quantityValue: this.inputData.headerInput.highPressure.condensateReturnTemperature,
-        thermodynamicQuantity: 0,
+        quantityValue: this.returnCondensate.specificEnthalpy,
+        thermodynamicQuantity: 1,
         inletWaterMassFlow: this.returnCondensate.massFlow,
         tankPressure: this.inputData.boilerInput.deaeratorPressure
       },
       this.settings
     );
 
-    if (this.condensateFlashTank.outletGasMassFlow < 0) {
-      this.condensateFlashTank.outletLiquidMassFlow = this.condensateFlashTank.outletLiquidMassFlow + this.condensateFlashTank.outletGasMassFlow;
-      this.condensateFlashTank.outletGasMassFlow = 0;
-    }else{
-      this.returnCondensate = {
-        pressure: this.condensateFlashTank.outletLiquidPressure,
-        temperature: this.condensateFlashTank.outletLiquidTemperature,
-        specificEnthalpy: this.condensateFlashTank.outletLiquidSpecificEnthalpy,
-        specificEntropy: this.condensateFlashTank.outletLiquidSpecificEntropy,
-        quality: this.condensateFlashTank.outletLiquidQuality,
-        energyFlow: this.condensateFlashTank.outletLiquidEnergyFlow,
-        specificVolume: this.condensateFlashTank.outletLiquidVolume,
-        massFlow: this.condensateFlashTank.outletLiquidMassFlow
-      }
+    // if (this.condensateFlashTank.outletGasMassFlow < 0) {
+    //   this.condensateFlashTank.outletLiquidMassFlow = this.condensateFlashTank.outletLiquidMassFlow + this.condensateFlashTank.outletGasMassFlow;
+    //   this.condensateFlashTank.outletGasMassFlow = 0;
+    // }else{
+
+    // }
+    this.returnCondensate = {
+      pressure: this.condensateFlashTank.outletLiquidPressure,
+      temperature: this.condensateFlashTank.outletLiquidTemperature,
+      specificEnthalpy: this.condensateFlashTank.outletLiquidSpecificEnthalpy,
+      specificEntropy: this.condensateFlashTank.outletLiquidSpecificEntropy,
+      quality: this.condensateFlashTank.outletLiquidQuality,
+      energyFlow: this.condensateFlashTank.outletLiquidEnergyFlow,
+      specificVolume: this.condensateFlashTank.outletLiquidVolume,
+      massFlow: this.condensateFlashTank.outletLiquidMassFlow
     }
   }
 
