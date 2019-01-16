@@ -5,7 +5,7 @@
         <span class="feedwater-mass-flow">
           {{boiler.feedwaterMassFlow| number:'1.0-1'}} klb/hr
         </span>
-        <span class="fa fa-chevron-right" (mouseenter)="hoverEquipment('boilerFeedwaterHovered')" (mouseleave)="hoverEquipment('default')"></span>
+        <span class="fa fa-chevron-right" (mouseenter)="hoverEquipment('boilerFeedwaterHovered')" (mouseleave)="hoverEquipment('feedwaterHovered')"></span>
       </div>
     </div>
   </div>
@@ -27,13 +27,13 @@
     </div>
     <div class="blowdown blowdown-one text-center mr-1 pl-2" (mouseenter)="hoverEquipment('blowdownHovered')"
       (mouseleave)="hoverEquipment('default')">
-      <span class="fa fa-chevron-right"></span>
+      <span class="fa fa-chevron-right hidden-chevron"></span>
     </div>
   </div>
   <div class="d-flex flex-column">
     <div class="d-flex h-100 high-pressure down-pipe" (mouseenter)="hoverEquipment('highPressureHovered')" (mouseleave)="hoverEquipment('default')">
       <div class="d-flex boiler-temp-holder mb-auto">
-        <span class="fa fa-chevron-down" (mouseenter)="hoverEquipment('boilerSteamHovered')" (mouseleave)="hoverEquipment('default')"></span>
+        <span class="fa fa-chevron-down" (mouseenter)="hoverEquipment('boilerSteamHovered')" (mouseleave)="hoverEquipment('highPressureHovered')"></span>
         <span class="boiler-temperature">{{boiler.steamTemperature | number:'1.0-1'}} &#8457;</span>
       </div>
     </div>
@@ -46,7 +46,7 @@
           <span class="blowdown-mass-flow">
             {{boiler.blowdownMassFlow | number:'1.0-1'}} klb/hr
           </span>
-          <span class="fa fa-chevron-right" (mouseenter)="hoverEquipment('boilerBlowdownHovered')"></span>
+          <span class="fa fa-chevron-right" (mouseenter)="hoverEquipment('boilerBlowdownHovered')" (mouseleave)="hoverEquipment('blowdownHovered')"></span>
         </div>
       </div>
     </div>

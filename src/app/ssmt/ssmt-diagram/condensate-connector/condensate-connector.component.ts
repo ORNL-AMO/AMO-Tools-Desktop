@@ -11,14 +11,20 @@ export class CondensateConnectorComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Input()
   returnCondensate: SteamPropertiesOutput;
-  
+
   constructor() { }
 
   ngOnInit() {
   }
 
 
-  hoverEquipment(str: string){
+  hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
+  }
+
+  hoverChevron() {
+    if (this.returnCondensate) {
+      this.emitSetHover.emit('returnCondensateHovered')
+    }
   }
 }

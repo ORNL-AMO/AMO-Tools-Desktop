@@ -17,7 +17,7 @@
     <div class="d-flex justify-content-center" (click)="selectEquipment()" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
       <div class="prv-img-holder">
         <div class="feedwater" *ngIf="prv.feedwaterMassFlow != undefined">
-          <span class="fa fa-chevron-right" (mouseenter)="hoverFeedwater()" (mouseleave)="hoverEquipment('default')"></span>
+          <span class="fa fa-chevron-right" (mouseenter)="hoverFeedwater()" (mouseleave)="hoverPRV()"></span>
         </div>
         <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined">
           {{prv.feedwaterMassFlow | number:'1.0-1'}} klb/hr
