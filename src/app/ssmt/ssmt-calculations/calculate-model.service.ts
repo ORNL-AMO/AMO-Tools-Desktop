@@ -751,23 +751,53 @@ export class CalculateModelService {
       this.settings
     );
 
-    if ((this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage) > this.mediumPressureHeader.massFlow) {
-      let steamDiff: number = (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage) - this.mediumPressureHeader.massFlow;
-      console.log('NEEDED MEDIUM FLOW ' + steamDiff);
-      //make up steam difference
-      this.makeupSteamDifference(steamDiff);
-
-      //Recalculate header
-      //3C. Model Medium Pressure Header
-      this.calculateMediumPressureHeader();
-      //3D. Calculate Heat Loss for Remain Steam in Medium Pressure Header
-      this.calculateHeatLossForMediumPressureHeader();
-      //3E. Calculate Medium Pressure Condensate
-      this.calculateMediumPressureCondensate();
+    let flowCheck: boolean = this.checkMediumToLowTurbineMassFlow();
+    if (flowCheck) {
+      if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 3) {
+        massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue1;
+        this.mediumToLowPressureTurbine = this.steamService.turbine(
+          {
+            solveFor: 0,
+            inletPressure: this.mediumPressureHeader.pressure,
+            inletQuantity: 1,
+            inletQuantityValue: this.mediumPressureHeader.specificEnthalpy,
+            turbineProperty: turbineProperty,
+            isentropicEfficiency: this.inputData.turbineInput.mediumToLowTurbine.isentropicEfficiency,
+            generatorEfficiency: this.inputData.turbineInput.mediumToLowTurbine.generationEfficiency,
+            massFlowOrPowerOut: massFlowOrPowerOut,
+            outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
+            outletQuantity: 0,
+            outletQuantityValue: 0
+          },
+          this.settings
+        );
+        console.log('REDUCED POWER OUT')
+      }
+      flowCheck = this.checkMediumToLowTurbineMassFlow();
+      if (flowCheck) {
+        let steamDiff: number = (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage) - this.mediumPressureHeader.massFlow;
+        console.log('NEEDED MEDIUM FLOW ' + steamDiff);
+        if (steamDiff > 0) {
+          //make up steam difference
+          this.makeupSteamDifference(steamDiff);
+          //Recalculate header
+          //3C. Model Medium Pressure Header
+          this.calculateMediumPressureHeader();
+          //3D. Calculate Heat Loss for Remain Steam in Medium Pressure Header
+          this.calculateHeatLossForMediumPressureHeader();
+          //3E. Calculate Medium Pressure Condensate
+          this.calculateMediumPressureCondensate();
+        }
+      }
     }
 
 
   }
+
+  checkMediumToLowTurbineMassFlow(): boolean {
+    return (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage) > this.mediumPressureHeader.massFlow;
+  }
+
 
   makeupSteamDifference(steamDiff: number) {
     let remainingSteamDiff: number = steamDiff;
@@ -810,46 +840,60 @@ export class CalculateModelService {
         );
       }
     }
+
+    //
     if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
-      if (this.highToLowPressureTurbine.massFlow > steamDiff) {
-        if (this.inputData.turbineInput.highToLowTurbine.operationType == 4 && (this.inputData.turbineInput.highToLowTurbine.operationValue1 > (this.highToLowPressureTurbine.massFlow - steamDiff))) {
-          this.highToLowPressureTurbine = this.steamService.turbine(
-            {
-              solveFor: 0,
-              inletPressure: this.highPressureHeader.pressure,
-              inletQuantity: 1,
-              inletQuantityValue: this.highPressureHeader.specificEnthalpy,
-              turbineProperty: 0, //massFlow
-              isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
-              generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
-              massFlowOrPowerOut: this.highToLowPressureTurbine.massFlow - steamDiff,
-              outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
-              outletQuantity: 0,
-              outletQuantityValue: 0
-            },
-            this.settings
-          );
-        } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 2) {
-          this.highToLowPressureTurbine = this.steamService.turbine(
-            {
-              solveFor: 0,
-              inletPressure: this.highPressureHeader.pressure,
-              inletQuantity: 1,
-              inletQuantityValue: this.highPressureHeader.specificEnthalpy,
-              turbineProperty: 0, //massFlow
-              isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
-              generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
-              massFlowOrPowerOut: this.highToLowPressureTurbine.massFlow - steamDiff,
-              outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
-              outletQuantity: 0,
-              outletQuantityValue: 0
-            },
-            this.settings
-          );
-        } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 2) {
-
-
-        }
+      if (this.inputData.turbineInput.highToLowTurbine.operationType == 4 && this.highToLowPressureTurbine.massFlow > steamDiff && (this.inputData.turbineInput.highToLowTurbine.operationValue1 > (this.highToLowPressureTurbine.massFlow - steamDiff))) {
+        this.highToLowPressureTurbine = this.steamService.turbine(
+          {
+            solveFor: 0,
+            inletPressure: this.highPressureHeader.pressure,
+            inletQuantity: 1,
+            inletQuantityValue: this.highPressureHeader.specificEnthalpy,
+            turbineProperty: 0, //massFlow
+            isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
+            generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
+            massFlowOrPowerOut: this.highToLowPressureTurbine.massFlow - steamDiff,
+            outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
+            outletQuantity: 0,
+            outletQuantityValue: 0
+          },
+          this.settings
+        );
+      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 2 && this.highToLowPressureTurbine.massFlow > steamDiff) {
+        this.highToLowPressureTurbine = this.steamService.turbine(
+          {
+            solveFor: 0,
+            inletPressure: this.highPressureHeader.pressure,
+            inletQuantity: 1,
+            inletQuantityValue: this.highPressureHeader.specificEnthalpy,
+            turbineProperty: 0, //massFlow
+            isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
+            generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
+            massFlowOrPowerOut: this.highToLowPressureTurbine.massFlow - steamDiff,
+            outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
+            outletQuantity: 0,
+            outletQuantityValue: 0
+          },
+          this.settings
+        );
+      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 3) {
+        this.highToLowPressureTurbine = this.steamService.turbine(
+          {
+            solveFor: 0,
+            inletPressure: this.highPressureHeader.pressure,
+            inletQuantity: 1,
+            inletQuantityValue: this.highPressureHeader.specificEnthalpy,
+            turbineProperty: 1, //powerOut
+            isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
+            generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
+            massFlowOrPowerOut: this.inputData.turbineInput.highToLowTurbine.operationValue1,
+            outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
+            outletQuantity: 0,
+            outletQuantityValue: 0
+          },
+          this.settings
+        );
       }
     }
   }
