@@ -120,4 +120,15 @@
       <span class="pl-2">Show</span>
     </div>
   </div>
+  <div class="form-group">
+    <label for="disableAllTutorials">All Tutorials</label>
+    <div class="d-flex justify-content-center" (click)="toggleDisableAll()">
+      <span class="pr-2">Hide</span>
+      <span class="switch">
+        <input name="disableAllTutorials" id="disableAllTutorials" [(ngModel)]="!disableAllTutorials" type="checkbox">
+        <span class="slider round"></span>
+      </span>
+      <span class="pl-2">Show</span>
+    </div>
+  </div>
 </form>
