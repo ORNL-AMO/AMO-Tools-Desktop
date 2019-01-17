@@ -23,3 +23,6 @@
 .btn-group .btn-sm {
     font-size: small !important;
 }
+.reset-size {
+    width:50%;
+}
