@@ -280,6 +280,11 @@ export class CalculateModelService {
 
     //6. Calculate Deaerator
     this.calculateDearator();
+    //check low pressure mass flow
+    if (this.inputData.headerInput.numberOfHeaders > 1) {
+      this.checkLowPressureBalance();
+    }
+
 
     //calculate process steam usage
     this.calculateHighPressureProcessUsage();
@@ -290,9 +295,6 @@ export class CalculateModelService {
     if (this.inputData.headerInput.numberOfHeaders == 3) {
       this.calculateMediumPressureProcessUsage();
     }
-
-
-
     //7. Calculate Energy and Cost Values
     //Power Generated
     this.calculatePowerGenerated();
@@ -553,10 +555,6 @@ export class CalculateModelService {
     if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
       prvMassFlow = prvMassFlow - this.condensingTurbine.massFlow;
     }
-    // if (this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true && (this.inputData.turbineInput.highToLowTurbine.useTurbine == true || this.inputData.turbineInput.highToMediumTurbine.useTurbine == true)) {
-    //   console.log('subtract flash tank')
-    //   prvMassFlow = prvMassFlow - this.highPressureCondensateFlashTank.outletGasMassFlow;
-    // }
     if (prvMassFlow < 0) {
       prvMassFlow = 0;
     }
@@ -713,27 +711,31 @@ export class CalculateModelService {
     //0: massFlow, 1: powerOut
     //massFlow = (flow from current header) - (process steam usage in connected header)
     let massFlowOrPowerOut: number = this.mediumPressureHeader.massFlow - this.inputData.headerInput.mediumPressure.processSteamUsage;
-    //mass flow can be adjusted depending on operation type of the turbine
-    //Still need to work out: powerOut: 1 and powerRange: 3.
-    //Working: balanceTurbine: 2, fixedFlow: 0, flowRange: 4
+    //2 = Balance header, use available steam
     if (this.inputData.turbineInput.mediumToLowTurbine.operationType != 2) {
+      //power generation or power range, calculate for power out
       if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 1 || this.inputData.turbineInput.mediumToLowTurbine.operationType == 3) {
         turbineProperty = 1; //powerOut
       }
       if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 1 || this.inputData.turbineInput.mediumToLowTurbine.operationType == 0) {
+        //1 or 0 = set flow or power generation, use operationValue1
         massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue1;
       } else if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 3) {
+        //3 = power out range, start with highest: use operationValue2
         massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue2;
       }
       else if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 4) {
+        //4 = flow range, check current mass flow is in range
         if (massFlowOrPowerOut < this.inputData.turbineInput.mediumToLowTurbine.operationValue1) {
+          //if less than minimum, set to minimum
           massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue1;
         } else if (massFlowOrPowerOut > this.inputData.turbineInput.mediumToLowTurbine.operationValue2) {
+          //if greater than max, set to max
           massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue2;
         }
       }
     }
-
+    //calculate turbine
     this.mediumToLowPressureTurbine = this.steamService.turbine(
       {
         solveFor: 0,
@@ -750,9 +752,11 @@ export class CalculateModelService {
       },
       this.settings
     );
-
+    //check that there is enough available steam in the medium pressure header 
     let flowCheck: boolean = this.checkMediumToLowTurbineMassFlow();
+    //if there is not enough available steam, make adjustments
     if (flowCheck) {
+      //if using power range, calculate using minimum power out value
       if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 3) {
         massFlowOrPowerOut = this.inputData.turbineInput.mediumToLowTurbine.operationValue1;
         this.mediumToLowPressureTurbine = this.steamService.turbine(
@@ -771,49 +775,59 @@ export class CalculateModelService {
           },
           this.settings
         );
+        //check to see if this fixes the problem
+        flowCheck = this.checkMediumToLowTurbineMassFlow();
       }
-      flowCheck = this.checkMediumToLowTurbineMassFlow();
+      //double checking flow check with no change when operationType != 3, can probably do this better logically.
       if (flowCheck) {
+        //calculate needed steam for medium pressure header
         let steamNeed: number = (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage);
+        //calculate available steam for medium pressure header, always PRV
         let steamAvailable: number = this.highToMediumPressurePRV.outletMassFlow;
-        if(this.inputData.turbineInput.highToMediumTurbine.useTurbine == true){
+        //add highToMediumTurbine massFlow if in use 
+        if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
           steamAvailable = steamAvailable + this.highPressureToMediumPressureTurbine.massFlow;
         }
-        if(this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true){
+        //add highPressureFlashTank steam if in use
+        if (this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true) {
           steamAvailable = steamAvailable + this.highPressureCondensateFlashTank.outletGasMassFlow;
         }
+        //calculate difference between needed steam and steam available
         let steamDiff: number = steamNeed - steamAvailable;
+        //if the difference is greater than .00001
         if (Math.abs(steamDiff) > 1e-5) {
-          //make up steam difference
+          //adjust the high pressure equipment to make up the steam difference
           this.makeupSteamDifference(steamDiff);
-          //Recalculate header
+          //After adjusting high pressure equipment, Recalculate medium pressure equipment
           //3C. Model Medium Pressure Header
           this.calculateMediumPressureHeader();
           //3D. Calculate Heat Loss for Remain Steam in Medium Pressure Header
           this.calculateHeatLossForMediumPressureHeader();
           //3E. Calculate Medium Pressure Condensate
           this.calculateMediumPressureCondensate();
-          //
+          //Recursively calculate turbine until steamDiff is less than .00001
           this.calculateMediumToLowSteamTurbine();
         }
       }
     }
-
-
   }
 
+  //check if enough steam in header for turbine
   checkMediumToLowTurbineMassFlow(): boolean {
     return (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage) != this.mediumPressureHeader.massFlow;
   }
 
-
+  //adjust model so enough steam gets to medium pressure header
   makeupSteamDifference(steamDiff: number) {
     let remainingSteamDiff: number = steamDiff;
     //try getting addtional steam from highToMediumTurbine
     if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
-      //check if additional steam can go through highToMedium turbine
-      remainingSteamDiff = this.checkHighToMediumTurbineCapacity(remainingSteamDiff);
+      //adjust high to medium turbine to send additional steam through
+      //returns amount of steam that cannot go through
+      remainingSteamDiff = this.adjustHighToMediumTurbine(remainingSteamDiff);
     }
+    //if theres still remaining steam needed, get it through PRV
+    //add additional steam to inlet mass flow
     if (remainingSteamDiff != 0) {
       if (this.inputData.headerInput.mediumPressure.desuperheatSteamIntoNextHighest == true) {
         this.highToMediumPressurePRV = this.steamService.prvWithDesuperheating(
@@ -848,8 +862,9 @@ export class CalculateModelService {
       }
     }
 
-    //
+    //adjust high to low pressure turbine if steam needs to be removed
     if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+      //4 = flow range, if room for more steam in range, add additional steam to turbine
       if (this.inputData.turbineInput.highToLowTurbine.operationType == 4 && this.highToLowPressureTurbine.massFlow > steamDiff && (this.inputData.turbineInput.highToLowTurbine.operationValue1 > (this.highToLowPressureTurbine.massFlow - steamDiff))) {
         this.highToLowPressureTurbine = this.steamService.turbine(
           {
@@ -867,7 +882,11 @@ export class CalculateModelService {
           },
           this.settings
         );
-      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 2 && this.highToLowPressureTurbine.massFlow > steamDiff) {
+      }
+      //2 = balancing header, remove excess steam from high pressure turbine
+      //instead of only removing steam if you can remove it all, maybe remove as much as possible. Need to find corresponding scenario
+      //use this for now
+      else if (this.inputData.turbineInput.highToLowTurbine.operationType == 2 && this.highToLowPressureTurbine.massFlow > steamDiff) {
         this.highToLowPressureTurbine = this.steamService.turbine(
           {
             solveFor: 0,
@@ -884,7 +903,9 @@ export class CalculateModelService {
           },
           this.settings
         );
-      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 3) {
+      }
+      //if power range, reduce steam through by using min power needed
+      else if (this.inputData.turbineInput.highToLowTurbine.operationType == 3) {
         this.highToLowPressureTurbine = this.steamService.turbine(
           {
             solveFor: 0,
@@ -905,7 +926,7 @@ export class CalculateModelService {
     }
   }
 
-  checkHighToMediumTurbineCapacity(steamDiff: number): number {
+  adjustHighToMediumTurbine(steamDiff: number): number {
     //if balance header addtional steam can go through here
     if (this.inputData.turbineInput.highToMediumTurbine.operationType == 2) {
       this.calculateHighToMediumTurbineGivenMassFlow(steamDiff);
@@ -1326,8 +1347,6 @@ export class CalculateModelService {
 
   //5C. Flash Condensate Return
   flashCondensateReturn() {
-    console.log(this.returnCondensate);
-    console.log('deaerator pressure ' + this.inputData.boilerInput.deaeratorPressure);
     this.condensateFlashTank = this.steamService.flashTank(
       {
         inletWaterPressure: this.returnCondensate.pressure,
@@ -1339,12 +1358,6 @@ export class CalculateModelService {
       this.settings
     );
 
-    // if (this.condensateFlashTank.outletGasMassFlow < 0) {
-    //   this.condensateFlashTank.outletLiquidMassFlow = this.condensateFlashTank.outletLiquidMassFlow + this.condensateFlashTank.outletGasMassFlow;
-    //   this.condensateFlashTank.outletGasMassFlow = 0;
-    // }else{
-
-    // }
     this.returnCondensate = {
       pressure: this.condensateFlashTank.outletLiquidPressure,
       temperature: this.condensateFlashTank.outletLiquidTemperature,
@@ -1371,7 +1384,6 @@ export class CalculateModelService {
 
   //5E. Calculate makeup water mass flow
   calculateMakeupWaterMassFlow() {
-
     let makeupWaterMassFlow: number = this.boilerOutput.feedwaterMassFlow * (1 + this.inputData.boilerInput.deaeratorVentRate / 100);
     let inletHeaderFlow: number = this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
     if (this.inputData.headerInput.numberOfHeaders > 1) {
@@ -1382,7 +1394,6 @@ export class CalculateModelService {
       if (isNaN(this.lowPressurePRV.feedwaterMassFlow) == false) {
         makeupWaterMassFlow = makeupWaterMassFlow + this.lowPressurePRV.feedwaterMassFlow;
       }
-
       if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
         makeupWaterMassFlow = makeupWaterMassFlow - this.condensingTurbine.massFlow;
       }
@@ -1489,6 +1500,95 @@ export class CalculateModelService {
       this.settings
     )
   }
+
+
+  checkLowPressureBalance() {
+    let lowPressureSteamNeed: number = this.deaeratorOutput.inletSteamMassFlow + this.inputData.headerInput.lowPressure.processSteamUsage;
+    let lowPressureSteamAvailable: number = this.lowPressureHeader.massFlow;
+    let steamBalance: number = lowPressureSteamAvailable - lowPressureSteamNeed;
+    if (Math.abs(steamBalance) > 1e-5) {
+      this.adjustLowPressureSteamFlow(steamBalance);
+    }
+  }
+
+  adjustLowPressureSteamFlow(steamBalance: number) {
+    let remainingSteamNeed: number = steamBalance;
+    //try adding addtional steam to high to low turbine
+    if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+      if (this.inputData.turbineInput.highToLowTurbine.operationType == 2) {
+        //balance header send additional steam through
+        this.calculateHighToLowTurbineGivenMassFlow(remainingSteamNeed);
+        remainingSteamNeed = 0;
+      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 3) {
+        //flow range
+        let availableCapacity: number = this.inputData.turbineInput.highToLowTurbine.operationValue2 - this.highToLowPressureTurbine.massFlow;
+        let addedSteam: number = availableCapacity - remainingSteamNeed;
+        if (addedSteam >= 0) {
+          this.calculateHighToLowTurbineGivenMassFlow(this.highToLowPressureTurbine.massFlow + addedSteam);
+          remainingSteamNeed = remainingSteamNeed - addedSteam;
+        }
+      } else if (this.inputData.turbineInput.highToLowTurbine.operationType == 4) {
+        //power range
+        if (this.inputData.turbineInput.highToLowTurbine.operationValue2 < this.highToLowPressureTurbine.powerOut) {
+          this.calculateHighToLowTurbineGivenMassFlow(this.highToLowPressureTurbine.massFlow + remainingSteamNeed)
+        }
+        if (this.inputData.turbineInput.highToLowTurbine.operationValue2 < this.highToLowPressureTurbine.powerOut) {
+          //if still under the range then all good
+          return 0;
+        } else {
+          //calculate for max power out
+          this.highToLowPressureTurbine = this.steamService.turbine(
+            {
+              solveFor: 0,
+              inletPressure: this.highPressureHeader.pressure,
+              inletQuantity: 1,
+              inletQuantityValue: this.highPressureHeader.specificEnthalpy,
+              turbineProperty: 1,//powerOut
+              isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
+              generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
+              massFlowOrPowerOut: this.inputData.turbineInput.highToLowTurbine.operationValue2,
+              outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
+              outletQuantity: 0,
+              outletQuantityValue: 0
+            },
+            this.settings
+          );
+        }
+      }
+    }
+
+    //try adding additional steam to high to medium turbine
+    if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
+      if (this.inputData.turbineInput.highToMediumTurbine.operationType == 2) {
+        //balance header send additional steam through
+      } else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 3) {
+        //flow range
+      } else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 4) {
+        //power range
+      }
+    }
+    //get remaining steam from prv
+  }
+
+  calculateHighToLowTurbineGivenMassFlow(massFlow: number) {
+    this.highToLowPressureTurbine = this.steamService.turbine(
+      {
+        solveFor: 0,
+        inletPressure: this.highPressureHeader.pressure,
+        inletQuantity: 1,
+        inletQuantityValue: this.highPressureHeader.specificEnthalpy,
+        turbineProperty: 0,//massflow
+        isentropicEfficiency: this.inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
+        generatorEfficiency: this.inputData.turbineInput.highToLowTurbine.generationEfficiency,
+        massFlowOrPowerOut: massFlow,
+        outletSteamPressure: this.inputData.headerInput.lowPressure.pressure,
+        outletQuantity: 0,
+        outletQuantityValue: 0
+      },
+      this.settings
+    );
+  }
+
 
   //Process Usage
   calculateHighPressureProcessUsage() {
