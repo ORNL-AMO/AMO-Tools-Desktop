@@ -17,7 +17,7 @@ export class SsmtDiagramComponent implements OnInit {
   @Input()
   containerHeight: number;
   
-  massFlow: number = 396.6;
+  massFlow: number = 505.2;
 
   dataCalculated: boolean = false;
 

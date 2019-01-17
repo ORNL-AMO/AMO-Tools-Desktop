@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
-import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-hover-steam-properties',
@@ -94,7 +94,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.deaeratorVentHovered();
     } else if (this.hoveredProperty == 'deaeratorFeedwaterHovered') {
       this.deaeratorFeedwaterHovered();
-    } else if (this.hoveredProperty == 'feedwaterHovered'){
+    } else if (this.hoveredProperty == 'feedwaterHovered') {
       this.boilerFeedwaterHovered();
     }
   }
@@ -266,19 +266,26 @@ export class HoverSteamPropertiesComponent implements OnInit {
   lowPressureProcessSteamInletHovered() {
     this.label = 'Low Pressure Process Steam';
     let header: HeaderOutputObj = this.calculateModelService.lowPressureHeader;
+    let processUsage: ProcessSteamUsage = this.calculateModelService.lowPressureProcessUsage;
     this.setSteamProperties(header);
+    this.steam.massFlow = processUsage.massFlow;
   }
 
   mediumPressureProcessSteamInletHovered() {
     this.label = 'Medium Pressure Process Steam';
     let header: HeaderOutputObj = this.calculateModelService.mediumPressureHeader;
+    let processUsage: ProcessSteamUsage = this.calculateModelService.mediumPressureProcessUsage;
     this.setSteamProperties(header);
+    this.steam.massFlow = processUsage.massFlow;
+
   }
 
   highPressureProcessSteamInletHovered() {
     this.label = 'High Pressure Process Steam';
     let header: HeaderOutputObj = this.calculateModelService.highPressureHeader;
+    let processUsage: ProcessSteamUsage = this.calculateModelService.highPressureProcessUsage;
     this.setSteamProperties(header);
+    this.steam.massFlow = processUsage.massFlow;
   }
 
   condensingTurbineOutletHovered() {
@@ -426,9 +433,9 @@ export class HoverSteamPropertiesComponent implements OnInit {
   }
 
   boilerFeedwaterHovered() {
-    if(this.hoveredProperty == 'boilerFeedwaterHovered'){
+    if (this.hoveredProperty == 'boilerFeedwaterHovered') {
       this.label = 'Boiler Feedwater';
-    }else if(this.hoveredProperty == 'feedwaterHovered'){
+    } else if (this.hoveredProperty == 'feedwaterHovered') {
       this.label = 'Feedwater';
     }
     let boilerOutput: BoilerOutput = this.calculateModelService.boilerOutput;

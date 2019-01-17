@@ -771,13 +771,19 @@ export class CalculateModelService {
           },
           this.settings
         );
-        console.log('REDUCED POWER OUT')
       }
       flowCheck = this.checkMediumToLowTurbineMassFlow();
       if (flowCheck) {
-        let steamDiff: number = (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage) - this.mediumPressureHeader.massFlow;
-        console.log('NEEDED MEDIUM FLOW ' + steamDiff);
-        if (steamDiff > 0) {
+        let steamNeed: number = (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage);
+        let steamAvailable: number = this.highToMediumPressurePRV.outletMassFlow;
+        if(this.inputData.turbineInput.highToMediumTurbine.useTurbine == true){
+          steamAvailable = steamAvailable + this.highPressureToMediumPressureTurbine.massFlow;
+        }
+        if(this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true){
+          steamAvailable = steamAvailable + this.highPressureCondensateFlashTank.outletGasMassFlow;
+        }
+        let steamDiff: number = steamNeed - steamAvailable;
+        if (Math.abs(steamDiff) > 1e-5) {
           //make up steam difference
           this.makeupSteamDifference(steamDiff);
           //Recalculate header
@@ -787,6 +793,8 @@ export class CalculateModelService {
           this.calculateHeatLossForMediumPressureHeader();
           //3E. Calculate Medium Pressure Condensate
           this.calculateMediumPressureCondensate();
+          //
+          this.calculateMediumToLowSteamTurbine();
         }
       }
     }
@@ -795,7 +803,7 @@ export class CalculateModelService {
   }
 
   checkMediumToLowTurbineMassFlow(): boolean {
-    return (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage) > this.mediumPressureHeader.massFlow;
+    return (this.mediumToLowPressureTurbine.massFlow + this.inputData.headerInput.mediumPressure.processSteamUsage) != this.mediumPressureHeader.massFlow;
   }
 
 
@@ -806,8 +814,7 @@ export class CalculateModelService {
       //check if additional steam can go through highToMedium turbine
       remainingSteamDiff = this.checkHighToMediumTurbineCapacity(remainingSteamDiff);
     }
-    console.log(remainingSteamDiff);
-    if (remainingSteamDiff > 0) {
+    if (remainingSteamDiff != 0) {
       if (this.inputData.headerInput.mediumPressure.desuperheatSteamIntoNextHighest == true) {
         this.highToMediumPressurePRV = this.steamService.prvWithDesuperheating(
           {
@@ -908,11 +915,15 @@ export class CalculateModelService {
     else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 0 || this.inputData.turbineInput.highToMediumTurbine.operationType == 1) {
       return steamDiff
     } else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 3) {
+      //if max power out less than current power out
       if (this.inputData.turbineInput.highToMediumTurbine.operationValue2 < this.highPressureToMediumPressureTurbine.powerOut) {
+        //try adding the addtional steam to turbine
         this.calculateHighToMediumTurbineGivenMassFlow(steamDiff);
         if (this.inputData.turbineInput.highToMediumTurbine.operationValue2 < this.highPressureToMediumPressureTurbine.powerOut) {
+          //if still under the range then all good
           return 0;
         } else {
+          //calculate for max power out
           this.highPressureToMediumPressureTurbine = this.steamService.turbine(
             {
               solveFor: 0,
@@ -936,12 +947,15 @@ export class CalculateModelService {
     }
     //send additional steam through turbine up to capacity
     else if (this.inputData.turbineInput.highToMediumTurbine.operationType == 4) {
+      //calculate available capacity for high to medium turbine
       let availableCapacity: number = this.inputData.turbineInput.highToMediumTurbine.operationValue2 - this.highPressureToMediumPressureTurbine.massFlow;
       let remainingSteamDiff: number = steamDiff - availableCapacity;
       if (remainingSteamDiff > 0) {
+        //if not all addtional steam can go through, send available capacity through
         this.calculateHighToMediumTurbineGivenMassFlow(availableCapacity);
         return remainingSteamDiff;
       } else {
+        //theres enough room for all additional steam, send all steam through
         this.calculateHighToMediumTurbineGivenMassFlow(steamDiff);
         return 0;
       }
@@ -1474,9 +1488,6 @@ export class CalculateModelService {
       },
       this.settings
     )
-
-
-
   }
 
   //Process Usage
