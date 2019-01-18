@@ -182,7 +182,21 @@ export class CalculateModelService {
     return steamUsage;
   }
 
-  calculateModel(massFlow: number): void {
+  testCalculateModelRunner(){
+    let initialGuess: number = 0;
+    if (this.inputData.headerInput.numberOfHeaders == 1) {
+      initialGuess = this.inputData.headerInput.highPressure.processSteamUsage;
+    } else if (this.inputData.headerInput.numberOfHeaders == 2) {
+      initialGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage);
+    } else if (this.inputData.headerInput.numberOfHeaders == 3) {
+      initialGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage);
+    }
+    let additionalSteam: number = this.calculateModel(initialGuess);
+    return additionalSteam;
+  }
+
+
+  calculateModel(massFlow: number): number {
     //1. Model Boiler
     //1A. Calculate Boiler with massFlow
     this.calculateBoiler(massFlow);
@@ -281,10 +295,7 @@ export class CalculateModelService {
     //6. Calculate Deaerator
     this.calculateDearator();
     //check low pressure mass flow
-    if (this.inputData.headerInput.numberOfHeaders > 1) {
-      this.checkLowPressureBalance();
-    }
-
+    let steamBalance: number = this.checkPowerBalance();
 
     //calculate process steam usage
     this.calculateHighPressureProcessUsage();
@@ -308,6 +319,7 @@ export class CalculateModelService {
     // totalEnergyUse
     //Boiler fuel Usage
     this.calculateBoilerFuelUsage();
+    return steamBalance
   }
 
 
@@ -1391,10 +1403,10 @@ export class CalculateModelService {
     let inletHeaderFlow: number = this.highPressureHeader.massFlow - this.inputData.headerInput.highPressure.processSteamUsage;
     if (this.inputData.headerInput.numberOfHeaders > 1) {
       inletHeaderFlow = this.lowPressureHeader.massFlow - this.inputData.headerInput.lowPressure.processSteamUsage;
-      if (this.inputData.headerInput.numberOfHeaders == 3 && isNaN(this.highToMediumPressurePRV.feedwaterMassFlow) == false) {
+      if (this.inputData.headerInput.numberOfHeaders == 3 && this.inputData.headerInput.mediumPressure.desuperheatSteamIntoNextHighest == true) {
         makeupWaterMassFlow = makeupWaterMassFlow + this.highToMediumPressurePRV.feedwaterMassFlow;
       }
-      if (isNaN(this.lowPressurePRV.feedwaterMassFlow) == false) {
+      if (this.inputData.headerInput.lowPressure.desuperheatSteamIntoNextHighest == true) {
         makeupWaterMassFlow = makeupWaterMassFlow + this.lowPressurePRV.feedwaterMassFlow;
       }
       if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
@@ -1486,6 +1498,7 @@ export class CalculateModelService {
     if (this.inputData.headerInput.numberOfHeaders == 3 && isNaN(this.highToMediumPressurePRV.feedwaterMassFlow) == false) {
       feedwaterMassFlow = feedwaterMassFlow + this.highToMediumPressurePRV.feedwaterMassFlow;
     }
+  
 
     //6B. Calculate Deaerator
     this.deaeratorOutput = this.steamService.deaerator(
@@ -1505,11 +1518,62 @@ export class CalculateModelService {
   }
 
 
-  checkLowPressureBalance() {
-    let steamBalance: number = this.getLowPressureSteamBalance();
-    if (Math.abs(steamBalance) > 1e-5) {
-      this.adjustLowPressureSteamFlow(steamBalance);
+  checkPowerBalance() {
+
+    let flashTankAdditionalSteam: number = 0;
+    let prvAdditionalSteam: number = 0;
+    let processSteamUsage: number = this.inputData.headerInput.highPressure.processSteamUsage;
+    if (this.inputData.headerInput.numberOfHeaders > 1) {
+      processSteamUsage = processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage;
+      
+      if(this.inputData.boilerInput.blowdownFlashed == true){
+        flashTankAdditionalSteam = flashTankAdditionalSteam + this.blowdownFlashTank.outletGasMassFlow;
+      }
+
+      if(this.inputData.headerInput.lowPressure.flashCondensateIntoHeader == true){
+        if(this.inputData.headerInput.numberOfHeaders == 2){
+          flashTankAdditionalSteam = flashTankAdditionalSteam + this.highPressureCondensateFlashTank.outletGasMassFlow;
+        }else if(this.inputData.headerInput.numberOfHeaders == 3){
+          flashTankAdditionalSteam = flashTankAdditionalSteam + this.mediumPressureCondensateFlashTank.outletGasMassFlow;
+        }
+      }
+      
+      if(this.inputData.headerInput.lowPressure.desuperheatSteamIntoNextHighest == true){
+        prvAdditionalSteam = prvAdditionalSteam + (this.lowPressurePRV.outletMassFlow - this.lowPressurePRV.inletMassFlow);
+      }
+    
+      if(this.inputData.headerInput.numberOfHeaders == 3){
+        processSteamUsage = processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage;
+        if(this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true){
+          flashTankAdditionalSteam = flashTankAdditionalSteam + this.highPressureCondensateFlashTank.outletGasMassFlow;
+        }
+      
+        if(this.inputData.headerInput.mediumPressure.desuperheatSteamIntoNextHighest == true){
+          prvAdditionalSteam = prvAdditionalSteam + (this.highToMediumPressurePRV.outletMassFlow - this.highToMediumPressurePRV.inletMassFlow);
+        }
+      }
     }
+
+    let condensingTurbineMassFlow: number = 0;
+    if(this.inputData.turbineInput.condensingTurbine.useTurbine == true){
+      condensingTurbineMassFlow = this.condensingTurbine.massFlow;
+    }
+
+    let steamProduction: number = this.boilerOutput.steamMassFlow + flashTankAdditionalSteam + prvAdditionalSteam;
+    let steamUse: number = processSteamUsage + this.deaeratorOutput.inletSteamMassFlow + condensingTurbineMassFlow;
+    let steamBalance: number = steamUse - steamProduction;
+
+    console.log(steamBalance);
+     
+    if (Math.abs(steamBalance) > 1e-3) {
+       this.calculateModel(this.boilerOutput.steamMassFlow + steamBalance);
+     }else {
+       return steamBalance;
+     }
+  }
+
+  checkLowPressureBalance(){
+
   }
 
   getLowPressureSteamBalance(): number {

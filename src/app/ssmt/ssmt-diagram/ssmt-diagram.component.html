@@ -205,13 +205,13 @@
         </div> -->
       </div>
       <div *ngIf="tabSelect == 'help'">
-        <div class="d-flex pt-3">
+        <!-- <div class="d-flex pt-3">
           <div class="form-group">
             <label for="massFlow">Define Boiler Steam Mass Flow for Calculation</label>
             <input name="massFlow" type="number" step="any" class="form-control" id="massFlow" (input)="calculateResultsGivenMassFlow()"
               [(ngModel)]="massFlow">
           </div>
-        </div>
+        </div> -->
         <app-diagram-help></app-diagram-help>
       </div>
     </div>

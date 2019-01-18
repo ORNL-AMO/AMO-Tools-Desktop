@@ -70,7 +70,7 @@ export class SsmtDiagramComponent implements OnInit {
   totalOperatingCost: number;
   boilerFuelUsage: number;
 
-  tabSelect: string = 'help';
+  tabSelect: string = 'results';
   selectedTable: string = 'default';
   hoveredEquipment: string = 'default';
   deaeratorWidth: number;
@@ -80,13 +80,13 @@ export class SsmtDiagramComponent implements OnInit {
   ngOnInit() {
     this.calculateModelService.initResults();
     if (this.ssmt.setupDone) {
-      this.calculateResultsGivenMassFlow();
+      this.calculateResults();
     }
   }
 
   calculateResults() {
     this.calculateModelService.initData(this.ssmt, this.settings)
-    let results: number = this.calculateModelService.marksIterator();
+    let results: number = this.calculateModelService.testCalculateModelRunner();
     console.log('Addtional Mass flow: ' + results);
     this.getResults();
     this.massFlow = this.boiler.steamMassFlow;
