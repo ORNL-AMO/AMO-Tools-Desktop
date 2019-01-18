@@ -17,7 +17,7 @@ export class SsmtDiagramComponent implements OnInit {
   @Input()
   containerHeight: number;
   
-  massFlow: number = 505.2;
+  massFlow: number = 504.0;
 
   dataCalculated: boolean = false;
 
@@ -70,7 +70,7 @@ export class SsmtDiagramComponent implements OnInit {
   totalOperatingCost: number;
   boilerFuelUsage: number;
 
-  tabSelect: string = 'results';
+  tabSelect: string = 'help';
   selectedTable: string = 'default';
   hoveredEquipment: string = 'default';
   deaeratorWidth: number;
@@ -80,7 +80,7 @@ export class SsmtDiagramComponent implements OnInit {
   ngOnInit() {
     this.calculateModelService.initResults();
     if (this.ssmt.setupDone) {
-      this.calculateResults();
+      this.calculateResultsGivenMassFlow();
     }
   }
 

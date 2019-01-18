@@ -199,6 +199,12 @@
         <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'"></app-prv-table>
         <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="deaerator"></app-deaerator-table>
 
+
+        <!-- <div class="d-flex p-2">
+          {{ventedLowPressureSteam | number:'1.0-2'}}
+        </div> -->
+      </div>
+      <div *ngIf="tabSelect == 'help'">
         <div class="d-flex pt-3">
           <div class="form-group">
             <label for="massFlow">Define Boiler Steam Mass Flow for Calculation</label>
@@ -206,11 +212,6 @@
               [(ngModel)]="massFlow">
           </div>
         </div>
-        <!-- <div class="d-flex p-2">
-          {{ventedLowPressureSteam | number:'1.0-2'}}
-        </div> -->
-      </div>
-      <div *ngIf="tabSelect == 'help'">
         <app-diagram-help></app-diagram-help>
       </div>
     </div>
