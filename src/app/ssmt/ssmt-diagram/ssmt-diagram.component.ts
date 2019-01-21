@@ -16,10 +16,9 @@ export class SsmtDiagramComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
-  
+
   massFlow: number = 504.0;
 
-  dataCalculated: boolean = false;
 
   inputData: SSMTInputs;
 
@@ -75,6 +74,8 @@ export class SsmtDiagramComponent implements OnInit {
   hoveredEquipment: string = 'default';
   deaeratorWidth: number;
   ventedLowPressureSteam: number;
+  calculationProcessSucess: boolean;
+  dataCalculated: boolean = false;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -86,10 +87,12 @@ export class SsmtDiagramComponent implements OnInit {
 
   calculateResults() {
     this.calculateModelService.initData(this.ssmt, this.settings)
-    let steamBalance: number = this.calculateModelService.testCalculateModelRunner();
-    console.log('Vented Steam: ' + steamBalance);
-    this.getResults();
-    this.massFlow = this.boiler.steamMassFlow;
+    this.calculationProcessSucess = this.calculateModelService.calculateModelRunner();
+    this.cd.detectChanges();
+    if (this.calculationProcessSucess == true) {
+      this.getResults();
+      this.massFlow = this.boiler.steamMassFlow;
+    }
   }
 
   calculateResultsGivenMassFlow() {

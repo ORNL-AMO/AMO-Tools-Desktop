@@ -38,6 +38,10 @@ export class HeaderFormComponent implements OnInit {
     } else {
       this.enableForm();
     }
+
+    if (this.pressureLevel == 'highPressure') {
+      this.headerForm.controls.flashCondensateReturn.disable();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,7 +56,7 @@ export class HeaderFormComponent implements OnInit {
 
   enableForm() {
     if (this.pressureLevel == 'highPressure') {
-      this.headerForm.controls.flashCondensateReturn.enable();
+      // this.headerForm.controls.flashCondensateReturn.enable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.enable();
       this.headerForm.controls.desuperheatSteamIntoNextHighest.enable();
@@ -61,7 +65,7 @@ export class HeaderFormComponent implements OnInit {
 
   disableForm() {
     if (this.pressureLevel == 'highPressure') {
-      this.headerForm.controls.flashCondensateReturn.disable();
+      //  this.headerForm.controls.flashCondensateReturn.disable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.disable();
       this.headerForm.controls.desuperheatSteamIntoNextHighest.disable();

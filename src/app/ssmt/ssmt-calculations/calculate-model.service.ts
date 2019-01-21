@@ -92,7 +92,7 @@ export class CalculateModelService {
     this.settings = _settings;
   }
 
-  testCalculateModelRunner() {
+  calculateModelRunner() {
     let initialGuess: number = 0;
     if (this.inputData.headerInput.numberOfHeaders == 1) {
       initialGuess = this.inputData.headerInput.highPressure.processSteamUsage;
@@ -101,138 +101,145 @@ export class CalculateModelService {
     } else if (this.inputData.headerInput.numberOfHeaders == 3) {
       initialGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage);
     }
-    let additionalSteam: number = this.calculateModel(initialGuess);
-    return additionalSteam;
+    let calculationProcessSuccess: boolean = this.calculateModel(initialGuess);
+    return calculationProcessSuccess;
   }
 
 
-  calculateModel(massFlow: number): number {
+  calculateModel(massFlow: number): boolean {
     this.calcCount++;
-    console.log('Calc Model Count: ' + this.calcCount);
-    console.log('Calc model Mass flow: ' + massFlow);
-    //1. Model Boiler
-    //1A. Calculate Boiler with massFlow
-    this.calculateBoiler(massFlow);
-    //1B. Flash blowdown if selected
-    if (this.inputData.boilerInput.blowdownFlashed == true) {
-      this.calculateBlowdownFlashTank();
-    }
-    //2. Model High Pressure Header
-    //2A. Calculate High Pressure Header
-    this.calculateHighPressureHeader();
-    //2B. Calculate Heat Loss of steam in high pressure header
-    this.calculateHeatLossForHighPressureHeader();
-    //2C. Calculate High Pressure Condensate
-    this.calculateHighPressureCondensate();
-
-    //2D. Calculate High Pressure Flash Tank if 3 header and on
-    if (this.inputData.headerInput.numberOfHeaders == 3 && this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true) {
-      this.calculateHighPressureFlashTank();
-    }
-
-    //2E. Calcuate condensing turbine
-    if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
-      this.calculateCondensingTurbine();
-    }
-
-    //2D. Calculate high to low steam turbine if in use
-    if (this.inputData.headerInput.numberOfHeaders > 1 && this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
-      this.calculateHighToLowSteamTurbine();
-    }
-    //2E. Calculate high to medium steam turbine if in use
-    if (this.inputData.headerInput.numberOfHeaders == 3) {
-      if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
-        this.calculateHighToMediumPressureSteamTurbine();
+    if (this.calcCount < 25) {
+      //1. Model Boiler
+      //1A. Calculate Boiler with massFlow
+      this.calculateBoiler(massFlow);
+      //1B. Flash blowdown if selected
+      if (this.inputData.boilerInput.blowdownFlashed == true) {
+        this.calculateBlowdownFlashTank();
       }
-    }
+      //2. Model High Pressure Header
+      //2A. Calculate High Pressure Header
+      this.calculateHighPressureHeader();
+      //2B. Calculate Heat Loss of steam in high pressure header
+      this.calculateHeatLossForHighPressureHeader();
+      //2C. Calculate High Pressure Condensate
+      this.calculateHighPressureCondensate();
 
-    //3. Calculate Medium Pressure Header
-    //if medium pressure header exists
-    if (this.inputData.headerInput.numberOfHeaders == 3) {
-      //3A. Calculate High to Medium PRV
-      this.calculateHighToMediumPRV();
-      //3C. Model Medium Pressure Header
-      this.calculateMediumPressureHeader();
-      //3D. Calculate Heat Loss for Remain Steam in Medium Pressure Header
-      this.calculateHeatLossForMediumPressureHeader();
-      //3E. Calculate Medium Pressure Condensate
-      this.calculateMediumPressureCondensate();
-      //3F. Calculate medium to low steam turbine if in use
-      if (this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
-        this.calculateMediumToLowSteamTurbine();
+      //2D. Calculate High Pressure Flash Tank if 3 header and on
+      if (this.inputData.headerInput.numberOfHeaders == 3 && this.inputData.headerInput.mediumPressure.flashCondensateIntoHeader == true) {
+        this.calculateHighPressureFlashTank();
       }
-    }
 
-    //4. Calculate Low Pressure Header
-    //if low pressure header exists
-    if (this.inputData.headerInput.numberOfHeaders > 1) {
-      //4A. Calculate to low pressure PRV
-      this.calculateLowPressurePRV();
-      //4B. Calculate flashed steam into low pressure header if selected
-      if (this.inputData.headerInput.lowPressure.flashCondensateIntoHeader == true) {
-        if (this.inputData.headerInput.numberOfHeaders == 3) {
-          this.calculateMediumPressureFlashTank();
-        } else {
-          this.calculateHighPressureFlashTank();
+      //2E. Calcuate condensing turbine
+      if (this.inputData.turbineInput.condensingTurbine.useTurbine == true) {
+        this.calculateCondensingTurbine();
+      }
+
+      //2D. Calculate high to low steam turbine if in use
+      if (this.inputData.headerInput.numberOfHeaders > 1 && this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+        this.calculateHighToLowSteamTurbine();
+      }
+      //2E. Calculate high to medium steam turbine if in use
+      if (this.inputData.headerInput.numberOfHeaders == 3) {
+        if (this.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
+          this.calculateHighToMediumPressureSteamTurbine();
         }
       }
-      //4C. Model Low Pressure Header
-      this.calculateLowPressureHeader();
-      //4D. Calculate Heat Loss for Remaining Steam in Low Pressure Header
-      this.calculateHeatLossForLowPressureHeader();
-      //4E. Calculate Low Pressure Condensate
-      this.calculateLowPressureCondensate();
-    }
 
-    //5. Calculate Makeup Water and Condensate Header
-    //5A. Calculate combined condensate
-    this.calculateCombinedCondensate();
-    //5B. Calculate return condensate
-    this.calculateReturnCondensate();
-    //5C. Flash return condensate if selected
-    if (this.inputData.headerInput.highPressure.flashCondensateReturn == true) {
-      this.flashCondensateReturn();
-    }
-    //5D. Calculate Makeup Water
-    this.calculateMakeupWater();
-    //5E. Calculate makeup water mass flow
-    this.calculateMakeupWaterMassFlow();
-    this.calculateMakeupWaterVolumeFlow()
-    //5F. Run heat exchange if pre heating makeup water
-    if (this.inputData.boilerInput.preheatMakeupWater == true) {
-      this.runHeatExchanger();
-    }
-    //5G. Calculate makeup water and condensate combined
-    this.calculateMakeupWaterAndCondensateHeader();
+      //3. Calculate Medium Pressure Header
+      //if medium pressure header exists
+      if (this.inputData.headerInput.numberOfHeaders == 3) {
+        //3A. Calculate High to Medium PRV
+        this.calculateHighToMediumPRV();
+        //3C. Model Medium Pressure Header
+        this.calculateMediumPressureHeader();
+        //3D. Calculate Heat Loss for Remain Steam in Medium Pressure Header
+        this.calculateHeatLossForMediumPressureHeader();
+        //3E. Calculate Medium Pressure Condensate
+        this.calculateMediumPressureCondensate();
+        //3F. Calculate medium to low steam turbine if in use
+        if (this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
+          this.calculateMediumToLowSteamTurbine();
+        }
+      }
 
-    //6. Calculate Deaerator
-    this.calculateDearator();
-    //check low pressure mass flow
-    let steamBalance: number = this.checkPowerBalance();
-    //let steamBalance: number = 0;
-    //calculate process steam usage
-    this.calculateHighPressureProcessUsage();
-    if (this.inputData.headerInput.numberOfHeaders > 1) {
-      this.calculateLowPressureProcessUsage();
-      //this.calculateLowPressureVentedSteam();
+      //4. Calculate Low Pressure Header
+      //if low pressure header exists
+      if (this.inputData.headerInput.numberOfHeaders > 1) {
+        //4A. Calculate to low pressure PRV
+        this.calculateLowPressurePRV();
+        //4B. Calculate flashed steam into low pressure header if selected
+        if (this.inputData.headerInput.lowPressure.flashCondensateIntoHeader == true) {
+          if (this.inputData.headerInput.numberOfHeaders == 3) {
+            this.calculateMediumPressureFlashTank();
+          } else {
+            this.calculateHighPressureFlashTank();
+          }
+        }
+        //4C. Model Low Pressure Header
+        this.calculateLowPressureHeader();
+        //4D. Calculate Heat Loss for Remaining Steam in Low Pressure Header
+        this.calculateHeatLossForLowPressureHeader();
+        //4E. Calculate Low Pressure Condensate
+        this.calculateLowPressureCondensate();
+      }
+
+      //5. Calculate Makeup Water and Condensate Header
+      //5A. Calculate combined condensate
+      this.calculateCombinedCondensate();
+      //5B. Calculate return condensate
+      this.calculateReturnCondensate();
+      //5C. Flash return condensate if selected
+      if (this.inputData.headerInput.highPressure.flashCondensateReturn == true) {
+        this.flashCondensateReturn();
+      }
+      //5D. Calculate Makeup Water
+      this.calculateMakeupWater();
+      //5E. Calculate makeup water mass flow
+      this.calculateMakeupWaterMassFlow();
+      this.calculateMakeupWaterVolumeFlow()
+      //5F. Run heat exchange if pre heating makeup water
+      if (this.inputData.boilerInput.preheatMakeupWater == true) {
+        this.runHeatExchanger();
+      }
+      //5G. Calculate makeup water and condensate combined
+      this.calculateMakeupWaterAndCondensateHeader();
+
+      //6. Calculate Deaerator
+      this.calculateDearator();
+      //check low pressure mass flow
+      let steamBalance: number = this.checkPowerBalance();
+      //let steamBalance: number = 0;
+      //calculate process steam usage
+      this.calculateHighPressureProcessUsage();
+      if (this.inputData.headerInput.numberOfHeaders > 1) {
+        this.calculateLowPressureProcessUsage();
+        //this.calculateLowPressureVentedSteam();
+      }
+      if (this.inputData.headerInput.numberOfHeaders == 3) {
+        this.calculateMediumPressureProcessUsage();
+      }
+      //7. Calculate Energy and Cost Values
+      //Power Generated
+      this.calculatePowerGenerated();
+      this.calculatePowerGenerationCost();
+      //Boiler Fuel Cost
+      this.calculateBoilerFuelCost();
+      //Makeup Water Cost
+      this.calculateMakeupWaterCost();
+      //Total Cost
+      this.calculateTotalOperatingCost();
+      // totalEnergyUse
+      //Boiler fuel Usage
+      this.calculateBoilerFuelUsage();
+
+      if(isNaN(steamBalance) == false){
+        return true;
+      }else{
+        return false;
+      }
+    } else {
+      return false;
     }
-    if (this.inputData.headerInput.numberOfHeaders == 3) {
-      this.calculateMediumPressureProcessUsage();
-    }
-    //7. Calculate Energy and Cost Values
-    //Power Generated
-    this.calculatePowerGenerated();
-    this.calculatePowerGenerationCost();
-    //Boiler Fuel Cost
-    this.calculateBoilerFuelCost();
-    //Makeup Water Cost
-    this.calculateMakeupWaterCost();
-    //Total Cost
-    this.calculateTotalOperatingCost();
-    // totalEnergyUse
-    //Boiler fuel Usage
-    this.calculateBoilerFuelUsage();
-    return steamBalance
   }
 
 
@@ -858,7 +865,7 @@ export class CalculateModelService {
     if (this.inputData.turbineInput.mediumToLowTurbine.operationType == 4) {
       if (this.inputData.turbineInput.mediumToLowTurbine.operationValue1 > inletMassFlow) {
         //calculate amount needed
-        this.calculateHighToMediumPressureTurbineGivenMassFlow(this.inputData.turbineInput.mediumToLowTurbine.operationValue1);
+        this.calculateMediumToLowPressureTurbineGivenMassFlow(this.inputData.turbineInput.mediumToLowTurbine.operationValue1);
         let steamNeed: number = this.mediumToLowPressureTurbine.massFlow - inletMassFlow;
         if (Math.abs(steamNeed) > 1e-3) {
           //re-run model with addtional steam added
@@ -1525,8 +1532,6 @@ export class CalculateModelService {
     let steamProduction: number = this.boilerOutput.steamMassFlow + flashTankAdditionalSteam + prvAdditionalSteam;
     let steamUse: number = processSteamUsage + this.deaeratorOutput.inletSteamMassFlow + condensingTurbineMassFlow;
     let steamBalance: number = steamUse - steamProduction;
-    console.log(steamBalance);
-
     if (Math.abs(steamBalance) > 1e-3) {
       this.calculateModel(this.boilerOutput.steamMassFlow + steamBalance);
     } else {

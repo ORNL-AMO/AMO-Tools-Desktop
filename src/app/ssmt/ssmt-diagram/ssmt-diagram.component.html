@@ -1,5 +1,5 @@
 <div class="d-flex ssmt modify-conditions panel-container ssmt-diagram" [ngClass]="hoveredEquipment">
-  <div class="panel-column scroll-item diagram-container" [ngStyle]="{'height.px': containerHeight}" *ngIf="dataCalculated == true">
+  <div class="panel-column scroll-item diagram-container" [ngStyle]="{'height.px': containerHeight}" *ngIf="dataCalculated == true && calculationProcessSucess == true">
     <div class="d-flex p-3 align-self-center">
       <div class="d-flex flex-grow">
         <app-feedwater-diagram [deaerator]="deaerator" (emitSetHover)="setHover($event)"></app-feedwater-diagram>
@@ -150,7 +150,7 @@
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column diagram-help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}">
+  <div class="d-flex flex-column diagram-help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="dataCalculated == true && calculationProcessSucess == true">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
@@ -213,6 +213,17 @@
           </div>
         </div> -->
         <app-diagram-help></app-diagram-help>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex w-100 h-100" *ngIf="dataCalculated == false && calculationProcessSucess == undefined">
+    Calculating.....
+  </div>
+  <div class="d-flex w-100 h-100 align-items-center justify-content-center" *ngIf="dataCalculated == false && calculationProcessSucess == false">
+    <div class="card p-4">
+      <div class="card-block">
+          <h4>Oops! Something went wrong :...( Please send your data to Mark and he'll figure out what he messed up! If you
+              know there is vented low pressure steam, that's the reason it didn't work. Still a work in progress...</h4>
       </div>
     </div>
   </div>
