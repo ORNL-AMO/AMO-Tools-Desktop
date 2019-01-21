@@ -86,8 +86,8 @@ export class SsmtDiagramComponent implements OnInit {
 
   calculateResults() {
     this.calculateModelService.initData(this.ssmt, this.settings)
-    let results: number = this.calculateModelService.testCalculateModelRunner();
-    console.log('Addtional Mass flow: ' + results);
+    let steamBalance: number = this.calculateModelService.testCalculateModelRunner();
+    console.log('Vented Steam: ' + steamBalance);
     this.getResults();
     this.massFlow = this.boiler.steamMassFlow;
   }
