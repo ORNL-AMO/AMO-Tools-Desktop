@@ -323,7 +323,7 @@ export interface ProcessSteamUsage {
   temperature: number;
   energyFlow: number;
   massFlow: number;
-  processUsage:number;
+  processUsage: number;
 }
 
 //TODO: HeatExchange...
@@ -361,4 +361,25 @@ export const boiler: DeaeratorOutput = {
   "ventedSteamSpecificEntropy": 0,
   "ventedSteamVolume": 0,
   "ventedSteamTemperature": 0
+}
+
+export interface HeatExchangerOutput {
+  hotOutletMassFlow: number;
+  hotOutletEnergyFlow: number;
+  hotOutletTemperature: number;
+  hotOutletPressure: number;
+  hotOutletQuality: number;
+  hotOutletSpecificVolume: number;
+  hotOutletDensity: number;
+  hotOutletSpecificEnthalpy: number;
+  hotOutletSpecificEntropy: number;
+  coldOutletMassFlow: number;
+  coldOutletEnergyFlow: number;
+  coldOutletTemperature: number;
+  coldOutletPressure: number;
+  coldOutletQuality: number;
+  coldOutletSpecificVolume: number;
+  coldOutletDensity: number;
+  coldOutletSpecificEnthalpy: number;
+  coldOutletSpecificEntropy: number;
 }

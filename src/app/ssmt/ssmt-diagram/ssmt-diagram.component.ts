@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, Hos
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
-import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, HeatLossOutput, ProcessSteamUsage } from '../../shared/models/steam/steam-outputs';
+import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, HeatLossOutput, ProcessSteamUsage, HeatExchangerOutput } from '../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-ssmt-diagram',
@@ -58,7 +58,8 @@ export class SsmtDiagramComponent implements OnInit {
   highPressureProcessUsage: ProcessSteamUsage;
   mediumPressureProcessUsage: ProcessSteamUsage;
   lowPressureProcessUsage: ProcessSteamUsage;
-
+  
+  heatExchanger: HeatExchangerOutput;
 
 
   powerGenerated: number;
@@ -146,6 +147,8 @@ export class SsmtDiagramComponent implements OnInit {
     this.powerGenerationCost = this.calculateModelService.powerGenerationCost;
     this.totalOperatingCost = this.calculateModelService.totalOperatingCost;
     this.boilerFuelUsage = this.calculateModelService.boilerFuelUsage;
+    this.heatExchanger = this.calculateModelService.heatExchanger;
+    console.log(this.heatExchanger);
     //this.ventedLowPressureSteam = this.calculateModelService.ventedLowPressureSteam;
     this.dataCalculated = true;
     this.cd.detectChanges();
