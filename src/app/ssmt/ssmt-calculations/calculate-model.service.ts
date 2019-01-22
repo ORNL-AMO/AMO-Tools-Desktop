@@ -108,9 +108,11 @@ export class CalculateModelService {
   }
 
 
-  calculateModel(massFlow: number): boolean {
+  calculateModel(massFlow: number): any {
     //using counter to catch mistakes in testing, shouldn't ever be more than like 7
     this.calcCount++;
+    console.log('calc model count ' + this.calcCount);
+    console.log('mass flow ' + massFlow);
     if (this.calcCount < 25) {
       //1. Model Boiler
       //1A. Calculate Boiler with massFlow
@@ -238,13 +240,7 @@ export class CalculateModelService {
       this.calculateTotalOperatingCost();
       //9f. Calculate boiler fuel usage
       this.calculateBoilerFuelUsage();
-
-      //just a check used by UI to make sure calcs worked correctly
-      if (isNaN(steamBalance) == false) {
-        return true;
-      } else {
-        return false;
-      }
+      return steamBalance;
     } else {
       return false;
     }
@@ -1637,6 +1633,7 @@ export class CalculateModelService {
     let steamUse: number = processSteamUsage + this.deaeratorOutput.inletSteamMassFlow + condensingTurbineMassFlow;
     //steam balance = difference between use and production (we want 0!)
     let steamBalance: number = steamUse - steamProduction;
+    console.log('steam balance ' + steamBalance);
     if (Math.abs(steamBalance) > 1e-3) {
       //if balance is off by more than .0001, add or remove steam to the system
       this.calculateModel(this.boilerOutput.steamMassFlow + steamBalance);

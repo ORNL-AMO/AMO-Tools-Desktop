@@ -87,12 +87,14 @@ export class SsmtDiagramComponent implements OnInit {
 
   calculateResults() {
     this.calculateModelService.initData(this.ssmt, this.settings)
-    this.calculationProcessSucess = this.calculateModelService.calculateModelRunner();
-    this.cd.detectChanges();
-    if (this.calculationProcessSucess == true) {
-      this.getResults();
-      this.massFlow = this.boiler.steamMassFlow;
+    let calculation: any = this.calculateModelService.calculateModelRunner();
+    this.getResults();
+    if(isNaN(this.deaerator.inletSteamPressure) == false){
+      this.calculationProcessSucess = true;
+    }else{
+      this.calculationProcessSucess = false;
     }
+    this.massFlow = this.boiler.steamMassFlow;
   }
 
   calculateResultsGivenMassFlow() {
