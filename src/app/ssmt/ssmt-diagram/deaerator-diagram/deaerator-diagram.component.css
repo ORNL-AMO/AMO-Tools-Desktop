@@ -48,7 +48,7 @@
 }
 
 
-.deaerator-img-holder, .inlet-pressure-holder{
+.deaerator-img-holder, .inlet-pressure-holder, .vented-steam-holder{
     position: relative;
 }
 
@@ -85,4 +85,13 @@
 .horizontal-pipe{
     border-bottom-left-radius: 25px;
     border-top-right-radius: 25px;
+}
+
+.vented-steam-holder .vented-steam{
+    position: absolute;
+    color: black;
+    width: 100px;
+    bottom: 25px;
+    text-align: center;
+    right: -40px;
 }

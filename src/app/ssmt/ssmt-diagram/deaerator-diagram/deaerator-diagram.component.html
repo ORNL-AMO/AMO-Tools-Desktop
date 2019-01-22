@@ -11,7 +11,10 @@
     <!--vent-->
     <div class="d-flex justify-content-center">
       <div class="d-flex vents" (mouseenter)="hoverEquipment('ventsHovered')" (mouseleave)="hoverEquipment('default')">
-        <span class="fa fa-chevron-up" (mouseenter)="hoverEquipment('deaeratorVentHovered')" (mouseleave)="hoverEquipment('ventsHovered')"></span>
+        <div class="vented-steam-holder">
+          <span class="vented-steam">{{deaerator.ventedSteamMassFlow | number:'1.0-1'}} klb/hr</span>
+          <span class="fa fa-chevron-up" (mouseenter)="hoverEquipment('deaeratorVentHovered')" (mouseleave)="hoverEquipment('ventsHovered')"></span>
+        </div>
       </div>
     </div>
 

@@ -14,15 +14,16 @@ export class HoverCondensateTableComponent implements OnInit {
   settings: Settings
 
   returnCondensate: SteamPropertiesOutput;
-  volumeFlow:number = 0;
+  volumeFlow: number = 0;
   constructor(private calculateModelService: CalculateModelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.returnCondensate = this.calculateModelService.returnCondensate;
     // let tmpMassFlow: number = this.returnCondensate.massFlow;
-    // tmpMassFlow = this.convertUnitsService.value(tmpMassFlow).from('klb').to('kg');
-    // //let tmpSpecificVolume: number = this.convertUnitsService.value(this.returnCondensate.specificVolume).from('ft3lb').to('m3kg');
-    // this.volumeFlow = this.returnCondensate.specificVolume * tmpMassFlow * 1000 * (1 / 60);
+    // tmpMassFlow = this.convertUnitsService.value(tmpMassFlow).from(this.settings.steamMassFlowMeasurement).to('kg');
+    // let tmpSpecificVolume: number = this.convertUnitsService.value(this.returnCondensate.specificVolume).from(this.settings.steamSpecificVolumeMeasurement).to('m3kg');
+    // // this.volumeFlow = tmpSpecificVolume * tmpMassFlow * 1000 * (1 / 60);
+    // this.volumeFlow = tmpSpecificVolume * tmpMassFlow * (1 / 60);
     // this.volumeFlow = this.convertUnitsService.value(this.volumeFlow).from('L/min').to('gpm');
   }
 }

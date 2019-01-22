@@ -49,6 +49,8 @@ export class BoilerComponent implements OnInit {
     if (this.selected == false) {
       this.disableForm();
     }
+
+    this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -74,14 +76,14 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.fuelType.enable();
     this.boilerForm.controls.fuel.enable();
     this.boilerForm.controls.blowdownFlashed.enable();
-    this.boilerForm.controls.preheatMakeupWater.enable();
+    // this.boilerForm.controls.preheatMakeupWater.enable();
   }
 
   disableForm() {
     this.boilerForm.controls.fuelType.disable();
     this.boilerForm.controls.fuel.disable();
     this.boilerForm.controls.blowdownFlashed.disable();
-    this.boilerForm.controls.preheatMakeupWater.disable();
+    // this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
   save() {
