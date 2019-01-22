@@ -3,8 +3,7 @@
 </button> -->
 
 
-<!-- <input type="text" class="form-control" [(ngModel)]="tableString" placeholder="content will be copy after click the copy button"> -->
-<textarea type="text" class="form-control clipboard-text" [(ngModel)]="tableString" placeholder="content will be copy after click the copy button"></textarea>
+<textarea type="text" class="form-control clipboard-text" [(ngModel)]="tableString" placeholder="content will be copied after clicking the copy button"></textarea>
 <div class="d-flex w-100 justify-content-center pl-2 pr-2">
   <span class="input-group-btn">
     <button (mouseenter)="updateTableString()" class="btn-copy-table" type="button" ngxClipboard [cbContent]="tableString"
@@ -13,16 +12,15 @@
 </div>
 
 
-<table class="table table-hover table-striped graph-table">
-  <thead>
+<table class="table table-hover table-striped">
+  <tbody>
     <tr>
       <th>Key</th>
       <th *ngFor="let columnTitle of columnTitles" [innerHTML]="columnTitle">
         <!-- {{columnTitle}} -->
       </th>
+      <th></th>
     </tr>
-  </thead>
-  <tbody>
     <tr (mouseenter)="emitHighlightPoint(i)" (mouseleave)="emitUnhighlightPoint(i)" *ngFor="let data of rowData; let i=index;">
       <td>
         <div class="key-color" [ngStyle]="{'border': '3px solid ' + keyColors[i].borderColor, 'background-color': keyColors[i].fillColor}"></div>
@@ -38,14 +36,14 @@
 <table #copyTable class="copy-table table table-hover table-striped graph-table">
   <thead>
     <tr>
-      <th *ngFor="let columnTitle of columnTitles" [innerHTML]="columnTitle">
-        <!-- {{columnTitle}} -->
+      <th *ngFor="let exportColumnTitle of exportColumnTitles" [innerHTML]="exportColumnTitle">
+        <!-- {{copyColumnTitle}} -->
       </th>
     </tr>
   </thead>
   <tbody>
 
-    <tr (mouseenter)="emitHighlightPoint(i)" (mouseleave)="emitUnhighlightPoint(i)" *ngFor="let data of rowData; let i=index;">
+    <tr (mouseenter)="emitHighlightPoint(i)" (mouseleave)="emitUnhighlightPoint(i)" *ngFor="let data of exportRowData; let i=index;">
       <td *ngFor="let d of data" [innerHTML]="d">
         <!-- {{d}} -->
       </td>

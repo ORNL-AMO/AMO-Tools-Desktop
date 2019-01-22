@@ -25,6 +25,8 @@ export class ExportableTableComponent implements OnInit {
 
   @ViewChild('copyTable') copyTable: ElementRef;
 
+  exportColumnTitles: Array<string>;
+  exportRowData: Array<Array<string>>;
   tableString: any;
   isCopied1: boolean = false;
   showNotification: boolean = false;
@@ -36,10 +38,27 @@ export class ExportableTableComponent implements OnInit {
     this.updateTableString();
   }
 
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.rowData) {
       this.updateTableString();
+    }
+  }
+
+  updateExportData() {
+    this.exportColumnTitles = new Array<string>();
+    this.exportRowData = new Array<Array<string>>();
+    for (let i = 0; i < this.columnTitles.length; i++) {
+      this.exportColumnTitles.push(this.columnTitles[i]);
+    }
+    this.exportColumnTitles.unshift("Point");
+
+    for (let i = 0; i < this.rowData.length; i++) {
+      let tmpArray = new Array<string>();
+      tmpArray.push((i + 1).toString());
+      for (let j = 0; j < this.rowData[i].length; j++) {
+        tmpArray.push(this.rowData[i][j]);
+      }
+      this.exportRowData.push(tmpArray);
     }
   }
 
@@ -60,9 +79,9 @@ export class ExportableTableComponent implements OnInit {
 
 
   updateTableString() {
+    this.updateExportData();
     this.tableString = this.copyTable.nativeElement.innerText;
   }
-
 
   copySuccess() {
     this.showNotification = true;
