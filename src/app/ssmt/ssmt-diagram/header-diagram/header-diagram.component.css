@@ -46,7 +46,7 @@
 }
 
 
-.header-data-holder, .process-usage-holder, .condensate-holder{
+.header-data-holder, .process-usage-holder, .condensate-holder, .vented-steam-holder{
     position: relative;
 }
 
@@ -118,4 +118,20 @@
     color: black;
     bottom: 25px;
     right: 0;
+}
+
+.vented-steam-holder .vented-steam{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    bottom: 60px;
+    left: 100px;
+}
+
+.vented-steam-holder .vents{
+    position: absolute;
+    z-index: +1;
+    height: 40px;
+    left: 110px;
+    bottom: 19px;
 }

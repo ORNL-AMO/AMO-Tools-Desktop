@@ -73,7 +73,7 @@ export class SsmtDiagramComponent implements OnInit {
   selectedTable: string = 'default';
   hoveredEquipment: string = 'default';
   deaeratorWidth: number;
-  ventedLowPressureSteam: number;
+  ventedLowPressureSteam: SteamPropertiesOutput;
   calculationProcessSucess: boolean;
   dataCalculated: boolean = false;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
@@ -151,7 +151,8 @@ export class SsmtDiagramComponent implements OnInit {
     this.powerGenerationCost = this.calculateModelService.powerGenerationCost;
     this.totalOperatingCost = this.calculateModelService.totalOperatingCost;
     this.boilerFuelUsage = this.calculateModelService.boilerFuelUsage;
-    //this.ventedLowPressureSteam = this.calculateModelService.ventedLowPressureSteam;
+    this.ventedLowPressureSteam = this.calculateModelService.ventedLowPressureSteam;
+    console.log(this.ventedLowPressureSteam);
     this.dataCalculated = true;
     this.cd.detectChanges();
   }

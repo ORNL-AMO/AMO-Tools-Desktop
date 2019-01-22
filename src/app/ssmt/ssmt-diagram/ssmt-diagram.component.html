@@ -97,7 +97,7 @@
               <div class="w-100">
                 <app-header-diagram *ngIf="lowPressureHeader" [header]="lowPressureHeader" [pressureLevel]="'lowPressure'"
                   [condensate]="lowPressureCondensate" [steamUsage]="lowPressureProcessUsage" (emitSetHover)="setHover($event)"
-                  [settings]="settings"></app-header-diagram>
+                  [settings]="settings" [ventedLowPressureSteam]="ventedLowPressureSteam"></app-header-diagram>
               </div>
             </div>
           </div>

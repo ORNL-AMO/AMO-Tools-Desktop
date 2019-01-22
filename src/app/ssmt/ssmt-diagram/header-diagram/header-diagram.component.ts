@@ -22,7 +22,8 @@ export class HeaderDiagramComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Input()
   settings: Settings;
-
+  @Input()
+  ventedLowPressureSteam: SteamPropertiesOutput;
   constructor() { }
 
   ngOnInit() {
