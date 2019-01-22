@@ -25,6 +25,8 @@ export class LineChartHelperService {
 
   //removes all svg elements from given parent element
   clearSvg(ngChart: ElementRef): ElementRef {
+    d3.select(ngChart.nativeElement).selectAll('.d3-tip').remove();
+    d3.select(ngChart.nativeElement).selectAll('.tooltip-pointer').remove();
     d3.select(ngChart.nativeElement).selectAll('svg').remove();
     return ngChart;
   }
