@@ -11,7 +11,8 @@ export class CondensateConnectorComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Input()
   returnCondensate: SteamPropertiesOutput;
-
+  @Input()
+  isOneHeaderSystem: boolean;
   constructor() { }
 
   ngOnInit() {

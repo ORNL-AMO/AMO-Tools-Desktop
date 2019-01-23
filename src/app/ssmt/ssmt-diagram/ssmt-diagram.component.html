@@ -107,7 +107,7 @@
         </div>
         <div class="d-flex w-100 pl-4">
           <div class="d-flex flex-fill">
-            <div class="w-25 deaerator-margin pt-3">
+            <div class="w-25 deaerator-margin" [ngClass]="{'pt-3': lowPressureHeader}">
               <app-deaerator-diagram *ngIf="lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'low-pressure'"
                 (emitSetHover)="setHover($event)" (emitSelectEquipment)="selectTable($event)"></app-deaerator-diagram>
               <app-deaerator-diagram *ngIf="!lowPressureHeader" [deaerator]="deaerator" [inletPressure]="'high-pressure'"
@@ -128,7 +128,8 @@
           <div class="w-25">
             <app-condensate-flash-tank *ngIf="condensateFlashTank" [flashTank]="condensateFlashTank" (emitSetHover)="setHover($event)"
               (emitSelectEquipment)="selectTable($event)"></app-condensate-flash-tank>
-            <app-condensate-connector *ngIf="!condensateFlashTank" (emitSetHover)="setHover($event)" [returnCondensate]="returnCondensate"></app-condensate-connector>
+            <app-condensate-connector *ngIf="!condensateFlashTank" (emitSetHover)="setHover($event)" [returnCondensate]="returnCondensate"
+            [isOneHeaderSystem]="lowPressureHeader == undefined"></app-condensate-connector>
           </div>
         </div>
         <div class="d-flex">

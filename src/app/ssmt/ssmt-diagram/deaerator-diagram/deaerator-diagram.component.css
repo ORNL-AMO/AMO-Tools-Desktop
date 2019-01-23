@@ -52,7 +52,7 @@
     position: relative;
 }
 
-.inlet-pressure-holder{
+.low-pressure .inlet-pressure-holder{
     padding-top: 25px;
 }
 
@@ -82,9 +82,14 @@
     right: 25px;
 }
 
-.horizontal-pipe{
+.low-pressure.horizontal-pipe{
     border-bottom-left-radius: 25px;
     border-top-right-radius: 25px;
+}
+
+.high-pressure.horizontal-pipe{
+    margin-right: 50px;
+    border-bottom-left-radius: 25px;
 }
 
 .vented-steam-holder .vented-steam{
@@ -94,4 +99,19 @@
     bottom: 25px;
     text-align: center;
     right: -40px;
+}
+
+.pipe-holder{
+    margin-left: 54px;
+}
+
+.one-header-container{
+    height: 100%;
+    padding-bottom: 11px;
+}
+
+.one-header-inlet{
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    margin-bottom: 1px;
 }
