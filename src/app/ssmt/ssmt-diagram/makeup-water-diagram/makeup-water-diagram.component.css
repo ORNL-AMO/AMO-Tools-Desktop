@@ -57,3 +57,36 @@
     right: 0px;
 }
 
+.heat-exchanger-holder{
+    position: relative;
+}
+
+
+.heat-exchanger-holder .heat-exchanger{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    z-index: +1;
+    top: -3px;
+    right: 60px;
+    background-color: #D7EDFB;
+}
+
+.heat-exchanger-holder .inlet-blowdown{
+    height: 20px;
+    position: absolute;
+    bottom: 30px;
+    right: 5px;
+}
+
+.heat-exchanger-holder .outlet-blowdown{
+    height: 30px;
+    position: absolute;
+    top: 30px;
+    right: 5px;
+}
+
+
+.blowdown .hidden-chevron{
+    color: #5D4037;
+}

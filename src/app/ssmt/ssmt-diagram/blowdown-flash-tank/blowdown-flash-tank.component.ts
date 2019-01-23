@@ -13,7 +13,7 @@ export class BlowdownFlashTankComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Output('emitSelectEquipment')
   emitSelectEquipment = new EventEmitter<string>();
-
+  
   constructor() { }
 
   ngOnInit() {

@@ -5,7 +5,9 @@
 .ssmt-diagram.blowdownHovered .blowdown{
     box-shadow: 0px 0px 10px 0px #5D4037;
 }
-
+.blowdown .hidden-chevron{
+    color: #5D4037;
+}
 .ssmt-diagram .feedwater{
     background-color: #8E44AD;
     color: white;

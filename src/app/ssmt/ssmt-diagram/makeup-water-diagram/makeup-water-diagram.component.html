@@ -5,6 +5,16 @@
   <div class="d-flex pt-2 w-50 h-100 align-self-end" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
     (mouseleave)="hoverEquipment('default')">
     <div class="d-flex w-100 makeup-water justify-content-end">
+      <div class="heat-exchanger-holder">
+        <div class="heat-exchanger">
+          <div class="blowdown inlet-blowdown">
+            <span class="fa fa-chevron-down hidden-chevron"></span>
+          </div>
+          <div class="blowdown outlet-blowdown">
+            <span class="fa fa-chevron-down"></span>
+          </div>
+        </div>
+      </div>
       <div class="makeup-water-holder">
         <span class="makeup-water-volume-flow">{{makeupWaterVolumeFlow | number:'1.0-1'}} gpm</span>
         <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('makeupWaterPropertiesHovered')" (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')"></span>
