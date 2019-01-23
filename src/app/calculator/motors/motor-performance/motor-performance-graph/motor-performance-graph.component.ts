@@ -27,6 +27,14 @@ export class MotorPerformanceGraphComponent implements OnInit {
   onResize(event) {
     this.resizeGraph();
   }
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code == 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
   exportName: string;
 
   svg: d3.Selection<any>;
