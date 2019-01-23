@@ -13,6 +13,8 @@ export class MakeupWaterDiagramComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Input()
   makeupWaterVolumeFlow: number;
+  @Input()
+  heatExchanger: boolean;
   constructor() { }
 
   ngOnInit() {
