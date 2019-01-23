@@ -67,7 +67,7 @@ export class CalculateModelService {
   calcCount: number = 0;
   //heatExchanger: HeatExchanger
 
-  //ventedLowPressureSteam: number;
+  ventedLowPressureSteam: SteamPropertiesOutput;
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
@@ -619,7 +619,6 @@ export class CalculateModelService {
     if (this.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
       availableMassFlow = availableMassFlow - this.highToLowPressureTurbine.massFlow;
     }
-
     //flow range
     if (this.inputData.turbineInput.highToMediumTurbine.operationType == 4) {
       //if more steam needed for minimum than is available
@@ -994,12 +993,12 @@ export class CalculateModelService {
       //calculate turbine with set mass flow
       this.calculateMediumToLowPressureTurbineGivenMassFlow(this.inputData.turbineInput.mediumToLowTurbine.operationValue1);
       //check theres enough available steam for set mass flow
-      if (this.highToLowPressureTurbine.massFlow > availableMassFlow) {
+      if (this.mediumToLowPressureTurbine.massFlow > availableMassFlow) {
         //calculate addtional mass flow needed
-        let additionalSteamNeed: number = this.highToLowPressureTurbine.massFlow - availableMassFlow;
+        let additionalSteamNeed: number = this.mediumToLowPressureTurbine.massFlow - availableMassFlow;
         if (Math.abs(additionalSteamNeed) > 1e-3) {
-        //calculate addtional mass flow needed
-        this.getMoreSteamForMediumToLow(additionalSteamNeed);
+          //calculate addtional mass flow needed
+          this.getMoreSteamForMediumToLow(additionalSteamNeed);
         }
       }
     }
@@ -1634,6 +1633,30 @@ export class CalculateModelService {
     //steam balance = difference between use and production (we want 0!)
     let steamBalance: number = steamUse - steamProduction;
     console.log('steam balance ' + steamBalance);
+    if (steamBalance < 0) {
+      let ventedSteamAmount: number = this.calculateLowPressureVentedSteam(steamBalance);
+      steamBalance = steamBalance + ventedSteamAmount;
+      if (Math.abs(steamBalance) < 1e-2) {
+        ventedSteamAmount = (this.lowPressureHeader.massFlow) - (this.inputData.headerInput.lowPressure.processSteamUsage + this.deaeratorOutput.inletSteamMassFlow)
+        this.calculateMakeupWaterMassFlow();
+        this.makeupWater.massFlow = this.makeupWater.massFlow + ventedSteamAmount;
+        this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 1000;
+        this.calculateMakeupWaterVolumeFlow();
+        this.calculateMakeupWaterAndCondensateHeader();
+        this.calculateDearator();
+
+        this.ventedLowPressureSteam = {
+          pressure: this.lowPressureHeader.pressure,
+          temperature: this.lowPressureHeader.temperature,
+          specificEnthalpy: this.lowPressureHeader.specificEnthalpy,
+          specificEntropy: this.lowPressureHeader.specificEntropy,
+          quality: this.lowPressureHeader.quality,
+          energyFlow: this.lowPressureHeader.energyFlow,
+          specificVolume: this.lowPressureHeader.specificVolume,
+          massFlow: ventedSteamAmount
+        }
+      }
+    }
     if (Math.abs(steamBalance) > 1e-3) {
       //if balance is off by more than .0001, add or remove steam to the system
       this.calculateModel(this.boilerOutput.steamMassFlow + steamBalance);
@@ -1690,12 +1713,33 @@ export class CalculateModelService {
     };
   }
 
-  // calculateLowPressureVentedSteam(){
-  //   this.ventedLowPressureSteam = this.lowPressureHeader.massFlow - this.inputData.headerInput.lowPressure.processSteamUsage;
-  //   if(this.deaeratorOutput){
-  //     this.ventedLowPressureSteam = this.ventedLowPressureSteam - this.deaeratorOutput.inletSteamMassFlow;
-  //   }
-  // }
+  calculateLowPressureVentedSteam(excessSteam: number): number {
+    let mustVent: boolean = false;
+    if (this.inputData.headerInput.numberOfHeaders > 1) {
+      if(this.inputData.turbineInput.highToLowTurbine.useTurbine == true && this.inputData.turbineInput.highToLowTurbine.operationType != 2){
+        mustVent = true;
+      }
+      if(this.inputData.headerInput.numberOfHeaders == 3){
+        if(this.inputData.turbineInput.highToMediumTurbine.useTurbine == true && this.inputData.turbineInput.highToMediumTurbine.operationType != 2){
+          mustVent = true;
+        }
+        if(this.inputData.turbineInput.mediumToLowTurbine.useTurbine == true && this.inputData.turbineInput.mediumToLowTurbine.operationType != 2){
+          mustVent = true;
+        }
+      }
+    }
+    if(mustVent){
+      let ventedSteamAmount: number = (this.lowPressureHeader.massFlow) - (this.inputData.headerInput.lowPressure.processSteamUsage + this.deaeratorOutput.inletSteamMassFlow)
+      this.makeupWater.massFlow = this.makeupWater.massFlow + ventedSteamAmount;
+      this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 1000;
+      this.calculateMakeupWaterVolumeFlow();
+      this.calculateMakeupWaterAndCondensateHeader();
+      this.calculateDearator();
+      return ventedSteamAmount
+    }else{
+      return 0;
+    }
+  }
 
   //Cost and Energy Calculations
   calculatePowerGenerated() {
@@ -1770,6 +1814,7 @@ export class CalculateModelService {
     this.boilerFuelCost = undefined;
     this.makeupWaterCost = undefined;
     this.boilerFuelUsage = undefined;
+    this.ventedLowPressureSteam = undefined;
   }
 
 }

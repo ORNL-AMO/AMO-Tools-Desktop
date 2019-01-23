@@ -4,6 +4,14 @@
       <span class="header-pressure">
         {{header.pressure | number:'1.0-1'}} psig
       </span>
+      <div class="vented-steam-holder" *ngIf="ventedLowPressureSteam">
+        <span class="vented-steam">
+          {{ventedLowPressureSteam.massFlow | number:'1.0-1'}} klb/hr
+        </span>
+        <div class="vents">
+          <span class="fa fa-chevron-up" (mouseenter)="hoverEquipment('ventedLowPressureSteam')" (mouseleave)="hoverEquipment('default')"></span>
+        </div>
+      </div>
     </div>
     <div class="text-right header-data-chevron">
       <div class="header-data-holder">

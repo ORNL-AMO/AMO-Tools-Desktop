@@ -96,8 +96,17 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.deaeratorFeedwaterHovered();
     } else if (this.hoveredProperty == 'feedwaterHovered') {
       this.boilerFeedwaterHovered();
+    }else if (this.hoveredProperty == 'ventedLowPressureSteam'){
+      this.hoverVentedLowPressureSteam();
     }
   }
+
+  hoverVentedLowPressureSteam(){
+    this.label = 'Low Pressure Vented Steam';
+    let ventedSteam: SteamPropertiesOutput = this.calculateModelService.ventedLowPressureSteam;
+    this.setSteamProperties(ventedSteam);
+  }
+
   deaeratorFeedwaterHovered() {
     this.label = 'Deaerator Feedwater';
     let deaerator: DeaeratorOutput = this.calculateModelService.deaeratorOutput;
