@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, HostListener } from '@angular/core';
 import { MotorDriveOutputs } from '../motor-drive.component';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
@@ -264,5 +264,14 @@ export class MotorDriveGraphComponent implements OnInit {
     }, 200);
   }
   //========== end chart resize functions ==========
+
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code == 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
 
 }

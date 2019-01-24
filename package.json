@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.3.2-beta",
+  "version": "0.3.3-beta",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -8,7 +8,7 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "^8.1.0",
+    "node": "^8.11.0",
     "npm": "^5.0.0"
   },
   "scripts": {
@@ -47,7 +47,7 @@
     "@angular/router": "5.2.5",
     "ajv": "^5.2.2",
     "amo-tools-suite": "0.3.3",
-    "bootstrap": "4.1.0",
+    "bootstrap": "4.1.2",
     "c3": "^0.4.18",
     "core-js": "^2.4.1",
     "d3": "4.5.0",
@@ -73,7 +73,7 @@
   "build": {
     "appId": "com.electron.amo-tools-desktop",
     "copyright": "Copyright 2017 ORNL. All rights reserved.",
-    "productName": "AMO-Tools-Desktop",
+    "productName": "MEASUR",
     "directories": {
       "output": "../output/"
     },
@@ -95,7 +95,7 @@
         "deb"
       ],
       "icon": "src/assets/icons/png/",
-      "executableName": "AMO-Tools-Desktop",
+      "executableName": "MEASUR",
       "maintainer": "Advanced Manufacturing Office"
     },
     "mac": {

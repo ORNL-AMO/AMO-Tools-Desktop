@@ -1,10 +1,31 @@
 import { Injectable } from '@angular/core';
 import { MotorDriveInputs, MotorDriveOutputs } from './motor-drive.component';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable()
 export class MotorDriveService {
   motorDriveData: MotorDriveInputs
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
+
+  getFormFromObj(inputObj: MotorDriveInputs): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      motorPower: [inputObj.motorPower, [Validators.required]],
+      annualOperatingHours: [inputObj.annualOperatingHours, [Validators.required, Validators.min(0)]],
+      averageMotorLoad: [inputObj.averageMotorLoad, [Validators.required]],
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]]
+    });
+    return tmpForm;
+  }
+
+  getObjFromForm(form: FormGroup): MotorDriveInputs {
+    let inputs: MotorDriveInputs = {
+      motorPower: form.controls.motorPower.value,
+      annualOperatingHours: form.controls.annualOperatingHours.value,
+      averageMotorLoad: form.controls.averageMotorLoad.value,
+      electricityCost: form.controls.electricityCost.value,
+    }
+    return inputs;
+  }
 
   getResults(data: MotorDriveInputs): MotorDriveOutputs {
     let energy: number = this.getEnergy(data);

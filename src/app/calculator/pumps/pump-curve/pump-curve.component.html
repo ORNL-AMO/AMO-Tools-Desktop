@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions" *ngIf="settings" [ngClass]="{'psat': !isFan, 'fsat': isFan}">
+<div class="d-flex h-100 modify-conditions standalone-calculator" *ngIf="settings" [ngClass]="{'psat': !isFan, 'fsat': isFan}">
   <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
@@ -30,8 +30,10 @@
               <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')" [ngClass]="{'active': selectedFormView == 'Data'}">By
                 Data</button>
             </div>
-            <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings"
-              (emitCalculate)="calculate()" (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form>
+
+            <app-pump-curve-form [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate($event)"
+              (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form>
+
             <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetPumpCurveData()">Reset
                 Data</button>
@@ -88,8 +90,8 @@
               <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')" [ngClass]="{'active': selectedFormView == 'Data'}">By
                 Data</button>
             </div>
-            <app-pump-curve-form [isFan]="isFan" [(pumpCurveForm)]="pumpCurveForm" [settings]="settings"
-              (emitCalculate)="calculate()" (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form>
+            <app-pump-curve-form [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate($event)"
+              (changeField)="setField($event, 'pump-curve')" [selectedFormView]="selectedFormView"></app-pump-curve-form>
 
           </div>
           <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
@@ -120,7 +122,7 @@
       <app-system-curve-help *ngIf="tabSelect == 'help' && focusedForm == 'system-curve'" [isFan]="isFan"></app-system-curve-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'" id="pumpCurveGraph">
         <app-pump-curve-graph class="w-100" [pumpCurvePrimary]="pumpCurvePrimary" [graphPumpCurve]="graphPumpCurve"
-          [isFan]="isFan" [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate"
+          [isFan]="isFan" [pumpCurve]="pumpCurveService.getObjFromForm(pumpCurveForm)" [settings]="settings" [toggleCalculate]="toggleCalculate"
           [selectedFormView]="selectedFormView" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo"
           [curveConstants]="curveConstants" [lossCoefficient]="lossCoefficient" [graphSystemCurve]="graphSystemCurve"></app-pump-curve-graph>
         <div class="d-flex pt-2 w-100 justify-content-center align-items-center">

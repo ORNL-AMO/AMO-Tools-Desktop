@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { PumpCurveForm } from '../../../../shared/models/calculators';
+import { PumpCurve } from '../../../../shared/models/calculators';
 import * as d3 from 'd3';
 import * as _ from 'lodash';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
@@ -22,7 +22,7 @@ export class PumpCurveGraphComponent implements OnInit {
   graphPumpCurve: boolean;
   // PumpCurveForm object holding data from form
   @Input()
-  pumpCurveForm: PumpCurveForm;
+  pumpCurve: PumpCurve;
   @Input()
   selectedFormView: string;
   @Input()
@@ -265,7 +265,7 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   checkGraphModificationCurve() {
-    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+    if (this.pumpCurve.baselineMeasurement != this.pumpCurve.modifiedMeasurement) {
       this.graphModificationCurve = true;
     }
     else {
@@ -274,7 +274,7 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.pumpCurveForm.maxFlow > 0) {
+    if (this.pumpCurve.maxFlow > 0) {
       return true;
     } else { return false }
   }
@@ -311,26 +311,26 @@ export class PumpCurveGraphComponent implements OnInit {
 
 
 
-  calculateY(formData: PumpCurveForm, flow: number): number {
+  calculateY(data: PumpCurve, flow: number): number {
     let result = 0;
-    result = formData.headConstant + formData.headFlow * flow + formData.headFlow2 * Math.pow(flow, 2) + formData.headFlow3 * Math.pow(flow, 3) + formData.headFlow4 * Math.pow(flow, 4) + formData.headFlow5 * Math.pow(flow, 5) + formData.headFlow6 * Math.pow(flow, 6);
+    result = data.headConstant + data.headFlow * flow + data.headFlow2 * Math.pow(flow, 2) + data.headFlow3 * Math.pow(flow, 3) + data.headFlow4 * Math.pow(flow, 4) + data.headFlow5 * Math.pow(flow, 5) + data.headFlow6 * Math.pow(flow, 6);
     return result;
   }
 
   getData(): Array<{ x: number, y: number }> {
-    return this.pumpCurveService.getData(this.pumpCurveForm, this.selectedFormView);
+    return this.pumpCurveService.getData(this.pumpCurve, this.selectedFormView);
   }
 
   getModifiedData(baseline: number, modified: number): Array<{ x: number, y: number }> {
-    return this.pumpCurveService.getModifiedData(this.pumpCurveForm, this.selectedFormView, baseline, modified);
+    return this.pumpCurveService.getModifiedData(this.pumpCurve, this.selectedFormView, baseline, modified);
   }
 
   getXScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Flow: number, systemPoint2Flow: number) {
-    return this.pumpCurveService.getXScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, dataBaseline, dataModification, systemPoint1Flow, systemPoint2Flow);
+    return this.pumpCurveService.getXScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, this.pumpCurve, dataBaseline, dataModification, systemPoint1Flow, systemPoint2Flow);
   }
 
   getYScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Head: number, systemPoint2Head: number) {
-    return this.pumpCurveService.getYScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, dataBaseline, dataModification, systemPoint1Head, systemPoint2Head);
+    return this.pumpCurveService.getYScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, this.pumpCurve, dataBaseline, dataModification, systemPoint1Head, systemPoint2Head);
   }
 
 
@@ -350,7 +350,7 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.graphPumpCurve) {
       data = this.getData();
       if (this.graphModificationCurve) {
-        dataModification = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
+        dataModification = this.getModifiedData(this.pumpCurve.baselineMeasurement, this.pumpCurve.modifiedMeasurement);
       }
     }
     this.initColumnTitles();
@@ -389,12 +389,12 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.graphPumpCurve) {
       //repair maxY bug
       if (this.selectedFormView == 'Equation') {
-        data[0].y = this.pumpCurveForm.headConstant;
+        data[0].y = this.pumpCurve.headConstant;
         data.pop();
       }
       else {
-        let tmpMaxX = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
-        let tmpMaxY = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.head });
+        let tmpMaxX = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.flow });
+        let tmpMaxY = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.head });
         for (let i = 0; i < data.length; i++) {
           if (data[i].x > tmpMaxX.flow) {
             data[i] = {
@@ -439,15 +439,15 @@ export class PumpCurveGraphComponent implements OnInit {
     }
 
     if (this.graphSystemCurve && this.graphPumpCurve) {
-      let maxFlow = this.pumpCurveForm.maxFlow;
+      let maxFlow = this.pumpCurve.maxFlow;
       if (this.selectedFormView == 'Data') {
-        maxFlow = _.maxBy(this.pumpCurveForm.dataRows, (row) => {
+        maxFlow = _.maxBy(this.pumpCurve.dataRows, (row) => {
           return row.flow;
         }).flow;
       }
       this.dIntersectBaseline = this.findIntersection(data, dataSystem, maxFlow, 1);
       if (this.graphModificationCurve) {
-        let ratio = (this.pumpCurveForm.modifiedMeasurement / this.pumpCurveForm.baselineMeasurement);
+        let ratio = (this.pumpCurve.modifiedMeasurement / this.pumpCurve.baselineMeasurement);
         this.dIntersectMod = this.findIntersection(dataModification, dataSystem, maxFlow * ratio, ratio);
       }
       else {
@@ -1027,5 +1027,13 @@ export class PumpCurveGraphComponent implements OnInit {
     let flow: number;
     flow = Math.pow((head - this.staticHead) / this.lossCoefficient, 1 / this.curveConstants.form.controls.systemLossExponent.value);
     return flow;
+  }
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code == 'Escape') {
+        this.contractChart();
+      }
+    }
   }
 }

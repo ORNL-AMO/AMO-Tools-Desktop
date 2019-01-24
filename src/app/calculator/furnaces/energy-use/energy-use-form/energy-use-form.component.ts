@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../../shared/models/phast/flowCalculations';
 import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
+import { FormGroup } from '@angular/forms';
+import { EnergyUseService } from '../energy-use.service';
 
 @Component({
   selector: 'app-energy-use-form',
@@ -77,14 +79,25 @@ export class EnergyUseFormComponent implements OnInit {
   insidePipeDiameterError: string = null;
   dischargeCoefficientError: string = null;
 
-  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService) {
+  form: FormGroup;
+
+  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private energyUseService: EnergyUseService) {
   }
 
   ngOnInit() {
     //this.gasTypeOptions = this.suiteDbService.selectGasFlueGasMaterials();
+    this.form = this.energyUseService.getFormFromObj(this.flowCalculations);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.flowCalculations) {
+      this.form = this.energyUseService.getFormFromObj(this.flowCalculations);
+    }
   }
 
   calculate() {
+    //TODO: update validation with extra error check rules
+    this.flowCalculations = this.energyUseService.getObjFromForm(this.form);
     const insidePipeDiameter = this.flowCalculations.insidePipeDiameter;
     const orificeDiameter = this.flowCalculations.orificeDiameter;
     let properties = this.rangeCheck.orificeInsideRatio;
@@ -97,13 +110,10 @@ export class EnergyUseFormComponent implements OnInit {
     const dischargeCoefficient = this.flowCalculations.dischargeCoefficient;
     properties = this.rangeCheck.dischargeCoefficient;
     if (dischargeCoefficient > properties.max || dischargeCoefficient < properties.min) {
-      this.dischargeCoefficientError = 'Discharge coefficient must be between ' + properties.max  + ' and ' + properties.min;
+      this.dischargeCoefficientError = 'Discharge coefficient must be between ' + properties.max + ' and ' + properties.min;
     } else {
       this.dischargeCoefficientError = null;
     }
-
-
-
     this.emitCalculate.emit(true);
   }
 
@@ -123,6 +133,7 @@ export class EnergyUseFormComponent implements OnInit {
   }
 
   setHHVandSG() {
+    this.flowCalculations = this.energyUseService.getObjFromForm(this.form);
     if (this.flowCalculations.gasType == 0) {
       this.flowCalculations.gasHeatingValue = 1032.44;
       this.flowCalculations.specificGravity = 0.657;
@@ -149,6 +160,7 @@ export class EnergyUseFormComponent implements OnInit {
     if (this.settings.unitsOfMeasure == 'Metric') {
       this.flowCalculations.gasHeatingValue = this.convertUnitsService.roundVal(this.convertUnitsService.value(this.flowCalculations.gasHeatingValue).from('btuSCF').to('kJNm3'), 2);
     }
+    this.form = this.energyUseService.getFormFromObj(this.flowCalculations);
     this.calculate();
   }
 

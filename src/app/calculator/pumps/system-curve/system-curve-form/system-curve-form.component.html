@@ -6,12 +6,22 @@
     <label *ngIf="isFan" class="small" for="specificGravity">Compressibility Factor</label>
     <input type="number" step="any" class="form-control" formControlName="specificGravity" id="specificGravity" (input)="saveChanges()"
       onfocus="this.select();" (focus)="focusField('specificGravity')">
+    <span class="alert-danger pull-right small" *ngIf="curveConstants.form.controls.specificGravity.invalid && !curveConstants.form.controls.specificGravity.pristine">
+      <span *ngIf="curveConstants.form.controls.specificGravity.errors.required">Value required.</span>
+      <span *ngIf="curveConstants.form.controls.specificGravity.errors.min">Value can't be less than
+        {{curveConstants.form.controls.specificGravity.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
     <input type="number" min="1" max="2.5" step="any" class="form-control" formControlName="systemLossExponent" id="systemLossExponent"
       (input)="saveChanges()" onfocus="this.select();" [ngClass]="{'invalid': checkLossExponent() == false}" (focus)="focusField('systemLossExponent')">
-    <span class="alert-danger pull-right small" *ngIf="exponentInputError !== null">{{exponentInputError}}</span>
+    <span class="alert-danger pull-right small" *ngIf="curveConstants.form.controls.systemLossExponent.invalid && !curveConstants.form.controls.systemLossExponent.pristine">
+      <span *ngIf="curveConstants.form.controls.systemLossExponent.errors.required">Value required.</span>
+      <span *ngIf="curveConstants.form.controls.systemLossExponent.errors.min">Value can't be less than
+        {{curveConstants.form.controls.systemLossExponent.errors.min.min}}.</span>
+      <span class="alert-danger pull-right small" *ngIf="exponentInputError !== null">{{exponentInputError}}</span>
+    </span>
   </div>
 </form>
 
@@ -26,11 +36,16 @@
   <div class="form-group">
     <label class="small" for="flowRate1">Flow Rate</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input" id="flowRate1" formControlName="flowRate" (input)="saveChanges()"
-        onfocus="this.select();" (focus)="focusField('flowRate')">
+      <input type="number" step="any" class="form-control addon-input" id="flowRate1" formControlName="flowRate"
+        (input)="saveChanges()" onfocus="this.select();" (focus)="focusField('flowRate')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="pointOne.form.controls.flowRate.invalid && !pointOne.form.controls.flowRate.pristine">
+      <span *ngIf="pointOne.form.controls.flowRate.errors.required">Value required.</span>
+      <span *ngIf="pointOne.form.controls.flowRate.errors.min">Value can't be less than
+        {{pointOne.form.controls.flowRate.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label *ngIf="!isFan" class="small" for="head1">Head</label>
@@ -41,6 +56,11 @@
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="pointOne.form.controls.head.invalid && !pointOne.form.controls.head.pristine">
+      <span *ngIf="pointOne.form.controls.head.errors.required">Value required.</span>
+      <span *ngIf="pointOne.form.controls.head.errors.min">Value can't be less than
+        {{pointOne.form.controls.head.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="row">
     <div class="col-6">
@@ -60,18 +80,24 @@
 <form [formGroup]="pointTwo.form" class="form-section">
   <div class="form-group">
     <label class="group-label point-label" for="pointAdjustment2">Point 2</label>
-    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment" id="pointAdjustment2" (focus)="focusField('specificGravity')">
+    <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointAdjustment"
+      id="pointAdjustment2" (focus)="focusField('specificGravity')">
       <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
     </select>
   </div>
   <div class="form-group">
     <label class="small" for="flowRate2">Flow Rate</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input" id="flowRate2" formControlName="flowRate" (input)="saveChanges()"
-        onfocus="this.select();" (focus)="focusField('flowRate')">
+      <input type="number" step="any" class="form-control addon-input" id="flowRate2" formControlName="flowRate"
+        (input)="saveChanges()" onfocus="this.select();" (focus)="focusField('flowRate')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="pointTwo.form.controls.flowRate.invalid && !pointTwo.form.controls.flowRate.pristine">
+      <span *ngIf="pointTwo.form.controls.flowRate.errors.required">Value required.</span>
+      <span *ngIf="pointTwo.form.controls.flowRate.errors.min">Value can't be less than
+        {{pointTwo.form.controls.flowRate.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label *ngIf="!isFan" class="small" for="head2">Head</label>
@@ -82,6 +108,11 @@
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="pointTwo.form.controls.head.invalid && !pointTwo.form.controls.head.pristine">
+      <span *ngIf="pointTwo.form.controls.head.errors.required">Value required.</span>
+      <span *ngIf="pointTwo.form.controls.head.errors.min">Value can't be less than
+        {{pointTwo.form.controls.head.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="row">
     <div class="col-6">

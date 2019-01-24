@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FieldMeasurementInputs } from '../percent-load-estimation.service';
+import { FieldMeasurementInputs, PercentLoadEstimationService } from '../percent-load-estimation.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-field-measurement-form',
@@ -12,15 +13,19 @@ export class FieldMeasurementFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<FieldMeasurementInputs>();
 
+  form: FormGroup;
+
   amps: string = 'Amps';
   volts: string = 'Volts';
-  constructor() { }
+  constructor(private percentLoadEstimationService: PercentLoadEstimationService) { }
 
   ngOnInit() {
+    this.form = this.percentLoadEstimationService.getFieldMeasurementFormFromObj(this.data);
   }
 
 
   calculate() {
+    this.data = this.percentLoadEstimationService.getFieldMeasurementObjFromForm(this.form);
     this.emitCalculate.emit(this.data);
   }
 }
