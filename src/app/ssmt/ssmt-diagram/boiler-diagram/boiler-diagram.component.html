@@ -11,7 +11,7 @@
   </div>
   <div class="d-flex boiler-img-holder" (click)="selectEquipment('boiler')">
     <span class="stack-loss">
-        {{boiler.fuelEnergy - boiler.boilerEnergy | number:'1.0-1'}} MMBtu/hr
+      {{boiler.fuelEnergy - boiler.boilerEnergy | number:'1.0-1'}} MMBtu/hr
     </span>
     <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-boiler.png" class="boiler-img" (mouseleave)="hoverEquipment('default')"
       (mouseenter)="hoverEquipment('boilerHovered')">
@@ -21,7 +21,9 @@
   <div class="d-flex flex-column outlet-column">
     <div class="high-pressure text-center pl-2" (mouseenter)="hoverEquipment('highPressureHovered')" (mouseleave)="hoverEquipment('default')">
       <div class="boiler-steam-holder">
-        <span class="boiler-mass-flow">{{boiler.steamMassFlow | number:'1.0-1'}} klb/hr</span>
+        <span class="boiler-mass-flow">{{boiler.steamMassFlow | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        </span>
         <span class="fa fa-chevron-right hidden-chevron"></span>
       </div>
     </div>
@@ -34,7 +36,9 @@
     <div class="d-flex h-100 high-pressure down-pipe" (mouseenter)="hoverEquipment('highPressureHovered')" (mouseleave)="hoverEquipment('default')">
       <div class="d-flex boiler-temp-holder mb-auto">
         <span class="fa fa-chevron-down" (mouseenter)="hoverEquipment('boilerSteamHovered')" (mouseleave)="hoverEquipment('highPressureHovered')"></span>
-        <span class="boiler-temperature">{{boiler.steamTemperature | number:'1.0-1'}} &#8457;</span>
+        <span class="boiler-temperature">{{boiler.steamTemperature | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        </span>
       </div>
     </div>
   </div>
@@ -44,7 +48,8 @@
         (mouseleave)="hoverEquipment('default')">
         <div class="blowdown-holder">
           <span class="blowdown-mass-flow">
-            {{boiler.blowdownMassFlow | number:'1.0-1'}} klb/hr
+            {{boiler.blowdownMassFlow | number:'1.0-1'}}
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
           </span>
           <span class="fa fa-chevron-right" (mouseenter)="hoverEquipment('boilerBlowdownHovered')" (mouseleave)="hoverEquipment('blowdownHovered')"></span>
         </div>

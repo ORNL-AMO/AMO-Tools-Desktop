@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-turbine-table',
@@ -11,6 +12,9 @@ export class TurbineTableComponent implements OnInit {
   turbine: TurbineOutput;
   @Input()
   turbineName: string;
+  @Input()
+  settings: Settings;
+  
   constructor() { }
 
   ngOnInit() {

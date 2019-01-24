@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-flash-tank-diagram',
@@ -17,6 +18,8 @@ export class FlashTankDiagramComponent implements OnInit {
   emitSelectEquipment = new EventEmitter<string>();
   @Input()
   flashTankType: string;
+  @Input()
+  settings: Settings;
 
   constructor() { }
 

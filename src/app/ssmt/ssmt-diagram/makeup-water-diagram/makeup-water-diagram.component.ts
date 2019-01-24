@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-makeup-water-diagram',
@@ -15,6 +16,9 @@ export class MakeupWaterDiagramComponent implements OnInit {
   makeupWaterVolumeFlow: number;
   @Input()
   heatExchanger: boolean;
+  @Input()
+  settings: Settings;
+  
   constructor() { }
 
   ngOnInit() {

@@ -3,7 +3,8 @@
     <div class="d-flex" [ngClass]="inletSteam">
       <div class="inlet-mass-flow-holder">
         <span class="inlet-mass-flow">
-          {{prv.inletMassFlow | number:'1.0-1'}} klb/hr
+          {{prv.inletMassFlow | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
         </span>
       </div>
       <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')"></span>
@@ -11,16 +12,14 @@
   </div>
 
   <div class="d-flex align-items-center flex-fill w-100">
-    <!-- <div class="d-flex outletGas h-100 w-100 text-center" [ngClass]="steamPressure">
-      <span class="fa fa-chevron-right feedwater"></span> {{prv.feedwaterMassFlow | number:'1.0-2'}}
-    </div> -->
     <div class="d-flex justify-content-center" (click)="selectEquipment()" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
       <div class="prv-img-holder">
         <div class="feedwater" *ngIf="prv.feedwaterMassFlow != undefined">
           <span class="fa fa-chevron-right" (mouseenter)="hoverFeedwater()" (mouseleave)="hoverPRV()"></span>
         </div>
         <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined">
-          {{prv.feedwaterMassFlow | number:'1.0-1'}} klb/hr
+          {{prv.feedwaterMassFlow | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
         </span>
         <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
         <span class="prv-label">PRV</span>
@@ -32,7 +31,8 @@
     <div class="d-flex align-items-end" [ngClass]="outletSteam">
       <div class="d-flex flex-fill outlet-temp-holder">
         <span class="outlet-temp">
-          {{prv.outletTemperature | number:'1.0-1'}} &#8457;
+          {{prv.outletTemperature | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </span>
         <span class="fa fa-chevron-down" (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')"></span>
       </div>
