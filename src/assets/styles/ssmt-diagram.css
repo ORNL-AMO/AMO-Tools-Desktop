@@ -144,3 +144,7 @@
     background: grey;
     /* cursor: pointer; */
 }
+
+.hover-tables td{
+    font-size: smaller;
+}

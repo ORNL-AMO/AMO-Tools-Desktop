@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 import { CalculateModelService } from '../../ssmt-calculations/calculate-model.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-prv-table',
@@ -10,7 +11,9 @@ import { CalculateModelService } from '../../ssmt-calculations/calculate-model.s
 export class PrvTableComponent implements OnInit {
   @Input()
   prvType:string;
-
+  @Input()
+  settings: Settings;
+  
   prv: PrvOutput;
   prvLabel: string;
   constructor(private calculateModelService: CalculateModelService) { }

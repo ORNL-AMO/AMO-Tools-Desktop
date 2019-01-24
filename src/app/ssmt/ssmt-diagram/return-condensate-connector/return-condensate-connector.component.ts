@@ -11,7 +11,7 @@ export class ReturnCondensateConnectorComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Input()
   deaerator: DeaeratorOutput;
-ß
+
   constructor() { }
 
   ngOnInit() {
