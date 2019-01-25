@@ -67,6 +67,11 @@ export interface SSMTOutput {
   finalLowPressureCondensate: SteamPropertiesOutput,
   highPressureSteamGasToMediumPressure: SteamPropertiesOutput,
   mediumPressureSteamGasToLowPressure: SteamPropertiesOutput
+
+
+  highPressureSteamHeatLoss: HeatLossOutput;
+  mediumPressureSteamHeatLoss: HeatLossOutput;
+  lowPressureSteamHeatLoss: HeatLossOutput;
 }
 
 export interface SSMTOperationsOutput {
@@ -323,42 +328,21 @@ export interface ProcessSteamUsage {
   temperature: number;
   energyFlow: number;
   massFlow: number;
-  processUsage:number;
+  processUsage: number;
 }
 
 //TODO: HeatExchange...
 
-export const boiler: DeaeratorOutput = {
-  "feedwaterEnergyFlow": 0,
-  "feedwaterMassFlow": 0,
-  "feedwaterPressure": 0,
-  "feedwaterQuality": 0,
-  "feedwaterSpecificEnthalpy": 0,
-  "feedwaterSpecificEntropy": 0,
-  "feedwaterVolume": 0,
-  "feedwaterTemperature": 0,
-  "inletSteamEnergyFlow": 0,
-  "inletSteamMassFlow": 0,
-  "inletSteamPressure": 0,
-  "inletSteamQuality": 0,
-  "inletSteamSpecificEnthalpy": 0,
-  "inletSteamSpecificEntropy": 0,
-  "inletSteamVolume": 0,
-  "inletSteamTemperature": 0,
-  "inletWaterEnergyFlow": 0,
-  "inletWaterMassFlow": 0,
-  "inletWaterPressure": 0,
-  "inletWaterQuality": 0,
-  "inletWaterSpecificEnthalpy": 0,
-  "inletWaterSpecificEntropy": 0,
-  "inletWaterVolume": 0,
-  "inletWaterTemperature": 0,
-  "ventedSteamEnergyFlow": 0,
-  "ventedSteamMassFlow": 0,
-  "ventedSteamPressure": 0,
-  "ventedSteamQuality": 0,
-  "ventedSteamSpecificEnthalpy": 0,
-  "ventedSteamSpecificEntropy": 0,
-  "ventedSteamVolume": 0,
-  "ventedSteamTemperature": 0
+export interface SSMTLosses {
+  stack: number;
+  blowdown: number;
+  highPressureHeader: number;
+  mediumPressureHeader: number;
+  lowPressureHeader: number;
+  condensingturbineEfficiencyLoss: number;
+  highToMediumTurbineEfficiencyLoss: number;
+  highToLowTurbineEfficiencyLoss: number;
+  mediumToLowTurbineEfficiencyLoss: number;
+  condensingLosses: number;
+  condensateLosses: number;
 }
