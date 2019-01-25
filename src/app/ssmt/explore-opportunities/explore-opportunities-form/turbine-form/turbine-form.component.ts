@@ -62,32 +62,38 @@ export class TurbineFormComponent implements OnInit {
     }
     this.baselineCondensingTurbineForm.disable();
 
-    if (this.ssmt.turbineInput.highToLowTurbine) {
-      this.baselineHighToLowTurbineForm = this.turbineService.getPressureFormFromObj(this.ssmt.turbineInput.highToLowTurbine);
-      this.modificationHighToLowTurbineForm = this.turbineService.getPressureFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToLowTurbine);
-    } else {
-      this.baselineHighToLowTurbineForm = this.turbineService.initPressureForm();
-      this.modificationHighToLowTurbineForm = this.turbineService.initPressureForm();
-    }
-    this.baselineHighToLowTurbineForm.disable();
 
-    if (this.ssmt.turbineInput.highToMediumTurbine) {
-      this.baselineHighToMediumForm = this.turbineService.getPressureFormFromObj(this.ssmt.turbineInput.highToMediumTurbine);
-      this.modificationHighToMediumForm = this.turbineService.getPressureFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToMediumTurbine);
-    } else {
-      this.baselineHighToMediumForm = this.turbineService.initPressureForm();
-      this.modificationHighToMediumForm = this.turbineService.initPressureForm();
+    if (this.ssmt.headerInput.numberOfHeaders >= 2) {
+      if (this.ssmt.turbineInput.highToLowTurbine) {
+        this.baselineHighToLowTurbineForm = this.turbineService.getPressureFormFromObj(this.ssmt.turbineInput.highToLowTurbine);
+        this.modificationHighToLowTurbineForm = this.turbineService.getPressureFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToLowTurbine);
+      } else {
+        this.baselineHighToLowTurbineForm = this.turbineService.initPressureForm();
+        this.modificationHighToLowTurbineForm = this.turbineService.initPressureForm();
+      }
+      this.baselineHighToLowTurbineForm.disable();
     }
-    this.baselineHighToMediumForm.disable();
 
-    if (this.ssmt.turbineInput.mediumToLowTurbine) {
-      this.baselineMediumToLowForm = this.turbineService.getPressureFormFromObj(this.ssmt.turbineInput.mediumToLowTurbine);
-      this.modificationMediumToLowForm = this.turbineService.getPressureFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.mediumToLowTurbine);
-    } else {
-      this.baselineMediumToLowForm = this.turbineService.initPressureForm();
-      this.modificationMediumToLowForm = this.turbineService.initPressureForm();
+    if (this.ssmt.headerInput.numberOfHeaders >= 3) {
+
+      if (this.ssmt.turbineInput.highToMediumTurbine) {
+        this.baselineHighToMediumForm = this.turbineService.getPressureFormFromObj(this.ssmt.turbineInput.highToMediumTurbine);
+        this.modificationHighToMediumForm = this.turbineService.getPressureFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToMediumTurbine);
+      } else {
+        this.baselineHighToMediumForm = this.turbineService.initPressureForm();
+        this.modificationHighToMediumForm = this.turbineService.initPressureForm();
+      }
+      this.baselineHighToMediumForm.disable();
+
+      if (this.ssmt.turbineInput.mediumToLowTurbine) {
+        this.baselineMediumToLowForm = this.turbineService.getPressureFormFromObj(this.ssmt.turbineInput.mediumToLowTurbine);
+        this.modificationMediumToLowForm = this.turbineService.getPressureFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.mediumToLowTurbine);
+      } else {
+        this.baselineMediumToLowForm = this.turbineService.initPressureForm();
+        this.modificationMediumToLowForm = this.turbineService.initPressureForm();
+      }
+      this.baselineMediumToLowForm.disable();
     }
-    this.baselineMediumToLowForm.disable();
   }
 
 
