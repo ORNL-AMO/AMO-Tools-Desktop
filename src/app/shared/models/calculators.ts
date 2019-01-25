@@ -19,7 +19,7 @@ export interface Calculator {
     headToolSuction?: HeadToolSuction,
     headToolType?: string,
     systemCurve?: SystemCurve,
-    pumpCurveForm?: PumpCurveForm,
+    pumpCurve?: PumpCurve,
     motorPerformanceInputs?: MotorPerformanceInputs
     nemaInputs?: NemaInputs,
     specificSpeedInputs?: SpecificSpeedInputs,
@@ -77,7 +77,8 @@ export interface CurveData {
 }
 
 
-export interface PumpCurveForm {
+// export interface PumpCurveForm {
+export interface PumpCurve {
     dataRows?: PumpCurveDataRow[],
     dataOrder?: number,
     measurementOption?: string,

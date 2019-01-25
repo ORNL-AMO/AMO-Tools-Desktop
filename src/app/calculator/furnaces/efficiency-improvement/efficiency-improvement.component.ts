@@ -58,7 +58,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     }
 
 
-    this.calculate();
+    this.calculate(this.efficiencyImprovementInputs);
   }
 
   ngAfterViewInit() {
@@ -75,7 +75,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     else {
       this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
     }
-    this.calculate();
+    this.calculate(this.efficiencyImprovementInputs);
   }
 
   resizeTabs() {
@@ -84,7 +84,8 @@ export class EfficiencyImprovementComponent implements OnInit {
     }
   }
 
-  calculate() {
+  calculate(data: EfficiencyImprovementInputs) {
+    this.efficiencyImprovementInputs = data;
     if (!this.inAssessment) {
       this.efficiencyImprovementService.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
     } else if (this.inAssessment && this.calcExists) {

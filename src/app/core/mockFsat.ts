@@ -229,7 +229,7 @@ export const MockFsatSettings: Settings = {
         },
         date: "Tue Dec 04 2018"
     },
-    steamPowerMeasurement: "MMBtu",
+    steamPowerMeasurement: "kW",
     steamEnergyMeasurement: "MMBtu"
 }
 
@@ -240,7 +240,7 @@ origin: "AMO-TOOLS-DESKTOP"
 */
 
 export const MockFsatCalculator: Calculator = {
-    pumpCurveForm: {
+    pumpCurve: {
         dataRows: [
             {
                 head: 22.3,

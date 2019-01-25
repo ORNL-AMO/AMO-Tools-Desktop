@@ -1,32 +1,51 @@
-<form>
+<form [formGroup]="formElectric">
   <label class="group-label">Calculate Equivalent Electrical Energy</label>
   <div class="form-group">
     <label for="fuelFiredEfficiency1">Fuel-Fire Equipment Efficiency</label>
     <div class="input-group">
-      <input autofocus name="fuelFiredEfficiency1" [(ngModel)]="energyEquivalencyElectric.fuelFiredEfficiency" type="number"
-        step="any" class="form-control" id="fuelFiredEfficiency1" (input)="calcElectric()" onfocus="this.select();"
-        (focus)="focusField('fuelFiredEfficiency')" (blur)="focusOut()">
+      <input autofocus name="fuelFiredEfficiency1" formControlName="fuelFiredEfficiency" type="number" step="any" class="form-control"
+        id="fuelFiredEfficiency1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiency')"
+        (blur)="focusOut()">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="formElectric.controls.fuelFiredEfficiency.invalid && !formElectric.controls.fuelFiredEfficiency.pristine">
+      <span *ngIf="formElectric.controls.fuelFiredEfficiency.errors.required">Value required.</span>
+      <span *ngIf="formElectric.controls.fuelFiredEfficiency.errors.min">Value cannot not be lower than
+        {{formElectric.controls.fuelFiredEfficiency.errors.min.min}}.</span>
+      <span *ngIf="formElectric.controls.fuelFiredEfficiency.errors.max">Value cannot not be greater than
+        {{formElectric.controls.fuelFiredEfficiency.errors.max.max}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="electricallyHeatedEfficiency1">Electrically Heated Equipment Efficiency</label>
     <div class="input-group">
-      <input name="electricallyHeatedEfficiency1" [(ngModel)]="energyEquivalencyElectric.electricallyHeatedEfficiency"
-        type="number" step="any" class="form-control" id="electricallyHeatedEfficiency1" (input)="calcElectric()"
-        onfocus="this.select();" (focus)="focusField('electricallyHeatedEfficiency')" (blur)="focusOut()">
+      <input name="electricallyHeatedEfficiency1" formControlName="electricallyHeatedEfficiency" type="number" step="any"
+        class="form-control" id="electricallyHeatedEfficiency1" (input)="calcElectric()" onfocus="this.select();"
+        (focus)="focusField('electricallyHeatedEfficiency')" (blur)="focusOut()">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="formElectric.controls.electricallyHeatedEfficiency.invalid && !formElectric.controls.electricallyHeatedEfficiency.pristine">
+      <span *ngIf="formElectric.controls.electricallyHeatedEfficiency.errors.required">Value required.</span>
+      <span *ngIf="formElectric.controls.electricallyHeatedEfficiency.errors.min">Value cannot not be lower than
+        {{formElectric.controls.electricallyHeatedEfficiency.errors.min.min}}.</span>
+      <span *ngIf="formElectric.controls.electricallyHeatedEfficiency.errors.max">Value cannot not be greater than
+        {{formElectric.controls.electricallyHeatedEfficiency.errors.max.max}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="fuelFiredHeatInput1">Heat Input for Fuel-Fire Equipment</label>
     <div class="input-group">
-      <input name="fuelFiredHeatInput1" [(ngModel)]="energyEquivalencyElectric.fuelFiredHeatInput" type="number" step="any"
-        class="form-control" id="fuelFiredHeatInput1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredHeatInput')"
+      <input name="fuelFiredHeatInput" formControlName="fuelFiredHeatInput" type="number" step="any" class="form-control"
+        id="fuelFiredHeatInput1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredHeatInput')"
         (blur)="focusOut()">
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
       <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="formElectric.controls.fuelFiredHeatInput.invalid && !formElectric.controls.fuelFiredHeatInput.pristine">
+      <span *ngIf="formElectric.controls.fuelFiredHeatInput.errors.required">Value required.</span>
+      <span *ngIf="formElectric.controls.fuelFiredHeatInput.errors.min">Value cannot not be lower than
+        {{formElectric.controls.fuelFiredHeatInput.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label>Equivalent Electrical Heat Input</label>
@@ -34,34 +53,55 @@
       <strong>{{energyEquivalencyElectricOutput.electricalHeatInput | number:'2.2-2'}} kW</strong>
     </div>
   </div>
+</form>
 
+<form [formGroup]="formFuel">
   <label class="group-label pt-2">Calculate Equivalent Fuel Heat</label>
   <div class="form-group">
     <label for="electricallyHeatedEfficiency2">Electrically Heated Equipment Efficiency</label>
     <div class="input-group">
-      <input name="electricallyHeatedEfficiency2" [(ngModel)]="energyEquivalencyFuel.electricallyHeatedEfficiency" type="number"
-        step="any" class="form-control" id="electricallyHeatedEfficiency2" (input)="calcFuel()" onfocus="this.select();"
-        (focus)="focusField('electricallyHeatedEfficiencyFuel')" (blur)="focusOut()">
+      <input name="electricallyHeatedEfficiency2" formControlName="electricallyHeatedEfficiency" type="number" step="any"
+        class="form-control" id="electricallyHeatedEfficiency2" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricallyHeatedEfficiencyFuel')"
+        (blur)="focusOut()">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="formFuel.controls.electricallyHeatedEfficiency.invalid && !formFuel.controls.electricallyHeatedEfficiency.pristine">
+      <span *ngIf="formFuel.controls.electricallyHeatedEfficiency.errors.required">Value required.</span>
+      <span *ngIf="formFuel.controls.electricallyHeatedEfficiency.errors.min">Value cannot not be lower than
+        {{formFuel.controls.electricallyHeatedEfficiency.errors.min.min}}.</span>
+      <span *ngIf="formFuel.controls.electricallyHeatedEfficiency.errors.max">Value cannot not be greater than
+        {{formFuel.controls.electricallyHeatedEfficiency.errors.max.max}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="fuelFiredEfficiency2">Fuel-Fired Equipment Efficiency</label>
     <div class="input-group">
-      <input name="fuelFiredEfficiency2" [(ngModel)]="energyEquivalencyFuel.fuelFiredEfficiency" type="number" step="any"
-        class="form-control" id="fuelFiredEfficiency2" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiencyFuel')"
+      <input name="fuelFiredEfficiency2" formControlName="fuelFiredEfficiency" type="number" step="any" class="form-control"
+        id="fuelFiredEfficiency2" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiencyFuel')"
         (blur)="focusOut()">
       <span class="input-group-addon units">%</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="formFuel.controls.fuelFiredEfficiency.invalid && !formFuel.controls.fuelFiredEfficiency.pristine">
+      <span *ngIf="formFuel.controls.fuelFiredEfficiency.errors.required">Value required.</span>
+      <span *ngIf="formFuel.controls.fuelFiredEfficiency.errors.min">Value cannot not be lower than
+        {{formFuel.controls.fuelFiredEfficiency.errors.min.min}}.</span>
+      <span *ngIf="formFuel.controls.fuelFiredEfficiency.errors.max">Value cannot not be greater than
+        {{formFuel.controls.fuelFiredEfficiency.errors.max.max}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label for="electricalHeatInput3">Heat Input for Electrically Heated Equipment</label>
     <div class="input-group">
-      <input name="electricalHeatInput3" [(ngModel)]="energyEquivalencyFuel.electricalHeatInput" type="number" step="any"
-        class="form-control" id="electricalHeatInput3" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricalHeatInput')"
+      <input name="electricalHeatInput3" formControlName="electricalHeatInput" type="number" step="any" class="form-control"
+        id="electricalHeatInput3" (input)="calcFuel()" onfocus="this.select();" (focus)="focusField('electricalHeatInput')"
         (blur)="focusOut()">
       <span class="input-group-addon units">kW</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="formFuel.controls.electricalHeatInput.invalid && !formFuel.controls.electricalHeatInput.pristine">
+      <span *ngIf="formFuel.controls.electricalHeatInput.errors.required">Value required.</span>
+      <span *ngIf="formFuel.controls.electricalHeatInput.errors.min">Value cannot not be lower than
+        {{formFuel.controls.electricalHeatInput.errors.min.min}}.</span>
+    </span>
   </div>
   <div class="form-group">
     <label class="strong">Equivalent Fuel-Fired Heat Input</label>

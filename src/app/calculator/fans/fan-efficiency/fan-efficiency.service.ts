@@ -10,7 +10,7 @@ export class FanEfficiencyService {
   initForm(): FormGroup {
     return this.formBuilder.group({
       fanType: ['', Validators.required],
-      fanSpeed: ['', Validators.required],
+      fanSpeed: ['', [Validators.required, Validators.min(0)]],
       inletPressure: ['', Validators.required],
       outletPressure: ['', Validators.required],
       flowRate: ['', Validators.required],
@@ -21,7 +21,7 @@ export class FanEfficiencyService {
   initFormFromFsat(fsat: FSAT): FormGroup {
     return this.formBuilder.group({
       fanType: ['', Validators.required],
-      fanSpeed: ['', Validators.required],
+      fanSpeed: ['', [Validators.required, Validators.min(0)]],
       inletPressure: ['', Validators.required],
       outletPressure: ['', Validators.required],
       flowRate: ['', Validators.required],
@@ -32,7 +32,7 @@ export class FanEfficiencyService {
   initFormFromObj(obj: FanEfficiencyInputs): FormGroup {
     return this.formBuilder.group({
       fanType: [obj.fanType, Validators.required],
-      fanSpeed: [obj.fanSpeed, Validators.required],
+      fanSpeed: [obj.fanSpeed, [Validators.required, Validators.min(0)]],
       inletPressure: [obj.inletPressure, Validators.required],
       outletPressure: [obj.outletPressure, Validators.required],
       flowRate: [obj.flowRate, Validators.required],
