@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ConvertUnitsService } from './convert-units/convert-units.service';
+import { ConvertUnitsService } from '../convert-units/convert-units.service';
 
 @Pipe({
   name: 'settingsLabel'
