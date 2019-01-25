@@ -28,6 +28,8 @@
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Furnace'">Example: "Furnace123" or "ORNL Furnace 3"</p>
               <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Fan'">Example: "Fan123" or "ORNL Fan 3"</p>
+              <p *ngIf="newAssessmentForm.controls.assessmentType.value == 'Steam'">Example: "Steam123" or "ORNL Steam 3"</p>
+
             </div>
           </div>
           <!-- End .form-group -->
@@ -38,6 +40,7 @@
               <option [ngValue]="'Pump'">Pump</option>
               <option [ngValue]="'Furnace'">Process Heating</option>
               <option [ngValue]="'Fan'">Fan</option>
+              <option [ngValue]="'Steam'">Steam</option>
             </select>
           </div>
 
@@ -56,7 +59,11 @@
         </div>
         <!-- End .modal-body -->
 
-        <div class="d-flex justify-content-between" [ngClass]="{'phast': newAssessmentForm.controls.assessmentType.value == 'Furnace','psat': newAssessmentForm.controls.assessmentType.value == 'Pump', 'fsat': newAssessmentForm.controls.assessmentType.value == 'Fan'}">
+        <div class="d-flex justify-content-between" [ngClass]="{
+          'phast': newAssessmentForm.controls.assessmentType.value == 'Furnace',
+          'psat': newAssessmentForm.controls.assessmentType.value == 'Pump', 
+          'fsat': newAssessmentForm.controls.assessmentType.value == 'Fan',
+          'ssmt': newAssessmentForm.controls.assessmentType.value == 'Steam'}">
           <div class="p-2">
             <button class="btn btn-secondary" type="button" (click)="hideCreateModal()">Close</button>
           </div>

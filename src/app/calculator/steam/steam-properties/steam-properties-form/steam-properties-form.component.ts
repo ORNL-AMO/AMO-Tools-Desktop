@@ -1,9 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
-import { SteamPropertiesInput, SteamPropertiesOutput } from "../../../../shared/models/steam";
+import { SteamPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
 import { SteamService } from "../../steam.service";
-import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
 
 @Component({
   selector: 'app-steam-properties-form',

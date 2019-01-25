@@ -1,0 +1,81 @@
+<div class="d-flex flex-column">
+  <label class="group-label">Steam System Summary</label>
+  <div class="p-1">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold text-center" colspan="2">Steam Generated</td>
+        </tr>
+        <tr>
+          <td class="text-center" colspan="2">{{boiler.steamMassFlow | number:'1.0-1'}}
+              <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+        <tr>
+          <td class="bold text-center" colspan="2">Total Operating Cost</td>
+        </tr>
+        <tr>
+          <td class="text-center" colspan="2">{{totalOperatingCost | currency:'USD'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold text-center" colspan="2">Fuel</td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Boiler Fuel Use</td>
+          <td class="text-center w-50">{{boilerFuelUsage | number:'1.0-2'}}
+              <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Boiler Fuel Cost</td>
+          <td class="text-center w-50">{{boilerFuelCost | currency:'USD'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold text-center" colspan="2">Electricity</td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Electricity Generated</td>
+          <td class="text-center w-50">{{powerGenerated | number:'1.0-2'}}
+              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Electricity Imported</td>
+          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport | currency:'USD'}}
+              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Electricity Cost</td>
+          <td class="text-center w-50">{{powerGenerationCost | currency:'USD'}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold text-center" colspan="2">Make-Up Water</td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Make-Up Water Required</td>
+          <td class="text-center w-50">{{annualMakeupWaterFlow | number:'1.0-2'}}
+              <span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center w-50">Make-up Water Cost</td>
+          <td class="text-center w-50">{{makeupWaterCost | currency:'USD'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

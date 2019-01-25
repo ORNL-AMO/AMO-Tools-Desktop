@@ -1,0 +1,10 @@
+<div class="d-flex h-100 w-100 justify-content-end" [ngClass]="{'set-height': returnCondensate != undefined, 'one-header': isOneHeaderSystem}">
+  <div class="d-flex condensate align-items-center" (mouseenter)="hoverEquipment('condensateHovered')" (mouseleave)="hoverEquipment('default')">
+    <div class="condensate-holder">
+      <span class="condensate-temp" *ngIf="returnCondensate">{{returnCondensate.temperature | number:'1.0-1'}} 
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </span>
+      <span class="fa fa-chevron-down" [ngClass]="{'hidden-chevron': returnCondensate == undefined}"  (mouseenter)="hoverChevron()" (mouseleave)="hoverEquipment('condensateHovered')"></span>
+    </div>
+  </div>
+</div>

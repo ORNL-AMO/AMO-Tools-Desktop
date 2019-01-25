@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BoilerInput } from '../../../shared/models/steam';
+import { BoilerInput } from '../../../shared/models/steam/steam-inputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { SteamService } from '../steam.service';
@@ -56,14 +56,14 @@ export class BoilerService {
   getRangeValues(settings: Settings, thermodynamicQuantity: number): BoilerRanges {
     let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
     let ranges: BoilerRanges = {
-      deaeratorPressureMax: Number(this.convertUnitsService.value(3185).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      deaeratorPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      deaeratorPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      deaeratorPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       combustionEfficiencyMax: 100,
       combustionEfficiencyMin: 50,
       blowdownRateMax: 25,
       blowdownRateMin: 0,
-      steamPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      steamPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      steamPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      steamPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       quantityValueMax: quantityMinMax.max,
       quantityValueMin: quantityMinMax.min,
       steamMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),

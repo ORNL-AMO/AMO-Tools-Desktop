@@ -1,0 +1,16 @@
+<div class="d-flex flex-column">
+  <div *ngIf="inSetup" class="header mr-2 ml-2">
+    <h3>Operating Conditions</h3>
+  </div>
+  <div class="p-3">
+    <app-operating-hours [(operatingHours)]="ssmt.operatingHours" [selected]="selected" (emitSave)="save()" [inSetup]="inSetup" [idString]="idString"></app-operating-hours>
+    <div class="pt-2">
+      <app-operating-costs [(operatingCosts)]="ssmt.operatingCosts" [selected]="selected" [settings]="settings"
+        (emitSave)="save()" [inSetup]="inSetup" [idString]="idString"></app-operating-costs>
+    </div>
+    <div class="pt-2">
+      <app-general-operations [(generalSteamOperations)]="ssmt.generalSteamOperations" [selected]="selected" [settings]="settings"
+        (emitSave)="save()" [inSetup]="inSetup" [idString]="idString"></app-general-operations>
+    </div>
+  </div>
+</div>

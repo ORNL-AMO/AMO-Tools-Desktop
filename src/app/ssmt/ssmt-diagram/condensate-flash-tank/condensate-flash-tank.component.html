@@ -1,0 +1,41 @@
+<div class="d-flex h-100 w-100">
+  <div class="d-flex flex-column h-100 flex-fill">
+    <div class="d-flex align-self-end chevron-one flex-fill condensate inlet-condensate" (mouseenter)="hoverEquipment('condensateHovered')"
+      (mouseleave)="hoverEquipment('default')">
+      <div class="inlet-temp-holder">
+        <span class="inlet-temp">{{flashTank.inletWaterTemperature | number:'1.0-1'}} 
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        </span>
+      </div>
+      <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverEquipment('condensateFlashTankInletHovered')"
+        (mouseleave)="hoverEquipment('condensateHovered')"></span>
+    </div>
+
+    <div class="d-flex align-self-end align-items-center flex-fill">
+      <div class="d-flex outletGas h-100 justify-content-center vents" (mouseenter)="hoverEquipment('ventsHovered')"
+        (mouseleave)="hoverEquipment('default')">
+        <div class="vented-steam-holder">
+          <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('condensateFlashTankVentHovered')" (mouseleave)="hoverEquipment('ventsHovered')"></span>
+          <span class="vented-steam">
+            {{flashTank.outletGasMassFlow | number:'1.0-1'}} 
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          </span>
+        </div>
+
+      </div>
+      <div class="d-flex justify-content-center" (click)="selectEquipment()">
+        <div class="flash-tank-img-holder">
+          <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-flash-tank.png" class="flash-tank-img"
+            (mouseenter)="hoverEquipment('condensateFlashTankHovered')" (mouseleave)="hoverEquipment('default')">
+          <span class="flash-tank-label" (mouseenter)="hoverEquipment('condensateFlashTankHovered')" (mouseleave)="hoverEquipment('default')">Flash
+            Tank</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex align-self-end chevron-one flex-fill makeup-water" (mouseenter)="hoverEquipment('makeupWaterHovered')"
+      (mouseleave)="hoverEquipment('default')">
+      <span class="fa fa-chevron-down hidden-chevron"></span>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators } from '../../../../../../node_modules/@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
-import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam';
+import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
 
 @Component({
@@ -42,6 +42,7 @@ export class TurbineFormComponent implements OnInit {
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
+    console.log(this.settings.steamPressureMeasurement);
     this.thermoOptions = ThermodynamicQuantityOptions;
     this.setValidators();
   }

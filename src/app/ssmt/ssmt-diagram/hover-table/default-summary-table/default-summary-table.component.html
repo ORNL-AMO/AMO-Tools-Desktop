@@ -1,0 +1,23 @@
+<div class="p-1">
+  <label class="group-label">Steam Model Summary</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold pr-2 pl-2">Steam Generated</td>
+        <td class="text-center pr-2 pl-2">{{boiler.steamMassFlow | number:'1.0-1'}} </td>
+        <td class="bold pr-2 pl-2">Boiler Fuel Usage</td>
+        <td class="text-center pr-2 pl-2">{{boilerFuelUsage | number:'1.0-2'}} </td>
+      </tr>
+      <tr>
+        <td class="bold pr-2 pl-2">Boiler Fuel Costs</td>
+        <td class="text-center pr-2 pl-2"> {{boilerFuelCost | currency:'USD'}}</td>
+        <td class="bold pr-2 pl-2">Electricity Costs</td>
+        <td class="text-center pr-2 pl-2"> </td>
+      </tr>
+      <tr>
+        <td class="bold pr-2 pl-2" colspan="2">Total Operating Costs</td>
+        <td class="text-center pr-2 pl-2" colspan="2">{{totalOperatingCost | currency:'USD'}} </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

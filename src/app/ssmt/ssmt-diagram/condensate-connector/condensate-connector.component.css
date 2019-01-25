@@ -1,0 +1,22 @@
+.condensate-holder{
+    position: relative;
+}
+
+.condensate-temp{
+    position: absolute;
+    bottom: 0px;
+    z-index: +1;
+    color: black;
+    width: 50px;
+    left: -42px;
+}
+
+.set-height{
+    height: 113px !important;
+}
+
+
+.one-header.set-height{
+    height: 127px !important;
+
+}

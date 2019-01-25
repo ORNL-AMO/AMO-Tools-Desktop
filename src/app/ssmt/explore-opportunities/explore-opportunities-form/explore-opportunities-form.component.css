@@ -1,0 +1,31 @@
+.explore-ops-form li{
+	list-style: none;
+}
+
+.explore-ops-form ul {
+	padding-left: 15px;
+}
+
+form{
+    padding-top: 0px;
+}
+
+.btn-primary{
+	padding: 6px;
+	font-size: small;
+}
+
+
+.group-name, .group-label{
+	border-bottom: #F39C12 groove 2px;
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+
+.explore-ops-margin-bottom{
+	margin-bottom: 3rem;
+}

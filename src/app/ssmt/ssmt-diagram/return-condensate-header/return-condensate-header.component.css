@@ -1,0 +1,31 @@
+
+.makeup-water{
+    border-bottom-right-radius: 25px;
+}
+
+
+.combined-return-holder, .return-condensate-holder{
+    position: relative;
+}
+
+.return-condensate-holder{
+    padding-right: 50px;
+}
+
+.combined-return-holder .combined-mass-flow{
+    position: absolute;
+    z-index: +1;
+    width: 100px;
+    left: -20px;
+    top: 20px;
+    color: black;
+}
+
+.return-condensate-holder .return-condensate{
+    position: absolute;
+    z-index: +1;
+    width: 100px;
+    right: 0px;
+    top: 20px;
+    color: black;
+}

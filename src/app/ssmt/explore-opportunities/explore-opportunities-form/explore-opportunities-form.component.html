@@ -1,0 +1,16 @@
+<div class="d-flex flex-column mr-3 ml-3 explore-ops-margin-bottom">
+  <div class="w-100 justify-content-center p-2 d-flex">
+    <button class="btn btn-primary" (click)="addNewMod()">Add New Scenario</button>
+  </div>
+  <div class="d-flex flex-column">
+    <div class="form-group group-name">
+      <label for="modificatonName">Modification Name</label>
+      <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.name"
+        (input)="save(ssmt)" />
+    </div>
+    <app-operations-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-operations-form>
+    <app-boiler-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-boiler-form>
+    <app-header-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-header-form>
+    <app-turbine-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"></app-turbine-form>
+  </div>
+</div>

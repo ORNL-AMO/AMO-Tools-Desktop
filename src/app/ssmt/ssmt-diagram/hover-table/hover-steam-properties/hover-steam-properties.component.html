@@ -1,0 +1,40 @@
+<div class="p-1">
+  <label class="group-label">{{label}}</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold">Temperature</td>
+        <td class="text-center">{{steam.temperature | number:'1.0-1'}} 
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+        </td>
+        <td class="bold">Mass Flow</td>
+        <td class="text-center">{{steam.massFlow | number:'1.0-1'}} 
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">Pressure</td>
+        <td class="text-center"> {{steam.pressure | number:'1.0-1'}}
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+        </td>
+        <td class="bold">Sp. Enthalpy</td>
+        <td class="text-center">{{steam.specificEnthalpy | number:'1.0-1'}} 
+            <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">Phase</td>
+        <td class="text-center">
+          <span *ngIf="steam.quality == 0">Liquid</span>
+          <span *ngIf="steam.quality == 1">Gas</span>
+          <span *ngIf="steam.quality != 1 && steam.quality != 0"> {{steam.quality | number:'1.1-2'}}
+          </span>
+        </td>
+        <td class="bold">Sp. Entropy</td>
+        <td class="text-center">{{steam.specificEntropy | number:'1.0-1'}} 
+            <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

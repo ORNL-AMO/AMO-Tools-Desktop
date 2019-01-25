@@ -44,7 +44,7 @@
         <div class="input-group">
           <input name="airPressure" class="form-control" type="number" step="any" [(ngModel)]="inputs.airPressure" id="airPressure"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('airPressure')">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">psi</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psi</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPa</span>
         </div>
       </div>

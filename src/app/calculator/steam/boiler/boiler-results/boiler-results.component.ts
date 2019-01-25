@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { BoilerOutput, BoilerInput } from '../../../../shared/models/steam';
+import { BoilerInput } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
+import { BoilerOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-boiler-results',

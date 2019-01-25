@@ -1,0 +1,100 @@
+<form [formGroup]="turbineForm">
+  <label class="group-label w-100">
+    <div class="form-group">
+      <input type="checkbox" (change)="save()" id="useTurbine" formControlName="useTurbine" (blur)="focusOut()"
+        [ngClass]="{'indicate-different': isUseTurbineDifferent()}">
+      <span class="pl-1">Condensing Turbine</span>
+    </div>
+  </label>
+  <div *ngIf="turbineForm.controls.useTurbine.value == true">
+    <div class="form-group">
+      <label for="isentropicEfficiency">Isentropic Efficiency</label>
+      <div class="input-group">
+        <input name="isentropicEfficiency" type="number" step="any" class="form-control" id="isentropicEfficiency"
+          (input)="save()" [readonly]="!selected" formControlName="isentropicEfficiency" (focus)="focusField('isentropicEfficiency')"
+          (blur)="focusOut()" [ngClass]="{'indicate-different': isIsentropicEfficiencyDifferent()}">
+        <span class="units input-group-addon">%</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.isentropicEfficiency.invalid && !turbineForm.controls.isentropicEfficiency.pristine">
+        <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.max">Value can't be greater than
+          {{turbineForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.min">Value can't be less than
+          {{turbineForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="generationEfficiency">Generator Efficiency</label>
+      <div class="input-group">
+        <input name="generationEfficiency" type="number" step="any" class="form-control" id="generationEfficiency"
+          (input)="save()" [readonly]="!selected" formControlName="generationEfficiency" (focus)="focusField('generationEfficiency')"
+          (blur)="focusOut()" [ngClass]="{'indicate-different': isGenerationEfficiencyDifferent()}">
+        <span class="units input-group-addon">%</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.generationEfficiency.invalid && !turbineForm.controls.generationEfficiency.pristine">
+        <span *ngIf="turbineForm.controls.generationEfficiency.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.generationEfficiency.errors.max">Value can't be greater than
+          {{turbineForm.controls.generationEfficiency.errors.max.max}} %.</span>
+        <span *ngIf="turbineForm.controls.generationEfficiency.errors.min">Value can't be less than
+          {{turbineForm.controls.generationEfficiency.errors.min.min}} %.</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="{{idString+'condenserPressure'}}">Condenser Pressure</label>
+      <div class="input-group">
+        <input name="condenserPressure" type="number" step="any" class="form-control" id="{{idString+'condenserPressure'}}"
+          (input)="save()" [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')"
+          (blur)="focusOut()" [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
+        <span class="units input-group-addon">{{settings.steamVacuumPressure}}</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.condenserPressure.invalid && !turbineForm.controls.condenserPressure.pristine">
+        <span *ngIf="turbineForm.controls.condenserPressure.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.condenserPressure.errors.max">Value can't be greater than
+          {{turbineForm.controls.condenserPressure.errors.max.max}} {{settings.steamVacuumPressure}}.</span>
+        <span *ngIf="turbineForm.controls.condenserPressure.errors.min">Value can't be less than
+          {{turbineForm.controls.condenserPressure.errors.min.min}} {{settings.steamVacuumPressure}}.</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="{{idString+'operationType'}}">Operation Type</label>
+      <select name="operationType" class="form-control" id="{{idString+'operationType'}}" (change)="changeOperationValidators()"
+        (focus)="focusField('operationType')" (blur)="focusOut()" formControlName="operationType" [ngClass]="{'indicate-different': isOperationTypeDifferent()}">
+        <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="{{idString+'operationValue'}}">
+        <span *ngIf="turbineForm.controls.operationType.value == 0">Fixed Flow</span>
+        <span *ngIf="turbineForm.controls.operationType.value == 1">Fixed Power</span>
+      </label>
+      <div class="input-group">
+        <input name="operationValue" type="number" step="any" class="form-control" id="{{idString+'operationValue'}}"
+          (input)="save()" [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')"
+          (blur)="focusOut()" [ngClass]="{'indicate-different': isOperationValueDifferent()}">
+        <span class="units input-group-addon">
+          <span *ngIf="turbineForm.controls.operationType.value == 0">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>
+        </span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.operationValue.invalid && !turbineForm.controls.operationValue.pristine">
+        <span *ngIf="turbineForm.controls.operationValue.errors.required">Value Required</span>
+        <span *ngIf="turbineForm.controls.operationValue.errors.max && turbineForm.controls.operationType.value == 0">Value
+          can't be greater than
+          {{turbineForm.controls.operationValue.errors.max.max}} {{settings.steamMassFlowMeasurement}}.</span>
+        <span *ngIf="turbineForm.controls.operationValue.errors.min && turbineForm.controls.operationType.value == 0">Value
+          can't be less than
+          {{turbineForm.controls.operationValue.errors.min.min}} {{settings.steamMassFlowMeasurement}}.</span>
+        <span *ngIf="turbineForm.controls.operationValue.errors.max && turbineForm.controls.operationType.value == 1">Value
+          can't be greater than
+          {{turbineForm.controls.operationValue.errors.max.max}} kW.</span>
+        <span *ngIf="turbineForm.controls.operationValue.errors.min && turbineForm.controls.operationType.value == 1">Value
+          can't be less than
+          {{turbineForm.controls.operationValue.errors.min.min}} kW.</span>
+      </span>
+    </div>
+  </div>
+</form>

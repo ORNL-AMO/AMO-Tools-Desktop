@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { HeatLossInput } from '../../../shared/models/steam';
+import { HeatLossInput } from '../../../shared/models/steam/steam-inputs';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SteamService } from '../steam.service';
@@ -47,10 +47,10 @@ export class HeatLossService {
   }
 
   getRangeValues(settings: Settings, thermodynamicQuantity: number): HeatLossRanges {
-    let quantityMinMax: {min: number, max: number} = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
+    let quantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, thermodynamicQuantity);
     let ranges: HeatLossRanges = {
-      inletPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      inletPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      inletPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      inletPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       quantityValueMin: quantityMinMax.min,
       quantityValueMax: quantityMinMax.max,
       inletMassFlowMin: 0,

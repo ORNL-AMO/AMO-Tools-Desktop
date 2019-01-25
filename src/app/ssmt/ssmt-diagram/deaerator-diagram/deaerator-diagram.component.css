@@ -1,0 +1,117 @@
+.inlet-pressure-column{
+    margin-left: -5px;
+}
+
+.inlet-pressure-tube{
+    margin-top: 26px;
+    min-width: 50px;
+}
+
+.feedwater-column{
+    margin-right: -5px;
+}
+
+.feedwater{
+    padding-left: .75rem;
+    padding-right: .75rem;
+    margin-top: 50px;
+    min-width: 50px;
+}
+
+.vents{
+    margin-bottom: -5px;
+    margin-left: 5px;
+    height: 25px;
+}
+
+.makeup-water{
+    margin-top: -2px;
+    margin-left: 4px;
+    padding-bottom: 5px;
+    height: 25px;
+}
+
+.deaerator-img{
+    height: 60px;
+    z-index: +1;
+    margin-bottom: -10px;
+}
+
+.low-pressure-tube{
+    height: 106.5%;
+    margin-top: -1rem;
+    border-bottom-right-radius: 35px;
+}
+
+.makeup-water-padding{
+    padding-left: 1.5rem;
+}
+
+
+.deaerator-img-holder, .inlet-pressure-holder, .vented-steam-holder{
+    position: relative;
+}
+
+.low-pressure .inlet-pressure-holder{
+    padding-top: 25px;
+}
+
+.deaerator-img-holder .deaerator-label{
+    position: absolute;
+    top: 30px;
+    left: 14px;
+    z-index: +1;
+    background-color: white;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    font-weight: bolder;
+}
+
+.deaerator-img-holder .deaerator-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+.inlet-pressure-holder .inlet-pressure-mass-flow{
+    position: absolute;
+    color: black;
+    width: 100px;
+    bottom: 0;
+    text-align: right;
+    right: 25px;
+}
+
+.low-pressure.horizontal-pipe{
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+.high-pressure.horizontal-pipe{
+    margin-right: 50px;
+    border-bottom-left-radius: 25px;
+}
+
+.vented-steam-holder .vented-steam{
+    position: absolute;
+    color: black;
+    width: 100px;
+    bottom: 25px;
+    text-align: center;
+    right: -40px;
+}
+
+.pipe-holder{
+    margin-left: 54px;
+}
+
+.one-header-container{
+    height: 100%;
+    padding-bottom: 11px;
+}
+
+.one-header-inlet{
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    margin-bottom: 1px;
+}

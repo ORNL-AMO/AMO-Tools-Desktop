@@ -16,6 +16,7 @@ import { AuxEquipment } from './auxEquipment';
 import { MeteredEnergy } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
+import { OperatingHours, OperatingCosts } from '../operations';
 export interface PHAST {
   name?: string,
   //phastInputs?: PhastInputs,
@@ -33,11 +34,6 @@ export interface PHAST {
   equipmentNotes?: string
 }
 
-export interface OperatingCosts {
-  fuelCost?: number,
-  steamCost?: number,
-  electricityCost?: number
-}
 
 // export interface PhastInputs {
 //   heatSource?: any,
@@ -86,16 +82,6 @@ export interface Notes {
   energyInputExhaustGasNotes?: string,
   heatSystemEfficiencyNotes?: string,
   operationsNotes?: string
-}
-
-export interface OperatingHours {
-  weeksPerYear?: number,
-  daysPerWeek?: number,
-  shiftsPerDay?: number,
-  hoursPerShift?: number,
-  hoursPerYear?: number,
-  isCalculated?: boolean,
-  operatingConditions?: string
 }
 
 export interface PhastResults {

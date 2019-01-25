@@ -1,0 +1,54 @@
+
+.turbine-img{
+    height: 90px;
+}
+
+.chevron-one  .fa-chevron-down{
+    margin-right: 17px;
+}
+
+
+.chevron-two  .fa-chevron-down{
+    margin-left: 33px;
+}
+
+.turbine-img-holder, .outlet-power-holder, .inlet-mass-flow-holder{
+    position: relative;
+}
+
+.turbine-img-holder .turbine-label{
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    z-index: +1;
+    background-color: white;
+    font-weight: bolder;
+    width: 65px;
+    opacity: 0.9;
+    text-align: center;
+}
+
+
+.turbine-img-holder .turbine-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.outlet-power{
+    position: absolute;
+    z-index: +1;
+    right: -25px;
+    text-align: right;
+    width: 100px;
+    top: 2px;
+}
+
+
+.inlet-mass-flow{
+    position: absolute;
+    top: 3px;
+    z-index: +1;
+    width: 100px;
+    left: 25px;
+}

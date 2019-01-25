@@ -1,0 +1,153 @@
+.ssmt-diagram .blowdown{
+    background-color: #5D4037;
+    color: white;
+}
+.ssmt-diagram.blowdownHovered .blowdown{
+    box-shadow: 0px 0px 10px 0px #5D4037;
+}
+.blowdown .hidden-chevron{
+    color: #5D4037;
+}
+.ssmt-diagram .feedwater{
+    background-color: #8E44AD;
+    color: white;
+}
+.ssmt-diagram.feedwaterHovered .feedwater{
+    box-shadow: 0px 0px 10px 0px #8E44AD;
+}
+
+.feedwater .hidden-chevron{
+    color: #8E44AD;
+}
+
+
+.ssmt-diagram .condensate{
+    background-color: #283593;
+    color: white;
+}
+.ssmt-diagram.condensateHovered .condensate{
+    box-shadow: 0px 0px 10px 0px #283593;
+}
+
+.condensate .hidden-chevron{
+    color: #283593;
+}
+
+.ssmt-diagram .makeup-water{
+    background-color: #43A047;
+    color: white;
+}
+
+.ssmt-diagram .makeup-water-box{
+    border: #43A047 solid 3px;
+}
+
+.ssmt-diagram.makeupWaterCondensateHovered .makeup-water,
+.ssmt-diagram.makeupWaterHovered .makeup-water-box
+{
+    box-shadow: 0px 0px 10px 0px #43A047;
+}
+
+.makeup-water .hidden-chevron{
+    color: #43A047;
+}
+
+.ssmt-diagram .high-pressure{
+    background-color: #C0392B;
+    color: white;
+}
+.ssmt-diagram.highPressureHovered .high-pressure, 
+.ssmt-diagram.highPressureHovered .highPressure .header-tube,
+.ssmt-diagram.highPressureProcessSteamHovered .highPressure .process-usage {
+    box-shadow: 0px 0px 10px 0px #C0392B;
+}
+
+.high-pressure .hidden-chevron{
+    color: #C0392B;
+}
+
+.ssmt-diagram .medium-pressure{
+    background-color: #FFA726;
+}
+.ssmt-diagram.mediumPressureHovered .medium-pressure,
+.ssmt-diagram.mediumPressureHovered .mediumPressure .header-tube, 
+.ssmt-diagram.mediumPressureProcessSteamHovered .mediumPressure .process-usage{
+    box-shadow: 0px 0px 10px 0px #FFA726;
+}
+
+.medium-pressure .hidden-chevron{
+    color:#FFA726;
+}
+
+.ssmt-diagram .low-pressure{
+    background-color: #FFEB3B;
+}
+.ssmt-diagram.lowPressureHovered .low-pressure,
+.ssmt-diagram.lowPressureHovered .lowPressure .header-tube, 
+.ssmt-diagram.lowPressureProcessSteamHovered .lowPressure .process-usage {
+    box-shadow: 0px 0px 10px 0px #FFEB3B;
+}
+
+.low-pressure .hidden-chevron{
+    color: #FFEB3B;
+}
+
+.ssmt-diagram .vents{
+    background-color: #ABB2B9;
+}
+.ssmt-diagram.ventsHovered .vents{
+    box-shadow: 0px 0px 10px 0px #ABB2B9;
+}
+
+.ssmt-diagram .fa-chevron-down, .ssmt-diagram .fa-chevron-up{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
+
+.ssmt-diagram .fa-chevron-right, .ssmt-diagram .fa-chevron-left{
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+
+
+.ssmt-diagram td{
+    /* width: 25%; */
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    vertical-align: middle;
+}
+
+.ssmt-diagram tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.ssmt-diagram .group-label{
+    font-weight: bold;
+    letter-spacing: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+
+.ssmt-diagram .fa-chevron-down:not(.hidden-chevron):hover, 
+.ssmt-diagram .fa-chevron-left:not(.hidden-chevron):hover, 
+.ssmt-diagram .fa-chevron-right:not(.hidden-chevron):hover, 
+.ssmt-diagram .fa-chevron-up:not(.hidden-chevron):hover{
+    background: grey;
+    /* cursor: pointer; */
+}
+
+.ssmt-diagram .hover-tables td{
+    font-size: smaller;
+}
+.ssmt-diagram .result-tables td {
+    font-size: 10px;
+}

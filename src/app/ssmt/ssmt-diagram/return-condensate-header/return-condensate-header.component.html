@@ -1,0 +1,15 @@
+<div class="d-flex w-100 makeup-water justify-content-between" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')" (mouseleave)="hoverEquipment('default')">
+  <span class="d-flex pl-3">
+    {{makeupWaterAndCondensateHeader.pressure | number:'1.0-0'}} 
+    <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+  </span>
+  <div class="d-flex">
+    <div class="return-condensate-holder">
+      <span class="return-condensate">
+        {{condensateMassFlow | number:'1.0-2'}} 
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+      </span>
+      <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('returnCondensateHovered')" (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')"></span>
+    </div>
+  </div>
+</div>

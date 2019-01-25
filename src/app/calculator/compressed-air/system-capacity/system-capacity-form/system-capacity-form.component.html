@@ -5,7 +5,7 @@
         <label class="bold">Pipe Size 
           (in.)</label>
         <label class="bold text-center">Pipe Length 
-          (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.)</label>
+          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.)</label>
       </div>
       <div class="form-group">
         <label for="oneHalf">
@@ -15,7 +15,7 @@
         <div class="input-group">
           <input name="oneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneHalf" id="oneHalf" (input)="emitChange()"
             onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -27,7 +27,7 @@
         <div class="input-group">
           <input name="threeFourths" class="form-control" type="number" step="any" [(ngModel)]="inputs.threeFourths" id="threeFourths"
             (input)="emitChange()" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -36,7 +36,7 @@
         <div class="input-group">
           <input name="one" class="form-control" type="number" step="any" [(ngModel)]="inputs.one" id="one" (input)="emitChange()"
             onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -48,7 +48,7 @@
         <div class="input-group">
           <input name="oneAndOneFourth" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneAndOneFourth" id="oneAndOneFourth"
             (input)="emitChange()" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -60,7 +60,7 @@
         <div class="input-group">
           <input name="oneAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.oneAndOneHalf" id="oneAndOneHalf"
             (input)="emitChange()" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -69,7 +69,7 @@
         <div class="input-group">
           <input name="two" class="form-control" type="number" step="any" [(ngModel)]="inputs.two" id="two" (input)="emitChange()"
             onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -81,7 +81,7 @@
         <div class="input-group">
           <input name="twoAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.twoAndOneHalf" id="twoAndOneHalf"
             (input)="emitChange()" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -90,7 +90,7 @@
         <div class="input-group">
           <input name="three" class="form-control" type="number" step="any" [(ngModel)]="inputs.three" id="three" (input)="emitChange()"
             onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -102,7 +102,7 @@
         <div class="input-group">
           <input name="threeAndOneHalf" class="form-control" type="number" step="any" [(ngModel)]="inputs.threeAndOneHalf" id="threeAndOneHalf"
             (input)="emitChange()" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -111,7 +111,7 @@
         <div class="input-group">
           <input name="four" class="form-control" type="number" step="any" [(ngModel)]="inputs.four" id="four" (input)="emitChange()"
             onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -120,7 +120,7 @@
         <div class="input-group">
           <input name="five" class="form-control" type="number" step="any" [(ngModel)]="inputs.five" id="five" (input)="emitChange()"
             onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -129,7 +129,7 @@
         <div class="input-group">
           <input name="six" class="form-control" type="number" step="any" [(ngModel)]="inputs.six" id="six" (input)="emitChange()"
             onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
         </div>
       </div>
@@ -141,11 +141,11 @@
 
         <div class="form-group">
           <label for="{{'pipe_size_' + i}}">Pipe {{i + 1}} Size 
-            (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>.)</label>
+            (<span *ngIf="settings.unitsOfMeasure != 'Metric'">in</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">cm</span>.)</label>
           <div class="input-group">
             <input name="{{'pipe_size_' + i}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.customPipes[i].pipeSize"
               id="{{'pipe_size_' + i}}" (input)="emitChange()" onfocus="this.select();">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
             <span class="input-group-addon">
               <div class="btn-delete-field" (click)="deleteCustomPipe(i)"> &times;</div>
@@ -154,11 +154,11 @@
         </div>
         <div class="form-group">
           <label for="{{'pipe_length_' + i}}">Pipe {{i + 1}} Length 
-            (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.)</label>
+            (<span *ngIf="settings.unitsOfMeasure != 'Metric'">ft</span><span *ngIf="settings.unitsOfMeasure == 'Metric'">m</span>.)</label>
           <div class="input-group">
             <input name="{{'pipe_length_' + i}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.customPipes[i].pipeLength"
               id="{{'pipe_length_' + i}}" (input)="emitChange()" onfocus="this.select();">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">ft</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m</span>
             <span class="input-group-addon">
               <div class="btn-delete-field" (click)="deleteCustomPipe(i)"> &times;</div>
@@ -182,7 +182,7 @@
         <div class="input-group">
           <input name="{{'capacity_'+index}}" class="form-control" type="number" step="any" [(ngModel)]="inputs.receiverCapacities[index]"
             id="{{'capacity_'+index}}" (input)="emitChange()" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">gal</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup></span>
           <span class="input-group-addon">
             <div class="btn-delete-field" (click)="removeCapacity(index)"> &times;</div>
@@ -201,7 +201,7 @@
         <div class="text-center small">
           <span *ngIf="outputs.totalPipeVolume">
             <strong>{{outputs.totalPipeVolume | number:'1.0-2'}} </strong>
-            <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup></strong>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
           </span>
           <span *ngIf="!outputs.totalPipeVolume">
@@ -214,7 +214,7 @@
         <div class="text-center small">
           <span *ngIf="outputs.totalReceiverVolume">
             <strong>{{outputs.totalReceiverVolume | number:'1.0-2'}} </strong>
-            <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup></strong>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
           </span>
           <span *ngIf="!outputs.totalReceiverVolume">
@@ -227,7 +227,7 @@
         <div class="text-center small">
           <span *ngIf="outputs.totalCapacityOfCompressedAirSystem">
             <strong>{{outputs.totalCapacityOfCompressedAirSystem | number:'1.0-2'}} </strong>
-            <strong *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>3</sup></strong>
+            <strong *ngIf="settings.unitsOfMeasure != 'Metric'">ft<sup>3</sup></strong>
             <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
           </span>
           <span *ngIf="!outputs.totalCapacityOfCompressedAirSystem">

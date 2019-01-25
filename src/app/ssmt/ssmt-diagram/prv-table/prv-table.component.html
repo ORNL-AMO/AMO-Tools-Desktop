@@ -1,0 +1,91 @@
+<div class="d-flex flex-column">
+  <div class="p-1">
+    <label class="group-label">{{prvLabel}} Pressure Releasing Valve</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="bold text-center">Steam In</td>
+          <td class="bold text-center">Steam Out</td>
+          <td class="bold text-center" *ngIf="prv.feedwaterMassFlow">Feedwater</td>
+          <td class="text-center">Units</td>
+        </tr>
+        <tr>
+          <td class="bold">Pressure</td>
+          <td class="text-center">{{prv.inletPressure | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletPressure | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterPressure |number:'2.0-2'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Temperature</td>
+          <td class="text-center">{{prv.inletTemperature | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletTemperature | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterTemperature |number:'2.0-2'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="bold">Sp. Enthalpy</td>
+          <td class="text-center">{{prv.inletSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletSpecificEnthalpy | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterSpecificEnthalpy |number:'2.0-2'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Sp. Entropy</td>
+          <td class="text-center">{{prv.inletSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletSpecificEntropy | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterSpecificEntropy |number:'2.0-2'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Quality</td>
+          <td class="text-center">
+            <span *ngIf="prv.inletQuality == 0">Liquid</span>
+            <span *ngIf="prv.inletQuality == 1">Gas</span>
+            <span *ngIf="prv.inletQuality != 0 && prv.inletQuality != 1">{{prv.inletQuality |number:'2.0-2'}}</span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="prv.outletQuality == 0">Liquid</span>
+            <span *ngIf="prv.outletQuality == 1">Gas</span>
+            <span *ngIf="prv.outletQuality != 0 && prv.outletQuality != 1">{{prv.outletQuality |number:'2.0-2'}}</span>
+          </td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">
+            <span *ngIf="prv.feedwaterQuality == 0">Liquid</span>
+            <span *ngIf="prv.feedwaterQuality == 1">Gas</span>
+            <span *ngIf="prv.feedwaterQuality != 0 && prv.feedwaterQuality != 1">{{prv.feedwaterQuality
+              |number:'2.0-2'}}</span>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="bold">Mass Flow</td>
+          <td class="text-center">{{prv.inletMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletMassFlow | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterMassFlow |number:'2.0-2'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Energy Flow</td>
+          <td class="text-center">{{prv.inletEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center">{{prv.outletEnergyFlow | number:'1.0-2'}}</td>
+          <td class="text-center" *ngIf="prv.feedwaterMassFlow">{{prv.feedwaterEnergyFlow |number:'2.0-2'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
