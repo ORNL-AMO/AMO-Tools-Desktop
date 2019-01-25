@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../../shared/models/phast/efficiencyImprovement';
 import { Settings } from '../../../../shared/models/settings';
+import { EfficiencyImprovementService } from '../efficiency-improvement.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-efficiency-improvement-form',
   templateUrl: './efficiency-improvement-form.component.html',
@@ -12,40 +14,37 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs
   @Output('calculate')
-  calculate = new EventEmitter<boolean>();
+  calculate = new EventEmitter<EfficiencyImprovementInputs>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
 
-  error = {
-    currentCombAirTemp: null,
-    newCombAirTemp: null
-  };
+  form: FormGroup;
 
-  constructor() { }
+  constructor(private efficiencyImprovementService: EfficiencyImprovementService) { }
 
   ngOnInit() {
+    this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
+    this.calc();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.efficiencyImprovementInputs) {
+      this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
+    }
   }
 
 
   calc() {
-    this.error.currentCombAirTemp = null;
-    this.error.newCombAirTemp = null;
-    let canCalculate: boolean = true;
-
-    if (this.efficiencyImprovementInputs.currentCombustionAirTemp > this.efficiencyImprovementInputs.currentFlueGasTemp) {
-      this.error.currentCombAirTemp = 'Combustion air temperature must be less than flue gas temperature';
-      canCalculate = false;
-    }
-
-    if (this.efficiencyImprovementInputs.newCombustionAirTemp > this.efficiencyImprovementInputs.newFlueGasTemp) {
-      this.error.newCombAirTemp = 'Combustion air temperature must be less than flue gas temperature';
-      canCalculate = false;
-    }
-
-    if (canCalculate) {
-      this.calculate.emit(true);
+    this.efficiencyImprovementInputs = this.efficiencyImprovementService.getObjFromForm(this.form);
+    this.efficiencyImprovementService.updateFormValidators(this.form, this.efficiencyImprovementInputs);
+    this.form.controls.currentCombustionAirTemp.markAsDirty({ onlySelf: true });
+    this.form.controls.currentCombustionAirTemp.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+    this.form.controls.newCombustionAirTemp.markAsDirty({ onlySelf: true });
+    this.form.controls.newCombustionAirTemp.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+    if (this.form.valid) {
+      this.calculate.emit(this.efficiencyImprovementInputs);
     }
   }
 

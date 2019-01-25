@@ -127,8 +127,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
       if (changes.resetData) {
         this.resetTableData();
       }
-      console.log('changes = ');
-      console.log(changes);
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
           // if (this.speedForm.controls.pumpType.value != this.tmpPumpType) {
@@ -558,5 +556,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }, 200);
   }
   //========== end chart resize functions ==========
-
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code == 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
 }

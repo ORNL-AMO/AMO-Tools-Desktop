@@ -1417,12 +1417,6 @@ Modify Conditions
   box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   z-index: 2;
 }
-.converter-col {
-  height: 100%;
-}
-.converter-content {
-  padding-top: 4%;
-}
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     border-color: #ddd;

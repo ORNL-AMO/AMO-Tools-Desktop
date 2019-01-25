@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { EnergyEquivalencyElectric, EnergyEquivalencyFuel, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuelOutput } from '../../../../shared/models/phast/energyEquivalency';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+import { EnergyEquivalencyService } from '../energy-equivalency.service';
 
 @Component({
   selector: 'app-energy-equivalency-form',
@@ -25,14 +27,31 @@ export class EnergyEquivalencyFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  constructor() { }
+  formElectric: FormGroup;
+  formFuel: FormGroup;
+
+  constructor(private energyEquivalencyService: EnergyEquivalencyService) { }
 
   ngOnInit() {
+    this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
+    this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.energyEquivalencyElectric) {
+      this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
+    }
+    if (changes.energyEquivalencyFuel) {
+      this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
+    }
+  }
+
   calcElectric() {
+    this.energyEquivalencyElectric = this.energyEquivalencyService.getElectricObjFromForm(this.formElectric);
     this.calculateElectric.emit(true);
   }
   calcFuel() {
+    this.energyEquivalencyFuel = this.energyEquivalencyService.getFuelObjFromForm(this.formFuel);
     this.calculateFuel.emit(true);
   }
 

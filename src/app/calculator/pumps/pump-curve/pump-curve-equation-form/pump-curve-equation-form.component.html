@@ -3,103 +3,149 @@
 <label class="group-label" *ngIf="isFan">
   Pressure Equation Coefficients</label>
 
-<div class="form-group">
-  <label for="maxFlow">Max Flow</label>
-  <div class="input-group">
-    <input name="maxFlow" [(ngModel)]="pumpCurveForm.maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="maxFlow" onfocus="this.select();" (focus)="focusField('maxFlow')" *ngIf="!isFan">
-    <input name="maxFlow" [(ngModel)]="pumpCurveForm.maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="maxFlow" onfocus="this.select();" (focus)="focusField('fanMaxFlow')" *ngIf="isFan">
-    <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
-    <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
-    <span class="alert-danger pull-right small" *ngIf="maxFlowWarning !== null">
-      {{maxFlowWarning}}
+<form [formGroup]="pumpCurveForm">
+  <div class="form-group">
+    <label for="maxFlow">Max Flow</label>
+    <div class="input-group">
+      <input name="maxFlow" formControlName="maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="maxFlow" onfocus="this.select();" (focus)="focusField('maxFlow')" *ngIf="!isFan">
+      <input name="maxFlow" formControlName="maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="maxFlow" onfocus="this.select();" (focus)="focusField('fanMaxFlow')" *ngIf="isFan">
+      <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+      <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.maxFlow.invalid && !pumpCurveForm.controls.maxFlow.pristine">
+      <span *ngIf="pumpCurveForm.controls.maxFlow.errors.required">Value required.</span>
+      <span *ngIf="pumpCurveForm.controls.maxFlow.errors.max">Value can't be greater than
+        {{pumpCurveForm.controls.maxFlow.max.max}}
+        <span *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+        <span *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+        .
+      </span>
+      <span *ngIf="pumpCurveForm.controls.maxFlow.errors.min">Value can't be less than
+        {{pumpCurveForm.controls.maxFlow.min.min}}
+        <span *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+        <span *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+        .
+      </span>
     </span>
   </div>
-</div>
 
 
-<div class="form-group">
-  <label for="headOrder">Order</label>
-  <select id="headOrder" name="headOrder" class="form-control" [(ngModel)]="pumpCurveForm.headOrder" (focus)="focusField('headOrder')"
-    (change)="setOrder()" *ngIf="!isFan">
-    <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
-  </select>
-  <select id="headOrder" name="headOrder" class="form-control" [(ngModel)]="pumpCurveForm.headOrder" (focus)="focusField('pressureOrder')"
-    (change)="setOrder()" *ngIf="isFan">
-    <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
-  </select>
-</div>
+  <div class="form-group">
+    <label for="headOrder">Order</label>
+    <select id="headOrder" name="headOrder" class="form-control" formControlName="headOrder" (focus)="focusField('headOrder')"
+      (change)="setOrder()" *ngIf="!isFan">
+      <option *ngFor="let order of orderOptions; let i = index" [ngValue]="i">{{order}}</option>
+    </select>
+    <select id="headOrder" name="headOrder" class="form-control" formControlName="headOrder" (focus)="focusField('pressureOrder')"
+      (change)="setOrder()" *ngIf="isFan">
+      <option *ngFor="let order of orderOptions; let i = index" [ngValue]="i">{{order}}</option>
+    </select>
+  </div>
 
-<div class="form-group">
-  <label for="headConstant">Constant</label>
-  <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control"
-    (input)="emitCalculateChanges()" id="headConstant" onfocus="this.select();" (focus)="focusField('headConstant')"
-    *ngIf="!isFan">
-  <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control"
-    (input)="emitCalculateChanges()" id="headConstant" onfocus="this.select();" (focus)="focusField('pressureConstant')"
-    *ngIf="isFan">
-  <span class="alert-danger pull-right small" *ngIf="constantWarning !== null">
-    {{constantWarning}}
-  </span>
-</div>
+  <div class="form-group">
+    <label for="headConstant">Constant</label>
+    <div class="input-group">
+      <input name="headConstant" formControlName="headConstant" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headConstant" onfocus="this.select();" (focus)="focusField('headConstant')" *ngIf="!isFan">
+      <input name="headConstant" formControlName="headConstant" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headConstant" onfocus="this.select();" (focus)="focusField('pressureConstant')" *ngIf="isFan">
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.headConstant.invalid && !pumpCurveForm.controls.headConstant.pristine">
+      <span *ngIf="pumpCurveForm.controls.headConstant.errors.required">Value required.</span>
+      <span *ngIf="pumpCurveForm.controls.headConstant.errors.min">Value can't be less than
+        {{pumpCurveForm.controls.headConstant.errors.min.min}}.</span>
+    </span>
+  </div>
 
-<div class="form-group">
-  <label for="headFlow">flow</label>
-  <input name="headFlow" [(ngModel)]="pumpCurveForm.headFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow" onfocus="this.select();" (focus)="focusField('headFlow')" *ngIf="!isFan">
-  <input name="headFlow" [(ngModel)]="pumpCurveForm.headFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow" onfocus="this.select();" (focus)="focusField('pressureFlow')" *ngIf="isFan">
-</div>
-
-
-<div class="form-group" *ngIf="pumpCurveForm.headOrder > 1">
-  <label for="headFlow2">flow
-    <sup>2</sup>
-  </label>
-  <input name="headFlow2" [(ngModel)]="pumpCurveForm.headFlow2" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow2" onfocus="this.select();" (focus)="focusField('headFlow2')" *ngIf="!isFan">
-  <input name="headFlow2" [(ngModel)]="pumpCurveForm.headFlow2" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow2" onfocus="this.select();" (focus)="focusField('pressureFlow2')" *ngIf="isFan">
-</div>
+  <div class="form-group">
+    <label for="headFlow">flow</label>
+    <div class="input-group">
+      <input name="headFlow" formControlName="headFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow" onfocus="this.select();" (focus)="focusField('headFlow')" *ngIf="!isFan">
+      <input name="headFlow" formControlName="headFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow" onfocus="this.select();" (focus)="focusField('pressureFlow')" *ngIf="isFan">
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.headFlow.invalid && !pumpCurveForm.controls.headFlow.pristine">
+      <span *ngIf="pumpCurveForm.controls.headFlow.errors.required">Value required.</span>
+    </span>
+  </div>
 
 
-<div class="form-group" *ngIf="pumpCurveForm.headOrder > 2">
-  <label for="headFlow3">flow
-    <sup>3</sup>
-  </label>
-  <input name="headFlow3" [(ngModel)]="pumpCurveForm.headFlow3" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow3" onfocus="this.select();" (focus)="focusField('headFlow3')" *ngIf="!isFan">
-  <input name="headFlow3" [(ngModel)]="pumpCurveForm.headFlow3" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow3" onfocus="this.select();" (focus)="focusField('pressureFlow3')" *ngIf="isFan">
-</div>
+  <div class="form-group" *ngIf="pumpCurveForm.controls.headOrder.value + 2 > 1">
+    <label for="headFlow2">flow
+      <sup>2</sup>
+    </label>
+    <div class="input-group">
+      <input name="headFlow2" formControlName="headFlow2" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow2" onfocus="this.select();" (focus)="focusField('headFlow2')" *ngIf="!isFan">
+      <input name="headFlow2" formControlName="headFlow2" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow2" onfocus="this.select();" (focus)="focusField('pressureFlow2')" *ngIf="isFan">
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.headFlow2.invalid && !pumpCurveForm.controls.headFlow2.pristine">
+      <span *ngIf="pumpCurveForm.controls.headFlow2.errors.required">Value required.</span>
+    </span>
+  </div>
 
-<div class="form-group" *ngIf="pumpCurveForm.headOrder > 3">
-  <label for="headFlow4">flow
-    <sup>4</sup>
-  </label>
-  <input name="headFlow4" [(ngModel)]="pumpCurveForm.headFlow4" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow4" onfocus="this.select();" (focus)="focusField('headFlow4')" *ngIf="!isFan">
-  <input name="headFlow4" [(ngModel)]="pumpCurveForm.headFlow4" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow4" onfocus="this.select();" (focus)="focusField('pressureFlow4')" *ngIf="isFan">
-</div>
 
-<div class="form-group row" *ngIf="pumpCurveForm.headOrder > 4">
-  <label for="headFlow5">flow
-    <sup>5</sup>
-  </label>
-  <input name="headFlow5" [(ngModel)]="pumpCurveForm.headFlow5" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow5" onfocus="this.select();" (focus)="focusField('headFlow5')" *ngIf="!isFan">
-  <input name="headFlow5" [(ngModel)]="pumpCurveForm.headFlow5" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow5" onfocus="this.select();" (focus)="focusField('pressureFlow5')" *ngIf="isFan">
-</div>
+  <div class="form-group" *ngIf="pumpCurveForm.controls.headOrder.value + 2 > 2">
+    <label for="headFlow3">flow
+      <sup>3</sup>
+    </label>
+    <div class="input-group">
+      <input name="headFlow3" formControlName="headFlow3" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow3" onfocus="this.select();" (focus)="focusField('headFlow3')" *ngIf="!isFan">
+      <input name="headFlow3" formControlName="headFlow3" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow3" onfocus="this.select();" (focus)="focusField('pressureFlow3')" *ngIf="isFan">
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.headFlow3.invalid && !pumpCurveForm.controls.headFlow3.pristine">
+      <span *ngIf="pumpCurveForm.controls.headFlow3.errors.required">Value required.</span>
+    </span>
+  </div>
 
-<div class="form-group row" *ngIf="pumpCurveForm.headOrder > 5">
-  <label for="headFlow6">flow
-    <sup>6</sup>
-  </label>
-  <input name="headFlow6" [(ngModel)]="pumpCurveForm.headFlow6" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow6" onfocus="this.select();" (focus)="focusField('headFlow6')" *ngIf="!isFan">
-  <input name="headFlow6" [(ngModel)]="pumpCurveForm.headFlow6" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-    id="headFlow6" onfocus="this.select();" (focus)="focusField('pressureFlow6')" *ngIf="isFan">
-</div>
+  <div class="form-group" *ngIf="pumpCurveForm.controls.headOrder.value + 2 > 3">
+    <label for="headFlow4">flow
+      <sup>4</sup>
+    </label>
+    <div class="input-group">
+      <input name="headFlow4" formControlName="headFlow4" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow4" onfocus="this.select();" (focus)="focusField('headFlow4')" *ngIf="!isFan">
+      <input name="headFlow4" formControlName="headFlow4" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow4" onfocus="this.select();" (focus)="focusField('pressureFlow4')" *ngIf="isFan">
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.headFlow4.invalid && !pumpCurveForm.controls.headFlow4.pristine">
+      <span *ngIf="pumpCurveForm.controls.headFlow4.errors.required">Value required.</span>
+    </span>
+  </div>
+
+  <div class="form-group" *ngIf="pumpCurveForm.controls.headOrder.value + 2 > 4">
+    <label for="headFlow5">flow
+      <sup>5</sup>
+    </label>
+    <div class="input-group">
+      <input name="headFlow5" formControlName="headFlow5" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow5" onfocus="this.select();" (focus)="focusField('headFlow5')" *ngIf="!isFan">
+      <input name="headFlow5" formControlName="headFlow5" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow5" onfocus="this.select();" (focus)="focusField('pressureFlow5')" *ngIf="isFan">
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.headFlow5.invalid && !pumpCurveForm.controls.headFlow5.pristine">
+      <span *ngIf="pumpCurveForm.controls.headFlow5.errors.required">Value required.</span>
+    </span>
+  </div>
+
+  <div class="form-group" *ngIf="pumpCurveForm.controls.headOrder.value + 2 > 5">
+    <label for="headFlow6">flow
+      <sup>6</sup>
+    </label>
+    <div class="input-group">
+      <input name="headFlow6" formControlName="headFlow6" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow6" onfocus="this.select();" (focus)="focusField('headFlow6')" *ngIf="!isFan">
+      <input name="headFlow6" formControlName="headFlow6" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+        id="headFlow6" onfocus="this.select();" (focus)="focusField('pressureFlow6')" *ngIf="isFan">
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="pumpCurveForm.controls.headFlow6.invalid && !pumpCurveForm.controls.headFlow6.pristine">
+      <span *ngIf="pumpCurveForm.controls.headFlow6.errors.required">Value required.</span>
+    </span>
+  </div>
+</form>

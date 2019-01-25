@@ -22,7 +22,7 @@ export class NemaEnergyEfficiencyService {
     // let efficiency: string = this.psatService.getEfficiencyClassFromEnum(psat.inputs.efficiency_class);
     return this.formBuilder.group({
       frequency: [psat.inputs.line_frequency, [Validators.required]],
-      horsePower: [psat.inputs.motor_rated_power, [Validators.required]],
+      horsePower: [psat.inputs.motor_rated_power, [Validators.required, Validators.min(0)]],
       efficiencyClass: [psat.inputs.efficiency_class, [Validators.required]],
       motorRPM: [psat.inputs.motor_rated_speed, [Validators.required]],
       efficiency: [psat.inputs.efficiency, [Validators.min(1), Validators.max(100)]]
