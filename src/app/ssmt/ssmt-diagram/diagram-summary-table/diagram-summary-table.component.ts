@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-diagram-summary-table',
@@ -26,7 +27,8 @@ export class DiagramSummaryTableComponent implements OnInit {
   totalOperatingCost: number;
   @Input()
   boilerFuelUsage: number;
-
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {

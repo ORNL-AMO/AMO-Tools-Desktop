@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-cost-table',
@@ -26,6 +27,9 @@ export class CostTableComponent implements OnInit {
   powerGenerationCost: number;
   @Input()
   totalOperatingCost: number;
+  @Input()
+  settings: Settings;
+  
   constructor() { }
 
   ngOnInit() {

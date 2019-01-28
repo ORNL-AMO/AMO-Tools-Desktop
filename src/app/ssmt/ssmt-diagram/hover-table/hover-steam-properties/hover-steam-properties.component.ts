@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage } from '../../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-hover-steam-properties',
@@ -10,6 +11,8 @@ import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOu
 export class HoverSteamPropertiesComponent implements OnInit {
   @Input()
   hoveredProperty: string;
+  @Input()
+  settings: Settings;
 
   steam: SteamPropertiesOutput;
   label: string;

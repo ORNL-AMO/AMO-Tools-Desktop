@@ -37,14 +37,14 @@
 }
 
 .low-pressure-margin{
-    margin-right: 18px;
+    margin-left: 18px;
 }
 
 .inlet-blowdown-holder, .outlet-steam-holder, .outlet-blowdown-holder{
     position: relative;
 }
 
-.blowdown{
+.tank-pipe{
     width: 50px;
 }
 
@@ -69,5 +69,12 @@
     color: black;
     width: 100px;
     text-align: right;
-    right: 40px;
+    right: 20px;
+    bottom: 20px;
+}
+
+.outlet-chevron{
+    padding-bottom: 5px;
+    margin-bottom: -10px;
+    border-top-left-radius: 25px;
 }

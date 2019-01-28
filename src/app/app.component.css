@@ -1091,6 +1091,7 @@ Calculators
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
 
 .psat .ico-size{
@@ -1126,6 +1127,7 @@ Calculators
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
 }
 
 .ico-size5 {
@@ -1144,7 +1146,14 @@ Calculators
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
-
+.lighting-bulb {
+  height: 55px;
+  width: 55px;
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
+}
 
 .ico-col{
   padding-top: 5px;
@@ -1416,12 +1425,6 @@ Modify Conditions
   -moz-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   z-index: 2;
-}
-.converter-col {
-  height: 100%;
-}
-.converter-content {
-  padding-top: 4%;
 }
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {

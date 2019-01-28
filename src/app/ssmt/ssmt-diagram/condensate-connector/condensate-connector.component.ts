@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-condensate-connector',
@@ -13,6 +14,9 @@ export class CondensateConnectorComponent implements OnInit {
   returnCondensate: SteamPropertiesOutput;
   @Input()
   isOneHeaderSystem: boolean;
+  @Input()
+  settings: Settings;
+  
   constructor() { }
 
   ngOnInit() {

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-turbine-diagram',
@@ -21,7 +22,9 @@ export class TurbineDiagramComponent implements OnInit {
   emitSelectEquipment = new EventEmitter<string>();
   @Input()
   turbineType: string;
-
+  @Input()
+  settings: Settings;
+  
   turbineLabel: string;
   constructor() { }
 

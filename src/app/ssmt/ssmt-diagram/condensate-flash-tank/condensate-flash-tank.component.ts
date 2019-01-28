@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-condensate-flash-tank',
@@ -13,6 +14,8 @@ export class CondensateFlashTankComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Output('emitSelectEquipment')
   emitSelectEquipment = new EventEmitter<string>();
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {

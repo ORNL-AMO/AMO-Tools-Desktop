@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { TurbineOutput } from '../../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-hover-turbine-table',
@@ -10,7 +11,9 @@ import { TurbineOutput } from '../../../../shared/models/steam/steam-outputs';
 export class HoverTurbineTableComponent implements OnInit {
   @Input()
   turbineType: string;
-
+  @Input()
+  settings: Settings;
+  
   turbine: TurbineOutput
   constructor(private calculateModelService: CalculateModelService) { }
 

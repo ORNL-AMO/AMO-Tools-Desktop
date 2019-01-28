@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-hover-makeup-water',
@@ -10,7 +11,9 @@ import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-out
 export class HoverMakeupWaterComponent implements OnInit {
   @Input()
   combined: boolean;
-
+  @Input()
+  settings: Settings;
+  
   makeupWater: SteamPropertiesOutput;
   makeupWaterLabel: string;
   constructor(private calculateModelService: CalculateModelService) { }

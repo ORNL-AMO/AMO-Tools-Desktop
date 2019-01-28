@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { FlashTankOutput } from '../../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-hover-flash-tank-table',
@@ -10,7 +11,9 @@ import { FlashTankOutput } from '../../../../shared/models/steam/steam-outputs';
 export class HoverFlashTankTableComponent implements OnInit {
   @Input()
   flashTankType: string;
-
+  @Input()
+  settings: Settings;
+  
   flashTank: FlashTankOutput;
   constructor(private calculateModelService: CalculateModelService) { }
 
