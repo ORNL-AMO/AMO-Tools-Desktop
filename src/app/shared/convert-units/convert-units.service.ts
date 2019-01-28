@@ -104,7 +104,7 @@ export class ConvertUnitsService {
     if (!this.val) {
       if (this.val !== 0) {
         // throw new Error('need to set value before call to .from');
-        console.log('You need to set a value (make sure its not undefined) before you call .from');
+        //console.log('You need to set a value (make sure its not undefined) before you call .from');
       }
     }
     if (this.destination)

@@ -1,0 +1,92 @@
+.up-pipe{
+    border-bottom-left-radius: 25px;
+}
+
+
+.makeup-water-holder{
+    position: relative;
+    padding-right: 50px;
+}
+
+.makeup-water-holder .makeup-water-label{
+    position: absolute;
+    width: 65px;
+    height: 38px;
+    z-index: +1;
+    color: black;
+    background: #D7EDFB;
+    border-color: solid 3px;
+    bottom: -12px;
+    left:-5px;
+    text-align: center;
+}
+
+.makeup-water-label:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    box-shadow: 0px 0px 10px 0px #91cef4;
+
+}
+
+
+.makeup-water-holder .makeup-water-temp{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    top: 25px;
+    width: 50px;
+    left: 12px;
+
+}
+
+
+.makeup-water-holder .makeup-water-mass-flow{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    top: 20px;
+    width: 100px;
+    right: 0px;
+}
+.makeup-water-holder .makeup-water-volume-flow{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    bottom: 20px;
+    width: 100px;
+    right: 0px;
+}
+
+.heat-exchanger-holder{
+    position: relative;
+}
+
+
+.heat-exchanger-holder .heat-exchanger{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    z-index: +1;
+    top: -3px;
+    right: 60px;
+    background-color: #D7EDFB;
+}
+
+.heat-exchanger-holder .inlet-blowdown{
+    height: 20px;
+    position: absolute;
+    bottom: 30px;
+    right: 5px;
+}
+
+.heat-exchanger-holder .outlet-blowdown{
+    height: 30px;
+    position: absolute;
+    top: 30px;
+    right: 5px;
+}
+
+
+.blowdown .hidden-chevron{
+    color: #5D4037;
+}

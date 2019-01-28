@@ -36,11 +36,12 @@
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
+      <app-ssmt-report [assessment]="assessment" [settings]="settings" [containerHeight]="containerHeight"></app-ssmt-report>
     </div>
   </div>
   <!--diagram-->
-  <div class="tab-content" *ngIf="mainTab == 'diagram'">
-    <app-ssmt-diagram></app-ssmt-diagram>
+  <div class="tab-content" [ngStyle]="{'height.px': containerHeight}" *ngIf="mainTab == 'diagram'">
+    <app-ssmt-diagram [settings]="settings" [ssmt]="_ssmt" [containerHeight]="containerHeight"></app-ssmt-diagram>
   </div>
   <!--calculators-->
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">

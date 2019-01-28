@@ -229,7 +229,7 @@ export const MockFsatSettings: Settings = {
         },
         date: "Tue Dec 04 2018"
     },
-    steamPowerMeasurement: "MMBtu",
+    steamPowerMeasurement: "kW",
     steamEnergyMeasurement: "MMBtu"
 }
 

@@ -1,0 +1,80 @@
+.flash-tank-img{
+    height: 55px;
+    z-index: +1;
+    margin-left: -5px;
+    margin-right: -5px;
+    margin-top: -18%;
+}
+
+.flash-tank-img-holder{
+    position: relative;
+}
+
+.flash-tank-img-holder .flash-tank-label{
+    position: absolute;
+    z-index: +1;
+    background-color: white;
+    font-weight: bolder;
+    width: 50px;
+    opacity: 0.9;
+    text-align: center;
+    right: 0;
+    font-size: smaller;
+    top: 5px;
+}
+
+
+.flash-tank-img-holder .flash-tank-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 1;
+}
+
+
+.fa-arrow-circle-left{
+    font-size: 18px;
+    padding-left: 2px;
+}
+
+.low-pressure-margin{
+    margin-left: 18px;
+}
+
+.inlet-blowdown-holder, .outlet-steam-holder, .outlet-blowdown-holder{
+    position: relative;
+}
+
+.tank-pipe{
+    width: 50px;
+}
+
+.inlet-blowdown-holder .inlet-blowdown{
+    position: absolute;
+    color: black;
+    width: 100px;
+    left: 40px;
+}
+
+.outlet-steam-holder .outlet-steam-mass-flow{
+    position: absolute;
+    color: black;
+    width: 100px;
+    right: 25px;
+    top: 0px;
+    text-align: right;
+}
+
+.outlet-blowdown-holder .outlet-blowdown{
+    position: absolute;
+    color: black;
+    width: 100px;
+    text-align: right;
+    right: 20px;
+    bottom: 20px;
+}
+
+.outlet-chevron{
+    padding-bottom: 5px;
+    margin-bottom: -10px;
+    border-top-left-radius: 25px;
+}

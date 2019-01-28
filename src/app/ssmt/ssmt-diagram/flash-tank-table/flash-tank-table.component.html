@@ -1,0 +1,93 @@
+<div class="d-flex flex-column">
+  <div class="p-1">
+    <label class="group-label">{{flashTankType}} Flash Tank</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="bold text-center">Inlet</td>
+          <td class="bold text-center">Steam Out</td>
+          <td class="bold text-center">Liquid Out</td>
+          <td class="text-center">Units</td>
+        </tr>
+        <tr>
+          <td class="bold">Pressure</td>
+          <td class="text-center">{{flashTank.inletWaterPressure | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletGasPressure | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidPressure | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Temperature</td>
+          <td class="text-center">{{flashTank.inletWaterTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletGasTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="bold">Sp. Enthalpy</td>
+          <td class="text-center">{{flashTank.inletWaterSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletGasSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Sp. Entropy</td>
+          <td class="text-center">{{flashTank.inletWaterSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletGasSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Quality</td>
+          <td class="text-center">
+            <span *ngIf="flashTank.inletWaterQuality == 0">Liquid</span>
+            <span *ngIf="flashTank.inletWaterQuality == 1">Gas</span>
+            <span *ngIf="flashTank.inletWaterQuality != 1 && flashTank.inletWaterQuality != 0">
+              {{flashTank.inletWaterQuality | number:'1.0-1'}} </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="flashTank.outletGasQuality == 0">Liquid</span>
+            <span *ngIf="flashTank.outletGasQuality == 1">Gas</span>
+            <span *ngIf="flashTank.outletGasQuality != 1 && flashTank.outletGasQuality != 0">
+              {{flashTank.outletGasQuality | number:'1.0-1'}} </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="flashTank.outletLiquidQuality == 0">Liquid</span>
+            <span *ngIf="flashTank.outletLiquidQuality == 1">Gas</span>
+            <span *ngIf="flashTank.outletLiquidQuality != 1 && flashTank.outletLiquidQuality != 0">
+              {{flashTank.outletLiquidQuality | number:'1.0-1'}} </span>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="bold">Mass Flow</td>
+          <td class="text-center">{{flashTank.inletWaterMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletGasMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Energy Flow</td>
+          <td class="text-center">{{flashTank.inletWaterEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletGasEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{flashTank.outletLiquidEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -25,10 +25,12 @@ import { HeaderFormComponent } from './header/header-form/header-form.component'
 import { TurbineService } from './turbine/turbine.service';
 import { CondensingTurbineFormComponent } from './turbine/condensing-turbine-form/condensing-turbine-form.component';
 import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pressure-turbine-form.component';
-import { SsmtDiagramComponent } from './ssmt-diagram/ssmt-diagram.component';
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
 import { SharedModule } from '../shared/shared.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
+
+import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
+import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
 
 @NgModule({
   imports: [
@@ -41,7 +43,9 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     ModalModule,
     SuiteDbModule,
     SharedModule,
-    HelpPanelModule
+    HelpPanelModule,
+    SsmtDiagramModule,
+    SsmtReportModule
   ],
   declarations: [
     SsmtComponent,
@@ -59,7 +63,6 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
     HeaderFormComponent,
     CondensingTurbineFormComponent,
     PressureTurbineFormComponent,
-    SsmtDiagramComponent,
     SsmtSankeyComponent
   ],
   providers: [

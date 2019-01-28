@@ -8,7 +8,7 @@
   </div>
   <div class="pl-3 pr-3 pt-2">
     <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="save()" [inPsat]="true"></app-application-settings>
-    <app-steam-settings [(settingsForm)]="settingsForm" (save)="save()"></app-steam-settings>
+    <app-steam-settings [(settingsForm)]="settingsForm" (startSavePolling)="save()"></app-steam-settings>
   </div>
   <div class="pl-3 pr-3">
     <form>

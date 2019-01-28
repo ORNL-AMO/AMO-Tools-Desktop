@@ -317,6 +317,15 @@ export interface SaturatedPropertiesOutput {
   evaporationVolume: number;
 }
 
+
+export interface ProcessSteamUsage {
+  pressure: number;
+  temperature: number;
+  energyFlow: number;
+  massFlow: number;
+  processUsage:number;
+}
+
 //TODO: HeatExchange...
 
 export const boiler: DeaeratorOutput = {

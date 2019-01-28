@@ -1,0 +1,98 @@
+
+.prv-img{
+    height: 70px;
+    margin-left: -7.5px;
+    margin-top: -50%;
+    margin-bottom: -50%;
+    z-index: +1;
+}
+
+.prv-img:hover{
+    cursor: pointer;
+}
+
+.prv-diagram{
+    min-height: 100px;
+}
+
+
+.prv-img-holder, .outlet-temp-holder, .inlet-mass-flow-holder{
+    position: relative;
+}
+
+.prv-img-holder .prv-label{
+    position: absolute;
+    z-index: +1;
+    background-color: white;
+    font-weight: bolder;
+    /* width: 40px; */
+    opacity: 0.9;
+    text-align: center;
+    right: 0px;
+    /* font-size: smaller; */
+    bottom: 32px;
+    width: 35px;
+    text-align: center;
+}
+
+
+.prv-label:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.outlet-temp-holder .outlet-temp{
+    position: absolute;
+    bottom: 0;
+    width: 100px;
+    z-index: +1;
+    left: 25px;
+    color: black;
+}
+
+
+.inlet-mass-flow-holder .inlet-mass-flow{
+    position: absolute;
+    top: 5px;
+    width: 100px;
+    z-index: +1;
+    left: 25px;
+    color: black;
+}
+
+/* .prv-img-holder  .feedwater-inlet{
+    position: relative;
+    left: 40px;
+    top: 0px;
+    width: 100px;
+}
+
+
+.prv-img-holder  .feedwater-inlet .feedwater-mass-flow{
+    position: relative;
+    left: 40px;
+    top: 25px;
+    width: 100px;
+} */
+
+.chevron-one, .chevron-two{
+    min-height: 40px;
+}
+
+.feedwater{
+    position: absolute;
+    width: 60px;
+    bottom: 13px;
+    right: 25px;
+    text-align: center;
+}
+
+.feedwater-mass-flow{
+    position: absolute;
+    z-index: +1;
+    top: 30px;
+    color: black;
+    left: -55px;
+    width: 50px;
+    text-align: center;
+}

@@ -49,6 +49,8 @@ export class BoilerComponent implements OnInit {
     if (this.selected == false) {
       this.disableForm();
     }
+
+    //this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
   ngOnChanges(changes: SimpleChanges) {
