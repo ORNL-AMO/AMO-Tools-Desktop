@@ -323,6 +323,12 @@ export interface SSMTLosses {
   mediumToLowTurbineEfficiencyLoss: number;
   condensingLosses: number;
   condensateLosses: number;
+  lowPressureVentLoss: number;
+  condensateFlashTankLoss: number;
+  deaeratorVentLoss: number;
+  highPressureProcessLoss: number;
+  mediumPressureProcessLoss: number;
+  lowPressureProcessLoss: number;
 }
 
 export interface HeatExchangerOutput {

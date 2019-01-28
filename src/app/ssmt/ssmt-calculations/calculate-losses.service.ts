@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SSMTLosses, SSMTOutput, TurbineOutput, SteamPropertiesOutput } from '../../shared/models/steam/steam-outputs';
+import { SSMTLosses, SSMTOutput, TurbineOutput, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage } from '../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../shared/models/steam/ssmt';
 import { SteamService } from '../../calculator/steam/steam.service';
 import { Settings } from '../../shared/models/settings';
@@ -14,14 +14,25 @@ export class CalculateLossesService {
     let ssmtLosses: SSMTLosses = this.initLosses();
     ssmtLosses.stack = this.calculateStack(ssmtResults);
     ssmtLosses.blowdown = this.calculateBlowdown(ssmtResults);
+    ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(ssmtResults.deaeratorOutput);
+    ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(ssmtResults.highPressureProcessUsage, ssmtResults.highPressureCondensate);
+    
     //
     ssmtLosses.highPressureHeader = ssmtResults.highPressureSteamHeatLoss.heatLoss;
     if (inputData.turbineInput.condensingTurbine.useTurbine == true) {
       ssmtLosses.condensingturbineEfficiencyLoss = this.calculateTurbine(ssmtResults.condensingTurbine);
     }
+
+    if(inputData.headerInput.highPressure.flashCondensateReturn == true){
+      ssmtLosses.condensateFlashTankLoss = this.calculateCondensateFlashTankLoss(ssmtResults.condensateFlashTank);
+    }
     if (inputData.headerInput.numberOfHeaders > 1) {
+      //low pressure vent
+      ssmtLosses.lowPressureVentLoss = this.calculateLowPressureVentLoss(ssmtResults.ventedLowPressureSteam);
       //header
       ssmtLosses.lowPressureHeader = ssmtResults.lowPressureSteamHeatLoss.heatLoss;
+      //process
+      ssmtLosses.lowPressureProcessLoss = this.calculateProcessLoss(ssmtResults.lowPressureProcessUsage, ssmtResults.lowPressureCondensate);
       //turbine
       if (inputData.turbineInput.highToLowTurbine.useTurbine == true) {
         ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.highToLowPressureTurbine);
@@ -35,6 +46,7 @@ export class CalculateLossesService {
         if (inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
           ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.mediumToLowPressureTurbine);
         }
+        ssmtLosses.mediumPressureProcessLoss = this.calculateProcessLoss(ssmtResults.mediumPressureProcessUsage, ssmtResults.mediumPressureCondensate);
       }
     }
     ssmtLosses.condensateLosses = this.calculateCondensateLoss(ssmtResults, inputData);
@@ -84,6 +96,26 @@ export class CalculateLossesService {
     return loss;
   }
 
+  calculateLowPressureVentLoss(lowPressureVentedSteam: SteamPropertiesOutput): number {
+    let loss: number = lowPressureVentedSteam.specificEnthalpy * lowPressureVentedSteam.massFlow;
+    return loss;
+  }
+
+  calculateCondensateFlashTankLoss(condensateFlashTank: FlashTankOutput): number {
+    let loss: number = condensateFlashTank.outletGasSpecificEnthalpy * condensateFlashTank.outletGasMassFlow;
+    return loss;
+  }
+
+  calculateDeaeratorVentLoss(deaeratorOutput: DeaeratorOutput): number {
+    let loss: number = deaeratorOutput.ventedSteamSpecificEnthalpy * deaeratorOutput.ventedSteamMassFlow;
+    return loss;
+  }
+
+  calculateProcessLoss(processSteam: ProcessSteamUsage, condensate: SteamPropertiesOutput): number {
+    let loss: number = (processSteam.energyFlow - (condensate.massFlow * condensate.specificEnthalpy) - processSteam.processUsage) / 1000;
+    return loss;
+  }
+
   initLosses(): SSMTLosses {
     let losses: SSMTLosses = {
       stack: 0,
@@ -96,7 +128,13 @@ export class CalculateLossesService {
       highToLowTurbineEfficiencyLoss: 0,
       mediumToLowTurbineEfficiencyLoss: 0,
       condensingLosses: 0,
-      condensateLosses: 0
+      condensateLosses: 0,
+      lowPressureVentLoss: 0,
+      condensateFlashTankLoss: 0,
+      deaeratorVentLoss: 0,
+      highPressureProcessLoss: 0,
+      mediumPressureProcessLoss: 0,
+      lowPressureProcessLoss: 0
     }
     return losses;
   }
