@@ -298,7 +298,7 @@ export const MockPsatSettings: Settings = {
     steamSpecificEntropyMeasurement: "btulbF",
     steamSpecificVolumeMeasurement: "ft3lb",
     steamMassFlowMeasurement: "klb",
-    steamPowerMeasurement: "MMBtu",
+    steamPowerMeasurement: "kW",
     currentMeasurement: null,
     viscosityMeasurement: null,
     voltageMeasurement: null,
