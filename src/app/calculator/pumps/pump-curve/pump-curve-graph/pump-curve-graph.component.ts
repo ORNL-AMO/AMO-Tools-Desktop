@@ -1028,4 +1028,12 @@ export class PumpCurveGraphComponent implements OnInit {
     flow = Math.pow((head - this.staticHead) / this.lossCoefficient, 1 / this.curveConstants.form.controls.systemLossExponent.value);
     return flow;
   }
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code == 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-feedwater-diagram',
@@ -11,6 +12,8 @@ export class FeedwaterDiagramComponent implements OnInit {
   deaerator: DeaeratorOutput;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {

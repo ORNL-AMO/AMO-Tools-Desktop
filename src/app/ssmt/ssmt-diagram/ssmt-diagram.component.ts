@@ -76,6 +76,7 @@ export class SsmtDiagramComponent implements OnInit {
   ventedLowPressureSteam: SteamPropertiesOutput;
   calculationProcessSucess: boolean;
   dataCalculated: boolean = false;
+  heatExchanger: boolean;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -153,6 +154,7 @@ export class SsmtDiagramComponent implements OnInit {
     this.boilerFuelUsage = this.calculateModelService.boilerFuelUsage;
     this.ventedLowPressureSteam = this.calculateModelService.ventedLowPressureSteam;
     console.log(this.ventedLowPressureSteam);
+    this.heatExchanger = this.inputData.boilerInput.preheatMakeupWater;
     this.dataCalculated = true;
     this.cd.detectChanges();
   }

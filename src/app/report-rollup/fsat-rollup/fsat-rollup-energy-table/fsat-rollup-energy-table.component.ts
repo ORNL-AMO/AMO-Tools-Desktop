@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FsatResultsData, ReportRollupService } from '../../report-rollup.service';
 import { Settings } from '../../../shared/models/settings';
-import { SigFigsPipe } from '../../../shared/sig-figs.pipe';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 
 @Component({

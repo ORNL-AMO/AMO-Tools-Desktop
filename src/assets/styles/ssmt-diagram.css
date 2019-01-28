@@ -5,7 +5,9 @@
 .ssmt-diagram.blowdownHovered .blowdown{
     box-shadow: 0px 0px 10px 0px #5D4037;
 }
-
+.blowdown .hidden-chevron{
+    color: #5D4037;
+}
 .ssmt-diagram .feedwater{
     background-color: #8E44AD;
     color: white;
@@ -141,4 +143,11 @@
 .ssmt-diagram .fa-chevron-up:not(.hidden-chevron):hover{
     background: grey;
     /* cursor: pointer; */
+}
+
+.ssmt-diagram .hover-tables td{
+    font-size: smaller;
+}
+.ssmt-diagram .result-tables td {
+    font-size: 10px;
 }

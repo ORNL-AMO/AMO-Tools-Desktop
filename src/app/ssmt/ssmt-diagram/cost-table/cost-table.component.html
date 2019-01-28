@@ -8,15 +8,21 @@
         </tr>
         <tr>
           <td class="text-center w-50">Generation</td>
-          <td class="text-center w-50">{{powerGenerated | number:'1.0-1'}} kW</td>
+          <td class="text-center w-50">{{powerGenerated | number:'1.0-1'}} 
+              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          </td>
         </tr>
         <tr>
           <td class="text-center w-50">Demand</td>
-          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport + powerGenerated | number:'1.0-1'}} kW</td>
+          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport + powerGenerated | number:'1.0-1'}} 
+              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          </td>
         </tr>
         <tr>
           <td class="text-center w-50">Import</td>
-          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport | number:'1.0-1'}} kW</td>
+          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport | number:'1.0-1'}} 
+              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          </td>
         </tr>
         <tr>
           <td class="text-center w-50">Unit Cost</td>
@@ -37,11 +43,15 @@
         </tr>
         <tr>
           <td class="text-center w-50">Boiler</td>
-          <td class="text-center w-50">{{boiler.fuelEnergy | number:'1.0-2'}} MMBtu/hr</td>
+          <td class="text-center w-50">{{boiler.fuelEnergy | number:'1.0-2'}} 
+              <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          </td>
         </tr>
         <tr>
           <td class="text-center w-50">Unit Cost</td>
-          <td class="text-center w-50">{{inputData.operationsInput.fuelCosts | currency:'USD'}} /MMBtu</td>
+          <td class="text-center w-50">{{inputData.operationsInput.fuelCosts | currency:'USD'}} 
+            /<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>
+          </td>
         </tr>
         <tr>
           <td class="bold text-center w-50">Total $/yr</td>
@@ -65,7 +75,9 @@
         </tr>
         <tr>
           <td class="text-center w-50">Unit Cost</td>
-          <td class="text-center w-50">${{inputData.operationsInput.makeUpWaterCosts | number:'1.2-4'}} /gal</td>
+          <td class="text-center w-50">${{inputData.operationsInput.makeUpWaterCosts | number:'1.2-4'}} 
+              /<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+          </td>
         </tr>
         <tr>
           <td class="bold text-center w-50">Total $/yr</td>
@@ -96,15 +108,16 @@
       <tbody>
         <tr>
           <td class="text-center w-50">High Pressure</td>
-          <td class="text-center w-50">$0.00 /klb</td>
+          <td class="text-center w-50">$0.00 /<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+          </td>
         </tr>
         <tr>
           <td class="text-center w-50">Medium Pressure</td>
-          <td class="text-center w-50">$0.00 /klb</td>
+          <td class="text-center w-50">$0.00 /<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
         </tr>
         <tr>
           <td class="text-center w-50">Low Pressure</td>
-          <td class="text-center w-50">$0.00 /klb</td>
+          <td class="text-center w-50">$0.00 /<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
         </tr>
       </tbody>
     </table>

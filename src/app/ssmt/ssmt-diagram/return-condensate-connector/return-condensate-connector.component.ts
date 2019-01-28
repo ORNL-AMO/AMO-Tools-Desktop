@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-return-condensate-connector',
@@ -11,7 +12,9 @@ export class ReturnCondensateConnectorComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Input()
   deaerator: DeaeratorOutput;
-ß
+  @Input()
+  settings: Settings;
+
   constructor() { }
 
   ngOnInit() {

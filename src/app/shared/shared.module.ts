@@ -10,7 +10,7 @@ import { ModelService } from './model.service';
 
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { PercentGraphComponent } from './percent-graph/percent-graph.component';
-import { SigFigsPipe } from './sig-figs.pipe';
+import { SigFigsPipe } from './pipes/sig-figs.pipe';
 import { UpdateDataService } from './update-data.service';
 import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
 import { SvgToPngService } from './svg-to-png/svg-to-png.service';
@@ -22,6 +22,7 @@ import { LineChartHelperService } from './line-chart-helper/line-chart-helper.se
 import { ExportableTableComponent } from './exportable-table/exportable-table.component';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 import { PrintOptionsMenuComponent } from './print-options-menu/print-options-menu.component';
+import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 
 @NgModule({
   imports: [
@@ -43,7 +44,8 @@ import { PrintOptionsMenuComponent } from './print-options-menu/print-options-me
     SimpleTooltipComponent,
     ExportableTableComponent,
     TabsTooltipComponent,
-    PrintOptionsMenuComponent
+    PrintOptionsMenuComponent,
+    SettingsLabelPipe
   ],
   exports: [
     ControlMessagesComponent,
@@ -56,7 +58,8 @@ import { PrintOptionsMenuComponent } from './print-options-menu/print-options-me
     SimpleTooltipComponent,
     ExportableTableComponent,
     TabsTooltipComponent,
-    PrintOptionsMenuComponent
+    PrintOptionsMenuComponent,
+    SettingsLabelPipe
   ],
   providers: [
     ValidationService,

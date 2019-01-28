@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { PrvOutput } from '../../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-hover-prv-table',
@@ -10,7 +11,9 @@ import { PrvOutput } from '../../../../shared/models/steam/steam-outputs';
 export class HoverPrvTableComponent implements OnInit {
   @Input()
   prvType: string;
-
+  @Input()
+  settings: Settings;
+  
   prv: PrvOutput;
   prvLabel: string;
   constructor(private calculateModelService: CalculateModelService) { }

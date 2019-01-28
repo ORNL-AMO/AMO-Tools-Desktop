@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { HeaderOutputObj, HeatLossOutput } from '../../../../shared/models/steam/steam-outputs';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../../../shared/models/steam/ssmt';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-hover-header-table',
@@ -11,7 +12,9 @@ import { HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../../..
 export class HoverHeaderTableComponent implements OnInit {
   @Input()
   headerPressure: string;
-
+  @Input()
+  settings: Settings;
+  
   header: HeaderOutputObj;
   heatLoss: HeatLossOutput;
   headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;

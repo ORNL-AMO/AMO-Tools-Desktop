@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-flash-tank-table',
@@ -11,7 +12,8 @@ export class FlashTankTableComponent implements OnInit {
   flashTank: FlashTankOutput;
   @Input()
   flashTankType: string;
-
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {
