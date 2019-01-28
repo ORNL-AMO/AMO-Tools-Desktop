@@ -16,14 +16,14 @@ export class CalculateLossesService {
     ssmtLosses.blowdown = this.calculateBlowdown(ssmtResults);
     ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(ssmtResults.deaeratorOutput);
     ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(ssmtResults.highPressureProcessUsage, ssmtResults.highPressureCondensate);
-    
+
     //
     ssmtLosses.highPressureHeader = ssmtResults.highPressureSteamHeatLoss.heatLoss;
     if (inputData.turbineInput.condensingTurbine.useTurbine == true) {
-      ssmtLosses.condensingturbineEfficiencyLoss = this.calculateTurbine(ssmtResults.condensingTurbine);
+      ssmtLosses.condensingTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.condensingTurbine);
     }
 
-    if(inputData.headerInput.highPressure.flashCondensateReturn == true){
+    if (inputData.headerInput.highPressure.flashCondensateReturn == true) {
       ssmtLosses.condensateFlashTankLoss = this.calculateCondensateFlashTankLoss(ssmtResults.condensateFlashTank);
     }
     if (inputData.headerInput.numberOfHeaders > 1) {
@@ -65,7 +65,7 @@ export class CalculateLossesService {
   }
 
   calculateTurbine(turbineOutput: TurbineOutput): number {
-    let loss: number = turbineOutput.energyOut * (1 - turbineOutput.generatorEfficiency);
+    let loss: number = turbineOutput.energyOut * (1 - turbineOutput.generatorEfficiency) /100;
     return loss;
   }
 
@@ -97,8 +97,12 @@ export class CalculateLossesService {
   }
 
   calculateLowPressureVentLoss(lowPressureVentedSteam: SteamPropertiesOutput): number {
-    let loss: number = lowPressureVentedSteam.specificEnthalpy * lowPressureVentedSteam.massFlow;
-    return loss;
+    if (lowPressureVentedSteam) {
+      let loss: number = lowPressureVentedSteam.specificEnthalpy * lowPressureVentedSteam.massFlow;
+      return loss;
+    } else {
+      return 0;
+    }
   }
 
   calculateCondensateFlashTankLoss(condensateFlashTank: FlashTankOutput): number {
@@ -123,7 +127,7 @@ export class CalculateLossesService {
       highPressureHeader: 0,
       mediumPressureHeader: 0,
       lowPressureHeader: 0,
-      condensingturbineEfficiencyLoss: 0,
+      condensingTurbineEfficiencyLoss: 0,
       highToMediumTurbineEfficiencyLoss: 0,
       highToLowTurbineEfficiencyLoss: 0,
       mediumToLowTurbineEfficiencyLoss: 0,

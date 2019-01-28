@@ -317,7 +317,7 @@ export interface SSMTLosses {
   highPressureHeader: number;
   mediumPressureHeader: number;
   lowPressureHeader: number;
-  condensingturbineEfficiencyLoss: number;
+  condensingTurbineEfficiencyLoss: number;
   highToMediumTurbineEfficiencyLoss: number;
   highToLowTurbineEfficiencyLoss: number;
   mediumToLowTurbineEfficiencyLoss: number;
