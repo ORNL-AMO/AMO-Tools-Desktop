@@ -1633,7 +1633,7 @@ export class CalculateModelService {
     //steam balance = difference between use and production (we want 0!)
     let steamBalance: number = steamUse - steamProduction;
     console.log('steam balance ' + steamBalance);
-    if (steamBalance < 0) {
+    if (this.inputData.headerInput.numberOfHeaders > 1 && steamBalance < 0) {
       let ventedSteamAmount: number = this.calculateLowPressureVentedSteam(steamBalance);
       steamBalance = steamBalance + ventedSteamAmount;
       if (Math.abs(steamBalance) < 1e-2) {
