@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SSMTLosses, SSMTOutput, TurbineOutput, SteamPropertiesOutput } from '../../shared/models/steam/steam-outputs';
-import { SSMTInputs, TurbineInput } from '../../shared/models/steam/ssmt';
+import { SSMTInputs } from '../../shared/models/steam/ssmt';
 import { SteamService } from '../../calculator/steam/steam.service';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -24,7 +24,7 @@ export class CalculateLossesService {
       ssmtLosses.lowPressureHeader = ssmtResults.lowPressureSteamHeatLoss.heatLoss;
       //turbine
       if (inputData.turbineInput.highToLowTurbine.useTurbine == true) {
-        ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.highPressureToLowPressureTurbine);
+        ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.highToLowPressureTurbine);
       }
 
       if (inputData.headerInput.numberOfHeaders == 3) {
@@ -33,13 +33,12 @@ export class CalculateLossesService {
           ssmtLosses.highToMediumTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.highPressureToMediumPressureTurbine);
         }
         if (inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
-          ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.mediumPressureToLowPressureTurbine);
+          ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.mediumToLowPressureTurbine);
         }
       }
     }
-
-
-
+    ssmtLosses.condensateLosses = this.calculateCondensateLoss(ssmtResults, inputData);
+    ssmtLosses.condensingLosses = this.calculateCondensingLosses(ssmtResults.condensingTurbine, inputData, settings);
     return ssmtLosses;
   }
 
@@ -59,22 +58,31 @@ export class CalculateLossesService {
   }
 
   calculateCondensingLosses(turbineOutput: TurbineOutput, inputData: SSMTInputs, settings: Settings): number {
-    let condenserPressure: number = this.convertUnitsService.value(inputData.turbineInput.condensingTurbine.condenserPressure).from(settings.steamVacuumPressure).to(settings.steamPressureMeasurement);
-    let outletProperties: SteamPropertiesOutput = this.steamService.steamProperties(
-      {
-        pressure: condenserPressure,
-        thermodynamicQuantity: 3,
-        quantityValue: 0
-      },
-      settings
-    );
-    let loss: number = turbineOutput.massFlow * (turbineOutput.outletSpecificEnthalpy - outletProperties.specificEnthalpy);
-    return loss;
+    if (inputData.turbineInput.condensingTurbine.useTurbine == true) {
+      let condenserPressure: number = this.convertUnitsService.value(inputData.turbineInput.condensingTurbine.condenserPressure).from(settings.steamVacuumPressure).to(settings.steamPressureMeasurement);
+      let outletProperties: SteamPropertiesOutput = this.steamService.steamProperties(
+        {
+          pressure: condenserPressure,
+          thermodynamicQuantity: 3,
+          quantityValue: 0
+        },
+        settings
+      );
+      let loss: number = turbineOutput.massFlow * (turbineOutput.outletSpecificEnthalpy - outletProperties.specificEnthalpy);
+      return loss;
+    } else {
+      return 0;
+    }
   }
 
-  // calculateCondensateLoss():number{
-
-  // }
+  calculateCondensateLoss(ssmtResults: SSMTOutput, inputData: SSMTInputs): number {
+    let lowPressureCondensate: SteamPropertiesOutput = ssmtResults.highPressureCondensate;
+    if (inputData.headerInput.numberOfHeaders > 1) {
+      lowPressureCondensate = ssmtResults.lowPressureCondensate;
+    }
+    let loss: number = ((ssmtResults.returnCondensate.specificEnthalpy * ssmtResults.returnCondensate.massFlow) - (lowPressureCondensate.specificEnthalpy * lowPressureCondensate.massFlow)) / 1000;
+    return loss;
+  }
 
   initLosses(): SSMTLosses {
     let losses: SSMTLosses = {
