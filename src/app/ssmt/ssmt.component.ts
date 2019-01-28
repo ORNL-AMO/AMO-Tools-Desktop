@@ -251,7 +251,6 @@ export class SsmtComponent implements OnInit {
 
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
-        console.log('saved');
         this.ssmtService.updateData.next(true);
       })
     })
@@ -265,7 +264,7 @@ export class SsmtComponent implements OnInit {
     } else {
       let isBoilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
       let isHeaderValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
-      let isTurbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this.settings);
+      let isTurbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
       if (isBoilerValid && isHeaderValid && isTurbineValid) {
         this._ssmt.setupDone = true;
       } else {
@@ -323,7 +322,7 @@ export class SsmtComponent implements OnInit {
   getCanContinue() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
     let headerValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
-    let turbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this.settings);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
     if (this.stepTab == 'operations' || this.stepTab == 'system-basics') {
       return true;
     } else if (this.stepTab == 'boiler') {

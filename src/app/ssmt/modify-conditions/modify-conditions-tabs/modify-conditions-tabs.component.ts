@@ -148,11 +148,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setTurbineBadgeClass(baseline: SSMT, modification?: SSMT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.turbineService.isTurbineValid(baseline.turbineInput, this.settings);
+    let validBaselineTest = this.turbineService.isTurbineValid(baseline.turbineInput, baseline.headerInput, this.settings);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      validModTest = this.turbineService.isTurbineValid(modification.turbineInput, this.settings);
+      validModTest = this.turbineService.isTurbineValid(modification.turbineInput, modification.headerInput, this.settings);
       isDifferent = this.compareService.checkTurbinesDifferent();
     }
     let inputError: boolean;
