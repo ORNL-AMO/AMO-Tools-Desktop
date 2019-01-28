@@ -604,4 +604,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }, 200);
   }
   //========== end chart resize functions ==========
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code == 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
 }

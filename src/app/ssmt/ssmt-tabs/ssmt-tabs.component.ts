@@ -163,7 +163,7 @@ export class SsmtTabsComponent implements OnInit {
   checkTurbineStatus() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
     let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings);
-    let turbineValid: boolean = this.turbineService.isTurbineValid(this.ssmt.turbineInput, this.settings);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(this.ssmt.turbineInput, this.ssmt.headerInput, this.settings);
     if (!boilerValid || !headerValid) {
       this.turbineTabStatus = ['disabled'];
     } else if (!turbineValid) {

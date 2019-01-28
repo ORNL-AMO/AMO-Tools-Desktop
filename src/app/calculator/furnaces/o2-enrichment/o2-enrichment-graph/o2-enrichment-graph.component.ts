@@ -694,6 +694,14 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     }, 200);
   }
   //========== end chart resize functions ==========
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code == 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
 
   highlightPoint(i: any) {
   }

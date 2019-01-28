@@ -25,6 +25,8 @@ export class LineChartHelperService {
 
   //removes all svg elements from given parent element
   clearSvg(ngChart: ElementRef): ElementRef {
+    d3.select(ngChart.nativeElement).selectAll('.d3-tip').remove();
+    d3.select(ngChart.nativeElement).selectAll('.tooltip-pointer').remove();
     d3.select(ngChart.nativeElement).selectAll('svg').remove();
     return ngChart;
   }
@@ -180,7 +182,6 @@ export class LineChartHelperService {
     if (!strokeWidth) {
       strokeWidth = "3px";
     }
-
     let focus: d3.Selection<any>;
 
     focus = svg.append("g")
@@ -188,7 +189,6 @@ export class LineChartHelperService {
       .attr("class", "focus")
       .style("display", "none")
       .style('pointer-events', 'none');
-
     focus.append("circle")
       .attr("r", r)
       .style("fill", "none")
@@ -421,6 +421,10 @@ export class LineChartHelperService {
 
 
   tableFocusHelper(svg: d3.Selection<any>, id: string, fill: string, stroke: string, transX: number, transY: number): d3.Selection<any> {
+    let splitText = id.split('-', 2);
+    let internalText = parseInt(splitText[splitText.length - 1]) + 1;
+
+
     let focus: d3.Selection<any> = svg.append("g")
       .attr("class", "tablePoint")
       .style("display", null)
@@ -432,7 +436,16 @@ export class LineChartHelperService {
       .style("fill", fill)
       .style("stroke", stroke)
       .style("stroke-width", "3px")
-      .style('pointer-events', 'none');
+      .style('pointer-events', 'none')
+    focus.append("text")
+      .attr('dx', -4)
+      .attr('dy', -10)
+      .text(internalText)
+      .style('font-size', '12px')
+      .style('font-weight', 'bold')
+      .style('stroke', '#000000')
+      .style('fill', '#000000');
+
     focus.attr("transform", "translate(" + transX + "," + transY + ")");
     return focus;
   }

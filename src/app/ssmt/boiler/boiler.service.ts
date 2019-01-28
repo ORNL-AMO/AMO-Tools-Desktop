@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { BoilerInput } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
@@ -12,8 +12,8 @@ export class BoilerService {
   initForm(settings: Settings) {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
 
-    let defaultApproachTemp: number = this.convertUnitsService.value(20).from('F').to(settings.steamTemperatureMeasurement);
-    defaultApproachTemp = this.convertUnitsService.roundVal(defaultApproachTemp, 0);
+    // let defaultApproachTemp: number = this.convertUnitsService.value(20).from('F').to(settings.steamTemperatureMeasurement);
+    // defaultApproachTemp = this.convertUnitsService.roundVal(defaultApproachTemp, 0);
 
     return this.formBuilder.group({
       'fuelType': [1, Validators.required],
@@ -25,12 +25,17 @@ export class BoilerService {
       'steamTemperature': ['', [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
       'deaeratorVentRate': ['', [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
-      'approachTemperature': [defaultApproachTemp, [Validators.min(0)]]
+      'approachTemperature': ['', [Validators.min(tmpRanges.approachTempMin)]]
     })
   }
 
   initFormFromObj(obj: BoilerInput, settings: Settings): FormGroup {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
+
+    let approachTempValidators: Array<ValidatorFn> = [];
+    if(obj.preheatMakeupWater){
+      approachTempValidators = [Validators.min(tmpRanges.approachTempMin), Validators.required];
+    }
     let form: FormGroup = this.formBuilder.group({
       'fuelType': [obj.fuelType, Validators.required],
       'fuel': [obj.fuel, Validators.required],
@@ -41,7 +46,7 @@ export class BoilerService {
       'steamTemperature': [obj.steamTemperature, [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
       'deaeratorVentRate': [obj.deaeratorVentRate, [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
-      'approachTemperature': [obj.approachTemperature, [Validators.min(0)]]
+      'approachTemperature': [obj.approachTemperature, approachTempValidators]
     })
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
@@ -76,11 +81,14 @@ export class BoilerService {
     let tmpDeaeratorPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     tmpDeaeratorPressureMax = this.convertUnitsService.roundVal(tmpDeaeratorPressureMax, 0);
 
+    let tmpApproachTempMin: number = this.convertUnitsService.value(0).from('F').to(settings.steamTemperatureMeasurement);
+    tmpApproachTempMin = this.convertUnitsService.roundVal(tmpApproachTempMin, 0);
     return {
       steamTemperatureMin: tmpSteamTemperatureMin,
       steamTemperatureMax: tmpSteamTemperatureMax,
       deaeratorPressureMin: tmpDeaeratorPressureMin,
-      deaeratorPressureMax: tmpDeaeratorPressureMax
+      deaeratorPressureMax: tmpDeaeratorPressureMax,
+      approachTempMin: tmpApproachTempMin
     }
   }
 
@@ -104,5 +112,6 @@ export interface BoilerRanges {
   steamTemperatureMin: number,
   steamTemperatureMax: number,
   deaeratorPressureMin: number,
-  deaeratorPressureMax: number
+  deaeratorPressureMax: number,
+  approachTempMin: number
 }

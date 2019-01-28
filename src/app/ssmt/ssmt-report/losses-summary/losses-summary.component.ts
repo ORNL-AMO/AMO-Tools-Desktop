@@ -5,6 +5,7 @@ import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { CalculateModelService } from '../../ssmt-calculations/calculate-model.service';
 
+
 @Component({
   selector: 'app-losses-summary',
   templateUrl: './losses-summary.component.html',

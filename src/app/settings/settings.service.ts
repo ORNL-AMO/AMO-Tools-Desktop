@@ -298,7 +298,7 @@ export class SettingsService {
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
         steamEnergyMeasurement: 'kWh',
-        steamPowerMeasurement: 'MJ'
+        steamPowerMeasurement: 'MJh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.3.2-beta",
+  "version": "0.3.3-beta",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -73,7 +73,7 @@
   "build": {
     "appId": "com.electron.amo-tools-desktop",
     "copyright": "Copyright 2017 ORNL. All rights reserved.",
-    "productName": "AMO-Tools-Desktop",
+    "productName": "MEASUR",
     "directories": {
       "output": "../output/"
     },
@@ -95,7 +95,7 @@
         "deb"
       ],
       "icon": "src/assets/icons/png/",
-      "executableName": "AMO-Tools-Desktop",
+      "executableName": "MEASUR",
       "maintainer": "Advanced Manufacturing Office"
     },
     "mac": {

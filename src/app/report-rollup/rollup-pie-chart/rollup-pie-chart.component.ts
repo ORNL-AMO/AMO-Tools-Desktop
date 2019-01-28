@@ -3,7 +3,6 @@ import { ReportRollupService, PhastResultsData } from '../report-rollup.service'
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from 'electron';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
-import { SigFigsPipe } from '../../shared/sig-figs.pipe';
 import * as d3 from 'd3';
 @Component({
   selector: 'app-rollup-pie-chart',

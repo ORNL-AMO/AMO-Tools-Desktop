@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { TurbineInput, PressureTurbine, CondensingTurbine } from '../../shared/models/steam/ssmt';
+import { TurbineInput, PressureTurbine, CondensingTurbine, HeaderInput } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 
@@ -178,14 +178,14 @@ export class TurbineService {
     }
   }
 
-  isTurbineValid(obj: TurbineInput, settings: Settings) {
+  isTurbineValid(obj: TurbineInput, headerObj: HeaderInput, settings: Settings) {
     if (obj) {
       let condensingTurbineValid: boolean = true;
       let highToLowTurbineValid: boolean = true;
       let highToMediumTurbineValid: boolean = true;
       let mediumToLowTurbineValid: boolean = true;
       if (obj.condensingTurbine) {
-        if (obj.condensingTurbine.useTurbine) {
+        if (obj.condensingTurbine.useTurbine && headerObj.numberOfHeaders >= 1) {
           let tmpForm: FormGroup = this.getCondensingFormFromObj(obj.condensingTurbine, settings);
           if (tmpForm.invalid) {
             condensingTurbineValid = false;
@@ -193,7 +193,7 @@ export class TurbineService {
         }
       }
       if (obj.highToLowTurbine) {
-        if (obj.highToLowTurbine.useTurbine) {
+        if (obj.highToLowTurbine.useTurbine && headerObj.numberOfHeaders >= 2) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToLowTurbine);
           if (tmpForm.invalid) {
             highToLowTurbineValid = false;
@@ -201,7 +201,7 @@ export class TurbineService {
         }
       }
       if (obj.highToMediumTurbine) {
-        if (obj.highToMediumTurbine.useTurbine) {
+        if (obj.highToMediumTurbine.useTurbine && headerObj.numberOfHeaders >= 3) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.highToMediumTurbine);
           if (tmpForm.invalid) {
             highToMediumTurbineValid = false;
@@ -209,7 +209,7 @@ export class TurbineService {
         }
       }
       if (obj.mediumToLowTurbine) {
-        if (obj.mediumToLowTurbine.useTurbine) {
+        if (obj.mediumToLowTurbine.useTurbine && headerObj.numberOfHeaders >= 3) {
           let tmpForm: FormGroup = this.getPressureFormFromObj(obj.mediumToLowTurbine);
           if (tmpForm.invalid) {
             mediumToLowTurbineValid = false;
