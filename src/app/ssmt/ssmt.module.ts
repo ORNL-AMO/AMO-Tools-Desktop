@@ -31,6 +31,8 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
 
 import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
 import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
+import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
+import { CalculateLossesService } from './ssmt-calculations/calculate-losses.service';
 
 @NgModule({
   imports: [
@@ -70,7 +72,9 @@ import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
     CompareService,
     BoilerService,
     HeaderService,
-    TurbineService
+    TurbineService,
+    CalculateModelService,
+    CalculateLossesService
   ]
 })
 export class SsmtModule { }

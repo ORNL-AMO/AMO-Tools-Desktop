@@ -24,7 +24,6 @@ import { CondensateConnectorComponent } from './condensate-connector/condensate-
 import { OneHeaderConnectorComponent } from './one-header-connector/one-header-connector.component';
 import { HoverTableComponent } from './hover-table/hover-table.component';
 import { HoverBoilerTableComponent } from './hover-table/hover-boiler-table/hover-boiler-table.component';
-import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
 import { HoverTurbineTableComponent } from './hover-table/hover-turbine-table/hover-turbine-table.component';
 import { HoverHeaderTableComponent } from './hover-table/hover-header-table/hover-header-table.component';
 import { FeedwaterDiagramComponent } from './feedwater-diagram/feedwater-diagram.component';
@@ -91,7 +90,6 @@ import { HoverSteamPropertiesComponent } from './hover-table/hover-steam-propert
     SsmtDiagramComponent
   ],
   providers:[
-    CalculateModelService
   ]
 })
 export class SsmtDiagramModule { }

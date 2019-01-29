@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SteamService } from '../../calculator/steam/steam.service';
-import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, HeatLossOutput, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, HeaderOutput } from '../../shared/models/steam/steam-outputs';
+import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, HeatLossOutput, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, HeaderOutput, SSMTOutput, HeatExchangerOutput } from '../../shared/models/steam/steam-outputs';
 import { Settings } from '../../shared/models/settings';
 import { SSMTInputs, SSMT, HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
 import { HeaderInputObj, HeaderInput } from '../../shared/models/steam/steam-inputs';
@@ -66,7 +66,7 @@ export class CalculateModelService {
 
   calcCount: number = 0;
   //heatExchanger: HeatExchanger
-
+  heatExchangerOutput: HeatExchangerOutput;
   ventedLowPressureSteam: SteamPropertiesOutput;
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -93,7 +93,7 @@ export class CalculateModelService {
     this.settings = _settings;
   }
 
-  calculateModelRunner() {
+  calculateModelRunner(): SSMTOutput {
     //initial guess for system is a sum of the process usage by the headers.
     let initialGuess: number = 0;
     if (this.inputData.headerInput.numberOfHeaders == 1) {
@@ -103,16 +103,15 @@ export class CalculateModelService {
     } else if (this.inputData.headerInput.numberOfHeaders == 3) {
       initialGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage);
     }
-    let calculationProcessSuccess: boolean = this.calculateModel(initialGuess);
-    return calculationProcessSuccess;
+    let results = this.calculateModel(initialGuess);
+    console.log('UPDATED RESULTS');
+    return results;
   }
 
 
-  calculateModel(massFlow: number): any {
+  calculateModel(massFlow: number): SSMTOutput {
     //using counter to catch mistakes in testing, shouldn't ever be more than like 7
     this.calcCount++;
-    console.log('calc model count ' + this.calcCount);
-    console.log('mass flow ' + massFlow);
     if (this.calcCount < 25) {
       //1. Model Boiler
       //1A. Calculate Boiler with massFlow
@@ -240,9 +239,9 @@ export class CalculateModelService {
       this.calculateTotalOperatingCost();
       //9f. Calculate boiler fuel usage
       this.calculateBoilerFuelUsage();
-      return steamBalance;
+      return this.getResultsObject();
     } else {
-      return false;
+      return this.getResultsObject();
     }
   }
 
@@ -1817,4 +1816,61 @@ export class CalculateModelService {
     this.ventedLowPressureSteam = undefined;
   }
 
+  getResultsObject(): SSMTOutput{
+    let output: SSMTOutput = {
+      boilerOutput: this.boilerOutput,
+
+      highPressureHeader: this.highPressureHeader,
+      highPressureSteamHeatLoss: this.highPressureSteamHeatLoss,    
+      lowPressurePRV: this.lowPressurePRV,
+      highToMediumPressurePRV: this.highToMediumPressurePRV,
+    
+      highToLowPressureTurbine: this.highToLowPressureTurbine,
+      highPressureToMediumPressureTurbine: this.highPressureToMediumPressureTurbine,
+      highPressureCondensateFlashTank: this.highPressureCondensateFlashTank,
+    
+      lowPressureHeader: this.lowPressureHeader,
+      lowPressureSteamHeatLoss: this.lowPressureSteamHeatLoss,
+    
+      mediumToLowPressureTurbine: this.mediumToLowPressureTurbine,
+      mediumPressureCondensateFlashTank: this.mediumPressureCondensateFlashTank,
+    
+      mediumPressureHeader: this.mediumPressureHeader,
+      mediumPressureSteamHeatLoss: this.mediumPressureSteamHeatLoss,
+    
+      blowdownFlashTank: this.blowdownFlashTank,
+    
+      highPressureCondensate: this.highPressureCondensate,
+      lowPressureCondensate: this.lowPressureCondensate,
+      mediumPressureCondensate: this.mediumPressureCondensate,
+      combinedCondensate: this.combinedCondensate,
+      returnCondensate: this.returnCondensate,
+      condensateFlashTank: this.condensateFlashTank,
+    
+      makeupWater: this.makeupWater,
+      makeupWaterAndCondensateHeader: this.makeupWaterAndCondensateHeader,
+    
+      condensingTurbine: this.condensingTurbine,
+      deaeratorOutput: this.deaeratorOutput,
+    
+      highPressureProcessUsage: this.highPressureProcessUsage,
+      mediumPressureProcessUsage: this.mediumPressureProcessUsage,
+      lowPressureProcessUsage: this.lowPressureProcessUsage,
+    
+      powerGenerated: this.powerGenerated,
+      boilerFuelCost: this.boilerFuelCost,
+      makeupWaterCost: this.makeupWaterCost,
+      totalOperatingCost: this.totalOperatingCost,
+      totalEnergyUse: this.totalEnergyUse,
+      powerGenerationCost: this.powerGenerationCost,
+      boilerFuelUsage: this.boilerFuelUsage,
+    
+      makeupWaterVolumeFlow: this.makeupWaterVolumeFlow,
+      annualMakeupWaterFlow: this.annualMakeupWaterFlow,
+    
+      ventedLowPressureSteam: this.ventedLowPressureSteam,
+      heatExchangerOutput: this.heatExchangerOutput
+    }
+    return output;
+  }
 }

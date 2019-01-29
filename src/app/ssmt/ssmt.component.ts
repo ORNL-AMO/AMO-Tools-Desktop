@@ -197,6 +197,7 @@ export class SsmtComponent implements OnInit {
 
   getSettings() {
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    console.log(tmpSettings.steamPowerMeasurement);
     if (tmpSettings) {
       this.settings = tmpSettings;
       this.isAssessmentSettings = true;
