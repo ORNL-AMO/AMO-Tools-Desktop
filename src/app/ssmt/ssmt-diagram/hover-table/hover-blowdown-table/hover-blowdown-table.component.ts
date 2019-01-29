@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { BoilerOutput } from '../../../../shared/models/steam/steam-outputs';
-import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
-import { BoilerInput } from '../../../../shared/models/steam/ssmt';
+import { BoilerOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
+import { BoilerInput, SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -12,13 +11,17 @@ import { Settings } from '../../../../shared/models/settings';
 export class HoverBlowdownTableComponent implements OnInit {
   @Input()
   settings: Settings;
-  
+  @Input()
+  outputData: SSMTOutput;
+  @Input()
+  inputData: SSMTInputs;
+
   boiler: BoilerOutput;
   boilerInput: BoilerInput;
-  constructor(private calculateModelService: CalculateModelService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.boiler = this.calculateModelService.boilerOutput;
-    this.boilerInput = this.calculateModelService.inputData.boilerInput;
+    this.boiler = this.outputData.boilerOutput;
+    this.boilerInput = this.inputData.boilerInput;
   }
 }

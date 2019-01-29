@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { BoilerOutput } from '../../../../shared/models/steam/steam-outputs';
-import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { BoilerOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-default-summary-table',
@@ -8,17 +7,19 @@ import { CalculateModelService } from '../../../ssmt-calculations/calculate-mode
   styleUrls: ['./default-summary-table.component.css']
 })
 export class DefaultSummaryTableComponent implements OnInit {
+  @Input()
+  outputData: SSMTOutput;
 
   boiler: BoilerOutput;
   totalOperatingCost: number;
   boilerFuelCost: number;
   boilerFuelUsage: number;
-  constructor(private calculateModelService: CalculateModelService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.boiler = this.calculateModelService.boilerOutput;
-    this.totalOperatingCost = this.calculateModelService.totalOperatingCost;
-    this.boilerFuelCost = this.calculateModelService.boilerFuelCost;
-    this.boilerFuelUsage = this.calculateModelService.boilerFuelUsage;
+    this.boiler = this.outputData.boilerOutput;
+    this.totalOperatingCost = this.outputData.totalOperatingCost;
+    this.boilerFuelCost = this.outputData.boilerFuelCost;
+    this.boilerFuelUsage = this.outputData.boilerFuelUsage;
   }
 }

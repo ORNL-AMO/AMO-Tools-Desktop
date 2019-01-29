@@ -28,11 +28,10 @@ import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pr
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
 import { SharedModule } from '../shared/shared.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
-
-import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
 import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
 import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
 import { CalculateLossesService } from './ssmt-calculations/calculate-losses.service';
+import { SsmtDiagramTabModule } from './ssmt-diagram-tab/ssmt-diagram-tab.module';
 
 @NgModule({
   imports: [
@@ -46,7 +45,7 @@ import { CalculateLossesService } from './ssmt-calculations/calculate-losses.ser
     SuiteDbModule,
     SharedModule,
     HelpPanelModule,
-    SsmtDiagramModule,
+    SsmtDiagramTabModule,
     SsmtReportModule
   ],
   declarations: [

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
-import { TurbineOutput } from '../../../../shared/models/steam/steam-outputs';
+import { TurbineOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -13,19 +12,21 @@ export class HoverTurbineTableComponent implements OnInit {
   turbineType: string;
   @Input()
   settings: Settings;
-  
+  @Input()
+  outputData: SSMTOutput;
+
   turbine: TurbineOutput
-  constructor(private calculateModelService: CalculateModelService) { }
+  constructor() { }
 
   ngOnInit() {
     if (this.turbineType == 'condensing') {
-      this.turbine = this.calculateModelService.condensingTurbine;
+      this.turbine = this.outputData.condensingTurbine;
     } else if (this.turbineType == 'highToLow') {
-      this.turbine = this.calculateModelService.highToLowPressureTurbine;
+      this.turbine = this.outputData.highToLowPressureTurbine;
     } else if (this.turbineType == 'highToMedium') {
-      this.turbine = this.calculateModelService.highPressureToMediumPressureTurbine;
+      this.turbine = this.outputData.highPressureToMediumPressureTurbine;
     } else if (this.turbineType == 'mediumToLow') {
-      this.turbine = this.calculateModelService.mediumToLowPressureTurbine;
+      this.turbine = this.outputData.mediumToLowPressureTurbine;
     }
   }
 

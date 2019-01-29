@@ -22,7 +22,7 @@ export class LossesSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.calculateModelService.initData(this.ssmt, this.settings);
-    this.baselineOutput = this.calculateModelService.calculateModelRunner();
+    this.baselineOutput = this.calculateModelService.calculateModelRunner().outputData;
     console.log('RETURN AGAIN')
     this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.ssmt, this.settings);
     console.log(this.baselineLosses);

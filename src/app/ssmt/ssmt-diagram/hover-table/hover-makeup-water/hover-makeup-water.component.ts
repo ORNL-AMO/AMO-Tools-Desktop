@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
-import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -13,17 +12,19 @@ export class HoverMakeupWaterComponent implements OnInit {
   combined: boolean;
   @Input()
   settings: Settings;
-  
+  @Input()
+  outputData: SSMTOutput;
+
   makeupWater: SteamPropertiesOutput;
   makeupWaterLabel: string;
-  constructor(private calculateModelService: CalculateModelService) { }
+  constructor() { }
 
   ngOnInit() {
     if(this.combined){
-      this.makeupWater = this.calculateModelService.makeupWaterAndCondensateHeader;
+      this.makeupWater = this.outputData.makeupWaterAndCondensateHeader;
       this.makeupWaterLabel = 'Make-up Water and Condensate';
     }else{
-      this.makeupWater = this.calculateModelService.makeupWater;
+      this.makeupWater = this.outputData.makeupWater;
       this.makeupWaterLabel = 'Make-up Water';
     }
   }
