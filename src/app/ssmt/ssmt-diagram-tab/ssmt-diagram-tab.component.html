@@ -1,4 +1,4 @@
-<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram" [ngClass]="hoveredEquipment">
+<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram">
   <div class="panel-column scroll-item diagram-container" [ngStyle]="{'height.px': containerHeight}" *ngIf="outputData">
     <app-ssmt-diagram [settings]="settings" [inputData]="inputData" [outputData]="outputData" (emitTableSelected)="selectTable($event)"
       (emitHoverChange)="setHover($event)"></app-ssmt-diagram>

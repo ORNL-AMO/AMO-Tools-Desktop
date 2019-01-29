@@ -7,10 +7,12 @@ import { LossesSummaryComponent } from './losses-summary/losses-summary.componen
 import { ReportDiagramComponent } from './report-diagram/report-diagram.component';
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { InputSummaryComponent } from './input-summary/input-summary.component';
+import { SsmtDiagramModule } from '../ssmt-diagram/ssmt-diagram.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    SsmtDiagramModule
   ],
   declarations: [
     SsmtReportComponent,
