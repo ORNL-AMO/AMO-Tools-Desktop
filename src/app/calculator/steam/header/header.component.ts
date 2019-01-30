@@ -28,6 +28,18 @@ export class HeaderComponent implements OnInit {
   results: HeaderOutput;
   numInletOptions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   inletThermoQuantity: number = 0;
+
+  //enable functionality for exportable result tables
+  table0String: any;
+  table1String: any;
+  table2String: any;
+  table3String: any;
+  table4String: any;
+  table5String: any;
+  table6String: any;
+  table7String: any;
+  table8String: any;
+
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private headerService: HeaderService) { }
 
   ngOnInit() {

@@ -63,7 +63,7 @@ export class EnergyUseService {
 
   initDefaultValues(settings: Settings) {
     if (settings.unitsOfMeasure == 'Metric') {
-      return {
+      return this.flowCalculations = {
         //natural gas
         gasType: 0,
         specificGravity: 0.657,
@@ -79,7 +79,7 @@ export class EnergyUseService {
         operatingTime: 10
       };
     } else {
-      return {
+      return this.flowCalculations = {
         //natural gas
         gasType: 0,
         specificGravity: 0.657,

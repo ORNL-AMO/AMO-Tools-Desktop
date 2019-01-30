@@ -8,7 +8,8 @@
       <span class="fa fa-pencil pull-right" (click)="editName()"></span>
     </label>
     <label class="group-label" *ngIf="isEditingName">
-      <input type="text" id="assessmentName" [(ngModel)]="assessment.name" onfocus="this.select();" required="required" (input)="calculate()">
+      <input type="text" id="assessmentName" [(ngModel)]="assessment.name" onfocus="this.select();" required="required"
+        (input)="calculate()">
       <span *ngIf="assessment.name" class="fa fa-check" (click)="doneEditingName()"></span>
     </label>
   </div>
@@ -16,14 +17,17 @@
   <div class="d-flex flex-column pre-assessement-form" [@collapsed]="assessment.collapsedState">
     <div class="d-flex w-100 justify-content-center pt-1 pb-1" *ngIf="assessment.collapsedState != 'closed'">
       <div class="btn-group btn-group-sm align-self-center">
-        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Metered')" [ngClass]="{'active': assessment.type == 'Metered'}">Metered</button>
-        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Designed')" [ngClass]="{'active':  assessment.type == 'Designed'}">Designed</button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Metered')"
+          [ngClass]="{'active': assessment.type == 'Metered'}">Metered</button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Designed')"
+          [ngClass]="{'active':  assessment.type == 'Designed'}">Designed</button>
       </div>
     </div>
 
     <div class="d-flex flex-column w-100 justify-content-center pt-1 pb-1" *ngIf="assessment.collapsedState != 'closed'">
       <div class="btn-group btn-group-sm align-self-center">
-        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Electricity')" [ngClass]="{'active':  assessment.electric == true}">Electric</button>
+        <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Electricity')"
+          [ngClass]="{'active':  assessment.electric == true}">Electric</button>
         <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Fuel')" [ngClass]="{'active': assessment.fuel == true}">Fuel</button>
         <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setFurnaceType('Steam')" [ngClass]="{'active':  assessment.steam == true}">Steam-based</button>
       </div>
@@ -33,16 +37,18 @@
     </div>
     <div class="d-flex flex-column" *ngIf="assessment.collapsedState != 'closed'">
       <div class="mx-auto w-100 pr-2 pl-2" *ngIf="assessment.type == 'Metered'">
-        <app-pre-assessment-metered [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-metered>
+        <app-pre-assessment-metered [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"
+          (emitChangeField)="changeField($event)"></app-pre-assessment-metered>
       </div>
       <div class="mx-auto w-100 pr-2 pl-2" *ngIf="assessment.type == 'Designed'">
-        <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-designed>
+        <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"
+          (emitChangeField)="changeField($event)"></app-pre-assessment-designed>
       </div>
       <div class="mx-auto w-100 pr-2 pl-2">
         <app-pre-assessment-cost-form [settings]="settings" (emitCalculate)="calculate()" [preAssessment]="assessment"></app-pre-assessment-cost-form>
       </div>
       <div class="d-flex w-100 justify-content-center pr-2 pl-2 pt-2">
-        <table class="table table-hover table-striped">
+        <table #copyTable class="table table-hover table-striped">
           <tbody>
             <tr>
               <td class="bold w-50 text-center">Energy Used</td>
@@ -59,6 +65,9 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="d-flex w-100 justify-content-center pr-2 pl-2">
+        <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()"></app-exportable-results-table>
       </div>
     </div>
   </div>

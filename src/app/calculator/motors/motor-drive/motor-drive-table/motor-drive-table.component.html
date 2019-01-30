@@ -1,7 +1,7 @@
 <div class="output-summary">
   <div class="summary-table">
     <label class="group-label">Results</label>
-    <table class="table table-hover table-striped">
+    <table #copyTable class="table table-hover table-striped">
       <thead>
         <tr>
           <th>Drive Type</th>
@@ -10,7 +10,7 @@
           <th>Annual Energy Cost</th>
         </tr>
         <tr>
-          <th></th>
+          <th>&nbsp;</th>
           <th>(%)</th>
           <th>(MWh/yr)</th>
           <th>($k/yr)</th>
@@ -61,5 +61,6 @@
         </tr>
       </tbody>
     </table>
+    <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()"></app-exportable-results-table>
   </div>
 </div>

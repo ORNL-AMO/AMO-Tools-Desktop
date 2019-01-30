@@ -1,16 +1,16 @@
 <label class="group-label">Baseline Summary</label>
-<table class="table table-hover table-striped">
+<table #copyTable0 class="table table-hover table-striped">
   <tbody>
     <tr>
-      <td></td>
+      <td>&nbsp;</td>
       <td class="bold text-center">Operating Hours
-        <br>(hrs/yr)
+        (hrs/yr)
       </td>
       <td class="bold text-center">Electricity Use
-        <br>(kWh/yr)
+        (kWh/yr)
       </td>
       <td class="bold text-center">Total Lighting
-        <br>(lumens)
+        (lumens)
       </td>
     </tr>
     <tr *ngFor="let data of baselineData; let index = index;">
@@ -22,20 +22,21 @@
     </tr>
   </tbody>
 </table>
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()"></app-exportable-results-table>
 
 <label class="group-label" *ngIf="modificationData.length != 0">Modification Summary</label>
-<table class="table table-hover table-striped" *ngIf="modificationData.length != 0">
+<table #copyTable1 class="table table-hover table-striped" *ngIf="modificationData.length != 0">
   <tbody>
     <tr>
-      <td></td>
+      <td>&nbsp;</td>
       <td class="bold text-center">Operating Hours
-        <br>(hrs/yr)
+        (hrs/yr)
       </td>
       <td class="bold text-center">Electricity Use
-        <br>(kWh/yr)
+        (kWh/yr)
       </td>
       <td class="bold text-center">Total Lighting
-        <br>(lumens)
+        (lumens)
       </td>
     </tr>
     <tr *ngFor="let data of modificationData; let index = index;">
@@ -47,20 +48,21 @@
     </tr>
   </tbody>
 </table>
+<app-exportable-results-table *ngIf="modificationData.length != 0" [tableString]="table1String" (updateTableString)="updateTable1String()"></app-exportable-results-table>
 
 <label class="group-label">Totals</label>
-<table class="table table-hover table-striped">
+<table #copyTable2 class="table table-hover table-striped">
   <tbody>
     <tr>
-      <td></td>
+      <td>&nbsp;</td>
       <td class="bold text-center">Operating Hours
-        <br>(hrs/yr)
+        (hrs/yr)
       </td>
       <td class="bold text-center">Electricity Use
-        <br>(kWh/yr)
+        (kWh/yr)
       </td>
       <td class="bold text-center">Total Lighting
-        <br>(lumens)
+        (lumens)
       </td>
     </tr>
     <tr>
@@ -79,16 +81,20 @@
     </tr>
   </tbody>
 </table>
+<app-exportable-results-table [tableString]="table2String" (updateTableString)="updateTable2String()"></app-exportable-results-table>
 
-<table class="table table-hover table-striped pt-2">
+<table #copyTable3 class="table table-hover table-striped pt-2">
   <tbody>
     <tr>
       <td class="bold w-50">Electricity Savings</td>
-      <td class="text-center w-50">{{baselineResults.totalElectricityUse - modificationResults.totalElectricityUse | number:'1.0-0'}} kWh/yr</td>
+      <td class="text-center w-50">{{baselineResults.totalElectricityUse - modificationResults.totalElectricityUse |
+        number:'1.0-0'}} kWh/yr</td>
     </tr>
     <tr>
       <td class="bold w-50">Change In Lighting Level</td>
-      <td class="text-center w-50">{{modificationResults.totalLighting - baselineResults.totalLighting | number:'1.0-0'}} lumens</td>
+      <td class="text-center w-50">{{modificationResults.totalLighting - baselineResults.totalLighting |
+        number:'1.0-0'}} lumens</td>
     </tr>
   </tbody>
 </table>
+<app-exportable-results-table [tableString]="table3String" (updateTableString)="updateTable3String()"></app-exportable-results-table>

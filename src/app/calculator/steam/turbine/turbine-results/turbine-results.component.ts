@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { TurbineOutput } from '../../../../shared/models/steam';
 import { SteamService } from '../../steam.service';
@@ -15,6 +15,12 @@ export class TurbineResultsComponent implements OnInit {
   results: TurbineOutput;
   energyMeasurement: string;
 
+  @ViewChild('copyTable0') copyTable0: ElementRef;
+  table0String: any;
+  @ViewChild('copyTable1') copyTable1: ElementRef;
+  table1String: any;
+  @ViewChild('copyTable2') copyTable2: ElementRef;
+  table2String: any;
 
   constructor(private steamService: SteamService) { }
 
@@ -35,5 +41,17 @@ export class TurbineResultsComponent implements OnInit {
     } else {
       return unit;
     }
+  }
+
+  updateTable0String() {
+    this.table0String = this.copyTable0.nativeElement.innerText;
+  }
+
+  updateTable1String() {
+    this.table1String = this.copyTable1.nativeElement.innerText;
+  }
+
+  updateTable2String() {
+    this.table2String = this.copyTable2.nativeElement.innerText;
   }
 }

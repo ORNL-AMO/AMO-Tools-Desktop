@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
@@ -21,6 +21,10 @@ export class EnergyUseComponent implements OnInit {
   assessment: Assessment;
   @Input()
   inAssessment: boolean;
+
+  //for exportable table
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -61,6 +65,9 @@ export class EnergyUseComponent implements OnInit {
     }
 
     this.calculate();
+
+    //update table string for exporting results
+    this.updateTableString();
   }
 
   ngAfterViewInit() {
@@ -75,9 +82,7 @@ export class EnergyUseComponent implements OnInit {
     }
     else {
       this.flowCalculations = this.energyUseService.initDefaultValues(this.settings);
-      this.energyUseService.flowCalculations = this.flowCalculations;
     }
-
     this.calculate();
   }
 
@@ -93,16 +98,19 @@ export class EnergyUseComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+    this.updateTableString();
   }
 
   calculate() {
     if (!this.inAssessment) {
-      this.energyUseService.flowCalculations = this.flowCalculations;
+      this.flowCalculations = this.energyUseService.flowCalculations;
     } else if (this.inAssessment && this.calcExists) {
       this.calculator.flowCalculations = this.flowCalculations;
       this.saveCalculator();
     }
     this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations, this.settings);
+    //update exportable table string whenever results are updated
+    this.updateTableString();
   }
 
   getCalculator() {
@@ -134,9 +142,9 @@ export class EnergyUseComponent implements OnInit {
   }
 
   initForm() {
-    if(this.energyUseService.flowCalculations){
+    if (this.energyUseService.flowCalculations) {
       this.flowCalculations = this.energyUseService.flowCalculations;
-    }else{
+    } else {
       this.flowCalculations = this.energyUseService.initDefaultValues(this.settings);
     }
   }
@@ -158,6 +166,14 @@ export class EnergyUseComponent implements OnInit {
           })
         });
       }
+    }
+  }
+
+  updateTableString() {
+    if (this.tabSelect === 'results') {
+      setTimeout(() => {
+        this.tableString = this.copyTable.nativeElement.innerText;
+      }, 25);
     }
   }
 }

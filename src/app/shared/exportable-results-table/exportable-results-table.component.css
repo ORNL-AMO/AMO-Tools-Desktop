@@ -1,5 +1,6 @@
 .table-export-container {
-    margin-top: 40px;
+    margin-top: 20px;
+    margin-bottom: 40px;
 }
 
 .btn-container {
@@ -31,7 +32,8 @@
 }
 
 .btn-copy-table {
-    margin-top: 20px;
+    margin-top: 5px;
+    margin-bottom: 15px;
     text-align: center;
     height: 30px;
     width: 125px;

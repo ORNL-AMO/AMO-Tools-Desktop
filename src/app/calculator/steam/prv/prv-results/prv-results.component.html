@@ -1,6 +1,6 @@
 <div *ngIf="results">
   <label class="group-label">Inlet</label>
-  <table class="table table-hover table-striped">
+  <table #copyTable0 class="table table-hover table-striped">
     <tbody>
       <tr>
         <td class="bold w-50">Pressure</td>
@@ -20,7 +20,7 @@
           <span *ngIf="results.inletQuality == 0">Liquid</span>
           <span *ngIf="results.inletQuality == 1">Gas</span>
           <span *ngIf="results.inletQuality != 0 && results.inletQuality != 1">{{results.inletQuality}}</span>
-        </td>        
+        </td>
       </tr>
       <tr>
         <td class="bold w-50">Mass Flow</td>
@@ -46,9 +46,11 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()"></app-exportable-results-table>
+
 
   <label class="group-label">Outlet</label>
-  <table class="table table-hover table-striped">
+  <table #copyTable1 class="table table-hover table-striped">
     <tbody>
       <tr>
         <td class="bold w-50">Pressure</td>
@@ -94,9 +96,11 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="table1String" (updateTableString)="updateTable1String()"></app-exportable-results-table>
+
 
   <label class="group-label" *ngIf="isSuperHeating">Feedwater</label>
-  <table class="table table-hover table-striped" *ngIf="isSuperHeating">
+  <table #copyTable2 class="table table-hover table-striped" *ngIf="isSuperHeating">
     <tbody>
       <tr>
         <td class="bold w-50">Pressure</td>
@@ -142,4 +146,6 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table *ngIf="isSuperHeating" [tableString]="table2String" (updateTableString)="updateTable2String()"></app-exportable-results-table>
+
 </div>
