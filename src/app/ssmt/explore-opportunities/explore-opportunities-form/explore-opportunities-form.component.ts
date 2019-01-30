@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../ssmt.service';
@@ -23,6 +23,13 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   showSizeMargin: boolean;
   constructor(private ssmtService: SsmtService) { }
+
+  ngOnDestroy(){
+    if(this.ssmt.modifications[this.exploreModIndex] && !this.ssmt.modifications[this.exploreModIndex].ssmt.name){
+      this.ssmt.modifications[this.exploreModIndex].ssmt.name = 'Opportunities Modification';
+      //this.emitSave.emit(true);
+    }
+  }
 
   ngOnInit() {
   }

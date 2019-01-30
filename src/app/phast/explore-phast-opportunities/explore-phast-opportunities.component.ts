@@ -44,6 +44,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   modExists: boolean = false;
   selectModificationSubscription: Subscription;
   toastId: any;
+  emitSave: any;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
   ) {
@@ -59,7 +60,11 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   ngOnDestroy() {
     this.toastyService.clearAll();
     this.exploreOppsToast.emit(false);
-  }
+      if(this.phast.modifications[this.exploreModIndex] && !this.phast.modifications[this.exploreModIndex].phast.name){
+        this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification';
+        this.emitSave.emit(true);
+      }
+    }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
@@ -84,7 +89,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
       if (!this.phast.modifications[this.exploreModIndex].exploreOpportunities) {
         this.exploreOppsToast.emit(true);
         let toastOptions: ToastOptions = {
-          title: 'Explore Opportunites',
+          title: 'Explore Opportunities',
           msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
           showClose: true,
           timeout: 10000000,
