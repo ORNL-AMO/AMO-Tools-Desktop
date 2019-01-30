@@ -75,7 +75,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    if(!this.psat.modifications[this.exploreModIndex].psat.name){
+    if(this.psat.modifications[this.exploreModIndex] && !this.psat.modifications[this.exploreModIndex].psat.name){
       this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
       this.emitSave.emit(true);
     }
