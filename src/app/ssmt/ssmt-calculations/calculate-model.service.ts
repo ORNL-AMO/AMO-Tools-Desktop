@@ -103,11 +103,55 @@ export class CalculateModelService {
     } else if (this.inputData.headerInput.numberOfHeaders == 3) {
       initialGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage);
     }
-    let results: SSMTOutput = this.calculateModel(initialGuess);
-    console.log('UPDATED RESULTS');
-    return { inputData: this.inputData, outputData: results };
+    let balancedResults: SSMTOutput = this.calculateModel(initialGuess);
+    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.calculateMarginalCosts(initialGuess, balancedResults);
+
+    balancedResults.marginalHPCost = marginalCosts.marginalHPCost;
+    balancedResults.marginalMPCost = marginalCosts.marginalMPCost;
+    balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
+
+    return { inputData: this.inputData, outputData: balancedResults };
   }
 
+  calculateMarginalCosts(initialGuess: number, balancedResults: SSMTOutput): { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } {
+    this.calcCount = 0;
+
+    let marginalHPCost: number = 0;
+    let marginalMPCost: number = 0;
+    let marginalLPCost: number = 0;
+
+    this.inputData.headerInput.highPressure.processSteamUsage = this.inputData.headerInput.highPressure.processSteamUsage + 100;
+    let highPressureMarginalResults: SSMTOutput = this.calculateModel(initialGuess + 100)
+    this.calcCount = 0;
+    this.inputData.headerInput.highPressure.processSteamUsage = this.inputData.headerInput.highPressure.processSteamUsage - 100;
+    marginalHPCost = this.getCostDifference(balancedResults, highPressureMarginalResults);
+
+    if (this.inputData.headerInput.numberOfHeaders > 1) {
+      this.inputData.headerInput.lowPressure.processSteamUsage = this.inputData.headerInput.lowPressure.processSteamUsage + 100;
+      let lowPressureMarginalResults: SSMTOutput = this.calculateModel(initialGuess + 100)
+      this.calcCount = 0;
+      this.inputData.headerInput.lowPressure.processSteamUsage = this.inputData.headerInput.lowPressure.processSteamUsage - 100;
+      marginalLPCost = this.getCostDifference(balancedResults, lowPressureMarginalResults);
+      
+      if (this.inputData.headerInput.numberOfHeaders == 3) {
+        this.inputData.headerInput.mediumPressure.processSteamUsage = this.inputData.headerInput.mediumPressure.processSteamUsage + 100;
+        let mediumPressureMarginalResults: SSMTOutput = this.calculateModel(initialGuess + 100)
+        this.calcCount = 0;
+        this.inputData.headerInput.mediumPressure.processSteamUsage = this.inputData.headerInput.mediumPressure.processSteamUsage - 100;
+        marginalMPCost = this.getCostDifference(balancedResults, mediumPressureMarginalResults);
+      }
+    }
+    return { marginalHPCost: marginalHPCost, marginalMPCost: marginalMPCost, marginalLPCost: marginalLPCost }
+  }
+
+  getCostDifference(balancedResults: SSMTOutput, adjustedResults: SSMTOutput): number{
+    let powerGenOC: number = balancedResults.powerGenerated * this.inputData.operationsInput.electricityCosts;
+    let adjustedPowerGenOC: number = adjustedResults.powerGenerated  * this.inputData.operationsInput.electricityCosts;
+    let totalOC: number = balancedResults.totalOperatingCost / this.inputData.operationsInput.operatingHoursPerYear;
+    let adjustedTotalOC: number = adjustedResults.totalOperatingCost / this.inputData.operationsInput.operatingHoursPerYear;
+
+    return ((adjustedTotalOC - totalOC) + (powerGenOC - adjustedPowerGenOC)) / 100;
+  }
 
   calculateModel(massFlow: number): SSMTOutput {
     //using counter to catch mistakes in testing, shouldn't ever be more than like 7
@@ -1631,7 +1675,6 @@ export class CalculateModelService {
     let steamUse: number = processSteamUsage + this.deaeratorOutput.inletSteamMassFlow + condensingTurbineMassFlow;
     //steam balance = difference between use and production (we want 0!)
     let steamBalance: number = steamUse - steamProduction;
-    console.log('steam balance ' + steamBalance);
     if (this.inputData.headerInput.numberOfHeaders > 1 && steamBalance < 0) {
       let ventedSteamAmount: number = this.calculateLowPressureVentedSteam(steamBalance);
       steamBalance = steamBalance + ventedSteamAmount;
@@ -1869,7 +1912,10 @@ export class CalculateModelService {
       annualMakeupWaterFlow: this.annualMakeupWaterFlow,
 
       ventedLowPressureSteam: this.ventedLowPressureSteam,
-      heatExchangerOutput: this.heatExchangerOutput
+      heatExchangerOutput: this.heatExchangerOutput,
+      marginalHPCost: 0,
+      marginalMPCost: 0,
+      marginalLPCost: 0
     }
     return output;
   }
