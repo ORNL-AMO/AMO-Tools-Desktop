@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { TurbineInput } from '../../../shared/models/steam';
+import { TurbineInput } from '../../../shared/models/steam/steam-inputs';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SteamService } from '../steam.service';
@@ -30,7 +30,6 @@ export class TurbineService {
 
   getFormFromObj(inputObj: TurbineInput, settings: Settings): FormGroup {
     let ranges: TurbineRanges = this.getRangeValues(settings, inputObj.inletQuantity, inputObj.outletQuantity);
-    console.log(inputObj.inletQuantityValue);
     let tmpForm: FormGroup = this.formBuilder.group({
       solveFor: [inputObj.solveFor, Validators.required], // (outlet properties = 0, isentropicEfficiency = 1) - unknown to solve for
       inletPressure: [inputObj.inletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
@@ -68,8 +67,8 @@ export class TurbineService {
     let inletQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, inletThermodynamicQuantity);
     let outletQuantityMinMax: { min: number, max: number } = this.steamService.getQuantityRange(settings, outletThermodynamicQuantity);
     let ranges: TurbineRanges = {
-      inletPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      inletPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      inletPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      inletPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       massFlowOrPowerOutMin: 0,
       massFlowOrPowerOutMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
       inletQuantityValueMin: inletQuantityMinMax.min,
@@ -78,8 +77,8 @@ export class TurbineService {
       isentropicEfficiencyMax: 100,
       generatorEfficiencyMin: 50,
       generatorEfficiencyMax: 100,
-      outletSteamPressureMin: Number(this.convertUnitsService.value(-14.5).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
-      outletSteamPressureMax: Number(this.convertUnitsService.value(14489).from('psi').to(settings.steamPressureMeasurement).toFixed(0)),
+      outletSteamPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      outletSteamPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       outletQuantityValueMin: outletQuantityMinMax.min,
       outletQuantityValueMax: outletQuantityMinMax.max
     }

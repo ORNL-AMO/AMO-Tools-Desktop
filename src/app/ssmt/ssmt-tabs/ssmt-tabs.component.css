@@ -1,0 +1,36 @@
+.btn{
+    padding: 6px;
+}
+
+.mod-name a:hover{
+    text-decoration: none !important;
+    cursor: default !important;
+}
+
+.btn-primary{
+    border-color: #F39C12;
+    background-color: #F39C12;
+    font-size: small;
+}
+
+
+.navbar{
+    padding: 0px;
+}
+
+.badge{
+    margin-left: .25rem;
+    margin-right: .25rem;
+}
+
+.click-link{
+    font-size: small;
+}
+
+.br-color-white{
+    background: #fff;
+}
+
+.assessment-bar{
+    background-color: #e5e5e5;
+}

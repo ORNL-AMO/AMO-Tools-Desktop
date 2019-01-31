@@ -1,0 +1,120 @@
+<div class="d-flex flex-column">
+  <div class="p-1">
+    <label class="group-label">Boiler Properties</label>
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td class="bold w-50">Blowdown Rate</td>
+          <td class="text-center w-50"> {{inputData.boilerInput.blowdownRate}} %</td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Boiler Energy</td>
+          <td class="text-center w-50"> {{boiler.boilerEnergy | number:'1.0-1'}}
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Combustion Efficiency</td>
+          <td class="text-center w-50"> {{inputData.boilerInput.combustionEfficiency}} %</td>
+        </tr>
+        <tr>
+          <td class="bold w-50">Fuel Energy</td>
+          <td class="text-center w-50">{{boiler.fuelEnergy | number:'1.0-1'}}
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-1">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="bold text-center">Feedwater</td>
+          <td class="bold text-center">Blowdown</td>
+          <td class="bold text-center">Steam</td>
+          <td class="text-center">Units</td>
+        </tr>
+        <tr>
+          <td class="bold">Pressure</td>
+          <td class="text-center">{{boiler.feedwaterPressure | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.blowdownPressure | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.steamPressure | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Temperature</td>
+          <td class="text-center">{{boiler.feedwaterTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.blowdownTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.steamTemperature}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Saturated</td>
+          <td class="text-center">
+            <span *ngIf="boiler.feedwaterQuality == 0">Liquid</span>
+            <span *ngIf="boiler.feedwaterQuality == 1">Gas</span>
+            <span *ngIf="boiler.feedwaterQuality != 1 && boiler.feedwaterQuality != 0">
+              {{boiler.feedwaterQuality | number:'1.0-1'}} </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="boiler.blowdownQuality == 0">Liquid</span>
+            <span *ngIf="boiler.blowdownQuality == 1">Gas</span>
+            <span *ngIf="boiler.blowdownQuality != 1 && boiler.blowdownQuality != 0">
+              {{boiler.blowdownQuality | number:'1.0-1'}} </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="boiler.steamQuality == 0">Liquid</span>
+            <span *ngIf="boiler.steamQuality == 1">Gas</span>
+            <span *ngIf="boiler.steamQuality != 1 && boiler.steamQuality != 0">
+              {{boiler.steamQuality | number:'1.0-1'}} </span>
+          </td>
+          <td class="text-center">
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Mass Flow</td>
+          <td class="text-center">{{boiler.feedwaterMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.blowdownMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.steamMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Sp. Enthalpy</td>
+          <td class="text-center">{{boiler.feedwaterSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.blowdownSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.steamSpecificEnthalpy | number:'1.0-1'}} </td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
+          </td>
+
+        </tr>
+        <tr>
+          <td class="bold">Sp. Entropy</td>
+          <td class="text-center">{{boiler.feedwaterSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.blowdownSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.steamSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Energy Flow</td>
+          <td class="text-center">{{boiler.feedwaterEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.blowdownEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{boiler.steamEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

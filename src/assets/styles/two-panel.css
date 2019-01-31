@@ -116,6 +116,11 @@
    border-bottom: #2C3E50 solid 2px;
 }
 
+.ssmt .header{
+    border-bottom: #F39C12 solid 2px;
+ }
+  
+
 .general .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #145A32;
     transition: all .5s ease-in-out;
@@ -133,6 +138,12 @@
 
 .fsat .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #FFE400;
+    transition: all .5s ease-in-out;
+    color: black;
+}
+
+.ssmt .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #F39C12;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -215,6 +226,10 @@
 
 .phast .group-label{
     border-bottom: #BF3D00 groove 2px;
+}
+
+.ssmt .group-label{
+    border-bottom: #F39C12 groove 2px;
 }
 
 
@@ -391,5 +406,10 @@
 
     .fsat .scroll-item::-webkit-scrollbar-thumb{
         background-color: #FFE400;
+        outline: 1px solid slategrey;
+    }
+
+    .ssmt .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #F39C12;
         outline: 1px solid slategrey;
     }

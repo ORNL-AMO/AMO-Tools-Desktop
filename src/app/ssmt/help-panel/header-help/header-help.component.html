@@ -1,0 +1,137 @@
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Header Help
+    <br>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Enter measured data to calculate your system's annual savings potential.
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'numberOfHeaders'">
+    <h6>
+      Number Of Headers
+      <br>
+      <small class="text-muted">
+        Choose the number of headers from the options (1, 2, or 3). With two or three headers notice that you must specify the highest and lowest pressure header.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'pressure'">
+    <h6>
+      Pressure
+      <br>
+      <small class="text-muted">
+        <span *ngIf="pressureLevel == 'highPressure'">Pressure of the high pressure header.</span>
+        <span *ngIf="pressureLevel == 'mediumPressure'">Pressure of the medium pressure header.</span>
+        <span *ngIf="pressureLevel == 'lowPressure'">Pressure of the low pressure header.</span>
+        <hr>
+      </small>
+    </h6>
+    <!-- <div class="w-100 justify-content-center">
+          <table class="table table-hover table-striped">
+            <tbody>
+              <tr>
+                <th class="w-50 text-center">Minimum</th>
+                <th class="w-50 text-center">Maximum</th>
+              </tr>
+              <tr>
+                <td class="w-50 text-center">0</td>
+                <td class="w-50 text-center">1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div> -->
+  </div>
+  <div class="my-2" *ngIf="currentField == 'processSteamUsage'">
+    <h6>
+      Process Steam Usage
+      <br>
+      <small class="text-muted">
+        Mass flow of steam used by processes. Includes any header steam leaks.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'condensationRecoveryRate'">
+    <h6>
+      Condensate Recovery Rate
+      <br>
+      <small class="text-muted">
+        Percent of process steam used that is returned as condensate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'condensateReturnTemperature'">
+    <h6>
+      Condensate Return Temperature
+      <br>
+      <small class="text-muted">
+        Average temperature of combined condensate returning.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'flashCondensateReturn'">
+    <h6>
+      Flash Condensate Return
+      <br>
+      <small class="text-muted">
+        Select YES if the model uses a flash to reduce the pressure of the combined condensate before joining the
+        makeup water stream.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'flashCondensateIntoHeader'">
+    <h6>
+      Flash Condensate Into Header
+      <br>
+      <small class="text-muted">
+        Select YES if the model uses a flash tank to reduce the pressure of the combined condensate, sending the flash
+        steam to another header.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'heatLoss'">
+    <h6>
+      Heat Loss
+      <br>
+      <small class="text-muted">
+        Estimation of header heat loss, as a percent of energy flow.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'desuperheatSteamIntoNextHighest'">
+    <h6>
+      Desuperheat Steam Into
+      <span *ngIf="numberOfHeaders == 2 && pressureLevel == 'lowPressure' || numberOfHeaders == 3 && pressureLevel == 'mediumPressure'">Highest
+        Pressure</span>
+      <span *ngIf="numberOfHeaders == 3 && pressureLevel == 'lowPressure'">Medium Pressure</span>
+      Header
+      <br>
+      <small class="text-muted">
+        Models the addition of feedwater into the pressure reduce valve.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'desuperheatSteamTemperature'">
+    <h6>
+      Desuperheat Temperature
+      <br>
+      <small class="text-muted">
+        The target desuperheating temperature for the PRV outlet. Must be below outlet temperature without
+        desuperheating to have an effect.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>

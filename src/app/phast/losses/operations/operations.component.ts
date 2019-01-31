@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { PHAST, OperatingCosts, OperatingHours } from '../../../shared/models/phast/phast';
+import { PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
 import { FormGroup } from '@angular/forms';
+import { OperatingHours, OperatingCosts } from '../../../shared/models/operations';
 @Component({
   selector: 'app-operations',
   templateUrl: './operations.component.html',

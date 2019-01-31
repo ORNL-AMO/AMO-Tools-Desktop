@@ -20,8 +20,8 @@
   <div class="form-group">
     <label for="steamSpecificEnthalpyMeasurement">Specific Enthalpy</label>
     <div class="input-group calc-addon-group">
-      <select name="steamSpecificEnthalpyMeasurement" class="form-control" formControlName="steamSpecificEnthalpyMeasurement" id="steamSpecificEnthalpyMeasurement"
-        (change)="save()" autofocus>
+      <select name="steamSpecificEnthalpyMeasurement" class="form-control" formControlName="steamSpecificEnthalpyMeasurement"
+        id="steamSpecificEnthalpyMeasurement" (change)="save()" autofocus>
         <option *ngFor="let measurement of steamSpecificEnthalpyMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
           <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>
         </option>
@@ -32,8 +32,8 @@
   <div class="form-group">
     <label for="steamSpecificEntropyMeasurement">Specific Entropy</label>
     <div class="input-group calc-addon-group">
-      <select name="steamSpecificEntropyMeasurement" class="form-control" formControlName="steamSpecificEntropyMeasurement" id="steamSpecificEntropyMeasurement"
-        (change)="save()" autofocus>
+      <select name="steamSpecificEntropyMeasurement" class="form-control" formControlName="steamSpecificEntropyMeasurement"
+        id="steamSpecificEntropyMeasurement" (change)="save()" autofocus>
         <option *ngFor="let measurement of steamSpecificEntropyMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
           <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>
         </option>
@@ -44,8 +44,8 @@
   <div class="form-group">
     <label for="steamSpecificVolumeMeasurement">Specific Volume</label>
     <div class="input-group calc-addon-group">
-      <select name="steamSpecificVolumeMeasurement" class="form-control" formControlName="steamSpecificVolumeMeasurement" id="steamSpecificVolumeMeasurement"
-        (change)="save()" autofocus>
+      <select name="steamSpecificVolumeMeasurement" class="form-control" formControlName="steamSpecificVolumeMeasurement"
+        id="steamSpecificVolumeMeasurement" (change)="save()" autofocus>
         <option *ngFor="let measurement of specificVolumeMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
           <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>
         </option>
@@ -58,7 +58,8 @@
     <div class="input-group calc-addon-group">
       <select name="steamMassFlowMeasurement" class="form-control" formControlName="steamMassFlowMeasurement" id="steamMassFlowMeasurement"
         (change)="save()" autofocus>
-        <option *ngFor="let measurement of steamMassFlowMeasurements" [ngValue]="measurement.unit">{{measurement.display}} per hour
+        <option *ngFor="let measurement of steamMassFlowMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
+          per hour
           <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>/hr
         </option>
       </select>
@@ -82,12 +83,48 @@
     <div class="input-group calc-addon-group">
       <select name="steamPowerMeasurement" class="form-control" formControlName="steamPowerMeasurement" id="steamPowerMeasurement"
         (change)="save()" autofocus>
-        <option *ngFor="let measurement of steamPowerMeasurements" [ngValue]="measurement.unit">{{measurement.display}} per hour
+        <option *ngFor="let measurement of steamPowerMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
+          per hour
           <span [innerHTML]="getPowerDisplay(measurement.unit)"></span><span *ngIf="measurement.unit != 'kWh'">/hr</span>
         </option>
       </select>
     </div>
   </div>
 
+  <div class="form-group">
+    <label for="steamVacuumPressure">Vacuum Pressure</label>
+    <div class="input-group calc-addon-group">
+      <select name="steamVacuumPressure" class="form-control" formControlName="steamVacuumPressure" id="steamVacuumPressure"
+        (change)="save()" autofocus>
+        <option *ngFor="let measurement of steamVacuumPreasureMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
+          <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>
+        </option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="steamVolumeMeasurement">Volume</label>
+    <div class="input-group calc-addon-group">
+      <select name="steamVolumeMeasurement" class="form-control" formControlName="steamVolumeMeasurement" id="steamVolumeMeasurement"
+        (change)="save()" autofocus>
+        <option *ngFor="let measurement of steamVolumeMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
+          <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>
+        </option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="steamVolumeFlowMeasurement">Volume Flow</label>
+    <div class="input-group calc-addon-group">
+      <select name="steamVolumeFlowMeasurement" class="form-control" formControlName="steamVolumeFlowMeasurement" id="steamVolumeFlowMeasurement"
+        (change)="save()" autofocus>
+        <option *ngFor="let measurement of steamVolumeFlowMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
+          <span [innerHTML]="getUnitDisplay(measurement.unit)"></span>
+        </option>
+      </select>
+    </div>
+  </div>
 
 </form>

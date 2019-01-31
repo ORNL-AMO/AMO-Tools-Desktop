@@ -1,0 +1,37 @@
+<div class="d-flex h-100 w-100 flash-tank-diagram">
+  <div class="d-flex flex-column justify-content-end h-100">
+    <div class="d-flex down-pipe justify-content-center" [ngClass]="steamPressure" (mouseenter)="hoverHeader()"
+      (mouseleave)="hoverEquipment('default')">
+      <span class="fa fa-chevron-down hidden-chevron"></span>
+    </div>
+  </div>
+  <div class="d-flex flex-column h-100 flex-fill">
+    <div class="d-flex align-self-end flex-fill condensate" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
+      <span class="fa fa-chevron-down mb-auto" [ngClass]="{'hidden-chevron':flashTankType == 'highPressure'}"
+        (mouseenter)="hoverInlet()" (mouseleave)="hoverCondensate()"></span>
+    </div>
+
+    <div class="d-flex align-self-end align-items-center flex-fill w-100">
+      <div class="d-flex outletGas h-100 w-100 justify-content-center" [ngClass]="steamPressure" (mouseenter)="hoverHeader()"
+        (mouseleave)="hoverEquipment('default')">
+        <span class="fa fa-chevron-left" (mouseenter)="hoverOutletGas()" (mouseleave)="hoverHeader()"></span>
+        {{flashTank.outletGasMassFlow | number:'1.0-1'}}
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+      </div>
+      <div class="d-flex justify-content-center" (click)="selectEquipment()">
+        <div class="flash-tank-img-holder">
+          <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-flash-tank.png" class="flash-tank-img"
+            (mouseenter)="hoverFlashTank()" (mouseleave)="hoverEquipment('default')">
+          <span class="flash-tank-label" (mouseenter)="hoverFlashTank()" (mouseleave)="hoverEquipment('default')">Flash
+            Tank</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex align-self-end flex-fill chevron-margin" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
+      <div class="d-flex condensate">
+        <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverOutlet()" (mouseleave)="hoverHeader()"></span>
+      </div>
+    </div>
+  </div>
+</div>

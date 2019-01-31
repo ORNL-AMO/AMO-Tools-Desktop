@@ -32,6 +32,6 @@ export class AboutPageComponent implements OnInit {
     this.showUser = !this.showUser;
   }
   toggleShowFAST() {
-    this.showFAST = !this.showFAST
+    this.showFAST = !this.showFAST;
   }
 }

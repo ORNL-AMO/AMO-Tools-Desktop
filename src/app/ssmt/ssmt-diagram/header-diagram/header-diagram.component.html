@@ -1,0 +1,49 @@
+<div class="d-flex w-100" [ngClass]="pressureLevel">
+  <div class="d-flex header-tube align-content-center" (mouseenter)="hoverHeader()" (mouseleave)="hoverEquipment('default')">
+    <div class="flex-fill">
+      <span class="header-pressure">
+        {{header.pressure | number:'1.0-1'}}
+        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+      </span>
+      <div class="vented-steam-holder" *ngIf="ventedLowPressureSteam">
+        <span class="vented-steam">
+          {{ventedLowPressureSteam.massFlow | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        </span>
+        <div class="vents">
+          <span class="fa fa-chevron-up" (mouseenter)="hoverEquipment('ventedLowPressureSteam')" (mouseleave)="hoverEquipment('default')"></span>
+        </div>
+      </div>
+    </div>
+    <div class="text-right header-data-chevron">
+      <div class="header-data-holder">
+        <span class="header-mass-flow">{{steamUsage.massFlow | number:'1.0-1'}}
+
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        </span>
+        <span class="header-energy-flow">{{steamUsage.processUsage | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        </span>
+      </div>
+      <span class="fa fa-chevron-right" (mouseenter)="hoverProcessUsageInlet()" (mouseleave)="hoverHeader()"></span>
+    </div>
+  </div>
+  <div class="d-flex flex-fill">
+    <div class="text-center process-usage-width" (mouseenter)="hoverProcessUsage()" (mouseleave)="hoverEquipment('default')">
+      <div class="process-usage-holder">
+        <span class="process-usage">
+          Process Usage
+        </span>
+      </div>
+    </div>
+    <div class="flex-fill condensate text-center" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
+      <div class="condensate-holder pr-1">
+        <span class="fa fa-chevron-right"></span>
+        <span class="condensate-mass-flow">
+          {{condensate.massFlow| number:'1.0-1'}}
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

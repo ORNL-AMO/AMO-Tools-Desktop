@@ -1,0 +1,137 @@
+
+.header-tube{
+    width: 82%; 
+}
+
+.highPressure .header-tube{
+    background-color: #C0392B;
+    border-top-left-radius: 25px;
+    color: white;
+}
+
+
+.highPressure .process-usage-holder .process-usage{
+    border: #C0392B solid 3px;
+}
+
+
+.mediumPressure .header-tube{
+    background-color: #FFA726;
+}
+
+.mediumPressure .process-usage-holder .process-usage{
+    border: #FFA726 solid 3px;
+}
+
+.lowPressure .header-tube{
+    background-color: #FFEB3B;
+    border-bottom-left-radius: 25px;
+}
+
+.lowPressure .process-usage-holder .process-usage{
+     border: #FFEB3B solid 3px; 
+}
+
+.condensate{
+    background-color: #283593;
+    color: white;
+}
+
+.highPressure .condensate {
+    border-top-right-radius: 25px;
+}
+
+.header-pressure{
+    padding-left: 60px;
+}
+
+
+.header-data-holder, .process-usage-holder, .condensate-holder, .vented-steam-holder{
+    position: relative;
+}
+
+.highPressure .header-data-holder .header-mass-flow{
+    position: absolute;
+    top: -35px;
+    width: 100px;
+    z-index: +1;
+    color: black;
+    left: -60px;
+}
+
+.highPressure .header-data-holder .header-energy-flow{
+    position: absolute;
+    top: -20px;
+    width: 100px;
+    z-index: +1;
+    left: -60px;
+    color: black;
+}
+
+.mediumPressure .header-data-holder .header-mass-flow,
+.lowPressure .header-data-holder .header-mass-flow{
+    position: absolute;
+    top: 20px;
+    width: 100px;
+    z-index: +1;
+    color: black;
+    left: -60px;
+}
+
+.mediumPressure .header-data-holder .header-energy-flow,
+.lowPressure .header-data-holder .header-energy-flow{
+    position: absolute;
+    top: 35px;
+    width: 100px;
+    z-index: +1;
+    left: -60px;
+    color: black;
+}
+
+
+.process-usage-holder .process-usage{
+    position: absolute;
+    width: 65px;
+    height: 45px;
+    z-index: +1;
+    color: black;
+    background: white;
+    border-color: solid 3px;
+    bottom: -37px;
+    right: 0px;
+}
+
+.process-usage-width{
+    width: 65px;
+}
+
+
+.header-data-chevron{
+    padding-right: 30px;
+}
+
+
+.condensate-mass-flow{
+    position: absolute;
+    width: 100px;
+    z-index: +1;
+    color: black;
+    bottom: 25px;
+    right: 0;
+}
+
+.vented-steam-holder .vented-steam{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    bottom: 60px;
+    left: 100px;
+}
+
+.vented-steam-holder .vents{
+    position: absolute;
+    z-index: +1;
+    height: 40px;
+    left: 110px;
+    bottom: 19px;
+}

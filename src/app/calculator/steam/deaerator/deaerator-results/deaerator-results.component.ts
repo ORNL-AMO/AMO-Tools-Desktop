@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { DeaeratorOutput } from '../../../../shared/models/steam';
+import { DeaeratorOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 

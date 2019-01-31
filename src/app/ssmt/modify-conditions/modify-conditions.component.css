@@ -1,0 +1,7 @@
+.modal-open {
+    z-index: initial !important;
+}
+
+.row-min-height{
+    min-height: 100%;
+}

@@ -1,0 +1,18 @@
+<div class="d-flex flex-column">
+  <div *ngIf="inSetup" class="header mr-2 ml-2">
+    <h3>Boiler Details</h3>
+  </div>
+  <div class="p-3">
+    <app-condensing-turbine-form [turbineForm]="condensingTurbineForm" [settings]="settings" [selected]="selected"
+      (emitSave)="saveCondensingTurbine()" [inSetup]="inSetup" [idString]="idString"></app-condensing-turbine-form>
+    <app-pressure-turbine-form *ngIf="numberOfHeaders >= 2" [turbineForm]="highToLowTurbineForm" [settings]="settings" [selected]="selected"
+      [pressureTurbineString]="'highToLowTurbine'" (emitSave)="saveHighLowPressureTurbine()" [inSetup]="inSetup"
+      [idString]="idString"></app-pressure-turbine-form>
+    <app-pressure-turbine-form *ngIf="numberOfHeaders >= 3" [turbineForm]="highToMediumTurbineForm" [settings]="settings" [selected]="selected"
+      [pressureTurbineString]="'highToMediumTurbine'" (emitSave)="saveHighMediumPressureTurbine()" [inSetup]="inSetup"
+      [idString]="idString"></app-pressure-turbine-form>
+    <app-pressure-turbine-form *ngIf="numberOfHeaders >= 3" [turbineForm]="mediumToLowTurbineForm" [settings]="settings" [selected]="selected"
+      [pressureTurbineString]="'mediumToLowTurbine'" (emitSave)="saveMediumLowPressureTurbine()" [inSetup]="inSetup"
+      [idString]="idString"></app-pressure-turbine-form>
+  </div>
+</div>

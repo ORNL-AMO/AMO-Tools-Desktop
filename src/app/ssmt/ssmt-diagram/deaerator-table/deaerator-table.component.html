@@ -1,0 +1,116 @@
+<div class="d-flex flex-column">
+  <label class="group-label">Deaerator</label>
+  <div class="p-1">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="bold text-center">Inlet Water</td>
+          <td class="bold text-center">Steam</td>
+          <td class="bold text-center">Vent Steam</td>
+          <td class="bold text-center">Feedwater</td>
+          <td class="text-center">Units</td>
+        </tr>
+        <tr>
+          <td class="bold">Pressure</td>
+          <td class="text-center">{{deaerator.inletWaterPressure | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.inletSteamPressure | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.ventedSteamPressure | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.feedwaterPressure | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Temperature</td>
+          <td class="text-center">{{deaerator.inletWaterTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.inletSteamTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.ventedSteamTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.feedwaterTemperature | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Sp. Enthalpy</td>
+          <td class="text-center">{{deaerator.inletWaterSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.inletSteamSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.ventedSteamSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.feedwaterSpecificEnthalpy | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Sp. Entropy</td>
+          <td class="text-center">{{deaerator.inletWaterSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.inletSteamSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.ventedSteamSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.feedwaterSpecificEntropy | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Quality</td>
+          <td class="text-center">
+            <span *ngIf="deaerator.inletWaterQuality == 0">Liquid</span>
+            <span *ngIf="deaerator.inletWaterQuality == 1">Gas</span>
+            <span *ngIf="deaerator.inletWaterQuality != 1 && deaerator.inletWaterQuality != 0">
+              {{deaerator.inletWaterQuality | number:'1.0-1'}} </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="deaerator.inletSteamQuality == 0">Liquid</span>
+            <span *ngIf="deaerator.inletSteamQuality == 1">Gas</span>
+            <span *ngIf="deaerator.inletSteamQuality != 1 && deaerator.inletSteamQuality != 0">
+              {{deaerator.inletSteamQuality | number:'1.0-1'}} </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="deaerator.ventedSteamQuality == 0">Liquid</span>
+            <span *ngIf="deaerator.ventedSteamQuality == 1">Gas</span>
+            <span *ngIf="deaerator.ventedSteamQuality != 1 && deaerator.ventedSteamQuality != 0">
+              {{deaerator.ventedSteamQuality | number:'1.0-1'}} </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="deaerator.feedwaterQuality == 0">Liquid</span>
+            <span *ngIf="deaerator.feedwaterQuality == 1">Gas</span>
+            <span *ngIf="deaerator.feedwaterQuality != 1 && deaerator.feedwaterQuality != 0">
+              {{deaerator.feedwaterQuality | number:'1.0-1'}} </span>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="bold">Sp. Volume</td>
+          <td class="text-center">{{deaerator.inletWaterVolume | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.inletSteamVolume | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.ventedSteamVolume | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.feedwaterVolume | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificVolumeMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="bold">Mass Flow</td>
+          <td class="text-center">{{deaerator.inletWaterMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.inletSteamMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.ventedSteamMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.feedwaterMassFlow | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+
+        <tr>
+          <td class="bold">Energy Flow</td>
+          <td class="text-center">{{deaerator.inletWaterEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.inletSteamEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.ventedSteamEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">{{deaerator.feedwaterEnergyFlow | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

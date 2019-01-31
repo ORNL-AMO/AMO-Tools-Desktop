@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { SaturatedPropertiesOutput } from '../../../../shared/models/steam';
+import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';

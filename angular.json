@@ -57,6 +57,7 @@
               "src/assets/styles/graphs.css",
               "src/assets/styles/forms.css",
               "src/assets/styles/help.css",
+              "src/assets/styles/ssmt-diagram.css",
               "src/assets/styles/toggle-switch.css"
             ],
             "scripts": [

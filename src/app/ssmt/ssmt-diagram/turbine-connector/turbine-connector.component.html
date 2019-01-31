@@ -1,0 +1,5 @@
+<div class="d-flex h-100 w-100 justify-content-center" [ngClass]="{'pb-1': noOutletConnection, 'pt-1': noInletConnection}">
+  <div class="d-flex chevron-one align-items-center h-100" [ngClass]="inletColor" (mouseenter)="hoverConnector()" (mouseleave)="hoverEquipment('default')">
+    <span class="fa fa-chevron-down hidden-chevron"></span>
+  </div>
+</div>

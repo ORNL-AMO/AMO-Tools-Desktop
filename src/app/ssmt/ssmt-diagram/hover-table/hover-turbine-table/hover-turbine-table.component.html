@@ -1,0 +1,27 @@
+<div class="p-1">
+  <label class="group-label" *ngIf="turbineType == 'condensing'">Condensing Turbine Details</label>
+  <label class="group-label" *ngIf="turbineType == 'highToLow'">High to Low Pressure Turbine Details</label>
+  <label class="group-label" *ngIf="turbineType == 'highToMedium'">High to Medium Pressure Turbine Details</label>
+  <label class="group-label" *ngIf="turbineType == 'mediumToLow'">Medium to Low Pressure Turbine Details</label>
+
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="bold">Isentropic Eff.</td>
+        <td class="text-center">{{turbine.isentropicEfficiency |number:'1.0-1'}} % </td>
+        <td class="bold">Energy Out</td>
+        <td class="text-center">{{turbine.energyOut | number:'1.0-1'}} 
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">Generation Eff.</td>
+        <td class="text-center">{{turbine.generatorEfficiency |number:'1.0-1'}} % </td>
+        <td class="bold">Power Out</td>
+        <td class="text-center">{{turbine.powerOut |number:'1.0-1'}} 
+            <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,124 @@
+
+.boiler-img{
+    height: 120px;
+    z-index: +1;
+}
+
+.feedwater{
+    margin-top: 72px;
+    margin-right: -2px;
+    padding-left: .25rem;
+}
+
+.feedwater-column{
+    margin-right: -5px;
+    padding-right: 5px;
+    width: 75px;
+}
+
+.blowdown-one{
+    margin-top: 61px;
+    color: #5D4037;
+}
+
+.blowdown-two{
+    margin-top: 94.5px;
+    width: 50px;
+}
+
+.high-pressure{
+    margin-top: 14px;
+}
+
+.outlet-column{
+    margin-left: -5px;
+    padding-left: 5px;
+    width: 50px;
+}
+
+.down-pipe{
+    border-top-right-radius: 25px;
+    margin-bottom: -1rem;
+}
+
+.fa-arrow-circle-right{
+    font-size: 18px;
+    padding-left: 2px;
+}
+
+
+.boiler-steam-holder, .feedwater-holder, .boiler-img-holder, .blowdown-holder, .boiler-temp-holder{
+    position: relative;
+}
+
+.boiler-temp-holder{
+    padding-top: 20px;
+}
+
+.boiler-img-holder .boiler-label{
+    position: absolute;
+    top: 45px;
+    left: 45px;
+    z-index: +1;
+    font-size: large;
+    background-color: white;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    font-weight: bolder;
+}
+
+.boiler-img-holder .fuel-energy{
+    position: absolute;
+    top: 110px;
+    width: 100px;
+    z-index: +1;
+    left: -13px;
+}
+
+.boiler-img-holder .stack-loss{
+    position: absolute;
+    width: 100px;
+    z-index: +1;
+    right: 80px;
+}
+
+.boiler-img-holder .boiler-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+.boiler-steam-holder .boiler-mass-flow{
+    position: absolute;
+    bottom: 22px;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    left: -19px;
+}
+
+.boiler-temp-holder .boiler-temperature{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 75px;
+    left: 30px;
+}
+
+.feedwater-holder .feedwater-mass-flow{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    top: -22px;
+    right: -10px;
+}
+
+
+.blowdown-holder .blowdown-mass-flow{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    width: 100px;
+    left: 40px;
+}

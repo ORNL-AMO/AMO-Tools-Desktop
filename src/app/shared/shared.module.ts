@@ -10,7 +10,7 @@ import { ModelService } from './model.service';
 
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { PercentGraphComponent } from './percent-graph/percent-graph.component';
-import { SigFigsPipe } from './sig-figs.pipe';
+import { SigFigsPipe } from './pipes/sig-figs.pipe';
 import { UpdateDataService } from './update-data.service';
 import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
 import { SvgToPngService } from './svg-to-png/svg-to-png.service';
@@ -23,6 +23,7 @@ import { ExportableTableComponent } from './exportable-table/exportable-table.co
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 import { PrintOptionsMenuComponent } from './print-options-menu/print-options-menu.component';
 import { ExportableResultsTableComponent } from './exportable-results-table/exportable-results-table.component';
+import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { ExportableResultsTableComponent } from './exportable-results-table/expo
     ExportableTableComponent,
     TabsTooltipComponent,
     PrintOptionsMenuComponent,
-    ExportableResultsTableComponent
+    ExportableResultsTableComponent,
+    SettingsLabelPipe
   ],
   exports: [
     ControlMessagesComponent,
@@ -59,7 +61,8 @@ import { ExportableResultsTableComponent } from './exportable-results-table/expo
     ExportableTableComponent,
     ExportableResultsTableComponent,
     TabsTooltipComponent,
-    PrintOptionsMenuComponent
+    PrintOptionsMenuComponent,
+    SettingsLabelPipe
   ],
   providers: [
     ValidationService,

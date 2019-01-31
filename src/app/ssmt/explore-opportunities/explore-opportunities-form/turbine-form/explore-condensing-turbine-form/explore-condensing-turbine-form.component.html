@@ -1,0 +1,113 @@
+<li>
+  <div class="checkbox">
+    <label for="condensingTurbineModifyCondenserPressure">
+      <input type="checkbox" id="condensingTurbineModifyCondenserPressure" (focus)="focusField('condenserPressure')"
+        (change)="toggleCondenserPressure()" [(ngModel)]="showCondenserPressure" /> Modify Condenser Pressure
+    </label>
+  </div>
+  <form [formGroup]="baselineForm" *ngIf="showCondenserPressure">
+    <div class="form-group">
+      <label for="condensingTurbineBaselineCondenserPressure">Baseline Condenser Pressure</label>
+      <div class="input-group">
+        <input name="condensingTurbineBaselineCondenserPressure" type="number" step="any" id="condensingTurbineBaselineCondenserPressure"
+          class="form-control" (focus)="focusField('condenserPressure')" (input)="save()" formControlName="condenserPressure" />
+        <span class="units input-group-addon">{{settings.steamVacuumPressure}}</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.condenserPressure.invalid && !baselineForm.controls.condenserPressure.pristine">
+        <span *ngIf="baselineForm.controls.condenserPressure.errors.required">Value Required</span>
+        <span *ngIf="baselineForm.controls.condenserPressure.errors.max">Value can't be greater than
+          {{baselineForm.controls.condenserPressure.errors.max.max}} {{settings.steamVacuumPressure}}.</span>
+        <span *ngIf="baselineForm.controls.condenserPressure.errors.min">Value can't be less than
+          {{baselineForm.controls.condenserPressure.errors.min.min}} {{settings.steamVacuumPressure}}.</span>
+      </span>
+    </div>
+  </form>
+  <form [formGroup]="modificationForm" *ngIf="showCondenserPressure">
+    <div class="form-group">
+      <label for="condensingTurbineModificationCondenserPressure">Modification Condenser Pressure</label>
+      <div class="input-group">
+        <input name="condensingTurbineModificationCondenserPressure" type="number" step="any" id="condensingTurbineModificationCondenserPressure"
+          class="form-control" (focus)="focusField('condenserPressure')" (input)="save()" formControlName="condenserPressure" />
+        <span class="units input-group-addon">{{settings.steamVacuumPressure}}</span>
+      </div>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.condenserPressure.invalid && !modificationForm.controls.condenserPressure.pristine">
+      <span *ngIf="modificationForm.controls.condenserPressure.errors.required">Value Required</span>
+      <span *ngIf="modificationForm.controls.condenserPressure.errors.max">Value can't be greater than
+        {{modificationForm.controls.condenserPressure.errors.max.max}} {{settings.steamVacuumPressure}}.</span>
+      <span *ngIf="modificationForm.controls.condenserPressure.errors.min">Value can't be less than
+        {{modificationForm.controls.condenserPressure.errors.min.min}} {{settings.steamVacuumPressure}}.</span>
+    </span>
+  </form>
+</li>
+
+<li>
+  <div class="checkbox">
+    <label for="condensingTurbineModifyOperationType">
+      <input type="checkbox" id="condensingTurbineModifyOperationType" (focus)="focusField('operationType')" (change)="toggleOperationType()"
+        [(ngModel)]="showOperation" /> Modify Operation Type
+    </label>
+  </div>
+  <form [formGroup]="baselineForm" *ngIf="showOperation">
+    <div class="form-group">
+      <label for="condensingTurbineBaselineOperationType">Baseline Operation Type</label>
+      <select name="condensingTurbineBaselineOperationType" class="form-control" id="condensingTurbineBaselineOperationType"
+        (change)="changeBaselineOperationValidators()" (focus)="focusField('operationType')" formControlName="operationType">
+        <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="condensingTurbineBaselineOperationValue">
+        <span *ngIf="baselineForm.controls.operationType.value == 0">Fixed Flow</span>
+        <span *ngIf="baselineForm.controls.operationType.value == 1">Fixed Power</span>
+      </label>
+      <div class="input-group">
+        <input name="condensingTurbineBaselineOperationValue" type="number" step="any" class="form-control" id="condensingTurbineBaselineOperationValue"
+          (input)="save()" formControlName="operationValue" (focus)="focusOperation(baselineForm.controls.operationType.value)">
+        <span class="units input-group-addon">
+          <span *ngIf="baselineForm.controls.operationType.value == 0">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="baselineForm.controls.operationType.value == 1">kW</span>
+        </span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="baselineForm.controls.operationValue.invalid && !baselineForm.controls.operationValue.pristine">
+        <span *ngIf="baselineForm.controls.operationValue.errors.required">Value Required</span>
+        <span *ngIf="baselineForm.controls.operationValue.errors.max">Value can't be greater than
+          {{baselineForm.controls.operationValue.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+        <span *ngIf="baselineForm.controls.operationValue.errors.min">Value can't be less than
+          {{baselineForm.controls.operationValue.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+      </span>
+    </div>
+  </form>
+  <form [formGroup]="modificationForm" *ngIf="showOperation">
+    <div class="form-group">
+      <label for="condensingTurbineModificationOperationType">Modification Operation Type</label>
+      <select name="condensingTurbineModificationOperationType" class="form-control" id="condensingTurbineModificationOperationType"
+        (change)="changeModificationOperationValidators()" (focus)="focusField('operationType')" formControlName="operationType">
+        <option *ngFor="let type of turbineOptionTypes" [ngValue]="type.value">{{type.display}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="condensingTurbineModificationOperationValue">
+        <span *ngIf="modificationForm.controls.operationType.value == 0">Fixed
+          Flow</span>
+        <span *ngIf="modificationForm.controls.operationType.value == 1">Fixed
+          Power</span>
+      </label>
+      <div class="input-group">
+        <input name="condensingTurbineModificationOperationValue" type="number" step="any" class="form-control" id="condensingTurbineModificationOperationValue"
+          (input)="save()" formControlName="operationValue" (focus)="focusOperation(modificationForm.controls.operationType.value)">
+        <span class="units input-group-addon">
+          <span *ngIf="modificationForm.controls.operationType.value == 0">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="modificationForm.controls.operationType.value == 1">kW</span>
+        </span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="modificationForm.controls.operationValue.invalid && !modificationForm.controls.operationValue.pristine">
+        <span *ngIf="modificationForm.controls.operationValue.errors.required">Value Required</span>
+        <span *ngIf="modificationForm.controls.operationValue.errors.max">Value can't be greater than
+          {{modificationForm.controls.operationValue.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+        <span *ngIf="modificationForm.controls.operationValue.errors.min">Value can't be less than
+          {{modificationForm.controls.operationValue.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+      </span>
+    </div>
+  </form>
+</li>

@@ -22,6 +22,9 @@ export class SteamSettingsComponent implements OnInit {
   steamMassFlowMeasurements: Array<any> = [];
   steamEnergyMeasurements: Array<any> = [];
   steamPowerMeasurements: Array<any> = [];
+  steamVolumeMeasurements: Array<any> = [];
+  steamVolumeFlowMeasurements: Array<any> = [];
+  steamVacuumPreasureMeasurements: Array<any> = [];
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -34,11 +37,19 @@ export class SteamSettingsComponent implements OnInit {
     this.steamMassFlowMeasurements = new Array();
     this.steamEnergyMeasurements = new Array();
     this.steamPowerMeasurements = new Array();
+    this.steamVolumeMeasurements = new Array();
+    this.steamVolumeFlowMeasurements = new Array();
+    this.steamVacuumPreasureMeasurements = new Array();
     //pressureMeasurements
     let tmpList = [
-      'kPa',
-      'psi',
-      'bar'
+      'kPaa',
+      'kPag',
+      'psia',
+      'psig',
+      'barg',
+      'bara',
+      'MPa',
+      'MPaa'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
@@ -143,10 +154,53 @@ export class SteamSettingsComponent implements OnInit {
       }
       if (unit == 'kWh') {
         tmpPossibility.display = 'Kilowatts';
+        tmpPossibility.unit = 'kW';
       }
       this.steamPowerMeasurements.push(tmpPossibility);
     })
 
+    //steam vacuum
+    tmpList = [
+      'kPaa',
+      'kPag',
+      'psia',
+      'psig',
+      'barg',
+      'bara',
+      'MPa',
+      'MPaa'
+    ];
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.steamVacuumPreasureMeasurements.push(tmpPossibility);
+    })
+    //steam volume
+    tmpList = [
+      'gal',
+      'L'
+    ];
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.steamVolumeMeasurements.push(tmpPossibility);
+    })
+    //steam volume flow
+    tmpList = [
+      'gpm',
+      'L/min'
+    ];
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.steamVolumeFlowMeasurements.push(tmpPossibility);
+    })
   }
 
   save() {

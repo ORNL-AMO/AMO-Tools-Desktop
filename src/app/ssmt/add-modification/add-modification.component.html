@@ -1,0 +1,19 @@
+<div class="ssmt">
+  <p class="small" *ngIf="!modificationExists && assessmentTab == 'modify-conditions'">The Modify All Conditions section is an expert view, allowing you to change any input. You can create many different scenarios,
+    to compare changes to your system. Notes for each loss page can be added in the right tab (NOTES), these will be added
+    to your final report. Data will be copied from your current baseline condition.</p>
+  <p class="small" *ngIf="!modificationExists && assessmentTab == 'explore-opportunities'">The Explore Opportunities section is a novice view to help you find and evaluate different opportunities for your system.
+    Notes can be added in the right tab (NOTES), these will be added to your final report. Data will be copied from your
+    current baseline condition.</p>
+  <hr>
+  <form>
+    <div class="form-section">
+      <div class="form-group d-flex">
+        <label class="w-50">Scenario Name</label>
+        <input name="newAssessmentName" type="text" class="form-control w-50" [(ngModel)]="newModificationName">
+      </div>
+    </div>
+  </form>
+  <hr>
+  <button class="btn btn-primary pull-right" (click)="addModification()">Create</button>
+</div>

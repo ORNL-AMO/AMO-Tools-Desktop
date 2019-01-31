@@ -53,6 +53,12 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     color: black;
 }
 
+.ssmt .btn-primary{
+    background-color: #F39C12;
+    border-color: #F39C12;
+    color: black;
+}
+
 .fan-block i{
     color:#FFE400
   }
@@ -104,70 +110,40 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 }
 
 
-.psat .form-group.indicate-different .input-group,
-.psat .form-group.indicate-different > .form-control,
-.fsat .form-group.indicate-different .input-group,
-.fsat .form-group.indicate-different > .form-control   {
-    border: #007bff solid 2px;
-    /* box-shadow: 0px 0px 1px #007bff; */
+.indicate-different {
+	border-left: #007bff solid 3px;
+	border-right: #007bff solid 3px;
+    /* box-shadow: 0px 0px 5px #007bff; */
 }
 
-.psat .form-group.invalid .input-group,
-.psat .form-group.indicate-different.invalid .input-group,
-.psat .form-group.indicate-different.error.invalid .input-group,
-.psat .form-group.error.invalid .input-group,
-.psat .form-group.invalid > .form-control ,
-.psat .form-group.indicate-different.invalid > .form-control ,
-.psat .form-group.indicate-different.error.invalid > .form-control,
-.psat .form-group.error.invalid > .form-control,
-.fsat .form-group.invalid .input-group,
-.fsat .form-group.indicate-different.invalid .input-group,
-.fsat .form-group.indicate-different.error.invalid .input-group,
-.fsat .form-group.error.invalid .input-group,
-.fsat .form-group.invalid > .form-control ,
-.fsat .form-group.indicate-different.invalid > .form-control ,
-.fsat .form-group.error.invalid > .form-control,
-.fsat .form-group.indicate-different.error.invalid > .form-control  {
-    border: red solid 2px;
-    /* box-shadow: 0px 0px 1px red; */
+.indicate-different.form-control {
+	border-left: #007bff solid 3px;
+	border-right: #007bff solid 3px;
+    /* box-shadow: 0px 0px 5px #007bff; */
 }
 
-.psat .form-group.error .input-group,
-.psat .form-group.indicate-different.error .input-group,
-.psat .form-group.error > .form-control,
-.psat .form-group.indicate-different.error > .form-control,
-.fsat .form-group.error .input-group,
-.fsat .form-group.indicate-different.error .input-group,
-.fsat .form-group.error > .form-control,
-.fsat .form-group.indicate-different.error > .form-control {
-    border: orange solid 2px;
-    /* box-shadow: 0px 0px 1px orange; */
+.indicate-different.incrementor {
+	border-left: #007bff solid 3px;
+	border-right: #007bff solid 3px;
+    /* box-shadow: 0px 0px 5px #007bff; */
 }
 
-.phast .indicate-different {
-	border: #007bff solid 2px;
-    box-shadow: 0px 0px 5px #007bff;
+.invalid, .indicate-different.invalid, input.indicate-different.invalid{
+    border-left: 5px solid red; /* red */
+    border-right: 5px solid red; /* red */
 }
 
-.phast .indicate-different.form-control {
-    border: 2px solid #007bff;
-    box-shadow: 0px 0px 5px #007bff;
+.error, .indicate-different.error, input.indicate-different.error {
+    /* border: orange solid 2px;
+    box-shadow: 0px 0px 5px orange; */
+    border-left: 5px solid orange; /* red */
+    border-right: 5px solid orange; /* red */
 }
+.ssmt .indicate-different.ng-invalid:not(form), .ssmt .ng-invalid:not(form)  {
+    border-left: 5px solid red; /* red */
+    border-right: 5px solid red; /* red */
+  }
 
-.phast .indicate-different.incrementor {
-    border: 2px solid #007bff;
-    box-shadow: 0px 0px 5px #007bff;
-}
-
-.phast .invalid, .phast .indicate-different.invalid, .phast input.indicate-different.invalid{
-	border: red solid 2px !important;
-    box-shadow: 0px 0px 5px red !important;
-}
-
-.phast .error, .phast .indicate-different.error, .phast input.indicate-different.error {
-    border: orange solid 2px;
-    box-shadow: 0px 0px 5px orange;
-}
 
 
 .card-item{
@@ -226,10 +202,17 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .compressed-air .calc-icon-div{
     background: linear-gradient(rgba(147, 112, 219, 0.34), rgba(216, 191, 216, 0.65));
 }
+.steam .calc-icon-div {
+    background: linear-gradient(rgba(228, 219, 219, 0.34), #FC5B00);
+}
+.lighting .calc-icon-div {
+    background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
+}
 
 .calc-img{
     width: 90%;
 }
+
 
 
 

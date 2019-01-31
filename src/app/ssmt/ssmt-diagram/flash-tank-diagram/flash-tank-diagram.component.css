@@ -1,0 +1,51 @@
+.flash-tank-img{
+    height: 55px;
+    margin-top: -14px;
+    margin-bottom: -17px;
+    z-index: +1;
+}
+
+.down-pipe{
+    height: 55%;
+    border-top-left-radius: 25px;
+}
+
+.outletGas{
+    margin-right: -14px;
+    padding-right: 15px;
+}
+
+
+.flash-tank-diagram{
+    min-height: 125px;
+}
+
+
+.chevron-margin{
+    margin-bottom: -5px;
+}
+
+.flash-tank-img-holder{
+    position: relative;
+    margin-right: -55%;
+}
+
+.flash-tank-img-holder .flash-tank-label{
+    position: absolute;
+    z-index: +1;
+    background-color: white;
+    font-weight: bolder;
+    width: 50px;
+    opacity: 0.9;
+    text-align: center;
+    right: 5px;
+    font-size: smaller;
+    bottom: 0px;
+}
+
+
+.flash-tank-img-holder .flash-tank-label:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 1;
+}

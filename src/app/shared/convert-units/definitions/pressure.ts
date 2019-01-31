@@ -1,29 +1,20 @@
 export const pressure = {
   metric: {
-    Pa: {
+    kPa: {
+      name: {
+        singular: 'Kilopascal'
+        , plural: 'KiloPascals',
+        display: '(kPa)'
+      }
+      , to_anchor: 1
+    }
+    , Pa: {
       name: {
         singular: 'Pascal'
         , plural: 'Pascals',
         display: '(Pa)'
       }
       , to_anchor: 1 / 1000
-    }
-    , kPa: {
-      name: {
-        singular: 'Kilopascal'
-        , plural: 'Kilopascals',
-        display: '(kPa)'
-      }
-      , to_anchor: 1
-    },
-    kPag: {
-      name: {
-        singular: 'Kilopascal - gauge'
-        , plural: 'Kilopascals - gauge',
-        display: '(kPag)'
-      }
-      , to_anchor: 1
-      , anchor_shift: -101.325
     }
     , MPa: {
       name: {
@@ -33,7 +24,42 @@ export const pressure = {
       }
       , to_anchor: 1000
     }
-    , hPa: {
+    , kPag: {
+      name: {
+        singular: 'Kilopascal gauge'
+        , plural: 'Kilopascals gauge',
+        display: '(kPag)'
+      }
+      , to_anchor: 1
+      , anchor_shift: -101.325
+    }
+    , kPaa: {
+      name: {
+        singular: 'Kilopascal absolute'
+        , plural: 'Kilopascals absolute',
+        display: '(kPaa)'
+      }
+      , to_anchor: 1
+    }
+    , MPag: {
+      name: {
+        singular: 'Megapascal gauge'
+        , plural: 'Megapascals',
+        display: '(MPa)'
+      }
+      , to_anchor: 1000
+      , anchor_shift: -101.325
+    }
+    , MPaa: {
+      name: {
+        singular: 'Megapascal absolute'
+        , plural: 'Megapascals absolute',
+        display: '(MPaa)'
+      }
+      , to_anchor: 1000
+
+    }
+    ,hPa: {
       name: {
         singular: 'Hectopascal'
         , plural: 'Hectopascals',
@@ -49,11 +75,19 @@ export const pressure = {
       }
       , to_anchor: 100
     },
-    barg: {
+    bara: {
       name: {
-        singular: 'Bar - gauge'
-        , plural: 'Bar - gauge',
-        display: '(barg)'
+        singular: 'Bar absolute'
+        , plural: 'Bar absolute',
+        display: '(bara)'
+      }
+      , to_anchor: 100
+    }
+    , barg: {
+      name: {
+        singular: 'Bar gauge'
+        , plural: 'Bar gauge',
+        display: '(bar)'
       }
       , to_anchor: 100
       , anchor_shift: -101.325
@@ -124,15 +158,23 @@ export const pressure = {
       }
       , to_anchor: 1 / 1000
     },
-    psig: {
+    psia: {
       name: {
-        singular: 'Pound per Square Inch - gauge'
-        , plural: 'Pounds per Square Inch - gauge',
-        display: '(psig)'
+        singular: 'Pound per Square Inch absolute'
+        , plural: 'Pounds per Square Inch absolute',
+        display: '(psia)'
       }
       , to_anchor: 1 / 1000
-      , anchor_shift: -14.696 / 1000
     }
+    ,  psig: {
+        name: {
+          singular: 'Pound per Square Inch gauge'
+          , plural: 'Pounds per Square Inch gauge',
+          display: '(psig)'
+        }
+        , to_anchor: 1 / 1000
+        , anchor_shift: -14.696 / 1000
+      }
     , ksi: {
       name: {
         singular: 'Kilopound per Square Inch'
