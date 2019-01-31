@@ -1145,6 +1145,8 @@ Calculators
   border-radius: 15px;
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
+  width: 85px;
+  height: 75px;
 }
 .lighting-bulb {
   height: 55px;
