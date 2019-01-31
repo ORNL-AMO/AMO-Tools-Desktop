@@ -32,19 +32,30 @@ export class ReplaceRewindService {
     return tmpForm;
   }
 
-  getFormFromObj(inputObj: ReplaceRewindData): FormGroup {
-    let tmpForm: FormGroup = this.formBuilder.group({
-      operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
-      motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
-      load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
-      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
-      currentEfficiency: [inputObj.currentEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
-      rewindEfficiencyLoss: [inputObj.rewindEfficiencyLoss, [Validators.required, Validators.min(0), Validators.max(100)]],
-      costOfRewind: [inputObj.costOfRewind, [Validators.required, Validators.min(0)]],
-      newEfficiency: [inputObj.newEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
-      purchaseCost: [inputObj.purchaseCost, [Validators.required, Validators.min(0)]]
-    });
-    return tmpForm;
+  getFormFromObj(inputObj: ReplaceRewindData, isNewMotor: boolean): FormGroup {
+    if (isNewMotor) {
+      let tmpForm: FormGroup = this.formBuilder.group({
+        operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
+        motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
+        load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
+        electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
+        newEfficiency: [inputObj.newEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+        purchaseCost: [inputObj.purchaseCost, [Validators.required, Validators.min(0)]]
+      });
+      return tmpForm;
+    }
+    else {
+      let tmpForm: FormGroup = this.formBuilder.group({
+        operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
+        motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
+        load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
+        electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
+        currentEfficiency: [inputObj.currentEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+        rewindEfficiencyLoss: [inputObj.rewindEfficiencyLoss, [Validators.required, Validators.min(0), Validators.max(100)]],
+        costOfRewind: [inputObj.costOfRewind, [Validators.required, Validators.min(0)]],
+      });
+      return tmpForm;
+    }
   }
 
   getObjFromForm(form: FormGroup): ReplaceRewindData {

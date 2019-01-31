@@ -13,6 +13,8 @@ export class ReplaceRewindFormComponent implements OnInit {
   @Input()
   inputs: ReplaceRewindData;
   @Input()
+  isNewMotor: boolean;
+  @Input()
   settings: Settings;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<ReplaceRewindData>();
@@ -24,12 +26,12 @@ export class ReplaceRewindFormComponent implements OnInit {
   constructor(private replaceRewindService: ReplaceRewindService) { }
 
   ngOnInit() {
-    this.form = this.replaceRewindService.getFormFromObj(this.inputs);
+    this.form = this.replaceRewindService.getFormFromObj(this.inputs, this.isNewMotor);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.inputs) {
-      this.form = this.replaceRewindService.getFormFromObj(this.inputs);
+      this.form = this.replaceRewindService.getFormFromObj(this.inputs, this.isNewMotor);
     }
   }
 

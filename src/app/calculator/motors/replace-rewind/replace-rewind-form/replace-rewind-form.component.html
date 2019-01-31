@@ -3,7 +3,7 @@
     <label for="efficiency">Operating Hours</label>
     <div class="input-group calc-addon-group">
       <input name="operatingHours" type="number" min="0" step="1" class="form-control" id="operatingHours"
-        formControlName="operatingHours" (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingHours')">
+        formControlName="operatingHours" (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingHours')" [disabled]="isNewMotor">
       <span class="units">hrs/yr</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
@@ -16,7 +16,7 @@
     <label for="efficiency">Motor Size</label>
     <div class="input-group calc-addon-group">
       <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize" formControlName="motorSize"
-        (input)="calculate()" onfocus="this.select();" (focus)="focusField('motorSize')">
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('motorSize')" [disabled]="isNewMotor">
       <span class="units">hp</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="form.controls.motorSize.invalid && !form.controls.motorSize.pristine">

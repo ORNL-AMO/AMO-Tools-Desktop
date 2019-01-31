@@ -11,11 +11,13 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class ReplaceRewindComponent implements OnInit {
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer') contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
+  containerHeight: number;
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
@@ -32,9 +34,13 @@ export class ReplaceRewindComponent implements OnInit {
     simplePayback: 0
   }
 
+  rewoundMotorInputs: ReplaceRewindData;
+  newMotorInputs: ReplaceRewindData;
+
   constructor(private replaceRewindService: ReplaceRewindService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+
     this.inputs = this.replaceRewindService.replaceRewindData;
     this.calculate(this.inputs);
     this.settings = this.settingsDbService.globalSettings;
@@ -49,6 +55,11 @@ export class ReplaceRewindComponent implements OnInit {
     }, 100);
   }
 
+  initMotorInputs() {
+    this.rewoundMotorInputs = this.replaceRewindService.replaceRewindData;
+    this.newMotorInputs = this.replaceRewindService.replaceRewindData;
+  }
+
   btnResetData() {
     this.inputs = this.replaceRewindService.initReplaceRewindData();
     this.calculate(this.inputs);
@@ -57,6 +68,7 @@ export class ReplaceRewindComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 
