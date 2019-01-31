@@ -92,7 +92,15 @@ img.fan-image{
 	width: 90px;
 	height:81px;
 }
+.ssmt-icon{
+	width: 90px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
 
+.steam-image{
+	width: 75px;
+}
 .phast-image{
 	width: 90px;
 	height:81px;
