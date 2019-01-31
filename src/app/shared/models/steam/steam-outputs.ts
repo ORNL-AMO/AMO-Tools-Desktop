@@ -46,12 +46,17 @@ export interface SSMTOutput {
   totalEnergyUse: number;
   powerGenerationCost: number;
   boilerFuelUsage: number;
+  marginalHPCost: number;
+  marginalMPCost: number;
+  marginalLPCost: number;
+
 
   makeupWaterVolumeFlow: number;
   annualMakeupWaterFlow: number;
 
   ventedLowPressureSteam: SteamPropertiesOutput;
   heatExchangerOutput: HeatExchangerOutput;
+
 }
 
 //export interface SSMTOperationsOutput {

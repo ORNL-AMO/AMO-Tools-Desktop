@@ -28,11 +28,7 @@
         <div class="d-flex w-100 pb-2 justify-content-center" *ngIf="selectedTable == 'default'">
           <a class="click-link small" (click)="selectTable('cost')">View More Cost Details</a>
         </div>
-        <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [powerGenerated]="outputData.powerGenerated"
-          [boiler]="outputData.boilerOutput" [makeupWaterVolumeFlow]="outputData.makeupWaterVolumeFlow"
-          [annualMakeupWaterFlow]="outputData.annualMakeupWaterFlow" [makeupWaterCost]="outputData.makeupWaterCost"
-          [boilerFuelCost]="outputData.boilerFuelCost" [powerGenerationCost]="outputData.powerGenerationCost"
-          [totalOperatingCost]="outputData.totalOperatingCost" [settings]="settings"></app-cost-table>
+        <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData" [settings]="settings"></app-cost-table>
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="outputData.boilerOutput" [inputData]="inputData"
           [settings]="settings"></app-boiler-table>
         <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
