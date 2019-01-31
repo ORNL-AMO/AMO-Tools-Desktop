@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { SSMT } from '../../shared/models/steam/ssmt';
+import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
+import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
+import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -21,12 +23,18 @@ export class SsmtReportComponent implements OnInit {
 
   @ViewChild('reportBtns') reportBtns: ElementRef;
   @ViewChild('reportHeader') reportHeader: ElementRef;
-  reportContainerHeight:number;
+  reportContainerHeight: number;
   currentTab: string = 'executiveSummary';
-  constructor() { }
+  baselineOutput: SSMTOutput;
+  baselineInputData: SSMTInputs;
+
+  constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
-
+    this.calculateModelService.initData(this.assessment.ssmt, this.settings);
+    let resultData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
+    this.baselineOutput = resultData.outputData;
+    this.baselineInputData = resultData.inputData;
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {

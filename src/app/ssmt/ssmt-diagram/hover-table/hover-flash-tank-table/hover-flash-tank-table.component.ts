@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
-import { FlashTankOutput } from '../../../../shared/models/steam/steam-outputs';
+import { FlashTankOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -13,21 +13,23 @@ export class HoverFlashTankTableComponent implements OnInit {
   flashTankType: string;
   @Input()
   settings: Settings;
-  
+  @Input()
+  outputData: SSMTOutput;
+
   flashTank: FlashTankOutput;
-  constructor(private calculateModelService: CalculateModelService) { }
+  constructor() { }
 
   ngOnInit() {
     if (this.flashTankType == 'High Pressure') {
-      this.flashTank = this.calculateModelService.highPressureCondensateFlashTank;
+      this.flashTank = this.outputData.highPressureCondensateFlashTank;
       this.flashTankType = this.flashTankType + ' Condensate';
     } else if (this.flashTankType == 'Medium Pressure') {
-      this.flashTank = this.calculateModelService.mediumPressureCondensateFlashTank;
+      this.flashTank = this.outputData.mediumPressureCondensateFlashTank;
       this.flashTankType = this.flashTankType + ' Condensate';
     } else if (this.flashTankType == 'Condensate') {
-      this.flashTank = this.calculateModelService.condensateFlashTank;
+      this.flashTank = this.outputData.condensateFlashTank;
     } else if (this.flashTankType == 'Blowdown') {
-      this.flashTank = this.calculateModelService.blowdownFlashTank;
+      this.flashTank = this.outputData.blowdownFlashTank;
     }
   }
 
