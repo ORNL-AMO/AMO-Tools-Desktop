@@ -22,6 +22,7 @@ import { LineChartHelperService } from './line-chart-helper/line-chart-helper.se
 import { ExportableTableComponent } from './exportable-table/exportable-table.component';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 import { PrintOptionsMenuComponent } from './print-options-menu/print-options-menu.component';
+import { ExportableResultsTableComponent } from './exportable-results-table/exportable-results-table.component';
 import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 
 @NgModule({
@@ -45,6 +46,7 @@ import { SettingsLabelPipe } from './pipes/settings-label.pipe';
     ExportableTableComponent,
     TabsTooltipComponent,
     PrintOptionsMenuComponent,
+    ExportableResultsTableComponent,
     SettingsLabelPipe
   ],
   exports: [
@@ -57,6 +59,7 @@ import { SettingsLabelPipe } from './pipes/settings-label.pipe';
     PhonePipe,
     SimpleTooltipComponent,
     ExportableTableComponent,
+    ExportableResultsTableComponent,
     TabsTooltipComponent,
     PrintOptionsMenuComponent,
     SettingsLabelPipe

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { CombinedHeatPowerOutput } from '../../../../shared/models/standalone';
 @Component({
   selector: 'app-combined-heat-power-results',
@@ -8,9 +8,15 @@ import { CombinedHeatPowerOutput } from '../../../../shared/models/standalone';
 export class CombinedHeatPowerResultsComponent implements OnInit {
   @Input()
   results: CombinedHeatPowerOutput;
+
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
   constructor() { }
 
   ngOnInit() {
   }
 
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
 }

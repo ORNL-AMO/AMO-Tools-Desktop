@@ -1,0 +1,97 @@
+.table-export-container {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.btn-container {
+    text-align: center;
+}
+
+.btn-export {
+    border-radius: 2px;
+    border: 1px solid transparent;
+    background-color: #dcdcdc;
+    opacity: 0.6;
+    font-size: 14px;
+    transition: ease-in-out 0.2s all;
+}
+
+.btn-export:hover {
+    cursor: pointer;
+    opacity: 1;
+    border-color: #212529;
+}
+
+.delete-row {
+    color: red;
+}
+
+.delete-row:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.btn-copy-table {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+    height: 30px;
+    width: 125px;
+    opacity: 0.6;
+    background-color: #dcdcdc;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    transition: ease-in-out 0.2s all;
+}
+
+.btn-copy-table:hover {
+    opacity: 1;
+    border-color: #212529;
+    cursor: pointer;
+}
+
+.copy-table {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+    top: 0;
+    right: 0;
+}
+
+.clipboard-text {
+    display: none;
+}
+
+.clipboard-notification {
+    position: absolute;
+    display: none;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: 280px;
+    border: 2px solid #00B52D;
+    border-radius: 6px;
+    background-color: rgba(0, 181, 45, 0.1);
+    opacity: 0;
+    transition: ease-in-out 0.3s opacity;
+}
+
+.clipboard-notification.show-notification {
+    display: initial;
+    opacity: 1;
+    transition: ease-in-out 0.3s opacity;
+}
+
+.clipboard-notification.text-container {
+    /* display: inline-block; */
+    /* float: right; */
+    width: 70%;
+}
+
+.clipboard-notification.checkmark-container {
+    /* display: inline-block; */
+    /* float: left; */
+    width: 30%;
+}

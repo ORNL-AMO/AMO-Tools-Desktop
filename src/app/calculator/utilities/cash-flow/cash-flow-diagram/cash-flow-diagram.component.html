@@ -3,7 +3,8 @@
   <div *ngIf="expanded" class="row">
     <div class="col-12">
       <div class="graph-btn-container">
-        <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')" (mouseleave)="hideTooltip('btnCollapseChart')"></span>
+        <span class="fa fa-compress" *ngIf="expanded" (click)="contractChart()" (mouseenter)="initTooltip('btnCollapseChart')"
+          (mouseleave)="hideTooltip('btnCollapseChart')"></span>
         <app-simple-tooltip *ngIf="expanded" [message]="'Collapse graph'" [hover]="hoverBtnCollapse" [display]="displayCollapseTooltip"
           [adjustLeft]="20" [adjustPercent]="false"></app-simple-tooltip>
       </div>
@@ -11,7 +12,7 @@
   </div>
 
   <div class="d-flex w-100 justify-content-center">
-    <table class="table table-hover table-striped">
+    <table #copyTable class="table table-hover table-striped">
       <tbody>
         <tr>
           <td class="bold w-50">Benefits / Cost</td>
@@ -26,6 +27,9 @@
       </tbody>
     </table>
   </div>
+  <div class="d-flex w-100 justify-content-center">
+    <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()"></app-exportable-results-table>
+  </div>
 
   <div class="d-flex w-100 justify-content-center align-items-center" [ngClass]="{'h-100': !expanded, 'h-90': expanded}">
     <div class="row m-0">
@@ -38,11 +42,12 @@
   <div class="col-md-12">
     <div class="graph-btn-container">
       <span class="fa fa-download" (click)="downloadChart()" (mouseenter)="initTooltip('btnExportChart')" (mouseleave)="hideTooltip('btnExportChart')"></span>
-      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip" [adjustLeft]="20"
-        [adjustPercent]="false"></app-simple-tooltip>
+      <app-simple-tooltip [message]="'Download graph as image'" [hover]="hoverBtnExport" [display]="displayExportTooltip"
+        [adjustLeft]="20" [adjustPercent]="false"></app-simple-tooltip>
     </div>
     <div class="graph-btn-container">
-      <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')" (mouseleave)="hideTooltip('btnExpandChart')"></span>
+      <span class="fa fa-expand" *ngIf="!expanded" (click)="expandChart()" (mouseenter)="initTooltip('btnExpandChart')"
+        (mouseleave)="hideTooltip('btnExpandChart')"></span>
       <app-simple-tooltip *ngIf="!expanded" [message]="'Expand graph'" [hover]="hoverBtnExpand" [display]="displayExpandTooltip"
         [adjustLeft]="59" [adjustPercent]="false"></app-simple-tooltip>
     </div>

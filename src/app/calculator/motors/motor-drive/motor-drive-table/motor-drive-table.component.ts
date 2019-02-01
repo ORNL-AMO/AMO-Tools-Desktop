@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { MotorDriveOutputs } from '../motor-drive.component';
 
 @Component({
@@ -9,10 +9,16 @@ import { MotorDriveOutputs } from '../motor-drive.component';
 export class MotorDriveTableComponent implements OnInit {
   @Input()
   results: MotorDriveOutputs;
-  
+
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
 }

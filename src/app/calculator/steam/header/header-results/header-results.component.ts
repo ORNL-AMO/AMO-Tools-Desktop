@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { HeaderOutputObj } from '../../../../shared/models/steam/steam-outputs';
 import { SteamService } from '../../steam.service';
@@ -17,6 +17,8 @@ export class HeaderResultsComponent implements OnInit {
   name: string;
   energyMeasurement: string;
 
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
 
   constructor(private steamService: SteamService) { }
 
@@ -27,11 +29,16 @@ export class HeaderResultsComponent implements OnInit {
       this.energyMeasurement = this.settings.steamEnergyMeasurement + '/hr';
     }
   }
+
   getDisplayUnit(unit: string) {
     if (unit) {
       return this.steamService.getDisplayUnit(unit);
     } else {
       return unit;
     }
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 }
