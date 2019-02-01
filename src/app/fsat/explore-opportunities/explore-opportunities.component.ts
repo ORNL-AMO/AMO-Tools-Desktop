@@ -23,6 +23,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationIndex: number;
   @Input()
   modificationExists: boolean;
+  @Input()
+  exploreModIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<FSAT>();
   @Output('emitAddNewMod')
@@ -66,7 +68,11 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   ngOnDestroy(){
     this.exploreOppsToast.emit(false);
+    if(this.fsat.modifications[this.exploreModIndex] && !this.fsat.modifications[this.exploreModIndex].fsat.name){
+      this.fsat.modifications[this.exploreModIndex].fsat.name = 'Opportunities Modification';
+      this.emitSave.emit();
   }
+}
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -118,7 +124,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
       if (!this.fsat.modifications[this.modificationIndex].exploreOpportunities) {
         this.exploreOppsToast.emit(true);
         let toastOptions: ToastOptions = {
-          title: 'Explore Opportunites',
+          title: 'Explore Opportunities',
           msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
           showClose: true,
           timeout: 10000000,

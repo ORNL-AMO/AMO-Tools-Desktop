@@ -44,7 +44,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   modExists: boolean = false;
   selectModificationSubscription: Subscription;
   toastId: any;
-  emitSave: any;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
   ) {
@@ -62,7 +61,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     this.exploreOppsToast.emit(false);
       if(this.phast.modifications[this.exploreModIndex] && !this.phast.modifications[this.exploreModIndex].phast.name){
         this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification';
-        this.emitSave.emit(true);
+        this.save.emit(true);
       }
     }
 
