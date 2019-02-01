@@ -1,9 +1,9 @@
 <form [formGroup]="form">
   <div class="form-group" *ngIf="!isNewMotor">
-    <label for="efficiency">Operating Hours</label>
+    <label for="operatingHours">Operating Hours</label>
     <div class="input-group calc-addon-group">
       <input name="operatingHours" type="number" min="0" step="1" class="form-control" id="operatingHours"
-        formControlName="operatingHours" (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingHours')" [disabled]="isNewMotor">
+        formControlName="operatingHours" (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingHours')">
       <span class="units">hrs/yr</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
@@ -13,10 +13,10 @@
     </span>
   </div>
   <div class="form-group" *ngIf="!isNewMotor">
-    <label for="efficiency">Motor Size</label>
+    <label for="motorSize">Motor Size</label>
     <div class="input-group calc-addon-group">
       <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize" formControlName="motorSize"
-        (input)="calculate()" onfocus="this.select();" (focus)="focusField('motorSize')" [disabled]="isNewMotor">
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('motorSize')">
       <span class="units">hp</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="form.controls.motorSize.invalid && !form.controls.motorSize.pristine">
@@ -26,7 +26,7 @@
     </span>
   </div>
   <div class="form-group" *ngIf="!isNewMotor">
-    <label for="efficiency">Load</label>
+    <label for="load">Load</label>
     <div class="input-group calc-addon-group">
       <input name="load" type="number" min="0" step="1" class="form-control" id="load" formControlName="load" (input)="calculate()"
         onfocus="this.select();" (focus)="focusField('load')">
@@ -41,7 +41,7 @@
     </span>
   </div>
   <div class="form-group" *ngIf="!isNewMotor">
-    <label for="efficiency">Electricity Cost</label>
+    <label for="electricityCost">Electricity Cost</label>
     <div class="input-group calc-addon-group">
       <input name="electricityCost" type="number" min="0" step="1" class="form-control" id="electricityCost"
         formControlName="electricityCost" (input)="calculate()" onfocus="this.select();" (focus)="focusField('electricityCost')">
@@ -55,7 +55,7 @@
   </div>
   <label class="group-label" *ngIf="!isNewMotor">Rewound Motor</label>
   <div class="form-group" *ngIf="!isNewMotor">
-    <label for="efficiency">Current Efficiency</label>
+    <label for="currentEfficiency">Current Efficiency</label>
     <div class="input-group calc-addon-group">
       <input name="currentEfficiency" type="number" min="0" step="1" class="form-control" id="currentEfficiency"
         formControlName="currentEfficiency" (input)="calculate()" onfocus="this.select();" (focus)="focusField('currentEfficiency')">
@@ -70,7 +70,7 @@
     </span>
   </div>
   <div class="form-group" *ngIf="!isNewMotor">
-    <label for="efficiency">Rewind Efficiency Loss</label>
+    <label for="rewindEfficiencyLoss">Rewind Efficiency Loss</label>
     <div class="input-group calc-addon-group">
       <input name="rewindEfficiencyLoss" type="number" min="0" step="1" class="form-control" id="rewindEfficiencyLoss"
         formControlName="rewindEfficiencyLoss" (input)="calculate()" onfocus="this.select();" (focus)="focusField('rewindEfficiencyLoss')">
@@ -85,7 +85,7 @@
     </span>
   </div>
   <div class="form-group" *ngIf="!isNewMotor">
-    <label for="efficiency">Cost of Rewind</label>
+    <label for="costOfRewind">Cost of Rewind</label>
     <div class="input-group calc-addon-group">
       <input name="costOfRewind" type="number" min="0" step="1" class="form-control" id="costOfRewind" formControlName="costOfRewind"
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('costOfRewind')">
@@ -99,7 +99,7 @@
   </div>
   <label class="group-label" *ngIf="isNewMotor">New Motor</label>
   <div class="form-group" *ngIf="isNewMotor">
-    <label for="efficiency">Efficiency</label>
+    <label for="newEfficiency">Efficiency</label>
     <div class="input-group calc-addon-group">
       <input name="newEfficiency" type="number" min="0" step="1" class="form-control" id="newEfficiency"
         formControlName="newEfficiency" (input)="calculate()" onfocus="this.select();" (focus)="focusField('newEfficiency')">
@@ -114,7 +114,7 @@
     </span>
   </div>
   <div class="form-group" *ngIf="isNewMotor">
-    <label for="efficiency">Purchase Cost</label>
+    <label for="purchaseCost">Purchase Cost</label>
     <div class="input-group calc-addon-group">
       <input name="purchaseCost" type="number" min="0" step="1" class="form-control" id="purchaseCost" formControlName="purchaseCost"
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('purchaseCost')">

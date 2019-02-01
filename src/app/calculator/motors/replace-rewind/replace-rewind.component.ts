@@ -58,7 +58,6 @@ export class ReplaceRewindComponent implements OnInit {
   initMotorInputs() {
     this.inputs = this.replaceRewindService.replaceRewindData;
     this.rewoundMotorInputs = this.replaceRewindService.replaceRewindData;
-    // this.newMotorInputs = this.replaceRewindService.replaceRewindData;
     this.newMotorInputs = {
       operatingHours: null,
       motorSize: null,
@@ -67,7 +66,7 @@ export class ReplaceRewindComponent implements OnInit {
       currentEfficiency: null,
       rewindEfficiencyLoss: null,
       costOfRewind: null,
-      newEfficiency: this.inputs.costOfRewind,
+      newEfficiency: this.inputs.newEfficiency,
       purchaseCost: this.inputs.purchaseCost
     };
 
@@ -94,13 +93,8 @@ export class ReplaceRewindComponent implements OnInit {
   }
 
   calculate(_inputs: ReplaceRewindData) {
-    console.log('calculate(), _inputs = ');
-    console.log(_inputs);
-    console.log('this.rewoundMotorInputs = ');
-    console.log(this.rewoundMotorInputs);
     //case of calculate new motor input
     if (_inputs.newEfficiency === null) {
-      console.log('first branch');
       this.rewoundMotorInputs = _inputs;
     }
     else {
@@ -112,7 +106,7 @@ export class ReplaceRewindComponent implements OnInit {
         currentEfficiency: null,
         rewindEfficiencyLoss: null,
         costOfRewind: null,
-        newEfficiency: _inputs.costOfRewind,
+        newEfficiency: _inputs.newEfficiency,
         purchaseCost: _inputs.purchaseCost
       };
     }

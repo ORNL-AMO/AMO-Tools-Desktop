@@ -26,12 +26,7 @@ export class ReplaceRewindFormComponent implements OnInit {
   constructor(private replaceRewindService: ReplaceRewindService) { }
 
   ngOnInit() {
-    console.log('form, isNewMotor = ' + this.isNewMotor);
-    console.log('this.inputs = ');
-    console.log(this.inputs);
     this.form = this.replaceRewindService.getFormFromObj(this.inputs, this.isNewMotor);
-    console.log('this.form = ');
-    console.log(this.form);
   }
 
   ngOnChanges(changes: SimpleChanges) {
