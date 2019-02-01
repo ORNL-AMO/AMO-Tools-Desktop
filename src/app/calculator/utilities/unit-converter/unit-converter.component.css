@@ -24,5 +24,6 @@
     font-size: small !important;
 }
 .reset-size {
-    max-width: 450px;
+    max-width: 800px;
+    height: 250px;
 }
