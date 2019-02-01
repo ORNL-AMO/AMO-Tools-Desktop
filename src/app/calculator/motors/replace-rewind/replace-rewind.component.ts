@@ -59,10 +59,10 @@ export class ReplaceRewindComponent implements OnInit {
     this.inputs = this.replaceRewindService.replaceRewindData;
     this.rewoundMotorInputs = this.replaceRewindService.replaceRewindData;
     this.newMotorInputs = {
-      operatingHours: null,
-      motorSize: null,
-      load: null,
-      electricityCost: null,
+      operatingHours: this.rewoundMotorInputs.operatingHours,
+      motorSize: this.rewoundMotorInputs.motorSize,
+      load: this.rewoundMotorInputs.load,
+      electricityCost: this.rewoundMotorInputs.electricityCost,
       currentEfficiency: null,
       rewindEfficiencyLoss: null,
       costOfRewind: null,
@@ -96,13 +96,24 @@ export class ReplaceRewindComponent implements OnInit {
     //case of calculate new motor input
     if (_inputs.newEfficiency === null) {
       this.rewoundMotorInputs = _inputs;
+      this.newMotorInputs = {
+        operatingHours: this.rewoundMotorInputs.operatingHours,
+        motorSize: this.rewoundMotorInputs.motorSize,
+        load: this.rewoundMotorInputs.load,
+        electricityCost: this.rewoundMotorInputs.electricityCost,
+        currentEfficiency: null,
+        rewindEfficiencyLoss: null,
+        costOfRewind: null,
+        newEfficiency: this.newMotorInputs.newEfficiency,
+        purchaseCost: this.newMotorInputs.purchaseCost
+      };
     }
     else {
       this.newMotorInputs = {
-        operatingHours: null,
-        motorSize: null,
-        load: null,
-        electricityCost: null,
+        operatingHours: this.rewoundMotorInputs.operatingHours,
+        motorSize: this.rewoundMotorInputs.motorSize,
+        load: this.rewoundMotorInputs.load,
+        electricityCost: this.rewoundMotorInputs.electricityCost,
         currentEfficiency: null,
         rewindEfficiencyLoss: null,
         costOfRewind: null,

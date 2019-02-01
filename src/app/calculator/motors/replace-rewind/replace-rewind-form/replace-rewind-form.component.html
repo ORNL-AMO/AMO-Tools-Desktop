@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <div class="form-group" *ngIf="!isNewMotor">
+  <div class="form-group">
     <label for="operatingHours">Operating Hours</label>
     <div class="input-group calc-addon-group">
       <input name="operatingHours" type="number" min="0" step="1" class="form-control" id="operatingHours"
@@ -12,7 +12,7 @@
         {{form.controls.operatingHours.errors.min.min}} hrs/yr.</span>
     </span>
   </div>
-  <div class="form-group" *ngIf="!isNewMotor">
+  <div class="form-group">
     <label for="motorSize">Motor Size</label>
     <div class="input-group calc-addon-group">
       <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize" formControlName="motorSize"
@@ -25,7 +25,7 @@
         {{form.controls.motorSize.errors.min.min}} hp.</span>
     </span>
   </div>
-  <div class="form-group" *ngIf="!isNewMotor">
+  <div class="form-group">
     <label for="load">Load</label>
     <div class="input-group calc-addon-group">
       <input name="load" type="number" min="0" step="1" class="form-control" id="load" formControlName="load" (input)="calculate()"
@@ -40,7 +40,7 @@
         {{form.controls.load.errors.max.max}}%.</span>
     </span>
   </div>
-  <div class="form-group" *ngIf="!isNewMotor">
+  <div class="form-group">
     <label for="electricityCost">Electricity Cost</label>
     <div class="input-group calc-addon-group">
       <input name="electricityCost" type="number" min="0" step="1" class="form-control" id="electricityCost"

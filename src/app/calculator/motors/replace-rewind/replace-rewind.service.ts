@@ -22,9 +22,17 @@ export class ReplaceRewindService {
     if (isNewMotor) {
       //new motor form
       let tmpForm: FormGroup = this.formBuilder.group({
+        operatingHours: [6000, [Validators.required, Validators.min(0)]],
+        motorSize: [350, [Validators.required, Validators.min(0)]],
+        load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
+        electricityCost: [0.08, [Validators.required, Validators.min(0)]],
         newEfficiency: [95.7, [Validators.required, Validators.min(0), Validators.max(100)]],
         purchaseCost: [33163, [Validators.required, Validators.min(0)]]
       });
+      tmpForm.controls.operatingHours.disable();
+      tmpForm.controls.motorSize.disable();
+      tmpForm.controls.load.disable();
+      tmpForm.controls.electricityCost.disable();
       return tmpForm;
     }
     else {
@@ -45,9 +53,17 @@ export class ReplaceRewindService {
   getFormFromObj(inputObj: ReplaceRewindData, isNewMotor: boolean): FormGroup {
     if (isNewMotor) {
       let tmpForm: FormGroup = this.formBuilder.group({
+        operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
+        motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
+        load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
+        electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
         newEfficiency: [inputObj.newEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
         purchaseCost: [inputObj.purchaseCost, [Validators.required, Validators.min(0)]]
       });
+      tmpForm.controls.operatingHours.disable();
+      tmpForm.controls.motorSize.disable();
+      tmpForm.controls.load.disable();
+      tmpForm.controls.electricityCost.disable();
       return tmpForm;
     }
     else {
