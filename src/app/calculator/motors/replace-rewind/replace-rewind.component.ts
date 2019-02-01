@@ -41,7 +41,7 @@ export class ReplaceRewindComponent implements OnInit {
 
   ngOnInit() {
 
-    this.inputs = this.replaceRewindService.replaceRewindData;
+    this.initMotorInputs();
     this.calculate(this.inputs);
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -56,8 +56,21 @@ export class ReplaceRewindComponent implements OnInit {
   }
 
   initMotorInputs() {
+    this.inputs = this.replaceRewindService.replaceRewindData;
     this.rewoundMotorInputs = this.replaceRewindService.replaceRewindData;
-    this.newMotorInputs = this.replaceRewindService.replaceRewindData;
+    // this.newMotorInputs = this.replaceRewindService.replaceRewindData;
+    this.newMotorInputs = {
+      operatingHours: null,
+      motorSize: null,
+      load: null,
+      electricityCost: null,
+      currentEfficiency: null,
+      rewindEfficiencyLoss: null,
+      costOfRewind: null,
+      newEfficiency: this.inputs.costOfRewind,
+      purchaseCost: this.inputs.purchaseCost
+    };
+
   }
 
   btnResetData() {
@@ -81,7 +94,41 @@ export class ReplaceRewindComponent implements OnInit {
   }
 
   calculate(_inputs: ReplaceRewindData) {
-    this.results = this.replaceRewindService.getResults(_inputs);
+    console.log('calculate(), _inputs = ');
+    console.log(_inputs);
+    console.log('this.rewoundMotorInputs = ');
+    console.log(this.rewoundMotorInputs);
+    //case of calculate new motor input
+    if (_inputs.newEfficiency === null) {
+      console.log('first branch');
+      this.rewoundMotorInputs = _inputs;
+    }
+    else {
+      this.newMotorInputs = {
+        operatingHours: null,
+        motorSize: null,
+        load: null,
+        electricityCost: null,
+        currentEfficiency: null,
+        rewindEfficiencyLoss: null,
+        costOfRewind: null,
+        newEfficiency: _inputs.costOfRewind,
+        purchaseCost: _inputs.purchaseCost
+      };
+    }
+    this.inputs = {
+      operatingHours: this.rewoundMotorInputs.operatingHours,
+      motorSize: this.rewoundMotorInputs.motorSize,
+      load: this.rewoundMotorInputs.load,
+      electricityCost: this.rewoundMotorInputs.electricityCost,
+      currentEfficiency: this.rewoundMotorInputs.currentEfficiency,
+      rewindEfficiencyLoss: this.rewoundMotorInputs.rewindEfficiencyLoss,
+      costOfRewind: this.rewoundMotorInputs.costOfRewind,
+      newEfficiency: this.newMotorInputs.newEfficiency,
+      purchaseCost: this.newMotorInputs.purchaseCost
+    };
+
+    this.results = this.replaceRewindService.getResults(this.inputs);
   }
 }
 

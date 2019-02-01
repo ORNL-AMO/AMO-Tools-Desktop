@@ -17,28 +17,46 @@ export class ReplaceRewindService {
   };
   constructor(private formBuilder: FormBuilder) { }
 
-  initForm(): FormGroup {
-    let tmpForm: FormGroup = this.formBuilder.group({
-      operatingHours: [6000, [Validators.required, Validators.min(0)]],
-      motorSize: [350, [Validators.required, Validators.min(0)]],
-      load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
-      electricityCost: [0.08, [Validators.required, Validators.min(0)]],
-      currentEfficiency: [94.4, [Validators.required, Validators.min(0), Validators.max(100)]],
-      rewindEfficiencyLoss: [0.5, [Validators.required, Validators.min(0), Validators.max(100)]],
-      costOfRewind: [8384, [Validators.required, Validators.min(0)]],
-      newEfficiency: [95.7, [Validators.required, Validators.min(0), Validators.max(100)]],
-      purchaseCost: [33163, [Validators.required, Validators.min(0)]]
-    });
-    return tmpForm;
+
+  initForm(isNewMotor: boolean): FormGroup {
+    if (isNewMotor) {
+      //new motor form
+      let tmpForm: FormGroup = this.formBuilder.group({
+        // operatingHours: [6000, [Validators.required, Validators.min(0)]],
+        // motorSize: [350, [Validators.required, Validators.min(0)]],
+        // load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
+        // electricityCost: [0.08, [Validators.required, Validators.min(0)]],
+        newEfficiency: [95.7, [Validators.required, Validators.min(0), Validators.max(100)]],
+        purchaseCost: [33163, [Validators.required, Validators.min(0)]]
+      });
+      return tmpForm;
+    }
+    else {
+      //rewound motor form
+      let tmpForm: FormGroup = this.formBuilder.group({
+        operatingHours: [6000, [Validators.required, Validators.min(0)]],
+        motorSize: [350, [Validators.required, Validators.min(0)]],
+        load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
+        electricityCost: [0.08, [Validators.required, Validators.min(0)]],
+        currentEfficiency: [94.4, [Validators.required, Validators.min(0), Validators.max(100)]],
+        rewindEfficiencyLoss: [0.5, [Validators.required, Validators.min(0), Validators.max(100)]],
+        costOfRewind: [8384, [Validators.required, Validators.min(0)]],
+      });
+      return tmpForm;
+    }
   }
 
   getFormFromObj(inputObj: ReplaceRewindData, isNewMotor: boolean): FormGroup {
+    console.log('getFormFromObj, inputObj = ');
+    console.log(inputObj);
+    console.log('isNewMotor = ');
+    console.log(isNewMotor);
     if (isNewMotor) {
       let tmpForm: FormGroup = this.formBuilder.group({
-        operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
-        motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
-        load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
-        electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
+        // operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
+        // motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
+        // load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
+        // electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
         newEfficiency: [inputObj.newEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
         purchaseCost: [inputObj.purchaseCost, [Validators.required, Validators.min(0)]]
       });
@@ -58,17 +76,17 @@ export class ReplaceRewindService {
     }
   }
 
-  getObjFromForm(form: FormGroup): ReplaceRewindData {
+  getObjFromForm(form: FormGroup, isNewMotor: boolean): ReplaceRewindData {
     this.replaceRewindData = {
-      operatingHours: form.controls.operatingHours.value,
-      motorSize: form.controls.motorSize.value,
-      load: form.controls.load.value,
-      electricityCost: form.controls.electricityCost.value,
-      currentEfficiency: form.controls.currentEfficiency.value,
-      rewindEfficiencyLoss: form.controls.rewindEfficiencyLoss.value,
-      costOfRewind: form.controls.costOfRewind.value,
-      newEfficiency: form.controls.newEfficiency.value,
-      purchaseCost: form.controls.purchaseCost.value
+      operatingHours: isNewMotor ? null : form.controls.operatingHours.value,
+      motorSize: isNewMotor ? null : form.controls.motorSize.value,
+      load: isNewMotor ? null : form.controls.load.value,
+      electricityCost: isNewMotor ? null : form.controls.electricityCost.value,
+      currentEfficiency: isNewMotor ? null : form.controls.currentEfficiency.value,
+      rewindEfficiencyLoss: isNewMotor ? null : form.controls.rewindEfficiencyLoss.value,
+      costOfRewind: isNewMotor ? null : form.controls.costOfRewind.value,
+      newEfficiency: isNewMotor ? form.controls.newEfficiency.value : null,
+      purchaseCost: isNewMotor ? form.controls.purchaseCost.value : null
     }
     return this.replaceRewindData;
   }

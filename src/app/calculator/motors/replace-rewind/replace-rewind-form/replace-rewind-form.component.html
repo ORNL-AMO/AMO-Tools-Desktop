@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <div class="form-group">
+  <div class="form-group" *ngIf="!isNewMotor">
     <label for="efficiency">Operating Hours</label>
     <div class="input-group calc-addon-group">
       <input name="operatingHours" type="number" min="0" step="1" class="form-control" id="operatingHours"
@@ -12,7 +12,7 @@
         {{form.controls.operatingHours.errors.min.min}} hrs/yr.</span>
     </span>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="!isNewMotor">
     <label for="efficiency">Motor Size</label>
     <div class="input-group calc-addon-group">
       <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize" formControlName="motorSize"
@@ -25,7 +25,7 @@
         {{form.controls.motorSize.errors.min.min}} hp.</span>
     </span>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="!isNewMotor">
     <label for="efficiency">Load</label>
     <div class="input-group calc-addon-group">
       <input name="load" type="number" min="0" step="1" class="form-control" id="load" formControlName="load" (input)="calculate()"
@@ -40,7 +40,7 @@
         {{form.controls.load.errors.max.max}}%.</span>
     </span>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="!isNewMotor">
     <label for="efficiency">Electricity Cost</label>
     <div class="input-group calc-addon-group">
       <input name="electricityCost" type="number" min="0" step="1" class="form-control" id="electricityCost"
@@ -53,8 +53,8 @@
         {{form.controls.electricityCost.errors.min.min}} $/kWh.</span>
     </span>
   </div>
-  <label class="group-label">Rewound Motor</label>
-  <div class="form-group">
+  <label class="group-label" *ngIf="!isNewMotor">Rewound Motor</label>
+  <div class="form-group" *ngIf="!isNewMotor">
     <label for="efficiency">Current Efficiency</label>
     <div class="input-group calc-addon-group">
       <input name="currentEfficiency" type="number" min="0" step="1" class="form-control" id="currentEfficiency"
@@ -69,7 +69,7 @@
         {{form.controls.currentEfficiency.errors.max.max}}%.</span>
     </span>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="!isNewMotor">
     <label for="efficiency">Rewind Efficiency Loss</label>
     <div class="input-group calc-addon-group">
       <input name="rewindEfficiencyLoss" type="number" min="0" step="1" class="form-control" id="rewindEfficiencyLoss"
@@ -84,7 +84,7 @@
         {{form.controls.rewindEfficiencyLoss.errors.max.max}}%.</span>
     </span>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="!isNewMotor">
     <label for="efficiency">Cost of Rewind</label>
     <div class="input-group calc-addon-group">
       <input name="costOfRewind" type="number" min="0" step="1" class="form-control" id="costOfRewind" formControlName="costOfRewind"
@@ -97,8 +97,8 @@
         ${{form.controls.costOfRewind.errors.min.min}}.</span>
     </span>
   </div>
-  <label class="group-label">New Motor</label>
-  <div class="form-group">
+  <label class="group-label" *ngIf="isNewMotor">New Motor</label>
+  <div class="form-group" *ngIf="isNewMotor">
     <label for="efficiency">Efficiency</label>
     <div class="input-group calc-addon-group">
       <input name="newEfficiency" type="number" min="0" step="1" class="form-control" id="newEfficiency"
@@ -113,7 +113,7 @@
         {{form.controls.newEfficiency.errors.max.max}}%.</span>
     </span>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="isNewMotor">
     <label for="efficiency">Purchase Cost</label>
     <div class="input-group calc-addon-group">
       <input name="purchaseCost" type="number" min="0" step="1" class="form-control" id="purchaseCost" formControlName="purchaseCost"
