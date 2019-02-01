@@ -32,6 +32,16 @@ import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
 import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
 import { CalculateLossesService } from './ssmt-calculations/calculate-losses.service';
 import { SsmtDiagramTabModule } from './ssmt-diagram-tab/ssmt-diagram-tab.module';
+import { SteamPropertiesModule } from '../calculator/steam/steam-properties/steam-properties.module';
+import { SaturatedPropertiesModule } from '../calculator/steam/saturated-properties/saturated-properties.module';
+import { StackLossModule } from '../calculator/steam/stack-loss/stack-loss.module';
+import { HeatLossModule } from '../calculator/steam/heat-loss/heat-loss.module';
+import { BoilerModule } from '../calculator/steam/boiler/boiler.module';
+import { FlashTankModule } from '../calculator/steam/flash-tank/flash-tank.module';
+import { PrvModule } from '../calculator/steam/prv/prv.module';
+import { TurbineModule } from '../calculator/steam/turbine/turbine.module';
+import { HeaderModule } from '../calculator/steam/header/header.module';
+import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module';
 
 @NgModule({
   imports: [
@@ -46,7 +56,17 @@ import { SsmtDiagramTabModule } from './ssmt-diagram-tab/ssmt-diagram-tab.module
     SharedModule,
     HelpPanelModule,
     SsmtDiagramTabModule,
-    SsmtReportModule
+    SsmtReportModule,
+    SteamPropertiesModule,
+    SaturatedPropertiesModule,
+    StackLossModule,
+    HeatLossModule,
+    BoilerModule,
+    FlashTankModule,
+    PrvModule,
+    DeaeratorModule,
+    HeaderModule,
+    TurbineModule
   ],
   declarations: [
     SsmtComponent,

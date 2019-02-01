@@ -9,7 +9,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 
 
 @Component({
-  selector: 'app-steam-properties',
+  selector: 'app-steam-properties-calculator',
   templateUrl: './steam-properties.component.html',
   styleUrls: ['./steam-properties.component.css']
 })

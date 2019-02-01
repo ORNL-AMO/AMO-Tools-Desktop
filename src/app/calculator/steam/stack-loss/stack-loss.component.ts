@@ -8,7 +8,7 @@ import { FlueGasByVolume, FlueGasByMass } from '../../../shared/models/phast/los
 import { StackLossService } from './stack-loss.service';
 
 @Component({
-  selector: 'app-stack-loss',
+  selector: 'app-stack-loss-calculator',
   templateUrl: './stack-loss.component.html',
   styleUrls: ['./stack-loss.component.css']
 })
