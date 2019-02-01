@@ -13,6 +13,8 @@ export class ReplaceExistingFormComponent implements OnInit {
   @Input()
   inputs: ReplaceExistingData;
   @Input()
+  isReplacementMotor: boolean;
+  @Input()
   settings: Settings;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<ReplaceExistingData>();
@@ -24,12 +26,12 @@ export class ReplaceExistingFormComponent implements OnInit {
   constructor(private replaceExistingService: ReplaceExistingService) { }
 
   ngOnInit() {
-    this.form = this.replaceExistingService.getFormFromObj(this.inputs);
+    this.form = this.replaceExistingService.getFormFromObj(this.inputs, this.isReplacementMotor);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.inputs) {
-      this.form = this.replaceExistingService.getFormFromObj(this.inputs);
+      this.form = this.replaceExistingService.getFormFromObj(this.inputs, this.isReplacementMotor);
       this.calculate();
     }
   }
@@ -39,7 +41,7 @@ export class ReplaceExistingFormComponent implements OnInit {
   }
 
   calculate() {
-    this.inputs = this.replaceExistingService.getObjFromForm(this.form);
+    this.inputs = this.replaceExistingService.getObjFromForm(this.form, this.isReplacementMotor);
     this.emitCalculate.emit(this.inputs);
   }
 
