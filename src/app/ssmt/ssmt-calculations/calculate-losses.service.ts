@@ -49,7 +49,7 @@ export class CalculateLossesService {
         ssmtLosses.mediumPressureProcessLoss = this.calculateProcessLoss(ssmtResults.mediumPressureProcessUsage, ssmtResults.mediumPressureCondensate);
       }
     }
-    ssmtLosses.condensateLosses = this.calculateCondensateLoss(ssmtResults, inputData);
+    ssmtLosses.condensateLosses = this.calculateCondensateLoss(ssmtResults);
     ssmtLosses.condensingLosses = this.calculateCondensingLosses(ssmtResults.condensingTurbine, inputData, settings);
     return ssmtLosses;
   }
@@ -87,12 +87,8 @@ export class CalculateLossesService {
     }
   }
 
-  calculateCondensateLoss(ssmtResults: SSMTOutput, inputData: SSMTInputs): number {
-    let lowPressureCondensate: SteamPropertiesOutput = ssmtResults.highPressureCondensate;
-    if (inputData.headerInput.numberOfHeaders > 1) {
-      lowPressureCondensate = ssmtResults.lowPressureCondensate;
-    }
-    let loss: number = ((ssmtResults.returnCondensate.specificEnthalpy * ssmtResults.returnCondensate.massFlow) - (lowPressureCondensate.specificEnthalpy * lowPressureCondensate.massFlow)) / 1000;
+  calculateCondensateLoss(ssmtResults: SSMTOutput): number {
+    let loss: number = ((ssmtResults.returnCondensate.specificEnthalpy * ssmtResults.returnCondensate.massFlow) - (ssmtResults.combinedCondensate.specificEnthalpy * ssmtResults.combinedCondensate.massFlow)) / 1000;
     return loss;
   }
 
@@ -111,11 +107,12 @@ export class CalculateLossesService {
   }
 
   calculateDeaeratorVentLoss(deaeratorOutput: DeaeratorOutput): number {
-    let loss: number = deaeratorOutput.ventedSteamSpecificEnthalpy * deaeratorOutput.ventedSteamMassFlow;
+    let loss: number = deaeratorOutput.ventedSteamSpecificEnthalpy * deaeratorOutput.ventedSteamMassFlow / 1000;
     return loss;
   }
 
   calculateProcessLoss(processSteam: ProcessSteamUsage, condensate: SteamPropertiesOutput): number {
+    debugger
     let loss: number = (processSteam.energyFlow - (condensate.massFlow * condensate.specificEnthalpy) - processSteam.processUsage) / 1000;
     return loss;
   }

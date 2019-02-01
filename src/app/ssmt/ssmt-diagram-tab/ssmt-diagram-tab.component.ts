@@ -36,6 +36,10 @@ export class SsmtDiagramTabComponent implements OnInit {
     let resultsData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;
+    console.log('Return condensate');
+    console.log(this.outputData.returnCondensate);
+    console.log('combined condensate')
+    console.log(this.outputData.combinedCondensate);
   }
   setTab(str: string) {
     this.tabSelect = str;
