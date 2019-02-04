@@ -10,11 +10,13 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class ReplaceExistingComponent implements OnInit {
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer') contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
+  containerHeight: number;
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
@@ -30,11 +32,14 @@ export class ReplaceExistingComponent implements OnInit {
   };
   inputs: ReplaceExistingData;
 
+  replacementMotorInputs: ReplaceExistingData;
+  existingMotorInputs: ReplaceExistingData;
+
 
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.inputs = this.replaceExistingService.replaceExistingData;
+    this.initMotorInputs();
     this.calculate(this.inputs);
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -48,15 +53,38 @@ export class ReplaceExistingComponent implements OnInit {
     }, 100);
   }
 
+  initMotorInputs() {
+    this.inputs = this.replaceExistingService.initReplaceExistingData();
+    this.existingMotorInputs = {
+      operatingHours: this.inputs.operatingHours,
+      motorSize: this.inputs.motorSize,
+      load: this.inputs.load,
+      electricityCost: this.inputs.electricityCost,
+      existingEfficiency: this.inputs.existingEfficiency,
+      newEfficiency: null,
+      purchaseCost: null
+    }
+    this.replacementMotorInputs = {
+      operatingHours: this.existingMotorInputs.operatingHours,
+      motorSize: this.existingMotorInputs.motorSize,
+      load: this.existingMotorInputs.load,
+      electricityCost: this.existingMotorInputs.electricityCost,
+      existingEfficiency: null,
+      newEfficiency: this.inputs.newEfficiency,
+      purchaseCost: this.inputs.purchaseCost
+    };
+  }
+
 
   btnResetData() {
-    this.inputs = this.replaceExistingService.initReplaceExistingData();
+    this.initMotorInputs();
     this.calculate(this.inputs);
   }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 
@@ -69,7 +97,40 @@ export class ReplaceExistingComponent implements OnInit {
   }
 
   calculate(_inputs: ReplaceExistingData) {
-    this.results = this.replaceExistingService.getResults(_inputs);
+    //case of calculate replacement motor
+    if (_inputs.newEfficiency === null) {
+      this.existingMotorInputs = _inputs;
+      this.replacementMotorInputs = {
+        operatingHours: this.existingMotorInputs.operatingHours,
+        motorSize: this.existingMotorInputs.motorSize,
+        load: this.existingMotorInputs.load,
+        electricityCost: this.existingMotorInputs.electricityCost,
+        existingEfficiency: null,
+        newEfficiency: this.replacementMotorInputs.newEfficiency,
+        purchaseCost: this.replacementMotorInputs.purchaseCost
+      };
+    }
+    else {
+      this.replacementMotorInputs = {
+        operatingHours: this.existingMotorInputs.operatingHours,
+        motorSize: this.existingMotorInputs.motorSize,
+        load: this.existingMotorInputs.load,
+        electricityCost: this.existingMotorInputs.electricityCost,
+        existingEfficiency: null,
+        newEfficiency: _inputs.newEfficiency,
+        purchaseCost: _inputs.purchaseCost
+      }
+    }
+    this.inputs = {
+      operatingHours: this.existingMotorInputs.operatingHours,
+      motorSize: this.existingMotorInputs.motorSize,
+      load: this.existingMotorInputs.load,
+      electricityCost: this.existingMotorInputs.electricityCost,
+      existingEfficiency: this.existingMotorInputs.existingEfficiency,
+      newEfficiency: this.replacementMotorInputs.newEfficiency,
+      purchaseCost: this.replacementMotorInputs.purchaseCost
+    }
+    this.results = this.replaceExistingService.getResults(this.inputs);
   }
 }
 

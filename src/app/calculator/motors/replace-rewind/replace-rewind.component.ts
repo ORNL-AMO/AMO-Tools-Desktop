@@ -40,7 +40,6 @@ export class ReplaceRewindComponent implements OnInit {
   constructor(private replaceRewindService: ReplaceRewindService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-
     this.initMotorInputs();
     this.calculate(this.inputs);
     this.settings = this.settingsDbService.globalSettings;
