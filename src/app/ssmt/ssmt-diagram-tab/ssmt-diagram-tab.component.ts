@@ -32,7 +32,7 @@ export class SsmtDiagramTabComponent implements OnInit {
   }
 
   calculateResults() {
-    this.calculateModelService.initData(this.ssmt, this.settings)
+    this.calculateModelService.initData(this.ssmt, this.settings, true);
     let resultsData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;

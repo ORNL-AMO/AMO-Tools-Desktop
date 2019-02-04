@@ -60,6 +60,8 @@ export class CalculateModelService {
   totalEnergyUse: number;
   powerGenerationCost: number;
   boilerFuelUsage: number;
+  sitePowerImport: number;
+  sitePowerDemand: number;
 
   makeupWaterVolumeFlow: number;
   annualMakeupWaterFlow: number;
@@ -68,6 +70,10 @@ export class CalculateModelService {
   //heatExchanger: HeatExchanger
   heatExchangerOutput: HeatExchangerOutput;
   ventedLowPressureSteam: SteamPropertiesOutput;
+
+  isBaselineCalculation: boolean;
+  baselinePowerDemand: number;
+
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
@@ -87,7 +93,9 @@ export class CalculateModelService {
     return inputData;
   }
 
-  initData(_ssmt: SSMT, _settings: Settings): void {
+  initData(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, baselinePowerDemand?: number): void {
+    this.isBaselineCalculation = isBaseline;
+    this.baselinePowerDemand = baselinePowerDemand;
     this.calcCount = 0;
     this.inputData = this.getInputDataFromSSMT(_ssmt);
     this.settings = _settings;
@@ -273,6 +281,10 @@ export class CalculateModelService {
       //9. Calculate Energy and Cost Values
       //9a. Calculate Power Generated
       this.calculatePowerGenerated();
+      //9b. Calculate Site Power Import
+      this.calculatePowerImport();
+      //9c. Calculate Demand
+      this.calculatePowerDemand();
       //9b. Calculate cost of power generation
       this.calculatePowerGenerationCost();
       //9c. Calculate cost of fuel for boiler
@@ -1803,7 +1815,19 @@ export class CalculateModelService {
   }
 
   calculatePowerGenerationCost() {
-    this.powerGenerationCost = this.inputData.operationsInput.sitePowerImport * this.inputData.operationsInput.electricityCosts * this.inputData.operationsInput.operatingHoursPerYear;
+    this.powerGenerationCost = this.sitePowerImport * this.inputData.operationsInput.electricityCosts * this.inputData.operationsInput.operatingHoursPerYear;
+  }
+
+  calculatePowerImport(){
+    if(this.isBaselineCalculation){
+      this.sitePowerImport = this.inputData.operationsInput.sitePowerImport;
+    }else{
+      this.sitePowerImport = this.baselinePowerDemand - this.powerGenerated;
+    }
+  }
+
+  calculatePowerDemand(){
+    this.sitePowerDemand = this.sitePowerImport + this.powerGenerated;
   }
 
   calculateBoilerFuelCost() {
@@ -1857,6 +1881,8 @@ export class CalculateModelService {
     this.makeupWaterCost = undefined;
     this.boilerFuelUsage = undefined;
     this.ventedLowPressureSteam = undefined;
+    this.sitePowerImport = undefined;
+    this.sitePowerDemand = undefined;
   }
 
   getResultsObject(): SSMTOutput {
@@ -1915,7 +1941,9 @@ export class CalculateModelService {
       heatExchangerOutput: this.heatExchangerOutput,
       marginalHPCost: 0,
       marginalMPCost: 0,
-      marginalLPCost: 0
+      marginalLPCost: 0,
+      sitePowerImport: this.sitePowerImport,
+      sitePowerDemand: this.sitePowerDemand
     }
     return output;
   }
