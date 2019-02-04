@@ -32,6 +32,7 @@ export class SsmtReportComponent implements OnInit {
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
+    this.calculateModelService.initResults();
     this.calculateModelService.initData(this.assessment.ssmt, this.settings, true);
     let resultData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
     this.baselineOutput = resultData.outputData;
@@ -39,6 +40,7 @@ export class SsmtReportComponent implements OnInit {
     this.modificationOutputs = new Array<{name: string, outputData: SSMTOutput}>();
     if(this.assessment.ssmt.modifications){
       this.assessment.ssmt.modifications.forEach(modification => {
+        this.calculateModelService.initResults();
         this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
         let resultData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
         this.modificationOutputs.push({name: modification.ssmt.name, outputData: resultData.outputData});
