@@ -59,7 +59,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   ngOnDestroy() {
     this.toastyService.clearAll();
     this.exploreOppsToast.emit(false);
-      if(this.phast.modifications[this.exploreModIndex] && !this.phast.modifications[this.exploreModIndex].phast.name){
+      if (this.phast.modifications[this.exploreModIndex] && !this.phast.modifications[this.exploreModIndex].phast.name){
         this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification';
         this.save.emit(true);
       }
@@ -93,7 +93,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
           showClose: true,
           timeout: 10000000,
           theme: 'default'
-        }
+        };
         this.toastyService.warning(toastOptions);
       } else {
         this.exploreOppsToast.emit(false);

@@ -29,9 +29,13 @@ export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   modificationIndex: number;
   @Input()
+  exploreModIndex: number;
+  @Input()
   modificationExists: boolean;
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
+  @Output('exploreOppsToast')
+  exploreOppsToast = new EventEmitter<boolean>();
 
 
   @ViewChild('resultTabs') resultTabs: ElementRef;
@@ -79,6 +83,13 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.exploreOppsToast.emit(false);
+    if(this.psat.modifications[this.exploreModIndex] && !this.psat.modifications[this.exploreModIndex].psat.name) {
+      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
+      this.saved.emit(true)
+  }
+}
   getContainerHeight() {
     if (this.containerHeight && this.resultTabs) {
       let tabHeight = this.resultTabs.nativeElement.clientHeight;

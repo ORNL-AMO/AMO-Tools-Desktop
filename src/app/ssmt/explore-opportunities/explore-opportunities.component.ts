@@ -23,11 +23,13 @@ export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   modificationExists: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<SSMT>();
+  emitSave = new EventEmitter<boolean>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
   @Output('exploreOppsToast')
   exploreOppsToast = new EventEmitter<boolean>();
+  @Input()
+  exploreModIndex: number;
 
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
@@ -63,6 +65,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   ngOnDestroy(){
     //this.exploreOppsToast.emit(false);
+    if(this.ssmt.modifications[this.exploreModIndex] && !this.ssmt.modifications[this.exploreModIndex].ssmt.name) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.name = 'Opportunities Modification';
+      this.emitSave.emit(true);
+    }
   }
 
   ngAfterViewInit() {
@@ -89,7 +95,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   save(newSSMT: SSMT) {
     this.assessment.ssmt = newSSMT;
-    this.emitSave.emit(this.assessment.ssmt);
+    this.emitSave.emit(true);
   }
 
   getContainerHeight() {
@@ -111,7 +117,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   //     if (!this.ssmt.modifications[this.modificationIndex].exploreOpportunities) {
   //       this.exploreOppsToast.emit(true);
   //       let toastOptions: ToastOptions = {
-  //         title: 'Explore Opportunites',
+  //         title: 'Explore Opportunities',
   //         msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
   //         showClose: true,
   //         timeout: 10000000,

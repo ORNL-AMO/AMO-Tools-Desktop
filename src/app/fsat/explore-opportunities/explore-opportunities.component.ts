@@ -26,7 +26,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   exploreModIndex: number;
   @Output('emitSave')
-  emitSave = new EventEmitter<FSAT>();
+  emitSave = new EventEmitter<boolean>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
   @Output('exploreOppsToast')
@@ -66,11 +66,11 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.exploreOppsToast.emit(false);
-    if(this.fsat.modifications[this.exploreModIndex] && !this.fsat.modifications[this.exploreModIndex].fsat.name){
+    if(this.fsat.modifications[this.exploreModIndex] && !this.fsat.modifications[this.exploreModIndex].fsat.name) {
       this.fsat.modifications[this.exploreModIndex].fsat.name = 'Opportunities Modification';
-      this.emitSave.emit();
+      this.emitSave.emit(true);
   }
 }
 
@@ -97,7 +97,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit(this.assessment.fsat);
+    this.emitSave.emit(true);
   }
 
   getContainerHeight() {
