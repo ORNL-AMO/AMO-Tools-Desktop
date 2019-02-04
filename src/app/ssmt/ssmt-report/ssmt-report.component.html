@@ -96,7 +96,7 @@
       </li>
     </ul>
     <div class="results scroll-item" *ngIf="currentTab == 'executiveSummary'" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-executive-summary></app-executive-summary>
+      <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput" [modificationOutputs]="modificationOutputs"></app-executive-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'energySummary'" [ngStyle]="{'height.px':reportContainerHeight}">
       <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput" [modificationOutputs]="modificationOutputs"></app-energy-summary>
