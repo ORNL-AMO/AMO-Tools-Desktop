@@ -8,7 +8,7 @@ import { HeatLossInput } from '../../../shared/models/steam/steam-inputs';
 import { HeatLossOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-heat-loss',
+  selector: 'app-heat-loss-calculator',
   templateUrl: './heat-loss.component.html',
   styleUrls: ['./heat-loss.component.css']
 })

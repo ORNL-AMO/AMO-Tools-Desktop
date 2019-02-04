@@ -16,6 +16,7 @@ export class SsmtService {
   turbineOperationValue: BehaviorSubject<number>;
   headerPressureLevelHelp: BehaviorSubject<string>;
   numberOfHeadersHelp:  BehaviorSubject<number>;
+  calcTab: BehaviorSubject<string>;
   constructor() { 
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
@@ -30,7 +31,7 @@ export class SsmtService {
     this.turbineOperationValue = new BehaviorSubject<number>(1);
     this.headerPressureLevelHelp = new BehaviorSubject<string>('highPressure');
     this.numberOfHeadersHelp = new BehaviorSubject<number>(1);
-
+    this.calcTab = new BehaviorSubject<string>('boiler');
 
   }
 }

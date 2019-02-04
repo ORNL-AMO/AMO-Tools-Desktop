@@ -8,7 +8,7 @@ import { FlashTankService } from './flash-tank.service';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-flash-tank',
+  selector: 'app-flash-tank-calculator',
   templateUrl: './flash-tank.component.html',
   styleUrls: ['./flash-tank.component.css']
 })

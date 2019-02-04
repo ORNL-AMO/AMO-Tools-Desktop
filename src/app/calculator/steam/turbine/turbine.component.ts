@@ -8,7 +8,7 @@ import { TurbineService } from './turbine.service';
 import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-turbine',
+  selector: 'app-turbine-calculator',
   templateUrl: './turbine.component.html',
   styleUrls: ['./turbine.component.css']
 })
