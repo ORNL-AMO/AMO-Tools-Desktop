@@ -87,7 +87,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     }
   }
 
-  ngOnDestory(){
+  ngOnDestroy(){
     this.resultsSub.unsubscribe();
   }
 

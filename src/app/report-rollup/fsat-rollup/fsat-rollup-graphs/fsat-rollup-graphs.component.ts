@@ -59,7 +59,7 @@ export class FsatRollupGraphsComponent implements OnInit {
     }
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 

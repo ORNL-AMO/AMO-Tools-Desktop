@@ -64,7 +64,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.exploreOppsToast.emit(false);
   }
 
@@ -84,10 +84,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   addExploreOpp() {
     this.fsatService.openNewModal.next(true);
-  }
-
-  getResults() {
-
   }
 
   save() {

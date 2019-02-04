@@ -81,7 +81,7 @@ export class ResultsDataComponent implements OnInit {
     }
   }
 
-  ngOnDestory(){
+  ngOnDestroy(){
     if(this.selectedPhastsSub){this.selectedPhastsSub.unsubscribe;}
   }
 

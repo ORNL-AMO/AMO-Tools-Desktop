@@ -71,7 +71,7 @@ export class PhastRollupGraphsComponent implements OnInit {
     }
   }
 
-  ngOnDestory(){
+  ngOnDestroy(){
     this.resultsSub.unsubscribe();
   }
 

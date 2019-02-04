@@ -83,7 +83,7 @@ export class FsatRollupFanSummaryComponent implements OnInit {
     }
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 

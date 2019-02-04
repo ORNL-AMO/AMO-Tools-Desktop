@@ -39,46 +39,54 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
 
   ngOnInit() {
     this.resultsCategories = this.phastResultsService.getResultCategories(this.settings);
-    
-    if(this.phast.losses.chargeMaterials && this.phast.losses.chargeMaterials.length != 0){
+
+    if (this.phast.losses.chargeMaterials && this.phast.losses.chargeMaterials.length != 0) {
       this.showCharge = true;
     }
-    if(this.phast.losses.fixtureLosses && this.phast.losses.fixtureLosses.length != 0){
+    if (this.phast.losses.fixtureLosses && this.phast.losses.fixtureLosses.length != 0) {
       this.showFixture = true;
     }
-    if(this.phast.losses.leakageLosses && this.phast.losses.leakageLosses.length != 0){
+    if (this.phast.losses.leakageLosses && this.phast.losses.leakageLosses.length != 0) {
       this.showLeakage = true;
     }
-    if(this.phast.losses.wallLosses && this.phast.losses.wallLosses.length != 0){
+    if (this.phast.losses.wallLosses && this.phast.losses.wallLosses.length != 0) {
       this.showWall = true;
     }
-    if(this.phast.losses.openingLosses && this.phast.losses.openingLosses.length != 0){
+    if (this.phast.losses.openingLosses && this.phast.losses.openingLosses.length != 0) {
       this.showOpening = true;
     }
-    if(this.phast.losses.slagLosses && this.phast.losses.slagLosses.length != 0){
+    if (this.phast.losses.slagLosses && this.phast.losses.slagLosses.length != 0) {
       this.showSlag = true;
     }
-    if(this.phast.losses.atmosphereLosses && this.phast.losses.atmosphereLosses.length != 0){
+    if (this.phast.losses.atmosphereLosses && this.phast.losses.atmosphereLosses.length != 0) {
       this.showAtmosphere = true;
     }
-    if(this.phast.losses.coolingLosses && this.phast.losses.coolingLosses.length != 0){
+    if (this.phast.losses.coolingLosses && this.phast.losses.coolingLosses.length != 0) {
       this.showCooling = true;
     }
   }
 
-  calculate(){
+  ngOnDestroy() {
+    if (this.phast.modifications[this.exploreModIndex] && !this.phast.modifications[this.exploreModIndex].phast.name) {
+      this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification';
+      this.calculate();
+    }
+  }
+
+
+  calculate() {
     this.emitCalculate.emit(true);
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  emitLossTab(tab: LossTab){
+  emitLossTab(tab: LossTab) {
     this.changeTab.emit(tab);
   }
 
-  addNewMod(){
+  addNewMod() {
     this.emitAddNewMod.emit(true);
   }
 }
