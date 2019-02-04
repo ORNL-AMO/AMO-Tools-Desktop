@@ -8,11 +8,13 @@ import { ReportDiagramComponent } from './report-diagram/report-diagram.componen
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { InputSummaryComponent } from './input-summary/input-summary.component';
 import { SsmtDiagramModule } from '../ssmt-diagram/ssmt-diagram.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    SsmtDiagramModule
+    SsmtDiagramModule,
+    SharedModule
   ],
   declarations: [
     SsmtReportComponent,
