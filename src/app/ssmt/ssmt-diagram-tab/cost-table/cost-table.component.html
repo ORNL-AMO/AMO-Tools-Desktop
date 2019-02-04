@@ -14,13 +14,13 @@
         </tr>
         <tr>
           <td class="text-center w-50">Demand</td>
-          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport + powerGenerated | number:'1.0-1'}} 
+          <td class="text-center w-50">{{outputData.sitePowerDemand | number:'1.0-1'}} 
               <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
           </td>
         </tr>
         <tr>
           <td class="text-center w-50">Import</td>
-          <td class="text-center w-50">{{inputData.operationsInput.sitePowerImport | number:'1.0-1'}} 
+          <td class="text-center w-50">{{outputData.sitePowerImport | number:'1.0-1'}} 
               <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
           </td>
         </tr>

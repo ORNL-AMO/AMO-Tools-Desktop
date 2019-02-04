@@ -26,6 +26,7 @@ export class SsmtReportComponent implements OnInit {
   @ViewChild('reportHeader') reportHeader: ElementRef;
   reportContainerHeight: number;
   currentTab: string = 'executiveSummary';
+
   baselineOutput: SSMTOutput;
   baselineInputData: SSMTInputs;
   baselineLosses: SSMTLosses;

@@ -99,10 +99,11 @@
       <app-executive-summary></app-executive-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'energySummary'" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-energy-summary></app-energy-summary>
+      <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput" [modificationOutputs]="modificationOutputs"></app-energy-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'losses'" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [settings]="settings"></app-losses-summary>
+      <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [settings]="settings"
+        [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"></app-losses-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'diagram'" [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"></app-report-diagram>
@@ -114,7 +115,7 @@
       <app-input-summary></app-input-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo'" [ngStyle]="{'height.px':reportContainerHeight}">
-    
+
     </div>
     <!-- <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrint" [ngStyle]="{'height.px':reportContainerHeight}">
           <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>

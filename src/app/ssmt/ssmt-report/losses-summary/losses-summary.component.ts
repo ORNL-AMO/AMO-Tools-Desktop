@@ -18,6 +18,8 @@ export class LossesSummaryComponent implements OnInit {
   baselineLosses: SSMTLosses;
   @Input()
   modificationLosses: Array<{outputData: SSMTLosses, name: string}>;
+  @Input()
+  numberOfHeaders: number;
   constructor() { }
 
   ngOnInit() {
