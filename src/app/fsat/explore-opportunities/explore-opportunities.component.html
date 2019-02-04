@@ -4,7 +4,7 @@
 			<h3>Select Potential Adjustment Projects</h3>
 		</div>
 		<p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of your system.</p>
-		<app-explore-opportunities-form (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" (changeField)="focusField($event)"
+		<app-explore-opportunities-form [settings]="settings" (emitSave)="save()" (changeField)="focusField($event)"
 		 (emitOptimize)="optimize()" [exploreModIndex]="modificationIndex" [(fsat)]="assessment.fsat" (emitAddNewMod)="addNewMod()">
 		</app-explore-opportunities-form>
 

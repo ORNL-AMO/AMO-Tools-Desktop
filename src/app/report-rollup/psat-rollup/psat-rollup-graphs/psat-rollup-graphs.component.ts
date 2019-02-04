@@ -59,7 +59,7 @@ export class PsatRollupGraphsComponent implements OnInit {
     }
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 

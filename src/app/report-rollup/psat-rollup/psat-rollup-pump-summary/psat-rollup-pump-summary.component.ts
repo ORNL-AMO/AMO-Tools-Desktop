@@ -84,7 +84,7 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
     }
   }
 
-  ngOnDestory(){
+  ngOnDestroy(){
     this.resultsSub.unsubscribe();
   }
 

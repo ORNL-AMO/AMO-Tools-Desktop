@@ -6,7 +6,7 @@
     <div class="form-group group-name">
       <label for="modificatonName">Modification Name</label>
       <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.name"
-        (input)="calculate()" />
+        (input)="save()" />
     </div>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
@@ -19,16 +19,16 @@
       [modificationFanSetupForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"
       [baselineFieldDataForm]="baselineFieldDataForm" [modificationFieldDataForm]="modificationFieldDataForm"
       [baselineWarnings]="baselineFanFieldDataWarnings" [modificationWarnings]="modificationFanFieldDataWarnings"
-      (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" (showPressureModal)="openPressureModal($event)"></app-variable-frequency-drive-form>
+      (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex" (showPressureModal)="openPressureModal($event)"></app-variable-frequency-drive-form>
 
-    <app-fan-data-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"
+    <app-fan-data-form (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"
       [baselineForm]="baselineFanSetupForm" [modificationForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"
       [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD"></app-fan-data-form>
 
-    <app-rated-motor-form (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+    <app-rated-motor-form (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex"
       [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"></app-rated-motor-form>
 
-    <app-system-data-form [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD" (emitCalculate)="calculate()"
+    <app-system-data-form [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD" (emitCalculate)="save()"
       [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
       [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
       [modificationWarnings]="modificationFanFieldDataWarnings" (showPressureModal)="openPressureModal($event)"></app-system-data-form>

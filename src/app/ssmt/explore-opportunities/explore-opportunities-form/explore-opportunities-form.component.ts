@@ -26,18 +26,25 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
+  ngOnDestroy() {
+    if (this.ssmt.modifications[this.exploreModIndex] && !this.ssmt.modifications[this.exploreModIndex].ssmt.name) {
+      this.ssmt.modifications[this.exploreModIndex].ssmt.name = 'Opportunities Modification';
+      this.save(this.ssmt);
+    }
+  }
+
   save(newSSMT: SSMT) {
     this.ssmt = newSSMT;
     this.emitSave.emit(this.ssmt);
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     // this.helpPanelService.currentField.next(str);
     // this.modifyConditionsService.modifyConditionsTab.next('fan-field-data')
   }
 
-  addNewMod(){
+  addNewMod() {
     this.ssmtService.openNewModificationModal.next(true);
   }
 }

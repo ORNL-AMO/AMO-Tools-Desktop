@@ -74,6 +74,13 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    if (this.psat.modifications[this.exploreModIndex] && !this.psat.modifications[this.exploreModIndex].psat.name) {
+      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
+      this.save();
+    }
+  }
+
   initForms() {
     this.baselineMotorForm = this.motorService.getFormFromObj(this.psat.inputs);
     this.baselineMotorForm.disable();
