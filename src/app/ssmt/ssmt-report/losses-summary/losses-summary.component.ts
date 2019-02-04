@@ -13,17 +13,14 @@ import { CalculateModelService } from '../../ssmt-calculations/calculate-model.s
 })
 export class LossesSummaryComponent implements OnInit {
   @Input()
-  inputData: SSMTInputs
-  @Input()
   settings: Settings;
   @Input()
-  baselineOutput: SSMTOutput;
-
   baselineLosses: SSMTLosses;
-  constructor(private calculateLossesService: CalculateLossesService) { }
+  @Input()
+  modificationLosses: Array<{outputData: SSMTLosses, name: string}>;
+  constructor() { }
 
   ngOnInit() {
-    this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.inputData, this.settings);
   } 
 
 }

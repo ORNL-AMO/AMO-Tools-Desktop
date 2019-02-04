@@ -112,7 +112,6 @@ export class CalculateLossesService {
   }
 
   calculateProcessLoss(processSteam: ProcessSteamUsage, condensate: SteamPropertiesOutput): number {
-    debugger
     let loss: number = (processSteam.energyFlow - (condensate.massFlow * condensate.specificEnthalpy) - processSteam.processUsage) / 1000;
     return loss;
   }
