@@ -57,6 +57,9 @@ export interface SSMTOutput {
   ventedLowPressureSteam: SteamPropertiesOutput;
   heatExchangerOutput: HeatExchangerOutput;
 
+  sitePowerImport: number;
+  sitePowerDemand: number;
+
 }
 
 //export interface SSMTOperationsOutput {

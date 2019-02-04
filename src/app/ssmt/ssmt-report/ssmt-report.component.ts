@@ -25,16 +25,27 @@ export class SsmtReportComponent implements OnInit {
   @ViewChild('reportHeader') reportHeader: ElementRef;
   reportContainerHeight: number;
   currentTab: string = 'executiveSummary';
+
   baselineOutput: SSMTOutput;
   baselineInputData: SSMTInputs;
-
+  modificationOutputs: Array<{name: string, outputData: SSMTOutput}>;
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
-    this.calculateModelService.initData(this.assessment.ssmt, this.settings);
+    this.calculateModelService.initData(this.assessment.ssmt, this.settings, true);
     let resultData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
     this.baselineOutput = resultData.outputData;
     this.baselineInputData = resultData.inputData;
+    this.modificationOutputs = new Array<{name: string, outputData: SSMTOutput}>();
+    if(this.assessment.ssmt.modifications){
+      this.assessment.ssmt.modifications.forEach(modification => {
+        this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
+        let resultData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
+        this.modificationOutputs.push({name: modification.ssmt.name, outputData: resultData.outputData});
+      })
+
+
+    }
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
