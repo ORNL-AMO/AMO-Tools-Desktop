@@ -113,8 +113,8 @@
     <div class="results scroll-item" *ngIf="currentTab == 'inputData'" [ngStyle]="{'height.px':reportContainerHeight}">
       <app-input-summary></app-input-summary>
     </div>
-    <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrint" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+    <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo'" [ngStyle]="{'height.px':reportContainerHeight}">
+     <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <!--   <div class="input-data results scroll-item print-height" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)"
           [ngStyle]="{'height.px':reportContainerHeight}">
