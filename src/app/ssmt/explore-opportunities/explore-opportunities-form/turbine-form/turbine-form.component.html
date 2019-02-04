@@ -1,11 +1,11 @@
 <!--Condensing turbine-->
-<div class="checkbox">
+<div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders >= 1">
   <label class="group-label" for="adjustHighPressureToCondensing">
     <input type="checkbox" id="adjustHighPressureToCondensing" (focus)="focusField('default')" (change)="toggleCondensingTurbine()"
       [(ngModel)]="showCondensingTurbine" /> Modify High Pressure to Condensing Steam Turbine
   </label>
 </div>
-<ul [hidden]="!showCondensingTurbine">
+<ul [hidden]="!showCondensingTurbine" *ngIf="ssmt.headerInput.numberOfHeaders >= 1">
   <app-explore-turbine-form [(baselineForm)]="baselineCondensingTurbineForm" [(modificationForm)]="modificationCondensingTurbineForm"
     [settings]="settings" (emitSave)="saveCondensingTurbine($event)" (emitShowTurbine)="setShowCondensingTurbine($event)"
     [turbineType]="'condensingTurbine'" [showFormToggle]="showCondensingTurbine"></app-explore-turbine-form>
@@ -16,13 +16,13 @@
 </ul>
 
 <!--High pressure to low pressure turbine-->
-<div class="checkbox">
+<div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders >= 2">
   <label class="group-label" for="adjustHighPressureToLowTurbinePressure">
     <input type="checkbox" id="adjustHighPressureToLowTurbinePressure" (focus)="focusField('default')" (change)="toggleHighPressureToLowPressure()"
       [(ngModel)]="showHighToLowPressureTurbine" /> Modify High Pressure to Low Pressure Steam Turbine
   </label>
 </div>
-<ul [hidden]="!showHighToLowPressureTurbine">
+<ul [hidden]="!showHighToLowPressureTurbine" *ngIf="ssmt.headerInput.numberOfHeaders >= 2">
   <app-explore-turbine-form [baselineForm]="baselineHighToLowTurbineForm" [modificationForm]="modificationHighToLowTurbineForm"
     [settings]="settings" (emitSave)="saveHighToLowTurbine()" (emitShowTurbine)="setShowHighLowTurbine($event)"
     [turbineType]="'highToLowTurbine'" [showFormToggle]="showHighToLowPressureTurbine"></app-explore-turbine-form>
@@ -32,13 +32,13 @@
 </ul>
 
 <!--high pressure to medium pressure turbine-->
-<div class="checkbox">
+<div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders >= 3">
   <label class="group-label" for="adjustHighPressureToMediumTurbinePressure">
     <input type="checkbox" id="adjustHighPressureToMediumTurbinePressure" (focus)="focusField('default')" (change)="toggleHighPressureToMediumPressure()"
       [(ngModel)]="showHighToMediumPressureTurbine" /> Modify High Pressure to Medium Pressure Steam Turbine
   </label>
 </div>
-<ul [hidden]="!showHighToMediumPressureTurbine">
+<ul [hidden]="!showHighToMediumPressureTurbine" *ngIf="ssmt.headerInput.numberOfHeaders >= 3">
   <app-explore-turbine-form [baselineForm]="baselineHighToMediumForm" [modificationForm]="modificationHighToMediumForm"
     [settings]="settings" (emitSave)="saveHighToMediumTurbine()" (emitShowTurbine)="setShowHighMediumTurbine($event)"
     [turbineType]="'highToMediumTurbine'" [showFormToggle]="showHighToMediumPressureTurbine"></app-explore-turbine-form>
@@ -48,13 +48,13 @@
 </ul>
 
 <!--medium pressure to low pressure turbine-->
-<div class="checkbox">
+<div class="checkbox" *ngIf="ssmt.headerInput.numberOfHeaders >= 3">
   <label class="group-label" for="adjustMediumPressureToLowTurbine">
     <input type="checkbox" id="adjustMediumPressureToLowTurbine" (focus)="focusField('default')" (change)="toggleMediumPressureToLowPressure()"
       [(ngModel)]="showMediumToLowPressureTurbine" /> Modify Medium Pressure to Low Pressure Steam Turbine
   </label>
 </div>
-<ul [hidden]="!showMediumToLowPressureTurbine">
+<ul [hidden]="!showMediumToLowPressureTurbine" *ngIf="ssmt.headerInput.numberOfHeaders >= 3">
   <app-explore-turbine-form [baselineForm]="baselineMediumToLowForm" [modificationForm]="modificationMediumToLowForm"
     [settings]="settings" (emitSave)="saveMediumToLowTurbine()" (emitShowTurbine)="setShowMediumLowTurbine($event)"
     [turbineType]="'mediumToLowTurbine'" [showFormToggle]="showMediumToLowPressureTurbine"></app-explore-turbine-form>
