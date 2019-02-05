@@ -1,0 +1,157 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Boiler Data
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+
+  <div *ngIf="!collapse || printView">
+    <div class="card-body">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of modificationInputData">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':fuelTypeDiff[0] == true}">
+                Fuel Type
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':fuelTypeDiff[0] == true}">
+                <span *ngIf="baselineInputData.boilerInput.fuelType == 0">Solid/Liquid</span>
+                <span *ngIf="baselineInputData.boilerInput.fuelType == 1">Gas</span>
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.fuelType, mod.inputData.boilerInput.fuelType, 'fuelTypeDiff', 0)}">
+                <span *ngIf="mod.inputData.boilerInput.fuelType == 0">Solid/Liquid</span>
+                <span *ngIf="mod.inputData.boilerInput.fuelType == 1">Gas</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':fuelDiff[0] == true}">
+                Fuel
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':fuelDiff[0] == true}">
+                {{getFuelType(baselineInputData.boilerInput.fuelType, baselineInputData.boilerInput.fuel)}}
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.fuel, mod.inputData.boilerInput.fuel, 'fuelDiff', 0)}">
+                {{getFuelType(mod.inputData.boilerInput.fuelType, mod.inputData.boilerInput.fuel)}}
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':combustionEfficiencyDiff[0] == true}">
+                Combustion Efficiency
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':combustionEfficiencyDiff[0] == true}">
+                {{baselineInputData.boilerInput.combustionEfficiency}}
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.combustionEfficiency, mod.inputData.boilerInput.combustionEfficiency, 'combustionEfficiencyDiff', 0)}">
+                {{mod.inputData.boilerInput.combustionEfficiency}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':steamTemperatureDiff[0] == true}">
+                Steam Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':steamTemperatureDiff[0] == true}">
+                {{baselineInputData.boilerInput.steamTemperature}}
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.steamTemperature, mod.inputData.boilerInput.steamTemperature, 'steamTemperatureDiff', 0)}">
+                {{mod.inputData.boilerInput.steamTemperature}}
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':blowdownRateDiff[0] == true}">
+                Blowdown Rate
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':blowdownRateDiff[0] == true}">
+                {{baselineInputData.boilerInput.blowdownRate}}
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.blowdownRate, mod.inputData.boilerInput.blowdownRate, 'blowdownRateDiff', 0)}">
+                {{mod.inputData.boilerInput.blowdownRate}}
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':blowdownFlashedDiff[0] == true}">
+                Is Blowdown Flashed?
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':blowdownFlashedDiff[0] == true}">
+                <span *ngIf="baselineInputData.boilerInput.blowdownFlashed == 0">No</span>
+                <span *ngIf="baselineInputData.boilerInput.blowdownFlashed == 1">Yes</span>
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.blowdownFlashed, mod.inputData.boilerInput.blowdownFlashed, 'blowdownFlashedDiff', 0)}">
+                <span *ngIf="mod.inputData.boilerInput.blowdownFlashed == 0">No</span>
+                <span *ngIf="mod.inputData.boilerInput.blowdownFlashed == 1">Yes</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':preheatMakeupWaterDiff[0] == true}">
+                Preheat Make-up Water?
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':preheatMakeupWaterDiff[0] == true}">
+                <span *ngIf="baselineInputData.boilerInput.preheatMakeupWater == 0">No</span>
+                <span *ngIf="baselineInputData.boilerInput.preheatMakeupWater == 1">Yes</span>
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.preheatMakeupWater, mod.inputData.boilerInput.preheatMakeupWater, 'preheatMakeupWaterDiff', 0)}">
+                <span *ngIf="mod.inputData.boilerInput.preheatMakeupWater == 0">No</span>
+                <span *ngIf="mod.inputData.boilerInput.preheatMakeupWater == 1">Yes</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':approachTemperatureDiff[0] == true}">
+                Approach Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':approachTemperatureDiff[0] == true}">
+                <span *ngIf="baselineInputData.boilerInput.approachTemperature">{{baselineInputData.boilerInput.approachTemperature}}</span>
+                <span *ngIf="!baselineInputData.boilerInput.approachTemperature">&mdash;</span>
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.approachTemperature, mod.inputData.boilerInput.approachTemperature, 'approachTemperatureDiff', 0)}">
+                <span *ngIf="mod.inputData.boilerInput.approachTemperature">{{mod.inputData.boilerInput.approachTemperature}}</span>
+                <span *ngIf="!mod.inputData.boilerInput.approachTemperature">&mdash;</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':deaeratorVentRateDiff[0] == true}">
+                Deaerator Vent Rate
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':deaeratorVentRateDiff[0] == true}">
+                {{baselineInputData.boilerInput.deaeratorVentRate}}
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.deaeratorVentRate, mod.inputData.boilerInput.deaeratorVentRate, 'deaeratorVentRateDiff', 0)}">
+                {{mod.inputData.boilerInput.deaeratorVentRate}}
+              </td>
+            </tr>
+
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':deaeratorPressureDiff[0] == true}">
+                Deaerator Pressure
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':deaeratorPressureDiff[0] == true}">
+                {{baselineInputData.boilerInput.deaeratorPressure}}
+              </td>
+              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.boilerInput.deaeratorPressure, mod.inputData.boilerInput.deaeratorPressure, 'deaeratorPressureDiff', 0)}">
+                {{mod.inputData.boilerInput.deaeratorPressure}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

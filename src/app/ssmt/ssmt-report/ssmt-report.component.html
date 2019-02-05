@@ -110,11 +110,11 @@
     <div class="results scroll-item" *ngIf="currentTab == 'reportGraphs'" [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-graphs></app-report-graphs>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'inputData'" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-input-summary></app-input-summary>
+    <div class="results scroll-item input-data" *ngIf="currentTab == 'inputData'" [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData"></app-input-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo'" [ngStyle]="{'height.px':reportContainerHeight}">
-     <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+      <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <!--   <div class="input-data results scroll-item print-height" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)"
           [ngStyle]="{'height.px':reportContainerHeight}">

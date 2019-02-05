@@ -1,0 +1,127 @@
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold" [ngStyle]="{'width.%': 100 /(numMods+2)}">
+        {{tableLabel}}
+      </td>
+      <td [ngStyle]="{'width.%': 100 /(numMods+2)}"></td>
+      <td *ngFor="let mod of modifications" [ngStyle]="{'width.%': 100 /(numMods+2)}"></td>
+    </tr>
+    <tr>
+      <td [ngClass]="{'indicate-report-field-different':pressureDiff[0] == true}">
+        Pressure
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':pressureDiff[0] == true}">
+        {{baseline.pressure}}
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.pressure, mod.pressure, 'pressureDiff', 0)}">
+        {{mod.pressure}}
+      </td>
+    </tr>
+
+    <tr>
+      <td [ngClass]="{'indicate-report-field-different':processSteamUsageDiff[0] == true}">
+        Process Steam Usage
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':processSteamUsageDiff[0] == true}">
+        {{baseline.processSteamUsage}}
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.processSteamUsage, mod.processSteamUsage, 'processSteamUsageDiff', 0)}">
+        {{mod.processSteamUsage}}
+      </td>
+    </tr>
+
+    <tr>
+      <td [ngClass]="{'indicate-report-field-different':condensationRecoveryRateDiff[0] == true}">
+        Condensation Recovery Rate
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':condensationRecoveryRateDiff[0] == true}">
+        {{baseline.condensationRecoveryRate}}
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.condensationRecoveryRate, mod.condensationRecoveryRate, 'condensationRecoveryRateDiff', 0)}">
+        {{mod.condensationRecoveryRate}}
+      </td>
+    </tr>
+    <tr>
+      <td [ngClass]="{'indicate-report-field-different':heatLossTempDiff[0] == true}">
+        Heat Loss
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':heatLossTempDiff[0] == true}">
+        {{baseline.heatLoss}}
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.heatLoss, mod.heatLoss, 'heatLossTempDiff', 0)}">
+        {{mod.heatLoss}}
+      </td>
+    </tr>
+
+    <tr *ngIf="headerLevel == 'high'">
+      <td [ngClass]="{'indicate-report-field-different':flashCondensateDiff[0] == true}">
+        Flash Condensate Return?
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':flashCondensateDiff[0] == true}">
+        <span *ngIf="baseline.flashCondensateReturn == 0">No</span>
+        <span *ngIf="baseline.flashCondensateReturn == 1">Yes</span>
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.flashCondensateReturn, mod.flashCondensateReturn, 'flashCondensateDiff', 0)}">
+        <span *ngIf="mod.flashCondensateReturn == 0">No</span>
+        <span *ngIf="mod.flashCondensateReturn == 1">Yes</span>
+      </td>
+    </tr>
+
+    <tr *ngIf="headerLevel == 'high'">
+      <td [ngClass]="{'indicate-report-field-different':condensateReturnTempDiff[0] == true}">
+        Condensate Return Temperature
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':condensateReturnTempDiff[0] == true}">
+        <span *ngIf="baseline.condensateReturnTemperature">{{baseline.condensateReturnTemperature}}</span>
+        <span *ngIf="!baseline.condensateReturnTemperature">&mdash;</span>
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.condensateReturnTemperature, mod.condensateReturnTemperature, 'condensateReturnTempDiff', 0)}">
+        <span *ngIf="mod.condensateReturnTemperature">{{mod.condensateReturnTemperature}}</span>
+        <span *ngIf="!mod.condensateReturnTemperature">&mdash;</span>
+      </td>
+    </tr>
+
+    <tr *ngIf="headerLevel != 'high'">
+      <td [ngClass]="{'indicate-report-field-different':flashCondensateDiff[0] == true}">
+        Flash Condensate Into Header?
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':flashCondensateDiff[0] == true}">
+        <span *ngIf="baseline.flashCondensateIntoHeader == 0">No</span>
+        <span *ngIf="baseline.flashCondensateIntoHeader == 1">Yes</span>
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.flashCondensateIntoHeader, mod.flashCondensateIntoHeader, 'flashCondensateDiff', 0)}">
+        <span *ngIf="mod.flashCondensateIntoHeader == 0">No</span>
+        <span *ngIf="mod.flashCondensateIntoHeader == 1">Yes</span>
+      </td>
+    </tr>
+
+    <tr *ngIf="headerLevel != 'high'">
+      <td [ngClass]="{'indicate-report-field-different':desuperheatSteamDiff[0] == true}">
+        Desuperheat Steam Into Next Highest?
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':desuperheatSteamDiff[0] == true}">
+        <span *ngIf="baseline.desuperheatSteamIntoNextHighest == 0">No</span>
+        <span *ngIf="baseline.desuperheatSteamIntoNextHighest == 1">Yes</span>
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.desuperheatSteamIntoNextHighest, mod.desuperheatSteamIntoNextHighest, 'desuperheatSteamDiff', 0)}">
+        <span *ngIf="mod.desuperheatSteamIntoNextHighest == 0">No</span>
+        <span *ngIf="mod.desuperheatSteamIntoNextHighest == 1">Yes</span>
+      </td>
+    </tr>
+
+    <tr *ngIf="headerLevel != 'high'">
+      <td [ngClass]="{'indicate-report-field-different':desuperheatSteamTempDiff[0] == true}">
+        Desuperheat Steam Temperature
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':desuperheatSteamTempDiff[0] == true}">
+        <span *ngIf="baseline.desuperheatSteamTemperature">{{baseline.desuperheatSteamTemperature}}</span>
+        <span *ngIf="!baseline.desuperheatSteamTemperature">&mdash;</span>
+      </td>
+      <td *ngFor="let mod of modifications" [ngClass]="{'indicate-report-field-different': checkDiff(baseline.desuperheatSteamTemperature, mod.desuperheatSteamTemperature, 'desuperheatSteamTempDiff', 0)}">
+        <span *ngIf="mod.desuperheatSteamTemperature">{{mod.desuperheatSteamTemperature}}</span>
+        <span *ngIf="!mod.desuperheatSteamTemperature">&mdash;</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
