@@ -103,10 +103,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   save() {
-    //this.assessment.psat = this.psat;
-    if (!this.psat.modifications[this.modificationIndex].psat.name) {
-      this.psat.modifications[this.modificationIndex].psat.name = 'Opportunities Modification';
-    }
     this.saved.emit(true);
   }
   setTab(str: string) {
