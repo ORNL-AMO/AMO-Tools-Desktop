@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 
 @Component({
@@ -15,16 +15,15 @@ export class HeaderSummaryComponent implements OnInit {
   collapse: boolean = true;
   numMods: number = 0;
 
-  constructor(private cd: ChangeDetectorRef) { }
+  constructor() { }
 
   ngOnInit() {
-
-  }
-
-  toggleCollapse() {
     if (this.modificationInputData) {
       this.numMods = this.modificationInputData.length;
     }
+  }
+
+  toggleCollapse() {
     this.collapse = !this.collapse;
   }
 

@@ -14,6 +14,7 @@ import { TurbineSummaryComponent } from './input-summary/turbine-summary/turbine
 import { HeaderSummaryComponent } from './input-summary/header-summary/header-summary.component';
 import { BoilerSummaryComponent } from './input-summary/boiler-summary/boiler-summary.component';
 import { HeaderInputTableComponent } from './input-summary/header-summary/header-input-table/header-input-table.component';
+import { TurbineInputTableComponent } from './input-summary/turbine-summary/turbine-input-table/turbine-input-table.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { HeaderInputTableComponent } from './input-summary/header-summary/header
     TurbineSummaryComponent,
     HeaderSummaryComponent,
     BoilerSummaryComponent,
-    HeaderInputTableComponent
+    HeaderInputTableComponent,
+    TurbineInputTableComponent
   ],
   exports: [
     SsmtReportComponent
