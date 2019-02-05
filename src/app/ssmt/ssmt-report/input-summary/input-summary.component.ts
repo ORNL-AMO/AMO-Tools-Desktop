@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-input-summary',
@@ -6,6 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./input-summary.component.css']
 })
 export class InputSummaryComponent implements OnInit {
+  @Input()
+  baselineInputData: SSMTInputs;
+  @Input()
+  modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  @Input()
+  settings: Settings;
 
   constructor() { }
 

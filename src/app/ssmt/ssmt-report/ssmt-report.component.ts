@@ -28,22 +28,26 @@ export class SsmtReportComponent implements OnInit {
 
   baselineOutput: SSMTOutput;
   baselineInputData: SSMTInputs;
-  modificationOutputs: Array<{name: string, outputData: SSMTOutput}>;
+  modificationOutputs: Array<{ name: string, outputData: SSMTOutput }>;
+  modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
   constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
     this.calculateModelService.initResults();
     this.calculateModelService.initData(this.assessment.ssmt, this.settings, true);
-    let resultData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
+    let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
     this.baselineOutput = resultData.outputData;
     this.baselineInputData = resultData.inputData;
-    this.modificationOutputs = new Array<{name: string, outputData: SSMTOutput}>();
-    if(this.assessment.ssmt.modifications){
+    this.modificationOutputs = new Array<{ name: string, outputData: SSMTOutput }>();
+    this.modificationInputData = new Array<{ name: string, inputData: SSMTInputs }>();
+    if (this.assessment.ssmt.modifications) {
       this.assessment.ssmt.modifications.forEach(modification => {
         this.calculateModelService.initResults();
         this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
-        let resultData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
-        this.modificationOutputs.push({name: modification.ssmt.name, outputData: resultData.outputData});
+        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
+        this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
+        this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
+
       })
 
 

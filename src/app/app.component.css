@@ -362,6 +362,11 @@ select.form-control:not([size]):not([multiple]) {
   color: #007bff  !important;
 }
 
+.ssmt .indicate-report-field-different {
+  font-weight: bold;
+  color: #F39C12  !important;
+}
+
 
 .input-error{
   color: red;
