@@ -69,7 +69,7 @@ export class SettingsService {
       'steamSpecificEntropyMeasurement': [settings.steamSpecificEntropyMeasurement],
       'steamSpecificVolumeMeasurement': [settings.steamSpecificVolumeMeasurement],
       'steamMassFlowMeasurement': [settings.steamMassFlowMeasurement],
-      'steamPowerMeasurement': [settings.steamPowerMeasurement || 'MMBtu'],
+      'steamPowerMeasurement': [settings.steamPowerMeasurement || 'kW'],
       'steamVolumeMeasurement': [settings.steamVolumeMeasurement || 'gal'],
       'steamVolumeFlowMeasurement': [settings.steamVolumeFlowMeasurement || 'gpm'],
       'steamVacuumPressure': [settings.steamVacuumPressure || 'psia'],
@@ -189,7 +189,7 @@ export class SettingsService {
       steamSpecificEntropyMeasurement: settings.steamSpecificEntropyMeasurement,
       steamSpecificVolumeMeasurement: settings.steamSpecificVolumeMeasurement,
       steamMassFlowMeasurement: settings.steamMassFlowMeasurement,
-      steamPowerMeasurement: settings.steamPowerMeasurement || 'MMBtu',
+      steamPowerMeasurement: settings.steamPowerMeasurement || 'kW',
       steamVolumeMeasurement: settings.steamVolumeMeasurement || 'gal',
       steamVolumeFlowMeasurement: settings.steamVolumeFlowMeasurement || 'gpm',
       steamVacuumPressure: settings.steamVacuumPressure || 'psia',
@@ -263,7 +263,7 @@ export class SettingsService {
         fanSpecificHeatGas: 'btulbF',
         fanTemperatureMeasurement: 'F',
         steamEnergyMeasurement: 'MMBtu',
-        steamPowerMeasurement: 'MMBtu'
+        steamPowerMeasurement: 'kW'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -298,7 +298,7 @@ export class SettingsService {
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
         steamEnergyMeasurement: 'kWh',
-        steamPowerMeasurement: 'MJ'
+        steamPowerMeasurement: 'MJh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

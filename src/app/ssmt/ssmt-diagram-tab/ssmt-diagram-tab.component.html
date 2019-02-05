@@ -1,0 +1,88 @@
+<div class="select-scenario-box">
+  <div class="d-flex flex-column">
+    <div class="d-flex selected-option p-1" (click)="toggleShowOptions()" *ngIf="!showOptions">Selected Scenario:
+      {{selectedSSMT.name}}</div>
+    <span *ngIf="showOptions">
+      <div class="d-flex p-1">
+        Select System Model:
+      </div>
+      <div *ngFor="let ssmtOption of ssmtOptions" (click)="setOption(ssmtOption)" class="d-flex scenario-option p-1 align-content-center">
+        <span class="fa fa-caret-right"> {{ssmtOption.name}}</span>
+      </div>
+    </span>
+  </div>
+</div>
+<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram">
+  <div class="panel-column scroll-item diagram-container" [ngStyle]="{'height.px': containerHeight}" *ngIf="outputData">
+    <app-ssmt-diagram [settings]="settings" [inputData]="inputData" [outputData]="outputData" (emitTableSelected)="selectTable($event)"
+      (emitHoverChange)="setHover($event)"></app-ssmt-diagram>
+  </div>
+  <div class="d-flex flex-column diagram-help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="outputData">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+          <div>Results</div>
+        </a>
+      </div>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center mr-2 ml-2">
+      <div class="pt-4 result-tables" *ngIf="tabSelect == 'results'">
+        <div class="d-flex w-100 pb-2 justify-content-center" *ngIf="selectedTable != 'default'">
+          <a class="click-link small" (click)="selectTable('default')">Back to General Summary</a>
+        </div>
+        <app-diagram-summary-table *ngIf="selectedTable == 'default'" [inputData]="inputData" [powerGenerated]="outputData.powerGenerated"
+          [boiler]="outputData.boilerOutput" [annualMakeupWaterFlow]="outputData.annualMakeupWaterFlow"
+          [makeupWaterCost]="outputData.makeupWaterCost" [boilerFuelCost]="outputData.boilerFuelCost"
+          [powerGenerationCost]="outputData.powerGenerationCost" [totalOperatingCost]="outputData.totalOperatingCost"
+          [boilerFuelUsage]="outputData.boilerFuelUsage" [settings]="settings"></app-diagram-summary-table>
+        <div class="d-flex w-100 pb-2 justify-content-center" *ngIf="selectedTable == 'default'">
+          <a class="click-link small" (click)="selectTable('cost')">View More Cost Details</a>
+        </div>
+        <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData" [settings]="settings"></app-cost-table>
+        <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="outputData.boilerOutput" [inputData]="inputData"
+          [settings]="settings"></app-boiler-table>
+        <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
+          [turbine]="outputData.highToLowPressureTurbine" [settings]="settings"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'" [turbineName]="'High to Medium Pressure'"
+          [turbine]="outputData.highPressureToMediumPressureTurbine" [settings]="settings"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'" [turbineName]="'Medium to Low Pressure'"
+          [turbine]="outputData.mediumToLowPressureTurbine" [settings]="settings"></app-turbine-table>
+        <app-turbine-table *ngIf="selectedTable == 'condensingTurbine'" [turbineName]="'Condensing'" [turbine]="outputData.condensingTurbine"
+          [settings]="settings"></app-turbine-table>
+        <app-flash-tank-table *ngIf="selectedTable == 'highPressureFlashTank'" [flashTank]="outputData.highPressureFlashTank"
+          [flashTankType]="'High'" [settings]="settings"></app-flash-tank-table>
+        <app-flash-tank-table *ngIf="selectedTable == 'mediumPressureFlashTank'" [flashTank]="outputData.mediumPressureFlashTank"
+          [flashTankType]="'Medium'" [settings]="settings"></app-flash-tank-table>
+        <app-flash-tank-table *ngIf="selectedTable == 'condensateFlashTank'" [flashTank]="outputData.condensateFlashTank"
+          [flashTankType]="'Condensate'" [settings]="settings"></app-flash-tank-table>
+        <app-flash-tank-table *ngIf="selectedTable == 'blowdownFlashTank'" [flashTank]="outputData.blowdownFlashTank"
+          [flashTankType]="'Blowdown'" [settings]="settings"></app-flash-tank-table>
+        <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prvType]="'highToMediumPressurePRV'"
+          [settings]="settings" [inputData]="inputData" [prv]="outputData.highToMediumPressurePRV"></app-prv-table>
+        <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'" [settings]="settings"
+          [inputData]="inputData" [prv]="outputData.lowPressurePRV"></app-prv-table>
+        <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="outputData.deaeratorOutput" [settings]="settings"></app-deaerator-table>
+      </div>
+      <div *ngIf="tabSelect == 'help'">
+        <app-diagram-help></app-diagram-help>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="d-flex w-100 h-100" *ngIf="dataCalculated == false && calculationProcessSucess == undefined">
+    Calculating.....
+  </div>
+  <div class="d-flex w-100 h-100 align-items-center justify-content-center" *ngIf="dataCalculated == false && calculationProcessSucess == false">
+    <div class="card p-4">
+      <div class="card-block">
+        <h4>Oops! Something went wrong :...( Please send your data to Mark and he'll figure out what he messed up! If
+          you
+          know there is vented low pressure steam, that's the reason it didn't work. Still a work in progress...</h4>
+      </div>
+    </div>
+  </div> -->
+</div>

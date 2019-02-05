@@ -1,30 +1,9 @@
 
 .boiler{
- width: 55%;
+    width: 55%;
 }
 .hover-equipment-table{
     width: 45%;
-}
-
- /* .deaerator{
-    width: 40%;
-} */
-
-
-.diagram-container{
-    width: 70% !important;
-    font-size: small;
-    min-width: 800px;
-    overflow-x: auto;
-}
-
-
-.diagram-help-panel{
-    width: 30%;
-}
-
-.boiler-table-height{
-    height: 160px;
 }
 
 .deaerator-margin{

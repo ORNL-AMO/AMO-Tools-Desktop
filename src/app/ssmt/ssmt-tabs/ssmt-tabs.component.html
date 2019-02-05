@@ -67,3 +67,36 @@
 <nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions' && mainTab =='assessment' || stepTab == 'steam-model' && mainTab == 'system-setup'">
   <app-modify-conditions-tabs [settings]="settings"></app-modify-conditions-tabs>
 </nav>
+
+<ul class="tabs subtabs ssmt" *ngIf="mainTab == 'calculators'">
+  <li [ngClass]="{'active': calcTab == 'boiler'}">
+    <a (click)="changeCalcTab('boiler')">Boiler</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'deaerator'}">
+    <a (click)="changeCalcTab('deaerator')">Deaerator</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'flash-tank'}">
+    <a (click)="changeCalcTab('flash-tank')">Flash Tank</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'header'}">
+    <a (click)="changeCalcTab('header')">Header</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'heat-loss'}">
+    <a (click)="changeCalcTab('heat-loss')">Heat Loss</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'prv'}">
+    <a (click)="changeCalcTab('prv')">Pressure Release Valve</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'saturated-properties'}">
+    <a (click)="changeCalcTab('saturated-properties')">Saturated Properties</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'stack-loss'}">
+    <a (click)="changeCalcTab('stack-loss')">Stack Loss</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'steam-properties'}">
+    <a (click)="changeCalcTab('steam-properties')">Steam Properties</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'turbine'}">
+    <a (click)="changeCalcTab('turbine')">Turbine</a>
+  </li>
+</ul>

@@ -147,14 +147,21 @@ export class SteamSettingsComponent implements OnInit {
       this.steamEnergyMeasurements.push(tmpPossibility);
     })
 
+    tmpList = [
+      'hp',
+      'btus',
+      'GW',
+      'kJh',
+      'kcals',
+      'kW',
+      'MJh'
+    ]
+
     tmpList.forEach(unit => {
+
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
-      if (unit == 'kWh') {
-        tmpPossibility.display = 'Kilowatts';
-        tmpPossibility.unit = 'kW';
       }
       this.steamPowerMeasurements.push(tmpPossibility);
     })

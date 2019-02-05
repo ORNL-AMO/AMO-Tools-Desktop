@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 import { CalculateModelService } from '../../ssmt-calculations/calculate-model.service';
 import { Settings } from '../../../shared/models/settings';
+import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-prv-table',
@@ -13,18 +14,19 @@ export class PrvTableComponent implements OnInit {
   prvType:string;
   @Input()
   settings: Settings;
-  
+  @Input()
   prv: PrvOutput;
+  @Input()
+  inputData: SSMTInputs;
+
   prvLabel: string;
-  constructor(private calculateModelService: CalculateModelService) { }
+  constructor() { }
 
   ngOnInit() {
     if(this.prvType == 'highToMediumPressurePRV'){
-      this.prv = this.calculateModelService.highToMediumPressurePRV;
       this.prvLabel = 'High to Medium';
     }else if(this.prvType == 'lowPressurePRV'){
-      this.prv = this.calculateModelService.lowPressurePRV;
-      if(this.calculateModelService.inputData.headerInput.numberOfHeaders == 3){
+      if(this.inputData.headerInput.numberOfHeaders == 3){
         this.prvLabel = 'Medium to Low';
       }else{
         this.prvLabel = 'High to Low';

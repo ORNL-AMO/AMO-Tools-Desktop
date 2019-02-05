@@ -27,7 +27,7 @@ export class PressureTurbineFormComponent implements OnInit {
   inSetup: boolean;
   @Input()
   idString: string;
-  
+
   turbineTypeOptions: Array<Quantity>;
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private turbineService: TurbineService) {
   }
@@ -57,6 +57,24 @@ export class PressureTurbineFormComponent implements OnInit {
     this.turbineForm.controls.operationValue1.setValidators(tmpValidators.operationValue1Validators);
     this.turbineForm.controls.operationValue1.reset(this.turbineForm.controls.operationValue1.value);
     this.turbineForm.controls.operationValue1.markAsDirty();
+    this.turbineForm.controls.operationValue2.setValidators(tmpValidators.operationValue2Validators);
+    this.turbineForm.controls.operationValue2.reset(this.turbineForm.controls.operationValue2.value);
+    this.turbineForm.controls.operationValue2.markAsDirty();
+    this.save();
+  }
+
+  changeOperation1Validators() {
+    let tmpObj: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.turbineForm);
+    let tmpValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.turbineService.getPressureOperationValueRanges(tmpObj);
+    this.turbineForm.controls.operationValue1.setValidators(tmpValidators.operationValue1Validators);
+    this.turbineForm.controls.operationValue1.reset(this.turbineForm.controls.operationValue1.value);
+    this.turbineForm.controls.operationValue1.markAsDirty();
+    this.save();
+  }
+
+  changeOperation2Validators() {
+    let tmpObj: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.turbineForm);
+    let tmpValidators: { operationValue1Validators: Array<ValidatorFn>, operationValue2Validators: Array<ValidatorFn> } = this.turbineService.getPressureOperationValueRanges(tmpObj);
     this.turbineForm.controls.operationValue2.setValidators(tmpValidators.operationValue2Validators);
     this.turbineForm.controls.operationValue2.reset(this.turbineForm.controls.operationValue2.value);
     this.turbineForm.controls.operationValue2.markAsDirty();

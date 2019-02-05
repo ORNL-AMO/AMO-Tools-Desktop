@@ -15,8 +15,8 @@
       <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true"
         [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
         [isBaseline]="true"></app-header>
-      <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput" [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>
+      <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput" [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders"
+        [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>
     </div>
     <div class="w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [settings]="settings" [inSetup]="true"></app-help-panel>
@@ -36,16 +36,25 @@
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
-      <app-ssmt-report></app-ssmt-report>
+      <app-ssmt-report [assessment]="assessment" [settings]="settings" [containerHeight]="containerHeight"></app-ssmt-report>
     </div>
   </div>
   <!--diagram-->
   <div class="tab-content" [ngStyle]="{'height.px': containerHeight}" *ngIf="mainTab == 'diagram'">
-    <app-ssmt-diagram [settings]="settings" [ssmt]="_ssmt" [containerHeight]="containerHeight"></app-ssmt-diagram>
+    <app-ssmt-diagram-tab [settings]="settings" [ssmt]="_ssmt" [containerHeight]="containerHeight"></app-ssmt-diagram-tab>
   </div>
   <!--calculators-->
-  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-
+  <div *ngIf="mainTab == 'calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
+    <app-steam-properties-calculator *ngIf="calcTab == 'steam-properties'" [settings]="settings"></app-steam-properties-calculator>
+    <app-saturated-properties-calculator *ngIf="calcTab == 'saturated-properties'" [settings]="settings"></app-saturated-properties-calculator>
+    <app-stack-loss-calculator *ngIf="calcTab == 'stack-loss'" [settings]="settings"></app-stack-loss-calculator>
+    <app-heat-loss-calculator *ngIf="calcTab == 'heat-loss'" [settings]="settings"></app-heat-loss-calculator>
+    <app-boiler-calculator *ngIf="calcTab == 'boiler'" [settings]="settings"></app-boiler-calculator>
+    <app-flash-tank-calculator *ngIf="calcTab == 'flash-tank'" [settings]="settings"></app-flash-tank-calculator>
+    <app-prv-calculator *ngIf="calcTab == 'prv'" [settings]="settings"></app-prv-calculator>
+    <app-deaerator-calculator *ngIf="calcTab == 'deaerator'" [settings]="settings"></app-deaerator-calculator>
+    <app-header-calculator *ngIf="calcTab == 'header'" [settings]="settings"></app-header-calculator>
+    <app-turbine-calculator *ngIf="calcTab == 'turbine'" [settings]="settings"></app-turbine-calculator>
   </div>
   <!--sankey-->
   <div *ngIf="mainTab == 'sankey'" class="d-flex flex-column scroll-item w-100" [ngStyle]="{'height.px': containerHeight}">
@@ -53,6 +62,8 @@
       <app-ssmt-sankey></app-ssmt-sankey>
     </div>
   </div>
+
+
 
   <div #footer id="ssmtFooter" class="footer hide-print" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
     <div class="pull-left" *ngIf="stepTab != 'system-basics'">

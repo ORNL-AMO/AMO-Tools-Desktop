@@ -1,0 +1,45 @@
+  
+   .diagram-container{
+       width: 70% !important;
+       font-size: small;
+       min-width: 800px;
+       overflow-x: auto;
+   }
+   
+   
+   .diagram-help-panel{
+       width: 30%;
+   }
+   
+   .boiler-table-height{
+       height: 160px;
+   }
+   
+   .deaerator-margin{
+       margin-left: -1.5rem;
+   }
+   
+   .deaerator-condensate-padding{
+       padding-left: 5rem;
+   }
+   
+   .inner-system-padding{
+       padding-left: 3rem;
+   }
+
+
+.select-scenario-box{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #F39C12;
+}
+
+.scenario-option:hover, .selected-option:hover{
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.scenario-option{
+    border-top: solid;
+}

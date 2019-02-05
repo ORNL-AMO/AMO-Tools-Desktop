@@ -8,7 +8,7 @@ import { Settings } from '../../../shared/models/settings';
 import { HeaderOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-header-calculator',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })

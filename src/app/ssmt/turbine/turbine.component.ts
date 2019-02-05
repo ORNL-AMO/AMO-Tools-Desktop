@@ -93,13 +93,11 @@ export class TurbineComponent implements OnInit {
     let tmpPressureTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.highToMediumTurbineForm);
     this.turbineInput.highToMediumTurbine = tmpPressureTurbine;
     this.emitSave.emit(this.turbineInput)
-
   }
 
   saveMediumLowPressureTurbine() {
     let tmpPressureTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.mediumToLowTurbineForm);
     this.turbineInput.mediumToLowTurbine = tmpPressureTurbine;
     this.emitSave.emit(this.turbineInput)
-
   }
 }

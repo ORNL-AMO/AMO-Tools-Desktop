@@ -1,92 +1,85 @@
-import { CondensingTurbine } from "./ssmt";
-
 export interface SSMTOutput {
-  //1 always
-  operationsOutput: SSMTOperationsOutput,
-  boilerOutput: BoilerOutput,
-  deaeratorOutput: DeaeratorOutput,
-  feedwater: SteamPropertiesOutput,
-  highPressureHeader: HeaderOutputObj,
-  highPressureHeaderSteam: SteamPropertiesOutput,
-  blowdown: SteamPropertiesOutput,
-  condensate: SteamPropertiesOutput,
-  makeupWater: SteamPropertiesOutput,
-  makeupWaterAndCondensate: SteamPropertiesOutput,
-  highPressureProcessSteamUsage: SteamPropertiesOutput,
-  //Optional
-  //0-4
-  condensingTurbine?: TurbineOutput,
-  highPressureToMediumPressureTurbine?: TurbineOutput,
-  highPressureToLowPressureTurbine?: TurbineOutput,
-  mediumPressureToLowPressureTurbine?: TurbineOutput,
-  //additional headers
-  mediumPressureHeader?: HeaderOutputObj,
-  mediumPressureHeaderSteam?: SteamPropertiesOutput,
-  lowPressureHeaderSteam?: SteamPropertiesOutput,
-  lowPressureHeader?: HeaderOutputObj,
-  //0-2 PRV
-  highPressureToMediumPressurePrv?: PrvOutput,
-  mediumPressureToLowPressurePrv?: PrvOutput,
-  //0-4 flash tanks
-  blowdownFlashTank?: FlashTankOutput,
-  condensateFlashTank?: FlashTankOutput,
-  highPressureCondensateFlashTank?: FlashTankOutput,
-  mediumPressureCondensateFlashTank?: FlashTankOutput,
-  //TODO: Heat Exchange
-  //heatExchange?: HeatExchange
-  //vented steam
-  ventedSteam?: SteamPropertiesOutput
+  boilerOutput: BoilerOutput;
+
+  highPressureHeader: HeaderOutputObj;
+  highPressureSteamHeatLoss: HeatLossOutput;
+
+  lowPressurePRV: PrvOutput;
+  highToMediumPressurePRV: PrvOutput;
+
+  highToLowPressureTurbine: TurbineOutput;
+  highPressureToMediumPressureTurbine: TurbineOutput;
+  highPressureCondensateFlashTank: FlashTankOutput;
+
+  lowPressureHeader: HeaderOutputObj;
+  lowPressureSteamHeatLoss: HeatLossOutput;
+
+  mediumToLowPressureTurbine: TurbineOutput;
+  mediumPressureCondensateFlashTank: FlashTankOutput;
+
+  mediumPressureHeader: HeaderOutputObj;
+  mediumPressureSteamHeatLoss: HeatLossOutput;
+
+  blowdownFlashTank: FlashTankOutput;
+
+  highPressureCondensate: SteamPropertiesOutput;
+  lowPressureCondensate: SteamPropertiesOutput;
+  mediumPressureCondensate: SteamPropertiesOutput;
+  combinedCondensate: HeaderOutputObj;
+  returnCondensate: SteamPropertiesOutput;
+  condensateFlashTank: FlashTankOutput;
+
+  makeupWater: SteamPropertiesOutput;
+  makeupWaterAndCondensateHeader: HeaderOutputObj;
+
+  condensingTurbine: TurbineOutput;
+  deaeratorOutput: DeaeratorOutput;
+
+  highPressureProcessUsage: ProcessSteamUsage;
+  mediumPressureProcessUsage: ProcessSteamUsage;
+  lowPressureProcessUsage: ProcessSteamUsage;
+
+  powerGenerated: number;
+  boilerFuelCost: number;
+  makeupWaterCost: number;
+  totalOperatingCost: number;
+  totalEnergyUse: number;
+  powerGenerationCost: number;
+  boilerFuelUsage: number;
+  marginalHPCost: number;
+  marginalMPCost: number;
+  marginalLPCost: number;
 
 
-  //additions may not be needed for results but used for calculations
-  steamToDeaerator: number,
-  lowPressurePRVneed: number,
-  lowPressureSteamVent: number
+  makeupWaterVolumeFlow: number;
+  annualMakeupWaterFlow: number;
 
-  mediumPressureSteamNeed: number,
-  lowPressureSteamNeed: number,
-  blowdownFlashLiquid: SteamPropertiesOutput,
-  blowdownGasToLowPressure: SteamPropertiesOutput,
-  condensateReturnVent: SteamPropertiesOutput,
-  inititialReturnCondensate: SteamPropertiesOutput,
-  initialHighPressureCondensate: SteamPropertiesOutput,
-  highPressureSaturatedLiquidEnthalpy: number,
-  intitialMediumPressureCondensate: SteamPropertiesOutput,
-  mediumPressureSaturatedLiquidEnthalpy: number,
-  initialLowPressureCondensate: SteamPropertiesOutput,
-  lowPressureSaturatedLiquidEnthalpy: number,
-  highPressureToLowPressureTurbineFlow: number;
-  highPressureToMediumPressureTurbineFlow: number;
-  mediumPressureToLowPressureTurbineModelFlow: number;
-  mediumPressureSteamRemaining: number;
-  turbineCondensateSteamCooled: SteamPropertiesOutput,
-  siteTotalPowerCost: number,
+  ventedLowPressureSteam: SteamPropertiesOutput;
+  heatExchangerOutput: HeatExchangerOutput;
 
-  finalHighPressureCondensate: SteamPropertiesOutput,
-  finalMediumPressureCondensate: SteamPropertiesOutput,
-  finalLowPressureCondensate: SteamPropertiesOutput,
-  highPressureSteamGasToMediumPressure: SteamPropertiesOutput,
-  mediumPressureSteamGasToLowPressure: SteamPropertiesOutput
+  sitePowerImport: number;
+  sitePowerDemand: number;
+
 }
 
-export interface SSMTOperationsOutput {
-  powerBalanceGeneration: number,
-  powerBalanceDemand: number,
-  powerBalanceImport: number,
-  powerBalanceUnitCost: number,
-  powerBalanceUnitCostPerYear: number,
-  fuelBalanceBoiler: number,
-  fuelBalanceUnitCost: number,
-  fuelBalanceUnitCostPerYear: number,
-  makeupWaterFlow: number,
-  makeupWaterFlowRate: number,
-  makeupWaterUnitCost: number,
-  makeupWaterUnitCostPerYear: number,
-  totalOperatingCostPerYear: number,
-  highPressureCost: number,
-  mediumPressureCost?: number,
-  lowPressureCost?: number
-}
+//export interface SSMTOperationsOutput {
+//   powerBalanceGeneration: number,
+//   powerBalanceDemand: number,
+//   powerBalanceImport: number,
+//   powerBalanceUnitCost: number,
+//   powerBalanceUnitCostPerYear: number,
+//   fuelBalanceBoiler: number,
+//   fuelBalanceUnitCost: number,
+//   fuelBalanceUnitCostPerYear: number,
+//   makeupWaterFlow: number,
+//   makeupWaterFlowRate: number,
+//   makeupWaterUnitCost: number,
+//   makeupWaterUnitCostPerYear: number,
+//   totalOperatingCostPerYear: number,
+//   highPressureCost: number,
+//   mediumPressureCost?: number,
+//   lowPressureCost?: number
+// }
 
 export interface BoilerOutput {
   steamPressure: number;
@@ -323,42 +316,46 @@ export interface ProcessSteamUsage {
   temperature: number;
   energyFlow: number;
   massFlow: number;
-  processUsage:number;
+  processUsage: number;
 }
 
-//TODO: HeatExchange...
+export interface SSMTLosses {
+  stack: number;
+  blowdown: number;
+  highPressureHeader: number;
+  mediumPressureHeader: number;
+  lowPressureHeader: number;
+  condensingTurbineEfficiencyLoss: number;
+  highToMediumTurbineEfficiencyLoss: number;
+  highToLowTurbineEfficiencyLoss: number;
+  mediumToLowTurbineEfficiencyLoss: number;
+  condensingLosses: number;
+  condensateLosses: number;
+  lowPressureVentLoss: number;
+  condensateFlashTankLoss: number;
+  deaeratorVentLoss: number;
+  highPressureProcessLoss: number;
+  mediumPressureProcessLoss: number;
+  lowPressureProcessLoss: number;
+}
 
-export const boiler: DeaeratorOutput = {
-  "feedwaterEnergyFlow": 0,
-  "feedwaterMassFlow": 0,
-  "feedwaterPressure": 0,
-  "feedwaterQuality": 0,
-  "feedwaterSpecificEnthalpy": 0,
-  "feedwaterSpecificEntropy": 0,
-  "feedwaterVolume": 0,
-  "feedwaterTemperature": 0,
-  "inletSteamEnergyFlow": 0,
-  "inletSteamMassFlow": 0,
-  "inletSteamPressure": 0,
-  "inletSteamQuality": 0,
-  "inletSteamSpecificEnthalpy": 0,
-  "inletSteamSpecificEntropy": 0,
-  "inletSteamVolume": 0,
-  "inletSteamTemperature": 0,
-  "inletWaterEnergyFlow": 0,
-  "inletWaterMassFlow": 0,
-  "inletWaterPressure": 0,
-  "inletWaterQuality": 0,
-  "inletWaterSpecificEnthalpy": 0,
-  "inletWaterSpecificEntropy": 0,
-  "inletWaterVolume": 0,
-  "inletWaterTemperature": 0,
-  "ventedSteamEnergyFlow": 0,
-  "ventedSteamMassFlow": 0,
-  "ventedSteamPressure": 0,
-  "ventedSteamQuality": 0,
-  "ventedSteamSpecificEnthalpy": 0,
-  "ventedSteamSpecificEntropy": 0,
-  "ventedSteamVolume": 0,
-  "ventedSteamTemperature": 0
+export interface HeatExchangerOutput {
+  hotOutletMassFlow: number;
+  hotOutletEnergyFlow: number;
+  hotOutletTemperature: number;
+  hotOutletPressure: number;
+  hotOutletQuality: number;
+  hotOutletSpecificVolume: number;
+  hotOutletDensity: number;
+  hotOutletSpecificEnthalpy: number;
+  hotOutletSpecificEntropy: number;
+  coldOutletMassFlow: number;
+  coldOutletEnergyFlow: number;
+  coldOutletTemperature: number;
+  coldOutletPressure: number;
+  coldOutletQuality: number;
+  coldOutletSpecificVolume: number;
+  coldOutletDensity: number;
+  coldOutletSpecificEnthalpy: number;
+  coldOutletSpecificEntropy: number;
 }

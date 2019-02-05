@@ -28,9 +28,20 @@ import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pr
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
 import { SharedModule } from '../shared/shared.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
-
-import { SsmtReportComponent } from './ssmt-report/ssmt-report.component';
-import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
+import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
+import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
+import { CalculateLossesService } from './ssmt-calculations/calculate-losses.service';
+import { SsmtDiagramTabModule } from './ssmt-diagram-tab/ssmt-diagram-tab.module';
+import { SteamPropertiesModule } from '../calculator/steam/steam-properties/steam-properties.module';
+import { SaturatedPropertiesModule } from '../calculator/steam/saturated-properties/saturated-properties.module';
+import { StackLossModule } from '../calculator/steam/stack-loss/stack-loss.module';
+import { HeatLossModule } from '../calculator/steam/heat-loss/heat-loss.module';
+import { BoilerModule } from '../calculator/steam/boiler/boiler.module';
+import { FlashTankModule } from '../calculator/steam/flash-tank/flash-tank.module';
+import { PrvModule } from '../calculator/steam/prv/prv.module';
+import { TurbineModule } from '../calculator/steam/turbine/turbine.module';
+import { HeaderModule } from '../calculator/steam/header/header.module';
+import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module';
 
 @NgModule({
   imports: [
@@ -44,7 +55,18 @@ import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
     SuiteDbModule,
     SharedModule,
     HelpPanelModule,
-    SsmtDiagramModule
+    SsmtDiagramTabModule,
+    SsmtReportModule,
+    SteamPropertiesModule,
+    SaturatedPropertiesModule,
+    StackLossModule,
+    HeatLossModule,
+    BoilerModule,
+    FlashTankModule,
+    PrvModule,
+    DeaeratorModule,
+    HeaderModule,
+    TurbineModule
   ],
   declarations: [
     SsmtComponent,
@@ -62,15 +84,16 @@ import { SsmtDiagramModule } from './ssmt-diagram/ssmt-diagram.module';
     HeaderFormComponent,
     CondensingTurbineFormComponent,
     PressureTurbineFormComponent,
-    SsmtSankeyComponent,
-    SsmtReportComponent,
+    SsmtSankeyComponent
   ],
   providers: [
     SsmtService,
     CompareService,
     BoilerService,
     HeaderService,
-    TurbineService
+    TurbineService,
+    CalculateModelService,
+    CalculateLossesService
   ]
 })
 export class SsmtModule { }

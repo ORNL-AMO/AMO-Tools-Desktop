@@ -1,0 +1,70 @@
+<div class="output-summary">
+
+  <h4 class="show-print">Report Results</h4>
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <td></td>
+        <td>Baseline</td>
+        <td *ngFor="let modification of modificationOutputs">{{modification.name}}</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Percent Savings (%)</td>
+        <td>&mdash;</td>
+        <td *ngFor="let modResults of modificationOutputs">
+          {{getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)}} %
+        </td>
+      </tr>
+      <tr>
+        <td>Power Balance ($)</td>
+        <td>{{baselineOutput.powerGenerationCost | currency:'USD'}}
+        </td>
+        <td *ngFor="let modResults of modificationOutputs">
+          {{modResults.outputData.powerGenerationCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>Savings ($)</td>
+        <td>&mdash;</td>
+        <td *ngFor="let modResults of modificationOutputs">
+          {{baselineOutput.powerGenerationCost - modResults.outputData.powerGenerationCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>Fuel Balance ($)</td>
+        <td>{{baselineOutput.boilerFuelCost| currency:'USD'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.boilerFuelCost | currency:'USD'}}</td>
+      </tr>
+      <tr>
+        <td>Savings ($)</td>
+        <td>&mdash;</td>
+        <td *ngFor="let modResults of modificationOutputs">
+          {{baselineOutput.boilerFuelCost - modResults.outputData.boilerFuelCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>Make-up Water ($)</td>
+        <td>{{baselineOutput.makeupWaterCost | currency:'USD'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.makeupWaterCost | currency:'USD'}}</td>
+      </tr>
+      <tr>
+        <td>Savings ($)</td>
+        <td>&mdash;</td>
+        <td *ngFor="let modResults of modificationOutputs">
+          {{baselineOutput.makeupWaterCost - modResults.outputData.makeupWaterCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>Total Savings ($)</td>
+        <td>&mdash;</td>
+        <td *ngFor="let modResults of modificationOutputs">
+          {{baselineOutput.totalOperatingCost - modResults.outputData.totalOperatingCost | currency:'USD'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

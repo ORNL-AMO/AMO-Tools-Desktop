@@ -8,13 +8,14 @@ import { BoilerService } from './boiler.service';
 import { BoilerOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-boiler',
+  selector: 'app-boiler-calculator',
   templateUrl: './boiler.component.html',
   styleUrls: ['./boiler.component.css']
 })
 export class BoilerComponent implements OnInit {
   @Input()
   settings: Settings;
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();

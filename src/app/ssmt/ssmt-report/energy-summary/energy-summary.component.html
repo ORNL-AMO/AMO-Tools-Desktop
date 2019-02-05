@@ -1,0 +1,93 @@
+<div class="output-summary">
+
+  <h4 class="show-print">Report Results</h4>
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <td></td>
+        <td>Baseline</td>
+        <td *ngFor="let modification of modificationOutputs">{{modification.name}}</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Power Balance ($/yr)</td>
+        <td>{{baselineOutput.powerGenerationCost | currency:'USD'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">
+          {{modResults.outputData.powerGenerationCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>Generatiom (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td>{{baselineOutput.powerGenerated | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.powerGenerated |
+          number:'1.0-1'}}
+          <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span></td>
+      </tr>
+      <tr>
+        <td>Demand (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td>{{baselineOutput.sitePowerDemand | number:'1.0-1'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.sitePowerDemand |
+          number:'1.0-1'}}</td>
+      </tr>
+      <tr>
+        <td>Import (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td>{{baselineOutput.sitePowerImport | number:'1.0-1'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.sitePowerImport |
+          number:'1.0-1'}}</td>
+      </tr>
+      <tr>
+        <td>Fuel Balance ($/yr)</td>
+        <td>{{baselineOutput.boilerFuelCost | currency:'USD'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.boilerFuelCost |
+          currency:'USD'}}</td>
+      </tr>
+      <tr>
+        <td>Boiler (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+        <td>{{baselineOutput.boilerOutput.fuelEnergy | number:'1.0-2'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.boilerOutput.fuelEnergy |
+          number:'1.0-2'}}</td>
+      </tr>
+      <tr>
+        <td>Make-up Water ($/yr)</td>
+        <td>{{baselineOutput.makeupWaterCost | currency:'USD'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.makeupWaterCost |
+          currency:'USD'}}</td>
+      </tr>
+      <tr>
+        <td>Flow (<span [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>)</td>
+        <td>{{baselineOutput.makeupWaterVolumeFlow | number:'1.0-2'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.makeupWaterVolumeFlow |
+          number:'1.0-2'}}</td>
+      </tr>
+      <tr>
+        <td>Flow (<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>)</td>
+        <td>{{baselineOutput.annualMakeupWaterFlow | number:'1.0-2'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.annualMakeupWaterFlow |
+          number:'1.0-2'}}</td>
+      </tr>
+      <tr>
+        <td>HP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
+        <td>{{baselineOutput.marginalHPCost | currency:'USD'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.marginalHPCost |
+          currency:'USD'}}</td>
+      </tr>
+      <tr>
+        <td>MP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
+        <td>{{baselineOutput.marginalMPCost | currency:'USD'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.marginalMPCost |
+          currency:'USD'}}</td>
+      </tr>
+      <tr>
+        <td>LP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
+        <td>{{baselineOutput.marginalLPCost | currency:'USD'}}</td>
+        <td *ngFor="let modResults of modificationOutputs">{{modResults.outputData.marginalLPCost |
+          currency:'USD'}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

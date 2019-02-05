@@ -12,7 +12,7 @@
         <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings" [headerInput]="ssmt.headerInput"
           (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"></app-header>
         <app-turbine *ngIf="modelTab == 'turbine'" [selected]="baselineSelected" [settings]="settings" [turbineInput]="ssmt.turbineInput"
-          (emitSave)="saveBaselineTurbine($event)" [isBaseline]="true"></app-turbine>
+          [numberOfHeaders]="ssmt.headerInput.numberOfHeaders" (emitSave)="saveBaselineTurbine($event)" [isBaseline]="true"></app-turbine>
       </div>
 
       <!-- Modifications Start -->
@@ -29,7 +29,7 @@
         <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings" [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput"
           (emitSave)="saveModHeader($event)"></app-header>
         <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings" [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"
-          (emitSave)="saveModTurbine($event)"></app-turbine>
+          [numberOfHeaders]="ssmt.modifications[modificationIndex].ssmt.headerInput.numberOfHeaders" (emitSave)="saveModTurbine($event)"></app-turbine>
       </div>
       <!-- No content message -->
       <div class="w-50 modification panel-column" *ngIf="!modificationExists" (click)="addModification()" [ngClass]="{'modal-open': isModalOpen == true}">

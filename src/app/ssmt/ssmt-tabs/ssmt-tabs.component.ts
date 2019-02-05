@@ -43,7 +43,8 @@ export class SsmtTabsComponent implements OnInit {
   boilerBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   headerBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   turbineBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
-
+  calcTab: string;
+  calcTabSubscription: Subscription;
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private cd: ChangeDetectorRef,
     private turbineService: TurbineService, private boilerService: BoilerService, private headerService: HeaderService) { }
 
@@ -72,6 +73,11 @@ export class SsmtTabsComponent implements OnInit {
       this.selectedModification = val;
       this.cd.detectChanges();
     })
+
+    this.calcTabSubscription = this.ssmtService.calcTab.subscribe(val => {
+      this.calcTab = val;
+      this.cd.detectChanges();
+    })
   }
 
   ngOnDestroy() {
@@ -81,6 +87,7 @@ export class SsmtTabsComponent implements OnInit {
     this.modelTabSubscription.unsubscribe();
     this.modSubscription.unsubscribe();
     this.updateDataSubscription.unsubscribe();
+    this.calcTabSubscription.unsubscribe();
   }
 
   changeAssessmentTab(str: string) {
@@ -163,7 +170,7 @@ export class SsmtTabsComponent implements OnInit {
   checkTurbineStatus() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
     let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings);
-    let turbineValid: boolean = this.turbineService.isTurbineValid(this.ssmt.turbineInput, this.settings);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(this.ssmt.turbineInput, this.ssmt.headerInput, this.settings);
     if (!boilerValid || !headerValid) {
       this.turbineTabStatus = ['disabled'];
     } else if (!turbineValid) {
@@ -199,5 +206,9 @@ export class SsmtTabsComponent implements OnInit {
     } else {
       badge.display = false;
     }
+  }
+
+  changeCalcTab(str: string){
+    this.ssmtService.calcTab.next(str);
   }
 }

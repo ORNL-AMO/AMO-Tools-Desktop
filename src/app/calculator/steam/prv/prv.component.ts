@@ -9,7 +9,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-prv',
+  selector: 'app-prv-calculator',
   templateUrl: './prv.component.html',
   styleUrls: ['./prv.component.css']
 })

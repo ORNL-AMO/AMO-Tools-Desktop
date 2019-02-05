@@ -8,7 +8,7 @@ import { DeaeratorService } from './deaerator.service';
 import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-deaerator',
+  selector: 'app-deaerator-calculator',
   templateUrl: './deaerator.component.html',
   styleUrls: ['./deaerator.component.css']
 })

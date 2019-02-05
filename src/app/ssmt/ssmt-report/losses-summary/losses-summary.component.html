@@ -1,0 +1,92 @@
+<div class="output-summary">
+  <table class="table table-hover table-striped" *ngIf="baselineLosses">
+    <tr>
+      <td class="bold">Loss</td>
+      <td class="text-center">Baseline</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="bold">Boiler</td>
+    </tr>
+    <tr>
+      <td>Stack</td>
+      <td class="text-center">{{baselineLosses.stack | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Blowdown</td>
+      <td class="text-center">{{baselineLosses.blowdown | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="bold">Header</td>
+    </tr>
+    <tr>
+      <td>High Pressure Loss</td>
+      <td class="text-center">{{baselineLosses.highPressureHeader | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Medium Pressure Loss</td>
+      <td class="text-center">{{baselineLosses.mediumPressureHeader | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Low Pressure Loss</td>
+      <td class="text-center">{{baselineLosses.lowPressureHeader | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="bold">Turbine</td>
+    </tr>
+    <tr>
+      <td>Condensing Turbine Efficiency Loss</td>
+      <td class="text-center">{{baselineLosses.condensingTurbineEfficiencyLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>High to Medium Turbine Efficiency Loss</td>
+      <td class="text-center">{{baselineLosses.highToMediumTurbineEfficiencyLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>High to Low Turbine Efficiency Loss</td>
+      <td class="text-center">{{baselineLosses.highToLowTurbineEfficiencyLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Medium to Low Turnine Efficiency Loss</td>
+      <td class="text-center">{{baselineLosses.mediumToLowTurbineEfficiencyLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Condensing Loss</td>
+      <td class="text-center">{{baselineLosses.condensingLosses | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="bold">Condensate</td>
+    </tr>
+    <tr>
+      <td>Condensate Loss</td>
+      <td class="text-center">{{baselineLosses.condensateLosses | number:'1.0-2'}}</td>
+    </tr>
+    <td colspan="2" class="bold">Venting Losses</td>
+    <tr>
+      <td>Low Pressure Vented Steam Loss</td>
+      <td class="text-center">{{baselineLosses.lowPressureVentLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Condensate Flash Tank Loss</td>
+      <td class="text-center">{{baselineLosses.condensateFlashTankLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Deaerator Vent Loss</td>
+      <td class="text-center">{{baselineLosses.deaeratorVentLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td colspan="2" class="bold">Process Losses</td>
+    </tr>
+    <tr>
+      <td>High Pressure</td>
+      <td class="text-center">{{baselineLosses.highPressureProcessLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Medium Pressure</td>
+      <td class="text-center">{{baselineLosses.mediumPressureProcessLoss | number:'1.0-2'}}</td>
+    </tr>
+    <tr>
+      <td>Low Pressure</td>
+      <td class="text-center">{{baselineLosses.lowPressureProcessLoss | number:'1.0-2'}}</td>
+    </tr>
+  </table>
+</div>
