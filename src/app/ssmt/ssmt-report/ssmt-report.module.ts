@@ -13,6 +13,7 @@ import { OperationsSummaryComponent } from './input-summary/operations-summary/o
 import { TurbineSummaryComponent } from './input-summary/turbine-summary/turbine-summary.component';
 import { HeaderSummaryComponent } from './input-summary/header-summary/header-summary.component';
 import { BoilerSummaryComponent } from './input-summary/boiler-summary/boiler-summary.component';
+import { HeaderInputTableComponent } from './input-summary/header-summary/header-input-table/header-input-table.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { BoilerSummaryComponent } from './input-summary/boiler-summary/boiler-su
     OperationsSummaryComponent,
     TurbineSummaryComponent,
     HeaderSummaryComponent,
-    BoilerSummaryComponent
+    BoilerSummaryComponent,
+    HeaderInputTableComponent
   ],
   exports: [
     SsmtReportComponent

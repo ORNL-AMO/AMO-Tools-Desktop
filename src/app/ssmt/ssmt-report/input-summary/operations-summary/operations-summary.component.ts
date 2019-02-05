@@ -12,9 +12,6 @@ export class OperationsSummaryComponent implements OnInit {
   baselineInputData: SSMTInputs;
   @Input()
   modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
-  @Input()
-  settings: Settings;
-
 
   collapse: boolean = true;
   numMods: number = 0;
