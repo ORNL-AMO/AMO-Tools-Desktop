@@ -16,6 +16,8 @@ export class SystemCapacityFormComponent implements OnInit {
   outputs: AirSystemCapacityOutput;
   @Output('calculate')
   calculate = new EventEmitter<AirSystemCapacityInput>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
@@ -67,5 +69,7 @@ export class SystemCapacityFormComponent implements OnInit {
     }
     this.emitChange();
   }
-
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
+  }
 }
