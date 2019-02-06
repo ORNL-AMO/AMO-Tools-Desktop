@@ -32,7 +32,9 @@ export interface Calculator {
     flowCalculations?: FlowCalculations,
     fanEfficiencyInputs?: FanEfficiencyInputs,
     fan203Inputs?: Fan203Inputs,
-    selected?: boolean
+    selected?: boolean,
+    
+
 }
 
 export interface HeadToolSuction {

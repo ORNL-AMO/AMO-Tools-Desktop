@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import { LightingReplacementResults, LightingReplacementData } from '../../../shared/models/lighting';
 
 @Injectable()
 export class LightingReplacementService {
@@ -40,22 +41,3 @@ export class LightingReplacementService {
   }
 }
 
-export interface LightingReplacementData {
-  hoursPerDay?: number,
-  daysPerMonth?: number,
-  monthsPerYear?: number,
-  hoursPerYear?: number,
-  wattsPerLamp?: number,
-  lampsPerFixture?: number,
-  numberOfFixtures?: number,
-  lumensPerLamp?: number,
-  totalLighting?: number,
-  electricityUse?: number
-}
-
-
-export interface LightingReplacementResults {
-  totalElectricityUse: number;
-  totalLighting: number;
-  totalOperatingHours: number;
-}

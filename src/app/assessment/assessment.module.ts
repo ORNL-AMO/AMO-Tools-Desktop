@@ -32,6 +32,7 @@ import { PreAssessmentListItemComponent } from './assessment-list-view/pre-asses
 import { FsatSummaryCardComponent } from './assessment-grid-view/assessment-card/fsat-summary-card/fsat-summary-card.component';
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.component';
+import { TreasureHuntCardComponent } from './assessment-grid-view/treasure-hunt-card/treasure-hunt-card.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.com
     AssessmentDashboardComponent,
     PreAssessmentListItemComponent,
     FsatSummaryCardComponent,
-    ResetDataModalComponent
+    ResetDataModalComponent,
+    TreasureHuntCardComponent
   ],
   exports: [
     AssessmentCreateComponent,
