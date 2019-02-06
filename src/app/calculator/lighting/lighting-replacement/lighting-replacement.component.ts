@@ -1,7 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { LightingReplacementService, LightingReplacementData, LightingReplacementResults } from './lighting-replacement.service';
+import { LightingReplacementService } from './lighting-replacement.service';
+import { LightingReplacementData, LightingReplacementResults } from '../../../shared/models/lighting';
 
 @Component({
   selector: 'app-lighting-replacement',
@@ -19,18 +20,7 @@ export class LightingReplacementComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
   settings: Settings;
-  baselineData: Array<LightingReplacementData> = [{
-    hoursPerDay: 0,
-    daysPerMonth: 30,
-    monthsPerYear: 12,
-    hoursPerYear: 0,
-    wattsPerLamp: 0,
-    lampsPerFixture: 0,
-    numberOfFixtures: 0,
-    lumensPerLamp: 0,
-    totalLighting: 0,
-    electricityUse: 0
-  }];
+  baselineData: Array<LightingReplacementData>;
   baselineElectricityUse: number;
   modificationData: Array<LightingReplacementData> = [];
   modificationElectricityUse: number;
@@ -46,13 +36,18 @@ export class LightingReplacementComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-    if(this.lightingReplacementService.baselineData){
+
+    if (this.lightingReplacementService.baselineData) {
       this.baselineData = this.lightingReplacementService.baselineData;
+    } else {
+      this.baselineData = this.lightingReplacementService.getInitializedData();
     }
-    if(this.lightingReplacementService.modificationData){
+
+    if (this.lightingReplacementService.modificationData) {
       this.modificationData = this.lightingReplacementService.modificationData;
       this.modificationExists = true;
     }
+
     this.calculate();
   }
   ngAfterViewInit() {
@@ -61,27 +56,14 @@ export class LightingReplacementComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.lightingReplacementService.baselineData = this.baselineData;
     this.lightingReplacementService.modificationData = this.modificationData;
   }
 
   btnResetData() {
-    this.baselineData = new Array<LightingReplacementResults>();
+    this.baselineData = this.lightingReplacementService.getInitializedData();
     this.modificationData = new Array<LightingReplacementResults>();
-    let newBaselineData = {
-      hoursPerDay: 0,
-      daysPerMonth: 30,
-      monthsPerYear: 12,
-      hoursPerYear: 0,
-      wattsPerLamp: 0,
-      lampsPerFixture: 0,
-      numberOfFixtures: 0,
-      lumensPerLamp: 0,
-      totalLighting: 0,
-      electricityUse: 0
-    }
-    this.baselineData.push(newBaselineData);
     this.lightingReplacementService.baselineData = this.baselineData;
     this.lightingReplacementService.modificationData = this.modificationData;
     this.calculate();
@@ -123,7 +105,7 @@ export class LightingReplacementComponent implements OnInit {
     this.modificationResults = this.lightingReplacementService.getTotals(this.modificationData);
   }
 
-  addBaselineFixture(){
+  addBaselineFixture() {
     this.baselineData.push({
       hoursPerDay: 0,
       daysPerMonth: 30,
@@ -139,20 +121,20 @@ export class LightingReplacementComponent implements OnInit {
     this.calculate();
   }
 
-  removeBaselineFixture(index: number){
+  removeBaselineFixture(index: number) {
     this.baselineData.splice(index, 1);
     this.calculate();
 
   }
 
-  addModification(){
+  addModification() {
     this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
     this.modificationExists = true;
     this.togglePanel(this.modifiedSelected);
   }
 
 
-  addModificationFixture(){
+  addModificationFixture() {
     this.modificationData.push({
       hoursPerDay: 0,
       daysPerMonth: 30,
@@ -168,12 +150,12 @@ export class LightingReplacementComponent implements OnInit {
     this.calculate();
   }
 
-  removeModificationFixture(index: number){
+  removeModificationFixture(index: number) {
     this.modificationData.splice(index, 1);
     this.calculate();
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.currentField = str;
   }
 }

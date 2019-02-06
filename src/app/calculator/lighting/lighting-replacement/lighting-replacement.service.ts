@@ -39,5 +39,20 @@ export class LightingReplacementService {
     }
     return tmpResults;
   }
+
+  getInitializedData(): Array<LightingReplacementData> {
+    return [{
+      hoursPerDay: 0,
+      daysPerMonth: 30,
+      monthsPerYear: 12,
+      hoursPerYear: 0,
+      wattsPerLamp: 0,
+      lampsPerFixture: 0,
+      numberOfFixtures: 0,
+      lumensPerLamp: 0,
+      totalLighting: 0,
+      electricityUse: 0
+    }]
+  }
 }
 

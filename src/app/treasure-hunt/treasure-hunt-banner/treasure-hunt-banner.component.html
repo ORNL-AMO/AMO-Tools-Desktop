@@ -1,0 +1,36 @@
+<nav class="treasure-hunt navbar banner d-flex mr-auto p-0 flex-nowrap">
+	<div class="d-flex align-items-center p-1">
+		<div class="img-col col-sm-auto col-md-auto col-lg-auto">
+			<span class="fa fa-map-marked"></span>
+		</div>
+		<div class="d-flex flex-column pl-2">
+			<div class="h2-name">
+				{{assessment.name}}
+			</div>
+			<div class="h2-name">
+				<span class="small">
+					Last modified: {{assessment.modifiedDate | date:'mediumDate'}}
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'settings'}" (click)="changeTab('settings')">Settings</a>
+		</div>
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'find-treasure'}" (click)="changeTab('find-treasure')">Find Treasure</a>
+		</div>
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">Treasure Chest</a>
+		</div>
+	</div>
+	<div class="d-flex ml-auto pr-2 h-100">
+		<div class="pl-2 pr-2 border-right border-left home-nav-item" (click)="goToFolder()">
+			<span class="fa fa-folder-open"></span>
+		</div>
+		<div class="pl-2 pr-2 border-right home-nav-item" (click)="goHome()">
+			<span class="fa fa-home"></span>
+		</div>
+	</div>
+</nav>

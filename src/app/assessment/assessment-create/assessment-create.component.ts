@@ -139,7 +139,7 @@ export class AssessmentCreateComponent implements OnInit {
               this.router.navigateByUrl('/phast/' + tmpAssessment.id);
             });
           });
-        } 
+        }
         //fsat
         else if (this.newAssessmentForm.controls.assessmentType.value == 'Fan') {
           let tmpAssessment = this.assessmentService.getNewAssessment('FSAT');
@@ -195,6 +195,33 @@ export class AssessmentCreateComponent implements OnInit {
               this.indexedDbService.putDirectory(tmpDirRef).then(results => {
                 this.assessmentService.createAssessment.next(false);
                 this.router.navigateByUrl('/ssmt/' + tmpAssessment.id)
+              });
+            })
+          });
+        } if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
+          let tmpAssessment = this.assessmentService.getNewAssessment('TreasureHunt');
+          tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+          tmpAssessment.directoryId = this.directory.id;
+          this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+            this.indexedDbService.getAssessment(assessmentId).then(assessment => {
+              tmpAssessment = assessment;
+              if (this.directory.assessments) {
+                this.directory.assessments.push(tmpAssessment);
+              } else {
+                this.directory.assessments = new Array();
+                this.directory.assessments.push(tmpAssessment);
+              }
+
+              let tmpDirRef: DirectoryDbRef = {
+                name: this.directory.name,
+                id: this.directory.id,
+                parentDirectoryId: this.directory.parentDirectoryId,
+                createdDate: this.directory.createdDate,
+                modifiedDate: this.directory.modifiedDate
+              }
+              this.indexedDbService.putDirectory(tmpDirRef).then(results => {
+                this.assessmentService.createAssessment.next(false);
+                this.router.navigateByUrl('/treasure-hunt/' + tmpAssessment.id)
               });
             })
           });

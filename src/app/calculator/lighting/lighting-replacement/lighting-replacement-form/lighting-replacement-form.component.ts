@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { LightingReplacementData } from '../lighting-replacement.service';
+import { LightingReplacementData } from '../../../../shared/models/lighting';
 
 @Component({
   selector: 'app-lighting-replacement-form',

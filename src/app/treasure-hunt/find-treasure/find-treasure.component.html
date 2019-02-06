@@ -1,0 +1,55 @@
+<div class="d-flex flex-fill justify-content-center" *ngIf="selectedCalc == 'none'">
+  <div class="d-flex flex-column w-75">
+    <!-- <h1>MEASUR</h1> -->
+    <p class="p-2 lead text-center mb-0">
+      Find ways to save your hard earned treasure!
+    </p>
+    <p class="align-self-center text-center help-text pr-3 pl-3 mb-0 w-75">
+      Choose one of the following calculators to find potential ways to reduce your manufacturing facilities energy
+      costs.
+    </p>
+    <br>
+    <hr class="w-100 m-0">
+  </div>
+</div>
+<div class="d-flex" *ngIf="selectedCalc == 'none'">
+  <div class="d-flex flex-column w-25 p-3 align-items-center lighting hunt-item" (click)="selectCalc('lighting-replacement')">
+    <div class="calc-icon-div d-flex justify-content-center align-items-center">
+      <span class="fa fa-lightbulb-o"></span>
+    </div>
+    <div class="d-flex flex-fill flex-column justify-content-center text-center pt-2">
+      <h5>Lighting Replacement</h5>
+      <p class="help-text">
+        The calculator is designed to quantify the energy savings associated with lighting opportunities.
+      </p>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column w-25 p-3 align-items-center motors">
+    <div class="calc-icon-div d-flex justify-content-center align-items-center">
+      <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace.png">
+    </div>
+    <div class="d-flex flex-fill flex-column justify-content-center text-center pt-2">
+      <h5>Replace Existing Motor</h5>
+      <p class="help-text">
+        This calculator calculates the energy savings, cost savings, and payback period for replacing an existing motor
+        with a higher efficiency motor.
+      </p>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column w-25 p-3 align-items-center motors">
+    <div class="calc-icon-div d-flex justify-content-center align-items-center">
+      <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace-rewind.png">
+    </div>
+    <div class="d-flex flex-fill flex-column justify-content-center text-center pt-2">
+      <h5>Replace vs Rewind</h5>
+      <p class="help-text">
+        This calculator compares the cost and energy expenditure of rewinding a failed motor versus replacing it with a
+        new energy-efficient model.
+      </p>
+    </div>
+  </div>
+</div>
+
+<app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'"></app-lighting-replacement>

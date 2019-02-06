@@ -4,6 +4,7 @@ import { PhastComponent } from '../phast/phast.component';
 import { PsatComponent } from '../psat/psat.component';
 import { FsatComponent } from '../fsat/fsat.component';
 import { SsmtComponent } from '../ssmt/ssmt.component';
+import { TreasureHuntComponent } from '../treasure-hunt/treasure-hunt.component';
 
 export const coreRoutes: Routes = [
   {
@@ -30,5 +31,9 @@ export const coreRoutes: Routes = [
   {
     path: 'ssmt/:id',
     component: SsmtComponent
+  },
+  {
+    path: 'treasure-hunt/:id',
+    component: TreasureHuntComponent
   }
 ]

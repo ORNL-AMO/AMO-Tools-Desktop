@@ -1,0 +1,35 @@
+<!--all main psat content-->
+<div #content class="treasure-hunt-container treasure-hunt d-flex flex-column" *ngIf="assessment && settings">
+  <!--header-->
+  <div #header class="w-100 hide-print sticky-top" id="treasureHuntBanner">
+    <app-treasure-hunt-banner [assessment]="assessment"></app-treasure-hunt-banner>
+    <!-- <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators' || mainTab == 'system-setup'">
+      <app-psat-tabs [settings]="settings" [psat]="_psat"></app-psat-tabs>
+    </div> -->
+  </div>
+  <!--end header-->
+  <div *ngIf="mainTab == 'settings'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    Treasure hunt settings here.
+  </div>
+
+  <div *ngIf="mainTab == 'find-treasure'" class="w-100 d-flex tab-content scroll-item justify-content-center" [ngStyle]="{'height.px': containerHeight}">
+    <app-find-treasure class="w-100"></app-find-treasure>
+  </div>
+
+  <div *ngIf="mainTab == 'report'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    Treasure hunt report/summary here.
+  </div>
+  <!--footer-->
+  <!--<div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
+    <div class="pull-left" *ngIf="stepTab != 'system-basics' || mainTab == 'assessment'">
+      <button class="btn btn-default" (click)="back()">Back</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
+      <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'assessment'">
+      <button class="btn btn-primary" (click)="goToReport()">View Report</button>
+    </div>
+  </div> -->
+  <!--end footer-->
+</div>

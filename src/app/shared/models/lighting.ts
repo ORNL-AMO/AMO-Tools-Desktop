@@ -17,10 +17,3 @@ export interface LightingReplacementData {
     totalLighting: number;
     totalOperatingHours: number;
   }
-
-
-  export interface LightingReplacementTreasureHunt {
-    baseline: LightingReplacementData;
-    modifications?: Array<LightingReplacementData>;
-    name?: string;
-  }

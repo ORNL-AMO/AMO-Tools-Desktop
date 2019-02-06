@@ -1343,6 +1343,11 @@ Banner
     color: black;
   }
 
+  .banner.treasure-hunt{
+    background: #2E4053;
+    color: white;
+  }
+
   .banner.fsat .btn-dashboard, .banner.fsat .title, 
   .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
     color: #000;

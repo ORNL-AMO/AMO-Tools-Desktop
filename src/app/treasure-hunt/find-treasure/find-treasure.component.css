@@ -1,0 +1,9 @@
+.fa.fa-lightbulb-o{
+    font-size: -webkit-xxx-large;
+}
+
+
+.hunt-item:hover{
+    cursor: pointer;
+    background: gray;
+}

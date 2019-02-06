@@ -1,3 +1,128 @@
-<p>
-  treasure-hunt-card works!
-</p>
+<div class="card card-item" *ngIf="!directory.treasureHunt">
+  <div class="card-header summary-card-header">
+    <a (click)="showTreasureHunt()">{{directory.name}} Treasure Hunt</a>
+  </div>
+  <div class="card-body summary-card-body scroll-item text-center">
+    <div class="no-assessment-data" (click)="addTreasureHuntCalc()">
+      Find Some Treasure!
+      <br>
+      <span class="fa fa-plus-circle"></span>
+      <br>
+      <p class="small">No treasure hunt found for this facility.</p>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="newItemModal" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        How would you like to hunt for treasure?
+        <button class="close" (click)="hideEditModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex">
+          <a class="click-item" (click)="addLightingReplacement()">Lighting Replacement</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+
+
+
+<!-- <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': calculator.type == 'furnace', 'psat': calculator.type == 'pump'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="editForm">
+      <div class="modal-header">
+        Edit Pre-Assessment Properties
+        <button class="close" (click)="hideEditModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="form-group">
+            <label>Edit Pre Assessment Name</label>
+            <input type="text" class="form-control w-100" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Change Folder Location</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<!-- <div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': calculator.type == 'furnace', 'psat': calculator.type == 'pump'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="copyForm">
+      <div class="modal-header">
+        Create {{calculator.name}} Copy
+        <button class="close" (click)="hideCopyModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="copyForm">
+          <div class="form-group">
+            <label>Copy Pre-Assessment Name</label>
+            <input type="text" class="form-control w-100" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Move Pre-Assessment to Different Folder</label>
+            <select class="form-control w-100" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id">
+                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                <span class="bold">{{dir.name}}/</span>
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="createCopy()">Create Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}" [ngClass]="{'phast': calculator.type == 'furnace', 'psat': calculator.type == 'pump'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        Delete {{calculator.name}}
+        <button class="close" (click)="hideDeleteModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center small">Are you sure you want to delete this Pre-Assessment? This
+          <span class="danger">cannot</span> be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="deletePreAssessment()">Delete Pre-Assessment</button>
+      </div>
+    </div>
+  </div>
+</div> -->

@@ -1,5 +1,6 @@
 import { Assessment } from './assessment';
 import { Calculator } from './calculators';
+import { TreasureHunt } from './treasure-hunt';
 export interface Directory {
   name: string,
   assessments?: Assessment[];
@@ -11,7 +12,8 @@ export interface Directory {
   id?: number,
   parentDirectoryId?: number,
   selected?: boolean,
-  isExample?: boolean
+  isExample?: boolean,
+  treasureHunt?: TreasureHunt
 }
 
 
