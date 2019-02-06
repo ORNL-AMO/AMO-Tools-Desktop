@@ -17,6 +17,7 @@ import { PreAssessmentModule } from './pre-assessment/pre-assessment.module';
 import { PowerFactorCorrectionModule } from './power-factor-correction/power-factor-correction.module';
 import { UnitConverterService } from './unit-converter/unit-converter.service';
 import { Co2SavingsModule } from './co2-savings/co2-savings.module';
+import { ElectricityReductionModule } from './electricity-reduction/electricity-reduction.module';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import { Co2SavingsModule } from './co2-savings/co2-savings.module';
         CombinedHeatPowerModule,
         PreAssessmentModule,
         PowerFactorCorrectionModule,
-        Co2SavingsModule
+        Co2SavingsModule,
+        ElectricityReductionModule
     ],
     providers: [
         CashFlowService,

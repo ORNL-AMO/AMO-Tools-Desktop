@@ -182,6 +182,9 @@
       <li [ngClass]="{'selected': selectedCalculator == 'co2-savings'}">
         <span class="sidebar-item" (click)="selectCalculator('co2-savings')">CO<sub>2</sub> Savings</span>
       </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'electricity-reduction'}">
+        <span class="sidebar-item" (click)="selectCalculator('electricity-reduction')">Electricity Reduction</span>
+      </li>
     </ul>
   </li>
 </ul>
