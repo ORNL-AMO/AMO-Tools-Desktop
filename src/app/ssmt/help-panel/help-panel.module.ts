@@ -8,11 +8,13 @@ import { SystemBasicsHelpComponent } from './system-basics-help/system-basics-he
 import { HelpPanelComponent } from './help-panel.component';
 import { ModifyConditionsNotesComponent } from './modify-conditions-notes/modify-conditions-notes.component';
 import { FormsModule } from '@angular/forms';
+import { SsmtResultsPanelModule } from '../ssmt-results-panel/ssmt-results-panel.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    SsmtResultsPanelModule
   ],
   declarations: [
     HelpPanelComponent,

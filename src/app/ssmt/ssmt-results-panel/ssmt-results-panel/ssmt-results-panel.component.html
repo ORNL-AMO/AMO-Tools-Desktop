@@ -1,0 +1,170 @@
+<div class="d-flex flex-column" *ngIf="showResults">
+  <div class="p-1">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td></td>
+          <td class="bold">Baseline</td>
+          <td class="bold">{{ssmt.modifications[this.modificationIndex].ssmt.name}}</td>
+          <td class="bold">Units</td>
+        </tr>
+        <tr>
+          <td class="bold" colspan="4">Power Balance</td>
+        </tr>
+        <tr>
+          <td>Generation</td>
+          <td>{{baselineOutput.powerGenerated | number:'1.0-1'}}
+          </td>
+          <td>{{modificationOutput.powerGenerated | number:'1.0-1'}}
+          </td>
+          <td>
+            <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Demand</td>
+          <td>{{baselineOutput.sitePowerDemand | number:'1.0-1'}}
+          </td>
+          <td>{{modificationOutput.sitePowerDemand | number:'1.0-1'}}
+          </td>
+          <td>
+            <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Import</td>
+          <td>{{baselineOutput.sitePowerImport | number:'1.0-1'}}
+          </td>
+          <td>{{modificationOutput.sitePowerImport | number:'1.0-1'}}
+          </td>
+          <td>
+            <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Unit Cost</td>
+          <td>{{baselineInputs.operationsInput.electricityCosts | currency:'USD'}}</td>
+          <td>{{modificationInputs.operationsInput.electricityCosts | currency:'USD'}}</td>
+          <td> $/kWh</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>{{baselineOutput.powerGenerationCost | currency:'USD'}}</td>
+          <td>{{modificationOutput.powerGenerationCost | currency:'USD'}}</td>
+          <td>$/yr</td>
+        </tr>
+        <tr>
+          <td class="bold" colspan="4">Fuel Balance</td>
+        </tr>
+        <tr>
+          <td>Boiler</td>
+          <td>{{baselineOutput.boilerOutput.fuelEnergy | number:'1.0-2'}}
+          </td>
+          <td>{{modificationOutput.boilerOutput.fuelEnergy | number:'1.0-2'}}
+          </td>
+          <td><span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr</td>
+        </tr>
+        <tr>
+          <td>Unit Cost</td>
+          <td>{{baselineInputs.operationsInput.fuelCosts | currency:'USD'}}
+          </td>
+          <td>{{modificationInputs.operationsInput.fuelCosts | currency:'USD'}}
+          </td>
+          <td> $/<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>{{baselineOutput.boilerFuelCost | currency:'USD'}}</td>
+          <td>{{modificationOutput.boilerFuelCost | currency:'USD'}}</td>
+          <td> $/yr</td>
+        </tr>
+        <tr>
+          <td class="bold" colspan="4">Make-Up Water</td>
+        </tr>
+        <tr>
+          <td>Flow</td>
+          <td>
+            {{baselineOutput.makeupWaterVolumeFlow | number:'1.0-2'}}<br>
+            {{modificationOutput.annualMakeupWaterFlow | number:'1.0-2'}}
+          </td>
+          <td>
+            {{baselineOutput.makeupWaterVolumeFlow | number:'1.0-2'}} <br>
+            {{modificationOutput.annualMakeupWaterFlow | number:'1.0-2'}} 
+          </td>
+          <td>
+            <span [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span> <br>
+            <span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Unit Cost</td>
+          <td>${{baselineInputs.operationsInput.makeUpWaterCosts | number:'1.2-4'}}
+          </td>
+          <td>${{modificationInputs.operationsInput.makeUpWaterCosts | number:'1.2-4'}}
+          </td>
+          <td>
+              $/<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>{{baselineOutput.makeupWaterCost | currency:'USD'}}</td>
+          <td>{{modificationOutput.makeupWaterCost | currency:'USD'}}</td>
+          <td>$/yr</td>
+        </tr>
+        <tr>
+          <td class="bold" colspan="4">Total Operating Cost</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>{{baselineOutput.totalOperatingCost | currency:'USD'}}</td>
+          <td>{{modificationOutput.totalOperatingCost | currency:'USD'}}</td>
+          <td>$/yr</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- <div class="d-flex flex-column" *ngIf="showResults">
+  <label class="group-label">Marginal Steam Cost</label>
+  <div class="p-1">
+    <table class="table table-hover table-striped">
+      <tbody>
+        <tr>
+          <td>High Pressure</td>
+          <td>{{baselineOutput.marginalHPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+          </td>
+          <td>{{modificationOutput.marginalHPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Medium Pressure</td>
+          <td>{{baselineOutput.marginalMPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+          <td>{{modificationOutput.marginalMPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+        </tr>
+        <tr>
+          <td>Low Pressure</td>
+          <td>{{baselineOutput.marginalLPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+          <td>{{modificationOutput.marginalLPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> -->
+
+<div class="d-flex flex-column justify-content-center align-items-center w-100 h-100" *ngIf="!showResults">
+  <div class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+  <h5>Calculating...</h5>
+</div>
