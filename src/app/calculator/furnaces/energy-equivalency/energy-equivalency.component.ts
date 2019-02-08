@@ -129,7 +129,7 @@ export class EnergyEquivalencyComponent implements OnInit {
         let tmpEnergyEquivalencyInputs: { energyEquivalencyFuel: EnergyEquivalencyFuel, energyEquivalencyElectric: EnergyEquivalencyElectric } = {
           energyEquivalencyElectric: this.energyEquivalencyService.initEquivalencyElectric(this.settings),
           energyEquivalencyFuel: this.energyEquivalencyService.initEquivalencyFuel()
-        }
+        };
         this.calculator.energyEquivalencyInputs = tmpEnergyEquivalencyInputs;
         this.energyEquivalencyElectric = this.calculator.energyEquivalencyInputs.energyEquivalencyElectric;
         this.energyEquivalencyFuel = this.calculator.energyEquivalencyInputs.energyEquivalencyFuel;
@@ -145,11 +145,11 @@ export class EnergyEquivalencyComponent implements OnInit {
     let tmpEnergyEquivalencyInputs: { energyEquivalencyFuel: EnergyEquivalencyFuel, energyEquivalencyElectric: EnergyEquivalencyElectric } = {
       energyEquivalencyElectric: this.energyEquivalencyService.initEquivalencyElectric(this.settings),
       energyEquivalencyFuel: this.energyEquivalencyService.initEquivalencyFuel()
-    }
+    };
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       energyEquivalencyInputs: tmpEnergyEquivalencyInputs
-    }
+    };
     return tmpCalculator;
   }
 
@@ -181,7 +181,7 @@ export class EnergyEquivalencyComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

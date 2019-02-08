@@ -64,7 +64,7 @@ export class SystemCurveFormComponent implements OnInit {
       if (this.psat.modifications) {
         this.psat.modifications.forEach(mod => {
           this.options.push(mod.psat);
-        })
+        });
       }
     } else if (this.fsat) {
       this.fsat.name = "Baseline";
@@ -72,7 +72,7 @@ export class SystemCurveFormComponent implements OnInit {
       if (this.fsat.modifications) {
         this.fsat.modifications.forEach(mod => {
           this.options.push(mod.fsat);
-        })
+        });
       }
     } else {
       this.p1Option = 'Point 1';
@@ -81,7 +81,7 @@ export class SystemCurveFormComponent implements OnInit {
   }
 
   saveChanges() {
-    this.save.emit(true)
+    this.save.emit(true);
   }
 
   setFormValues() {

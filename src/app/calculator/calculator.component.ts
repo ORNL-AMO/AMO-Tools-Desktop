@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 })
 export class CalculatorComponent implements OnInit {
   selectedTool: string;
-  selectedToolSub: Subscription
+  selectedToolSub: Subscription;
   selectedCalculatorSub: Subscription;
   selectedCalculator: string;
   constructor(private calculatorService: CalculatorService) { }
@@ -17,13 +17,13 @@ export class CalculatorComponent implements OnInit {
   ngOnInit() {
     this.selectedToolSub = this.calculatorService.selectedTool.subscribe(toolStr => {
       this.selectedTool = toolStr;
-    })
+    });
     this.selectedCalculatorSub = this.calculatorService.selectedToolType.subscribe(calcStr => {
       this.selectedCalculator = calcStr;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.calculatorService.selectedTool.next('none');
     this.calculatorService.selectedToolType.next(undefined);
     this.selectedToolSub.unsubscribe();

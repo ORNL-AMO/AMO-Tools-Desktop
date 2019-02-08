@@ -1,5 +1,5 @@
 import { Assessment } from "../shared/models/assessment";
-import { Settings } from "../shared/models/settings"
+import { Settings } from "../shared/models/settings";
 import { Calculator } from "../shared/models/calculators";
 
 export const MockFsat: Assessment = {
@@ -165,7 +165,7 @@ export const MockFsat: Assessment = {
             }
         ]
     }
-}
+};
 
 export const MockFsatSettings: Settings = {
     language: "English",
@@ -231,7 +231,7 @@ export const MockFsatSettings: Settings = {
     },
     steamPowerMeasurement: "kW",
     steamEnergyMeasurement: "MMBtu"
-}
+};
 
 /*
 calculators: [],
@@ -329,4 +329,4 @@ export const MockFsatCalculator: Calculator = {
         selectedP1Name: "Baseline1",
         selectedP2Name: "Baseline"
     }
-}
+};

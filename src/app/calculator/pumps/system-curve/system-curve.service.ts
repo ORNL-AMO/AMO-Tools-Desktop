@@ -48,13 +48,13 @@ export class SystemCurveService {
         flowRate: [psat.inputs.flow_rate, [Validators.required, Validators.min(0)]],
         head: [psat.inputs.head, [Validators.required, Validators.min(0)]],
         pointAdjustment: [psat.name]
-      })
+      });
     } else {
       return this.formBuilder.group({
         flowRate: [2000, [Validators.required, Validators.min(0)]],
         head: [276.8, [Validators.required, Validators.min(0)]],
         pointAdjustment: ['']
-      })
+      });
     }
   }
 
@@ -63,12 +63,12 @@ export class SystemCurveService {
       return this.formBuilder.group({
         specificGravity: [psat.inputs.specific_gravity, [Validators.required, Validators.min(0)]],
         systemLossExponent: [1.420, [Validators.required, Validators.min(0)]]
-      })
+      });
     } else {
       return this.formBuilder.group({
         specificGravity: [1.0, [Validators.required, Validators.min(0)]],
         systemLossExponent: [1.000, [Validators.required, Validators.min(0)]]
-      })
+      });
     }
   }
 
@@ -85,13 +85,13 @@ export class SystemCurveService {
         flowRate: [fsat.fieldData.flowRate, [Validators.required, Validators.min(0)]],
         head: [fsat.fieldData.outletPressure - fsat.fieldData.inletPressure, [Validators.required, Validators.min(0)]],
         pointAdjustment: [fsat.name]
-      })
+      });
     } else {
       return this.formBuilder.group({
         flowRate: [2000, [Validators.required, Validators.min(0)]],
         head: [276.8, [Validators.required, Validators.min(0)]],
         pointAdjustment: ['']
-      })
+      });
     }
   }
 
@@ -100,12 +100,12 @@ export class SystemCurveService {
       return this.formBuilder.group({
         specificGravity: [fsat.fieldData.compressibilityFactor, [Validators.required, Validators.min(0)]],
         systemLossExponent: [1.96969, [Validators.required, Validators.min(0)]]
-      })
+      });
     } else {
       return this.formBuilder.group({
         specificGravity: [.98, [Validators.required, Validators.min(0)]],
         systemLossExponent: [1.9, [Validators.required, Validators.min(0)]]
-      })
+      });
     }
   }
 
@@ -129,7 +129,7 @@ export class SystemCurveService {
       } else {
         tmpFluidPower = this.getPumpFluidPower(staticHead, 0, curveConstants.form.controls.specificGravity.value);
       }
-      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+      if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
       }
       data.push({
@@ -155,7 +155,7 @@ export class SystemCurveService {
         } else {
           tmpFluidPower = this.getPumpFluidPower(head, i, curveConstants.form.controls.specificGravity.value);
         }
-        if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
         }
         data.push({
@@ -179,9 +179,9 @@ export class SystemCurveService {
       if (isFan) {
         tmpFluidPower = this.getFanFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value);
       } else {
-        tmpFluidPower = this.getPumpFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value);;
+        tmpFluidPower = this.getPumpFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value); ;
       }
-      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+      if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
       }
       data.push({

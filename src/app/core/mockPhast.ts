@@ -1142,7 +1142,7 @@ export const MockPhast: Assessment = {
         ]
     },
     directoryId: 2
-}
+};
 
 export const MockPhastSettings: Settings = {
     language: "English",
@@ -1195,4 +1195,4 @@ export const MockPhastSettings: Settings = {
             email: 'AMO_ToolHelpDesk@ee.doe.gov'
         }
     }
-}
+};

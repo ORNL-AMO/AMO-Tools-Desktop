@@ -22,8 +22,8 @@ export class O2EnrichmentService {
       combAirTemp: 900,
       combAirTempEnriched: 80,
       fuelConsumption: 10
-    }
-    if (settings.unitsOfMeasure == 'Metric') {
+    };
+    if (settings.unitsOfMeasure === 'Metric') {
       defaultO2Enrichment.flueGasTemp = this.convertUnitsService.roundVal(this.convertUnitsService.value(defaultO2Enrichment.flueGasTemp).from('F').to('C'), 2);
       defaultO2Enrichment.flueGasTempEnriched = this.convertUnitsService.roundVal(this.convertUnitsService.value(defaultO2Enrichment.flueGasTempEnriched).from('F').to('C'), 2);
       defaultO2Enrichment.combAirTemp = this.convertUnitsService.roundVal(this.convertUnitsService.value(defaultO2Enrichment.combAirTemp).from('F').to('C'), 2);
@@ -43,7 +43,7 @@ export class O2EnrichmentService {
       combAirTemp: [defaultO2Enrichment.combAirTemp, [Validators.required, Validators.min(ranges.combAirTempMin), Validators.max(ranges.combAirTempMax)]],
       combAirTempEnriched: [defaultO2Enrichment.combAirTempEnriched, [Validators.required, Validators.min(ranges.combAirTempEnrichedMin), Validators.max(ranges.combAirTempEnrichedMax)]],
       fuelConsumption: [defaultO2Enrichment.fuelConsumption, Validators.required]
-    })
+    });
   }
 
   initFormFromObj(settings: Settings, obj: O2Enrichment): FormGroup {
@@ -58,7 +58,7 @@ export class O2EnrichmentService {
       combAirTemp: [obj.combAirTemp, [Validators.required, Validators.min(ranges.combAirTempMin), Validators.max(ranges.combAirTempMax)]],
       combAirTempEnriched: [obj.combAirTempEnriched, [Validators.required, Validators.min(ranges.combAirTempEnrichedMin), Validators.max(ranges.combAirTempEnrichedMax)]],
       fuelConsumption: [obj.fuelConsumption, Validators.required]
-    })
+    });
   }
 
   getObjFromForm(form: FormGroup): O2Enrichment {
@@ -72,17 +72,17 @@ export class O2EnrichmentService {
       combAirTemp: form.controls.combAirTemp.value,
       combAirTempEnriched: form.controls.combAirTempEnriched.value,
       fuelConsumption: form.controls.fuelConsumption.value
-    }
+    };
   }
 
   getMinMaxRanges(settings: Settings, o2Enrichment?: O2Enrichment): O2EnrichmentMinMax {
     let tmpTempMin: number = 0;
     let tmpFlueGasTempMax: number = 4000;
     let o2CombAirMax: number = 2000;
-    let combAirMax: number = 2000
+    let combAirMax: number = 2000;
     let combAirEnrichedMax: number = 2000;
 
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       tmpTempMin = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpTempMin).from('F').to('C'), 0);
       tmpFlueGasTempMax = this.convertUnitsService.roundVal(this.convertUnitsService.value(tmpFlueGasTempMax).from('F').to('C'), 0);
       o2CombAirMax = this.convertUnitsService.roundVal(this.convertUnitsService.value(o2CombAirMax).from('F').to('C'), 0);
@@ -125,7 +125,7 @@ export class O2EnrichmentService {
       //combAirTempEnriched
       combAirTempEnrichedMin: tmpTempMin,
       combAirTempEnrichedMax: combAirEnrichedMax
-    }
+    };
     return tmpO2EnrichmentMinMax;
   }
 
@@ -168,19 +168,19 @@ export class O2EnrichmentService {
 
 
 export interface O2EnrichmentMinMax {
-  o2CombAirMax: number,
-  o2CombAirEnrichedMin: number,
-  o2CombAirEnrichedMax: number,
-  flueGasTempMin: number,
-  flueGasTempMax: number,
-  flueGasTempEnrichedMin: number,
-  flueGasTempEnrichedMax: number,
-  o2FlueGasMin: number,
-  o2FlueGasMax: number,
-  o2FlueGasEnrichedMin: number,
-  o2FlueGasEnrichedMax: number,
-  combAirTempMin: number,
-  combAirTempMax: number,
-  combAirTempEnrichedMin: number,
-  combAirTempEnrichedMax: number
+  o2CombAirMax: number;
+  o2CombAirEnrichedMin: number;
+  o2CombAirEnrichedMax: number;
+  flueGasTempMin: number;
+  flueGasTempMax: number;
+  flueGasTempEnrichedMin: number;
+  flueGasTempEnrichedMax: number;
+  o2FlueGasMin: number;
+  o2FlueGasMax: number;
+  o2FlueGasEnrichedMin: number;
+  o2FlueGasEnrichedMax: number;
+  combAirTempMin: number;
+  combAirTempMax: number;
+  combAirTempEnrichedMin: number;
+  combAirTempEnrichedMax: number;
 }

@@ -103,7 +103,7 @@ export class SpecificSpeedComponent implements OnInit {
     if (this.calculator) {
       this.calcExists = true;
       if (this.calculator.specificSpeedInputs) {
-        this.speedForm = this.specificSpeedService.initFormFromObj(this.calculator.specificSpeedInputs)
+        this.speedForm = this.specificSpeedService.initFormFromObj(this.calculator.specificSpeedInputs);
       } else {
         this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
         let tmpSpecificSpeedInputs: SpecificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
@@ -122,7 +122,7 @@ export class SpecificSpeedComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       specificSpeedInputs: tmpSpecificSpeedInputs
-    }
+    };
     return tmpCalculator;
   }
 
@@ -152,7 +152,7 @@ export class SpecificSpeedComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

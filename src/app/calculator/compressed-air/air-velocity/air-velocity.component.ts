@@ -43,7 +43,7 @@ export class AirVelocityComponent implements OnInit {
       airFlow: 0,
       pipePressure: 0,
       atmosphericPressure: 0,
-    }
+    };
     this.compressedAirService.airVelocityInputs = this.inputs;
     this.getAirVelocity(this.inputs);
   }
@@ -57,7 +57,7 @@ export class AirVelocityComponent implements OnInit {
     this.outputs = this.standaloneService.airVelocity(inputs, this.settings);
   }
 
-  setField(str: string){
+  setField(str: string) {
     this.currentField = str;
   }
 }

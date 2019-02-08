@@ -33,14 +33,14 @@ export class LandingScreenComponent implements OnInit {
     this.calculatorService.selectedToolType.next(str);
   }
 
-  createAssessment(str?: string){
-    if(str){
+  createAssessment(str?: string) {
+    if (str) {
       this.createAssessmentType = str;
     }
     this.showCreateAssessment = true;
   }
 
-  hideCreateAssessment(){
+  hideCreateAssessment() {
     this.showCreateAssessment = false;
   }
 }

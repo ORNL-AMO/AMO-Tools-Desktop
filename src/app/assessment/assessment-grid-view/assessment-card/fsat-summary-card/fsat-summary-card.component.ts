@@ -43,7 +43,7 @@ export class FsatSummaryCardComponent implements OnInit {
             this.maxCostSavings = tmpSavingCalc;
             this.maxEnergySavings = tmpSavingEnergy;
           }
-        })
+        });
       }
     }
   }

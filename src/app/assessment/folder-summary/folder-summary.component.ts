@@ -57,7 +57,7 @@ export class FolderSummaryComponent implements OnInit {
     this.counter = setTimeout(() => {
       this.getData();
       this.getForm();
-    }, 150)
+    }, 150);
   }
 
   getForm() {
@@ -82,13 +82,13 @@ export class FolderSummaryComponent implements OnInit {
       this.numPsats = test.PSAT || 0;
       this.numFsats = test.FSAT || 0;
       this.directory.assessments.forEach(assessment => {
-        if (assessment.type == 'PSAT') {
+        if (assessment.type === 'PSAT') {
           if (assessment.psat.setupDone) {
             let result = this.psatService.resultsExisting(assessment.psat.inputs, this.directorySettings);
             this.psatEnergyUsed = result.annual_energy + this.psatEnergyUsed;
             this.psatEnergyCost = result.annual_cost + this.psatEnergyCost;
           }
-        } else if (assessment.type == 'PHAST') {
+        } else if (assessment.type === 'PHAST') {
           if (assessment.phast.setupDone) {
             let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
             let result = this.executiveSummaryService.getSummary(assessment.phast, false, settings, assessment.phast);
@@ -96,7 +96,7 @@ export class FolderSummaryComponent implements OnInit {
             this.phastEnergyCost = this.phastEnergyCost + result.annualCost;
           }
         }
-        else if (assessment.type == 'FSAT') {
+        else if (assessment.type === 'FSAT') {
           if (assessment.fsat.setupDone) {
             let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
             let result = this.fsatService.getResults(assessment.fsat, true, this.directorySettings);
@@ -104,7 +104,7 @@ export class FolderSummaryComponent implements OnInit {
             this.fsatEnergyCost = result.annualCost + this.fsatEnergyCost;
           }
         }
-      })
+      });
     }
   }
 
@@ -129,7 +129,7 @@ export class FolderSummaryComponent implements OnInit {
           this.getForm();
           this.getData();
           this.settingsModal.hide();
-        })
+        });
       });
     } else {
       this.getForm();

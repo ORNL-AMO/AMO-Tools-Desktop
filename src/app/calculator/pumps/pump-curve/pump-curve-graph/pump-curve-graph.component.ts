@@ -147,7 +147,7 @@ export class PumpCurveGraphComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeGraph();
-    }, 100)
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -168,16 +168,16 @@ export class PumpCurveGraphComponent implements OnInit {
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = true;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
@@ -187,26 +187,26 @@ export class PumpCurveGraphComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -214,7 +214,7 @@ export class PumpCurveGraphComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -222,7 +222,7 @@ export class PumpCurveGraphComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       if (this.hoverBtnExpand) {
         this.displayExpandTooltip = true;
       }
@@ -230,7 +230,7 @@ export class PumpCurveGraphComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
       }
@@ -265,7 +265,7 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   checkGraphModificationCurve() {
-    if (this.pumpCurve.baselineMeasurement != this.pumpCurve.modifiedMeasurement) {
+    if (this.pumpCurve.baselineMeasurement !== this.pumpCurve.modifiedMeasurement) {
       this.graphModificationCurve = true;
     }
     else {
@@ -276,7 +276,7 @@ export class PumpCurveGraphComponent implements OnInit {
   checkForm() {
     if (this.pumpCurve.maxFlow > 0) {
       return true;
-    } else { return false }
+    } else { return false; }
   }
 
   resizeGraph() {
@@ -383,30 +383,30 @@ export class PumpCurveGraphComponent implements OnInit {
       dataSystem.shift();
     }
     //create axis
-    this.xAxis = this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 5, null, null, null, tickFormat)
+    this.xAxis = this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 5, null, null, null, tickFormat);
     this.yAxis = this.lineChartHelperService.setYAxis(this.svg, this.y, this.width, this.isGridToggled, 6, 0, 0, 15, null);
     //append dummy curve
     if (this.graphPumpCurve) {
       //repair maxY bug
-      if (this.selectedFormView == 'Equation') {
+      if (this.selectedFormView === 'Equation') {
         data[0].y = this.pumpCurve.headConstant;
         data.pop();
       }
       else {
-        let tmpMaxX = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.flow });
-        let tmpMaxY = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.head });
+        let tmpMaxX = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.flow; });
+        let tmpMaxY = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.head; });
         for (let i = 0; i < data.length; i++) {
           if (data[i].x > tmpMaxX.flow) {
             data[i] = {
               x: tmpMaxX.flow,
               y: data[i].y
-            }
+            };
           }
           if (data[i].y > tmpMaxY.head) {
             data[i] = {
               x: data[i].x,
               y: tmpMaxY.head
-            }
+            };
           }
         }
       }
@@ -440,7 +440,7 @@ export class PumpCurveGraphComponent implements OnInit {
 
     if (this.graphSystemCurve && this.graphPumpCurve) {
       let maxFlow = this.pumpCurve.maxFlow;
-      if (this.selectedFormView == 'Data') {
+      if (this.selectedFormView === 'Data') {
         maxFlow = _.maxBy(this.pumpCurve.dataRows, (row) => {
           return row.flow;
         }).flow;
@@ -621,7 +621,7 @@ export class PumpCurveGraphComponent implements OnInit {
         let colors = {
           borderColor: "#000",
           fillColor: "#000"
-        }
+        };
         this.keyColors.unshift(colors);
         this.rowData.unshift(data);
         this.tableData.unshift(dataPiece);
@@ -652,7 +652,7 @@ export class PumpCurveGraphComponent implements OnInit {
         let colors = {
           borderColor: "#000",
           fillColor: "#000"
-        }
+        };
         this.keyColors.unshift(colors);
         this.rowData.unshift(data);
         this.tableData.unshift(dataPiece);
@@ -697,19 +697,19 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.modIntersect) {
       iteratorShift++;
       if (this.baselineIntersect) {
-        if (i == 1) {
+        if (i === 1) {
           this.modIntersect = false;
         }
       }
       else {
-        if (i == 0) {
+        if (i === 0) {
           this.modIntersect = false;
         }
       }
     }
     if (this.baselineIntersect) {
       iteratorShift++;
-      if (i == 0) {
+      if (i === 0) {
         this.baselineIntersect = false;
       }
     }
@@ -734,7 +734,7 @@ export class PumpCurveGraphComponent implements OnInit {
       this.rowData[j] = this.rowData[j + 1];
       this.keyColors[j] = this.keyColors[j + 1];
     }
-    if (i != this.tableData.length - 1) {
+    if (i !== this.tableData.length - 1) {
       this.deleteCount += 1;
     }
     this.tableData.pop();
@@ -768,14 +768,14 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.modIntersect) {
       iteratorShift++;
     }
-    if (this.baselineIntersect && i == 0) {
+    if (this.baselineIntersect && i === 0) {
       ids.push("#intersectBaseline");
     }
     else if (this.modIntersect) {
-      if (i == 0 && !this.baselineIntersect) {
+      if (i === 0 && !this.baselineIntersect) {
         ids.push("#intersectMod");
       }
-      else if (i == 1) {
+      else if (i === 1) {
         ids.push("#intersectMod");
       }
       else {
@@ -805,14 +805,14 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.modIntersect) {
       iteratorShift++;
     }
-    if (this.baselineIntersect && i == 0) {
+    if (this.baselineIntersect && i === 0) {
       ids.push("#intersectBaseline");
     }
     else if (this.modIntersect) {
-      if (i == 0 && !this.baselineIntersect) {
+      if (i === 0 && !this.baselineIntersect) {
         ids.push("#intersectMod");
       }
-      else if (i == 1) {
+      else if (i === 1) {
         ids.push("#intersectMod");
       }
       else {
@@ -1031,7 +1031,7 @@ export class PumpCurveGraphComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
     if (this.expanded) {
-      if (event.code == 'Escape') {
+      if (event.code === 'Escape') {
         this.contractChart();
       }
     }

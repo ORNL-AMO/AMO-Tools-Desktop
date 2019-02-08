@@ -21,7 +21,7 @@ export class EnergyUseService {
     gasPressure: 85,
     orificePressureDrop: 10,
     operatingTime: 10
-  }
+  };
 
   constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
 
@@ -55,14 +55,14 @@ export class EnergyUseService {
       gasPressure: form.controls.gasPressure.value,
       orificePressureDrop: form.controls.orificePressureDrop.value,
       operatingTime: form.controls.operatingTime.value,
-    }
+    };
     return this.flowCalculations;
   }
 
 
 
   initDefaultValues(settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       return this.flowCalculations = {
         //natural gas
         gasType: 0,

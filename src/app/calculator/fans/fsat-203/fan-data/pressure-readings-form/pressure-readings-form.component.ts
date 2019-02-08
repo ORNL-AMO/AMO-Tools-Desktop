@@ -21,11 +21,11 @@ export class PressureReadingsFormComponent implements OnInit {
 
   ngOnInit() {
     this.numLabels = new Array();
-    if (this.planeData.traverseData.length != this.planeData.numInsertionPoints || this.planeData.traverseData[0].length != this.planeData.numTraverseHoles) {
+    if (this.planeData.traverseData.length !== this.planeData.numInsertionPoints || this.planeData.traverseData[0].length !== this.planeData.numTraverseHoles) {
       let cols = new Array();
       for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
-        cols.push(0)
-        this.numLabels.push(i+1);
+        cols.push(0);
+        this.numLabels.push(i + 1);
       }
 
       let rows = new Array();
@@ -34,9 +34,9 @@ export class PressureReadingsFormComponent implements OnInit {
       }
       this.traverseHoles = rows;
     } else {
-      this.traverseHoles = this.planeData.traverseData
-      for(let i = 0; i < this.planeData.numTraverseHoles; i++){
-        this.numLabels.push(i+1);
+      this.traverseHoles = this.planeData.traverseData;
+      for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
+        this.numLabels.push(i + 1);
       }
     }
   }
@@ -49,11 +49,11 @@ export class PressureReadingsFormComponent implements OnInit {
 
   resetData() {
     this.numLabels = new Array();
-    if (this.planeData.traverseData.length != this.planeData.numInsertionPoints || this.planeData.traverseData[0].length != this.planeData.numTraverseHoles) {
+    if (this.planeData.traverseData.length !== this.planeData.numInsertionPoints || this.planeData.traverseData[0].length !== this.planeData.numTraverseHoles) {
       let cols = new Array();
       for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
-        cols.push(0)
-        this.numLabels.push(i+1);
+        cols.push(0);
+        this.numLabels.push(i + 1);
       }
 
       let rows = new Array();
@@ -62,9 +62,9 @@ export class PressureReadingsFormComponent implements OnInit {
       }
       this.traverseHoles = rows;
     } else {
-      this.traverseHoles = this.planeData.traverseData
-      for(let i = 0; i < this.planeData.numTraverseHoles; i++){
-        this.numLabels.push(i+1);
+      this.traverseHoles = this.planeData.traverseData;
+      for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
+        this.numLabels.push(i + 1);
       }
     }
     this.save();
@@ -75,7 +75,7 @@ export class PressureReadingsFormComponent implements OnInit {
     this.emitSave.emit(this.planeData);
   }
 
-  goBack(){
+  goBack() {
     this.emitBack.emit(true);
   }
 

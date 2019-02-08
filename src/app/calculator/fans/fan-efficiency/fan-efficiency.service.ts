@@ -15,7 +15,7 @@ export class FanEfficiencyService {
       outletPressure: ['', Validators.required],
       flowRate: ['', Validators.required],
       compressibility: ['', Validators.required]
-    })
+    });
   }
 
   initFormFromFsat(fsat: FSAT): FormGroup {
@@ -26,7 +26,7 @@ export class FanEfficiencyService {
       outletPressure: ['', Validators.required],
       flowRate: ['', Validators.required],
       compressibility: ['', Validators.required]
-    })
+    });
   }
 
   initFormFromObj(obj: FanEfficiencyInputs): FormGroup {
@@ -37,7 +37,7 @@ export class FanEfficiencyService {
       outletPressure: [obj.outletPressure, Validators.required],
       flowRate: [obj.flowRate, Validators.required],
       compressibility: [obj.compressibility, Validators.required]
-    })
+    });
   }
 
   getObjFromForm(form: FormGroup): FanEfficiencyInputs {
@@ -48,16 +48,16 @@ export class FanEfficiencyService {
       outletPressure: form.controls.outletPressure.value,
       flowRate: form.controls.flowRate.value,
       compressibility: form.controls.compressibility.value
-    }
+    };
   }
 }
 
 
 export interface FanEfficiencyInputs {
-  fanType: number,
-  fanSpeed: number,
-  inletPressure: number,
-  outletPressure: number,
-  flowRate: number,
-  compressibility: number
+  fanType: number;
+  fanSpeed: number;
+  inletPressure: number;
+  outletPressure: number;
+  flowRate: number;
+  compressibility: number;
 }

@@ -45,42 +45,42 @@ export class CoreComponent implements OnInit {
 
   ngOnInit() {
     this.electronService.ipcRenderer.once('available', (event, arg) => {
-      if (arg == true) {
+      if (arg === true) {
         this.showUpdateModal = true;
         this.assessmentService.updateAvailable.next(true);
         this.changeDetectorRef.detectChanges();
       }
-    })
+    });
 
     this.electronService.ipcRenderer.once('error', (event, arg) => {
-      if (arg == true) {
+      if (arg === true) {
         this.updateError = true;
       }
-    })
+    });
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
 
-    if (this.electronService.process.platform == 'win32') {
+    if (this.electronService.process.platform === 'win32') {
       this.showScreenshot = false;
     }
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(val => {
       this.dashboardTab = val;
-    })
+    });
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
-      this.inTutorialsView = (this.router.url == '/') && this.dashboardTab == 'tutorials';
+      this.inTutorialsView = (this.router.url === '/') && this.dashboardTab === 'tutorials';
       if (val && !this.assessmentService.tutorialShown) {
         this.showTutorial = true;
         this.hideTutorial = false;
         this.tutorialType = val;
         this.changeDetectorRef.detectChanges();
       }
-    })
+    });
 
-    if (this.suiteDbService.hasStarted == false) {
+    if (this.suiteDbService.hasStarted === false) {
       this.suiteDbService.startup();
     }
-    if (this.indexedDbService.db == undefined) {
+    if (this.indexedDbService.db === undefined) {
       this.initData();
     }
   }
@@ -97,7 +97,7 @@ export class CoreComponent implements OnInit {
   initData() {
     this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
       this.indexedDbService.getAllDirectories().then(val => {
-        if (val.length == 0) {
+        if (val.length === 0) {
           this.coreService.createDirectory().then(() => {
             this.coreService.createExamples().then(() => {
               this.coreService.createDirectorySettings().then(() => {
@@ -108,8 +108,8 @@ export class CoreComponent implements OnInit {
         } else {
           this.setAllDbData();
         }
-      })
-    })
+      });
+    });
   }
 
   setAllDbData() {
@@ -119,10 +119,10 @@ export class CoreComponent implements OnInit {
           this.calculatorDbService.setAll().then(() => {
             this.idbStarted = true;
             this.changeDetectorRef.detectChanges();
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
 

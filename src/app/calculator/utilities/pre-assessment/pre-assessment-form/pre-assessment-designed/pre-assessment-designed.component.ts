@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
-import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedZone } from '../../../../../shared/models/phast/designedEnergy'
+import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedZone } from '../../../../../shared/models/phast/designedEnergy';
 
 import { Settings } from '../../../../../shared/models/settings';
 @Component({
@@ -32,7 +32,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       fuel: this.assessment.fuel,
       steam: this.assessment.steam,
       electricity: this.assessment.electric
-    }
+    };
     this.addZone();
   }
 
@@ -41,7 +41,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
     if (!this.assessment.designedEnergy.electricity) {
       this.assessment.designedEnergy.zones.forEach(zone => {
         zone.designedEnergyElectricity = this.getEmptyElectricityInput();
-      })
+      });
     }
     this.calculate();
   }
@@ -51,7 +51,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
     if (!this.assessment.designedEnergy.fuel) {
       this.assessment.designedEnergy.zones.forEach(zone => {
         zone.designedEnergyFuel = this.getEmptyFuelInput();
-      })
+      });
     }
     this.calculate();
   }
@@ -61,7 +61,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
     if (!this.assessment.designedEnergy.steam) {
       this.assessment.designedEnergy.zones.forEach(zone => {
         zone.designedEnergySteam = this.getEmptySteamInput();
-      })
+      });
     }
     this.calculate();
   }
@@ -74,12 +74,12 @@ export class PreAssessmentDesignedComponent implements OnInit {
       designedEnergyElectricity: this.getEmptyElectricityInput(),
       designedEnergyFuel: this.getEmptyFuelInput(),
       designedEnergySteam: this.getEmptySteamInput()
-    })
+    });
     this.calculate();
   }
 
-  removeZone(index: number){
-    this.assessment.designedEnergy.zones.splice(index,1);
+  removeZone(index: number) {
+    this.assessment.designedEnergy.zones.splice(index, 1);
     this.calculate();
   }
 
@@ -89,7 +89,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       steamFlow: 0,
       percentCapacityUsed: 0,
       percentOperatingHours: 0
-    }
+    };
   }
 
   getEmptyFuelInput(): DesignedEnergyFuel {
@@ -98,7 +98,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       percentCapacityUsed: 0,
       totalBurnerCapacity: 0,
       percentOperatingHours: 0
-    }
+    };
   }
 
   getEmptyElectricityInput(): DesignedEnergyElectricity {
@@ -106,7 +106,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
       kwRating: 0,
       percentCapacityUsed: 0,
       percentOperatingHours: 0
-    }
+    };
   }
 
   calculate() {

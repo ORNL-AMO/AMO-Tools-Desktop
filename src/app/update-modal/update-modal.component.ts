@@ -41,7 +41,7 @@ export class UpdateModalComponent implements OnInit {
     this.cd.detectChanges();
     setTimeout(() => {
       this.electronService.ipcRenderer.send('update', null);
-    },500)
+    }, 500);
   }
 
   cancel() {
@@ -49,7 +49,7 @@ export class UpdateModalComponent implements OnInit {
     //this.electronService.ipcRenderer.send('later', null);
   }
 
-  sendMail(){
+  sendMail() {
     this.importExportService.openMailTo();
   }
 }

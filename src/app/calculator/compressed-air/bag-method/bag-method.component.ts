@@ -36,7 +36,7 @@ export class BagMethodComponent implements OnInit {
   ngOnInit() {
     this.inputsArray = this.compressedAirService.bagMethodInputs.inputsArray;
     this.totalOperatingTime = this.compressedAirService.bagMethodInputs.operatingHours;
-    if(this.inputsArray.length == 0){
+    if (this.inputsArray.length === 0) {
       this.initBagMethodArrays();
     }
     this.outputs = {
@@ -54,7 +54,7 @@ export class BagMethodComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.compressedAirService.bagMethodInputs.operatingHours = this.totalOperatingTime;
   }
 
@@ -115,14 +115,14 @@ export class BagMethodComponent implements OnInit {
     let output: BagMethodOutput = {
       flowRate: 0,
       annualConsumption: 0
-    }
+    };
 
     this.inputsArray.push(input);
     this.outputsArray.push(output);
   }
 
   deleteLeakage(i: number) {
-    if (i == this.inputsArray.length - 1) {
+    if (i === this.inputsArray.length - 1) {
       this.inputsArray.pop();
       this.outputsArray.pop();
     }
@@ -132,7 +132,7 @@ export class BagMethodComponent implements OnInit {
       this.inputsArray = new Array<BagMethodInput>();
       this.outputsArray = new Array<BagMethodOutput>();
       for (let j = 0; j < tempInputsArray.length; j++) {
-        if (j != i) {
+        if (j !== i) {
           this.inputsArray.push(tempInputsArray[j]);
           this.outputsArray.push(tempOutputsArray[j]);
         }

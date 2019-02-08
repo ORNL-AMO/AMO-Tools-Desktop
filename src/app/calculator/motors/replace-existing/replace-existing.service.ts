@@ -80,7 +80,7 @@ export class ReplaceExistingService {
       electricityCost: isReplacementMotor ? null : form.controls.electricityCost.value,
       newEfficiency: isReplacementMotor ? form.controls.newEfficiency.value : null,
       purchaseCost: isReplacementMotor ? form.controls.purchaseCost.value : null
-    }
+    };
     return this.replaceExistingData;
   }
 

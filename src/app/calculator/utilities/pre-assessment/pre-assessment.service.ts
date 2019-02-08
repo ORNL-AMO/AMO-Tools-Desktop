@@ -17,14 +17,14 @@ export class PreAssessmentService {
     let results = new Array<{ name: string, percent: number, value: number, color: string, energyCost: number }>();
     //calculation logic to get results (in pre-assessment.component.ts)
     preAssessments.forEach(assessment => {
-      if (assessment.type == 'Metered') {
+      if (assessment.type === 'Metered') {
         if (assessment.meteredEnergy) {
-          let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateMetered(assessment, settings)
+          let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateMetered(assessment, settings);
           if (result) {
             results.push(result);
           }
         }
-      } else if (assessment.type == 'Designed') {
+      } else if (assessment.type === 'Designed') {
         if (assessment.designedEnergy) {
           let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.calculateDesigned(assessment, settings);
           if (result) {
@@ -32,8 +32,8 @@ export class PreAssessmentService {
           }
         }
       }
-    })
-    if (results.length != 0) {
+    });
+    if (results.length !== 0) {
       let sum = this.getSum(results, resultType);
       results.forEach(result => {
         result.percent = this.getResultPercent(result[resultType], sum);
@@ -92,7 +92,7 @@ export class PreAssessmentService {
       if (assessment.designedEnergy.electricity) {
         electricityResults += this.designedEnergyService.calculateElectricityZoneEnergyUsed(zone.designedEnergyElectricity);
       }
-    })
+    });
     fuelCost = fuelResults * assessment.fuelCost;
     steamResults = this.convertSteamResults(steamResults, settings);
     steamCost = steamResults * assessment.steamCost;
@@ -106,7 +106,7 @@ export class PreAssessmentService {
 
   convertSteamResults(val: number, settings: Settings) {
     if (val) {
-      if (settings.unitsOfMeasure == 'Metric') {
+      if (settings.unitsOfMeasure === 'Metric') {
         val = this.convertUnitsService.value(val).from('kJ').to('GJ');
       } else {
         val = this.convertUnitsService.value(val).from('Btu').to('MMBtu');
@@ -117,7 +117,7 @@ export class PreAssessmentService {
 
   convertElectrotechResults(val: number, settings: Settings) {
     if (val) {
-      if (settings.unitsOfMeasure == 'Metric') {
+      if (settings.unitsOfMeasure === 'Metric') {
         val = this.convertUnitsService.value(val).from('kWh').to('GJ');
       } else {
         val = this.convertUnitsService.value(val).from('kWh').to('MMBtu');
@@ -127,14 +127,14 @@ export class PreAssessmentService {
   }
 
   buildResult(num: number, name: string, color: string, energyCost: number): { name: string, percent: number, value: number, color: string, energyCost: number } {
-    if (isNaN(num) != true) {
+    if (isNaN(num) !== true) {
       let result: { name: string, percent: number, value: number, color: string, energyCost: number } = {
         name: name,
         percent: null,
         value: num,
         color: color,
         energyCost: energyCost
-      }
+      };
       return result;
     }
   }

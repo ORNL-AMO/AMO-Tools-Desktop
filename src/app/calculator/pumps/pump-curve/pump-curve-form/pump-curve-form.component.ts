@@ -51,14 +51,14 @@ export class PumpCurveFormComponent implements OnInit {
 
   setSmallUnit() {
     if (!this.isFan) {
-      if (this.settings.distanceMeasurement == 'ft') {
+      if (this.settings.distanceMeasurement === 'ft') {
         this.smallUnit = 'in';
       } else {
         this.smallUnit = 'cm';
       }
     }
     else {
-      if (this.settings.fanFlowRate == 'ft3/min') {
+      if (this.settings.fanFlowRate === 'ft3/min') {
         this.smallUnit = 'in';
       }
       else {
@@ -75,7 +75,7 @@ export class PumpCurveFormComponent implements OnInit {
     let tmpRow: PumpCurveDataRow = {
       head: 0,
       flow: 0
-    }
+    };
     this.pumpCurveForm = this.pumpCurveService.addDataRowToForm(tmpRow, this.pumpCurveForm);
     this.calculate();
   }
@@ -97,15 +97,15 @@ export class PumpCurveFormComponent implements OnInit {
   }
 
   estimateHead() {
-    if (this.selectedFormView == 'Data') {
+    if (this.selectedFormView === 'Data') {
       let tmpArr = new Array<any>();
       this.pumpCurveForm.controls.dataRows.value.forEach(val => {
         tmpArr.push([val.flow, val.head]);
-      })
+      });
       let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.controls.dataOrder.value, precision: 10 });
       let newVal = results.predict(this.pumpCurveForm.controls.exploreFlow.value);
       this.pumpCurveForm.controls.exploreHead.patchValue(newVal[1]);
-    } else if (this.selectedFormView == 'Equation') {
+    } else if (this.selectedFormView === 'Equation') {
       let result = 0;
       result = this.pumpCurveForm.controls.headConstant.value + this.pumpCurveForm.controls.headFlow.value * this.pumpCurveForm.controls.exploreFlow.value + this.pumpCurveForm.controls.headFlow2.value * Math.pow(this.pumpCurveForm.controls.exploreFlow.value, 2) + this.pumpCurveForm.controls.headFlow3.value * Math.pow(this.pumpCurveForm.controls.exploreFlow.value, 3) + this.pumpCurveForm.controls.headFlow4.value * Math.pow(this.pumpCurveForm.controls.exploreFlow.value, 4) + this.pumpCurveForm.controls.headFlow5.value * Math.pow(this.pumpCurveForm.controls.exploreFlow.value, 5) + this.pumpCurveForm.controls.headFlow6.value * Math.pow(this.pumpCurveForm.controls.exploreFlow.value, 6);
       this.pumpCurveForm.controls.exploreHead.patchValue(result);
@@ -113,11 +113,11 @@ export class PumpCurveFormComponent implements OnInit {
   }
 
   estimateFlow() {
-    if (this.selectedFormView == 'Data') {
+    if (this.selectedFormView === 'Data') {
       let tmpArr = new Array<any>();
       this.pumpCurveForm.controls.dataRows.value.forEach(val => {
         tmpArr.push([val.head, val.flow]);
-      })
+      });
       let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.controls.dataOrder.value, precision: 10 });
       let newVal = results.predict(this.pumpCurveForm.controls.exploreHead.value);
       this.pumpCurveForm.controls.exploreFlow.patchValue(newVal[1]);
@@ -141,7 +141,7 @@ export class PumpCurveFormComponent implements OnInit {
   }
 
   changeMeasurementOption() {
-    if (this.pumpCurveForm.controls.measurementOption.value == 0) {
+    if (this.pumpCurveForm.controls.measurementOption.value === 0) {
       this.pumpCurveForm.controls.baselineMeasurement.patchValue(this.convertUnitsService.value(1).from('ft').to(this.smallUnit));
       this.pumpCurveForm.controls.modifiedMeasurement.patchValue(this.convertUnitsService.value(1).from('ft').to(this.smallUnit));
     }

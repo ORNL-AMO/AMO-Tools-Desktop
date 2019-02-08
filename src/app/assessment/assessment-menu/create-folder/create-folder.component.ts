@@ -36,8 +36,8 @@ export class CreateFolderComponent implements OnInit {
     this.directorySettings = this.settingsDbService.getByDirectoryId(this.directory.id);
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.directory && !changes.directory.firstChange){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.directory && !changes.directory.firstChange) {
       this.directorySettings = this.settingsDbService.getByDirectoryId(this.directory.id);
       this.newFolderForm = this.initForm();
     }
@@ -71,7 +71,7 @@ export class CreateFolderComponent implements OnInit {
         parentDirectoryId: this.directory.id,
         createdDate: new Date(),
         modifiedDate: new Date()
-      }
+      };
 
       if (this.newFolderForm.controls.companyName.value || this.newFolderForm.controls.facilityName.value) {
         delete this.directorySettings.facilityInfo;
@@ -79,7 +79,7 @@ export class CreateFolderComponent implements OnInit {
           companyName: this.newFolderForm.controls.companyName.value,
           facilityName: this.newFolderForm.controls.facilityName.value,
           date: new Date().toLocaleDateString()
-        }
+        };
       }
 
       this.indexedDbService.addDirectory(newDir).then(newDirId => {
@@ -92,19 +92,19 @@ export class CreateFolderComponent implements OnInit {
               this.directory.subDirectory = this.directoryDbService.getSubDirectoriesById(this.directory.id);
               this.newFolderForm = this.initForm();
               this.newDirectory.emit(true);
-            })
+            });
           });
-        })
-      })
+        });
+      });
     }
   }
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
     if (parentDir) {
       let str = parentDir.name + '/';
       while (parentDir.parentDirectoryId) {
-        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
         str = parentDir.name + '/' + str;
       }
       return str;
