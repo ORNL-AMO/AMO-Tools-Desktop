@@ -19,12 +19,13 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addBaselineEquipment()">+Add Equipment</a>
             </div>
-            <div class="pb-2" *ngFor="let data of baselineData; let i = index;">
+            <div class="pb-2" *ngFor="let data of baselineForms; let i = index;">
               <label class="group-label w-100 bold">
                 <span class="fa fa-lightbulb-o pr-2"></span>Equipment #{{i + 1}}
-                <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineEquipment(i)"></span>
+                <span *ngIf="baselineForms.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineEquipment(i)"></span>
               </label>
               <!-- app form -->
+              <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="baselineForms[i]" [isBaseline]="true"></app-electricity-reduction-form>
             </div>
             <div class="w-100 justify content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
@@ -45,10 +46,10 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addModificationEquipment()">+Add Equipment</a>
             </div>
-            <div class="pb-2" *ngFor="let data of modificationData; let i = index;">
+            <div class="pb-2" *ngFor="let data of modificationForms; let i = index;">
               <label class="group-label w-100 bold">
                 <span class="fa fa-lightbulb-o pr-2"></span>Equipment #{{i + 1}}
-                <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeModificationEquipment(i)"></span>
+                <span *ngIf="modificationForms.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeModificationEquipment(i)"></span>
               </label>
               <!-- app form -->
             </div>

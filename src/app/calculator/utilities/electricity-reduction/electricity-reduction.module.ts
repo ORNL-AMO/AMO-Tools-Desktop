@@ -19,6 +19,9 @@ import { ElectricityReductionFormComponent } from './electricity-reduction-form/
   ],
   providers: [
     ElectricityReductionService
+  ],
+  exports: [
+    ElectricityReductionComponent
   ]
 })
 export class ElectricityReductionModule { }
