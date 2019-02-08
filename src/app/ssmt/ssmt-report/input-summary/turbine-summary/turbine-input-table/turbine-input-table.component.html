@@ -1,0 +1,187 @@
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold" [ngStyle]="{'width.%': 100 /(numMods+2)}">
+        {{tableLabel}}
+      </td>
+      <td [ngStyle]="{'width.%': 100 /(numMods+2)}"></td>
+      <td *ngFor="let mod of modificationTurbines" [ngStyle]="{'width.%': 100 /(numMods+2)}"></td>
+    </tr>
+    <tr>
+      <td [ngClass]="{'indicate-report-field-different':isentropicEfficiencyDiff[0] == true}">
+        Isentropic Efficiency
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':isentropicEfficiencyDiff[0] == true}">
+        <span *ngIf="baselineTurbine.useTurbine == true">
+          {{baselineTurbine.isentropicEfficiency}}
+        </span>
+        <span *ngIf="baselineTurbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+      <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.isentropicEfficiency, mod.turbine.isentropicEfficiency, 'isentropicEfficiencyDiff', 0)}">
+        <span *ngIf="mod.turbine.useTurbine == true">
+          {{mod.turbine.isentropicEfficiency}}
+        </span>
+        <span *ngIf="mod.turbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+    </tr>
+
+    <tr>
+      <td [ngClass]="{'indicate-report-field-different':generationEfficiencyDiff[0] == true}">
+        Generation Efficiency
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':generationEfficiencyDiff[0] == true}">
+        <span *ngIf="baselineTurbine.useTurbine == true">
+          {{baselineTurbine.generationEfficiency}}
+        </span>
+        <span *ngIf="baselineTurbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+      <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.generationEfficiency, mod.turbine.generationEfficiency, 'generationEfficiencyDiff', 0)}">
+        <span *ngIf="mod.turbine.useTurbine == true">
+          {{mod.turbine.generationEfficiency}}
+        </span>
+        <span *ngIf="mod.turbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+    </tr>
+
+    <tr *ngIf="turbineType == 'condensing'">
+      <td [ngClass]="{'indicate-report-field-different':condenserPressureDiff[0] == true}">
+        Condenser Pressure
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':condenserPressureDiff[0] == true}">
+        <span *ngIf="baselineTurbine.useTurbine == true">
+          {{baselineTurbine.condenserPressure}}
+        </span>
+        <span *ngIf="baselineTurbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+      <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.condenserPressure, mod.turbine.condenserPressure, 'condenserPressureDiff', 0)}">
+        <span *ngIf="mod.turbine.useTurbine == true">
+          {{mod.turbine.condenserPressure}}
+        </span>
+        <span *ngIf="mod.turbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td [ngClass]="{'indicate-report-field-different':operationTypeDiff[0] == true}">
+        Operation Type
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':operationTypeDiff[0] == true}">
+        <span *ngIf="baselineTurbine.useTurbine == true">
+          <span *ngIf="turbineType == 'condensing'">
+            <span *ngIf="baselineTurbine.operationType == 0">Fixed Flow</span>
+            <span *ngIf="baselineTurbine.operationType == 1">Fixed Power</span>
+          </span>
+          <span *ngIf="turbineType != 'condensing'">
+            <span *ngIf="baselineTurbine.operationType == 0">Steam Flow</span>
+            <span *ngIf="baselineTurbine.operationType == 1">Power Generation</span>
+            <span *ngIf="baselineTurbine.operationType == 2">Balance Header</span>
+            <span *ngIf="baselineTurbine.operationType == 3">Power Range</span>
+            <span *ngIf="baselineTurbine.operationType == 4">Flow Range</span>
+          </span>
+        </span>
+        <span *ngIf="baselineTurbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+      <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.operationType, mod.turbine.operationType, 'operationTypeDiff', 0)}">
+        <span *ngIf="mod.turbine.useTurbine == true">
+          <span *ngIf="turbineType == 'condensing'">
+            <span *ngIf="mod.turbine.operationType == 0">Fixed Flow</span>
+            <span *ngIf="mod.turbine.operationType == 1">Fixed Power</span>
+          </span>
+          <span *ngIf="turbineType != 'condensing'">
+            <span *ngIf="mod.turbine.operationType == 0">Steam Flow</span>
+            <span *ngIf="mod.turbine.operationType == 1">Power Generation</span>
+            <span *ngIf="mod.turbine.operationType == 2">Balance Header</span>
+            <span *ngIf="mod.turbine.operationType == 3">Power Range</span>
+            <span *ngIf="mod.turbine.operationType == 4">Flow Range</span>
+          </span>
+        </span>
+        <span *ngIf="mod.turbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+    </tr>
+
+    <tr *ngIf="turbineType == 'condensing'">
+      <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
+        Operation Value
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
+        <span *ngIf="baselineTurbine.useTurbine == true">
+          {{baselineTurbine.operationValue}}
+        </span>
+        <span *ngIf="baselineTurbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+      <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.operationValue, mod.turbine.operationValue, 'operationValue1Diff', 0)}">
+        <span *ngIf="mod.turbine.useTurbine == true">
+          {{mod.turbine.operationValue}}
+        </span>
+        <span *ngIf="mod.turbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+    </tr>
+
+    <tr *ngIf="turbineType != 'condensing'">
+      <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
+        Operation Value 1
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
+        <span *ngIf="baselineTurbine.useTurbine == true">
+          <span *ngIf="baselineTurbine.operationValue1">{{baselineTurbine.operationValue1}}</span>
+          <span *ngIf="!baselineTurbine.operationValue1">&mdash;</span>
+        </span>
+        <span *ngIf="baselineTurbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+      <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.operationValue1, mod.turbine.operationValue1, 'operationValue1Diff', 0)}">
+        <span *ngIf="mod.turbine.useTurbine == true">
+          <span *ngIf="mod.turbine.operationValue1">{{mod.turbine.operationValue1}}</span>
+          <span *ngIf="!mod.turbine.operationValue1">&mdash;</span>
+        </span>
+        <span *ngIf="mod.turbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+    </tr>
+
+    <tr *ngIf="turbineType != 'condensing'">
+      <td [ngClass]="{'indicate-report-field-different':operationValue2Diff[0] == true}">
+        Operation Value 2
+      </td>
+      <td [ngClass]="{'indicate-report-field-different':operationValue2Diff[0] == true}">
+        <span *ngIf="baselineTurbine.useTurbine == true">
+          <span *ngIf="baselineTurbine.operationValue2">{{baselineTurbine.operationValue2}}</span>
+          <span *ngIf="!baselineTurbine.operationValue2">&mdash;</span>
+        </span>
+        <span *ngIf="baselineTurbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+      <td *ngFor="let mod of modificationTurbines" [ngClass]="{'indicate-report-field-different': checkDiff(baselineTurbine.operationValue2, mod.turbine.operationValue2, 'operationValue2Diff', 0)}">
+        <span *ngIf="mod.turbine.useTurbine == true">
+          <span *ngIf="mod.turbine.operationValue2">{{mod.turbine.operationValue2}}</span>
+          <span *ngIf="!mod.turbine.operationValue2">&mdash;</span>
+        </span>
+        <span *ngIf="mod.turbine.useTurbine == false">
+          &mdash;
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>

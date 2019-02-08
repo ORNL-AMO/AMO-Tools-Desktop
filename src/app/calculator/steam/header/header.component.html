@@ -2,7 +2,7 @@
   <div class="d-flex flex-column modification w-50 scroll-item mh-100">
     <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
       <div class="col-md-auto">
-        <img src="assets/images/calculator-icons/steam-icons/header.png" class="ico-size pr-2 pl-2">
+        <img src="assets/images/calculator-icons/steam-icons/header.png" class="ico-size steam pr-2 pl-2">
       </div>
       <h3>Header Calculator</h3>
     </div>
@@ -67,7 +67,7 @@
       <app-header-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
         [thermodynamicQuantity]="inletThermoQuantity"></app-header-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-header-results *ngIf="results.header" [results]="results.header" [settings]="settings" [name]="'Combined Header'"></app-header-results>
+        <app-header-results *ngIf="results.header" [results]="results.header" [settings]="settings" [name]="'Combined Header'" (tableStringEmitter)="updateTable0String($event)"></app-header-results>
         <app-header-results *ngIf="results.inlet1" [results]="results.inlet1" [settings]="settings" [name]="'Inlet 1'"></app-header-results>
         <app-header-results *ngIf="input.numInlets > 1" [results]="results.inlet2" [settings]="settings" [name]="'Inlet 2'"></app-header-results>
         <app-header-results *ngIf="input.numInlets > 2" [results]="results.inlet3" [settings]="settings" [name]="'Inlet 3'"></app-header-results>

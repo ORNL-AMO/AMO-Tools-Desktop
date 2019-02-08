@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { ReplaceExistingResults } from '../replace-existing.component';
 
 @Component({
@@ -9,10 +9,16 @@ import { ReplaceExistingResults } from '../replace-existing.component';
 export class ReplaceExistingResultsComponent implements OnInit {
   @Input()
   results: ReplaceExistingResults;
-  
+
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
 }

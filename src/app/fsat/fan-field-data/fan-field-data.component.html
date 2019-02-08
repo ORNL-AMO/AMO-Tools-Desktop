@@ -25,7 +25,7 @@
     </div>
     <!--min-->
     <div class="form-group" [ngClass]="{'indicate-different': isCostDifferent(),'error': warnings.costError !== null, 'invalid':fieldDataForm.controls.cost.invalid}">
-      <label for="{{'cost_'+idString}}">Cost</label>
+      <label for="{{'cost_'+idString}}">Electricity Cost</label>
       <div class="input-group">
         <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost" id="{{'cost_'+idString}}"
           (input)="save()" (focus)="focusField('cost')" onfocus="this.select();" [readonly]="!selected">

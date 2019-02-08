@@ -24,7 +24,7 @@
     </div>
 
     <div class="form-group" [ngClass]="{'indicate-different': isCostKwhrDifferent(), 'invalid': psatForm.controls.costKwHr.invalid}">
-      <label for="{{'costKwHr_'+idString}}">Cost</label>
+      <label for="{{'costKwHr_'+idString}}">Electricity Cost</label>
       <div class="input-group">
         <input [readonly]="!selected" name="costKwHr" type="number" min="0" max="1" step="any" class="form-control"
           formControlName="costKwHr" id="{{'costKwHr_'+idString}}" (input)="save()" (focus)="focusField('costKwHr')"

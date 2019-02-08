@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PreAssessment } from '../pre-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { trigger, state, style, animate, transition } from '@angular/animations';
@@ -41,6 +41,9 @@ export class PreAssessmentFormComponent implements OnInit {
   emitEnergyType = new EventEmitter<string>();
 
   isEditingName: boolean = false;
+
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
 
   constructor(private preAssessmentService: PreAssessmentService) { }
 
@@ -141,5 +144,9 @@ export class PreAssessmentFormComponent implements OnInit {
         return 0;
       }
     }
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 }

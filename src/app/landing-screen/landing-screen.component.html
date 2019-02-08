@@ -11,7 +11,8 @@
 			</p>
 		</div>
 		<hr class="my-2">
-		<p class="text-center text-help no-margin-bottom">Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many
+		<p class="text-center text-help no-margin-bottom">Create an assessment to model your system and find opportunities
+			for efficiency or run calculations from one of our many
 			property and equipment calculators.
 			<br>Get started with one of the following options.</p>
 		<div class="row justify-content-center arrow-row">
@@ -69,18 +70,32 @@
 								</div>
 
 								<div class="d-flex">
-									<div class="p-2 align-items-center">
+									<div class="p-2 align-items-center fan">
 										<div class="d-flex flex-column fan-icon align-items-center justify-content-center">
 											<img class="fan-image" src="assets/images/ico-fsat-diagram.png">
 										</div>
 									</div>
 									<div class="p-2 d-flex">
 										<div class="d-flex flex-column">
-											<a (click)="createAssessment('Fan')" class="click-link p-0">Create Fan Assessment</a>
+											<a (click)="createAssessment('Fan')" class="click-link p-0 fan">Create Fan Assessment</a>
 											<span class="former-name">formerly DOE Fan System Assessment Tool (FSAT)</span>
 										</div>
 									</div>
 								</div>
+								<!--Steam Assessment-->
+								<div class="d-flex">
+										<div class="p-2 align-items-center steam">
+											<div class="d-flex flex-column steam-icon align-items-center justify-content-center">
+												<img class="steam-image" src="assets/images/ico-ssmt-diagram.png">
+											</div>
+										</div>
+										<div class="p-2 d-flex">
+											<div class="d-flex flex-column">
+												<a (click)="createAssessment('Steam')" class="click-link p-0 steam">Create Steam Assessment</a>
+												<span class="former-name steam">formerly DOE Steam System Modeler Tool (SSMT)</span>
+											</div>
+										</div>
+									</div>
 								<hr>
 								<div class="d-flex flex-column">
 									<a (click)="hideScreen()" class="click-link align-self-center">
@@ -114,6 +129,11 @@
 								<div class="p-2">
 									<a class="icon click-link" (click)="chooseCalculator('compressed-air')">
 										<i class="fa fa-calculator"></i> Compressed Air
+									</a>
+								</div>
+								<div class="p-2">
+									<a class="icon click-link" (click)="chooseCalculator('lighting')">
+										<i class="fa fa-calculator"></i> Lighting
 									</a>
 								</div>
 								<div class="p-2">

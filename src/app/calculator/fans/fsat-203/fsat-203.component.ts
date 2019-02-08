@@ -323,7 +323,7 @@ export class Fsat203Component implements OnInit {
 
   checkShaftPower() {
     let tmpForm: FormGroup = this.fsat203Service.getShaftPowerFormFromObj(this.inputs.FanShaftPower);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status == 'VALID' && this.inputs.FanShaftPower.motorShaftPower !== null && this.inputs.FanShaftPower.motorShaftPower !== undefined && this.inputs.FanShaftPower.motorShaftPower !== NaN) {
       this.shaftPowerDone = true;
     } else {
       this.shaftPowerDone = false;

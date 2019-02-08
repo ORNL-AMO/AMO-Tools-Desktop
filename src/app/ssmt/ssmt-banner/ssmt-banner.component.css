@@ -5,7 +5,7 @@
 
 
 .img-icon{
-    width: 40px;
+    width: 45px;
 }
 
 .furnace-name{
@@ -15,7 +15,12 @@
 }
 
 .img-col{
-    padding-right: 0px;
+    padding-top: 3px;
+    background: white;
+    padding-bottom: 3px;
+    border-radius: 9px;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 .h2-name{

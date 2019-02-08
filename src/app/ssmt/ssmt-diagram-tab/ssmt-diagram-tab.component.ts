@@ -16,30 +16,49 @@ export class SsmtDiagramTabComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
-  
+
   outputData: SSMTOutput;
   inputData: SSMTInputs;
   tabSelect: string = 'results';
   hoveredEquipment: string = 'default';
-  selectedTable: string = 'cost'
+  selectedTable: string = 'cost';
+
+  selectedSSMT: SSMT;
+  ssmtOptions: Array<SSMT>;
+  showOptions: boolean = false;
+  dataCalculated: boolean = false;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.calculateModelService.initResults();
+    this.ssmt.name = 'Baseline';
+    this.selectedSSMT = this.ssmt;
+    this.ssmtOptions = new Array<SSMT>();
+    if (this.ssmt.modifications) {
+      this.ssmtOptions.push(this.ssmt);
+      this.ssmt.modifications.forEach(modification => {
+        this.ssmtOptions.push(modification.ssmt);
+      })
+    }
     if (this.ssmt.setupDone) {
       this.calculateResults();
     }
   }
 
+  setOption(ssmt: SSMT) {
+    this.selectedSSMT = ssmt;
+    this.calculateResults();
+    this.showOptions = false;
+  }
+
   calculateResults() {
-    this.calculateModelService.initData(this.ssmt, this.settings, true);
-    let resultsData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
-    this.inputData = resultsData.inputData;
-    this.outputData = resultsData.outputData;
-    console.log('Return condensate');
-    console.log(this.outputData.returnCondensate);
-    console.log('combined condensate')
-    console.log(this.outputData.combinedCondensate);
+    setTimeout(() => {
+      this.calculateModelService.initResults();
+      this.calculateModelService.initData(this.selectedSSMT, this.settings, true);
+      let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
+      this.inputData = resultsData.inputData;
+      this.outputData = resultsData.outputData;
+      this.dataCalculated = true;
+    }, 100)
   }
   setTab(str: string) {
     this.tabSelect = str;
@@ -51,5 +70,9 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   selectTable(str: string) {
     this.selectedTable = str;
+  }
+
+  toggleShowOptions() {
+    this.showOptions = !this.showOptions;
   }
 }

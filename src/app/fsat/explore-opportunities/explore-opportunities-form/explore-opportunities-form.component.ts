@@ -25,8 +25,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   fsat: FSAT;
   @Input()
   exploreModIndex: number;
-  @Output('emitCalculate')
-  emitCalculate = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Output('emitAddNewMod')
@@ -78,13 +76,13 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.pressureModalSub.unsubscribe();
-  }
-
-  calculate() {
-    this.save();
-    this.emitCalculate.emit(true);
+    console.log(this.fsat.modifications[this.exploreModIndex].fsat.name);
+    if (this.fsat.modifications[this.exploreModIndex] && !this.fsat.modifications[this.exploreModIndex].fsat.name) {
+      this.fsat.modifications[this.exploreModIndex].fsat.name = 'Opportunities Modification';
+      this.save();
+    }
   }
 
   save() {

@@ -26,3 +26,20 @@
    .inner-system-padding{
        padding-left: 3rem;
    }
+
+
+.select-scenario-box{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #F39C12;
+}
+
+.scenario-option:hover, .selected-option:hover{
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.scenario-option{
+    border-top: solid;
+}

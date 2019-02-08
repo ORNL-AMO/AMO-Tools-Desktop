@@ -35,8 +35,9 @@
       <app-energy-use-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-energy-use-help>
       <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
         <div class="w-75">
+
           <label class="group-label">Result Data</label>
-          <table class="table table-hover table-striped">
+          <table #copyTable class="table table-hover table-striped">
             <tbody>
               <tr>
                 <td class="bold w-50">Flow</td>
@@ -77,6 +78,8 @@
               </tr>
             </tbody>
           </table>
+
+          <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()"></app-exportable-results-table>
         </div>
       </div>
     </div>

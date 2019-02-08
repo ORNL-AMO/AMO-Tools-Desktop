@@ -8,6 +8,7 @@ import { HeadToolHelpComponent } from './head-tool-help/head-tool-help.component
 import { HeadToolResultsComponent } from './head-tool-results/head-tool-results.component';
 import { HeadToolSuctionFormComponent } from './head-tool-suction-form/head-tool-suction-form.component';
 import { HeadToolService } from './head-tool.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { HeadToolService } from './head-tool.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SettingsModule
+    SettingsModule,
+    SharedModule
   ],
   declarations: [
     HeadToolComponent,

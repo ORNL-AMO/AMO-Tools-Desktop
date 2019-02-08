@@ -84,20 +84,30 @@
 }
 
 
-.fan-image{
-	width: 50%;
-}
-
-.fan-icon{
-	width: 90px;
+img.fan-image{
+	width: 50px !important;
 }
 
 .psat-image{
 	width: 90px;
+	height:81px;
+}
+.ssmt-icon{
+	width: 90px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 }
 
+.steam-image{
+	width: 75px;
+}
 .phast-image{
 	width: 90px;
+	height:81px;
+}
+.steam-image{
+	width:90px;
+	height:81px;
 }
 
 
@@ -109,4 +119,37 @@
 
 .landing-menu{
 	z-index: +1;
+}
+.p2.align-items-center.steam{
+	padding-top: 15px !important;
+}
+.p2.align-items-center{
+	padding-top: 0px !important;
+}
+a.click-link.p-0.steam {
+	margin-left: 15px;
+}
+
+.p-2.align-items-center.steam {
+	width: 90px;
+	height: 81px;
+	background: linear-gradient(rgba(228, 219, 219, 0.34), #F39C12);
+	border-radius: 15px;
+	border: 0.1px solid rgba(123, 120, 120, 0.25);
+	margin-left: 10px;
+	box-shadow: #7b7878 2px 2px 5px 1px;
+}
+img.steam-image {
+	width: 65px;
+	height: 90px;
+	padding-bottom: 25px;
+}
+.p-2.align-items-center.fan {
+	padding-bottom: 30px !important;
+}
+a.click-link.p-0.fan {
+	margin-left: 8px;
+}
+span.former-name.steam {
+	margin-left: 5px;
 }

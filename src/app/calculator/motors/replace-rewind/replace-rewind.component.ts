@@ -11,11 +11,13 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class ReplaceRewindComponent implements OnInit {
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer') contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
+  containerHeight: number;
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
@@ -32,10 +34,13 @@ export class ReplaceRewindComponent implements OnInit {
     simplePayback: 0
   }
 
+  rewoundMotorInputs: ReplaceRewindData;
+  newMotorInputs: ReplaceRewindData;
+
   constructor(private replaceRewindService: ReplaceRewindService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.inputs = this.replaceRewindService.replaceRewindData;
+    this.initMotorInputs();
     this.calculate(this.inputs);
     this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -49,6 +54,23 @@ export class ReplaceRewindComponent implements OnInit {
     }, 100);
   }
 
+  initMotorInputs() {
+    this.inputs = this.replaceRewindService.replaceRewindData;
+    this.rewoundMotorInputs = this.replaceRewindService.replaceRewindData;
+    this.newMotorInputs = {
+      operatingHours: this.rewoundMotorInputs.operatingHours,
+      motorSize: this.rewoundMotorInputs.motorSize,
+      load: this.rewoundMotorInputs.load,
+      electricityCost: this.rewoundMotorInputs.electricityCost,
+      currentEfficiency: null,
+      rewindEfficiencyLoss: null,
+      costOfRewind: null,
+      newEfficiency: this.inputs.newEfficiency,
+      purchaseCost: this.inputs.purchaseCost
+    };
+
+  }
+
   btnResetData() {
     this.inputs = this.replaceRewindService.initReplaceRewindData();
     this.calculate(this.inputs);
@@ -57,6 +79,7 @@ export class ReplaceRewindComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 
@@ -69,7 +92,47 @@ export class ReplaceRewindComponent implements OnInit {
   }
 
   calculate(_inputs: ReplaceRewindData) {
-    this.results = this.replaceRewindService.getResults(_inputs);
+    //case of calculate new motor input
+    if (_inputs.newEfficiency === null) {
+      this.rewoundMotorInputs = _inputs;
+      this.newMotorInputs = {
+        operatingHours: this.rewoundMotorInputs.operatingHours,
+        motorSize: this.rewoundMotorInputs.motorSize,
+        load: this.rewoundMotorInputs.load,
+        electricityCost: this.rewoundMotorInputs.electricityCost,
+        currentEfficiency: null,
+        rewindEfficiencyLoss: null,
+        costOfRewind: null,
+        newEfficiency: this.newMotorInputs.newEfficiency,
+        purchaseCost: this.newMotorInputs.purchaseCost
+      };
+    }
+    else {
+      this.newMotorInputs = {
+        operatingHours: this.rewoundMotorInputs.operatingHours,
+        motorSize: this.rewoundMotorInputs.motorSize,
+        load: this.rewoundMotorInputs.load,
+        electricityCost: this.rewoundMotorInputs.electricityCost,
+        currentEfficiency: null,
+        rewindEfficiencyLoss: null,
+        costOfRewind: null,
+        newEfficiency: _inputs.newEfficiency,
+        purchaseCost: _inputs.purchaseCost
+      };
+    }
+    this.inputs = {
+      operatingHours: this.rewoundMotorInputs.operatingHours,
+      motorSize: this.rewoundMotorInputs.motorSize,
+      load: this.rewoundMotorInputs.load,
+      electricityCost: this.rewoundMotorInputs.electricityCost,
+      currentEfficiency: this.rewoundMotorInputs.currentEfficiency,
+      rewindEfficiencyLoss: this.rewoundMotorInputs.rewindEfficiencyLoss,
+      costOfRewind: this.rewoundMotorInputs.costOfRewind,
+      newEfficiency: this.newMotorInputs.newEfficiency,
+      purchaseCost: this.newMotorInputs.purchaseCost
+    };
+
+    this.results = this.replaceRewindService.getResults(this.inputs);
   }
 }
 

@@ -5,12 +5,14 @@ import { EnergyUseFormComponent } from './energy-use-form/energy-use-form.compon
 import { EnergyUseComponent } from './energy-use.component';
 import { EnergyUseHelpComponent } from './energy-use-help/energy-use-help.component';
 import { EnergyUseService } from './energy-use.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [
     EnergyUseFormComponent,

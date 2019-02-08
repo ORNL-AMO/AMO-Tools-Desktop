@@ -26,7 +26,7 @@ export class CalculatorListComponent implements OnInit {
     })
   }
 
-  ngOnDestory(){
+  ngOnDestroy(){
     this.selectedCalcSub.unsubscribe();
     this.selectedCalcTypeSub.unsubscribe();
   }

@@ -49,7 +49,7 @@ export class ReportRollupUnitsComponent implements OnInit {
     })
   }
 
-  ngOnDestory(){
+  ngOnDestroy(){
     this.assessmentsSub.unsubscribe();
   }
 

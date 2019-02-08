@@ -76,7 +76,7 @@
     <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.powerFactorAtLoad.invalid && !shaftPowerForm.controls.powerFactorAtLoad.pristine">
       <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.required">Value Required</span>
       <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.max">Value can't be greater than {{shaftPowerForm.controls.powerFactorAtLoad.errors.max.max}}.</span>
-      <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.min">Value can't be less than {{shaftPowerForm.controls.powerFactorAtLoad.errors.min.min}}.</span>
+      <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.greaterThan">Value must be greater than 0.</span>
     </span>
   </div>
 
@@ -170,7 +170,7 @@
       </span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.motorShaftPower.invalid && !shaftPowerForm.controls.motorShaftPower.pristine">
-      <span *ngIf="shaftPowerForm.controls.motorShaftPower.errors.required">Value Required</span>
+      <span *ngIf="shaftPowerForm.controls.motorShaftPower.errors.required">Value required.</span>
     </span>
   </div>
 
@@ -185,7 +185,7 @@
     <span class="alert-danger pull-right small" *ngIf="shaftPowerForm.controls.efficiencyMotor.invalid && !shaftPowerForm.controls.efficiencyMotor.pristine">
       <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.required">Value Required</span>
       <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.max">Value can't be greater than {{shaftPowerForm.controls.efficiencyMotor.errors.max.max}}.</span>
-      <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.min">Value can't be less than {{shaftPowerForm.controls.efficiencyMotor.errors.min.min}}.</span>
+      <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.greaterThan">Value must be greater than than 0.</span>
     </span>
   </div>
   <div class="form-group">

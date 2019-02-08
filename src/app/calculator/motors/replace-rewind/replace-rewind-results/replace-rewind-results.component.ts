@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { ReplaceRewindResults } from '../replace-rewind.component';
 
 @Component({
@@ -10,9 +10,23 @@ export class ReplaceRewindResultsComponent implements OnInit {
   @Input()
   results: ReplaceRewindResults;
 
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
+
   constructor() { }
 
   ngOnInit() {
+    this.updateTableString();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.results) {
+      this.updateTableString();
+    }
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 
 }

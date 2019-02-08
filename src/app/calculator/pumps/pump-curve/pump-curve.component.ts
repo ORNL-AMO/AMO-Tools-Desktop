@@ -167,6 +167,8 @@ export class PumpCurveComponent implements OnInit {
     if (this.isFan) {
       this.currentField = 'fanMaxFlow';
     }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
     this.calculateValues();
     this.calculate(this.pumpCurveForm);
   }
@@ -388,6 +390,9 @@ export class PumpCurveComponent implements OnInit {
         fluidPower: 0
       };
     }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
   }
 
   setPointValuesFromCalc(init?: boolean) {
@@ -544,9 +549,17 @@ export class PumpCurveComponent implements OnInit {
   calculateP1Flow() {
     if (this.pointOne.form.status == 'VALID') {
       if (!this.isFan) {
-        this.pointOne.fluidPower = this.systemCurveService.getPumpFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+        let tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+        if (this.settings.powerMeasurement != 'hp') {
+          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+        }
+        this.pointOne.fluidPower = tmpFluidPower;
       } else {
-        this.pointOne.fluidPower = this.systemCurveService.getFanFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+        let tmpFluidPower = this.systemCurveService.getFanFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+        if (this.settings.fanPowerMeasurement != 'hp') {
+          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.fanPowerMeasurement);
+        }
+        this.pointOne.fluidPower = tmpFluidPower;
       }
     }
   }
@@ -554,9 +567,17 @@ export class PumpCurveComponent implements OnInit {
   calculateP2Flow() {
     if (this.pointTwo.form.status == 'VALID') {
       if (!this.isFan) {
-        this.pointTwo.fluidPower = this.systemCurveService.getPumpFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+        let tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+        if (this.settings.powerMeasurement != 'hp') {
+          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+        }
+        this.pointTwo.fluidPower = tmpFluidPower;
       } else {
-        this.pointTwo.fluidPower = this.systemCurveService.getFanFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+        let tmpFluidPower = this.systemCurveService.getFanFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
+        if (this.settings.fanPowerMeasurement != 'hp') {
+          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.fanPowerMeasurement);
+        }
+        this.pointTwo.fluidPower = tmpFluidPower;
       }
     }
   }

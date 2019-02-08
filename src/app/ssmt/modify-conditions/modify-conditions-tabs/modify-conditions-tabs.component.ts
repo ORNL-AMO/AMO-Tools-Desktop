@@ -62,7 +62,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
     this.turbineBadgeHover = false;
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.modelTabSubscription.unsubscribe();
     this.updateDataSub.unsubscribe();
   }

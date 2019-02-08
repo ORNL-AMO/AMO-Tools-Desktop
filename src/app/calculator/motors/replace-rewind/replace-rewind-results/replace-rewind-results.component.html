@@ -1,7 +1,7 @@
-<table class="table table-hover table-striped">
+<table #copyTable class="table table-hover table-striped">
   <tbody>
     <tr>
-      <th></th>
+      <th>&nbsp;</th>
       <th>Rewound Motor</th>
       <th>New Motor</th>
     </tr>
@@ -46,3 +46,5 @@
     </tr>
   </tbody>
 </table>
+
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()"></app-exportable-results-table>

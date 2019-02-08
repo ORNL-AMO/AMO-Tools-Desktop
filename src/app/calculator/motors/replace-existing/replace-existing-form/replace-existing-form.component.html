@@ -28,23 +28,6 @@
     </span>
   </div>
   <div class="form-group">
-    <label for="efficiency">Efficiency of Existing Motor</label>
-    <div class="input-group calc-addon-group">
-      <input name="existingEfficiency" type="number" min="0" step="1" class="form-control" id="existingEfficiency"
-        formControlName="existingEfficiency" (input)="calculate()" onfocus="this.select();" (focus)="focusField('existingEfficiency')">
-      <span class="units">%</span>
-    </div>
-    <span class="alert-danger pull-right small" *ngIf="form.controls.existingEfficiency.invalid && !form.controls.existingEfficiency.pristine">
-      <span *ngIf="form.controls.existingEfficiency.errors.required">Value required.</span>
-      <span *ngIf="form.controls.existingEfficiency.errors.min">Value cannot not be lower than
-        {{form.controls.existingEfficiency.errors.min.min}}%.
-      </span>
-      <span *ngIf="form.controls.existingEfficiency.errors.max">Value cannot not be greater than
-        {{form.controls.existingEfficiency.errors.max.max}}%.
-      </span>
-    </span>
-  </div>
-  <div class="form-group">
     <label for="efficiency">Load</label>
     <div class="input-group calc-addon-group">
       <input name="load" type="number" min="0" step="1" class="form-control" id="load" formControlName="load" (input)="calculate()"
@@ -75,8 +58,27 @@
       </span>
     </span>
   </div>
-  <div class="form-group">
-    <label for="efficiency">Efficiency of New Motor</label>
+  <label class="group-label" *ngIf="!isReplacementMotor">Existing Motor</label>
+  <div class="form-group" *ngIf="!isReplacementMotor">
+    <label for="efficiency">Efficiency</label>
+    <div class="input-group calc-addon-group">
+      <input name="existingEfficiency" type="number" min="0" step="1" class="form-control" id="existingEfficiency"
+        formControlName="existingEfficiency" (input)="calculate()" onfocus="this.select();" (focus)="focusField('existingEfficiency')">
+      <span class="units">%</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="form.controls.existingEfficiency.invalid && !form.controls.existingEfficiency.pristine">
+      <span *ngIf="form.controls.existingEfficiency.errors.required">Value required.</span>
+      <span *ngIf="form.controls.existingEfficiency.errors.min">Value cannot not be lower than
+        {{form.controls.existingEfficiency.errors.min.min}}%.
+      </span>
+      <span *ngIf="form.controls.existingEfficiency.errors.max">Value cannot not be greater than
+        {{form.controls.existingEfficiency.errors.max.max}}%.
+      </span>
+    </span>
+  </div>
+  <label class="group-label" *ngIf="isReplacementMotor">Replacement Motor</label>
+  <div class="form-group" *ngIf="isReplacementMotor">
+    <label for="efficiency">Efficiency</label>
     <div class="input-group calc-addon-group">
       <input name="newEfficiency" type="number" min="0" step="1" class="form-control" id="newEfficiency"
         formControlName="newEfficiency" (input)="calculate()" onfocus="this.select();" (focus)="focusField('newEfficiency')">
@@ -92,7 +94,7 @@
       </span>
     </span>
   </div>
-  <div class="form-group">
+  <div class="form-group" *ngIf="isReplacementMotor">
     <label for="efficiency">Purchase Cost</label>
     <div class="input-group calc-addon-group">
       <input name="purchaseCost" type="number" min="0" step="1" class="form-control" id="purchaseCost" formControlName="purchaseCost"

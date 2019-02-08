@@ -1,6 +1,6 @@
 <div *ngIf="results">
   <label class="group-label">Steam</label>
-  <table class="table table-hover table-striped">
+  <table #copyTable0 class="table table-hover table-striped">
     <tbody>
       <tr>
         <td class="bold w-50">Pressure</td>
@@ -46,9 +46,10 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()"></app-exportable-results-table>
 
   <label class="group-label">Boiler</label>
-  <table class="table table-hover table-striped">
+  <table #copyTable1 class="table table-hover table-striped">
     <tbody>
       <tr>
         <td class="text-center w-50">Blowdown Rate</td>
@@ -68,9 +69,10 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="table1String" (updateTableString)="updateTable1String()"></app-exportable-results-table>
 
   <label class="group-label">Blowdown</label>
-  <table class="table table-hover table-striped">
+  <table #copyTable2 class="table table-hover table-striped">
     <tbody>
       <tr>
         <td class="bold w-50">Pressure</td>
@@ -114,9 +116,10 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="table2String" (updateTableString)="updateTable2String()"></app-exportable-results-table>
 
   <label class="group-label">Feedwater</label>
-  <table class="table table-hover table-striped">
+  <table #copyTable3 class="table table-hover table-striped">
     <tbody>
       <tr>
         <td class="bold w-50">Pressure</td>
@@ -160,4 +163,6 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="table3String" (updateTableString)="updateTable3String()"></app-exportable-results-table>
+
 </div>

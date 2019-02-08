@@ -92,7 +92,7 @@ export class FanFieldDataComponent implements OnInit {
     }
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.pressureModalSub.unsubscribe();
   }
 

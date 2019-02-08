@@ -42,7 +42,7 @@
   </div>
   <!--end assessment-->
   
-  <!--caluclators tab-->
+  <!--calculators tab-->
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-pump-curve *ngIf="calcTab == 'system-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"
       [inAssessment]="true" [assessment]="assessment" [pumpCurvePrimary]="false"></app-pump-curve>
