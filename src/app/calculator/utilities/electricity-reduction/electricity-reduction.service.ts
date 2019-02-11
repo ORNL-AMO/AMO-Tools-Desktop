@@ -52,196 +52,207 @@ export class ElectricityReductionService {
     return obj;
   }
 
-  initForm(): FormGroup {
+  initForm(settings?: Settings): FormGroup {
+    let initObj: ElectricityReductionData = this.initObject(settings);
+
     let form: FormGroup = this.formBuilder.group({
-      hoursPerDay: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
-      daysPerMonth: [0, [Validators.required, Validators.min(0), Validators.max(31)]],
-      monthsPerYear: [0, [Validators.required, Validators.min(0), Validators.max(12)]],
-      electricityCost: [0.12, [Validators.required, Validators.min(0)]],
-      measurementMethod: [0],
-      numberOfPhases: [1, [Validators.required]],
-      supplyVoltage: [0, [Validators.required, Validators.min(0)]],
-      averageCurrent: [0, [Validators.required, Validators.min(0)]],
-      powerFactor: [0.85, [GreaterThanValidator.greaterThan(0), Validators.max(1)]],
-      units: [1, [Validators.required, Validators.min(0)]]
+      hoursPerDay: [initObj.hoursPerDay, [Validators.required, Validators.min(0), Validators.max(24)]],
+      daysPerMonth: [initObj.daysPerMonth, [Validators.required, Validators.min(0), Validators.max(31)]],
+      monthsPerYear: [initObj.monthsPerYear, [Validators.required, Validators.min(0), Validators.max(12)]],
+      electricityCost: [initObj.electricityCost],
+      measurementMethod: [initObj.measurementMethod],
+
+      // multimeter data
+      numberOfPhases: [initObj.multimeterData.numberOfPhases],
+      supplyVoltage: [initObj.multimeterData.supplyVoltage],
+      averageCurrent: [initObj.multimeterData.averageCurrent],
+      powerFactor: [initObj.multimeterData.powerFactor],
+
+      // nameplate data
+      ratedMotorPower: [initObj.nameplateData.ratedMotorPower],
+      variableSpeedMotor: [initObj.nameplateData.variableSpeedMotor],
+      operationalFrequency: [initObj.nameplateData.operationalFrequency],
+      lineFrequency: [initObj.nameplateData.lineFrequency],
+      motorAndDriveEfficiency: [initObj.nameplateData.motorAndDriveEfficiency],
+      loadFactor: [initObj.nameplateData.loadFactor],
+
+      // power meter data
+      power: [initObj.powerMeterData.power],
+
+      // offsheet / other data
+      energy: [initObj.otherMethodData.energy],
+
+      units: [initObj.units]
     });
-    return form;
-  }
-
-  getFormFromObj(obj: ElectricityReductionData): FormGroup {
-    let form: FormGroup;
-    switch (obj.measurementMethod) {
-      case 0:
-        //multimeter reading
-        if (obj.multimeterData) {
-          form = this.formBuilder.group({
-            hoursPerDay: [obj.hoursPerDay, [Validators.required, Validators.min(0), Validators.max(24)]],
-            daysPerMonth: [obj.daysPerMonth, [Validators.required, Validators.min(0), Validators.max(31)]],
-            monthsPerYear: [obj.monthsPerYear, [Validators.required, Validators.min(0), Validators.max(12)]],
-            electricityCost: [obj.electricityCost, [Validators.required, Validators.min(0)]],
-            measurementMethod: [0],
-            numberOfPhases: [obj.multimeterData.numberOfPhases, [Validators.required]],
-            supplyVoltage: [obj.multimeterData.supplyVoltage, [Validators.required, Validators.min(0)]],
-            averageCurrent: [obj.multimeterData.averageCurrent, [Validators.required, Validators.min(0)]],
-            powerFactor: [obj.multimeterData.powerFactor, [GreaterThanValidator.greaterThan(0), Validators.max(1)]],
-            units: [obj.units, [Validators.required, Validators.min(0)]]
-          });
-        }
-        break;
-      case 1:
-        //name plate data
-        form = this.formBuilder.group({
-          hoursPerDay: [obj.hoursPerDay, [Validators.required, Validators.min(0), Validators.max(24)]],
-          daysPerMonth: [obj.daysPerMonth, [Validators.required, Validators.min(0), Validators.max(31)]],
-          monthsPerYear: [obj.monthsPerYear, [Validators.required, Validators.min(0), Validators.max(12)]],
-          electricityCost: [obj.electricityCost, [Validators.required, Validators.min(0)]],
-          measurementMethod: [1],
-          ratedMotorPower: [obj.nameplateData.ratedMotorPower, [Validators.required, Validators.min(0)]],
-          variableSpeedMotor: [obj.nameplateData.variableSpeedMotor],
-          operationalFrequency: [obj.nameplateData.operationalFrequency, [Validators.required, Validators.min(0)]],
-          lineFrequency: [obj.nameplateData.lineFrequency],
-          motorAndDriveEfficiency: [obj.nameplateData.motorAndDriveEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
-          loadFactor: [obj.nameplateData.loadFactor, [Validators.required, Validators.min(0), Validators.max(100)]],
-          units: [obj.units, [Validators.required, Validators.min(0)]]
-        });
-        break;
-      case 2:
-        //power meter data
-        form = this.formBuilder.group({
-          hoursPerDay: [obj.hoursPerDay, [Validators.required, Validators.min(0), Validators.max(24)]],
-          daysPerMonth: [obj.daysPerMonth, [Validators.required, Validators.min(0), Validators.max(31)]],
-          monthsPerYear: [obj.monthsPerYear, [Validators.required, Validators.min(0), Validators.max(12)]],
-          electricityCost: [obj.electricityCost, [Validators.required, Validators.min(0)]],
-          measurementMethod: [2],
-          power: [obj.powerMeterData.power, [Validators.required, Validators.min(0)]],
-          units: [obj.units, [Validators.required, Validators.min(0)]]
-        });
-        break;
-      case 3:
-        //power meter data
-        form = this.formBuilder.group({
-          hoursPerDay: [obj.hoursPerDay, [Validators.required, Validators.min(0), Validators.max(24)]],
-          daysPerMonth: [obj.daysPerMonth, [Validators.required, Validators.min(0), Validators.max(31)]],
-          monthsPerYear: [obj.monthsPerYear, [Validators.required, Validators.min(0), Validators.max(12)]],
-          electricityCost: [obj.electricityCost, [Validators.required, Validators.min(0)]],
-          measurementMethod: [3],
-          energy: [obj.otherMethodData.energy, [Validators.required, Validators.min(0)]]
-        });
-        break;
-      default:
-        break;
-    }
-    return form;
-  }
-
-  getObjFromForm(form: FormGroup, index: number, isBaseline: boolean): ElectricityReductionData {
-    let tmpObj: ElectricityReductionData;
     switch (form.controls.measurementMethod.value) {
       case 0:
-        let tmpMultimeterData: MultimeterReadingData = {
-          numberOfPhases: form.controls.numberOfPhases.value,
-          supplyVoltage: form.controls.supplyVoltage.value,
-          averageCurrent: form.controls.averageCurrent.value,
-          powerFactor: form.controls.powerFactor.value
-        };
-        tmpObj = {
-          hoursPerDay: form.controls.hoursPerDay.value,
-          daysPerMonth: form.controls.daysPerMonth.value,
-          monthsPerYear: form.controls.monthsPerYear.value,
-          electricityCost: form.controls.electricityCost.value,
-          measurementMethod: 0,
-          multimeterData: tmpMultimeterData,
-          nameplateData: isBaseline ? this.baselineData[index].nameplateData : this.modificationData[index].nameplateData,
-          powerMeterData: isBaseline ? this.baselineData[index].powerMeterData : this.modificationData[index].powerMeterData,
-          otherMethodData: isBaseline ? this.baselineData[index].otherMethodData : this.modificationData[index].otherMethodData,
-          units: form.controls.units.value
-        };
+        form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.numberOfPhases.setValidators([Validators.required]);
+        form.controls.supplyVoltage.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.averageCurrent.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.powerFactor.setValidators([GreaterThanValidator.greaterThan(0), Validators.max(1)]);
+        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
         break;
       case 1:
-        let tmpNameplateData: NameplateData = {
-          ratedMotorPower: form.controls.ratedMotorPower.value,
-          variableSpeedMotor: form.controls.variableSpeedMotor.value,
-          operationalFrequency: form.controls.operationalFrequency.value,
-          lineFrequency: form.controls.lineFrequency.value,
-          motorAndDriveEfficiency: form.controls.motorAndDriveEfficiency.value,
-          loadFactor: form.controls.loadFactor.value
-        };
-        tmpObj = {
-          hoursPerDay: form.controls.hoursPerDay.value,
-          daysPerMonth: form.controls.daysPerMonth.value,
-          monthsPerYear: form.controls.monthsPerYear.value,
-          electricityCost: form.controls.electricityCost.value,
-          measurementMethod: 1,
-          multimeterData: isBaseline ? this.baselineData[index].multimeterData : this.modificationData[index].multimeterData,
-          nameplateData: tmpNameplateData,
-          powerMeterData: isBaseline ? this.baselineData[index].powerMeterData : this.modificationData[index].powerMeterData,
-          otherMethodData: isBaseline ? this.baselineData[index].otherMethodData : this.modificationData[index].otherMethodData,
-          units: form.controls.units.value
-        };
+        form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.ratedMotorPower.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.operationalFrequency.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.motorAndDriveEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+        form.controls.loadFactor.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
         break;
       case 2:
-        let tmpPowerMeterData: PowerMeterData = {
-          power: form.controls.power.value,
-        };
-        tmpObj = {
-          hoursPerDay: form.controls.hoursPerDay.value,
-          daysPerMonth: form.controls.daysPerMonth.value,
-          monthsPerYear: form.controls.monthsPerYear.value,
-          electricityCost: form.controls.electricityCost.value,
-          measurementMethod: 2,
-          multimeterData: isBaseline ? this.baselineData[index].multimeterData : this.modificationData[index].multimeterData,
-          nameplateData: isBaseline ? this.baselineData[index].nameplateData : this.modificationData[index].nameplateData,
-          powerMeterData: tmpPowerMeterData,
-          otherMethodData: isBaseline ? this.baselineData[index].otherMethodData : this.modificationData[index].otherMethodData,
-          units: form.controls.units.value
-        };
+        form.controls.power.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
         break;
       case 3:
-        let tmpOtherMethodData: OtherMethodData = {
-          energy: form.controls.energy.value,
-        };
-        tmpObj = {
-          hoursPerDay: form.controls.hoursPerDay.value,
-          daysPerMonth: form.controls.daysPerMonth.value,
-          monthsPerYear: form.controls.monthsPerYear.value,
-          electricityCost: form.controls.electricityCost.value,
-          measurementMethod: 3,
-          multimeterData: isBaseline ? this.baselineData[index].multimeterData : this.modificationData[index].multimeterData,
-          nameplateData: isBaseline ? this.baselineData[index].nameplateData : this.modificationData[index].nameplateData,
-          powerMeterData: isBaseline ? this.baselineData[index].powerMeterData : this.modificationData[index].powerMeterData,
-          otherMethodData: tmpOtherMethodData,
-          units: isBaseline ? this.baselineData[index].units : this.modificationData[index].units
-        };
-        break;
-      default:
-        break;
+        form.controls.energy.setValidators([Validators.required, Validators.min(0)]);
     }
-    return tmpObj;
+    return form;
+  }
+
+  getFormFromObj(initObj: ElectricityReductionData): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      hoursPerDay: [initObj.hoursPerDay, [Validators.required, Validators.min(0), Validators.max(24)]],
+      daysPerMonth: [initObj.daysPerMonth, [Validators.required, Validators.min(0), Validators.max(31)]],
+      monthsPerYear: [initObj.monthsPerYear, [Validators.required, Validators.min(0), Validators.max(12)]],
+      electricityCost: [initObj.electricityCost],
+      measurementMethod: [initObj.measurementMethod],
+
+      // multimeter data
+      numberOfPhases: [initObj.multimeterData.numberOfPhases],
+      supplyVoltage: [initObj.multimeterData.supplyVoltage],
+      averageCurrent: [initObj.multimeterData.averageCurrent],
+      powerFactor: [initObj.multimeterData.powerFactor],
+
+      // nameplate data
+      ratedMotorPower: [initObj.nameplateData.ratedMotorPower],
+      variableSpeedMotor: [initObj.nameplateData.variableSpeedMotor],
+      operationalFrequency: [initObj.nameplateData.operationalFrequency],
+      lineFrequency: [initObj.nameplateData.lineFrequency],
+      motorAndDriveEfficiency: [initObj.nameplateData.motorAndDriveEfficiency],
+      loadFactor: [initObj.nameplateData.loadFactor],
+
+      // power meter data
+      power: [initObj.powerMeterData.power],
+
+      // offsheet / other data
+      energy: [initObj.otherMethodData.energy],
+
+      units: [initObj.units]
+    });
+    switch (form.controls.measurementMethod.value) {
+      case 0:
+        form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.numberOfPhases.setValidators([Validators.required]);
+        form.controls.supplyVoltage.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.averageCurrent.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.powerFactor.setValidators([GreaterThanValidator.greaterThan(0), Validators.max(1)]);
+        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
+        break;
+      case 1:
+        form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.ratedMotorPower.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.operationalFrequency.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.motorAndDriveEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+        form.controls.loadFactor.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
+        break;
+      case 2:
+        form.controls.power.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
+        break;
+      case 3:
+        form.controls.energy.setValidators([Validators.required, Validators.min(0)]);
+    }
+    return form;
+  }
+
+  getObjFromForm(form: FormGroup): ElectricityReductionData {
+    let multimeterObj: MultimeterReadingData = {
+      numberOfPhases: form.controls.numberOfPhases.value,
+      supplyVoltage: form.controls.supplyVoltage.value,
+      averageCurrent: form.controls.averageCurrent.value,
+      powerFactor: form.controls.powerFactor.value
+    };
+
+    let nameplateObj: NameplateData = {
+      ratedMotorPower: form.controls.ratedMotorPower.value,
+      variableSpeedMotor: form.controls.variableSpeedMotor.value,
+      operationalFrequency: form.controls.operationalFrequency.value,
+      lineFrequency: form.controls.lineFrequency.value,
+      motorAndDriveEfficiency: form.controls.motorAndDriveEfficiency.value,
+      loadFactor: form.controls.loadFactor.value
+    };
+
+    let powerMeterObj: PowerMeterData = {
+      power: form.controls.power.value,
+    };
+
+    let otherMethodData: OtherMethodData = {
+      energy: form.controls.energy.value
+    };
+
+    let obj: ElectricityReductionData = {
+      hoursPerDay: form.controls.hoursPerDay.value,
+      daysPerMonth: form.controls.daysPerMonth.value,
+      monthsPerYear: form.controls.monthsPerYear.value,
+      electricityCost: form.controls.electricityCost.value,
+      measurementMethod: form.controls.measurementMethod.value,
+      multimeterData: multimeterObj,
+      nameplateData: nameplateObj,
+      powerMeterData: powerMeterObj,
+      otherMethodData: otherMethodData,
+      units: form.controls.units.value
+    };
+
+    return obj;
   }
 
   addBaselineEquipment(settings?: Settings) {
-    if (this.baselineData !== null && this.baselineData !== undefined) {
-      this.baselineData.push(this.initObject(settings ? settings : null));
-    }
-    else {
+    if (this.baselineData === null || this.baselineData === undefined) {
       this.baselineData = new Array<ElectricityReductionData>();
-      this.baselineData.push(this.initObject(settings ? settings : null));
+    }
+    this.baselineData.push(this.initObject(settings ? settings : null));
+  }
+
+  removeBaselineEquipment(index: number) {
+    this.baselineData.splice(index, 1);
+  }
+
+  createModification() {
+    this.modificationData = new Array<ElectricityReductionData>();
+    for (let i = 0; i < this.baselineData.length; i++) {
+      this.modificationData.push(this.baselineData[i]);
     }
   }
 
   addModificationEquipment(settings?: Settings) {
-    if (this.modificationData !== null && this.modificationData !== undefined) {
-      this.modificationData.push(this.initObject(settings ? settings : null));
-    }
-    else {
+    if (this.modificationData === null || this.modificationData === undefined) {
       this.modificationData = new Array<ElectricityReductionData>();
-      this.modificationData.push(this.initObject(settings ? settings : null));
     }
+    this.modificationData.push(this.initObject(settings ? settings : null));
+  }
+
+  removeModificationEquipment(index: number) {
+    this.modificationData.splice(index, 1);
   }
 
   initModificationData() {
     if (this.modificationData === undefined || this.modificationData === null) {
       this.modificationData = new Array<ElectricityReductionData>();
+    }
+  }
+
+  updateBaselineDataArray(baselineForms: Array<FormGroup>): void {
+    for (let i = 0; i < this.baselineData.length; i++) {
+      this.baselineData[i] = this.getObjFromForm(baselineForms[i]);
+    }
+  }
+
+  updateModificationDataArray(modificationForms: Array<FormGroup>): void {
+    for (let i = 0; i < this.modificationData.length; i++) {
+      this.modificationData[i] = this.getObjFromForm(modificationForms[i]);
     }
   }
 }

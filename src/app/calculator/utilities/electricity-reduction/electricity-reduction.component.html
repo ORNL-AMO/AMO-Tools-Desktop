@@ -19,13 +19,13 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addBaselineEquipment()">+Add Equipment</a>
             </div>
-            <div class="pb-2" *ngFor="let data of baselineForms; let i = index;">
+            <div class="pb-2" *ngFor="let form of baselineForms; let i = index;">
               <label class="group-label w-100 bold">
                 <span class="fa fa-lightbulb-o pr-2"></span>Equipment #{{i + 1}}
                 <span *ngIf="baselineForms.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineEquipment(i)"></span>
               </label>
               <!-- app form -->
-              <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="baselineForms[i]" [isBaseline]="true"></app-electricity-reduction-form>
+              <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="true" (emitCalculate)="calculate($event)"></app-electricity-reduction-form>
             </div>
             <div class="w-100 justify content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
@@ -46,12 +46,13 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addModificationEquipment()">+Add Equipment</a>
             </div>
-            <div class="pb-2" *ngFor="let data of modificationForms; let i = index;">
+            <div class="pb-2" *ngFor="let form of modificationForms; let i = index;">
               <label class="group-label w-100 bold">
                 <span class="fa fa-lightbulb-o pr-2"></span>Equipment #{{i + 1}}
-                <span *ngIf="modificationForms.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeModificationEquipment(i)"></span>
+                <span class="fa fa-times-circle-o pull-right large" (click)="removeModificationEquipment(i)"></span>
               </label>
               <!-- app form -->
+              <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="false" (emitCalculate)="calculate($event)"></app-electricity-reduction-form>
             </div>
           </div>
         </div>
@@ -62,7 +63,7 @@
           </div>
           <div class="p-3 no-data">
             <h3>Once you have set up your baseline..</h3>
-            <button type="button" class="btn btn-primary" (click)="addModificationEquipment()">Add Modified Condition</button>
+            <button type="button" class="btn btn-primary" (click)="createModification()">Add Modified Condition</button>
             <p>Data will be copied from your current baseline condition.</p>
           </div>
         </div>

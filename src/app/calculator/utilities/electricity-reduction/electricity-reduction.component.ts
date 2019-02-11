@@ -23,11 +23,12 @@ export class ElectricityReductionComponent implements OnInit {
   containerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
-  
+
   // baselineData: Array<ElectricityReductionData>;
   // modificationData: Array<ElectricityReductionData>;
   baselineForms: Array<FormGroup>;
   modificationForms: Array<FormGroup>;
+  modificationExists = false;
 
   constructor(private settingsDbService: SettingsDbService, private electricityReductionService: ElectricityReductionService) { }
 
@@ -39,13 +40,14 @@ export class ElectricityReductionComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    // TO DO - init baseline forms and modification forms; need to check if any are already saved
-    console.log('service.baselineData = ');
-    console.log(this.electricityReductionService.baselineData);
-    if (this.electricityReductionService.baselineData === undefined || this.electricityReductionService.baselineData === null) {
+    this.baselineForms = new Array<FormGroup>();
+    this.modificationForms = new Array<FormGroup>();
+    if (this.electricityReductionService.baselineData === undefined || this.electricityReductionService.baselineData === null || this.electricityReductionService.baselineData.length < 1) {
       this.addBaselineEquipment();
     }
-    this.loadForms();
+    else {
+      this.loadForms();
+    }
   }
 
   resizeTabs() {
@@ -61,19 +63,38 @@ export class ElectricityReductionComponent implements OnInit {
   addBaselineEquipment() {
     console.log('addBaselineEquipment()');
     this.electricityReductionService.addBaselineEquipment(this.settings);
+    this.baselineForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.baselineData[this.electricityReductionService.baselineData.length - 1]));
+    // this.loadForms();
   }
 
   removeBaselineEquipment(i: number) {
     console.log('removeBaselineEquipment(' + i + ')');
+    this.electricityReductionService.removeBaselineEquipment(i);
+    this.baselineForms.splice(i, 1);
+  }
+
+  createModification() {
+    this.electricityReductionService.createModification();
+    this.modificationForms = new Array<FormGroup>();
+    for (let i = 0; i < this.baselineForms.length; i++) {
+      this.modificationForms.push(this.baselineForms[i]);
+    }
+    this.modificationExists = true;
   }
 
   addModificationEquipment() {
     console.log('addModificationEquipment()');
     this.electricityReductionService.addModificationEquipment(this.settings);
+    this.modificationForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.modificationData[this.electricityReductionService.modificationData.length - 1]));
   }
 
   removeModificationEquipment(i: number) {
     console.log('removeModificationEquipment(' + i + ')');
+    this.electricityReductionService.removeModificationEquipment(i);
+    this.modificationForms.splice(i, 1);
+    if (this.modificationForms.length < 1) {
+      this.modificationExists = false;
+    }
   }
 
   loadForms() {
@@ -86,10 +107,22 @@ export class ElectricityReductionComponent implements OnInit {
     for (let i = 0; i < this.electricityReductionService.modificationData.length; i++) {
       this.modificationForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.modificationData[i]));
     }
-    console.log('loaded baselineForms = ');
-    console.log(this.baselineForms);
-    console.log('loaded modificationForms = ');
-    console.log(this.modificationForms);
+    if (!this.modificationExists) {
+      if (this.modificationForms.length > 0) {
+        this.modificationExists = true;
+      }
+    }
+  }
+
+  calculate(emitObj: { form: FormGroup, index: number, isBaseline: boolean }) {
+    if (emitObj.isBaseline) {
+      this.baselineForms[emitObj.index] = emitObj.form;
+      this.electricityReductionService.updateBaselineDataArray(this.baselineForms);
+    } else {
+      this.modificationForms[emitObj.index] = emitObj.form;
+      this.electricityReductionService.updateModificationDataArray(this.modificationForms);
+    }
+
   }
 
 }

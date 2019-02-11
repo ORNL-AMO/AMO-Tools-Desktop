@@ -19,16 +19,25 @@ export class ElectricityReductionFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<FormGroup>();
+  emitCalculate = new EventEmitter<{ form: FormGroup, index: number, isBaseline: boolean }>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
   measurementOptions: Array<{ value: number, name: string }>;
+  idString: string;
 
   constructor(private electricityReductionService: ElectricityReductionService) { }
 
   ngOnInit() {
+    if (this.isBaseline) {
+      this.idString = this.index.toString();
+    }
+    else {
+      this.idString = 'modification_' + this.index;
+    }
     this.initMeasurementOptions();
+    console.log('this.form = ');
+    console.log(this.form);
   }
 
   initMeasurementOptions() {
@@ -39,11 +48,22 @@ export class ElectricityReductionFormComponent implements OnInit {
     this.measurementOptions.push({ value: 3, name: 'Offsheet / Other Method' });
   }
 
+  changeMeasurementMethod() {
+    let tmpObject = this.electricityReductionService.getObjFromForm(this.form);
+    this.form = this.electricityReductionService.getFormFromObj(tmpObject);
+    this.calculate();
+  }
+
   calculate() {
     console.log('calculate()');
-    let tmpObject = this.electricityReductionService.getObjFromForm(this.form, this.index, this.isBaseline);
-    this.form = this.electricityReductionService.getFormFromObj(tmpObject);
-
+    if (this.form.valid) {
+      let emitObj = {
+        form: this.form,
+        index: this.index,
+        isBaseline: this.isBaseline
+      };
+      this.emitCalculate.emit(emitObj);
+    }
   }
 
   focusField(str: string) {
