@@ -27,6 +27,7 @@ export class SsmtResultsPanelComponent implements OnInit {
 
   counter: any;
   showResults: boolean;
+  percentSavings: number;
   constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
@@ -53,7 +54,13 @@ export class SsmtResultsPanelComponent implements OnInit {
       resultData = this.calculateModelService.calculateModelRunner();
       this.modificationOutput = resultData.outputData;
       this.modificationInputs = resultData.inputData;
+      this.getPercentSavings(this.baselineOutput.totalOperatingCost, this.modificationOutput.totalOperatingCost);
       this.showResults = true;
     }, 750)
+  }
+
+
+  getPercentSavings(baselineCost: number, modificationCost: number) {
+    this.percentSavings = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));
   }
 }
