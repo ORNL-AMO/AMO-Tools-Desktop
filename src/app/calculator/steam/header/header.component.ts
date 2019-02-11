@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit {
     }, 50);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.headerService.headerInput = this.input;
   }
 
@@ -106,7 +106,7 @@ export class HeaderComponent implements OnInit {
         this.inletForms.push(tmpForm);
       }
     } else {
-      while (this.inletForms.length != this.headerPressureForm.controls.numInlets.value) {
+      while (this.inletForms.length !== this.headerPressureForm.controls.numInlets.value) {
         this.inletForms.pop();
       }
     }
@@ -121,14 +121,14 @@ export class HeaderComponent implements OnInit {
   calculate() {
     this.input = this.headerService.getObjFromForm(this.headerPressureForm, this.inletForms);
     this.headerService.headerInput = this.input;
-    if (this.headerPressureForm.status == 'VALID') {
+    if (this.headerPressureForm.status === 'VALID') {
       let formTest: boolean = true;
       this.inletForms.forEach(form => {
-        if (form.status != 'VALID') {
+        if (form.status !== 'VALID') {
           formTest = false;
         }
-      })
-      if (formTest == true) {
+      });
+      if (formTest === true) {
         this.results = this.steamService.header(this.input, this.settings);
       } else {
         this.results = this.getEmptyResults();
@@ -240,7 +240,7 @@ export class HeaderComponent implements OnInit {
         temperature: 0,
         specificVolume: 0
       }
-    }
+    };
 
     return emptyResults;
   }

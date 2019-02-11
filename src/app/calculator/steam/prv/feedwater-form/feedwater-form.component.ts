@@ -39,7 +39,7 @@ export class FeedwaterFormComponent implements OnInit {
   }
 
   getOptionDisplay(): string {
-    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value == this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value });
+    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value === this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value; });
     return selectedQuantity.display;
   }
 
@@ -53,16 +53,16 @@ export class FeedwaterFormComponent implements OnInit {
 
   getOptionDisplayUnit() {
     let displayUnit: string;
-    if (this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value == 0) {
+    if (this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value === 0) {
       displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
       return displayUnit;
-    } else if (this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value == 1) {
+    } else if (this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value === 1) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
       return displayUnit;
-    } else if (this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value == 2) {
+    } else if (this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value === 2) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
       return displayUnit;
-    } else if (this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value == 3) {
+    } else if (this.feedwaterForm.controls.feedwaterThermodynamicQuantity.value === 3) {
       return displayUnit;
     }
   }

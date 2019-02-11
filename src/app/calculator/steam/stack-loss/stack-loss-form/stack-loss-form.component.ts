@@ -24,11 +24,11 @@ export class StackLossFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  calculate(form: FormGroup){
+  calculate(form: FormGroup) {
     this.emitCalculate.emit(form);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 

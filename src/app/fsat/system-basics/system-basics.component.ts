@@ -34,7 +34,7 @@ export class SystemBasicsComponent implements OnInit {
   }
 
 
-  save(){
+  save() {
     let id: number = this.settings.id;
     let createdDate = this.settings.createdDate;
     let assessmentId: number = this.settings.assessmentId;
@@ -43,21 +43,21 @@ export class SystemBasicsComponent implements OnInit {
     this.settings.createdDate = createdDate;
     this.settings.assessmentId = assessmentId;
     if (
-      this.settings.temperatureMeasurement != this.oldSettings.temperatureMeasurement ||
-      this.settings.densityMeasurement != this.oldSettings.densityMeasurement ||
-      this.settings.fanBarometricPressure != this.oldSettings.fanBarometricPressure ||
-      this.settings.fanPressureMeasurement != this.oldSettings.fanPressureMeasurement ||
-      this.settings.fanFlowRate != this.oldSettings.fanFlowRate
-    ){
+      this.settings.temperatureMeasurement !== this.oldSettings.temperatureMeasurement ||
+      this.settings.densityMeasurement !== this.oldSettings.densityMeasurement ||
+      this.settings.fanBarometricPressure !== this.oldSettings.fanBarometricPressure ||
+      this.settings.fanPressureMeasurement !== this.oldSettings.fanPressureMeasurement ||
+      this.settings.fanFlowRate !== this.oldSettings.fanFlowRate
+    ) {
       this.showUpdateData = true;
     }
-    if(this.dataUpdated == true){
+    if (this.dataUpdated === true) {
       this.dataUpdated = false;
     }
     this.emitSave.emit(this.settings);
   }
 
-  updateData(){
+  updateData() {
     this.assessment.fsat = this.convertFsatService.convertAllInputData(this.assessment.fsat, this.oldSettings, this.settings);
     this.emitSaveFsat.emit(this.assessment.fsat);
     this.dataUpdated = true;

@@ -114,12 +114,12 @@ export class ExploreOpportunitiesComponent implements OnInit {
       if (!this.fsat.modifications[this.modificationIndex].exploreOpportunities) {
         this.exploreOppsToast.emit(true);
         let toastOptions: ToastOptions = {
-          title: 'Explore Opportunites',
+          title: 'Explore Opportunities',
           msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
           showClose: true,
           timeout: 10000000,
           theme: 'default'
-        }
+        };
         this.toastyService.warning(toastOptions);
       } else {
         this.exploreOppsToast.emit(false);

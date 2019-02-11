@@ -17,7 +17,7 @@ export class FanMotorService {
       specifiedEfficiency: [obj.specifiedEfficiency, specifiedEfficiencyValidators],
       motorRatedVoltage: [obj.motorRatedVoltage, Validators.required],
       fullLoadAmps: [obj.fullLoadAmps, Validators.required]
-    })
+    });
     for (let key in form.controls) {
       if (form.controls[key].value) {
         form.controls[key].markAsDirty();
@@ -28,8 +28,8 @@ export class FanMotorService {
 
 
   getEfficiencyValidators(effClass: number): Array<ValidatorFn> {
-    if (effClass == 3) {
-      return [Validators.required, Validators.min(0), Validators.max(100)]
+    if (effClass === 3) {
+      return [Validators.required, Validators.min(0), Validators.max(100)];
     } else {
       return [];
     }
@@ -44,13 +44,13 @@ export class FanMotorService {
       specifiedEfficiency: form.controls.specifiedEfficiency.value,
       motorRatedVoltage: form.controls.motorRatedVoltage.value,
       fullLoadAmps: form.controls.fullLoadAmps.value
-    }
+    };
     return obj;
   }
 
   isFanMotorValid(obj: FanMotor): boolean {
     let form: FormGroup = this.getFormFromObj(obj);
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       return true;
     } else {
       return false;

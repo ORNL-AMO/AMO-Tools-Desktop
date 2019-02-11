@@ -90,7 +90,7 @@ export class FanSetupComponent implements OnInit {
   }
 
   init() {
-    if (this.fanSetup.drive != 4) {
+    if (this.fanSetup.drive !== 4) {
       this.fanSetup.specifiedDriveEfficiency = 100;
     }
     else {
@@ -102,7 +102,7 @@ export class FanSetupComponent implements OnInit {
   disableForm() {
     this.fanForm.controls.fanType.disable();
     this.fanForm.controls.drive.disable();
-    if (this.fanForm.controls.fanType.value != 12) {
+    if (this.fanForm.controls.fanType.value !== 12) {
       this.fanForm.controls.fanEfficiency.disable();
     }
   }
@@ -130,7 +130,7 @@ export class FanSetupComponent implements OnInit {
   // }
 
   changeDriveType() {
-    if (this.fanForm.controls.drive.value == 4) {
+    if (this.fanForm.controls.drive.value === 4) {
       this.fanForm.controls.specifiedDriveEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       this.fanForm.controls.specifiedDriveEfficiency.reset(this.fanForm.controls.specifiedDriveEfficiency.value);
       this.fanForm.controls.specifiedDriveEfficiency.markAsDirty();
@@ -152,7 +152,7 @@ export class FanSetupComponent implements OnInit {
 
   save() {
     this.fanSetup = this.fanSetupService.getObjFromForm(this.fanForm);
-    if (this.fanSetup.drive != 4) {
+    if (this.fanSetup.drive !== 4) {
       this.fanSetup.specifiedDriveEfficiency = 100;
     }
     this.checkForWarnings();
@@ -187,7 +187,7 @@ export class FanSetupComponent implements OnInit {
       outletPressure: this.fsat.fieldData.outletPressure,
       flowRate: this.fsat.fieldData.flowRate,
       compressibility: this.fsat.fieldData.compressibilityFactor
-    }
+    };
     let tmpEfficiency: number = this.fsatService.optimalFanEfficiency(inputs, this.settings);
     tmpEfficiency = this.convertUnitsService.roundVal(tmpEfficiency, 2);
     return tmpEfficiency;

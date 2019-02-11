@@ -45,7 +45,7 @@ export class PrvComponent implements OnInit {
     }
     this.initForm();
     this.input = this.prvService.getObjFromForm(this.inletForm, this.feedwaterForm, this.isSuperHeating);
-    this.calculate(this.inletForm, this.feedwaterForm)
+    this.calculate(this.inletForm, this.feedwaterForm);
   }
 
   ngAfterViewInit() {
@@ -56,7 +56,7 @@ export class PrvComponent implements OnInit {
 
   btnResetData() {
     this.isSuperHeating = false;
-    this.setInletForm(this.prvService.initInletForm(this.settings))
+    this.setInletForm(this.prvService.initInletForm(this.settings));
     this.setFeedwaterForm(this.prvService.initFeedwaterForm(this.settings));
   }
 
@@ -99,14 +99,14 @@ export class PrvComponent implements OnInit {
     this.prvService.prvInput = this.input;
     this.prvService.isSuperHeating = this.isSuperHeating;
     if (this.isSuperHeating) {
-      if ((inletForm.status == 'VALID') && (feedwaterForm.status == 'VALID')) {
+      if ((inletForm.status === 'VALID') && (feedwaterForm.status === 'VALID')) {
         this.results = this.steamService.prvWithDesuperheating(this.input, this.settings);
         this.checkWarning(this.results, this.input);
       } else {
         this.results = this.getEmptyResults();
       }
     } else {
-      if (inletForm.status == 'VALID') {
+      if (inletForm.status === 'VALID') {
         this.results = this.steamService.prvWithoutDesuperheating(this.input, this.settings);
       } else {
         this.results = this.getEmptyResults();
@@ -161,7 +161,7 @@ export class PrvComponent implements OnInit {
       outletSpecificEntropy: 0,
       outletTemperature: 0,
       outletVolume: 0
-    }
+    };
 
     return emptyResults;
   }

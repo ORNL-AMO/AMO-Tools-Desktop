@@ -73,7 +73,7 @@ export class DeaeratorComponent implements OnInit {
   calculate(form: FormGroup) {
     this.input = this.deaeratorService.getObjFromForm(form);
     this.deaeratorService.deaeratorInput = this.input;
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       this.results = this.steamService.deaerator(this.input, this.settings);
     } else {
       this.results = this.getEmptyResults();
@@ -114,7 +114,7 @@ export class DeaeratorComponent implements OnInit {
       ventedSteamVolume: 0,
       inletSteamVolume: 0,
       inletWaterVolume: 0
-    }
+    };
     return emptyResults;
   }
 }

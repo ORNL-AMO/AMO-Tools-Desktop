@@ -23,7 +23,7 @@ export class HeaderResultsComponent implements OnInit {
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
-    if (this.settings.steamEnergyMeasurement == 'kWh') {
+    if (this.settings.steamEnergyMeasurement === 'kWh') {
       this.energyMeasurement = 'kW';
     } else {
       this.energyMeasurement = this.settings.steamEnergyMeasurement + '/hr';

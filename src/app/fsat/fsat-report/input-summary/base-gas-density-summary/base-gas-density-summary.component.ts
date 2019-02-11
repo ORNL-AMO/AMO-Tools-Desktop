@@ -99,10 +99,10 @@ export class BaseGasDensitySummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change
@@ -115,16 +115,16 @@ export class BaseGasDensitySummaryComponent implements OnInit {
   }
 
   formatInputType(type: string): string {
-    if (type == 'relativeHumidity') {
+    if (type === 'relativeHumidity') {
       return "Relative Humidity";
     }
-    else if (type == 'dewPoint') {
+    else if (type === 'dewPoint') {
       return "Dew Point";
     }
-    else if (type == 'wetBulb') {
+    else if (type === 'wetBulb') {
       return "Wet Bulb";
     }
-    else if (type == 'custom') {
+    else if (type === 'custom') {
       return "Custom Density";
     }
     else {

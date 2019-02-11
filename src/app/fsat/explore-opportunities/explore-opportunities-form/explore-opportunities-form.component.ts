@@ -65,13 +65,13 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.checkWarnings();
     this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
       this.getBodyHeight();
-    })
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.initForms()
+        this.initForms();
       }
     }
   }
@@ -132,18 +132,18 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
-    this.modifyConditionsService.modifyConditionsTab.next('fan-field-data')
+    this.modifyConditionsService.modifyConditionsTab.next('fan-field-data');
   }
 
   addNewMod() {
     this.emitAddNewMod.emit(true);
   }
 
-  setVFD(){
-    if(this.fsat.modifications[this.exploreModIndex].fsat.isVFD){
+  setVFD() {
+    if (this.fsat.modifications[this.exploreModIndex].fsat.isVFD) {
       this.modificationFanSetupForm.controls.drive.patchValue(4);
       this.modificationFanSetupForm.controls.specifiedDriveEfficiency.patchValue(95);
-    }else{
+    }else {
       this.modificationFanSetupForm.controls.drive.patchValue(this.baselineFanSetupForm.controls.drive.value);
       this.modificationFanSetupForm.controls.specifiedDriveEfficiency.patchValue(95);
     }
@@ -168,9 +168,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   saveAndClose() {
-    if (this.pressureCalcType == 'inlet') {
+    if (this.pressureCalcType === 'inlet') {
       this.saveInletPressure(this.inletPressureCopy);
-    } else if (this.pressureCalcType == 'outlet') {
+    } else if (this.pressureCalcType === 'outlet') {
       this.saveOutletPressure(this.outletPressureCopy);
     }
     this.hidePressureModal();
@@ -182,7 +182,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData = inletPressureData;
       this.modificationFieldDataForm.patchValue({
         inletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.inletPressureData.calculatedInletPressure
-      })
+      });
       this.save();
     }
   }

@@ -27,7 +27,7 @@ export class FsatReportGraphsPrintComponent implements OnInit {
   @Input()
   printGraphs: boolean;
   @Input()
-  allChartData: { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> }
+  allChartData: { pieLabels: Array<Array<string>>, pieValues: Array<Array<number>>, barLabels: Array<string>, barValues: Array<Array<number>> };
   @Input()
   assessmentName: string;
 
@@ -59,7 +59,7 @@ export class FsatReportGraphsPrintComponent implements OnInit {
   }
 
   getAllModifications() {
-    this.modifications = (JSON.parse(JSON.stringify(this.baselineFsat.fsat.modifications)))
+    this.modifications = (JSON.parse(JSON.stringify(this.baselineFsat.fsat.modifications)));
   }
 
   getAllNotes() {

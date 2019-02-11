@@ -21,15 +21,15 @@ export class FsatBannerComponent implements OnInit {
   ngOnInit() {
     this.mainTabSubscription = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.mainTabSubscription.unsubscribe();
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'calculators') {
+    if (str === 'system-setup' || str === 'calculators') {
       this.fsatService.mainTab.next(str);
     } else if (this.assessment.fsat.setupDone) {
       this.fsatService.mainTab.next(str);

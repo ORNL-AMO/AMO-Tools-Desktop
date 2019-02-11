@@ -26,7 +26,7 @@ export class HeaderService {
       thermodynamicQuantity: [0, [Validators.required]],
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
       massFlow: ['', [Validators.required, Validators.min(ranges.massFlowMin)]]
-    })
+    });
     return tmpForm;
   }
 
@@ -46,7 +46,7 @@ export class HeaderService {
       thermodynamicQuantity: [inputObj.thermodynamicQuantity, [Validators.required]],
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
       massFlow: [inputObj.massFlow, [Validators.required, Validators.min(ranges.massFlowMin)]]
-    })
+    });
     return tmpForm;
   }
 
@@ -55,11 +55,11 @@ export class HeaderService {
       headerPressure: headerForm.controls.headerPressure.value,
       inlets: new Array<HeaderInputObj>(),
       numberOfInlets: headerForm.controls.numInlets.value
-    }
+    };
     inletForms.forEach(form => {
       let tmpObj: HeaderInputObj = this.getInletObjFromForm(form);
-      input.inlets.push(tmpObj)
-    })
+      input.inlets.push(tmpObj);
+    });
     return input;
   }
 
@@ -69,7 +69,7 @@ export class HeaderService {
       thermodynamicQuantity: form.controls.thermodynamicQuantity.value,
       quantityValue: form.controls.quantityValue.value,
       massFlow: form.controls.massFlow.value
-    }
+    };
   }
 
   getInletRangeValues(settings: Settings, thermodynamicQuantity: number): InletRanges {
@@ -81,7 +81,7 @@ export class HeaderService {
       quantityMax: quantityMinMax.max,
       massFlowMin: 0,
       massFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0))
-    }
+    };
     return ranges;
   }
 
@@ -93,10 +93,10 @@ export class HeaderService {
 }
 
 export interface InletRanges {
-  pressureMin: number,
-  pressureMax: number,
-  quantityMin: number,
-  quantityMax: number,
-  massFlowMin: number,
-  massFlowMax: number
+  pressureMin: number;
+  pressureMax: number;
+  quantityMin: number;
+  quantityMax: number;
+  massFlowMin: number;
+  massFlowMax: number;
 }

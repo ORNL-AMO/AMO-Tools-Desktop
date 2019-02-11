@@ -14,7 +14,7 @@ export class FanSetupService {
       fanEfficiencyValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
     let specifiedDriveValidators: Array<ValidatorFn> = [];
-    if (obj.drive == 4) {
+    if (obj.drive === 4) {
       specifiedDriveValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
     let form: FormGroup = this.formBuilder.group({
@@ -23,7 +23,7 @@ export class FanSetupService {
       fanSpeed: [obj.fanSpeed, Validators.required],
       drive: [obj.drive, Validators.required],
       specifiedDriveEfficiency: [obj.specifiedDriveEfficiency, specifiedDriveValidators]
-    })
+    });
     for (let key in form.controls) {
       if (form.controls[key].value) {
         form.controls[key].markAsDirty();
@@ -33,7 +33,7 @@ export class FanSetupService {
   }
 
   changeFanType(form: FormGroup): FormGroup {
-    if (form.controls.fanType.value == 12) {
+    if (form.controls.fanType.value === 12) {
       form.controls.fanEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.fanEfficiency.reset(form.controls.fanEfficiency.value);
       form.controls.fanEfficiency.markAsDirty();
@@ -46,7 +46,7 @@ export class FanSetupService {
   }
 
   changeDriveType(form: FormGroup): FormGroup {
-    if (form.controls.drive.value == 4) {
+    if (form.controls.drive.value === 4) {
       form.controls.specifiedDriveEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.specifiedDriveEfficiency.reset(form.controls.specifiedDriveEfficiency.value);
       form.controls.specifiedDriveEfficiency.markAsDirty();
@@ -66,13 +66,13 @@ export class FanSetupService {
       fanSpeed: form.controls.fanSpeed.value,
       drive: form.controls.drive.value,
       specifiedDriveEfficiency: form.controls.specifiedDriveEfficiency.value
-    }
+    };
     return obj;
   }
 
   isFanSetupValid(obj: FanSetup, isModification: boolean): boolean {
     let form: FormGroup = this.getFormFromObj(obj, isModification);
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       return true;
     } else {
       return false;

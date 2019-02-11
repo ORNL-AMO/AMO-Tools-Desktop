@@ -49,10 +49,10 @@ export class SettingsService {
   }
 
   getFormFromSettings(settings: Settings): FormGroup {
-    if(settings.steamPressureMeasurement == 'psi'){
+    if (settings.steamPressureMeasurement === 'psi') {
       settings.steamPressureMeasurement = 'psig';
     }
-    if(settings.steamPressureMeasurement == 'kPag'){
+    if (settings.steamPressureMeasurement === 'kPag') {
       settings.steamPressureMeasurement = 'kPag';
     }
     return this.formBuilder.group({
@@ -229,12 +229,12 @@ export class SettingsService {
       disableFsatSetupTutorial: settings.disableFsatSetupTutorial,
       disableFsatAssessmentTutorial: settings.disableFsatAssessmentTutorial,
       disableFsatReportTutorial: settings.disableFsatReportTutorial
-    }
+    };
     return newSettings;
   }
 
   setUnits(settingsForm: FormGroup): FormGroup {
-    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
+    if (settingsForm.controls.unitsOfMeasure.value === 'Imperial') {
       settingsForm.patchValue({
         powerMeasurement: 'hp',
         flowMeasurement: 'gpm',
@@ -267,9 +267,9 @@ export class SettingsService {
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
-      })
+      });
 
-    } else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
+    } else if (settingsForm.controls.unitsOfMeasure.value === 'Metric') {
       settingsForm.patchValue({
         powerMeasurement: 'kW',
         flowMeasurement: 'm3/h',
@@ -302,64 +302,64 @@ export class SettingsService {
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
-      })
+      });
     }
     settingsForm = this.setEnergyResultUnit(settingsForm);
     return settingsForm;
   }
 
   setEnergyResultUnit(settingsForm: FormGroup): FormGroup {
-    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
+    if (settingsForm.controls.unitsOfMeasure.value === 'Imperial') {
       settingsForm.patchValue({
         energyResultUnit: 'MMBtu'
-      })
+      });
     }
-    else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
+    else if (settingsForm.controls.unitsOfMeasure.value === 'Metric') {
       settingsForm.patchValue({
         energyResultUnit: 'GJ'
-      })
+      });
     }
 
-    if (settingsForm.controls.energySourceType.value == 'Electricity') {
+    if (settingsForm.controls.energySourceType.value === 'Electricity') {
       settingsForm.patchValue({
         energyResultUnit: 'kWh'
-      })
+      });
     }
     return settingsForm;
   }
 
   setEnergyResultUnitSetting(settings: Settings): Settings {
-    if (settings.unitsOfMeasure == 'Imperial') {
-      settings.energyResultUnit = 'MMBtu'
+    if (settings.unitsOfMeasure === 'Imperial') {
+      settings.energyResultUnit = 'MMBtu';
     }
-    else if (settings.unitsOfMeasure == 'Metric') {
+    else if (settings.unitsOfMeasure === 'Metric') {
       settings.energyResultUnit = 'GJ';
     }
 
-    if (settings.energySourceType == 'Electricity') {
+    if (settings.energySourceType === 'Electricity') {
       settings.energyResultUnit = 'kWh';
     }
     return settings;
   }
 
   setPhastResultUnit(settings: Settings): Settings {
-    if (settings.unitsOfMeasure == 'Imperial') {
-      settings.phastRollupUnit = 'MMBtu'
+    if (settings.unitsOfMeasure === 'Imperial') {
+      settings.phastRollupUnit = 'MMBtu';
     }
-    else if (settings.unitsOfMeasure == 'Metric') {
+    else if (settings.unitsOfMeasure === 'Metric') {
       settings.phastRollupUnit = 'GJ';
     }
 
-    if (settings.energySourceType == 'Electricity') {
+    if (settings.energySourceType === 'Electricity') {
       settings.phastRollupUnit = 'kWh';
     }
     return settings;
   }
 
   setTemperatureUnit(settings: Settings): Settings {
-    if (settings.unitsOfMeasure == 'Imperial') {
+    if (settings.unitsOfMeasure === 'Imperial') {
       settings.temperatureMeasurement = 'F';
-    } else if (settings.unitsOfMeasure == 'Metric') {
+    } else if (settings.unitsOfMeasure === 'Metric') {
       settings.temperatureMeasurement = 'C';
       settings.steamTemperatureMeasurement = 'C';
     } else {
@@ -374,7 +374,7 @@ export class SettingsService {
       if (!settings.steamTemperatureMeasurement) {
         settings.steamTemperatureMeasurement = 'F';
       }
-      if (!settings.steamPressureMeasurement || settings.steamPressureMeasurement == 'psi') {
+      if (!settings.steamPressureMeasurement || settings.steamPressureMeasurement === 'psi') {
         settings.steamPressureMeasurement = 'psig';
       }
       if (!settings.steamSpecificEnthalpyMeasurement) {
@@ -390,22 +390,22 @@ export class SettingsService {
         settings.steamMassFlowMeasurement = 'klb';
       }
       if (!settings.steamEnergyMeasurement) {
-        settings.steamEnergyMeasurement = 'MMBtu'
+        settings.steamEnergyMeasurement = 'MMBtu';
       }
       if (!settings.steamVolumeMeasurement) {
-        settings.steamVolumeMeasurement = 'gal'
+        settings.steamVolumeMeasurement = 'gal';
       }
       if (!settings.steamVolumeFlowMeasurement) {
-        settings.steamVolumeFlowMeasurement = 'gpm'
+        settings.steamVolumeFlowMeasurement = 'gpm';
       }
       if (!settings.steamVacuumPressure) {
-        settings.steamVacuumPressure = 'psia'
+        settings.steamVacuumPressure = 'psia';
       }
     } else {
       if (!settings.steamTemperatureMeasurement) {
         settings.steamTemperatureMeasurement = 'C';
       }
-      if (!settings.steamPressureMeasurement || settings.steamPressureMeasurement == 'kPa') {
+      if (!settings.steamPressureMeasurement || settings.steamPressureMeasurement === 'kPa') {
         settings.steamPressureMeasurement = 'kPag';
       }
       if (!settings.steamSpecificEnthalpyMeasurement) {
@@ -421,17 +421,17 @@ export class SettingsService {
         settings.steamMassFlowMeasurement = 'tonne';
       }
       if (!settings.steamEnergyMeasurement) {
-        settings.steamEnergyMeasurement = 'kWh'
+        settings.steamEnergyMeasurement = 'kWh';
       }
 
       if (!settings.steamVolumeMeasurement) {
-        settings.steamVolumeMeasurement = 'L'
+        settings.steamVolumeMeasurement = 'L';
       }
       if (!settings.steamVolumeFlowMeasurement) {
-        settings.steamVolumeFlowMeasurement = 'L/min'
+        settings.steamVolumeFlowMeasurement = 'L/min';
       }
       if (!settings.steamVacuumPressure) {
-        settings.steamVacuumPressure = 'bara'
+        settings.steamVacuumPressure = 'bara';
       }
     }
     return settings;
@@ -439,7 +439,7 @@ export class SettingsService {
 
 
   setFanUnits(settings: Settings): Settings {
-    if (settings.unitsOfMeasure == 'Metric' || settings.unitsOfMeasure == 'Other') {
+    if (settings.unitsOfMeasure === 'Metric' || settings.unitsOfMeasure === 'Other') {
       if (!settings.densityMeasurement) {
         settings.densityMeasurement = 'kgNm3';
       }
