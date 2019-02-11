@@ -220,23 +220,18 @@
         <div class="input-group">
           <input name="baselineCondensateReturnTemperature" type="number" step="any" id="baselineCondensateReturnTemperature"
             class="form-control" (focus)="focusField('condensateReturnTemperature')" (input)="save()" formControlName="condensateReturnTemperature" />
-          <span class="units input-group-addon">
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
-          </span>
+          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.invalid && !baselineHighPressureForm.controls.condensateReturnTemperature.pristine">
           <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
           <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.max">Value can't be greater
             than
             {{baselineHighPressureForm.controls.condensateReturnTemperature.errors.max.max}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
           <span *ngIf="baselineHighPressureForm.controls.condensateReturnTemperature.errors.min">Value can't be less
             than
             {{baselineHighPressureForm.controls.condensateReturnTemperature.errors.min.min}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
       </div>
     </form>
@@ -246,10 +241,7 @@
         <div class="input-group">
           <input name="modificationCondensateReturnTemperature" type="number" step="any" id="modificationCondensateReturnTemperature"
             class="form-control" (focus)="focusField('condensateReturnTemperature')" (input)="save()" formControlName="condensateReturnTemperature" />
-          <span class="units input-group-addon">
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
-          </span>
+          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.invalid && !modificationHighPressureForm.controls.condensateReturnTemperature.pristine">
           <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.required">Value
@@ -257,13 +249,11 @@
           <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.max">Value can't be
             greater than
             {{modificationHighPressureForm.controls.condensateReturnTemperature.errors.max.max}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
           <span *ngIf="modificationHighPressureForm.controls.condensateReturnTemperature.errors.min">Value can't be
             less than
             {{modificationHighPressureForm.controls.condensateReturnTemperature.errors.min.min}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
       </div>
     </form>
