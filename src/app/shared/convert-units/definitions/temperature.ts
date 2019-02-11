@@ -41,11 +41,11 @@ export const temperature = {
     _anchors: {
       metric: {
         unit: 'C'
-        , transform: function (C) { return C / (5/9) + 32 }
+        , transform: function (C) { return C / (5 / 9) + 32; }
       }
       , imperial: {
         unit: 'F'
-        , transform: function (F) { return (F - 32) * (5/9) }
+        , transform: function (F) { return (F - 32) * (5 / 9); }
       }
     }
-}
+};

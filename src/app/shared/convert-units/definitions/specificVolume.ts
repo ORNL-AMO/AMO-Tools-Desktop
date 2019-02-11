@@ -22,7 +22,7 @@ export const specificVolume = {
                 plural: 'Cubic Feet per Pound',
                 display: '(ft&#x00B3;/lb)'
             },
-            to_anchor: 1/16.0185
+            to_anchor: 1 / 16.0185
         }
     },
     // imperial: {
@@ -45,4 +45,4 @@ export const specificVolume = {
         //     , ratio: 16.0185
         // }
     }
-}
+};

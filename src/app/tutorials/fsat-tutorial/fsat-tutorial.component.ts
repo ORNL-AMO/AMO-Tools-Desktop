@@ -21,7 +21,7 @@ export class FsatTutorialComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.next();
-    }, 1000)
+    }, 1000);
  }
 
   next() {

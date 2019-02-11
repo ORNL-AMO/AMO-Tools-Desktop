@@ -43,13 +43,13 @@ export class PhastSummaryComponent implements OnInit {
     // })
 
     this.resultsSub = this.reportRollupService.phastResults.subscribe(val => {
-       if (val.length != 0) {
+       if (val.length !== 0) {
          this.calcPhastSums(val);
        }
-     })
+     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 
@@ -64,8 +64,8 @@ export class PhastSummaryComponent implements OnInit {
       sumCost += result.modificationResults.annualCost;
       let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
       sumEnergySavings += diffEnergy;
-      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);;
-    })
+      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit); ;
+    });
     this.furnaceSavingsPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;
     this.totalCost = sumCost;

@@ -106,25 +106,25 @@ export class ReportRollupComponent implements OnInit {
     this.createdDate = new Date();
     this.reportAssessmentsSub = this.reportRollupService.reportAssessments.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           this._reportAssessments = items;
           // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
         }
       }
     });
     this.allPhastSub = this.reportRollupService.allPhastResults.subscribe(val => {
-      if (val.length != 0) {
+      if (val.length !== 0) {
         this.reportRollupService.initPhastCompare(val);
       }
     });
     this.selectedPhastSub = this.reportRollupService.selectedPhasts.subscribe(val => {
-      if (val.length != 0) {
+      if (val.length !== 0) {
         this.reportRollupService.getPhastResultsFromSelected(val);
       }
     });
     this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           this._psatAssessments = items;
           this.numPsats = this._psatAssessments.length;
           if (!this.focusedAssessment) {
@@ -135,7 +135,7 @@ export class ReportRollupComponent implements OnInit {
     });
     this.phastAssessmentsSub = this.reportRollupService.phastAssessments.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           this.reportRollupService.initPhastResultsArr(items);
           this._phastAssessments = items;
           this.numPhasts = this._phastAssessments.length;
@@ -148,7 +148,7 @@ export class ReportRollupComponent implements OnInit {
 
     this.fsatAssessmentsSub = this.reportRollupService.fsatAssessments.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           this._fsatAssessments = items;
           this.numFsats = this._fsatAssessments.length;
           this.reportRollupService.initFsatResultsArr(items);
@@ -157,20 +157,20 @@ export class ReportRollupComponent implements OnInit {
           }
         }
       }
-    })
+    });
     //gets calculators for pre assessment rollup
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           items.forEach(item => {
-            if (item.type == 'furnace') {
+            if (item.type === 'furnace') {
               this.selectedPhastCalcs.push(item);
-            } else if (item.type == 'pump') {
+            } else if (item.type === 'pump') {
               this.selectedPsatCalcs.push(item);
-            } else if (item.type == 'fan') {
+            } else if (item.type === 'fan') {
               this.selectedFsatCalcs.push(item);
             }
-          })
+          });
         }
       }
     });
@@ -198,14 +198,14 @@ export class ReportRollupComponent implements OnInit {
       this.settings.phastRollupElectricityUnit = 'kWh';
     }
     if (!this.settings.phastRollupFuelUnit) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.settings.phastRollupFuelUnit = 'GJ';
       } else {
         this.settings.phastRollupFuelUnit = 'MMBtu';
       }
     }
     if (!this.settings.phastRollupSteamUnit) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.settings.phastRollupSteamUnit = 'GJ';
       } else {
         this.settings.phastRollupSteamUnit = 'MMBtu';
@@ -389,7 +389,7 @@ export class ReportRollupComponent implements OnInit {
         if (diff > 0 && diff < 50) {
           this.focusedAssessment = item.assessment;
         }
-      })
+      });
     }
   }
 

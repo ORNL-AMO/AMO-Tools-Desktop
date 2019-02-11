@@ -45,9 +45,9 @@ export class PsatRollupGraphsComponent implements OnInit {
   ngOnInit() {
     this.graphColors = graphColors;
     this.resultsSub = this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
-      if (psats.length != 0) {
-        this.totalEnergyUse = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_energy });
-        this.totalCost = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_cost });
+      if (psats.length !== 0) {
+        this.totalEnergyUse = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_energy; });
+        this.totalCost = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_cost; });
         this.resultData = psats;
         this.getResults(this.resultData);
         this.getData();
@@ -75,7 +75,7 @@ export class PsatRollupGraphsComponent implements OnInit {
     if (resultsData) {
       resultsData.forEach(val => {
         let percent;
-        if (this.dataOption == 'cost') {
+        if (this.dataOption === 'cost') {
           percent = this.getTotalCostPercent(val.baselineResults.annual_cost);
         } else {
           percent = this.getTotalEnergyPercent(val.baselineResults.annual_energy);
@@ -84,9 +84,9 @@ export class PsatRollupGraphsComponent implements OnInit {
           name: val.name,
           percent: percent,
           color: graphColors[i]
-        })
+        });
         i++;
-      })
+      });
     }
   }
 
@@ -121,7 +121,7 @@ export class PsatRollupGraphsComponent implements OnInit {
       {
         backgroundColor: this.backgroundColors
       }
-    ]
+    ];
   }
 
   initPrintChartData() {

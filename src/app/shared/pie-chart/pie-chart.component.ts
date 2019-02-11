@@ -73,10 +73,10 @@ export class PieChartComponent implements OnInit {
   // ========== export/gridline tooltip functions ==========
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
     setTimeout(() => {
@@ -86,18 +86,18 @@ export class PieChartComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -105,7 +105,7 @@ export class PieChartComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -408,7 +408,7 @@ export class PieChartComponent implements OnInit {
     path.enter()
       .append("path")
       .attr("class", "slice")
-      .attr("fill", color)
+      .attr("fill", color);
       // .attr("fill", function (d, i) { return color(i); })
     path.transition().duration(500)
       .attrTween("d", function (d) {
@@ -418,7 +418,7 @@ export class PieChartComponent implements OnInit {
         return function (t) {
           return arc(interpolate(t));
         };
-      })
+      });
     path.exit().remove();
 
     let text = this.svg.selectAll("text").remove();
@@ -539,7 +539,7 @@ export class PieChartComponent implements OnInit {
     let pointer = this.svg.selectAll("path.pointer")
       .data(pieValuesData)
       .enter()
-      .append("path")
+      .append("path");
     pointer.style('opacity', 0).transition().duration(750).ease(d3.easeLinear).style('opacity', 1);
     pointer.attr("class", "pointer")
       .style("fill", "none")

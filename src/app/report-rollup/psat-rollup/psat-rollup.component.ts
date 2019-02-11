@@ -16,7 +16,7 @@ export class PsatRollupComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (!this.calculators || this.calculators.length == 0) {
+    if (!this.calculators || this.calculators.length === 0) {
       this.showPreAssessment = false;
     }
     else {

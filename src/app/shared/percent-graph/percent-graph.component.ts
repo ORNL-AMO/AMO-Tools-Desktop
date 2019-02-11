@@ -57,7 +57,7 @@ export class PercentGraphComponent implements OnInit {
   ngAfterViewInit() {
     this.exportName = this.title + "-graph";
 
-    if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings" || this.title.trim() == 'phast-modification-savings') {
+    if (this.title.trim() === "psat-opportunities-savings" || this.title.trim() === "psat-modification-savings" || this.title.trim() === 'phast-modification-savings') {
       this.inChart = true;
       this.chartHeight = 120;
       // this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
@@ -81,10 +81,10 @@ export class PercentGraphComponent implements OnInit {
   // ========== export/gridline tooltip functions ==========
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
     setTimeout(() => {
@@ -94,18 +94,18 @@ export class PercentGraphComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -113,7 +113,7 @@ export class PercentGraphComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -175,7 +175,7 @@ export class PercentGraphComponent implements OnInit {
     d3.selectAll(".c3-gauge-value").style("display", "none");
     d3.selectAll(".c3-axis.c3-axis-x .tick text").style("display", "none");
     d3.selectAll(".c3-chart-arcs-background").style("fill", "#FFF");
-    d3.selectAll(".c3-chart-arcs-background").style("stroke", "#b8b8b8").style("stroke-width","0.5px");
+    d3.selectAll(".c3-chart-arcs-background").style("stroke", "#b8b8b8").style("stroke-width", "0.5px");
 
     if (this.value && this.chart) {
       this.updateChart();

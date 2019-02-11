@@ -157,10 +157,10 @@ export interface HeaderInput {
 }
 
 export interface HeaderInputObj {
-  pressure: number,
-  thermodynamicQuantity: number,
-  quantityValue: number,
-  massFlow: number
+  pressure: number;
+  thermodynamicQuantity: number;
+  quantityValue: number;
+  massFlow: number;
 }
 
 // export interface HeaderOutput {
@@ -216,7 +216,7 @@ export interface HeatLossInput {
 
 export interface PrvInput {
   inletPressure: number;
-  thermodynamicQuantity: number;//0 is TEMPERATURE
+  thermodynamicQuantity: number; //0 is TEMPERATURE
   quantityValue: number;
   inletMassFlow: number;
   outletPressure: number;
@@ -255,13 +255,13 @@ export interface TurbineInput {
   inletPressure: number;
   inletQuantity: number;
   inletQuantityValue: number;
-  turbineProperty: number;// massFlow = 0, powerOut = 1
+  turbineProperty: number; // massFlow = 0, powerOut = 1
   isentropicEfficiency: number;
   generatorEfficiency: number;
   massFlowOrPowerOut: number; // massFlow or powerOut
   outletSteamPressure: number;
-  outletQuantity: number,
-  outletQuantityValue: number
+  outletQuantity: number;
+  outletQuantityValue: number;
 }
 
 // export interface TurbineOutput {
@@ -301,10 +301,10 @@ export const ThermodynamicQuantityOptions: Array<Quantity> = [
     value: 3,
     display: 'Quality'
   }
-]
+];
 
 export interface Quantity {
 
-  value: number,
-  display: string
+  value: number;
+  display: string;
 }

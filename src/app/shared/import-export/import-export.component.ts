@@ -47,14 +47,14 @@ export class ImportExportComponent implements OnInit {
     if (this.export) {
       this.noDirAssessmentItems = JSON.parse(JSON.stringify(this.exportData.assessments));
       if (this.exportData.calculators) {
-        if (this.exportData.calculators.length != 0) {
+        if (this.exportData.calculators.length !== 0) {
           if (this.exportData.calculators[0].preAssessments) {
             this.showCalcs = true;
           }
         }
       }
       if (this.exportData.directories) {
-        if (this.exportData.directories.length != 0) {
+        if (this.exportData.directories.length !== 0) {
           this.showDirs = true;
         }
       }
@@ -68,10 +68,10 @@ export class ImportExportComponent implements OnInit {
 
   getDirAssessments(id: number) {
     if (this.noDirAssessmentItems) {
-      _.remove(this.noDirAssessmentItems, (assessment) => { return assessment.assessment.directoryId == id });
+      _.remove(this.noDirAssessmentItems, (assessment) => { return assessment.assessment.directoryId === id; });
       // this.cd.detectChanges();
     }
-    let assessments = _.filter(this.exportData.assessments, (assessmentItem) => { return assessmentItem.assessment.directoryId == id });
+    let assessments = _.filter(this.exportData.assessments, (assessmentItem) => { return assessmentItem.assessment.directoryId === id; });
     return assessments;
   }
 
@@ -88,7 +88,7 @@ export class ImportExportComponent implements OnInit {
 
   setImportFile($event) {
     if ($event.target.files) {
-      if ($event.target.files.length != 0) {
+      if ($event.target.files.length !== 0) {
         let regex = /.json$/;
         if (regex.test($event.target.files[0].name)) {
           this.fileReference = $event;
@@ -103,7 +103,7 @@ export class ImportExportComponent implements OnInit {
             } catch (err) {
               this.validFile = false;
             }
-          }
+          };
         }
       }
     }
@@ -116,7 +116,7 @@ importFile() {
     fr.onloadend = (e) => {
       this.importJson = JSON.parse(fr.result);
       this.importData.emit(this.importJson);
-    }
+    };
   }
   else {
     this.importData.emit(this.importJson);

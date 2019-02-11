@@ -39,7 +39,7 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
     }
 
     if (resultCategories.showExGas) {
-      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100
+      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100;
     }
   }
 }

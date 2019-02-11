@@ -23,6 +23,6 @@ export class GreaterThanValidator {
             else {
                 return undefined;
             }
-        }
+        };
     }
 }

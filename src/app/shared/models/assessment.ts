@@ -4,17 +4,17 @@ import { FSAT } from './fans';
 import { SSMT } from './steam/ssmt';
 
 export interface Assessment {
-  id?: number,
-  directoryId?: number,
-  psat?: PSAT,
-  phast?: PHAST,
-  fsat?: FSAT,
-  ssmt?: SSMT,
-  createdDate?: Date,
-  modifiedDate?: Date,
+  id?: number;
+  directoryId?: number;
+  psat?: PSAT;
+  phast?: PHAST;
+  fsat?: FSAT;
+  ssmt?: SSMT;
+  createdDate?: Date;
+  modifiedDate?: Date;
   type: string;
-  name: string,
-  selected?: boolean,
-  appVersion?: string,
-  isExample?: boolean
+  name: string;
+  selected?: boolean;
+  appVersion?: string;
+  isExample?: boolean;
 }

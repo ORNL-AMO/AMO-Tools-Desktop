@@ -48,4 +48,4 @@ export const specificHeat = {
       , ratio: 1 / 0.238845897
     }
   }
-}
+};

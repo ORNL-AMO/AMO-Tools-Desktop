@@ -45,9 +45,9 @@ export class FsatRollupGraphsComponent implements OnInit {
   ngOnInit() {
     this.graphColors = graphColors;
     this.resultsSub = this.reportRollupService.fsatResults.subscribe((fsats: Array<FsatResultsData>) => {
-      if (fsats.length != 0) {
-        this.totalEnergyUse = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualEnergy });
-        this.totalCost = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualCost });
+      if (fsats.length !== 0) {
+        this.totalEnergyUse = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualEnergy; });
+        this.totalCost = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualCost; });
         this.resultData = fsats;
         this.getResults(this.resultData);
         this.getData();
@@ -75,7 +75,7 @@ export class FsatRollupGraphsComponent implements OnInit {
     if (resultsData) {
       resultsData.forEach(val => {
         let percent;
-        if (this.dataOption == 'cost') {
+        if (this.dataOption === 'cost') {
           percent = this.getTotalCostPercent(val.baselineResults.annualCost);
         } else {
           percent = this.getTotalEnergyPercent(val.baselineResults.annualEnergy);
@@ -84,9 +84,9 @@ export class FsatRollupGraphsComponent implements OnInit {
           name: val.name,
           percent: percent,
           color: graphColors[i]
-        })
+        });
         i++;
-      })
+      });
     }
   }
 
@@ -121,7 +121,7 @@ export class FsatRollupGraphsComponent implements OnInit {
       {
         backgroundColor: this.backgroundColors
       }
-    ]
+    ];
   }
 
   initPrintChartData() {
