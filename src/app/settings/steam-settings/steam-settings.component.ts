@@ -117,7 +117,8 @@ export class SteamSettingsComponent implements OnInit {
     //massFlowMeasurements
     tmpList = [
       'klb',
-      'tonne'
+      'tonne',
+      'kg'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
@@ -148,14 +149,10 @@ export class SteamSettingsComponent implements OnInit {
     });
 
     tmpList = [
-      'hp',
-      'btus',
-      'GW',
-      'kJh',
-      'kcals',
       'kW',
-      'MJh'
-    ];
+      'MJh',
+      'GJh'
+    ]
 
     tmpList.forEach(unit => {
 
@@ -187,7 +184,8 @@ export class SteamSettingsComponent implements OnInit {
     //steam volume
     tmpList = [
       'gal',
-      'L'
+      'L',
+      'm3'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
@@ -199,7 +197,8 @@ export class SteamSettingsComponent implements OnInit {
     //steam volume flow
     tmpList = [
       'gpm',
-      'L/min'
+      'L/min',
+      'm3/min'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
