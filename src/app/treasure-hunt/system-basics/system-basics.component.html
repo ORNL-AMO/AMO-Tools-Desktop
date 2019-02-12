@@ -1,0 +1,9 @@
+<div class="d-flex flex-column">
+  <div class="header mr-2 ml-2">
+    <h3>{{assessment.name}} Settings</h3>
+  </div>
+  <div class="p-4">
+    <app-application-settings [(settingsForm)]="settingsForm" [inPsat]="true" (startSavePolling)="save()"></app-application-settings>
+    Additional settings for operations here...
+  </div>
+</div>

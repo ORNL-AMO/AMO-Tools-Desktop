@@ -6,6 +6,6 @@ export class TreasureHuntService {
 
   mainTab: BehaviorSubject<string>;
   constructor() { 
-    this.mainTab = new BehaviorSubject<string>('settings');
+    this.mainTab = new BehaviorSubject<string>('system-basics');
   }
 }

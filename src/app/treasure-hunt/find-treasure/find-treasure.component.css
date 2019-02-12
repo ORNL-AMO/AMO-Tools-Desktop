@@ -5,5 +5,9 @@
 
 .hunt-item:hover{
     cursor: pointer;
-    background: gray;
+    background: #CCD1D1;
+    border-radius: 25px;
+    box-shadow: 0px 0px 5px 3px #2E4053
 }
+
+

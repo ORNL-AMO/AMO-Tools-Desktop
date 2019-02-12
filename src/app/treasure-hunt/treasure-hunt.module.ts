@@ -5,13 +5,17 @@ import { TreasureHuntBannerComponent } from './treasure-hunt-banner/treasure-hun
 import { FindTreasureComponent } from './find-treasure/find-treasure.component';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { LightingReplacementModule } from '../calculator/lighting/lighting-replacement/lighting-replacement.module';
+import { SystemBasicsComponent } from './system-basics/system-basics.component';
+import { SettingsModule } from '../settings/settings.module';
+import { HelpPanelComponent } from './help-panel/help-panel.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    LightingReplacementModule
+    LightingReplacementModule,
+    SettingsModule
   ],
-  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent],
+  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent],
   providers: [ TreasureHuntService ]
 })
 export class TreasureHuntModule { }
