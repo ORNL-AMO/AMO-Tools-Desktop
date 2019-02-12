@@ -2,7 +2,8 @@
   <div class="d-flex stripe my-table-bg border-top-0">
     <div class="col-4">
     </div>
-    <div class="text-center bold table-text d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+    <div
+      class="text-center bold table-text d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
       Baseline
     </div>
     <div class="col-4 text-center bold table-text d-flex justify-content-center align-items-center pl-1 pr-1">
@@ -18,8 +19,8 @@
       <span class="table-text"> &mdash; &mdash;</span>
     </div>
     <div class="col-4 d-flex justify-content-center align-items-center pl-1 pr-1">
-      <!-- <app-percent-graph *ngIf="percentSavings" [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"
-        [title]="'ssmt-opportunities-savings'"></app-percent-graph> -->
+      <app-percent-graph *ngIf="percentSavings" [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"
+        [title]="'ssmt-opportunities-savings'"></app-percent-graph>
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
@@ -98,7 +99,8 @@
   </div>
   <div class="d-flex stripe my-table-item">
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">Power Generated (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>/yr)</span>
+      <span class="table-text">Power Generated (<span
+          [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>/yr)</span>
     </div>
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
       <span class="table-text">{{baselineOutput.powerGenerated | number:'2.0-1'}}</span>
@@ -107,104 +109,85 @@
       <span class="table-text">{{modificationOutput.powerGenerated | number:'2.0-1'}}</span>
     </div>
   </div>
-  <!-- <div class="d-flex my-table-item">
-    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">Pump shaft power (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>/yr)</span>
-    </div>
-    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">{{baselineResults.pump_shaft_power | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="table-text">{{modificationResults.pump_shaft_power | number:'2.0-1'}}</span>
-    </div>
-  </div> -->
-  <!--<div class="d-flex stripe my-table-item">
-    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">Motor efficiency (%)</span>
-    </div>
-    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">{{baselineResults.motor_efficiency | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="table-text" *ngIf="modificationResults.motor_efficiency">{{modificationResults.motor_efficiency |
-        number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.motor_efficiency">&mdash;</span>
-    </div>
-  </div>
-
   <div class="d-flex my-table-item">
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">Motor power factor (%)</span>
+      <span class="table-text">Process Use (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
     </div>
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">{{baselineResults.motor_power_factor | number:'2.0-1'}}</span>
+      <span class="table-text">{{baselineLosses.allProcessUsageUsefulEnergy | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="table-text" *ngIf="modificationResults.motor_power_factor">{{modificationResults.motor_power_factor
-        | number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.motor_power_factor">&mdash;</span>
+      <span class="table-text">{{modificationLosses.allProcessUsageUsefulEnergy | number:'2.0-1'}}</span>
     </div>
   </div>
-
-
   <div class="d-flex stripe my-table-item">
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">Load factor (%)</span>
+      <span class="table-text">Stack Loss (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
     </div>
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">{{baselineResults.load_factor*100 | number:'2.0-1'}}</span>
+      <span class="table-text">{{baselineLosses.stack | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="table-text" *ngIf="modificationResults.load_factor">{{modificationResults.load_factor*100 |
-        number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.load_factor">&mdash;</span>
-    </div>
-  </div>
-
-  <div class="d-flex my-table-item">
-    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">Drive efficiency (%)</span>
-    </div>
-    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">{{baselineResults.drive_efficiency | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="table-text" *ngIf="modificationResults.drive_efficiency">{{modificationResults.drive_efficiency |
-        number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.drive_efficiency">&mdash;</span>
+      <span class="table-text">{{modificationLosses.stack |number:'2.0-1'}}</span>
     </div>
   </div>
 
   <div class="d-flex stripe my-table-item">
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">Motor current (amps)</span>
+      <span class="table-text">Vent Losses (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
     </div>
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">{{baselineResults.motor_current | number:'2.0-1'}}</span>
+      <span class="table-text">{{baselineLosses.totalVentLosses | number:'2.0-1'}}</span>
     </div>
     <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="table-text" *ngIf="modificationResults.motor_current">{{modificationResults.motor_current |
-        number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.motor_current">&mdash;</span>
+      <span class="table-text">{{modificationLosses.totalVentLosses |number:'2.0-1'}}</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Unrecycled Condensate Losses (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.totalProcessLosses | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.totalProcessLosses |number:'2.0-1'}}</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Turbine Losses (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.totalTurbineLosses | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.totalTurbineLosses |number:'2.0-1'}}</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Other Losses (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.totalOtherLosses | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.totalOtherLosses |number:'2.0-1'}}</span>
     </div>
   </div>
 
 
-  <div class="d-flex my-table-item">
-    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">Motor power (kW)</span>
-    </div>
-    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="table-text">{{baselineResults.motor_power | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="table-text" *ngIf="modificationResults.motor_power">{{modificationResults.motor_power |
-        number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.motor_power">&mdash;</span>
-    </div>
-  </div>
-
-  <div class="d-flex stripe my-table-bg my-table-item">
+  <!-- <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
       <span class="bold table-text">Annual Energy (MWh)</span>
     </div>
@@ -212,7 +195,8 @@
       <span class="bold  table-text">{{baselineResults.annual_energy | number:'2.0-0'}}</span>
     </div>
     <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="bold table-text" *ngIf="modificationResults.annual_energy" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_energy
+      <span class="bold table-text" *ngIf="modificationResults.annual_energy"
+        [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_energy
         | number:'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.annual_energy">&mdash;</span>
     </div>
@@ -226,29 +210,30 @@
       <span class="bold table-text">&mdash;</span>
     </div>
     <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="bold table-text" *ngIf="modificationResults.annual_energy" [ngClass]="{'positive-savings': percentSavings > 10}">{{getDiff(baselineResults.annual_energy,
+      <span class="bold table-text" *ngIf="modificationResults.annual_energy"
+        [ngClass]="{'positive-savings': percentSavings > 10}">{{getDiff(baselineResults.annual_energy,
         modificationResults.annual_energy) | number:'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!modificationResults.annual_energy">&mdash;</span>
     </div>
-  </div>
+  </div> -->
 
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Cost</span>
+      <span class="bold table-text">Annual Cost ($/yr)</span>
     </div>
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="bold table-text">{{baselineResults.annual_cost | currency:'USD':'symbol':'2.0-0'}}</span>
+      <span class="bold table-text">{{baselineOutput.totalOperatingCost | currency:'USD'}}</span>
     </div>
     <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
-      <span class="bold table-text" *ngIf="modificationResults.annual_cost" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost
-        | currency:'USD':'symbol':'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!modificationResults.annual_cost">&mdash;</span>
+      <span class="bold table-text" *ngIf="modificationOutput.totalOperatingCost"
+        [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationOutput.totalOperatingCost| currency:'USD'}}</span>
+      <span class="bold table-text" *ngIf="!modificationOutput.totalOperatingCost">&mdash;</span>
     </div>
   </div>
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
-      <span class="bold table-text">Annual Savings</span>
+      <span class="bold table-text">Annual Savings ($/yr)</span>
     </div>
     <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
       <span class="bold table-text">&mdash;</span>
@@ -258,7 +243,7 @@
         {{annualSavings | currency:'USD':'symbol':'2.0-0'}}</span>
       <span class="bold table-text" *ngIf="!annualSavings">&mdash;</span>
     </div>
-  </div> -->
+  </div>
 </div>
 
 

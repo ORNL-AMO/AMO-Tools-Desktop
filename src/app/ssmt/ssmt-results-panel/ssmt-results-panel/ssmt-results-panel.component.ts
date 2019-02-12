@@ -1,10 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
-import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
+import { SSMTOutput, SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import { Subscription } from 'rxjs';
 import { SsmtService } from '../../ssmt.service';
 import { CalculateModelService } from '../../ssmt-calculations/calculate-model.service';
+import { CalculateLossesService } from '../../ssmt-calculations/calculate-losses.service';
 
 @Component({
   selector: 'app-ssmt-results-panel',
@@ -21,14 +22,17 @@ export class SsmtResultsPanelComponent implements OnInit {
 
   baselineOutput: SSMTOutput;
   baselineInputs: SSMTInputs;
+  baselineLosses: SSMTLosses;
   modificationOutput: SSMTOutput;
   modificationInputs: SSMTInputs;
+  modificationLosses: SSMTLosses;
   updateDataSub: Subscription;
 
   counter: any;
   showResults: boolean;
   percentSavings: number;
-  constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService) { }
+  annualSavings: number;
+  constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService) { }
 
   ngOnInit() {
     this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); })
@@ -49,18 +53,21 @@ export class SsmtResultsPanelComponent implements OnInit {
       let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
       this.baselineOutput = resultData.outputData;
       this.baselineInputs = resultData.inputData;
+      this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputs, this.settings);
       this.calculateModelService.initResults();
       this.calculateModelService.initData(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
       resultData = this.calculateModelService.calculateModelRunner();
       this.modificationOutput = resultData.outputData;
       this.modificationInputs = resultData.inputData;
-      this.getPercentSavings(this.baselineOutput.totalOperatingCost, this.modificationOutput.totalOperatingCost);
+      this.modificationLosses = this.calculateLossesService.calculateLosses(this.modificationOutput, this.modificationInputs, this.settings);
+      this.getSavings(this.baselineOutput.totalOperatingCost, this.modificationOutput.totalOperatingCost);
       this.showResults = true;
     }, 750)
   }
 
 
-  getPercentSavings(baselineCost: number, modificationCost: number) {
+  getSavings(baselineCost: number, modificationCost: number) {
     this.percentSavings = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));
+    this.annualSavings = baselineCost - modificationCost;
   }
 }
