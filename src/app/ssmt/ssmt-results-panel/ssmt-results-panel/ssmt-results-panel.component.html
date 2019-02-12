@@ -1,0 +1,257 @@
+<div class="d-flex flex-column my-table" *ngIf="showResults">
+  <div class="d-flex stripe my-table-bg border-top-0">
+    <div class="col-4">
+    </div>
+    <div
+      class="text-center bold table-text d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      Baseline
+    </div>
+    <div class="col-4 text-center bold table-text d-flex justify-content-center align-items-center pl-1 pr-1">
+      {{ssmt.modifications[modificationIndex].ssmt.name}}
+
+    </div>
+  </div>
+  <div class="d-flex my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Percent Savings (%)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text"> &mdash; &mdash;</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center pl-1 pr-1">
+      <app-percent-graph *ngIf="percentSavings" [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"
+        [title]="'ssmt-opportunities-savings'"></app-percent-graph>
+    </div>
+  </div>
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Fuel Usage
+        (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)
+      </span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineOutput.boilerFuelUsage | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationOutput.boilerFuelUsage | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Fuel Cost ($/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineOutput.boilerFuelCost | currency:'USD'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationOutput.boilerFuelCost | currency:'USD'}}</span>
+    </div>
+  </div>
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Electricity Usage
+        (kW/yr)
+      </span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineOutput.sitePowerImport * baselineInputs.operationsInput.operatingHoursPerYear
+        | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationOutput.sitePowerImport *
+        modificationInputs.operationsInput.operatingHoursPerYear | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Electricity Cost ($/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineOutput.powerGenerationCost | currency:'USD'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationOutput.powerGenerationCost | currency:'USD'}}</span>
+    </div>
+  </div>
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Water Usage
+        (<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>/yr)
+      </span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineOutput.annualMakeupWaterFlow | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationOutput.annualMakeupWaterFlow | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Water Cost ($/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineOutput.makeupWaterCost | currency:'USD'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationOutput.makeupWaterCost | currency:'USD'}}</span>
+    </div>
+  </div>
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Power Generated (<span
+          [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineOutput.powerGenerated | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationOutput.powerGenerated | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Process Use (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.allProcessUsageUsefulEnergy | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.allProcessUsageUsefulEnergy | number:'2.0-1'}}</span>
+    </div>
+  </div>
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Stack Loss (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.stack | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.stack |number:'2.0-1'}}</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Vent Losses (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.totalVentLosses | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.totalVentLosses |number:'2.0-1'}}</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Unrecycled Condensate Losses (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.totalProcessLosses | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.totalProcessLosses |number:'2.0-1'}}</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Turbine Losses (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.totalTurbineLosses | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.totalTurbineLosses |number:'2.0-1'}}</span>
+    </div>
+  </div>
+
+  <div class="d-flex stripe my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">Other Losses (<span
+          [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="table-text">{{baselineLosses.totalOtherLosses | number:'2.0-1'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="table-text">{{modificationLosses.totalOtherLosses |number:'2.0-1'}}</span>
+    </div>
+  </div>
+
+
+  <!-- <div class="d-flex stripe my-table-bg my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="bold table-text">Annual Energy (MWh)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="bold  table-text">{{baselineResults.annual_energy | number:'2.0-0'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="bold table-text" *ngIf="modificationResults.annual_energy"
+        [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_energy
+        | number:'2.0-0'}}</span>
+      <span class="bold table-text" *ngIf="!modificationResults.annual_energy">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex my-table-bg my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="bold table-text">Annual Energy Savings (MWh)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="bold table-text">&mdash;</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="bold table-text" *ngIf="modificationResults.annual_energy"
+        [ngClass]="{'positive-savings': percentSavings > 10}">{{getDiff(baselineResults.annual_energy,
+        modificationResults.annual_energy) | number:'2.0-0'}}</span>
+      <span class="bold table-text" *ngIf="!modificationResults.annual_energy">&mdash;</span>
+    </div>
+  </div> -->
+
+  <div class="d-flex stripe my-table-bg my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="bold table-text">Annual Cost ($/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="bold table-text">{{baselineOutput.totalOperatingCost | currency:'USD'}}</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="bold table-text" *ngIf="modificationOutput.totalOperatingCost"
+        [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationOutput.totalOperatingCost| currency:'USD'}}</span>
+      <span class="bold table-text" *ngIf="!modificationOutput.totalOperatingCost">&mdash;</span>
+    </div>
+  </div>
+
+  <div class="d-flex my-table-bg my-table-item">
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="bold table-text">Annual Savings ($/yr)</span>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center pl-1 pr-1 col-4">
+      <span class="bold table-text">&mdash;</span>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center text-center pl-1 pr-1">
+      <span class="bold table-text" *ngIf="annualSavings" [ngClass]="{'positive-savings': percentSavings > 10}">
+        {{annualSavings | currency:'USD':'symbol':'2.0-0'}}</span>
+      <span class="bold table-text" *ngIf="!annualSavings">&mdash;</span>
+    </div>
+  </div>
+</div>
+
+
+<div class="d-flex flex-column justify-content-center align-items-center w-100 h-100" *ngIf="!showResults">
+  <div class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+  <h5>Calculating...</h5>
+</div>

@@ -46,6 +46,7 @@ export class SsmtReportComponent implements OnInit {
       this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputData, this.settings);
       this.modificationOutputs = new Array<{ name: string, outputData: SSMTOutput }>();
       this.modificationInputData = new Array<{ name: string, inputData: SSMTInputs }>();
+      this.modificationLosses = new Array<{ name: string, outputData: SSMTLosses }>();
       if (this.assessment.ssmt.modifications) {
         this.assessment.ssmt.modifications.forEach(modification => {
           this.calculateModelService.initResults();

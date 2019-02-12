@@ -39,7 +39,6 @@ export class CalculateLossesService {
       if (inputData.turbineInput.highToLowTurbine.useTurbine == true) {
         ssmtLosses.highToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(ssmtResults.highToLowPressureTurbine);
         ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(ssmtResults.highToLowPressureTurbine);
-
       }
 
       if (inputData.headerInput.numberOfHeaders == 3) {
@@ -60,6 +59,11 @@ export class CalculateLossesService {
 
     ssmtLosses.fuelEnergy = ssmtResults.boilerOutput.fuelEnergy;
     ssmtLosses.makeupWaterEnergy = this.calculateMakeupWaterEnergy(ssmtResults.makeupWater, settings);
+    ssmtLosses.allProcessUsageUsefulEnergy = this.calculateUsefulProcessUsage(ssmtResults, inputData.headerInput.numberOfHeaders);
+    ssmtLosses.totalProcessLosses = this.calculateTotalProcessLoss(ssmtLosses);
+    ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses);
+    ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses);
+    ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses);
     return ssmtLosses;
   }
 
@@ -152,6 +156,38 @@ export class CalculateLossesService {
     return energy;
   }
 
+  calculateUsefulProcessUsage(outputData: SSMTOutput, numberOfHeaders: number): number {
+    let usefulProcessUsage: number = outputData.highPressureProcessUsage.processUsage;
+    if (numberOfHeaders > 1) {
+      usefulProcessUsage = usefulProcessUsage + outputData.lowPressureProcessUsage.processUsage;
+
+      if (numberOfHeaders == 3) {
+        usefulProcessUsage = usefulProcessUsage + outputData.mediumPressureProcessUsage.processUsage;
+      }
+    }
+    return usefulProcessUsage;
+  }
+
+  calculateTotalVentLoss(ssmtLosses: SSMTLosses): number{
+    let loss: number = ssmtLosses.deaeratorVentLoss + ssmtLosses.lowPressureVentLoss + ssmtLosses.condensateFlashTankLoss;
+    return loss;
+  }
+
+  calculateTotalProcessLoss(ssmtLosses: SSMTLosses): number{
+    let loss: number = ssmtLosses.lowPressureProcessLoss + ssmtLosses.mediumPressureProcessLoss + ssmtLosses.highPressureProcessLoss;
+    return loss;
+  }
+
+  calculateTotalTurbineLosses(ssmtLosses: SSMTLosses): number{
+    let loss: number = ssmtLosses.highToLowTurbineEfficiencyLoss + ssmtLosses.condensingTurbineEfficiencyLoss + ssmtLosses.mediumToLowTurbineEfficiencyLoss + ssmtLosses.highToMediumTurbineEfficiencyLoss;
+    return loss;
+  }
+
+  calculateTotalOtherLosses(ssmtLosses: SSMTLosses): number {
+    let loss: number = ssmtLosses.lowPressureHeader + ssmtLosses.mediumPressureHeader + ssmtLosses.highPressureHeader + ssmtLosses.blowdown + ssmtLosses.condensateLosses;
+    return loss;
+  }
+
   initLosses(): SSMTLosses {
     let losses: SSMTLosses = {
       stack: 0,
@@ -176,7 +212,12 @@ export class CalculateLossesService {
       condensingTurbineUsefulEnergy: 0,
       highToMediumTurbineUsefulEnergy: 0,
       highToLowTurbineUsefulEnergy: 0,
-      mediumToLowTurbineUsefulEnergy: 0
+      mediumToLowTurbineUsefulEnergy: 0,
+      allProcessUsageUsefulEnergy: 0,
+      totalProcessLosses: 0,
+      totalVentLosses: 0,
+      totalTurbineLosses: 0,
+      totalOtherLosses: 0
     }
     return losses;
   }
