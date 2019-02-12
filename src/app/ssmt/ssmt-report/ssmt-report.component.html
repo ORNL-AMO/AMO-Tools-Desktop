@@ -106,10 +106,9 @@
       <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs"></app-energy-summary>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'losses' && dataCalculated"
-      [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-losses-summary [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings">
-      </app-losses-summary>
+    <div class="results scroll-item" *ngIf="currentTab == 'losses' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [settings]="settings"
+        [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"></app-losses-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'diagram' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
