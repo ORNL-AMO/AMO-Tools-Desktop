@@ -47,14 +47,15 @@
         <input name="condenserPressure" type="number" step="any" class="form-control" id="{{idString+'condenserPressure'}}"
           (input)="save()" [readonly]="!selected" formControlName="condenserPressure" (focus)="focusField('condenserPressure')"
           (blur)="focusOut()" [ngClass]="{'indicate-different': isCondenserPressureDifferent()}">
-        <span class="units input-group-addon">{{settings.steamVacuumPressure}}</span>
+        <span class="units input-group-addon" [innerHTML]="settings.steamVacuumPressure | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.condenserPressure.invalid && !turbineForm.controls.condenserPressure.pristine">
         <span *ngIf="turbineForm.controls.condenserPressure.errors.required">Value Required</span>
         <span *ngIf="turbineForm.controls.condenserPressure.errors.max">Value can't be greater than
-          {{turbineForm.controls.condenserPressure.errors.max.max}} {{settings.steamVacuumPressure}}.</span>
+          {{turbineForm.controls.condenserPressure.errors.max.max}} <span [innerHTML]="settings.steamVacuumPressure | settingsLabel"></span>.</span>
+
         <span *ngIf="turbineForm.controls.condenserPressure.errors.min">Value can't be less than
-          {{turbineForm.controls.condenserPressure.errors.min.min}} {{settings.steamVacuumPressure}}.</span>
+          {{turbineForm.controls.condenserPressure.errors.min.min}} <span [innerHTML]="settings.steamVacuumPressure | settingsLabel"></span>.</span>
       </span>
     </div>
 
@@ -76,24 +77,22 @@
           (input)="save()" [readonly]="!selected" formControlName="operationValue" (focus)="focusField('operationValue')"
           (blur)="focusOut()" [ngClass]="{'indicate-different': isOperationValueDifferent()}">
         <span class="units input-group-addon">
-          <span *ngIf="turbineForm.controls.operationType.value == 0">{{settings.steamMassFlowMeasurement}}</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 0" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
           <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>
         </span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.operationValue.invalid && !turbineForm.controls.operationValue.pristine">
         <span *ngIf="turbineForm.controls.operationValue.errors.required">Value Required</span>
-        <span *ngIf="turbineForm.controls.operationValue.errors.max && turbineForm.controls.operationType.value == 0">Value
-          can't be greater than
-          {{turbineForm.controls.operationValue.errors.max.max}} {{settings.steamMassFlowMeasurement}}.</span>
-        <span *ngIf="turbineForm.controls.operationValue.errors.min && turbineForm.controls.operationType.value == 0">Value
-          can't be less than
-          {{turbineForm.controls.operationValue.errors.min.min}} {{settings.steamMassFlowMeasurement}}.</span>
-        <span *ngIf="turbineForm.controls.operationValue.errors.max && turbineForm.controls.operationType.value == 1">Value
-          can't be greater than
-          {{turbineForm.controls.operationValue.errors.max.max}} kW.</span>
-        <span *ngIf="turbineForm.controls.operationValue.errors.min && turbineForm.controls.operationType.value == 1">Value
-          can't be less than
-          {{turbineForm.controls.operationValue.errors.min.min}} kW.</span>
+        <span *ngIf="turbineForm.controls.operationValue.errors.max">Value can't be greater than
+          {{turbineForm.controls.operationValue.errors.max.max}}
+          <span *ngIf="turbineForm.controls.operationType.value == 0" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+          <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>.
+        </span>
+        <span *ngIf="turbineForm.controls.operationValue.errors.min">Value can't be less than
+          {{turbineForm.controls.operationValue.errors.min.min}}
+          <span *ngIf="turbineForm.controls.operationType.value == 0" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+          <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>.
+        </span>
       </span>
     </div>
   </div>

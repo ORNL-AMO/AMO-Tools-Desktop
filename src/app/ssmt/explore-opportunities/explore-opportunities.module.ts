@@ -15,6 +15,7 @@ import { ExploreTurbineFormComponent } from './explore-opportunities-form/turbin
 import { HelpPanelModule } from '../help-panel/help-panel.module';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 import { SsmtResultsPanelModule } from '../ssmt-results-panel/ssmt-results-panel.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { SsmtResultsPanelModule } from '../ssmt-results-panel/ssmt-results-panel
     FormsModule,
     ReactiveFormsModule,
     HelpPanelModule,
-    SsmtResultsPanelModule
+    SsmtResultsPanelModule,
+    SharedModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
   exports: [ExploreOpportunitiesComponent],
