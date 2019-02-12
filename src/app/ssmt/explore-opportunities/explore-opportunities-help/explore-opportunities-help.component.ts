@@ -19,11 +19,9 @@ export class ExploreOpportunitiesHelpComponent implements OnInit {
   ngOnInit() {
     this.currentTabSubscription = this.exploreOpportunitiesService.currentTab.subscribe(val => {
       this.currentTab = val;
-      console.log(this.currentTab);
     })
     this.currentFieldSubscription = this.exploreOpportunitiesService.currentField.subscribe(val => {
       this.currentField = val;
-      console.log(this.currentField)
     })
   }
 

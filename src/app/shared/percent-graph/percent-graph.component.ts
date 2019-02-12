@@ -23,6 +23,8 @@ export class PercentGraphComponent implements OnInit {
   fontSize: number;
   @Input()
   unit: string;
+  @Input()
+  chartWidth: number;
 
   doughnutChartLabels: string[];
   doughnutChartData: number[];
@@ -51,13 +53,16 @@ export class PercentGraphComponent implements OnInit {
   constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
+    if(!this.chartWidth){
+      this.chartWidth = 250;
+    }
 
   }
 
   ngAfterViewInit() {
     this.exportName = this.title + "-graph";
 
-    if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings" || this.title.trim() == 'phast-modification-savings') {
+    if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings" || this.title.trim() == 'phast-modification-savings' || this.title.trim() == 'ssmt-opportunities-savings') {
       this.inChart = true;
       this.chartHeight = 120;
       // this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";

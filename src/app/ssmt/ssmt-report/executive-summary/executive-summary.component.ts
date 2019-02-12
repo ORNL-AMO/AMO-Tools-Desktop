@@ -14,11 +14,13 @@ export class ExecutiveSummaryComponent implements OnInit {
   baselineOutput: SSMTOutput;
   @Input()
   modificationOutputs: Array<SSMTOutput>;
-
+  
+  tableCellWidth: number;
+  chartWidth: number;
   constructor() { }
 
   ngOnInit() {
-    
+    this.getTableCellWidth();
   }
 
   getSavingsPercentage(baselineCost: number, modificationCost: number): number {
@@ -26,4 +28,8 @@ export class ExecutiveSummaryComponent implements OnInit {
     return tmpSavingsPercent;
   }
 
+  getTableCellWidth(){
+    this.tableCellWidth = 100 / (this.modificationOutputs.length + 2);
+    this.chartWidth = this.tableCellWidth * .75;
+  }
 }
