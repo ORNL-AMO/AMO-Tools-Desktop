@@ -14,13 +14,15 @@ import { ExplorePressureTurbineFormComponent } from './explore-opportunities-for
 import { ExploreTurbineFormComponent } from './explore-opportunities-form/turbine-form/explore-turbine-form/explore-turbine-form.component';
 import { HelpPanelModule } from '../help-panel/help-panel.module';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HelpPanelModule
+    HelpPanelModule,
+    SharedModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
   exports: [ExploreOpportunitiesComponent],

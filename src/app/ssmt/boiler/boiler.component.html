@@ -82,14 +82,12 @@
           <input name="approachTemperature" type="number" step="any" class="form-control" id="{{idString+'approachTemperature'}}"
             (input)="save()" [readonly]="!selected" formControlName="approachTemperature" (focus)="focusField('approachTemperature')"
             (blur)="focusOut()" [ngClass]="{'indicate-different': isApproachTemperatureDifferent()}">
-          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.approachTemperature.invalid && !boilerForm.controls.approachTemperature.pristine">
           <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value can't be less than
             {{boilerForm.controls.approachTemperature.errors.min.min}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
       </div>
 
@@ -100,19 +98,16 @@
           <input name="steamTemperature" type="number" step="any" class="form-control" id="{{idString+'steamTemperature'}}"
             (input)="save()" [readonly]="!selected" formControlName="steamTemperature" (focus)="focusField('steamTemperature')"
             (blur)="focusOut()" [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}">
-          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.steamTemperature.invalid && !boilerForm.controls.steamTemperature.pristine">
           <span *ngIf="boilerForm.controls.steamTemperature.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.steamTemperature.errors.max">Value can't be greater than
             {{boilerForm.controls.steamTemperature.errors.max.max}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
           <span *ngIf="boilerForm.controls.steamTemperature.errors.min">Value can't be less than
             {{boilerForm.controls.steamTemperature.errors.min.min}}
-            <span *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-            <span *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>.</span>
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
       </div>
 
@@ -139,14 +134,14 @@
           <input name="deaeratorPressure" type="number" step="any" class="form-control" id="{{idString+'deaeratorPressure'}}"
             (input)="save()" [readonly]="!selected" formControlName="deaeratorPressure" (focus)="focusField('deaeratorPressure')"
             (blur)="focusOut()" [ngClass]="{'indicate-different': isDeaeratorPressureDifferent()}">
-          <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+          <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.deaeratorPressure.invalid && !boilerForm.controls.deaeratorPressure.pristine">
           <span *ngIf="boilerForm.controls.deaeratorPressure.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.deaeratorPressure.errors.max">Value can't be greater than
-            {{boilerForm.controls.deaeratorPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+            {{boilerForm.controls.deaeratorPressure.errors.max.max}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
           <span *ngIf="boilerForm.controls.deaeratorPressure.errors.min">Value can't be less than
-            {{boilerForm.controls.deaeratorPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+            {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
         </span>
       </div>
     </form>
