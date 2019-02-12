@@ -75,13 +75,13 @@
           <div class="d-flex">
             <label class="w-100" for="{{'onePhase_'+idString}}">
               <input type="radio" name="numberOfPhases" id="{{'onePhase_'+idString}}" formControlName="numberOfPhases"
-                value="1">1
+                value="1" (focus)="focusField('numberOfPhases')">1
             </label>
           </div>
           <div class="d-flex">
             <label class="w-100" for="{{'threePhases_'+idString}}">
               <input type="radio" name="numberOfPhases" id="{{'threePhases_'+idString}}" formControlName="numberOfPhases"
-                value="3" [checked]="form.controls.numberOfPhases.value === 3">3
+                value="3" (focus)="focusField('numberOfPhases')" [checked]="form.controls.numberOfPhases.value === 3">3
             </label>
           </div>
         </div>

@@ -60,15 +60,16 @@ export class ElectricityReductionComponent implements OnInit {
     this.currentField = str;
   }
 
+  changeField(str: string) {
+    this.currentField = str;
+  }
+
   addBaselineEquipment() {
-    console.log('addBaselineEquipment()');
     this.electricityReductionService.addBaselineEquipment(this.settings);
     this.baselineForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.baselineData[this.electricityReductionService.baselineData.length - 1]));
-    // this.loadForms();
   }
 
   removeBaselineEquipment(i: number) {
-    console.log('removeBaselineEquipment(' + i + ')');
     this.electricityReductionService.removeBaselineEquipment(i);
     this.baselineForms.splice(i, 1);
   }
@@ -83,13 +84,11 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    console.log('addModificationEquipment()');
     this.electricityReductionService.addModificationEquipment(this.settings);
     this.modificationForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.modificationData[this.electricityReductionService.modificationData.length - 1]));
   }
 
   removeModificationEquipment(i: number) {
-    console.log('removeModificationEquipment(' + i + ')');
     this.electricityReductionService.removeModificationEquipment(i);
     this.modificationForms.splice(i, 1);
     if (this.modificationForms.length < 1) {
@@ -122,7 +121,6 @@ export class ElectricityReductionComponent implements OnInit {
       this.modificationForms[emitObj.index] = emitObj.form;
       this.electricityReductionService.updateModificationDataArray(this.modificationForms);
     }
-
   }
 
 }

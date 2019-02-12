@@ -1,0 +1,229 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Electricity Reduction
+    <br>
+    <small class="text-muted">
+      This calculator is used to quantify the energy savings associated with reducing electricity usage.
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        This calculator can be used to calculate the energy savings of typical energy savings opportunities like:
+        <hr class="my-1">Reduce the operation time of equipment which uses electricity
+        <hr class="my-1">Reduce the size/load of the equipment which uses electricity
+        <hr class="my-1">Turn off equipment that uses electricity
+        <hr class="my-1">Lower the frequency of a variable speed drive motor
+        <hr class="my-1">
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'hoursPerDay'">
+    <h6>
+      Hours per Day
+      <small class="text-muted">
+        <br>
+        Number of hours per day the equipment is on. This is not necessarily how long the shift is. Be sure to include
+        normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'daysPerMonth'">
+    <h6>
+      Days per Month
+      <small class="text-muted">
+        <br>
+        Number of days per month the equipment is on. Be sure to include normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'monthsPerYear'">
+    <h6>
+      Months per Year
+      <small class="text-muted">
+        <br>
+        Numbers of months per year.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'electricityCost'">
+    <h6>
+      Electricity Cost
+      <small class="text-muted">
+        <br>
+        Per unit cost of electricity in ($/kWh).
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'measurementMethod'">
+    <h6>
+      Method of Measurement
+      <small class="text-muted">
+        <br>
+        Choose the method to be used to determine electricity consumption.
+        <hr class="my-1">Power Meter Method - The best way to measure electrical consumption is with a power meter.
+        Manufacturer's data on lights can be entered as if the measurements were done with a power meter.
+        <hr class="my-1">Multimeter Reading - Multimeter measurements are the second most accurate means of measuring
+        electrical consumption and are accurate for DC and for AC (When combined with the plant's uncorrected power
+        factor).
+        <hr class="my-1">Name Plate Data - Motor nameplate data can provide a reasonable estimation of the energy that
+        motors are consuming but are not as accurate as a power meter. Nameplate data does not tell the user how
+        heavily loaded the motor is.
+        <hr class="my-1">Other Method – Choose this option if you are using a different method to find the electricity
+        consumption.
+        <hr class="my-1">
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'power'">
+    <h6>
+      Power
+      <small class="text-muted">
+        <br>
+        Enter the power reading from the power meter.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'units'">
+    <h6>
+      Units
+      <small class="text-muted">
+        <br>
+        The number of identical units in the specified system. When units of different size have been combined
+        previously enter 1.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'totalPower'">
+    <h6>
+      Total Power
+      <small class="text-muted">
+        <br>
+        The total power consumption of all the specified equipment.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'supplyVoltage'">
+    <h6>
+      Supply Voltage
+      <small class="text-muted">
+        <br>
+        The voltage of the equipment as measured by a multimeter. Typically, 480 for three phase systems.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'averageCurrent'">
+    <h6>
+      Average Current
+      <small class="text-muted">
+        <br>
+        The current of the equipment as measured by a multimeter.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'powerFactor'">
+    <h6>
+      Power Factor
+      <small class="text-muted">
+        <br>
+        Use the uncorrected power factor of the plant as an average value. This number is available from the plant
+        electrical specialist. For the modified case this value should be the same as the baseline unless specific
+        actions were taken to improve power factor.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'numberOfPhases'">
+    <h6>
+      Number of Phases
+      <small class="text-muted">
+        <br>
+        Select “1” if the motor is single phase or “3” if the motor is three-phase.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'ratedMotorPower'">
+    <h6>
+      Rated Motor Power
+      <small class="text-muted">
+        <br>
+        The rated power for the equipment in Hp or kW.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'lineFrequency'">
+    <h6>
+      Line Frequency
+      <small class="text-muted">
+        <br>
+        The main supply frequency from the utility. In North America the standard frequency is 60 Hz. Elsewhere, 50 Hz
+        is often the standard.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'variableSpeedMotor'">
+    <h6>
+      Variable Speed Motor
+      <small class="text-muted">
+        <br>
+        Select YES if the equipment has a variable speed motor drive.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'operationalFrequency'">
+    <h6>
+      Operational Frequency
+      <small class="text-muted">
+        <br>
+        Input the operating frequency which has been adjusted by the variable speed motor drive.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'motorAndDriveEfficiency'">
+    <h6>
+      Motor & Drive Efficiency
+      <small class="text-muted">
+        <br>
+        The ratio between the amount of mechanical work the equipment performs and the electrical power it consumes to
+        do the work represented by a percentage.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'loadFactor'">
+    <h6>
+      Load Factor
+      <small class="text-muted">
+        <br>
+        The amount of work the equipment is doing compared to the nameplate. Typical load factor is 75% for a motor and
+        100% for an electric heater. This value cannot be found on the nameplate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'energy'">
+    <h6>
+      Energy
+      <small class="text-muted">
+        <br>
+        Enter the off sheet calculated value for energy consumption in kWh.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+</div>

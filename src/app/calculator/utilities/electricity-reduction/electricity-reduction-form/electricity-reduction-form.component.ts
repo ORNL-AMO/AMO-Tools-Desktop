@@ -36,8 +36,6 @@ export class ElectricityReductionFormComponent implements OnInit {
       this.idString = 'modification_' + this.index;
     }
     this.initMeasurementOptions();
-    console.log('this.form = ');
-    console.log(this.form);
   }
 
   initMeasurementOptions() {
@@ -55,7 +53,6 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   calculate() {
-    console.log('calculate()');
     if (this.form.valid) {
       let emitObj = {
         form: this.form,
@@ -71,6 +68,5 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   focusOut() {
-    console.log('focusOut()');
   }
 }

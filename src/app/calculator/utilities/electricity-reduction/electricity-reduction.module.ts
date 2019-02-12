@@ -5,6 +5,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { ElectricityReductionComponent } from './electricity-reduction.component';
 import { ElectricityReductionService } from './electricity-reduction.service';
 import { ElectricityReductionFormComponent } from './electricity-reduction-form/electricity-reduction-form.component';
+import { ElectricityReductionHelpComponent } from './electricity-reduction-help/electricity-reduction-help.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ElectricityReductionFormComponent } from './electricity-reduction-form/
   ],
   declarations: [
     ElectricityReductionComponent,
-    ElectricityReductionFormComponent
+    ElectricityReductionFormComponent,
+    ElectricityReductionHelpComponent
   ],
   providers: [
     ElectricityReductionService

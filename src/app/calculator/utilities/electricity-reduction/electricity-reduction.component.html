@@ -25,7 +25,8 @@
                 <span *ngIf="baselineForms.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineEquipment(i)"></span>
               </label>
               <!-- app form -->
-              <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="true" (emitCalculate)="calculate($event)"></app-electricity-reduction-form>
+              <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="true"
+                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"></app-electricity-reduction-form>
             </div>
             <div class="w-100 justify content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
@@ -52,7 +53,8 @@
                 <span class="fa fa-times-circle-o pull-right large" (click)="removeModificationEquipment(i)"></span>
               </label>
               <!-- app form -->
-              <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="false" (emitCalculate)="calculate($event)"></app-electricity-reduction-form>
+              <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="false"
+                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"></app-electricity-reduction-form>
             </div>
           </div>
         </div>
@@ -89,6 +91,7 @@
           <div class="d-flex justify-content-center px-2">
             <!-- app results if results tab -->
             <!-- app help if help tab -->
+            <app-electricity-reduction-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-electricity-reduction-help>
           </div>
 
         </div>
