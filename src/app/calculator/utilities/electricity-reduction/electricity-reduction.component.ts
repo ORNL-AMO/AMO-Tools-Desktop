@@ -78,7 +78,9 @@ export class ElectricityReductionComponent implements OnInit {
     this.electricityReductionService.createModification();
     this.modificationForms = new Array<FormGroup>();
     for (let i = 0; i < this.baselineForms.length; i++) {
-      this.modificationForms.push(this.baselineForms[i]);
+      let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.baselineForms[i]);
+      let modForm: FormGroup = this.electricityReductionService.getFormFromObj(tmpObj);
+      this.modificationForms.push(modForm);
     }
     this.modificationExists = true;
   }
