@@ -55,6 +55,7 @@ export class SsmtDiagramTabComponent implements OnInit {
       this.calculateModelService.initResults();
       this.calculateModelService.initData(this.selectedSSMT, this.settings, true);
       let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
+      console.log(resultsData.outputData.highPressureCondensateFlashTank);
       this.inputData = resultsData.inputData;
       this.outputData = resultsData.outputData;
       this.dataCalculated = true;
