@@ -16,7 +16,7 @@ export class SsmtDiagramTabComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
-  
+
   outputData: SSMTOutput;
   inputData: SSMTInputs;
   tabSelect: string = 'results';
@@ -26,13 +26,14 @@ export class SsmtDiagramTabComponent implements OnInit {
   selectedSSMT: SSMT;
   ssmtOptions: Array<SSMT>;
   showOptions: boolean = false;
+  dataCalculated: boolean = false;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.ssmt.name = 'Baseline';
     this.selectedSSMT = this.ssmt;
     this.ssmtOptions = new Array<SSMT>();
-    if(this.ssmt.modifications){
+    if (this.ssmt.modifications) {
       this.ssmtOptions.push(this.ssmt);
       this.ssmt.modifications.forEach(modification => {
         this.ssmtOptions.push(modification.ssmt);
@@ -43,18 +44,22 @@ export class SsmtDiagramTabComponent implements OnInit {
     }
   }
 
-  setOption(ssmt: SSMT){
+  setOption(ssmt: SSMT) {
     this.selectedSSMT = ssmt;
     this.calculateResults();
     this.showOptions = false;
   }
 
   calculateResults() {
-    this.calculateModelService.initResults();
-    this.calculateModelService.initData(this.selectedSSMT, this.settings, true);
-    let resultsData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
-    this.inputData = resultsData.inputData;
-    this.outputData = resultsData.outputData;
+    setTimeout(() => {
+      this.calculateModelService.initResults();
+      this.calculateModelService.initData(this.selectedSSMT, this.settings, true);
+      let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
+      console.log(resultsData.outputData.highPressureCondensateFlashTank);
+      this.inputData = resultsData.inputData;
+      this.outputData = resultsData.outputData;
+      this.dataCalculated = true;
+    }, 100)
   }
   setTab(str: string) {
     this.tabSelect = str;
@@ -68,7 +73,7 @@ export class SsmtDiagramTabComponent implements OnInit {
     this.selectedTable = str;
   }
 
-  toggleShowOptions(){
+  toggleShowOptions() {
     this.showOptions = !this.showOptions;
   }
 }

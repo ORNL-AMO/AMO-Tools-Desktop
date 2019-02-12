@@ -404,6 +404,7 @@ export class CalculateModelService {
 
   //2D. or 4B. Calculate High Pressure Condensate Flash Tank
   calculateHighPressureFlashTank() {
+    console.log('calculate high pressure flash tank!')
     let header: HeaderNotHighestPressure;
     //if two headers, flashinging into low pressure header
     if (this.inputData.headerInput.numberOfHeaders == 2) {
