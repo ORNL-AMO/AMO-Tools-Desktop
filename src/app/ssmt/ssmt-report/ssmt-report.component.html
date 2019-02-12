@@ -99,12 +99,12 @@
     <div class="results scroll-item" *ngIf="currentTab == 'executiveSummary' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
-        [modificationOutputs]="modificationOutputs"></app-executive-summary>
+        [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth"></app-executive-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'energySummary' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput"
-        [modificationOutputs]="modificationOutputs"></app-energy-summary>
+        [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth"></app-energy-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'losses' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
       <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [settings]="settings"

@@ -23,8 +23,6 @@ export class PercentGraphComponent implements OnInit {
   fontSize: number;
   @Input()
   unit: string;
-  @Input()
-  chartWidth: number;
 
   doughnutChartLabels: string[];
   doughnutChartData: number[];
@@ -36,7 +34,7 @@ export class PercentGraphComponent implements OnInit {
   chartHeight: number;
 
   firstChange: boolean = true;
-  inChart: boolean = false;
+  //inChart: boolean = false;
   exportName: string;
 
   potential: number = 0;
@@ -53,9 +51,6 @@ export class PercentGraphComponent implements OnInit {
   constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
-    if(!this.chartWidth){
-      this.chartWidth = 250;
-    }
 
   }
 
@@ -63,8 +58,8 @@ export class PercentGraphComponent implements OnInit {
     this.exportName = this.title + "-graph";
 
     if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings" || this.title.trim() == 'phast-modification-savings' || this.title.trim() == 'ssmt-opportunities-savings') {
-      this.inChart = true;
-      this.chartHeight = 120;
+      //this.inChart = true;
+      // this.chartHeight = 120;
       // this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
     }
     this.initChart();
@@ -157,10 +152,10 @@ export class PercentGraphComponent implements OnInit {
       legend: {
         show: false
       },
-      size: {
-        height: this.chartHeight,
-        width: 250
-      },
+      // size: {
+      //   height: this.chartHeight,
+      //   width: this.chartWidth
+      // },
       gauge: {
         width: 20,
         label: {

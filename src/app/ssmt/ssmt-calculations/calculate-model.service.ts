@@ -102,8 +102,8 @@ export class CalculateModelService {
   }
 
   calculateModelRunner(): { inputData: SSMTInputs, outputData: SSMTOutput } {
-    this.callCount++;
-    console.log(this.isBaselineCalculation + ' CALLED ' + this.callCount)
+    //this.callCount++;
+    //console.log(this.isBaselineCalculation + ' CALLED ' + this.callCount)
     //initial guess for system is a sum of the process usage by the headers.
     let initialGuess: number = 0;
     if (this.inputData.headerInput.numberOfHeaders == 1) {
@@ -119,7 +119,7 @@ export class CalculateModelService {
     balancedResults.marginalHPCost = marginalCosts.marginalHPCost;
     balancedResults.marginalMPCost = marginalCosts.marginalMPCost;
     balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
-    console.log(this.isBaselineCalculation + ' RETURNED ' + this.callCount)
+    //console.log(this.isBaselineCalculation + ' RETURNED ' + this.callCount)
     return { inputData: this.inputData, outputData: balancedResults };
   }
 
