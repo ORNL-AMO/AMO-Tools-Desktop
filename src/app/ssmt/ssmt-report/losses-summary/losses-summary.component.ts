@@ -1,9 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculateLossesService } from '../../ssmt-calculations/calculate-losses.service';
-import { SSMTOutput, SSMTLosses } from '../../../shared/models/steam/steam-outputs';
-import { SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
-import { CalculateModelService } from '../../ssmt-calculations/calculate-model.service';
 
 
 @Component({
@@ -20,15 +17,12 @@ export class LossesSummaryComponent implements OnInit {
   modificationLosses: Array<{ outputData: SSMTLosses, name: string }>;
   @Input()
   numberOfHeaders: number;
-
-  numMods: number = 0;
-
+  @Input()
+  tableCellWidth: number
+  
   constructor() { }
 
   ngOnInit() {
-    if (this.modificationLosses) {
-      this.numMods = this.modificationLosses.length;
-    }
   }
 
 }

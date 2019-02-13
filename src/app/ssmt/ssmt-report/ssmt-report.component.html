@@ -108,7 +108,7 @@
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'losses' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
       <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [settings]="settings"
-        [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"></app-losses-summary>
+        [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders" [tableCellWidth]="tableCellWidth"></app-losses-summary>
     </div>
     <div class="results scroll-item" *ngIf="currentTab == 'diagram' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
