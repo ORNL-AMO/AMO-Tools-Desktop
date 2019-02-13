@@ -3,8 +3,8 @@
     <thead>
       <tr>
         <td [ngStyle]="{'width.%': 100 /(numMods+2)}"></td>
-        <td [ngStyle]="{'width.%': 100 /(numMods+2)}" class="text-center">Baseline</td>
-        <td [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let modification of modificationLosses" class="text-center" class="text-center">{{modification.name}}</td>
+        <td [ngStyle]="{'width.%': 100 /(numMods+2)}" class="text-center bold">Baseline</td>
+        <td [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let modification of modificationLosses" class="text-center bold">{{modification.name}}</td>
       </tr>
     </thead>
     <tbody>

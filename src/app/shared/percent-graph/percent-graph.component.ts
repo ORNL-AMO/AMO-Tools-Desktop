@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, SimpleChange, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, SimpleChange, ViewChild, HostListener } from '@angular/core';
 import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
@@ -23,6 +23,13 @@ export class PercentGraphComponent implements OnInit {
   fontSize: number;
   @Input()
   unit: string;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.initChart();
+  }
+
+
 
   doughnutChartLabels: string[];
   doughnutChartData: number[];
