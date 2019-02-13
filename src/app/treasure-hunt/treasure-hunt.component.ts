@@ -12,6 +12,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
+import { LightingReplacementTreasureHunt, TreasureHunt } from '../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -53,6 +54,12 @@ export class TreasureHuntComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
+        if(!this.assessment.treasureHunt){
+          this.assessment.treasureHunt = {
+            name: 'Treasure Hunt',
+            lightingReplacements: new Array<LightingReplacementTreasureHunt>()
+          }
+        }
         this.getSettings();
       })
     })
@@ -117,5 +124,14 @@ export class TreasureHuntComponent implements OnInit {
         this.containerHeight = contentHeight - headerHeight - footerHeight;
       }, 100);
     }
+  }
+
+  saveTreasureHunt(treasureHunt: TreasureHunt){
+    this.assessment.treasureHunt = treasureHunt;
+    this.indexedDbService.putAssessment(this.assessment).then(results => {
+      this.assessmentDbService.setAll().then(() => {
+        // this.ssmtService.updateData.next(true);
+      })
+    })
   }
 }

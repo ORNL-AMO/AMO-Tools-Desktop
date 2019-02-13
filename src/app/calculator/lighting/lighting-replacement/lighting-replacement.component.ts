@@ -1,8 +1,9 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { LightingReplacementService } from './lighting-replacement.service';
 import { LightingReplacementData, LightingReplacementResults } from '../../../shared/models/lighting';
+import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-lighting-replacement',
@@ -10,6 +11,13 @@ import { LightingReplacementData, LightingReplacementResults } from '../../../sh
   styleUrls: ['./lighting-replacement.component.css']
 })
 export class LightingReplacementComponent implements OnInit {
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<LightingReplacementTreasureHunt>();
+  @Output()
+  emitCancel = new EventEmitter<boolean>();
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -57,8 +65,10 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.lightingReplacementService.baselineData = this.baselineData;
-    this.lightingReplacementService.modificationData = this.modificationData;
+    if (!this.inTreasureHunt) {
+      this.lightingReplacementService.baselineData = this.baselineData;
+      this.lightingReplacementService.modificationData = this.modificationData;
+    }
   }
 
   btnResetData() {
@@ -133,7 +143,6 @@ export class LightingReplacementComponent implements OnInit {
     this.togglePanel(this.modifiedSelected);
   }
 
-
   addModificationFixture() {
     this.modificationData.push({
       hoursPerDay: 0,
@@ -157,5 +166,13 @@ export class LightingReplacementComponent implements OnInit {
 
   focusField(str: string) {
     this.currentField = str;
+  }
+
+  save() {
+    this.emitSave.emit({ baseline: this.baselineData, modifications: this.modificationData });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 }

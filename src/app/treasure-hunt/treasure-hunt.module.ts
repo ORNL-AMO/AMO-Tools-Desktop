@@ -8,12 +8,16 @@ import { LightingReplacementModule } from '../calculator/lighting/lighting-repla
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { SettingsModule } from '../settings/settings.module';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
+import { ModalModule } from 'ngx-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     LightingReplacementModule,
-    SettingsModule
+    SettingsModule,
+    ModalModule,
+    FormsModule
   ],
   declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent],
   providers: [ TreasureHuntService ]

@@ -1,6 +1,5 @@
 .header .fa.fa-lightbulb-o{
     font-size: -webkit-xxx-large;
-    padding-left: 12px;
 }
 
 
@@ -23,4 +22,23 @@
 
 .btn-margin-10 {
     margin: 10px 0px;
+}
+
+
+.fa-save, .fa-ban{
+    font-size: xx-large;
+}
+
+.action-item:hover{
+    cursor: pointer;
+    background: #efefef;
+}
+
+.help-holder{
+    max-width: 500px;
+}
+
+.treasure-hunt-help{
+    margin-right: .5rem;
+    margin-bottom: 0px;
 }
