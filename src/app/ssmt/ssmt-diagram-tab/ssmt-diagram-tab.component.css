@@ -29,8 +29,13 @@
 
 
 .select-scenario-box{
-    position: fixed;
-    bottom: 0;
+    background-color: #F39C12;
+    position: relative;
+}
+
+.scenario-options{
+    position: absolute;
+    top: 0;
     left: 0;
     background-color: #F39C12;
 }
@@ -42,4 +47,13 @@
 
 .scenario-option{
     border-top: solid;
+}
+
+.form-control{
+    font-size: large;
+}
+
+
+.ssmt-diagram{
+    min-width: 1120px;
 }

@@ -1,4 +1,4 @@
-<div class="d-flex p-3 align-self-center ssmt-diagram" [ngClass]="hoveredEquipment" *ngIf="outputData">
+<div class="d-flex p-3 align-self-stretch ssmt-diagram w-100" [ngClass]="hoveredEquipment" *ngIf="outputData">
   <div class="d-flex flex-grow">
     <app-feedwater-diagram [deaerator]="outputData.deaeratorOutput" (emitSetHover)="setHover($event)" [settings]="settings"></app-feedwater-diagram>
   </div>
