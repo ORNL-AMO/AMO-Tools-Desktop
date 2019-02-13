@@ -2,15 +2,16 @@
   <div class="d-flex flex-column panel-column scroll-item diagram-container align-content-stretch" [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex justify-content-center pt-2">
       <div class="form-group">
-        <select name="selectedSSMT" class="form-control w-100" id="selectedSSMT" (change)="calculateResults()" [(ngModel)]="selectedSSMT">
+        <select name="selectedSSMT" class="form-control w-100" id="selectedSSMT" (change)="calculateResults()"
+          [(ngModel)]="selectedSSMT">
           <option [ngValue]="ssmt">Baseline</option>
           <option *ngFor="let modification of ssmt.modifications" [ngValue]="modification.ssmt">{{modification.ssmt.name}}</option>
         </select>
       </div>
     </div>
     <!-- <div class="d-flex w-100"> -->
-      <app-ssmt-diagram [settings]="settings" [inputData]="inputData" [outputData]="outputData" (emitTableSelected)="selectTable($event)"
-        (emitHoverChange)="setHover($event)"></app-ssmt-diagram>
+    <app-ssmt-diagram [settings]="settings" [inputData]="inputData" [outputData]="outputData" (emitTableSelected)="selectTable($event)"
+      (emitHoverChange)="setHover($event)"></app-ssmt-diagram>
     <!-- </div> -->
   </div>
   <div class="d-flex flex-column diagram-help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}" *ngIf="outputData">
@@ -27,18 +28,12 @@
       </div>
     </div>
     <div class="d-flex justify-content-center mr-2 ml-2">
-      <div class="pt-4 result-tables" *ngIf="tabSelect == 'results' && dataCalculated">
-        <div class="d-flex w-100 pb-2 justify-content-center" *ngIf="selectedTable != 'default'">
-          <a class="click-link small" (click)="selectTable('default')">Back to General Summary</a>
-        </div>
+      <div class="pt-4 w-100 result-tables" *ngIf="tabSelect == 'results' && dataCalculated">
         <app-diagram-summary-table *ngIf="selectedTable == 'default'" [inputData]="inputData" [powerGenerated]="outputData.powerGenerated"
           [boiler]="outputData.boilerOutput" [annualMakeupWaterFlow]="outputData.annualMakeupWaterFlow"
           [makeupWaterCost]="outputData.makeupWaterCost" [boilerFuelCost]="outputData.boilerFuelCost"
           [powerGenerationCost]="outputData.powerGenerationCost" [totalOperatingCost]="outputData.totalOperatingCost"
           [boilerFuelUsage]="outputData.boilerFuelUsage" [settings]="settings"></app-diagram-summary-table>
-        <div class="d-flex w-100 pb-2 justify-content-center" *ngIf="selectedTable == 'default'">
-          <a class="click-link small" (click)="selectTable('cost')">View More Cost Details</a>
-        </div>
         <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData" [settings]="settings"></app-cost-table>
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="outputData.boilerOutput" [inputData]="inputData"
           [settings]="settings"></app-boiler-table>
@@ -66,6 +61,10 @@
         <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'" [settings]="settings"
           [inputData]="inputData" [prv]="outputData.lowPressurePRV"></app-prv-table>
         <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="outputData.deaeratorOutput" [settings]="settings"></app-deaerator-table>
+        <div class="d-flex w-100 pt-2 justify-content-center">
+          <a class="click-link small" (click)="selectTable('default')" *ngIf="selectedTable != 'default'">Back to General Summary</a>
+          <a class="click-link small" (click)="selectTable('cost')" *ngIf="selectedTable == 'default'">View More Cost Details</a>
+        </div>
       </div>
       <div *ngIf="tabSelect == 'help'">
         <app-diagram-help></app-diagram-help>
