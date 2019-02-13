@@ -34,7 +34,7 @@ export class PressureTurbineFormComponent implements OnInit {
 
   ngOnInit() {
     this.turbineTypeOptions = PressureTurbineOperationTypes;
-    if (this.selected == false) {
+    if (this.selected === false) {
       this.disableForm();
     } else {
       this.enableForm();
@@ -43,7 +43,7 @@ export class PressureTurbineFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected == false) {
+      if (this.selected === false) {
         this.disableForm();
       } else {
         this.enableForm();

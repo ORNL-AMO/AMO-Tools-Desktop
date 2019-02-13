@@ -29,13 +29,13 @@ export class TurbineDiagramComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.turbineType == 'condensing') {
+    if (this.turbineType === 'condensing') {
       this.turbineLabel = 'Condensing Turbine';
-    } else if (this.turbineType == 'mediumToLow') {
+    } else if (this.turbineType === 'mediumToLow') {
       this.turbineLabel = 'MP to LP Turbine';
-    } else if (this.turbineType == 'highToLow') {
+    } else if (this.turbineType === 'highToLow') {
       this.turbineLabel = 'HP to LP Turbine';
-    } else if (this.turbineType == 'highToMedium') {
+    } else if (this.turbineType === 'highToMedium') {
       this.turbineLabel = 'HP to MP Turbine';
     }
   }

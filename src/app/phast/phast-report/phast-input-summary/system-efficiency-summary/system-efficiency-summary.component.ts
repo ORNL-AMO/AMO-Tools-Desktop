@@ -17,8 +17,8 @@ export class SystemEfficiencySummaryComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.phast){
-      if(this.phast.modifications){
+    if (this.phast) {
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
     }

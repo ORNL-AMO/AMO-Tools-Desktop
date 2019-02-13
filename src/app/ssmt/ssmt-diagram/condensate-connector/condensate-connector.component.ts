@@ -29,7 +29,7 @@ export class CondensateConnectorComponent implements OnInit {
 
   hoverChevron() {
     if (this.returnCondensate) {
-      this.emitSetHover.emit('returnCondensateHovered')
+      this.emitSetHover.emit('returnCondensateHovered');
     }
   }
 }

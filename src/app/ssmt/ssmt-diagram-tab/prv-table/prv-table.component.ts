@@ -11,7 +11,7 @@ import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 })
 export class PrvTableComponent implements OnInit {
   @Input()
-  prvType:string;
+  prvType: string;
   @Input()
   settings: Settings;
   @Input()
@@ -23,12 +23,12 @@ export class PrvTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.prvType == 'highToMediumPressurePRV'){
+    if (this.prvType === 'highToMediumPressurePRV') {
       this.prvLabel = 'High to Medium';
-    }else if(this.prvType == 'lowPressurePRV'){
-      if(this.inputData.headerInput.numberOfHeaders == 3){
+    }else if (this.prvType === 'lowPressurePRV') {
+      if (this.inputData.headerInput.numberOfHeaders === 3) {
         this.prvLabel = 'Medium to Low';
-      }else{
+      }else {
         this.prvLabel = 'High to Low';
       }
     }

@@ -19,13 +19,13 @@ export class ExploreOpportunitiesHelpComponent implements OnInit {
   ngOnInit() {
     this.currentTabSubscription = this.exploreOpportunitiesService.currentTab.subscribe(val => {
       this.currentTab = val;
-    })
+    });
     this.currentFieldSubscription = this.exploreOpportunitiesService.currentField.subscribe(val => {
       this.currentField = val;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.currentFieldSubscription.unsubscribe();
     this.currentTabSubscription.unsubscribe();
   }

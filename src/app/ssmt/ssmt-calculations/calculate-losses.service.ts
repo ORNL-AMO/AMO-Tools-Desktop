@@ -19,11 +19,11 @@ export class CalculateLossesService {
 
     //
     ssmtLosses.highPressureHeader = ssmtResults.highPressureSteamHeatLoss.heatLoss;
-    if (inputData.turbineInput.condensingTurbine.useTurbine == true) {
+    if (inputData.turbineInput.condensingTurbine.useTurbine === true) {
       ssmtLosses.condensingTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.condensingTurbine);
     }
 
-    if (inputData.headerInput.highPressure.flashCondensateReturn == true) {
+    if (inputData.headerInput.highPressure.flashCondensateReturn === true) {
       ssmtLosses.condensateFlashTankLoss = this.calculateCondensateFlashTankLoss(ssmtResults.condensateFlashTank);
     }
     if (inputData.headerInput.numberOfHeaders > 1) {
@@ -34,16 +34,16 @@ export class CalculateLossesService {
       //process
       ssmtLosses.lowPressureProcessLoss = this.calculateProcessLoss(ssmtResults.lowPressureProcessUsage, ssmtResults.lowPressureCondensate);
       //turbine
-      if (inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+      if (inputData.turbineInput.highToLowTurbine.useTurbine === true) {
         ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.highToLowPressureTurbine);
       }
 
-      if (inputData.headerInput.numberOfHeaders == 3) {
+      if (inputData.headerInput.numberOfHeaders === 3) {
         ssmtLosses.mediumPressureHeader = ssmtResults.mediumPressureSteamHeatLoss.heatLoss;
-        if (inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
+        if (inputData.turbineInput.highToMediumTurbine.useTurbine === true) {
           ssmtLosses.highToMediumTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.highPressureToMediumPressureTurbine);
         }
-        if (inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
+        if (inputData.turbineInput.mediumToLowTurbine.useTurbine === true) {
           ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbine(ssmtResults.mediumToLowPressureTurbine);
         }
         ssmtLosses.mediumPressureProcessLoss = this.calculateProcessLoss(ssmtResults.mediumPressureProcessUsage, ssmtResults.mediumPressureCondensate);
@@ -65,12 +65,12 @@ export class CalculateLossesService {
   }
 
   calculateTurbine(turbineOutput: TurbineOutput): number {
-    let loss: number = turbineOutput.energyOut * (1 - turbineOutput.generatorEfficiency) /100;
+    let loss: number = turbineOutput.energyOut * (1 - turbineOutput.generatorEfficiency) / 100;
     return loss;
   }
 
   calculateCondensingLosses(turbineOutput: TurbineOutput, inputData: SSMTInputs, settings: Settings): number {
-    if (inputData.turbineInput.condensingTurbine.useTurbine == true) {
+    if (inputData.turbineInput.condensingTurbine.useTurbine === true) {
       let condenserPressure: number = this.convertUnitsService.value(inputData.turbineInput.condensingTurbine.condenserPressure).from(settings.steamVacuumPressure).to(settings.steamPressureMeasurement);
       let outletProperties: SteamPropertiesOutput = this.steamService.steamProperties(
         {
@@ -139,7 +139,7 @@ export class CalculateLossesService {
       highPressureProcessLoss: 0,
       mediumPressureProcessLoss: 0,
       lowPressureProcessLoss: 0
-    }
+    };
     return losses;
   }
 }

@@ -33,7 +33,7 @@ export class AddModificationComponent implements OnInit {
     }
     this.tabSubscription = this.phastService.assessmentTab.subscribe(val => {
       this.currentTab = val;
-    })
+    });
   }
   
   ngOnDestroy() {
@@ -63,14 +63,14 @@ export class AddModificationComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       }
-    }
-    if(this.currentTab == 'explore-opportunities'){
+    };
+    if (this.currentTab === 'explore-opportunities') {
       tmpModification.exploreOpportunities = true;
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
     tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));
     tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
-    this.save.emit(tmpModification)
+    this.save.emit(tmpModification);
   }
 }

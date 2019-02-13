@@ -37,7 +37,7 @@ export class BoilerComponent implements OnInit {
     private compareService: CompareService) { }
 
   ngOnInit() {
-    if(!this.isBaseline){
+    if (!this.isBaseline) {
       this.idString = 'modification_';
     }
     if (this.boilerInput) {
@@ -46,7 +46,7 @@ export class BoilerComponent implements OnInit {
       this.boilerForm = this.boilerService.initForm(this.settings);
     }
     this.setFuelTypes();
-    if (this.selected == false) {
+    if (this.selected === false) {
       this.disableForm();
     }
 
@@ -55,18 +55,18 @@ export class BoilerComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected == true) {
+      if (this.selected === true) {
         this.enableForm();
-      } else if (this.selected == false) {
+      } else if (this.selected === false) {
         this.disableForm();
       }
     }
   }
 
   setFuelTypes() {
-    if (this.boilerForm.controls.fuelType.value == 0) {
+    if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    } else if (this.boilerForm.controls.fuelType.value == 1) {
+    } else if (this.boilerForm.controls.fuelType.value === 1) {
       this.options = this.suiteDbService.selectGasFlueGasMaterials();
     }
   }

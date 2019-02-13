@@ -41,7 +41,7 @@ export class OtherLossesComponent implements OnInit {
   constructor(private otherLossesService: OtherLossesService) { }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -78,7 +78,7 @@ export class OtherLossesComponent implements OnInit {
           collapse: false
         };
         this._otherLosses.push(tmpLoss);
-      })
+      });
       this.total = this.getTotal();
     }
   }
@@ -92,7 +92,7 @@ export class OtherLossesComponent implements OnInit {
       form: this.otherLossesService.initForm(),
       name: 'Loss #' + (this._otherLosses.length + 1),
       collapse: false
-    });;
+    }); ;
     this.saveLosses();
   }
 
@@ -107,7 +107,7 @@ export class OtherLossesComponent implements OnInit {
     this._otherLosses.forEach(loss => {
       loss.name = 'Loss #' + index;
       index++;
-    })
+    });
   }
 
   saveLosses() {
@@ -115,7 +115,7 @@ export class OtherLossesComponent implements OnInit {
     this._otherLosses.forEach(loss => {
       let tmpLoss = this.otherLossesService.getLossFromForm(loss.form);
       tmpLosses.push(tmpLoss);
-    })
+    });
     this.losses.otherLosses = tmpLosses;
     this.total = this.getTotal();
     this.savedLoss.emit(true);
@@ -131,7 +131,7 @@ export class OtherLossesComponent implements OnInit {
 }
 
 export interface OtherLossObj {
-  form: FormGroup,
-  name: string,
-  collapse: boolean
+  form: FormGroup;
+  name: string;
+  collapse: boolean;
 }

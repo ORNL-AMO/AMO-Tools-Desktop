@@ -38,7 +38,7 @@ export class AtmosphereTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
     this.badgeHover = false;
   }
 
@@ -74,38 +74,38 @@ export class AtmosphereTabComponent implements OnInit {
     if (this.atmosphereLossesCompareService.baselineAtmosphereLosses) {
       this.atmosphereLossesCompareService.baselineAtmosphereLosses.forEach(loss => {
         //missingData
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         //warnings
         let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
         let tmpHasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(warnings);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
 
-      })
+      });
     }
     if (this.atmosphereLossesCompareService.modifiedAtmosphereLosses && !this.inSetup) {
       this.atmosphereLossesCompareService.modifiedAtmosphereLosses.forEach(loss => {
         //missingData
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         //warnings
         let warnings: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
         let tmpHasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(warnings);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
 
   checkLossValid(loss: AtmosphereLoss) {
     let tmpForm: FormGroup = this.atmosphereLossesService.getAtmosphereForm(loss);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;

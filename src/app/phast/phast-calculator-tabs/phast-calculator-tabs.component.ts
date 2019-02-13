@@ -14,7 +14,7 @@ export class PhastCalculatorTabsComponent implements OnInit {
   ngOnInit() {
     this.phastService.calcTab.subscribe(val => {
       this.calcTab = val;
-    })
+    });
   }
 
   changeCalcTab(str: string) {

@@ -49,7 +49,7 @@ export class OpeningLossesFormComponent implements OnInit {
       this.idString = '_baseline_' + this.lossIndex;
     }
     this.checkWarnings();
-    this.getArea(true)
+    this.getArea(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -107,7 +107,7 @@ export class OpeningLossesFormComponent implements OnInit {
 
     let smallUnit = 'in';
     let largeUnit = 'ft';
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       smallUnit = 'mm';
       largeUnit = 'm';
     }
@@ -116,8 +116,8 @@ export class OpeningLossesFormComponent implements OnInit {
       this.totalArea = 0;
       return;
     }
-    if (this.openingLossesForm.controls.openingType.value == 'Round') {
-      if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
+    if (this.openingLossesForm.controls.openingType.value === 'Round') {
+      if (this.openingLossesForm.controls.lengthOfOpening.status === "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
         let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value;
         //let radiusFeet = (radiusInches * .08333333) / 2;
@@ -125,8 +125,8 @@ export class OpeningLossesFormComponent implements OnInit {
         let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
       }
-    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (or Square)') {
-      if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
+    } else if (this.openingLossesForm.controls.openingType.value === 'Rectangular (or Square)') {
+      if (this.openingLossesForm.controls.lengthOfOpening.status === "VALID" && this.openingLossesForm.controls.heightOfOpening.status === "VALID") {
         let lengthInches = this.openingLossesForm.controls.lengthOfOpening.value;
         let heightInches = this.openingLossesForm.controls.heightOfOpening.value;
         let lengthFeet = 0;

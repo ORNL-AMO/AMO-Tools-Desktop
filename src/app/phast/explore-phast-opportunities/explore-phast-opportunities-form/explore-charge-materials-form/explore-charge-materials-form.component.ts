@@ -55,18 +55,18 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
       this.modificationWarnings.push(null);
       let tmpBaseline: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
       let tmpModified: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
-      if (material.chargeMaterialType == 'Solid') {
+      if (material.chargeMaterialType === 'Solid') {
         tmpBaseline = material.solidChargeMaterial;
-      } else if (material.chargeMaterialType == 'Liquid') {
+      } else if (material.chargeMaterialType === 'Liquid') {
         tmpBaseline = material.liquidChargeMaterial;
-      } else if (material.chargeMaterialType == 'Gas') {
+      } else if (material.chargeMaterialType === 'Gas') {
         tmpBaseline = material.gasChargeMaterial;
       }
-      if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Solid') {
+      if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType === 'Solid') {
         tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].solidChargeMaterial;
-      } else if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Liquid') {
+      } else if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType === 'Liquid') {
         tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].liquidChargeMaterial;
-      } else if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType == 'Gas') {
+      } else if (this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].chargeMaterialType === 'Gas') {
         tmpModified = this.phast.modifications[this.exploreModIndex].phast.losses.chargeMaterials[index].gasChargeMaterial;
       }
       let checkTemp: boolean = this.checkVal(tmpBaseline.initialTemperature, tmpModified.initialTemperature);
@@ -77,19 +77,19 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
         this.showMaterial = true;
       }
       this.showTemp.push(checkTemp);
-      this.materials
+      this.materials;
       this.materials.push({
         baseline: tmpBaseline,
         modification: tmpModified,
         type: material.chargeMaterialType,
         name: material.name
-      })
+      });
       index++;
-    })
+    });
   }
 
   checkVal(val1: number, val2: number): boolean {
-    if (val1 != val2) {
+    if (val1 !== val2) {
       return true;
     } else {
       return false;
@@ -107,7 +107,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   }
 
   toggleInitialTemp(index: number, material: ExploreMaterial) {
-    if (this.showTemp[index] == false) {
+    if (this.showTemp[index] === false) {
       material.modification.initialTemperature = material.baseline.initialTemperature;
       this.modificationWarnings[index] = this.baselineWarnings[index];
       this.calculate();
@@ -115,7 +115,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   }
 
   toggleMaterials() {
-    if (this.showMaterial == false) {
+    if (this.showMaterial === false) {
       let index = 0;
       this.materials.forEach(material => {
         this.showTemp[index] = false;
@@ -143,14 +143,14 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   }
 
   calculate() {
-    this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true);
   }
 }
 
 export interface ExploreMaterial {
-  baseline: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial,
-  modification: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial,
-  type: string,
-  name: string
+  baseline: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
+  modification: SolidChargeMaterial | LiquidChargeMaterial | GasChargeMaterial;
+  type: string;
+  name: string;
 }
 

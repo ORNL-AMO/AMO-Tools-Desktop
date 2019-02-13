@@ -50,10 +50,10 @@ export class SsmtReportComponent implements OnInit {
           this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
           this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
 
-        })
+        });
       }
       this.dataCalculated = true;
-    }, 10)
+    }, 10);
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
@@ -64,7 +64,7 @@ export class SsmtReportComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    }, 100)
+    }, 100);
   }
 
   getContainerHeight() {

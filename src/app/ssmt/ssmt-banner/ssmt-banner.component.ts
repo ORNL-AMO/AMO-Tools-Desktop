@@ -21,7 +21,7 @@ export class SsmtBannerComponent implements OnInit {
   ngOnInit() {
     this.mainTabSub = this.ssmtService.mainTab.subscribe(val => {
       this.mainTab = val;
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -29,7 +29,7 @@ export class SsmtBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'calculators') {
+    if (str === 'system-setup' || str === 'calculators') {
       this.ssmtService.mainTab.next(str);
     } else if (this.assessment.ssmt.setupDone) {
       this.ssmtService.mainTab.next(str);

@@ -42,7 +42,7 @@ export class PhastBarChartComponent implements OnInit {
   chartLabels: Array<string>;
   chartData: Array<any>;
 
-  options: any = {}
+  options: any = {};
 
   doc: any;
   window: any;
@@ -101,10 +101,10 @@ export class PhastBarChartComponent implements OnInit {
   // ========== export/gridline tooltip functions ==========
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
     setTimeout(() => {
@@ -114,18 +114,18 @@ export class PhastBarChartComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -133,7 +133,7 @@ export class PhastBarChartComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -147,10 +147,10 @@ export class PhastBarChartComponent implements OnInit {
   initChart() {
 
     let unit;
-    if (this.settings.unitsOfMeasure == "Metric") {
+    if (this.settings.unitsOfMeasure === "Metric") {
       unit = "GJ/hr";
     }
-    else if (this.settings.unitsOfMeasure == "Imperial") {
+    else if (this.settings.unitsOfMeasure === "Imperial") {
       unit = "MMBtu/hr";
     }
 
@@ -226,7 +226,7 @@ export class PhastBarChartComponent implements OnInit {
               + "<td style='text-align: right; font-weight: bold'>"
               + d[1].value + " " + unit
               + "</td>"
-              + "</tr>"
+              + "</tr>";
           }
           html = html + "</table></div>";
           return html;
@@ -411,14 +411,14 @@ export class PhastBarChartComponent implements OnInit {
     return percent;
   }
   roundVal(val: number, digits: number) {
-    return Number((Math.round(val * 100) / 100).toFixed(digits))
+    return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 
   getColors() {
     this.chartColors = [
       '#1E7640',
       '#2ABDDA',
-    ]
+    ];
   }
 
 

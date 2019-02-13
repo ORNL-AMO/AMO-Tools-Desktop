@@ -16,8 +16,8 @@ export class AuxEquipmentService {
           name: equipment.name,
           totalPower: this.calcTotalPower(equipment),
           motorPower: equipment.motorPower
-        })
-      })
+        });
+      });
     }
     return results;
   }
@@ -26,24 +26,24 @@ export class AuxEquipmentService {
   getResultsSum(results: Array<{name: string, totalPower: number, motorPower: string}>) {
     let sum = 0;
     results.forEach(result => {
-      if (result.motorPower == 'Calculated') {
+      if (result.motorPower === 'Calculated') {
         sum += result.totalPower;
-      } else if (result.motorPower == 'Rated') {
-        if (result.totalPower != 0) {
+      } else if (result.motorPower === 'Rated') {
+        if (result.totalPower !== 0) {
           let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
           sum += convert;
         }
       }
-    })
+    });
     return sum;
   }
 
   calcTotalPower(equipment: AuxEquipment): number {
     let tmpPower = 0;
-    if (equipment.motorPower == 'Calculated') {
+    if (equipment.motorPower === 'Calculated') {
       tmpPower = (Math.pow(Number(equipment.motorPhase), .5) * equipment.supplyVoltage * equipment.averageCurrent * equipment.powerFactor * (equipment.dutyCycle / 100)) / 1000;
-    } else if (equipment.motorPower == 'Rated') {
-      tmpPower = equipment.totalConnectedPower * (equipment.ratedCapacity / 100) * (equipment.dutyCycle / 100)
+    } else if (equipment.motorPower === 'Rated') {
+      tmpPower = equipment.totalConnectedPower * (equipment.ratedCapacity / 100) * (equipment.dutyCycle / 100);
     }
     return tmpPower;
   }

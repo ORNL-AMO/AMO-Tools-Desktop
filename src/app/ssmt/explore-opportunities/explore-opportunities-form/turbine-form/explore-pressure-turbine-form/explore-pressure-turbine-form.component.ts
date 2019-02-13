@@ -40,13 +40,13 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
     this.initOperationType();
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.showFormToggle && !changes.showFormToggle.isFirstChange()){
-      if(this.showFormToggle == false){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.showFormToggle && !changes.showFormToggle.isFirstChange()) {
+      if (this.showFormToggle === false) {
         this.showOperation = false;
       }
     }
-    if(changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()){
+    if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
       this.showOperation = false;
       this.initOperationType();
     }
@@ -54,12 +54,12 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
 
 
   initOperationType() {
-    if (this.baselineForm.controls.operationType.value != this.modificationForm.controls.operationType.value) {
+    if (this.baselineForm.controls.operationType.value !== this.modificationForm.controls.operationType.value) {
       this.showOperation = true;
       this.emitShowTurbine.emit(true);
-    } else if (this.baselineForm.controls.operationType.value != 2) {
-      if (this.baselineForm.controls.operationValue1.value != this.modificationForm.controls.operationValue1.value ||
-        this.baselineForm.controls.operationValue2.value != this.modificationForm.controls.operationValue2.value) {
+    } else if (this.baselineForm.controls.operationType.value !== 2) {
+      if (this.baselineForm.controls.operationValue1.value !== this.modificationForm.controls.operationValue1.value ||
+        this.baselineForm.controls.operationValue2.value !== this.modificationForm.controls.operationValue2.value) {
         this.showOperation = true;
         this.emitShowTurbine.emit(true);
       }
@@ -67,7 +67,7 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
   }
 
 
-  toggleOperationType(){
+  toggleOperationType() {
     
   }
 
@@ -111,8 +111,8 @@ export class ExplorePressureTurbineFormComponent implements OnInit {
     // this.exploreOpportunitiesService.currentTab.next('turbine');
     // this.exploreOpportunitiesService.currentField.next('default');
   }
-  focusOperation(operationValue: number, str: string){
+  focusOperation(operationValue: number, str: string) {
     this.ssmtService.turbineOperationValue.next(operationValue);
-    this.focusField(str)
+    this.focusField(str);
   }
 }

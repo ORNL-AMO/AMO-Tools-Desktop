@@ -27,17 +27,17 @@ export class GeneralOperationsComponent implements OnInit {
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    if(!this.generalSteamOperations.makeUpWaterTemperature){
+    if (!this.generalSteamOperations.makeUpWaterTemperature) {
       let defaultVal: number = this.convertUnitsService.value(70).from('F').to(this.settings.steamTemperatureMeasurement);
       defaultVal = this.convertUnitsService.roundVal(defaultVal, 1);
       this.generalSteamOperations.makeUpWaterTemperature = this.convertUnitsService.value(70).from('F').to(this.settings.steamTemperatureMeasurement);
     }
-    if(!this.generalSteamOperations.sitePowerImport){
+    if (!this.generalSteamOperations.sitePowerImport) {
       this.generalSteamOperations.sitePowerImport = 0;
     }
   }
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 
@@ -64,7 +64,7 @@ export class GeneralOperationsComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.ssmtService.currentField.next(str);
   }  
   focusOut() {

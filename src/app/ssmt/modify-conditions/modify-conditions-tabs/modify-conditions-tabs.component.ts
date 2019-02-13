@@ -43,11 +43,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
   ngOnInit() {
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
       this.modelTab = val;
-    })
+    });
 
     this.updateDataSub = this.ssmtService.updateData.subscribe(val => {
       this.setBadgeClass();
-    })
+    });
 
     this.displayOperationsTooltip = false;
     this.operationsBadgeHover = false;

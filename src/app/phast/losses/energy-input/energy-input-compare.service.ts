@@ -17,7 +17,7 @@ export class EnergyInputCompareService {
     let isDiff: boolean = false;
     if (this.modifiedEnergyInput) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -35,7 +35,7 @@ export class EnergyInputCompareService {
       this.compareElectrodeHeatingValue(index) ||
       this.compareOtherFuels(index) ||
       this.compareElectricityInput(index)
-    )
+    );
   }
 
   compareNaturalGasHeatInput(index: number): boolean {
@@ -69,11 +69,11 @@ export class EnergyInputCompareService {
       if (baseline.losses.energyInputEAF) {
         let index = 0;
         baseline.losses.energyInputEAF.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.energyInputEAF[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.energyInputEAF[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -89,21 +89,21 @@ export class EnergyInputCompareService {
       this.compare(baseline.otherFuels, modification.otherFuels) ||
       this.compare(baseline.electricityInput, modification.electricityInput) ||
       this.compare(baseline.flowRateInput, modification.flowRateInput)
-    )
+    );
   }
 
 
 
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

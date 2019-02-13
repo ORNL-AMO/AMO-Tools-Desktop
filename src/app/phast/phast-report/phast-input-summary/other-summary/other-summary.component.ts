@@ -30,7 +30,7 @@ export class OtherSummaryComponent implements OnInit {
 
     this.lossData = new Array();
     if (this.phast.losses) {
-      if(this.phast.modifications){
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
       if (this.phast.losses.otherLosses) {
@@ -42,18 +42,18 @@ export class OtherSummaryComponent implements OnInit {
             this.phast.modifications.forEach(mod => {
               let modData = mod.phast.losses.otherLosses[index];
               modificationData.push(modData);
-            })
+            });
           }
           this.lossData.push({
             baseline: loss,
             modifications: modificationData
-          })
+          });
           //initialize array values for every defined loss
           this.openingTypeDiff.push(false);
           this.heatLossDiff.push(false);
           //index +1 for next loss
           index++;
-        })
+        });
       }
     }
   }
@@ -62,10 +62,10 @@ export class OtherSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change

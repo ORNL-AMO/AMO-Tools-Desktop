@@ -13,7 +13,7 @@ import { CalculateModelService } from '../../ssmt-calculations/calculate-model.s
 })
 export class LossesSummaryComponent implements OnInit {
   @Input()
-  inputData: SSMTInputs
+  inputData: SSMTInputs;
   @Input()
   settings: Settings;
   @Input()

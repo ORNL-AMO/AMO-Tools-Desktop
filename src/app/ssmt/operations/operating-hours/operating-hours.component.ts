@@ -36,7 +36,7 @@ export class OperatingHoursComponent implements OnInit {
         shiftsPerDay: Infinity,
         hoursPerShift: 8,
         hoursPerYear: 8736
-      }
+      };
       this.operatingHours = defaultHours;
       this.calculatHrsPerYear();
     } else if (!this.operatingHours.hoursPerYear) {
@@ -44,7 +44,7 @@ export class OperatingHoursComponent implements OnInit {
     }
   }
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 
@@ -78,9 +78,9 @@ export class OperatingHoursComponent implements OnInit {
 
     this.operatingHours.isCalculated = true;
     this.operatingHours.hoursPerYear = this.operatingHours.hoursPerShift * this.operatingHours.shiftsPerDay * this.operatingHours.daysPerWeek * this.operatingHours.weeksPerYear;
-    if(this.operatingHours.hoursPerYear > 8760){
-      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
-    }else{
+    if (this.operatingHours.hoursPerYear > 8760) {
+      this.hoursPerYearError = "Number of hours/year is greater than hours in a year.";
+    }else {
       this.hoursPerYearError = null;
     }
     this.save();
@@ -137,7 +137,7 @@ export class OperatingHoursComponent implements OnInit {
     }
   }
 
-  isHoursPerYearDifferent(){
+  isHoursPerYearDifferent() {
     if (this.canCompare()) {
       return this.compareService.isHoursPerYearDifferent();
     } else {
@@ -145,7 +145,7 @@ export class OperatingHoursComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.ssmtService.currentField.next(str);
   }
   

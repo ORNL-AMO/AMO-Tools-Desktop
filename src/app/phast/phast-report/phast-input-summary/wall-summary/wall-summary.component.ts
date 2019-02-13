@@ -11,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class WallSummaryComponent implements OnInit {
   @Input()
-  phast: PHAST
+  phast: PHAST;
   @Input()
   settings: Settings;
   @Input()
@@ -71,7 +71,7 @@ export class WallSummaryComponent implements OnInit {
               let modData = mod.phast.losses.wallLosses[index];
               //add modification loss data to modification array
               modificationData.push(modData);
-            })
+            });
           }
           //add baseline and modification data to lossData
           this.lossData.push({
@@ -89,7 +89,7 @@ export class WallSummaryComponent implements OnInit {
           this.emissivityDiff.push(false);
           //index +1 for next loss
           index++;
-        })
+        });
       }
     }
   }
@@ -99,10 +99,10 @@ export class WallSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change
@@ -117,11 +117,11 @@ export class WallSummaryComponent implements OnInit {
   //function for getting surface from suiteDb
   getSurfaceOption(id: number) {
     if (id) {
-      let option = this.surfaceOrientationOptions.filter(val => { return id == val.id });
-      if (option.length != 0) {
+      let option = this.surfaceOrientationOptions.filter(val => { return id === val.id; });
+      if (option.length !== 0) {
         return option[0].surface;
       } else {
-        return ''
+        return '';
       }
     }
     return '';

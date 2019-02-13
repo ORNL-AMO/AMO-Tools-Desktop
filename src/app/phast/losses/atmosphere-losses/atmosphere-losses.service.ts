@@ -18,7 +18,7 @@ export class AtmosphereLossesService {
       'outletTemp': ['', Validators.required],
       'flowRate': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'name': ['Loss #'+lossNum]
+      'name': ['Loss #' + lossNum]
     });
   }
 
@@ -44,22 +44,22 @@ export class AtmosphereLossesService {
       flowRate: form.controls.flowRate.value,
       correctionFactor: form.controls.correctionFactor.value,
       name: form.controls.name.value
-    }
+    };
     return tmpLoss;
   }
 
 
-  checkWarnings(loss: AtmosphereLoss): AtmosphereLossWarnings{
+  checkWarnings(loss: AtmosphereLoss): AtmosphereLossWarnings {
     return {
       specificHeatWarning: this.checkSpecificHeat(loss),
       flowRateWarning: this.checkFlowRate(loss),
       temperatureWarning: this.checkTempError(loss)
-    }
+    };
   }
 
   checkTempError(loss: AtmosphereLoss): string {
     if (loss.inletTemperature > loss.outletTemperature) {
-      return 'Inlet temperature is greater than outlet temperature'
+      return 'Inlet temperature is greater than outlet temperature';
     } else {
       return null;
     }
@@ -71,7 +71,7 @@ export class AtmosphereLossesService {
       return null;
     }
   }
-  checkFlowRate(loss: AtmosphereLoss): string{
+  checkFlowRate(loss: AtmosphereLoss): string {
     if (loss.flowRate < 0) {
       return 'Flow Rate must be greater than 0';
     } else {

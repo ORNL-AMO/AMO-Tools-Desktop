@@ -72,7 +72,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   }
 
   checkExists() {
-    if ((this.exploreModIndex || this.exploreModIndex == 0) && this.phast.modifications.length != 0) {
+    if ((this.exploreModIndex || this.exploreModIndex === 0) && this.phast.modifications.length !== 0) {
       this.modExists = true;
     } else {
       this.modExists = false;
@@ -84,12 +84,12 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
       if (!this.phast.modifications[this.exploreModIndex].exploreOpportunities) {
         this.exploreOppsToast.emit(true);
         let toastOptions: ToastOptions = {
-          title: 'Explore Opportunites',
+          title: 'Explore Opportunities',
           msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
           showClose: true,
           timeout: 10000000,
           theme: 'default'
-        }
+        };
         this.toastyService.warning(toastOptions);
       } else {
         this.exploreOppsToast.emit(false);

@@ -20,13 +20,13 @@ export class HeaderHelpComponent implements OnInit {
   ngOnInit() {
     this.numberOfHeadersSubscription = this.ssmtService.numberOfHeadersHelp.subscribe(val => {
       this.numberOfHeaders = val;
-    })
+    });
     this.pressureLevelSubscription = this.ssmtService.headerPressureLevelHelp.subscribe(val => {
       this.pressureLevel = val;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.numberOfHeadersSubscription.unsubscribe();
     this.pressureLevelSubscription.unsubscribe();
   }

@@ -25,7 +25,7 @@ export class ModificationNavbarComponent implements OnInit {
     this.modSubscription = this.phastCompareService.selectedModification.subscribe(val => {
       this.selectedModification = val;
       this.cd.detectChanges();
-    })
+    });
 
     // this.updateTabsSubscription = this.lossesService.updateTabs.subscribe(val => {
     //   if (val) {
@@ -35,10 +35,10 @@ export class ModificationNavbarComponent implements OnInit {
 
     this.phastService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
    // this.updateTabsSubscription.unsubscribe();
     this.modSubscription.unsubscribe();
   }
@@ -56,7 +56,7 @@ export class ModificationNavbarComponent implements OnInit {
   //   this.cd.detectChanges();
   // }
 
-  changeAssessmentTab(str: string){
+  changeAssessmentTab(str: string) {
     this.phastService.assessmentTab.next(str);
   }
 }

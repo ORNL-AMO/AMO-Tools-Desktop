@@ -55,7 +55,7 @@ export class MeteredFuelFormComponent implements OnInit {
 
   showHideInputField() {
     this.inputs.userDefinedMeteredEnergy = !this.inputs.userDefinedMeteredEnergy;
-    if(!this.inputs.userDefinedMeteredEnergy){
+    if (!this.inputs.userDefinedMeteredEnergy) {
       this.calculate();
     }
   }
