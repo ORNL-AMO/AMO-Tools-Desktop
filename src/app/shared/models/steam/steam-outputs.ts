@@ -320,6 +320,8 @@ export interface ProcessSteamUsage {
 }
 
 export interface SSMTLosses {
+  fuelEnergy: number;
+  makeupWaterEnergy: number;
   stack: number;
   blowdown: number;
   highPressureHeader: number;
@@ -337,6 +339,15 @@ export interface SSMTLosses {
   highPressureProcessLoss: number;
   mediumPressureProcessLoss: number;
   lowPressureProcessLoss: number;
+  condensingTurbineUsefulEnergy: number;
+  highToMediumTurbineUsefulEnergy: number;
+  highToLowTurbineUsefulEnergy: number;
+  mediumToLowTurbineUsefulEnergy: number;
+  allProcessUsageUsefulEnergy: number;
+  totalProcessLosses: number;
+  totalVentLosses: number;
+  totalTurbineLosses: number;
+  totalOtherLosses: number
 }
 
 export interface HeatExchangerOutput {

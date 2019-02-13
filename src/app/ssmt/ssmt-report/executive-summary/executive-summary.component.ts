@@ -14,16 +14,18 @@ export class ExecutiveSummaryComponent implements OnInit {
   baselineOutput: SSMTOutput;
   @Input()
   modificationOutputs: Array<SSMTOutput>;
+  @Input()
+  tableCellWidth: number;
 
   constructor() { }
 
   ngOnInit() {
-    
   }
 
   getSavingsPercentage(baselineCost: number, modificationCost: number): number {
     let tmpSavingsPercent = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));
     return tmpSavingsPercent;
   }
+
 
 }

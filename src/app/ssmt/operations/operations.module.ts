@@ -5,11 +5,13 @@ import { OperatingHoursComponent } from './operating-hours/operating-hours.compo
 import { OperatingCostsComponent } from './operating-costs/operating-costs.component';
 import { GeneralOperationsComponent } from './general-operations/general-operations.component';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   declarations: [
     OperationsComponent,

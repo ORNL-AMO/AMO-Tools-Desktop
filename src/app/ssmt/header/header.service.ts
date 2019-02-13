@@ -20,7 +20,7 @@ export class HeaderService {
     let ranges: HeaderRanges = this.getRanges(settings);
     return this.formBuilder.group({
       pressure: [undefined, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
-      processSteamUsage: [undefined, [Validators.required, Validators.min(0), Validators.max(1000)]],
+      processSteamUsage: [undefined, [Validators.required, Validators.min(ranges.processUsageMin), Validators.max(ranges.processUsageMax)]],
       condensationRecoveryRate: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [undefined, [Validators.required, Validators.min(0), Validators.max(10)]],
       condensateReturnTemperature: [undefined, [Validators.required, Validators.min(ranges.condensateReturnTempMin), Validators.max(ranges.condensateReturnTempMax)]],
@@ -32,7 +32,7 @@ export class HeaderService {
     let ranges: HeaderRanges = this.getRanges(settings);
     let form: FormGroup = this.formBuilder.group({
       pressure: [obj.pressure, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
-      processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(0), Validators.max(1000)]],
+      processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(ranges.processUsageMin), Validators.max(ranges.processUsageMax)]],
       condensationRecoveryRate: [obj.condensationRecoveryRate, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [obj.heatLoss, [Validators.required, Validators.min(0), Validators.max(10)]],
       condensateReturnTemperature: [obj.condensateReturnTemperature, [Validators.required, Validators.min(ranges.condensateReturnTempMin), Validators.max(ranges.condensateReturnTempMax)]],
@@ -59,7 +59,7 @@ export class HeaderService {
     let ranges: HeaderRanges = this.getRanges(settings);
     return this.formBuilder.group({
       pressure: [undefined, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
-      processSteamUsage: [undefined, [Validators.required, Validators.min(0), Validators.max(1000)]],
+      processSteamUsage: [undefined, [Validators.required, Validators.min(ranges.processUsageMin), Validators.max(ranges.processUsageMax)]],
       condensationRecoveryRate: [undefined, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [undefined, [Validators.required, Validators.min(0), Validators.max(10)]],
       flashCondensateIntoHeader: [false, Validators.required],
@@ -73,13 +73,13 @@ export class HeaderService {
     let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
     if (obj.desuperheatSteamIntoNextHighest) {
       tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
-    }else {
+    } else {
       tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     }
     let form: FormGroup = this.formBuilder.group({
       pressure: [obj.pressure, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
-      processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(0), Validators.max(1000)]],
-      condensationRecoveryRate: [obj.condensationRecoveryRate, [Validators.required, Validators.min(0), Validators.max(1000)]],
+      processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(ranges.processUsageMin), Validators.max(ranges.processUsageMax)]],
+      condensationRecoveryRate: [obj.condensationRecoveryRate, [Validators.required, Validators.min(0), Validators.max(100)]],
       heatLoss: [obj.heatLoss, [Validators.required, Validators.min(0), Validators.max(10)]],
       flashCondensateIntoHeader: [obj.flashCondensateIntoHeader, Validators.required],
       desuperheatSteamIntoNextHighest: [obj.desuperheatSteamIntoNextHighest, Validators.required],
@@ -158,13 +158,23 @@ export class HeaderService {
 
     let tmpDesuperheatingTempMax: number = this.convertUnitsService.value(1472).from('F').to(settings.temperatureMeasurement);
     tmpDesuperheatingTempMax = this.convertUnitsService.roundVal(tmpDesuperheatingTempMax, 0);
+
+
+    let tmpProcessUsageMin: number = this.convertUnitsService.value(0).from('klb').to(settings.steamMassFlowMeasurement);
+    tmpProcessUsageMin = this.convertUnitsService.roundVal(tmpProcessUsageMin, 0);
+
+    let tmpProcessUsageMax: number = this.convertUnitsService.value(1000).from('klb').to(settings.steamMassFlowMeasurement);
+    tmpProcessUsageMax = this.convertUnitsService.roundVal(tmpProcessUsageMax, 0);
+
     return {
       pressureMin: tmpPressureMin,
       pressureMax: tmpPressureMax,
       condensateReturnTempMin: tmpCondensateReturnTempMin,
       condensateReturnTempMax: tmpCondensateReturnTempMax,
       desuperheatingTempMin: tmpDesuperheatingTempMin,
-      desuperheatingTempMax: tmpDesuperheatingTempMax
+      desuperheatingTempMax: tmpDesuperheatingTempMax,
+      processUsageMax: tmpProcessUsageMax,
+      processUsageMin: tmpProcessUsageMin
     };
   }
 
@@ -225,4 +235,6 @@ export interface HeaderRanges {
   condensateReturnTempMax: number;
   desuperheatingTempMin: number;
   desuperheatingTempMax: number;
+  processUsageMin: number;
+  processUsageMax: number;
 }

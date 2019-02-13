@@ -9,7 +9,8 @@
 		 (emitOptimize)="optimize()" [exploreModIndex]="modificationIndex" [(fsat)]="assessment.fsat" (emitAddNewMod)="addNewMod()">
 		</app-explore-opportunities-form> -->
     <app-explore-opportunities-form (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save($event)"
-      (changeField)="focusField($event)" [exploreModIndex]="modificationIndex" [(ssmt)]="assessment.ssmt"></app-explore-opportunities-form>
+      (changeField)="focusField($event)" [exploreModIndex]="modificationIndex" [(ssmt)]="assessment.ssmt">
+    </app-explore-opportunities-form>
   </div>
   <div *ngIf="!modificationExists" class="no-data w-50 scroll-item" [ngStyle]="{'height.px': containerHeight}">
     <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find
@@ -24,9 +25,9 @@
       <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
         <a class="border-left-0" (click)="setTab('results')">Results</a>
       </div>
-      <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'sankey'}">
+      <!-- <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'sankey'}">
         <a (click)="setTab('sankey')">Sankey</a>
-      </div>
+      </div> -->
       <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
         <a (click)="setTab('help')">Help</a>
       </div>
@@ -43,6 +44,7 @@
 
     <div class="scroll-item" *ngIf="modificationExists && tabSelect == 'results'" [ngStyle]="{'height.px': helpHeight}">
       <!-- <app-fsat-results-panel [fsat]="assessment.fsat" [settings]="settings" [modificationIndex]="modificationIndex"></app-fsat-results-panel> -->
+      <app-ssmt-results-panel [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex"></app-ssmt-results-panel>
     </div>
     <div *ngIf="!modificationExists && tabSelect != 'help'">
       <!--Placeholder for help text -->

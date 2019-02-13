@@ -272,6 +272,9 @@ export class PhastComponent implements OnInit {
     //get assessment settings
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
+      if (tmpSettings.unitsOfMeasure == 'Custom') {
+        tmpSettings.unitsOfMeasure = 'Imperial';
+      }
       this.settings = tmpSettings;
       //sets which tabs will be used based on settings
       this.lossesService.setTabs(this.settings);
