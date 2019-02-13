@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, SimpleChange, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, SimpleChange, ViewChild, HostListener } from '@angular/core';
 import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
@@ -24,6 +24,13 @@ export class PercentGraphComponent implements OnInit {
   @Input()
   unit: string;
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.initChart();
+  }
+
+
+
   doughnutChartLabels: string[];
   doughnutChartData: number[];
   doughnutChartType: string = 'doughnut';
@@ -34,7 +41,7 @@ export class PercentGraphComponent implements OnInit {
   chartHeight: number;
 
   firstChange: boolean = true;
-  inChart: boolean = false;
+  //inChart: boolean = false;
   exportName: string;
 
   potential: number = 0;
@@ -57,9 +64,9 @@ export class PercentGraphComponent implements OnInit {
   ngAfterViewInit() {
     this.exportName = this.title + "-graph";
 
-    if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings" || this.title.trim() == 'phast-modification-savings') {
-      this.inChart = true;
-      this.chartHeight = 120;
+    if (this.title.trim() == "psat-opportunities-savings" || this.title.trim() == "psat-modification-savings" || this.title.trim() == 'phast-modification-savings' || this.title.trim() == 'ssmt-opportunities-savings') {
+      //this.inChart = true;
+      // this.chartHeight = 120;
       // this.btnDownload.nativeElement.className = "percent-chart-table-btn fa fa-download";
     }
     this.initChart();
@@ -152,10 +159,10 @@ export class PercentGraphComponent implements OnInit {
       legend: {
         show: false
       },
-      size: {
-        height: this.chartHeight,
-        width: 250
-      },
+      // size: {
+      //   height: this.chartHeight,
+      //   width: this.chartWidth
+      // },
       gauge: {
         width: 20,
         label: {

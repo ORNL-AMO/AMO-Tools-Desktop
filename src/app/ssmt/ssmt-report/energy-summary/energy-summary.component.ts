@@ -14,7 +14,8 @@ export class EnergySummaryComponent implements OnInit {
   modificationOutputs: Array<{name: string, outputData: SSMTOutput}>;
   @Input()
   settings: Settings;
-
+  @Input()
+  tableCellWidth: number;
   constructor() { }
 
   ngOnInit() {

@@ -34,6 +34,7 @@ export class SsmtReportComponent implements OnInit {
   modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
   dataCalculated: boolean;
   modificationLosses: Array<{ name: string, outputData: SSMTLosses }>;
+  tableCellWidth: number;
   constructor(private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService) { }
 
   ngOnInit() {
@@ -58,6 +59,7 @@ export class SsmtReportComponent implements OnInit {
           this.modificationLosses.push({ outputData: modLosses, name: modification.ssmt.name });
         })
       }
+      this.getTableCellWidth();
       this.dataCalculated = true;
     }, 10)
   }
@@ -81,5 +83,9 @@ export class SsmtReportComponent implements OnInit {
 
   setTab(str: string) {
     this.currentTab = str;
+  }
+
+  getTableCellWidth(){
+    this.tableCellWidth = 85 / (this.modificationOutputs.length + 1);
   }
 }
