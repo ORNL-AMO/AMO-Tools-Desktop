@@ -84,8 +84,7 @@
       <select name="steamPowerMeasurement" class="form-control" formControlName="steamPowerMeasurement" id="steamPowerMeasurement"
         (change)="save()" autofocus>
         <option *ngFor="let measurement of steamPowerMeasurements" [ngValue]="measurement.unit">{{measurement.display}}
-          per hour
-          <span [innerHTML]="getPowerDisplay(measurement.unit)"></span><span *ngIf="measurement.unit != 'kWh'">/hr</span>
+          <span [innerHTML]="getPowerDisplay(measurement.unit)"></span>
         </option>
       </select>
     </div>
@@ -102,7 +101,7 @@
       </select>
     </div>
   </div>
-  
+
   <div class="form-group">
     <label for="steamVolumeMeasurement">Volume</label>
     <div class="input-group calc-addon-group">
@@ -114,7 +113,7 @@
       </select>
     </div>
   </div>
-  
+
   <div class="form-group">
     <label for="steamVolumeFlowMeasurement">Volume Flow</label>
     <div class="input-group calc-addon-group">

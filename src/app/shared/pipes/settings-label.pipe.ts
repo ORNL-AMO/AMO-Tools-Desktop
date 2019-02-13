@@ -14,7 +14,7 @@ export class SettingsLabelPipe implements PipeTransform {
       dispUnit = dispUnit.replace('(', '');
       dispUnit = dispUnit.replace(')', '');
       return dispUnit;
-    } else if (value && (value != 'F' || value != 'C' || value != 'K')) {
+    } else if (value && (value == 'F' || value == 'C' || value == 'K')) {
       if(value == 'F'){
         return '&#8457;'
       }else if(value == 'C'){

@@ -580,6 +580,7 @@ Reports
 }
 .output-summary .table td {
     padding: 0px;
+    vertical-align: middle;
 }
 
 

@@ -5,6 +5,8 @@ import { BaseGasDensity } from '../../../shared/models/fans';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { BehaviorSubject } from 'rxjs';
+import { LessThanValidator } from '../../../shared/validators/less-than';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 
 @Injectable()
@@ -386,7 +388,7 @@ export class Fsat203Service {
       mainsDataAvailable: [obj.mainsDataAvailable, Validators.required],
       ratedHP: [obj.ratedHP, Validators.required],
       synchronousSpeed: [obj.synchronousSpeed, Validators.required],
-      powerFactorAtLoad: [obj.powerFactorAtLoad, [Validators.required, Validators.min(0), Validators.max(1)]],
+      powerFactorAtLoad: [obj.powerFactorAtLoad, [Validators.required, Validators.min(0), Validators.max(1), GreaterThanValidator.greaterThan(0)]],
       npv: [obj.npv, [Validators.required, Validators.min(0), Validators.max(20000)]],
       fullLoadAmps: [obj.fla, Validators.required],
       motorShaftPower: [obj.motorShaftPower, Validators.required],
@@ -396,7 +398,7 @@ export class Fsat203Service {
       phase2Amps: [obj.phase2.amps, Validators.min(0)],
       phase3Voltage: [obj.phase3.voltage, Validators.min(0)],
       phase3Amps: [obj.phase3.amps, Validators.min(0)],
-      efficiencyMotor: [obj.efficiencyMotor, [Validators.required, Validators.min(0), Validators.max(100)]],
+      efficiencyMotor: [obj.efficiencyMotor, [Validators.required, Validators.min(0), Validators.max(100), GreaterThanValidator.greaterThan(0)]],
       efficiencyVFD: [obj.efficiencyVFD, [Validators.required, Validators.min(0), Validators.max(100)]],
       efficiencyBelt: [obj.efficiencyBelt, [Validators.required, Validators.min(0), Validators.max(100)]],
       driveType: [obj.driveType],

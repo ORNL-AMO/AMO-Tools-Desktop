@@ -53,13 +53,13 @@
             </div>
           </div>
           <div class="w-25">
-            <app-flash-tank-diagram *ngIf="outputData.highPressureFlashTank && outputData.mediumPressureHeader"
-              [flashTank]="outputData.highPressureFlashTank" [steamPressure]="'medium-pressure'" (emitSetHover)="setHover($event)"
+            <app-flash-tank-diagram *ngIf="outputData.highPressureCondensateFlashTank && outputData.mediumPressureHeader"
+              [flashTank]="outputData.highPressureCondensateFlashTank" [steamPressure]="'medium-pressure'" (emitSetHover)="setHover($event)"
               [flashTankType]="'highPressure'" (emitSelectEquipment)="selectTable($event)" [settings]="settings"></app-flash-tank-diagram>
-            <app-flash-tank-diagram *ngIf="outputData.highPressureFlashTank && !outputData.mediumPressureHeader"
-              [flashTank]="outputData.highPressureFlashTank" [steamPressure]="'low-pressure'" (emitSetHover)="setHover($event)"
+            <app-flash-tank-diagram *ngIf="outputData.highPressureCondensateFlashTank && !outputData.mediumPressureHeader"
+              [flashTank]="outputData.highPressureCondensateFlashTank" [steamPressure]="'low-pressure'" (emitSetHover)="setHover($event)"
               [flashTankType]="'highPressure'" (emitSelectEquipment)="selectTable($event)" [settings]="settings"></app-flash-tank-diagram>
-            <app-condensate-connector *ngIf="!outputData.highPressureFlashTank" (emitSetHover)="setHover($event)"
+            <app-condensate-connector *ngIf="!outputData.highPressureCondensateFlashTank" (emitSetHover)="setHover($event)"
               [settings]="settings"></app-condensate-connector>
           </div>
         </div>
@@ -94,10 +94,10 @@
             </div>
           </div>
           <div class="w-25">
-            <app-flash-tank-diagram *ngIf="outputData.mediumPressureFlashTank" [flashTank]="outputData.mediumPressureFlashTank"
+            <app-flash-tank-diagram *ngIf="outputData.mediumPressureCondensateFlashTank" [flashTank]="outputData.mediumPressureCondensateFlashTank"
               [steamPressure]="'low-pressure'" (emitSetHover)="setHover($event)" [flashTankType]="'mediumPressure'"
               (emitSelectEquipment)="selectTable($event)" [settings]="settings"></app-flash-tank-diagram>
-            <app-condensate-connector *ngIf="!outputData.mediumPressureFlashTank && outputData.mediumPressureHeader"
+            <app-condensate-connector *ngIf="!outputData.mediumPressureCondensateFlashTank && outputData.mediumPressureHeader"
               (emitSetHover)="setHover($event)" [settings]="settings"></app-condensate-connector>
           </div>
         </div>

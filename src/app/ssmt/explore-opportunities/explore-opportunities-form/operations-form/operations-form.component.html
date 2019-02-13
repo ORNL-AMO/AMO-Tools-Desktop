@@ -46,8 +46,7 @@
           <input name="baselineMakeupWaterTemp" type="number" step="any" id="baselineOperatingHours" class="form-control"
             (focus)="focusField('makeUpWaterTemperature')" (input)="save()" [(ngModel)]="ssmt.generalSteamOperations.makeUpWaterTemperature"
             [disabled]="true" />
-          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
       </div>
       <div class="form-group">
@@ -55,8 +54,7 @@
         <div class="input-group">
           <input name="modificationMakeupWaterTemp" type="number" step="any" id="modificationMakeupWaterTemp" class="form-control"
             (focus)="focusField('makeUpWaterTemperature')" (input)="save()" [(ngModel)]="ssmt.modifications[exploreModIndex].ssmt.generalSteamOperations.makeUpWaterTemperature" />
-          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'F'">&#8457;</span>
-          <span class="units input-group-addon" *ngIf="settings.steamTemperatureMeasurement == 'C'">&#8451;</span>
+          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
       </div>
     </form>
@@ -135,8 +133,9 @@
       <div class="form-group">
         <label for="baselineMakeupWaterCost">Baseline Make-up Water Cost</label>
         <div class="input-group">
-          <input name="baselineMakeupWaterCost" type="number" step="any" id="baselineMakeupWaterCost" class="form-control" (focus)="focusField('makeUpWaterCost')"
-            (input)="save()" [(ngModel)]="ssmt.operatingCosts.makeUpWaterCost" [disabled]="true" />
+          <input name="baselineMakeupWaterCost" type="number" step="any" id="baselineMakeupWaterCost" class="form-control"
+            (focus)="focusField('makeUpWaterCost')" (input)="save()" [(ngModel)]="ssmt.operatingCosts.makeUpWaterCost"
+            [disabled]="true" />
           <span class="input-group-addon units">$/{{settings.steamVolumeMeasurement}}</span>
         </div>
       </div>
