@@ -57,3 +57,20 @@
 .ssmt-diagram{
     min-width: 1120px;
 }
+
+.close-calc{
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    z-index: 4;
+}
+
+.close-calc a{
+    background-color: white;
+    font-size: xx-large;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid 3px #F39C12;
+    border-radius: 15px;
+}
+

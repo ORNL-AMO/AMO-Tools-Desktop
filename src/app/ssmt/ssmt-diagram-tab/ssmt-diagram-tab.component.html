@@ -1,4 +1,4 @@
-<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram" *ngIf="outputData && dataCalculated">
+<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram" *ngIf="outputData && dataCalculated && !displayCalculators">
   <div class="d-flex flex-column panel-column scroll-item diagram-container align-content-stretch" [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex justify-content-center pt-2">
       <div class="form-group">
@@ -36,7 +36,7 @@
           [boilerFuelUsage]="outputData.boilerFuelUsage" [settings]="settings"></app-diagram-summary-table>
         <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData" [settings]="settings"></app-cost-table>
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="outputData.boilerOutput" [inputData]="inputData"
-          [settings]="settings"></app-boiler-table>
+          [settings]="settings" (emitShowCalc)="showCalculators()"></app-boiler-table>
         <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
           [turbine]="outputData.highToLowPressureTurbine" [settings]="settings"></app-turbine-table>
         <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'" [turbineName]="'High to Medium Pressure'"
@@ -80,4 +80,11 @@
     <div class="bounce3"></div>
   </div>
   <h5> Calculating...</h5>
+</div>
+
+<div class="w-100 close-calc" *ngIf="displayCalculators">
+  <a class="click-link" (click)="closeCalculator()">Return To Diagram</a>
+</div>
+<div class="h-100" *ngIf="displayCalculators">
+  <app-boiler-calculator [settings]="settings"></app-boiler-calculator>
 </div>

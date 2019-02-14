@@ -27,6 +27,7 @@ export class SsmtDiagramTabComponent implements OnInit {
   ssmtOptions: Array<SSMT>;
   showOptions: boolean = false;
   dataCalculated: boolean = false;
+  displayCalculators: boolean = false;
   constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -74,5 +75,13 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   toggleShowOptions() {
     this.showOptions = !this.showOptions;
+  }
+
+  showCalculators(){
+    this.displayCalculators = true;
+  }
+
+  closeCalculator(){
+    this.displayCalculators = false;
   }
 }
