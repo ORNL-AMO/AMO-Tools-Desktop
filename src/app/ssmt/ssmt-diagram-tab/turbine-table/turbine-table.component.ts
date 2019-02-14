@@ -1,6 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { TurbineOutput, SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
+import { TurbineService } from '../../../calculator/steam/turbine/turbine.service';
+import { SsmtService } from '../../ssmt.service';
+import { TurbineInput } from '../../../shared/models/steam/steam-inputs';
+import { SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { SsmtDiagramTabService } from '../ssmt-diagram-tab.service';
 
 @Component({
   selector: 'app-turbine-table',
@@ -14,10 +19,16 @@ export class TurbineTableComponent implements OnInit {
   turbineName: string;
   @Input()
   settings: Settings;
+  @Output('emitShowCalc')
+  emitShowCalc = new EventEmitter<boolean>();
   
-  constructor() { }
+  constructor(private ssmtDiagramTabService: SsmtDiagramTabService) { }
 
   ngOnInit() {
   }
 
+  goToCalculator() {
+    this.ssmtDiagramTabService.setTurbine(this.turbine);
+    this.emitShowCalc.emit(true);
+  }
 }

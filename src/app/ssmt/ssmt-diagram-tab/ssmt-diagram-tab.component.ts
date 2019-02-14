@@ -3,6 +3,8 @@ import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
+import { Subscription } from 'rxjs';
+import { SsmtService } from '../ssmt.service';
 
 @Component({
   selector: 'app-ssmt-diagram-tab',
@@ -28,7 +30,9 @@ export class SsmtDiagramTabComponent implements OnInit {
   showOptions: boolean = false;
   dataCalculated: boolean = false;
   displayCalculators: boolean = false;
-  constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
+  calculatorTab: string;
+  calculatorTabSubscription: Subscription;
+  constructor(private calculateModelService: CalculateModelService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.ssmt.name = 'Baseline';
@@ -43,6 +47,14 @@ export class SsmtDiagramTabComponent implements OnInit {
     if (this.ssmt.setupDone) {
       this.calculateResults();
     }
+
+    this.calculatorTabSubscription = this.ssmtService.calcTab.subscribe(val => {
+      this.calculatorTab = val;
+    })
+  }
+
+  ngOnDestroy(){
+    this.calculatorTabSubscription.unsubscribe();
   }
 
   // setOption(ssmt: SSMT) {
