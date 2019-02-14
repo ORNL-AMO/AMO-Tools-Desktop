@@ -1,0 +1,45 @@
+<div class="card card-item w-100">
+  <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center">
+      Treasure Chest Summary
+    </div>
+    <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
+    <!-- <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
+      </button>
+      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+        <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
+        <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
+        <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+      </div>
+    </div> -->
+  </div>
+  <div class="card-body scroll-item summary-card-body p-1">
+    <table class="table">
+      <tr>
+        <td>
+          Lighting Replacement
+        </td>
+        <td>
+          {{treasureHunt.lightingReplacements.length}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Total Projects
+        </td>
+        <td>
+          {{treasureHunt.lightingReplacements.length}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Total Savings
+        </td>
+        <td>
+          {{1000 | currency:'USD'}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

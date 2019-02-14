@@ -1,0 +1,18 @@
+<div class="d-flex flex-fill justify-content-center">
+  <div class="d-flex flex-column w-75">
+    <p class="p-2 lead text-center mb-0">
+      Take a look at all your treasure!
+    </p>
+    <br>
+    <hr class="w-100 m-0">
+  </div>
+</div>
+<div class="d-flex w-100 pt-2">
+  <div class="summary-item col-3">
+    <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
+  </div>
+
+  <div class="summary-item col-3" *ngFor="let replacement of treasureHunt.lightingReplacements">
+    <app-lighting-replacement-card [replacement]="replacement" [settings]="settings"></app-lighting-replacement-card>
+  </div>
+</div>

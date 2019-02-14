@@ -23,9 +23,15 @@
     <app-find-treasure class="w-100" [treasureHunt]="assessment.treasureHunt" (emitSave)="saveTreasureHunt($event)"></app-find-treasure>
   </div>
 
+  <div *ngIf="mainTab == 'treasure-chest'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <app-treasure-chest class="w-100" [treasureHunt]="assessment.treasureHunt" [settings]="settings"></app-treasure-chest>
+  </div>
+
   <div *ngIf="mainTab == 'report'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
     {{assessment.treasureHunt.lightingReplacements.length}}
   </div>
+
+  
   <!--footer-->
   <!--<div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left" *ngIf="stepTab != 'system-basics' || mainTab == 'assessment'">

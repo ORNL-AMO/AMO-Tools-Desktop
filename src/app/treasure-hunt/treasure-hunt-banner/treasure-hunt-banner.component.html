@@ -22,7 +22,10 @@
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'find-treasure'}" (click)="changeTab('find-treasure')">Find Treasure</a>
 		</div>
 		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">Treasure Chest</a>
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'treasure-chest'}" (click)="changeTab('treasure-chest')">Treasure Chest</a>
+		</div>
+		<div class="nav-item">
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')">Report</a>
 		</div>
 	</div>
 	<div class="d-flex ml-auto pr-2 h-100">

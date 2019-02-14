@@ -1,0 +1,21 @@
+td{
+    padding: 0px;
+    font-size: small;
+}
+/* a:not([href]):not([tabindex]):hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  a:not([href]):not([tabindex]){
+    color: blue;
+  } */
+
+  .summary-card-header{
+      padding: 6px;
+  }
+
+  .summary-card-body{
+      height: 200px;
+  }

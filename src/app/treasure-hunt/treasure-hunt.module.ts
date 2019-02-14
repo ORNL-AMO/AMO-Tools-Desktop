@@ -10,6 +10,9 @@ import { SettingsModule } from '../settings/settings.module';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { TreasureChestComponent } from './treasure-chest/treasure-chest.component';
+import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
+import { LightingReplacementCardComponent } from './treasure-chest/lighting-replacement-card/lighting-replacement-card.component';
 
 @NgModule({
   imports: [
@@ -19,7 +22,7 @@ import { FormsModule } from '@angular/forms';
     ModalModule,
     FormsModule
   ],
-  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent],
+  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent, TreasureChestComponent, SummaryCardComponent, LightingReplacementCardComponent],
   providers: [ TreasureHuntService ]
 })
 export class TreasureHuntModule { }
