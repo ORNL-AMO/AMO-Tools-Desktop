@@ -1,6 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
+import { SsmtDiagramTabService } from '../ssmt-diagram-tab.service';
+import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-deaerator-table',
@@ -12,10 +14,15 @@ export class DeaeratorTableComponent implements OnInit {
   deaerator: DeaeratorOutput;
   @Input()
   settings: Settings;
-  
-  constructor() { }
+  @Input()
+  inputData: SSMTInputs;
+
+  constructor(private ssmtDiagramTabService: SsmtDiagramTabService) { }
 
   ngOnInit() {
   }
 
+  goToCalculator(){
+    this.ssmtDiagramTabService.setDeaeratorCalculator(this.deaerator, this.inputData);
+  }
 }

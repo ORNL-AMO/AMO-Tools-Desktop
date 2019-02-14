@@ -19,8 +19,6 @@ export class TurbineTableComponent implements OnInit {
   turbineName: string;
   @Input()
   settings: Settings;
-  @Output('emitShowCalc')
-  emitShowCalc = new EventEmitter<boolean>();
   
   constructor(private ssmtDiagramTabService: SsmtDiagramTabService) { }
 
@@ -29,6 +27,5 @@ export class TurbineTableComponent implements OnInit {
 
   goToCalculator() {
     this.ssmtDiagramTabService.setTurbine(this.turbine);
-    this.emitShowCalc.emit(true);
   }
 }

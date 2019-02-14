@@ -45,6 +45,7 @@ export class PrvComponent implements OnInit {
     }
     this.initForm();
     this.input = this.prvService.getObjFromForm(this.inletForm, this.feedwaterForm, this.isSuperHeating);
+    console.log(this.input);
     this.calculate(this.inletForm, this.feedwaterForm)
   }
 

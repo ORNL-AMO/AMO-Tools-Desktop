@@ -1,5 +1,4 @@
-<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram"
-  *ngIf="outputData && dataCalculated && !displayCalculators">
+<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram" *ngIf="outputData && dataCalculated">
   <div class="d-flex flex-column panel-column scroll-item diagram-container align-content-stretch"
     [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex justify-content-center pt-2">
@@ -44,19 +43,19 @@
           [settings]="settings"></app-cost-table>
         <!--boiler-->
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="outputData.boilerOutput" [inputData]="inputData"
-          [settings]="settings" (emitShowCalc)="showCalculators()"></app-boiler-table>
+          [settings]="settings"></app-boiler-table>
         <!--turbines-->
         <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
-          [turbine]="outputData.highToLowPressureTurbine" [settings]="settings" (emitShowCalc)="showCalculators()">
+          [turbine]="outputData.highToLowPressureTurbine" [settings]="settings">
         </app-turbine-table>
         <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'"
           [turbineName]="'High to Medium Pressure'" [turbine]="outputData.highPressureToMediumPressureTurbine"
-          [settings]="settings" (emitShowCalc)="showCalculators()"></app-turbine-table>
+          [settings]="settings"></app-turbine-table>
         <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'"
           [turbineName]="'Medium to Low Pressure'" [turbine]="outputData.mediumToLowPressureTurbine"
-          [settings]="settings" (emitShowCalc)="showCalculators()"></app-turbine-table>
+          [settings]="settings"></app-turbine-table>
         <app-turbine-table *ngIf="selectedTable == 'condensingTurbine'" [turbineName]="'Condensing'"
-          [turbine]="outputData.condensingTurbine" [settings]="settings" (emitShowCalc)="showCalculators()">
+          [turbine]="outputData.condensingTurbine" [settings]="settings">
         </app-turbine-table>
 
         <app-flash-tank-table *ngIf="selectedTable == 'highPressureFlashTank'"
@@ -75,7 +74,7 @@
         <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'" [settings]="settings"
           [inputData]="inputData" [prv]="outputData.lowPressurePRV"></app-prv-table>
         <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="outputData.deaeratorOutput"
-          [settings]="settings"></app-deaerator-table>
+          [settings]="settings" [inputData]="inputData"></app-deaerator-table>
         <div class="d-flex w-100 pt-2 justify-content-center">
           <a class="click-link small" (click)="selectTable('default')" *ngIf="selectedTable != 'default'">Back to
             General Summary</a>
@@ -98,12 +97,4 @@
     <div class="bounce3"></div>
   </div>
   <h5> Calculating...</h5>
-</div>
-
-<div class="w-100 close-calc" *ngIf="displayCalculators">
-  <a class="click-link" (click)="closeCalculator()">Return To Diagram</a>
-</div>
-<div class="h-100" *ngIf="displayCalculators">
-  <app-boiler-calculator [settings]="settings" *ngIf="calculatorTab == 'boiler'"></app-boiler-calculator>
-  <app-turbine-calculator [settings]="settings" *ngIf="calculatorTab == 'turbine'"></app-turbine-calculator>
 </div>
