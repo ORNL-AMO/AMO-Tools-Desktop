@@ -11,12 +11,14 @@ import { PrvTableComponent } from './prv-table/prv-table.component';
 import { TurbineTableComponent } from './turbine-table/turbine-table.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SsmtDiagramModule } from '../ssmt-diagram/ssmt-diagram.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    SsmtDiagramModule
+    SsmtDiagramModule,
+    FormsModule
   ],
   declarations: [
     SsmtDiagramTabComponent,

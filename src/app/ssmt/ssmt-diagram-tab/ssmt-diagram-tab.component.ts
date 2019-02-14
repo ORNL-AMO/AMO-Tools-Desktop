@@ -21,7 +21,7 @@ export class SsmtDiagramTabComponent implements OnInit {
   inputData: SSMTInputs;
   tabSelect: string = 'results';
   hoveredEquipment: string = 'default';
-  selectedTable: string = 'cost';
+  selectedTable: string = 'default';
 
   selectedSSMT: SSMT;
   ssmtOptions: Array<SSMT>;
@@ -44,18 +44,17 @@ export class SsmtDiagramTabComponent implements OnInit {
     }
   }
 
-  setOption(ssmt: SSMT) {
-    this.selectedSSMT = ssmt;
-    this.calculateResults();
-    this.showOptions = false;
-  }
+  // setOption(ssmt: SSMT) {
+  //   this.selectedSSMT = ssmt;
+  //   this.calculateResults();
+  //   this.showOptions = false;
+  // }
 
   calculateResults() {
     setTimeout(() => {
       this.calculateModelService.initResults();
       this.calculateModelService.initData(this.selectedSSMT, this.settings, true);
       let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
-      console.log(resultsData.outputData.highPressureCondensateFlashTank);
       this.inputData = resultsData.inputData;
       this.outputData = resultsData.outputData;
       this.dataCalculated = true;

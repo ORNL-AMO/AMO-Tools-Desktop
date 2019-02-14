@@ -40,7 +40,7 @@
     </div>
   </div>
   <!--diagram-->
-  <div class="tab-content" [ngStyle]="{'height.px': containerHeight}" *ngIf="mainTab == 'diagram'">
+  <div class="tab-content scroll-item diagram-content" [ngStyle]="{'height.px': containerHeight}" *ngIf="mainTab == 'diagram'">
     <app-ssmt-diagram-tab [settings]="settings" [ssmt]="_ssmt" [containerHeight]="containerHeight"></app-ssmt-diagram-tab>
   </div>
   <!--calculators-->

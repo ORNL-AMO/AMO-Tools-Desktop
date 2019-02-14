@@ -148,6 +148,8 @@
 .ssmt-diagram .hover-tables td{
     font-size: smaller;
 }
-.ssmt-diagram .result-tables td {
-    font-size: 10px;
+
+
+.result-tables .group-label{
+    font-size: 14px;
 }
