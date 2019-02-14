@@ -17,13 +17,27 @@ export class TreasureHuntBannerComponent implements OnInit {
   mainTabSub: Subscription;
   mainTab: string;
 
+  subTab: string;
+  subTabSub: Subscription;
+
   constructor(private assessmentService: AssessmentService, private router: Router, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
     });
+
+    this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
+      this.subTab = val;
+    })
   }
+
+  ngOnDestroy(){
+    this.subTabSub.unsubscribe();
+    this.mainTabSub.unsubscribe();
+  }
+
+
   changeTab(str: string) {
     this.treasureHuntService.mainTab.next(str);
   }
@@ -38,5 +52,9 @@ export class TreasureHuntBannerComponent implements OnInit {
     this.assessmentService.workingDirectoryId.next(this.assessment.directoryId);
     this.assessmentService.dashboardView.next('assessment-dashboard');
     this.router.navigateByUrl('/dashboard');
+  }
+
+  changeSubTab(str: string){
+    this.treasureHuntService.subTab.next(str)
   }
 }

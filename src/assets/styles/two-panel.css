@@ -103,6 +103,10 @@
     border-bottom: #FFFF00 solid 2px;
 }
 
+.treasure-hunt .header{
+    border-bottom: #2E4053 solid 2px;
+}
+
 
 .psat .disabled .header{
     border-bottom-color: gray;
@@ -144,6 +148,12 @@
 
 .ssmt .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #F39C12;
+    transition: all .5s ease-in-out;
+    color: black;
+}
+
+.treasure-hunt .btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #2E4053;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -232,6 +242,9 @@
     border-bottom: #F39C12 groove 2px;
 }
 
+.treasure-hunt .group-label{
+    border-bottom: #2E4053 groove 2px;
+}
 
 .fsat .group-label{
     border-bottom: #FFE400 groove 2px;
@@ -411,5 +424,10 @@
 
     .ssmt .scroll-item::-webkit-scrollbar-thumb{
         background-color: #F39C12;
+        outline: 1px solid slategrey;
+    }
+
+    .treasure-hunt .scroll-item::-webkit-scrollbar-thumb{
+        background-color: #2E4053;
         outline: 1px solid slategrey;
     }

@@ -90,6 +90,10 @@ Tabs
     border-bottom:   #FFFF00 solid 3px;
   }
 
+  .treasure-hunt .tabs.primary .active a {
+    border: none;
+    border-bottom:   #2E4053 solid 3px;
+  }  
 
   .fixed-tab-size{
     min-width: 200px;
@@ -141,6 +145,10 @@ Tabs
     border-bottom: #F39C12 solid 3px;
   }
   
+  .tabs.subtabs.treasure-hunt {
+    border-bottom: #2E4053 solid 3px;
+  }
+
     .tabs.subtabs.progress-tabs a {
       color: #000;
       padding-top: 8px;

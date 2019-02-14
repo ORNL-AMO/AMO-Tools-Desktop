@@ -60,10 +60,10 @@
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="saveCalcModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-lg list-modal">
+  <div class="modal-dialog modal-sm list-modal">
     <div class="modal-content">
-      <div class="modal-header">
-        <h3>Name Your New Treasure</h3>
+      <div class="modal-header p-1">
+        <h5>Name This Project</h5>
         <button class="close" (click)="closeSaveCalcModal()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -74,8 +74,8 @@
           <input class="form-control" type="text" [(ngModel)]="calcName">
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-success small pull-right" (click)="saveLighting()">Save</button>
+      <div class="modal-footer p-1">
+        <button class="btn btn-success btn-sm pull-right" (click)="saveLighting()">Save</button>
       </div>
     </div>
   </div>

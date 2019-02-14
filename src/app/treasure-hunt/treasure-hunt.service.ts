@@ -5,7 +5,9 @@ import { BehaviorSubject } from 'rxjs';
 export class TreasureHuntService {
 
   mainTab: BehaviorSubject<string>;
+  subTab:  BehaviorSubject<string>;
   constructor() { 
     this.mainTab = new BehaviorSubject<string>('system-basics');
+    this.subTab = new BehaviorSubject<string>('settings');
   }
 }

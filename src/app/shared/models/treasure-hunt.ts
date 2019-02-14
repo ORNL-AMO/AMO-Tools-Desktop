@@ -10,4 +10,5 @@ export interface LightingReplacementTreasureHunt {
     baseline: Array<LightingReplacementData>;
     modifications?: Array<LightingReplacementData>;
     name?: string;
+    selected?: boolean;
 }

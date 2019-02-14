@@ -49,3 +49,8 @@ td{
 .summary-card-body{
     height: 200px;
 }
+
+.dropdown-toggle,
+.btn-primary{
+  background-color: #2E4053;
+}

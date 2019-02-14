@@ -40,6 +40,7 @@ export class FindTreasureComponent implements OnInit {
     }
     this.newLightingCalc = newCalcToSave;
     this.newLightingCalc.name = this.calcName;
+    this.newLightingCalc.selected = true;
     this.saveCalcModal.show();
   }
 
