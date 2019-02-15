@@ -41,7 +41,7 @@ export class HeatLossService {
       thermodynamicQuantity: form.controls.thermodynamicQuantity.value,
       quantityValue: form.controls.quantityValue.value,
       inletMassFlow: form.controls.inletMassFlow.value,
-      percentHeatLoss: form.controls.percentHeatLoss.value,
+      percentHeatLoss: form.controls.percentHeatLoss.value || 0,
     }
     return input;
   }
