@@ -77,10 +77,10 @@ export class SsmtDiagramTabService {
       deaeratorPressure: inputData.boilerInput.deaeratorPressure,
       ventRate: inputData.boilerInput.deaeratorVentRate,
       feedwaterMassFlow: Number(Math.round(deaerator.feedwaterMassFlow).toFixed(2)),
-      waterPressure: deaerator.inletWaterPressure,
+      waterPressure:  Number(Math.round(deaerator.inletWaterPressure).toFixed(2)),
       waterThermodynamicQuantity: 1,
       waterQuantityValue: Number(Math.round(deaerator.inletWaterSpecificEnthalpy).toFixed(2)),
-      steamPressure: deaerator.inletSteamPressure,
+      steamPressure:  Number(Math.round(deaerator.inletSteamPressure).toFixed(2)),
       steamThermodynamicQuantity: 1,
       steamQuantityValue: Number(Math.round(deaerator.inletSteamSpecificEnthalpy).toFixed(2))
     }
