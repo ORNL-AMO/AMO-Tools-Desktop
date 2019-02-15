@@ -59,10 +59,10 @@
         </app-turbine-table>
 
         <app-flash-tank-table *ngIf="selectedTable == 'highPressureFlashTank'"
-          [flashTank]="outputData.highPressureFlashTank" [flashTankType]="'High'" [settings]="settings">
+          [flashTank]="outputData.highPressureCondensateFlashTank" [flashTankType]="'High'" [settings]="settings">
         </app-flash-tank-table>
         <app-flash-tank-table *ngIf="selectedTable == 'mediumPressureFlashTank'"
-          [flashTank]="outputData.mediumPressureFlashTank" [flashTankType]="'Medium'" [settings]="settings">
+          [flashTank]="outputData.mediumPressureCondensateFlashTank" [flashTankType]="'Medium'" [settings]="settings">
         </app-flash-tank-table>
         <app-flash-tank-table *ngIf="selectedTable == 'condensateFlashTank'"
           [flashTank]="outputData.condensateFlashTank" [flashTankType]="'Condensate'" [settings]="settings">

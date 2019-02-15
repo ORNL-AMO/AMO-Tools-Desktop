@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { BoilerService } from '../../calculator/steam/boiler/boiler.service';
 import { SsmtService } from '../ssmt.service';
 import { SSMTInputs } from '../../shared/models/steam/ssmt';
-import { BoilerOutput, TurbineOutput, PrvOutput, DeaeratorOutput } from '../../shared/models/steam/steam-outputs';
-import { BoilerInput, TurbineInput, PrvInput, DeaeratorInput } from '../../shared/models/steam/steam-inputs';
+import { BoilerOutput, TurbineOutput, PrvOutput, DeaeratorOutput, FlashTankOutput } from '../../shared/models/steam/steam-outputs';
+import { BoilerInput, TurbineInput, PrvInput, DeaeratorInput, FlashTankInput } from '../../shared/models/steam/steam-inputs';
 import { TurbineService } from '../../calculator/steam/turbine/turbine.service';
 import { PrvService } from '../../calculator/steam/prv/prv.service';
 import { DeaeratorService } from '../../calculator/steam/deaerator/deaerator.service';
+import { FlashTankService } from '../../calculator/steam/flash-tank/flash-tank.service';
 
 @Injectable()
 export class SsmtDiagramTabService {
 
   constructor(private boilerCalculatorService: BoilerService, private ssmtService: SsmtService,
-    private turbineService: TurbineService, private prvService: PrvService, private deaeratorService: DeaeratorService) { }
+    private turbineService: TurbineService, private prvService: PrvService, private deaeratorService: DeaeratorService,
+    private flashTankService: FlashTankService) { }
 
   setBoilerCalculator(inputData: SSMTInputs, boiler: BoilerOutput){
     let boilerInput: BoilerInput = {
@@ -34,11 +36,11 @@ export class SsmtDiagramTabService {
         solveFor: 0,
         inletPressure: turbine.inletPressure,
         inletQuantity: 1,
-        inletQuantityValue: turbine.inletSpecificEnthalpy,
+        inletQuantityValue: Number(Math.round(turbine.inletSpecificEnthalpy).toFixed(2)),
         turbineProperty: 0, // massFlow
         isentropicEfficiency: turbine.isentropicEfficiency,
         generatorEfficiency: turbine.generatorEfficiency,
-        massFlowOrPowerOut: turbine.massFlow,
+        massFlowOrPowerOut: Number(Math.round(turbine.massFlow).toFixed(2)),
         outletSteamPressure: turbine.outletPressure,
         outletQuantity: 0,
         outletQuantityValue: 0
@@ -52,12 +54,12 @@ export class SsmtDiagramTabService {
     let prvInput: PrvInput = {
       inletPressure: prv.inletPressure,
       thermodynamicQuantity: 1,//1 is enthalpy
-      quantityValue: prv.inletSpecificEnthalpy,
-      inletMassFlow: prv.inletMassFlow,
+      quantityValue: Number(Math.round(prv.inletSpecificEnthalpy).toFixed(2)),
+      inletMassFlow: Number(Math.round(prv.inletMassFlow).toFixed(2)),
       outletPressure: prv.outletPressure,
       feedwaterPressure: prv.feedwaterPressure,
       feedwaterThermodynamicQuantity: 1,
-      feedwaterQuantityValue: prv.feedwaterSpecificEnthalpy,
+      feedwaterQuantityValue: Number(Math.round(prv.feedwaterSpecificEnthalpy).toFixed(2)),
       desuperheatingTemp: prv.outletTemperature
     }
     this.prvService.prvInput = prvInput;
@@ -74,16 +76,29 @@ export class SsmtDiagramTabService {
     let deaeratorInput: DeaeratorInput = {
       deaeratorPressure: inputData.boilerInput.deaeratorPressure,
       ventRate: inputData.boilerInput.deaeratorVentRate,
-      feedwaterMassFlow: deaerator.feedwaterMassFlow,
+      feedwaterMassFlow: Number(Math.round(deaerator.feedwaterMassFlow).toFixed(2)),
       waterPressure: deaerator.inletWaterPressure,
       waterThermodynamicQuantity: 1,
-      waterQuantityValue: deaerator.inletWaterSpecificEnthalpy,
+      waterQuantityValue: Number(Math.round(deaerator.inletWaterSpecificEnthalpy).toFixed(2)),
       steamPressure: deaerator.inletSteamPressure,
       steamThermodynamicQuantity: 1,
-      steamQuantityValue: deaerator.inletSteamSpecificEnthalpy
+      steamQuantityValue: Number(Math.round(deaerator.inletSteamSpecificEnthalpy).toFixed(2))
     }
     this.deaeratorService.deaeratorInput = deaeratorInput;
     this.ssmtService.calcTab.next('deaerator');
+    this.ssmtService.mainTab.next('calculators');
+  }
+
+  setFlashTankCalculator(flashTank: FlashTankOutput){
+    let flashTankInput: FlashTankInput = {
+      inletWaterPressure: flashTank.inletWaterPressure,
+      thermodynamicQuantity: 1, //1 is ENTHALPY
+      quantityValue: Number(Math.round(flashTank.inletWaterSpecificEnthalpy).toFixed(2)),
+      inletWaterMassFlow: Number(Math.round(flashTank.inletWaterMassFlow).toFixed(2)),
+      tankPressure: flashTank.outletGasPressure
+    }
+    this.flashTankService.flashTankInput = flashTankInput;
+    this.ssmtService.calcTab.next('flash-tank');
     this.ssmtService.mainTab.next('calculators');
   }
 }
