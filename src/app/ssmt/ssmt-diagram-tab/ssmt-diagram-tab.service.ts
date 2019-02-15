@@ -34,14 +34,14 @@ export class SsmtDiagramTabService {
   setTurbine(turbine: TurbineOutput){
     let turbineInput: TurbineInput = {
         solveFor: 0,
-        inletPressure: turbine.inletPressure,
+        inletPressure: Number(Math.round(turbine.inletPressure).toFixed(2)),
         inletQuantity: 1,
         inletQuantityValue: Number(Math.round(turbine.inletSpecificEnthalpy).toFixed(2)),
         turbineProperty: 0, // massFlow
-        isentropicEfficiency: turbine.isentropicEfficiency,
-        generatorEfficiency: turbine.generatorEfficiency,
+        isentropicEfficiency: Number(Math.round(turbine.isentropicEfficiency).toFixed(2)),
+        generatorEfficiency: Number(Math.round(turbine.generatorEfficiency).toFixed(2)),
         massFlowOrPowerOut: Number(Math.round(turbine.massFlow).toFixed(2)),
-        outletSteamPressure: turbine.outletPressure,
+        outletSteamPressure: Number(Math.round(turbine.outletPressure).toFixed(2)),
         outletQuantity: 0,
         outletQuantityValue: 0
     }
@@ -52,15 +52,15 @@ export class SsmtDiagramTabService {
 
   setPRV(prv: PrvOutput){
     let prvInput: PrvInput = {
-      inletPressure: prv.inletPressure,
+      inletPressure: Number(Math.round(prv.inletPressure).toFixed(2)),
       thermodynamicQuantity: 1,//1 is enthalpy
       quantityValue: Number(Math.round(prv.inletSpecificEnthalpy).toFixed(2)),
       inletMassFlow: Number(Math.round(prv.inletMassFlow).toFixed(2)),
-      outletPressure: prv.outletPressure,
-      feedwaterPressure: prv.feedwaterPressure,
+      outletPressure: Number(Math.round(prv.outletPressure).toFixed(2)),
+      feedwaterPressure: Number(Math.round(prv.feedwaterPressure).toFixed(2)),
       feedwaterThermodynamicQuantity: 1,
       feedwaterQuantityValue: Number(Math.round(prv.feedwaterSpecificEnthalpy).toFixed(2)),
-      desuperheatingTemp: prv.outletTemperature
+      desuperheatingTemp: Number(Math.round(prv.outletTemperature).toFixed(2))
     }
     this.prvService.prvInput = prvInput;
     if(prv.feedwaterMassFlow){
@@ -91,11 +91,11 @@ export class SsmtDiagramTabService {
 
   setFlashTankCalculator(flashTank: FlashTankOutput){
     let flashTankInput: FlashTankInput = {
-      inletWaterPressure: flashTank.inletWaterPressure,
+      inletWaterPressure:  Number(Math.round(flashTank.inletWaterPressure).toFixed(2)),
       thermodynamicQuantity: 1, //1 is ENTHALPY
       quantityValue: Number(Math.round(flashTank.inletWaterSpecificEnthalpy).toFixed(2)),
       inletWaterMassFlow: Number(Math.round(flashTank.inletWaterMassFlow).toFixed(2)),
-      tankPressure: flashTank.outletGasPressure
+      tankPressure:  Number(Math.round(flashTank.outletGasPressure).toFixed(2))
     }
     this.flashTankService.flashTankInput = flashTankInput;
     this.ssmtService.calcTab.next('flash-tank');

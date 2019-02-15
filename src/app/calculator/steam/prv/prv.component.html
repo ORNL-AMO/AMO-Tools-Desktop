@@ -42,8 +42,8 @@
     <div class="d-flex">
       <app-prv-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
         [thermodynamicQuantity]="input.thermodynamicQuantity" [feedwaterThermodynamicQuantity]="input.feedwaterThermodynamicQuantity"></app-prv-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-prv-results [results]="results" [settings]="settings" [isSuperHeating]="isSuperHeating"></app-prv-results>
+      <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
+        <app-prv-results class="w-100" [results]="results" [settings]="settings" [isSuperHeating]="isSuperHeating"></app-prv-results>
       </div>
     </div>
   </div>
