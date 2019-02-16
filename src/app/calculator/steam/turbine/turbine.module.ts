@@ -16,7 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '../../../../../node_modules/@a
     ReactiveFormsModule
   ],
   declarations: [TurbineComponent, TurbineFormComponent, TurbineHelpComponent, TurbineResultsComponent],
-  exports: [TurbineComponent],
+  exports: [TurbineComponent, TurbineResultsComponent],
   providers: [TurbineService]
 })
 export class TurbineModule { }

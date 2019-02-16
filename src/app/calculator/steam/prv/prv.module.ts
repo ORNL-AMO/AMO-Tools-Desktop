@@ -18,6 +18,6 @@ import { FeedwaterFormComponent } from './feedwater-form/feedwater-form.componen
   ],
   declarations: [PrvComponent, PrvHelpComponent, PrvResultsComponent, InletFormComponent, FeedwaterFormComponent],
   providers: [PrvService],
-  exports: [PrvComponent]
+  exports: [PrvComponent, PrvResultsComponent]
 })
 export class PrvModule { }

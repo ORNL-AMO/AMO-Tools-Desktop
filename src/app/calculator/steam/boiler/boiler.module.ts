@@ -16,7 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '../../../../../node_modules/@a
     SharedModule
   ],
   declarations: [BoilerComponent, BoilerFormComponent, BoilerHelpComponent, BoilerResultsComponent],
-  exports: [BoilerComponent],
+  exports: [BoilerComponent, BoilerResultsComponent],
   providers: [BoilerService]
 })
 export class BoilerModule { }

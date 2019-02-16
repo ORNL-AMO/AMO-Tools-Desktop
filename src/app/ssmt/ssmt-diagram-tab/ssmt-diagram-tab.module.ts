@@ -15,6 +15,9 @@ import { FormsModule } from '@angular/forms';
 import { BoilerModule } from '../../calculator/steam/boiler/boiler.module';
 import { SsmtDiagramTabService } from './ssmt-diagram-tab.service';
 import { TurbineModule } from '../../calculator/steam/turbine/turbine.module';
+import { DeaeratorModule } from '../../calculator/steam/deaerator/deaerator.module';
+import { PrvModule } from '../../calculator/steam/prv/prv.module';
+import { FlashTankModule } from '../../calculator/steam/flash-tank/flash-tank.module';
 
 @NgModule({
   imports: [
@@ -23,7 +26,10 @@ import { TurbineModule } from '../../calculator/steam/turbine/turbine.module';
     SsmtDiagramModule,
     FormsModule,
     BoilerModule,
-    TurbineModule
+    TurbineModule,
+    DeaeratorModule,
+    PrvModule,
+    FlashTankModule
   ],
   declarations: [
     SsmtDiagramTabComponent,
