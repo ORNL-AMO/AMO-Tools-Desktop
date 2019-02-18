@@ -22,6 +22,7 @@
     <app-psat-summary-card *ngIf="assessment.type == 'PSAT'" [assessment]="assessment"></app-psat-summary-card>
     <app-phast-summary-card *ngIf="assessment.type == 'PHAST'" [assessment]="assessment"></app-phast-summary-card>
     <app-fsat-summary-card *ngIf="assessment.type == 'FSAT'" [assessment]="assessment"></app-fsat-summary-card>
+    <app-ssmt-summary-card *ngIf="assessment.type == 'SSMT'" [assessment]="assessment"></app-ssmt-summary-card>
   </div>
   <div class="card-footer summary-card-footer">
     <div class="last-updated pull-right">Last updated {{assessment.modifiedDate | date }}</div>

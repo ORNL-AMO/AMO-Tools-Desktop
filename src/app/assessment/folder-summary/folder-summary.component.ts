@@ -12,6 +12,9 @@ import { ExecutiveSummaryService } from '../../phast/phast-report/executive-summ
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FsatService } from '../../fsat/fsat.service';
+import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
+import { CalculateModelService } from '../../ssmt/ssmt-calculations/calculate-model.service';
+import { SSMTInputs } from '../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-folder-summary',
@@ -32,6 +35,7 @@ export class FolderSummaryComponent implements OnInit {
   numPhasts: number = 0;
   numPsats: number = 0;
   numFsats: number = 0;
+  numSsmts: number = 0;
   settingsForm: FormGroup;
   psatEnergyUsed: number = 0;
   psatEnergyCost: number = 0;
@@ -39,12 +43,14 @@ export class FolderSummaryComponent implements OnInit {
   phastEnergyCost: number = 0;
   fsatEnergyUsed: number = 0;
   fsatEnergyCost: number = 0;
+  ssmtEnergyUsed: number = 0;
+  ssmtEnergyCost: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
   counter: any;
   constructor(private settingsService: SettingsService, private psatService: PsatService, private fsatService: FsatService,
     private convertUnitsService: ConvertUnitsService, private executiveSummaryService: ExecutiveSummaryService,
-    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
   }
@@ -73,6 +79,8 @@ export class FolderSummaryComponent implements OnInit {
     this.phastEnergyCost = 0;
     this.fsatEnergyUsed = 0;
     this.fsatEnergyCost = 0;
+    this.ssmtEnergyUsed = 0;
+    this.ssmtEnergyCost = 0;
     this.totalCost = 0;
     this.totalEnergy = 0;
     if (this.assessments) {
@@ -81,6 +89,7 @@ export class FolderSummaryComponent implements OnInit {
       this.numPhasts = test.PHAST || 0;
       this.numPsats = test.PSAT || 0;
       this.numFsats = test.FSAT || 0;
+      this.numSsmts = test.SSMT || 0;
       this.directory.assessments.forEach(assessment => {
         if (assessment.type === 'PSAT') {
           if (assessment.psat.setupDone) {
@@ -103,14 +112,23 @@ export class FolderSummaryComponent implements OnInit {
             this.fsatEnergyUsed = result.annualEnergy + this.fsatEnergyUsed;
             this.fsatEnergyCost = result.annualCost + this.fsatEnergyCost;
           }
+        }else if(assessment.type === 'SSMT'){
+          if(assessment.ssmt.setupDone){
+            let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+            this.calculateModelService.initData(assessment.ssmt, settings, true);
+            let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
+            results.outputData.boilerFuelUsage = this.convertUnitsService.value(results.outputData.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
+            this.ssmtEnergyUsed = results.outputData.boilerFuelUsage + this.ssmtEnergyUsed;
+            this.ssmtEnergyCost = results.outputData.totalOperatingCost + this.ssmtEnergyCost;
+          }
         }
       });
     }
   }
 
   getTotals() {
-    this.totalCost = this.phastEnergyCost + this.psatEnergyCost + this.fsatEnergyCost;
-    this.totalEnergy = this.phastEnergyUsed + this.convertUnitsService.value(this.psatEnergyUsed).from('kWh').to(this.directorySettings.energyResultUnit) + this.convertUnitsService.value(this.fsatEnergyUsed).from('kWh').to(this.directorySettings.energyResultUnit);
+    this.totalCost = this.phastEnergyCost + this.psatEnergyCost + this.fsatEnergyCost + this.ssmtEnergyCost;
+    this.totalEnergy = this.phastEnergyUsed + this.ssmtEnergyUsed + this.convertUnitsService.value(this.psatEnergyUsed).from('kWh').to(this.directorySettings.energyResultUnit) + this.convertUnitsService.value(this.fsatEnergyUsed).from('kWh').to(this.directorySettings.energyResultUnit);
     return { totalCost: this.totalCost, totalEnergy: this.totalEnergy };
   }
 

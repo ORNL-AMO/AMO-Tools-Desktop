@@ -111,9 +111,9 @@ export class SsmtComponent implements OnInit {
         }
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
-        // if (tmpTab) {
-        //   this.ssmtService.mainTab.next(tmpTab);
-        // }
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       });
     });
     this.subscribeTabs();
