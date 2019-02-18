@@ -12,7 +12,6 @@ import { HoverBlowdownTableComponent } from './hover-blowdown-table/hover-blowdo
 import { HoverProcessUsageComponent } from './hover-process-usage/hover-process-usage.component';
 import { HoverTableComponent } from './hover-table.component';
 import { HoverDeaeratorTableComponent } from './hover-deaerator-table/hover-deaerator-table.component';
-import { DefaultSummaryTableComponent } from './default-summary-table/default-summary-table.component';
 import { SharedModule } from '../../../shared/shared.module';
 
 @NgModule({
@@ -32,7 +31,6 @@ import { SharedModule } from '../../../shared/shared.module';
     HoverBlowdownTableComponent,
     HoverProcessUsageComponent,
     HoverDeaeratorTableComponent,
-    DefaultSummaryTableComponent,
     HoverSteamPropertiesComponent
   ],
   exports: [

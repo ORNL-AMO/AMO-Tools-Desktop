@@ -3,7 +3,7 @@
   <tbody>
     <tr>
       <td class="bold">Pressure</td>
-      <td class="text-center">{{boilerInput.deaeratorPressure | number:'1.0-1'}}
+      <td class="text-center">{{boilerInput.deaeratorPressure | number:'1.0-2'}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </td>
       <td class="bold">Vent Rate</td>
@@ -11,11 +11,11 @@
     </tr>
     <tr>
       <td class="bold">Feedwater Flow</td>
-      <td class="text-center"> {{deaerator.feedwaterMassFlow | number:'1.0-1'}}
+      <td class="text-center"> {{deaerator.feedwaterMassFlow | number:'1.0-2'}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
       </td>
       <td class="bold">Vented Flow</td>
-      <td class="text-center"> {{deaerator.ventedSteamMassFlow | number:'1.0-1'}}
+      <td class="text-center"> {{deaerator.ventedSteamMassFlow | number:'1.0-2'}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
       </td>
     </tr>

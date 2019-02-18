@@ -6,7 +6,7 @@
       <td class="text-center">{{boilerInput.blowdownRate | number:'1.0-1'}} %</td>
       <td class="bold">Mass Flow</td>
       <td class="text-center">
-        {{boiler.blowdownMassFlow | number:'1.0-1'}}
+        {{boiler.blowdownMassFlow | number:'1.0-2'}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
       </td>
     </tr>
@@ -24,7 +24,7 @@
       <td class="bold" colspan="2">Flash Blowdown</td>
       <td class="text-center" colspan="2">
         <span *ngIf="boilerInput.blowdownFlashed">Yes</span>
-        <span *ngIf="!boilerInput.blowdownFlashed">Yes</span>
+        <span *ngIf="!boilerInput.blowdownFlashed">No</span>
       </td>
     </tr>
   </tbody>

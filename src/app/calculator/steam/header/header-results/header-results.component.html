@@ -11,7 +11,7 @@
     </tr>
     <tr>
       <td class="bold">Pressure</td>
-      <td *ngFor="let header of resultsArray" class="text-center">{{header.pressure | number:'1.0-1'}}
+      <td *ngFor="let header of resultsArray" class="text-center">{{header.pressure | number:'1.0-2'}}
       </td>
       <td class="text-center">
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
@@ -31,13 +31,13 @@
       <td *ngFor="let header of resultsArray" class="text-center">
         <span *ngIf="header.quality == 0">Liquid</span>
         <span *ngIf="header.quality == 1">Gas</span>
-        <span *ngIf="header.quality != 0 && header.quality != 1">{{header.quality}}</span>
+        <span *ngIf="header.quality != 0 && header.quality != 1">{{header.quality| number:'1.0-2'}}</span>
       </td>
       <td class="text-center"></td>
     </tr>
     <tr>
       <td class="bold">Mass Flow</td>
-      <td *ngFor="let header of resultsArray" class="text-center">{{header.massFlow | number:'1.0-1'}}
+      <td *ngFor="let header of resultsArray" class="text-center">{{header.massFlow | number:'1.0-2'}}
       </td>
       <td class="text-center">
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
