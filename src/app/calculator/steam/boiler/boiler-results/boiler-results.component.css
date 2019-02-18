@@ -16,3 +16,8 @@ tbody{
 .group-label{
     font-weight: bold;
 }
+
+
+.empty-row-col{
+    height: 25px;
+}

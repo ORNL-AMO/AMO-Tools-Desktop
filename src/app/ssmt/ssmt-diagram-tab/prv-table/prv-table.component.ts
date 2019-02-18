@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
-import { CalculateModelService } from '../../ssmt-calculations/calculate-model.service';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
+import { SsmtDiagramTabService } from '../ssmt-diagram-tab.service';
 
 @Component({
   selector: 'app-prv-table',
@@ -20,7 +20,7 @@ export class PrvTableComponent implements OnInit {
   inputData: SSMTInputs;
 
   prvLabel: string;
-  constructor() { }
+  constructor(private ssmtDiagramTabService: SsmtDiagramTabService) { }
 
   ngOnInit() {
     if (this.prvType === 'highToMediumPressurePRV') {
@@ -33,4 +33,9 @@ export class PrvTableComponent implements OnInit {
       }
     }
   }
+
+  goToCalculator(){
+    this.ssmtDiagramTabService.setPRV(this.prv);
+  }
+
 }

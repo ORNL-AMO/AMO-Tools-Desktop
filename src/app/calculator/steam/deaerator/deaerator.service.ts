@@ -34,10 +34,10 @@ export class DeaeratorService {
       ventRate: [inputObj.ventRate, [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
       feedwaterMassFlow: [inputObj.feedwaterMassFlow, [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
       waterPressure: [inputObj.waterPressure, [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
-      waterThermodynamicQuantity: [1, [Validators.required]],
+      waterThermodynamicQuantity: [inputObj.waterThermodynamicQuantity, [Validators.required]],
       waterQuantityValue: [inputObj.waterQuantityValue, [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
       steamPressure: [inputObj.steamPressure, [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
-      steamThermodynamicQuantity: [2, [Validators.required]],
+      steamThermodynamicQuantity: [inputObj.steamThermodynamicQuantity, [Validators.required]],
       steamQuantityValue: [inputObj.steamQuantityValue, [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
     });
     return tmpForm;

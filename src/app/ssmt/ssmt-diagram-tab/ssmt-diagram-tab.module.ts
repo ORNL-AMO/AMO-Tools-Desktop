@@ -12,13 +12,18 @@ import { TurbineTableComponent } from './turbine-table/turbine-table.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SsmtDiagramModule } from '../ssmt-diagram/ssmt-diagram.module';
 import { FormsModule } from '@angular/forms';
+import { BoilerModule } from '../../calculator/steam/boiler/boiler.module';
+import { SsmtDiagramTabService } from './ssmt-diagram-tab.service';
+import { TurbineModule } from '../../calculator/steam/turbine/turbine.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     SsmtDiagramModule,
-    FormsModule
+    FormsModule,
+    BoilerModule,
+    TurbineModule
   ],
   declarations: [
     SsmtDiagramTabComponent,
@@ -34,6 +39,9 @@ import { FormsModule } from '@angular/forms';
   ],
   exports: [
     SsmtDiagramTabComponent
+  ],
+  providers: [
+    SsmtDiagramTabService
   ]
 })
 export class SsmtDiagramTabModule { }

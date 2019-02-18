@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { HeaderOutputObj } from '../../../../shared/models/steam/steam-outputs';
-import { SteamService } from '../../steam.service';
+import { HeaderOutput, HeaderOutputObj } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-header-results',
@@ -12,29 +11,31 @@ export class HeaderResultsComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  results: HeaderOutputObj;
+  results: HeaderOutput;
   @Input()
-  name: string;
-  energyMeasurement: string;
+  numberOfInlets: number;
 
   @ViewChild('copyTable') copyTable: ElementRef;
   tableString: any;
 
-  constructor(private steamService: SteamService) { }
+  resultsArray: Array<HeaderOutputObj>;
+  constructor() { }
 
   ngOnInit() {
-    if (this.settings.steamEnergyMeasurement === 'kWh') {
-      this.energyMeasurement = 'kW';
-    } else {
-      this.energyMeasurement = this.settings.steamEnergyMeasurement + '/hr';
-    }
   }
 
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
+  ngOnChanges() {
+    this.getResultsData();
+  }
+
+  getResultsData() {
+    this.resultsArray = new Array<HeaderOutputObj>();
+    let index: number = 0;
+    for (let key in this.results) {
+      if (index <= this.numberOfInlets) {
+        this.resultsArray.push(this.results[key]);
+      }
+      index++;
     }
   }
 

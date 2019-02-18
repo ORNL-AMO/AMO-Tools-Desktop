@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
@@ -27,7 +27,8 @@ export class SsmtDiagramTabComponent implements OnInit {
   ssmtOptions: Array<SSMT>;
   showOptions: boolean = false;
   dataCalculated: boolean = false;
-  constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
+  displayCalculators: boolean = false;
+  constructor(private calculateModelService: CalculateModelService) { }
 
   ngOnInit() {
     this.ssmt.name = 'Baseline';
@@ -74,5 +75,13 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   toggleShowOptions() {
     this.showOptions = !this.showOptions;
+  }
+
+  showCalculators(){
+    this.displayCalculators = true;
+  }
+
+  closeCalculator(){
+    this.displayCalculators = false;
   }
 }

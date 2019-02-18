@@ -32,8 +32,8 @@
     <div class="d-flex">
       <app-flash-tank-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
         [thermodynamicQuantity]="input.thermodynamicQuantity"></app-flash-tank-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-flash-tank-results [results]="results" [settings]="settings"></app-flash-tank-results>
+      <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
+        <app-flash-tank-results class="w-100" [results]="results" [settings]="settings"></app-flash-tank-results>
       </div>
     </div>
   </div>
