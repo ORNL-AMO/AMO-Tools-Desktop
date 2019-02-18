@@ -40,16 +40,16 @@ export class ExploreOperationsFormComponent implements OnInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.exploreModIndex){
-      if(!changes.exploreModIndex.isFirstChange()){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.exploreModIndex) {
+      if (!changes.exploreModIndex.isFirstChange()) {
         this.initElectricityCosts();
         this.initSteamCosts();
         this.initFuelCosts();
         this.initOpHours();
         if (this.showElectricityCosts || this.showFuelCosts || this.showSteamCosts || this.showOpHours) {
           this.showOperations = true;
-        }else{
+        }else {
           this.showOperations = false;
         }
       }
@@ -58,67 +58,67 @@ export class ExploreOperationsFormComponent implements OnInit {
 
 
   initElectricityCosts() {
-    if (this.phast.operatingCosts.electricityCost != this.phast.modifications[this.exploreModIndex].phast.operatingCosts.electricityCost) {
+    if (this.phast.operatingCosts.electricityCost !== this.phast.modifications[this.exploreModIndex].phast.operatingCosts.electricityCost) {
       this.showElectricityCosts = true;
-    }else{
+    }else {
       this.showElectricityCosts = false;
     }
   }
 
   initSteamCosts() {
-    if (this.phast.operatingCosts.steamCost != this.phast.modifications[this.exploreModIndex].phast.operatingCosts.steamCost) {
+    if (this.phast.operatingCosts.steamCost !== this.phast.modifications[this.exploreModIndex].phast.operatingCosts.steamCost) {
       this.showSteamCosts = true;
-    }else{
+    }else {
       this.showSteamCosts = false;
     }
   }
 
   initFuelCosts() {
-    if (this.phast.operatingCosts.fuelCost != this.phast.modifications[this.exploreModIndex].phast.operatingCosts.fuelCost) {
+    if (this.phast.operatingCosts.fuelCost !== this.phast.modifications[this.exploreModIndex].phast.operatingCosts.fuelCost) {
       this.showFuelCosts = true;
-    }else{
+    }else {
       this.showFuelCosts = false;
     }
   }
 
   initOpHours() {
-    if (this.phast.operatingHours.hoursPerYear != this.phast.modifications[this.exploreModIndex].phast.operatingHours.hoursPerYear) {
+    if (this.phast.operatingHours.hoursPerYear !== this.phast.modifications[this.exploreModIndex].phast.operatingHours.hoursPerYear) {
       this.showOpHours = true;
-    }else{
+    }else {
       this.showOpHours = false;
     }
   }
 
   toggleElectricityCosts() {
-    if (this.showElectricityCosts == false) {
+    if (this.showElectricityCosts === false) {
       this.phast.modifications[this.exploreModIndex].phast.operatingCosts.electricityCost = this.phast.operatingCosts.electricityCost;
       this.calculate();
     }
   }
 
   toggleSteamCosts() {
-    if (this.showSteamCosts == false) {
+    if (this.showSteamCosts === false) {
       this.phast.modifications[this.exploreModIndex].phast.operatingCosts.steamCost = this.phast.operatingCosts.steamCost;
       this.calculate();
     }
   }
 
   toggleFuelCosts() {
-    if (this.showFuelCosts == false) {
+    if (this.showFuelCosts === false) {
       this.phast.modifications[this.exploreModIndex].phast.operatingCosts.fuelCost = this.phast.operatingCosts.fuelCost;
       this.calculate();
     }
   }
 
   toggleOpHours() {
-    if (this.showOpHours == false) {
+    if (this.showOpHours === false) {
       this.phast.modifications[this.exploreModIndex].phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerYear;
       this.calculate();
     }
   }
 
   toggleOperations() {
-    if (this.showOperations == false) {
+    if (this.showOperations === false) {
       this.showOpHours = false;
       this.showElectricityCosts = false;
       this.showSteamCosts = false;
@@ -136,7 +136,7 @@ export class ExploreOperationsFormComponent implements OnInit {
       tabName: 'Operations',
       step: 1,
       componentStr: 'operations' 
-    })
+    });
   }
 
   calculate() {

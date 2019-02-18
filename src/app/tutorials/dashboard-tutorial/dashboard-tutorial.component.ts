@@ -24,7 +24,7 @@ export class DashboardTutorialComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.next();
-    }, 1000)
+    }, 1000);
   }
 
   next() {
@@ -45,7 +45,7 @@ export class DashboardTutorialComponent implements OnInit {
     this.closeTutorial.emit(true);
   }
 
-  sendDontShow(){
+  sendDontShow() {
     this.settingsDbService.globalSettings.disableDashboardTutorial = this.dontShow;
     this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
       this.settingsDbService.setAll();

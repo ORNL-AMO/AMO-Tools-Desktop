@@ -102,7 +102,7 @@ export class PhastComponent implements OnInit {
         //use copy of phast object of as modal provided to forms
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
         if (this._phast.modifications) {
-          if (this._phast.modifications.length != 0) {
+          if (this._phast.modifications.length !== 0) {
             if (!this._phast.modifications[0].exploreOpportunities) {
               this.phastService.assessmentTab.next('modify-conditions');
             }
@@ -113,7 +113,7 @@ export class PhastComponent implements OnInit {
         }
         //get settings
         this.getSettings();
-      })
+      });
       //check to see if we need to start on a specified tab
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
@@ -126,26 +126,26 @@ export class PhastComponent implements OnInit {
         //on tab change get container height
         this.getContainerHeight();
         this.checkTutorials();
-      })
+      });
       //subscription for stepTab
       this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
         this.stepTab = val;
         //on tab change get container height
         this.getContainerHeight();
-      })
+      });
       //specTab used for: system basics, operating hours and operating costs
       this.specTabSubscription = this.phastService.specTab.subscribe(val => {
         this.specTab = val;
-      })
+      });
       //tabs used for heat balance
       this.lossesTabSubscription = this.lossesService.lossesTab.subscribe(tab => {
         this.selectedLossTab = this.lossesService.getTab(tab);
-      })
+      });
       //modify conditions or explore opps tab
       this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(tab => {
         this.assessmentTab = tab;
         this.getContainerHeight();
-      })
+      });
     });
     //calculator tab
     this.calcTabSubscription = this.phastService.calcTab.subscribe(val => {
@@ -154,26 +154,26 @@ export class PhastComponent implements OnInit {
 
     this.openModListSubscription = this.lossesService.openModificationModal.subscribe(val => {
       if (val) {
-        this.selectModificationModal()
+        this.selectModificationModal();
       }
-    })
+    });
     this.selectedModSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
-      if (this.mainTab == 'assessment') {
+      if (this.mainTab === 'assessment') {
         if (mod && this._phast) {
           this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
-            return val.phast.name == mod.name
-          })
+            return val.phast.name === mod.name;
+          });
         } else {
           this.modificationIndex = undefined;
         }
       }
-    })
+    });
 
     this.addNewSubscription = this.lossesService.openNewModal.subscribe(val => {
       if (val) {
         this.showAddNewModal();
       }
-    })
+    });
   }
 
 
@@ -181,7 +181,7 @@ export class PhastComponent implements OnInit {
     //after init show disclaimer toasty
     this.disclaimerToast();
     setTimeout(() => {
-      //intialize container height after content is rendered
+      //initialize container height after content is rendered
       this.getContainerHeight();
     }, 100);
   }
@@ -250,17 +250,17 @@ export class PhastComponent implements OnInit {
   }
 
   checkTutorials() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab === 'system-setup') {
       if (!this.settingsDbService.globalSettings.disablePhastSetupTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('phast-setup-tutorial');
       }
-    } else if (this.mainTab == 'assessment') {
+    } else if (this.mainTab === 'assessment') {
       if (!this.settingsDbService.globalSettings.disablePhastAssessmentTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('phast-assessment-tutorial');
       }
-    } else if (this.mainTab == 'report') {
+    } else if (this.mainTab === 'report') {
       if (!this.settingsDbService.globalSettings.disablePhastReportTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('phast-report-tutorial');
@@ -301,8 +301,8 @@ export class PhastComponent implements OnInit {
         results => {
           this.settingsDbService.setAll().then(() => {
             this.getSettings();
-          })
-        })
+          });
+        });
     }
     else {
       //if no settings for directory check parent directory
@@ -322,14 +322,14 @@ export class PhastComponent implements OnInit {
   }
   //logic for next step
   nextStep() {
-    if (this.stepTab.step == 1 && this.mainTab != 'assessment') {
+    if (this.stepTab.step === 1 && this.mainTab !== 'assessment') {
       if (this.specTab.next)
         this.phastService.goToSpec(this.specTab.next);
       else {
         this.phastService.goToStep(this.stepTab.next);
       }
     }
-    else if (this.stepTab.step == 2 || this.mainTab == 'assessment') {
+    else if (this.stepTab.step === 2 || this.mainTab === 'assessment') {
       if (this.selectedLossTab.next) {
         this.lossesService.lossesTab.next(this.selectedLossTab.next);
       } else {
@@ -341,12 +341,12 @@ export class PhastComponent implements OnInit {
   }
   //logic for previous step
   lastStep() {
-    if (this.mainTab == 'system-setup') {
-      if (this.stepTab.step == 1) {
+    if (this.mainTab === 'system-setup') {
+      if (this.stepTab.step === 1) {
         if (this.specTab.back) {
           this.phastService.goToSpec(this.specTab.back);
         }
-      } else if (this.stepTab.step == 2) {
+      } else if (this.stepTab.step === 2) {
         if (this.selectedLossTab.back) {
           this.lossesService.lossesTab.next(this.selectedLossTab.back);
         } else {
@@ -355,8 +355,8 @@ export class PhastComponent implements OnInit {
       } else if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
       }
-    } else if (this.mainTab == 'assessment') {
-      if (this.assessmentTab == 'modify-conditions') {
+    } else if (this.mainTab === 'assessment') {
+      if (this.assessmentTab === 'modify-conditions') {
         if (this.selectedLossTab.back) {
           this.lossesService.lossesTab.next(this.selectedLossTab.back);
         } else {
@@ -365,7 +365,7 @@ export class PhastComponent implements OnInit {
       } else {
         this.phastService.mainTab.next('system-setup');
       }
-    } else if (this.mainTab == 'system-setup') {
+    } else if (this.mainTab === 'system-setup') {
       if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
       }
@@ -399,7 +399,7 @@ export class PhastComponent implements OnInit {
       showClose: true,
       timeout: 10000000,
       theme: 'default'
-    }
+    };
     this.toastyService.info(toastOptions);
   }
 
@@ -459,7 +459,7 @@ export class PhastComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       }
-    }
+    };
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this._phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this._phast.operatingCosts)));
     tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this._phast.operatingHours)));

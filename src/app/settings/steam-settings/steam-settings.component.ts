@@ -55,9 +55,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.pressureMeasurements.push(tmpPossibility);
-    })
+    });
 
     //temperatureMeasurements
     tmpList = [
@@ -70,9 +70,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.temperatureMeasurements.push(tmpPossibility);
-    })
+    });
 
     //specificEnthalpyMeasurements
     tmpList = [
@@ -83,9 +83,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.steamSpecificEnthalpyMeasurements.push(tmpPossibility);
-    })
+    });
 
     //specificEntropyMeasurements
     tmpList = [
@@ -96,9 +96,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.steamSpecificEntropyMeasurements.push(tmpPossibility);
-    })
+    });
 
     //specificVolumeMeasurements
     tmpList = [
@@ -110,9 +110,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.specificVolumeMeasurements.push(tmpPossibility);
-    })
+    });
 
     //massFlowMeasurements
     tmpList = [
@@ -124,9 +124,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.steamMassFlowMeasurements.push(tmpPossibility);
-    })
+    });
 
     //steamEnergyMeasurements
     tmpList = [
@@ -139,29 +139,29 @@ export class SteamSettingsComponent implements OnInit {
       'kgoe',
       'kWh',
       'MJ'
-    ]
+    ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.steamEnergyMeasurements.push(tmpPossibility);
-    })
+    });
 
     tmpList = [
       'kW',
       'MJh',
       'GJh'
-    ]
+    ];
 
     tmpList.forEach(unit => {
 
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.steamPowerMeasurements.push(tmpPossibility);
-    })
+    });
 
     //steam vacuum
     tmpList = [
@@ -178,9 +178,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.steamVacuumPreasureMeasurements.push(tmpPossibility);
-    })
+    });
     //steam volume
     tmpList = [
       'gal',
@@ -191,9 +191,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.steamVolumeMeasurements.push(tmpPossibility);
-    })
+    });
     //steam volume flow
     tmpList = [
       'gpm',
@@ -204,9 +204,9 @@ export class SteamSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.steamVolumeFlowMeasurements.push(tmpPossibility);
-    })
+    });
   }
 
   save() {
@@ -227,8 +227,8 @@ export class SteamSettingsComponent implements OnInit {
 
   getPowerDisplay(unit: any) {
     if (unit) {
-      if (unit == 'kWh') {
-        return '(kW)'
+      if (unit === 'kWh') {
+        return '(kW)';
       } else {
         return this.convertUnitsService.getUnit(unit).unit.name.display;
       }

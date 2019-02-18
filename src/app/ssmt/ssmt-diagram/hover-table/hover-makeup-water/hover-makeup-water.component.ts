@@ -20,10 +20,10 @@ export class HoverMakeupWaterComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.combined){
+    if (this.combined) {
       this.makeupWater = this.outputData.makeupWaterAndCondensateHeader;
       this.makeupWaterLabel = 'Make-up Water and Condensate';
-    }else{
+    }else {
       this.makeupWater = this.outputData.makeupWater;
       this.makeupWaterLabel = 'Make-up Water';
     }

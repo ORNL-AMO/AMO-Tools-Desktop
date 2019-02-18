@@ -55,12 +55,12 @@ export class FixtureSummaryComponent implements OnInit {
             this.phast.modifications.forEach(mod => {
               let modData = mod.phast.losses.fixtureLosses[index];
               modificationData.push(modData);
-            })
+            });
           }
           this.lossData.push({
             baseline: loss,
             modifications: modificationData
-          })
+          });
           //initialize array values for every defined loss
           this.materialNameDiff.push(false);
           this.specificHeatDiff.push(false);
@@ -70,7 +70,7 @@ export class FixtureSummaryComponent implements OnInit {
           this.correctionFactorDiff.push(false);
           //index +1 for next loss
           index++;
-        })
+        });
       }
     }
   }
@@ -79,10 +79,10 @@ export class FixtureSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change
@@ -96,11 +96,11 @@ export class FixtureSummaryComponent implements OnInit {
 
   getMaterialName(id: number) {
     if (id) {
-      let option = this.materialOptions.find(val => { return id == val.id });
+      let option = this.materialOptions.find(val => { return id === val.id; });
       if (option) {
         return option.substance;
       } else {
-        return ''
+        return '';
       }
     }
     return '';
@@ -110,11 +110,11 @@ export class FixtureSummaryComponent implements OnInit {
     console.log(loss);
     let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(loss.materialName);
     if (material) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC')
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
         material.specificHeatSolid = this.roundVal(val, 4);
       }
-      if (material.specificHeatSolid != loss.specificHeat) {
+      if (material.specificHeatSolid !== loss.specificHeat) {
         return true;
       } else {
         return false;

@@ -15,7 +15,7 @@ export class ExtendedSurfaceLossesService {
       'ambientTemp': ['', Validators.required],
       'surfaceEmissivity': [0.9, Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   getSurfaceLossForm(wallLoss: ExtendedSurface): FormGroup {
@@ -25,7 +25,7 @@ export class ExtendedSurfaceLossesService {
       'ambientTemp': [wallLoss.ambientTemperature, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
       'name': [wallLoss.name]
-    })
+    });
   }
   //get WallLoss from form
   getSurfaceLossFromForm(wallLossForm: FormGroup): ExtendedSurface {
@@ -35,7 +35,7 @@ export class ExtendedSurfaceLossesService {
       surfaceTemperature: wallLossForm.controls.avgSurfaceTemp.value,
       surfaceEmissivity: wallLossForm.controls.surfaceEmissivity.value,
       name: wallLossForm.controls.name.value
-    }
+    };
     return tmpWallLoss;
   }
 
@@ -44,7 +44,7 @@ export class ExtendedSurfaceLossesService {
       surfaceAreaWarning: this.checkSurfaceArea(loss),
       temperatureWarning: this.checkAmbientTemp(loss),
       emissivityWarning: this.checkEmissivity(loss)
-    }
+    };
   }
   checkAmbientTemp(loss: ExtendedSurface): string {
     if (loss.ambientTemperature > loss.surfaceTemperature) {

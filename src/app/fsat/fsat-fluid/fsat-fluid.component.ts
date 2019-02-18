@@ -40,12 +40,12 @@ export class FsatFluidComponent implements OnInit {
     { display: 'Wet Bulb Temperature', value: 'wetBulb' },
     { display: 'Gas Dew Point', value: 'dewPoint' },
     { display: 'Use Custom Density', value: 'custom' },
-  ]
+  ];
 
   gasTypes: Array<{ display: string, value: string }> = [
     { display: 'Air', value: 'AIR' },
     { display: 'Other Gas', value: 'OTHER' }
-  ]
+  ];
 
   idString: string;
   constructor(private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
@@ -103,11 +103,11 @@ export class FsatFluidComponent implements OnInit {
   }
 
   getDensity() {
-    if (this.gasDensityForm.controls.inputType.value == 'relativeHumidity') {
+    if (this.gasDensityForm.controls.inputType.value === 'relativeHumidity') {
       this.calcDensityRelativeHumidity();
-    } else if (this.gasDensityForm.controls.inputType.value == 'wetBulb') {
+    } else if (this.gasDensityForm.controls.inputType.value === 'wetBulb') {
       this.calcDensityWetBulb();
-    } else if (this.gasDensityForm.controls.inputType.value == 'dewPoint') {
+    } else if (this.gasDensityForm.controls.inputType.value === 'dewPoint') {
       this.calcDensityDewPoint();
     } else {
       this.save();
@@ -119,7 +119,7 @@ export class FsatFluidComponent implements OnInit {
     let newDensity: number = this.fsatService.getBaseGasDensityWetBulb(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
-    })
+    });
     this.save();
   }
 
@@ -128,7 +128,7 @@ export class FsatFluidComponent implements OnInit {
     let newDensity: number = this.fsatService.getBaseGasDensityRelativeHumidity(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
-    })
+    });
     this.save();
   }
 
@@ -137,11 +137,11 @@ export class FsatFluidComponent implements OnInit {
     let newDensity: number = this.fsatService.getBaseGasDensityDewPoint(tmpObj, this.settings);
     this.gasDensityForm.patchValue({
       gasDensity: newDensity
-    })
+    });
     this.save();
   }
 
-  changeMethod(){
+  changeMethod() {
     this.gasDensityForm = this.fsatFluidService.updateGasDensityForm(this.gasDensityForm);
     this.getDensity();
   }

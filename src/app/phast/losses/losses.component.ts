@@ -65,8 +65,8 @@ export class LossesComponent implements OnInit {
 
     this.lossTabSubscription = this.lossesService.lossesTab.subscribe(val => {
       this.changeField('default');
-      this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
-    })
+      this.selectedTab = _.find(this.lossesTabs, (t) => { return val === t.step; });
+    });
 
     if (!this.inSetup) {
       this.baselineSelected = false;
@@ -79,12 +79,12 @@ export class LossesComponent implements OnInit {
         showClose: true,
         theme: 'default',
         timeout: 10000000
-      }
+      };
       this.toastyService.warning(toastOptions);
     }
     this.modalOpenSubscription = this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
-    })
+    });
     this.lossesService.updateTabs.next(true);
     this.saveModifications(true);
   }
@@ -115,7 +115,7 @@ export class LossesComponent implements OnInit {
     this.phastCompareService.setCompareVals(this.phast, this.modificationIndex, this.inSetup);
     this.saved.emit(true);
     this.toggleCalculate = !this.toggleCalculate;
-    if (this.phast.modifications.length != 0) {
+    if (this.phast.modifications.length !== 0) {
       this.modificationExists = true;
     } else {
       this.modificationExists = false;
@@ -135,11 +135,11 @@ export class LossesComponent implements OnInit {
   }
 
   togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
+    if (bool === this.baselineSelected) {
       this.baselineSelected = true;
       this.modificationSelected = false;
     }
-    else if (bool == this.modificationSelected) {
+    else if (bool === this.modificationSelected) {
       this.modificationSelected = true;
       this.baselineSelected = false;
     }

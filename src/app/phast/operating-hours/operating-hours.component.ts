@@ -29,7 +29,7 @@ export class OperatingHoursComponent implements OnInit {
         shiftsPerDay: Infinity,
         hoursPerShift: 8,
         hoursPerYear: 8736
-      }
+      };
       this.phast.operatingHours = defaultHours;
       this.calculatHrsPerYear();
     } else if (!this.phast.operatingHours.hoursPerYear) {
@@ -68,9 +68,9 @@ export class OperatingHoursComponent implements OnInit {
     this.startSavePolling();
     this.phast.operatingHours.isCalculated = true;
     this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
-    if(this.phast.operatingHours.hoursPerYear > 8760){
-      this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
-    }else{
+    if (this.phast.operatingHours.hoursPerYear > 8760) {
+      this.hoursPerYearError = "Number of hours/year is greater than hours in a year.";
+    }else {
       this.hoursPerYearError = null;
     }
 

@@ -57,11 +57,11 @@ export class SsmtReportComponent implements OnInit {
           this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
           let modLosses: SSMTLosses = this.calculateLossesService.calculateLosses(resultData.outputData, resultData.inputData, this.settings);
           this.modificationLosses.push({ outputData: modLosses, name: modification.ssmt.name });
-        })
+        });
       }
       this.getTableCellWidth();
       this.dataCalculated = true;
-    }, 10)
+    }, 10);
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
@@ -72,7 +72,7 @@ export class SsmtReportComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    }, 100)
+    }, 100);
   }
 
   getContainerHeight() {
@@ -85,7 +85,7 @@ export class SsmtReportComponent implements OnInit {
     this.currentTab = str;
   }
 
-  getTableCellWidth(){
+  getTableCellWidth() {
     this.tableCellWidth = 85 / (this.modificationOutputs.length + 1);
   }
 }

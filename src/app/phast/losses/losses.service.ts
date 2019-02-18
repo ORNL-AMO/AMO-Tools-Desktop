@@ -40,7 +40,7 @@ export class LossesService {
   }
 
   getTab(num: number) {
-    let newTab = _.find(this.lossesTabs, (t) => { return num == t.step });
+    let newTab = _.find(this.lossesTabs, (t) => { return num === t.step; });
     return newTab;
   }
 
@@ -48,71 +48,71 @@ export class LossesService {
     this.lossesTabs = new Array();
     defaultTabs.forEach(tab => {
       this.lossesTabs.push(tab);
-    })
-    if (settings.energySourceType == 'Electricity') {
-      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
+    });
+    if (settings.energySourceType === 'Electricity') {
+      if (settings.furnaceType === 'Electric Arc Furnace (EAF)') {
         this.lossesTabs.push({
           tabName: 'Slag',
           componentStr: 'slag'
-        })
+        });
         this.lossesTabs.push({
           tabName: 'Exhaust Gas',
           componentStr: 'exhaust-gas'
-        })
+        });
         this.lossesTabs.unshift({
           tabName: 'Energy Input',
           componentStr: 'energy-input'
-        })
+        });
       }
 
-      else if (settings.furnaceType != 'Custom Electrotechnology') {
+      else if (settings.furnaceType !== 'Custom Electrotechnology') {
         this.lossesTabs.push({
           tabName: 'Auxiliary Power',
           componentStr: 'auxiliary-power'
-        })
+        });
         this.lossesTabs.unshift({
           tabName: 'Energy Input',
           componentStr: 'energy-input-exhaust-gas'
-        })
+        });
       }
 
-      else if (settings.furnaceType == 'Custom Electrotechnology') {
+      else if (settings.furnaceType === 'Custom Electrotechnology') {
         this.lossesTabs.unshift({
           tabName: 'Heat System Efficiency',
           componentStr: 'heat-system-efficiency'
-        })
+        });
       }
     }
 
-    else if (settings.energySourceType == 'Steam') {
+    else if (settings.energySourceType === 'Steam') {
       this.lossesTabs.unshift({
         tabName: 'Heat System Efficiency',
         componentStr: 'heat-system-efficiency'
-      })
+      });
     }
 
-    else if (settings.energySourceType == 'Fuel') {
+    else if (settings.energySourceType === 'Fuel') {
       this.lossesTabs.unshift({
         tabName: 'Flue Gas',
         componentStr: 'flue-gas-losses'
-      })
+      });
     }
     this.lossesTabs.unshift({
       tabName: 'Charge Material',
       componentStr: 'charge-material',
       showAdd: true
-    })
+    });
     this.lossesTabs.unshift({
       tabName: 'Operations',
       componentStr: 'operations'
-    })
+    });
     let i = 0;
     let numTabs = this.lossesTabs.length;
     for (i; i < numTabs; i++) {
-      if (i == 1) {
+      if (i === 1) {
         this.lossesTabs[i].step = i + 1;
         this.lossesTabs[i].next = i + 2;
-      } else if (i == numTabs - 1) {
+      } else if (i === numTabs - 1) {
         this.lossesTabs[i].step = i + 1;
         this.lossesTabs[i].back = i;
       } else {
@@ -146,8 +146,8 @@ export class LossesService {
 
   checkSetupDone(phast: PHAST, settings: Settings) {
     let modExists = false;
-    if(phast.modifications){
-      if(phast.modifications.length != 0){
+    if (phast.modifications) {
+      if (phast.modifications.length !== 0) {
         modExists = true;
       }
     }
@@ -196,9 +196,9 @@ export class LossesService {
 
   checkChargeMaterials(phast: PHAST, settings: Settings) {
     if (phast.losses.chargeMaterials) {
-      if (phast.losses.chargeMaterials.length != 0) {
+      if (phast.losses.chargeMaterials.length !== 0) {
         let test = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
-        if (test != 0) {
+        if (test !== 0) {
           this.chargeDone = true;
         } else {
           this.chargeDone = false;
@@ -221,23 +221,23 @@ export class LossesService {
 
   checkFlueGas(phast: PHAST, settings: Settings) {
     if (phast.losses.flueGasLosses) {
-      if (phast.losses.flueGasLosses.length != 0) {
+      if (phast.losses.flueGasLosses.length !== 0) {
         let flueGas = phast.losses.flueGasLosses[0];
-        if (flueGas.flueGasType == 'By Mass') {
+        if (flueGas.flueGasType === 'By Mass') {
           let tmpForm = this.flueGasLossesService.initByMassFormFromLoss(flueGas);
-          if (tmpForm.status == 'VALID') {
+          if (tmpForm.status === 'VALID') {
             let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, settings);
-            if (test != 0) {
+            if (test !== 0) {
               this.flueGasDone = true;
             } else {
               this.flueGasDone = false;
             }
           }
-        } else if (flueGas.flueGasType == 'By Volume') {
+        } else if (flueGas.flueGasType === 'By Volume') {
           let tmpForm = this.flueGasLossesService.initByVolumeFormFromLoss(flueGas);
-          if (tmpForm.status == 'VALID') {
+          if (tmpForm.status === 'VALID') {
             let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, settings);
-            if (test != 0) {
+            if (test !== 0) {
               this.flueGasDone = true;
             } else {
               this.flueGasDone = false;
@@ -254,14 +254,14 @@ export class LossesService {
 
   checkEnergyInputExhaustGas(phast: PHAST, settings: Settings) {
     if (phast.losses.energyInputExhaustGasLoss) {
-      if (phast.losses.energyInputExhaustGasLoss.length != 0) {
+      if (phast.losses.energyInputExhaustGasLoss.length !== 0) {
         let test = this.phastService.sumEnergyInputExhaustGas(phast.losses.energyInputExhaustGasLoss, settings);
-        if (test != 0) {
+        if (test !== 0) {
           //fuel heat delivered not 0
-          this.enInput2Done = true
-        } else if (phast.losses.energyInputExhaustGasLoss[0].totalHeatInput == 0) {
-          //fuel heat delevired 0 && "Total heat for burners" = 0
-          this.enInput2Done = true
+          this.enInput2Done = true;
+        } else if (phast.losses.energyInputExhaustGasLoss[0].totalHeatInput === 0) {
+          //fuel heat delivered 0 && "Total heat for burners" = 0
+          this.enInput2Done = true;
         } else {
           this.enInput2Done = false;
         }
@@ -275,9 +275,9 @@ export class LossesService {
 
   checkEAF(phast: PHAST, settings: Settings) {
     if (phast.losses.energyInputEAF) {
-      if (phast.losses.energyInputEAF.length != 0) {
+      if (phast.losses.energyInputEAF.length !== 0) {
         let test = this.phastService.sumEnergyInputEAF(phast.losses.energyInputEAF, settings);
-        if (test != 0) {
+        if (test !== 0) {
           this.enInput1Done = true;
         } else {
           this.enInput1Done = false;

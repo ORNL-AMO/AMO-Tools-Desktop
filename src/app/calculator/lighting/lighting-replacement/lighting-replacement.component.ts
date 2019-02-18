@@ -46,10 +46,10 @@ export class LightingReplacementComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-    if(this.lightingReplacementService.baselineData){
+    if (this.lightingReplacementService.baselineData) {
       this.baselineData = this.lightingReplacementService.baselineData;
     }
-    if(this.lightingReplacementService.modificationData){
+    if (this.lightingReplacementService.modificationData) {
       this.modificationData = this.lightingReplacementService.modificationData;
       this.modificationExists = true;
     }
@@ -61,7 +61,7 @@ export class LightingReplacementComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.lightingReplacementService.baselineData = this.baselineData;
     this.lightingReplacementService.modificationData = this.modificationData;
   }
@@ -80,7 +80,7 @@ export class LightingReplacementComponent implements OnInit {
       lumensPerLamp: 0,
       totalLighting: 0,
       electricityUse: 0
-    }
+    };
     this.baselineData.push(newBaselineData);
     this.lightingReplacementService.baselineData = this.baselineData;
     this.lightingReplacementService.modificationData = this.modificationData;
@@ -88,11 +88,11 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
+    if (bool === this.baselineSelected) {
       this.baselineSelected = true;
       this.modifiedSelected = false;
     }
-    else if (bool == this.modifiedSelected) {
+    else if (bool === this.modifiedSelected) {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }
@@ -115,15 +115,15 @@ export class LightingReplacementComponent implements OnInit {
   calculate() {
     this.baselineData.forEach(data => {
       data = this.lightingReplacementService.calculate(data);
-    })
+    });
     this.baselineResults = this.lightingReplacementService.getTotals(this.baselineData);
     this.modificationData.forEach(data => {
       data = this.lightingReplacementService.calculate(data);
-    })
+    });
     this.modificationResults = this.lightingReplacementService.getTotals(this.modificationData);
   }
 
-  addBaselineFixture(){
+  addBaselineFixture() {
     this.baselineData.push({
       hoursPerDay: 0,
       daysPerMonth: 30,
@@ -139,20 +139,20 @@ export class LightingReplacementComponent implements OnInit {
     this.calculate();
   }
 
-  removeBaselineFixture(index: number){
+  removeBaselineFixture(index: number) {
     this.baselineData.splice(index, 1);
     this.calculate();
 
   }
 
-  addModification(){
+  addModification() {
     this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
     this.modificationExists = true;
     this.togglePanel(this.modifiedSelected);
   }
 
 
-  addModificationFixture(){
+  addModificationFixture() {
     this.modificationData.push({
       hoursPerDay: 0,
       daysPerMonth: 30,
@@ -168,12 +168,12 @@ export class LightingReplacementComponent implements OnInit {
     this.calculate();
   }
 
-  removeModificationFixture(index: number){
+  removeModificationFixture(index: number) {
     this.modificationData.splice(index, 1);
     this.calculate();
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.currentField = str;
   }
 }

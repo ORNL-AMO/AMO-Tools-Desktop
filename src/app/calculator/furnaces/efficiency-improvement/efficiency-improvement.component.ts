@@ -16,7 +16,7 @@ import { Assessment } from '../../../shared/models/assessment';
 })
 export class EfficiencyImprovementComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   assessment: Assessment;
   @Input()
@@ -121,7 +121,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       efficiencyImprovementInputs: tmpEfficiencyImprovementInputs
-    }
+    };
     return tmpCalculator;
   }
 
@@ -147,7 +147,7 @@ export class EfficiencyImprovementComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

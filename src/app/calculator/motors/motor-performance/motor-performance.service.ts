@@ -7,7 +7,7 @@ export class MotorPerformanceService {
   motorPerformanceInputs: MotorPerformanceInputs;
   constructor(private formBuilder: FormBuilder) { }
 
-  initFormFromPsat(psat: PSAT):FormGroup{
+  initFormFromPsat(psat: PSAT): FormGroup {
     return this.formBuilder.group({
       frequency: [50, [Validators.required]],
       horsePower: [psat.inputs.motor_rated_power, [Validators.required]],
@@ -20,7 +20,7 @@ export class MotorPerformanceService {
     });
   }
 
-  initForm():FormGroup{
+  initForm(): FormGroup {
    return this.formBuilder.group({
       frequency: [50, [Validators.required]],
       horsePower: [200, [Validators.required, Validators.min(0)]],
@@ -33,7 +33,7 @@ export class MotorPerformanceService {
     });
   }
 
-  initFormFromObj(inputs: MotorPerformanceInputs):FormGroup{
+  initFormFromObj(inputs: MotorPerformanceInputs): FormGroup {
     return this.formBuilder.group({
       frequency: [inputs.frequency, [Validators.required]],
       horsePower: [inputs.horsePower, [Validators.required]],
@@ -43,10 +43,10 @@ export class MotorPerformanceService {
       fullLoadAmps: [inputs.fullLoadAmps, [Validators.required]],
       sizeMargin: [1, [Validators.required]],
       efficiency: [inputs.efficiency, [Validators.min(0), Validators.max(100)]]
-    })
+    });
   }
 
-  getObjFromForm(form: FormGroup): MotorPerformanceInputs{
+  getObjFromForm(form: FormGroup): MotorPerformanceInputs {
     return {
       frequency: form.controls.frequency.value,
       horsePower: form.controls.horsePower.value,
@@ -56,18 +56,18 @@ export class MotorPerformanceService {
       fullLoadAmps: form.controls.fullLoadAmps.value,
       sizeMargin: form.controls.sizeMargin.value,
       efficiency: form.controls.efficiency.value,
-    }
+    };
   }
 }
 
 
-export interface MotorPerformanceInputs{
-  frequency: number,
-  horsePower: number,
-  motorRPM: number,
-  efficiencyClass: number,
-  motorVoltage: number,
-  fullLoadAmps: number,
-  sizeMargin: number,
-  efficiency: number,
+export interface MotorPerformanceInputs {
+  frequency: number;
+  horsePower: number;
+  motorRPM: number;
+  efficiencyClass: number;
+  motorVoltage: number;
+  fullLoadAmps: number;
+  sizeMargin: number;
+  efficiency: number;
 }

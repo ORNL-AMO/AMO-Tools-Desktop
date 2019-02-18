@@ -9,12 +9,12 @@ export class AchievableEfficiencyService {
   constructor(private formBuilder: FormBuilder) { }
 
 
-  getForm(pumpType: number, flowRate: number): FormGroup{
+  getForm(pumpType: number, flowRate: number): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       pumpType: [pumpType, Validators.required],
       flowRate: [flowRate, [Validators.required, Validators.min(0)]]
-    })
-    if(form.controls.flowRate.value){
+    });
+    if (form.controls.flowRate.value) {
       form.controls.flowRate.markAsDirty();
     }
     return form;

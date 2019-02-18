@@ -47,17 +47,17 @@ export class FsatSettingsComponent implements OnInit {
   densityOptions: Array<string> = [
     'kgNm3',
     'lbscf'
-  ]
+  ];
 
   barometricPressureOptions: Array<string> = [
     'kPaa',
     'inHg'
-  ]
+  ];
 
   specificHeatGasOptions: Array<string> = [
     'btulbF',
     'kJkgC'
-  ]
+  ];
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
@@ -66,53 +66,53 @@ export class FsatSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.flowMeasurements.push(tmpPossibility);
-    })
+    });
     this.pressureOptions.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.pressureMeasurements.push(tmpPossibility);
-    })
+    });
     this.powerOptions.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.powerMeasurements.push(tmpPossibility);
-    })
+    });
     this.tempOptions.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.temperatureMeasurements.push(tmpPossibility);
-    })
+    });
     this.densityOptions.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.densityMeasurements.push(tmpPossibility);
-    })
+    });
 
     this.barometricPressureOptions.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.barometricPressureMeasurements.push(tmpPossibility);
-    })
+    });
 
     this.specificHeatGasOptions.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.specificHeatMeasurements.push(tmpPossibility);
-    })
+    });
 
   }
 
@@ -125,7 +125,7 @@ export class FsatSettingsComponent implements OnInit {
   setCustom() {
     this.settingsForm.patchValue({
       unitsOfMeasure: 'Custom'
-    })
+    });
     this.emitSave();
   }
 

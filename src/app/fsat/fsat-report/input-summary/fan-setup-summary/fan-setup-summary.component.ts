@@ -53,11 +53,11 @@ export class FanSetupSummaryComponent implements OnInit {
             mods.push(this.fsat.modifications[i].fsat.fanSetup);
           }
         }
-        this.fanTypeDiff.push(false)
+        this.fanTypeDiff.push(false);
         this.fanSpeedDiff.push(false);
-        this.driveDiff.push(false)
+        this.driveDiff.push(false);
         // this.specifiedDriveEfficiencyDiff.push(false)
-        this.fanEfficiencyDiff.push(false)
+        this.fanEfficiencyDiff.push(false);
       }
       this.fanSetup = {
         baseline: this.fsat.fanSetup,
@@ -70,10 +70,10 @@ export class FanSetupSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change
@@ -92,20 +92,20 @@ export class FanSetupSummaryComponent implements OnInit {
 
 
   getFanType(fanTypeEnum: number): string {
-    let fanType: { value: number, display: string } = _.find(this.fanTypes, (val) => { return val.value == fanTypeEnum });
+    let fanType: { value: number, display: string } = _.find(this.fanTypes, (val) => { return val.value === fanTypeEnum; });
     if (fanType) {
       return fanType.display;
     } else {
-      return
+      return;
     }
   }
 
   getDriveType(driveTypeEnum: number): string {
-    let driveType: { value: number, display: string } = _.find(this.drives, (val) => { return val.value == driveTypeEnum });
+    let driveType: { value: number, display: string } = _.find(this.drives, (val) => { return val.value === driveTypeEnum; });
     if (driveType) {
       return driveType.display;
     } else {
-      return
+      return;
     }
   }
 }

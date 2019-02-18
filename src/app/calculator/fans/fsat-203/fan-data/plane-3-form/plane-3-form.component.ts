@@ -44,19 +44,19 @@ export class Plane3FormComponent implements OnInit {
   }
 
   showDataToggle() {
-    this.focusField('differentialReadings')
+    this.focusField('differentialReadings');
     this.showReadingsForm.emit(true);
   }
 
   setCoefficient() {
-    if (this.pitotDataForm.controls.pitotTubeType.value == 'Standard') {
+    if (this.pitotDataForm.controls.pitotTubeType.value === 'Standard') {
       this.pitotDataForm.patchValue({
         pitotTubeCoefficient: 1
-      })
-    } else if (this.pitotDataForm.controls.pitotTubeType.value == 'S-Type') {
+      });
+    } else if (this.pitotDataForm.controls.pitotTubeType.value === 'S-Type') {
       this.pitotDataForm.patchValue({
         pitotTubeCoefficient: .86
-      })
+      });
     }
     this.save();
   }

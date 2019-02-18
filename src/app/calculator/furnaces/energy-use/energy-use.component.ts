@@ -137,7 +137,7 @@ export class EnergyUseComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       flowCalculations: tmpFlowCalculations
-    }
+    };
     return tmpCalculator;
   }
 
@@ -163,7 +163,7 @@ export class EnergyUseComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

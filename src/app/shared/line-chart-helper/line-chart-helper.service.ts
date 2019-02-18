@@ -17,11 +17,11 @@ export class LineChartHelperService {
     return this.dArray;
   }
 
-  // Use this service for basic d3 funtions to build a line chart.
+  // Use this service for basic d3 functions to build a line chart.
   // Many features of a line chart will be specific to the chart in question, but this service aims
   // to come some of the general d3 functions out of the calculator components. Features such as
   // chart sizing, axis labels, ranges, exporting, and others will be implemented here while
-  // data-specific functionality will reamin in individual calculator graph components.
+  // data-specific functionality will remain in individual calculator graph components.
 
   //removes all svg elements from given parent element
   clearSvg(ngChart: ElementRef): ElementRef {
@@ -54,12 +54,12 @@ export class LineChartHelperService {
 
 
   setScale(scaleType: string, range: { min: number, max: number }, domain: { min: number, max: number }) {
-    if (scaleType == 'linear') {
+    if (scaleType === 'linear') {
       return d3.scaleLinear()
         .range([range.min, range.max])
         .domain([domain.min, domain.max]);
     }
-    else if (scaleType == 'log') {
+    else if (scaleType === 'log') {
       return d3.scaleLog()
         .range([range.min, range.max])
         .domain([domain.min, domain.max]);
@@ -275,7 +275,7 @@ export class LineChartHelperService {
           let pointerLeft: number = margin.left + xScale(dArray[0].x) - 10;
           let pointerTop: number;
           for (let j = 0; j < dArray.length; j++) {
-            if (j == 0) {
+            if (j === 0) {
               detailTop = yScale(dArray[j].y);
             }
             else if (detailTop < yScale(dArray[j].y)) {
@@ -375,7 +375,7 @@ export class LineChartHelperService {
     detailBox.html('');
     let htmlString: string;
     for (let i = 0; i < tooltipData.length; i++) {
-      if (i == 0) {
+      if (i === 0) {
         htmlString = "<p>" + "<strong>";
       }
       htmlString = htmlString + "<div style='float:left; position: relative; top: -10px;'>"
@@ -384,7 +384,7 @@ export class LineChartHelperService {
       if (i < tooltipData.length - 1) {
         htmlString = htmlString + "<br>";
       }
-      if (i == tooltipData.length - 1) {
+      if (i === tooltipData.length - 1) {
         htmlString = htmlString + "</strong>" + "</p>";
       }
     }
@@ -436,7 +436,7 @@ export class LineChartHelperService {
       .style("fill", fill)
       .style("stroke", stroke)
       .style("stroke-width", "3px")
-      .style('pointer-events', 'none')
+      .style('pointer-events', 'none');
     focus.append("text")
       .attr('dx', -4)
       .attr('dy', -10)

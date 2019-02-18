@@ -34,18 +34,18 @@ export class HeaderDiagramComponent implements OnInit {
   }
 
   hoverCondensate() {
-    this.emitSetHover.emit(this.pressureLevel+'CondensateHovered');
+    this.emitSetHover.emit(this.pressureLevel + 'CondensateHovered');
   }
 
   hoverHeader() {
-    this.emitSetHover.emit(this.pressureLevel+'Hovered');
+    this.emitSetHover.emit(this.pressureLevel + 'Hovered');
   }
 
   hoverProcessUsage() {
-    this.emitSetHover.emit(this.pressureLevel+'ProcessSteamHovered');
+    this.emitSetHover.emit(this.pressureLevel + 'ProcessSteamHovered');
   }
 
-  hoverProcessUsageInlet(){
-    this.emitSetHover.emit(this.pressureLevel+'ProcessSteamInletHovered');
+  hoverProcessUsageInlet() {
+    this.emitSetHover.emit(this.pressureLevel + 'ProcessSteamInletHovered');
   }
 }

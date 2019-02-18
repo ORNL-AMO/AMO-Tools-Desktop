@@ -13,11 +13,11 @@ export class MeasurComponent implements OnInit {
   ngOnInit() {
   }
 
-  showText(){
+  showText() {
     this.textShow = true;
   }
 
-  hideText(){
+  hideText() {
     this.textShow = false;
   }
 }

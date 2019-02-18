@@ -120,7 +120,7 @@ export class PreAssessmentComponent implements OnInit {
       }
       this.type = this.calculator.type;
       if (this.calculator.preAssessments) {
-        if (this.calculator.preAssessments.length != 0) {
+        if (this.calculator.preAssessments.length !== 0) {
           this.nameIndex = this.calculator.preAssessments.length;
           this.preAssessments = this.calculator.preAssessments;
         } else {
@@ -140,8 +140,8 @@ export class PreAssessmentComponent implements OnInit {
   setType(str: string) {
     this.calculator.type = str;
     this.type = str;
-    if (this.type == 'pump') {
-      this.calculator.preAssessments.length == 1;
+    if (this.type === 'pump') {
+      this.calculator.preAssessments.length === 1;
       this.calculator.preAssessments[0].settings.energySourceType = 'Electricity';
     }
   }
@@ -151,13 +151,13 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   setEnergySourceType(str: string) {
-    if (str != this.currentEnergySourceType) {
+    if (str !== this.currentEnergySourceType) {
       this.currentEnergySourceType = str;
     }
   }
 
   setAssessmentType(str: string) {
-    if (str != this.currentAssessmentType) {
+    if (str !== this.currentAssessmentType) {
       this.currentAssessmentType = str;
     }
   }
@@ -167,7 +167,7 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   setUnitsOfMeasure(str: string) {
-    if (this.settings.unitsOfMeasure != str) {
+    if (this.settings.unitsOfMeasure !== str) {
       this.convertData();
       this.settings.unitsOfMeasure = str;
     }
@@ -177,7 +177,7 @@ export class PreAssessmentComponent implements OnInit {
     if (this.calculator) {
       this.calculator.preAssessments = this.preAssessments;
       //save in assessment, in modal button needs to be clicked to save
-      if(this.inAssessment){
+      if (this.inAssessment) {
         this.saveCalculator();
       }
     }
@@ -222,22 +222,22 @@ export class PreAssessmentComponent implements OnInit {
 
   convertData() {
     this.preAssessments.forEach(assessment => {
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         let oldSettings: Settings = {
           unitsOfMeasure: 'Imperial'
         };
-        if (assessment.type == 'Metered') {
+        if (assessment.type === 'Metered') {
           assessment.meteredEnergy = this.convertPhastService.convertMeteredEnergy(assessment.meteredEnergy, oldSettings, this.settings);
-        } else if (assessment.type == 'Designed') {
+        } else if (assessment.type === 'Designed') {
           assessment.designedEnergy = this.convertPhastService.convertDesignedEnergy(assessment.designedEnergy, oldSettings, this.settings);
         }
-      } else if (this.settings.unitsOfMeasure == 'Imperial') {
+      } else if (this.settings.unitsOfMeasure === 'Imperial') {
         let oldSettings: Settings = {
           unitsOfMeasure: 'Metric'
         };
-        if (assessment.type == 'Metered') {
+        if (assessment.type === 'Metered') {
           assessment.meteredEnergy = this.convertPhastService.convertMeteredEnergy(assessment.meteredEnergy, oldSettings, this.settings);
-        } else if (assessment.type == 'Designed') {
+        } else if (assessment.type === 'Designed') {
           assessment.designedEnergy = this.convertPhastService.convertDesignedEnergy(assessment.designedEnergy, oldSettings, this.settings);
         }
       }
@@ -256,7 +256,7 @@ export class PreAssessmentComponent implements OnInit {
         this.preAssessments = this.calculator.preAssessments;
       } else {
         this.calculator.preAssessments = new Array<PreAssessment>();
-        this.preAssessments = this.calculator.preAssessments
+        this.preAssessments = this.calculator.preAssessments;
         this.addPreAssessment();
         this.saveCalculator();
       }
@@ -273,7 +273,7 @@ export class PreAssessmentComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       preAssessments: tmpPreAssessments
-    }
+    };
     return tmpCalculator;
   }
 
@@ -291,7 +291,7 @@ export class PreAssessmentComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

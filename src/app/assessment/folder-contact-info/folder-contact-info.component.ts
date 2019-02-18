@@ -64,13 +64,13 @@ export class FolderContactInfoComponent implements OnInit {
           this.checkShow();
           this.hideFacilityModal();
         });
-      })
+      });
     } else {
       this.indexedDbService.putSettings(this.settings).then(returnVal => {
         this.settingsDbService.setAll().then(() => {
           this.checkShow();
           this.hideFacilityModal();
-        })
+        });
       });
     }
   }

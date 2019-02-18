@@ -14,8 +14,8 @@ export class SlagService {
       'outletTemperature': ['', Validators.required],
       'specificHeat': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'name': ['Loss #'+lossNum]
-    })
+      'name': ['Loss #' + lossNum]
+    });
   }
 
   getFormFromLoss(slag: Slag): FormGroup {
@@ -26,7 +26,7 @@ export class SlagService {
       'specificHeat': [slag.specificHeat, Validators.required],
       'correctionFactor': [slag.correctionFactor, Validators.required],
       'name': [slag.name]
-    })
+    });
   }
 
   getLossFromForm(form: FormGroup): Slag {
@@ -37,7 +37,7 @@ export class SlagService {
       specificHeat: form.controls.specificHeat.value,
       correctionFactor: form.controls.correctionFactor.value,
       name: form.controls.name.value
-    }
+    };
     return tmpSlag;
   }
 }

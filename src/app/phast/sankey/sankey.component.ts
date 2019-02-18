@@ -75,9 +75,9 @@ export class SankeyComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.location != "sankey-diagram") {
+    if (this.location !== "sankey-diagram") {
       // this.location = this.location + this.modIndex.toString();
-      if (this.location == 'baseline') {
+      if (this.location === 'baseline') {
         this.location = this.assessmentName + '-baseline';
         this.isBaseline = true;
       }
@@ -104,7 +104,7 @@ export class SankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.phast) {
       if (!changes.phast.firstChange) {
-        if (this.location != "sankey-diagram") {
+        if (this.location !== "sankey-diagram") {
           if (this.isBaseline) {
             this.location = this.assessmentName + '-baseline';
           }
@@ -127,7 +127,7 @@ export class SankeyComponent implements OnInit {
       x: availableHeatX,
       y: availableHeatY,
       name: "Available Heat"
-    }
+    };
   }
 
   calculateExothermicPlacement() {
@@ -159,9 +159,9 @@ export class SankeyComponent implements OnInit {
     //create node linkes
     let links = new Array<any>();
     let i = 0;
-    for (i; i < results.nodes.length - 2;) {
+    for (i; i < results.nodes.length - 2; ) {
       links.push({ source: i, target: i + 1 });
-      if (i != 0) {
+      if (i !== 0) {
         links.push({ source: i, target: i + 2 });
         i = i + 2;
       } else {
@@ -264,14 +264,14 @@ export class SankeyComponent implements OnInit {
           else if (this.location !== 'sankey-diagram') {
             return d.x - 135;
           }
-          return d.x
+          return d.x;
         }
         else {
           return d.x;
         }
       })
       .attr("dy", (d) => {
-        if (d.input && d.name != "Exothermic Heat") {
+        if (d.input && d.name !== "Exothermic Heat") {
           if (this.location === 'sankey-diagram') {
             return d.y + (d.displaySize) + labelFontSize + labelPadding - 182;
           } else if (this.location !== 'sankey-diagram') {
@@ -334,7 +334,7 @@ export class SankeyComponent implements OnInit {
         }
       })
       .attr("dy", (d) => {
-        if (d.input && d.name != "Exothermic Heat") {
+        if (d.input && d.name !== "Exothermic Heat") {
           if (this.location === 'sankey-diagram') {
             return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2) - 182;
           } else if (this.location !== 'sankey-diagram') {
@@ -386,7 +386,7 @@ export class SankeyComponent implements OnInit {
         return d.y;
       })
       .text((d) => {
-        return d.name
+        return d.name;
       })
       .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
       .attr("fill", "white");
@@ -447,7 +447,7 @@ export class SankeyComponent implements OnInit {
           return d.y;
         })
         .text((d) => {
-          return d.name
+          return d.name;
         })
         .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
         .attr("fill", "black");
@@ -495,7 +495,7 @@ export class SankeyComponent implements OnInit {
           return d.y;
         })
         .text((d) => {
-          return d.name
+          return d.name;
         })
         .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
         .attr("fill", "black");
@@ -535,7 +535,7 @@ export class SankeyComponent implements OnInit {
         return d.y;
       })
       .text((d) => {
-        return d.name
+        return d.name;
       })
       .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
       .attr("fill", "white");
@@ -543,7 +543,7 @@ export class SankeyComponent implements OnInit {
 
     //exothermic heat
     let tmpExothermicHeat = this.sankeyService.getExothermicHeat();
-    if (tmpExothermicHeat != 0 && tmpExothermicHeat !== null) {
+    if (tmpExothermicHeat !== 0 && tmpExothermicHeat !== null) {
 
       let exothermicXSpacing = this.sankeyService.getExothermicHeatSpacing() - 100;
 
@@ -565,7 +565,7 @@ export class SankeyComponent implements OnInit {
           return d.y;
         })
         .text((d) => {
-          return d.name
+          return d.name;
         })
         .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px")
         .attr("fill", "black");
@@ -608,7 +608,7 @@ export class SankeyComponent implements OnInit {
       d.y = (height / 2 - nodes[0].displaySize / 2);
       if (d.inter) {
         // Reset heightbn
-        if (i == 1) {
+        if (i === 1) {
           // First interNode
           d.value = nodes[i - 1].value;
           d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
@@ -649,7 +649,7 @@ export class SankeyComponent implements OnInit {
             }
           }
         }
-        else if (d.name == 'Exothermic Heat') {
+        else if (d.name === 'Exothermic Heat') {
           // d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
           d.displaySize = this.calcDisplayValue(this.baseSize, Math.abs(d.value), nodes[0].value);
           // d.y += (nodes[i - 1].displaySize * 2) + alterVal;
@@ -773,7 +773,7 @@ export class SankeyComponent implements OnInit {
         this.svg.select("#end-" + location + "-" + i)
           .attr("fill", function () {
             return color(node_data.value);
-          })
+          });
       }
     });
 
@@ -830,7 +830,7 @@ export class SankeyComponent implements OnInit {
     svg.selectAll("input")
       .attr("value", function (d, i) {
         var format = d3.format(",");
-        if (i == 8) {
+        if (i === 8) {
           return format(nodes[15].value);
         }
         else {
@@ -839,7 +839,7 @@ export class SankeyComponent implements OnInit {
       })
       .each(function (d, i) {
         var format = d3.format(",");
-        if (i == 8) {
+        if (i === 8) {
           this.value = format(nodes[15].value);
         }
         else {
@@ -849,7 +849,7 @@ export class SankeyComponent implements OnInit {
     svg.selectAll("foreignObject")
       .data(nodes)
       .attr("x", function (d, i) {
-        if (i == 8) {
+        if (i === 8) {
           return nodes[15].x + (nodes[15].displaySize * .7) + 50;
         }
         else if (nodes[i * 2].input) {
@@ -863,7 +863,7 @@ export class SankeyComponent implements OnInit {
         if (nodes[i].input) {
           return (nodes[i * 2].y + (nodes[i * 2].displaySize / 2)) + 10;
         }
-        else if (i == 8) {
+        else if (i === 8) {
           return (nodes[15].y + (nodes[15].displaySize / 2)) + 10;
         }
         else {
@@ -896,7 +896,7 @@ export class SankeyComponent implements OnInit {
       });
     link
       .style("stroke", (d, i) => {
-        return "url(#linear-gradient-" + i + ")"
+        return "url(#linear-gradient-" + i + ")";
       });
     nodes_text
       .attr("dx", function (d) {
@@ -958,7 +958,7 @@ export class SankeyComponent implements OnInit {
       .attr("points", function () {
         let xVentAnchor = 520;
         let xLeftSideShift = 60;
-        let xRightSideShift = 120
+        let xRightSideShift = 120;
         return (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor - 150 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor - 150 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (250 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (250 + xLeftSideShift) + "," + ((height / 2) + 350) + "," + (width - 500 + xRightSideShift) + "," + ((height / 2) + 350) + "," + (width - 500 + xRightSideShift) + "," + ((height / 2) - 350) + "," + (xVentAnchor + 150 + xLeftSideShift) + "," + ((height / 2) - 350) + "," + (xVentAnchor + 150 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor + 100 + xLeftSideShift) + "," + ((height / 2) - 500) + "," + (xVentAnchor + 100 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + ((width - 500) - 50 + xRightSideShift) + "," + ((height / 2) - 300) + "," + ((width - 500) - 50 + xRightSideShift) + "," + ((height / 2) + 300) + "," + (300 + xLeftSideShift) + "," + ((height / 2) + 300) + "," + (300 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 300) + "," + (xVentAnchor - 100 + xLeftSideShift) + "," + ((height / 2) - 500);
       })
       .style("fill", "#bae4ce")

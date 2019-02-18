@@ -51,33 +51,33 @@ export class FanDataFormComponent implements OnInit {
   calcArea() {
     let tmpData = this.fsat203Service.getPlaneObjFromForm(this.dataForm, this.planeData);
     this.fsat203Service.planeShape.next(tmpData.planeType);
-    if (tmpData.planeType == 'Rectangular') {
+    if (tmpData.planeType === 'Rectangular') {
       let tmpArea = tmpData.length * tmpData.width;
       if (tmpData.numInletBoxes) {
-        tmpArea = tmpArea * tmpData.numInletBoxes
+        tmpArea = tmpArea * tmpData.numInletBoxes;
       }
       tmpArea = this.convertUnitsService.value(tmpArea).from('in2').to('ft2');
       this.dataForm.patchValue({
         'area': tmpArea
-      })
-    } else if (tmpData.planeType == 'Circular') {
+      });
+    } else if (tmpData.planeType === 'Circular') {
       let tmpArea = (Math.PI / 4) * (tmpData.length * tmpData.length);
       if (tmpData.numInletBoxes) {
-        tmpArea = tmpArea * tmpData.numInletBoxes
+        tmpArea = tmpArea * tmpData.numInletBoxes;
       }
       tmpArea = this.convertUnitsService.value(tmpArea).from('in2').to('ft2');
       this.dataForm.patchValue({
         'area': tmpArea
-      })
+      });
     }
     this.save();
   }
 
 
   convertArea(area: number): number {
-    if (this.settings.fanFlowRate == 'ft3/min') {
+    if (this.settings.fanFlowRate === 'ft3/min') {
       return this.convertUnitsService.value(area).from('in2').to('ft2');
-    } else if (this.settings.fanFlowRate == 'm3/s') {
+    } else if (this.settings.fanFlowRate === 'm3/s') {
       return this.convertUnitsService.value(area).from('mm2').to('m2');
     }
   }

@@ -110,7 +110,7 @@ export class ResetDataModalComponent implements OnInit {
       }
       setTimeout(() => {
         this.setAllDbData();
-      }, 1500)
+      }, 1500);
     }
   }
 
@@ -130,7 +130,7 @@ export class ResetDataModalComponent implements OnInit {
     this.indexedDbService.putSettings(tmpSettings).then(() => {
       this.settingsDbService.setAll().then(() => {
       });
-    })
+    });
   }
 
   resetFactoryExampleAssessments() {
@@ -140,7 +140,7 @@ export class ResetDataModalComponent implements OnInit {
       //create assessments
       this.createExampleAssessments(exampleDirectory.id);
     } else {
-      //example directory doesnt exists
+      //example directory doesn't exists
       //create example directory
       let tmpDirectory: Directory = {
         name: 'Examples',
@@ -148,7 +148,7 @@ export class ResetDataModalComponent implements OnInit {
         modifiedDate: new Date(),
         parentDirectoryId: 1,
         isExample: true
-      }
+      };
       //create example directory
       this.indexedDbService.addDirectory(tmpDirectory).then(dirId => {
         //add example settings
@@ -158,8 +158,8 @@ export class ResetDataModalComponent implements OnInit {
         this.indexedDbService.addSettings(tmpSettings).then(() => {
           //create assessments
           this.createExampleAssessments(dirId);
-        })
-      })
+        });
+      });
     }
   }
 
@@ -173,7 +173,7 @@ export class ResetDataModalComponent implements OnInit {
       this.indexedDbService.deleteAssessment(psatExample.id).then(() => {
         //create
         this.createPsatExample(id);
-      })
+      });
     } else {
       this.createPsatExample(id);
     }
@@ -185,7 +185,7 @@ export class ResetDataModalComponent implements OnInit {
       this.indexedDbService.deleteAssessment(fsatExample.id).then(() => {
         //create
         this.createFsatExample(id);
-      })
+      });
     } else {
       this.createFsatExample(id);
     }
@@ -197,7 +197,7 @@ export class ResetDataModalComponent implements OnInit {
       this.indexedDbService.deleteAssessment(phastExample.id).then(() => {
         //create
         this.createPhastExample(id);
-      })
+      });
     } else {
       //create
       this.createPhastExample(id);
@@ -214,10 +214,10 @@ export class ResetDataModalComponent implements OnInit {
         MockPhastSettings.assessmentId = mockPhastId;
         //add settings
         this.indexedDbService.addSettings(MockPhastSettings).then(() => {
-          resolve(true)
+          resolve(true);
         });
       });
-    })
+    });
   }
 
   createPsatExample(dirId: number): Promise<any> {
@@ -232,7 +232,7 @@ export class ResetDataModalComponent implements OnInit {
           //add psat calcs
           MockPsatCalculator.assessmentId = assessmentId;
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
-            resolve(true)
+            resolve(true);
           });
         });
       });
@@ -251,7 +251,7 @@ export class ResetDataModalComponent implements OnInit {
           resolve(true);
         });
       });
-    })
+    });
   }
 
   resetFactoryUserAssessments() {
@@ -261,14 +261,14 @@ export class ResetDataModalComponent implements OnInit {
         this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
           this.coreService.createDirectory().then(() => {
             this.coreService.createDirectorySettings().then(() => {
-              //after dir setttings add check to see if we want to reset settings or keep existing
+              //after dir settings add check to see if we want to reset settings or keep existing
               if (!this.resetAppSettings) {
                 //keep existing
                 this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
                   this.coreService.createExamples().then(() => {
                     this.setAllDbData();
                   });
-                })
+                });
               } else {
                 //use reset settings
                 this.coreService.createExamples().then(() => {
@@ -289,10 +289,10 @@ export class ResetDataModalComponent implements OnInit {
           this.calculatorDbService.setAll().then(() => {
             this.assessmentService.updateSidebarData.next(true);
             this.hideResetSystemSettingsModal();
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
   resetFactoryCustomMaterials() {

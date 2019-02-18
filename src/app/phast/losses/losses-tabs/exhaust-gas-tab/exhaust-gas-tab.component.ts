@@ -36,19 +36,19 @@ export class ExhaustGasTabComponent implements OnInit {
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
-    })
+    });
     this.badgeHover = false;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.isDifferent && !this.inSetup){
+    }else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -66,17 +66,17 @@ export class ExhaustGasTabComponent implements OnInit {
     let testVal = false;
     if (this.exhaustGasCompareService.baselineExhaustGasLosses) {
       this.exhaustGasCompareService.baselineExhaustGasLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     if (this.exhaustGasCompareService.modifiedExhaustGasLosses && !this.inSetup) {
       this.exhaustGasCompareService.modifiedExhaustGasLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     return testVal;
   }
@@ -84,7 +84,7 @@ export class ExhaustGasTabComponent implements OnInit {
 
   checkLossValid(loss: ExhaustGasEAF) {
     let tmpForm: FormGroup = this.exhaustGasService.getFormFromLoss(loss);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;

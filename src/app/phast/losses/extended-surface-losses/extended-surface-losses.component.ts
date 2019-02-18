@@ -57,7 +57,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     }
   }
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -85,12 +85,12 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._surfaceLosses.push(tmpLoss);
-      })
+      });
       this.total = this.getTotal();
     }
   }
@@ -111,7 +111,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       //EXTENDED SURFACE LOSS = WALL LOSS WITH ASSUMPTIONS:
       //windVelocity = 5
       //correctionFactor = 1
@@ -125,7 +125,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
         surfaceEmissivity: tmpLoss.surfaceEmissivity,
         conditionFactor: 1,
         correctionFactor: 1,
-      }
+      };
       loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
     } else {
       loss.heatLoss = null;
@@ -144,7 +144,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpSurfaceLoss = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
@@ -168,7 +168,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 }
 
 export interface ExtSurfaceObj {
-  form: FormGroup,
-  heatLoss: number,
-  collapse: boolean
+  form: FormGroup;
+  heatLoss: number;
+  collapse: boolean;
 }

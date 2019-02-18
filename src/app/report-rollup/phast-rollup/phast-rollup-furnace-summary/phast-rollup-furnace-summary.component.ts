@@ -16,7 +16,7 @@ import { Subscriber, Subscription } from 'rxjs';
 })
 export class PhastRollupFurnaceSummaryComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   printView: boolean;
 
@@ -55,7 +55,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     'Energy Use',
     'Cost',
     'Energy Intensity'
-  ]
+  ];
   graphOption: string = 'Energy Use';
   resultsSub: Subscription;
   constructor(private reportRollupService: ReportRollupService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
@@ -63,7 +63,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
   ngOnInit() {
     this.resultData = new Array();
     this.resultsSub = this.reportRollupService.phastResults.subscribe((phasts: Array<PhastResultsData>) => {
-      if (phasts.length != 0) {
+      if (phasts.length !== 0) {
         this.resultData = phasts;
         if (this.printView) {
           this.chartContainerWidth = 1500;
@@ -87,7 +87,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 
@@ -114,31 +114,31 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
-      if (graphOption == '% Available Heat') {
+      if (graphOption === '% Available Heat') {
         this.unit = "%";
-        num1 = this.getAvailableHeat(data.baselineResultData, data.settings)
+        num1 = this.getAvailableHeat(data.baselineResultData, data.settings);
         if (data.modName) {
-          num2 = this.getAvailableHeat(data.modificationResultData, data.settings)
+          num2 = this.getAvailableHeat(data.modificationResultData, data.settings);
         }
-      } else if (graphOption == 'Energy Use') {
-        if (i == 1) {
+      } else if (graphOption === 'Energy Use') {
+        if (i === 1) {
           this.unit = this.settings.phastRollupUnit + '/yr';
         }
         num1 = this.getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings);
         if (data.modName) {
           num2 = this.getConvertedValue(data.modificationResults.annualEnergyUsed, data.settings);
         }
-      } else if (graphOption == 'Cost') {
-        if (i == 1) {
+      } else if (graphOption === 'Cost') {
+        if (i === 1) {
           this.unit = "$/yr";
         }
         num1 = data.baselineResults.annualCost;
         if (data.modName) {
           num2 = data.modificationResults.annualCost;
         }
-      } else if (graphOption == 'Energy Intensity') {
-        if (i == 1) {
-          if (this.settings.unitsOfMeasure == 'Metric') {
+      } else if (graphOption === 'Energy Intensity') {
+        if (i === 1) {
+          if (this.settings.unitsOfMeasure === 'Metric') {
             this.unit = this.settings.phastRollupUnit + '/kg';
           } else {
             this.unit = this.settings.phastRollupUnit + '/lb';
@@ -187,7 +187,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     }
 
     if (resultCategories.showExGas) {
-      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100
+      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100;
     }
   }
 

@@ -28,31 +28,31 @@ export class PsatSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.assessmentSub = this.reportRollupService.psatAssessments.subscribe(val => {
-      this.numPsats = val.length
-      if (val.length != 0) {
+      this.numPsats = val.length;
+      if (val.length !== 0) {
         this.reportRollupService.initResultsArr(val);
       }
-    })
+    });
 
     this.allSub = this.reportRollupService.allPsatResults.subscribe(val => {
-      if (val.length != 0) {
+      if (val.length !== 0) {
         this.reportRollupService.initPsatCompare(val);
       }
-    })
+    });
     this.selectedSub = this.reportRollupService.selectedPsats.subscribe(val => {
-      if (val.length != 0) {
+      if (val.length !== 0) {
         this.reportRollupService.getResultsFromSelected(val);
       }
-    })
+    });
 
     this.resultsSub = this.reportRollupService.psatResults.subscribe(val => {
-      if (val.length != 0) {
+      if (val.length !== 0) {
         this.calcPsatSums(val);
       }
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.assessmentSub.unsubscribe();
     this.allSub.unsubscribe();
     this.selectedSub.unsubscribe();
@@ -71,7 +71,7 @@ export class PsatSummaryComponent implements OnInit {
       let diffEnergy = result.baselineResults.annual_energy - result.modificationResults.annual_energy;
       sumEnergySavings += diffEnergy;
       sumEnergy += result.modificationResults.annual_energy;
-    })
+    });
     this.pumpSavingsPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;
     this.totalCost = sumCost;

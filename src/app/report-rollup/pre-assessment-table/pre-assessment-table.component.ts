@@ -25,7 +25,7 @@ export class PreAssessmentTableComponent implements OnInit {
   // preAssessments: Array<PreAssessment>;
   graphColors: Array<string>;
   data: Array<{ name: string, type: string, energyUse: number, energyCost: number, percentEnergy: number, percentCost: number, color: string }>;
-  unit: string
+  unit: string;
   totalEnergyUse: number;
   totalEnergyCost: number;
   directorySettings: Settings;
@@ -68,10 +68,10 @@ export class PreAssessmentTableComponent implements OnInit {
           percentEnergy: energyResults[i].percent / 100,
           percentCost: costResults[i].percent / 100,
           color: energyResults[i].color
-        }
+        };
         i++;
         this.data.unshift(tmpData);
-      })
+      });
     }
   }
 

@@ -37,21 +37,21 @@ export class OperationsTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
     this.badgeHover = false;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    }else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent && !this.inSetup){
+    }else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -62,17 +62,17 @@ export class OperationsTabComponent implements OnInit {
     let missingData = false;
     let hasWarning: boolean = false;
     if (this.operationsCompareService.baseline) {
-      if (this.checkLossValid(this.operationsCompareService.baseline) == false) {
+      if (this.checkLossValid(this.operationsCompareService.baseline) === false) {
         missingData = true;
       }
       let warnings: OperationsWarnings = this.operationsService.checkWarnings(this.operationsCompareService.baseline.operatingHours);
       let tmpHasWarning: boolean = this.operationsService.checkWarningsExist(warnings);
-      if (tmpHasWarning == true) {
+      if (tmpHasWarning === true) {
         hasWarning = tmpHasWarning;
       }
     }
     if (this.operationsCompareService.modification) {
-      if (this.checkLossValid(this.operationsCompareService.modification) == false) {
+      if (this.checkLossValid(this.operationsCompareService.modification) === false) {
         missingData = true;
       }
     }
@@ -82,7 +82,7 @@ export class OperationsTabComponent implements OnInit {
 
   checkLossValid(phast: PHAST) {
     let tmpForm: FormGroup = this.operationsService.initForm(phast);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;

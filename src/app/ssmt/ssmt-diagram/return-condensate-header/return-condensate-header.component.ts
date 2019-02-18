@@ -25,9 +25,9 @@ export class ReturnCondensateHeaderComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.condensateFlashTank){
+    if (this.condensateFlashTank) {
       this.condensateMassFlow = this.condensateFlashTank.outletLiquidMassFlow;
-    }else{
+    }else {
       this.condensateMassFlow = this.returnCondensate.massFlow;
     }
   }

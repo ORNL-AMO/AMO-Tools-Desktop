@@ -25,7 +25,7 @@ export class PumpCurveEquationFormComponent implements OnInit {
 
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
-  ]
+  ];
 
   constantWarning: string = null;
   maxFlowWarning: string = null;

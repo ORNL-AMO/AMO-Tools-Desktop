@@ -22,7 +22,6 @@ export class HeaderResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.getResultsData();
   }
 
   ngOnChanges() {

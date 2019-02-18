@@ -21,7 +21,6 @@ export class PrvResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
   }
 
   updateTable0String() {

@@ -55,13 +55,13 @@ export class CalculateFlowPressuresComponent implements OnInit {
       PlaneData: this.fsat.fieldData.planeData,
       FanShaftPower: undefined,
       BaseGasDensity: this.fsat.baseGasDensity
-    }
+    };
     this.isDataMissing = false;
     this.planeResults = this.fsatService.getPlaneResults(this.mockInputs, this.settings);
-    if (this.fsat.fieldData.pressureCalcResultType == 'static') {
+    if (this.fsat.fieldData.pressureCalcResultType === 'static') {
       this.fsat.fieldData.inletPressure = this.roundVal(this.planeResults.FanInletFlange.staticPressure, 5);
       this.fsat.fieldData.outletPressure = this.roundVal(this.planeResults.FanOrEvaseOutletFlange.staticPressure, 5);
-    } else if (this.fsat.fieldData.pressureCalcResultType == 'total') {
+    } else if (this.fsat.fieldData.pressureCalcResultType === 'total') {
       this.fsat.fieldData.inletPressure = this.roundVal(this.planeResults.FanInletFlange.gasTotalPressure, 5);
       this.fsat.fieldData.outletPressure = this.roundVal(this.planeResults.FanOrEvaseOutletFlange.gasTotalPressure, 5);
     }
@@ -70,7 +70,7 @@ export class CalculateFlowPressuresComponent implements OnInit {
   }
 
   roundVal(val, digits): number {
-    return Number((Math.round(val * 100) / 100).toFixed(digits))
+    return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 
   setTab(str: string) {
@@ -99,11 +99,11 @@ export class CalculateFlowPressuresComponent implements OnInit {
     this.currentPlane = str;
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.currentField = str;
   }
 
-  setFormSelect(str: string){
+  setFormSelect(str: string) {
     this.formSelect = str;
   }
 }

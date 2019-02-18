@@ -61,7 +61,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     //this.exploreOppsToast.emit(false);
   }
 
@@ -111,7 +111,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   //     if (!this.ssmt.modifications[this.modificationIndex].exploreOpportunities) {
   //       this.exploreOppsToast.emit(true);
   //       let toastOptions: ToastOptions = {
-  //         title: 'Explore Opportunites',
+  //         title: 'Explore Opportunities',
   //         msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
   //         showClose: true,
   //         timeout: 10000000,

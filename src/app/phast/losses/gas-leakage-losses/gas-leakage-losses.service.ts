@@ -17,7 +17,7 @@ export class GasLeakageLossesService {
       specificGravity: [1.0, Validators.required],
       correctionFactor: [1.0, Validators.required],
       name: ['Loss #' + lossNum]
-    })
+    });
   }
 
   initFormFromLoss(loss: LeakageLoss): FormGroup {
@@ -30,7 +30,7 @@ export class GasLeakageLossesService {
       specificGravity: [loss.specificGravity, Validators.required],
       correctionFactor: [loss.correctionFactor, Validators.required],
       name: [loss.name]
-    })
+    });
   }
 
   initLossFromForm(form: FormGroup): LeakageLoss {
@@ -43,7 +43,7 @@ export class GasLeakageLossesService {
       specificGravity: form.controls.specificGravity.value,
       correctionFactor: form.controls.correctionFactor.value,
       name: form.controls.name.value
-    }
+    };
     return tmpLoss;
   }
 
@@ -53,7 +53,7 @@ export class GasLeakageLossesService {
       specificGravityWarning: this.checkSpecificGravity(loss),
       draftPressureWarning: this.checkDraftPressure(loss),
       temperatureWarning: this.checkTemperature(loss)
-    }
+    };
   }
 
   checkOpeningArea(loss: LeakageLoss): string {

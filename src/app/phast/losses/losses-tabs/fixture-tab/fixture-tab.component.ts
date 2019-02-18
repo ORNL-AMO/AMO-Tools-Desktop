@@ -38,7 +38,7 @@ export class FixtureTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
 
     this.badgeHover = false;
   }
@@ -72,32 +72,32 @@ export class FixtureTabComponent implements OnInit {
     let hasWarning: boolean = false;
     if (this.fixtureLossesCompareService.baselineFixtureLosses) {
       this.fixtureLossesCompareService.baselineFixtureLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
         if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
           hasWarning = true;
         }
-      })
+      });
     }
     if (this.fixtureLossesCompareService.modifiedFixtureLosses && !this.inSetup) {
       this.fixtureLossesCompareService.modifiedFixtureLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: { specificHeatWarning: string, feedRateWarning: string } = this.fixtureLossesService.checkWarnings(loss);
         if (warnings.specificHeatWarning != null || warnings.feedRateWarning != null) {
           hasWarning = true;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
 
   checkLossValid(loss: FixtureLoss) {
     let tmpForm: FormGroup = this.fixtureLossesService.getFormFromLoss(loss);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;

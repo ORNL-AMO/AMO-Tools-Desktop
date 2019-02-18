@@ -17,7 +17,7 @@ export class RatedOperatingPointsFormComponent implements OnInit {
   options: Array<string> = [
     'Yes',
     'No'
-  ]
+  ];
   constructor() { }
 
   ngOnInit() {

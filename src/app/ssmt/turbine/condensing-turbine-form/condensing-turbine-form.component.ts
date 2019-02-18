@@ -32,7 +32,7 @@ export class CondensingTurbineFormComponent implements OnInit {
 
   ngOnInit() {
     this.turbineOptionTypes = CondensingTurbineOperationTypes;
-    if (this.selected == false) {
+    if (this.selected === false) {
       this.disableForm();
     } else {
       this.enableForm();
@@ -41,7 +41,7 @@ export class CondensingTurbineFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected == false) {
+      if (this.selected === false) {
         this.disableForm();
       } else {
         this.enableForm();

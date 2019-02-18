@@ -33,7 +33,7 @@ export class EfficiencyImprovementService {
       newCombustionAirTemp: form.controls.newCombustionAirTemp.value,
       currentEnergyInput: form.controls.currentEnergyInput.value,
       newFlueGasTemp: form.controls.newFlueGasTemp.value,
-    }
+    };
     return this.efficiencyImprovementInputs;
   }
   
@@ -43,7 +43,7 @@ export class EfficiencyImprovementService {
   }
 
   initDefaultValues(settings: Settings): EfficiencyImprovementInputs {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       return {
         currentFlueGasOxygen: 6,
         newFlueGasOxygen: 2,
@@ -52,7 +52,7 @@ export class EfficiencyImprovementService {
         newCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(750).from('F').to('C'), 2),
         currentEnergyInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2),
         newFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(1600).from('F').to('C'), 2)
-      }
+      };
     }
     else {
       return {
@@ -63,7 +63,7 @@ export class EfficiencyImprovementService {
         newCombustionAirTemp: 750,
         currentEnergyInput: 10,
         newFlueGasTemp: 1600
-      }
+      };
     }
   }
 

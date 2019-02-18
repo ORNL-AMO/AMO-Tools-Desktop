@@ -43,7 +43,7 @@ export class SidebarComponent implements OnInit {
     }
     this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
       this.isUpdateAvailable = val;
-    })
+    });
 
   }
 
@@ -54,7 +54,7 @@ export class SidebarComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.workingDirectory && !this.firstChange) {
       if (changes.workingDirectory.currentValue) {
-        if (changes.workingDirectory.previousValue.id != changes.workingDirectory.currentValue.id) {
+        if (changes.workingDirectory.previousValue.id !== changes.workingDirectory.currentValue.id) {
           this.toggleSelected(this.workingDirectory);
           if (this.workingDirectory.collapsed) {
             this.toggleDirectoryCollapse(this.workingDirectory);
@@ -74,7 +74,7 @@ export class SidebarComponent implements OnInit {
   toggleSelected(dir: Directory) {
     this.assessmentService.dashboardView.next('assessment-dashboard');
     if (dir) {
-      if (dir.collapsed == true) {
+      if (dir.collapsed === true) {
         dir.collapsed = false;
       }
       this.selectedDirectoryId = dir.id;

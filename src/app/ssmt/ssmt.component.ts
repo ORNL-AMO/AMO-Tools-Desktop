@@ -43,7 +43,7 @@ export class SsmtComponent implements OnInit {
     'boiler',
     'header',
     'turbine'
-  ]
+  ];
 
   containerHeight: number;
   assessment: Assessment;
@@ -96,7 +96,7 @@ export class SsmtComponent implements OnInit {
         this.assessment = dbAssessment;
         this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
         if (this._ssmt.modifications) {
-          if (this._ssmt.modifications.length != 0) {
+          if (this._ssmt.modifications.length !== 0) {
             this.modificationExists = true;
             this.modificationIndex = 0;
             this.compareService.setCompareVals(this._ssmt, 0);
@@ -123,37 +123,37 @@ export class SsmtComponent implements OnInit {
       if (val) {
         this.showAddNewModal();
       }
-    })
+    });
 
     this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
       if (mod && this._ssmt) {
         this.modificationIndex = _.findIndex(this._ssmt.modifications, (val) => {
-          return val.ssmt.name == mod.name
-        })
+          return val.ssmt.name === mod.name;
+        });
       } else {
         this.modificationIndex = undefined;
       }
-    })
+    });
 
     this.openModificationSelectSubscription = this.ssmtService.openModificationSelectModal.subscribe(val => {
       if (val) {
-        this.selectModificationModal()
+        this.selectModificationModal();
       }
-    })
+    });
 
     this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
-    })
+    });
 
     this.calcTabSubscription = this.ssmtService.calcTab.subscribe(val => {
       this.calcTab = val;
-    })
+    });
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    }, 100)
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -176,21 +176,21 @@ export class SsmtComponent implements OnInit {
     this.mainTabSubscription = this.ssmtService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
-    })
+    });
     this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
       this.stepTab = val;
-      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab == val });
+      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab === val; });
 
       this.getContainerHeight();
-    })
+    });
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
       this.modelTab = val;
       this.getContainerHeight();
-    })
+    });
     this.assessmentTabSubscription = this.ssmtService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
       this.getContainerHeight();
-    })
+    });
   }
 
   saveSettings(newSettings: Settings) {
@@ -199,7 +199,7 @@ export class SsmtComponent implements OnInit {
       this.indexedDbService.putSettings(this.settings).then(() => {
         this.settingsDbService.setAll().then(() => {
         });
-      })
+      });
     }
   }
 
@@ -227,8 +227,8 @@ export class SsmtComponent implements OnInit {
         results => {
           this.settingsDbService.setAll().then(() => {
             this.getSettings();
-          })
-        })
+          });
+        });
     }
     else {
       //if no settings for directory check parent directory
@@ -239,7 +239,7 @@ export class SsmtComponent implements OnInit {
 
   save() {
     if (this._ssmt.modifications) {
-      if (this._ssmt.modifications.length == 0) {
+      if (this._ssmt.modifications.length === 0) {
         this.modificationExists = false;
       } else {
         this.modificationExists = true;
@@ -260,8 +260,8 @@ export class SsmtComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.ssmtService.updateData.next(true);
-      })
-    })
+      });
+    });
   }
 
 
@@ -302,13 +302,13 @@ export class SsmtComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'system-setup') {
-      if (this.stepTab != 'system-basics') {
+    if (this.mainTab === 'system-setup') {
+      if (this.stepTab !== 'system-basics') {
         let assessmentTabIndex: number = this.stepTabIndex - 1;
         let nextTab: string = this.stepTabs[assessmentTabIndex];
         this.ssmtService.stepTab.next(nextTab);
       }
-    } else if (this.mainTab == 'assessment') {
+    } else if (this.mainTab === 'assessment') {
       this.ssmtService.mainTab.next('system-setup');
     }
   }
@@ -318,7 +318,7 @@ export class SsmtComponent implements OnInit {
   }
 
   continue() {
-    if (this.stepTab == 'turbine') {
+    if (this.stepTab === 'turbine') {
       this.ssmtService.mainTab.next('assessment');
     } else {
       let assessmentTabIndex: number = this.stepTabIndex + 1;
@@ -331,21 +331,21 @@ export class SsmtComponent implements OnInit {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
     let headerValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
     let turbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
-    if (this.stepTab == 'operations' || this.stepTab == 'system-basics') {
+    if (this.stepTab === 'operations' || this.stepTab === 'system-basics') {
       return true;
-    } else if (this.stepTab == 'boiler') {
+    } else if (this.stepTab === 'boiler') {
       if (boilerValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'header') {
+    } else if (this.stepTab === 'header') {
       if (boilerValid && headerValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'turbine') {
+    } else if (this.stepTab === 'turbine') {
       if (boilerValid && headerValid && turbineValid) {
         return true;
       } else {

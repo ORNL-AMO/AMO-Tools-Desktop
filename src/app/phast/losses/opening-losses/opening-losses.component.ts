@@ -40,7 +40,7 @@ export class OpeningLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   total: number;
-  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService){}
+  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) {}
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -58,7 +58,7 @@ export class OpeningLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -85,12 +85,12 @@ export class OpeningLossesComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._openingLosses.push(tmpLoss);
-      })
+      });
       this.total = this.getTotal();
     }
   }
@@ -115,12 +115,12 @@ export class OpeningLossesComponent implements OnInit {
   }
 
   calculate(loss: OpeningLossObj) {
-    if (loss.form.status == 'VALID') {
-      if (loss.form.controls.openingType.value == 'Rectangular (or Square)' && loss.form.controls.heightOfOpening.value != '') {
+    if (loss.form.status === 'VALID') {
+      if (loss.form.controls.openingType.value === 'Rectangular (or Square)' && loss.form.controls.heightOfOpening.value !== '') {
         let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
         loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
-      } else if (loss.form.controls.openingType.value == 'Round') {
+      } else if (loss.form.controls.openingType.value === 'Round') {
         let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesCircular(tmpLoss, this.settings);
         loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
@@ -140,13 +140,13 @@ export class OpeningLossesComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpOpeningLoss = this.openingLossesService.getLossFromForm(loss.form);
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.push(tmpOpeningLoss);
-    })
+    });
     this.losses.openingLosses = tmpOpeningLosses;
     this.savedLoss.emit(true);
   }
@@ -164,7 +164,7 @@ export class OpeningLossesComponent implements OnInit {
 }
 
 export interface OpeningLossObj {
-  form: FormGroup,
-  totalOpeningLosses: number,
-  collapse: boolean
+  form: FormGroup;
+  totalOpeningLosses: number;
+  collapse: boolean;
 }

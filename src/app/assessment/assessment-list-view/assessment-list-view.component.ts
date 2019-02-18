@@ -24,9 +24,9 @@ export class AssessmentListViewComponent implements OnInit {
   }
 
   changeDirectory(dir?) {
-    if(dir){
+    if (dir) {
       this.directoryChange.emit(dir);
-    }else{
+    }else {
       this.directoryChange.emit(this.directory);
     }
   }

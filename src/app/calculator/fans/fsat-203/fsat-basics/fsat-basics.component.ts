@@ -31,7 +31,7 @@ export class FsatBasicsComponent implements OnInit {
 
   planes: Array<number> = [
     1, 2, 3
-  ]
+  ];
 
   constructor(private helpPanelService: HelpPanelService, private fsat203Service: Fsat203Service, private convertUnitsService: ConvertUnitsService) { }
 

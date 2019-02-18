@@ -29,9 +29,9 @@ export class ExportService {
     this.workingDirId = workingDirId;
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
-    let assessments: Array<Assessment> = _.filter(dir.assessments, (assessment) => { return assessment.selected == true });
-    let subDirs: Array<Directory> = _.filter(dir.subDirectory, (subDir) => { return subDir.selected == true });
-    let calculators: Array<Calculator> = _.filter(dir.calculators, (calc) => { return calc.selected == true });
+    let assessments: Array<Assessment> = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
+    let subDirs: Array<Directory> = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
+    let calculators: Array<Calculator> = _.filter(dir.calculators, (calc) => { return calc.selected === true; });
     console.log(calculators);
     //ToDo: make sure these calcs are exported
     //  need to add multiple calcs functionality
@@ -39,20 +39,20 @@ export class ExportService {
       assessments.forEach(assessment => {
         let obj = this.getAssessmentObj(assessment);
         this.exportAssessments.push(obj);
-      })
+      });
     }
     if (subDirs) {
       subDirs.forEach(dir => {
         this.addDirectoryObj(dir);
         let objs = this.getSubDirData(dir, this.exportAssessments);
         this.exportAssessments.concat(objs);
-      })
+      });
     }
     this.exportData = {
       directories: this.exportDirectories,
       assessments: this.exportAssessments,
       calculators: calculators
-    }
+    };
     return this.exportData;
   }
 
@@ -63,12 +63,12 @@ export class ExportService {
       assessment: assessment,
       settings: settings,
       calculator: calculator
-    }
+    };
     return model;
   }
 
   addDirectoryObj(directory: Directory) {
-    let testDirAdded = _.find(this.exportDirectories, (item) => { return item.directory.id == directory.id });
+    let testDirAdded = _.find(this.exportDirectories, (item) => { return item.directory.id === directory.id; });
     if (!testDirAdded) {
       let settings: Settings = this.settingsDbService.getByDirectoryId(directory.id);
       let calculators: Array<Calculator> = this.calculatorDbService.getByDirectoryId(directory.id);
@@ -76,7 +76,7 @@ export class ExportService {
         settings: settings,
         calculator: calculators,
         directory: directory
-      }
+      };
       this.exportDirectories.push(dirItem);
     }
   }
@@ -93,7 +93,7 @@ export class ExportService {
       assessments.forEach(assessment => {
         let obj = this.getAssessmentObj(assessment);
         assessmentObjs.push(obj);
-      })
+      });
     }
     let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
     if (subDirs) {
@@ -101,7 +101,7 @@ export class ExportService {
         this.addDirectoryObj(subDir);
         let objs = this.getSubDirSelected(subDir, assessmentObjs);
         assessmentObjs.concat(objs);
-      })
+      });
     }
     return assessmentObjs;
   }

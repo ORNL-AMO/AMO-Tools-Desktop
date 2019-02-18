@@ -116,17 +116,17 @@ export class HeaderFormComponent implements OnInit {
   }
 
   initHighPressureHeatLoss() {
-    if (this.baselineHighPressureForm.controls.heatLoss.value != this.modificationHighPressureForm.controls.heatLoss.value) {
+    if (this.baselineHighPressureForm.controls.heatLoss.value !== this.modificationHighPressureForm.controls.heatLoss.value) {
       this.showHighPressureHeatLoss = true;
     }
   }
   initMediumPressureHeatLoss() {
-    if (this.baselineMediumPressureForm.controls.heatLoss.value != this.modificationMediumPressureForm.controls.heatLoss.value) {
+    if (this.baselineMediumPressureForm.controls.heatLoss.value !== this.modificationMediumPressureForm.controls.heatLoss.value) {
       this.showMediumPressureHeatLoss = true;
     }
   }
   initLowPressureHeatLoss() {
-    if (this.baselineLowPressureForm.controls.heatLoss.value != this.modificationLowPressureForm.controls.heatLoss.value) {
+    if (this.baselineLowPressureForm.controls.heatLoss.value !== this.modificationLowPressureForm.controls.heatLoss.value) {
       this.showLowPressureHeatLoss = true;
     }
   }
@@ -145,21 +145,21 @@ export class HeaderFormComponent implements OnInit {
   }
 
   toggleHighPressureHeatLoss() {
-    if (this.showHighPressureHeatLoss == false) {
+    if (this.showHighPressureHeatLoss === false) {
       this.modificationHighPressureForm.controls.heatLoss.patchValue(this.baselineHighPressureForm.controls.heatLoss.value);
       this.save();
     }
   }
 
   toggleMediumPressureHeatLoss() {
-    if (this.showMediumPressureHeatLoss == false) {
+    if (this.showMediumPressureHeatLoss === false) {
       this.modificationMediumPressureForm.controls.heatLoss.patchValue(this.baselineMediumPressureForm.controls.heatLoss.value);
       this.save();
     }
   }
 
   toggleLowPressureHeatLoss() {
-    if (this.showLowPressureHeatLoss == false) {
+    if (this.showLowPressureHeatLoss === false) {
       this.modificationLowPressureForm.controls.heatLoss.patchValue(this.baselineLowPressureForm.controls.heatLoss.value);
       this.save();
     }
@@ -179,17 +179,17 @@ export class HeaderFormComponent implements OnInit {
   }
 
   initHighPressureSteamUsage() {
-    if (this.baselineHighPressureForm.controls.processSteamUsage.value != this.modificationHighPressureForm.controls.processSteamUsage.value) {
+    if (this.baselineHighPressureForm.controls.processSteamUsage.value !== this.modificationHighPressureForm.controls.processSteamUsage.value) {
       this.showHighPressureSteamUsage = true;
     }
   }
   initMediumPressureSteamUsage() {
-    if (this.baselineMediumPressureForm.controls.processSteamUsage.value != this.modificationMediumPressureForm.controls.processSteamUsage.value) {
+    if (this.baselineMediumPressureForm.controls.processSteamUsage.value !== this.modificationMediumPressureForm.controls.processSteamUsage.value) {
       this.showMediumPressureSteamUsage = true;
     }
   }
   initLowPressureSteamUsage() {
-    if (this.baselineLowPressureForm.controls.processSteamUsage.value != this.modificationLowPressureForm.controls.processSteamUsage.value) {
+    if (this.baselineLowPressureForm.controls.processSteamUsage.value !== this.modificationLowPressureForm.controls.processSteamUsage.value) {
       this.showLowPressureSteamUsage = true;
     }
   }
@@ -207,21 +207,21 @@ export class HeaderFormComponent implements OnInit {
     }
   }
   toggleHighPressureSteamUsage() {
-    if (this.showHighPressureSteamUsage == false) {
+    if (this.showHighPressureSteamUsage === false) {
       this.modificationHighPressureForm.controls.processSteamUsage.patchValue(this.baselineHighPressureForm.controls.processSteamUsage.value);
       this.save();
     }
   }
 
   toggleMediumPressureSteamUsage() {
-    if (this.showMediumPressureSteamUsage == false) {
+    if (this.showMediumPressureSteamUsage === false) {
       this.modificationMediumPressureForm.controls.processSteamUsage.patchValue(this.baselineMediumPressureForm.controls.processSteamUsage.value);
       this.save();
     }
   }
 
   toggleLowPressureSteamUsage() {
-    if (this.showLowPressureSteamUsage == false) {
+    if (this.showLowPressureSteamUsage === false) {
       this.modificationLowPressureForm.controls.processSteamUsage.patchValue(this.baselineLowPressureForm.controls.processSteamUsage.value);
       this.save();
     }
@@ -231,7 +231,7 @@ export class HeaderFormComponent implements OnInit {
     // add rest of baseline if we ever enable baseline
     // let tmpBaselineHighPressureHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.baselineHighPressureForm);
     // this.ssmt.headerInput.highPressure = tmpBaselineHighPressureHeader;
-    let tmpModificationHighPressureHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.modificationHighPressureForm)
+    let tmpModificationHighPressureHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.modificationHighPressureForm);
     this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure = tmpModificationHighPressureHeader;
     let tmpModificationMediumPressureHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.modificationMediumPressureForm);
     this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure = tmpModificationMediumPressureHeader;

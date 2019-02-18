@@ -83,9 +83,9 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   calculateFieldMeasurementMethod(data: FieldMeasurementInputs) {
     this.fieldMeasurementData = data;
-    this.percentLoadEstimationService.fieldMeasurementInputs = this.fieldMeasurementData
+    this.percentLoadEstimationService.fieldMeasurementInputs = this.fieldMeasurementData;
     this.fieldMeasurementResults = this.percentLoadEstimationService.getResults(data);
-    if (isNaN(this.fieldMeasurementResults.percentLoad) == false && this.fieldMeasurementResults.percentLoad != Infinity) {
+    if (isNaN(this.fieldMeasurementResults.percentLoad) === false && this.fieldMeasurementResults.percentLoad !== Infinity) {
       this.percentLoadEstimation = this.fieldMeasurementResults.percentLoad;
     } else {
       this.percentLoadEstimation = 0;

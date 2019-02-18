@@ -40,4 +40,4 @@ export const partsPer = {
             , ratio: .000001
         }
     }
-}
+};

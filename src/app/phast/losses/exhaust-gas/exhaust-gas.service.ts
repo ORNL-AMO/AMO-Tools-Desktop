@@ -17,7 +17,7 @@ export class ExhaustGasService {
       'vfr': ['', Validators.required],
       'dustLoading': ['', Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   getFormFromLoss(exhaustGas: ExhaustGasEAF): FormGroup {
@@ -29,7 +29,7 @@ export class ExhaustGasService {
       'vfr': [exhaustGas.vfr, Validators.required],
       'dustLoading': [exhaustGas.dustLoading, Validators.required],
       'name': exhaustGas.name
-    })
+    });
     return tmpGroup;
   }
 
@@ -43,7 +43,7 @@ export class ExhaustGasService {
       dustLoading: form.controls.dustLoading.value,
       otherLosses: 0.0,
       name: form.controls.name.value
-    }
+    };
     return tmpExhaustGas;
   }
 }

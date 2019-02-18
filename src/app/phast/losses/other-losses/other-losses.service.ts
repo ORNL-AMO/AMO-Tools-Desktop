@@ -12,21 +12,21 @@ export class OtherLossesService {
     return this.formBuilder.group({
       description: ['', Validators.required],
       heatLoss: [0.0, Validators.required]
-    })
+    });
   }
 
   getLossFromForm(form: FormGroup): OtherLoss {
     let tmpLoss = {
       description: form.controls.description.value,
       heatLoss: form.controls.heatLoss.value
-    }
-    return tmpLoss
+    };
+    return tmpLoss;
   }
 
   getFormFromLoss(loss: OtherLoss): FormGroup {
     return this.formBuilder.group({
       description: [loss.description, Validators.required],
       heatLoss: [loss.heatLoss, Validators.required]
-    })
+    });
   }
 }

@@ -33,7 +33,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   showTimeOpen: Array<boolean>;
   showAllTimeOpen: boolean = false;
   showEmissivity: Array<boolean>;
-  showViewFactor: Array<boolean>
+  showViewFactor: Array<boolean>;
   showSize: Array<boolean>;
   showAllEmissivity: boolean = false;
   showOpening: boolean = false;
@@ -68,17 +68,17 @@ export class ExploreOpeningFormComponent implements OnInit {
         this.showOpening = check;
       }
       this.showSize.push(check);
-      this.getArea(2, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], index)
-      this.getArea(1, loss, index)
+      this.getArea(2, this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], index);
+      this.getArea(1, loss, index);
 
-      check = (loss.viewFactor == this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].viewFactor);
+      check = (loss.viewFactor === this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].viewFactor);
       this.showViewFactor.push(!check);
-      check = (loss.emissivity != this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity);
+      check = (loss.emissivity !== this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity);
       if (!this.showAllEmissivity && check) {
         this.showAllEmissivity = check;
       }
       this.showEmissivity.push(check);
-      check = (loss.percentTimeOpen != this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen);
+      check = (loss.percentTimeOpen !== this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen);
       this.showTimeOpen.push(check);
       if (!this.showAllTimeOpen && check) {
         this.showAllTimeOpen = check;
@@ -89,20 +89,20 @@ export class ExploreOpeningFormComponent implements OnInit {
       tmpWarnings = this.openingLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       index++;
-    })
+    });
   }
 
   initSize(baselineLoss: OpeningLoss, modLoss: OpeningLoss) {
-    if (baselineLoss.heightOfOpening != modLoss.heightOfOpening || baselineLoss.numberOfOpenings != modLoss.numberOfOpenings ||
-      baselineLoss.lengthOfOpening != modLoss.lengthOfOpening || baselineLoss.thickness != modLoss.thickness) {
-      return true
+    if (baselineLoss.heightOfOpening !== modLoss.heightOfOpening || baselineLoss.numberOfOpenings !== modLoss.numberOfOpenings ||
+      baselineLoss.lengthOfOpening !== modLoss.lengthOfOpening || baselineLoss.thickness !== modLoss.thickness) {
+      return true;
     } else {
       return false;
     }
   }
 
   toggleViewFactor(index: number, loss: OpeningLoss) {
-    if (this.showViewFactor[index] == false) {
+    if (this.showViewFactor[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].viewFactor = loss.viewFactor;
       this.checkModificationWarnings(index);
       this.calculate();
@@ -110,7 +110,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   toggleSize(index: number, loss: OpeningLoss) {
-    if (this.showSize[index] == false) {
+    if (this.showSize[index] === false) {
       this.setToBaseline(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], loss);
       this.checkModificationWarnings(index);
       this.calculate();
@@ -125,30 +125,30 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   toggleOpening() {
-    if (this.showOpening == false) {
+    if (this.showOpening === false) {
       let index = 0;
       this.phast.losses.openingLosses.forEach(loss => {
         this.setToBaseline(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], loss);
         this.checkModificationWarnings(index);
         index++;
-      })
+      });
     }
   }
 
   getArea(num: number, loss: OpeningLoss, index: number) {
     let smallUnit = 'in';
     let largeUnit = 'ft';
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       smallUnit = 'mm';
       largeUnit = 'm';
     }
-    if (num == 1) {
+    if (num === 1) {
       this.checkBaselineWarnings(index);
     } else {
       this.checkModificationWarnings(index);
     }
 
-    if (loss.openingType == 'Round') {
+    if (loss.openingType === 'Round') {
       if (loss.lengthOfOpening) {
         loss.heightOfOpening = 0;
         let radiusInches = loss.lengthOfOpening;
@@ -159,7 +159,7 @@ export class ExploreOpeningFormComponent implements OnInit {
       } else {
         loss.openingTotalArea = 0;
       }
-    } else if (loss.openingType == 'Rectangular (or Square)') {
+    } else if (loss.openingType === 'Rectangular (or Square)') {
       if (loss.lengthOfOpening && loss.heightOfOpening) {
         let lengthInches = loss.lengthOfOpening;
         let heightInches = loss.heightOfOpening;
@@ -182,7 +182,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   toggleAllEmissivity() {
-    if (this.showAllEmissivity == false) {
+    if (this.showAllEmissivity === false) {
       let index = 0;
       this.phast.losses.openingLosses.forEach(loss => {
         this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity = loss.emissivity;
@@ -190,12 +190,12 @@ export class ExploreOpeningFormComponent implements OnInit {
         this.checkModificationWarnings(index);
         index++;
         this.calculate();
-      })
+      });
     }
   }
 
   toggleEmissivity(index: number, loss: OpeningLoss) {
-    if (this.showEmissivity[index] == false) {
+    if (this.showEmissivity[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].emissivity = loss.emissivity;
       this.checkModificationWarnings(index);
       this.calculate();
@@ -215,7 +215,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   toggleAllTimeOpen() {
-    if (this.showAllTimeOpen == false) {
+    if (this.showAllTimeOpen === false) {
       let index = 0;
       this.phast.losses.openingLosses.forEach(loss => {
         this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen = loss.percentTimeOpen;
@@ -223,12 +223,12 @@ export class ExploreOpeningFormComponent implements OnInit {
         this.checkModificationWarnings(index);
         index++;
         this.calculate();
-      })
+      });
     }
   }
 
   toggleTimeOpen(index: number, loss: OpeningLoss) {
-    if (this.showTimeOpen[index] == false) {
+    if (this.showTimeOpen[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].percentTimeOpen = loss.percentTimeOpen;
       this.checkModificationWarnings(index);
       this.calculate();
@@ -245,7 +245,7 @@ export class ExploreOpeningFormComponent implements OnInit {
       back: 5,
       componentStr: 'opening-losses',
       showAdd: true
-    })
+    });
   }
 
   focusOut() {

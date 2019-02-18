@@ -67,9 +67,9 @@ export class AchievableEfficiencyComponent implements OnInit {
       }
       else {
         let tmpFlowRate: number = 2000;
-        if (this.settings.flowMeasurement != 'gpm') {
+        if (this.settings.flowMeasurement !== 'gpm') {
           tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement);
-          tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2)
+          tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2);
         }
         this.efficiencyForm = this.achievableEfficiencyService.getForm(6, tmpFlowRate);
       }

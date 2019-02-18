@@ -18,7 +18,7 @@ export class LossesSummaryComponent implements OnInit {
   @Input()
   numberOfHeaders: number;
   @Input()
-  tableCellWidth: number
+  tableCellWidth: number;
   
   constructor() { }
 

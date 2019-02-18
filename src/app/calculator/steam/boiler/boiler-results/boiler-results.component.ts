@@ -23,9 +23,7 @@ export class BoilerResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
   }
-
 
   updateTable0String() {
     this.table0String = this.copyTable0.nativeElement.innerText;

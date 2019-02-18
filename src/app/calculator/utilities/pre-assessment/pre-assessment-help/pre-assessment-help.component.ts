@@ -25,31 +25,31 @@ export class PreAssessmentHelpComponent implements OnInit {
   }
 
 
-  ngOnChanges(){
-    if(this.calcType != 'pump'){
+  ngOnChanges() {
+    if (this.calcType !== 'pump') {
       this.showDescription = true;
-    }else{
+    }else {
       this.showDescription = false;
     }
 
-    if(this.currentEnergySourceType == 'Electricity'){
+    if (this.currentEnergySourceType === 'Electricity') {
       this.showElectricity = true;
       this.showSteam = false;
       this.showFuel = false;
-    }else if(this.currentEnergySourceType == 'Fuel'){
+    }else if (this.currentEnergySourceType === 'Fuel') {
       this.showElectricity = false;
       this.showSteam = false;
       this.showFuel = true;
-    }else if(this.currentEnergySourceType == 'Steam'){
+    }else if (this.currentEnergySourceType === 'Steam') {
       this.showElectricity = false;
       this.showSteam = true;
       this.showFuel = false;
-    }else if(this.currentEnergySourceType == 'Hybrid'){
-      if(this.currentField != 'kwRating'){
+    }else if (this.currentEnergySourceType === 'Hybrid') {
+      if (this.currentField !== 'kwRating') {
         this.showElectricity = false;
         this.showSteam = false;
         this.showFuel = true;
-      }else{
+      }else {
 
         this.showElectricity = true;
         this.showSteam = false;

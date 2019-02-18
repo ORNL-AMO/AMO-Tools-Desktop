@@ -39,7 +39,7 @@ export class OperationsSummaryComponent implements OnInit {
         this.electricityCostDiff.push(false);
         this.makeUpWaterCostDiff.push(false);
         this.makeUpWaterTempDiff.push(false);
-      })
+      });
     }
   }
 
@@ -47,10 +47,10 @@ export class OperationsSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change

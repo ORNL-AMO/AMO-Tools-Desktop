@@ -37,7 +37,7 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
     }
   }
   initEfficiency() {
-    if (this.phast.systemEfficiency != this.phast.modifications[this.exploreModIndex].phast.systemEfficiency) {
+    if (this.phast.systemEfficiency !== this.phast.modifications[this.exploreModIndex].phast.systemEfficiency) {
       this.showEfficiencyData = true;
     } else {
       this.showEfficiencyData = false;
@@ -45,7 +45,7 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   }
 
   toggleEfficiency() {
-    if (this.showEfficiencyData == false) {
+    if (this.showEfficiencyData === false) {
       this.phast.modifications[this.exploreModIndex].phast.systemEfficiency = this.phast.systemEfficiency;
       this.calculate();
     }
@@ -57,7 +57,7 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
       tabName: 'Heat System Efficiency',
       step: 1,
       componentStr: 'heat-system-efficiency'
-    })
+    });
   }
 
   calculate() {

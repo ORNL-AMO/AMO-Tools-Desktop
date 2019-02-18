@@ -31,50 +31,50 @@ export class PrvDiagramComponent implements OnInit {
   }
 
   hoverInlet() {
-    if (this.inletSteam == 'medium-pressure') {
+    if (this.inletSteam === 'medium-pressure') {
       this.emitSetHover.emit('mediumPressurePRVInletHovered');
-    } else if (this.inletSteam == 'high-pressure') {
+    } else if (this.inletSteam === 'high-pressure') {
       this.emitSetHover.emit('highPressurePRVInletHovered');
     }
   }
 
   hoverOutlet() {
-    if (this.outletSteam == 'low-pressure') {
+    if (this.outletSteam === 'low-pressure') {
       this.emitSetHover.emit('lowPressurePRVOutletHovered');
-    } else if (this.outletSteam == 'medium-pressure') {
+    } else if (this.outletSteam === 'medium-pressure') {
       this.emitSetHover.emit('mediumPressurePRVOutletHovered');
     }
   }
 
-  selectEquipment(){
-    if(this.inletSteam == 'high-pressure'){
-      if(this.outletSteam == 'medium-pressure'){
+  selectEquipment() {
+    if (this.inletSteam === 'high-pressure') {
+      if (this.outletSteam === 'medium-pressure') {
         this.emitSelectEquipment.emit('highToMediumPressurePRV');
-      }else{
+      }else {
         this.emitSelectEquipment.emit('lowPressurePRV');
       }
-    }else if(this.inletSteam == 'medium-pressure'){
+    }else if (this.inletSteam === 'medium-pressure') {
       this.emitSelectEquipment.emit('lowPressurePRV');
     }
   }
 
-  hoverPRV(){
-    if(this.inletSteam == 'high-pressure'){
-      if(this.outletSteam == 'medium-pressure'){
+  hoverPRV() {
+    if (this.inletSteam === 'high-pressure') {
+      if (this.outletSteam === 'medium-pressure') {
         this.emitSetHover.emit('highToMediumPressurePRVHovered');
-      }else{
+      }else {
         this.emitSetHover.emit('lowPressurePRVHovered');
       }
-    }else if(this.inletSteam == 'medium-pressure'){
+    }else if (this.inletSteam === 'medium-pressure') {
       this.emitSetHover.emit('lowPressurePRVHovered');
     }
   }
   
 
   hoverFeedwater() {
-    if (this.outletSteam == 'low-pressure') {
+    if (this.outletSteam === 'low-pressure') {
       this.emitSetHover.emit('lowPressurePRVFeedwaterHovered');
-    } else if (this.outletSteam == 'medium-pressure') {
+    } else if (this.outletSteam === 'medium-pressure') {
       this.emitSetHover.emit('mediumPressurePRVFeedwaterHovered');
     }
   }

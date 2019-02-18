@@ -56,7 +56,7 @@ export class ExhaustGasComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -82,12 +82,12 @@ export class ExhaustGasComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
-      })
+      });
     }
   }
 
@@ -109,7 +109,7 @@ export class ExhaustGasComponent implements OnInit {
     loss.collapse = !loss.collapse;
   }
   calculate(loss: ExhaustGasObj) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       let tmpGas = this.exhaustGasService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.exhaustGasEAF(tmpGas, this.settings);
     } else {
@@ -124,12 +124,12 @@ export class ExhaustGasComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpExhaustGas = this.exhaustGasService.getLossFromForm(loss.form);
       tmpExhaustGases.push(tmpExhaustGas);
-    })
+    });
     this.losses.exhaustGasEAF = tmpExhaustGases;
     this.savedLoss.emit(true);
   }
@@ -141,7 +141,7 @@ export class ExhaustGasComponent implements OnInit {
 }
 
 export interface ExhaustGasObj {
-  form: FormGroup,
-  heatLoss: number,
-  collapse: boolean
+  form: FormGroup;
+  heatLoss: number;
+  collapse: boolean;
 }

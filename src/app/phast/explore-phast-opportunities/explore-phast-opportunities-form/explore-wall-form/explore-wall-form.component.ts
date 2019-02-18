@@ -54,15 +54,15 @@ export class ExploreWallFormComponent implements OnInit {
       this.showSurfaceTemp.push(check);
       let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
       this.baselineWarnings.push(tmpWarnings);
-      tmpWarnings = this.wallLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index])
+      tmpWarnings = this.wallLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       index++;
-    })
+    });
   }
 
 
   initSurfaceTemp(temp1: number, temp2: number) {
-    if (temp1 != temp2) {
+    if (temp1 !== temp2) {
       return true;
     } else {
       return false;
@@ -70,7 +70,7 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   toggleWall() {
-    if (this.showWall == false) {
+    if (this.showWall === false) {
       let index: number = 0;
       this.phast.losses.wallLosses.forEach(loss => {
         let baselineTemp: number = loss.surfaceTemperature;
@@ -84,7 +84,7 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   toggleSurfaceTemp(index: number, baselineArea: number) {
-    if (this.showSurfaceTemp[index] == false) {
+    if (this.showSurfaceTemp[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature = baselineArea;
       this.checkModificationWarnings(index);
       this.calculate();
@@ -97,17 +97,17 @@ export class ExploreWallFormComponent implements OnInit {
       tabName: 'Wall',
       step: 3,
       componentStr: 'wall-losses',
-    })
+    });
   }
 
   checkModificationWarnings(index: number) {
-    let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index])
+    let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index]);
     this.modificationWarnings[index] = tmpWarnings;
     this.calculate();
   }
 
   checkBaselineWarnings(index: number) {
-    let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(this.phast.losses.wallLosses[index])
+    let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(this.phast.losses.wallLosses[index]);
     this.baselineWarnings[index] = tmpWarnings;
     this.calculate();
   }
@@ -117,7 +117,7 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   calculate() {
-    this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true);
   }
 
 }

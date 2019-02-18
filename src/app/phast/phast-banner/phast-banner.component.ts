@@ -21,11 +21,11 @@ export class PhastBannerComponent implements OnInit {
   ngOnInit() {
     this.phastService.mainTab.subscribe(val => {
       this.mainTab = val;
-    })
+    });
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'calculators') {
+    if (str === 'system-setup' || str === 'calculators') {
       this.phastService.mainTab.next(str);
     } else if (this.assessment.phast.setupDone) {
       this.phastService.mainTab.next(str);
@@ -33,13 +33,13 @@ export class PhastBannerComponent implements OnInit {
   }
 
 
-  goHome(){
+  goHome() {
     this.assessmentService.workingDirectoryId.next(undefined);
     this.assessmentService.dashboardView.next('landing-screen');
     this.router.navigateByUrl('/dashboard');
   }
 
-  goToFolder(){
+  goToFolder() {
     this.assessmentService.workingDirectoryId.next(this.assessment.directoryId);
     this.assessmentService.dashboardView.next('assessment-dashboard');
     this.router.navigateByUrl('/dashboard');

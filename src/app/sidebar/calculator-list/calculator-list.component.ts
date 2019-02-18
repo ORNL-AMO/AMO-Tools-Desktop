@@ -19,14 +19,14 @@ export class CalculatorListComponent implements OnInit {
   ngOnInit() {
     this.selectedCalcTypeSub = this.calculatorService.selectedToolType.subscribe(calcType => {
       this.selectedCalculatorType = calcType;
-    })
+    });
 
     this.selectedCalcSub = this.calculatorService.selectedTool.subscribe(calculator => {
       this.selectedCalculator = calculator;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectedCalcSub.unsubscribe();
     this.selectedCalcTypeSub.unsubscribe();
   }
@@ -38,7 +38,7 @@ export class CalculatorListComponent implements OnInit {
     this.calculatorService.selectedTool.next('none');
   }
 
-  selectCalculator(str: string){
+  selectCalculator(str: string) {
     this.calculatorService.selectedTool.next(str);
   }
 }

@@ -19,19 +19,19 @@ export class ReportBannerComponent implements OnInit {
   ngOnInit() {
   }
 
-  closeReport(){
+  closeReport() {
     this.emitCloseReport.emit(true);
   }
 
-  exportToCsv(){
+  exportToCsv() {
     this.emitExport.emit(true);
   }
 
-  print(){
+  print() {
     this.emitPrint.emit(true);
   }
 
-  showUnitsModal(){
+  showUnitsModal() {
     this.emitShowUnitModal.emit(true);
   }
 

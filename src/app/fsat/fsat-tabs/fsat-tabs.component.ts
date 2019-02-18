@@ -59,7 +59,7 @@ export class FsatTabsComponent implements OnInit {
   ngOnInit() {
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
-    })
+    });
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
       this.checkSettingsStatus();
@@ -67,16 +67,16 @@ export class FsatTabsComponent implements OnInit {
       this.checkFluidStatus();
       this.checkMotorStatus();
       this.checkFieldDataSatus();
-    })
+    });
 
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-    })
+    });
 
     this.modSubscription = this.compareService.selectedModification.subscribe(val => {
       this.selectedModification = val;
       this.cd.detectChanges();
-    })
+    });
 
     this.updateDataSub = this.fsatService.updateData.subscribe(val => {
       this.checkSettingsStatus();
@@ -84,14 +84,14 @@ export class FsatTabsComponent implements OnInit {
       this.checkFluidStatus();
       this.checkMotorStatus();
       this.checkFieldDataSatus();
-    })
+    });
 
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.modifyConditionsTab = val;
     });
     this.calcTabSub = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -108,15 +108,15 @@ export class FsatTabsComponent implements OnInit {
     let fluidValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity);
     let fanValid: boolean = this.fanSetupService.isFanSetupValid(this.fsat.fanSetup, false);
     let motorValid: boolean = this.fanMotorService.isFanMotorValid(this.fsat.fanMotor);
-    if (str == 'fan-setup') {
+    if (str === 'fan-setup') {
       if (fluidValid) {
         this.fsatService.stepTab.next(str);
       }
-    } else if (str == 'fan-motor') {
+    } else if (str === 'fan-motor') {
       if (fluidValid && fanValid) {
         this.fsatService.stepTab.next(str);
       }
-    } else if (str == 'fan-field-data') {
+    } else if (str === 'fan-field-data') {
       if (fluidValid && fanValid && motorValid) {
         this.fsatService.stepTab.next(str);
       }
@@ -135,7 +135,7 @@ export class FsatTabsComponent implements OnInit {
 
 
   checkSettingsStatus() {
-    if (this.stepTab == 'system-basics') {
+    if (this.stepTab === 'system-basics') {
       this.settingsClassStatus = ['active', 'success'];
     } else {
       this.settingsClassStatus = ['success'];
@@ -151,7 +151,7 @@ export class FsatTabsComponent implements OnInit {
     } else {
       this.fluidClassStatus = ['success'];
     }
-    if (this.stepTab == 'fsat-fluid') {
+    if (this.stepTab === 'fsat-fluid') {
       this.fluidClassStatus.push('active');
     }
   }
@@ -170,7 +170,7 @@ export class FsatTabsComponent implements OnInit {
     } else {
       this.fanClassStatus = ['success'];
     }
-    if (this.stepTab == 'fan-setup') {
+    if (this.stepTab === 'fan-setup') {
       this.fanClassStatus.push('active');
     }
   }
@@ -190,7 +190,7 @@ export class FsatTabsComponent implements OnInit {
     } else {
       this.motorClassStatus = ['success'];
     }
-    if (this.stepTab == 'fan-motor') {
+    if (this.stepTab === 'fan-motor') {
       this.motorClassStatus.push('active');
     }
   }
@@ -211,7 +211,7 @@ export class FsatTabsComponent implements OnInit {
     } else {
       this.fieldDataClassStatus = ['success'];
     }
-    if (this.stepTab == 'fan-field-data') {
+    if (this.stepTab === 'fan-field-data') {
       this.fieldDataClassStatus.push('active');
     }
   }

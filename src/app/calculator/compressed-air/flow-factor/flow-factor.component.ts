@@ -54,7 +54,7 @@ export class FlowFactorComponent implements OnInit {
       this.getFlowRate();
     }
     let val: number = this.standaloneService.pneumaticValve(this.inputs, this.settings);
-    if (isNaN(val) == false) {
+    if (isNaN(val) === false) {
       this.valveFlowFactor = val;
     } else {
       this.valveFlowFactor = 0;

@@ -36,11 +36,11 @@ export class ModifyConditionsComponent implements OnInit {
   ngOnInit() {
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.modifyConditionsTab = val;
-    })
+    });
 
     this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
-    })
+    });
   }
 
   ngOnChanges() {
@@ -52,11 +52,11 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
+    if (bool === this.baselineSelected) {
       this.baselineSelected = true;
       this.modifiedSelected = false;
     }
-    else if (bool == this.modifiedSelected) {
+    else if (bool === this.modifiedSelected) {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }

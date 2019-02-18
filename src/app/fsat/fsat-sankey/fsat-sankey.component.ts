@@ -64,8 +64,8 @@ export class FsatSankeyComponent implements OnInit {
   ngOnInit() {
 
     if (!this.printView) {
-      if (this.location != "sankey-diagram" && this.location != "explore-opportunities-sankey") {
-        if (this.location == 'baseline') {
+      if (this.location !== "sankey-diagram" && this.location !== "explore-opportunities-sankey") {
+        if (this.location === 'baseline') {
           this.location = this.assessmentName + '-baseline';
         }
         else {
@@ -87,7 +87,7 @@ export class FsatSankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.fsat) {
       if (!changes.fsat.firstChange) {
-        if (this.location != "sankey-diagram" && !this.printView) {
+        if (this.location !== "sankey-diagram" && !this.printView) {
           if (this.isBaseline) {
             this.location = this.assessmentName + '-baseline';
           }
@@ -116,7 +116,7 @@ export class FsatSankeyComponent implements OnInit {
   //  let motorShaftPower: number, fanShaftPower: number;
     let isBaseline: boolean;
 
-    if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name == 'Baseline') {
+    if (this.fsat.name === undefined || this.fsat.name === null || this.fsat.name === 'Baseline') {
       isBaseline = true;
     }
     else {
@@ -576,7 +576,7 @@ export class FsatSankeyComponent implements OnInit {
       d.y = (this.height / 2 - nodes[0].displaySize / 2);
       if (d.inter) {
         // Reset height
-        if (i == 1) {
+        if (i === 1) {
           // First interNode
           d.value = nodes[i - 1].value;
           d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
@@ -731,7 +731,7 @@ export class FsatSankeyComponent implements OnInit {
         svg.select("#fsat-end-" + location + "-" + i)
           .attr("fill", function () {
             return color(node_data.value);
-          })
+          });
       }
     });
 
@@ -792,7 +792,7 @@ export class FsatSankeyComponent implements OnInit {
     svg.selectAll("input")
       .attr("value", function (d, i) {
         var format = d3.format(",");
-        if (i == 8) {
+        if (i === 8) {
           return format(nodes[15].value);
         }
         else {
@@ -801,7 +801,7 @@ export class FsatSankeyComponent implements OnInit {
       })
       .each(function (d, i) {
         var format = d3.format(",");
-        if (i == 8) {
+        if (i === 8) {
           this.value = format(nodes[15].value);
         }
         else {
@@ -811,7 +811,7 @@ export class FsatSankeyComponent implements OnInit {
     svg.selectAll("foreignObject")
       .data(nodes)
       .attr("x", function (d, i) {
-        if (i == 8) {
+        if (i === 8) {
           return nodes[15].x + (nodes[15].displaySize * .7) + 50;
         }
         else if (nodes[i * 2].input) {
@@ -825,7 +825,7 @@ export class FsatSankeyComponent implements OnInit {
         if (nodes[i].input) {
           return (nodes[i * 2].y + (nodes[i * 2].displaySize / 2)) + 10;
         }
-        else if (i == 8) {
+        else if (i === 8) {
           return (nodes[15].y + (nodes[15].displaySize / 2)) + 10;
         }
         else {
@@ -857,7 +857,7 @@ export class FsatSankeyComponent implements OnInit {
       });
     link
       .style("stroke", (d, i) => {
-        return "url(#fsat-linear-gradient-" + i + ")"
+        return "url(#fsat-linear-gradient-" + i + ")";
       });
     nodes_text
       .attr("dx", function (d) {

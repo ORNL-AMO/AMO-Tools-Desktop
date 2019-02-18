@@ -28,7 +28,7 @@ export class TutorialsComponent implements OnInit {
     this.assessmentService.showTutorial.next('dashboard-tutorial');
   }
 
-  viewTutorial(str: string){
+  viewTutorial(str: string) {
     this.assessmentService.tutorialShown = false;
     this.assessmentService.showTutorial.next(str);
   }

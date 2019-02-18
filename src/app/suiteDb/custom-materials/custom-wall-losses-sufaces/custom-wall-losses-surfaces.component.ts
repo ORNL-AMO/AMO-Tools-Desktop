@@ -38,26 +38,26 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
       if (val) {
         this.getSelected();
       }
-    })
+    });
 
     this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
       this.selectAll(val);
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectAllSub.unsubscribe();
     this.selectedSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showModal && !changes.showModal.firstChange) {
-      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+      if (changes.showModal.currentValue !== changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
-    if(changes.importing){
-      if(changes.importing.currentValue == false && changes.importing.previousValue == true){
+    if (changes.importing) {
+      if (changes.importing.currentValue === false && changes.importing.previousValue === true) {
         this.getCustomMaterials();
       }
     }
@@ -100,7 +100,7 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   }
 
   getSelected() {
-    let selected: Array<WallLossesSurface> = _.filter(this.wallLossesSurfaces, (material) => { return material.selected == true });
+    let selected: Array<WallLossesSurface> = _.filter(this.wallLossesSurfaces, (material) => { return material.selected === true; });
     this.customMaterialService.selectedWall = selected;
   }
 
@@ -108,6 +108,6 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   selectAll(val: boolean) {
     this.wallLossesSurfaces.forEach(surface => {
       surface.selected = val;
-    })
+    });
   }
 }

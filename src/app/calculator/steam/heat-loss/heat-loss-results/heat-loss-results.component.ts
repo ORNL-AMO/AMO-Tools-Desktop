@@ -21,7 +21,6 @@ export class HeatLossResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
   }
 
   updateTable0String() {

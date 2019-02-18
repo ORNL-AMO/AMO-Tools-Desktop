@@ -19,7 +19,6 @@ export class TurbineResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
   }
 
   updateTable0String() {
