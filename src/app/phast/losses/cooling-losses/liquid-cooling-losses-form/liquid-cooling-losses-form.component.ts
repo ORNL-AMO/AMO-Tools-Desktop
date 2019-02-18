@@ -63,12 +63,12 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   save() {
     this.checkWarnings();
     this.saveEmit.emit(true);
-    this.calculate.emit(true)
+    this.calculate.emit(true);
   }
   canCompare() {
     if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
-      if (this.coolingLossesCompareService.compareLossType(this.lossIndex) == false) {
-        return true
+      if (this.coolingLossesCompareService.compareLossType(this.lossIndex) === false) {
+        return true;
       } else {
         return false;
       }

@@ -51,7 +51,7 @@ export class ReceiverTankComponent implements OnInit {
   ngOnInit() {
     this.method = this.compressedAirService.recieverTankMethod;
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.compressedAirService.recieverTankMethod = this.method;
   }
   changeField(str: string, formStr: string) {
@@ -77,16 +77,16 @@ export class ReceiverTankComponent implements OnInit {
     }
   }
 
-  setCurrentForm(){
-    if(this.method == 0){
+  setCurrentForm() {
+    if (this.method === 0) {
       this.currentForm = 'general-method';
-    }else if(this.method == 1){
+    }else if (this.method === 1) {
       this.currentForm = 'dedicated-storage';
-    }else if(this.method == 2){
+    }else if (this.method === 2) {
       this.currentForm = 'metered-storage';
-    }else if(this.method == 3){
+    }else if (this.method === 3) {
       this.currentForm = 'delay-method';
-    }else{
+    }else {
       this.currentForm = 'air-capacity';
     }
   }

@@ -12,9 +12,9 @@ const appRoutes: Routes = [
     component: CoreComponent,
     children: coreRoutes
   }
-]
+];
 
 export const appRoutingProviders: any[] = [
-]
+];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

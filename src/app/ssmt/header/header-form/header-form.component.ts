@@ -33,20 +33,20 @@ export class HeaderFormComponent implements OnInit {
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
-    if (this.selected == false) {
+    if (this.selected === false) {
       this.disableForm();
     } else {
       this.enableForm();
     }
 
-    if (this.pressureLevel == 'highPressure') {
+    if (this.pressureLevel === 'highPressure') {
       this.headerForm.controls.flashCondensateReturn.disable();
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected == false) {
+      if (this.selected === false) {
         this.disableForm();
       } else {
         this.enableForm();
@@ -55,7 +55,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   enableForm() {
-    if (this.pressureLevel == 'highPressure') {
+    if (this.pressureLevel === 'highPressure') {
       // this.headerForm.controls.flashCondensateReturn.enable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.enable();
@@ -64,7 +64,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   disableForm() {
-    if (this.pressureLevel == 'highPressure') {
+    if (this.pressureLevel === 'highPressure') {
       //  this.headerForm.controls.flashCondensateReturn.disable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.disable();
@@ -83,7 +83,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   save() {
-    if (this.pressureLevel == 'highPressure') {
+    if (this.pressureLevel === 'highPressure') {
       let tmpHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.headerForm);
       this.emitSave.emit(tmpHeader);
     } else {
@@ -93,12 +93,12 @@ export class HeaderFormComponent implements OnInit {
   }
 
   setDesuperheatSteam() {
-    let ranges: HeaderRanges = this.headerService.getRanges(this.settings)
+    let ranges: HeaderRanges = this.headerService.getRanges(this.settings);
     let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
-    if (this.headerForm.controls.desuperheatSteamIntoNextHighest.value == true) {
-      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+    if (this.headerForm.controls.desuperheatSteamIntoNextHighest.value === true) {
+      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     } else {
-      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     }
     this.headerForm.controls.desuperheatSteamTemperature.setValidators(tmpDesuperheatSteamTemperatureValidators);
     this.headerForm.controls.desuperheatSteamTemperature.reset(this.headerForm.controls.desuperheatSteamTemperature.value);

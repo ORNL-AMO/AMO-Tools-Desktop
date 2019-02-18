@@ -26,15 +26,15 @@ export class OperatingCostsComponent implements OnInit {
   constructor(private compareService: CompareService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    if(!this.operatingCosts.electricityCost){
+    if (!this.operatingCosts.electricityCost) {
       this.operatingCosts.electricityCost = this.settings.electricityCost;
     }
 
-    if(!this.operatingCosts.fuelCost){
+    if (!this.operatingCosts.fuelCost) {
       this.operatingCosts.fuelCost = this.settings.fuelCost;
     }
 
-    if(!this.operatingCosts.makeUpWaterCost){
+    if (!this.operatingCosts.makeUpWaterCost) {
       this.operatingCosts.makeUpWaterCost = 0;
     }
   }
@@ -75,7 +75,7 @@ export class OperatingCostsComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.ssmtService.currentField.next(str);
   }  
   focusOut() {

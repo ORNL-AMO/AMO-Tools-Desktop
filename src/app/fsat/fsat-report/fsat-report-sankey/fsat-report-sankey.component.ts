@@ -67,7 +67,7 @@ export class FsatReportSankeyComponent implements OnInit {
     let fsat1Results: FsatOutput;
     baseFsatResults = this.fsatService.getResults(this.fsat, false, this.settings);
 
-    if (this.fsat1.name == this.fsat.name) {
+    if (this.fsat1.name === this.fsat.name) {
       isMod = false;
     }
     else {
@@ -96,7 +96,7 @@ export class FsatReportSankeyComponent implements OnInit {
     let fsat2Results: FsatOutput;
     baseFsatResults = this.fsatService.getResults(this.fsat, true, this.settings);
 
-    if (this.fsat2.name == this.fsat.name) {
+    if (this.fsat2.name === this.fsat.name) {
       isMod = false;
     }
     else {

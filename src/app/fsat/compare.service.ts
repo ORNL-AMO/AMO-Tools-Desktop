@@ -15,7 +15,7 @@ export class CompareService {
   setCompareVals(fsat: FSAT, selectedModIndex?: number) {
     this.baselineFSAT = fsat;
     if (fsat.modifications) {
-      if (fsat.modifications.length != 0) {
+      if (fsat.modifications.length !== 0) {
         this.selectedModification.next(fsat.modifications[selectedModIndex].fsat);
         this.modifiedFSAT = this.selectedModification.value;
       } else {
@@ -51,7 +51,7 @@ export class CompareService {
         this.isRelativeHumidityDifferent(baseline, modification) ||
         this.isWetBulbTempDifferent(baseline, modification) ||
         this.isSpecificHeatGasDifferent(baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -66,7 +66,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.dryBulbTemp != modification.baseGasDensity.dryBulbTemp) {
+      if (baseline.baseGasDensity.dryBulbTemp !== modification.baseGasDensity.dryBulbTemp) {
         return true;
       } else {
         return false;
@@ -83,7 +83,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.staticPressure != modification.baseGasDensity.staticPressure) {
+      if (baseline.baseGasDensity.staticPressure !== modification.baseGasDensity.staticPressure) {
         return true;
       } else {
         return false;
@@ -100,7 +100,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.barometricPressure != modification.baseGasDensity.barometricPressure) {
+      if (baseline.baseGasDensity.barometricPressure !== modification.baseGasDensity.barometricPressure) {
         return true;
       } else {
         return false;
@@ -117,7 +117,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.gasDensity != modification.baseGasDensity.gasDensity) {
+      if (baseline.baseGasDensity.gasDensity !== modification.baseGasDensity.gasDensity) {
         return true;
       } else {
         return false;
@@ -134,7 +134,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.gasType != modification.baseGasDensity.gasType) {
+      if (baseline.baseGasDensity.gasType !== modification.baseGasDensity.gasType) {
         return true;
       } else {
         return false;
@@ -152,7 +152,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.specificGravity != modification.baseGasDensity.specificGravity) {
+      if (baseline.baseGasDensity.specificGravity !== modification.baseGasDensity.specificGravity) {
         return true;
       } else {
         return false;
@@ -170,7 +170,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.inputType != modification.baseGasDensity.inputType) {
+      if (baseline.baseGasDensity.inputType !== modification.baseGasDensity.inputType) {
         return true;
       } else {
         return false;
@@ -187,7 +187,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.dewPoint != modification.baseGasDensity.dewPoint) {
+      if (baseline.baseGasDensity.dewPoint !== modification.baseGasDensity.dewPoint) {
         return true;
       } else {
         return false;
@@ -204,7 +204,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.relativeHumidity != modification.baseGasDensity.relativeHumidity) {
+      if (baseline.baseGasDensity.relativeHumidity !== modification.baseGasDensity.relativeHumidity) {
         return true;
       } else {
         return false;
@@ -221,7 +221,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.wetBulbTemp != modification.baseGasDensity.wetBulbTemp) {
+      if (baseline.baseGasDensity.wetBulbTemp !== modification.baseGasDensity.wetBulbTemp) {
         return true;
       } else {
         return false;
@@ -238,7 +238,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.baseGasDensity.specificHeatGas != modification.baseGasDensity.specificHeatGas) {
+      if (baseline.baseGasDensity.specificHeatGas !== modification.baseGasDensity.specificHeatGas) {
         return true;
       } else {
         return false;
@@ -263,7 +263,7 @@ export class CompareService {
         this.isFanSpeedDifferent(baseline, modification) ||
         this.isDriveDifferent(baseline, modification) ||
         this.isSpecifiedFanEfficiencyDifferent(baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -276,7 +276,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.fanType != modification.fanSetup.fanType) {
+      if (baseline.fanSetup.fanType !== modification.fanSetup.fanType) {
         return true;
       } else {
         return false;
@@ -293,7 +293,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.fanSpeed != modification.fanSetup.fanSpeed) {
+      if (baseline.fanSetup.fanSpeed !== modification.fanSetup.fanSpeed) {
         return true;
       } else {
         return false;
@@ -310,7 +310,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.drive != modification.fanSetup.drive) {
+      if (baseline.fanSetup.drive !== modification.fanSetup.drive) {
         return true;
       } else {
         return false;
@@ -327,7 +327,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.specifiedDriveEfficiency != modification.fanSetup.specifiedDriveEfficiency) {
+      if (baseline.fanSetup.specifiedDriveEfficiency !== modification.fanSetup.specifiedDriveEfficiency) {
 
         return true;
       } else {
@@ -346,7 +346,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.fanEfficiency != modification.fanSetup.fanEfficiency) {
+      if (baseline.fanSetup.fanEfficiency !== modification.fanSetup.fanEfficiency) {
         return true;
       } else {
         return false;
@@ -374,7 +374,7 @@ export class CompareService {
         this.isOutletPressureDifferent(baseline, modification) ||
         this.isSpecificHeatRatioDifferent(baseline, modification) ||
         this.isCompressibilityFactorDifferent(baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -388,7 +388,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.operatingHours != modification.fieldData.operatingHours) {
+      if (baseline.fieldData.operatingHours !== modification.fieldData.operatingHours) {
         return true;
       } else {
         return false;
@@ -405,7 +405,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.cost != modification.fieldData.cost) {
+      if (baseline.fieldData.cost !== modification.fieldData.cost) {
         return true;
       } else {
         return false;
@@ -422,7 +422,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.flowRate != modification.fieldData.flowRate) {
+      if (baseline.fieldData.flowRate !== modification.fieldData.flowRate) {
         return true;
       } else {
         return false;
@@ -439,7 +439,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.inletPressure != modification.fieldData.inletPressure) {
+      if (baseline.fieldData.inletPressure !== modification.fieldData.inletPressure) {
         return true;
       } else {
         return false;
@@ -456,7 +456,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.outletPressure != modification.fieldData.outletPressure) {
+      if (baseline.fieldData.outletPressure !== modification.fieldData.outletPressure) {
         return true;
       } else {
         return false;
@@ -508,7 +508,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.specificHeatRatio != modification.fieldData.specificHeatRatio) {
+      if (baseline.fieldData.specificHeatRatio !== modification.fieldData.specificHeatRatio) {
         return true;
       } else {
         return false;
@@ -525,7 +525,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fieldData.compressibilityFactor != modification.fieldData.compressibilityFactor) {
+      if (baseline.fieldData.compressibilityFactor !== modification.fieldData.compressibilityFactor) {
         return true;
       } else {
         return false;
@@ -569,7 +569,7 @@ export class CompareService {
         this.isSpecifiedEfficiencyDifferent(baseline, modification) ||
         this.isMotorRatedVoltageDifferent(baseline, modification) ||
         this.isMotorFullLoadAmpsDifferent(baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -583,7 +583,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanMotor.lineFrequency != modification.fanMotor.lineFrequency) {
+      if (baseline.fanMotor.lineFrequency !== modification.fanMotor.lineFrequency) {
         return true;
       } else {
         return false;
@@ -600,7 +600,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanMotor.motorRatedPower != modification.fanMotor.motorRatedPower) {
+      if (baseline.fanMotor.motorRatedPower !== modification.fanMotor.motorRatedPower) {
         return true;
       } else {
         return false;
@@ -617,7 +617,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanMotor.motorRpm != modification.fanMotor.motorRpm) {
+      if (baseline.fanMotor.motorRpm !== modification.fanMotor.motorRpm) {
         return true;
       } else {
         return false;
@@ -634,7 +634,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanMotor.efficiencyClass != modification.fanMotor.efficiencyClass) {
+      if (baseline.fanMotor.efficiencyClass !== modification.fanMotor.efficiencyClass) {
         return true;
       } else {
         return false;
@@ -651,7 +651,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanMotor.specifiedEfficiency != modification.fanMotor.specifiedEfficiency) {
+      if (baseline.fanMotor.specifiedEfficiency !== modification.fanMotor.specifiedEfficiency) {
         return true;
       } else {
         return false;
@@ -668,7 +668,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanMotor.motorRatedVoltage != modification.fanMotor.motorRatedVoltage) {
+      if (baseline.fanMotor.motorRatedVoltage !== modification.fanMotor.motorRatedVoltage) {
         return true;
       } else {
         return false;
@@ -686,7 +686,7 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanMotor.fullLoadAmps != modification.fanMotor.fullLoadAmps) {
+      if (baseline.fanMotor.fullLoadAmps !== modification.fanMotor.fullLoadAmps) {
         return true;
       } else {
         return false;
@@ -700,16 +700,16 @@ export class CompareService {
     let badges: Array<{ badge: string, componentStr: string }> = [];
     if (baseline && modification) {
       if (this.checkFluidDifferent(baseline, modification)) {
-        badges.push({ badge: 'Fluid', componentStr: 'fsat-fluid' })
+        badges.push({ badge: 'Fluid', componentStr: 'fsat-fluid' });
       }
       if (this.checkFanSetupDifferent(baseline, modification)) {
-        badges.push({ badge: 'Fan', componentStr: 'fan-setup' })
+        badges.push({ badge: 'Fan', componentStr: 'fan-setup' });
       }
       if (this.checkFanMotorDifferent(baseline, modification)) {
-        badges.push({ badge: 'Motor', componentStr: 'fan-motor' })
+        badges.push({ badge: 'Motor', componentStr: 'fan-motor' });
       }
       if (this.checkFanFieldDataDifferent(baseline, modification)) {
-        badges.push({ badge: 'Field Data', componentStr: 'fan-field-data' })
+        badges.push({ badge: 'Field Data', componentStr: 'fan-field-data' });
       }
     }
     return badges;

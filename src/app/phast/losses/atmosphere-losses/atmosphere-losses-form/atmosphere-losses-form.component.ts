@@ -74,7 +74,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
     }
 
@@ -89,11 +89,11 @@ export class AtmosphereLossesFormComponent implements OnInit {
       let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
       if (material) {
         let val = material.specificHeat;
-        if (this.settings.unitsOfMeasure == 'Metric') {
-          val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C')
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C');
         }
         material.specificHeat = this.roundVal(val, 4);
-        if (material.specificHeat != this.atmosphereLossForm.controls.specificHeat.value) {
+        if (material.specificHeat !== this.atmosphereLossForm.controls.specificHeat.value) {
           return true;
         } else {
           return false;
@@ -198,11 +198,11 @@ export class AtmosphereLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
-      if (newMaterial.length != 0) {
+      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
         this.atmosphereLossForm.patchValue({
           atmosphereGas: newMaterial[0].id
-        })
+        });
         this.setProperties();
       }
     }

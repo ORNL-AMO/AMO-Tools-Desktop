@@ -51,16 +51,16 @@ export class PrvHelpComponent implements OnInit {
 
   getOptionDisplayUnit(quantity: number) {
     let displayUnit: string;
-    if (quantity == 0) {
+    if (quantity === 0) {
       displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
       return displayUnit;
-    } else if (quantity == 1) {
+    } else if (quantity === 1) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
       return displayUnit;
-    } else if (quantity == 2) {
+    } else if (quantity === 2) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
       return displayUnit;
-    } else if (quantity == 3) {
+    } else if (quantity === 3) {
       return displayUnit;
     }
   }

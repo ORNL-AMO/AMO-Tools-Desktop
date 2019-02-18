@@ -66,11 +66,11 @@ export class CoolingTabComponent implements OnInit {
   }
 
   checkWarningExists(loss: CoolingLoss): boolean {
-    if (loss.coolingLossType == 'Gas' || loss.coolingLossType == 'Air' || loss.coolingLossType == 'Other Gas') {
+    if (loss.coolingLossType === 'Gas' || loss.coolingLossType === 'Air' || loss.coolingLossType === 'Other Gas') {
       let warnings: GasCoolingWarnings = this.coolingLossesService.checkGasWarnings(loss.gasCoolingLoss);
       let tmpHasWarning: boolean = this.coolingLossesService.checkWarningsExist(warnings);
       return tmpHasWarning;
-    } else if (loss.coolingLossType == 'Liquid' || loss.coolingLossType == 'Water' || loss.coolingLossType == 'Other Liquid') {
+    } else if (loss.coolingLossType === 'Liquid' || loss.coolingLossType === 'Water' || loss.coolingLossType === 'Other Liquid') {
       let warnings: LiquidCoolingWarnings = this.coolingLossesService.checkLiquidWarnings(loss.liquidCoolingLoss);
       let tmpHasWarning: boolean = this.coolingLossesService.checkWarningsExist(warnings);
       return tmpHasWarning;
@@ -82,41 +82,41 @@ export class CoolingTabComponent implements OnInit {
     let hasWarning: boolean = false;
     if (this.coolingLossesCompareService.baselineCoolingLosses) {
       this.coolingLossesCompareService.baselineCoolingLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let tmpHasWarning: boolean = this.checkWarningExists(loss);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     if (this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
       this.coolingLossesCompareService.modifiedCoolingLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let tmpHasWarning: boolean = this.checkWarningExists(loss);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
 
 
   checkLossValid(loss: CoolingLoss) {
-    if (loss.coolingLossType == 'Gas') {
+    if (loss.coolingLossType === 'Gas') {
       let tmpForm: FormGroup = this.coolingLossesService.initGasFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
-    } else if (loss.coolingLossType == 'Liquid') {
+    } else if (loss.coolingLossType === 'Liquid') {
       let tmpForm: FormGroup = this.coolingLossesService.initLiquidFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;

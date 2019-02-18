@@ -48,11 +48,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
   ngOnInit() {
     this.modifyConditionsTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.modifyConditionsTab = val;
-    })
+    });
 
     this.updateDataSub = this.fsatService.updateData.subscribe(val => {
       this.setBadgeClass();
-    })
+    });
 
     this.displayFanMotorTooltip = false;
     this.fanMotorBadgeHover = false;

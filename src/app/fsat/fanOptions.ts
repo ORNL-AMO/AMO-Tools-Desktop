@@ -51,7 +51,7 @@ export const FanTypes: Array<{ value: number, display: string }> = [
   //   value: 12,
   //   display: 'Specified Optimal Efficiency'
   // }
-]
+];
 
 export const Drives: Array<{ value: number, display: string }> = [
   {

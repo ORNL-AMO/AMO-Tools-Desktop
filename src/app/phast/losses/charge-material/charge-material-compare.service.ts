@@ -18,17 +18,17 @@ export class ChargeMaterialCompareService {
     if (this.modifiedMaterials) {
       for (index; index < numLoss; index++) {
         let typeCheck = this.compareMaterialType(index);
-        if (typeCheck == false) {
-          if (this.baselineMaterials[index].chargeMaterialType == 'Liquid') {
-            if (this.compareLiquidMaterial(index) == true) {
+        if (typeCheck === false) {
+          if (this.baselineMaterials[index].chargeMaterialType === 'Liquid') {
+            if (this.compareLiquidMaterial(index) === true) {
               isDiff = true;
             }
-          } else if (this.baselineMaterials[index].chargeMaterialType == 'Solid') {
-            if (this.compareSolidMaterial(index) == true) {
+          } else if (this.baselineMaterials[index].chargeMaterialType === 'Solid') {
+            if (this.compareSolidMaterial(index) === true) {
               isDiff = true;
             }
-          } else if (this.baselineMaterials[index].chargeMaterialType == 'Gas') {
-            if (this.compareGasMaterial(index) == true) {
+          } else if (this.baselineMaterials[index].chargeMaterialType === 'Gas') {
+            if (this.compareGasMaterial(index) === true) {
               isDiff = true;
             }
           }
@@ -61,7 +61,7 @@ export class ChargeMaterialCompareService {
       this.compareLiquidPercentReacted(index) ||
       this.compareLiquidReactionHeat(index) ||
       this.compareLiquidAdditionalHeat(index)
-    )
+    );
   }
   compareLiquidMaterialId(index: number) {
     return this.compare(this.baselineMaterials[index].liquidChargeMaterial.materialId, this.modifiedMaterials[index].liquidChargeMaterial.materialId);
@@ -125,7 +125,7 @@ export class ChargeMaterialCompareService {
       this.compareSolidChargeReacted(index) ||
       this.compareSolidReactionHeat(index) ||
       this.compareSolidAdditionalHeat(index)
-    )
+    );
   }
   compareSolidMaterialId(index: number) {
     return this.compare(this.baselineMaterials[index].solidChargeMaterial.materialId, this.modifiedMaterials[index].solidChargeMaterial.materialId);
@@ -187,7 +187,7 @@ export class ChargeMaterialCompareService {
       this.compareGasSpecificHeatVapor(index) ||
       this.compareGasPercentReacted(index) ||
       this.compareGasReactionHeat(index) ||
-      this.compareGasAdditionalHeat(index))
+      this.compareGasAdditionalHeat(index));
   }
   compareGasMaterialId(index: number) {
     return this.compare(this.baselineMaterials[index].gasChargeMaterial.materialId, this.modifiedMaterials[index].gasChargeMaterial.materialId);
@@ -230,11 +230,11 @@ export class ChargeMaterialCompareService {
       if (baseline.losses.chargeMaterials) {
         let index = 0;
         baseline.losses.chargeMaterials.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.chargeMaterials[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.chargeMaterials[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -246,7 +246,7 @@ export class ChargeMaterialCompareService {
     if (this.compare(baseline.chargeMaterialType, modification.chargeMaterialType)) {
       isDiff = true;
     } else {
-      if (baseline.chargeMaterialType == 'Gas') {
+      if (baseline.chargeMaterialType === 'Gas') {
         if (
           this.compare(baseline.gasChargeMaterial.materialId, modification.gasChargeMaterial.materialId) ||
           this.compare(baseline.gasChargeMaterial.thermicReactionType, modification.gasChargeMaterial.thermicReactionType) ||
@@ -263,7 +263,7 @@ export class ChargeMaterialCompareService {
         ) {
           isDiff = true;
         }
-      } else if (baseline.chargeMaterialType == 'Liquid') {
+      } else if (baseline.chargeMaterialType === 'Liquid') {
         if (
           this.compare(baseline.liquidChargeMaterial.materialId, baseline.liquidChargeMaterial.materialId) ||
           this.compare(baseline.liquidChargeMaterial.thermicReactionType, baseline.liquidChargeMaterial.thermicReactionType) ||
@@ -281,7 +281,7 @@ export class ChargeMaterialCompareService {
         ) {
           isDiff = true;
         }
-      } else if (baseline.chargeMaterialType == 'Solid') {
+      } else if (baseline.chargeMaterialType === 'Solid') {
         if (this.compare(baseline.solidChargeMaterial.materialId, modification.solidChargeMaterial.materialId) ||
           this.compare(baseline.solidChargeMaterial.thermicReactionType, modification.solidChargeMaterial.thermicReactionType) ||
           this.compare(baseline.solidChargeMaterial.specificHeatSolid, modification.solidChargeMaterial.specificHeatSolid) ||
@@ -306,14 +306,14 @@ export class ChargeMaterialCompareService {
   }
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

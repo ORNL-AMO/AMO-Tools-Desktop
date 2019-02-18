@@ -34,12 +34,12 @@ export class ResultsSummaryComponent implements OnInit {
       this.reportRollupService.selectedFsats.forEach(val => {
         if (val) {
           val.forEach(assessment => {
-            if (assessment.assessmentId == this.assessment.id) {
+            if (assessment.assessmentId === this.assessment.id) {
               this.selectedModificationIndex = assessment.selectedIndex;
             }
-          })
+          });
         }
-      })
+      });
     }
   }
 
@@ -49,7 +49,7 @@ export class ResultsSummaryComponent implements OnInit {
 
   getResults() {
     this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
-    if (this.fsat.modifications && this.fsat.modifications.length != 0) {
+    if (this.fsat.modifications && this.fsat.modifications.length !== 0) {
       this.fsat.modifications.forEach(mod => {
         // mod.fsat.fanSetup.fanEfficiency = this.baselineResults.fanEfficiency;
         let modResult: FsatOutput = this.fsatService.getResults(mod.fsat, false, this.settings);
@@ -57,7 +57,7 @@ export class ResultsSummaryComponent implements OnInit {
         modResult.energySavings = this.baselineResults.annualEnergy - modResult.annualEnergy;
         modResult.annualSavings = this.baselineResults.annualCost - modResult.annualCost;
         this.modificationResults.push(modResult);
-      })
+      });
     }  
   }
 

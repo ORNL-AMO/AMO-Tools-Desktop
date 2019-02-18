@@ -102,4 +102,4 @@ export const mass = {
             , ratio: 453.592
         }
     }
-}
+};

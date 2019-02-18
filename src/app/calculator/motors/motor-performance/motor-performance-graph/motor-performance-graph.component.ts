@@ -30,7 +30,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
     if (this.expanded) {
-      if (event.code == 'Escape') {
+      if (event.code === 'Escape') {
         this.contractChart();
       }
     }
@@ -213,16 +213,16 @@ export class MotorPerformanceGraphComponent implements OnInit {
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = true;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
@@ -232,26 +232,26 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -259,7 +259,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -267,7 +267,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       if (this.hoverBtnExpand) {
         this.displayExpandTooltip = true;
       }
@@ -275,7 +275,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
       }
@@ -380,7 +380,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   checkForm() {
     if (this.performanceForm.valid) {
-      return true
+      return true;
     }
     else {
       return false;
@@ -395,27 +395,27 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   makeGraph() {
 
-    if (this.tempMotorPower != this.performanceForm.controls.horsePower.value) {
+    if (this.tempMotorPower !== this.performanceForm.controls.horsePower.value) {
       this.curveChanged = true;
       this.tempMotorPower = this.performanceForm.controls.horsePower.value;
     }
-    if (this.tempEfficiencyClass != this.performanceForm.controls.efficiencyClass.value) {
+    if (this.tempEfficiencyClass !== this.performanceForm.controls.efficiencyClass.value) {
       this.curveChanged = true;
       this.tempEfficiencyClass = this.performanceForm.controls.efficiencyClass.value;
     }
-    if (this.tempRpm != this.performanceForm.controls.motorRPM.value) {
+    if (this.tempRpm !== this.performanceForm.controls.motorRPM.value) {
       this.curveChanged = true;
-      this.tempRpm = this.performanceForm.controls.motorRPM.value
+      this.tempRpm = this.performanceForm.controls.motorRPM.value;
     }
-    if (this.tempAmps != this.performanceForm.controls.fullLoadAmps.value) {
+    if (this.tempAmps !== this.performanceForm.controls.fullLoadAmps.value) {
       this.curveChanged = true;
       this.tempRpm = this.performanceForm.controls.fullLoadAmps.value;
     }
-    if (this.tempVoltage != this.performanceForm.controls.motorVoltage.value) {
+    if (this.tempVoltage !== this.performanceForm.controls.motorVoltage.value) {
       this.curveChanged = true;
       this.tempVoltage = this.performanceForm.controls.motorVoltage.value;
     }
-    if (this.tempLineFrequency != this.performanceForm.controls.frequency.value) {
+    if (this.tempLineFrequency !== this.performanceForm.controls.frequency.value) {
       this.curveChanged = true;
       this.tempLineFrequency = this.performanceForm.controls.frequency.value;
     }
@@ -742,7 +742,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
         data.push({
           x: i,
           y: this.psatService.roundVal(current, 3)
-        })
+        });
       }
     }
     return data;
@@ -751,12 +751,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
   getEfficiencyData(): Array<{ x: number, y: number }> {
     let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     for (var i = .001; i <= 1.2; i = i + .01) {
-      let efficiency = this.calculateEfficiency(i)
+      let efficiency = this.calculateEfficiency(i);
       if (efficiency >= 0 && efficiency <= 120) {
         data.push({
           x: i,
           y: this.psatService.roundVal(efficiency, 3)
-        })
+        });
       }
     }
     return data;
@@ -770,7 +770,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
         data.push({
           x: i,
           y: this.psatService.roundVal(powerFactor, 3)
-        })
+        });
       }
     }
     return data;
@@ -1134,7 +1134,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       this.rowData[j] = this.rowData[j + 1];
       this.keyColors[j] = this.keyColors[j + 1];
     }
-    if (i != this.tableData.length - 1) {
+    if (i !== this.tableData.length - 1) {
       this.deleteCount += 1;
     }
     this.tableData.pop();

@@ -23,7 +23,7 @@ export class DeaeratorService {
       steamPressure: ['', [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
       steamThermodynamicQuantity: [2, [Validators.required]],
       steamQuantityValue: ['', [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
-    })
+    });
     return tmpForm;
   }
 
@@ -39,7 +39,7 @@ export class DeaeratorService {
       steamPressure: [inputObj.steamPressure, [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
       steamThermodynamicQuantity: [2, [Validators.required]],
       steamQuantityValue: [inputObj.steamQuantityValue, [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
-    })
+    });
     return tmpForm;
   }
 
@@ -54,7 +54,7 @@ export class DeaeratorService {
       steamPressure: form.controls.steamPressure.value,
       steamThermodynamicQuantity: form.controls.steamThermodynamicQuantity.value,
       steamQuantityValue: form.controls.steamQuantityValue.value
-    }
+    };
     return input;
   }
 
@@ -76,7 +76,7 @@ export class DeaeratorService {
       steamPressureMax: Number(this.convertUnitsService.value(22064 ).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       steamQuantityValueMin: steamQuantityMinMax.min,
       steamQuantityValueMax: steamQuantityMinMax.max
-    }
+    };
     return ranges;
   }
 }

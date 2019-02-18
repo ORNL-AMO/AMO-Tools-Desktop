@@ -97,37 +97,37 @@ export class CondensateHandlingFormComponent implements OnInit {
 
   //condensate recovery rate
   initHighPressureCondensateRecovery() {
-    if (this.baselineHighPressureForm.controls.condensationRecoveryRate.value != this.modificationHighPressureForm.controls.condensationRecoveryRate.value) {
+    if (this.baselineHighPressureForm.controls.condensationRecoveryRate.value !== this.modificationHighPressureForm.controls.condensationRecoveryRate.value) {
       this.showHighPressureCondensateRecovery = true;
     }
   }
   initMediumPressureCondensateRecovery() {
-    if (this.baselineMediumPressureForm.controls.condensationRecoveryRate.value != this.modificationMediumPressureForm.controls.condensationRecoveryRate.value) {
+    if (this.baselineMediumPressureForm.controls.condensationRecoveryRate.value !== this.modificationMediumPressureForm.controls.condensationRecoveryRate.value) {
       this.showMediumPressureCondensateRecovery = true;
     }
   }
   initLowPressureCondensateRecovery() {
-    if (this.baselineLowPressureForm.controls.condensationRecoveryRate.value != this.modificationLowPressureForm.controls.condensationRecoveryRate.value) {
+    if (this.baselineLowPressureForm.controls.condensationRecoveryRate.value !== this.modificationLowPressureForm.controls.condensationRecoveryRate.value) {
       this.showLowPressureCondensateRecovery = true;
     }
   }
 
   toggleHighPressureCondensateRecovery() {
-    if (this.showHighPressureCondensateRecovery == false) {
+    if (this.showHighPressureCondensateRecovery === false) {
       this.modificationHighPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineHighPressureForm.controls.condensationRecoveryRate.value);
       this.save();
     }
   }
 
   toggleMediumPressureCondensateRecovery() {
-    if (this.showMediumPressureCondensateRecovery == false) {
+    if (this.showMediumPressureCondensateRecovery === false) {
       this.modificationMediumPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineMediumPressureForm.controls.condensationRecoveryRate.value);
       this.save();
     }
   }
 
   toggleLowPressureCondensateRecovery() {
-    if (this.showLowPressureCondensateRecovery == false) {
+    if (this.showLowPressureCondensateRecovery === false) {
       this.modificationLowPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineLowPressureForm.controls.condensationRecoveryRate.value);
       this.save();
     }
@@ -135,13 +135,13 @@ export class CondensateHandlingFormComponent implements OnInit {
 
   //condensate return temperature
   initReturnTemperature() {
-    if (this.modificationHighPressureForm.controls.condensateReturnTemperature.value != this.baselineHighPressureForm.controls.condensateReturnTemperature.value) {
+    if (this.modificationHighPressureForm.controls.condensateReturnTemperature.value !== this.baselineHighPressureForm.controls.condensateReturnTemperature.value) {
       this.showReturnTemperature = true;
     }
   }
 
   toggleReturnTemperature() {
-    if (this.showReturnTemperature == false) {
+    if (this.showReturnTemperature === false) {
       this.modificationHighPressureForm.controls.condensateReturnTemperature.patchValue(this.baselineHighPressureForm.controls.condensateReturnTemperature.value);
       this.save();
     }
@@ -150,26 +150,26 @@ export class CondensateHandlingFormComponent implements OnInit {
 
   //flash condensate
   initFlashCondensateLowPressure() {
-    if (this.modificationLowPressureForm.controls.flashCondensateIntoHeader.value != this.baselineLowPressureForm.controls.flashCondensateIntoHeader.value) {
+    if (this.modificationLowPressureForm.controls.flashCondensateIntoHeader.value !== this.baselineLowPressureForm.controls.flashCondensateIntoHeader.value) {
       this.showFlashCondensateLowPressure = true;
     }
   }
 
   toggleFlashCondensateLowPressure() {
-    if (this.showFlashCondensateLowPressure == false) {
+    if (this.showFlashCondensateLowPressure === false) {
       this.modificationLowPressureForm.controls.flashCondensateIntoHeader.patchValue(this.baselineLowPressureForm.controls.flashCondensateIntoHeader.value);
       this.save();
     }
   }
 
   initFlashCondensateMediumPressure() {
-    if (this.modificationMediumPressureForm.controls.flashCondensateIntoHeader.value != this.baselineMediumPressureForm.controls.flashCondensateIntoHeader.value) {
+    if (this.modificationMediumPressureForm.controls.flashCondensateIntoHeader.value !== this.baselineMediumPressureForm.controls.flashCondensateIntoHeader.value) {
       this.showFlashCondensateMediumPressure = true;
     }
   }
 
   toggleFlashCondensateMediumPressure() {
-    if (this.showFlashCondensateLowPressure == false) {
+    if (this.showFlashCondensateLowPressure === false) {
       this.modificationMediumPressureForm.controls.flashCondensateIntoHeader.patchValue(this.baselineMediumPressureForm.controls.flashCondensateIntoHeader.value);
       this.save();
     }

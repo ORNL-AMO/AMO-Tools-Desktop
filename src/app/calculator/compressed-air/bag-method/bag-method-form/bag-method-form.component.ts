@@ -33,7 +33,7 @@ export class BagMethodFormComponent implements OnInit {
     let inputsObject = {
       inputs: this.inputs,
       index: this.index
-    }
+    };
     this.calculate.emit(inputsObject);
   }
 

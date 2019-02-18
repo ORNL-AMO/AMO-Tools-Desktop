@@ -23,7 +23,7 @@ export class PsatRollupPumpSummaryTableComponent implements OnInit {
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {
     if (implementationCost) {
       let val = (implementationCost / (baselineCost - modCost)) * 12;
-      if (isNaN(val) == false) {
+      if (isNaN(val) === false) {
         return val;
       } else {
         return 0;

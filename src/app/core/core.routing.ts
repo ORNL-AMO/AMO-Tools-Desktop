@@ -31,4 +31,4 @@ export const coreRoutes: Routes = [
     path: 'ssmt/:id',
     component: SsmtComponent
   }
-]
+];

@@ -33,7 +33,7 @@ export class StackLossService {
       'SO2': ['', Validators.required],
       'O2': ['', Validators.required],
       'name': ['Loss #' + 1]
-    })
+    });
   }
 
   initFormMass(): FormGroup {
@@ -56,7 +56,7 @@ export class StackLossService {
       'moisture': ['', Validators.required],
       'nitrogen': ['', Validators.required],
       'name': ['Loss #' + 1]
-    })
+    });
   }
 
   initByVolumeFormFromLoss(loss: FlueGas): FormGroup {
@@ -80,7 +80,7 @@ export class StackLossService {
       'SO2': [loss.flueGasByVolume.SO2, Validators.required],
       'O2': [loss.flueGasByVolume.O2, Validators.required],
       'name': [loss.name]
-    })
+    });
   }
 
   initByMassFormFromLoss(loss: FlueGas): FormGroup {
@@ -103,7 +103,7 @@ export class StackLossService {
       'moisture': [loss.flueGasByMass.moisture, Validators.required],
       'nitrogen': [loss.flueGasByMass.nitrogen, Validators.required],
       'name': [loss.name]
-    })
+    });
   }
 
   buildByMassLossFromForm(form: FormGroup): FlueGasByMass {
@@ -125,7 +125,7 @@ export class StackLossService {
       o2: form.controls.o2.value,
       moisture: form.controls.moisture.value,
       nitrogen: form.controls.nitrogen.value
-    }
+    };
     return flueGasByMass;
   }
 
@@ -149,7 +149,7 @@ export class StackLossService {
       CO2: form.controls.CO2.value,
       SO2: form.controls.SO2.value,
       O2: form.controls.O2.value
-    }
+    };
     return flueGasByVolume;
   }
 }

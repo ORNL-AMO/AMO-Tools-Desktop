@@ -13,7 +13,7 @@ export class HeaderService {
     return {
       numberOfHeaders: 1,
       highPressure: undefined
-    }
+    };
   }
 
   initHighestPressureHeaderForm(settings: Settings) {
@@ -25,7 +25,7 @@ export class HeaderService {
       heatLoss: [undefined, [Validators.required, Validators.min(0), Validators.max(10)]],
       condensateReturnTemperature: [undefined, [Validators.required, Validators.min(ranges.condensateReturnTempMin), Validators.max(ranges.condensateReturnTempMax)]],
       flashCondensateReturn: [false, Validators.required]
-    })
+    });
   }
 
   getHighestPressureHeaderFormFromObj(obj: HeaderWithHighestPressure, settings: Settings): FormGroup {
@@ -52,7 +52,7 @@ export class HeaderService {
       heatLoss: form.controls.heatLoss.value,
       condensateReturnTemperature: form.controls.condensateReturnTemperature.value,
       flashCondensateReturn: form.controls.flashCondensateReturn.value
-    }
+    };
   }
 
   initHeaderForm(settings: Settings): FormGroup {
@@ -65,16 +65,16 @@ export class HeaderService {
       flashCondensateIntoHeader: [false, Validators.required],
       desuperheatSteamIntoNextHighest: [false, Validators.required],
       desuperheatSteamTemperature: [undefined, [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
-    })
+    });
   }
 
   getHeaderFormFromObj(obj: HeaderNotHighestPressure, settings: Settings): FormGroup {
-    let ranges: HeaderRanges = this.getRanges(settings)
+    let ranges: HeaderRanges = this.getRanges(settings);
     let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
     if (obj.desuperheatSteamIntoNextHighest) {
-      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     } else {
-      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     }
     let form: FormGroup = this.formBuilder.group({
       pressure: [obj.pressure, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
@@ -84,7 +84,7 @@ export class HeaderService {
       flashCondensateIntoHeader: [obj.flashCondensateIntoHeader, Validators.required],
       desuperheatSteamIntoNextHighest: [obj.desuperheatSteamIntoNextHighest, Validators.required],
       desuperheatSteamTemperature: [obj.desuperheatSteamTemperature, tmpDesuperheatSteamTemperatureValidators],
-    })
+    });
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
@@ -100,34 +100,34 @@ export class HeaderService {
       flashCondensateIntoHeader: form.controls.flashCondensateIntoHeader.value,
       desuperheatSteamIntoNextHighest: form.controls.desuperheatSteamIntoNextHighest.value,
       desuperheatSteamTemperature: form.controls.desuperheatSteamTemperature.value
-    }
+    };
   }
 
   getHeaderLabel(index: number, numberOfHeaders: number): string {
     //index is 0 indexed
-    if (index == 0) {
+    if (index === 0) {
       return 'High Pressure';
     }
     else {
-      if (index == numberOfHeaders - 1) {
+      if (index === numberOfHeaders - 1) {
         return 'Low Pressure';
       } else {
-        if (numberOfHeaders == 3) {
-          if (index == 1) {
+        if (numberOfHeaders === 3) {
+          if (index === 1) {
             return 'Medium Pressure';
           }
-        } else if (numberOfHeaders == 4) {
-          if (index == 1) {
+        } else if (numberOfHeaders === 4) {
+          if (index === 1) {
             return 'Medium High Pressure';
-          } else if (index == 2) {
+          } else if (index === 2) {
             return 'Medium Low Pressure';
           }
-        } else if (numberOfHeaders == 5) {
-          if (index == 1) {
+        } else if (numberOfHeaders === 5) {
+          if (index === 1) {
             return 'Medium High Pressure';
-          } else if (index == 2) {
+          } else if (index === 2) {
             return 'Medium Pressure';
-          } else if (index == 3) {
+          } else if (index === 3) {
             return 'Medium Low Pressure';
           }
         }
@@ -175,7 +175,7 @@ export class HeaderService {
       desuperheatingTempMax: tmpDesuperheatingTempMax,
       processUsageMax: tmpProcessUsageMax,
       processUsageMin: tmpProcessUsageMin
-    }
+    };
   }
 
 
@@ -186,7 +186,7 @@ export class HeaderService {
       let isLowPressureHeaderValid: boolean = true;
       if (obj.highPressure) {
         let tmpHighPressureFrom: FormGroup = this.getHighestPressureHeaderFormFromObj(obj.highPressure, settings);
-        if (tmpHighPressureFrom.status == 'INVALID') {
+        if (tmpHighPressureFrom.status === 'INVALID') {
           isHighPressureHeaderValid = false;
         }
       } else {
@@ -196,7 +196,7 @@ export class HeaderService {
       if (obj.numberOfHeaders > 1) {
         if (obj.lowPressure) {
           let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressure, settings);
-          if (tmpLowPressureHeaderForm.status == 'INVALID') {
+          if (tmpLowPressureHeaderForm.status === 'INVALID') {
             isLowPressureHeaderValid = false;
           }
         }
@@ -205,10 +205,10 @@ export class HeaderService {
         }
       }
 
-      if (obj.numberOfHeaders == 3) {
+      if (obj.numberOfHeaders === 3) {
         if (obj.mediumPressure) {
           let tmpMediumHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.mediumPressure, settings);
-          if (tmpMediumHeaderForm.status == 'INVALID') {
+          if (tmpMediumHeaderForm.status === 'INVALID') {
             isMediumPressureHeaderValid = false;
           }
         } else {
@@ -229,12 +229,12 @@ export class HeaderService {
 
 
 export interface HeaderRanges {
-  pressureMin: number,
-  pressureMax: number,
-  condensateReturnTempMin: number,
-  condensateReturnTempMax: number,
-  desuperheatingTempMin: number,
-  desuperheatingTempMax: number,
-  processUsageMin: number,
-  processUsageMax: number
+  pressureMin: number;
+  pressureMax: number;
+  condensateReturnTempMin: number;
+  condensateReturnTempMax: number;
+  desuperheatingTempMin: number;
+  desuperheatingTempMax: number;
+  processUsageMin: number;
+  processUsageMax: number;
 }

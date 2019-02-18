@@ -35,7 +35,7 @@ export class FacilityInfoComponent implements OnInit {
         assessmentPhoneNumber: [''],
         assessmentEmail: [''],
         date: [date]
-      })
+      });
     }
     else {
       let facilityContactInfo: Contact = this.settings.facilityInfo.facilityContact;
@@ -54,7 +54,7 @@ export class FacilityInfoComponent implements OnInit {
           state: '',
           country: '',
           zip: ''
-        }
+        };
       }
 
       this.facilityForm = this.formBuilder.group({
@@ -72,7 +72,7 @@ export class FacilityInfoComponent implements OnInit {
         assessmentPhoneNumber: [assessmentContact.phoneNumber],
         assessmentEmail: [assessmentContact.email],
         date: [this.settings.facilityInfo.date]
-      })
+      });
     }
 
   }
@@ -99,7 +99,7 @@ export class FacilityInfoComponent implements OnInit {
         email: this.facilityForm.controls.assessmentEmail.value
       },
       date: this.facilityForm.controls.date.value
-    }
+    };
     this.close.emit(true);
   }
 
@@ -109,7 +109,7 @@ export class FacilityInfoComponent implements OnInit {
       contactName: undefined,
       phoneNumber: undefined,
       email: undefined
-    }
+    };
     return contact;
   }
 

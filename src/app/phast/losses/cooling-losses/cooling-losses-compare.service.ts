@@ -16,13 +16,13 @@ export class CoolingLossesCompareService {
     if (this.modifiedCoolingLosses) {
       for (index; index < numLoss; index++) {
         let typeCheck = this.compareLossType(index);
-        if (typeCheck == false) {
-          if (this.baselineCoolingLosses[index].coolingLossType == 'Liquid') {
-            if (this.compareLiquidLoss(index) == true) {
+        if (typeCheck === false) {
+          if (this.baselineCoolingLosses[index].coolingLossType === 'Liquid') {
+            if (this.compareLiquidLoss(index) === true) {
               isDiff = true;
             }
-          } else if (this.baselineCoolingLosses[index].coolingLossType == 'Gas') {
-            if (this.compareGasLoss(index) == true) {
+          } else if (this.baselineCoolingLosses[index].coolingLossType === 'Gas') {
+            if (this.compareGasLoss(index) === true) {
               isDiff = true;
             }
           }
@@ -51,7 +51,7 @@ export class CoolingLossesCompareService {
       this.compareGasCorrectionFactor(index) ||
       this.compareGasDensity(index) ||
       this.compareCoolingMedium(index)
-    )
+    );
   }
   compareGasFlowRate(index: number): boolean {
     return this.compare(this.baselineCoolingLosses[index].gasCoolingLoss.flowRate, this.modifiedCoolingLosses[index].gasCoolingLoss.flowRate);
@@ -82,7 +82,7 @@ export class CoolingLossesCompareService {
       this.compareLiquidSpecificHeat(index) ||
       this.compareLiquidCorrectionFactor(index) ||
       this.compareCoolingMedium(index)
-    )
+    );
   }
   compareLiquidFlowRate(index: number): boolean {
     return this.compare(this.baselineCoolingLosses[index].liquidCoolingLoss.flowRate, this.modifiedCoolingLosses[index].liquidCoolingLoss.flowRate);
@@ -109,11 +109,11 @@ export class CoolingLossesCompareService {
       if (baseline.losses.coolingLosses) {
         let index = 0;
         baseline.losses.coolingLosses.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.coolingLosses[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.coolingLosses[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -124,7 +124,7 @@ export class CoolingLossesCompareService {
     if (this.compare(baseline.coolingLossType, modification.coolingLossType)) {
       isDiff = true;
     } else {
-      if (baseline.coolingLossType == 'Gas') {
+      if (baseline.coolingLossType === 'Gas') {
         if (this.compare(baseline.gasCoolingLoss.flowRate, modification.gasCoolingLoss.flowRate) ||
           this.compare(baseline.gasCoolingLoss.initialTemperature, modification.gasCoolingLoss.initialTemperature) ||
           this.compare(baseline.gasCoolingLoss.finalTemperature, modification.gasCoolingLoss.finalTemperature) ||
@@ -133,7 +133,7 @@ export class CoolingLossesCompareService {
           this.compare(baseline.gasCoolingLoss.correctionFactor, modification.gasCoolingLoss.correctionFactor)) {
           isDiff = true;
         }
-      } else if (baseline.coolingLossType == 'Liquid') {
+      } else if (baseline.coolingLossType === 'Liquid') {
         if (this.compare(baseline.liquidCoolingLoss.flowRate, modification.liquidCoolingLoss.flowRate) ||
           this.compare(baseline.liquidCoolingLoss.initialTemperature, modification.liquidCoolingLoss.initialTemperature) ||
           this.compare(baseline.liquidCoolingLoss.outletTemperature, modification.liquidCoolingLoss.outletTemperature) ||
@@ -144,19 +144,19 @@ export class CoolingLossesCompareService {
         }
       }
     }
-    return isDiff
+    return isDiff;
   }
 
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

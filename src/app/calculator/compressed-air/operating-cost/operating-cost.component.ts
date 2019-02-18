@@ -48,7 +48,7 @@ export class OperatingCostComponent implements OnInit {
       efficiencyLoaded: 0,
       efficiencyUnloaded: 0,
       costOfElectricity: 0,
-    }
+    };
     this.compressedAirService.operatingCostInput = this.inputs;
     this.calculateOperationCost(this.inputs);
   }

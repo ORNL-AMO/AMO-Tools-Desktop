@@ -88,9 +88,9 @@ export class AssessmentCardComponent implements OnInit {
       this.editForm = this.formBuilder.group({
         'name': [this.assessment.name, Validators.required],
         'directoryId': [this.assessment.directoryId, Validators.required]
-      })
+      });
       this.editModal.show();
-    })
+    });
   }
 
 
@@ -106,9 +106,9 @@ export class AssessmentCardComponent implements OnInit {
         'directoryId': [this.assessment.directoryId, Validators.required],
         'copyModifications': [false],
         'copyCalculators': [false]
-      })
+      });
       this.copyModal.show();
-    })
+    });
   }
 
   hideCopyModal() {
@@ -121,10 +121,10 @@ export class AssessmentCardComponent implements OnInit {
     this.assessmentCopy.createdDate = new Date();
     this.assessmentCopy.modifiedDate = new Date();
 
-    if (this.copyForm.controls.copyModifications.value == false) {
-      if (this.assessmentCopy.type == 'PHAST') {
+    if (this.copyForm.controls.copyModifications.value === false) {
+      if (this.assessmentCopy.type === 'PHAST') {
         this.assessmentCopy.phast.modifications = new Array();
-      } else if (this.assessmentCopy.type == 'PSAT') {
+      } else if (this.assessmentCopy.type === 'PSAT') {
         this.assessmentCopy.psat.modifications = new Array();
       }
     }
@@ -134,31 +134,31 @@ export class AssessmentCardComponent implements OnInit {
       this.indexedDbService.addSettings(this.settingsCopy).then(() => {
         this.settingsDbService.setAll().then(() => {
           this.assessmentDbService.setAll().then(() => {
-            if (this.copyForm.controls.copyCalculators.value == true) {
+            if (this.copyForm.controls.copyCalculators.value === true) {
               this.assessmentCalculatorCopy.assessmentId = newAssessmentId;
               this.indexedDbService.addCalculator(this.assessmentCalculatorCopy).then(() => {
                 this.calculatorDbService.setAll().then(() => {
                   this.changeDirectory.emit(true);
                   this.hideCopyModal();
-                })
-              })
+                });
+              });
             } else {
               this.changeDirectory.emit(true);
               this.hideCopyModal();
             }
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
 
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
     let str = parentDir.name + '/';
     while (parentDir.parentDirectoryId) {
-      parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+      parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
       str = parentDir.name + '/' + str;
     }
     return str;
@@ -172,8 +172,8 @@ export class AssessmentCardComponent implements OnInit {
         this.changeDirectory.emit(true);
         this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
-      })
-    })
+      });
+    });
   }
 
   showDropdown() {
@@ -199,17 +199,17 @@ export class AssessmentCardComponent implements OnInit {
                 this.calculatorDbService.setAll().then(() => {
                   this.hideDeleteModal();
                   this.assessmentService.updateSidebarData.next(true);
-                })
-              })
+                });
+              });
             } else {
-              console.log('delete')
+              console.log('delete');
               this.hideDeleteModal();
               this.assessmentService.updateSidebarData.next(true);
             }
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
 

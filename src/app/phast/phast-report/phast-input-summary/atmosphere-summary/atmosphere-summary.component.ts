@@ -47,7 +47,7 @@ export class AtmosphereSummaryComponent implements OnInit {
     this.gasOptions = this.suiteDbService.selectAtmosphereSpecificHeat();
     this.lossData = new Array();
     if (this.phast.losses) {
-      if(this.phast.modifications){
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
       if (this.phast.losses.atmosphereLosses) {
@@ -59,7 +59,7 @@ export class AtmosphereSummaryComponent implements OnInit {
             this.phast.modifications.forEach(mod => {
               let modData = mod.phast.losses.atmosphereLosses[index];
               modificationData.push(modData);
-            })
+            });
           }
           this.lossData.push({
             baseline: loss,
@@ -74,7 +74,7 @@ export class AtmosphereSummaryComponent implements OnInit {
           this.correctionFactorDiff.push(false);
           //index +1 for next loss
           index++;
-        })
+        });
       }
     }
   }
@@ -83,10 +83,10 @@ export class AtmosphereSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change
@@ -98,14 +98,14 @@ export class AtmosphereSummaryComponent implements OnInit {
     }
   }
 
-  checkSpecificHeat(loss: AtmosphereLoss){
+  checkSpecificHeat(loss: AtmosphereLoss) {
     let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(loss.atmosphereGas);
     if (material) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeat).from('btulbF').to('kJkgC')
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeat).from('btulbF').to('kJkgC');
         material.specificHeat = this.roundVal(val, 4);
       }
-      if (material.specificHeat != loss.specificHeat) {
+      if (material.specificHeat !== loss.specificHeat) {
         return true;
       } else {
         return false;
@@ -120,11 +120,11 @@ export class AtmosphereSummaryComponent implements OnInit {
 
   getGas(id: number) {
     if (id) {
-      let option = this.gasOptions.filter(val => { return id == val.id });
-      if (option.length != 0) {
+      let option = this.gasOptions.filter(val => { return id === val.id; });
+      if (option.length !== 0) {
         return option[0].substance;
       } else {
-        return ''
+        return '';
       }
     }
     return '';

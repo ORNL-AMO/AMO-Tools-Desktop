@@ -29,17 +29,17 @@ export class CalculateOutletPressureComponent implements OnInit {
         systemDamperLoss: 0,
         processRequirements: 0,
         calculatedOutletPressure: 0
-      }
+      };
     }
   }
 
   calculate() {
     let sum: number = 0;
     Object.keys(this.outletPressureData).map((key, index) => {
-      if (key.valueOf() != 'calculatedOutletPressure') {
+      if (key.valueOf() !== 'calculatedOutletPressure') {
         sum = sum + this.outletPressureData[key];
       }
-    })
+    });
     this.outletPressureData.calculatedOutletPressure = sum;
     this.emitSave.emit(this.outletPressureData);
   }

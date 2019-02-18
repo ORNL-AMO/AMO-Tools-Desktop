@@ -45,9 +45,9 @@ export class ExecutiveSummaryService {
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let calculatedEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
     let calculatedEnergyIntensity = (calculatedEnergyUsed / sumFeedRate) || 0;
-    if (settings.energyResultUnit == 'MMBtu') {
+    if (settings.energyResultUnit === 'MMBtu') {
       calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('MMBtu').to('Btu');
-    } else if (settings.energyResultUnit == 'GJ') {
+    } else if (settings.energyResultUnit === 'GJ') {
       calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('GJ').to('kJ');
     }
     return calculatedEnergyIntensity;
@@ -60,20 +60,20 @@ export class ExecutiveSummaryService {
     let tmpAnnualEnergy = JSON.parse(JSON.stringify(annualEnergyUsed));
 
     //convert our annual energy to cost unit
-    if (settings.energySourceType == 'Electricity') {
+    if (settings.energySourceType === 'Electricity') {
       tmpAnnualEnergy = this.convertUnitsService.value(tmpAnnualEnergy).from(settings.energyResultUnit).to('kWh');
-    } else if (settings.unitsOfMeasure == 'Metric') {
+    } else if (settings.unitsOfMeasure === 'Metric') {
       tmpAnnualEnergy = this.convertUnitsService.value(tmpAnnualEnergy).from(settings.energyResultUnit).to('GJ');
     } else {
       tmpAnnualEnergy = this.convertUnitsService.value(tmpAnnualEnergy).from(settings.energyResultUnit).to('MMBtu');
     }
 
     //annual cost = annual energy in cost unit * cost
-    if (settings.energySourceType == 'Fuel') {
+    if (settings.energySourceType === 'Fuel') {
       tmpAnnualCost = tmpAnnualEnergy * phast.operatingCosts.fuelCost;
-    } else if (settings.energySourceType == 'Electricity') {
+    } else if (settings.energySourceType === 'Electricity') {
       tmpAnnualCost = tmpAnnualEnergy * phast.operatingCosts.electricityCost;
-    } else if (settings.energySourceType == 'Steam') {
+    } else if (settings.energySourceType === 'Steam') {
       tmpAnnualCost = tmpAnnualEnergy * phast.operatingCosts.steamCost;
     }
     return tmpAnnualCost;
@@ -89,7 +89,7 @@ export class ExecutiveSummaryService {
       annualCostSavings: 0,
       implementationCosts: 0,
       paybackPeriod: 0
-    }
+    };
     return tmpSummary;
   }
 
@@ -162,7 +162,7 @@ export class ExecutiveSummaryService {
           tmpNotesArr.push(note);
         }
       }
-    })
+    });
     return tmpNotesArr;
   }
   buildNoteObject(modName: string, lossName: string, note: string): SummaryNote {
@@ -170,7 +170,7 @@ export class ExecutiveSummaryService {
       modificationName: modName,
       lossName: lossName,
       note: note
-    }
+    };
     return summaryNote;
   }
 
@@ -180,7 +180,7 @@ export class ExecutiveSummaryService {
 
 
 export interface SummaryNote {
-  modificationName: string,
-  lossName: string,
-  note: string
+  modificationName: string;
+  lossName: string;
+  note: string;
 }

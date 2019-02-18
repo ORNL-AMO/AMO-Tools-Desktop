@@ -10,7 +10,7 @@ import { OperatingHours } from '../../../../shared/models/operations';
 })
 export class OperationsFormComponent implements OnInit {
   @Output('changeField')
-  changeField = new EventEmitter<string>()
+  changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
   @Input()
@@ -52,9 +52,9 @@ export class OperationsFormComponent implements OnInit {
     let tmpHoursPerYear = this.operationsForm.controls.hoursPerShift.value * this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.daysPerWeek.value * this.operationsForm.controls.weeksPerYear.value;
     this.operationsForm.patchValue({
       hoursPerYear: tmpHoursPerYear.toFixed(0)
-    })
+    });
     this.isCalculated = true;
-    this.save()
+    this.save();
   }
 
   setNotCalculated() {
@@ -67,7 +67,7 @@ export class OperationsFormComponent implements OnInit {
     let tmpVal = this.operationsForm.controls.shiftsPerDay.value + 1;
     this.operationsForm.patchValue({
       shiftsPerDay: tmpVal
-    })
+    });
     //  this.phast.operatingHours.shiftsPerDay += 1;
     this.calculatHrsPerYear();
   }
@@ -76,7 +76,7 @@ export class OperationsFormComponent implements OnInit {
     let tmpVal = this.operationsForm.controls.shiftsPerDay.value - 1;
     this.operationsForm.patchValue({
       shiftsPerDay: tmpVal
-    })
+    });
     // this.phast.operatingHours.shiftsPerDay -= 1;
     this.calculatHrsPerYear();
   }
@@ -84,7 +84,7 @@ export class OperationsFormComponent implements OnInit {
     let tmpVal = this.operationsForm.controls.hoursPerShift.value - 1;
     this.operationsForm.patchValue({
       hoursPerShift: tmpVal
-    })
+    });
     // this.phast.operatingHours.hoursPerShift -= 1;
     this.calculatHrsPerYear();
   }
@@ -92,7 +92,7 @@ export class OperationsFormComponent implements OnInit {
     let tmpVal = this.operationsForm.controls.hoursPerShift.value + 1;
     this.operationsForm.patchValue({
       hoursPerShift: tmpVal
-    })
+    });
     // this.phast.operatingHours.hoursPerShift += 1;
     this.calculatHrsPerYear();
   }
@@ -101,7 +101,7 @@ export class OperationsFormComponent implements OnInit {
     let tmpVal = this.operationsForm.controls.daysPerWeek.value - 1;
     this.operationsForm.patchValue({
       daysPerWeek: tmpVal
-    })
+    });
     //this.phast.operatingHours.daysPerWeek -= 1;
     this.calculatHrsPerYear();
   }
@@ -109,7 +109,7 @@ export class OperationsFormComponent implements OnInit {
     let tmpVal = this.operationsForm.controls.daysPerWeek.value + 1;
     this.operationsForm.patchValue({
       daysPerWeek: tmpVal
-    })
+    });
     //this.phast.operatingHours.daysPerWeek += 1;
     this.calculatHrsPerYear();
   }
@@ -118,7 +118,7 @@ export class OperationsFormComponent implements OnInit {
     let tmpVal = this.operationsForm.controls.weeksPerYear.value + 1;
     this.operationsForm.patchValue({
       weeksPerYear: tmpVal
-    })
+    });
     //this.phast.operatingHours.weeksPerYear += 1;
     this.calculatHrsPerYear();
   }
@@ -127,7 +127,7 @@ export class OperationsFormComponent implements OnInit {
     let tmpVal = this.operationsForm.controls.weeksPerYear.value - 1;
     this.operationsForm.patchValue({
       weeksPerYear: tmpVal
-    })
+    });
     // this.phast.operatingHours.weeksPerYear -= 1;
     this.calculatHrsPerYear();
   }

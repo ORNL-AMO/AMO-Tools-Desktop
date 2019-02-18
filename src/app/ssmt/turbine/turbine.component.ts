@@ -86,18 +86,18 @@ export class TurbineComponent implements OnInit {
   saveHighLowPressureTurbine() {
     let tmpPressureTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.highToLowTurbineForm);
     this.turbineInput.highToLowTurbine = tmpPressureTurbine;
-    this.emitSave.emit(this.turbineInput)
+    this.emitSave.emit(this.turbineInput);
   }
 
   saveHighMediumPressureTurbine() {
     let tmpPressureTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.highToMediumTurbineForm);
     this.turbineInput.highToMediumTurbine = tmpPressureTurbine;
-    this.emitSave.emit(this.turbineInput)
+    this.emitSave.emit(this.turbineInput);
   }
 
   saveMediumLowPressureTurbine() {
     let tmpPressureTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.mediumToLowTurbineForm);
     this.turbineInput.mediumToLowTurbine = tmpPressureTurbine;
-    this.emitSave.emit(this.turbineInput)
+    this.emitSave.emit(this.turbineInput);
   }
 }

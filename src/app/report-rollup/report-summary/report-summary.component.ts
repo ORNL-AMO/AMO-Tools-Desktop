@@ -52,7 +52,7 @@ export class ReportSummaryComponent implements OnInit {
     this.showPsatModal.emit(true);
   }
 
-  showFanModal(){
+  showFanModal() {
     this.showFsatModal.emit(true);
   }
 
@@ -60,6 +60,6 @@ export class ReportSummaryComponent implements OnInit {
     this.showSummary = str;
     setTimeout(() => {
       this.hideSummary.emit(true);
-    },250)
+    }, 250);
   }
 }

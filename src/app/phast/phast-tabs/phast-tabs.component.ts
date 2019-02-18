@@ -33,10 +33,10 @@ export class PhastTabsComponent implements OnInit {
     //subscribe here, other components can also change the tabs.
     this.phastService.stepTab.subscribe(val => {
       this.currentTab = val;
-    })
+    });
     this.phastService.specTab.subscribe(val => {
       this.specTab = val;
-    })
+    });
 
     this.badge1Hover = false;
     this.badge2Hover = false;
@@ -52,10 +52,10 @@ export class PhastTabsComponent implements OnInit {
 
 
   showTooltip(num: number) {
-    if (num == 1) {
+    if (num === 1) {
       this.badge1Hover = true;
     }
-    else if (num == 2) {
+    else if (num === 2) {
       this.badge2Hover = true;
     }
 
@@ -65,18 +65,18 @@ export class PhastTabsComponent implements OnInit {
   }
 
   hideTooltip(num: number) {
-    if (num == 1) {
+    if (num === 1) {
       this.badge1Hover = false;
       this.display1 = false;
     }
-    else if (num == 2) {
+    else if (num === 2) {
       this.badge2Hover = false;
       this.display2 = false;
     }
   }
 
   checkHover(num: number) {
-    if (num == 1) {
+    if (num === 1) {
       if (this.badge1Hover) {
         this.display1 = true;
       }
@@ -84,7 +84,7 @@ export class PhastTabsComponent implements OnInit {
         this.display1 = false;
       }
     }
-    else if (num == 2) {
+    else if (num === 2) {
       if (this.badge2Hover) {
         this.display2 = true;
       }

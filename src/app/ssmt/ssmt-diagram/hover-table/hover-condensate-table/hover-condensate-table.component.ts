@@ -11,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class HoverCondensateTableComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   outputData: SSMTOutput;
 

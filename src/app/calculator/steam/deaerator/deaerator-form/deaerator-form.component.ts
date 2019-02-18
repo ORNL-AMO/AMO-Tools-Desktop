@@ -39,11 +39,11 @@ export class DeaeratorFormComponent implements OnInit {
   }
 
   getWaterOptionDisplay(): string {
-    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value == this.deaeratorForm.controls.waterThermodynamicQuantity.value });
+    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value === this.deaeratorForm.controls.waterThermodynamicQuantity.value; });
     return selectedQuantity.display;
   }
   getSteamOptionDisplay(): string {
-    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value == this.deaeratorForm.controls.steamThermodynamicQuantity.value });
+    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value === this.deaeratorForm.controls.steamThermodynamicQuantity.value; });
     return selectedQuantity.display;
   }
 
@@ -57,16 +57,16 @@ export class DeaeratorFormComponent implements OnInit {
 
   getOptionDisplayUnit(quantityVal: number) {
     let displayUnit: string;
-    if (quantityVal == 0) {
+    if (quantityVal === 0) {
       displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
       return displayUnit;
-    } else if (quantityVal == 1) {
+    } else if (quantityVal === 1) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
       return displayUnit;
-    } else if (quantityVal == 2) {
+    } else if (quantityVal === 2) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
       return displayUnit;
-    } else if (quantityVal == 3) {
+    } else if (quantityVal === 3) {
       return displayUnit;
     }
   }

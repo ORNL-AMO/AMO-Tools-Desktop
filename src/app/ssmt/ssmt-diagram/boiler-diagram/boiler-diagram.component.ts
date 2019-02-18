@@ -25,11 +25,11 @@ export class BoilerDiagramComponent implements OnInit {
   ngOnInit() {
   }
 
-  hoverEquipment(str: string){
+  hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }
 
-  selectEquipment(str: string){
+  selectEquipment(str: string) {
     this.emitSelectEquipment.emit(str);
   }
 }

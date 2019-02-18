@@ -1,9 +1,9 @@
 export interface OtherFuel {
-    energySource: string,
+    energySource: string;
     fuelTypes: Array<{
         fuelType: string,
         outputRate: number
-    }>
+    }>;
 }
 
 export const otherFuels: Array<OtherFuel> = [
@@ -162,4 +162,4 @@ export const otherFuels: Array<OtherFuel> = [
 
         ]
     }
-]
+];

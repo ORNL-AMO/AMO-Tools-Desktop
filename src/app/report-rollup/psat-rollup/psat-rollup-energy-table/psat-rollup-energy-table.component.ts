@@ -31,7 +31,7 @@ export class PsatRollupEnergyTableComponent implements OnInit {
   getTotalCostPercent(value: number) {
     if (this.totalCost) {
       let percent = (value / this.totalCost) * 100;
-      let val = this.reportRollupService.transform(percent, 4)
+      let val = this.reportRollupService.transform(percent, 4);
       return val;
     }
   }
@@ -39,7 +39,7 @@ export class PsatRollupEnergyTableComponent implements OnInit {
   getTotalEnergyPercent(value: number) {
     if (this.totalEnergyUse) {
       let percent = (value / this.totalEnergyUse) * 100;
-      let val = this.reportRollupService.transform(percent, 4)
+      let val = this.reportRollupService.transform(percent, 4);
       return val;    }
   }
 

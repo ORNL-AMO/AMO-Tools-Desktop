@@ -58,7 +58,7 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -85,12 +85,12 @@ export class AtmosphereLossesComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._atmosphereLosses.push(tmpLoss);
-      })
+      });
     }
   }
 
@@ -112,7 +112,7 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.atmosphere(tmpAtmosphereLoss, this.settings);
     } else {
@@ -127,13 +127,13 @@ export class AtmosphereLossesComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
       tmpAtmosphereLoss.heatLoss = loss.heatLoss;
       tmpAtmosphereLosses.push(tmpAtmosphereLoss);
-    })
+    });
     this.losses.atmosphereLosses = tmpAtmosphereLosses;
     this.savedLoss.emit(true);
   }
@@ -149,7 +149,7 @@ export class AtmosphereLossesComponent implements OnInit {
 
 
 export interface AtmoLossObj {
-  form: FormGroup,
-  heatLoss: number,
-  collapse: boolean
+  form: FormGroup;
+  heatLoss: number;
+  collapse: boolean;
 }

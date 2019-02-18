@@ -125,8 +125,8 @@ export interface SteamPropertiesOutput {
   //SteamProperties() function call does not have these fields
   //these fields will be set during the SSMT calculation
   //and will need to be apart of objects with this type
-  massFlow?: number,
-  energyFlow?: number
+  massFlow?: number;
+  energyFlow?: number;
 }
 
 export interface DeaeratorOutput {

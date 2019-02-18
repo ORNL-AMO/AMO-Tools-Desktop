@@ -20,7 +20,7 @@ export class OperationsService {
       steamCost: [phast.operatingCosts.steamCost, Validators.required],
       electricityCost: [phast.operatingCosts.electricityCost, Validators.required],
       implementationCost: [phast.implementationCost]
-    })
+    });
     return form;
   }
 
@@ -29,18 +29,18 @@ export class OperationsService {
       electricityCost: form.controls.electricityCost.value,
       steamCost: form.controls.steamCost.value,
       fuelCost: form.controls.fuelCost.value
-    }
+    };
     let hours: OperatingHours = {
       hoursPerShift: form.controls.hoursPerShift.value,
       hoursPerYear: form.controls.hoursPerYear.value,
       shiftsPerDay: form.controls.shiftsPerDay.value,
       daysPerWeek: form.controls.daysPerWeek.value,
       weeksPerYear: form.controls.weeksPerYear.value,
-    }
+    };
     return {
       costs: costs,
       hours: hours
-    }
+    };
   }
 
   checkWarnings(hours: OperatingHours): OperationsWarnings {
@@ -51,7 +51,7 @@ export class OperationsService {
       shiftsPerDayWarning: this.checkShiftsPerDay(hours),
       hoursPerShiftWarning: this.checkHoursPerShift(hours),
       hoursPerYearWarning: this.checkHoursPerYear(hours)
-    }
+    };
   }
   checkTotalTime(hours: OperatingHours): string {
     let timeCheck = hours.shiftsPerDay * hours.hoursPerShift;
@@ -88,10 +88,10 @@ export class OperationsService {
     }
   }
   checkHoursPerShift(hours: OperatingHours): string {
-    if (hours.hoursPerShift > 24 ){
+    if (hours.hoursPerShift > 24 ) {
       return "Number of hours/shift must be less than or equal to 24";
     }
-    else if(hours.hoursPerShift <= 0) {
+    else if (hours.hoursPerShift <= 0) {
       return "Number of hours/shift must be greater then 0";
     } else {
       return null;
@@ -99,7 +99,7 @@ export class OperationsService {
   }
   checkHoursPerYear(hours: OperatingHours): string {
     if (hours.hoursPerYear > 8760) {
-      return "Number of hours/year is greater than hours in a year."
+      return "Number of hours/year is greater than hours in a year.";
     } else {
       return null;
     }

@@ -41,7 +41,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showFormToggle && !changes.showFormToggle.isFirstChange()) {
-      if (this.showFormToggle == false) {
+      if (this.showFormToggle === false) {
         this.showOperation = false;
         this.showCondenserPressure = false;
       }
@@ -86,27 +86,27 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   }
 
   initCondenserPressure() {
-    if (this.baselineForm.controls.condenserPressure.value != this.modificationForm.controls.condenserPressure.value) {
+    if (this.baselineForm.controls.condenserPressure.value !== this.modificationForm.controls.condenserPressure.value) {
       this.showCondenserPressure = true;
     }
   }
 
   initOperationType() {
-    if (this.baselineForm.controls.operationType.value != this.modificationForm.controls.operationType.value ||
-      this.baselineForm.controls.operationValue.value != this.modificationForm.controls.operationValue.value) {
+    if (this.baselineForm.controls.operationType.value !== this.modificationForm.controls.operationType.value ||
+      this.baselineForm.controls.operationValue.value !== this.modificationForm.controls.operationValue.value) {
       this.showOperation = true;
     }
   }
 
   toggleCondenserPressure() {
-    if (this.showCondenserPressure == false) {
+    if (this.showCondenserPressure === false) {
       this.modificationForm.controls.condenserPressure.patchValue(this.baselineForm.controls.condenserPressure.value);
       this.save();
     }
   }
 
   toggleOperationType() {
-    if (this.showOperation == false) {
+    if (this.showOperation === false) {
       this.modificationForm.controls.operationType.patchValue(this.baselineForm.controls.operationType.value);
       this.modificationForm.controls.operationValue.patchValue(this.baselineForm.controls.operationValue.value);
       this.save();
@@ -118,7 +118,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.ssmtService.turbineOperationHelp.next('condensing')
+    this.ssmtService.turbineOperationHelp.next('condensing');
     this.exploreOpportunitiesService.currentTab.next('turbine');
     this.exploreOpportunitiesService.currentField.next(str);
   }
@@ -129,6 +129,6 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
 
   focusOperation(operationValue: number) {
     this.ssmtService.turbineOperationValue.next(operationValue);
-    this.focusField('operationValue')
+    this.focusField('operationValue');
   }
 }

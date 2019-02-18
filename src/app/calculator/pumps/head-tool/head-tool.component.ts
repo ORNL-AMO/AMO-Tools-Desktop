@@ -44,7 +44,7 @@ export class HeadToolComponent implements OnInit {
     estimatedSuctionFrictionHead: 0.0,
     estimatedDischargeFrictionHead: 0.0,
     pumpHead: 0.0
-  }
+  };
 
   currentField: string = 'headToolType';
 
@@ -96,7 +96,7 @@ export class HeadToolComponent implements OnInit {
   ngOnDestroy() {
     if (!this.inAssessment) {
       this.headToolService.headToolType = this.headToolType;
-      this.headToolService.headToolSuctionInputs = this.headToolService.getHeadToolSuctionFromForm(this.headToolSuctionForm)
+      this.headToolService.headToolSuctionInputs = this.headToolService.getHeadToolSuctionFromForm(this.headToolSuctionForm);
       this.headToolService.headToolInputs = this.headToolService.getHeadToolFromForm(this.headToolForm);
     }
   }
@@ -126,7 +126,7 @@ export class HeadToolComponent implements OnInit {
       this.headToolSuctionForm.patchValue({
         specificGravity: this.psat.inputs.specific_gravity,
         flowRate: this.psat.inputs.flow_rate,
-      })
+      });
     } else {
       if (this.headToolService.headToolInputs) {
         this.headToolForm = this.headToolService.getHeadToolFormFromObj(this.headToolService.headToolInputs);
@@ -164,7 +164,7 @@ export class HeadToolComponent implements OnInit {
         this.indexedDbService.putCalculator(this.calculator).then(() => {
           this.calculatorDbService.setAll().then(() => {
             this.closeTool();
-          })
+          });
         });
       } else {
         this.calculator = {
@@ -172,12 +172,12 @@ export class HeadToolComponent implements OnInit {
           headToolSuction: this.headToolService.getHeadToolSuctionFromForm(this.headToolSuctionForm),
           headToolType: this.headToolType,
           assessmentId: this.assessmentId
-        }
+        };
         this.indexedDbService.addCalculator(this.calculator).then(() => {
           this.calculatorDbService.setAll().then(() => {
             this.closeTool();
-          })
-        });;
+          });
+        }); ;
       }
     } else {
       this.closeTool();

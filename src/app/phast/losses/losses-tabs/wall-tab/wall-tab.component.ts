@@ -37,7 +37,7 @@ export class WallTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
     this.badgeHover = false;
   }
 
@@ -70,27 +70,27 @@ export class WallTabComponent implements OnInit {
     let hasWarning: boolean = false;
     if (this.wallLossCompareService.baselineWallLosses) {
       this.wallLossCompareService.baselineWallLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
         let tmpHasWarning: boolean = this.wallLossesService.checkWarningsExist(warnings);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     if (this.wallLossCompareService.modifiedWallLosses && !this.inSetup) {
       this.wallLossCompareService.modifiedWallLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
         let tmpHasWarning: boolean = this.wallLossesService.checkWarningsExist(warnings);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
@@ -98,7 +98,7 @@ export class WallTabComponent implements OnInit {
 
   checkLossValid(loss: WallLoss) {
     let tmpForm: FormGroup = this.wallLossesService.getWallLossForm(loss);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;

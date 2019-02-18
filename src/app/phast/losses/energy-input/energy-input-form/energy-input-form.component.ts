@@ -49,7 +49,7 @@ export class EnergyInputFormComponent implements OnInit {
     let heatVal = this.energyInputForm.controls.flowRateInput.value * (1020 / (Math.pow(10, 6)));
     this.energyInputForm.patchValue({
       'naturalGasHeatInput': heatVal
-    })
+    });
     this.save();
   }
 

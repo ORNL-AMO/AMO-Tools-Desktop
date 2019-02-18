@@ -22,7 +22,7 @@ export class FsatFluidService {
       dewPoint: [obj.dewPoint, gasDensityValidators.dewPointValidators],
       gasDensity: [obj.gasDensity, [Validators.min(0.01), Validators.required]],
       specificHeatGas: [obj.specificHeatGas, gasDensityValidators.specificHeatGasValidators]
-    })
+    });
     for (let key in form.controls) {
       if (form.controls[key].value) {
         form.controls[key].markAsDirty();
@@ -40,19 +40,19 @@ export class FsatFluidService {
     let dewPointValidators: Array<ValidatorFn> = [];
     let specificHeatGasValidators: Array<ValidatorFn> = [];
 
-    if (obj.inputType != 'custom') {
+    if (obj.inputType !== 'custom') {
       dryBulbTempValidators = [Validators.required];
       staticPressureValidators = [Validators.required];
       specificGravityValidators = [Validators.required];
     }
-    if (obj.inputType == 'wetBulb') {
+    if (obj.inputType === 'wetBulb') {
       wetBulbTempValidators = [Validators.required];
       specificHeatGasValidators = [Validators.min(0.01), Validators.required];
     }
-    if (obj.inputType == 'relativeHumidity') {
+    if (obj.inputType === 'relativeHumidity') {
       relativeHumidityValidators = [Validators.min(0), Validators.max(100), Validators.required];
     }
-    if (obj.inputType == 'dewPoint') {
+    if (obj.inputType === 'dewPoint') {
       dewPointValidators = [Validators.required];
     }
 
@@ -64,7 +64,7 @@ export class FsatFluidService {
       relativeHumidityValidators: relativeHumidityValidators,
       dewPointValidators: dewPointValidators,
       specificHeatGasValidators: specificHeatGasValidators
-    }
+    };
   }
 
 
@@ -130,13 +130,13 @@ export class FsatFluidService {
       dewPoint: form.controls.dewPoint.value,
       gasDensity: form.controls.gasDensity.value,
       specificHeatGas: form.controls.specificHeatGas.value
-    }
+    };
     return fanGasDensity;
   }
 
   isFanFluidValid(obj: BaseGasDensity): boolean {
     let form: FormGroup = this.getGasDensityFormFromObj(obj);
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       return true;
     } else {
       return false;

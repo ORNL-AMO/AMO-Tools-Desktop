@@ -17,7 +17,7 @@ export class ExhaustGasCompareService {
     let isDiff: boolean = false;
     if (this.modifiedExhaustGasLosses) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -33,7 +33,7 @@ export class ExhaustGasCompareService {
       this.compareCombustibleGases(index) ||
       this.compareVfr(index) ||
       this.compareDustLoading(index)
-    )
+    );
   }
   compareOffGasTemp(index: number): boolean {
     return this.compare(this.baselineExhaustGasLosses[index].offGasTemp, this.modifiedExhaustGasLosses[index].offGasTemp);
@@ -61,11 +61,11 @@ export class ExhaustGasCompareService {
       if (baseline.losses.exhaustGasEAF) {
         let index = 0;
         baseline.losses.exhaustGasEAF.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.exhaustGasEAF[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.exhaustGasEAF[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -79,18 +79,18 @@ export class ExhaustGasCompareService {
       this.compare(baseline.combustibleGases, modification.combustibleGases) ||
       this.compare(baseline.vfr, modification.vfr) ||
       this.compare(baseline.dustLoading, modification.dustLoading)
-    )
+    );
   }
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }
@@ -98,10 +98,10 @@ export class ExhaustGasCompareService {
 }
 
 export interface ExhaustGasDifferent {
-  offGasTemp: BehaviorSubject<boolean>,
-  CO: BehaviorSubject<boolean>,
-  H2: BehaviorSubject<boolean>,
-  combustibleGases: BehaviorSubject<boolean>,
-  vfr: BehaviorSubject<boolean>,
-  dustLoading: BehaviorSubject<boolean>,
+  offGasTemp: BehaviorSubject<boolean>;
+  CO: BehaviorSubject<boolean>;
+  H2: BehaviorSubject<boolean>;
+  combustibleGases: BehaviorSubject<boolean>;
+  vfr: BehaviorSubject<boolean>;
+  dustLoading: BehaviorSubject<boolean>;
 }

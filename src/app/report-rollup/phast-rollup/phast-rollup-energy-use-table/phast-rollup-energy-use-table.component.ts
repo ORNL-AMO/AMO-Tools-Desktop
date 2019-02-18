@@ -48,14 +48,14 @@ export class PhastRollupEnergyUseTableComponent implements OnInit {
 
   getResultPercent(value: number, sum: number): number {
     let percent = (value / sum) * 100;
-    let val = this.reportRollupService.transform(percent, 4)
+    let val = this.reportRollupService.transform(percent, 4);
     return val;
   }
 
   getConvertedPercent(value: number, sum: number, settings: Settings) {
     let convertVal = this.getConvertedValue(value, settings, this.settings.phastRollupUnit);
     let percent = (convertVal / sum) * 100;
-    let val = this.reportRollupService.transform(percent, 4)
+    let val = this.reportRollupService.transform(percent, 4);
     return val;
   }
 

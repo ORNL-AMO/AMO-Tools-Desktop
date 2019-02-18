@@ -48,7 +48,7 @@ export class EnergyUseFormComponent implements OnInit {
       value: 2,
       dischargeCoefficient: .8
     }
-  ]
+  ];
 
 
   gasType: any = [
@@ -74,7 +74,7 @@ export class EnergyUseFormComponent implements OnInit {
       name: 'Other',
       value: 6,
     }
-  ]
+  ];
 
   insidePipeDiameterError: string = null;
   dischargeCoefficientError: string = null;
@@ -122,11 +122,11 @@ export class EnergyUseFormComponent implements OnInit {
   }
 
   setDischargeCoefficient() {
-    if (this.flowCalculations.sectionType == 0) {
+    if (this.flowCalculations.sectionType === 0) {
       this.flowCalculations.dischargeCoefficient = .5;
-    } else if (this.flowCalculations.sectionType == 1) {
+    } else if (this.flowCalculations.sectionType === 1) {
       this.flowCalculations.dischargeCoefficient = .6;
-    } else if (this.flowCalculations.sectionType == 2) {
+    } else if (this.flowCalculations.sectionType === 2) {
       this.flowCalculations.dischargeCoefficient = .8;
     }
     this.calculate();
@@ -134,30 +134,30 @@ export class EnergyUseFormComponent implements OnInit {
 
   setHHVandSG() {
     this.flowCalculations = this.energyUseService.getObjFromForm(this.form);
-    if (this.flowCalculations.gasType == 0) {
+    if (this.flowCalculations.gasType === 0) {
       this.flowCalculations.gasHeatingValue = 1032.44;
       this.flowCalculations.specificGravity = 0.657;
-    } else if (this.flowCalculations.gasType == 1) {
+    } else if (this.flowCalculations.gasType === 1) {
       this.flowCalculations.gasHeatingValue = 0;
       this.flowCalculations.specificGravity = 1.1044;
-    } else if (this.flowCalculations.gasType == 2) {
+    } else if (this.flowCalculations.gasType === 2) {
       this.flowCalculations.gasHeatingValue = 0;
       this.flowCalculations.specificGravity = 0.9669;
-    } else if (this.flowCalculations.gasType == 3) {
+    } else if (this.flowCalculations.gasType === 3) {
       this.flowCalculations.gasHeatingValue = 325;
       this.flowCalculations.specificGravity = 0.0696;
-    } else if (this.flowCalculations.gasType == 4) {
+    } else if (this.flowCalculations.gasType === 4) {
       this.flowCalculations.gasHeatingValue = 0;
       this.flowCalculations.specificGravity = 1.5189;
-    } else if (this.flowCalculations.gasType == 5) {
+    } else if (this.flowCalculations.gasType === 5) {
       this.flowCalculations.gasHeatingValue = 0;
       this.flowCalculations.specificGravity = 1;
-    } else if (this.flowCalculations.gasType == 6) {
+    } else if (this.flowCalculations.gasType === 6) {
       this.flowCalculations.gasHeatingValue = 0;
       this.flowCalculations.specificGravity = 0;
     }
 
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       this.flowCalculations.gasHeatingValue = this.convertUnitsService.roundVal(this.convertUnitsService.value(this.flowCalculations.gasHeatingValue).from('btuSCF').to('kJNm3'), 2);
     }
     this.form = this.energyUseService.getFormFromObj(this.flowCalculations);

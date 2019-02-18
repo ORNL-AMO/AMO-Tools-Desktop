@@ -11,7 +11,7 @@ import { FlueGasMaterial } from '../../../../shared/models/materials';
 })
 export class FlueGasSummaryComponent implements OnInit {
   @Input()
-  phast: PHAST
+  phast: PHAST;
   @Input()
   settings: Settings;
   @Input()
@@ -90,7 +90,7 @@ export class FlueGasSummaryComponent implements OnInit {
     this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
-      if(this.phast.modifications){
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
       if (this.phast.losses.flueGasLosses) {
@@ -102,7 +102,7 @@ export class FlueGasSummaryComponent implements OnInit {
             this.phast.modifications.forEach(mod => {
               let modData = this.getData(mod.phast.losses.flueGasLosses[index]);
               modificationData.push(modData);
-            })
+            });
           }
           this.lossData.push({
             baseline: this.getData(loss),
@@ -133,7 +133,7 @@ export class FlueGasSummaryComponent implements OnInit {
           this.so2Diff.push(false);
           //index +1 for next loss
           index++;
-        })
+        });
       }
     }
   }
@@ -142,10 +142,10 @@ export class FlueGasSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change
@@ -167,8 +167,8 @@ export class FlueGasSummaryComponent implements OnInit {
       tmpMoisture, tmpDischargeTemp, tmpUnburnedCarbon;
     let tmpGas: FlueGasMaterial;
 
-    if (loss.flueGasType == 'By Volume') {
-      tmpGas = this.volumeOptions.find(val => { return loss.flueGasByVolume.gasTypeId == val.id })
+    if (loss.flueGasType === 'By Volume') {
+      tmpGas = this.volumeOptions.find(val => { return loss.flueGasByVolume.gasTypeId === val.id; });
       tmpName = tmpGas.substance;
       tmpGasTemp = loss.flueGasByVolume.flueGasTemperature;
       tmpMethod = loss.flueGasByVolume.oxygenCalculationMethod;
@@ -176,8 +176,8 @@ export class FlueGasSummaryComponent implements OnInit {
       tmpExcessAir = loss.flueGasByVolume.excessAirPercentage;
       tmpCombustionTemp = loss.flueGasByVolume.combustionAirTemperature;
       tmpFuelTemp = loss.flueGasByVolume.fuelTemperature;
-    } else if (loss.flueGasType == 'By Mass') {
-      tmpGas = this.massOptions.find(val => { return loss.flueGasByMass.gasTypeId == val.id })
+    } else if (loss.flueGasType === 'By Mass') {
+      tmpGas = this.massOptions.find(val => { return loss.flueGasByMass.gasTypeId === val.id; });
       tmpName = tmpGas.substance;
       tmpGasTemp = loss.flueGasByMass.flueGasTemperature;
       tmpMethod = loss.flueGasByMass.oxygenCalculationMethod;
@@ -203,24 +203,24 @@ export class FlueGasSummaryComponent implements OnInit {
       dischargeTemp: tmpDischargeTemp,
       unburnedCarbon: tmpUnburnedCarbon,
       material: tmpGas
-    }
+    };
     return tmpSummaryData;
   }
 }
 
 
 export interface FlueGasSummaryData {
-  name: string,
-  type: string,
-  fuelName: string,
-  flueGasTemp: number,
-  excessAirMethod: string,
-  oxygenInFlueGas: number,
-  excessAir: number,
-  combustionAirTemp: number,
-  fuelTemperature: number,
-  moistureInAir: number,
-  dischargeTemp: number,
-  unburnedCarbon: number,
-  material: FlueGasMaterial
+  name: string;
+  type: string;
+  fuelName: string;
+  flueGasTemp: number;
+  excessAirMethod: string;
+  oxygenInFlueGas: number;
+  excessAir: number;
+  combustionAirTemp: number;
+  fuelTemperature: number;
+  moistureInAir: number;
+  dischargeTemp: number;
+  unburnedCarbon: number;
+  material: FlueGasMaterial;
 }

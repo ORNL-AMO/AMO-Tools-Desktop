@@ -37,7 +37,7 @@ export class SsmtDiagramTabComponent implements OnInit {
       this.ssmtOptions.push(this.ssmt);
       this.ssmt.modifications.forEach(modification => {
         this.ssmtOptions.push(modification.ssmt);
-      })
+      });
     }
     if (this.ssmt.setupDone) {
       this.calculateResults();
@@ -58,7 +58,7 @@ export class SsmtDiagramTabComponent implements OnInit {
       this.inputData = resultsData.inputData;
       this.outputData = resultsData.outputData;
       this.dataCalculated = true;
-    }, 100)
+    }, 100);
   }
   setTab(str: string) {
     this.tabSelect = str;

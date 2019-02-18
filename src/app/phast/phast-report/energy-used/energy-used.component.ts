@@ -42,7 +42,7 @@ export class EnergyUsedComponent implements OnInit {
     fuelEnergyUsed: 0,
     energyIntensity: 0,
     electricityUsed: 0
-  }
+  };
   fuelHeatingValue: number = 0;
   steamHeatingValue: number = 0;
   fuelName: string;
@@ -64,12 +64,12 @@ export class EnergyUsedComponent implements OnInit {
     this.electricityHeatingValue = this.convertUnitsService.value(9800).from('Btu').to(this.settings.energyResultUnit);
     this.getUnits();
 
-    if (this.settings.energySourceType == 'Steam') {
+    if (this.settings.energySourceType === 'Steam') {
       this.setSteamVals(tmpResults);
-    } else if (this.settings.energySourceType == 'Electricity') {
+    } else if (this.settings.energySourceType === 'Electricity') {
       this.setElectrotechVals(tmpResults);
-    } else if (this.settings.energySourceType == 'Fuel') {
-      this.setFuelVals(tmpResults)
+    } else if (this.settings.energySourceType === 'Fuel') {
+      this.setFuelVals(tmpResults);
     }
 
     if (this.phast.designedEnergy) {
@@ -80,28 +80,28 @@ export class EnergyUsedComponent implements OnInit {
   }
 
   getUnits() {
-    if (this.settings.energyResultUnit != 'kWh') {
-      this.baseEnergyUnit = this.settings.energyResultUnit + '/hr'
+    if (this.settings.energyResultUnit !== 'kWh') {
+      this.baseEnergyUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.baseEnergyUnit = this.settings.energyResultUnit;
     }
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       this.energyCostUnit = '/GJ';
       this.energyPerTimeUnit = this.settings.energyResultUnit + '/kWh';
-    } else if (this.settings.unitsOfMeasure == 'Imperial') {
+    } else if (this.settings.unitsOfMeasure === 'Imperial') {
       this.energyCostUnit = '/MMBtu';
       this.energyPerTimeUnit = this.settings.energyResultUnit + '/kWh';
     }
 
-    if (this.settings.energyResultUnit == 'MMBtu') {
+    if (this.settings.energyResultUnit === 'MMBtu') {
       this.energyPerMassUnit = 'Btu/lb';
-    } else if (this.settings.energyResultUnit == 'GJ') {
+    } else if (this.settings.energyResultUnit === 'GJ') {
       this.energyPerMassUnit = 'kJ/kg';
     } else {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        this.energyPerMassUnit = this.settings.energyResultUnit + '/kg'
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        this.energyPerMassUnit = this.settings.energyResultUnit + '/kg';
       } else {
-        this.energyPerMassUnit = this.settings.energyResultUnit + '/lb'
+        this.energyPerMassUnit = this.settings.energyResultUnit + '/lb';
       }
     }
 
@@ -134,11 +134,11 @@ export class EnergyUsedComponent implements OnInit {
       }
     }
     
-    if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
+    if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
       let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
       this.fuelHeatingValue = gas.heatingValue;
       this.fuelName = gas.substance;
-    } else if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Volume') {
+    } else if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
       let gas = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
       this.fuelHeatingValue = gas.heatingValue;
       this.fuelName = gas.substance;
@@ -147,7 +147,7 @@ export class EnergyUsedComponent implements OnInit {
   }
 
   convertResult(val: number, settings: Settings): number {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);

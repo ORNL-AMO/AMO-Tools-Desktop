@@ -41,7 +41,7 @@ export class CoreService {
           });
         });
       });
-    })
+    });
   }
 
   createDirectorySettings(): Promise<any> {
@@ -72,7 +72,7 @@ export class CoreService {
           });
         });
       });
-    })
+    });
   }
 
   createDirectory(): Promise<any> {
@@ -82,7 +82,7 @@ export class CoreService {
         createdDate: new Date(),
         modifiedDate: new Date(),
         parentDirectoryId: null,
-      }
+      };
       this.indexedDbService.addDirectory(tmpDirectory).then(
         results => {
           tmpDirectory.parentDirectoryId = results;
@@ -91,8 +91,8 @@ export class CoreService {
           this.indexedDbService.addDirectory(tmpDirectory).then(dirId => {
             this.exampleDirectoryId = dirId;
             resolve(true);
-          })
-        })
-    })
+          });
+        });
+    });
   }
 }

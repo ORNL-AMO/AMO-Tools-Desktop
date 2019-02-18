@@ -21,7 +21,7 @@ export class BoilerService {
       thermodynamicQuantity: [1, [Validators.required]],
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       steamMassFlow: ['', [Validators.required, Validators.min(ranges.steamMassFlowMin)]],
-    })
+    });
     return form;
   }
 
@@ -35,7 +35,7 @@ export class BoilerService {
       thermodynamicQuantity: [inputs.thermodynamicQuantity, [Validators.required]],
       quantityValue: [inputs.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       steamMassFlow: [inputs.steamMassFlow, [Validators.required, Validators.min(ranges.steamMassFlowMin)]],
-    })
+    });
     return form;
   }
 
@@ -48,7 +48,7 @@ export class BoilerService {
       thermodynamicQuantity: form.controls.thermodynamicQuantity.value,
       quantityValue: form.controls.quantityValue.value,
       steamMassFlow: form.controls.steamMassFlow.value,
-    }
+    };
     return input;
   }
 
@@ -68,7 +68,7 @@ export class BoilerService {
       quantityValueMin: quantityMinMax.min,
       steamMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
       steamMassFlowMin: 0
-    }
+    };
     return ranges;
   }
 }

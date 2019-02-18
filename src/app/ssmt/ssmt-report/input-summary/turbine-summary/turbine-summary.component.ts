@@ -41,19 +41,19 @@ export class TurbineSummaryComponent implements OnInit {
     this.modificationHighToMediumTurbineData = new Array<{ turbine: PressureTurbine, name: string }>();
     this.modificationMediumToLowTurbineData = new Array<{ turbine: PressureTurbine, name: string }>();
 
-    if (this.baselineInputData.turbineInput.condensingTurbine.useTurbine == true) {
+    if (this.baselineInputData.turbineInput.condensingTurbine.useTurbine === true) {
       this.showCondensingTurbine = true;
     }
     if (this.baselineInputData.headerInput.numberOfHeaders > 1) {
-      if (this.baselineInputData.turbineInput.highToLowTurbine.useTurbine == true) {
+      if (this.baselineInputData.turbineInput.highToLowTurbine.useTurbine === true) {
         this.showHighToLowTurbine = true;
       }
 
-      if (this.baselineInputData.headerInput.numberOfHeaders == 3) {
-        if (this.baselineInputData.turbineInput.highToMediumTurbine.useTurbine == true) {
+      if (this.baselineInputData.headerInput.numberOfHeaders === 3) {
+        if (this.baselineInputData.turbineInput.highToMediumTurbine.useTurbine === true) {
           this.showHighToMediumTurbine = true;
         }
-        if (this.baselineInputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
+        if (this.baselineInputData.turbineInput.mediumToLowTurbine.useTurbine === true) {
           this.showMediumToLowTurbine = true;
         }
       }
@@ -65,20 +65,20 @@ export class TurbineSummaryComponent implements OnInit {
     this.baselineMediumToLowTurbineData = this.baselineInputData.turbineInput.mediumToLowTurbine;
 
     this.modificationInputData.forEach(modification => {
-      if (modification.inputData.turbineInput.condensingTurbine.useTurbine == true) {
+      if (modification.inputData.turbineInput.condensingTurbine.useTurbine === true) {
         this.showCondensingTurbine = true;
       }
 
       if (modification.inputData.headerInput.numberOfHeaders > 1) {
-        if (modification.inputData.turbineInput.highToLowTurbine.useTurbine == true) {
+        if (modification.inputData.turbineInput.highToLowTurbine.useTurbine === true) {
           this.showHighToLowTurbine = true;
         }
 
-        if (modification.inputData.headerInput.numberOfHeaders == 3) {
-          if (modification.inputData.turbineInput.highToMediumTurbine.useTurbine == true) {
+        if (modification.inputData.headerInput.numberOfHeaders === 3) {
+          if (modification.inputData.turbineInput.highToMediumTurbine.useTurbine === true) {
             this.showHighToMediumTurbine = true;
           }
-          if (modification.inputData.turbineInput.mediumToLowTurbine.useTurbine == true) {
+          if (modification.inputData.turbineInput.mediumToLowTurbine.useTurbine === true) {
             this.showMediumToLowTurbine = true;
           }
         }
@@ -108,7 +108,7 @@ export class TurbineSummaryComponent implements OnInit {
           name: modification.name
         }
       );
-    })
+    });
 
   }
 

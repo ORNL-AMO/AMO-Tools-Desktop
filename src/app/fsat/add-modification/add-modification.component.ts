@@ -38,7 +38,7 @@ export class AddModificationComponent implements OnInit {
 
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -48,6 +48,6 @@ export class AddModificationComponent implements OnInit {
   addModification() {
     let tmpModification: Modification = this.fsatService.getNewMod(this.fsat, this.settings);
     tmpModification.fsat.name = this.newModificationName;
-    this.save.emit(tmpModification)
+    this.save.emit(tmpModification);
   }
 }

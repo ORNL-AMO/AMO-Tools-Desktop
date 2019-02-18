@@ -63,7 +63,7 @@ export class ReplaceExistingComponent implements OnInit {
       existingEfficiency: this.inputs.existingEfficiency,
       newEfficiency: null,
       purchaseCost: null
-    }
+    };
     this.replacementMotorInputs = {
       operatingHours: this.existingMotorInputs.operatingHours,
       motorSize: this.existingMotorInputs.motorSize,
@@ -119,7 +119,7 @@ export class ReplaceExistingComponent implements OnInit {
         existingEfficiency: null,
         newEfficiency: _inputs.newEfficiency,
         purchaseCost: _inputs.purchaseCost
-      }
+      };
     }
     this.inputs = {
       operatingHours: this.existingMotorInputs.operatingHours,
@@ -129,27 +129,27 @@ export class ReplaceExistingComponent implements OnInit {
       existingEfficiency: this.existingMotorInputs.existingEfficiency,
       newEfficiency: this.replacementMotorInputs.newEfficiency,
       purchaseCost: this.replacementMotorInputs.purchaseCost
-    }
+    };
     this.results = this.replaceExistingService.getResults(this.inputs);
   }
 }
 
 
 export interface ReplaceExistingData {
-  operatingHours: number,
-  motorSize: number,
-  existingEfficiency: number,
-  load: number,
-  electricityCost: number,
-  newEfficiency: number,
-  purchaseCost: number
+  operatingHours: number;
+  motorSize: number;
+  existingEfficiency: number;
+  load: number;
+  electricityCost: number;
+  newEfficiency: number;
+  purchaseCost: number;
 }
 export interface ReplaceExistingResults {
-  existingEnergyUse: number,
-  newEnergyUse: number,
-  existingEnergyCost: number,
-  newEnergyCost: number,
-  annualEnergySavings: number,
-  costSavings: number,
-  simplePayback: number
+  existingEnergyUse: number;
+  newEnergyUse: number;
+  existingEnergyCost: number;
+  newEnergyCost: number;
+  annualEnergySavings: number;
+  costSavings: number;
+  simplePayback: number;
 }

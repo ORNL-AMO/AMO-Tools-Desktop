@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
   constructor(private headerService: HeaderService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    if(!this.isBaseline){
+    if (!this.isBaseline) {
       this.idString = 'modification_';
     }
     if (!this.headerInput) {
@@ -45,9 +45,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected == true) {
+      if (this.selected === true) {
         //  this.enableForm();
-      } else if (this.selected == false) {
+      } else if (this.selected === false) {
         //  this.disableForm();
       }
     }

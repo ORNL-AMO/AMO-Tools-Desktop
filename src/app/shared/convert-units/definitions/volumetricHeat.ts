@@ -32,7 +32,7 @@ export const volumetricHeat = {
         , plural: 'Btu per Standard Cubic Feet Fahrenheit',
         display: '(Btu/SCF - &#x2109;)'
       }
-      , to_anchor: 1/14.921
+      , to_anchor: 1 / 14.921
     }
   },
   _anchors: {

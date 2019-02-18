@@ -66,8 +66,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   ngOnInit() {
     this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
     if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value != '') {
-        if (this.chargeMaterialForm.controls.materialSpecificHeat.value == '') {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
+        if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
           this.setProperties();
         }
       }
@@ -85,11 +85,11 @@ export class GasChargeMaterialFormComponent implements OnInit {
   checkMaterialValues() {
     let material: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC')
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
         material.specificHeatVapor = this.roundVal(val, 4);
       }
-      if (material.specificHeatVapor != this.chargeMaterialForm.controls.materialSpecificHeat.value) {
+      if (material.specificHeatVapor !== this.chargeMaterialForm.controls.materialSpecificHeat.value) {
         return true;
       } else {
         return false;
@@ -117,7 +117,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
     }
     this.chargeMaterialForm.patchValue({
@@ -146,7 +146,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   canCompare() {
     if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
-      if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) == false) {
+      if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) === false) {
         return true;
       } else {
         return false;
@@ -242,11 +242,11 @@ export class GasChargeMaterialFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
-      if (newMaterial.length != 0) {
+      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
         this.chargeMaterialForm.patchValue({
           materialId: newMaterial[0].id
-        })
+        });
         this.setProperties();
       }
     }

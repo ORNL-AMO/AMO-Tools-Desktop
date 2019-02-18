@@ -26,14 +26,14 @@ export class BoilerService {
       'deaeratorVentRate': ['', [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       'approachTemperature': ['', [Validators.min(tmpRanges.approachTempMin)]]
-    })
+    });
   }
 
   initFormFromObj(obj: BoilerInput, settings: Settings): FormGroup {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
 
     let approachTempValidators: Array<ValidatorFn> = [];
-    if(obj.preheatMakeupWater){
+    if (obj.preheatMakeupWater) {
       approachTempValidators = [Validators.min(tmpRanges.approachTempMin), Validators.required];
     }
     let form: FormGroup = this.formBuilder.group({
@@ -47,7 +47,7 @@ export class BoilerService {
       'deaeratorVentRate': [obj.deaeratorVentRate, [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       'approachTemperature': [obj.approachTemperature, approachTempValidators]
-    })
+    });
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
@@ -66,7 +66,7 @@ export class BoilerService {
       deaeratorVentRate: form.controls.deaeratorVentRate.value,
       deaeratorPressure: form.controls.deaeratorPressure.value,
       approachTemperature: form.controls.approachTemperature.value
-    }
+    };
   }
 
   getRanges(settings: Settings): BoilerRanges {
@@ -89,13 +89,13 @@ export class BoilerService {
       deaeratorPressureMin: tmpDeaeratorPressureMin,
       deaeratorPressureMax: tmpDeaeratorPressureMax,
       approachTempMin: tmpApproachTempMin
-    }
+    };
   }
 
   isBoilerValid(obj: BoilerInput, settings: Settings): boolean {
     if (obj) {
       let form: FormGroup = this.initFormFromObj(obj, settings);
-      if (form.status == 'VALID') {
+      if (form.status === 'VALID') {
         return true;
       } else {
         return false;
@@ -109,9 +109,9 @@ export class BoilerService {
 
 
 export interface BoilerRanges {
-  steamTemperatureMin: number,
-  steamTemperatureMax: number,
-  deaeratorPressureMin: number,
-  deaeratorPressureMax: number,
-  approachTempMin: number
+  steamTemperatureMin: number;
+  steamTemperatureMax: number;
+  deaeratorPressureMin: number;
+  deaeratorPressureMax: number;
+  approachTempMin: number;
 }

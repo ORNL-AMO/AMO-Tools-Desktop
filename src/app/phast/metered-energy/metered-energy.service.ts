@@ -168,7 +168,7 @@ export class MeteredEnergyService {
     let fuelEnergyUsed: number = 0;
     let electricityEnergyUsed: number = 0;
     if (phast.meteredEnergy.steam) {
-      steamEnergyUsed = this.calcSteamEnergyUsed(phast.meteredEnergy.meteredEnergySteam)
+      steamEnergyUsed = this.calcSteamEnergyUsed(phast.meteredEnergy.meteredEnergySteam);
       steamEnergyUsed = this.convertSteamEnergyUsed(steamEnergyUsed, settings);
     }
     if (phast.meteredEnergy.electricity) {
@@ -206,11 +206,11 @@ export class MeteredEnergyService {
   }
 
   calcFuelEnergyUsed(inputs: MeteredEnergyFuel): number {
-    return (inputs.fuelEnergy / inputs.collectionTime)
+    return (inputs.fuelEnergy / inputs.collectionTime);
   }
 
   convertSteamEnergyUsed(val: number, settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
@@ -219,7 +219,7 @@ export class MeteredEnergyService {
   }
 
   convertFuelEnergyUsed(val: number, settings: Settings): number {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       val = this.convertUnitsService.value(val).from('GJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
@@ -228,9 +228,9 @@ export class MeteredEnergyService {
   }
 
   convertIntensity(num: number, settings: Settings): number {
-    if (settings.energyResultUnit == 'MMBtu') {
+    if (settings.energyResultUnit === 'MMBtu') {
       num = this.convertUnitsService.value(num).from('MMBtu').to('Btu');
-    } else if (settings.energyResultUnit == 'GJ') {
+    } else if (settings.energyResultUnit === 'GJ') {
       num = this.convertUnitsService.value(num).from('GJ').to('kJ');
     }
     return num;

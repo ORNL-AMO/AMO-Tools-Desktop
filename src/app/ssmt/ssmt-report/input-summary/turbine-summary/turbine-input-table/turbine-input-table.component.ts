@@ -30,13 +30,13 @@ export class TurbineInputTableComponent implements OnInit {
 
   ngOnInit() {
     
-    if(this.turbineType == 'condensing'){
+    if (this.turbineType === 'condensing') {
       this.tableLabel = 'Condensing Turbine';
-    }else if(this.turbineType == 'highToLow'){
+    }else if (this.turbineType === 'highToLow') {
       this.tableLabel = 'High To Low Pressure Turbine';
-    }else if(this.turbineType == 'highToMedium'){
+    }else if (this.turbineType === 'highToMedium') {
       this.tableLabel = 'Medium To Medium Pressure Turbine';
-    }else if(this.turbineType == 'mediumToLow'){
+    }else if (this.turbineType === 'mediumToLow') {
       this.tableLabel = 'Medium To Low Pressure Turbine';
     }
 
@@ -55,7 +55,7 @@ export class TurbineInputTableComponent implements OnInit {
         this.operationValue1Diff.push(false);
         this.operationTypeDiff.push(false);
         this.operationValue2Diff.push(false);
-      })
+      });
     }
   }
 
@@ -63,10 +63,10 @@ export class TurbineInputTableComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change

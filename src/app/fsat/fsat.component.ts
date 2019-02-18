@@ -108,7 +108,7 @@ export class FsatComponent implements OnInit {
         this.assessment = dbAssessment;
         this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
         if (this._fsat.modifications) {
-          if (this._fsat.modifications.length != 0) {
+          if (this._fsat.modifications.length !== 0) {
             this.modificationExists = true;
             this.modificationIndex = 0;
             this.compareService.setCompareVals(this._fsat, 0);
@@ -127,51 +127,51 @@ export class FsatComponent implements OnInit {
         if (tmpTab) {
           this.fsatService.mainTab.next(tmpTab);
         }
-      })
-    })
+      });
+    });
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
       this.checkTutorials();
-    })
+    });
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
-      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab == val });
+      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab === val; });
       this.getContainerHeight();
-    })
+    });
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
       this.getContainerHeight();
-    })
+    });
 
     this.addNewSub = this.fsatService.openNewModal.subscribe(val => {
       this.showAdd = val;
       if (val) {
         this.showAddNewModal();
       }
-    })
+    });
     this.openModSub = this.fsatService.openModificationModal.subscribe(val => {
       if (val) {
-        this.selectModificationModal()
+        this.selectModificationModal();
       }
-    })
+    });
     this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
       if (mod && this._fsat) {
         this.modificationIndex = _.findIndex(this._fsat.modifications, (val) => {
-          return val.fsat.name == mod.name
-        })
+          return val.fsat.name === mod.name;
+        });
       } else {
         this.modificationIndex = undefined;
       }
-    })
+    });
 
     this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
-    })
+    });
 
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
-    })
+    });
 
   }
 
@@ -197,17 +197,17 @@ export class FsatComponent implements OnInit {
   }
 
   checkTutorials() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab === 'system-setup') {
       if (!this.settingsDbService.globalSettings.disableFsatSetupTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('fsat-system-setup');
       }
-    } else if (this.mainTab == 'assessment') {
+    } else if (this.mainTab === 'assessment') {
       if (!this.settingsDbService.globalSettings.disableFsatAssessmentTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('fsat-assessment-tutorial');
       }
-    } else if (this.mainTab == 'report') {
+    } else if (this.mainTab === 'report') {
       if (!this.settingsDbService.globalSettings.disableFsatReportTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('fsat-report-tutorial');
@@ -250,7 +250,7 @@ export class FsatComponent implements OnInit {
       this.indexedDbService.putSettings(this.settings).then(() => {
         this.settingsDbService.setAll().then(() => {
         });
-      })
+      });
     }
   }
 
@@ -280,8 +280,8 @@ export class FsatComponent implements OnInit {
           this.settingsDbService.setAll().then(() => {
             // this.addToast('Settings Saved');
             this.getSettings();
-          })
-        })
+          });
+        });
     }
     else {
       //if no settings for directory check parent directory
@@ -342,7 +342,7 @@ export class FsatComponent implements OnInit {
 
   save() {
     if (this._fsat.modifications) {
-      if (this._fsat.modifications.length == 0) {
+      if (this._fsat.modifications.length === 0) {
         this.modificationExists = false;
       } else {
         this.modificationExists = true;
@@ -356,8 +356,8 @@ export class FsatComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.fsatService.updateData.next(true);
-      })
-    })
+      });
+    });
   }
 
   checkSetupDone(fsat: FSAT): boolean {
@@ -376,30 +376,30 @@ export class FsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab == 'system-basics') {
+    if (this.stepTab === 'system-basics') {
       return true;
-    } else if (this.stepTab == 'fsat-fluid') {
+    } else if (this.stepTab === 'fsat-fluid') {
       let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity);
       if (isValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'fan-setup') {
+    } else if (this.stepTab === 'fan-setup') {
       let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup, false);
       if (isValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'fan-motor') {
+    } else if (this.stepTab === 'fan-motor') {
       let isValid: boolean = this.fanMotorService.isFanMotorValid(this._fsat.fanMotor);
       if (isValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'fan-field-data') {
+    } else if (this.stepTab === 'fan-field-data') {
       let isValid: boolean = this.fanFieldDataService.isFanFieldDataValid(this._fsat.fieldData);
       if (isValid) {
         return true;
@@ -410,7 +410,7 @@ export class FsatComponent implements OnInit {
   }
 
   continue() {
-    if (this.stepTab == 'fan-field-data') {
+    if (this.stepTab === 'fan-field-data') {
       this.fsatService.mainTab.next('assessment');
     } else {
       let assessmentTabIndex: number = this.stepTabIndex + 1;
@@ -420,7 +420,7 @@ export class FsatComponent implements OnInit {
   }
 
   back() {
-    if (this.stepTab != 'system-basics') {
+    if (this.stepTab !== 'system-basics') {
       let assessmentTabIndex: number = this.stepTabIndex - 1;
       let nextTab: string = this.stepTabs[assessmentTabIndex];
       this.fsatService.stepTab.next(nextTab);
@@ -428,12 +428,12 @@ export class FsatComponent implements OnInit {
   }
 
   goToReport() {
-    this.fsatService.mainTab.next('report')
+    this.fsatService.mainTab.next('report');
   }
 
   addNewMod() {
     let tmpModification: Modification = this.fsatService.getNewMod(this._fsat, this.settings);
-    this.saveNewMod(tmpModification)
+    this.saveNewMod(tmpModification);
   }
 
   disclaimerToast() {
@@ -443,7 +443,7 @@ export class FsatComponent implements OnInit {
       showClose: true,
       timeout: 10000000,
       theme: 'default'
-    }
+    };
     this.toastyService.info(toastOptions);
   }
 

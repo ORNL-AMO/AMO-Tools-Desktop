@@ -47,4 +47,4 @@ export const reactivePower = {
             , ratio: 1
         }
     }
-}
+};

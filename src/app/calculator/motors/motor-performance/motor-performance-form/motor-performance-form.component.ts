@@ -36,7 +36,7 @@ export class MotorPerformanceFormComponent implements OnInit {
 
   modifyPowerArrays() {
     //if specified
-    if (this.performanceForm.controls.efficiencyClass.value == 3) {
+    if (this.performanceForm.controls.efficiencyClass.value === 3) {
       this.performanceForm.controls.efficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
     }
     this.setRpmValidation();
@@ -58,8 +58,8 @@ export class MotorPerformanceFormComponent implements OnInit {
       && this.performanceForm.controls.motorRPM.valid
       && this.performanceForm.controls.motorVoltage.valid
       && this.performanceForm.controls.efficiencyClass.valid
-      && ((this.performanceForm.controls.efficiencyClass.value == 3 && this.performanceForm.controls.efficiency.valid)
-        || this.performanceForm.controls.efficiencyClass.value != 3);
+      && ((this.performanceForm.controls.efficiencyClass.value === 3 && this.performanceForm.controls.efficiency.valid)
+        || this.performanceForm.controls.efficiencyClass.value !== 3);
 
   }
 
@@ -75,14 +75,14 @@ export class MotorPerformanceFormComponent implements OnInit {
 
   setRpmValidation() {
     //standard or energy efficiency
-    if (this.performanceForm.controls.efficiencyClass.value == 0 || this.performanceForm.controls.efficiencyClass.value == 1) {
-      if (this.performanceForm.controls.frequency.value == 60) {
+    if (this.performanceForm.controls.efficiencyClass.value === 0 || this.performanceForm.controls.efficiencyClass.value === 1) {
+      if (this.performanceForm.controls.frequency.value === 60) {
         this.performanceForm.controls.motorRPM.setValidators([Validators.required, Validators.min(540)]);
         this.performanceForm.controls.motorRPM.reset(this.performanceForm.controls.motorRPM.value);
         if (this.performanceForm.controls.motorRPM.value) {
           this.performanceForm.controls.motorRPM.markAsDirty();
         }
-      } else if (this.performanceForm.controls.frequency.value == 50) {
+      } else if (this.performanceForm.controls.frequency.value === 50) {
         this.performanceForm.controls.motorRPM.setValidators([Validators.required, Validators.min(450)]);
         this.performanceForm.controls.motorRPM.reset(this.performanceForm.controls.motorRPM.value);
         if (this.performanceForm.controls.motorRPM.value) {
@@ -91,14 +91,14 @@ export class MotorPerformanceFormComponent implements OnInit {
       }
     }
     //premium
-    else if (this.performanceForm.controls.efficiencyClass.value == 2) {
-      if (this.performanceForm.controls.frequency.value == 60) {
+    else if (this.performanceForm.controls.efficiencyClass.value === 2) {
+      if (this.performanceForm.controls.frequency.value === 60) {
         this.performanceForm.controls.motorRPM.setValidators([Validators.required, Validators.min(1080)]);
         this.performanceForm.controls.motorRPM.reset(this.performanceForm.controls.motorRPM.value);
         if (this.performanceForm.controls.motorRPM.value) {
           this.performanceForm.controls.motorRPM.markAsDirty();
         }
-      } else if (this.performanceForm.controls.frequency.value == 50) {
+      } else if (this.performanceForm.controls.frequency.value === 50) {
         this.performanceForm.controls.motorRPM.setValidators([Validators.required, Validators.min(900)]);
         this.performanceForm.controls.motorRPM.reset(this.performanceForm.controls.motorRPM.value);
         if (this.performanceForm.controls.motorRPM.value) {

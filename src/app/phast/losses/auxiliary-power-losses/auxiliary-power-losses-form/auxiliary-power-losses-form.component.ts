@@ -38,8 +38,8 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   constructor(private auxiliaryPowerCompareService: AuxiliaryPowerCompareService, private auxiliaryLossesService: AuxiliaryPowerLossesService) { }
   
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.baselineSelected){
-      if(!changes.baselineSelected.firstChange){
+    if (changes.baselineSelected) {
+      if (!changes.baselineSelected.firstChange) {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
@@ -78,7 +78,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  checkWarnings(){
+  checkWarnings() {
     let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryLossesService.getLossFromForm(this.auxLossesForm);
     this.voltageWarning = this.auxiliaryLossesService.checkWarnings(tmpLoss);
     let errorExists: boolean = (this.voltageWarning !== null);

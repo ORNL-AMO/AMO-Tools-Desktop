@@ -82,21 +82,21 @@ export class PreAssessmentFormComponent implements OnInit {
   }
 
   setFurnaceType(str: string) {
-    if (str == 'Electricity') {
+    if (str === 'Electricity') {
       this.assessment.electric = !this.assessment.electric;
       if (this.assessment.designedEnergy) {
         this.assessment.designedEnergy.electricity = this.assessment.electric;
       }
     }
 
-    if (str == 'Steam') {
+    if (str === 'Steam') {
       this.assessment.steam = !this.assessment.steam;
       if (this.assessment.designedEnergy) {
         this.assessment.designedEnergy.steam = this.assessment.steam;
       }
     }
 
-    if (str == 'Fuel') {
+    if (str === 'Fuel') {
       this.assessment.fuel = !this.assessment.fuel;
       if (this.assessment.designedEnergy) {
         this.assessment.designedEnergy.fuel = this.assessment.fuel;
@@ -111,14 +111,14 @@ export class PreAssessmentFormComponent implements OnInit {
   }
 
   getEnergyUsed(assessment: PreAssessment) {
-    if (assessment.type == 'Metered') {
+    if (assessment.type === 'Metered') {
       let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.preAssessmentService.calculateMetered(assessment, assessment.settings);
       if (result) {
         return result.value;
       } else {
         return 0;
       }
-    } else if (assessment.type == 'Designed') {
+    } else if (assessment.type === 'Designed') {
       let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.preAssessmentService.calculateDesigned(assessment, assessment.settings);
       if (result) {
         return result.value;
@@ -129,14 +129,14 @@ export class PreAssessmentFormComponent implements OnInit {
   }
 
   getEnergyCost(assessment: PreAssessment) {
-    if (assessment.type == 'Metered') {
+    if (assessment.type === 'Metered') {
       let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.preAssessmentService.calculateMetered(assessment, assessment.settings);
       if (result) {
         return result.energyCost;
       } else {
         return 0;
       }
-    } else if (assessment.type == 'Designed') {
+    } else if (assessment.type === 'Designed') {
       let result: { name: string, percent: number, value: number, color: string, energyCost: number } = this.preAssessmentService.calculateDesigned(assessment, assessment.settings);
       if (result) {
         return result.energyCost;

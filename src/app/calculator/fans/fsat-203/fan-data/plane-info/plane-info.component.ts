@@ -48,7 +48,7 @@ export class PlaneInfoComponent implements OnInit {
     this.emitChangeField.emit(str);
   }
 
-  getSum(planeData: PlaneData){
+  getSum(planeData: PlaneData) {
     this.sumSEF = planeData.inletSEF + planeData.outletSEF;
   }
   save() {

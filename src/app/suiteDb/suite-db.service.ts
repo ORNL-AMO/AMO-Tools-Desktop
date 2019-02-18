@@ -29,47 +29,47 @@ export class SuiteDbService {
 
   //volume
   selectGasFlueGasMaterials() {
-    return db.selectGasFlueGasMaterials()
+    return db.selectGasFlueGasMaterials();
   }
 
   selectGasFlueGasMaterialById(id: number) {
-    return db.selectGasFlueGasMaterialById(id)
+    return db.selectGasFlueGasMaterialById(id);
   }
   //mass
   selectSolidLiquidFlueGasMaterials() {
-    return db.selectSolidLiquidFlueGasMaterials()
+    return db.selectSolidLiquidFlueGasMaterials();
   }
 
   selectSolidLiquidFlueGasMaterialById(id: number) {
-    return db.selectSolidLiquidFlueGasMaterialById(id)
+    return db.selectSolidLiquidFlueGasMaterialById(id);
   }
 
   selectGasLoadChargeMaterials() {
-    return db.selectGasLoadChargeMaterials()
+    return db.selectGasLoadChargeMaterials();
   }
 
   selectGasLoadChargeMaterialById(id: number) {
-    return db.selectGasLoadChargeMaterialById(id)
+    return db.selectGasLoadChargeMaterialById(id);
   }
 
   selectLiquidLoadChargeMaterials() {
-    return db.selectLiquidLoadChargeMaterials()
+    return db.selectLiquidLoadChargeMaterials();
   }
 
   selectLiquidLoadChargeMaterialById(id: number) {
-    return db.selectLiquidLoadChargeMaterialById(id)
+    return db.selectLiquidLoadChargeMaterialById(id);
   }
 
   selectSolidLoadChargeMaterials() {
-    return db.selectSolidLoadChargeMaterials()
+    return db.selectSolidLoadChargeMaterials();
   }
 
   selectSolidLoadChargeMaterialById(id: number) {
-    return db.selectSolidLoadChargeMaterialById(id)
+    return db.selectSolidLoadChargeMaterialById(id);
   }
 
   update() {
-    return db.update()
+    return db.update();
   }
 
   selectAtmosphereSpecificHeat() {
@@ -81,7 +81,7 @@ export class SuiteDbService {
   }
 
   insertAtmosphereSpecificHeat(material: AtmosphereSpecificHeat) {
-    return db.insertAtmosphereSpecificHeat(material)
+    return db.insertAtmosphereSpecificHeat(material);
   }
 
   insertGasFlueGasMaterial(material: FlueGasMaterial) {
@@ -93,7 +93,7 @@ export class SuiteDbService {
   }
 
   insertLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial) {
-    return db.insertLiquidLoadChargeMaterial(material)
+    return db.insertLiquidLoadChargeMaterial(material);
   }
 
   insertSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) {
@@ -181,43 +181,43 @@ export class SuiteDbService {
       let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
       customGasLoadChargeMaterials.forEach(material => {
         let suiteResult = this.insertGasLoadChargeMaterial(material);
-      })
-    })
+      });
+    });
     this.indexedDbService.getAllLiquidLoadChargeMaterial().then(results => {
       let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = results;
       customLiquidLoadChargeMaterials.forEach(material => {
         let suiteResult = this.insertLiquidLoadChargeMaterial(material);
-      })
-    })
+      });
+    });
     this.indexedDbService.getAllSolidLoadChargeMaterial().then(results => {
       let customLiquidLoadChargeMaterials: SolidLoadChargeMaterial[] = results;
       customLiquidLoadChargeMaterials.forEach(material => {
         let suiteResult = this.insertSolidLoadChargeMaterial(material);
-      })
-    })
+      });
+    });
     this.indexedDbService.getAtmosphereSpecificHeat().then(results => {
       let customAtmosphereSpecificHeatMaterials: AtmosphereSpecificHeat[] = results;
       customAtmosphereSpecificHeatMaterials.forEach(material => {
         let suiteResult = this.insertAtmosphereSpecificHeat(material);
-      })
-    })
+      });
+    });
     this.indexedDbService.getWallLossesSurface().then(results => {
       let customWallLossesSurfaces: WallLossesSurface[] = results;
       customWallLossesSurfaces.forEach(material => {
         let suiteResult = this.insertWallLossesSurface(material);
-      })
-    })
+      });
+    });
     this.indexedDbService.getFlueGasMaterials().then(results => {
       let customFluesGasses: FlueGasMaterial[] = results;
       customFluesGasses.forEach(material => {
         let suiteResult = this.insertGasFlueGasMaterial(material);
-      })
-    })
+      });
+    });
     this.indexedDbService.getSolidLiquidFlueGasMaterials().then(results => {
       let customSolidLiquidFlueGasses: SolidLiquidFlueGasMaterial[] = results;
       customSolidLiquidFlueGasses.forEach(material => {
         let suiteResult = this.insertSolidLiquidFlueGasMaterial(material);
-      })
-    })
+      });
+    });
   }
 }

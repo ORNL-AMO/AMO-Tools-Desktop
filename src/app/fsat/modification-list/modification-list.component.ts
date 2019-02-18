@@ -35,7 +35,7 @@ export class ModificationListComponent implements OnInit {
     this.initDropdown();
     this.assessmentTabSubscription = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -49,7 +49,7 @@ export class ModificationListComponent implements OnInit {
   }
   selectModification(index: number, close?: boolean) {
     this.compareService.setCompareVals(this.fsat, index);
-    this.initDropdown()
+    this.initDropdown();
     if (close) {
       this.close.emit(true);
     }
@@ -61,17 +61,17 @@ export class ModificationListComponent implements OnInit {
   }
   selectModificationBadge(modifiction: FSAT, index: number) {
     let testBadges = this.getBadges(modifiction);
-    if (testBadges.length == 1) {
+    if (testBadges.length === 1) {
       this.goToModification(index, testBadges[0].componentStr);
     } else {
-      this.goToModification(index, 'fan-field-data')
+      this.goToModification(index, 'fan-field-data');
     }
   }
   getBadges(modification: FSAT) {
     if (modification) {
       return this.compareService.getBadges(this.fsat, modification);
     } else {
-      return []
+      return [];
     }
   }
 
@@ -106,9 +106,9 @@ export class ModificationListComponent implements OnInit {
     this.rename.splice(index, 1);
     this.dropdown.splice(index, 1);
     this.deleteArr.splice(index, 1);
-    if (this.fsat.modifications.length == 0) {
+    if (this.fsat.modifications.length === 0) {
       this.compareService.setCompareVals(this.fsat, 0);
-    } else if (index == this.modificationIndex) {
+    } else if (index === this.modificationIndex) {
       this.selectModification(0);
     } else if (index < this.modificationIndex) {
       this.selectModification(this.modificationIndex - 1);
@@ -123,7 +123,7 @@ export class ModificationListComponent implements OnInit {
   addNewModification(fsat?: FSAT) {
     if (fsat) {
       this.newModificationName = fsat.name;
-      let testName = _.filter(this.fsat.modifications, (mod) => { return mod.fsat.name.includes(this.newModificationName) });
+      let testName = _.filter(this.fsat.modifications, (mod) => { return mod.fsat.name.includes(this.newModificationName); });
       if (testName) {
         this.newModificationName = this.newModificationName + '(' + testName.length + ')';
       }

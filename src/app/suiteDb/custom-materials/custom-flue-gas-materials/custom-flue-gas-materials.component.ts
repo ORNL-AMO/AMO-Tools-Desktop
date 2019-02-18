@@ -43,10 +43,10 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
       if (val) {
         this.getSelected();
       }
-    })
+    });
     this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
       this.selectAll(val);
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -56,12 +56,12 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showModal && !changes.showModal.firstChange) {
-      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+      if (changes.showModal.currentValue !== changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
     if (changes.importing) {
-      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
+      if (changes.importing.currentValue === false && changes.importing.previousValue === true) {
         this.getCustomMaterials();
       }
     }
@@ -78,7 +78,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   getCustomMaterials() {
     this.indexedDbService.getFlueGasMaterials().then(idbResults => {
       this.flueGasMaterials = idbResults;
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.convertAllMaterials();
       }
     });
@@ -115,12 +115,12 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   }
 
   getSelected() {
-    let selected: Array<FlueGasMaterial> = _.filter(this.flueGasMaterials, (material) => { return material.selected == true });
+    let selected: Array<FlueGasMaterial> = _.filter(this.flueGasMaterials, (material) => { return material.selected === true; });
     this.customMaterialService.selectedFlueGas = selected;
   }
   selectAll(val: boolean) {
     this.flueGasMaterials.forEach(material => {
       material.selected = val;
-    })
+    });
   }
 }
