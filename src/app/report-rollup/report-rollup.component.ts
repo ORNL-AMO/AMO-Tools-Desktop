@@ -25,6 +25,7 @@ export class ReportRollupComponent implements OnInit {
   _phastAssessments: Array<ReportItem>;
   _psatAssessments: Array<ReportItem>;
   _fsatAssessments: Array<ReportItem>;
+  _ssmtAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
   //debug
   selectedPhastCalcs: Array<Calculator>;
@@ -46,6 +47,7 @@ export class ReportRollupComponent implements OnInit {
   numPhasts: number = 0;
   numPsats: number = 0;
   numFsats: number = 0;
+  numSsmt: number = 0;
   sidebarHeight: number = 0;
   printView: boolean = false;
   reportAssessmentsSub: Subscription;
@@ -55,6 +57,7 @@ export class ReportRollupComponent implements OnInit {
   selectedPhastSub: Subscription;
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
+  ssmtAssessmentsSub: Subscription;
 
   showPrint: boolean = false;
   showPrintMenu: boolean = false;
@@ -80,9 +83,6 @@ export class ReportRollupComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    let url = this.activatedRoute.url;
-    console.log(url);
-    console.log(this.activatedRoute);
     this._phastAssessments = new Array<ReportItem>();
     this._psatAssessments = new Array<ReportItem>();
     this._fsatAssessments = new Array<ReportItem>();
@@ -158,6 +158,21 @@ export class ReportRollupComponent implements OnInit {
         }
       }
     });
+
+    this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
+      console.log(items);
+      if (items) {
+        if (items.length !== 0) {
+          this._ssmtAssessments = items;
+          this.numSsmt = this._ssmtAssessments.length;
+          //this.reportRollupService.initSsmtResultsArr(items);
+          if (!this.focusedAssessment) {
+            this.focusedAssessment = this._ssmtAssessments[0].assessment;
+          }
+        }
+      }
+    });
+
     //gets calculators for pre assessment rollup
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(items => {
       if (items) {

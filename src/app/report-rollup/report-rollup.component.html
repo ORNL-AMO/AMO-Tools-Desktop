@@ -14,8 +14,8 @@
 <div class="row sticky-top" id="reportHeader" *ngIf="printView && assessmentsGathered && settings">
     <div class="col-12">
         <div class="report-header hide-print">
-            <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="showPrintModal()"
-                (emitShowUnitModal)="showUnitModal()">
+            <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()"
+                (emitPrint)="showPrintModal()" (emitShowUnitModal)="showUnitModal()">
             </app-report-banner>
             <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numPsats]="numPsats"
                 [numFsats]="numFsats" (showPhastModal)="showPhastModal()" (showPsatModal)="showPsatModal();"
@@ -40,14 +40,15 @@
     <div #reportHeader class="row sticky-top" id="reportHeader" *ngIf="!printView">
         <div class="col-12">
             <div class="report-header hide-print">
-                <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="showPrintModal()"
-                    (emitShowUnitModal)="showUnitModal()">
+                <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()"
+                    (emitPrint)="showPrintModal()" (emitShowUnitModal)="showUnitModal()">
                     <!-- <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="setPrintViewThenPrint()"
                     (emitShowUnitModal)="showUnitModal()"> -->
                 </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" [numFsats]="numFsats"
-                    [numPsats]="numPsats" (showPhastModal)="showPhastModal()" (showPsatModal)="showPsatModal();"
-                    (hideSummary)="setSidebarHeight()" (showFsatModal)="showFsatModal()"></app-report-summary>
+                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts"
+                    [numFsats]="numFsats" [numPsats]="numPsats" (showPhastModal)="showPhastModal()"
+                    (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"
+                    (showFsatModal)="showFsatModal()"></app-report-summary>
             </div>
         </div>
     </div>
@@ -55,35 +56,54 @@
 
     <div class="d-flex">
 
-        <div class="p-1 sidebar hide-print scroll-item" id="sidebar" [ngStyle]="{'height.px': sidebarHeight, 'top.px':bannerHeight}">
+        <div class="p-1 sidebar hide-print scroll-item" id="sidebar"
+            [ngStyle]="{'height.px': sidebarHeight, 'top.px':bannerHeight}">
             <ul id="sidebar-list">
-                <li *ngFor="let item of _psatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
+                <li *ngFor="let item of _psatAssessments"
+                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
                     <div class="d-flex align-items-center psat">
                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                             <img class="icon" src="assets/images/ico-psat-diagram.png">
                         </span>
                         <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}">{{item.assessment.name}}</a>
+                            <a class="click-link"
+                                href="#{{'assessment_'+item.assessment.id}}">{{item.assessment.name}}</a>
                         </span>
                     </div>
                 </li>
-                <li *ngFor="let item of _phastAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
+                <li *ngFor="let item of _phastAssessments"
+                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
                     <div class="d-flex align-items-center phast">
                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                             <img class="icon" src="assets/images/ico-phast-diagram.png">
                         </span>
                         <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}">{{item.assessment.name}}</a>
+                            <a class="click-link"
+                                href="#{{'assessment_'+item.assessment.id}}">{{item.assessment.name}}</a>
                         </span>
                     </div>
                 </li>
-                <li *ngFor="let item of _fsatAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
+                <li *ngFor="let item of _fsatAssessments"
+                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
                     <div class="d-flex align-items-center fsat">
                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
                             <img class="icon" src="assets/images/ico-fsat-diagram.png">
                         </span>
                         <span class="p-1">
-                            <a class="click-link" href="#{{'assessment_'+item.assessment.id}}">{{item.assessment.name}}</a>
+                            <a class="click-link"
+                                href="#{{'assessment_'+item.assessment.id}}">{{item.assessment.name}}</a>
+                        </span>
+                    </div>
+                </li>
+                <li *ngFor="let item of _ssmtAssessments"
+                    [ngClass]="{'active': focusedAssessment.id == item.assessment.id}">
+                    <div class="d-flex align-items-center ssmt">
+                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                            <img class="icon" src="assets/images/ico-ssmt-diagram.png">
+                        </span>
+                        <span class="p-1">
+                            <a class="click-link"
+                                href="#{{'assessment_'+item.assessment.id}}">{{item.assessment.name}}</a>
                         </span>
                     </div>
                 </li>
@@ -92,8 +112,8 @@
         <!-- End .sidebar -->
 
 
-        <div class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline" [ngStyle]="{'height.px': sidebarHeight}"
-            (scroll)="checkActiveAssessment($event)">
+        <div class="assessment-padding d-flex flex-column scroll-item print-height w-100 skyline"
+            [ngStyle]="{'height.px': sidebarHeight}" (scroll)="checkActiveAssessment($event)">
             <!-- print layout -->
             <div class="print-container" *ngIf="printView">
                 <div *ngIf="_psatAssessments.length > 0 && printPsatRollup" class="row print-break-before">
@@ -101,25 +121,31 @@
                         <app-psat-rollup-print [settings]="settings"></app-psat-rollup-print>
                     </div>
                 </div>
-                <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
+                <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}"
+                    class="assessment-item row">
                     <div class="col-12">
                         <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
-                            [printView]="printView" (selectModification)="updateSummary($event)" [settings]="item.settings"
-                            [printInputData]="printInputData" [printReportGraphs]="printReportGraphs"
-                            [printReportSankey]="printReportSankey" [printResults]="printResults">
+                            [printView]="printView" (selectModification)="updateSummary($event)"
+                            [settings]="item.settings" [printInputData]="printInputData"
+                            [printReportGraphs]="printReportGraphs" [printReportSankey]="printReportSankey"
+                            [printResults]="printResults">
                         </app-psat-report>
                     </div>
                 </div>
 
-                <div *ngIf="_phastAssessments.length > 0 && printPhastRollup" class="row" [ngClass]="{'print-break-before' : (printPsatRollup && _psatAssessments.length > 0)}">
+                <div *ngIf="_phastAssessments.length > 0 && printPhastRollup" class="row"
+                    [ngClass]="{'print-break-before' : (printPsatRollup && _psatAssessments.length > 0)}">
                     <div class="col-12">
-                        <app-phast-rollup-print [settings]="settings" [calculators]="selectedCalcs"></app-phast-rollup-print>
+                        <app-phast-rollup-print [settings]="settings" [calculators]="selectedCalcs">
+                        </app-phast-rollup-print>
                     </div>
                 </div>
-                <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item row">
+                <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}"
+                    class="assessment-item row">
                     <div class="col-12">
-                        <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast" [assessment]="item.assessment"
-                            [inRollup]="true" [settings]="item.settings" [printView]="printView" [printInputSummary]="printInputData"
+                        <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast"
+                            [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings"
+                            [printView]="printView" [printInputSummary]="printInputData"
                             [printResultsData]="printResults" [printReportGraphs]="printReportGraphs"
                             [printReportSankey]="printReportSankey" [printEnergyUsed]="printEnergyUsed"
                             [printExecutiveSummary]="printExecutiveSummary">
@@ -133,10 +159,12 @@
                         <app-fsat-rollup-print [settings]="settings"></app-fsat-rollup-print>
                     </div>
                 </div>
-                <div class="assessment-item row" *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}">
+                <div class="assessment-item row" *ngFor="let item of _fsatAssessments"
+                    id="{{'assessment_'+item.assessment.id}}">
                     <div class="col-12">
-                        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment"
-                            [settings]="item.settings" [inRollup]="true" [printView]="printView" [printInputData]="printInputData"
+                        <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat"
+                            [assessment]="item.assessment" [settings]="item.settings" [inRollup]="true"
+                            [printView]="printView" [printInputData]="printInputData"
                             [printReportGraphs]="printReportGraphs" [printReportSankey]="printReportSankey"
                             [printResults]="printResults"></app-fsat-report>
                     </div>
@@ -145,21 +173,30 @@
 
             <!-- app layout -->
             <div *ngIf="!printView">
-                <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
+                <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}"
+                    class="assessment-item">
                     <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true"
                         (selectModification)="updateSummary($event)" [settings]="item.settings">
                     </app-psat-report>
                 </div>
 
-                <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
-                    <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast" [assessment]="item.assessment"
-                        [inRollup]="true" [settings]="item.settings">
+                <div *ngFor="let item of _phastAssessments" id="{{'assessment_'+item.assessment.id}}"
+                    class="assessment-item">
+                    <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast"
+                        [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings">
                     </app-phast-report>
                 </div>
-                <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
-                    <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat" [assessment]="item.assessment"
-                        [inRollup]="true" [settings]="item.settings">
+                <div *ngFor="let item of _fsatAssessments" id="{{'assessment_'+item.assessment.id}}"
+                    class="assessment-item">
+                    <app-fsat-report *ngIf="item.assessment.fsat" [fsat]="item.assessment.fsat"
+                        [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings">
                     </app-fsat-report>
+                </div>
+                <div *ngFor="let item of _ssmtAssessments" id="{{'assessment_'+item.assessment.id}}"
+                    class="assessment-item">
+                    <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment"
+                        [settings]="item.settings" [inRollup]="true" >
+                    </app-ssmt-report>
                 </div>
             </div>
         </div>
@@ -199,8 +236,8 @@
 </div>
 
 <!--psat rollup modal -->
-<div bsModal #psatRollupModal="bs-modal" class="psat-modal modal fade psat" tabindex="-1" role="dialog" aria-labelledby="psatRollupModal"
-    aria-hidden="true" [config]="{backdrop: 'fixed'}">
+<div bsModal #psatRollupModal="bs-modal" class="psat-modal modal fade psat" tabindex="-1" role="dialog"
+    aria-labelledby="psatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -235,8 +272,8 @@
 </div>
 
 <!--fsat rollup modal -->
-<div bsModal #fsatRollupModal="bs-modal" class="fsat-modal modal fade fsat" tabindex="-1" role="dialog" aria-labelledby="fsatRollupModal"
-    aria-hidden="true" [config]="{backdrop: 'fixed'}">
+<div bsModal #fsatRollupModal="bs-modal" class="fsat-modal modal fade fsat" tabindex="-1" role="dialog"
+    aria-labelledby="fsatRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -264,29 +301,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                <app-report-rollup-units *ngIf="settings" [settings]="settings" (closeUnitModal)="hideUnitModal()"></app-report-rollup-units>
+                <app-report-rollup-units *ngIf="settings" [settings]="settings" (closeUnitModal)="hideUnitModal()">
+                </app-report-rollup-units>
             </div>
         </div>
     </div>
 </div>
 
 
-<app-print-options-menu *ngIf="showPrintMenu"
-    [showRollupReportOptions]="showRollupReportOptions"
-    [showPsatReportOptions]="showPsatReportOptions"
-    [showFsatReportOptions]="showFsatReportOptions"
-    [showPhastReportOptions]="showPhastReportOptions"
-    [selectAll]="selectAll"
-    [printReportGraphs]="printReportGraphs"
-    [printReportSankey]="printReportSankey"
-    [printResults]="printResults"
-    [printInputData]="printInputData"
-    [printEnergyUsed]="printEnergyUsed"
-    [printExecutiveSummary]="printExecutiveSummary"
-    [printPsatRollup]="printPsatRollup"
-    [printFsatRollup]="printFsatRollup"
-    [printPhastRollup]="printPhastRollup"
-    (emitClosePrintModal)="closePrintModal($event)"
-    (emitTogglePrint)="togglePrint($event)"
+<app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="showRollupReportOptions"
+    [showPsatReportOptions]="showPsatReportOptions" [showFsatReportOptions]="showFsatReportOptions"
+    [showPhastReportOptions]="showPhastReportOptions" [selectAll]="selectAll" [printReportGraphs]="printReportGraphs"
+    [printReportSankey]="printReportSankey" [printResults]="printResults" [printInputData]="printInputData"
+    [printEnergyUsed]="printEnergyUsed" [printExecutiveSummary]="printExecutiveSummary"
+    [printPsatRollup]="printPsatRollup" [printFsatRollup]="printFsatRollup" [printPhastRollup]="printPhastRollup"
+    (emitClosePrintModal)="closePrintModal($event)" (emitTogglePrint)="togglePrint($event)"
     (emitPrint)="setPrintViewThenPrint()">
 </app-print-options-menu>

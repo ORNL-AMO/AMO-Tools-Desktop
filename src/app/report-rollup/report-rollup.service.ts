@@ -27,12 +27,13 @@ export class ReportRollupService {
   phastAssessments: BehaviorSubject<Array<ReportItem>>;
   psatAssessments: BehaviorSubject<Array<ReportItem>>;
   fsatAssessments: BehaviorSubject<Array<ReportItem>>;
+  ssmtAssessments: BehaviorSubject<Array<ReportItem>>;
 
   assessmentsArray: Array<ReportItem>;
   phastArray: Array<ReportItem>;
   psatArray: Array<ReportItem>;
   fsatArray: Array<ReportItem>;
-
+  ssmtArray: Array<ReportItem>;
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
   psatResults: BehaviorSubject<Array<PsatResultsData>>;
   allPsatResults: BehaviorSubject<Array<AllPsatResultsData>>;
@@ -68,7 +69,7 @@ export class ReportRollupService {
     this.phastAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.psatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.fsatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
-
+    this.ssmtAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
 
     this.selectedPsats = new BehaviorSubject<Array<PsatCompare>>(new Array<PsatCompare>());
     this.psatResults = new BehaviorSubject<Array<PsatResultsData>>(new Array<PsatResultsData>());
@@ -81,6 +82,7 @@ export class ReportRollupService {
     this.selectedFsats = new BehaviorSubject<Array<FsatCompare>>(new Array<FsatCompare>());
     this.fsatResults = new BehaviorSubject<Array<FsatResultsData>>(new Array<FsatResultsData>());
     this.allFsatResults = new BehaviorSubject<Array<AllFsatResultsData>>(new Array<AllFsatResultsData>());
+
 
     this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
@@ -97,6 +99,11 @@ export class ReportRollupService {
       this.phastArray.push({ assessment: assessment, settings: tmpSettings });
     } else if (assessment.fsat) {
       this.fsatArray.push({ assessment: assessment, settings: tmpSettings });
+    } else if(assessment.ssmt){
+      this.ssmtArray.push({
+        assessment: assessment,
+        settings: tmpSettings
+      })
     }
   }
 
@@ -105,9 +112,10 @@ export class ReportRollupService {
     this.phastArray = new Array<ReportItem>();
     this.psatArray = new Array<ReportItem>();
     this.fsatArray = new Array<ReportItem>();
-
+    this.ssmtArray = new Array<ReportItem>();
     let selected = directory.assessments.filter((val) => { return val.selected; });
     selected.forEach(assessment => {
+      console.log(assessment);
       this.pushAssessment(assessment);
     });
     directory.subDirectory.forEach(subDir => {
@@ -119,6 +127,7 @@ export class ReportRollupService {
     this.phastAssessments.next(this.phastArray);
     this.psatAssessments.next(this.psatArray);
     this.fsatAssessments.next(this.fsatArray);
+    this.ssmtAssessments.next(this.ssmtArray);
     this.reportAssessments.next(this.assessmentsArray);
 
   }

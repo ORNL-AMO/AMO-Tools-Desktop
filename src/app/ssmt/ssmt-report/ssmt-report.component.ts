@@ -21,6 +21,8 @@ export class SsmtReportComponent implements OnInit {
   directory: Directory;
   @Input()
   containerHeight: number;
+  @Input()
+  inRollup: boolean;
 
   @ViewChild('reportBtns') reportBtns: ElementRef;
   @ViewChild('reportHeader') reportHeader: ElementRef;
