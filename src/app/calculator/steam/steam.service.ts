@@ -479,7 +479,7 @@ export class SteamService {
   }
 
   turbine(input: TurbineInput, settings: Settings): TurbineOutput {
-    let inputCpy = JSON.parse(JSON.stringify(input));
+    let inputCpy: TurbineInput = JSON.parse(JSON.stringify(input));
 
     inputCpy.inletPressure = this.convertSteamPressureInput(inputCpy.inletPressure, settings);
     inputCpy.outletSteamPressure = this.convertSteamPressureInput(inputCpy.outletSteamPressure, settings);
@@ -507,6 +507,14 @@ export class SteamService {
       }
     }
     let results: TurbineOutput = steamAddon.turbine(inputCpy);
+    inputCpy.isentropicEfficiency = 100
+    let idealResults: TurbineOutput = steamAddon.turbine(inputCpy);
+    results.outletIdealPressure = idealResults.outletPressure;
+    results.outletIdealQuality = idealResults.outletQuality;
+    results.outletIdealSpecificEnthalpy = idealResults.outletSpecificEnthalpy;
+    results.outletIdealSpecificEntropy = idealResults.outletSpecificEntropy;
+    results.outletIdealTemperature = idealResults.outletTemperature;
+    results.outletIdealVolume = idealResults.outletVolume;
     //comes back as tonnes   
     if (inputCpy.turbineProperty === 0) {
       //mass flow
@@ -526,13 +534,16 @@ export class SteamService {
 
     results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);
     results.inletPressure = this.convertSteamPressureOutput(results.inletPressure, settings);
+    results.outletIdealPressure = this.convertSteamPressureOutput(results.outletIdealPressure, settings);
     results.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.outletSpecificEnthalpy, settings);
     results.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.inletSpecificEnthalpy, settings);
+    results.outletIdealSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(results.outletIdealSpecificEnthalpy, settings);
     results.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.outletSpecificEntropy, settings);
     results.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.inletSpecificEntropy, settings);
+    results.outletIdealSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.outletIdealSpecificEntropy, settings);
     results.outletTemperature = this.convertSteamTemperatureOutput(results.outletTemperature, settings);
     results.inletTemperature = this.convertSteamTemperatureOutput(results.inletTemperature, settings);
-
+    results.outletIdealTemperature = this.convertSteamTemperatureOutput(results.outletIdealTemperature, settings);
     return results;
   }
 
