@@ -4,7 +4,7 @@
   <tbody>
     <tr>
       <td class="bold">Pressure</td>
-      <td class="text-center">{{processSteamUsage.pressure |number:'1.0-1'}}
+      <td class="text-center">{{processSteamUsage.pressure |number:'1.0-2'}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </td>
       <td class="bold">Temperature</td>
@@ -18,7 +18,7 @@
         <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
       </td>
       <td class="bold">Mass Flow</td>
-      <td class="text-center">{{processSteamUsage.massFlow |number:'1.0-1'}}
+      <td class="text-center">{{processSteamUsage.massFlow |number:'1.0-2'}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
       </td>
     </tr>

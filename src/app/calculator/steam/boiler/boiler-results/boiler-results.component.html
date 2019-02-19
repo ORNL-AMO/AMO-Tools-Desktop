@@ -32,9 +32,9 @@
     </tr>
     <tr>
       <td class="bold">Pressure</td>
-      <td class="text-center">{{results.feedwaterPressure | number:'1.0-1'}}</td>
-      <td class="text-center">{{results.blowdownPressure | number:'1.0-1'}}</td>
-      <td class="text-center">{{results.steamPressure | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.feedwaterPressure | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.blowdownPressure | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.steamPressure | number:'1.0-2'}}</td>
       <td class="text-center">
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </td>
@@ -43,7 +43,7 @@
       <td class="bold">Temperature</td>
       <td class="text-center">{{results.feedwaterTemperature | number:'1.0-1'}}</td>
       <td class="text-center">{{results.blowdownTemperature | number:'1.0-1'}}</td>
-      <td class="text-center">{{results.steamTemperature}}</td>
+      <td class="text-center">{{results.steamTemperature | number:'1.0-1'}}</td>
       <td class="text-center">
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </td>
@@ -54,28 +54,28 @@
         <span *ngIf="results.feedwaterQuality == 0">Liquid</span>
         <span *ngIf="results.feedwaterQuality == 1">Gas</span>
         <span *ngIf="results.feedwaterQuality != 1 && results.feedwaterQuality != 0">
-          {{results.feedwaterQuality | number:'1.0-1'}} </span>
+          {{results.feedwaterQuality | number:'1.0-2'}} </span>
       </td>
       <td class="text-center">
         <span *ngIf="results.blowdownQuality == 0">Liquid</span>
         <span *ngIf="results.blowdownQuality == 1">Gas</span>
         <span *ngIf="results.blowdownQuality != 1 && results.blowdownQuality != 0">
-          {{results.blowdownQuality | number:'1.0-1'}} </span>
+          {{results.blowdownQuality | number:'1.0-2'}} </span>
       </td>
       <td class="text-center">
         <span *ngIf="results.steamQuality == 0">Liquid</span>
         <span *ngIf="results.steamQuality == 1">Gas</span>
         <span *ngIf="results.steamQuality != 1 && results.steamQuality != 0">
-          {{results.steamQuality | number:'1.0-1'}} </span>
+          {{results.steamQuality | number:'1.0-2'}} </span>
       </td>
       <td class="text-center">
       </td>
     </tr>
     <tr>
       <td class="bold">Mass Flow</td>
-      <td class="text-center">{{results.feedwaterMassFlow | number:'1.0-1'}}</td>
-      <td class="text-center">{{results.blowdownMassFlow | number:'1.0-1'}}</td>
-      <td class="text-center">{{results.steamMassFlow | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.feedwaterMassFlow | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.blowdownMassFlow | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.steamMassFlow | number:'1.0-2'}}</td>
       <td class="text-center">
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
       </td>

@@ -13,8 +13,6 @@ export class PrvResultsComponent implements OnInit {
   results: PrvOutput;
   @Input()
   settings: Settings;
-  @Input()
-  isSuperHeating: boolean;
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;

@@ -3,7 +3,6 @@
     Click-on and mouse-over equipment and components for more details.
   </div>
   <div class="w-100" *ngIf="hoveredEquipment != 'default'">
-    <!-- <app-default-summary-table *ngIf="hoveredEquipment == 'default'"></app-default-summary-table> -->
     <!--Boiler-->
     <app-hover-boiler-table *ngIf="hoveredEquipment == 'boilerHovered'" [settings]="settings" [outputData]="outputData"
       [inputData]="inputData"></app-hover-boiler-table>

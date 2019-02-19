@@ -3,7 +3,7 @@
     <div class="d-flex" [ngClass]="inletSteam">
       <div class="inlet-mass-flow-holder">
         <span class="inlet-mass-flow">
-          {{prv.inletMassFlow | number:'1.0-1'}}
+          {{prv.inletMassFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
         </span>
       </div>
@@ -18,7 +18,7 @@
           <span class="fa fa-chevron-right" (mouseenter)="hoverFeedwater()" (mouseleave)="hoverPRV()"></span>
         </div>
         <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined">
-          {{prv.feedwaterMassFlow | number:'1.0-1'}}
+          {{prv.feedwaterMassFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
         </span>
         <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
