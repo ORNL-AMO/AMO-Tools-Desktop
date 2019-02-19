@@ -112,11 +112,21 @@ export class FolderSummaryComponent implements OnInit {
             this.fsatEnergyUsed = result.annualEnergy + this.fsatEnergyUsed;
             this.fsatEnergyCost = result.annualCost + this.fsatEnergyCost;
           }
-        }else if(assessment.type === 'SSMT'){
-          if(assessment.ssmt.setupDone){
+        } else if (assessment.type === 'SSMT') {
+          if (assessment.ssmt.setupDone) {
             let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-            // this.calculateModelService.initData(assessment.ssmt, settings, true);
-            let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(assessment.ssmt, settings, true, false);
+            let results: { inputData: SSMTInputs, outputData: SSMTOutput }
+            if (assessment.ssmt.resultsCalculated) {
+              let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(assessment.ssmt);
+              results = {
+                inputData: inputData,
+                outputData: assessment.ssmt.outputData
+              }
+            }
+            else {
+              console.log('calculate');
+              results = this.calculateModelService.initDataAndRun(assessment.ssmt, settings, true, false);
+            }
             results.outputData.boilerFuelUsage = this.convertUnitsService.value(results.outputData.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
             this.ssmtEnergyUsed = results.outputData.boilerFuelUsage + this.ssmtEnergyUsed;
             this.ssmtEnergyCost = results.outputData.totalOperatingCost + this.ssmtEnergyCost;

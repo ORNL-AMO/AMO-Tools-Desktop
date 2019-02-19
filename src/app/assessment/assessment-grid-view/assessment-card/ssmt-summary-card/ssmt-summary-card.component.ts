@@ -6,7 +6,7 @@ import { AssessmentService } from '../../../assessment.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
-import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
+import { SSMTInputs, SSMT } from '../../../../shared/models/steam/ssmt';
 
 @Component({
   selector: 'app-ssmt-summary-card',
@@ -41,16 +41,13 @@ export class SsmtSummaryCardComponent implements OnInit {
   }
 
   getBaselineData() {
-    console.time('baseline data calc');
-    this.baselineData = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, false);
-    console.timeEnd('baseline data calc');
+    this.baselineData = this.getData(this.assessment.ssmt, true);
   }
 
   getModificationData() {
-    console.time('modifications calc');
     this.numMods = this.assessment.ssmt.modifications.length;
     this.assessment.ssmt.modifications.forEach(mod => {
-      let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(mod.ssmt, this.settings, false, false, this.baselineData.outputData.sitePowerDemand);
+      let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.getData(mod.ssmt, false);
       let tmpSavingCalc = this.baselineData.outputData.totalOperatingCost - results.outputData.totalOperatingCost;
       let tmpSavingEnergy = this.baselineData.outputData.boilerFuelUsage - results.outputData.boilerFuelUsage;
       if (tmpSavingCalc > this.maxCostSavings) {
@@ -58,14 +55,26 @@ export class SsmtSummaryCardComponent implements OnInit {
         this.maxEnergySavings = tmpSavingEnergy;
       }
     });
-    console.timeEnd('modifications calc');
+  }
+
+  getData(ssmt: SSMT, isBaseline: boolean): { inputData: SSMTInputs, outputData: SSMTOutput } {
+    if (ssmt.resultsCalculated) {
+      let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(ssmt);
+      return {
+        inputData: inputData,
+        outputData: ssmt.outputData
+      }
+    } else if (isBaseline) {
+      return this.calculateModelService.initDataAndRun(ssmt, this.settings, true, false);
+    } else {
+      return this.calculateModelService.initDataAndRun(ssmt, this.settings, false, false, this.baselineData.outputData.sitePowerDemand);
+    }
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {
     this.assessmentService.goToAssessment(assessment, str, str2);
   }
-
-
+  
   showReportModal() {
     this.showReport = true;
     this.reportModal.show();

@@ -40,7 +40,7 @@
           [totalOperatingCost]="outputData.totalOperatingCost" [boilerFuelUsage]="outputData.boilerFuelUsage"
           [settings]="settings"></app-diagram-summary-table>
         <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData"
-          [settings]="settings"></app-cost-table>
+          [settings]="settings" (emitCalculateMarginalCosts)="calculateResultsWithMarginalCosts()"></app-cost-table>
         <!--boiler-->
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="outputData.boilerOutput" [inputData]="inputData"
           [settings]="settings"></app-boiler-table>
