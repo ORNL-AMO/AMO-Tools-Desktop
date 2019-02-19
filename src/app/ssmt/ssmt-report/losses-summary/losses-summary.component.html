@@ -2,7 +2,7 @@
   <table class="table table-hover table-striped" *ngIf="baselineLosses">
     <thead>
       <tr>
-        <td [ngStyle]="{'width.%': 15}"></td>
+        <td class="bold" [ngStyle]="{'width.%': 15}">Energy Losses (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
         <td [ngStyle]="{'width.%': tableCellWidth}" class="text-center bold">Baseline</td>
         <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationLosses" class="text-center bold">{{modification.name}}</td>
       </tr>
