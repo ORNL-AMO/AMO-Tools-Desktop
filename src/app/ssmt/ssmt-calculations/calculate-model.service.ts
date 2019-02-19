@@ -74,7 +74,20 @@ export class CalculateModelService {
   isBaselineCalculation: boolean;
   baselinePowerDemand: number;
   callCount: number = 0;
+
+  executeCalculateMarginalCosts: boolean;
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
+
+  initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
+    this.initResults();
+    this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
+    this.isBaselineCalculation = isBaseline;
+    this.baselinePowerDemand = baselinePowerDemand;
+    this.calcCount = 0;
+    this.inputData = this.getInputDataFromSSMT(_ssmt);
+    this.settings = _settings;
+    return this.calculateModelRunner();
+  }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
     let inputData: SSMTInputs = {
@@ -93,14 +106,6 @@ export class CalculateModelService {
     return inputData;
   }
 
-  initData(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, baselinePowerDemand?: number): void {
-    this.isBaselineCalculation = isBaseline;
-    this.baselinePowerDemand = baselinePowerDemand;
-    this.calcCount = 0;
-    this.inputData = this.getInputDataFromSSMT(_ssmt);
-    this.settings = _settings;
-  }
-
   calculateModelRunner(): { inputData: SSMTInputs, outputData: SSMTOutput } {
     //this.callCount++;
     //console.log(this.isBaselineCalculation + ' CALLED ' + this.callCount)
@@ -114,11 +119,12 @@ export class CalculateModelService {
       initialGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage);
     }
     let balancedResults: SSMTOutput = this.calculateModel(initialGuess);
-    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.calculateMarginalCosts(initialGuess, balancedResults);
-
-    balancedResults.marginalHPCost = marginalCosts.marginalHPCost;
-    balancedResults.marginalMPCost = marginalCosts.marginalMPCost;
-    balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
+    if (this.executeCalculateMarginalCosts) {
+      let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.calculateMarginalCosts(initialGuess, balancedResults);
+      balancedResults.marginalHPCost = marginalCosts.marginalHPCost;
+      balancedResults.marginalMPCost = marginalCosts.marginalMPCost;
+      balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
+    }
     //console.log(this.isBaselineCalculation + ' RETURNED ' + this.callCount)
     return { inputData: this.inputData, outputData: balancedResults };
   }
@@ -472,6 +478,7 @@ export class CalculateModelService {
         if (Math.abs(additionalSteamNeed) > 1e-3) {
           //re-run model with additional steam added
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
       //if more steam is available than max allowed
@@ -499,6 +506,7 @@ export class CalculateModelService {
         if (Math.abs(additionalSteamNeed) > 1e-3) {
           //re-run model with additional steam added
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
       //if there is more power out with current mass flow available than max allowed, reduce to max power out.
@@ -518,6 +526,7 @@ export class CalculateModelService {
         if (Math.abs(additionalSteamNeed) > 1e-3) {
           //re-run model with additional steam added
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
     }
@@ -532,6 +541,7 @@ export class CalculateModelService {
         if (Math.abs(additionalSteamNeed) > 1e-3) {
           //re-run model with additional steam added
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
     }
@@ -690,6 +700,7 @@ export class CalculateModelService {
           if (Math.abs(newSteamNeed) > 1e-3) {
             //re-run model with additional steam added
             this.calculateModel(this.boilerOutput.steamMassFlow + newSteamNeed);
+            return;
           }
         }
       }
@@ -720,6 +731,7 @@ export class CalculateModelService {
           if (Math.abs(newSteamNeed) > 1e-3) {
             //re-run model with additional steam added
             this.calculateModel(this.boilerOutput.steamMassFlow + newSteamNeed);
+            return;
           }
         }
       }
@@ -743,6 +755,7 @@ export class CalculateModelService {
           if (Math.abs(newSteamNeed) > 1e-3) {
             //re-run model with additional steam added
             this.calculateModel(this.boilerOutput.steamMassFlow + newSteamNeed);
+            return;
           }
         }
       }
@@ -761,6 +774,7 @@ export class CalculateModelService {
           if (Math.abs(newSteamNeed) > 1e-3) {
             //re-run model with additional steam added
             this.calculateModel(this.boilerOutput.steamMassFlow + newSteamNeed);
+            return;
           }
         }
       }
@@ -904,6 +918,7 @@ export class CalculateModelService {
           this.calculateMediumPressureHeader();
         } else {
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
     }
@@ -1089,6 +1104,7 @@ export class CalculateModelService {
       //if cant reduce high to medium
       //re-calculate model with additional needed steam added
       this.calculateModel(this.boilerOutput.steamMassFlow + neededSteam);
+      return;
     }
   }
 
@@ -1793,6 +1809,7 @@ export class CalculateModelService {
     if (Math.abs(steamBalance) > 1e-3) {
       //if balance is off by more than .0001, add or remove steam to the system
       this.calculateModel(this.boilerOutput.steamMassFlow + steamBalance);
+      return;
     } else {
       return steamBalance;
     }
@@ -1900,7 +1917,7 @@ export class CalculateModelService {
   calculatePowerImport() {
     if (this.isBaselineCalculation) {
       this.sitePowerImport = this.inputData.operationsInput.sitePowerImport;
-    }else {
+    } else {
       this.sitePowerImport = this.baselinePowerDemand - this.powerGenerated;
     }
   }
@@ -1962,6 +1979,10 @@ export class CalculateModelService {
     this.ventedLowPressureSteam = undefined;
     this.sitePowerImport = undefined;
     this.sitePowerDemand = undefined;
+    this.executeCalculateMarginalCosts = undefined;
+    this.heatExchangerOutput = undefined;
+    this.isBaselineCalculation = undefined;
+    this.baselinePowerDemand = undefined;
   }
 
   getResultsObject(): SSMTOutput {

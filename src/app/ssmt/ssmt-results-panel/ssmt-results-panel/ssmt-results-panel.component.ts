@@ -48,15 +48,15 @@ export class SsmtResultsPanelComponent implements OnInit {
       clearTimeout(this.counter);
     }
     this.counter = setTimeout(() => {
-      this.calculateModelService.initResults();
-      this.calculateModelService.initData(this.ssmt, this.settings, true);
-      let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
+      // this.calculateModelService.initResults();
+      // this.calculateModelService.initData(this.ssmt, this.settings, true);
+      let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.ssmt, this.settings, true, false);
       this.baselineOutput = resultData.outputData;
       this.baselineInputs = resultData.inputData;
       this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputs, this.settings);
-      this.calculateModelService.initResults();
-      this.calculateModelService.initData(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
-      resultData = this.calculateModelService.calculateModelRunner();
+      // this.calculateModelService.initResults();
+      // this.calculateModelService.initData(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
+      resultData = this.calculateModelService.initDataAndRun(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, false, this.baselineOutput.sitePowerDemand);
       this.modificationOutput = resultData.outputData;
       this.modificationInputs = resultData.inputData;
       this.modificationLosses = this.calculateLossesService.calculateLosses(this.modificationOutput, this.modificationInputs, this.settings);

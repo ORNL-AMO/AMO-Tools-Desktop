@@ -41,7 +41,9 @@ export class SsmtDiagramTabComponent implements OnInit {
       });
     }
     if (this.ssmt.setupDone) {
-      this.calculateResults();
+      setTimeout(() => {
+        this.calculateResults();
+      }, 100);
     }
   }
 
@@ -52,15 +54,12 @@ export class SsmtDiagramTabComponent implements OnInit {
   // }
 
   calculateResults() {
-    setTimeout(() => {
-      this.calculateModelService.initResults();
-      this.calculateModelService.initData(this.selectedSSMT, this.settings, true);
-      let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
-      this.inputData = resultsData.inputData;
-      this.outputData = resultsData.outputData;
-      this.dataCalculated = true;
-    }, 100);
+    let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, true);
+    this.inputData = resultsData.inputData;
+    this.outputData = resultsData.outputData;
+    this.dataCalculated = true;
   }
+  
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -77,11 +76,11 @@ export class SsmtDiagramTabComponent implements OnInit {
     this.showOptions = !this.showOptions;
   }
 
-  showCalculators(){
+  showCalculators() {
     this.displayCalculators = true;
   }
 
-  closeCalculator(){
+  closeCalculator() {
     this.displayCalculators = false;
   }
 }

@@ -16,13 +16,13 @@ import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 export class SsmtSummaryCardComponent implements OnInit {
   @Input()
   assessment: Assessment;
+
   baselineData: { inputData: SSMTInputs, outputData: SSMTOutput };
   settings: Settings;
   numMods: number = 0;
   setupDone: boolean;
   maxCostSavings: number = 0;
   maxEnergySavings: number = 0;
-
   showReport: boolean = false;
 
   @ViewChild('reportModal') public reportModal: ModalDirective;
@@ -33,22 +33,32 @@ export class SsmtSummaryCardComponent implements OnInit {
     this.setupDone = this.assessment.ssmt.setupDone;
     if (this.setupDone) {
       this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
-      this.calculateModelService.initData(this.assessment.ssmt, this.settings, true);
-      this.baselineData = this.calculateModelService.calculateModelRunner();
+      this.getBaselineData();
       if (this.assessment.ssmt.modifications) {
-        this.numMods = this.assessment.ssmt.modifications.length;
-        this.assessment.ssmt.modifications.forEach(mod => {
-          this.calculateModelService.initData(mod.ssmt, this.settings, false, this.baselineData.outputData.sitePowerDemand);
-          let tmpResults: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();;
-          let tmpSavingCalc = this.baselineData.outputData.totalOperatingCost - tmpResults.outputData.totalOperatingCost;
-          let tmpSavingEnergy = this.baselineData.outputData.boilerFuelUsage - tmpResults.outputData.boilerFuelUsage;
-          if (tmpSavingCalc > this.maxCostSavings) {
-            this.maxCostSavings = tmpSavingCalc;
-            this.maxEnergySavings = tmpSavingEnergy;
-          }
-        });
+        this.getModificationData();
       }
     }
+  }
+
+  getBaselineData() {
+    console.time('baseline data calc');
+    this.baselineData = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, false);
+    console.timeEnd('baseline data calc');
+  }
+
+  getModificationData() {
+    console.time('modifications calc');
+    this.numMods = this.assessment.ssmt.modifications.length;
+    this.assessment.ssmt.modifications.forEach(mod => {
+      let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(mod.ssmt, this.settings, false, false, this.baselineData.outputData.sitePowerDemand);
+      let tmpSavingCalc = this.baselineData.outputData.totalOperatingCost - results.outputData.totalOperatingCost;
+      let tmpSavingEnergy = this.baselineData.outputData.boilerFuelUsage - results.outputData.boilerFuelUsage;
+      if (tmpSavingCalc > this.maxCostSavings) {
+        this.maxCostSavings = tmpSavingCalc;
+        this.maxEnergySavings = tmpSavingEnergy;
+      }
+    });
+    console.timeEnd('modifications calc');
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {
