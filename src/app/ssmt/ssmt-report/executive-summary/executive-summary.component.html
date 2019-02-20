@@ -92,8 +92,7 @@
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           {{baselineOutput.totalOperatingCost | currency:'USD'}}</td>
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}"
-          [ngClass]="{'positive-savings': getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost) > 10}">
+          [ngClass]="{'selected-modification': index == selectedModificationIndex, 'positive-savings': getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost) > 10}">
           {{modResults.outputData.totalOperatingCost | currency:'USD'}}
         </td>
       </tr>
@@ -101,8 +100,7 @@
         <td>Annual Savings</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}"
-          [ngClass]="{'positive-savings': getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost) > 10}">
+          [ngClass]="{'selected-modification': index == selectedModificationIndex, 'positive-savings': getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost) > 10}">
           {{baselineOutput.totalOperatingCost - modResults.outputData.totalOperatingCost | currency:'USD'}}
         </td>
       </tr>

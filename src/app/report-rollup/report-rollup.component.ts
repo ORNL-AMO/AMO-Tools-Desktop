@@ -79,7 +79,7 @@ export class ReportRollupComponent implements OnInit {
   printEnergyUsed: boolean = false;
   printExecutiveSummary: boolean = false;
 
-
+  gatheringAssessments: boolean = true;
 
   constructor(private activatedRoute: ActivatedRoute, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
@@ -93,13 +93,18 @@ export class ReportRollupComponent implements OnInit {
     this.directoryIds = new Array<number>();
 
     setTimeout(() => {
+      this.gatheringAssessments = false;
+    }, 1000)
+
+    setTimeout(() => {
       this.assessmentsGathered = true;
       this.cd.detectChanges();
-    }, 3000);
+    }, 2000);
     setTimeout(() => {
       this.setSidebarHeight();
       this.initPrintLogic();
-    }, 3100);
+      this.cd.detectChanges();
+    }, 2100);
 
     this.settings = this.settingsDbService.globalSettings;
     this.checkSettings();
@@ -161,7 +166,6 @@ export class ReportRollupComponent implements OnInit {
     });
 
     this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
-      console.log(items);
       if (items) {
         if (items.length !== 0) {
           this._ssmtAssessments = items;
