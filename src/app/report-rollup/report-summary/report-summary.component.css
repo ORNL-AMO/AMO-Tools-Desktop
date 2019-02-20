@@ -12,14 +12,14 @@
 }
 
 .report-summary ul li {
-    padding: 0;
-    margin: 0;
+    /* padding: 0;
+    margin: 0; */
     list-style: none;
-    border-radius: 2px;
+    /* border-radius: 2px;
     background: #fff;
     -webkit-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
     -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
-    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4); */
     width: 24.5%;
 }
     .report-summary ul li.coming-soon {
@@ -158,7 +158,7 @@ dl.summary-list {
     color: #7b7b7b;
 }
 .summary-list dd {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .summary-content:after {

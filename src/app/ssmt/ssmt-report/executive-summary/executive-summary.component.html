@@ -7,19 +7,39 @@
       <tr>
         <td [ngStyle]="{'width.%': 15}"></td>
         <td [ngStyle]="{'width.%': tableCellWidth}" class="bold text-center">Baseline</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationOutputs" class="bold text-center">{{modification.name}}</td>
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationOutputs"
+          class="bold text-center">{{modification.name}}</td>
       </tr>
 
       <tr>
         <td class="bold">Percent Savings (%)</td>
-        <td class="text-center">&mdash;</td>
-        <td *ngFor="let modResults of modificationOutputs" class="text-center" class="text-center">
+        <td>&mdash;</td>
+        <!-- <td *ngFor="let modResults of modificationOutputs">
           <div class="d-flex w-100 justify-content-center">
             <div class="col-lg-8 col-md-10 col-sm-12">
-              <app-percent-graph [value]="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)"
-                [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'ssmt-opportunities-savings'"></app-percent-graph>
+              <app-percent-graph
+                [value]="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)"
+                [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'ssmt-opportunities-savings'">
+              </app-percent-graph>
             </div>
           </div>
+        </td> -->
+        <td class="percent-graph" *ngFor="let modResults of modificationOutputs"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <div class="hide-print col-10 mx-auto gauge-chart-width"
+            *ngIf="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)">
+            <app-percent-graph
+              [value]="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)"
+              [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'ssmt-opportunities-savings'">
+            </app-percent-graph>
+          </div>
+          <div class="show-print text-center"
+            *ngIf="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)">
+            {{getSavingsPercentage(baselineResults, modification) | number:'1.0'}} %
+          </div>
+          <div
+            *ngIf="!getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)"
+            class="mx-auto">&mdash; &mdash;</div>
         </td>
       </tr>
     </tbody>
@@ -28,17 +48,17 @@
     <tbody>
       <tr class="mt-2">
         <td class="bold" [ngStyle]="{'width.%': 15}">Power</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" class="text-center">{{baselineOutput.powerGenerationCost |
+        <td [ngStyle]="{'width.%': tableCellWidth}">{{baselineOutput.powerGenerationCost |
           currency:'USD'}}
         </td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs" class="text-center">
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs">
           {{modResults.outputData.powerGenerationCost | currency:'USD'}}
         </td>
       </tr>
       <tr>
         <td>Savings</td>
-        <td class="text-center">&mdash;</td>
-        <td *ngFor="let modResults of modificationOutputs" class="text-center">
+        <td>&mdash;</td>
+        <td *ngFor="let modResults of modificationOutputs">
           {{baselineOutput.powerGenerationCost - modResults.outputData.powerGenerationCost | currency:'USD'}}
         </td>
       </tr>
@@ -48,16 +68,16 @@
     <tbody>
       <tr>
         <td class="bold" [ngStyle]="{'width.%': 15}">Fuel</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" class="text-center">{{baselineOutput.boilerFuelCost|
+        <td [ngStyle]="{'width.%': tableCellWidth}">{{baselineOutput.boilerFuelCost|
           currency:'USD'}}</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs" class="text-center">{{modResults.outputData.boilerFuelCost
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.boilerFuelCost
           | currency:'USD'}}
         </td>
       </tr>
       <tr>
         <td>Savings</td>
-        <td class="text-center">&mdash;</td>
-        <td *ngFor="let modResults of modificationOutputs" class="text-center">
+        <td>&mdash;</td>
+        <td *ngFor="let modResults of modificationOutputs">
           {{baselineOutput.boilerFuelCost - modResults.outputData.boilerFuelCost | currency:'USD'}}
         </td>
       </tr>
@@ -67,16 +87,16 @@
     <tbody>
       <tr>
         <td class="bold" [ngStyle]="{'width.%': 15}">Make-up Water</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" class="text-center">{{baselineOutput.makeupWaterCost |
+        <td [ngStyle]="{'width.%': tableCellWidth}">{{baselineOutput.makeupWaterCost |
           currency:'USD'}}</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs" class="text-center">{{modResults.outputData.makeupWaterCost
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.makeupWaterCost
           | currency:'USD'}}
         </td>
       </tr>
       <tr>
         <td>Savings</td>
-        <td class="text-center">&mdash;</td>
-        <td *ngFor="let modResults of modificationOutputs" class="text-center">
+        <td>&mdash;</td>
+        <td *ngFor="let modResults of modificationOutputs">
           {{baselineOutput.makeupWaterCost - modResults.outputData.makeupWaterCost | currency:'USD'}}
         </td>
       </tr>
@@ -84,13 +104,23 @@
   </table>
   <table class="table table-striped table-hover pt-2">
     <tbody>
-      <tr>
-        <td class="bold" [ngStyle]="{'width.%': 15}">Total Savings</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" class="text-center">&mdash;</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs" class="text-center">
-          {{baselineOutput.totalOperatingCost - modResults.outputData.totalOperatingCost | currency:'USD'}}
+      <tr class="bold">
+        <td [ngStyle]="{'width.%': 15}">Annual Cost</td>
+        <td [ngStyle]="{'width.%': tableCellWidth}">{{baselineOutput.totalOperatingCost | currency:'USD'}}</td>
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs"
+          [ngClass]="{'positive-savings': getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost) > 10}">
+          {{modResults.outputData.totalOperatingCost | currency:'USD'}}
         </td>
       </tr>
+    </tbody>
+    <tr class="bold">
+      <td [ngStyle]="{'width.%': 15}">Annual Savings</td>
+      <td [ngStyle]="{'width.%': tableCellWidth}">&mdash;</td>
+      <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs"
+        [ngClass]="{'positive-savings': getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost) > 10}">
+        {{baselineOutput.totalOperatingCost - modResults.outputData.totalOperatingCost | currency:'USD'}}
+      </td>
+    </tr>
     </tbody>
   </table>
 
