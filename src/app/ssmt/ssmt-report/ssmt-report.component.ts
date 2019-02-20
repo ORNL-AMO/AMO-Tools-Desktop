@@ -41,9 +41,9 @@ export class SsmtReportComponent implements OnInit {
 
   ngOnInit() {
     setTimeout(() => {
-      this.calculateModelService.initResults();
-      this.calculateModelService.initData(this.assessment.ssmt, this.settings, true);
-      let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
+      // this.calculateModelService.initResults();
+      // this.calculateModelService.initData(this.assessment.ssmt, this.settings, true);
+      let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, true);
       this.baselineOutput = resultData.outputData;
       this.baselineInputData = resultData.inputData;
       this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputData, this.settings);
@@ -52,9 +52,9 @@ export class SsmtReportComponent implements OnInit {
       this.modificationLosses = new Array<{ name: string, outputData: SSMTLosses }>();
       if (this.assessment.ssmt.modifications) {
         this.assessment.ssmt.modifications.forEach(modification => {
-          this.calculateModelService.initResults();
-          this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
-          let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.calculateModelRunner();
+          // this.calculateModelService.initResults();
+          // this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
+          let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(modification.ssmt, this.settings, false, true, this.baselineOutput.sitePowerDemand);
           this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
           this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
           let modLosses: SSMTLosses = this.calculateLossesService.calculateLosses(resultData.outputData, resultData.inputData, this.settings);
