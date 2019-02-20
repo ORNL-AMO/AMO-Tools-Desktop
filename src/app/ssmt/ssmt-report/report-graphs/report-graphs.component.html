@@ -1,11 +1,13 @@
 <div class="output-summary">
   <div class="row justify-content-center align-items-center hide-print">
-    
+
     <div class="col-6">
-      <div class="row">
-        <div class="col-12">
+      <div class="row justify-content-center">
+        <div class="d-flex justify-content-center pr-3">
+          <!-- <div class="col-12"> -->
           <div class="form-group">
-            <select name="selectedSsmt1" class="form-control mx-auto" id="selectedSsmt1" [(ngModel)]="selectedSsm1" (ngModelChange)="selectNewSsmt(1)">
+            <select name="selectedSsmt1" class="form-control mx-auto" id="selectedSsmt1" [(ngModel)]="selectedSsmt1"
+              (ngModelChange)="selectNewSsmt(1)">
               <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option>
             </select>
           </div>
@@ -17,7 +19,8 @@
       <div class="row">
         <div class="col-12">
           <div class="form-group">
-            <select name="selectedSsmt2" class="form-control mx-auto" id="selectedSsmt2" [(ngModel)]="selectedSsm2" (ngModelChange)="selectNewSsmt(2)">
+            <select name="selectedSsmt2" class="form-control mx-auto" id="selectedSsmt2" [(ngModel)]="selectedSsmt2"
+              (ngModelChange)="selectNewSsmt(2)">
               <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option>
             </select>
           </div>
@@ -30,23 +33,31 @@
   <!-- if no mod, only 2 pie charts -->
   <div class="row justify-content-center align-items-center hide-print" *ngIf="!modExists">
     <div class="col-12">
-      <div class="row">
-        <div class="col-6">
-          {{selectedSsmt1.name}}
+      <div class="row justify-content-center">
+        <div class="d-flex justify-content-center pr-3">
+          {{selectedSsmt1.name}} Process Usage
         </div>
       </div>
       <!-- Process graph -->
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="pieLabels"
-            [values]="ssmt1ProcessPieValues" [exportName]="ssmt1ProcessExportName"></app-pie-chart>
+          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
+            [labels]="ssmt1ProcessPieLabels" [values]="ssmt1ProcessPieValues" [exportName]="ssmt1ProcessExportName">
+          </app-pie-chart>
         </div>
       </div>
 
+      <div class="row justify-content-center">
+        <div class="d-flex justify-content-center pr-3">
+          {{selectedSsmt1.name}} Generation Efficiency
+        </div>
+      </div>
+      <!-- generation graph -->
       <div class="row print-solo">
         <div class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="pieLabels"
-            [values]="ssmt1GenerationPieValues" [exportName]="ssmt1GenerationExportName"></app-pie-chart>
+          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
+            [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues" [exportName]="ssmt1GenerationExportName">
+          </app-pie-chart>
         </div>
       </div>
 
@@ -56,50 +67,63 @@
   <!-- mod exists, show 4 pie charts -->
   <div class="row justify-content-center align-items-center hide-print" *ngIf="modExists">
     <div class="col-6">
-      <div class="row">
-        <div class="col-6">
-          {{selectedSsmt1.name}}
+      <div class="row justify-content-center">
+        <div class="d-flex justify-content-center pr-3">
+          {{selectedSsmt1.name}} Process Usage
         </div>
       </div>
       <!-- Process graph -->
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="pieLabels"
-            [values]="ssmt1ProcessPieValues" [exportName]="ssmt1ProcessExportName"></app-pie-chart>
+          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
+            [labels]="ssmt1ProcessPieLabels" [values]="ssmt1ProcessPieValues" [exportName]="ssmt1ProcessExportName">
+          </app-pie-chart>
         </div>
       </div>
 
+      <div class="row justify-content-center">
+        <div class="d-flex justify-content-center pr-3">
+          {{selectedSsmt1.name}} Generation Efficiency
+        </div>
+      </div>
       <div class="row print-solo">
         <div class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="pieLabels"
-            [values]="ssmt1GenerationPieValues" [exportName]="ssmt1GenerationExportName"></app-pie-chart>
+          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
+            [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues" [exportName]="ssmt1GenerationExportName">
+          </app-pie-chart>
         </div>
       </div>
     </div>
 
     <div class="col-6">
-      <div class="row">
-        <div class="col-6">
-          {{selectedSsmt2.name}}
+      <div class="row justify-content-center">
+        <div class="d-flex justify-content-center pr-3">
+          {{selectedSsmt2.name}} Process Usage
         </div>
       </div>
       <!-- Process graph -->
       <div class="row print-solo">
         <div #pieChartContainer class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="pieLabels"
-            [values]="ssmt2ProcessPieValues" [exportName]="ssmt2ProcessExportName"></app-pie-chart>
+          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
+            [labels]="ssmt2ProcessPieLabels" [values]="ssmt2ProcessPieValues" [exportName]="ssmt2ProcessExportName">
+          </app-pie-chart>
         </div>
       </div>
 
+      <div class="row justify-content-center">
+        <div class="d-flex justify-content-center pr-3">
+          {{selectedSsmt2.name}} Generation Efficiency
+        </div>
+      </div>
       <div class="row print-solo">
         <div class="col-12">
-          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()" [labels]="pieLabels"
-            [values]="ssmt2GenerationPieValues" [exportName]="ssmt2GenerationExportName"></app-pie-chart>
+          <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
+            [labels]="ssmt2GenerationPieLabels" [values]="ssmt2GenerationPieValues" [exportName]="ssmt2GenerationExportName">
+          </app-pie-chart>
         </div>
       </div>
 
     </div>
-    
   </div>
 
 
