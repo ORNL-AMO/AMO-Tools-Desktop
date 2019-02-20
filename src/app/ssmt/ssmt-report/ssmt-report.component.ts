@@ -6,6 +6,7 @@ import { Directory } from '../../shared/models/directory';
 import { SSMTOutput, SSMTLosses } from '../../shared/models/steam/steam-outputs';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
 import { CalculateLossesService } from '../ssmt-calculations/calculate-losses.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -37,7 +38,9 @@ export class SsmtReportComponent implements OnInit {
   dataCalculated: boolean;
   modificationLosses: Array<{ name: string, outputData: SSMTLosses }>;
   tableCellWidth: number;
-  constructor(private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService) { }
+  assessmentDirectories: Directory[];
+
+  constructor(private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     setTimeout(() => {
@@ -64,6 +67,11 @@ export class SsmtReportComponent implements OnInit {
       this.getTableCellWidth();
       this.dataCalculated = true;
     }, 10);
+
+    if (this.assessment) {
+      this.assessmentDirectories = new Array();
+      this.getDirectoryList(this.assessment.directoryId);
+    }
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
@@ -89,5 +97,14 @@ export class SsmtReportComponent implements OnInit {
 
   getTableCellWidth() {
     this.tableCellWidth = 85 / (this.modificationOutputs.length + 1);
+  }
+  getDirectoryList(id: number) {
+    if (id && id !== 1) {
+      let results = this.directoryDbService.getById(id);
+      this.assessmentDirectories.push(results);
+      if (results.parentDirectoryId !== 1) {
+        this.getDirectoryList(results.parentDirectoryId);
+      }
+    }
   }
 }

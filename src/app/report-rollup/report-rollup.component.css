@@ -1,9 +1,7 @@
 .report-header {
     border-bottom: #bbb solid 1px;
     width: 100%;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
+    padding: 0px;
     background-color: #fff;
 }
 

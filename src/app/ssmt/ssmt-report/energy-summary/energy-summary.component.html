@@ -3,7 +3,7 @@
   <h4 class="show-print">Report Results</h4>
 
   <table class="table table-striped table-hover">
-    <tbody>
+    <thead>
       <tr>
         <td [ngStyle]="{'width.%': 15}"></td>
         <td [ngStyle]="{'width.%': tableCellWidth}" class="bold text-center"
@@ -12,6 +12,8 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}" class="bold text-center">
           {{modification.name}}</td>
       </tr>
+    </thead>
+    <tbody>
       <tr>
         <td class="bold">Power ($/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">

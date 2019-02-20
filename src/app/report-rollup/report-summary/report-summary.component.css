@@ -1,3 +1,9 @@
+.report-banner .btn {
+    font-size: 12px;
+    line-height: 14px;
+    padding: 6px 10px;
+}
+
 
 .report-summary {
     padding: 5px;

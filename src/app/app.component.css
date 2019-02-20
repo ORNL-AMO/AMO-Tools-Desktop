@@ -604,11 +604,10 @@ Reports
     }
 
     .report-header, .report-data .results {
-        padding: 10px 20px;
+      padding-left: 20px;
+      padding-right: 20px;
     }
-    .report-header {
 
-    }
     .report-data {
         border-top: #ddd solid 1px;
     }

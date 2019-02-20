@@ -3,7 +3,7 @@
   <h4 class="show-print">Report Results</h4>
 
   <table class="table table-striped table-hover">
-    <tbody>
+    <thead>
       <tr>
         <td [ngStyle]="{'width.%': 15}"></td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"
@@ -12,13 +12,14 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}" class="bold text-center">
           {{modification.name}}</td>
       </tr>
-
+    </thead>
+    <tbody>
       <tr>
         <td class="bold">Percent Savings (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
         <td class="percent-graph" *ngFor="let modResults of modificationOutputs; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <div class="hide-print col-10 mx-auto gauge-chart-width"
+          <div class="hide-print"
             *ngIf="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)">
             <app-percent-graph
               [value]="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)"
