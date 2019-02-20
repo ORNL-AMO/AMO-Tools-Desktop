@@ -14,6 +14,8 @@ import { CalculateLossesService } from '../ssmt-calculations/calculate-losses.se
 })
 export class SsmtReportComponent implements OnInit {
   @Input()
+  ssmt: SSMT;
+  @Input()
   assessment: Assessment;
   @Input()
   settings: Settings;
@@ -26,6 +28,8 @@ export class SsmtReportComponent implements OnInit {
   @ViewChild('reportHeader') reportHeader: ElementRef;
   reportContainerHeight: number;
   currentTab: string = 'executiveSummary';
+
+  printGraphs = false;
 
   baselineOutput: SSMTOutput;
   baselineInputData: SSMTInputs;
