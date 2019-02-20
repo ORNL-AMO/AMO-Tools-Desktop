@@ -18,6 +18,9 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { FSAT, FsatOutput } from '../shared/models/fans';
 import { FsatService } from '../fsat/fsat.service';
+import { ReportItem, PsatCompare, PsatResultsData, AllPsatResultsData, PhastCompare, PhastResultsData, AllPhastResultsData, FsatCompare, FsatResultsData, AllFsatResultsData, AllSsmtResultsData, SsmtCompare, SsmtResultsData } from './report-rollup-models';
+import { CalculateModelService } from '../ssmt/ssmt-calculations/calculate-model.service';
+import { SSMTOutput } from '../shared/models/steam/steam-outputs';
 
 
 @Injectable()
@@ -46,6 +49,9 @@ export class ReportRollupService {
   fsatResults: BehaviorSubject<Array<FsatResultsData>>;
   allFsatResults: BehaviorSubject<Array<AllFsatResultsData>>;
 
+  selectedSsmt: BehaviorSubject<Array<SsmtCompare>>;
+  ssmtResults: BehaviorSubject<Array<SsmtResultsData>>;
+  allSsmtResults: BehaviorSubject<Array<AllSsmtResultsData>>;
 
   calcsArray: Array<Calculator>;
   selectedCalcs: BehaviorSubject<Array<Calculator>>;
@@ -59,7 +65,8 @@ export class ReportRollupService {
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
-    private fsatService: FsatService
+    private fsatService: FsatService,
+    private calculateModelService: CalculateModelService
   ) {
     this.initSummary();
   }
@@ -83,6 +90,9 @@ export class ReportRollupService {
     this.fsatResults = new BehaviorSubject<Array<FsatResultsData>>(new Array<FsatResultsData>());
     this.allFsatResults = new BehaviorSubject<Array<AllFsatResultsData>>(new Array<AllFsatResultsData>());
 
+    this.selectedSsmt = new BehaviorSubject<Array<SsmtCompare>>(new Array<SsmtCompare>());
+    this.ssmtResults = new BehaviorSubject<Array<SsmtResultsData>>(new Array<SsmtResultsData>());
+    this.allSsmtResults = new BehaviorSubject<Array<AllSsmtResultsData>>(new Array<AllSsmtResultsData>());
 
     this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
@@ -99,7 +109,7 @@ export class ReportRollupService {
       this.phastArray.push({ assessment: assessment, settings: tmpSettings });
     } else if (assessment.fsat) {
       this.fsatArray.push({ assessment: assessment, settings: tmpSettings });
-    } else if(assessment.ssmt){
+    } else if (assessment.ssmt) {
       this.ssmtArray.push({
         assessment: assessment,
         settings: tmpSettings
@@ -383,6 +393,83 @@ export class ReportRollupService {
     this.fsatResults.next(tmpResultsArr);
   }
 
+  //used for ssmt summary
+  initSsmtCompare(resultsArr: Array<AllSsmtResultsData>) {
+    let tmpResults: Array<SsmtCompare> = new Array<SsmtCompare>();
+    resultsArr.forEach(result => {
+      let minCost = _.minBy(result.modificationResults, (result) => { return result.totalOperatingCost; });
+      let modIndex = _.findIndex(result.modificationResults, { totalOperatingCost: minCost.totalOperatingCost });
+      let ssmtAssessments = this.ssmtAssessments.value;
+      let assessmentIndex = _.findIndex(ssmtAssessments, (val) => { return val.assessment.id === result.assessmentId; });
+      let item = ssmtAssessments[assessmentIndex];
+      if (result.isBaseline) {
+        tmpResults.push({ baseline: item.assessment.ssmt, modification: item.assessment.ssmt, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+      } else {
+        tmpResults.push({ baseline: item.assessment.ssmt, modification: item.assessment.ssmt.modifications[modIndex].ssmt, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+      }
+    });
+    this.selectedSsmt.next(tmpResults);
+  }
+
+  updateSelectedSsmt(item: ReportItem, modIndex: number) {
+    let tmpSelected = this.selectedSsmt.value;
+    if (modIndex !== -1) {
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.ssmt, modification: item.assessment.ssmt.modifications[modIndex].ssmt, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+    } else {
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.ssmt, modification: item.assessment.ssmt, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+    }
+    this.selectedSsmt.next(tmpSelected);
+  }
+
+  initSsmtResultsArr(fsatArr: Array<ReportItem>) {
+    let tmpResultsArr = new Array<AllSsmtResultsData>();
+    fsatArr.forEach(val => {
+      if (val.assessment.ssmt.setupDone && val.assessment.ssmt.modifications.length !== 0) {
+        //get results
+        if (!val.assessment.ssmt.resultsCalculated) {
+          val.assessment.ssmt.outputData = this.calculateModelService.initDataAndRun(val.assessment.ssmt, val.settings, true, false).outputData;
+          val.assessment.ssmt.resultsCalculated = true;
+        }
+        let baselineResults: SSMTOutput = val.assessment.ssmt.outputData;
+        if (val.assessment.ssmt.modifications) {
+          if (val.assessment.ssmt.modifications.length !== 0) {
+            let modResultsArr = new Array<SSMTOutput>();
+            val.assessment.ssmt.modifications.forEach(mod => {
+              if (!mod.ssmt.resultsCalculated) {
+                mod.ssmt.outputData = this.calculateModelService.initDataAndRun(mod.ssmt, val.settings, false, false, baselineResults.sitePowerDemand).outputData;
+                mod.ssmt.resultsCalculated = true;
+              }
+              let tmpResults: SSMTOutput = mod.ssmt.outputData;
+              modResultsArr.push(tmpResults);
+            });
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
+          } else {
+            let modResultsArr = new Array<SSMTOutput>();
+            modResultsArr.push(baselineResults);
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
+          }
+        } else {
+          let modResultsArr = new Array<SSMTOutput>();
+          modResultsArr.push(baselineResults);
+          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
+        }
+      }
+    });
+    this.allSsmtResults.next(tmpResultsArr);
+  }
+
+  getSsmtResultsFromSelected(selectedFsats: Array<SsmtCompare>) {
+    let tmpResultsArr = new Array<SsmtResultsData>();
+    selectedFsats.forEach(val => {
+      let baselineResults: SSMTOutput = val.baseline.outputData;
+      let modificationResults: SSMTOutput = val.modification.outputData;
+      tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
+    });
+    this.ssmtResults.next(tmpResultsArr);
+  }
+
   checkSettings(settings: Settings) {
     if (!settings.energyResultUnit) {
       settings = this.settingsService.setEnergyResultUnitSetting(settings);
@@ -418,100 +505,4 @@ export class ReportRollupService {
     }
   }
 
-}
-
-export interface ReportItem {
-  assessment: Assessment;
-  settings: Settings;
-}
-
-export interface PsatCompare {
-  baseline: PSAT;
-  modification: PSAT;
-  assessmentId: number;
-  selectedIndex: number;
-  name: string;
-  assessment: Assessment;
-  settings: Settings;
-}
-
-
-export interface PsatResultsData {
-  baselineResults: PsatOutputs;
-  modificationResults: PsatOutputs;
-  assessmentId: number;
-  name: string;
-  modName: string;
-  baseline: PSAT;
-  modification: PSAT;
-  settings: Settings;
-}
-
-
-export interface AllPsatResultsData {
-  baselineResults: PsatOutputs;
-  modificationResults: Array<PsatOutputs>;
-  assessmentId: number;
-  isBaseline?: boolean;
-}
-
-
-export interface PhastCompare {
-  baseline: PHAST;
-  modification: PHAST;
-  assessmentId: number;
-  selectedIndex: number;
-  name: string;
-  assessment: Assessment;
-  settings: Settings;
-}
-
-
-export interface PhastResultsData {
-  baselineResults: ExecutiveSummary;
-  modificationResults: ExecutiveSummary;
-  baselineResultData: PhastResults;
-  modificationResultData: PhastResults;
-  assessmentId: number;
-  settings: Settings;
-  name: string;
-  modName: string;
-  assessment: Assessment;
-}
-
-
-export interface AllPhastResultsData {
-  baselineResults: ExecutiveSummary;
-  modificationResults: Array<ExecutiveSummary>;
-  assessmentId: number;
-  isBaseline?: boolean;
-}
-
-export interface FsatCompare {
-  baseline: FSAT;
-  modification: FSAT;
-  assessmentId: number;
-  selectedIndex: number;
-  name: string;
-  assessment: Assessment;
-  settings: Settings;
-}
-
-export interface FsatResultsData {
-  baselineResults: FsatOutput;
-  modificationResults: FsatOutput;
-  assessmentId: number;
-  name: string;
-  modName: string;
-  baseline: FSAT;
-  modification: FSAT;
-  settings: Settings;
-}
-
-
-export interface AllFsatResultsData {
-  baselineResults: FsatOutput;
-  modificationResults: Array<FsatOutput>;
-  assessmentId: number;
-  isBaseline?: boolean;
 }

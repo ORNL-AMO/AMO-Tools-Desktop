@@ -42,6 +42,11 @@
     box-shadow: 0px 0px 6px 0px #FFE400 !important;
 }
 
+/* .ssmt-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #F39C12 !important;
+} */
+
 
 
 .coming-soon .summary-header {
@@ -210,6 +215,10 @@ dl.summary-list {
 
 .card.fans .card-header > span {
     background: #FFE400;
+}
+
+.card.steam .card-header > span {
+    background: #F39C12;
 }
 
 .card.fans .card-header > span span {
