@@ -3,157 +3,195 @@
     <thead>
       <tr>
         <td [ngStyle]="{'width.%': 15}"></td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" class="text-center bold">Baseline</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationLosses" class="text-center bold">{{modification.name}}</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}" [ngStyle]="{'width.%': tableCellWidth}" class="text-center bold">Baseline</td>
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}"
+          class="text-center bold">{{modification.name}}</td>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td colspan="2" class="bold">Boiler</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center"></td>
+        <td class="bold">Boiler</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
         <td>Stack</td>
-        <td class="text-center">{{baselineLosses.stack | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.stack |
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.stack | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.stack |
           number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td>Blowdown</td>
-        <td class="text-center">{{baselineLosses.blowdown | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.blowdown |
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.blowdown | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.blowdown |
           number:'1.0-2'}}</td>
 
       </tr>
       <tr>
         <td class="bold">Header</td>
-        <td></td>
-        <td *ngFor="let modification of modificationLosses" class="text-center"></td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
         <td>High Pressure Loss</td>
-        <td class="text-center">{{baselineLosses.highPressureHeader | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.highPressureHeader
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.highPressureHeader | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.highPressureHeader
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr *ngIf="numberOfHeaders == 3">
         <td>Medium Pressure Loss</td>
-        <td class="text-center">{{baselineLosses.mediumPressureHeader | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.mediumPressureHeader
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.mediumPressureHeader | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.mediumPressureHeader
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr *ngIf="numberOfHeaders > 1">
         <td>Low Pressure Loss</td>
-        <td class="text-center">{{baselineLosses.lowPressureHeader | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.lowPressureHeader
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.lowPressureHeader | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.lowPressureHeader
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td class="bold">Turbine</td>
-        <td></td>
-        <td *ngFor="let modification of modificationLosses" class="text-center"></td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
         <td>Condensing Turbine Efficiency Loss</td>
-        <td class="text-center">{{baselineLosses.condensingTurbineEfficiencyLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.condensingTurbineEfficiencyLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.condensingTurbineEfficiencyLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.condensingTurbineEfficiencyLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr *ngIf="numberOfHeaders == 3">
         <td>High to Medium Turbine Efficiency Loss</td>
-        <td class="text-center">{{baselineLosses.highToMediumTurbineEfficiencyLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.highToMediumTurbineEfficiencyLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.highToMediumTurbineEfficiencyLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.highToMediumTurbineEfficiencyLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr *ngIf="numberOfHeaders > 1">
         <td>High to Low Turbine Efficiency Loss</td>
-        <td class="text-center">{{baselineLosses.highToLowTurbineEfficiencyLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.highToLowTurbineEfficiencyLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.highToLowTurbineEfficiencyLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.highToLowTurbineEfficiencyLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr *ngIf="numberOfHeaders == 3">
         <td>Medium to Low Turbine Efficiency Loss</td>
-        <td class="text-center">{{baselineLosses.mediumToLowTurbineEfficiencyLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.mediumToLowTurbineEfficiencyLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.mediumToLowTurbineEfficiencyLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.mediumToLowTurbineEfficiencyLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td>Condensing Loss</td>
-        <td class="text-center">{{baselineLosses.condensingLosses | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.condensingLosses
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.condensingLosses | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.condensingLosses
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td class="bold">Condensate</td>
-        <td></td>
-        <td *ngFor="let modification of modificationLosses" class="text-center"></td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
         <td>Condensate Loss</td>
-        <td class="text-center">{{baselineLosses.condensateLosses | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.condensateLosses
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.condensateLosses | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.condensateLosses
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td class="bold">Venting Losses</td>
-        <td></td>
-        <td *ngFor="let modification of modificationLosses" class="text-center"></td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
         <td>Low Pressure Vented Steam Loss</td>
-        <td class="text-center">{{baselineLosses.lowPressureVentLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.lowPressureVentLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.lowPressureVentLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.lowPressureVentLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td>Condensate Flash Tank Loss</td>
-        <td class="text-center">{{baselineLosses.condensateFlashTankLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.condensateFlashTankLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.condensateFlashTankLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.condensateFlashTankLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td>Deaerator Vent Loss</td>
-        <td class="text-center">{{baselineLosses.deaeratorVentLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.deaeratorVentLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.deaeratorVentLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.deaeratorVentLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr>
         <td class="bold">Process Losses</td>
-        <td></td>
-        <td *ngFor="let modification of modificationLosses" class="text-center"></td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
         <td>High Pressure</td>
-        <td class="text-center">{{baselineLosses.highPressureProcessLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.highPressureProcessLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.highPressureProcessLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.highPressureProcessLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr *ngIf="numberOfHeaders == 3">
         <td>Medium Pressure</td>
-        <td class="text-center">{{baselineLosses.mediumPressureProcessLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.mediumPressureProcessLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.mediumPressureProcessLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.mediumPressureProcessLoss
           |
           number:'1.0-2'}}</td>
       </tr>
       <tr *ngIf="numberOfHeaders > 1">
         <td>Low Pressure</td>
-        <td class="text-center">{{baselineLosses.lowPressureProcessLoss | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of modificationLosses" class="text-center">{{modification.outputData.lowPressureProcessLoss
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baselineLosses.lowPressureProcessLoss | number:'1.0-2'}}</td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputData.lowPressureProcessLoss
           |
           number:'1.0-2'}}</td>
+      </tr>
+      <tr class="hide-print" *ngIf="inRollup">
+        <td>Use for Summary</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1"
+            [(ngModel)]="selectedModificationIndex">
+        </td>
+        <td *ngFor="let modification of modificationLosses; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
+            [(ngModel)]="selectedModificationIndex">
+        </td>
       </tr>
     </tbody>
   </table>

@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FsatResultsData, ReportRollupService } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { Settings } from '../../../shared/models/settings';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { FsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-fsat-rollup-energy-table',

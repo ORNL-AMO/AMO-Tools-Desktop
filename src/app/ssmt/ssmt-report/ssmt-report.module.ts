@@ -15,12 +15,14 @@ import { HeaderSummaryComponent } from './input-summary/header-summary/header-su
 import { BoilerSummaryComponent } from './input-summary/boiler-summary/boiler-summary.component';
 import { HeaderInputTableComponent } from './input-summary/header-summary/header-input-table/header-input-table.component';
 import { TurbineInputTableComponent } from './input-summary/turbine-summary/turbine-input-table/turbine-input-table.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     SsmtDiagramModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   declarations: [
     SsmtReportComponent,

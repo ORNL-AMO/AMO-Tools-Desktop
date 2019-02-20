@@ -1,13 +1,11 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { PsatService } from '../../../psat/psat.service';
-// import { BaseChartDirective } from 'ng2-charts';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
 import { Subscription } from 'rxjs';
+import { PsatResultsData } from '../../report-rollup-models';
 @Component({
   selector: 'app-psat-rollup-graphs',
   templateUrl: './psat-rollup-graphs.component.html',

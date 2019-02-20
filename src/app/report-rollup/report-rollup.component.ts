@@ -1,16 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ReportRollupService, PhastResultsData, ReportItem } from './report-rollup.service';
+import { ReportRollupService } from './report-rollup.service';
 import { PhastReportService } from '../phast/phast-report/phast-report.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AssessmentService } from '../assessment/assessment.service';
 import { Calculator } from '../shared/models/calculators';
-import { SettingsService } from '../settings/settings.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '../../../node_modules/@angular/router';
+import { ReportItem } from './report-rollup-models';
+
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',

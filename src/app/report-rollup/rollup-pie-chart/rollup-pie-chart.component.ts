@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
-import { ReportRollupService, PhastResultsData } from '../report-rollup.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from 'electron';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
-import * as d3 from 'd3';
+
 @Component({
   selector: 'app-rollup-pie-chart',
   templateUrl: './rollup-pie-chart.component.html',

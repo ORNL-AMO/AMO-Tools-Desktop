@@ -3,10 +3,6 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
 import { PreAssessmentService } from '../../calculator/utilities/pre-assessment/pre-assessment.service';
-import { PreAssessment } from '../../calculator/utilities/pre-assessment/pre-assessment';
-import { MeteredEnergy } from '../../shared/models/phast/meteredEnergy';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({

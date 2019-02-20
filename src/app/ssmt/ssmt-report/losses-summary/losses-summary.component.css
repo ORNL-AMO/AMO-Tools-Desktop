@@ -28,3 +28,8 @@ tr > th:not(:first-child){
         padding: 0px !important;
     }
 }
+
+.selected-modification{
+    z-index: 2;
+    background: #e5efe9;
+}

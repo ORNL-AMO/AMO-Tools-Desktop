@@ -1,4 +1,5 @@
-<div class="assessment-report report-in-ssmt ssmt" *ngIf="assessment && settings" [ngClass]="{'assessment-report-padding': inSSMT, 'report-in-rollup': inRollup}">
+<div class="assessment-report report-in-ssmt ssmt" *ngIf="assessment && settings"
+  [ngClass]="{'assessment-report-padding': inSSMT, 'report-in-rollup': inRollup}">
 
 
   <div *ngIf="inSSMT" class="report-cover">
@@ -95,30 +96,41 @@
         <a>Facility Info</a>
       </li>
     </ul>
-    <div class="results scroll-item" *ngIf="currentTab == 'executiveSummary' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput" [modificationOutputs]="modificationOutputs"
-        [tableCellWidth]="tableCellWidth"></app-executive-summary>
+    <div class="results scroll-item" *ngIf="currentTab == 'executiveSummary' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
+        [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
+        [assessment]="assessment"></app-executive-summary>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'energySummary' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput" [modificationOutputs]="modificationOutputs"
-        [tableCellWidth]="tableCellWidth"></app-energy-summary>
+    <div class="results scroll-item" *ngIf="currentTab == 'energySummary' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput"
+        [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
+        [assessment]="assessment"></app-energy-summary>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'losses' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [settings]="settings"
-        [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders" [tableCellWidth]="tableCellWidth"></app-losses-summary>
+    <div class="results scroll-item" *ngIf="currentTab == 'losses' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
+        [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
+        [tableCellWidth]="tableCellWidth" [inRollup]="inRollup" [assessment]="assessment"></app-losses-summary>
     </div>
-    <div class="results scroll-item report-diagrams" *ngIf="currentTab == 'diagram' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
+    <div class="results scroll-item report-diagrams" *ngIf="currentTab == 'diagram' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
         [modificationOutputs]="modificationOutputs" [modificationInputData]="modificationInputData">
       </app-report-diagram>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'reportGraphs' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
+    <div class="results scroll-item" *ngIf="currentTab == 'reportGraphs' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-graphs></app-report-graphs>
     </div>
-    <div class="results scroll-item input-data" *ngIf="currentTab == 'inputData' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData"></app-input-summary>
+    <div class="results scroll-item input-data" *ngIf="currentTab == 'inputData' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData"
+        [modificationInputData]="modificationInputData"></app-input-summary>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
+    <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item" *ngIf="!dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">

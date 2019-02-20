@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { FsatResultsData, ReportRollupService } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { Subscription } from 'rxjs';
+import { FsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-fsat-rollup-fan-summary',
