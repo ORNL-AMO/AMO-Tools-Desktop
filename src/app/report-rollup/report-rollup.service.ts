@@ -397,12 +397,16 @@ export class ReportRollupService {
   initSsmtCompare(resultsArr: Array<AllSsmtResultsData>) {
     let tmpResults: Array<SsmtCompare> = new Array<SsmtCompare>();
     resultsArr.forEach(result => {
+      console.log(result);
       let minCost = _.minBy(result.modificationResults, (result) => { return result.totalOperatingCost; });
-      let modIndex = _.findIndex(result.modificationResults, { totalOperatingCost: minCost.totalOperatingCost });
+      let modIndex;
+      if (minCost) {
+        modIndex = _.findIndex(result.modificationResults, { totalOperatingCost: minCost.totalOperatingCost });
+      }
       let ssmtAssessments = this.ssmtAssessments.value;
       let assessmentIndex = _.findIndex(ssmtAssessments, (val) => { return val.assessment.id === result.assessmentId; });
       let item = ssmtAssessments[assessmentIndex];
-      if (result.isBaseline) {
+      if (result.isBaseline || !modIndex) {
         tmpResults.push({ baseline: item.assessment.ssmt, modification: item.assessment.ssmt, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
       } else {
         tmpResults.push({ baseline: item.assessment.ssmt, modification: item.assessment.ssmt.modifications[modIndex].ssmt, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
@@ -442,7 +446,10 @@ export class ReportRollupService {
                 mod.ssmt.resultsCalculated = true;
               }
               let tmpResults: SSMTOutput = mod.ssmt.outputData;
-              modResultsArr.push(tmpResults);
+              if (tmpResults.boilerOutput) {
+                console.log(mod.ssmt.name);
+                modResultsArr.push(tmpResults);
+              }
             });
             tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
           } else {
@@ -460,9 +467,9 @@ export class ReportRollupService {
     this.allSsmtResults.next(tmpResultsArr);
   }
 
-  getSsmtResultsFromSelected(selectedFsats: Array<SsmtCompare>) {
+  getSsmtResultsFromSelected(selectedSsmt: Array<SsmtCompare>) {
     let tmpResultsArr = new Array<SsmtResultsData>();
-    selectedFsats.forEach(val => {
+    selectedSsmt.forEach(val => {
       let baselineResults: SSMTOutput = val.baseline.outputData;
       let modificationResults: SSMTOutput = val.modification.outputData;
       tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });

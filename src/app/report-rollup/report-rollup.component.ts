@@ -99,12 +99,12 @@ export class ReportRollupComponent implements OnInit {
     setTimeout(() => {
       this.assessmentsGathered = true;
       this.cd.detectChanges();
-    }, 2000);
+    }, 1500);
     setTimeout(() => {
       this.setSidebarHeight();
       this.initPrintLogic();
       this.cd.detectChanges();
-    }, 2100);
+    }, 1600);
 
     this.settings = this.settingsDbService.globalSettings;
     this.checkSettings();

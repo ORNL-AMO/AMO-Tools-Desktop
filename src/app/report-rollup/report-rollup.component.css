@@ -16,6 +16,7 @@
     border-right: #d0d0d0 solid 1px;
     overflow-y: auto;
     position: sticky;
+    width: 220px;
 }
     .sidebar ul {
         margin: 0;

@@ -43,31 +43,32 @@ export class SsmtReportComponent implements OnInit {
   constructor(private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
-    setTimeout(() => {
-      // this.calculateModelService.initResults();
-      // this.calculateModelService.initData(this.assessment.ssmt, this.settings, true);
-      let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, true);
-      this.baselineOutput = resultData.outputData;
-      this.baselineInputData = resultData.inputData;
-      this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputData, this.settings);
-      this.modificationOutputs = new Array<{ name: string, outputData: SSMTOutput }>();
-      this.modificationInputData = new Array<{ name: string, inputData: SSMTInputs }>();
-      this.modificationLosses = new Array<{ name: string, outputData: SSMTLosses }>();
-      if (this.assessment.ssmt.modifications) {
-        this.assessment.ssmt.modifications.forEach(modification => {
-          // this.calculateModelService.initResults();
-          // this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
-          let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(modification.ssmt, this.settings, false, true, this.baselineOutput.sitePowerDemand);
-          this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
-          this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
-          let modLosses: SSMTLosses = this.calculateLossesService.calculateLosses(resultData.outputData, resultData.inputData, this.settings);
-          this.modificationLosses.push({ outputData: modLosses, name: modification.ssmt.name });
-        });
-      }
-      this.getTableCellWidth();
+    if (this.assessment.ssmt.setupDone) {
+      setTimeout(() => {
+        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, true);
+        this.baselineOutput = resultData.outputData;
+        this.baselineInputData = resultData.inputData;
+        this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputData, this.settings, this.assessment.ssmt);
+        this.modificationOutputs = new Array<{ name: string, outputData: SSMTOutput }>();
+        this.modificationInputData = new Array<{ name: string, inputData: SSMTInputs }>();
+        this.modificationLosses = new Array<{ name: string, outputData: SSMTLosses }>();
+        if (this.assessment.ssmt.modifications) {
+          this.assessment.ssmt.modifications.forEach(modification => {
+            // this.calculateModelService.initResults();
+            // this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
+            let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(modification.ssmt, this.settings, false, true, this.baselineOutput.sitePowerDemand);
+            this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
+            this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
+            let modLosses: SSMTLosses = this.calculateLossesService.calculateLosses(resultData.outputData, resultData.inputData, this.settings, modification.ssmt);
+            this.modificationLosses.push({ outputData: modLosses, name: modification.ssmt.name });
+          });
+        }
+        this.getTableCellWidth();
+        this.dataCalculated = true;
+      }, 10);
+    } else {
       this.dataCalculated = true;
-    }, 10);
-
+    }
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
@@ -86,9 +87,11 @@ export class SsmtReportComponent implements OnInit {
   }
 
   getContainerHeight() {
-    let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
-    let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    if (this.assessment.ssmt.setupDone) {
+      let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
+      let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
+      this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
+    }
   }
 
   setTab(str: string) {

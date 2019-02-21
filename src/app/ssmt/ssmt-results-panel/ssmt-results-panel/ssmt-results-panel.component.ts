@@ -34,6 +34,8 @@ export class SsmtResultsPanelComponent implements OnInit {
   showResults: boolean;
   percentSavings: number;
   annualSavings: number;
+  modValid: boolean;
+  baselineValid: boolean;
   constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService) { }
 
   ngOnInit() {
@@ -77,6 +79,16 @@ export class SsmtResultsPanelComponent implements OnInit {
       this.getSavings(this.ssmt.outputData.totalOperatingCost, this.ssmt.modifications[this.modificationIndex].ssmt.outputData.totalOperatingCost);
       this.showResults = true;
     }
+    if (this.ssmt.modifications[this.modificationIndex].ssmt.outputData.boilerOutput) {
+      this.modValid = true;
+    } else {
+      this.modValid = false;
+    }
+    if(this.ssmt.outputData.boilerOutput){
+      this.baselineValid = true;
+    }else{
+      this.baselineValid = false;
+    }
   }
 
   getInputs() {
@@ -85,8 +97,8 @@ export class SsmtResultsPanelComponent implements OnInit {
   }
 
   getLosses() {
-    this.baselineLosses = this.calculateLossesService.calculateLosses(this.ssmt.outputData, this.baselineInputs, this.settings);
-    this.modificationLosses = this.calculateLossesService.calculateLosses(this.ssmt.modifications[this.modificationIndex].ssmt.outputData, this.modificationInputs, this.settings);
+    this.baselineLosses = this.calculateLossesService.calculateLosses(this.ssmt.outputData, this.baselineInputs, this.settings, this.ssmt);
+    this.modificationLosses = this.calculateLossesService.calculateLosses(this.ssmt.modifications[this.modificationIndex].ssmt.outputData, this.modificationInputs, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
   }
 
   getSavings(baselineCost: number, modificationCost: number) {
