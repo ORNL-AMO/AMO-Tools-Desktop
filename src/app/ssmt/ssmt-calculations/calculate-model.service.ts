@@ -407,7 +407,7 @@ export class CalculateModelService {
     //Calculate mass flow = steam usage * (recovery rate / 100);
     let calculatedMassFlow: number = this.inputData.headerInput.highPressure.processSteamUsage * (this.inputData.headerInput.highPressure.condensationRecoveryRate / 100);
     //calculate energy flow = mass flow * condensate enthalpy / 1000
-    let calculatedEnergyFlow: number = calculatedMassFlow * this.boilerOutput.blowdownSpecificEnthalpy / 1000;
+    let calculatedEnergyFlow: number = this.calculateEnergy(calculatedMassFlow, this.boilerOutput.blowdownSpecificEnthalpy);
     this.highPressureCondensate = {
       pressure: this.boilerOutput.blowdownPressure,
       temperature: this.boilerOutput.blowdownTemperature,
@@ -422,7 +422,6 @@ export class CalculateModelService {
 
   //2D. or 4B. Calculate High Pressure Condensate Flash Tank
   calculateHighPressureFlashTank() {
-    console.log('calculate high pressure flash tank!')
     let header: HeaderNotHighestPressure;
     //if two headers, flashing into low pressure header
     if (this.inputData.headerInput.numberOfHeaders === 2) {
@@ -1008,7 +1007,7 @@ export class CalculateModelService {
       this.settings
     );
     this.mediumPressureCondensate.massFlow = calculatedMassFlow;
-    this.mediumPressureCondensate.energyFlow = this.mediumPressureCondensate.massFlow * this.mediumPressureCondensate.specificEnthalpy / 1000;
+    this.mediumPressureCondensate.energyFlow = this.calculateEnergy(this.mediumPressureCondensate.massFlow, this.mediumPressureCondensate.specificEnthalpy);
   }
 
   //3F. Calculate Medium to Low Steam Turbine
@@ -1408,7 +1407,7 @@ export class CalculateModelService {
       this.settings
     );
     this.lowPressureCondensate.massFlow = calculatedMassFlow;
-    this.lowPressureCondensate.energyFlow = this.lowPressureCondensate.massFlow * this.lowPressureCondensate.specificEnthalpy / 1000;
+    this.lowPressureCondensate.energyFlow = this.calculateEnergy(this.lowPressureCondensate.massFlow, this.lowPressureCondensate.specificEnthalpy);
   }
 
   /********** 5. Calculate makeup water and condensate *********/
@@ -1498,7 +1497,7 @@ export class CalculateModelService {
       this.settings
     );
     this.returnCondensate.massFlow = this.combinedCondensate.massFlow;
-    this.returnCondensate.energyFlow = this.returnCondensate.massFlow * this.returnCondensate.specificEnthalpy / 1000;
+    this.returnCondensate.energyFlow = this.calculateEnergy(this.returnCondensate.massFlow, this.returnCondensate.specificEnthalpy);
   }
 
   //5C. Flash Condensate Return
@@ -1557,7 +1556,7 @@ export class CalculateModelService {
 
     makeupWaterMassFlow = makeupWaterMassFlow - this.returnCondensate.massFlow - inletHeaderFlow;
     this.makeupWater.massFlow = makeupWaterMassFlow;
-    this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 1000;
+    this.makeupWater.energyFlow = this.calculateEnergy(this.makeupWater.massFlow, this.makeupWater.specificEnthalpy);
   }
 
   calculateMakeupWaterVolumeFlow() {
@@ -1800,7 +1799,7 @@ export class CalculateModelService {
         ventedSteamAmount = (this.lowPressureHeader.massFlow) - (this.inputData.headerInput.lowPressure.processSteamUsage + this.deaeratorOutput.inletSteamMassFlow);
         this.calculateMakeupWaterMassFlow();
         this.makeupWater.massFlow = this.makeupWater.massFlow + ventedSteamAmount;
-        this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 1000;
+        this.makeupWater.energyFlow = this.calculateEnergy(this.makeupWater.massFlow, this.makeupWater.specificEnthalpy);
         this.calculateMakeupWaterVolumeFlow();
         this.calculateMakeupWaterAndCondensateHeader();
         this.calculateDearator();
@@ -1829,7 +1828,7 @@ export class CalculateModelService {
   //Process Usage
   //for process usage we will have to work with Kristina on how to do conversions here.
   calculateHighPressureProcessUsage() {
-    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.highPressure.processSteamUsage * this.highPressureHeader.specificEnthalpy / 1000;
+    let processSteamUsageEnergyFlow: number = this.calculateEnergy(this.inputData.headerInput.highPressure.processSteamUsage, this.highPressureHeader.specificEnthalpy);
     let processUsage: number = (this.inputData.headerInput.highPressure.processSteamUsage) * (this.highPressureHeader.specificEnthalpy - this.highPressureCondensate.specificEnthalpy);
     processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamMassFlowMeasurement).to('kg');
     processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
@@ -1844,7 +1843,7 @@ export class CalculateModelService {
   }
 
   calculateMediumPressureProcessUsage() {
-    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.mediumPressure.processSteamUsage * this.mediumPressureHeader.specificEnthalpy / 1000;
+    let processSteamUsageEnergyFlow: number = this.calculateEnergy(this.inputData.headerInput.mediumPressure.processSteamUsage, this.mediumPressureHeader.specificEnthalpy);
     let processUsage: number = (this.inputData.headerInput.mediumPressure.processSteamUsage) * (this.mediumPressureHeader.specificEnthalpy - this.mediumPressureCondensate.specificEnthalpy);
     processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamMassFlowMeasurement).to('kg');
     processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
@@ -1859,12 +1858,11 @@ export class CalculateModelService {
   }
 
   calculateLowPressureProcessUsage() {
-    let processSteamUsageEnergyFlow: number = this.inputData.headerInput.lowPressure.processSteamUsage * this.lowPressureHeader.specificEnthalpy / 1000;
+    let processSteamUsageEnergyFlow: number = this.calculateEnergy(this.inputData.headerInput.lowPressure.processSteamUsage, this.lowPressureHeader.specificEnthalpy);
     let processUsage: number = (this.inputData.headerInput.lowPressure.processSteamUsage) * (this.lowPressureHeader.specificEnthalpy - this.lowPressureCondensate.specificEnthalpy);
     processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamMassFlowMeasurement).to('kg');
     processUsage = this.convertUnitsService.value(processUsage).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
     processUsage = this.convertUnitsService.value(processUsage).from('kJ').to(this.settings.steamEnergyMeasurement);
-    //TODO: Calculate processUsage
     this.lowPressureProcessUsage = {
       pressure: this.lowPressureHeader.pressure,
       temperature: this.lowPressureHeader.temperature,
@@ -1873,6 +1871,15 @@ export class CalculateModelService {
       processUsage: processUsage
     };
   }
+
+  calculateEnergy(massFlow: number, specificEnthalpy: number): number {
+    let convertedMassFlow: number = this.convertUnitsService.value(massFlow).from(this.settings.steamMassFlowMeasurement).to('tonne');
+    let convertedEnthalpy: number = this.convertUnitsService.value(specificEnthalpy).from(this.settings.steamSpecificEnthalpyMeasurement).to('kJkg');
+    let energy: number = convertedMassFlow * convertedEnthalpy;
+    energy = this.convertUnitsService.value(energy).from('MJ').to(this.settings.steamEnergyMeasurement);
+    return energy;
+  }
+
 
   calculateLowPressureVentedSteam(excessSteam: number): number {
     let mustVent: boolean = false;
@@ -1892,7 +1899,7 @@ export class CalculateModelService {
     if (mustVent) {
       let ventedSteamAmount: number = (this.lowPressureHeader.massFlow) - (this.inputData.headerInput.lowPressure.processSteamUsage + this.deaeratorOutput.inletSteamMassFlow);
       this.makeupWater.massFlow = this.makeupWater.massFlow + ventedSteamAmount;
-      this.makeupWater.energyFlow = this.makeupWater.massFlow * this.makeupWater.specificEnthalpy / 1000;
+      this.makeupWater.energyFlow = this.calculateEnergy(this.makeupWater.massFlow, this.makeupWater.specificEnthalpy);
       this.calculateMakeupWaterVolumeFlow();
       this.calculateMakeupWaterAndCondensateHeader();
       this.calculateDearator();

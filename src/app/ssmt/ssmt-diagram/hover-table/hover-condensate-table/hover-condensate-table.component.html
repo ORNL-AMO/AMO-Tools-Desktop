@@ -7,13 +7,13 @@
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </td>
       <td class="bold">Mass Flow</td>
-      <td class="text-center">{{returnCondensate.massFlow | number:'1.0-1'}}
+      <td class="text-center">{{returnCondensate.massFlow | number:'1.0-2'}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
       </td>
     </tr>
     <tr>
       <td class="bold">Pressure</td>
-      <td class="text-center"> {{returnCondensate.pressure | number:'1.0-1'}}
+      <td class="text-center"> {{returnCondensate.pressure | number:'1.0-2'}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </td>
       <td class="bold">Energy Flow</td>

@@ -17,7 +17,9 @@
     margin-left: 0;
 }
 
-
 .report-diagrams{
     max-height: 600px;
+}
+.assessment-report{
+    min-width: 800px;
 }

@@ -7,13 +7,13 @@
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </td>
       <td class="bold">Mass Flow</td>
-      <td class="text-center">{{steam.massFlow | number:'1.0-1'}}
+      <td class="text-center">{{steam.massFlow | number:'1.0-2'}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
       </td>
     </tr>
     <tr>
       <td class="bold">Pressure</td>
-      <td class="text-center"> {{steam.pressure | number:'1.0-1'}}
+      <td class="text-center"> {{steam.pressure | number:'1.0-2'}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </td>
       <td class="bold">Sp. Enthalpy</td>
@@ -26,7 +26,7 @@
       <td class="text-center">
         <span *ngIf="steam.quality == 0">Liquid</span>
         <span *ngIf="steam.quality == 1">Gas</span>
-        <span *ngIf="steam.quality != 1 && steam.quality != 0"> {{steam.quality | number:'1.1-2'}}
+        <span *ngIf="steam.quality != 1 && steam.quality != 0"> {{steam.quality | number:'1.0-2'}}
         </span>
       </td>
       <td class="bold">Sp. Entropy</td>

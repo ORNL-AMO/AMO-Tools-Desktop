@@ -16,7 +16,7 @@ import { SharedModule } from '../../../shared/shared.module';
     SharedModule
   ],
   declarations: [DeaeratorComponent, DeaeratorHelpComponent, DeaeratorResultsComponent, DeaeratorFormComponent],
-  exports: [DeaeratorComponent],
+  exports: [DeaeratorComponent, DeaeratorResultsComponent],
   providers: [DeaeratorService]
 })
 export class DeaeratorModule { }

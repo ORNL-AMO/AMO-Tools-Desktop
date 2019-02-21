@@ -20,6 +20,7 @@ export class BoilerTableComponent implements OnInit {
   constructor(private ssmtDiagramTabService: SsmtDiagramTabService) { }
 
   ngOnInit() {
+
   }
 
   goToCalculator(){
