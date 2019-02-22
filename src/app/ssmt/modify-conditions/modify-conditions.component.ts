@@ -89,6 +89,7 @@ export class ModifyConditionsComponent implements OnInit {
 
   saveBaselineSsmt(newSsmt: SSMT){
     this.ssmt = newSsmt;
+    this.ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
 
@@ -113,6 +114,7 @@ export class ModifyConditionsComponent implements OnInit {
 
   saveModSsmt(newSSMT: SSMT){
     this.ssmt.modifications[this.modificationIndex].ssmt = newSSMT;
+    this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
 }
