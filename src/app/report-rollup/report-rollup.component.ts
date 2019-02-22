@@ -80,7 +80,7 @@ export class ReportRollupComponent implements OnInit {
   printExecutiveSummary: boolean = false;
 
   gatheringAssessments: boolean = true;
-
+  sidebarCollapsed: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -454,5 +454,9 @@ export class ReportRollupComponent implements OnInit {
       this.initPrintLogic();
     }
     this.showPrintMenu = false;
+  }
+
+  collapseSidebar(){
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

@@ -16,7 +16,6 @@
     border-right: #d0d0d0 solid 1px;
     overflow-y: auto;
     position: sticky;
-    width: 220px;
 }
     .sidebar ul {
         margin: 0;
@@ -40,6 +39,16 @@
                 color: #000;
                 font-weight: bold;
             }
+.sidebar.set-width{
+    width: 220px;
+}
+
+.sidebar ul li.collapse-option{
+    background-color: #145A32;
+    color: white;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
 
 .report-container .content {
     /* flex: 1;
@@ -74,12 +83,13 @@
 }
 
 .icon-image{
-    width: 26px;
+    width: 35px;
   }
   
   .icon{
     width: 100%;
   }
+
 
 
 @media print {
@@ -178,11 +188,6 @@
 .assessment-item{
     margin-bottom: 2rem;
 }
-
-
-.icon-image{
-    height: 18px;
-  }
 
   .sb-item{
       width: 100%;
