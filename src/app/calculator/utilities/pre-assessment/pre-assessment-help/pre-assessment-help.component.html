@@ -5,9 +5,7 @@
       to focus assessment efforts on. This method calculates total energy used by the equipment by multiplying meter energy
       data by the measurement period (hours).</p>
   </div>
-  <app-metered-steam-help *ngIf="showSteam" [inPreAssessment]="!showDescription" [currentField]="currentField"></app-metered-steam-help>
-  <app-metered-fuel-help *ngIf="showFuel" [inPreAssessment]="!showDescription" [currentField]="currentField"></app-metered-fuel-help>
-  <app-metered-electricity-help *ngIf="showElectricity" [inPreAssessment]="!showDescription" [currentField]="currentField"></app-metered-electricity-help>
+  <app-metered-energy-help *ngIf="showElectricity" [inPreAssessment]="!showDescription" [currentField]="currentField"></app-metered-energy-help>
 </div>
 <div *ngIf="currentAssessmentType == 'Designed'">
   <div class="help-header" *ngIf="!showDescription">
@@ -17,8 +15,5 @@
       with annual operating hours, percentage rated capacity used and duty cycle.</p>
   </div>
 
-
-  <app-designed-energy-electricity-help *ngIf="showElectricity" [inPreAssessment]="!showDescription" [currentField]="currentField"></app-designed-energy-electricity-help>
-  <app-designed-energy-steam-help *ngIf="showSteam" [inPreAssessment]="!showDescription" [currentField]="currentField"></app-designed-energy-steam-help>
-  <app-designed-energy-fuel-help *ngIf="showFuel" [inPreAssessment]="!showDescription" [currentField]="currentField"></app-designed-energy-fuel-help>
+  <app-metered-energy-help *ngIf="showElectricity" [inPreAssessment]="!showDescription" [currentField]="currentField"></app-metered-energy-help>
 </div>

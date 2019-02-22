@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-metered-steam-help',
-  templateUrl: './metered-steam-help.component.html',
-  styleUrls: ['./metered-steam-help.component.css']
+  selector: 'app-metered-energy-help',
+  templateUrl: './metered-energy-help.component.html',
+  styleUrls: ['./metered-energy-help.component.css']
 })
-export class MeteredSteamHelpComponent implements OnInit {
+export class MeteredEnergyHelpComponent implements OnInit {
   @Input()
   currentField: string;
   @Input()
@@ -17,9 +17,13 @@ export class MeteredSteamHelpComponent implements OnInit {
   @Input()
   showFuel: boolean;
   
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  setField(str: string) {
+    this.currentField = str;
+  }
 }
