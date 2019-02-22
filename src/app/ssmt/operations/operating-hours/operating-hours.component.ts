@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { OperatingHours } from '../../../shared/models/operations';
 import { CompareService } from '../../compare.service';
 import { SsmtService } from '../../ssmt.service';
 import { FormGroup } from '@angular/forms';
@@ -32,7 +31,7 @@ export class OperatingHoursComponent implements OnInit {
 
   ngOnInit() {
     let isCalculateCheck: number = this.form.controls.hoursPerShift.value * this.form.controls.shiftsPerDay.value * this.form.controls.daysPerWeek.value * this.form.controls.weeksPerYear.value;
-    if(isCalculateCheck == this.form.controls.hoursPerYear.value){
+    if (isCalculateCheck == this.form.controls.hoursPerYear.value) {
       this.isCalculated = true;
     }
   }
@@ -75,11 +74,6 @@ export class OperatingHoursComponent implements OnInit {
       this.form.controls.shiftsPerDay.value *
       this.form.controls.daysPerWeek.value *
       this.form.controls.weeksPerYear.value);
-    if (this.form.controls.hoursPerYear.value > 8760) {
-      this.hoursPerYearError = "Number of hours/year is greater than hours in a year.";
-    } else {
-      this.hoursPerYearError = null;
-    }
     this.save();
     // this.operatingHours.hoursPerYear = this.operatingHours.hoursPerYear.toFixed(0);
   }
