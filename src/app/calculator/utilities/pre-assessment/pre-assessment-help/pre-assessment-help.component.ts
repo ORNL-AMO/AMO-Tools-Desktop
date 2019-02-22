@@ -28,7 +28,7 @@ export class PreAssessmentHelpComponent implements OnInit {
   ngOnChanges() {
     if (this.calcType !== 'pump') {
       this.showDescription = true;
-    }else {
+    } else {
       this.showDescription = false;
     }
 
@@ -36,26 +36,26 @@ export class PreAssessmentHelpComponent implements OnInit {
       this.showElectricity = true;
       this.showSteam = false;
       this.showFuel = false;
-    }else if (this.currentEnergySourceType === 'Fuel') {
+    } else if (this.currentEnergySourceType === 'Fuel') {
       this.showElectricity = false;
       this.showSteam = false;
       this.showFuel = true;
-    }else if (this.currentEnergySourceType === 'Steam') {
+    } else if (this.currentEnergySourceType === 'Steam') {
       this.showElectricity = false;
       this.showSteam = true;
       this.showFuel = false;
-    }else if (this.currentEnergySourceType === 'Hybrid') {
+    } else if (this.currentEnergySourceType === 'Hybrid') {
       if (this.currentField !== 'kwRating') {
         this.showElectricity = false;
         this.showSteam = false;
         this.showFuel = true;
-      }else {
+      } else {
 
         this.showElectricity = true;
         this.showSteam = false;
         this.showFuel = false;
       }
     }
-    // console.log(this.currentField);
+    console.log(this.currentField);
   }
 }
