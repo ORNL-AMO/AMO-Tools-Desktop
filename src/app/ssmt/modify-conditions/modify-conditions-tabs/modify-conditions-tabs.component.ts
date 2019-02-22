@@ -7,6 +7,7 @@ import { SSMT } from '../../../shared/models/steam/ssmt';
 import { BoilerService } from '../../boiler/boiler.service';
 import { TurbineService } from '../../turbine/turbine.service';
 import { HeaderService } from '../../header/header.service';
+import { OperationsService } from '../../operations/operations.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -38,7 +39,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   turbineBadgeClass: Array<string>;
   updateDataSub: Subscription;
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private boilerService: BoilerService, private turbineService: TurbineService,
-    private headerService: HeaderService) { }
+    private headerService: HeaderService, private operationsService: OperationsService) { }
 
   ngOnInit() {
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
@@ -83,14 +84,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setOperationsBadgeClass(baseline: SSMT, modification?: SSMT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest: boolean = true;
-    //TODO:
-    // let validBaselineTest = this.operationsService.isFanFieldDataValid(baseline.operations);
+    let validBaselineTest = this.operationsService.getForm(baseline, this.settings).valid;
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
       //TODO:
-      // validModTest = this.fanFieldDataService.isFanFieldDataValid(modification.operations);
+      validModTest = this.operationsService.getForm(modification, this.settings).valid;
       isDifferent = this.compareService.checkOperationsDifferent();
     }
     let inputError: boolean;

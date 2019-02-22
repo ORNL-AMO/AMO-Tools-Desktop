@@ -16,15 +16,12 @@ export class OperationsService {
     makeupWaterTempMin = this.convertUnitsService.roundVal(makeupWaterTempMin, 1);
     makeupWaterTempMax = this.convertUnitsService.roundVal(makeupWaterTempMax, 1);
 
-    let defaultMakeupWaterTemp: number = this.convertUnitsService.value(70).from('F').to(settings.steamTemperatureMeasurement);
-    defaultMakeupWaterTemp = this.convertUnitsService.roundVal(defaultMakeupWaterTemp, 0);
-
     let form: FormGroup = this.formBuilder.group({
       sitePowerImport: [ssmt.generalSteamOperations.sitePowerImport, [Validators.required]],
-      makeUpWaterTemperature: [ssmt.generalSteamOperations.makeUpWaterTemperature || defaultMakeupWaterTemp, [Validators.required, Validators.min(makeupWaterTempMin), Validators.max(makeupWaterTempMax)]],
-      fuelCost: [ssmt.operatingCosts.fuelCost || settings.fuelCost, [Validators.required, Validators.min(.00000001)]],
-      electricityCost: [ssmt.operatingCosts.electricityCost || settings.electricityCost, [Validators.required, Validators.min(.0000001)]],
-      makeUpWaterCost: [ssmt.operatingCosts.makeUpWaterCost || 0.0025, [Validators.required, Validators.min(.0000001)]],
+      makeUpWaterTemperature: [ssmt.generalSteamOperations.makeUpWaterTemperature, [Validators.required, Validators.min(makeupWaterTempMin), Validators.max(makeupWaterTempMax)]],
+      fuelCost: [ssmt.operatingCosts.fuelCost, [Validators.required, Validators.min(.00000001)]],
+      electricityCost: [ssmt.operatingCosts.electricityCost, [Validators.required, Validators.min(.0000001)]],
+      makeUpWaterCost: [ssmt.operatingCosts.makeUpWaterCost, [Validators.required, Validators.min(.0000001)]],
       weeksPerYear: [ssmt.operatingHours.weeksPerYear],
       daysPerWeek: [ssmt.operatingHours.daysPerWeek],
       shiftsPerDay: [ssmt.operatingHours.shiftsPerDay],

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { SSMT, GeneralSteamOperations } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -35,6 +35,27 @@ export class OperationsComponent implements OnInit {
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
+    if (this.selected === false) {
+      this.disableForm();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (this.selected === true) {
+        this.enableForm();
+      } else if (this.selected === false) {
+        this.disableForm();
+      }
+    }
+  }
+
+  disableForm() {
+    this.operationsForm.disable();
+  }
+
+  enableForm() {
+    this.operationsForm.enable();
   }
 
   save() {
