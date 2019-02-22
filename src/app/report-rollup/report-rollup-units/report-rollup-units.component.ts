@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { ReportRollupService, ReportItem } from '../report-rollup.service';
-import { Assessment } from '../../shared/models/assessment';
+import { ReportRollupService } from '../report-rollup.service';
 import { Subscription } from 'rxjs';
+import { ReportItem } from '../report-rollup-models';
 
 @Component({
   selector: 'app-report-rollup-units',

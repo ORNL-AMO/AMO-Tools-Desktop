@@ -1,10 +1,8 @@
 .report-header {
-    background: #fff;
     border-bottom: #bbb solid 1px;
     width: 100%;
-    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
-    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    padding: 0px;
+    background-color: #fff;
 }
 
 .report-container {
@@ -18,6 +16,7 @@
     border-right: #d0d0d0 solid 1px;
     overflow-y: auto;
     position: sticky;
+    width: 220px;
 }
     .sidebar ul {
         margin: 0;
@@ -222,4 +221,15 @@ font-size: 150px;
     background-attachment: fixed;
     background-position: bottom center; 
     background-size: 100%;
+}
+
+
+.gathering-assessments{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    z-index: 1500;
 }

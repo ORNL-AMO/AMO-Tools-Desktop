@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { Assessment } from '../../../shared/models/assessment';
-import { ReportRollupService, PsatCompare, PhastResultsData } from '../../report-rollup.service';
-import * as _ from 'lodash';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { ReportRollupService } from '../../report-rollup.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Subscription } from 'rxjs';
+import { PhastResultsData } from '../../report-rollup-models';
+
 @Component({
   selector: 'app-phast-summary',
   templateUrl: './phast-summary.component.html',
@@ -25,23 +24,6 @@ export class PhastSummaryComponent implements OnInit {
   constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    // this.reportRollupService.phastAssessments.subscribe(val => {
-    //   this.numPhasts = val.length;
-    //   if (val.length != 0) {
-    //     this.reportRollupService.initPhastResultsArr(val);
-    //   }
-    // })
-    // this.reportRollupService.allPhastResults.subscribe(val => {
-    //   if (val.length != 0) {
-    //     this.reportRollupService.initPhastCompare(val);
-    //   }
-    // })
-    // this.reportRollupService.selectedPhasts.subscribe(val => {
-    //   if (val.length != 0) {
-    //     this.reportRollupService.getPhastResultsFromSelected(val);
-    //   }
-    // })
-
     this.resultsSub = this.reportRollupService.phastResults.subscribe(val => {
        if (val.length !== 0) {
          this.calcPhastSums(val);

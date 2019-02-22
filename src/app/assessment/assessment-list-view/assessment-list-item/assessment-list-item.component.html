@@ -1,4 +1,5 @@
-<div class="list-row d-flex w-100" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT'}">
+<div class="list-row d-flex w-100"
+  [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT'}">
   <div class="d-flex">
     <div class="p-1">
       <input type="checkbox" [(ngModel)]="assessment.selected" (change)="setDelete()" />
@@ -8,6 +9,7 @@
         <img *ngIf="assessment.type == 'PSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-psat-diagram.png">
         <img *ngIf="assessment.type == 'PHAST'" class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram.png">
         <img *ngIf="assessment.type == 'FSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-fsat-diagram.png">
+        <img *ngIf="assessment.type == 'SSMT'" class="icon-image pl-1 pr-1" src="assets/images/ico-ssmt-diagram.png">
         <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
         <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
       </div>
@@ -36,8 +38,8 @@
   </div>
 </div>
 
-<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}">
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content" *ngIf="editForm">
       <div class="modal-header">
@@ -71,30 +73,34 @@
 </div>
 
 
-<div bsModal #reportModal="bs-modal" class="modal fade report-modal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
+<div bsModal #reportModal="bs-modal" class="modal fade report-modal" tabindex="-1" role="dialog"
+  aria-labelledby="reportModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
-    <div class="modal-content" [ngClass]="{'phast':assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat':assessment.type == 'FSAT'}">
+    <div class="modal-content"
+      [ngClass]="{'phast':assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat':assessment.type == 'FSAT'}">
       <div class="modal-header">
         <button class="close pull-right" (click)="hideReportModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body scroll-item" *ngIf="showReport">
-        <app-phast-report *ngIf="assessment.type == 'PHAST'" [assessment]="assessment" [settings]="settings" [phast]="assessment.phast"
-          [inRollup]="false" [inPhast]="true" [quickReport]="true"></app-phast-report>
-        <app-psat-report *ngIf="assessment.type == 'PSAT'" [assessment]="assessment" [settings]="settings" [psat]="assessment.psat"
-          [inRollup]="false" [inPsat]="true" [quickReport]="true"></app-psat-report>
-        <app-fsat-report *ngIf="assessment.type == 'FSAT'" [assessment]="assessment" [settings]="settings" [fsat]="assessment.fsat"
-          [inRollup]="false" [inFsat]="true" [quickReport]="true"></app-fsat-report>
+        <app-phast-report *ngIf="assessment.type == 'PHAST'" [assessment]="assessment" [settings]="settings"
+          [phast]="assessment.phast" [inRollup]="false" [inPhast]="true" [quickReport]="true"></app-phast-report>
+        <app-psat-report *ngIf="assessment.type == 'PSAT'" [assessment]="assessment" [settings]="settings"
+          [psat]="assessment.psat" [inRollup]="false" [inPsat]="true" [quickReport]="true"></app-psat-report>
+        <app-fsat-report *ngIf="assessment.type == 'FSAT'" [assessment]="assessment" [settings]="settings"
+          [fsat]="assessment.fsat" [inRollup]="false" [inFsat]="true" [quickReport]="true"></app-fsat-report>
+        <app-ssmt-report *ngIf="assessment.type == 'SSMT'" [assessment]="assessment" [settings]="settingsCopy">
+        </app-ssmt-report>
       </div>
     </div>
   </div>
 </div>
 
 
-<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
+<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}"
+  [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content" *ngIf="copyForm">
       <div class="modal-header">
@@ -127,8 +133,9 @@
   </div>
 </div>
 
-<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}"
+  [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">

@@ -604,11 +604,10 @@ Reports
     }
 
     .report-header, .report-data .results {
-        padding: 10px 20px;
+      padding-left: 20px;
+      padding-right: 20px;
     }
-    .report-header {
 
-    }
     .report-data {
         border-top: #ddd solid 1px;
     }
@@ -633,6 +632,15 @@ Reports
 .assessment-report.report-in-fsat .assessment-name,
 .assessment-report.report-in-rollup.report-in-fsat .assessment-name {
     background-image: url('../assets/images/ico-fsat-diagram.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 33px;
+    padding: 0px 0 0px 30px;
+}
+
+.assessment-report.report-in-ssmt .assessment-name,
+.assessment-report.report-in-rollup.report-in-ssmt .assessment-name {
+    background-image: url('../assets/images/ico-ssmt-diagram.png');
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 33px;

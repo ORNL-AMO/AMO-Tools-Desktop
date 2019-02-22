@@ -8,20 +8,20 @@
         </tr>
         <tr>
           <td class="text-center w-50">Generation</td>
-          <td class="text-center w-50">{{outputData.powerGenerated | number:'1.0-1'}} 
-              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          <td class="text-center w-50">{{outputData.powerGenerated | number:'1.0-1'}}
+            <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
           </td>
         </tr>
         <tr>
           <td class="text-center w-50">Demand</td>
-          <td class="text-center w-50">{{outputData.sitePowerDemand | number:'1.0-1'}} 
-              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          <td class="text-center w-50">{{outputData.sitePowerDemand | number:'1.0-1'}}
+            <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
           </td>
         </tr>
         <tr>
           <td class="text-center w-50">Import</td>
-          <td class="text-center w-50">{{outputData.sitePowerImport | number:'1.0-1'}} 
-              <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+          <td class="text-center w-50">{{outputData.sitePowerImport | number:'1.0-1'}}
+            <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
           </td>
         </tr>
         <tr>
@@ -43,13 +43,13 @@
         </tr>
         <tr>
           <td class="text-center w-50">Boiler</td>
-          <td class="text-center w-50">{{outputData.boilerOutput.fuelEnergy | number:'1.0-2'}} 
-              <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          <td class="text-center w-50">{{outputData.boilerOutput.fuelEnergy | number:'1.0-2'}}
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
           </td>
         </tr>
         <tr>
           <td class="text-center w-50">Unit Cost</td>
-          <td class="text-center w-50">{{inputData.operationsInput.fuelCosts | currency:'USD'}} 
+          <td class="text-center w-50">{{inputData.operationsInput.fuelCosts | currency:'USD'}}
             /<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>
           </td>
         </tr>
@@ -75,8 +75,8 @@
         </tr>
         <tr>
           <td class="text-center w-50">Unit Cost</td>
-          <td class="text-center w-50">${{inputData.operationsInput.makeUpWaterCosts | number:'1.2-4'}} 
-              /<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+          <td class="text-center w-50">${{inputData.operationsInput.makeUpWaterCosts | number:'1.2-4'}}
+            /<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
           </td>
         </tr>
         <tr>
@@ -104,22 +104,27 @@
 <div class="d-flex flex-column">
   <label class="group-label">Marginal Steam Cost</label>
   <div class="p-1">
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-striped" *ngIf="outputData.marginalHPCost">
       <tbody>
         <tr>
           <td class="text-center w-50">High Pressure</td>
-          <td class="text-center w-50">{{outputData.marginalHPCost | currency:'USD'}} /<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
+          <td class="text-center w-50">{{outputData.marginalHPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
           </td>
         </tr>
         <tr>
           <td class="text-center w-50">Medium Pressure</td>
-          <td class="text-center w-50">{{outputData.marginalMPCost | currency:'USD'}} /<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+          <td class="text-center w-50">{{outputData.marginalMPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
         </tr>
         <tr>
           <td class="text-center w-50">Low Pressure</td>
-          <td class="text-center w-50">{{outputData.marginalLPCost | currency:'USD'}} /<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
+          <td class="text-center w-50">{{outputData.marginalLPCost | currency:'USD'}} /<span
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span></td>
         </tr>
       </tbody>
     </table>
+    <button *ngIf="!outputData.marginalHPCost" class="btn btn-primary"
+      (click)="calculateMarginalCosts()">Calculate Marginal Costs</button>
   </div>
 </div>

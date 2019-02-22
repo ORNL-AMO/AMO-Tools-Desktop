@@ -9,12 +9,11 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput, SSMTInputs } from '../shared/models/steam/ssmt';
+import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
-import { SteamService } from '../calculator/steam/steam.service';
 import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
@@ -72,6 +71,8 @@ export class SsmtComponent implements OnInit {
 
   calcTab: string;
   calcTabSubscription: Subscription;
+
+  saveSsmtSub: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
@@ -81,7 +82,6 @@ export class SsmtComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
-    private steamService: SteamService,
     private headerService: HeaderService,
     private turbineService: TurbineService,
     private boilerService: BoilerService,
@@ -113,9 +113,9 @@ export class SsmtComponent implements OnInit {
         }
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
-        // if (tmpTab) {
-        //   this.ssmtService.mainTab.next(tmpTab);
-        // }
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       });
     });
     this.subscribeTabs();
@@ -150,6 +150,12 @@ export class SsmtComponent implements OnInit {
     this.calcTabSubscription = this.ssmtService.calcTab.subscribe(val => {
       this.calcTab = val;
     });
+
+    this.saveSsmtSub = this.ssmtService.saveSSMT.subscribe(newSSMT => {
+      if(newSSMT){
+        this.saveSsmt(newSSMT);
+      }
+    })
   }
 
   ngAfterViewInit() {
@@ -172,6 +178,8 @@ export class SsmtComponent implements OnInit {
     this.ssmtService.assessmentTab.next('explore-opportunities');
     this.ssmtService.steamModelTab.next('operations');
     this.calcTabSubscription.unsubscribe();
+    this.ssmtService.saveSSMT.next(undefined);
+    this.saveSsmtSub.unsubscribe();
   }
 
   subscribeTabs() {
@@ -252,21 +260,12 @@ export class SsmtComponent implements OnInit {
     this.checkSetupDone();
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
-
-    // if (this._ssmt.setupDone) {
-    //   this.calculateModelService.iterateModel(this._ssmt, this.settings);
-    //   //console.log(outputData);
-    // }
-
-
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.ssmtService.updateData.next(true);
       });
     });
   }
-
-
 
   checkSetupDone() {
     if (this.modificationExists) {
@@ -286,16 +285,19 @@ export class SsmtComponent implements OnInit {
 
   saveBoiler(boilerData: BoilerInput) {
     this._ssmt.boilerInput = boilerData;
+    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveHeaderData(headerInput: HeaderInput) {
     this._ssmt.headerInput = headerInput;
+    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveTurbineData(turbineData: TurbineInput) {
     this._ssmt.turbineInput = turbineData;
+    this._ssmt.resultsCalculated = false;
     this.save();
   }
 

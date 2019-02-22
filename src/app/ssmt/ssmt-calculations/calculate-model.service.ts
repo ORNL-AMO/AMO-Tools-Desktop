@@ -5,6 +5,10 @@ import { Settings } from '../../shared/models/settings';
 import { SSMTInputs, SSMT, HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
 import { HeaderInputObj, HeaderInput, HeatExchangerInput } from '../../shared/models/steam/steam-inputs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { BoilerService } from '../boiler/boiler.service';
+import { HeaderService } from '../header/header.service';
+import { TurbineService } from '../turbine/turbine.service';
+import { OperationsService } from '../operations/operations.service';
 
 @Injectable()
 export class CalculateModelService {
@@ -74,7 +78,32 @@ export class CalculateModelService {
   isBaselineCalculation: boolean;
   baselinePowerDemand: number;
   callCount: number = 0;
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
+
+  executeCalculateMarginalCosts: boolean;
+  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService, 
+    private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService,
+    private operationsService: OperationsService) { }
+
+  initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
+    this.initResults();
+    let boilerValid: boolean = this.boilerService.isBoilerValid(_ssmt.boilerInput, _settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(_ssmt.headerInput, _settings);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(_ssmt.turbineInput, _ssmt.headerInput, _settings);
+    let operationsValid: boolean = this.operationsService.getForm(_ssmt, _settings).valid;
+
+    this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
+    this.isBaselineCalculation = isBaseline;
+    this.baselinePowerDemand = baselinePowerDemand;
+    this.calcCount = 0;
+    this.inputData = this.getInputDataFromSSMT(_ssmt);
+    this.settings = _settings;
+    if (turbineValid && headerValid && boilerValid && operationsValid) {
+      return this.calculateModelRunner();
+    } else {
+      let outputData: SSMTOutput = this.getResultsObject();
+      return { inputData: this.inputData, outputData: outputData };
+    }
+  }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
     let inputData: SSMTInputs = {
@@ -93,14 +122,6 @@ export class CalculateModelService {
     return inputData;
   }
 
-  initData(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, baselinePowerDemand?: number): void {
-    this.isBaselineCalculation = isBaseline;
-    this.baselinePowerDemand = baselinePowerDemand;
-    this.calcCount = 0;
-    this.inputData = this.getInputDataFromSSMT(_ssmt);
-    this.settings = _settings;
-  }
-
   calculateModelRunner(): { inputData: SSMTInputs, outputData: SSMTOutput } {
     //this.callCount++;
     //console.log(this.isBaselineCalculation + ' CALLED ' + this.callCount)
@@ -114,11 +135,12 @@ export class CalculateModelService {
       initialGuess = (this.inputData.headerInput.highPressure.processSteamUsage + this.inputData.headerInput.lowPressure.processSteamUsage + this.inputData.headerInput.mediumPressure.processSteamUsage);
     }
     let balancedResults: SSMTOutput = this.calculateModel(initialGuess);
-    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.calculateMarginalCosts(initialGuess, balancedResults);
-
-    balancedResults.marginalHPCost = marginalCosts.marginalHPCost;
-    balancedResults.marginalMPCost = marginalCosts.marginalMPCost;
-    balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
+    if (this.executeCalculateMarginalCosts) {
+      let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.calculateMarginalCosts(initialGuess, balancedResults);
+      balancedResults.marginalHPCost = marginalCosts.marginalHPCost;
+      balancedResults.marginalMPCost = marginalCosts.marginalMPCost;
+      balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
+    }
     //console.log(this.isBaselineCalculation + ' RETURNED ' + this.callCount)
     return { inputData: this.inputData, outputData: balancedResults };
   }
@@ -471,6 +493,7 @@ export class CalculateModelService {
         if (Math.abs(additionalSteamNeed) > 1e-3) {
           //re-run model with additional steam added
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
       //if more steam is available than max allowed
@@ -498,6 +521,7 @@ export class CalculateModelService {
         if (Math.abs(additionalSteamNeed) > 1e-3) {
           //re-run model with additional steam added
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
       //if there is more power out with current mass flow available than max allowed, reduce to max power out.
@@ -517,6 +541,7 @@ export class CalculateModelService {
         if (Math.abs(additionalSteamNeed) > 1e-3) {
           //re-run model with additional steam added
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
     }
@@ -531,6 +556,7 @@ export class CalculateModelService {
         if (Math.abs(additionalSteamNeed) > 1e-3) {
           //re-run model with additional steam added
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
     }
@@ -689,6 +715,7 @@ export class CalculateModelService {
           if (Math.abs(newSteamNeed) > 1e-3) {
             //re-run model with additional steam added
             this.calculateModel(this.boilerOutput.steamMassFlow + newSteamNeed);
+            return;
           }
         }
       }
@@ -719,6 +746,7 @@ export class CalculateModelService {
           if (Math.abs(newSteamNeed) > 1e-3) {
             //re-run model with additional steam added
             this.calculateModel(this.boilerOutput.steamMassFlow + newSteamNeed);
+            return;
           }
         }
       }
@@ -742,6 +770,7 @@ export class CalculateModelService {
           if (Math.abs(newSteamNeed) > 1e-3) {
             //re-run model with additional steam added
             this.calculateModel(this.boilerOutput.steamMassFlow + newSteamNeed);
+            return;
           }
         }
       }
@@ -760,6 +789,7 @@ export class CalculateModelService {
           if (Math.abs(newSteamNeed) > 1e-3) {
             //re-run model with additional steam added
             this.calculateModel(this.boilerOutput.steamMassFlow + newSteamNeed);
+            return;
           }
         }
       }
@@ -903,6 +933,7 @@ export class CalculateModelService {
           this.calculateMediumPressureHeader();
         } else {
           this.calculateModel(this.boilerOutput.steamMassFlow + additionalSteamNeed);
+          return;
         }
       }
     }
@@ -1088,6 +1119,7 @@ export class CalculateModelService {
       //if cant reduce high to medium
       //re-calculate model with additional needed steam added
       this.calculateModel(this.boilerOutput.steamMassFlow + neededSteam);
+      return;
     }
   }
 
@@ -1792,6 +1824,7 @@ export class CalculateModelService {
     if (Math.abs(steamBalance) > 1e-3) {
       //if balance is off by more than .0001, add or remove steam to the system
       this.calculateModel(this.boilerOutput.steamMassFlow + steamBalance);
+      return;
     } else {
       return steamBalance;
     }
@@ -1958,17 +1991,21 @@ export class CalculateModelService {
     this.highPressureSteamHeatLoss = undefined;
     this.lowPressureSteamHeatLoss = undefined;
     this.mediumPressureSteamHeatLoss = undefined;
-    this.powerGenerated = undefined;
-    this.makeupWaterVolumeFlow = undefined;
-    this.annualMakeupWaterFlow = undefined;
-    this.totalOperatingCost = undefined;
-    this.powerGenerationCost = undefined;
-    this.boilerFuelCost = undefined;
-    this.makeupWaterCost = undefined;
-    this.boilerFuelUsage = undefined;
+    this.powerGenerated = 0;
+    this.makeupWaterVolumeFlow = 0;
+    this.annualMakeupWaterFlow = 0;
+    this.totalOperatingCost = 0;
+    this.powerGenerationCost = 0;
+    this.boilerFuelCost = 0;
+    this.makeupWaterCost = 0;
+    this.boilerFuelUsage = 0;
     this.ventedLowPressureSteam = undefined;
-    this.sitePowerImport = undefined;
-    this.sitePowerDemand = undefined;
+    this.sitePowerImport = 0;
+    this.sitePowerDemand = 0;
+    this.executeCalculateMarginalCosts = undefined;
+    this.heatExchangerOutput = undefined;
+    this.isBaselineCalculation = undefined;
+    this.baselinePowerDemand = undefined;
   }
 
   getResultsObject(): SSMTOutput {

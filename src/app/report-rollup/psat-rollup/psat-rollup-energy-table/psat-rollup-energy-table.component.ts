@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { PsatResultsData, ReportRollupService } from '../../report-rollup.service';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-
+import { ReportRollupService } from '../../report-rollup.service';
+import { PsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-psat-rollup-energy-table',

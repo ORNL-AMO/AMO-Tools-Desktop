@@ -1,10 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
+import { ReportRollupService } from '../../report-rollup.service';
 import { Subscription } from 'rxjs';
+import { PsatResultsData } from '../../report-rollup-models';
 @Component({
   selector: 'app-psat-rollup-pump-summary',
   templateUrl: './psat-rollup-pump-summary.component.html',

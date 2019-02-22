@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FsatResultsData } from '../../report-rollup.service';
 import { Settings } from '../../../shared/models/settings';
+import { FsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-fsat-rollup-fan-summary-table',

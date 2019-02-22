@@ -1,4 +1,5 @@
 import { OperatingHours, OperatingCosts } from "../operations";
+import { SSMTOutput } from "./steam-outputs";
 
 export interface SSMT {
     name?: string;
@@ -14,6 +15,8 @@ export interface SSMT {
     boilerInput?: BoilerInput;
     headerInput?: HeaderInput;
     turbineInput?: TurbineInput;
+    outputData?: SSMTOutput;
+    resultsCalculated?: boolean;
 }
 
 export interface SSMTInputs {
