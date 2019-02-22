@@ -21,6 +21,8 @@ export class SsmtResultsPanelComponent implements OnInit {
   modificationIndex: number;
   @Output('saveOutputCalculated')
   saveOutputCalculated = new EventEmitter<SSMT>();
+  @Input()
+  inModifyConditions: boolean;
 
   // baselineOutput: SSMTOutput;
   baselineInputs: SSMTInputs;
