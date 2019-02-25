@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../shared/models/settings';
-import { SSMT, BoilerInput, PressureTurbine, CondensingTurbine, HeaderWithHighestPressure } from '../shared/models/steam/ssmt';
+import { SSMT, BoilerInput, PressureTurbine, CondensingTurbine, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()
@@ -9,13 +9,26 @@ export class ConvertSsmtService {
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   convertAllInputData(ssmt: SSMT, oldSettings: Settings, newSettings: Settings): SSMT {
-    ssmt.boilerInput = this.convertBoiler(ssmt.boilerInput, oldSettings, newSettings);
-    ssmt.turbineInput.condensingTurbine = this.convertCondensingTurbine(ssmt.turbineInput.condensingTurbine, oldSettings, newSettings);
-    ssmt.turbineInput.highToLowTurbine = this.convertPressureTurbine(ssmt.turbineInput.highToLowTurbine, oldSettings, newSettings);
-    ssmt.turbineInput.highToMediumTurbine = this.convertPressureTurbine(ssmt.turbineInput.highToMediumTurbine, oldSettings, newSettings);
-    ssmt.turbineInput.mediumToLowTurbine = this.convertPressureTurbine(ssmt.turbineInput.mediumToLowTurbine, oldSettings, newSettings);
-    ssmt.headerInput.highPressure = this.convertHighPressureHeader(ssmt.headerInput.highPressure, oldSettings, newSettings);
-
+    if (ssmt.boilerInput) {
+      ssmt.boilerInput = this.convertBoiler(ssmt.boilerInput, oldSettings, newSettings);
+    }
+    if (ssmt.turbineInput) {
+      ssmt.turbineInput.condensingTurbine = this.convertCondensingTurbine(ssmt.turbineInput.condensingTurbine, oldSettings, newSettings);
+      ssmt.turbineInput.highToLowTurbine = this.convertPressureTurbine(ssmt.turbineInput.highToLowTurbine, oldSettings, newSettings);
+      ssmt.turbineInput.highToMediumTurbine = this.convertPressureTurbine(ssmt.turbineInput.highToMediumTurbine, oldSettings, newSettings);
+      ssmt.turbineInput.mediumToLowTurbine = this.convertPressureTurbine(ssmt.turbineInput.mediumToLowTurbine, oldSettings, newSettings);
+    }
+    if (ssmt.headerInput) {
+      if (ssmt.headerInput.highPressure) {
+        ssmt.headerInput.highPressure = this.convertHighPressureHeader(ssmt.headerInput.highPressure, oldSettings, newSettings);
+      }
+      if (ssmt.headerInput.lowPressure) {
+        ssmt.headerInput.lowPressure = this.convertNotHighPressureHeader(ssmt.headerInput.lowPressure, oldSettings, newSettings);
+      }
+      if (ssmt.headerInput.mediumPressure) {
+        ssmt.headerInput.mediumPressure = this.convertNotHighPressureHeader(ssmt.headerInput.mediumPressure, oldSettings, newSettings);
+      }
+    }
     ssmt = this.convertOperations(ssmt, oldSettings, newSettings);
     return ssmt;
   }
@@ -66,6 +79,15 @@ export class ConvertSsmtService {
         ssmt.generalSteamOperations.sitePowerImport = this.convertValue(ssmt.generalSteamOperations.sitePowerImport, oldSettings.steamPowerMeasurement, newSettings.steamPowerMeasurement);
       }
     }
+
+    if (ssmt.operatingCosts) {
+      if (oldSettings.steamEnergyMeasurement != newSettings.steamEnergyMeasurement) {
+        ssmt.operatingCosts.fuelCost = this.convertValue(ssmt.operatingCosts.fuelCost, oldSettings.steamEnergyMeasurement, newSettings.steamEnergyMeasurement);
+      }
+      if (oldSettings.steamVolumeMeasurement != newSettings.steamVolumeMeasurement) {
+        ssmt.operatingCosts.makeUpWaterCost = this.convertValue(ssmt.operatingCosts.makeUpWaterCost, oldSettings.steamVolumeMeasurement, newSettings.steamVolumeMeasurement);
+      }
+    }
     return ssmt;
   }
 
@@ -74,14 +96,25 @@ export class ConvertSsmtService {
       header.condensateReturnTemperature = this.convertValue(header.condensateReturnTemperature, oldSettings.steamTemperatureMeasurement, newSettings.steamTemperatureMeasurement)
     }
     if (oldSettings.steamPressureMeasurement != newSettings.steamPressureMeasurement) {
-      header.pressure
       header.pressure = this.convertValue(header.pressure, oldSettings.steamPressureMeasurement, newSettings.steamPressureMeasurement)
 
     }
     if (oldSettings.steamMassFlowMeasurement != newSettings.steamMassFlowMeasurement) {
-      header.processSteamUsage
       header.processSteamUsage = this.convertValue(header.processSteamUsage, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement)
+    }
+    return header;
+  }
 
+  convertNotHighPressureHeader(header: HeaderNotHighestPressure, oldSettings: Settings, newSettings: Settings): HeaderNotHighestPressure {
+    if (oldSettings.steamTemperatureMeasurement != newSettings.steamTemperatureMeasurement) {
+      header.desuperheatSteamTemperature = this.convertValue(header.desuperheatSteamTemperature, oldSettings.steamTemperatureMeasurement, newSettings.steamTemperatureMeasurement)
+    }
+    if (oldSettings.steamPressureMeasurement != newSettings.steamPressureMeasurement) {
+      header.pressure = this.convertValue(header.pressure, oldSettings.steamPressureMeasurement, newSettings.steamPressureMeasurement)
+
+    }
+    if (oldSettings.steamMassFlowMeasurement != newSettings.steamMassFlowMeasurement) {
+      header.processSteamUsage = this.convertValue(header.processSteamUsage, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement)
     }
     return header;
   }
