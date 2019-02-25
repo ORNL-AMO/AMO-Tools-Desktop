@@ -100,17 +100,6 @@ export class CalculateModelService {
     }
   }
 
-  initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
-    this.initResults();
-    this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
-    this.isBaselineCalculation = isBaseline;
-    this.baselinePowerDemand = baselinePowerDemand;
-    this.calcCount = 0;
-    this.inputData = this.getInputDataFromSSMT(_ssmt);
-    this.settings = _settings;
-    return this.calculateModelRunner();
-  }
-
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
     let inputData: SSMTInputs = {
       operationsInput: {
