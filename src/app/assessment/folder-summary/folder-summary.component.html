@@ -37,6 +37,12 @@
               <td>{{fsatEnergyCost | currency}}</td>
             </tr>
             <tr>
+              <td>Steam</td>
+              <td>{{numSsmts}}</td>
+              <td>{{ssmtEnergyUsed | sigFigs:'6'}} {{directorySettings.energyResultUnit}}</td>
+              <td>{{ssmtEnergyCost | currency}}</td>
+            </tr>
+            <tr>
               <td class="bold">Total</td>
               <td class="bold">{{numAssessments}}</td>
               <td class="bold">{{getTotals().totalEnergy | sigFigs:'6'}} {{directorySettings.energyResultUnit}}</td>
@@ -80,8 +86,8 @@
 </div>
 
 
-<div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
+<div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="settingsModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content" *ngIf="settingsForm">
       <div class="modal-body tab-content">
