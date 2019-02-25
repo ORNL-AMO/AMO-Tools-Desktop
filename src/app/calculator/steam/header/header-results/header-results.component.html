@@ -7,24 +7,24 @@
         <span *ngIf="index == 0">Header</span>
         <span *ngIf="index != 0">Inlet {{index}}</span>
       </td>
-      <td class="text-center">Units</td>
+      <!-- <td class="text-center">Units</td> -->
     </tr>
     <tr>
-      <td class="bold">Pressure</td>
+      <td class="bold">Pressure (<span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>)</td>
       <td *ngFor="let header of resultsArray" class="text-center">{{header.pressure | number:'1.0-2'}}
       </td>
-      <td class="text-center">
+      <!-- <td class="text-center">
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-      </td>
+      </td> -->
 
     </tr>
     <tr>
-      <td class="bold">Temperature</td>
+      <td class="bold">Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</td>
       <td *ngFor="let header of resultsArray" class="text-center">{{header.temperature | number:'1.0-1'}}
       </td>
-      <td class="text-center">
+      <!-- <td class="text-center">
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-      </td>
+      </td> -->
     </tr>
     <tr>
       <td class="bold">Phase</td>
@@ -33,38 +33,38 @@
         <span *ngIf="header.quality == 1">Gas</span>
         <span *ngIf="header.quality != 0 && header.quality != 1">{{header.quality| number:'1.0-2'}}</span>
       </td>
-      <td class="text-center"></td>
+      <!-- <td class="text-center"></td> -->
     </tr>
     <tr>
-      <td class="bold">Mass Flow</td>
+      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr)</td>
       <td *ngFor="let header of resultsArray" class="text-center">{{header.massFlow | number:'1.0-2'}}
       </td>
-      <td class="text-center">
+      <!-- <td class="text-center">
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
-      </td>
+      </td> -->
     </tr>
     <tr>
-      <td class="bold">Specific Enthalpy</td>
+      <td class="bold">Specific Enthalpy (<span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</td>
       <td *ngFor="let header of resultsArray" class="text-center">{{header.specificEnthalpy | number:'1.0-1'}}
       </td>
-      <td class="text-center">
+      <!-- <td class="text-center">
         <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
-      </td>
+      </td> -->
     </tr>
     <tr>
-      <td class="bold">Specific Entropy</td>
+      <td class="bold">Specific Entropy (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</td>
       <td *ngFor="let header of resultsArray" class="text-center">{{header.specificEntropy | number:'1.0-1'}}
       </td>
-      <td class="text-center">
+      <!-- <td class="text-center">
         <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
-      </td>
+      </td> -->
     </tr>
     <tr>
-      <td class="bold">Energy Flow</td>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
       <td *ngFor="let header of resultsArray" class="text-center">{{header.energyFlow | number:'1.0-1'}}</td>
-      <td class="text-center">
+      <!-- <td class="text-center">
         <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
-      </td>
+      </td> -->
     </tr>
   </tbody>
 </table>
