@@ -59,6 +59,12 @@ export class SystemBasicsComponent implements OnInit {
 
   updateData() {
     this.assessment.fsat = this.convertFsatService.convertAllInputData(this.assessment.fsat, this.oldSettings, this.settings);
+    if(this.assessment.fsat.modifications){
+      this.assessment.fsat.modifications.forEach(mod => {
+        mod.fsat = this.convertFsatService.convertAllInputData(mod.fsat, this.oldSettings, this.settings);
+      })
+    }
+    
     this.emitSaveFsat.emit(this.assessment.fsat);
     this.dataUpdated = true;
     this.showUpdateData = false;
