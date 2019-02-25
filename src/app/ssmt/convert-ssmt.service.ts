@@ -36,7 +36,7 @@ export class ConvertSsmtService {
   convertValue(val: number, oldUnit: string, newUnit: string): number {
     if (val) {
       let newVal: number = this.convertUnitsService.value(val).from(oldUnit).to(newUnit);
-      return this.convertUnitsService.roundVal(newVal, 2);
+      return this.convertUnitsService.roundVal(newVal, 4);
     } else { return }
   }
 
@@ -82,10 +82,13 @@ export class ConvertSsmtService {
 
     if (ssmt.operatingCosts) {
       if (oldSettings.steamEnergyMeasurement != newSettings.steamEnergyMeasurement) {
-        ssmt.operatingCosts.fuelCost = this.convertValue(ssmt.operatingCosts.fuelCost, oldSettings.steamEnergyMeasurement, newSettings.steamEnergyMeasurement);
+        let convertOne: number = this.convertUnitsService.value(1).from(oldSettings.steamEnergyMeasurement).to(newSettings.steamEnergyMeasurement);
+        ssmt.operatingCosts.fuelCost = this.convertUnitsService.roundVal(ssmt.operatingCosts.fuelCost / convertOne, 4);
+        //ssmt.operatingCosts.fuelCost = this.convertValue(1 / ssmt.operatingCosts.fuelCost, oldSettings.steamEnergyMeasurement, newSettings.steamEnergyMeasurement);
       }
       if (oldSettings.steamVolumeMeasurement != newSettings.steamVolumeMeasurement) {
-        ssmt.operatingCosts.makeUpWaterCost = this.convertValue(ssmt.operatingCosts.makeUpWaterCost, oldSettings.steamVolumeMeasurement, newSettings.steamVolumeMeasurement);
+        let convertOne: number = this.convertUnitsService.value(1).from(oldSettings.steamVolumeMeasurement).to(newSettings.steamVolumeMeasurement);
+        ssmt.operatingCosts.makeUpWaterCost = this.convertUnitsService.roundVal(ssmt.operatingCosts.makeUpWaterCost / convertOne, 4);
       }
     }
     return ssmt;
