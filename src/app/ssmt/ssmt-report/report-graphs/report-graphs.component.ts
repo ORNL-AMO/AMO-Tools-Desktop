@@ -11,8 +11,6 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 })
 export class ReportGraphsComponent implements OnInit {
   @Input()
-  ssmt: SSMT;
-  @Input()
   settings: Settings;
   @Input()
   assessment: Assessment;
@@ -25,6 +23,8 @@ export class ReportGraphsComponent implements OnInit {
 
   @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
   @ViewChild('barChartContainer') barChartContainer: ElementRef;
+
+  ssmt: SSMT;
 
   ssmtOptions: Array<{ name: string, ssmt: SSMT, index: number }>;
 
@@ -55,6 +55,7 @@ export class ReportGraphsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.ssmt = this.assessment.ssmt;
     this.graphColors = graphColors;
     this.ssmt1ProcessPieValues = new Array<number>();
     this.ssmt1GenerationPieValues = new Array<number>();

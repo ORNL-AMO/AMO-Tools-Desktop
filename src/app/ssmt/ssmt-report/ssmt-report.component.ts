@@ -15,8 +15,6 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 })
 export class SsmtReportComponent implements OnInit {
   @Input()
-  ssmt: SSMT;
-  @Input()
   assessment: Assessment;
   @Input()
   settings: Settings;
