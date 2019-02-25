@@ -1,5 +1,5 @@
-<div class="assessment-report report-in-ssmt ssmt scroll-item" *ngIf="assessment && settings" [ngClass]="{'assessment-report-padding': inSSMT, 'report-in-rollup': inRollup}">
-
+<div class="assessment-report report-in-ssmt ssmt" *ngIf="assessment && settings"
+  [ngClass]="{'assessment-report-padding': inSSMT, 'report-in-rollup': inRollup}">
 
   <div *ngIf="inSSMT" class="report-cover">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
@@ -15,11 +15,10 @@
 
   <div #reportHeader class="report-header" [ngClass]="{'hide-print': inSSMT}">
 
-    <div class="btn-group hide-print">
+    <div *ngIf="!inRollup" class="btn-group hide-print">
       <button class="btn btn-secondary" (click)="showModal()" [disabled]="true">Print</button>
       <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
     </div>
-    <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 
     <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
@@ -38,10 +37,6 @@
           <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
         </h2>
       </div>
-
-      <!--<button *ngIf="inFsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
-      <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
-
     </div>
   </div>
   <!-- End .report-header -->
@@ -95,19 +90,26 @@
         <a>Facility Info</a>
       </li>
     </ul>
-    <div class="results scroll-item" *ngIf="currentTab == 'executiveSummary' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput" [modificationOutputs]="modificationOutputs"
-        [tableCellWidth]="tableCellWidth"></app-executive-summary>
+    <div class="results scroll-item" *ngIf="currentTab == 'executiveSummary' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
+        [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
+        [assessment]="assessment"></app-executive-summary>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'energySummary' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput" [modificationOutputs]="modificationOutputs"
-        [tableCellWidth]="tableCellWidth"></app-energy-summary>
+    <div class="results scroll-item" *ngIf="currentTab == 'energySummary' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-energy-summary [settings]="settings" [baselineOutput]="baselineOutput"
+        [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
+        [assessment]="assessment"></app-energy-summary>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'losses' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [settings]="settings"
-        [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders" [tableCellWidth]="tableCellWidth"></app-losses-summary>
+    <div class="results scroll-item" *ngIf="currentTab == 'losses' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
+        [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
+        [tableCellWidth]="tableCellWidth" [inRollup]="inRollup" [assessment]="assessment"></app-losses-summary>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'diagram' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
+    <div class="results scroll-item report-diagrams" *ngIf="currentTab == 'diagram' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
         [modificationOutputs]="modificationOutputs" [modificationInputData]="modificationInputData">
       </app-report-diagram>
@@ -115,10 +117,13 @@
     <div class="results scroll-item" *ngIf="currentTab == 'reportGraphs' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-graphs [ssmt]="ssmt" [settings]="settings" [assessment]="assessment" [printView]="printView" [printGraphs]="printGraphs"></app-report-graphs>
     </div>
-    <div class="results scroll-item input-data" *ngIf="currentTab == 'inputData' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData"></app-input-summary>
+    <div class="results scroll-item input-data" *ngIf="currentTab == 'inputData' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-input-summary [settings]="settings" [baselineInputData]="baselineInputData"
+        [modificationInputData]="modificationInputData"></app-input-summary>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
+    <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
     <div class="results scroll-item" *ngIf="!dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
@@ -132,31 +137,12 @@
       </div>
     </div>
 
-    <!--   <div class="input-data results scroll-item print-height" [ngClass]="{'hide-print': !printInputData}" *ngIf="currentTab == 'inputData' || (showPrint && printInputData)"
-          [ngStyle]="{'height.px':reportContainerHeight}">
-          <app-input-summary [fsat]="fsat" [settings]="settings" [printView]="printInputData"></app-input-summary>
-      </div>
-      <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printResults}" *ngIf="currentTab == 'results' || (showPrint && printResults)"
-          [ngStyle]="{'height.px':reportContainerHeight}">
-          <app-results-summary [fsat]="fsat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
-          </app-results-summary>
-      </div>
-      <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportGraphs}" *ngIf="currentTab == 'reportGraphs' || (showPrint && (printReportGraphs || printReportSankey))"
-          [ngStyle]="{'height.px':reportContainerHeight}">
-          <app-fsat-report-graphs [fsat]="fsat" [settings]="settings" [assessment]="assessment" [printView]="showPrint" [printSankey]="printReportSankey"
-          [printGraphs]="printReportGraphs"></app-fsat-report-graphs>
-      </div>
-      <div class="results scroll-item print-height" [ngClass]="{'hide-print': !printReportSankey}" *ngIf="currentTab == 'reportSankey' || (showPrint && printReportSankey)"
-          [ngStyle]="{'height.px':reportContainerHeight}">
-          <app-fsat-report-sankey [fsat]="fsat" [settings]="settings" [assessment]="assessment" [printView]="showPrint"></app-fsat-report-sankey>
-      </div> -->
-
   </div>
   <!-- End .report-data -->
 
-  <!-- <div *ngIf="!fsat.setupDone">
+  <div *ngIf="!assessment.ssmt.setupDone">
       <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
-  </div> -->
+  </div>
 
 
 </div>

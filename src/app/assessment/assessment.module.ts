@@ -32,6 +32,8 @@ import { PreAssessmentListItemComponent } from './assessment-list-view/pre-asses
 import { FsatSummaryCardComponent } from './assessment-grid-view/assessment-card/fsat-summary-card/fsat-summary-card.component';
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.component';
+import { SsmtSummaryCardComponent } from './assessment-grid-view/assessment-card/ssmt-summary-card/ssmt-summary-card.component';
+import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.com
     AssessmentDashboardComponent,
     PreAssessmentListItemComponent,
     FsatSummaryCardComponent,
-    ResetDataModalComponent
+    ResetDataModalComponent,
+    SsmtSummaryCardComponent
   ],
   exports: [
     AssessmentCreateComponent,
@@ -73,7 +76,8 @@ import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.com
     ImportExportModule,
     PhastReportModule,
     PsatModule,
-    FsatReportModule
+    FsatReportModule,
+    SsmtReportModule
   ],
   providers: []
 })

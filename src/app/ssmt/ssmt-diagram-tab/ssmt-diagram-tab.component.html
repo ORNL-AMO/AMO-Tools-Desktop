@@ -12,8 +12,12 @@
       </div>
     </div>
     <!-- <div class="d-flex w-100"> -->
-    <app-ssmt-diagram [settings]="settings" [inputData]="inputData" [outputData]="outputData"
-      (emitTableSelected)="selectTable($event)" (emitHoverChange)="setHover($event)"></app-ssmt-diagram>
+    <app-ssmt-diagram *ngIf="outputData.boilerOutput" [settings]="settings" [inputData]="inputData"
+      [outputData]="outputData" (emitTableSelected)="selectTable($event)" (emitHoverChange)="setHover($event)">
+    </app-ssmt-diagram>
+    <div *ngIf="!outputData.boilerOutput" class="alert-danger w-50 mx-auto bold p-2">
+      The model you selected is invalid, please fix your selected model or choose a different model.
+    </div>
     <!-- </div> -->
   </div>
   <div class="d-flex flex-column diagram-help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}"
@@ -31,7 +35,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-center mr-2 ml-2">
-      <div class="pt-4 w-100 result-tables" *ngIf="tabSelect == 'results' && dataCalculated">
+      <div class="pt-4 w-100 result-tables" *ngIf="tabSelect == 'results' && dataCalculated && outputData.boilerOutput">
         <!--summary-->
         <app-diagram-summary-table *ngIf="selectedTable == 'default'" [inputData]="inputData"
           [powerGenerated]="outputData.powerGenerated" [boiler]="outputData.boilerOutput"
@@ -40,7 +44,7 @@
           [totalOperatingCost]="outputData.totalOperatingCost" [boilerFuelUsage]="outputData.boilerFuelUsage"
           [settings]="settings"></app-diagram-summary-table>
         <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData"
-          [settings]="settings"></app-cost-table>
+          [settings]="settings" (emitCalculateMarginalCosts)="calculateResultsWithMarginalCosts()"></app-cost-table>
         <!--boiler-->
         <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="outputData.boilerOutput" [inputData]="inputData"
           [settings]="settings"></app-boiler-table>

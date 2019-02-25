@@ -1,12 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
-import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { ReportRollupService } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
 import { Calculator } from '../../../shared/models/calculators';
 import { Subscription } from 'rxjs';
+import { PhastResultsData } from '../../report-rollup-models';
 @Component({
   selector: 'app-phast-rollup-graphs',
   templateUrl: './phast-rollup-graphs.component.html',

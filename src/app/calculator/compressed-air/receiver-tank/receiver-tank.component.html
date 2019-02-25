@@ -72,9 +72,8 @@
     </div>
     <div class="d-flex">
       <div class="p-4 pt-2 d-flex flex-column help-info">
-        <h5>
-          Receiver Tank Help
-          <br>
+        <h5 *ngIf="calcType == 'size-calculations'">Receiver Tank Sizing Help</h5>
+        <h5 *ngIf="calcType == 'usable-air'">Usable Air Capacity Help</h5>
           <small *ngIf="calcType == 'size-calculations'" class="text-muted">
             This calculator uses one of four methods to calculate the required size of the receiver tank.
             The receiver tank is used to store a supply of compressed air and assure a steady
@@ -86,7 +85,6 @@
             receivers are installed, the system's pressure profile and lack of storage limit the effectiveness of
             compressed air energy storage. Hence this calculator proves useful in such a context.
           </small>
-        </h5>
         <hr class="my-1 hr-spacer">
         <app-air-capacity-help *ngIf="currentForm == 'air-capacity'" [currentField]="currentField"></app-air-capacity-help>
         <app-general-method-help *ngIf="currentForm == 'general-method'" [currentField]="currentField"></app-general-method-help>

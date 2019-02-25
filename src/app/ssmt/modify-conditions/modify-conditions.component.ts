@@ -71,31 +71,50 @@ export class ModifyConditionsComponent implements OnInit {
 
   saveBaselineBoiler(newBoiler: BoilerInput) {
     this.ssmt.boilerInput = newBoiler;
+    this.ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
 
   saveBaselineHeader(newHeaderInput: HeaderInput) {
     this.ssmt.headerInput = newHeaderInput;
+    this.ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
 
   saveBaselineTurbine(newTurbineInput: TurbineInput) {
     this.ssmt.turbineInput = newTurbineInput;
+    this.ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
 
+  saveBaselineSsmt(newSsmt: SSMT){
+    this.ssmt = newSsmt;
+    this.ssmt.resultsCalculated = false;
+    this.saveAssessment();
+  }
+
+
   saveModBoiler(newBoiler: BoilerInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.boilerInput = newBoiler;
+    this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
 
   saveModHeader(newHeaderInput: HeaderInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.headerInput = newHeaderInput;
+    this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
 
   saveModTurbine(newTurbineInput: TurbineInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.turbineInput = newTurbineInput;
+    this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = false;
+    this.saveAssessment();
+  }
+
+  saveModSsmt(newSSMT: SSMT){
+    this.ssmt.modifications[this.modificationIndex].ssmt = newSSMT;
+    this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
 }

@@ -1,11 +1,6 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { ReportRollupService, PhastResultsData } from '../report-rollup.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
-import { PhastService } from '../../phast/phast.service';
-import { PhastResults, ShowResultsCategories } from '../../shared/models/phast/phast';
-import { PhastResultsService } from '../../phast/phast-results.service';
 import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
