@@ -18,6 +18,8 @@ import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
 import { AssessmentService } from '../assessment/assessment.service';
+import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
+import { OperationsService } from './operations/operations.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -83,7 +85,8 @@ export class SsmtComponent implements OnInit {
     private headerService: HeaderService,
     private turbineService: TurbineService,
     private boilerService: BoilerService,
-    private assessmentService: AssessmentService
+    private assessmentService: AssessmentService,
+    private operationsService: OperationsService
   ) { }
 
   ngOnInit() {
@@ -271,7 +274,8 @@ export class SsmtComponent implements OnInit {
       let isBoilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
       let isHeaderValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
       let isTurbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
-      if (isBoilerValid && isHeaderValid && isTurbineValid) {
+      let operationsValid: boolean = this.operationsService.getForm(this._ssmt, this.settings).valid;
+      if (isBoilerValid && isHeaderValid && isTurbineValid && operationsValid) {
         this._ssmt.setupDone = true;
       } else {
         this._ssmt.setupDone = false;
@@ -332,22 +336,23 @@ export class SsmtComponent implements OnInit {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
     let headerValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
     let turbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
+    let operationsValid: boolean = this.operationsService.getForm(this._ssmt, this.settings).valid;
     if (this.stepTab === 'operations' || this.stepTab === 'system-basics') {
       return true;
     } else if (this.stepTab === 'boiler') {
-      if (boilerValid) {
+      if (boilerValid && operationsValid) {
         return true;
       } else {
         return false;
       }
     } else if (this.stepTab === 'header') {
-      if (boilerValid && headerValid) {
+      if (boilerValid && headerValid && operationsValid) {
         return true;
       } else {
         return false;
       }
     } else if (this.stepTab === 'turbine') {
-      if (boilerValid && headerValid && turbineValid) {
+      if (boilerValid && headerValid && turbineValid && operationsValid) {
         return true;
       } else {
         return false;

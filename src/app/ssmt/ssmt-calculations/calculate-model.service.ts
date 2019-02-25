@@ -8,6 +8,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { BoilerService } from '../boiler/boiler.service';
 import { HeaderService } from '../header/header.service';
 import { TurbineService } from '../turbine/turbine.service';
+import { OperationsService } from '../operations/operations.service';
 
 @Injectable()
 export class CalculateModelService {
@@ -79,20 +80,24 @@ export class CalculateModelService {
   callCount: number = 0;
 
   executeCalculateMarginalCosts: boolean;
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService, private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService) { }
+  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService, 
+    private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService,
+    private operationsService: OperationsService) { }
 
   initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
     this.initResults();
     let boilerValid: boolean = this.boilerService.isBoilerValid(_ssmt.boilerInput, _settings);
     let headerValid: boolean = this.headerService.isHeaderValid(_ssmt.headerInput, _settings);
     let turbineValid: boolean = this.turbineService.isTurbineValid(_ssmt.turbineInput, _ssmt.headerInput, _settings);
+    let operationsValid: boolean = this.operationsService.getForm(_ssmt, _settings).valid;
+
     this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
     this.isBaselineCalculation = isBaseline;
     this.baselinePowerDemand = baselinePowerDemand;
     this.calcCount = 0;
     this.inputData = this.getInputDataFromSSMT(_ssmt);
     this.settings = _settings;
-    if (turbineValid && headerValid && boilerValid) {
+    if (turbineValid && headerValid && boilerValid && operationsValid) {
       return this.calculateModelRunner();
     } else {
       let outputData: SSMTOutput = this.getResultsObject();

@@ -7,19 +7,23 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { BoilerService } from '../boiler/boiler.service';
 import { HeaderService } from '../header/header.service';
 import { TurbineService } from '../turbine/turbine.service';
+import { OperationsService } from '../operations/operations.service';
 
 @Injectable()
 export class CalculateLossesService {
 
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService,
-    private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService) { }
+    private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService,
+    private operationsService: OperationsService) { }
 
   calculateLosses(ssmtResults: SSMTOutput, inputData: SSMTInputs, settings: Settings, ssmt: SSMT): SSMTLosses {
     let ssmtLosses: SSMTLosses = this.initLosses();
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmt.boilerInput, settings);
     let headerValid: boolean = this.headerService.isHeaderValid(ssmt.headerInput, settings);
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmt.turbineInput, ssmt.headerInput, settings);
-    if (boilerValid && headerValid && turbineValid) {
+    let operationsValid: boolean = this.operationsService.getForm(ssmt, settings).valid;
+
+    if (boilerValid && headerValid && turbineValid && operationsValid) {
       ssmtLosses.stack = this.calculateStack(ssmtResults);
       ssmtLosses.blowdown = this.calculateBlowdown(ssmtResults.boilerOutput, settings);
       ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(ssmtResults.deaeratorOutput, settings);

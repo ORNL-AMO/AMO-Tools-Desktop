@@ -276,7 +276,7 @@ export class SettingsService {
         distanceMeasurement: 'm',
         pressureMeasurement: 'kPa',
         temperatureMeasurement: 'C',
-        steamPressureMeasurement: 'kPag',
+        steamPressureMeasurement: 'barg',
         steamTemperatureMeasurement: 'C',
         steamSpecificEnthalpyMeasurement: 'kJkg',
         steamSpecificEntropyMeasurement: 'kJkgK',
@@ -297,7 +297,7 @@ export class SettingsService {
         fanBarometricPressure: 'kPaa',
         fanSpecificHeatGas: 'kJkgC',
         fanTemperatureMeasurement: 'C',
-        steamEnergyMeasurement: 'kWh',
+        steamEnergyMeasurement: 'MJ',
         steamPowerMeasurement: 'MJh'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',

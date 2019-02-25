@@ -18,8 +18,8 @@ export class BoilerService {
     return this.formBuilder.group({
       'fuelType': [1, Validators.required],
       'fuel': [1, Validators.required],
-      'combustionEfficiency': [80, [Validators.required, Validators.min(50), Validators.max(100)]],
-      'blowdownRate': [0, [Validators.required, Validators.min(0), Validators.max(25)]],
+      'combustionEfficiency': [85, [Validators.required, Validators.min(50), Validators.max(100)]],
+      'blowdownRate': ['', [Validators.required, Validators.min(0), Validators.max(25)]],
       'blowdownFlashed': [0, [Validators.required]],
       'preheatMakeupWater': [0, [Validators.required]],
       'steamTemperature': ['', [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
