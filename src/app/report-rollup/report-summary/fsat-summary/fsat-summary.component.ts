@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ReportRollupService, FsatResultsData } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
+import { FsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-fsat-summary',

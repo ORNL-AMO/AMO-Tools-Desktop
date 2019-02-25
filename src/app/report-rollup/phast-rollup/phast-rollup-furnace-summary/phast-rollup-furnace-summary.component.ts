@@ -1,14 +1,13 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { PhastService } from '../../../phast/phast.service';
 import { PhastResults, ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { PhastResultsService } from '../../../phast/phast-results.service';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { PhastResultsData } from '../../report-rollup-models';
+
 @Component({
   selector: 'app-phast-rollup-furnace-summary',
   templateUrl: './phast-rollup-furnace-summary.component.html',

@@ -1,16 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ReportRollupService, PhastResultsData, ReportItem } from './report-rollup.service';
+import { ReportRollupService } from './report-rollup.service';
 import { PhastReportService } from '../phast/phast-report/phast-report.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AssessmentService } from '../assessment/assessment.service';
 import { Calculator } from '../shared/models/calculators';
-import { SettingsService } from '../settings/settings.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '../../../node_modules/@angular/router';
+import { ReportItem } from './report-rollup-models';
+
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',
@@ -25,6 +26,7 @@ export class ReportRollupComponent implements OnInit {
   _phastAssessments: Array<ReportItem>;
   _psatAssessments: Array<ReportItem>;
   _fsatAssessments: Array<ReportItem>;
+  _ssmtAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
   //debug
   selectedPhastCalcs: Array<Calculator>;
@@ -46,6 +48,7 @@ export class ReportRollupComponent implements OnInit {
   numPhasts: number = 0;
   numPsats: number = 0;
   numFsats: number = 0;
+  numSsmt: number = 0;
   sidebarHeight: number = 0;
   printView: boolean = false;
   reportAssessmentsSub: Subscription;
@@ -55,6 +58,7 @@ export class ReportRollupComponent implements OnInit {
   selectedPhastSub: Subscription;
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
+  ssmtAssessmentsSub: Subscription;
 
   showPrint: boolean = false;
   showPrintMenu: boolean = false;
@@ -75,14 +79,11 @@ export class ReportRollupComponent implements OnInit {
   printEnergyUsed: boolean = false;
   printExecutiveSummary: boolean = false;
 
-
-
+  gatheringAssessments: boolean = true;
+  sidebarCollapsed: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    let url = this.activatedRoute.url;
-    console.log(url);
-    console.log(this.activatedRoute);
     this._phastAssessments = new Array<ReportItem>();
     this._psatAssessments = new Array<ReportItem>();
     this._fsatAssessments = new Array<ReportItem>();
@@ -92,13 +93,18 @@ export class ReportRollupComponent implements OnInit {
     this.directoryIds = new Array<number>();
 
     setTimeout(() => {
+      this.gatheringAssessments = false;
+    }, 1000)
+
+    setTimeout(() => {
       this.assessmentsGathered = true;
       this.cd.detectChanges();
-    }, 2000);
+    }, 1500);
     setTimeout(() => {
       this.setSidebarHeight();
       this.initPrintLogic();
-    }, 2100);
+      this.cd.detectChanges();
+    }, 1600);
 
     this.settings = this.settingsDbService.globalSettings;
     this.checkSettings();
@@ -158,6 +164,20 @@ export class ReportRollupComponent implements OnInit {
         }
       }
     });
+
+    this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
+      if (items) {
+        if (items.length !== 0) {
+          this._ssmtAssessments = items;
+          this.numSsmt = this._ssmtAssessments.length;
+          //this.reportRollupService.initSsmtResultsArr(items);
+          if (!this.focusedAssessment) {
+            this.focusedAssessment = this._ssmtAssessments[0].assessment;
+          }
+        }
+      }
+    });
+
     //gets calculators for pre assessment rollup
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(items => {
       if (items) {
@@ -434,5 +454,9 @@ export class ReportRollupComponent implements OnInit {
       this.initPrintLogic();
     }
     this.showPrintMenu = false;
+  }
+
+  collapseSidebar(){
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

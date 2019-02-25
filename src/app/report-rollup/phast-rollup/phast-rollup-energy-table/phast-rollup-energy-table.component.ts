@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReportRollupService, PhastCompare, PhastResultsData } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { CalculatedByPhast, PhastResults, PHAST } from '../../../shared/models/phast/phast';
+import { PhastResults } from '../../../shared/models/phast/phast';
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';

@@ -48,11 +48,13 @@ export class SsmtSummaryCardComponent implements OnInit {
     this.numMods = this.assessment.ssmt.modifications.length;
     this.assessment.ssmt.modifications.forEach(mod => {
       let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.getData(mod.ssmt, false);
-      let tmpSavingCalc = this.baselineData.outputData.totalOperatingCost - results.outputData.totalOperatingCost;
-      let tmpSavingEnergy = this.baselineData.outputData.boilerFuelUsage - results.outputData.boilerFuelUsage;
-      if (tmpSavingCalc > this.maxCostSavings) {
-        this.maxCostSavings = tmpSavingCalc;
-        this.maxEnergySavings = tmpSavingEnergy;
+      if (results.outputData.boilerOutput) {
+        let tmpSavingCalc = this.baselineData.outputData.totalOperatingCost - results.outputData.totalOperatingCost;
+        let tmpSavingEnergy = this.baselineData.outputData.boilerFuelUsage - results.outputData.boilerFuelUsage;
+        if (tmpSavingCalc > this.maxCostSavings) {
+          this.maxCostSavings = tmpSavingCalc;
+          this.maxEnergySavings = tmpSavingEnergy;
+        }
       }
     });
   }
@@ -74,7 +76,7 @@ export class SsmtSummaryCardComponent implements OnInit {
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {
     this.assessmentService.goToAssessment(assessment, str, str2);
   }
-  
+
   showReportModal() {
     this.showReport = true;
     this.reportModal.show();

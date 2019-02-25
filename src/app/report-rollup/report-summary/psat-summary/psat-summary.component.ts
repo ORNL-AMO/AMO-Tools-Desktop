@@ -1,10 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Assessment } from '../../../shared/models/assessment';
-import { ReportRollupService, PsatCompare, PsatResultsData } from '../../report-rollup.service';
-import * as _ from 'lodash';
-import { PsatService } from '../../../psat/psat.service';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { Subscription } from 'rxjs';
+import { PsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-psat-summary',

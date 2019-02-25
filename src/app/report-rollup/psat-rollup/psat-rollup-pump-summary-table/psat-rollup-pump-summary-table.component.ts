@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { PsatResultsData, ReportRollupService } from '../../report-rollup.service';
+import { PsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-psat-rollup-pump-summary-table',
