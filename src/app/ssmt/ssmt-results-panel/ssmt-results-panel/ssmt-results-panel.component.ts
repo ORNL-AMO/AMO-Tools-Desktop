@@ -91,6 +91,7 @@ export class SsmtResultsPanelComponent implements OnInit {
     }else{
       this.baselineValid = false;
     }
+
   }
 
   getInputs() {
