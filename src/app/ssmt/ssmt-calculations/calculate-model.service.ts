@@ -5,6 +5,10 @@ import { Settings } from '../../shared/models/settings';
 import { SSMTInputs, SSMT, HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
 import { HeaderInputObj, HeaderInput, HeatExchangerInput } from '../../shared/models/steam/steam-inputs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { BoilerService } from '../boiler/boiler.service';
+import { HeaderService } from '../header/header.service';
+import { TurbineService } from '../turbine/turbine.service';
+import { OperationsService } from '../operations/operations.service';
 
 @Injectable()
 export class CalculateModelService {
@@ -76,17 +80,29 @@ export class CalculateModelService {
   callCount: number = 0;
 
   executeCalculateMarginalCosts: boolean;
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService, 
+    private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService,
+    private operationsService: OperationsService) { }
 
   initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
     this.initResults();
+    let boilerValid: boolean = this.boilerService.isBoilerValid(_ssmt.boilerInput, _settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(_ssmt.headerInput, _settings);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(_ssmt.turbineInput, _ssmt.headerInput, _settings);
+    let operationsValid: boolean = this.operationsService.getForm(_ssmt, _settings).valid;
+
     this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
     this.isBaselineCalculation = isBaseline;
     this.baselinePowerDemand = baselinePowerDemand;
     this.calcCount = 0;
     this.inputData = this.getInputDataFromSSMT(_ssmt);
     this.settings = _settings;
-    return this.calculateModelRunner();
+    if (turbineValid && headerValid && boilerValid && operationsValid) {
+      return this.calculateModelRunner();
+    } else {
+      let outputData: SSMTOutput = this.getResultsObject();
+      return { inputData: this.inputData, outputData: outputData };
+    }
   }
 
   getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
@@ -1975,17 +1991,17 @@ export class CalculateModelService {
     this.highPressureSteamHeatLoss = undefined;
     this.lowPressureSteamHeatLoss = undefined;
     this.mediumPressureSteamHeatLoss = undefined;
-    this.powerGenerated = undefined;
-    this.makeupWaterVolumeFlow = undefined;
-    this.annualMakeupWaterFlow = undefined;
-    this.totalOperatingCost = undefined;
-    this.powerGenerationCost = undefined;
-    this.boilerFuelCost = undefined;
-    this.makeupWaterCost = undefined;
-    this.boilerFuelUsage = undefined;
+    this.powerGenerated = 0;
+    this.makeupWaterVolumeFlow = 0;
+    this.annualMakeupWaterFlow = 0;
+    this.totalOperatingCost = 0;
+    this.powerGenerationCost = 0;
+    this.boilerFuelCost = 0;
+    this.makeupWaterCost = 0;
+    this.boilerFuelUsage = 0;
     this.ventedLowPressureSteam = undefined;
-    this.sitePowerImport = undefined;
-    this.sitePowerDemand = undefined;
+    this.sitePowerImport = 0;
+    this.sitePowerDemand = 0;
     this.executeCalculateMarginalCosts = undefined;
     this.heatExchangerOutput = undefined;
     this.isBaselineCalculation = undefined;

@@ -87,6 +87,13 @@ export class ModifyConditionsComponent implements OnInit {
     this.saveAssessment();
   }
 
+  saveBaselineSsmt(newSsmt: SSMT){
+    this.ssmt = newSsmt;
+    this.ssmt.resultsCalculated = false;
+    this.saveAssessment();
+  }
+
+
   saveModBoiler(newBoiler: BoilerInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.boilerInput = newBoiler;
     this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = false;
@@ -101,6 +108,12 @@ export class ModifyConditionsComponent implements OnInit {
 
   saveModTurbine(newTurbineInput: TurbineInput) {
     this.ssmt.modifications[this.modificationIndex].ssmt.turbineInput = newTurbineInput;
+    this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = false;
+    this.saveAssessment();
+  }
+
+  saveModSsmt(newSSMT: SSMT){
+    this.ssmt.modifications[this.modificationIndex].ssmt = newSSMT;
     this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = false;
     this.saveAssessment();
   }
