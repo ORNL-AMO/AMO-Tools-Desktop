@@ -42,6 +42,7 @@ import { PrvModule } from '../calculator/steam/prv/prv.module';
 import { TurbineModule } from '../calculator/steam/turbine/turbine.module';
 import { HeaderModule } from '../calculator/steam/header/header.module';
 import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module';
+import { ConvertSsmtService } from './convert-ssmt.service';
 
 @NgModule({
   imports: [
@@ -93,7 +94,8 @@ import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module'
     HeaderService,
     TurbineService,
     CalculateModelService,
-    CalculateLossesService
+    CalculateLossesService,
+    ConvertSsmtService
   ]
 })
 export class SsmtModule { }

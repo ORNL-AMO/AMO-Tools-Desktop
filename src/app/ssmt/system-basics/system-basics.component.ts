@@ -4,6 +4,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { FormGroup } from '@angular/forms';
 import { SettingsService } from '../../settings/settings.service';
 import { SSMT } from '../../shared/models/steam/ssmt';
+import { ConvertSsmtService } from '../convert-ssmt.service';
 
 @Component({
   selector: 'app-system-basics',
@@ -19,12 +20,14 @@ export class SystemBasicsComponent implements OnInit {
   emitSave = new EventEmitter<Settings>();
   @Input()
   ssmt: SSMT;
+  @Output('emitSaveSsmt')
+  emitSaveSsmt = new EventEmitter<SSMT>();
 
   settingsForm: FormGroup;
   oldSettings: Settings;
   showUpdateData: boolean = false;
   dataUpdated: boolean = false;
-  constructor(private settingsService: SettingsService) { }
+  constructor(private settingsService: SettingsService, private convertSsmtService: ConvertSsmtService) { }
 
 
   ngOnInit() {
@@ -40,26 +43,38 @@ export class SystemBasicsComponent implements OnInit {
     this.settings.id = id;
     this.settings.createdDate = createdDate;
     this.settings.assessmentId = assessmentId;
-    // if (
-    //   this.settings.temperatureMeasurement != this.oldSettings.temperatureMeasurement ||
-    //   this.settings.densityMeasurement != this.oldSettings.densityMeasurement ||
-    //   this.settings.fanBarometricPressure != this.oldSettings.fanBarometricPressure ||
-    //   this.settings.fanPressureMeasurement != this.oldSettings.fanPressureMeasurement ||
-    //   this.settings.fanFlowRate != this.oldSettings.fanFlowRate
-    // ){
-    //   this.showUpdateData = true;
-    // }
-    // if(this.dataUpdated == true){
-    //   this.dataUpdated = false;
-    // }
+    if (
+      this.settings.steamPressureMeasurement != this.oldSettings.steamPressureMeasurement ||
+      this.settings.steamTemperatureMeasurement != this.oldSettings.steamTemperatureMeasurement ||
+      this.settings.steamSpecificEnthalpyMeasurement != this.oldSettings.steamSpecificEnthalpyMeasurement ||
+      this.settings.steamSpecificEntropyMeasurement != this.oldSettings.steamSpecificEntropyMeasurement ||
+      this.settings.steamSpecificVolumeMeasurement != this.oldSettings.steamSpecificVolumeMeasurement ||
+      this.settings.steamMassFlowMeasurement != this.oldSettings.steamMassFlowMeasurement ||
+      this.settings.steamEnergyMeasurement != this.oldSettings.steamEnergyMeasurement ||
+      this.settings.steamPowerMeasurement != this.oldSettings.steamPowerMeasurement ||
+      this.settings.steamVolumeMeasurement != this.oldSettings.steamVolumeMeasurement ||
+      this.settings.steamVolumeFlowMeasurement != this.oldSettings.steamVolumeFlowMeasurement ||
+      this.settings.steamVacuumPressure != this.oldSettings.steamVacuumPressure
+    ) {
+      this.showUpdateData = true;
+    }
+    if (this.dataUpdated == true) {
+      this.dataUpdated = false;
+    }
     this.emitSave.emit(this.settings);
   }
 
   updateData() {
-    // this.assessment.fsat = this.convertFsatService.convertAllInputData(this.assessment.fsat, this.oldSettings, this.settings);
-    // this.emitSaveFsat.emit(this.assessment.fsat);
-    // this.dataUpdated = true;
-    // this.showUpdateData = false;
+    this.assessment.ssmt = this.convertSsmtService.convertAllInputData(this.ssmt, this.oldSettings, this.settings);
+    if(this.assessment.ssmt.modifications){
+      this.assessment.ssmt.modifications.forEach(mod => {
+        mod.ssmt = this.convertSsmtService.convertAllInputData(mod.ssmt, this.oldSettings, this.settings);
+      })
+    }
+
+    this.emitSaveSsmt.emit(this.assessment.ssmt);
+    this.dataUpdated = true;
+    this.showUpdateData = false;
   }
 
   saveChanges() {
