@@ -31,7 +31,7 @@
         </td>
       </tr>
       <tr>
-        <td>Generation (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td class="pl-4">Generation (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.powerGenerated | number:'1.0-1'}}
@@ -46,7 +46,7 @@
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
       </tr>
       <tr>
-        <td>Demand (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td class="pl-4">Demand (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.sitePowerDemand | number:'1.0-1'}}
@@ -62,7 +62,7 @@
         </td>
       </tr>
       <tr>
-        <td>Import (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td class="pl-4">Import (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.sitePowerImport | number:'1.0-1'}}
@@ -95,7 +95,7 @@
         </td>
       </tr>
       <tr>
-        <td>Boiler (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+        <td class="pl-4">Boiler (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.boilerOutput.fuelEnergy | number:'1.0-2'}}
@@ -127,7 +127,7 @@
         </td>
       </tr>
       <tr>
-        <td>Flow (<span [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>)</td>
+        <td class="pl-4">Flow (<span [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.makeupWaterVolumeFlow | number:'1.0-2'}}
@@ -143,7 +143,7 @@
         </td>
       </tr>
       <tr>
-        <td>Flow (<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>/yr)</td>
+        <td class="pl-4">Flow (<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.annualMakeupWaterFlow | number:'1.0-2'}}
@@ -166,7 +166,7 @@
         </td>
       </tr>
       <tr>
-        <td>HP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
+        <td class="pl-4">HP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
 
           <span *ngIf="baselineOutput.boilerOutput">
@@ -182,8 +182,8 @@
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
-      <tr>
-        <td>MP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
+      <tr *ngIf="numberOfHeaders == 3">
+        <td class="pl-4">MP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.marginalMPCost | currency:'USD'}}
@@ -198,8 +198,8 @@
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
-      <tr>
-        <td>LP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
+      <tr *ngIf="numberOfHeaders > 1">
+        <td class="pl-4">LP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.marginalLPCost | currency:'USD'}}

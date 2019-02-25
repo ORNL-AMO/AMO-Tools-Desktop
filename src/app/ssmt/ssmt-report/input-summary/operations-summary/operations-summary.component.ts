@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
-import { OperationsInput, SSMT, SSMTInputs } from '../../../../shared/models/steam/ssmt';
+import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -12,6 +12,8 @@ export class OperationsSummaryComponent implements OnInit {
   baselineInputData: SSMTInputs;
   @Input()
   modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  @Input()
+  settings: Settings;
 
   collapse: boolean = true;
   numMods: number = 0;

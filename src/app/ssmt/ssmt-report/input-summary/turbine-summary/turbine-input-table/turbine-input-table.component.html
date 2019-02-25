@@ -9,7 +9,7 @@
     </tr>
     <tr>
       <td [ngClass]="{'indicate-report-field-different':isentropicEfficiencyDiff[0] == true}">
-        Isentropic Efficiency
+        Isentropic Efficiency (%)
       </td>
       <td [ngClass]="{'indicate-report-field-different':isentropicEfficiencyDiff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">
@@ -31,7 +31,7 @@
 
     <tr>
       <td [ngClass]="{'indicate-report-field-different':generationEfficiencyDiff[0] == true}">
-        Generation Efficiency
+        Generation Efficiency (%)
       </td>
       <td [ngClass]="{'indicate-report-field-different':generationEfficiencyDiff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">
@@ -53,7 +53,7 @@
 
     <tr *ngIf="turbineType == 'condensing'">
       <td [ngClass]="{'indicate-report-field-different':condenserPressureDiff[0] == true}">
-        Condenser Pressure
+        Condenser Pressure (<span [innerHTML]="settings.steamVacuumPressureMeasurement | settingsLabel"></span>)
       </td>
       <td [ngClass]="{'indicate-report-field-different':condenserPressureDiff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">
@@ -117,6 +117,8 @@
     <tr *ngIf="turbineType == 'condensing'">
       <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
         Operation Value
+        (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr) or
+        (<span >kW</span>)
       </td>
       <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">
@@ -139,6 +141,8 @@
     <tr *ngIf="turbineType != 'condensing'">
       <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
         Operation Value 1
+        (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr) or
+        (<span >kW</span>)
       </td>
       <td [ngClass]="{'indicate-report-field-different':operationValue1Diff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">
@@ -163,6 +167,8 @@
     <tr *ngIf="turbineType != 'condensing'">
       <td [ngClass]="{'indicate-report-field-different':operationValue2Diff[0] == true}">
         Operation Value 2
+        (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr) or
+        (<span >kW</span>)
       </td>
       <td [ngClass]="{'indicate-report-field-different':operationValue2Diff[0] == true}">
         <span *ngIf="baselineTurbine.useTurbine == true">

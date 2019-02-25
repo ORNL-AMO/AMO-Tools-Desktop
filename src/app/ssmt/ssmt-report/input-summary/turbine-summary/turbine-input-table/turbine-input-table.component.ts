@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PressureTurbine, CondensingTurbine } from '../../../../../shared/models/steam/ssmt';
+import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
   selector: 'app-turbine-input-table',
@@ -15,6 +16,8 @@ export class TurbineInputTableComponent implements OnInit {
   turbineType: string;
   @Input()
   numMods: number;
+  @Input()
+  settings: Settings;
 
   isentropicEfficiencyDiff: Array<boolean>;
   generationEfficiencyDiff: Array<boolean>;

@@ -2,7 +2,7 @@
   <table class="table table-hover table-striped" *ngIf="baselineLosses">
     <thead>
       <tr>
-        <td [ngStyle]="{'width.%': 15}"></td>
+        <td [ngStyle]="{'width.%': 15}" class="bold">(<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"
           [ngStyle]="{'width.%': tableCellWidth}" class="text-center bold">Baseline</td>
         <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationLosses; let index = index;"
@@ -18,7 +18,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
-        <td>Stack</td>
+        <td class="pl-4">Stack</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.stack">
             {{baselineLosses.stack | number:'1.0-2'}}
@@ -38,7 +38,7 @@
         </td>
       </tr>
       <tr>
-        <td>Blowdown</td>
+        <td class="pl-4">Blowdown</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.blowdown">
             {{baselineLosses.blowdown | number:'1.0-2'}}
@@ -64,7 +64,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
-        <td>High Pressure Loss</td>
+        <td class="pl-4">High Pressure Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.highPressureHeader">
             {{baselineLosses.highPressureHeader | number:'1.0-2'}}
@@ -84,7 +84,7 @@
         </td>
       </tr>
       <tr *ngIf="numberOfHeaders == 3">
-        <td>Medium Pressure Loss</td>
+        <td class="pl-4">Medium Pressure Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.mediumPressureHeader">
             {{baselineLosses.mediumPressureHeader | number:'1.0-2'}}
@@ -104,7 +104,7 @@
         </td>
       </tr>
       <tr *ngIf="numberOfHeaders > 1">
-        <td>Low Pressure Loss</td>
+        <td class="pl-4">Low Pressure Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.lowPressureHeader">
             {{baselineLosses.lowPressureHeader | number:'1.0-2'}}
@@ -123,14 +123,15 @@
           </span>
         </td>
       </tr>
-      <tr>
+      <tr
+        *ngIf="showCondensingTurbine || showHighToLowTurbine || showHighToMediumTurbine || showMediumToLowTurbine || showCondensingLoss">
         <td class="bold">Turbine</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
-      <tr>
-        <td>Condensing Turbine Efficiency Loss</td>
+      <tr *ngIf="showCondensingTurbine">
+        <td class="pl-4">Condensing Turbine Efficiency Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.condensingTurbineEfficiencyLoss">
             {{baselineLosses.condensingTurbineEfficiencyLoss | number:'1.0-2'}}
@@ -149,8 +150,8 @@
           </span>
         </td>
       </tr>
-      <tr *ngIf="numberOfHeaders == 3">
-        <td>High to Medium Turbine Efficiency Loss</td>
+      <tr *ngIf="numberOfHeaders == 3 && showHighToMediumTurbine">
+        <td class="pl-4">High to Medium Turbine Efficiency Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.highToMediumTurbineEfficiencyLoss">
             {{baselineLosses.highToMediumTurbineEfficiencyLoss | number:'1.0-2'}}
@@ -169,8 +170,8 @@
           </span>
         </td>
       </tr>
-      <tr *ngIf="numberOfHeaders > 1">
-        <td>High to Low Turbine Efficiency Loss</td>
+      <tr *ngIf="numberOfHeaders > 1 && showHighToLowTurbine">
+        <td class="pl-4">High to Low Turbine Efficiency Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.highToLowTurbineEfficiencyLoss">
             {{baselineLosses.highToLowTurbineEfficiencyLoss | number:'1.0-2'}}
@@ -189,8 +190,8 @@
           </span>
         </td>
       </tr>
-      <tr *ngIf="numberOfHeaders == 3">
-        <td>Medium to Low Turbine Efficiency Loss</td>
+      <tr *ngIf="numberOfHeaders == 3 && showMediumToLowTurbine">
+        <td class="pl-4">Medium to Low Turbine Efficiency Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.mediumToLowTurbineEfficiencyLoss">
             {{baselineLosses.mediumToLowTurbineEfficiencyLoss | number:'1.0-2'}}
@@ -209,8 +210,8 @@
           </span>
         </td>
       </tr>
-      <tr>
-        <td>Condensing Loss</td>
+      <tr *ngIf="showCondensingLoss">
+        <td class="pl-4">Condensing Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.condensingLosses">
             {{baselineLosses.condensingLosses | number:'1.0-2'}}
@@ -236,7 +237,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
-        <td>Condensate Loss</td>
+        <td class="pl-4">Condensate Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.condensateLosses">
             {{baselineLosses.condensateLosses | number:'1.0-2'}}
@@ -261,8 +262,8 @@
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
-      <tr>
-        <td>Low Pressure Vented Steam Loss</td>
+      <tr *ngIf="showLowPressureVentedSteam">
+        <td class="pl-4">Low Pressure Vented Steam Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.lowPressureVentLoss">
             {{baselineLosses.lowPressureVentLoss | number:'1.0-2'}}
@@ -281,8 +282,8 @@
           </span>
         </td>
       </tr>
-      <tr>
-        <td>Condensate Flash Tank Loss</td>
+      <tr *ngIf="showCondensateFlashTank">
+        <td class="pl-4">Condensate Flash Tank Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.condensateFlashTankLoss">
             {{baselineLosses.condensateFlashTankLoss | number:'1.0-2'}}
@@ -302,7 +303,7 @@
         </td>
       </tr>
       <tr>
-        <td>Deaerator Vent Loss</td>
+        <td class="pl-4">Deaerator Vent Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.deaeratorVentLoss">
             {{baselineLosses.deaeratorVentLoss | number:'1.0-2'}}
@@ -328,7 +329,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
-        <td>High Pressure</td>
+        <td class="pl-4">High Pressure</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.highPressureProcessLoss">
             {{baselineLosses.highPressureProcessLoss | number:'1.0-2'}}
@@ -348,7 +349,7 @@
         </td>
       </tr>
       <tr *ngIf="numberOfHeaders == 3">
-        <td>Medium Pressure</td>
+        <td class="pl-4">Medium Pressure</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.mediumPressureProcessLoss">
             {{baselineLosses.mediumPressureProcessLoss | number:'1.0-2'}}
@@ -368,7 +369,7 @@
         </td>
       </tr>
       <tr *ngIf="numberOfHeaders > 1">
-        <td>Low Pressure</td>
+        <td class="pl-4">Low Pressure</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.lowPressureProcessLoss">
             {{baselineLosses.lowPressureProcessLoss | number:'1.0-2'}}
