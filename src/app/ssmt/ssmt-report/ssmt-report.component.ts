@@ -30,6 +30,8 @@ export class SsmtReportComponent implements OnInit {
   reportContainerHeight: number;
   currentTab: string = 'executiveSummary';
 
+  printGraphs = false;
+
   baselineOutput: SSMTOutput;
   baselineInputData: SSMTInputs;
   baselineLosses: SSMTLosses;
