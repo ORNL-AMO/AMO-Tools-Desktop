@@ -1,13 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { InputSummaryComponent } from '../../../psat/psat-report/input-summary/input-summary.component';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { SsmtService } from '../../ssmt.service';
-import { FormGroup } from '@angular/forms';
-import { e } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-report-graphs',
@@ -57,7 +52,7 @@ export class ReportGraphsComponent implements OnInit {
   modExists: boolean = false;
   graphColors: Array<string>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private ssmtService: SsmtService) { }
+  constructor() { }
 
   ngOnInit() {
     this.graphColors = graphColors;
