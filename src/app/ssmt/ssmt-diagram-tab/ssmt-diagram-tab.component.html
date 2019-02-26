@@ -79,6 +79,11 @@
           [inputData]="inputData" [prv]="outputData.lowPressurePRV"></app-prv-table>
         <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="outputData.deaeratorOutput"
           [settings]="settings" [inputData]="inputData"></app-deaerator-table>
+
+        <app-heat-exchanger-table *ngIf="selectedTable == 'heat-exchanger'" [outputData]="outputData"
+          [settings]="settings" [inputData]="inputData"></app-heat-exchanger-table>
+
+
         <div class="d-flex w-100 pt-2 justify-content-center">
           <a class="click-link small" (click)="selectTable('default')" *ngIf="selectedTable != 'default'">Back to
             General Summary</a>

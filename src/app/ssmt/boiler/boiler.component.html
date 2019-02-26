@@ -62,8 +62,8 @@
         <label for="{{idString+'blowdownFlashed'}}">Is the blowdown flashed?</label>
         <select name="blowdownFlashed" class="form-control" id="{{idString+'blowdownFlashed'}}" (change)="save()"
           (focus)="focusField('blowdownFlashed')" (blur)="focusOut()" formControlName="blowdownFlashed" [ngClass]="{'indicate-different': isBlowdownFlashedDifferent()}">
-          <option [ngValue]="1">Yes</option>
-          <option [ngValue]="0">No</option>
+          <option [ngValue]="true">Yes</option>
+          <option [ngValue]="false">No</option>
         </select>
       </div>
 
@@ -71,8 +71,8 @@
         <label for="{{idString+'preheatMakeupWater'}}">Preheat Make-up Water with Blowdown</label>
         <select name="preheatMakeupWater" class="form-control" id="{{idString+'preheatMakeupWater'}}" (change)="save()"
           (focus)="focusField('preheatMakeupWater')" (blur)="focusOut()" formControlName="preheatMakeupWater" [ngClass]="{'indicate-different': isPreheatMakeupWaterDifferent()}">
-          <option [ngValue]="1">Yes</option>
-          <option [ngValue]="0">No</option>
+          <option [ngValue]="true">Yes</option>
+          <option [ngValue]="false">No</option>
         </select>
       </div>
 

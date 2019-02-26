@@ -5,8 +5,8 @@
   <div class="d-flex pt-2 w-50 h-100 align-self-end" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
     (mouseleave)="hoverEquipment('default')">
     <div class="d-flex w-100 makeup-water justify-content-end">
-      <div class="heat-exchanger-holder" *ngIf="heatExchanger">
-        <div class="heat-exchanger">
+      <div class="heat-exchanger-holder" *ngIf="heatExchangerOutput">
+        <div class="heat-exchanger" (click)="selectHeatExchanger()">
           <div class="blowdown inlet-blowdown">
             <span class="fa fa-chevron-down hidden-chevron"></span>
           </div>
