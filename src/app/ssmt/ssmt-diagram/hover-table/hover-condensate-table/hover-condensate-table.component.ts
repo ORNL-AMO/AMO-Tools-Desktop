@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { SteamPropertiesOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
-import { SteamService } from '../../../../calculator/steam/steam.service';
 
 @Component({
   selector: 'app-hover-condensate-table',
@@ -18,7 +16,7 @@ export class HoverCondensateTableComponent implements OnInit {
 
   returnCondensate: SteamPropertiesOutput;
   volumeFlow: number = 0;
-  constructor(private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.returnCondensate = this.outputData.returnCondensate;
