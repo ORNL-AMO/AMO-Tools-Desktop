@@ -74,7 +74,7 @@ export class ReportGraphsComponent implements OnInit {
     this.prepSsmtOptions();
     this.setPieData();
     this.setWaterfallData();
-    this.testBaselineLosses();
+    // this.testBaselineLosses();
   }
 
   testBaselineLosses() {
@@ -147,6 +147,7 @@ export class ReportGraphsComponent implements OnInit {
       this.ssmt2GenerationExportName = this.assessment.name + '-generation-' + this.selectedSsmt2.name;
     }
     this.setPieData();
+    this.setWaterfallData();
   }
 
   getProcessUsageData(ssmt: SSMT): Array<number> {
@@ -244,13 +245,15 @@ export class ReportGraphsComponent implements OnInit {
 
   // waterfall functions
   setWaterfallData() {
+    this.ssmt1WaterfallData = null;
+    this.ssmt2WaterfallData = null;
     this.ssmt1WaterfallData = this.getWaterfallData(this.selectedSsmt1, "#00FF00", "#FF0000", "#0000FF");
     if (this.modExists) {
       this.ssmt2WaterfallData = this.getWaterfallData(this.selectedSsmt2, "#92e040", "#10c4ab", "#5105F8");
     }
   }
 
-  getWaterfallData(selectedSsmt: {name: string, ssmt: SSMT, index: number}, startColor: string, lossColor: string, netColor: string) {
+  getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, startColor: string, lossColor: string, netColor: string) {
     let tmpLosses: SSMTLosses;
     if (selectedSsmt.index == 0) {
       tmpLosses = this.baselineLosses;
@@ -271,12 +274,41 @@ export class ReportGraphsComponent implements OnInit {
       isStartValue: false,
       isNetValue: true
     };
-    // let turbineGenNetNode: WaterfallItem = {
-    //   value: tmpLosses.turbine
-    // }
+    let turbineUseNetNode: WaterfallItem = {
+      value: tmpLosses.highToLowTurbineUsefulEnergy + tmpLosses.highToMediumTurbineUsefulEnergy + tmpLosses.mediumToLowTurbineUsefulEnergy + tmpLosses.condensingTurbineUsefulEnergy,
+      label: 'Turbine Generation',
+      isStartValue: false,
+      isNetValue: true
+    }
+    let otherLossNode: WaterfallItem = {
+      value: tmpLosses.totalOtherLosses,
+      label: 'Other Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let stackLossNode: WaterfallItem = {
+      value: tmpLosses.stack,
+      label: 'Stack Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let turbineLossNode: WaterfallItem = {
+      value: tmpLosses.highToLowTurbineEfficiencyLoss + tmpLosses.highToMediumTurbineEfficiencyLoss + tmpLosses.mediumToLowTurbineEfficiencyLoss + tmpLosses.condensingTurbineEfficiencyLoss + tmpLosses.condensingLosses,
+      label: 'Turbine Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let condensateLossNode: WaterfallItem = {
+      value: tmpLosses.condensateLosses,
+      label: 'Condensate Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    inputObjects = [startNode, turbineUseNetNode, turbineLossNode, processUseNetNode, condensateLossNode, stackLossNode, otherLossNode];
+
     let waterfallData: WaterfallInput = {
       name: selectedSsmt.name,
-      inputObjects: null,
+      inputObjects: inputObjects,
       startColor: startColor,
       lossColor: lossColor,
       netColor: netColor
@@ -294,6 +326,6 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   getWaterfallHeight(): number {
-    return 700;
+    return 500;
   }
 }

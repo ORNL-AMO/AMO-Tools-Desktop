@@ -129,8 +129,9 @@
 
   <div class="row justify-content-center mt-5">
     <div class="col-12" #waterfallChartContainer>
-      <app-waterfall-graph [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
+      <app-waterfall-graph *ngIf="!modExists" [waterfallInput1]="ssmt1WaterfallData" [modExists]="modExists" [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
       </app-waterfall-graph>
+      <app-waterfall-graph *ngIf="modExists" [waterfallInput1]="ssmt1WaterfallData" [waterfallInput2]="ssmt2WaterfallData" [modExists]="modExists" [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()"></app-waterfall-graph>
     </div>
   </div>
 

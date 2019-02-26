@@ -1,0 +1,7 @@
+/* .waterfall-node-label-title {
+    font-weight: bold;
+} */
+
+.waterfall-node-label-title:hover {
+    cursor: pointer;
+}

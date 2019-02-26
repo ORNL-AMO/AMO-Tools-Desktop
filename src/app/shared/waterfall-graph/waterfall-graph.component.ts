@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterViewInit, SimpleChanges } from '@angular/core';
 import { WaterfallGraphService, WaterfallInput, WaterfallItem } from './waterfall-graph.service';
 import * as d3 from 'd3';
 
@@ -12,6 +12,8 @@ export class WaterfallGraphComponent implements OnInit {
   waterfallInput1: WaterfallInput;
   @Input()
   waterfallInput2: WaterfallInput;
+  @Input()
+  modExists: boolean;
   @Input()
   focusInput1: boolean;
   @Input()
@@ -29,6 +31,7 @@ export class WaterfallGraphComponent implements OnInit {
   nodeHeight: number;
   margin: { top: number, right: number, bottom: number, left: number };
   svg: d3.Selection<any>;
+  xScale: any;
   x: any;
   y: any;
   range: { min: number, max: number };
@@ -48,6 +51,13 @@ export class WaterfallGraphComponent implements OnInit {
     this.resizeGraph();
   }
 
+  ngOnChange(changes: SimpleChanges) {
+    if ((changes.waterfallInput1 && !changes.waterfallInput1.isFirstChange) || (changes.waterfallInput2 && !changes.waterfallInput2.isFirstChange)) {
+      this.checkInputs();
+      this.resizeGraph();
+    }
+  }
+
   checkInputs() {
     if (this.waterfallInput1 !== undefined && this.waterfallInput1 !== null && this.waterfallInput2 !== undefined && this.waterfallInput2 !== null) {
       if (this.waterfallInput1.inputObjects.length !== this.waterfallInput2.inputObjects.length) {
@@ -59,32 +69,20 @@ export class WaterfallGraphComponent implements OnInit {
   setRange() {
     this.range = {
       min: 0,
-      max: this.waterfallGraphService.getRange(this.waterfallInput1, this.waterfallInput2 !== undefined && this.waterfallInput2 !== null ? this.waterfallInput2 : null)
+      max: this.width
     }
   }
 
   setDomain() {
     this.domain = {
       min: 0,
-      max: this.width
+      max: this.waterfallGraphService.getDomain(this.waterfallInput1, this.modExists ? this.waterfallInput2 : null)
     };
   }
 
 
 
   resizeGraph() {
-    //need to update curveGraph to grab a new containing element 'panelChartContainer'
-    //make sure to update html container in the graph component as well
-    // let curveGraph = this.ngChartContainer.nativeElement;
-    // //conditional sizing if graph is expanded/compressed
-    // if (!this.expanded) {
-    //   this.canvasWidth = curveGraph.clientWidth;
-    //   this.canvasHeight = this.canvasWidth * (3 / 5);
-    // } else {
-    //   this.canvasWidth = curveGraph.clientWidth;
-    //   this.canvasHeight = curveGraph.clientHeight * 0.9;
-    // }
-
     if (this.containerWidth < 400) {
       this.margin = { top: 10, right: 10, bottom: 10, left: 10 };
     } else {
@@ -103,10 +101,27 @@ export class WaterfallGraphComponent implements OnInit {
   makeGraph() {
     this.setRange();
     this.setDomain();
+    this.xScale = this.waterfallGraphService.setScale(this.range, this.domain);
     this.ngChart = this.waterfallGraphService.clearSvg(this.ngChart);
     this.svg = this.waterfallGraphService.initSvg(this.ngChart, this.width, this.height, this.margin);
     this.waterfallGraphService.setNodeHeight(this.waterfallInput1, this.height);
-    
+    this.waterfallGraphService.setFormat();
+
+    let xOffset = 0;
+    let maxValue = this.domain.max;
+    this.waterfallGraphService.appendLegend(this.svg, this.waterfallInput1, this.waterfallInput2, maxValue, this.xScale);
+    for (let i = 0; i < this.waterfallInput1.inputObjects.length; i++) {
+      this.waterfallGraphService.appendSourceNode(this.svg, this.waterfallInput1, this.width, this.height, this.xScale, i, maxValue, xOffset, true);
+      xOffset += this.waterfallInput1.inputObjects[i].isStartValue ? 0 : this.waterfallInput1.inputObjects[i].value;
+    }
+
+    if (this.modExists) {
+      xOffset = 0;
+      for (let i = 0; i < this.waterfallInput2.inputObjects.length; i++) {
+        this.waterfallGraphService.appendSourceNode(this.svg, this.waterfallInput2, this.width, this.height, this.xScale, i, maxValue, xOffset, false);
+        xOffset += this.waterfallInput2.inputObjects[i].isStartValue ? 0 : this.waterfallInput2.inputObjects[i].value;
+      }
+    }
   }
 
 }
