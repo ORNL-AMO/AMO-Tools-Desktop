@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { TurbineInput, CondensingTurbine, PressureTurbine } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -25,6 +25,8 @@ export class TurbineComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   numberOfHeaders: number;
+  @Input()
+  modificationIndex: number;
 
   condensingTurbineForm: FormGroup;
   highToLowTurbineForm: FormGroup;
@@ -41,6 +43,12 @@ export class TurbineComponent implements OnInit {
       this.turbineInput = this.turbineService.initTurbineInputObj();
     }
     this.initForms();
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
+      this.initForms();
+    }
   }
 
   initForms() {

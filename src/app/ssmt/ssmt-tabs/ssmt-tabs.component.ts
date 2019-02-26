@@ -132,8 +132,6 @@ export class SsmtTabsComponent implements OnInit {
 
   checkOperationsStatus() {
     let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
-    console.log(this.ssmt.generalSteamOperations.makeUpWaterTemperature);
-    console.log(operationsValid);
     if (!operationsValid) {
       this.operationsTabStatus = ['missing-data'];
     } else if (this.stepTab === 'operations') {

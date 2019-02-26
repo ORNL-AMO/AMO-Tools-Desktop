@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SSMTInputs, CondensingTurbine, TurbineInput, PressureTurbine } from '../../../../shared/models/steam/ssmt';
+import { SSMTInputs, CondensingTurbine, PressureTurbine } from '../../../../shared/models/steam/ssmt';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-turbine-summary',
@@ -11,6 +12,8 @@ export class TurbineSummaryComponent implements OnInit {
   baselineInputData: SSMTInputs;
   @Input()
   modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  @Input()
+  settings: Settings;
 
   collapse: boolean = true;
   numMods: number = 0;

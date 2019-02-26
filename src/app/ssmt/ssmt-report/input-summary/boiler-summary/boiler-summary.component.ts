@@ -3,6 +3,7 @@ import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
+
 @Component({
   selector: 'app-boiler-summary',
   templateUrl: './boiler-summary.component.html',
@@ -13,6 +14,8 @@ export class BoilerSummaryComponent implements OnInit {
   baselineInputData: SSMTInputs;
   @Input()
   modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  @Input()
+  settings: Settings;
 
   collapse: boolean = true;
   numMods: number = 0;

@@ -23,6 +23,8 @@ export class OperationsComponent implements OnInit {
   inSetup: boolean;
   @Input()
   isBaseline: boolean;
+  @Input()
+  modificationIndex: number;
 
   idString: string = 'baseline_';
 
@@ -31,7 +33,7 @@ export class OperationsComponent implements OnInit {
   constructor(private operationsService: OperationsService) { }
 
   ngOnInit() {
-    this.operationsForm = this.operationsService.getForm(this.ssmt, this.settings);
+    this.initForm();
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
@@ -48,6 +50,13 @@ export class OperationsComponent implements OnInit {
         this.disableForm();
       }
     }
+    if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
+      this.initForm();
+    }
+  }
+
+  initForm(){
+    this.operationsForm = this.operationsService.getForm(this.ssmt, this.settings);
   }
 
   disableForm() {
