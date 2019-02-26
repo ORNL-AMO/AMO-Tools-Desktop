@@ -80,7 +80,7 @@ export class CalculateModelService {
   callCount: number = 0;
 
   executeCalculateMarginalCosts: boolean;
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService, 
+  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService,
     private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService,
     private operationsService: OperationsService) { }
 
@@ -1566,7 +1566,16 @@ export class CalculateModelService {
 
   calculateMakeupWaterVolumeFlow() {
     //calculate volume flow in gpm
-    this.makeupWaterVolumeFlow = this.makeupWater.massFlow * 1000 * (1 / 8.33) * (1 / 60);
+    // this.makeupWaterVolumeFlow = this.makeupWater.massFlow * 1000 * (1 / 8.33) * (1 / 60);
+    
+    // specific volume = m3kg
+    let specificVolume: number = this.convertUnitsService.value(this.makeupWater.specificVolume).from(this.settings.steamSpecificVolumeMeasurement).to('m3kg')
+    // mass flow kg/hr
+    let massFlow: number = this.convertUnitsService.value(this.makeupWater.massFlow).from(this.settings.steamMassFlowMeasurement).to('kg');
+    // volume flow (m3/hr) = specific volume (m3kg) * mass flow (kg/hr) 
+    let volumeFlow: number = specificVolume * massFlow;
+    //convert to set volume flow unit
+    this.makeupWaterVolumeFlow = this.convertUnitsService.value(volumeFlow).from('m3/h').to(this.settings.steamVolumeFlowMeasurement);
     this.annualMakeupWaterFlow = this.makeupWaterVolumeFlow * 60 * this.inputData.operationsInput.operatingHoursPerYear;
   }
 
