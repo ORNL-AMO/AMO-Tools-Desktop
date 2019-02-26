@@ -26,6 +26,8 @@ export class BoilerComponent implements OnInit {
   emitSave = new EventEmitter<BoilerInput>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  modificationIndex: number;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -40,11 +42,7 @@ export class BoilerComponent implements OnInit {
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
-    if (this.boilerInput) {
-      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
-    } else {
-      this.boilerForm = this.boilerService.initForm(this.settings);
-    }
+    this.initForm();
     this.setFuelTypes();
     if (this.selected === false) {
       this.disableForm();
@@ -60,6 +58,17 @@ export class BoilerComponent implements OnInit {
       } else if (this.selected === false) {
         this.disableForm();
       }
+    }
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.initForm();
+    }
+  }
+
+  initForm() {
+    if (this.boilerInput) {
+      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
+    } else {
+      this.boilerForm = this.boilerService.initForm(this.settings);
     }
   }
 

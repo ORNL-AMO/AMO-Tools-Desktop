@@ -636,10 +636,10 @@ export class CompareService {
 
     if (baseline && modification) {
       return (
-        this.isCondensingTurbineDifferent() ||
-        this.isHighToMediumTurbineDifferent() ||
-        this.isHighToLowTurbineDifferent() ||
-        this.isMediumToLowTurbineDifferent()
+        this.isCondensingTurbineDifferent(baseline, modification) ||
+        this.isHighToMediumTurbineDifferent(baseline, modification) ||
+        this.isHighToLowTurbineDifferent(baseline, modification) ||
+        this.isMediumToLowTurbineDifferent(baseline, modification)
       );
     } else {
       return false;
@@ -654,15 +654,19 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (
-        this.isIsentropicEfficiencyDifferent('condensingTurbine', baseline, modification) ||
-        this.isGenerationEfficiencyDifferent('condensingTurbine', baseline, modification) ||
-        this.isCondenserPressureDifferent('condensingTurbine', baseline, modification) ||
-        this.isOperationTypeDifferent('condensingTurbine', baseline, modification) ||
-        this.isOperationValueDifferent(baseline, modification) ||
-        this.isUseTurbineDifferent('condensingTurbine', baseline, modification)
-      ) {
-        return true;
+      if (baseline.turbineInput.condensingTurbine.useTurbine || modification.turbineInput.condensingTurbine.useTurbine) {
+        if (
+          this.isIsentropicEfficiencyDifferent('condensingTurbine', baseline, modification) ||
+          this.isGenerationEfficiencyDifferent('condensingTurbine', baseline, modification) ||
+          this.isCondenserPressureDifferent('condensingTurbine', baseline, modification) ||
+          this.isOperationTypeDifferent('condensingTurbine', baseline, modification) ||
+          this.isOperationValueDifferent(baseline, modification) ||
+          this.isUseTurbineDifferent('condensingTurbine', baseline, modification)
+        ) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -679,8 +683,12 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (this.isPressureTurbineDifferent('highToMediumTurbine', baseline, modification)) {
-        return true;
+      if (baseline.turbineInput.highToMediumTurbine.useTurbine || modification.turbineInput.highToMediumTurbine.useTurbine) {
+        if (this.isPressureTurbineDifferent('highToMediumTurbine', baseline, modification)) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -697,8 +705,12 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (this.isPressureTurbineDifferent('highToLowTurbine', baseline, modification)) {
-        return true;
+      if (baseline.turbineInput.highToLowTurbine.useTurbine || modification.turbineInput.highToLowTurbine.useTurbine) {
+        if (this.isPressureTurbineDifferent('highToLowTurbine', baseline, modification)) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -715,8 +727,12 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (this.isPressureTurbineDifferent('mediumToLowTurbine', baseline, modification)) {
-        return true;
+      if (baseline.turbineInput.mediumToLowTurbine.useTurbine || modification.turbineInput.mediumToLowTurbine.useTurbine) {
+        if (this.isPressureTurbineDifferent('mediumToLowTurbine', baseline, modification)) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -862,11 +878,9 @@ export class CompareService {
         } else {
           return false;
         }
-      } else if (baseline.turbineInput.condensingTurbine && !modification.turbineInput.condensingTurbine || !baseline.turbineInput.condensingTurbine && modification.turbineInput.condensingTurbine) {
-        return true;
-      } else {
-        return false;
       }
+    } else if (baseline.turbineInput.condensingTurbine && !modification.turbineInput.condensingTurbine || !baseline.turbineInput.condensingTurbine && modification.turbineInput.condensingTurbine) {
+      return true;
     } else {
       return false;
     }
@@ -905,8 +919,12 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].operationValue1 !== modification.turbineInput[turbineTypeString].operationValue1) {
-          return true;
+        if (baseline.turbineInput[turbineTypeString].operationType != 2 && modification.turbineInput[turbineTypeString].operationType != 2) {
+          if (baseline.turbineInput[turbineTypeString].operationValue1 !== modification.turbineInput[turbineTypeString].operationValue1) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return false;
         }
@@ -929,8 +947,13 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].operationValue2 !== modification.turbineInput[turbineTypeString].operationValue2) {
-          return true;
+        if (baseline.turbineInput[turbineTypeString].operationType == 3 || modification.turbineInput[turbineTypeString].operationType == 3
+          || baseline.turbineInput[turbineTypeString].operationType == 4 || modification.turbineInput[turbineTypeString].operationType == 4) {
+          if (baseline.turbineInput[turbineTypeString].operationValue2 !== modification.turbineInput[turbineTypeString].operationValue2) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return false;
         }

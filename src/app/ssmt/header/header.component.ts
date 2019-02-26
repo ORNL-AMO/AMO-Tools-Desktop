@@ -25,7 +25,9 @@ export class HeaderComponent implements OnInit {
   modificationExists: boolean;
   @Input()
   isBaseline: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   highPressureForm: FormGroup;
   mediumPressureForm: FormGroup;
   lowPressureForm: FormGroup;
@@ -50,6 +52,9 @@ export class HeaderComponent implements OnInit {
       } else if (this.selected === false) {
         //  this.disableForm();
       }
+    }
+    if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
+      this.initForms();
     }
   }
 

@@ -73,6 +73,7 @@ export class SsmtComponent implements OnInit {
   calcTabSubscription: Subscription;
 
   saveSsmtSub: Subscription;
+  modListOpen: boolean = false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
@@ -379,6 +380,7 @@ export class SsmtComponent implements OnInit {
 
   selectModificationModal() {
     this.ssmtService.modalOpen.next(true);
+    this.modListOpen = true;
     this.changeModificationModal.show();
   }
 
@@ -386,6 +388,7 @@ export class SsmtComponent implements OnInit {
     this.ssmtService.modalOpen.next(false);
     this.ssmtService.openModificationSelectModal.next(false);
     this.changeModificationModal.hide();
+    this.modListOpen = false;
     this.ssmtService.updateData.next(true);
   }
 
