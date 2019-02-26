@@ -23,6 +23,8 @@ export class EnergySummaryComponent implements OnInit {
   @Input()
   assessment:Assessment;
 
+
+  numberOfHeaders: number;
   selectedModificationIndex: number;
   constructor(private reportRollupService: ReportRollupService) { }
 
@@ -38,6 +40,7 @@ export class EnergySummaryComponent implements OnInit {
         }
       });
     }
+    this.numberOfHeaders = this.assessment.ssmt.headerInput.numberOfHeaders;
   }
 
   useModification() {

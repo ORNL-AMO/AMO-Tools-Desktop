@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { SSMTInputs, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../../../shared/models/steam/ssmt';
+import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
   selector: 'app-header-input-table',
@@ -15,7 +16,9 @@ export class HeaderInputTableComponent implements OnInit {
   headerLevel: string;
   @Input()
   numMods: number;
-
+  @Input()
+  settings: Settings;
+  
   pressureDiff: Array<boolean>;
   processSteamUsageDiff: Array<boolean>;
   condensationRecoveryRateDiff: Array<boolean>;

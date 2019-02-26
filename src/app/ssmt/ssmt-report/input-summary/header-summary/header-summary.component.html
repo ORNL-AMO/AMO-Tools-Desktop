@@ -1,7 +1,8 @@
 <div class="card summary-card">
   <div class="card-header" (click)="toggleCollapse()">
     <h5>Header Data
-      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+      <span class="pull-right fa hide-print"
+        [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
     </h5>
   </div>
 
@@ -34,12 +35,15 @@
             </tr>
           </tbody>
         </table>
-        <app-header-input-table [headerLevel]="'high'" [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData"
-          [numMods]="numMods"></app-header-input-table>
-        <app-header-input-table *ngIf="baselineInputData.headerInput.numberOfHeaders == 3" [baselineInputData]="baselineInputData"
-          [modificationInputData]="modificationInputData" [headerLevel]="'medium'" [numMods]="numMods"></app-header-input-table>
+        <app-header-input-table [headerLevel]="'high'" [baselineInputData]="baselineInputData"
+          [modificationInputData]="modificationInputData" [numMods]="numMods" [settings]="settings">
+        </app-header-input-table>
+        <app-header-input-table *ngIf="baselineInputData.headerInput.numberOfHeaders == 3"
+          [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData"
+          [headerLevel]="'medium'" [numMods]="numMods" [settings]="settings"></app-header-input-table>
         <app-header-input-table *ngIf="baselineInputData.headerInput.numberOfHeaders > 1" [headerLevel]="'low'"
-          [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData" [numMods]="numMods"></app-header-input-table>
+          [baselineInputData]="baselineInputData" [modificationInputData]="modificationInputData" [numMods]="numMods"
+          [settings]="settings"></app-header-input-table>
 
       </div>
     </div>

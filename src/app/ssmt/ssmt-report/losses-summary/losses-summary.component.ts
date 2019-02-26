@@ -27,6 +27,13 @@ export class LossesSummaryComponent implements OnInit {
   assessment: Assessment;
 
   selectedModificationIndex: number;
+  showCondensingTurbine: boolean;
+  showHighToLowTurbine: boolean;
+  showHighToMediumTurbine: boolean;
+  showMediumToLowTurbine: boolean;
+  showCondensingLoss: boolean;
+  showLowPressureVentedSteam: boolean;
+  showCondensateFlashTank: boolean;
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -41,9 +48,71 @@ export class LossesSummaryComponent implements OnInit {
         }
       });
     }
+
+    this.checkCondensingTurbine(this.baselineLosses);
+    this.checkHighToLowTurbine(this.baselineLosses);
+    this.checkHighToMediumTurbine(this.baselineLosses);
+    this.checkMediumtoLowTurbine(this.baselineLosses);
+    this.checkCondensateFlashTank(this.baselineLosses);
+    this.checkCondensingLoss(this.baselineLosses);
+    this.checkLowPressureVentedSteam(this.baselineLosses);
+    if(this.modificationLosses){
+      this.modificationLosses.forEach(loss => {
+        this.checkCondensingTurbine(loss.outputData);
+        this.checkHighToLowTurbine(loss.outputData);
+        this.checkHighToMediumTurbine(loss.outputData);
+        this.checkMediumtoLowTurbine(loss.outputData);
+        this.checkCondensateFlashTank(loss.outputData);
+        this.checkCondensingLoss(loss.outputData);
+        this.checkLowPressureVentedSteam(loss.outputData);
+      })
+    }
+
   }
 
   useModification() {
     this.reportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
+
+  checkCondensingTurbine(loss: SSMTLosses) {
+    if (loss.condensingTurbineEfficiencyLoss) {
+      this.showCondensingTurbine = true;
+    }
+  }
+
+  checkHighToLowTurbine(loss: SSMTLosses) {
+    if (loss.highToLowTurbineEfficiencyLoss) {
+      this.showHighToLowTurbine = true;
+    }
+  }
+
+  checkHighToMediumTurbine(loss: SSMTLosses) {
+    if (loss.highToMediumTurbineEfficiencyLoss) {
+      this.showHighToMediumTurbine = true;
+    }
+  }
+
+  checkMediumtoLowTurbine(loss: SSMTLosses) {
+    if (loss.mediumToLowTurbineEfficiencyLoss) {
+      this.showMediumToLowTurbine = true;
+    }
+  }
+
+  checkCondensingLoss(loss: SSMTLosses) {
+    if (loss.condensingLosses) {
+      this.showCondensingLoss = true;
+    }
+  }
+
+  checkCondensateFlashTank(loss: SSMTLosses) {
+    if (loss.condensateFlashTankLoss) {
+      this.showCondensateFlashTank = true;
+    }
+  }
+
+  checkLowPressureVentedSteam(loss: SSMTLosses) {
+    if (loss.lowPressureVentLoss) {
+      this.showLowPressureVentedSteam = true;
+    }
   }
 }

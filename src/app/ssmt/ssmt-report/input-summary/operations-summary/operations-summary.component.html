@@ -24,7 +24,7 @@
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
-                Operating Hours
+                Annual Operating Hours
               </td>
               <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
                 {{baselineInputData.operationsInput.operatingHoursPerYear}}
@@ -36,7 +36,7 @@
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':fuelCostDiff[0] == true}">
-                Fuel Cost
+                Fuel Cost ($/<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>)
               </td>
               <td [ngClass]="{'indicate-report-field-different':fuelCostDiff[0] == true}">
                 {{baselineInputData.operationsInput.fuelCosts}}
@@ -48,7 +48,7 @@
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':electricityCostDiff[0] == true}">
-                Electricity Cost
+                Electricity Cost ($/kWh)
               </td>
               <td [ngClass]="{'indicate-report-field-different':electricityCostDiff[0] == true}">
                 {{baselineInputData.operationsInput.electricityCosts}}
@@ -60,7 +60,7 @@
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':makeUpWaterCostDiff[0] == true}">
-                Make-up Water Cost
+                Make-up Water Cost ($/<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>)
               </td>
               <td [ngClass]="{'indicate-report-field-different':makeUpWaterCostDiff[0] == true}">
                 {{baselineInputData.operationsInput.makeUpWaterCosts}}
@@ -72,7 +72,7 @@
 
             <tr>
               <td [ngClass]="{'indicate-report-field-different':makeUpWaterTempDiff[0] == true}">
-                Make-up Water Temp
+                Make-up Water Temp (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
               </td>
               <td [ngClass]="{'indicate-report-field-different':makeUpWaterTempDiff[0] == true}">
                 {{baselineInputData.operationsInput.makeUpWaterTemperature}}

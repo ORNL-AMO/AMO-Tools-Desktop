@@ -9,7 +9,7 @@
     </tr>
     <tr>
       <td [ngClass]="{'indicate-report-field-different':pressureDiff[0] == true}">
-        Pressure
+        Pressure (<span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>)
       </td>
       <td [ngClass]="{'indicate-report-field-different':pressureDiff[0] == true}">
         {{baseline.pressure}}
@@ -21,7 +21,7 @@
 
     <tr>
       <td [ngClass]="{'indicate-report-field-different':processSteamUsageDiff[0] == true}">
-        Process Steam Usage
+        Process Steam Usage (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr)
       </td>
       <td [ngClass]="{'indicate-report-field-different':processSteamUsageDiff[0] == true}">
         {{baseline.processSteamUsage}}
@@ -33,7 +33,7 @@
 
     <tr>
       <td [ngClass]="{'indicate-report-field-different':condensationRecoveryRateDiff[0] == true}">
-        Condensation Recovery Rate
+        Condensation Recovery Rate (%)
       </td>
       <td [ngClass]="{'indicate-report-field-different':condensationRecoveryRateDiff[0] == true}">
         {{baseline.condensationRecoveryRate}}
@@ -44,7 +44,7 @@
     </tr>
     <tr>
       <td [ngClass]="{'indicate-report-field-different':heatLossTempDiff[0] == true}">
-        Heat Loss
+        Heat Loss (%)
       </td>
       <td [ngClass]="{'indicate-report-field-different':heatLossTempDiff[0] == true}">
         {{baseline.heatLoss}}
@@ -70,7 +70,7 @@
 
     <tr *ngIf="headerLevel == 'high'">
       <td [ngClass]="{'indicate-report-field-different':condensateReturnTempDiff[0] == true}">
-        Condensate Return Temperature
+        Condensate Return Temperature  (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
       </td>
       <td [ngClass]="{'indicate-report-field-different':condensateReturnTempDiff[0] == true}">
         <span *ngIf="baseline.condensateReturnTemperature">{{baseline.condensateReturnTemperature}}</span>
@@ -112,7 +112,7 @@
 
     <tr *ngIf="headerLevel != 'high'">
       <td [ngClass]="{'indicate-report-field-different':desuperheatSteamTempDiff[0] == true}">
-        Desuperheat Steam Temperature
+        Desuperheat Steam Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
       </td>
       <td [ngClass]="{'indicate-report-field-different':desuperheatSteamTempDiff[0] == true}">
         <span *ngIf="baseline.desuperheatSteamTemperature">{{baseline.desuperheatSteamTemperature}}</span>
