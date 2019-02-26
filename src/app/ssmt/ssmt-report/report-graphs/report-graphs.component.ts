@@ -3,6 +3,8 @@ import { SSMT } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { WaterfallItem, WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
+import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-report-graphs',
@@ -15,6 +17,10 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   assessment: Assessment;
   @Input()
+  baselineLosses: SSMTLosses;
+  @Input()
+  modificationLosses: Array<{ outputData: SSMTLosses, name: string }>;
+  @Input()
   printView: boolean;
   @Input()
   printSankey: boolean;
@@ -22,7 +28,7 @@ export class ReportGraphsComponent implements OnInit {
   printGraphs: boolean;
 
   @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
-  @ViewChild('barChartContainer') barChartContainer: ElementRef;
+  @ViewChild('waterfallChartContainer') waterfallChartContainer: ElementRef;
 
   ssmt: SSMT;
 
@@ -48,6 +54,9 @@ export class ReportGraphsComponent implements OnInit {
   allProcessPieValues: Array<Array<number>>;
   allGenerationPieValues: Array<Array<number>>;
 
+  ssmt1WaterfallData: WaterfallInput;
+  ssmt2WaterfallData: WaterfallInput;
+
 
   modExists: boolean = false;
   graphColors: Array<string>;
@@ -64,6 +73,17 @@ export class ReportGraphsComponent implements OnInit {
     this.ssmtOptions = new Array<{ name: string, ssmt: SSMT, index: number }>();
     this.prepSsmtOptions();
     this.setPieData();
+    this.setWaterfallData();
+    this.testBaselineLosses();
+  }
+
+  testBaselineLosses() {
+    console.log('baselineLosses = ');
+    console.log(this.baselineLosses);
+    console.log('modificationLosses = ');
+    console.log(this.modificationLosses);
+    console.log('ssmt = ');
+    console.log(this.assessment.ssmt);
   }
 
   setPieData() {
@@ -210,7 +230,6 @@ export class ReportGraphsComponent implements OnInit {
     return generationLabels;
   }
 
-
   getPieWidth(): number {
     if (this.pieChartContainer) {
       let containerPadding = 50;
@@ -219,5 +238,62 @@ export class ReportGraphsComponent implements OnInit {
     else {
       return 0;
     }
+  }
+
+
+
+  // waterfall functions
+  setWaterfallData() {
+    this.ssmt1WaterfallData = this.getWaterfallData(this.selectedSsmt1, "#00FF00", "#FF0000", "#0000FF");
+    if (this.modExists) {
+      this.ssmt2WaterfallData = this.getWaterfallData(this.selectedSsmt2, "#92e040", "#10c4ab", "#5105F8");
+    }
+  }
+
+  getWaterfallData(selectedSsmt: {name: string, ssmt: SSMT, index: number}, startColor: string, lossColor: string, netColor: string) {
+    let tmpLosses: SSMTLosses;
+    if (selectedSsmt.index == 0) {
+      tmpLosses = this.baselineLosses;
+    }
+    else {
+      tmpLosses = this.modificationLosses[selectedSsmt.index - 1].outputData;
+    }
+    let inputObjects: Array<WaterfallItem> = new Array<WaterfallItem>();
+    let startNode: WaterfallItem = {
+      value: tmpLosses.fuelEnergy,
+      label: 'Input Energy',
+      isStartValue: true,
+      isNetValue: false
+    }
+    let processUseNetNode: WaterfallItem = {
+      value: tmpLosses.allProcessUsageUsefulEnergy,
+      label: 'Process Use',
+      isStartValue: false,
+      isNetValue: true
+    };
+    // let turbineGenNetNode: WaterfallItem = {
+    //   value: tmpLosses.turbine
+    // }
+    let waterfallData: WaterfallInput = {
+      name: selectedSsmt.name,
+      inputObjects: null,
+      startColor: startColor,
+      lossColor: lossColor,
+      netColor: netColor
+    };
+    return waterfallData;
+  }
+
+  getWaterfallWidth(): number {
+    if (this.waterfallChartContainer) {
+      return this.waterfallChartContainer.nativeElement.clientWidth;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  getWaterfallHeight(): number {
+    return 700;
   }
 }

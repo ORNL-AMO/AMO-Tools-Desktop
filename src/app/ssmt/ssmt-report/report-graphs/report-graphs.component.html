@@ -55,7 +55,8 @@
       <div class="row print-solo">
         <div class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
-            [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues" [exportName]="ssmt1GenerationExportName">
+            [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues"
+            [exportName]="ssmt1GenerationExportName">
           </app-pie-chart>
         </div>
       </div>
@@ -88,7 +89,8 @@
       <div class="row print-solo">
         <div class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
-            [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues" [exportName]="ssmt1GenerationExportName">
+            [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues"
+            [exportName]="ssmt1GenerationExportName">
           </app-pie-chart>
         </div>
       </div>
@@ -117,10 +119,18 @@
       <div class="row print-solo">
         <div class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
-            [labels]="ssmt2GenerationPieLabels" [values]="ssmt2GenerationPieValues" [exportName]="ssmt2GenerationExportName">
+            [labels]="ssmt2GenerationPieLabels" [values]="ssmt2GenerationPieValues"
+            [exportName]="ssmt2GenerationExportName">
           </app-pie-chart>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-5">
+    <div class="col-12" #waterfallChartContainer>
+      <app-waterfall-graph [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
+      </app-waterfall-graph>
     </div>
   </div>
 
