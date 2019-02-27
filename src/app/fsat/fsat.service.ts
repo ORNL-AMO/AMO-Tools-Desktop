@@ -146,7 +146,7 @@ export class FsatService {
       let input: FsatInput = {
         fanSpeed: fsat.fanSetup.fanSpeed,
         drive: fsat.fanSetup.drive,
-        specifiedDriveEfficiency: fsat.fanSetup.specifiedDriveEfficiency | 100,
+        specifiedDriveEfficiency: fsat.fanSetup.drive === 4 ? fsat.fanSetup.specifiedDriveEfficiency : 100,
         lineFrequency: fsat.fanMotor.lineFrequency,
         motorRatedPower: fsat.fanMotor.motorRatedPower,
         motorRpm: fsat.fanMotor.motorRpm,
@@ -168,7 +168,6 @@ export class FsatService {
         airDensity: fsat.baseGasDensity.gasDensity,
         sizeMargin: 1
       };
-
       input = this.convertFsatService.convertInputDataForCalculations(input, settings);
       let results: FsatOutput;
       if (isBaseline) {
