@@ -5,35 +5,35 @@
       <tr>
         <td colspan="3" class="bold">Hot Inlet / Cold Outlet Temperature Difference</td>
         <td colspan="2" class="text-center">
-          {{heatExchangerInput.hotInletTemperature - heatExchangerOutput.coldOutletTemperature | number:'1.0-3'}}
+          {{heatExchangerInput.hotInletTemperature - heatExchangerOutput.coldOutletTemperature | number:'1.0-1'}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </td>
       </tr>
       <tr>
         <td colspan="3" class="bold">Cold Inlet / Hot Outlet Temperature Difference</td>
         <td colspan="2" class="text-center">
-          {{heatExchangerOutput.hotOutletTemperature - heatExchangerInput.coldInletTemperature | number:'1.0-3'}}
+          {{heatExchangerOutput.hotOutletTemperature - heatExchangerInput.coldInletTemperature | number:'1.0-1'}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </td>
       </tr>
       <tr>
         <td colspan="3" class="bold">Heat / Energy Exchanged</td>
         <td colspan="2" class="text-center">
-          {{heatExchangerInput.hotInletEnergyFlow - heatExchangerOutput.hotOutletEnergyFlow | number:'1.0-3'}}
+          {{heatExchangerInput.hotInletEnergyFlow - heatExchangerOutput.hotOutletEnergyFlow | number:'1.0-1'}}
           <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>
         </td>
       </tr>
       <tr>
         <td colspan="3" class="bold">Hot Inlet to Outlet Temperature Drop</td>
         <td colspan="2" class="text-center">
-          {{heatExchangerInput.hotInletTemperature - heatExchangerOutput.hotOutletTemperature | number:'1.0-3'}}
+          {{heatExchangerInput.hotInletTemperature - heatExchangerOutput.hotOutletTemperature | number:'1.0-1'}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </td>
       </tr>
       <tr>
         <td colspan="3" class="bold">Cold Inlet to Outlet Temperature Gain</td>
         <td colspan="2" class="text-center">
-          {{heatExchangerOutput.coldOutletTemperature - heatExchangerInput.coldInletTemperature | number:'1.0-3'}}
+          {{heatExchangerOutput.coldOutletTemperature - heatExchangerInput.coldInletTemperature | number:'1.0-1'}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </td>
       </tr>
@@ -49,26 +49,26 @@
       </tr>
       <tr>
         <td class="bold">Pressure (<span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{heatExchangerInput.hotInletPressure | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.coldOutletPressure | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.hotOutletPressure | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerInput.coldInletPressure | number:'1.0-3'}}</td>
+        <td class="text-center">{{heatExchangerInput.hotInletPressure | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.coldOutletPressure | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.hotOutletPressure | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerInput.coldInletPressure | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td class="bold">Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
         </td>
-        <td class="text-center">{{heatExchangerInput.hotInletTemperature | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.coldOutletTemperature | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.hotOutletTemperature | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerInput.coldInletTemperature | number:'1.0-3'}}</td>
+        <td class="text-center">{{heatExchangerInput.hotInletTemperature | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.coldOutletTemperature | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.hotOutletTemperature | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerInput.coldInletTemperature | number:'1.0-1'}}</td>
       </tr>
       <tr>
         <td class="bold">Sp. Enthalpy (<span
             [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{heatExchangerInput.hotInletSpecificEnthalpy | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.coldOutletSpecificEnthalpy | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.hotOutletSpecificEnthalpy | number:'1.0-3'}} </td>
-        <td class="text-center">{{heatExchangerInput.coldInletSpecificEnthalpy | number:'1.0-3'}} </td>
+        <td class="text-center">{{heatExchangerInput.hotInletSpecificEnthalpy | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.coldOutletSpecificEnthalpy | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.hotOutletSpecificEnthalpy | number:'1.0-1'}} </td>
+        <td class="text-center">{{heatExchangerInput.coldInletSpecificEnthalpy | number:'1.0-1'}} </td>
       </tr>
       <tr>
         <td class="bold">Sp. Entropy (<span
@@ -84,25 +84,25 @@
           <span *ngIf="heatExchangerInput.hotInletQuality == 0">Liquid</span>
           <span *ngIf="heatExchangerInput.hotInletQuality == 1">Gas</span>
           <span *ngIf="heatExchangerInput.hotInletQuality != 1 && heatExchangerInput.hotInletQuality != 0">
-            {{heatExchangerInput.hotInletQuality | number:'1.0-3'}} </span>
+            {{heatExchangerInput.hotInletQuality | number:'1.0-2'}} </span>
         </td>
         <td class="text-center">
           <span *ngIf="heatExchangerOutput.coldOutletQuality == 0">Liquid</span>
           <span *ngIf="heatExchangerOutput.coldOutletQuality == 1">Gas</span>
           <span *ngIf="heatExchangerOutput.coldOutletQuality != 1 && heatExchangerOutput.coldOutletQuality != 0">
-            {{heatExchangerOutput.coldOutletQuality | number:'1.0-3'}} </span>
+            {{heatExchangerOutput.coldOutletQuality | number:'1.0-2'}} </span>
         </td>
         <td class="text-center">
           <span *ngIf="heatExchangerOutput.hotOutletQuality == 0">Liquid</span>
           <span *ngIf="heatExchangerOutput.hotOutletQuality == 1">Gas</span>
           <span *ngIf="heatExchangerOutput.hotOutletQuality != 1 && heatExchangerOutput.hotOutletQuality != 0">
-            {{heatExchangerOutput.hotOutletQuality | number:'1.0-3'}} </span>
+            {{heatExchangerOutput.hotOutletQuality | number:'1.0-2'}} </span>
         </td>
         <td class="text-center">
           <span *ngIf="heatExchangerInput.coldInletQuality == 0">Liquid</span>
           <span *ngIf="heatExchangerInput.coldInletQuality == 1">Gas</span>
           <span *ngIf="heatExchangerInput.coldInletQuality != 1 && heatExchangerInput.coldInletQuality != 0">
-            {{heatExchangerInput.coldInletQuality | number:'1.0-3'}} </span>
+            {{heatExchangerInput.coldInletQuality | number:'1.0-2'}} </span>
         </td>
       </tr>
       <tr>
@@ -117,19 +117,19 @@
       <tr>
         <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr)
         </td>
-        <td class="text-center">{{heatExchangerInput.hotInletMassFlow | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.coldOutletMassFlow | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.hotOutletMassFlow | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerInput.coldInletMassFlow | number:'1.0-3'}}</td>
+        <td class="text-center">{{heatExchangerInput.hotInletMassFlow | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.coldOutletMassFlow | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.hotOutletMassFlow | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerInput.coldInletMassFlow | number:'1.0-1'}}</td>
       </tr>
 
       <tr>
         <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)
         </td>
-        <td class="text-center">{{heatExchangerInput.hotInletEnergyFlow | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.coldOutletEnergyFlow | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerOutput.hotOutletEnergyFlow | number:'1.0-3'}}</td>
-        <td class="text-center">{{heatExchangerInput.coldInletEnergyFlow | number:'1.0-3'}}</td>
+        <td class="text-center">{{heatExchangerInput.hotInletEnergyFlow | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.coldOutletEnergyFlow | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerOutput.hotOutletEnergyFlow | number:'1.0-1'}}</td>
+        <td class="text-center">{{heatExchangerInput.coldInletEnergyFlow | number:'1.0-1'}}</td>
       </tr>
     </tbody>
   </table>

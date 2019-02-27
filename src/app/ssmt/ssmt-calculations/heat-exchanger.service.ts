@@ -11,7 +11,6 @@ export class HeatExchangerService {
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
   heatExchange(approachTemp: number, heatExchangerInput: HeatExchangerInput, settings: Settings): HeatExchangerOutput {
-
     let maxTempDiff: number = heatExchangerInput.hotInletTemperature - heatExchangerInput.coldInletTemperature;
     // if(maxTempDiff < 0){
     //   return;
@@ -35,7 +34,7 @@ export class HeatExchangerService {
 
     let coldOutletTest: SteamPropertiesOutput = this.steamService.steamProperties(
       {
-        pressure: 0,
+        pressure: heatExchangerInput.coldInletPressure,
         thermodynamicQuantity: 1,
         quantityValue: (heatExchangerInput.coldInletEnergyFlow + heatExchanged) / heatExchangerInput.coldInletMassFlow * 1000,
       },
@@ -47,7 +46,7 @@ export class HeatExchangerService {
     if ((hotOutletTest.temperature - heatExchangerInput.coldInletTemperature) > approachTemp) {
       coldOutletTest = this.steamService.steamProperties(
         {
-          pressure: 0,
+          pressure: heatExchangerInput.coldInletPressure,
           thermodynamicQuantity: 0,
           quantityValue: (heatExchangerInput.hotInletTemperature - approachTemp),
         },
@@ -91,7 +90,6 @@ export class HeatExchangerService {
       coldOutletSpecificEnthalpy: coldOutletTest.specificEnthalpy,
       coldOutletSpecificEntropy: coldOutletTest.specificEntropy
     }
-    console.log(results);
     return results;
   }
 

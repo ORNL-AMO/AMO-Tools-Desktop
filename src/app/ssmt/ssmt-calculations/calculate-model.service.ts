@@ -196,7 +196,6 @@ export class CalculateModelService {
       if (this.inputData.boilerInput.blowdownFlashed === true) {
         this.calculateBlowdownFlashTank();
       }
-
       //2. Model High Pressure Header and Outlets
       //2A. Calculate High Pressure Header
       this.calculateHighPressureHeader();
@@ -274,7 +273,6 @@ export class CalculateModelService {
       this.calculateMakeupWaterMassFlow();
       this.calculateMakeupWaterVolumeFlow();
       //5F. Run heat exchange if pre heating makeup water
-      console.log(this.inputData.boilerInput.preheatMakeupWater);
       if (this.inputData.boilerInput.preheatMakeupWater === true) {
         this.runHeatExchanger();
       }
@@ -1538,7 +1536,7 @@ export class CalculateModelService {
       {
         thermodynamicQuantity: 0, //temperature
         quantityValue: this.inputData.operationsInput.makeUpWaterTemperature,
-        pressure: .101325 //atmospheric pressure
+        pressure: 0 //atmospheric pressure
       },
       this.settings
     );
@@ -1685,10 +1683,10 @@ export class CalculateModelService {
       //heat exchanger
       inlets.push(
         {
-          pressure: this.heatExchangerOutput.hotOutletPressure,
+          pressure: this.heatExchangerOutput.coldOutletPressure,
           thermodynamicQuantity: 0, //temperature
-          quantityValue: this.heatExchangerOutput.hotOutletTemperature,
-          massFlow: this.heatExchangerOutput.hotOutletMassFlow
+          quantityValue: this.heatExchangerOutput.coldOutletTemperature,
+          massFlow: this.heatExchangerOutput.coldOutletMassFlow
         }
       );
     } else {
@@ -1918,7 +1916,6 @@ export class CalculateModelService {
       }
     }
     if (mustVent) {
-      debugger
       let ventedSteamAmount: number = (this.lowPressureHeader.massFlow) - (this.inputData.headerInput.lowPressure.processSteamUsage + this.deaeratorOutput.inletSteamMassFlow);
       this.makeupWater.massFlow = this.makeupWater.massFlow + ventedSteamAmount;
       this.makeupWater.energyFlow = this.calculateEnergy(this.makeupWater.massFlow, this.makeupWater.specificEnthalpy);
