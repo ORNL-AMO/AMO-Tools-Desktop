@@ -13,6 +13,8 @@ export class WaterfallGraphComponent implements OnInit {
   @Input()
   waterfallInput2: WaterfallInput;
   @Input()
+  changeWaterfall: boolean;
+  @Input()
   modExists: boolean;
   @Input()
   focusInput1: boolean;
@@ -40,19 +42,22 @@ export class WaterfallGraphComponent implements OnInit {
   // add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
+  input1MaxGreater: boolean;
+  inputMaxDifference: number;
+
   constructor(private waterfallGraphService: WaterfallGraphService) { }
 
-
   ngOnInit() {
-    console.log('containerWidth = ' + this.containerWidth);
-    console.log('containerHeight = ' + this.containerHeight);
     this.checkInputs();
-    // this.nodeHeight = this.waterfallGraphService.getNodeHeight(this.waterfallInput1, this.containerHeight);
     this.resizeGraph();
   }
 
-  ngOnChange(changes: SimpleChanges) {
-    if ((changes.waterfallInput1 && !changes.waterfallInput1.isFirstChange) || (changes.waterfallInput2 && !changes.waterfallInput2.isFirstChange)) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.waterfallInput1 && !changes.waterfallInput1.firstChange) {
+      this.checkInputs();
+      this.resizeGraph();
+    }
+    if (changes.waterfallInput2 && !changes.waterfallInput2.firstChange) {
       this.checkInputs();
       this.resizeGraph();
     }
@@ -69,7 +74,7 @@ export class WaterfallGraphComponent implements OnInit {
   setRange() {
     this.range = {
       min: 0,
-      max: this.width
+      max: this.width * 0.5
     }
   }
 
@@ -78,9 +83,18 @@ export class WaterfallGraphComponent implements OnInit {
       min: 0,
       max: this.waterfallGraphService.getDomain(this.waterfallInput1, this.modExists ? this.waterfallInput2 : null)
     };
+
+    if (this.modExists) {
+      this.inputMaxDifference = this.waterfallGraphService.getDomain(this.waterfallInput1, null) - this.waterfallGraphService.getDomain(this.waterfallInput2, null);
+      if (this.inputMaxDifference >= 0) {
+        this.input1MaxGreater = true;
+      }
+      else {
+        this.input1MaxGreater = false;
+        this.inputMaxDifference = this.inputMaxDifference * (-1);
+      }
+    }
   }
-
-
 
   resizeGraph() {
     if (this.containerWidth < 400) {
@@ -109,7 +123,10 @@ export class WaterfallGraphComponent implements OnInit {
 
     let xOffset = 0;
     let maxValue = this.domain.max;
-    this.waterfallGraphService.appendLegend(this.svg, this.waterfallInput1, this.waterfallInput2, maxValue, this.xScale);
+    this.waterfallGraphService.appendLegend(this.svg, this.width, this.waterfallInput1, this.modExists ? this.waterfallInput2 : null);
+    if (this.modExists && !this.input1MaxGreater) {
+      xOffset = this.inputMaxDifference;
+    }
     for (let i = 0; i < this.waterfallInput1.inputObjects.length; i++) {
       this.waterfallGraphService.appendSourceNode(this.svg, this.waterfallInput1, this.width, this.height, this.xScale, i, maxValue, xOffset, true);
       xOffset += this.waterfallInput1.inputObjects[i].isStartValue ? 0 : this.waterfallInput1.inputObjects[i].value;
@@ -117,11 +134,23 @@ export class WaterfallGraphComponent implements OnInit {
 
     if (this.modExists) {
       xOffset = 0;
+      if (this.input1MaxGreater) {
+        xOffset = this.inputMaxDifference;
+      }
       for (let i = 0; i < this.waterfallInput2.inputObjects.length; i++) {
         this.waterfallGraphService.appendSourceNode(this.svg, this.waterfallInput2, this.width, this.height, this.xScale, i, maxValue, xOffset, false);
         xOffset += this.waterfallInput2.inputObjects[i].isStartValue ? 0 : this.waterfallInput2.inputObjects[i].value;
       }
     }
-  }
+    this.waterfallGraphService.addMinMaxLines(this.svg, this.width, this.height, this.domain, this.xScale);
+    if (!this.modExists) {
+      this.waterfallGraphService.styleForNoComparison();
+    }
 
+    setTimeout(() => {
+      if (this.modExists) {
+        this.waterfallGraphService.addHoverEvent();
+      }
+    }, 500);
+  }
 }

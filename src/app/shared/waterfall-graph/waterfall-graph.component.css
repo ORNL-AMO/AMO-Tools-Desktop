@@ -2,6 +2,6 @@
     font-weight: bold;
 } */
 
-.waterfall-node-label-title:hover {
-    cursor: pointer;
+.waterfall-line {
+    stroke-dasharray: 5,5;
 }
