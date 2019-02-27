@@ -28,13 +28,13 @@
                     <div class="row">
                         <div class="col-12">
                             <app-metered-steam-form *ngIf="phast.meteredEnergy.steam" [inputs]="phast.meteredEnergy.meteredEnergySteam"
-                                (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="setField($event, 'steam')"
+                                (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="changeField($event, 'steam')"
                                 [settings]="settings"></app-metered-steam-form>
                             <app-metered-fuel-form *ngIf="phast.meteredEnergy.fuel" [inputs]="phast.meteredEnergy.meteredEnergyFuel"
-                                (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="setField($event, 'fuel')"
+                                (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="changeField($event, 'fuel')"
                                 [settings]="settings"></app-metered-fuel-form>
                             <app-metered-electricity-form *ngIf="phast.meteredEnergy.electricity" [inputs]="phast.meteredEnergy.meteredEnergyElectricity"
-                                (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="setField($event, 'electricity')"></app-metered-electricity-form>
+                                (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="changeField($event, 'electricity')"></app-metered-electricity-form>
                         </div>
                     </div>
                 </div>
