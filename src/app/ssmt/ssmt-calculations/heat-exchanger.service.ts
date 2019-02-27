@@ -12,13 +12,28 @@ export class HeatExchangerService {
 
   heatExchange(approachTemp: number, heatExchangerInput: HeatExchangerInput, settings: Settings): HeatExchangerOutput {
     let maxTempDiff: number = heatExchangerInput.hotInletTemperature - heatExchangerInput.coldInletTemperature;
-    // if(maxTempDiff < 0){
-    //   return;
-    // }
-
-    // if(maxTempDiff < approachTemp){
-    //   return;
-    // }
+    if (maxTempDiff < 0 || maxTempDiff < approachTemp) {
+      return {
+        hotOutletMassFlow: heatExchangerInput.hotInletMassFlow,
+        hotOutletEnergyFlow: heatExchangerInput.hotInletEnergyFlow,
+        hotOutletTemperature: heatExchangerInput.hotInletTemperature,
+        hotOutletPressure: heatExchangerInput.hotInletPressure,
+        hotOutletQuality: heatExchangerInput.hotInletQuality,
+        hotOutletSpecificVolume: heatExchangerInput.hotInletSpecificVolume,
+        hotOutletDensity: heatExchangerInput.hotInletDensity,
+        hotOutletSpecificEnthalpy: heatExchangerInput.hotInletSpecificEnthalpy,
+        hotOutletSpecificEntropy: heatExchangerInput.hotInletSpecificEntropy,
+        coldOutletMassFlow: heatExchangerInput.coldInletMassFlow,
+        coldOutletEnergyFlow: heatExchangerInput.coldInletEnergyFlow,
+        coldOutletTemperature: heatExchangerInput.coldInletTemperature,
+        coldOutletPressure: heatExchangerInput.coldInletPressure,
+        coldOutletQuality: heatExchangerInput.coldInletQuality,
+        coldOutletSpecificVolume: heatExchangerInput.coldInletSpecificVolume,
+        coldOutletDensity: heatExchangerInput.coldInletDensity,
+        coldOutletSpecificEnthalpy: heatExchangerInput.coldInletSpecificEnthalpy,
+        coldOutletSpecificEntropy: heatExchangerInput.coldInletSpecificEntropy
+      };
+    }
 
     let hotOutletTest: SteamPropertiesOutput = this.steamService.steamProperties(
       {
@@ -77,7 +92,7 @@ export class HeatExchangerService {
       hotOutletPressure: hotOutletTest.pressure,
       hotOutletQuality: hotOutletTest.quality,
       hotOutletSpecificVolume: hotOutletTest.specificVolume,
-      hotOutletDensity: 0,
+      hotOutletDensity: 1 / hotOutletTest.specificVolume,
       hotOutletSpecificEnthalpy: hotOutletTest.specificEnthalpy,
       hotOutletSpecificEntropy: hotOutletTest.specificEntropy,
       coldOutletMassFlow: coldOutletTest.massFlow,
@@ -86,7 +101,7 @@ export class HeatExchangerService {
       coldOutletPressure: coldOutletTest.pressure,
       coldOutletQuality: coldOutletTest.quality,
       coldOutletSpecificVolume: coldOutletTest.specificVolume,
-      coldOutletDensity: 0,
+      coldOutletDensity: 1 / coldOutletTest.specificVolume,
       coldOutletSpecificEnthalpy: coldOutletTest.specificEnthalpy,
       coldOutletSpecificEntropy: coldOutletTest.specificEntropy
     }
