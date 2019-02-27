@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { BoilerService } from './boiler.service';
+import { BoilerService, BoilerRanges } from './boiler.service';
 import { BoilerInput } from '../../shared/models/steam/ssmt';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -93,6 +93,16 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.fuel.disable();
     this.boilerForm.controls.blowdownFlashed.disable();
     this.boilerForm.controls.preheatMakeupWater.disable();
+  }
+
+  setPreheatMakeupWater() {
+    if (this.boilerForm.controls.preheatMakeupWater.value == true) {
+      let tmpRanges: BoilerRanges = this.boilerService.getRanges(this.settings);
+      this.boilerForm.controls.approachTemperature.setValidators([Validators.min(tmpRanges.approachTempMin), Validators.required]);
+    } else {
+      this.boilerForm.controls.approachTemperature.setValidators([]);
+    }
+    this.save();
   }
 
   save() {

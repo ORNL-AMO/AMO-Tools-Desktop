@@ -7,8 +7,9 @@
     <form [formGroup]="boilerForm">
       <div class="form-group">
         <label for="{{idString+'fuelType'}}">Fuel Type</label>
-        <select name="fuelType" class="form-control" id="{{idString+'fuelType'}}" (change)="setFuelTypes()" (focus)="focusField('fuelType')"
-          (blur)="focusOut()" formControlName="fuelType" [ngClass]="{'indicate-different': isFuelTypeDifferent()}">
+        <select name="fuelType" class="form-control" id="{{idString+'fuelType'}}" (change)="setFuelTypes()"
+          (focus)="focusField('fuelType')" (blur)="focusOut()" formControlName="fuelType"
+          [ngClass]="{'indicate-different': isFuelTypeDifferent()}">
           <option [ngValue]="0">Solid/Liquid</option>
           <option [ngValue]="1">Gas</option>
         </select>
@@ -16,7 +17,8 @@
 
       <div class="form-group">
         <label for="{{idString+'fuel'}}">Fuel
-          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'readonly-link': !baselineSelected}">Add
+          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()"
+            [ngClass]="{'readonly-link': !baselineSelected}">Add
             New Fuel</a>
         </label>
         <select name="fuel" class="form-control" id="{{idString+'fuel'}}" (change)="save()" (focus)="focusField('fuel')"
@@ -27,12 +29,14 @@
       <div class="form-group">
         <label for="{{idString+'combustionEfficiency'}}">Boiler Combustion Efficiency</label>
         <div class="input-group">
-          <input name="combustionEfficiency" type="number" step="any" class="form-control" id="{{idString+'combustionEfficiency'}}"
-            (input)="save()" [readonly]="!selected" formControlName="combustionEfficiency" (focus)="focusField('combustionEfficiency')"
-            (blur)="focusOut()" [ngClass]="{'indicate-different': isCombustionEfficiencyDifferent()}">
+          <input name="combustionEfficiency" type="number" step="any" class="form-control"
+            id="{{idString+'combustionEfficiency'}}" (input)="save()" [readonly]="!selected"
+            formControlName="combustionEfficiency" (focus)="focusField('combustionEfficiency')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isCombustionEfficiencyDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.combustionEfficiency.invalid && !boilerForm.controls.combustionEfficiency.pristine">
+        <span class="alert-danger pull-right small"
+          *ngIf="boilerForm.controls.combustionEfficiency.invalid && !boilerForm.controls.combustionEfficiency.pristine">
           <span *ngIf="boilerForm.controls.combustionEfficiency.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.combustionEfficiency.errors.max">Value can't be greater than
             {{boilerForm.controls.combustionEfficiency.errors.max.max}} %.</span>
@@ -49,7 +53,8 @@
             (blur)="focusOut()" [ngClass]="{'indicate-different': isBlowdownRateDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.blowdownRate.invalid && !boilerForm.controls.blowdownRate.pristine">
+        <span class="alert-danger pull-right small"
+          *ngIf="boilerForm.controls.blowdownRate.invalid && !boilerForm.controls.blowdownRate.pristine">
           <span *ngIf="boilerForm.controls.blowdownRate.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.blowdownRate.errors.max">Value can't be greater than
             {{boilerForm.controls.blowdownRate.errors.max.max}} %.</span>
@@ -61,7 +66,8 @@
       <div class="form-group">
         <label for="{{idString+'blowdownFlashed'}}">Is the blowdown flashed?</label>
         <select name="blowdownFlashed" class="form-control" id="{{idString+'blowdownFlashed'}}" (change)="save()"
-          (focus)="focusField('blowdownFlashed')" (blur)="focusOut()" formControlName="blowdownFlashed" [ngClass]="{'indicate-different': isBlowdownFlashedDifferent()}">
+          (focus)="focusField('blowdownFlashed')" (blur)="focusOut()" formControlName="blowdownFlashed"
+          [ngClass]="{'indicate-different': isBlowdownFlashedDifferent()}">
           <option [ngValue]="true">Yes</option>
           <option [ngValue]="false">No</option>
         </select>
@@ -69,8 +75,9 @@
 
       <div class="form-group">
         <label for="{{idString+'preheatMakeupWater'}}">Preheat Make-up Water with Blowdown</label>
-        <select name="preheatMakeupWater" class="form-control" id="{{idString+'preheatMakeupWater'}}" (change)="save()"
-          (focus)="focusField('preheatMakeupWater')" (blur)="focusOut()" formControlName="preheatMakeupWater" [ngClass]="{'indicate-different': isPreheatMakeupWaterDifferent()}">
+        <select name="preheatMakeupWater" class="form-control" id="{{idString+'preheatMakeupWater'}}" (change)="setPreheatMakeupWater()"
+          (focus)="focusField('preheatMakeupWater')" (blur)="focusOut()" formControlName="preheatMakeupWater"
+          [ngClass]="{'indicate-different': isPreheatMakeupWaterDifferent()}">
           <option [ngValue]="true">Yes</option>
           <option [ngValue]="false">No</option>
         </select>
@@ -79,12 +86,16 @@
       <div class="form-group" *ngIf="boilerForm.controls.preheatMakeupWater.value == 1">
         <label for="{{idString+'approachTemperature'}}">Approach Temperature</label>
         <div class="input-group">
-          <input name="approachTemperature" type="number" step="any" class="form-control" id="{{idString+'approachTemperature'}}"
-            (input)="save()" [readonly]="!selected" formControlName="approachTemperature" (focus)="focusField('approachTemperature')"
-            (blur)="focusOut()" [ngClass]="{'indicate-different': isApproachTemperatureDifferent()}">
-          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          <input name="approachTemperature" type="number" step="any" class="form-control"
+            id="{{idString+'approachTemperature'}}" (input)="save()" [readonly]="!selected"
+            formControlName="approachTemperature" (focus)="focusField('approachTemperature')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isApproachTemperatureDifferent()}">
+          <span class="units input-group-addon"
+            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.approachTemperature.invalid && !boilerForm.controls.approachTemperature.pristine">
+        <span class="alert-danger pull-right small"
+          *ngIf="boilerForm.controls.approachTemperature.invalid && !boilerForm.controls.approachTemperature.pristine">
+          <span *ngIf="boilerForm.controls.approachTemperature.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value can't be less than
             {{boilerForm.controls.approachTemperature.errors.min.min}}
             <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
@@ -95,12 +106,15 @@
       <div class="form-group">
         <label for="{{idString+'steamTemperature'}}">Steam Temperature</label>
         <div class="input-group">
-          <input name="steamTemperature" type="number" step="any" class="form-control" id="{{idString+'steamTemperature'}}"
-            (input)="save()" [readonly]="!selected" formControlName="steamTemperature" (focus)="focusField('steamTemperature')"
-            (blur)="focusOut()" [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}">
-          <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          <input name="steamTemperature" type="number" step="any" class="form-control"
+            id="{{idString+'steamTemperature'}}" (input)="save()" [readonly]="!selected"
+            formControlName="steamTemperature" (focus)="focusField('steamTemperature')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}">
+          <span class="units input-group-addon"
+            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.steamTemperature.invalid && !boilerForm.controls.steamTemperature.pristine">
+        <span class="alert-danger pull-right small"
+          *ngIf="boilerForm.controls.steamTemperature.invalid && !boilerForm.controls.steamTemperature.pristine">
           <span *ngIf="boilerForm.controls.steamTemperature.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.steamTemperature.errors.max">Value can't be greater than
             {{boilerForm.controls.steamTemperature.errors.max.max}}
@@ -114,12 +128,14 @@
       <div class="form-group">
         <label for="{{idString+'deaeratorVentRate'}}">Deaerator Vent Rate</label>
         <div class="input-group">
-          <input name="deaeratorVentRate" type="number" step="any" class="form-control" id="{{idString+'deaeratorVentRate'}}"
-            (input)="save()" [readonly]="!selected" formControlName="deaeratorVentRate" (focus)="focusField('deaeratorVentRate')"
-            (blur)="focusOut()" [ngClass]="{'indicate-different': isDeaeratorVentRateDifferent()}">
+          <input name="deaeratorVentRate" type="number" step="any" class="form-control"
+            id="{{idString+'deaeratorVentRate'}}" (input)="save()" [readonly]="!selected"
+            formControlName="deaeratorVentRate" (focus)="focusField('deaeratorVentRate')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isDeaeratorVentRateDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.deaeratorVentRate.invalid && !boilerForm.controls.deaeratorVentRate.pristine">
+        <span class="alert-danger pull-right small"
+          *ngIf="boilerForm.controls.deaeratorVentRate.invalid && !boilerForm.controls.deaeratorVentRate.pristine">
           <span *ngIf="boilerForm.controls.deaeratorVentRate.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.deaeratorVentRate.errors.max">Value can't be greater than
             {{boilerForm.controls.deaeratorVentRate.errors.max.max}} %.</span>
@@ -131,17 +147,21 @@
       <div class="form-group">
         <label for="{{idString+'deaeratorPressure'}}">Deaerator Pressure</label>
         <div class="input-group">
-          <input name="deaeratorPressure" type="number" step="any" class="form-control" id="{{idString+'deaeratorPressure'}}"
-            (input)="save()" [readonly]="!selected" formControlName="deaeratorPressure" (focus)="focusField('deaeratorPressure')"
-            (blur)="focusOut()" [ngClass]="{'indicate-different': isDeaeratorPressureDifferent()}">
+          <input name="deaeratorPressure" type="number" step="any" class="form-control"
+            id="{{idString+'deaeratorPressure'}}" (input)="save()" [readonly]="!selected"
+            formControlName="deaeratorPressure" (focus)="focusField('deaeratorPressure')" (blur)="focusOut()"
+            [ngClass]="{'indicate-different': isDeaeratorPressureDifferent()}">
           <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="boilerForm.controls.deaeratorPressure.invalid && !boilerForm.controls.deaeratorPressure.pristine">
+        <span class="alert-danger pull-right small"
+          *ngIf="boilerForm.controls.deaeratorPressure.invalid && !boilerForm.controls.deaeratorPressure.pristine">
           <span *ngIf="boilerForm.controls.deaeratorPressure.errors.required">Value Required</span>
           <span *ngIf="boilerForm.controls.deaeratorPressure.errors.max">Value can't be greater than
-            {{boilerForm.controls.deaeratorPressure.errors.max.max}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+            {{boilerForm.controls.deaeratorPressure.errors.max.max}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
           <span *ngIf="boilerForm.controls.deaeratorPressure.errors.min">Value can't be less than
-            {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+            {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
         </span>
       </div>
     </form>
@@ -150,15 +170,17 @@
 
 
 <!--CREATE material MODAL-->
-<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="materialModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div>
-        <app-solid-liquid-flue-gas-material *ngIf="showModal && boilerForm.controls.fuelType.value == 0" (closeModal)="hideMaterialModal($event)"
-          (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-liquid-flue-gas-material>
-        <app-flue-gas-material *ngIf="showModal && boilerForm.controls.fuelType.value == 1" (closeModal)="hideMaterialModal($event)"
-          (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-flue-gas-material>
+        <app-solid-liquid-flue-gas-material *ngIf="showModal && boilerForm.controls.fuelType.value == 0"
+          (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings">
+        </app-solid-liquid-flue-gas-material>
+        <app-flue-gas-material *ngIf="showModal && boilerForm.controls.fuelType.value == 1"
+          (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings">
+        </app-flue-gas-material>
       </div>
     </div>
   </div>
