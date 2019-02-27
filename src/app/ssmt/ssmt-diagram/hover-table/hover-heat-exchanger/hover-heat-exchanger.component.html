@@ -1,0 +1,37 @@
+<label class="group-label">Heat Exchanger</label>
+
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold">Approach Temperature</td>
+      <td class="text-center">{{inputData.boilerInput.approachTemperature}}
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </td>
+      <td class="bold">Heat Exchanged</td>
+      <td class="text-center">
+        {{heatExchangerInput.hotInletEnergyFlow - outputData.heatExchangerOutput.hotOutletEnergyFlow | number:'1.0-1'}}
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Cold Inlet</td>
+      <td class="text-center">{{heatExchangerInput.coldInletTemperature |number:'1.0-1'}}
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </td>
+      <td class="bold">Hot Inlet</td>
+      <td class="text-center">{{heatExchangerInput.hotInletTemperature | number:'1.0-1'}}
+        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Cold Outlet</td>
+      <td class="text-center">{{outputData.heatExchangerOutput.coldOutletTemperature |number:'1.0-1'}}
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </td>
+      <td class="bold">Hot Outlet</td>
+      <td class="text-center">{{outputData.heatExchangerOutput.hotOutletTemperature |number:'1.0-1'}}
+        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+      </td>
+    </tr>
+  </tbody>
+</table>

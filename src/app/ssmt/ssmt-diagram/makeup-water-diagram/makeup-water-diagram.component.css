@@ -57,7 +57,7 @@
     right: 0px;
 }
 
-.heat-exchanger-holder{
+.heat-exchanger-holder, .cold-outlet-holder{
     position: relative;
 }
 
@@ -70,6 +70,11 @@
     top: -3px;
     right: 60px;
     background-color: #D7EDFB;
+}
+
+.heat-exchanger-holder .heat-exchanger:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 10px 0px #91cef4;
 }
 
 .heat-exchanger-holder .inlet-blowdown{
@@ -89,4 +94,18 @@
 
 .blowdown .hidden-chevron{
     color: #5D4037;
+}
+
+.cold-outlet-holder .cold-outlet{
+    position: absolute;
+    z-index: +1;
+    color: black;
+    bottom: 20px;
+    width: 100px;
+    right: 75px;
+}
+
+.cold-outlet-holder .fa-chevron-left{
+    right: 145px;
+    position: absolute;
 }
