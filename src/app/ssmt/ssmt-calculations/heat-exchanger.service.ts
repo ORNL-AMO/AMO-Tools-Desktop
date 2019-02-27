@@ -36,7 +36,7 @@ export class HeatExchangerService {
       {
         pressure: heatExchangerInput.coldInletPressure,
         thermodynamicQuantity: 1,
-        quantityValue: (heatExchangerInput.coldInletEnergyFlow + heatExchanged) / heatExchangerInput.coldInletMassFlow * 1000,
+        quantityValue: this.calculateSpecificEnthalpy(heatExchangerInput.coldInletEnergyFlow + heatExchanged, heatExchangerInput.coldInletMassFlow, settings)
       },
       settings
     );
@@ -62,7 +62,7 @@ export class HeatExchangerService {
         {
           pressure: heatExchangerInput.hotInletPressure,
           thermodynamicQuantity: 1,
-          quantityValue: (heatExchangerInput.hotInletEnergyFlow - heatExchanged) /  heatExchangerInput.hotInletMassFlow * 1000
+          quantityValue: this.calculateSpecificEnthalpy(heatExchangerInput.hotInletEnergyFlow - heatExchanged, heatExchangerInput.hotInletMassFlow, settings)
         },
         settings);
 
@@ -99,5 +99,13 @@ export class HeatExchangerService {
     let energy: number = convertedMassFlow * convertedEnthalpy;
     energy = this.convertUnitsService.value(energy).from('MJ').to(settings.steamEnergyMeasurement);
     return energy;
+  }
+
+  calculateSpecificEnthalpy(energy: number, massFlow: number, settings: Settings): number {
+    let convertedEnergy: number = this.convertUnitsService.value(energy).from(settings.steamEnergyMeasurement).to('MMBtu');
+    let convertedMassFlow: number = this.convertUnitsService.value(massFlow).from(settings.steamMassFlowMeasurement).to('klb');
+    let enthalpy: number = convertedEnergy / convertedMassFlow * 1000;
+    let convertedEnthalpy: number = this.convertUnitsService.value(enthalpy).from('btuLb').to(settings.steamSpecificEnthalpyMeasurement);
+    return convertedEnthalpy;
   }
 }
