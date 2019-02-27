@@ -41,9 +41,7 @@ export class FanSetupComponent implements OnInit {
   drives: Array<{ display: string, value: number }>;
   fanTypes: Array<{ display: string, value: number }>;
   fanForm: FormGroup;
-  // fanEfficiencyError: string = null;
   fanSpeedError: string = null;
-  // specifiedDriveEfficiencyError: string = null;
   idString: string;
   constructor(private fsatWarningService: FsatWarningService, private fsatService: FsatService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fanSetupService: FanSetupService, private helpPanelService: HelpPanelService) {
   }
@@ -66,7 +64,6 @@ export class FanSetupComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight) {
       this.initCondenseDropDown();
-      // console.log('containerHeight = ' + this.containerHeight);
     }
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected) {
