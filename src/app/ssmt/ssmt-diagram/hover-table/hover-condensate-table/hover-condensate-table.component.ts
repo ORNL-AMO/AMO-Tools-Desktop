@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { SteamPropertiesOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -21,11 +20,13 @@ export class HoverCondensateTableComponent implements OnInit {
 
   ngOnInit() {
     this.returnCondensate = this.outputData.returnCondensate;
-    // let tmpMassFlow: number = this.returnCondensate.massFlow;
-    // tmpMassFlow = this.convertUnitsService.value(tmpMassFlow).from(this.settings.steamMassFlowMeasurement).to('kg');
-    // let tmpSpecificVolume: number = this.convertUnitsService.value(this.returnCondensate.specificVolume).from(this.settings.steamSpecificVolumeMeasurement).to('m3kg');
-    // // this.volumeFlow = tmpSpecificVolume * tmpMassFlow * 1000 * (1 / 60);
-    // this.volumeFlow = tmpSpecificVolume * tmpMassFlow * (1 / 60);
-    // this.volumeFlow = this.convertUnitsService.value(this.volumeFlow).from('L/min').to('gpm');
+    // specific volume = m3kg
+    let specificVolume: number = this.convertUnitsService.value(this.returnCondensate.specificVolume).from(this.settings.steamSpecificVolumeMeasurement).to('m3kg')
+    // mass flow kg/hr
+    let massFlow: number = this.convertUnitsService.value(this.returnCondensate.massFlow).from(this.settings.steamMassFlowMeasurement).to('kg');
+    // volume flow (m3/hr) = specific volume (m3kg) * mass flow (kg/hr) 
+    this.volumeFlow = specificVolume * massFlow;
+    //convert from m3/h to settings volume flow measurement (gpm | m3/h | L/min)
+    this.volumeFlow = this.convertUnitsService.value(this.volumeFlow).from('m3/h').to(this.settings.steamVolumeFlowMeasurement);
   }
 }
