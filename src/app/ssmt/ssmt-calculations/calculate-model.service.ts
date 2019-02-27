@@ -9,6 +9,7 @@ import { BoilerService } from '../boiler/boiler.service';
 import { HeaderService } from '../header/header.service';
 import { TurbineService } from '../turbine/turbine.service';
 import { OperationsService } from '../operations/operations.service';
+import { HeatExchangerService } from './heat-exchanger.service';
 
 @Injectable()
 export class CalculateModelService {
@@ -82,7 +83,7 @@ export class CalculateModelService {
   executeCalculateMarginalCosts: boolean;
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService,
     private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService,
-    private operationsService: OperationsService) { }
+    private operationsService: OperationsService, private heatExchangerService: HeatExchangerService) { }
 
   initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
     this.initResults();
@@ -1649,9 +1650,8 @@ export class CalculateModelService {
         approachTemp: this.inputData.boilerInput.approachTemperature
       }
     }
-
-    this.heatExchangerOutput = this.steamService.heatExchanger(heatExhangerInput, this.settings);
-    console.log(this.heatExchangerOutput);
+    this.heatExchangerOutput = this.heatExchangerService.heatExchange(this.inputData.boilerInput.approachTemperature, heatExhangerInput, this.settings);
+    //this.heatExchangerOutput = this.steamService.heatExchanger(heatExhangerInput, this.settings);
   }
 
   //5G. Calculate make up water and condensate combined header
@@ -1808,6 +1808,7 @@ export class CalculateModelService {
 
     //steam production = steam produced by (boiler) + (flash tanks) + (PRV feedwater)
     let steamProduction: number = this.boilerOutput.steamMassFlow + flashTankAdditionalSteam + prvAdditionalSteam;
+
     //steam use = steam used by (header process usage) + (deaerator) + (condensing turbine)
     let steamUse: number = processSteamUsage + this.deaeratorOutput.inletSteamMassFlow + condensingTurbineMassFlow;
     //steam balance = difference between use and production (we want 0!)
@@ -1917,6 +1918,7 @@ export class CalculateModelService {
       }
     }
     if (mustVent) {
+      debugger
       let ventedSteamAmount: number = (this.lowPressureHeader.massFlow) - (this.inputData.headerInput.lowPressure.processSteamUsage + this.deaeratorOutput.inletSteamMassFlow);
       this.makeupWater.massFlow = this.makeupWater.massFlow + ventedSteamAmount;
       this.makeupWater.energyFlow = this.calculateEnergy(this.makeupWater.massFlow, this.makeupWater.specificEnthalpy);

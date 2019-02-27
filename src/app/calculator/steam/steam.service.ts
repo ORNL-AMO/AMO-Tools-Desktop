@@ -576,10 +576,13 @@ export class SteamService {
     inputCpy.coldInletSpecificEntropy = this.convertSteamSpecificEntropyInput(inputCpy.coldInletSpecificEntropy, settings);
     inputCpy.approachTemp = this.convertSteamTemperatureInput(inputCpy.approachTemp, settings);
 
-    console.log('orig ' + inputCpy.hotInletDensity)
-    inputCpy.hotInletDensity = 1 / inputCpy.hotInletSpecificVolume;
-    inputCpy.coldInletDensity = 1 / inputCpy.coldInletSpecificVolume;
-    console.log('convert ' + inputCpy.hotInletDensity)
+    console.log('approach temp ' + inputCpy.approachTemp);
+    console.log('cold inlet temp ' + inputCpy.coldInletTemperature);
+    console.log('hot inlet temp' + inputCpy.hotInletTemperature);
+    // console.log('orig ' + inputCpy.hotInletDensity)
+    // inputCpy.hotInletDensity = 1 / inputCpy.hotInletSpecificVolume;
+    // inputCpy.coldInletDensity = 1 / inputCpy.coldInletSpecificVolume;
+    // console.log('convert ' + inputCpy.hotInletDensity)
 
     let results: HeatExchangerOutput = steamAddon.heatExchanger(inputCpy);
 
