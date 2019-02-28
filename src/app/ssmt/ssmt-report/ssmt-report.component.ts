@@ -7,6 +7,9 @@ import { SSMTOutput, SSMTLosses } from '../../shared/models/steam/steam-outputs'
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
 import { CalculateLossesService } from '../ssmt-calculations/calculate-losses.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { SsmtReportService } from './ssmt-report.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -24,12 +27,35 @@ export class SsmtReportComponent implements OnInit {
   containerHeight: number;
   @Input()
   inRollup: boolean;
+  @Input()
+  printView: boolean;
+  @Input()
+  printExecutiveSummary: boolean;
+  @Input()
+  printEnergySummary: boolean;
+  @Input()
+  printLossesSummary: boolean;
+  @Input()
+  printReportDiagram: boolean;
+  @Input()
+  printInputData: boolean;
+  @Input()
+  printResults: boolean;
+  @Input()
+  printReportGraphs: boolean;
+  @Input()
+  printReportSankey: boolean;
 
+  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
   @ViewChild('reportBtns') reportBtns: ElementRef;
   @ViewChild('reportHeader') reportHeader: ElementRef;
   reportContainerHeight: number;
   currentTab: string = 'executiveSummary';
 
+  showPrint: boolean = false;
+  showPrintMenu: boolean = false;
+  showPrintDiv: boolean = false;
+  selectAll: boolean = false;
   printGraphs = false;
 
   baselineOutput: SSMTOutput;
@@ -42,7 +68,7 @@ export class SsmtReportComponent implements OnInit {
   tableCellWidth: number;
   assessmentDirectories: Directory[];
 
-  constructor(private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService) { }
+  constructor(private windowRefService: WindowRefService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService, private ssmtReportService: SsmtReportService) { }
 
   ngOnInit() {
     if (this.assessment.ssmt.setupDone) {
@@ -74,6 +100,25 @@ export class SsmtReportComponent implements OnInit {
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
+    }
+
+    if (this.inRollup) {
+      this.showPrint = this.printView;
+    }
+    else {
+      // subscribe to print event
+      this.ssmtReportService.showPrint.subscribe(printVal => {
+        // shows loading print view
+        this.showPrintDiv = printVal;
+        if (printVal === true) {
+          // use delay to show loading before print payload starts
+          setTimeout(() => {
+            this.showPrint = printVal;
+          }, 20);
+        } else {
+          this.showPrint = printVal;
+        }
+      });
     }
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -111,5 +156,91 @@ export class SsmtReportComponent implements OnInit {
         this.getDirectoryList(results.parentDirectoryId);
       }
     }
+  }
+
+  // print functions
+  initPrintLogic() {
+    if (!this.inRollup) {
+      this.selectAll = false;
+      this.printReportGraphs = false;
+      this.printReportSankey = false;
+      this.printResults = false;
+      this.printInputData = false;
+    }
+  }
+
+  resetPrintSelection() {
+    this.selectAll = false;
+    this.printReportGraphs = false;
+    this.printReportSankey = false;
+    this.printResults = false;
+    this.printInputData = false;
+  }
+
+  showModal(): void {
+    this.showPrintMenu = true;
+  }
+
+  closeModal(reset: boolean): void {
+    if (reset) {
+      this.resetPrintSelection();
+    }
+    this.showPrintMenu = false;
+  }
+
+  togglePrint(section: string): void {
+    switch (section) {
+      case "selectAll": {
+        this.selectAll = !this.selectAll;
+        if (this.selectAll) {
+          this.printReportGraphs = true;
+          this.printReportSankey = true;
+          this.printResults = true;
+        }
+        else {
+          this.printReportGraphs = false;
+          this.printReportSankey = false;
+          this.printResults = false;
+        }
+        break;
+      }
+      case "executiveSummary": {
+        this.printExecutiveSummary = !this.printExecutiveSummary
+        break;
+      }
+      case "reportGraphs": {
+        this.printReportGraphs = !this.printReportGraphs;
+        break;
+      }
+      case "reportSankey": {
+        this.printReportSankey = !this.printReportSankey;
+        break;
+      }
+      case "results": {
+        this.printResults = !this.printResults;
+        break;
+      }
+      case "inputData": {
+        this.printInputData = !this.printInputData;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+
+  print(): void {
+    this.closeModal(false);
+    this.ssmtReportService.showPrint.next(true);
+    setTimeout(() => {
+      let win = this.windowRefService.nativeWindow;
+      let doc = this.windowRefService.getDoc();
+      win.print();
+      //after printing hide content again
+      this.ssmtReportService.showPrint.next(false);
+      this.resetPrintSelection();
+    }, 2000);
   }
 }

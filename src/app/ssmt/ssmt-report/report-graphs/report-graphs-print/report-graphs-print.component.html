@@ -1,0 +1,80 @@
+<div *ngFor="let ssmtOption of ssmtOptions; let i = index">
+
+  <div *ngIf="!modExists || i > 0">
+    <div class="row justify-content-center align-items-center print-graphs-container show-print">
+
+      <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
+        Scenario: {{ssmtOption.name}}
+      </div>
+      <div *ngIf="!modExists" align="center" class="print-page-title print-center-title">
+        Baseline
+      </div>
+
+      <div class="col-12">
+        <!-- notes -->
+        <!-- <div class="row" *ngIf="modExists">
+          <div class="col-12 print-notes-padding">
+            <div class="row" *ngFor="let note of allNotes[i - 1]">
+              <div class="col-12 print-mod-notes">
+                {{note}}
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- pie chart titles -->
+        <div class="row print-pad-graph-title" *ngIf="printGraphs">
+          <div class="text-center print-graph-sub-title" [ngClass]="modExists ? 'col-6' : 'col-12'">
+            Baseline Process Usage
+          </div>
+          <div class="col-6 print-graph-sub-title text-center" *ngIf="modExists">
+            {{ssmtOption.name}} Process Usage
+          </div>
+        </div>
+
+        <div class="row" *ngIf="printGraphs">
+          <div class="col-6 print-pie-chart">
+            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true"
+              [chartContainerWidth]="pieChartWidth"
+              [labels]="reportGraphsService.getProcessUsageLabels(reportGraphsService.getProcessUsageData(baselineSsmt.ssmt), settings)"
+              [values]="reportGraphsService.getProcessUsageData(baselineSsmt.ssmt)"></app-pie-chart>
+          </div>
+          <div class="col-6 print-pie-chart" *ngIf="modExists">
+            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true"
+              [chartContainerWidth]="pieChartWidth"
+              [labels]="reportGraphsService.getProcessUsageLabels(reportGraphsService.getProcessUsageData(ssmtOption.ssmt), settings)"
+              [values]="reportGraphsService.getProcessUsageData(ssmtOption.ssmt)"></app-pie-chart>
+          </div>
+        </div>
+
+        <div class="row print-pad-graph-title" *ngIf="printGraphs">
+            <div class="text-center print-graph-sub-title" [ngClass]="modExists ? 'col-6' : 'col-12'">
+              Baseline Generation
+            </div>
+            <div class="col-6 print-graph-sub-title text-center" *ngIf="modExists">
+              {{ssmtOption.name}} Generation
+            </div>
+          </div>
+  
+          <div class="row" *ngIf="printGraphs">
+            <div class="col-6 print-pie-chart">
+              <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true"
+                [chartContainerWidth]="pieChartWidth"
+                [labels]="reportGraphsService.getGenerationLabels(reportGraphsService.getGenerationData(baselineSsmt.ssmt), settings)"
+                [values]="reportGraphsService.getGenerationData(baselineSsmt.ssmt)"></app-pie-chart>
+            </div>
+            <div class="col-6 print-pie-chart" *ngIf="modExists">
+              <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true"
+                [chartContainerWidth]="pieChartWidth"
+                [labels]="reportGraphsService.getGenerationLabels(reportGraphsService.getGenerationData(ssmtOption.ssmt), settings)"
+                [values]="reportGraphsService.getGenerationData(ssmtOption.ssmt)"></app-pie-chart>
+            </div>
+          </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
