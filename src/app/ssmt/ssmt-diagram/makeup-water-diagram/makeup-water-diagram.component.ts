@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, HeatExchangerOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -12,10 +12,12 @@ export class MakeupWaterDiagramComponent implements OnInit {
   makeupWater: SteamPropertiesOutput;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
   @Input()
   makeupWaterVolumeFlow: number;
   @Input()
-  heatExchanger: boolean;
+  heatExchangerOutput: HeatExchangerOutput;
   @Input()
   settings: Settings;
   
@@ -27,5 +29,9 @@ export class MakeupWaterDiagramComponent implements OnInit {
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
+  }
+
+  selectHeatExchanger() {
+    this.emitSelectEquipment.emit('heat-exchanger');
   }
 }

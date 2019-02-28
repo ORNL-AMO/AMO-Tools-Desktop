@@ -18,6 +18,7 @@ import { TurbineModule } from '../../calculator/steam/turbine/turbine.module';
 import { DeaeratorModule } from '../../calculator/steam/deaerator/deaerator.module';
 import { PrvModule } from '../../calculator/steam/prv/prv.module';
 import { FlashTankModule } from '../../calculator/steam/flash-tank/flash-tank.module';
+import { HeatExchangerTableComponent } from './heat-exchanger-table/heat-exchanger-table.component';
 
 @NgModule({
   imports: [
@@ -42,6 +43,8 @@ import { FlashTankModule } from '../../calculator/steam/flash-tank/flash-tank.mo
     CostTableComponent,
 
     DiagramSummaryTableComponent,
+
+    HeatExchangerTableComponent,
   ],
   exports: [
     SsmtDiagramTabComponent
