@@ -2,26 +2,28 @@
   <h5>
     Metered Energy Help
     <br>
+    
     <small class="text-muted">
       Enter data about the energy of processing heating equipment based on metered steam/electricity/fuel use. This
       allows the user to compare PHAST calculations to the meter data of the equipment.
       <br>
-      <br>
+      <hr class="my-1">
       <strong>Electric: </strong>
       This method calculates total energy used by a furnace by multiplying
       metered electric energy used by the measurement period (hours/days/weeks).
       <br>
-      <br>
+      <hr class="my-1">
       <strong>Fuel: </strong>
       This method calculates total energy used by a furnace by
       multiplying metered fuel energy used by the measurement period (hours/days/weeks).
       <br>
-      <br>
+      <hr class="my-1">
       <strong>Steam: </strong>
       This method calculates total energy used by a furnace by multiplying
       metered steam energy used by the measurement period (hours/days/weeks).
+      <hr class="my-1">
     </small>
-  <hr class="my-1 hr-spacer">
+  <br>
 
   <!-- steam help -->
   <div class="my-2" *ngIf="currentField == 'totalHeatSteam'">
@@ -33,6 +35,7 @@
         and pressure of the steam.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
 
@@ -44,6 +47,7 @@
         Metered flow rate of steam, as measured during the collection period.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
   
 
@@ -55,6 +59,7 @@
         Time period over which steam meter data was collected.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
 
@@ -66,6 +71,7 @@
         Metered electricity used by auxiliary equipment during collection period.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
   
 
@@ -77,6 +83,7 @@
         Time period over which auxiliary electricity meter data was collected.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
 
@@ -90,6 +97,7 @@
         Fuel used in heat zone.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
   
 
@@ -102,6 +110,7 @@
         calculated using the button below using data about.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
   <div class="my-2" *ngIf="currentField == 'fuelHeatingValue'">
@@ -112,6 +121,7 @@
         Higher heating value of the fuel (calculated based on fuel composition).
       </small>
     </h6>
+    <hr class="my-1">
   </div>
  
 
@@ -123,6 +133,7 @@
         Time period over which fuel meter data was collected.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
  
 
@@ -134,6 +145,7 @@
         Metered electricity used by auxiliary equipment during collection period.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
   
 
@@ -145,6 +157,7 @@
         Time period over which auxiliary electricity meter data was collected.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
 
@@ -156,6 +169,7 @@
         Gas or Solid/Liquid Fuels.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
  
 
@@ -167,6 +181,7 @@
         The amount of fuel energy measured by the fuel meter during the data collection time.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
  
 
@@ -178,6 +193,7 @@
         The volume of fuel measured by the meter during the data collection time.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
  
 
@@ -189,6 +205,7 @@
         Metered flow rate of fuel, as measured during the collection period.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
 
@@ -201,6 +218,7 @@
         Metered electricity used by process heating equipment during collection period.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
   <div class="my-2" *ngIf="currentField == 'electricityCollectionTime'">
@@ -211,6 +229,7 @@
         Time period over which process heating electricity meter data was collected.
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
   <div class="my-2" *ngIf="currentField == 'auxElectricityUsed'">
@@ -221,6 +240,7 @@
         Description
       </small>
     </h6>
+    <hr class="my-1">
   </div>
 
   <div class="my-2" *ngIf="currentField == 'auxElectricityCollectionTime'">
@@ -231,7 +251,7 @@
       <small class="text-muted">
         Description
       </small>
-  <hr class="my-1 hr-spacer">
+  <hr class="my-1">
 </div>
 
 

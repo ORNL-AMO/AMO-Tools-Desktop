@@ -17,6 +17,8 @@ export class DesignedEnergyComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   results: DesignedEnergyResults = {
     designedEnergyUsed: 0,
@@ -107,7 +109,9 @@ export class DesignedEnergyComponent implements OnInit {
     this.currentField = currentField;
     this.energySource = energySource;
   }
-
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
+  }
   addZone() {
     let zoneNum: number = this.phast.designedEnergy.zones.length + 1;
     this.phast.designedEnergy.zones.push({
