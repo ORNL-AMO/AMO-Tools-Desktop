@@ -26,7 +26,7 @@
           (input)="save()" formControlName="operationValue1" (focus)="focusOperation(baselineForm.controls.operationType.value, 'operationValue1')">
         <span class="units input-group-addon">
           <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>
         </span>
       </div>
@@ -35,13 +35,13 @@
         <span *ngIf="baselineForm.controls.operationValue1.errors.max">Value can't be greater than
           {{baselineForm.controls.operationValue1.errors.max.max}}
           <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>
           .</span>
         <span *ngIf="baselineForm.controls.operationValue1.errors.min">Value can't be less than
           {{baselineForm.controls.operationValue1.errors.min.min}}
           <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>.</span>
       </span>
     </div>
@@ -55,7 +55,7 @@
           (input)="save()" formControlName="operationValue2" (focus)="focusOperation(baselineForm.controls.operationType.value, 'operationValue2')">
         <span class="units input-group-addon">
           <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>
         </span>
       </div>
@@ -64,12 +64,12 @@
         <span *ngIf="baselineForm.controls.operationValue2.errors.max">Value can't be greater than
           {{baselineForm.controls.operationValue2.errors.max.max}}
           <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>.</span>
         <span *ngIf="baselineForm.controls.operationValue2.errors.min">Value can't be less than
           {{baselineForm.controls.operationValue2.errors.min.min}}
           <span *ngIf="baselineForm.controls.operationType.value == 0 || baselineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1 || baselineForm.controls.operationType.value == 3">kW</span>.</span>
       </span>
     </div>
@@ -95,7 +95,7 @@
           (input)="save()" formControlName="operationValue1" (focus)="focusOperation(modificationForm.controls.operationType.value, 'operationValue1')">
         <span class="units input-group-addon">
           <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>
         </span>
       </div>
@@ -104,12 +104,12 @@
         <span *ngIf="modificationForm.controls.operationValue1.errors.max">Value can't be greater than
           {{modificationForm.controls.operationValue1.errors.max.max}}
           <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
         <span *ngIf="modificationForm.controls.operationValue1.errors.min">Value can't be less than
           {{modificationForm.controls.operationValue1.errors.min.min}}
           <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
       </span>
     </div>
@@ -123,7 +123,7 @@
           (input)="save()" formControlName="operationValue2" (focus)="focusOperation(modificationForm.controls.operationType.value, 'operationValue2')">
         <span class="units input-group-addon">
           <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>
         </span>
       </div>
@@ -132,12 +132,12 @@
         <span *ngIf="modificationForm.controls.operationValue2.errors.max">Value can't be greater than
           {{modificationForm.controls.operationValue2.errors.max.max}}
           <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
         <span *ngIf="modificationForm.controls.operationValue2.errors.min">Value can't be less than
           {{modificationForm.controls.operationValue2.errors.min.min}}
           <span *ngIf="modificationForm.controls.operationType.value == 0 || modificationForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1 || modificationForm.controls.operationType.value == 3">kW</span>.</span>
       </span>
     </div>

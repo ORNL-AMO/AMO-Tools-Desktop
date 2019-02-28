@@ -95,7 +95,7 @@
         </td>
       </tr>
       <tr>
-        <td class="pl-4">Boiler (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+        <td class="pl-4">Boiler (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
             {{baselineOutput.boilerOutput.fuelEnergy | number:'1.0-2'}}

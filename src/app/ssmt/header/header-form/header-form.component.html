@@ -29,16 +29,16 @@
       <input name="processSteamUsage" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_processSteamUsage'}}"
         (input)="save()" [readonly]="!selected" formControlName="processSteamUsage" (focus)="focusField('processSteamUsage')"
         (blur)="focusOut()" [ngClass]="{'indicate-different': isProcessSteamUsageDifferent()}">
-      <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+      <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="headerForm.controls.processSteamUsage.invalid && !headerForm.controls.processSteamUsage.pristine">
       <span *ngIf="headerForm.controls.processSteamUsage.errors.required">Value Required</span>
       <span *ngIf="headerForm.controls.processSteamUsage.errors.max">Value can't be greater than
         {{headerForm.controls.processSteamUsage.errors.max.max}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
       <span *ngIf="headerForm.controls.processSteamUsage.errors.min">Value can't be less than
         {{headerForm.controls.processSteamUsage.errors.min.min}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </span>
   </div>
 

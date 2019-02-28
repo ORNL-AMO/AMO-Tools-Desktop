@@ -8,7 +8,7 @@
       <div class="vented-steam-holder" *ngIf="ventedLowPressureSteam">
         <span class="vented-steam">
           {{ventedLowPressureSteam.massFlow | number:'1.0-2'}}
-          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
         <div class="vents">
           <span class="fa fa-chevron-up" (mouseenter)="hoverEquipment('ventedLowPressureSteam')" (mouseleave)="hoverEquipment('default')"></span>
@@ -19,10 +19,10 @@
       <div class="header-data-holder">
         <span class="header-mass-flow">{{steamUsage.massFlow | number:'1.0-2'}}
 
-          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
         <span class="header-energy-flow">{{steamUsage.processUsage | number:'1.0-2'}}
-          <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+          <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
         </span>
       </div>
       <span class="fa fa-chevron-right" (mouseenter)="hoverProcessUsageInlet()" (mouseleave)="hoverHeader()"></span>
@@ -41,7 +41,7 @@
         <span class="fa fa-chevron-right"></span>
         <span class="condensate-mass-flow">
           {{condensate.massFlow| number:'1.0-2'}}
-          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
       </div>
     </div>

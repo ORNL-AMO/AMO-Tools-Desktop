@@ -21,7 +21,7 @@
 
     <tr>
       <td [ngClass]="{'indicate-report-field-different':processSteamUsageDiff[0] == true}">
-        Process Steam Usage (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr)
+        Process Steam Usage (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)
       </td>
       <td [ngClass]="{'indicate-report-field-different':processSteamUsageDiff[0] == true}">
         {{baseline.processSteamUsage}}

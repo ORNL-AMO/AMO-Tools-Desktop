@@ -65,7 +65,7 @@
           (blur)="focusOut()" [ngClass]="{'indicate-different': isOperationValue1Different()}">
         <span class="units input-group-addon">
           <span *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement |settingsLabel:'/hr'"></span></span>
           <span *ngIf="turbineForm.controls.operationType.value == 1 || turbineForm.controls.operationType.value == 3">kW</span>
         </span>
       </div>
@@ -74,13 +74,13 @@
         <span *ngIf="turbineForm.controls.operationValue1.errors.max">Value can't be greater than
           {{turbineForm.controls.operationValue1.errors.max.max}}
           <span *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="turbineForm.controls.operationType.value == 1 || turbineForm.controls.operationType.value == 3">kW</span>
           .</span>
         <span *ngIf="turbineForm.controls.operationValue1.errors.min">Value can't be less than
           {{turbineForm.controls.operationValue1.errors.min.min}}
           <span *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="turbineForm.controls.operationType.value == 1 || turbineForm.controls.operationType.value == 3">kW</span>.</span>
       </span>
     </div>
@@ -96,7 +96,7 @@
           (blur)="focusOut()" [ngClass]="{'indicate-different': isOperationValue2Different()}">
         <span class="units input-group-addon">
           <span *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="turbineForm.controls.operationType.value == 1 || turbineForm.controls.operationType.value == 3">kW</span>
         </span>
       </div>
@@ -105,12 +105,12 @@
         <span *ngIf="turbineForm.controls.operationValue2.errors.max">Value can't be greater than
           {{turbineForm.controls.operationValue2.errors.max.max}}
           <span *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="turbineForm.controls.operationType.value == 1 || turbineForm.controls.operationType.value == 3">kW</span>.</span>
         <span *ngIf="turbineForm.controls.operationValue2.errors.min">Value can't be less than
           {{turbineForm.controls.operationValue2.errors.min.min}}
           <span *ngIf="turbineForm.controls.operationType.value == 0 || turbineForm.controls.operationType.value == 4"><span
-              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+              [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="turbineForm.controls.operationType.value == 1 || turbineForm.controls.operationType.value == 3">kW</span>.</span>
       </span>
     </div>
