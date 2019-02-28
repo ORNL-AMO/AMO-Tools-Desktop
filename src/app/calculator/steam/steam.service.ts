@@ -319,7 +319,7 @@ export class SteamService {
     results.inletWaterTemperature = this.convertSteamTemperatureOutput(results.inletWaterTemperature, settings);
     results.outletGasTemperature = this.convertSteamTemperatureOutput(results.outletGasTemperature, settings);
     results.outletLiquidTemperature = this.convertSteamTemperatureOutput(results.outletLiquidTemperature, settings);
-    //energy flow
+    //energy flow    
     results.inletWaterEnergyFlow = this.convertEnergyFlowOutput(results.inletWaterEnergyFlow, settings);
     results.outletGasEnergyFlow = this.convertEnergyFlowOutput(results.outletGasEnergyFlow, settings);
     results.outletLiquidEnergyFlow = this.convertEnergyFlowOutput(results.outletLiquidEnergyFlow, settings);
