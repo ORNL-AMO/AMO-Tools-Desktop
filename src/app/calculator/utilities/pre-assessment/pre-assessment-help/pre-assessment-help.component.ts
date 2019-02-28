@@ -30,12 +30,7 @@ export class PreAssessmentHelpComponent implements OnInit {
   ngOnInit() {
   }
 
-  setAssessmentType(str: string) {
-    if (str !== this.currentAssessmentType) {
-      this.currentAssessmentType = str;
-    }
-  }
   ngOnChanges() {
-
+    console.log(this.currentAssessmentType);
   }
 }
