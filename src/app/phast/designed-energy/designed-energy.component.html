@@ -69,9 +69,9 @@
                     <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
                         <div class="col-11">
                             <div class="calc-help">
-                                <app-designed-energy-steam-help *ngIf="phast.designedEnergy.steam || phast.designedEnergy.fuel || phast.designedEnergy.electricity"
+                                <app-designed-energy-help *ngIf="phast.designedEnergy.steam || phast.designedEnergy.fuel || phast.designedEnergy.electricity"
                                     [currentField]="currentField" [showSteam]="phast.designedEnergy.steam"
-                                    [showElectricity]="phast.designedEnergy.electricity" [showFuel]="phast.designedEnergy.fuel"></app-designed-energy-steam-help>
+                                    [showElectricity]="phast.designedEnergy.electricity" [showFuel]="phast.designedEnergy.fuel"></app-designed-energy-help>
                             </div>
                         </div>
                     </div>

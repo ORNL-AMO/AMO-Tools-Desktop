@@ -27,6 +27,8 @@ export class PreAssessmentFormComponent implements OnInit {
   assessment: PreAssessment;
   @Input()
   settings: Settings;
+  @Input()
+  currentAssessmentType: string;
   @Output('emitCalculate')
   emitCalcualte = new EventEmitter<boolean>();
   @Output('emitCollapse')
@@ -107,7 +109,9 @@ export class PreAssessmentFormComponent implements OnInit {
   }
 
   setAssessmentType(str: string) {
-    this.assessment.type = str;
+    if (str !== this.currentAssessmentType) {
+      this.currentAssessmentType = str;
+    }
   }
 
   getEnergyUsed(assessment: PreAssessment) {
