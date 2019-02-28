@@ -114,8 +114,11 @@
         [modificationOutputs]="modificationOutputs" [modificationInputData]="modificationInputData">
       </app-report-diagram>
     </div>
-    <div class="results scroll-item" *ngIf="currentTab == 'reportGraphs' && dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-report-graphs [settings]="settings" [assessment]="assessment" [printView]="printView" [printGraphs]="printGraphs"></app-report-graphs>
+    <div class="results scroll-item" *ngIf="currentTab == 'reportGraphs' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-report-graphs [settings]="settings" [assessment]="assessment" [baselineLosses]="baselineLosses"
+        [modificationLosses]="modificationLosses" [printView]="printView" [printGraphs]="printGraphs">
+      </app-report-graphs>
     </div>
     <div class="results scroll-item input-data" *ngIf="currentTab == 'inputData' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
@@ -141,7 +144,8 @@
   <!-- End .report-data -->
 
   <div *ngIf="!assessment.ssmt.setupDone">
-      <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
+    <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see
+      the resulting data.</p>
   </div>
 
 

@@ -25,6 +25,7 @@ import { PrintOptionsMenuComponent } from './print-options-menu/print-options-me
 import { ExportableResultsTableComponent } from './exportable-results-table/exportable-results-table.component';
 import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
+import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.compo
     ExportableResultsTableComponent,
     TabsTooltipComponent,
     PrintOptionsMenuComponent,
-    SettingsLabelPipe
+    SettingsLabelPipe,
+    WaterfallGraphComponent
   ],
   providers: [
     ValidationService,
@@ -72,7 +74,8 @@ import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.compo
     ConvertUnitsService,
     UpdateDataService,
     SvgToPngService,
-    LineChartHelperService
+    LineChartHelperService,
+    WaterfallGraphService
   ]
 })
 
