@@ -3,6 +3,9 @@ import { SSMT } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { WaterfallItem, WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
+import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-report-graphs',
@@ -15,6 +18,10 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   assessment: Assessment;
   @Input()
+  baselineLosses: SSMTLosses;
+  @Input()
+  modificationLosses: Array<{ outputData: SSMTLosses, name: string }>;
+  @Input()
   printView: boolean;
   @Input()
   printSankey: boolean;
@@ -22,7 +29,7 @@ export class ReportGraphsComponent implements OnInit {
   printGraphs: boolean;
 
   @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
-  @ViewChild('barChartContainer') barChartContainer: ElementRef;
+  @ViewChild('waterfallChartContainer') waterfallChartContainer: ElementRef;
 
   ssmt: SSMT;
 
@@ -48,13 +55,21 @@ export class ReportGraphsComponent implements OnInit {
   allProcessPieValues: Array<Array<number>>;
   allGenerationPieValues: Array<Array<number>>;
 
+  ssmt1WaterfallData: WaterfallInput;
+  ssmt2WaterfallData: WaterfallInput;
 
   modExists: boolean = false;
   graphColors: Array<string>;
 
+  steamPowerUnit: string = 'kW';
+
+  // number formatter for d3
+  format: any;
+
   constructor() { }
 
   ngOnInit() {
+    this.setFormat();
     this.ssmt = this.assessment.ssmt;
     this.graphColors = graphColors;
     this.ssmt1ProcessPieValues = new Array<number>();
@@ -64,6 +79,11 @@ export class ReportGraphsComponent implements OnInit {
     this.ssmtOptions = new Array<{ name: string, ssmt: SSMT, index: number }>();
     this.prepSsmtOptions();
     this.setPieData();
+    this.setWaterfallData();
+  }
+
+  setFormat() {
+    this.format = d3.format(',.2f');
   }
 
   setPieData() {
@@ -127,6 +147,7 @@ export class ReportGraphsComponent implements OnInit {
       this.ssmt2GenerationExportName = this.assessment.name + '-generation-' + this.selectedSsmt2.name;
     }
     this.setPieData();
+    this.setWaterfallData();
   }
 
   getProcessUsageData(ssmt: SSMT): Array<number> {
@@ -152,16 +173,16 @@ export class ReportGraphsComponent implements OnInit {
     let l = processUsageData.length;
     let processUsageLabels = new Array<string>();
     if (l === 1) {
-      processUsageLabels.push('HP: ' + processUsageData[0]);
+      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
     }
     else if (l === 2) {
-      processUsageLabels.push('HP: ' + processUsageData[0]);
-      processUsageLabels.push('LP: ' + processUsageData[1]);
+      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
+      processUsageLabels.push('LP: ' + this.format(processUsageData[1]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
     }
     else if (l === 3) {
-      processUsageLabels.push('HP: ' + processUsageData[0]);
-      processUsageLabels.push('MP: ' + processUsageData[1]);
-      processUsageLabels.push('LP: ' + processUsageData[2]);
+      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
+      processUsageLabels.push('MP: ' + this.format(processUsageData[1]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
+      processUsageLabels.push('LP: ' + this.format(processUsageData[2]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
     }
     return processUsageLabels;
   }
@@ -170,16 +191,16 @@ export class ReportGraphsComponent implements OnInit {
     let generationData = new Array<number>();
     if (ssmt.turbineInput) {
       if (ssmt.turbineInput.condensingTurbine.useTurbine) {
-        generationData.push(ssmt.turbineInput.condensingTurbine.generationEfficiency);
+        generationData.push(ssmt.outputData.condensingTurbine.powerOut);
       }
       if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-        generationData.push(ssmt.turbineInput.highToLowTurbine.generationEfficiency);
+        generationData.push(ssmt.outputData.highToLowPressureTurbine.powerOut);
       }
       if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
-        generationData.push(ssmt.turbineInput.highToMediumTurbine.generationEfficiency);
+        generationData.push(ssmt.outputData.highPressureToMediumPressureTurbine.powerOut);
       }
       if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-        generationData.push(ssmt.turbineInput.mediumToLowTurbine.generationEfficiency);
+        generationData.push(ssmt.outputData.mediumToLowPressureTurbine.powerOut);
       }
     }
     else {
@@ -193,23 +214,22 @@ export class ReportGraphsComponent implements OnInit {
     let generationLabels = new Array<string>();
     let i = 0;
     if (ssmt.turbineInput.condensingTurbine.useTurbine) {
-      generationLabels.push('Condensing Turbine: ' + generationData[i]);
+      generationLabels.push('Condensing Turbine: ' + this.format(generationData[i]) + ' ' + this.steamPowerUnit);
       i++;
     }
     if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-      generationLabels.push('HP to LP: ' + generationData[i]);
+      generationLabels.push('HP to LP: ' + this.format(generationData[i]) + ' ' + this.steamPowerUnit);
       i++;
     }
     if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
-      generationLabels.push('HP to MP: ' + generationData[i]);
+      generationLabels.push('HP to MP: ' + this.format(generationData[i]) + ' ' + this.steamPowerUnit);
       i++;
     }
     if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-      generationLabels.push('MP to LP: ' + generationData[i]);
+      generationLabels.push('MP to LP: ' + this.format(generationData[i]) + ' ' + this.steamPowerUnit);
     }
     return generationLabels;
   }
-
 
   getPieWidth(): number {
     if (this.pieChartContainer) {
@@ -219,5 +239,93 @@ export class ReportGraphsComponent implements OnInit {
     else {
       return 0;
     }
+  }
+
+
+
+  // waterfall functions
+  setWaterfallData() {
+    this.ssmt1WaterfallData = null;
+    this.ssmt2WaterfallData = null;
+    this.ssmt1WaterfallData = this.getWaterfallData(this.selectedSsmt1, "#74E88B", "#ED6F5B", "#17ADD3");
+    if (this.modExists) {
+      this.ssmt2WaterfallData = this.getWaterfallData(this.selectedSsmt2, "#74E88B", "#ED6F5B", "#17ADD3");
+    }
+  }
+
+  getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, startColor: string, lossColor: string, netColor: string) {
+    let tmpLosses: SSMTLosses;
+    if (selectedSsmt.index == 0) {
+      tmpLosses = this.baselineLosses;
+    }
+    else {
+      tmpLosses = this.modificationLosses[selectedSsmt.index - 1].outputData;
+    }
+    let inputObjects: Array<WaterfallItem> = new Array<WaterfallItem>();
+    let startNode: WaterfallItem = {
+      value: tmpLosses.fuelEnergy,
+      label: 'Input Energy',
+      isStartValue: true,
+      isNetValue: false
+    }
+    let processUseNetNode: WaterfallItem = {
+      value: tmpLosses.allProcessUsageUsefulEnergy,
+      label: 'Process Use',
+      isStartValue: false,
+      isNetValue: true
+    };
+    let turbineUseNetNode: WaterfallItem = {
+      value: tmpLosses.highToLowTurbineUsefulEnergy + tmpLosses.highToMediumTurbineUsefulEnergy + tmpLosses.mediumToLowTurbineUsefulEnergy + tmpLosses.condensingTurbineUsefulEnergy,
+      label: 'Turbine Generation',
+      isStartValue: false,
+      isNetValue: true
+    }
+    let otherLossNode: WaterfallItem = {
+      value: tmpLosses.totalOtherLosses,
+      label: 'Other Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let stackLossNode: WaterfallItem = {
+      value: tmpLosses.stack,
+      label: 'Stack Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let turbineLossNode: WaterfallItem = {
+      value: tmpLosses.highToLowTurbineEfficiencyLoss + tmpLosses.highToMediumTurbineEfficiencyLoss + tmpLosses.mediumToLowTurbineEfficiencyLoss + tmpLosses.condensingTurbineEfficiencyLoss + tmpLosses.condensingLosses,
+      label: 'Turbine Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let condensateLossNode: WaterfallItem = {
+      value: tmpLosses.condensateLosses,
+      label: 'Condensate Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    inputObjects = [startNode, turbineUseNetNode, turbineLossNode, processUseNetNode, condensateLossNode, stackLossNode, otherLossNode];
+
+    let waterfallData: WaterfallInput = {
+      name: selectedSsmt.name,
+      inputObjects: inputObjects,
+      startColor: startColor,
+      lossColor: lossColor,
+      netColor: netColor
+    };
+    return waterfallData;
+  }
+
+  getWaterfallWidth(): number {
+    if (this.waterfallChartContainer) {
+      return this.waterfallChartContainer.nativeElement.clientWidth;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  getWaterfallHeight(): number {
+    return 500;
   }
 }

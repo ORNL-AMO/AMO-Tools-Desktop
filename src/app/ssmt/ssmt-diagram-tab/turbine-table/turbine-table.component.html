@@ -1,8 +1,11 @@
 <div class="d-flex flex-column">
   <label class="group-label">{{turbineName}} Steam Turbine Properties</label>
-  <app-turbine-results [settings]="settings" [results]="turbine"></app-turbine-results>
-  <div class="w-100 text-center">
+  <app-turbine-results *ngIf="turbine" [settings]="settings" [results]="turbine"></app-turbine-results>
+  <div class="w-100 text-center" *ngIf="turbine">
     <a class="click-link small" (click)="goToCalculator()"><span class="fa fa-calculator click-item pr-2"></span>Copy to
       Turbine Calculator</a>
+  </div>
+  <div class="p-4 text-center" *ngIf="!turbine">
+    <span class="alert alert-warning">No turbine selected for this setup.</span>
   </div>
 </div>
