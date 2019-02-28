@@ -1,0 +1,7 @@
+/* .waterfall-node-label-title {
+    font-weight: bold;
+} */
+
+.waterfall-line {
+    stroke-dasharray: 5,5;
+}
