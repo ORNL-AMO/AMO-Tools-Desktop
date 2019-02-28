@@ -38,7 +38,7 @@
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
       <span *ngIf="headerForm.controls.processSteamUsage.errors.min">Value can't be less than
         {{headerForm.controls.processSteamUsage.errors.min.min}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
     </span>
   </div>
 

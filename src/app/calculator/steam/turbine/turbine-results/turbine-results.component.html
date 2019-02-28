@@ -8,7 +8,7 @@
     <tr>
       <td colspan="2" class="bold">Energy Out</td>
       <td colspan="2" class="text-center">{{results.energyOut |number:'1.0-1'}}
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
 
@@ -20,7 +20,7 @@
     <tr>
       <td colspan="2" class="bold">Power Out</td>
       <td colspan="2" class="text-center">{{results.powerOut |number:'1.0-1'}}
-        <span [innerHTML]="settings.steamMassPowerMeasurement | settingsLabel"></span>
+        <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
       </td>
     </tr>
     <tr>

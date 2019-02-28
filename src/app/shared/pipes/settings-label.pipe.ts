@@ -8,11 +8,14 @@ export class SettingsLabelPipe implements PipeTransform {
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  transform(value: any, args?: any): any {
+  transform(value: string, per?: string): any {
     if (value && value !== 'F' && value !== 'C' && value !== 'K') {
       let dispUnit: string = this.convertUnitsService.getUnit(value).unit.name.display;
       dispUnit = dispUnit.replace('(', '');
       dispUnit = dispUnit.replace(')', '');
+      if(per && value != 'kWh'){
+        dispUnit = dispUnit + per
+      }
       return dispUnit;
     } else if (value && (value === 'F' || value === 'C' || value === 'K')) {
       if (value === 'F') {
