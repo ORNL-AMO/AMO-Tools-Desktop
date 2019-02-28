@@ -1,5 +1,5 @@
-<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram" *ngIf="outputData && dataCalculated">
-  <div class="d-flex flex-column panel-column scroll-item diagram-container align-content-stretch"
+<div class="d-flex ssmt modify-conditions panel-container ssmt-diagram w-100" *ngIf="outputData && dataCalculated">
+  <div class="d-flex flex-column panel-column scroll-item diagram-container align-items-center"
     [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex justify-content-center pt-2">
       <div class="form-group">
@@ -20,7 +20,7 @@
     </div>
     <!-- </div> -->
   </div>
-  <div class="d-flex flex-column diagram-help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}"
+  <div class="d-flex flex-column flex-fill diagram-help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}"
     *ngIf="outputData">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">

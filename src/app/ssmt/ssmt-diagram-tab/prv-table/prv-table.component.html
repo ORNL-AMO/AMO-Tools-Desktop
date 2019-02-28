@@ -1,8 +1,11 @@
 <div class="d-flex flex-column">
   <label class="group-label">{{prvLabel}} Pressure Releasing Valve</label>
-  <app-prv-results [results]="prv" [settings]="settings"></app-prv-results>
-  <div class="w-100 text-center">
+  <app-prv-results *ngIf="prv" [results]="prv" [settings]="settings"></app-prv-results>
+  <div class="w-100 text-center" *ngIf="prv">
     <a class="click-link small" (click)="goToCalculator()"><span class="fa fa-calculator click-item pr-2"></span>Copy to
       PRV Calculator</a>
+  </div>
+  <div class="p-4 text-center" *ngIf="!prv">
+    <span class="alert alert-warning">No prv selected for this setup.</span>
   </div>
 </div>

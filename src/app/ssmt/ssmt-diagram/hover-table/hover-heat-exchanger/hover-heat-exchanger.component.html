@@ -20,7 +20,7 @@
       </td>
       <td class="bold">Hot Inlet</td>
       <td class="text-center">{{heatExchangerInput.hotInletTemperature | number:'1.0-1'}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </td>
     </tr>
     <tr>
@@ -30,7 +30,7 @@
       </td>
       <td class="bold">Hot Outlet</td>
       <td class="text-center">{{outputData.heatExchangerOutput.hotOutletTemperature |number:'1.0-1'}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </td>
     </tr>
   </tbody>

@@ -1,6 +1,6 @@
 <div class="d-flex flex-column">
   <label class="group-label">Heat Exchanger</label>
-  <table #copyTable0 class="table table-hover table-striped">
+  <table #copyTable0 class="table table-hover table-striped" *ngIf="heatExchangerOutput">
     <tbody>
       <tr>
         <td colspan="3" class="bold">Hot Inlet / Cold Outlet Temperature Difference</td>
@@ -133,12 +133,10 @@
       </tr>
     </tbody>
   </table>
-  <!-- <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
-  </app-exportable-results-table> -->
+  <div class="p-4 text-center" *ngIf="!heatExchangerOutput">
+    <span class="alert alert-warning">No heat exchanger selected for this setup.</span>
+  </div>
 
-
-  <!-- <div class="w-100 text-center">
-    <a class="click-link small" (click)="goToCalculator()"><span class="fa fa-calculator click-item pr-2"></span>Copy to
-      PRV Calculator</a>
-  </div> -->
+  <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+  </app-exportable-results-table>
 </div>

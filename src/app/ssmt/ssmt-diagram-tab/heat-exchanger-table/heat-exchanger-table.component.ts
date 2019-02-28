@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { SSMTOutput, HeatExchangerOutput, SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 import { HeatExchangerInput } from '../../../shared/models/steam/steam-inputs';
@@ -18,12 +18,30 @@ export class HeatExchangerTableComponent implements OnInit {
   @Input()
   inputData: SSMTInputs;
 
+  @ViewChild('copyTable0') copyTable0: ElementRef;
+  table0String: any;
+
   heatExchangerOutput: HeatExchangerOutput;
 
   heatExchangerInput: HeatExchangerInput;
   constructor(private steamService: SteamService) { }
 
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes.outputData.isFirstChange()) {
+      this.getData();
+    }
+  }
+
   ngOnInit() {
+    this.getData();
+  }
+
+  updateTable0String() {
+    this.table0String = this.copyTable0.nativeElement.innerText;
+  }
+
+  getData() {
     this.heatExchangerOutput = this.outputData.heatExchangerOutput;
     if (this.inputData.boilerInput.blowdownFlashed == true) {
       let hotInletProperties: SteamPropertiesOutput = this.steamService.steamProperties(
@@ -44,7 +62,7 @@ export class HeatExchangerTableComponent implements OnInit {
         hotInletDensity: 1 / hotInletProperties.specificVolume,
         hotInletSpecificEnthalpy: this.outputData.blowdownFlashTank.outletLiquidSpecificEnthalpy,
         hotInletSpecificEntropy: this.outputData.blowdownFlashTank.outletLiquidSpecificEntropy,
-        
+
         coldInletMassFlow: this.outputData.makeupWater.massFlow,
         coldInletEnergyFlow: this.outputData.makeupWater.energyFlow,
         coldInletTemperature: this.outputData.makeupWater.temperature,
