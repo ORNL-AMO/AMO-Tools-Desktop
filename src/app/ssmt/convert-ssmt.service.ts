@@ -88,7 +88,7 @@ export class ConvertSsmtService {
       }
       if (oldSettings.steamVolumeMeasurement != newSettings.steamVolumeMeasurement) {
         let convertOne: number = this.convertUnitsService.value(1).from(oldSettings.steamVolumeMeasurement).to(newSettings.steamVolumeMeasurement);
-        ssmt.operatingCosts.makeUpWaterCost = this.convertUnitsService.roundVal(ssmt.operatingCosts.makeUpWaterCost / convertOne, 4);
+        ssmt.operatingCosts.makeUpWaterCost = ssmt.operatingCosts.makeUpWaterCost / convertOne
       }
     }
     return ssmt;
