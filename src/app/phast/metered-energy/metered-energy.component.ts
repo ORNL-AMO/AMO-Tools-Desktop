@@ -19,6 +19,8 @@ export class MeteredEnergyComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
 
   results: MeteredEnergyResults = {
@@ -61,7 +63,7 @@ export class MeteredEnergyComponent implements OnInit {
       meteredEnergySteam: this.getEmptySteamInput(),
       fuel: fuel,
       steam: steam,
-      electricity: electricity
+      electricity: electricity,
     };
   }
 
@@ -119,9 +121,12 @@ export class MeteredEnergyComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  setField(currentField: string, energySource: string) {
-    this.currentField = currentField;
+  setField(energySource: string) {
     this.energySource = energySource;
+  }
+  
+  changeField(str: string) {
+    this.currentField = str;
   }
 
   getEmptySteamInput(): MeteredEnergySteam {

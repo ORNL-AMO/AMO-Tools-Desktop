@@ -17,6 +17,8 @@ export class DesignedEnergyComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   results: DesignedEnergyResults = {
     designedEnergyUsed: 0,

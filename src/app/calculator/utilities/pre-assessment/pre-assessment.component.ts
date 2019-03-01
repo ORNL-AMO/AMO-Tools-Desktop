@@ -47,7 +47,6 @@ export class PreAssessmentComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   results: Array<any>;
-  currentEnergySourceType: string = 'Electricity';
   currentAssessmentType: string = 'Metered';
   nameIndex: number = 1;
   assessmentGraphColors: Array<string>;
@@ -148,12 +147,6 @@ export class PreAssessmentComponent implements OnInit {
 
   setCurrentField(str: string) {
     this.currentField = str;
-  }
-
-  setEnergySourceType(str: string) {
-    if (str !== this.currentEnergySourceType) {
-      this.currentEnergySourceType = str;
-    }
   }
 
   setAssessmentType(str: string) {

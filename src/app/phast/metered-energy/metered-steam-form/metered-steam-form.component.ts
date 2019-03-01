@@ -16,8 +16,8 @@ export class MeteredSteamFormComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   @Input()
   inCalc: boolean;
 
@@ -26,8 +26,8 @@ export class MeteredSteamFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  focusField(str: string) {
-    this.changeField.emit(str);
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   calculate() {

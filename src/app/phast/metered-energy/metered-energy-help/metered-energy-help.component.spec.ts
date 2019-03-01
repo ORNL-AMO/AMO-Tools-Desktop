@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MeteredFuelHelpComponent } from './metered-fuel-help.component';
+import { MeteredEnergyHelpComponent } from './metered-energy-help.component';
 
-describe('MeteredFuelHelpComponent', () => {
-  let component: MeteredFuelHelpComponent;
-  let fixture: ComponentFixture<MeteredFuelHelpComponent>;
+describe('MeteredEnergyHelpComponent', () => {
+  let component: MeteredEnergyHelpComponent;
+  let fixture: ComponentFixture<MeteredEnergyHelpComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MeteredFuelHelpComponent ]
+      declarations: [ MeteredEnergyHelpComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MeteredFuelHelpComponent);
+    fixture = TestBed.createComponent(MeteredEnergyHelpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
