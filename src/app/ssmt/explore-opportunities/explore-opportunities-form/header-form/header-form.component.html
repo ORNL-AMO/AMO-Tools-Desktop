@@ -165,9 +165,9 @@
         <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.processSteamUsage.invalid && !baselineHighPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
           <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
-            {{baselineHighPressureForm.controls.processSteamUsage.errors.max.max}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            {{baselineHighPressureForm.controls.processSteamUsage.errors.max.max}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
-            {{baselineHighPressureForm.controls.processSteamUsage.errors.min.min}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            {{baselineHighPressureForm.controls.processSteamUsage.errors.min.min}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </span>
       </div>
     </form>
@@ -204,7 +204,7 @@
         <div class="input-group">
           <input name="baselineMPSteamUsage" type="number" step="any" id="baselineMPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="baselineMediumPressureForm.controls.processSteamUsage.invalid && !baselineMediumPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
