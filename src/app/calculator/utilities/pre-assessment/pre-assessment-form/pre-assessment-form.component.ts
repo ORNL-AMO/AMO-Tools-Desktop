@@ -37,8 +37,6 @@ export class PreAssessmentFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
   @Output('emitAssessmentType')
   emitAssessmentType = new EventEmitter<string>();
-  @Output('emitEnergyType')
-  emitEnergyType = new EventEmitter<string>();
 
   isEditingName: boolean = false;
 
@@ -73,7 +71,6 @@ export class PreAssessmentFormComponent implements OnInit {
 
   changeField(data: { inputField: string, energyType: string }) {
     this.emitChangeField.emit(data.inputField);
-    this.emitEnergyType.emit(data.energyType);
     this.changeAssessmentType();
   }
 

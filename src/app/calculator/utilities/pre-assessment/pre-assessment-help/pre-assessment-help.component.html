@@ -1,11 +1,7 @@
 <div *ngIf="currentAssessmentType == 'Metered'">
-  <div class="help-header" *ngIf="!showDescription">
-  </div>
-  <app-metered-energy-help [inPreAssessment]="!showDescription" [currentField]="currentField"></app-metered-energy-help>
+  <app-metered-energy-help [currentField]="currentField"></app-metered-energy-help>
 </div>
 
 <div *ngIf="currentAssessmentType == 'Designed'">
-  <div class="help-header" *ngIf="!showDescription">
-  </div>
-  <app-designed-energy-help [inPreAssessment]="!showDescription" [currentField]="currentField"></app-designed-energy-help>
+  <app-designed-energy-help [currentField]="currentField"></app-designed-energy-help>
 </div>

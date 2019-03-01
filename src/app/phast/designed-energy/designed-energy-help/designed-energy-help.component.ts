@@ -8,14 +8,6 @@ import { Component, OnInit, Input } from '@angular/core';
 export class DesignedEnergyHelpComponent implements OnInit {
   @Input()
   currentField: string;
-  @Input()
-  inPreAssessment: boolean;
-  @Input()
-  showSteam: boolean;
-  @Input()
-  showElectricity: boolean;
-  @Input()
-  showFuel: boolean;
 
   constructor() { }
 

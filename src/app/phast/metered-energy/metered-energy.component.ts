@@ -126,7 +126,7 @@ export class MeteredEnergyComponent implements OnInit {
   }
   
   changeField(str: string) {
-    this.emitChangeField.emit(str);
+    this.currentField = str;
   }
 
   getEmptySteamInput(): MeteredEnergySteam {
