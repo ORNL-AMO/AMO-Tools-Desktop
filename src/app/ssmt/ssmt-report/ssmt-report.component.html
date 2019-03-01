@@ -108,8 +108,8 @@
         [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
         [tableCellWidth]="tableCellWidth" [inRollup]="inRollup" [assessment]="assessment"></app-losses-summary>
     </div>
-    <div class="results scroll-item report-diagrams" *ngIf="currentTab == 'diagram' && dataCalculated"
-      [ngStyle]="{'height.px':reportContainerHeight}">
+    <div class="results scroll-item" *ngIf="currentTab == 'diagram' && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}" [ngClass]="{'report-diagrams': inRollup}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
         [modificationOutputs]="modificationOutputs" [modificationInputData]="modificationInputData">
       </app-report-diagram>

@@ -146,8 +146,8 @@
         <label for="baselineBlowdownFlashed">Baseline Blowdown Flashed</label>
         <select name="baselineBlowdownFlashed" id="baselineBlowdownFlashed" class="form-control" (focus)="focusField('blowdownFlashed')"
           (change)="save()" formControlName="blowdownFlashed">
-          <option [ngValue]="1">Yes</option>
-          <option [ngValue]="0">No</option>
+          <option [ngValue]="true">Yes</option>
+          <option [ngValue]="false">No</option>
         </select>
       </div>
     </form>
@@ -156,8 +156,8 @@
         <label for="modificationBlowdownFlashed">Modification Blowdown Flashed</label>
         <select name="modificationBlowdownFlashed" id="modificationBlowdownFlashed" class="form-control" (focus)="focusField('blowdownFlashed')"
           (change)="save()" formControlName="blowdownFlashed">
-          <option [ngValue]="1">Yes</option>
-          <option [ngValue]="0">No</option>
+          <option [ngValue]="true">Yes</option>
+          <option [ngValue]="false">No</option>
         </select>
       </div>
     </form>
@@ -175,8 +175,8 @@
         <label for="baselinePreheatBlowdownWater">Baseline Preheat Make-up Water</label>
         <select name="baselinePreheatBlowdownWater" id="baselinePreheatBlowdownWater" class="form-control" (focus)="focusField('preheatMakeupWater')"
           (change)="save()" formControlName="preheatMakeupWater">
-          <option [ngValue]="1">Yes</option>
-          <option [ngValue]="0">No</option>
+          <option [ngValue]="true">Yes</option>
+          <option [ngValue]="false">No</option>
         </select>
       </div>
       <div class="form-group">
@@ -199,8 +199,8 @@
         <label for="modificationPreheatBlowdownWater">Modification Preheat Make-up Water</label>
         <select name="modificationPreheatBlowdownWater" id="modificationPreheatBlowdownWater" class="form-control"
           (focus)="focusField('preheatMakeupWater')" (change)="save()" formControlName="preheatMakeupWater">
-          <option [ngValue]="1">Yes</option>
-          <option [ngValue]="0">No</option>
+          <option [ngValue]="true">Yes</option>
+          <option [ngValue]="false">No</option>
         </select>
       </div>
       <div class="form-group">

@@ -2,7 +2,7 @@
    .diagram-container{
        width: 70% !important;
        font-size: small;
-       min-width: 800px;
+       min-width: 875px;
        overflow-x: auto;
    }
    
