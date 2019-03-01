@@ -86,17 +86,18 @@ export class CalculateModelService {
     private operationsService: OperationsService, private heatExchangerService: HeatExchangerService) { }
 
   initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
+    let ssmtCopy: SSMT = JSON.parse(JSON.stringify(_ssmt));
     this.initResults();
-    let boilerValid: boolean = this.boilerService.isBoilerValid(_ssmt.boilerInput, _settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(_ssmt.headerInput, _settings);
-    let turbineValid: boolean = this.turbineService.isTurbineValid(_ssmt.turbineInput, _ssmt.headerInput, _settings);
-    let operationsValid: boolean = this.operationsService.getForm(_ssmt, _settings).valid;
+    let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, _settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, _settings);
+    let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, _settings).valid;
 
     this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
     this.isBaselineCalculation = isBaseline;
     this.baselinePowerDemand = baselinePowerDemand;
     this.calcCount = 0;
-    this.inputData = this.getInputDataFromSSMT(_ssmt);
+    this.inputData = this.getInputDataFromSSMT(ssmtCopy);
     this.settings = _settings;
     if (turbineValid && headerValid && boilerValid && operationsValid) {
       return this.calculateModelRunner();
@@ -106,19 +107,19 @@ export class CalculateModelService {
     }
   }
 
-  getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
+  getInputDataFromSSMT(ssmt: SSMT): SSMTInputs {
     let inputData: SSMTInputs = {
       operationsInput: {
-        sitePowerImport: _ssmt.generalSteamOperations.sitePowerImport,
-        makeUpWaterTemperature: _ssmt.generalSteamOperations.makeUpWaterTemperature,
-        operatingHoursPerYear: _ssmt.operatingHours.hoursPerYear,
-        fuelCosts: _ssmt.operatingCosts.fuelCost,
-        electricityCosts: _ssmt.operatingCosts.electricityCost,
-        makeUpWaterCosts: _ssmt.operatingCosts.makeUpWaterCost,
+        sitePowerImport: ssmt.generalSteamOperations.sitePowerImport,
+        makeUpWaterTemperature: ssmt.generalSteamOperations.makeUpWaterTemperature,
+        operatingHoursPerYear: ssmt.operatingHours.hoursPerYear,
+        fuelCosts: ssmt.operatingCosts.fuelCost,
+        electricityCosts: ssmt.operatingCosts.electricityCost,
+        makeUpWaterCosts: ssmt.operatingCosts.makeUpWaterCost,
       },
-      boilerInput: _ssmt.boilerInput,
-      headerInput: _ssmt.headerInput,
-      turbineInput: _ssmt.turbineInput
+      boilerInput: ssmt.boilerInput,
+      headerInput: ssmt.headerInput,
+      turbineInput: ssmt.turbineInput
     };
     return inputData;
   }
