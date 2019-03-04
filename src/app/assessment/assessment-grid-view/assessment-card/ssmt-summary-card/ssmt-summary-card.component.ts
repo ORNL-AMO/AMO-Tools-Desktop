@@ -27,26 +27,28 @@ export class SsmtSummaryCardComponent implements OnInit {
 
   @ViewChild('reportModal') public reportModal: ModalDirective;
 
+  assessmentCpy: Assessment;
   constructor(private calculateModelService: CalculateModelService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    this.setupDone = this.assessment.ssmt.setupDone;
+    this.assessmentCpy = JSON.parse(JSON.stringify(this.assessment));
+    this.setupDone = this.assessmentCpy.ssmt.setupDone;
     if (this.setupDone) {
-      this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
+      this.settings = this.settingsDbService.getByAssessmentId(this.assessmentCpy);
       this.getBaselineData();
-      if (this.assessment.ssmt.modifications) {
+      if (this.assessmentCpy.ssmt.modifications) {
         this.getModificationData();
       }
     }
   }
 
   getBaselineData() {
-    this.baselineData = this.getData(this.assessment.ssmt, true);
+    this.baselineData = this.getData(this.assessmentCpy.ssmt, true);
   }
 
   getModificationData() {
-    this.numMods = this.assessment.ssmt.modifications.length;
-    this.assessment.ssmt.modifications.forEach(mod => {
+    this.numMods = this.assessmentCpy.ssmt.modifications.length;
+    this.assessmentCpy.ssmt.modifications.forEach(mod => {
       let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.getData(mod.ssmt, false);
       if (results.outputData.boilerOutput) {
         let tmpSavingCalc = this.baselineData.outputData.totalOperatingCost - results.outputData.totalOperatingCost;
@@ -61,7 +63,7 @@ export class SsmtSummaryCardComponent implements OnInit {
 
   getData(ssmt: SSMT, isBaseline: boolean): { inputData: SSMTInputs, outputData: SSMTOutput } {
     if (ssmt.resultsCalculated) {
-      let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(ssmt);
+      let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(JSON.parse(JSON.stringify(ssmt)));
       return {
         inputData: inputData,
         outputData: ssmt.outputData
