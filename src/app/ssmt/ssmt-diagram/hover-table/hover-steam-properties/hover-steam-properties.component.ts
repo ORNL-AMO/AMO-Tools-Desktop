@@ -107,7 +107,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.hoverVentedLowPressureSteam();
     } else if (this.hoveredProperty === 'heatExchangerHotOutlet') {
       this.hoverHeatExchangerHotOutlet();
-    }else if(this.hoveredProperty === 'coldExchangerHotOutlet'){
+    }else if(this.hoveredProperty === 'heatExchangerColdOutlet'){
       this.hoverHeatExchangerColdOutlet();
     }
   }
