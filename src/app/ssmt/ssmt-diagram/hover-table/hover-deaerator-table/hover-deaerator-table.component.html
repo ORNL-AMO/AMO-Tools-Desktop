@@ -12,11 +12,11 @@
     <tr>
       <td class="bold">Feedwater Flow</td>
       <td class="text-center"> {{deaerator.feedwaterMassFlow | number:'1.0-2'}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td>
       <td class="bold">Vented Flow</td>
       <td class="text-center"> {{deaerator.ventedSteamMassFlow | number:'1.0-2'}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
   </tbody>

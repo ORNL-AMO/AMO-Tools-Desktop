@@ -36,11 +36,11 @@
       <!-- <td class="text-center"></td> -->
     </tr>
     <tr>
-      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
       <td *ngFor="let header of resultsArray" class="text-center">{{header.massFlow | number:'1.0-2'}}
       </td>
       <!-- <td class="text-center">
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td> -->
     </tr>
     <tr>
@@ -60,10 +60,10 @@
       </td> -->
     </tr>
     <tr>
-      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
       <td *ngFor="let header of resultsArray" class="text-center">{{header.energyFlow | number:'1.0-1'}}</td>
       <!-- <td class="text-center">
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td> -->
     </tr>
   </tbody>

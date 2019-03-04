@@ -8,7 +8,7 @@
       </td>
       <td class="bold">Mass Flow</td>
       <td class="text-center">{{steam.massFlow | number:'1.0-2'}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
     <tr>

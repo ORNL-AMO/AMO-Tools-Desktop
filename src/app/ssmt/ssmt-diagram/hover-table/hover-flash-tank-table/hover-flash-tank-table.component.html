@@ -8,17 +8,17 @@
       </td>
       <td class="bold">Inlet Mass Flow</td>
       <td class="text-center"> {{flashTank.inletWaterMassFlow | number:'1.0-2'}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
     <tr>
       <td class="bold">Gas Mass Flow</td>
       <td class="text-center"> {{flashTank.outletGasMassFlow | number:'1.0-2'}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td>
       <td class="bold">Liquid Mass Flow</td>
       <td class="text-center"> {{flashTank.outletLiquidMassFlow | number:'1.0-2'}}
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
   </tbody>

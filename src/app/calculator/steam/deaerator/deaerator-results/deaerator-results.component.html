@@ -87,24 +87,24 @@
           </td>
         </tr> -->
     <tr>
-      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
       <td class="text-center">{{results.inletWaterMassFlow | number:'1.0-2'}}</td>
       <td class="text-center">{{results.inletSteamMassFlow | number:'1.0-2'}}</td>
       <td class="text-center">{{results.ventedSteamMassFlow | number:'1.0-2'}}</td>
       <td class="text-center">{{results.feedwaterMassFlow | number:'1.0-2'}}</td>
       <!-- <td class="text-center">
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td> -->
     </tr>
 
     <tr>
-      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
       <td class="text-center">{{results.inletWaterEnergyFlow | number:'1.0-1'}}</td>
       <td class="text-center">{{results.inletSteamEnergyFlow | number:'1.0-1'}}</td>
       <td class="text-center">{{results.ventedSteamEnergyFlow | number:'1.0-1'}}</td>
       <td class="text-center">{{results.feedwaterEnergyFlow | number:'1.0-1'}}</td>
       <!-- <td class="text-center">
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td> -->
     </tr>
   </tbody>

@@ -2,7 +2,7 @@
   <table class="table table-hover table-striped" *ngIf="baselineLosses">
     <thead>
       <tr>
-        <td [ngStyle]="{'width.%': 15}" class="bold">(<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+        <td [ngStyle]="{'width.%': 15}" class="bold">(<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"
           [ngStyle]="{'width.%': tableCellWidth}" class="text-center bold">Baseline</td>
         <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationLosses; let index = index;"

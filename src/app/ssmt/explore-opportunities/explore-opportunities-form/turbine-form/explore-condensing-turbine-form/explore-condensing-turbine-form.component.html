@@ -69,7 +69,7 @@
         <input name="condensingTurbineBaselineOperationValue" type="number" step="any" class="form-control" id="condensingTurbineBaselineOperationValue"
           (input)="save()" formControlName="operationValue" (focus)="focusOperation(baselineForm.controls.operationType.value)">
         <span class="units input-group-addon">
-          <span *ngIf="baselineForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span *ngIf="baselineForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1">kW</span>
         </span>
       </div>
@@ -77,12 +77,12 @@
         <span *ngIf="baselineForm.controls.operationValue.errors.required">Value Required</span>
         <span *ngIf="baselineForm.controls.operationValue.errors.max">Value can't be greater than
           {{baselineForm.controls.operationValue.errors.max.max}}
-          <span *ngIf="baselineForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span *ngIf="baselineForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1">kW</span>.
         </span>
         <span *ngIf="baselineForm.controls.operationValue.errors.min">Value can't be less than
           {{baselineForm.controls.operationValue.errors.min.min}}
-          <span *ngIf="baselineForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span *ngIf="baselineForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineForm.controls.operationType.value == 1">kW</span>.
         </span>
       </span>
@@ -107,7 +107,7 @@
         <input name="condensingTurbineModificationOperationValue" type="number" step="any" class="form-control" id="condensingTurbineModificationOperationValue"
           (input)="save()" formControlName="operationValue" (focus)="focusOperation(modificationForm.controls.operationType.value)">
         <span class="units input-group-addon">
-          <span *ngIf="modificationForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span *ngIf="modificationForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1">kW</span>
         </span>
       </div>
@@ -115,12 +115,12 @@
         <span *ngIf="modificationForm.controls.operationValue.errors.required">Value Required</span>
         <span *ngIf="modificationForm.controls.operationValue.errors.max">Value can't be greater than
           {{modificationForm.controls.operationValue.errors.max.max}}
-          <span *ngIf="modificationForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span *ngIf="modificationForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1">kW</span>.
         </span>
         <span *ngIf="modificationForm.controls.operationValue.errors.min">Value can't be less than
           {{modificationForm.controls.operationValue.errors.min.min}}
-          <span *ngIf="modificationForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span *ngIf="modificationForm.controls.operationType.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationForm.controls.operationType.value == 1">kW</span>.
         </span>
       </span>

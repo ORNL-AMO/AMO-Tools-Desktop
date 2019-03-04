@@ -41,7 +41,7 @@ export class SsmtResultsPanelComponent implements OnInit {
   constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService) { }
 
   ngOnInit() {
-    this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); })
+    this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); });
   }
 
   ngOnDestroy() {
@@ -74,7 +74,7 @@ export class SsmtResultsPanelComponent implements OnInit {
         this.ssmt.resultsCalculated = true;
         this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = true;
         this.save();
-      }, 750)
+      }, 750);
     } else {
       this.getInputs();
       this.getLosses();
@@ -86,9 +86,9 @@ export class SsmtResultsPanelComponent implements OnInit {
     } else {
       this.modValid = false;
     }
-    if(this.ssmt.outputData.boilerOutput){
+    if (this.ssmt.outputData.boilerOutput) {
       this.baselineValid = true;
-    }else{
+    } else {
       this.baselineValid = false;
     }
 
