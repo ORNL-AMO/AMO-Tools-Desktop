@@ -42,7 +42,16 @@ export class ConvertSsmtService {
 
   convertBoiler(boilerInput: BoilerInput, oldSettings: Settings, newSettings: Settings): BoilerInput {
     if (oldSettings.steamTemperatureMeasurement != newSettings.steamTemperatureMeasurement) {
-      boilerInput.approachTemperature = this.convertValue(boilerInput.approachTemperature, oldSettings.steamTemperatureMeasurement, newSettings.steamTemperatureMeasurement);
+      let approachTempUnitValOld: string = 'R';
+      let approachTempUnitValNew: string = 'R';
+      if (oldSettings.steamTemperatureMeasurement == 'C' || oldSettings.steamTemperatureMeasurement == 'K') {
+        approachTempUnitValOld = 'K';
+      }
+      if (newSettings.steamTemperatureMeasurement == 'C' || newSettings.steamTemperatureMeasurement == 'K') {
+        approachTempUnitValNew = 'K';
+      }
+
+      boilerInput.approachTemperature = this.convertValue(boilerInput.approachTemperature, approachTempUnitValOld, approachTempUnitValNew);
       boilerInput.steamTemperature = this.convertValue(boilerInput.steamTemperature, oldSettings.steamTemperatureMeasurement, newSettings.steamTemperatureMeasurement);
     }
     if (oldSettings.steamPressureMeasurement != newSettings.steamPressureMeasurement) {
