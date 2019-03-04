@@ -129,8 +129,8 @@
 
   <div class="row justify-content-center mt-5 hide-print">
     <div class="col-12" #waterfallChartContainer>
-      <app-waterfall-graph *ngIf="!modExists" [waterfallInput1]="ssmt1WaterfallData"
-        [modExists]="modExists" [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
+      <app-waterfall-graph *ngIf="!modExists" [waterfallInput1]="ssmt1WaterfallData" [modExists]="modExists"
+        [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
       </app-waterfall-graph>
       <app-waterfall-graph *ngIf="modExists" [waterfallInput1]="ssmt1WaterfallData"
         [waterfallInput2]="ssmt2WaterfallData" [changeWaterfall]="changeWaterfall" [modExists]="modExists"
@@ -138,9 +138,12 @@
     </div>
   </div>
 
-  <div class="row justify-content-center show-print">
+  <div *ngIf="printView" class="row justify-content-center show-print">
     <div class="col-12">
-      <app-report-graphs-print [ssmtOptions]="ssmtOptions" [settings]="settings" [modExists]="modExists"></app-report-graphs-print>
+      <app-report-graphs-print [ssmtOptions]="ssmtOptions" [baselineLosses]="baselineLosses"
+        [modificationLosses]="modificationLosses" [settings]="settings" [modExists]="modExists"
+        [printGraphs]="printGraphs">
+      </app-report-graphs-print>
     </div>
   </div>
 

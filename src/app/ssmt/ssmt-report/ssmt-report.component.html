@@ -95,7 +95,7 @@
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
     </div>
-    <div class="results scroll-item print-height" *ngIf="(currentTab == 'executiveSummary' || (showPrint && printExecutiveSummary)) && dataCalculated"
+    <div class="results scroll-item print-height print-break-before" *ngIf="(currentTab == 'executiveSummary' || (showPrint && printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [settings]="settings" [baselineOutput]="baselineOutput"
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
@@ -107,13 +107,13 @@
         [modificationOutputs]="modificationOutputs" [tableCellWidth]="tableCellWidth" [inRollup]="inRollup"
         [assessment]="assessment"></app-energy-summary>
     </div>
-    <div class="results scroll-item print-height" *ngIf="currentTab == 'losses' && dataCalculated"
+    <div class="results scroll-item print-height print-break-before" *ngIf="(currentTab == 'losses' || (showPrint && printLossesSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-losses-summary [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses"
         [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
         [tableCellWidth]="tableCellWidth" [inRollup]="inRollup" [assessment]="assessment"></app-losses-summary>
     </div>
-    <div class="results scroll-item report-diagrams print-height" *ngIf="(currentTab == 'diagram' || (showPrint && printReportDiagram)) && dataCalculated"
+    <div class="results scroll-item report-diagrams hide-print" *ngIf="currentTab == 'diagram' && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
         [modificationOutputs]="modificationOutputs" [modificationInputData]="modificationInputData">
@@ -122,7 +122,7 @@
     <div class="results scroll-item print-height" *ngIf="(currentTab == 'reportGraphs' || (showPrint && printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-report-graphs [settings]="settings" [assessment]="assessment" [baselineLosses]="baselineLosses"
-        [modificationLosses]="modificationLosses" [printView]="printView" [printGraphs]="printGraphs">
+        [modificationLosses]="modificationLosses" [printView]="showPrint" [printGraphs]="printReportGraphs">
       </app-report-graphs>
     </div>
     <div class="results scroll-item input-data print-height" *ngIf="(currentTab == 'inputData' || (showPrint && printInputData)) && dataCalculated"

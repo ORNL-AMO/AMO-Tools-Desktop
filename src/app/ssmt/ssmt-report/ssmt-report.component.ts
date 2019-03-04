@@ -196,16 +196,36 @@ export class SsmtReportComponent implements OnInit {
           this.printReportGraphs = true;
           this.printReportSankey = true;
           this.printResults = true;
+          this.printExecutiveSummary = true;
+          this.printEnergySummary = true;
+          this.printLossesSummary = true;
+          this.printReportDiagram = true;
         }
         else {
           this.printReportGraphs = false;
           this.printReportSankey = false;
           this.printResults = false;
+          this.printExecutiveSummary = false;
+          this.printEnergySummary = false;
+          this.printLossesSummary = false;
+          this.printReportDiagram = false;
         }
         break;
       }
       case "executiveSummary": {
         this.printExecutiveSummary = !this.printExecutiveSummary
+        break;
+      }
+      case "energySummary": {
+        this.printEnergySummary = !this.printEnergySummary;
+        break;
+      }
+      case "lossesSummary": {
+        this.printLossesSummary = !this.printLossesSummary;
+        break;
+      }
+      case "reportDiagram": {
+        this.printReportDiagram = !this.printReportDiagram;
         break;
       }
       case "reportGraphs": {

@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import * as d3 from 'd3';
+import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
+import { WaterfallItem, WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
 
 @Injectable()
 export class ReportGraphsService {
-  
+
   // number formatter for d3
   format: any = d3.format(',.2f');
-  
+
   constructor() { }
 
   getProcessUsageData(ssmt: SSMT): Array<number> {
@@ -51,6 +53,8 @@ export class ReportGraphsService {
   getGenerationData(ssmt: SSMT): Array<number> {
     let generationData = new Array<number>();
     if (ssmt.turbineInput) {
+      console.log('ssmt.turbineInput = ');
+      console.log(ssmt.turbineInput);
       if (ssmt.turbineInput.condensingTurbine.useTurbine) {
         generationData.push(ssmt.outputData.condensingTurbine.powerOut);
       }
@@ -74,21 +78,93 @@ export class ReportGraphsService {
     let l = generationData.length;
     let generationLabels = new Array<string>();
     let i = 0;
-    if (ssmt.turbineInput.condensingTurbine.useTurbine) {
-      generationLabels.push('Condensing Turbine: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
-      i++;
-    }
-    if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-      generationLabels.push('HP to LP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
-      i++;
-    }
-    if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
-      generationLabels.push('HP to MP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
-      i++;
-    }
-    if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-      generationLabels.push('MP to LP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
+    if (ssmt.turbineInput) {
+      if (ssmt.turbineInput.condensingTurbine.useTurbine) {
+        // if (ssmt.turbineInput.condensingTurbine !== undefined && ssmt.turbineInput.condensingTurbine !== null && ssmt.turbineInput.condensingTurbine.useTurbine) {
+        generationLabels.push('Condensing Turbine: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
+        i++;
+      }
+      if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
+        // if (ssmt.turbineInput.highToLowTurbine !== undefined && ssmt.turbineInput.highToLowTurbine !== null && ssmt.turbineInput.highToLowTurbine.useTurbine) {
+        generationLabels.push('HP to LP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
+        i++;
+      }
+      if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
+        // if (ssmt.turbineInput.highToMediumTurbine !== undefined && ssmt.turbineInput.highToMediumTurbine !== null && ssmt.turbineInput.highToMediumTurbine.useTurbine) {
+        generationLabels.push('HP to MP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
+        i++;
+      }
+      if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
+        // if (ssmt.turbineInput.mediumToLowTurbine !== undefined && ssmt.turbineInput.mediumToLowTurbine !== null && ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
+        generationLabels.push('MP to LP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
+      }
     }
     return generationLabels;
+  }
+
+  getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, startColor: string, lossColor: string, netColor: string, baselineLosses: SSMTLosses, modificationLosses?: Array<{ outputData: SSMTLosses, name: string }>) {
+    let tmpLosses: SSMTLosses;
+    if (selectedSsmt.index == 0) {
+      tmpLosses = baselineLosses;
+    }
+    else if (modificationLosses !== undefined && modificationLosses !== null && modificationLosses.length > 0) {
+      tmpLosses = modificationLosses[selectedSsmt.index - 1].outputData;
+    }
+    else {
+      throw "ERROR - Invalid index supplied for waterfall loss data array.";
+    }
+    let inputObjects: Array<WaterfallItem> = new Array<WaterfallItem>();
+    let startNode: WaterfallItem = {
+      value: tmpLosses.fuelEnergy,
+      label: 'Input Energy',
+      isStartValue: true,
+      isNetValue: false
+    }
+    let processUseNetNode: WaterfallItem = {
+      value: tmpLosses.allProcessUsageUsefulEnergy,
+      label: 'Process Use',
+      isStartValue: false,
+      isNetValue: true
+    };
+    let turbineUseNetNode: WaterfallItem = {
+      value: tmpLosses.highToLowTurbineUsefulEnergy + tmpLosses.highToMediumTurbineUsefulEnergy + tmpLosses.mediumToLowTurbineUsefulEnergy + tmpLosses.condensingTurbineUsefulEnergy,
+      label: 'Turbine Generation',
+      isStartValue: false,
+      isNetValue: true
+    }
+    let otherLossNode: WaterfallItem = {
+      value: tmpLosses.totalOtherLosses,
+      label: 'Other Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let stackLossNode: WaterfallItem = {
+      value: tmpLosses.stack,
+      label: 'Stack Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let turbineLossNode: WaterfallItem = {
+      value: tmpLosses.highToLowTurbineEfficiencyLoss + tmpLosses.highToMediumTurbineEfficiencyLoss + tmpLosses.mediumToLowTurbineEfficiencyLoss + tmpLosses.condensingTurbineEfficiencyLoss + tmpLosses.condensingLosses,
+      label: 'Turbine Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    let condensateLossNode: WaterfallItem = {
+      value: tmpLosses.condensateLosses,
+      label: 'Condensate Losses',
+      isStartValue: false,
+      isNetValue: false
+    };
+    inputObjects = [startNode, turbineUseNetNode, turbineLossNode, processUseNetNode, condensateLossNode, stackLossNode, otherLossNode];
+
+    let waterfallData: WaterfallInput = {
+      name: selectedSsmt.name,
+      inputObjects: inputObjects,
+      startColor: startColor,
+      lossColor: lossColor,
+      netColor: netColor
+    };
+    return waterfallData;
   }
 }

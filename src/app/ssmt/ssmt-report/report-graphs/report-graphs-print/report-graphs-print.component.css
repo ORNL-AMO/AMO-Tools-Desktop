@@ -27,6 +27,13 @@
     .print-only-sankey {
         page-break-inside: avoid;
     }
+    .print-waterfall {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+    .print-only-waterfall {
+        page-break-inside: avoid;
+    }
     .print-page-title {
         font-size: 40px !important;
         font-weight: bold;

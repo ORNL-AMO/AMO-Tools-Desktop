@@ -144,9 +144,9 @@ export class WaterfallGraphService {
       })
       .attr('height', this.nodeHeight)
       .attr('x', (width * 0.25) + xScale(maxValue - tmpWaterfallItem.value - xOffset))
-      .attr('y', 0)
-      .transition()
-      .duration(500)
+      // .attr('y', 0)
+      // .transition()
+      // .duration(500)
       .attr('y', this.legendHeight + (this.nodeHeight + 2 * this.verticalNodeMargin) * index);
 
     svg.append('text')
