@@ -1,12 +1,12 @@
 <li>
-  <div class="checkbox">
+  <div class="checkbox" *ngIf="showBaseline">
     <label for="{{turbineType+'modifyOperationType'}}">
       <input type="checkbox" id="{{turbineType+'modifyOperationType'}}" (focus)="focusField('operationType')" (change)="toggleOperationType()"
         [(ngModel)]="showOperation" /> Modify Operation Type
     </label>
   </div>
   <!--baseline-->
-  <form [formGroup]="baselineForm" *ngIf="showOperation">
+  <form [formGroup]="baselineForm" *ngIf="showOperation && showBaseline">
     <div class="form-group">
       <label for="{{turbineType+'baselineOperationType'}}">Baseline Operation Type</label>
       <select name="{{turbineType+'baselineOperationType'}}" class="form-control" id="{{turbineType+'baselineOperationType'}}"
@@ -75,7 +75,7 @@
     </div>
   </form>
   <!--Modification-->
-  <form [formGroup]="modificationForm" *ngIf="showOperation">
+  <form [formGroup]="modificationForm" *ngIf="showOperation || !showBaseline">
     <div class="form-group">
       <label for="{{turbineType+'modificationOperationType'}}">Modification Operation Type</label>
       <select name="{{turbineType+'modificationOperationType'}}" class="form-control" id="{{turbineType+'modificationOperationType'}}"
