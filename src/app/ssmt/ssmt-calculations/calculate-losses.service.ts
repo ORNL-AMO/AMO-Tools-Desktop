@@ -113,6 +113,7 @@ export class CalculateLossesService {
         settings
       );
       let loss: number = this.calculateEnergy(turbineOutput.massFlow, (turbineOutput.outletSpecificEnthalpy - outletProperties.specificEnthalpy), settings);
+      loss = this.convertUnitsService.value(loss).from('MJ').to(settings.steamEnergyMeasurement);
       return loss;
     } else {
       return 0;
