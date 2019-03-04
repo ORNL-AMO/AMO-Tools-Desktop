@@ -75,9 +75,9 @@
 
       <div class="form-group">
         <label for="{{idString+'preheatMakeupWater'}}">Preheat Make-up Water with Blowdown</label>
-        <select name="preheatMakeupWater" class="form-control" id="{{idString+'preheatMakeupWater'}}" (change)="setPreheatMakeupWater()"
-          (focus)="focusField('preheatMakeupWater')" (blur)="focusOut()" formControlName="preheatMakeupWater"
-          [ngClass]="{'indicate-different': isPreheatMakeupWaterDifferent()}">
+        <select name="preheatMakeupWater" class="form-control" id="{{idString+'preheatMakeupWater'}}"
+          (change)="setPreheatMakeupWater()" (focus)="focusField('preheatMakeupWater')" (blur)="focusOut()"
+          formControlName="preheatMakeupWater" [ngClass]="{'indicate-different': isPreheatMakeupWaterDifferent()}">
           <option [ngValue]="true">Yes</option>
           <option [ngValue]="false">No</option>
         </select>
@@ -96,9 +96,8 @@
         <span class="alert-danger pull-right small"
           *ngIf="boilerForm.controls.approachTemperature.invalid && !boilerForm.controls.approachTemperature.pristine">
           <span *ngIf="boilerForm.controls.approachTemperature.errors.required">Value Required</span>
-          <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value can't be less than
-            {{boilerForm.controls.approachTemperature.errors.min.min}}
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+          <span *ngIf="boilerForm.controls.approachTemperature.errors.min">Value must be greater than 0 <span
+              [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
       </div>
 

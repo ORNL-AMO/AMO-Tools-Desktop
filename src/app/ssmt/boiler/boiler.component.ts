@@ -97,8 +97,7 @@ export class BoilerComponent implements OnInit {
 
   setPreheatMakeupWater() {
     if (this.boilerForm.controls.preheatMakeupWater.value == true) {
-      let tmpRanges: BoilerRanges = this.boilerService.getRanges(this.settings);
-      this.boilerForm.controls.approachTemperature.setValidators([Validators.min(tmpRanges.approachTempMin), Validators.required]);
+      this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required]);
     } else {
       this.boilerForm.controls.approachTemperature.setValidators([]);
     }
