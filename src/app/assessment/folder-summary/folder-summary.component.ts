@@ -117,10 +117,10 @@ export class FolderSummaryComponent implements OnInit {
             let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
             let results: { inputData: SSMTInputs, outputData: SSMTOutput }
             if (assessment.ssmt.resultsCalculated) {
-              let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(assessment.ssmt);
+              let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(JSON.parse(JSON.stringify(assessment.ssmt)));
               results = {
                 inputData: inputData,
-                outputData: assessment.ssmt.outputData
+                outputData: JSON.parse(JSON.stringify(assessment.ssmt.outputData))
               }
             }
             else {
