@@ -1519,6 +1519,15 @@ export class CalculateModelService {
       this.settings
     );
 
+    let outletLiquidProperties: SteamPropertiesOutput = this.steamService.steamProperties(
+      {
+        pressure: this.condensateFlashTank.outletLiquidPressure,
+        thermodynamicQuantity: 1,
+        quantityValue: this.condensateFlashTank.outletLiquidSpecificEnthalpy
+      },
+      this.settings
+    )
+
     this.returnCondensate = {
       pressure: this.condensateFlashTank.outletLiquidPressure,
       temperature: this.condensateFlashTank.outletLiquidTemperature,
@@ -1526,7 +1535,7 @@ export class CalculateModelService {
       specificEntropy: this.condensateFlashTank.outletLiquidSpecificEntropy,
       quality: this.condensateFlashTank.outletLiquidQuality,
       energyFlow: this.condensateFlashTank.outletLiquidEnergyFlow,
-      specificVolume: this.condensateFlashTank.outletLiquidVolume,
+      specificVolume: outletLiquidProperties.specificVolume,
       massFlow: this.condensateFlashTank.outletLiquidMassFlow
     };
   }
@@ -1568,7 +1577,6 @@ export class CalculateModelService {
   calculateMakeupWaterVolumeFlow() {
     //calculate volume flow in gpm
     // this.makeupWaterVolumeFlow = this.makeupWater.massFlow * 1000 * (1 / 8.33) * (1 / 60);
-
     // specific volume = m3kg
     let specificVolume: number = this.convertUnitsService.value(this.makeupWater.specificVolume).from(this.settings.steamSpecificVolumeMeasurement).to('m3kg')
     // mass flow kg/hr
@@ -1666,6 +1674,16 @@ export class CalculateModelService {
       },
       this.settings
     ).header;
+
+    let tmpMakeupWaterAndCondensateProperties: SteamPropertiesOutput = this.steamService.steamProperties(
+      {
+        pressure: this.makeupWaterAndCondensateHeader.pressure,
+        thermodynamicQuantity: 1,
+        quantityValue: this.makeupWaterAndCondensateHeader.specificEnthalpy
+      },
+      this.settings
+    );
+    this.makeupWaterAndCondensateHeader.specificVolume = tmpMakeupWaterAndCondensateProperties.specificVolume;
   }
 
   //5G1. Get inlets for makeup water and condensate header
