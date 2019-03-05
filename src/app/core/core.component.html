@@ -39,7 +39,7 @@
     <router-outlet></router-outlet>
 
     <div class="card survey-card" [@survey]="showSurvey">
-        <div class="card-header">
+        <div class="card-header text-center">
             Thanks for using MEASUR!
             <button class="close pull-right" (click)="closeSurvey()">
                 <span aria-hidden="true">&times;</span>
@@ -47,9 +47,14 @@
         </div>
         <div class="card-body p-2">
             <p class="hard-text">
-                You are using a beta version of an application that is currently in active development.
+                We at ORNL want to thank you for using our application while we continue to build and improve
+                upon it. If you would like to help us in creating a quality tool for you and others, please use this
+                <a (click)="closeSurvey()" href="https://www.surveymonkey.com/r/DOE-AMO-TOOLS" target="_blank">Suvery
+                    Monkey</a> to provide feedback.
+                <!-- You are using a beta version of an application that is currently in active development.
                 If you would like to provide feedback on how we can create a better experience, please take a few
-                moments to fill out our <a (click)="closeSurvey()" href="https://www.surveymonkey.com/r/DOE-AMO-TOOLS" target="_blank">Suvery Monkey!</a>
+                moments to fill out our <a (click)="closeSurvey()" href="https://www.surveymonkey.com/r/DOE-AMO-TOOLS"
+                    target="_blank">Suvery Monkey!</a> -->
             </p>
         </div>
         <!-- <div class="card-footer">
