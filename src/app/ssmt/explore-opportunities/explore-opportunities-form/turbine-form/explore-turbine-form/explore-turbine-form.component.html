@@ -103,7 +103,7 @@
       </span>
     </div>
   </form>
-  <form [formGroup]="modificationForm" *ngIf="showGenerationEfficiency">
+  <form [formGroup]="modificationForm" *ngIf="showGenerationEfficiency || !showBaseline">
     <div class="form-group">
       <label for="{{turbineType+'modificationGenerationEfficiency'}}">Modification Generator Efficiency</label>
       <div class="input-group">
