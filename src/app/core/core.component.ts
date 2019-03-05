@@ -49,6 +49,7 @@ export class CoreComponent implements OnInit {
   updateError: boolean = false;
 
   showSurvey: string = 'hide';
+  destroySurvey: boolean = false;
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
@@ -140,8 +141,11 @@ export class CoreComponent implements OnInit {
     });
   }
 
-  closeSurvey(){
+  closeSurvey() {
     this.showSurvey = 'hide';
+    setTimeout(() => {
+      this.destroySurvey = true;
+    }, 500);
   }
 
 
