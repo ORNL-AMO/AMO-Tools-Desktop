@@ -158,7 +158,7 @@ export class WaterfallGraphService {
         return isPrimary ? 10 : width - 10;
       })
       .attr('y', this.legendHeight + (this.nodeHeight + 2 * this.verticalNodeMargin) * index + (this.verticalNodeMargin + this.nodeHeight / 2))
-      .text(tmpWaterfallItem.label + ': ' + (tmpWaterfallItem.isNetValue || tmpWaterfallItem.isStartValue ? '' : '-') + this.format(tmpWaterfallItem.value));
+      .text(tmpWaterfallItem.label + ': ' + (tmpWaterfallItem.isNetValue || tmpWaterfallItem.isStartValue ? '' : '-') + this.format(tmpWaterfallItem.value) + ' ' + waterfallInput.units);
   }
 
   addHoverEvent() {
@@ -226,6 +226,7 @@ export interface WaterfallItem {
 export interface WaterfallInput {
   name: string,
   inputObjects: Array<WaterfallItem>,
+  units: string,
   startColor: string,
   lossColor: string,
   netColor: string
