@@ -38,7 +38,7 @@
 
     <router-outlet></router-outlet>
 
-    <div class="card survey-card" [@survey]="showSurvey">
+    <div class="card survey-card" [@survey]="showSurvey" *ngIf="!destroySurvey">
         <div class="card-header text-center">
             Thanks for using MEASUR!
             <button class="close pull-right" (click)="closeSurvey()">
