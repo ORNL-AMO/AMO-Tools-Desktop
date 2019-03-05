@@ -112,7 +112,7 @@
     "@angular-devkit/schematics": "0.6.8",
     "@angular/cli": "6.0.8",
     "@types/jasmine": "2.5.38",
-    "@types/lodash": "^4.14.74",
+    "@types/lodash": "4.14.100",
     "@types/node": "^8.0.28",
     "chart.js": "^2.7.0",
     "codelyzer": "~2.0.0",
