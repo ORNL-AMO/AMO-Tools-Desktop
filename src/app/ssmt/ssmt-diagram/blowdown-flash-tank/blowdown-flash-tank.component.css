@@ -3,7 +3,6 @@
     z-index: +1;
     margin-left: -5px;
     margin-right: -5px;
-    margin-top: -18%;
 }
 
 .flash-tank-img-holder{
@@ -18,9 +17,9 @@
     width: 50px;
     opacity: 0.9;
     text-align: center;
-    right: 0;
+    right: -7px;
     font-size: smaller;
-    top: 5px;
+    top: 15px;
 }
 
 
@@ -52,7 +51,8 @@
     position: absolute;
     color: black;
     width: 100px;
-    left: 40px;
+    left: 0px;
+    top: 20px;
 }
 
 .outlet-steam-holder .outlet-steam-mass-flow{
@@ -60,7 +60,7 @@
     color: black;
     width: 100px;
     right: 25px;
-    top: 0px;
+    top: 5px;
     text-align: right;
 }
 
@@ -69,12 +69,18 @@
     color: black;
     width: 100px;
     text-align: right;
-    right: 20px;
-    bottom: 20px;
+    right: 55px;
+    top: 20px;
 }
 
 .outlet-chevron{
     padding-bottom: 5px;
-    margin-bottom: -9px;
+    margin-bottom: -26px;
     border-top-left-radius: 25px;
+    height: 45px;
+}
+
+
+.flash-tank-diagram{
+    margin-bottom: 15px;
 }

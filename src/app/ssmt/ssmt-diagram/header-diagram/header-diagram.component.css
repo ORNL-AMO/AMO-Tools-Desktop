@@ -117,7 +117,8 @@
     z-index: +1;
     color: black;
     bottom: 25px;
-    right: 0;
+    right: 25px;
+    text-align: right;
 }
 
 .vented-steam-holder .vented-steam{

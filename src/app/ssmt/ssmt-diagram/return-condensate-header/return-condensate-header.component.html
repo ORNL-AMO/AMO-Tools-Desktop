@@ -1,7 +1,7 @@
 <div class="d-flex w-100 makeup-water justify-content-between" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')" (mouseleave)="hoverEquipment('default')">
   <span class="d-flex pl-3">
     {{makeupWaterAndCondensateHeader.pressure | number:'1.0-2'}} 
-    <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+    <span class="pl-1" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
   </span>
   <div class="d-flex">
     <div class="return-condensate-holder">
