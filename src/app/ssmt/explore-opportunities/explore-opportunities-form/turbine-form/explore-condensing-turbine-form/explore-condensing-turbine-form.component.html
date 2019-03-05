@@ -1,11 +1,11 @@
 <li>
-  <div class="checkbox">
+  <div class="checkbox" *ngIf="showBaseline">
     <label for="condensingTurbineModifyCondenserPressure">
       <input type="checkbox" id="condensingTurbineModifyCondenserPressure" (focus)="focusField('condenserPressure')"
         (change)="toggleCondenserPressure()" [(ngModel)]="showCondenserPressure" /> Modify Condenser Pressure
     </label>
   </div>
-  <form [formGroup]="baselineForm" *ngIf="showCondenserPressure">
+  <form [formGroup]="baselineForm" *ngIf="showCondenserPressure && showBaseline">
     <div class="form-group">
       <label for="condensingTurbineBaselineCondenserPressure">Baseline Condenser Pressure</label>
       <div class="input-group">
@@ -24,7 +24,7 @@
       </span>
     </div>
   </form>
-  <form [formGroup]="modificationForm" *ngIf="showCondenserPressure">
+  <form [formGroup]="modificationForm" *ngIf="showCondenserPressure || !showBaseline">
     <div class="form-group">
       <label for="condensingTurbineModificationCondenserPressure">Modification Condenser Pressure</label>
       <div class="input-group">
@@ -46,13 +46,13 @@
 </li>
 
 <li>
-  <div class="checkbox">
+  <div class="checkbox" *ngIf="showBaseline">
     <label for="condensingTurbineModifyOperationType">
       <input type="checkbox" id="condensingTurbineModifyOperationType" (focus)="focusField('operationType')" (change)="toggleOperationType()"
         [(ngModel)]="showOperation" /> Modify Operation Type
     </label>
   </div>
-  <form [formGroup]="baselineForm" *ngIf="showOperation">
+  <form [formGroup]="baselineForm" *ngIf="showOperation && showBaseline">
     <div class="form-group">
       <label for="condensingTurbineBaselineOperationType">Baseline Operation Type</label>
       <select name="condensingTurbineBaselineOperationType" class="form-control" id="condensingTurbineBaselineOperationType"
@@ -88,7 +88,7 @@
       </span>
     </div>
   </form>
-  <form [formGroup]="modificationForm" *ngIf="showOperation">
+  <form [formGroup]="modificationForm" *ngIf="showOperation || !showBaseline">
     <div class="form-group">
       <label for="condensingTurbineModificationOperationType">Modification Operation Type</label>
       <select name="condensingTurbineModificationOperationType" class="form-control" id="condensingTurbineModificationOperationType"

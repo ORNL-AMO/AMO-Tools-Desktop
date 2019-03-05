@@ -30,7 +30,7 @@ export class ExploreTurbineFormComponent implements OnInit {
   showUseTurbine: boolean;
   showGenerationEfficiency: boolean;
   showIsentropicEfficiency: boolean;
-  
+  showBaseline: boolean;
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit() {
@@ -61,6 +61,7 @@ export class ExploreTurbineFormComponent implements OnInit {
     if (this.showUseTurbine || this.showIsentropicEfficiency || this.showGenerationEfficiency) {
       this.emitShowTurbine.emit(true);
     }
+    this.showBaseline = this.baselineForm.controls.useTurbine.value;
   }
 
   initTurbineStatus() {
