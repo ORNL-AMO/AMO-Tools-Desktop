@@ -6,6 +6,7 @@ import { graphColors } from '../../../phast/phast-report/report-graphs/graphColo
 import { WaterfallItem, WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import * as d3 from 'd3';
+import { ReportGraphsService } from './report-graphs.service';
 
 @Component({
   selector: 'app-report-graphs',
@@ -63,13 +64,10 @@ export class ReportGraphsComponent implements OnInit {
 
   steamPowerUnit: string = 'kW';
 
-  // number formatter for d3
-  format: any;
 
-  constructor() { }
+  constructor(private reportGraphsService: ReportGraphsService) { }
 
   ngOnInit() {
-    this.setFormat();
     this.ssmt = this.assessment.ssmt;
     this.graphColors = graphColors;
     this.ssmt1ProcessPieValues = new Array<number>();
@@ -79,31 +77,28 @@ export class ReportGraphsComponent implements OnInit {
     this.ssmtOptions = new Array<{ name: string, ssmt: SSMT, index: number }>();
     this.prepSsmtOptions();
     this.setPieData();
+    this.setPieLabels();
     this.setWaterfallData();
   }
 
-  setFormat() {
-    this.format = d3.format(',.2f');
-  }
 
   setPieData() {
-    this.ssmt1ProcessPieValues = this.getProcessUsageData(this.selectedSsmt1.ssmt);
-    this.ssmt1GenerationPieValues = this.getGenerationData(this.selectedSsmt1.ssmt);
+    this.ssmt1ProcessPieValues = this.reportGraphsService.getProcessUsageData(this.selectedSsmt1.ssmt);
+    this.ssmt1GenerationPieValues = this.reportGraphsService.getGenerationData(this.selectedSsmt1.ssmt);
     if (this.modExists) {
-      this.ssmt2ProcessPieValues = this.getProcessUsageData(this.selectedSsmt2.ssmt);
-      this.ssmt2GenerationPieValues = this.getGenerationData(this.selectedSsmt2.ssmt);
+      this.ssmt2ProcessPieValues = this.reportGraphsService.getProcessUsageData(this.selectedSsmt2.ssmt);
+      this.ssmt2GenerationPieValues = this.reportGraphsService.getGenerationData(this.selectedSsmt2.ssmt);
     }
-    this.setPieLabels();
   }
 
   setPieLabels() {
     this.ssmt1ProcessPieLabels = new Array<string>();
     this.ssmt1GenerationPieLabels = new Array<string>();
-    this.ssmt1ProcessPieLabels = this.getProcessUsageLabels(this.ssmt1ProcessPieValues);
-    this.ssmt1GenerationPieLabels = this.getGenerationLabels(this.ssmt1GenerationPieValues, this.selectedSsmt1.ssmt);
+    this.ssmt1ProcessPieLabels = this.reportGraphsService.getProcessUsageLabels(this.ssmt1ProcessPieValues, this.settings);
+    this.ssmt1GenerationPieLabels = this.reportGraphsService.getGenerationLabels(this.ssmt1GenerationPieValues, this.selectedSsmt1.ssmt, this.settings);
     if (this.modExists) {
-      this.ssmt2ProcessPieLabels = this.getProcessUsageLabels(this.ssmt2ProcessPieValues);
-      this.ssmt2GenerationPieLabels = this.getGenerationLabels(this.ssmt2GenerationPieValues, this.selectedSsmt2.ssmt);
+      this.ssmt2ProcessPieLabels = this.reportGraphsService.getProcessUsageLabels(this.ssmt2ProcessPieValues, this.settings);
+      this.ssmt2GenerationPieLabels = this.reportGraphsService.getGenerationLabels(this.ssmt2GenerationPieValues, this.selectedSsmt2.ssmt, this.settings);
     }
   }
 
@@ -135,101 +130,22 @@ export class ReportGraphsComponent implements OnInit {
 
   selectNewSsmt(dropDownIndex: number): void {
     if (dropDownIndex === 1) {
-      this.ssmt1ProcessPieValues = this.getProcessUsageData(this.selectedSsmt1.ssmt);
-      this.ssmt1GenerationPieValues = this.getGenerationData(this.selectedSsmt1.ssmt);
+      // this.ssmt1ProcessPieValues = this.reportGraphsService.getProcessUsageData(this.selectedSsmt1.ssmt);
+      // this.ssmt1GenerationPieValues = this.reportGraphsService.getGenerationData(this.selectedSsmt1.ssmt);
       this.ssmt1ProcessExportName = this.assessment.name + '-process-' + this.selectedSsmt1.name;
       this.ssmt1GenerationExportName = this.assessment.name + '-generation-' + this.selectedSsmt1.name;
     }
     else {
-      this.ssmt2ProcessPieValues = this.getProcessUsageData(this.selectedSsmt2.ssmt);
-      this.ssmt2GenerationPieValues = this.getGenerationData(this.selectedSsmt2.ssmt);
+      // this.ssmt2ProcessPieValues = this.reportGraphsService.getProcessUsageData(this.selectedSsmt2.ssmt);
+      // this.ssmt2GenerationPieValues = this.reportGraphsService.getGenerationData(this.selectedSsmt2.ssmt);
       this.ssmt2ProcessExportName = this.assessment.name + '-process-' + this.selectedSsmt2.name;
       this.ssmt2GenerationExportName = this.assessment.name + '-generation-' + this.selectedSsmt2.name;
     }
     this.setPieData();
+    this.setPieLabels();
     this.setWaterfallData();
   }
 
-  getProcessUsageData(ssmt: SSMT): Array<number> {
-    let processUsageData = new Array<number>();
-    if (ssmt.headerInput) {
-      if (ssmt.headerInput.highPressure) {
-        processUsageData.push(ssmt.headerInput.highPressure.processSteamUsage);
-      }
-      if (ssmt.headerInput.mediumPressure) {
-        processUsageData.push(ssmt.headerInput.mediumPressure.processSteamUsage);
-      }
-      if (ssmt.headerInput.lowPressure) {
-        processUsageData.push(ssmt.headerInput.lowPressure.processSteamUsage);
-      }
-    }
-    else {
-      processUsageData = [0, 0, 0];
-    }
-    return processUsageData;
-  }
-
-  getProcessUsageLabels(processUsageData: Array<number>) {
-    let l = processUsageData.length;
-    let processUsageLabels = new Array<string>();
-    if (l === 1) {
-      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
-    }
-    else if (l === 2) {
-      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
-      processUsageLabels.push('LP: ' + this.format(processUsageData[1]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
-    }
-    else if (l === 3) {
-      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
-      processUsageLabels.push('MP: ' + this.format(processUsageData[1]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
-      processUsageLabels.push('LP: ' + this.format(processUsageData[2]) + ' ' + this.settings.steamEnergyMeasurement + '/hr');
-    }
-    return processUsageLabels;
-  }
-
-  getGenerationData(ssmt: SSMT): Array<number> {
-    let generationData = new Array<number>();
-    if (ssmt.turbineInput) {
-      if (ssmt.turbineInput.condensingTurbine.useTurbine) {
-        generationData.push(ssmt.outputData.condensingTurbine.powerOut);
-      }
-      if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-        generationData.push(ssmt.outputData.highToLowPressureTurbine.powerOut);
-      }
-      if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
-        generationData.push(ssmt.outputData.highPressureToMediumPressureTurbine.powerOut);
-      }
-      if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-        generationData.push(ssmt.outputData.mediumToLowPressureTurbine.powerOut);
-      }
-    }
-    else {
-      generationData = [0, 0, 0, 0];
-    }
-    return generationData;
-  }
-
-  getGenerationLabels(generationData: Array<number>, ssmt: SSMT) {
-    let l = generationData.length;
-    let generationLabels = new Array<string>();
-    let i = 0;
-    if (ssmt.turbineInput.condensingTurbine.useTurbine) {
-      generationLabels.push('Condensing Turbine: ' + this.format(generationData[i]) + ' ' + this.steamPowerUnit);
-      i++;
-    }
-    if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-      generationLabels.push('HP to LP: ' + this.format(generationData[i]) + ' ' + this.steamPowerUnit);
-      i++;
-    }
-    if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
-      generationLabels.push('HP to MP: ' + this.format(generationData[i]) + ' ' + this.steamPowerUnit);
-      i++;
-    }
-    if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-      generationLabels.push('MP to LP: ' + this.format(generationData[i]) + ' ' + this.steamPowerUnit);
-    }
-    return generationLabels;
-  }
 
   getPieWidth(): number {
     if (this.pieChartContainer) {
@@ -247,9 +163,9 @@ export class ReportGraphsComponent implements OnInit {
   setWaterfallData() {
     this.ssmt1WaterfallData = null;
     this.ssmt2WaterfallData = null;
-    this.ssmt1WaterfallData = this.getWaterfallData(this.selectedSsmt1, "#74E88B", "#ED6F5B", "#17ADD3");
+    this.ssmt1WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt1, '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses);
     if (this.modExists) {
-      this.ssmt2WaterfallData = this.getWaterfallData(this.selectedSsmt2, "#74E88B", "#ED6F5B", "#17ADD3");
+      this.ssmt2WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt2, '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses);
     }
   }
 

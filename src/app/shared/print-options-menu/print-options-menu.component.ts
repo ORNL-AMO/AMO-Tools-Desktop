@@ -17,6 +17,8 @@ export class PrintOptionsMenuComponent implements OnInit {
   @Input()
   showPhastReportOptions: boolean;
   @Input()
+  showSsmtReportOptions: boolean;
+  @Input()
   selectAll: boolean;
   @Input()
   printReportGraphs: boolean;
@@ -32,7 +34,14 @@ export class PrintOptionsMenuComponent implements OnInit {
   printFsatRollup: boolean;
   @Input()
   printPhastRollup: boolean;
-  
+
+  @Input()
+  printEnergySummary: boolean;
+  @Input()
+  printLossesSummary: boolean;
+  @Input()
+  printReportDiagram: boolean;
+
   //---- phast-specific options --------
   @Input()
   printEnergyUsed: boolean;

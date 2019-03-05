@@ -21,7 +21,9 @@ export class ExecutiveSummaryComponent implements OnInit {
   @Input()
   inRollup: boolean;
   @Input()
-  assessment:Assessment;
+  assessment: Assessment;
+  @Input()
+  printView: boolean;
 
   selectedModificationIndex: number;
   constructor(private reportRollupService: ReportRollupService) { }
@@ -46,7 +48,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedSsmt({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
+    this.reportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
 }
