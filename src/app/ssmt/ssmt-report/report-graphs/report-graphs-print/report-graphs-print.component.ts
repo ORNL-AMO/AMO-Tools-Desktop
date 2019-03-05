@@ -57,10 +57,6 @@ export class ReportGraphsPrintComponent implements OnInit {
       this.modificationPieProcessUsageLabels = this.getAllModificationPieProcessUsageLabels();
       this.modificationPieGenerationData = this.getAllModificationPieGenerationData();
       this.modificationPieGenerationLabels = this.getAllModificationPieGenerationLabels();
-      console.log('this.ssmtOptions = ');
-      console.log(this.ssmtOptions);
-      console.log('this.modificationPieProcessUsageData = ');
-      console.log(this.modificationPieGenerationLabels);
     }
   }
 
@@ -116,6 +112,4 @@ export class ReportGraphsPrintComponent implements OnInit {
   getGenerationLabels(generationData: Array<number>, ssmt: SSMT) {
     return this.reportGraphsService.getGenerationLabels(generationData, ssmt, this.settings);
   }
-
-
 }

@@ -35,6 +35,9 @@
     .print-height {
         height: 100% !important;
     }
+    .print-dont-break {
+        page-break-inside: avoid;
+    }
 }
 
 .print-div {

@@ -166,6 +166,10 @@ export class SsmtReportComponent implements OnInit {
       this.printReportSankey = false;
       this.printResults = false;
       this.printInputData = false;
+      this.printLossesSummary = false;
+      this.printExecutiveSummary = false;
+      this.printEnergySummary = false;
+      this.printReportDiagram = false;
     }
   }
 
@@ -175,6 +179,10 @@ export class SsmtReportComponent implements OnInit {
     this.printReportSankey = false;
     this.printResults = false;
     this.printInputData = false;
+    this.printExecutiveSummary = false;
+    this.printEnergySummary = false;
+    this.printLossesSummary = false;
+    this.printReportDiagram = false;
   }
 
   showModal(): void {
