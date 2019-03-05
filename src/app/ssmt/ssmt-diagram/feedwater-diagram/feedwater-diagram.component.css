@@ -18,7 +18,6 @@
     z-index: +1;
     color: black;
     width: 100px;
-    /* right: -15px; */
     left: 25px;
-    bottom: 0px;
+    top: 5px;
 }

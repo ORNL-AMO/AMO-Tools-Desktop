@@ -24,8 +24,9 @@
 .return-condensate-holder .return-condensate{
     position: absolute;
     z-index: +1;
-    width: 100px;
-    right: 0px;
-    top: 20px;
     color: black;
+    top: 20px;
+    width: 100px;
+    text-align: right;
+    right: 10px;
 }

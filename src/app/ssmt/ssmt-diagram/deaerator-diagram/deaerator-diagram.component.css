@@ -4,7 +4,7 @@
 
 .inlet-pressure-tube{
     margin-top: 26px;
-    min-width: 50px;
+    min-width: 75px;
 }
 
 .feedwater-column{
@@ -15,7 +15,7 @@
     padding-left: .75rem;
     padding-right: .75rem;
     margin-top: 50px;
-    min-width: 50px;
+    min-width: 75px;
 }
 
 .vents{
