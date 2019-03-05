@@ -319,6 +319,10 @@ export class SteamService {
     results.inletWaterTemperature = this.convertSteamTemperatureOutput(results.inletWaterTemperature, settings);
     results.outletGasTemperature = this.convertSteamTemperatureOutput(results.outletGasTemperature, settings);
     results.outletLiquidTemperature = this.convertSteamTemperatureOutput(results.outletLiquidTemperature, settings);
+    //energy flow    
+    results.inletWaterEnergyFlow = this.convertEnergyFlowOutput(results.inletWaterEnergyFlow, settings);
+    results.outletGasEnergyFlow = this.convertEnergyFlowOutput(results.outletGasEnergyFlow, settings);
+    results.outletLiquidEnergyFlow = this.convertEnergyFlowOutput(results.outletLiquidEnergyFlow, settings);
     return results;
   }
 
@@ -486,7 +490,7 @@ export class SteamService {
     if (inputCpy.turbineProperty === 0) {
       //mass flow
       inputCpy.massFlowOrPowerOut = this.convertUnitsService.value(inputCpy.massFlowOrPowerOut).from(settings.steamMassFlowMeasurement).to('tonne');
-    }else {
+    } else {
       //power out
       inputCpy.massFlowOrPowerOut = this.convertUnitsService.value(inputCpy.massFlowOrPowerOut).from('kW').to('MJh');
     }
@@ -523,7 +527,7 @@ export class SteamService {
       results.inletEnergyFlow = this.convertUnitsService.value(results.inletEnergyFlow).from('kJ').to(settings.steamEnergyMeasurement) * 1000000;
       results.energyOut = this.convertUnitsService.value(results.energyOut).from('kJ').to(settings.steamEnergyMeasurement) * 1000000;
       results.powerOut = this.convertUnitsService.value(results.powerOut).from('kJh').to(settings.steamPowerMeasurement) * 1000000;
-    }else {
+    } else {
       //power out
       results.massFlow = this.convertUnitsService.value(results.massFlow).from('kg').to(settings.steamMassFlowMeasurement) * 1000;
       results.outletEnergyFlow = this.convertUnitsService.value(results.outletEnergyFlow).from('MJ').to(settings.steamEnergyMeasurement);
@@ -575,6 +579,14 @@ export class SteamService {
     inputCpy.coldInletSpecificEnthalpy = this.convertSteamSpecificEnthalpyInput(inputCpy.coldInletSpecificEnthalpy, settings);
     inputCpy.coldInletSpecificEntropy = this.convertSteamSpecificEntropyInput(inputCpy.coldInletSpecificEntropy, settings);
     inputCpy.approachTemp = this.convertSteamTemperatureInput(inputCpy.approachTemp, settings);
+
+    console.log('approach temp ' + inputCpy.approachTemp);
+    console.log('cold inlet temp ' + inputCpy.coldInletTemperature);
+    console.log('hot inlet temp' + inputCpy.hotInletTemperature);
+    // console.log('orig ' + inputCpy.hotInletDensity)
+    // inputCpy.hotInletDensity = 1 / inputCpy.hotInletSpecificVolume;
+    // inputCpy.coldInletDensity = 1 / inputCpy.coldInletSpecificVolume;
+    // console.log('convert ' + inputCpy.hotInletDensity)
 
     let results: HeatExchangerOutput = steamAddon.heatExchanger(inputCpy);
 

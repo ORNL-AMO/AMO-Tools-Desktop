@@ -5,7 +5,7 @@
     </label>
     <div class="form-group">
       <label for="fuelDescription">Type of Fuel</label>
-      <select name="fuelDescription" id="fuelDescription" class="form-control" (focus)="focusField('fuelDescription')" (change)="getFuelTypes()"
+      <select name="fuelDescription" id="fuelDescription" class="form-control" (focus)="changeField('fuelDescription')" (change)="getFuelTypes()"
         [(ngModel)]="inputs.fuelDescription">
         <option value="gas">Gas</option>
         <option value="solidLiquid">Solid/Liquid</option>
@@ -13,14 +13,14 @@
     </div>
     <div class="form-group">
       <label for="fuelType">Fuel</label>
-      <select name="fuelType" id="fuelType" class="form-control" (focus)="focusField('fuelType')" (change)="setProperties()" [(ngModel)]="inputs.fuelType">
+      <select name="fuelType" id="fuelType" class="form-control" (focus)="changeField('fuelType')" (change)="setProperties()" [(ngModel)]="inputs.fuelType">
         <option *ngFor="let type of fuelTypes" [ngValue]="type.id">{{type.substance}}</option>
       </select>
     </div>
     <div class="form-group">
       <label for="heatingValue">Heating Value - HHV</label>
       <div class="input-group">
-        <input name="heatingValue" type="number" step="any" id="heatingValue" class="form-control" (focus)="focusField('fuelHeatingValue')"
+        <input name="heatingValue" type="number" step="any" id="heatingValue" class="form-control" (focus)="changeField('fuelHeatingValue')"
           [(ngModel)]="inputs.heatingValue" (input)="calculate()" onfocus="this.select();" />
         <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'gas'" class="input-group-addon units">Btu/SCF</span>
         <span *ngIf="settings.unitsOfMeasure == 'Imperial' && inputs.fuelDescription == 'solidLiquid'" class="input-group-addon units">Btu/lb</span>
@@ -36,7 +36,7 @@
         <!-- <a class="click-link small" (click)="showHideInputField()">Calculate using flow rate</a> -->
       </label>
       <div class="input-group">
-        <input id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="any" class="form-control" (focus)="focusField('fuelFlowRateInput')"
+        <input id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="any" class="form-control" (focus)="changeField('fuelFlowRateInput')"
           [(ngModel)]="inputs.fuelFlowRateInput" (input)="calculate()" onfocus="this.select();">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
@@ -49,7 +49,7 @@
         <a class="click-link small form-text" (click)="showHideInputField()" *ngIf="inputs.userDefinedMeteredEnergy">Auto Calculate Fuel Energy</a>
       </label>
       <div class="input-group" *ngIf="inputs.userDefinedMeteredEnergy">
-        <input name="fuelEnergy" type="number" step="any" id="fuelEnergy" class="form-control" (focus)="focusField('fuelEnergy')"
+        <input name="fuelEnergy" type="number" step="any" id="fuelEnergy" class="form-control" (focus)="changeField('fuelEnergy')"
           [(ngModel)]="inputs.fuelEnergy" (input)="calculate()" onfocus="this.select();" />
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ</span>
@@ -65,7 +65,7 @@
     <div class="form-group">
       <label for="collectionTime">Data Collection Time</label>
       <div class="input-group">
-        <input name="collectionTime" type="number" step="any" id="collectionTime" class="form-control" (focus)="focusField('fuelCollectionTime')"
+        <input name="collectionTime" type="number" step="any" id="collectionTime" class="form-control" (focus)="changeField('fuelCollectionTime')"
           [(ngModel)]="inputs.collectionTime" (input)="calculate()" onfocus="this.select();" />
         <span class="input-group-addon units">hrs</span>
       </div>

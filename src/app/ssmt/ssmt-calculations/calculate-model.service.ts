@@ -9,6 +9,7 @@ import { BoilerService } from '../boiler/boiler.service';
 import { HeaderService } from '../header/header.service';
 import { TurbineService } from '../turbine/turbine.service';
 import { OperationsService } from '../operations/operations.service';
+import { HeatExchangerService } from './heat-exchanger.service';
 
 @Injectable()
 export class CalculateModelService {
@@ -82,20 +83,21 @@ export class CalculateModelService {
   executeCalculateMarginalCosts: boolean;
   constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService,
     private boilerService: BoilerService, private headerService: HeaderService, private turbineService: TurbineService,
-    private operationsService: OperationsService) { }
+    private operationsService: OperationsService, private heatExchangerService: HeatExchangerService) { }
 
   initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
+    let ssmtCopy: SSMT = JSON.parse(JSON.stringify(_ssmt));
     this.initResults();
-    let boilerValid: boolean = this.boilerService.isBoilerValid(_ssmt.boilerInput, _settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(_ssmt.headerInput, _settings);
-    let turbineValid: boolean = this.turbineService.isTurbineValid(_ssmt.turbineInput, _ssmt.headerInput, _settings);
-    let operationsValid: boolean = this.operationsService.getForm(_ssmt, _settings).valid;
+    let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, _settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, _settings);
+    let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, _settings).valid;
 
     this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
     this.isBaselineCalculation = isBaseline;
     this.baselinePowerDemand = baselinePowerDemand;
     this.calcCount = 0;
-    this.inputData = this.getInputDataFromSSMT(_ssmt);
+    this.inputData = this.getInputDataFromSSMT(ssmtCopy);
     this.settings = _settings;
     if (turbineValid && headerValid && boilerValid && operationsValid) {
       return this.calculateModelRunner();
@@ -105,19 +107,19 @@ export class CalculateModelService {
     }
   }
 
-  getInputDataFromSSMT(_ssmt: SSMT): SSMTInputs {
+  getInputDataFromSSMT(ssmt: SSMT): SSMTInputs {
     let inputData: SSMTInputs = {
       operationsInput: {
-        sitePowerImport: _ssmt.generalSteamOperations.sitePowerImport,
-        makeUpWaterTemperature: _ssmt.generalSteamOperations.makeUpWaterTemperature,
-        operatingHoursPerYear: _ssmt.operatingHours.hoursPerYear,
-        fuelCosts: _ssmt.operatingCosts.fuelCost,
-        electricityCosts: _ssmt.operatingCosts.electricityCost,
-        makeUpWaterCosts: _ssmt.operatingCosts.makeUpWaterCost,
+        sitePowerImport: ssmt.generalSteamOperations.sitePowerImport,
+        makeUpWaterTemperature: ssmt.generalSteamOperations.makeUpWaterTemperature,
+        operatingHoursPerYear: ssmt.operatingHours.hoursPerYear,
+        fuelCosts: ssmt.operatingCosts.fuelCost,
+        electricityCosts: ssmt.operatingCosts.electricityCost,
+        makeUpWaterCosts: ssmt.operatingCosts.makeUpWaterCost,
       },
-      boilerInput: _ssmt.boilerInput,
-      headerInput: _ssmt.headerInput,
-      turbineInput: _ssmt.turbineInput
+      boilerInput: ssmt.boilerInput,
+      headerInput: ssmt.headerInput,
+      turbineInput: ssmt.turbineInput
     };
     return inputData;
   }
@@ -195,7 +197,6 @@ export class CalculateModelService {
       if (this.inputData.boilerInput.blowdownFlashed === true) {
         this.calculateBlowdownFlashTank();
       }
-
       //2. Model High Pressure Header and Outlets
       //2A. Calculate High Pressure Header
       this.calculateHighPressureHeader();
@@ -1518,6 +1519,15 @@ export class CalculateModelService {
       this.settings
     );
 
+    let outletLiquidProperties: SteamPropertiesOutput = this.steamService.steamProperties(
+      {
+        pressure: this.condensateFlashTank.outletLiquidPressure,
+        thermodynamicQuantity: 1,
+        quantityValue: this.condensateFlashTank.outletLiquidSpecificEnthalpy
+      },
+      this.settings
+    )
+
     this.returnCondensate = {
       pressure: this.condensateFlashTank.outletLiquidPressure,
       temperature: this.condensateFlashTank.outletLiquidTemperature,
@@ -1525,7 +1535,7 @@ export class CalculateModelService {
       specificEntropy: this.condensateFlashTank.outletLiquidSpecificEntropy,
       quality: this.condensateFlashTank.outletLiquidQuality,
       energyFlow: this.condensateFlashTank.outletLiquidEnergyFlow,
-      specificVolume: this.condensateFlashTank.outletLiquidVolume,
+      specificVolume: outletLiquidProperties.specificVolume,
       massFlow: this.condensateFlashTank.outletLiquidMassFlow
     };
   }
@@ -1536,7 +1546,7 @@ export class CalculateModelService {
       {
         thermodynamicQuantity: 0, //temperature
         quantityValue: this.inputData.operationsInput.makeUpWaterTemperature,
-        pressure: .101325 //atmospheric pressure
+        pressure: 0 //atmospheric pressure
       },
       this.settings
     );
@@ -1567,7 +1577,6 @@ export class CalculateModelService {
   calculateMakeupWaterVolumeFlow() {
     //calculate volume flow in gpm
     // this.makeupWaterVolumeFlow = this.makeupWater.massFlow * 1000 * (1 / 8.33) * (1 / 60);
-    
     // specific volume = m3kg
     let specificVolume: number = this.convertUnitsService.value(this.makeupWater.specificVolume).from(this.settings.steamSpecificVolumeMeasurement).to('m3kg')
     // mass flow kg/hr
@@ -1584,28 +1593,26 @@ export class CalculateModelService {
     //TODO: need bindings to HeatExchanger() in the suite before doing this step..
     //inlet: blowdown
     //outlet: makeup water
-
-    let hotInletProperties: SteamPropertiesOutput = this.steamService.steamProperties(
-      {
-        pressure: this.blowdownFlashTank.outletLiquidPressure,
-        quantityValue: this.blowdownFlashTank.outletLiquidSpecificEnthalpy,
-        thermodynamicQuantity: 1 //specificEnthalpy
-      },
-      this.settings
-    )
-
-
     let heatExhangerInput: HeatExchangerInput;
 
     if (this.inputData.boilerInput.blowdownFlashed == true) {
+      let hotInletProperties: SteamPropertiesOutput = this.steamService.steamProperties(
+        {
+          pressure: this.blowdownFlashTank.outletLiquidPressure,
+          quantityValue: this.blowdownFlashTank.outletLiquidSpecificEnthalpy,
+          thermodynamicQuantity: 1 //specificEnthalpy
+        },
+        this.settings
+      )
+
       heatExhangerInput = {
         hotInletMassFlow: this.blowdownFlashTank.outletLiquidMassFlow,
         hotInletEnergyFlow: this.blowdownFlashTank.outletLiquidEnergyFlow,
         hotInletTemperature: this.blowdownFlashTank.outletLiquidTemperature,
         hotInletPressure: this.blowdownFlashTank.outletLiquidPressure,
         hotInletQuality: this.blowdownFlashTank.outletLiquidQuality,
-        hotInletSpecificVolume: 0,
-        hotInletDensity: 0,
+        hotInletSpecificVolume: hotInletProperties.specificVolume,
+        hotInletDensity: 1 / hotInletProperties.specificVolume,
         hotInletSpecificEnthalpy: this.blowdownFlashTank.outletLiquidSpecificEnthalpy,
         hotInletSpecificEntropy: this.blowdownFlashTank.outletLiquidSpecificEntropy,
         coldInletMassFlow: this.makeupWater.massFlow,
@@ -1614,20 +1621,28 @@ export class CalculateModelService {
         coldInletPressure: this.makeupWater.pressure,
         coldInletQuality: this.makeupWater.quality,
         coldInletSpecificVolume: this.makeupWater.specificVolume,
-        coldInletDensity: 0,
+        coldInletDensity: 1 / this.makeupWater.specificVolume,
         coldInletSpecificEnthalpy: this.makeupWater.specificEnthalpy,
         coldInletSpecificEntropy: this.makeupWater.specificEntropy,
         approachTemp: this.inputData.boilerInput.approachTemperature
       }
     } else {
+      let hotInletProperties: SteamPropertiesOutput = this.steamService.steamProperties(
+        {
+          pressure: this.boilerOutput.blowdownPressure,
+          quantityValue: this.boilerOutput.blowdownSpecificEnthalpy,
+          thermodynamicQuantity: 1 //specificEnthalpy
+        },
+        this.settings
+      )
       heatExhangerInput = {
         hotInletMassFlow: this.boilerOutput.blowdownMassFlow,
         hotInletEnergyFlow: this.boilerOutput.blowdownEnergyFlow,
         hotInletTemperature: this.boilerOutput.blowdownTemperature,
         hotInletPressure: this.boilerOutput.blowdownPressure,
         hotInletQuality: this.boilerOutput.blowdownQuality,
-        hotInletSpecificVolume: this.boilerOutput.blowdownVolume,
-        hotInletDensity: 0,
+        hotInletSpecificVolume: hotInletProperties.specificVolume,
+        hotInletDensity: 1 / hotInletProperties.specificVolume,
         hotInletSpecificEnthalpy: this.boilerOutput.blowdownSpecificEnthalpy,
         hotInletSpecificEntropy: this.boilerOutput.blowdownSpecificEntropy,
         coldInletMassFlow: this.makeupWater.massFlow,
@@ -1636,16 +1651,14 @@ export class CalculateModelService {
         coldInletPressure: this.makeupWater.pressure,
         coldInletQuality: this.makeupWater.quality,
         coldInletSpecificVolume: this.makeupWater.specificVolume,
-        coldInletDensity: 0,
+        coldInletDensity: 1 / this.makeupWater.specificVolume,
         coldInletSpecificEnthalpy: this.makeupWater.specificEnthalpy,
         coldInletSpecificEntropy: this.makeupWater.specificEntropy,
         approachTemp: this.inputData.boilerInput.approachTemperature
       }
     }
-
+    this.heatExchangerOutput = this.heatExchangerService.heatExchange(this.inputData.boilerInput.approachTemperature, heatExhangerInput, this.settings);
     //this.heatExchangerOutput = this.steamService.heatExchanger(heatExhangerInput, this.settings);
-
-
   }
 
   //5G. Calculate make up water and condensate combined header
@@ -1661,6 +1674,16 @@ export class CalculateModelService {
       },
       this.settings
     ).header;
+
+    let tmpMakeupWaterAndCondensateProperties: SteamPropertiesOutput = this.steamService.steamProperties(
+      {
+        pressure: this.makeupWaterAndCondensateHeader.pressure,
+        thermodynamicQuantity: 1,
+        quantityValue: this.makeupWaterAndCondensateHeader.specificEnthalpy
+      },
+      this.settings
+    );
+    this.makeupWaterAndCondensateHeader.specificVolume = tmpMakeupWaterAndCondensateProperties.specificVolume;
   }
 
   //5G1. Get inlets for makeup water and condensate header
@@ -1675,27 +1698,27 @@ export class CalculateModelService {
         massFlow: this.returnCondensate.massFlow
       }
     );
-    // if(this.inputData.boilerInput.preheatMakeupWater == true){
-    // //makeup water
-    // inlets.push(
-    //   {
-    //     pressure: this.heatExchangerOutput.hotOutletPressure,
-    //     thermodynamicQuantity: 0, //temperature
-    //     quantityValue: this.heatExchangerOutput.hotOutletTemperature,
-    //     massFlow: this.heatExchangerOutput.hotOutletMassFlow
-    //   }
-    // );
-    // }else{
-    //makeup water
-    inlets.push(
-      {
-        pressure: this.makeupWater.pressure,
-        thermodynamicQuantity: 1, //specificEnthalpy
-        quantityValue: this.makeupWater.specificEnthalpy,
-        massFlow: this.makeupWater.massFlow
-      }
-    );
-    // }
+    if (this.inputData.boilerInput.preheatMakeupWater == true) {
+      //heat exchanger
+      inlets.push(
+        {
+          pressure: this.heatExchangerOutput.coldOutletPressure,
+          thermodynamicQuantity: 0, //temperature
+          quantityValue: this.heatExchangerOutput.coldOutletTemperature,
+          massFlow: this.heatExchangerOutput.coldOutletMassFlow
+        }
+      );
+    } else {
+      //makeup water
+      inlets.push(
+        {
+          pressure: this.makeupWater.pressure,
+          thermodynamicQuantity: 1, //specificEnthalpy
+          quantityValue: this.makeupWater.specificEnthalpy,
+          massFlow: this.makeupWater.massFlow
+        }
+      );
+    }
 
     //condensing turbine
     if (this.inputData.turbineInput.condensingTurbine.useTurbine === true) {
@@ -1802,6 +1825,7 @@ export class CalculateModelService {
 
     //steam production = steam produced by (boiler) + (flash tanks) + (PRV feedwater)
     let steamProduction: number = this.boilerOutput.steamMassFlow + flashTankAdditionalSteam + prvAdditionalSteam;
+
     //steam use = steam used by (header process usage) + (deaerator) + (condensing turbine)
     let steamUse: number = processSteamUsage + this.deaeratorOutput.inletSteamMassFlow + condensingTurbineMassFlow;
     //steam balance = difference between use and production (we want 0!)

@@ -5,8 +5,7 @@
   <table class="table table-hover table-striped" *ngIf="baselineLosses">
     <thead>
       <tr>
-        <td [ngStyle]="{'width.%': 15}" class="bold">(<span
-            [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+        <td [ngStyle]="{'width.%': 15}" class="bold">(<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"
           [ngStyle]="{'width.%': tableCellWidth}" class="text-center bold">Baseline</td>
         <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationLosses; let index = index;"
@@ -241,7 +240,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>
       </tr>
       <tr>
-        <td class="pl-4">Condensate Loss</td>
+        <td class="pl-4">Condensate Heat Loss</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineLosses.condensateLosses">
             {{baselineLosses.condensateLosses | number:'1.0-2'}}
@@ -327,7 +326,7 @@
         </td>
       </tr>
       <tr>
-        <td class="bold">Process Losses</td>
+        <td class="bold">Non-recovered Process Losses</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}"></td>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput, HeatExchangerOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 
@@ -103,8 +103,12 @@ export class HoverSteamPropertiesComponent implements OnInit {
       this.deaeratorFeedwaterHovered();
     } else if (this.hoveredProperty === 'feedwaterHovered') {
       this.boilerFeedwaterHovered();
-    }else if (this.hoveredProperty === 'ventedLowPressureSteam') {
+    } else if (this.hoveredProperty === 'ventedLowPressureSteam') {
       this.hoverVentedLowPressureSteam();
+    } else if (this.hoveredProperty === 'heatExchangerHotOutlet') {
+      this.hoverHeatExchangerHotOutlet();
+    }else if(this.hoveredProperty === 'heatExchangerColdOutlet'){
+      this.hoverHeatExchangerColdOutlet();
     }
   }
 
@@ -471,4 +475,30 @@ export class HoverSteamPropertiesComponent implements OnInit {
     };
   }
 
+
+  hoverHeatExchangerHotOutlet() {
+    this.label = 'Boiler Blowdown Drain';
+    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
+    this.steam = {
+      pressure: heatExchangerOutput.hotOutletPressure,
+      temperature: heatExchangerOutput.hotOutletTemperature,
+      specificEnthalpy: heatExchangerOutput.hotOutletSpecificEnthalpy,
+      specificEntropy: heatExchangerOutput.hotOutletSpecificEntropy,
+      quality: heatExchangerOutput.hotOutletQuality,
+      massFlow: heatExchangerOutput.hotOutletMassFlow
+    }
+  }
+
+  hoverHeatExchangerColdOutlet() {
+    this.label = 'Makeup Water';
+    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
+    this.steam = {
+      pressure: heatExchangerOutput.coldOutletPressure,
+      temperature: heatExchangerOutput.coldOutletTemperature,
+      specificEnthalpy: heatExchangerOutput.coldOutletSpecificEnthalpy,
+      specificEntropy: heatExchangerOutput.coldOutletSpecificEntropy,
+      quality: heatExchangerOutput.coldOutletQuality,
+      massFlow: heatExchangerOutput.coldOutletMassFlow
+    }
+  }
 }

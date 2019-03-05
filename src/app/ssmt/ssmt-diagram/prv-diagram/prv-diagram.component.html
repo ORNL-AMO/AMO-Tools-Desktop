@@ -4,7 +4,7 @@
       <div class="inlet-mass-flow-holder">
         <span class="inlet-mass-flow">
           {{prv.inletMassFlow | number:'1.0-2'}}
-          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
       </div>
       <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')"></span>
@@ -19,7 +19,7 @@
         </div>
         <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined">
           {{prv.feedwaterMassFlow | number:'1.0-2'}}
-          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
         <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
         <span class="prv-label">PRV</span>

@@ -15,10 +15,10 @@
             </div>
         </div>
         <app-designed-energy-electricity-form *ngIf="assessment.designedEnergy.electricity" [inputs]="zone.designedEnergyElectricity"
-            (emitCalculate)="calculate()" (changeField)="changeElectricField($event)"></app-designed-energy-electricity-form>
+            (emitCalculate)="calculate()" (emitChangeField)="changeElectricField($event)"></app-designed-energy-electricity-form>
         <app-designed-energy-fuel-form *ngIf="assessment.designedEnergy.fuel" [inputs]="zone.designedEnergyFuel" [settings]="settings"
-            (emitCalculate)="calculate()" (changeField)="changeFuelField($event)"></app-designed-energy-fuel-form>
+            (emitCalculate)="calculate()" (emitChangeField)="changeFuelField($event)"></app-designed-energy-fuel-form>
         <app-designed-energy-steam-form *ngIf="assessment.designedEnergy.steam" [inputs]="zone.designedEnergySteam" [settings]="settings"
-            (emitCalculate)="calculate()" (changeField)="changeSteamField($event)"></app-designed-energy-steam-form>
+            (emitCalculate)="calculate()" (emitChangeField)="changeSteamField($event)"></app-designed-energy-steam-form>
     </div>
 </form>

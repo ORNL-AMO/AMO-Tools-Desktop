@@ -44,7 +44,7 @@
         <tr>
           <td class="text-center w-50">Boiler</td>
           <td class="text-center w-50">{{outputData.boilerOutput.fuelEnergy | number:'1.0-2'}}
-            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+            <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
           </td>
         </tr>
         <tr>

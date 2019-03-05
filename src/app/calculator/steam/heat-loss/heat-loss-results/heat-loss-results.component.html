@@ -9,7 +9,7 @@
     <tr>
       <td class="bold">Heat Loss</td>
       <td colspan="2" class="text-center"> {{results.heatLoss | number:'1.0-1'}}
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
     <tr>
@@ -28,7 +28,7 @@
       </td>
     </tr>
     <tr>
-      <td class="bold">Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)      </td>
+      <td class="bold">Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</td>
       <td class="text-center">{{results.inletTemperature | number:'1.0-1'}}
       </td>
       <td class="text-center">{{results.outletTemperature | number:'1.0-1'}}
@@ -63,13 +63,13 @@
     </tr>
     <tr>
       <td class="bold">Specific Entropy (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</td>
-      <td class="text-center">{{results.inletSpecificEntropy | number:'1.0-1'}}
+      <td class="text-center">{{results.inletSpecificEntropy | number:'1.0-3'}}
       </td>
-      <td class="text-center">{{results.outletSpecificEntropy | number:'1.0-1'}}
+      <td class="text-center">{{results.outletSpecificEntropy | number:'1.0-3'}}
       </td>
     </tr>
     <tr>
-      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
       <td class="text-center">{{results.inletEnergyFlow | number:'1.0-1'}}
       </td>
       <td class="text-center">{{results.outletEnergyFlow | number:'1.0-1'}}       

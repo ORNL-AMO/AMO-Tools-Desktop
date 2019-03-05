@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MeteredSteamHelpComponent } from './metered-steam-help.component';
+import { DesignedEnergyHelpComponent } from './designed-energy-help.component';
 
-describe('MeteredSteamHelpComponent', () => {
-  let component: MeteredSteamHelpComponent;
-  let fixture: ComponentFixture<MeteredSteamHelpComponent>;
+describe('DesignedEnergyHelpComponent', () => {
+  let component: DesignedEnergyHelpComponent;
+  let fixture: ComponentFixture<DesignedEnergyHelpComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MeteredSteamHelpComponent ]
+      declarations: [ DesignedEnergyHelpComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MeteredSteamHelpComponent);
+    fixture = TestBed.createComponent(DesignedEnergyHelpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

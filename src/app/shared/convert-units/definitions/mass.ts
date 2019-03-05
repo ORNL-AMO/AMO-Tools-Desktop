@@ -36,7 +36,7 @@ export const mass = {
             name: {
                 singular: 'Tonne'
                 , plural: 'Tonne',
-                display: '(tonne)'
+                display: '(t)'
             }
             , to_anchor: 1000000
         }

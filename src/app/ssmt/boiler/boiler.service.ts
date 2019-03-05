@@ -20,12 +20,12 @@ export class BoilerService {
       'fuel': [1, Validators.required],
       'combustionEfficiency': [85, [Validators.required, Validators.min(50), Validators.max(100)]],
       'blowdownRate': ['', [Validators.required, Validators.min(0), Validators.max(25)]],
-      'blowdownFlashed': [0, [Validators.required]],
-      'preheatMakeupWater': [0, [Validators.required]],
+      'blowdownFlashed': [false, [Validators.required]],
+      'preheatMakeupWater': [false, [Validators.required]],
       'steamTemperature': ['', [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
       'deaeratorVentRate': ['', [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
-      'approachTemperature': ['', [Validators.min(tmpRanges.approachTempMin)]]
+      'approachTemperature': ['', [Validators.min(0.000005)]]
     });
   }
 
@@ -34,7 +34,7 @@ export class BoilerService {
 
     let approachTempValidators: Array<ValidatorFn> = [];
     if (obj.preheatMakeupWater) {
-      approachTempValidators = [Validators.min(tmpRanges.approachTempMin), Validators.required];
+      approachTempValidators = [Validators.min(0.000005), Validators.required];
     }
     let form: FormGroup = this.formBuilder.group({
       'fuelType': [obj.fuelType, Validators.required],
@@ -81,14 +81,13 @@ export class BoilerService {
     let tmpDeaeratorPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     tmpDeaeratorPressureMax = this.convertUnitsService.roundVal(tmpDeaeratorPressureMax, 0);
 
-    let tmpApproachTempMin: number = this.convertUnitsService.value(0).from('F').to(settings.steamTemperatureMeasurement);
-    tmpApproachTempMin = this.convertUnitsService.roundVal(tmpApproachTempMin, 0);
+    // let tmpApproachTempMin: number = this.convertUnitsService.value(0).from('F').to(settings.steamTemperatureMeasurement);
+    // tmpApproachTempMin = this.convertUnitsService.roundVal(tmpApproachTempMin, 0);
     return {
       steamTemperatureMin: tmpSteamTemperatureMin,
       steamTemperatureMax: tmpSteamTemperatureMax,
       deaeratorPressureMin: tmpDeaeratorPressureMin,
-      deaeratorPressureMax: tmpDeaeratorPressureMax,
-      approachTempMin: tmpApproachTempMin
+      deaeratorPressureMax: tmpDeaeratorPressureMax
     };
   }
 
@@ -113,5 +112,4 @@ export interface BoilerRanges {
   steamTemperatureMax: number;
   deaeratorPressureMin: number;
   deaeratorPressureMax: number;
-  approachTempMin: number;
 }

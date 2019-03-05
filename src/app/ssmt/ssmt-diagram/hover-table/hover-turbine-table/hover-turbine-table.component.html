@@ -10,7 +10,7 @@
       <td class="text-center">{{turbine.isentropicEfficiency |number:'1.0-1'}} % </td>
       <td class="bold">Energy Out</td>
       <td class="text-center">{{turbine.energyOut | number:'1.0-1'}}
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
     <tr>

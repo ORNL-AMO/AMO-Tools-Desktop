@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { BoilerService } from './boiler.service';
+import { BoilerService, BoilerRanges } from './boiler.service';
 import { BoilerInput } from '../../shared/models/steam/ssmt';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -48,7 +48,7 @@ export class BoilerComponent implements OnInit {
       this.disableForm();
     }
 
-    this.boilerForm.controls.preheatMakeupWater.disable();
+    //this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -85,14 +85,23 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.fuelType.enable();
     this.boilerForm.controls.fuel.enable();
     this.boilerForm.controls.blowdownFlashed.enable();
-    //this.boilerForm.controls.preheatMakeupWater.enable();
+    this.boilerForm.controls.preheatMakeupWater.enable();
   }
 
   disableForm() {
     this.boilerForm.controls.fuelType.disable();
     this.boilerForm.controls.fuel.disable();
     this.boilerForm.controls.blowdownFlashed.disable();
-    // this.boilerForm.controls.preheatMakeupWater.disable();
+    this.boilerForm.controls.preheatMakeupWater.disable();
+  }
+
+  setPreheatMakeupWater() {
+    if (this.boilerForm.controls.preheatMakeupWater.value == true) {
+      this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required]);
+    } else {
+      this.boilerForm.controls.approachTemperature.setValidators([]);
+    }
+    this.save();
   }
 
   save() {

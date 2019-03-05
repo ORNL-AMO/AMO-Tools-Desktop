@@ -382,18 +382,18 @@ export class CompareService {
     if (baseline && modification) {
       if (baseline.headerInput.numberOfHeaders === 1) {
         return (
-          this.isHighPressureHeaderDifferent()
+          this.isHighPressureHeaderDifferent(baseline, modification)
         );
       } else if (baseline.headerInput.numberOfHeaders === 2) {
         return (
-          this.isHighPressureHeaderDifferent() ||
-          this.isLowPressureHeaderDifferent()
+          this.isHighPressureHeaderDifferent(baseline, modification) ||
+          this.isLowPressureHeaderDifferent(baseline, modification)
         );
       } else if (baseline.headerInput.numberOfHeaders === 3) {
         return (
-          this.isHighPressureHeaderDifferent() ||
-          this.isMediumPressureHeaderDifferent() ||
-          this.isLowPressureHeaderDifferent()
+          this.isHighPressureHeaderDifferent(baseline, modification) ||
+          this.isMediumPressureHeaderDifferent(baseline, modification) ||
+          this.isLowPressureHeaderDifferent(baseline, modification)
         );
       }
     } else {

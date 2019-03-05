@@ -7,7 +7,7 @@
     <tr>
       <td colspan="2" class="bold">Boiler Energy</td>
       <td colspan="2" class="text-center"> {{results.boilerEnergy | number:'1.0-1'}}
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
     <tr>
@@ -17,7 +17,7 @@
     <tr>
       <td colspan="2" class="bold">Fuel Energy</td>
       <td colspan="2" class="text-center">{{results.fuelEnergy | number:'1.0-1'}}
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td>
     </tr>
     <tr>
@@ -72,12 +72,12 @@
       </td> -->
     </tr>
     <tr>
-      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
       <td class="text-center">{{results.feedwaterMassFlow | number:'1.0-2'}}</td>
       <td class="text-center">{{results.blowdownMassFlow | number:'1.0-2'}}</td>
       <td class="text-center">{{results.steamMassFlow | number:'1.0-2'}}</td>
       <!-- <td class="text-center">
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td> -->
     </tr>
     <tr>
@@ -91,20 +91,20 @@
     </tr>
     <tr>
       <td class="bold">Sp. Entropy (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</td>
-      <td class="text-center">{{results.feedwaterSpecificEntropy | number:'1.0-1'}}</td>
-      <td class="text-center">{{results.blowdownSpecificEntropy | number:'1.0-1'}}</td>
-      <td class="text-center">{{results.steamSpecificEntropy | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.feedwaterSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center">{{results.blowdownSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center">{{results.steamSpecificEntropy | number:'1.0-3'}}</td>
       <!-- <td class="text-center">
         <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
       </td> -->
     </tr>
     <tr>
-      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span></td>
       <td class="text-center">{{results.feedwaterEnergyFlow | number:'1.0-1'}}</td>
       <td class="text-center">{{results.blowdownEnergyFlow | number:'1.0-1'}}</td>
       <td class="text-center">{{results.steamEnergyFlow | number:'1.0-1'}}</td>
       <!-- <td class="text-center">
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td> -->
     </tr>
   </tbody>

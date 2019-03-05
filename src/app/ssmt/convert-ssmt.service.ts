@@ -42,7 +42,16 @@ export class ConvertSsmtService {
 
   convertBoiler(boilerInput: BoilerInput, oldSettings: Settings, newSettings: Settings): BoilerInput {
     if (oldSettings.steamTemperatureMeasurement != newSettings.steamTemperatureMeasurement) {
-      boilerInput.approachTemperature = this.convertValue(boilerInput.approachTemperature, oldSettings.steamTemperatureMeasurement, newSettings.steamTemperatureMeasurement);
+      let approachTempUnitValOld: string = 'R';
+      let approachTempUnitValNew: string = 'R';
+      if (oldSettings.steamTemperatureMeasurement == 'C' || oldSettings.steamTemperatureMeasurement == 'K') {
+        approachTempUnitValOld = 'K';
+      }
+      if (newSettings.steamTemperatureMeasurement == 'C' || newSettings.steamTemperatureMeasurement == 'K') {
+        approachTempUnitValNew = 'K';
+      }
+
+      boilerInput.approachTemperature = this.convertValue(boilerInput.approachTemperature, approachTempUnitValOld, approachTempUnitValNew);
       boilerInput.steamTemperature = this.convertValue(boilerInput.steamTemperature, oldSettings.steamTemperatureMeasurement, newSettings.steamTemperatureMeasurement);
     }
     if (oldSettings.steamPressureMeasurement != newSettings.steamPressureMeasurement) {
@@ -88,7 +97,7 @@ export class ConvertSsmtService {
       }
       if (oldSettings.steamVolumeMeasurement != newSettings.steamVolumeMeasurement) {
         let convertOne: number = this.convertUnitsService.value(1).from(oldSettings.steamVolumeMeasurement).to(newSettings.steamVolumeMeasurement);
-        ssmt.operatingCosts.makeUpWaterCost = this.convertUnitsService.roundVal(ssmt.operatingCosts.makeUpWaterCost / convertOne, 4);
+        ssmt.operatingCosts.makeUpWaterCost = ssmt.operatingCosts.makeUpWaterCost / convertOne
       }
     }
     return ssmt;

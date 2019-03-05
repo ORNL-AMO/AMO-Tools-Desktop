@@ -38,9 +38,9 @@
     </tr>
     <tr>
       <td class="bold">Sp. Entropy (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</td>
-      <td class="text-center">{{results.inletSpecificEntropy | number:'1.0-1'}}</td>
-      <td class="text-center">{{results.outletSpecificEntropy | number:'1.0-1'}}</td>
-      <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterSpecificEntropy |number:'1.0-1'}}
+      <td class="text-center">{{results.inletSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center">{{results.outletSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterSpecificEntropy |number:'1.0-3'}}
       </td>
       <!-- <td class="text-center">
         <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
@@ -69,21 +69,21 @@
       <!-- <td></td> -->
     </tr>
     <tr>
-      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
       <td class="text-center">{{results.inletMassFlow | number:'1.0-2'}}</td>
       <td class="text-center">{{results.outletMassFlow | number:'1.0-2'}}</td>
       <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterMassFlow |number:'1.0-2'}}</td>
       <!-- <td class="text-center">
-        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </td> -->
     </tr>
     <tr>
-      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
       <td class="text-center">{{results.inletEnergyFlow | number:'1.0-1'}}</td>
       <td class="text-center">{{results.outletEnergyFlow | number:'1.0-1'}}</td>
       <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterEnergyFlow |number:'1.0-1'}}</td>
       <!-- <td class="text-center">
-        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
       </td> -->
     </tr>
   </tbody>

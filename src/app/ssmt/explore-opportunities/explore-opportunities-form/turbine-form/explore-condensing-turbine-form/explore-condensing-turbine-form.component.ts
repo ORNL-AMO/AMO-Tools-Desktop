@@ -31,6 +31,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
   showCondenserPressure: boolean;
   showOperation: boolean;
   turbineOptionTypes: Array<Quantity>;
+  showBaseline: boolean;
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService, private turbineService: TurbineService) { }
 
   ngOnInit() {
@@ -83,6 +84,7 @@ export class ExploreCondensingTurbineFormComponent implements OnInit {
     if (this.showCondenserPressure || this.showOperation) {
       this.emitShowTurbine.emit(true);
     }
+    this.showBaseline = this.baselineForm.controls.useTurbine.value;
   }
 
   initCondenserPressure() {
