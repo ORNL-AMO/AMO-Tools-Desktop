@@ -97,6 +97,9 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   initAssessments() {
+    if(this.settings.unitsOfMeasure == 'Custom'){
+      this.settings.unitsOfMeasure = 'Imperial';
+    }
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
