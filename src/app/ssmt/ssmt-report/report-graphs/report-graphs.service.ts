@@ -36,16 +36,16 @@ export class ReportGraphsService {
     let l = processUsageData.length;
     let processUsageLabels = new Array<string>();
     if (l === 1) {
-      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamEnergyMeasurement + '/hr');
+      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
     }
     else if (l === 2) {
-      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamEnergyMeasurement + '/hr');
-      processUsageLabels.push('LP: ' + this.format(processUsageData[1]) + ' ' + settings.steamEnergyMeasurement + '/hr');
+      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
+      processUsageLabels.push('LP: ' + this.format(processUsageData[1]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
     }
     else if (l === 3) {
-      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamEnergyMeasurement + '/hr');
-      processUsageLabels.push('MP: ' + this.format(processUsageData[1]) + ' ' + settings.steamEnergyMeasurement + '/hr');
-      processUsageLabels.push('LP: ' + this.format(processUsageData[2]) + ' ' + settings.steamEnergyMeasurement + '/hr');
+      processUsageLabels.push('HP: ' + this.format(processUsageData[0]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
+      processUsageLabels.push('MP: ' + this.format(processUsageData[1]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
+      processUsageLabels.push('LP: ' + this.format(processUsageData[2]) + ' ' + settings.steamMassFlowMeasurement + '/hr');
     }
     return processUsageLabels;
   }
@@ -53,8 +53,6 @@ export class ReportGraphsService {
   getGenerationData(ssmt: SSMT): Array<number> {
     let generationData = new Array<number>();
     if (ssmt.turbineInput) {
-      console.log('ssmt.turbineInput = ');
-      console.log(ssmt.turbineInput);
       if (ssmt.turbineInput.condensingTurbine.useTurbine) {
         generationData.push(ssmt.outputData.condensingTurbine.powerOut);
       }
@@ -80,29 +78,25 @@ export class ReportGraphsService {
     let i = 0;
     if (ssmt.turbineInput) {
       if (ssmt.turbineInput.condensingTurbine.useTurbine) {
-        // if (ssmt.turbineInput.condensingTurbine !== undefined && ssmt.turbineInput.condensingTurbine !== null && ssmt.turbineInput.condensingTurbine.useTurbine) {
         generationLabels.push('Condensing Turbine: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
         i++;
       }
       if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-        // if (ssmt.turbineInput.highToLowTurbine !== undefined && ssmt.turbineInput.highToLowTurbine !== null && ssmt.turbineInput.highToLowTurbine.useTurbine) {
         generationLabels.push('HP to LP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
         i++;
       }
       if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
-        // if (ssmt.turbineInput.highToMediumTurbine !== undefined && ssmt.turbineInput.highToMediumTurbine !== null && ssmt.turbineInput.highToMediumTurbine.useTurbine) {
         generationLabels.push('HP to MP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
         i++;
       }
       if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-        // if (ssmt.turbineInput.mediumToLowTurbine !== undefined && ssmt.turbineInput.mediumToLowTurbine !== null && ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
         generationLabels.push('MP to LP: ' + this.format(generationData[i]) + ' ' + settings.steamPowerMeasurement);
       }
     }
     return generationLabels;
   }
 
-  getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, startColor: string, lossColor: string, netColor: string, baselineLosses: SSMTLosses, modificationLosses?: Array<{ outputData: SSMTLosses, name: string }>) {
+  getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, units: string, startColor: string, lossColor: string, netColor: string, baselineLosses: SSMTLosses, modificationLosses?: Array<{ outputData: SSMTLosses, name: string }>) {
     let tmpLosses: SSMTLosses;
     if (selectedSsmt.index == 0) {
       tmpLosses = baselineLosses;
@@ -115,7 +109,7 @@ export class ReportGraphsService {
     }
     let inputObjects: Array<WaterfallItem> = new Array<WaterfallItem>();
     let startNode: WaterfallItem = {
-      value: tmpLosses.fuelEnergy,
+      value: tmpLosses.fuelEnergy + tmpLosses.makeupWaterEnergy,
       label: 'Input Energy',
       isStartValue: true,
       isNetValue: false
@@ -133,13 +127,13 @@ export class ReportGraphsService {
       isNetValue: true
     }
     let otherLossNode: WaterfallItem = {
-      value: tmpLosses.totalOtherLosses,
+      value: tmpLosses.blowdown + tmpLosses.highPressureHeader + tmpLosses.mediumPressureHeader + tmpLosses.lowPressureHeader + tmpLosses.condensateLosses + tmpLosses.deaeratorVentLoss + tmpLosses.lowPressureVentLoss + tmpLosses.condensateFlashTankLoss,
       label: 'Other Losses',
       isStartValue: false,
       isNetValue: false
     };
     let stackLossNode: WaterfallItem = {
-      value: tmpLosses.stack,
+      value: tmpLosses.stack, 
       label: 'Stack Losses',
       isStartValue: false,
       isNetValue: false
@@ -151,8 +145,8 @@ export class ReportGraphsService {
       isNetValue: false
     };
     let condensateLossNode: WaterfallItem = {
-      value: tmpLosses.condensateLosses,
-      label: 'Condensate Losses',
+      value: tmpLosses.highPressureProcessLoss + tmpLosses.mediumPressureProcessLoss + tmpLosses.lowPressureProcessLoss,
+      label: 'Unreturned Condensate Losses',
       isStartValue: false,
       isNetValue: false
     };
@@ -161,6 +155,7 @@ export class ReportGraphsService {
     let waterfallData: WaterfallInput = {
       name: selectedSsmt.name,
       inputObjects: inputObjects,
+      units: units,
       startColor: startColor,
       lossColor: lossColor,
       netColor: netColor
