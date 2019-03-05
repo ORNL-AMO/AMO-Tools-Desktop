@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges, HostListener, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../assessment/assessment.service';
 import { Subscription } from 'rxjs';
@@ -12,11 +11,21 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { Router } from '../../../node_modules/@angular/router';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
-  styleUrls: ['./core.component.css']
+  styleUrls: ['./core.component.css'],
+  animations: [
+    trigger('survey', [
+      state('show', style({
+        bottom: '20px'
+      })),
+      transition('hide => show', animate('.5s ease-in')),
+      transition('show => hide', animate('.5s ease-out'))
+    ])
+  ]
 })
 
 export class CoreComponent implements OnInit {
@@ -38,6 +47,8 @@ export class CoreComponent implements OnInit {
   dashboardTab: string;
   dashboardViewSub: Subscription;
   updateError: boolean = false;
+
+  showSurvey: string = 'hide';
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
@@ -83,6 +94,10 @@ export class CoreComponent implements OnInit {
     if (this.indexedDbService.db === undefined) {
       this.initData();
     }
+
+    setTimeout(() => {
+      this.showSurvey = 'show';
+    }, 3500);
   }
 
   ngOnDestroy() {
@@ -125,6 +140,9 @@ export class CoreComponent implements OnInit {
     });
   }
 
+  closeSurvey(){
+    this.showSurvey = 'hide';
+  }
 
 
   closeModal() {
