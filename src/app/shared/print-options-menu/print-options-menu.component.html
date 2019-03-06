@@ -51,6 +51,15 @@
                         FSAT Rollup Summary
                     </div>
                 </div>
+                <div class="row toggle-btn pad-top-10" *ngIf="showSsmtReportOptions && showRollupReportOptions"
+                    (click)="togglePrint('ssmtRollup')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printSsmtRollup"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        SSMT Rollup Summary
+                    </div>
+                </div>
 
                 <div *ngIf="!showSsmtReportOptions" class="row toggle-btn pad-top-10" (click)="togglePrint('results')">
                     <div class="col-2">
@@ -77,33 +86,17 @@
                         Report Graphs
                     </div>
                 </div>
-                <div *ngIf="!showSsmtReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('reportSankey')">
+                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions"
+                    class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printReportSankey"></app-animated-checkmark>
                     </div>
                     <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : !showRollupReportOptions && !showPhastReportOptions, 'bottom-divider' : showRollupReportOptions || (!showRollupReportOptions && showPhastReportOptions)}">
+                        [ngClass]="{'bold-bottom-divider' : (showFsatReportOptions || showPsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions}">
                         Report Sankey
                     </div>
                 </div>
 
-                <div *ngIf="showPhastReportOptions && showRollupReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('inputData')">
-                    <div class="col-2"
-                        [ngClass]="{'bold-bottom-divider' : showPhastReportOptions && showRollupReportOptions}">
-                        <app-animated-checkmark [active]="printInputData"></app-animated-checkmark>
-                    </div>
-                    <div class="col-10"
-                        [ngClass]="{'bold-bottom-divider' : showPhastReportOptions && showRollupReportOptions}">
-                        Input Summary
-                    </div>
-                </div>
-
-                <div *ngIf="showPhastReportOptions && showRollupReportOptions" class="row pad-top-10 pad-bottom-10">
-                    <div class="col-2 bottom-divider"></div>
-                    <div class="col-10 bottom-divider">Process Heating Options</div>
-                </div>
                 <div *ngIf="showPhastReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('energyUsed')">
                     <div class="col-2">
@@ -113,13 +106,14 @@
                         Energy Used
                     </div>
                 </div>
+
                 <div *ngIf="showPhastReportOptions || showSsmtReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('executiveSummary')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printExecutiveSummary"></app-animated-checkmark>
                     </div>
                     <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : showPhastReportOptions && !showRollupReportOptions, 'bottom-divider' : showSsmtReportOptions}">
+                        [ngClass]="{'bold-bottom-divider' : !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions}">
                         Executive Summary
                     </div>
                 </div>
@@ -137,10 +131,43 @@
                 <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
                     (click)="togglePrint('lossesSummary')">
                     <div class="col-2">
-                        <app-animated-checkmark [active]="printLossesSummary"></app-animated-checkmark>
+                        <app-animated-checkmark [active]="printEnergySummary"></app-animated-checkmark>
                     </div>
                     <div class="col-8 bold-bottom-divider">
                         Losses Summary
+                    </div>
+                </div>
+
+                <!-- input summary last -->
+                <div class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printInputData"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8">
+                        Input Summary
+                    </div>
+                </div>
+
+                <!-- 
+
+                <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('energySummary')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printEnergySummary"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bottom-divider">
+                        Energy Summary<span *ngIf="showRollupReportOptions"> - SSMT</span>
+                    </div>
+                </div>
+
+                <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
+                    (click)="togglePrint('lossesSummary')">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printLossesSummary"></app-animated-checkmark>
+                    </div>
+                    <div class="col-8"
+                        [ngClass]="{'bottom-divider' : showRollupReportOptions, 'bold-bottom-divider' : !showRollupReportOptions}">
+                        Losses Summary<span *ngIf="showRollupReportOptions"> - SSMT</span>
                     </div>
                 </div>
 
@@ -150,9 +177,9 @@
                         <app-animated-checkmark [active]="printInputData"></app-animated-checkmark>
                     </div>
                     <div class="col-10">
-                        Input Summary
+                        Input Summary<span *ngIf="showRollupReportOptions"> - SSMT</span>
                     </div>
-                </div>
+                </div> -->
 
             </div>
             <div class="modal-footer">

@@ -34,6 +34,8 @@ export class PrintOptionsMenuComponent implements OnInit {
   printFsatRollup: boolean;
   @Input()
   printPhastRollup: boolean;
+  @Input()
+  printSsmtRollup: boolean;
 
   @Input()
   printEnergySummary: boolean;
