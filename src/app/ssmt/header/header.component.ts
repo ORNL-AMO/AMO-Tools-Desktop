@@ -27,6 +27,8 @@ export class HeaderComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   modificationIndex: number;
+  @Input()
+  deaeratorPressure: number;
   
   highPressureForm: FormGroup;
   mediumPressureForm: FormGroup;
@@ -60,10 +62,10 @@ export class HeaderComponent implements OnInit {
 
   initForms() {
     if (this.headerInput.highPressure) {
-      this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings);
+      this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, this.deaeratorPressure);
     }
     else {
-      this.highPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings);
+      this.highPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.deaeratorPressure);
     }
 
     if (this.headerInput.mediumPressure) {
