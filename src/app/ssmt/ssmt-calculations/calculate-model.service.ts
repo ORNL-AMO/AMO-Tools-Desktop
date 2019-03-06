@@ -1542,11 +1542,12 @@ export class CalculateModelService {
 
   //5D. Calculate Makeup Water Properties
   calculateMakeupWater() {
+    let makeupWaterPressure: number = this.convertUnitsService.value(0.101325).from('MPaa').to(this.settings.steamPressureMeasurement);
     this.makeupWater = this.steamService.steamProperties(
       {
         thermodynamicQuantity: 0, //temperature
         quantityValue: this.inputData.operationsInput.makeUpWaterTemperature,
-        pressure: 0 //atmospheric pressure
+        pressure: makeupWaterPressure //atmospheric pressure
       },
       this.settings
     );
