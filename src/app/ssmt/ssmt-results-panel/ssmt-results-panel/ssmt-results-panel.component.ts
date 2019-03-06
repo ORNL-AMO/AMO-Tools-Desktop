@@ -74,14 +74,21 @@ export class SsmtResultsPanelComponent implements OnInit {
         this.ssmt.resultsCalculated = true;
         this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = true;
         this.save();
+        this.checkValid();
       }, 750);
     } else {
       this.getInputs();
       this.getLosses();
       this.getSavings(this.ssmt.outputData.totalOperatingCost, this.ssmt.modifications[this.modificationIndex].ssmt.outputData.totalOperatingCost);
       this.showResults = true;
+      this.checkValid();
     }
-    if (this.ssmt.modifications[this.modificationIndex].ssmt.outputData.boilerOutput) {
+
+
+  }
+
+  checkValid() {
+    if (this.ssmt.modifications[this.modificationIndex].ssmt.outputData && this.ssmt.modifications[this.modificationIndex].ssmt.outputData.boilerOutput) {
       this.modValid = true;
     } else {
       this.modValid = false;
@@ -91,7 +98,6 @@ export class SsmtResultsPanelComponent implements OnInit {
     } else {
       this.baselineValid = false;
     }
-
   }
 
   getInputs() {
