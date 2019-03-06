@@ -138,7 +138,7 @@
       <input name="desuperheatSteamTemperature" type="number" step="any" class="form-control" id="{{idString+pressureLevel+'_desuperheatSteamTemperature'}}"
         (input)="save()" [readonly]="!selected" formControlName="desuperheatSteamTemperature" (focus)="focusField('desuperheatSteamTemperature')"
         (blur)="focusOut()" [ngClass]="{'indicate-different': isDesuperheatSteamTemperatureDifferent()}">
-
+        <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="headerForm.controls.desuperheatSteamTemperature.invalid && !headerForm.controls.desuperheatSteamTemperature.pristine">
       <span *ngIf="headerForm.controls.desuperheatSteamTemperature.errors.required">Value Required</span>

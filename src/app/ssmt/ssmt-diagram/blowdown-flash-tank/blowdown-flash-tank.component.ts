@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
-import { Settings } from 'http2';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-blowdown-flash-tank',

@@ -11,7 +11,8 @@
         <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings"
           [boilerInput]="ssmt.boilerInput" (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true"></app-boiler>
         <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings"
-          [headerInput]="ssmt.headerInput" (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"></app-header>
+          [headerInput]="ssmt.headerInput" (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"
+          [deaeratorPressure]="ssmt.boilerInput.deaeratorPressure"></app-header>
         <app-turbine *ngIf="modelTab == 'turbine'" [selected]="baselineSelected" [settings]="settings"
           [turbineInput]="ssmt.turbineInput" [numberOfHeaders]="ssmt.headerInput.numberOfHeaders"
           (emitSave)="saveBaselineTurbine($event)" [isBaseline]="true"></app-turbine>
@@ -33,7 +34,8 @@
         </app-boiler>
         <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
           [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput" (emitSave)="saveModHeader($event)"
-          [modificationIndex]="modificationIndex">
+          [modificationIndex]="modificationIndex"
+          [deaeratorPressure]="ssmt.modifications[modificationIndex].ssmt.boilerInput.deaeratorPressure">
         </app-header>
         <app-turbine *ngIf="modelTab == 'turbine'" [selected]="modifiedSelected" [settings]="settings"
           [turbineInput]="ssmt.modifications[modificationIndex].ssmt.turbineInput"

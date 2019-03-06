@@ -22,7 +22,7 @@ export class CalculateLossesService {
     let ssmtCpy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let ssmtLosses: SSMTLosses = this.initLosses();
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCpy.boilerInput, settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCpy.headerInput, settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCpy.headerInput, settings, ssmtCpy.boilerInput.deaeratorPressure);
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCpy.turbineInput, ssmtCpy.headerInput, settings);
     let operationsValid: boolean = this.operationsService.getForm(ssmtCpy, settings).valid;
 
