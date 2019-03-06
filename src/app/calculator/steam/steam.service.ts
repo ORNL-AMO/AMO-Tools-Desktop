@@ -97,11 +97,12 @@ export class SteamService {
   saturatedProperties(saturatedPropertiesInput: SaturatedPropertiesInput, pressureOrTemperature: number, settings: Settings): SaturatedPropertiesOutput {
     let inputCpy = JSON.parse(JSON.stringify(saturatedPropertiesInput));
     let output: SaturatedPropertiesOutput;
-
+    //0 = pressure
     if (pressureOrTemperature === 0) {
       inputCpy.saturatedPressure = this.convertUnitsService.value(inputCpy.saturatedPressure).from(settings.steamPressureMeasurement).to('MPa');
       output = steamAddon.saturatedPropertiesGivenPressure(inputCpy);
     } else {
+      //temperature
       inputCpy.saturatedTemperature = this.convertUnitsService.value(inputCpy.saturatedTemperature).from(settings.steamTemperatureMeasurement).to('C') + 273.15;
       output = steamAddon.saturatedPropertiesGivenTemperature(inputCpy);
     }

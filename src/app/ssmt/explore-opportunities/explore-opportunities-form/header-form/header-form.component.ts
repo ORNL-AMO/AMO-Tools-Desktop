@@ -65,14 +65,14 @@ export class HeaderFormComponent implements OnInit {
 
   initForms() {
     if (this.ssmt.headerInput.highPressure) {
-      this.baselineHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressure, this.settings);
+      this.baselineHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressure, this.settings, this.ssmt.boilerInput.deaeratorPressure);
     } else {
-      this.baselineHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings);
+      this.baselineHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.ssmt.boilerInput.deaeratorPressure);
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure) {
-      this.modificationHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure, this.settings);
+      this.modificationHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure, this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure);
     } else {
-      this.modificationHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings);
+      this.modificationHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure);
     }
 
     if (this.ssmt.headerInput.lowPressure) {
@@ -243,10 +243,5 @@ export class HeaderFormComponent implements OnInit {
   focusField(str: string) {
     this.exploreOpportunitiesService.currentTab.next('header');
     this.exploreOpportunitiesService.currentField.next(str);
-  }
-
-  focusOut() {
-    // this.exploreOpportunitiesService.currentTab.next('header');
-    // this.exploreOpportunitiesService.currentField.next('default');
   }
 }

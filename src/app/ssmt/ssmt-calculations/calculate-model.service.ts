@@ -89,7 +89,7 @@ export class CalculateModelService {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(_ssmt));
     this.initResults();
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, _settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings, ssmtCopy.boilerInput.deaeratorPressure);
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, _settings);
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, _settings).valid;
 
@@ -1542,11 +1542,12 @@ export class CalculateModelService {
 
   //5D. Calculate Makeup Water Properties
   calculateMakeupWater() {
+    let makeupWaterPressure: number = this.convertUnitsService.value(0.101325).from('MPaa').to(this.settings.steamPressureMeasurement);
     this.makeupWater = this.steamService.steamProperties(
       {
         thermodynamicQuantity: 0, //temperature
         quantityValue: this.inputData.operationsInput.makeUpWaterTemperature,
-        pressure: 0 //atmospheric pressure
+        pressure: makeupWaterPressure //atmospheric pressure
       },
       this.settings
     );

@@ -22,7 +22,7 @@ export class CalculateLossesService {
     let ssmtCpy: SSMT = JSON.parse(JSON.stringify(ssmt));
     let ssmtLosses: SSMTLosses = this.initLosses();
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCpy.boilerInput, settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCpy.headerInput, settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCpy.headerInput, settings, ssmtCpy.boilerInput.deaeratorPressure);
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCpy.turbineInput, ssmtCpy.headerInput, settings);
     let operationsValid: boolean = this.operationsService.getForm(ssmtCpy, settings).valid;
 
@@ -31,7 +31,7 @@ export class CalculateLossesService {
       ssmtLosses.blowdown = this.calculateBlowdown(resultsCpy.boilerOutput, settings);
       ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
       ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessUsage, resultsCpy.highPressureCondensate, settings);
-      ssmtLosses.highPressureProcessUsage = inputData.headerInput.highPressure.processSteamUsage;
+      ssmtLosses.highPressureProcessUsage = resultsCpy.highPressureProcessUsage.processUsage;
       //
       ssmtLosses.highPressureHeader = resultsCpy.highPressureSteamHeatLoss.heatLoss;
       if (inputCpy.turbineInput.condensingTurbine.useTurbine === true) {
@@ -49,7 +49,7 @@ export class CalculateLossesService {
         //header
         ssmtLosses.lowPressureHeader = resultsCpy.lowPressureSteamHeatLoss.heatLoss;
         //process
-        ssmtLosses.lowPressureProcessUsage = inputData.headerInput.lowPressure.processSteamUsage;
+        ssmtLosses.lowPressureProcessUsage = resultsCpy.lowPressureProcessUsage.processUsage;
         ssmtLosses.lowPressureProcessLoss = this.calculateProcessLoss(resultsCpy.lowPressureProcessUsage, resultsCpy.lowPressureCondensate, settings);
         //turbine
         if (inputCpy.turbineInput.highToLowTurbine.useTurbine === true) {
@@ -58,7 +58,7 @@ export class CalculateLossesService {
         }
 
         if (inputCpy.headerInput.numberOfHeaders === 3) {
-          ssmtLosses.mediumPressureProcessUsage = inputData.headerInput.mediumPressure.processSteamUsage;
+          ssmtLosses.mediumPressureProcessUsage = resultsCpy.mediumPressureProcessUsage.processUsage;
           ssmtLosses.mediumPressureHeader = resultsCpy.mediumPressureSteamHeatLoss.heatLoss;
           if (inputCpy.turbineInput.highToMediumTurbine.useTurbine === true) {
             ssmtLosses.highToMediumTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToMediumPressureTurbine);

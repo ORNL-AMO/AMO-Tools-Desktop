@@ -17,8 +17,7 @@
 
       <div class="form-group">
         <label for="{{idString+'fuel'}}">Fuel
-          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()"
-            [ngClass]="{'readonly-link': !baselineSelected}">Add
+          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()">Add
             New Fuel</a>
         </label>
         <select name="fuel" class="form-control" id="{{idString+'fuel'}}" (change)="save()" (focus)="focusField('fuel')"
