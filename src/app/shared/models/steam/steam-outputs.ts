@@ -343,6 +343,9 @@ export interface SSMTLosses {
   highToMediumTurbineUsefulEnergy: number;
   highToLowTurbineUsefulEnergy: number;
   mediumToLowTurbineUsefulEnergy: number;
+  highPressureProcessUsage: number;
+  mediumPressureProcessUsage: number;
+  lowPressureProcessUsage: number;
   allProcessUsageUsefulEnergy: number;
   totalProcessLosses: number;
   totalVentLosses: number;

@@ -130,14 +130,10 @@ export class ReportGraphsComponent implements OnInit {
 
   selectNewSsmt(dropDownIndex: number): void {
     if (dropDownIndex === 1) {
-      // this.ssmt1ProcessPieValues = this.reportGraphsService.getProcessUsageData(this.selectedSsmt1.ssmt);
-      // this.ssmt1GenerationPieValues = this.reportGraphsService.getGenerationData(this.selectedSsmt1.ssmt);
       this.ssmt1ProcessExportName = this.assessment.name + '-process-' + this.selectedSsmt1.name;
       this.ssmt1GenerationExportName = this.assessment.name + '-generation-' + this.selectedSsmt1.name;
     }
     else {
-      // this.ssmt2ProcessPieValues = this.reportGraphsService.getProcessUsageData(this.selectedSsmt2.ssmt);
-      // this.ssmt2GenerationPieValues = this.reportGraphsService.getGenerationData(this.selectedSsmt2.ssmt);
       this.ssmt2ProcessExportName = this.assessment.name + '-process-' + this.selectedSsmt2.name;
       this.ssmt2GenerationExportName = this.assessment.name + '-generation-' + this.selectedSsmt2.name;
     }
@@ -157,79 +153,14 @@ export class ReportGraphsComponent implements OnInit {
     }
   }
 
-
-
   // waterfall functions
   setWaterfallData() {
     this.ssmt1WaterfallData = null;
     this.ssmt2WaterfallData = null;
-    this.ssmt1WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt1, '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses);
+    this.ssmt1WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt1, this.settings.steamEnergyMeasurement + '/hr', '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses);
     if (this.modExists) {
-      this.ssmt2WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt2, '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses);
+      this.ssmt2WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt2, this.settings.steamEnergyMeasurement + '/hr', '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses);
     }
-  }
-
-  getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, startColor: string, lossColor: string, netColor: string) {
-    let tmpLosses: SSMTLosses;
-    if (selectedSsmt.index == 0) {
-      tmpLosses = this.baselineLosses;
-    }
-    else {
-      tmpLosses = this.modificationLosses[selectedSsmt.index - 1].outputData;
-    }
-    let inputObjects: Array<WaterfallItem> = new Array<WaterfallItem>();
-    let startNode: WaterfallItem = {
-      value: tmpLosses.fuelEnergy,
-      label: 'Input Energy',
-      isStartValue: true,
-      isNetValue: false
-    }
-    let processUseNetNode: WaterfallItem = {
-      value: tmpLosses.allProcessUsageUsefulEnergy,
-      label: 'Process Use',
-      isStartValue: false,
-      isNetValue: true
-    };
-    let turbineUseNetNode: WaterfallItem = {
-      value: tmpLosses.highToLowTurbineUsefulEnergy + tmpLosses.highToMediumTurbineUsefulEnergy + tmpLosses.mediumToLowTurbineUsefulEnergy + tmpLosses.condensingTurbineUsefulEnergy,
-      label: 'Turbine Generation',
-      isStartValue: false,
-      isNetValue: true
-    }
-    let otherLossNode: WaterfallItem = {
-      value: tmpLosses.totalOtherLosses,
-      label: 'Other Losses',
-      isStartValue: false,
-      isNetValue: false
-    };
-    let stackLossNode: WaterfallItem = {
-      value: tmpLosses.stack,
-      label: 'Stack Losses',
-      isStartValue: false,
-      isNetValue: false
-    };
-    let turbineLossNode: WaterfallItem = {
-      value: tmpLosses.highToLowTurbineEfficiencyLoss + tmpLosses.highToMediumTurbineEfficiencyLoss + tmpLosses.mediumToLowTurbineEfficiencyLoss + tmpLosses.condensingTurbineEfficiencyLoss + tmpLosses.condensingLosses,
-      label: 'Turbine Losses',
-      isStartValue: false,
-      isNetValue: false
-    };
-    let condensateLossNode: WaterfallItem = {
-      value: tmpLosses.condensateLosses,
-      label: 'Condensate Losses',
-      isStartValue: false,
-      isNetValue: false
-    };
-    inputObjects = [startNode, turbineUseNetNode, turbineLossNode, processUseNetNode, condensateLossNode, stackLossNode, otherLossNode];
-
-    let waterfallData: WaterfallInput = {
-      name: selectedSsmt.name,
-      inputObjects: inputObjects,
-      startColor: startColor,
-      lossColor: lossColor,
-      netColor: netColor
-    };
-    return waterfallData;
   }
 
   getWaterfallWidth(): number {

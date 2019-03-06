@@ -50,6 +50,9 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
+    if(this.settings.unitsOfMeasure == 'Custom'){
+      this.settings.unitsOfMeasure = 'Imperial';
+    }
     if (this.inAssessment) {
       this.getCalculator();
       this.originalCalculator = this.calculator;

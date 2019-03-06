@@ -53,6 +53,9 @@ export class EnergyUseComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    if(this.settings.unitsOfMeasure == 'Custom'){
+      this.settings.unitsOfMeasure = 'Imperial';
+    }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
