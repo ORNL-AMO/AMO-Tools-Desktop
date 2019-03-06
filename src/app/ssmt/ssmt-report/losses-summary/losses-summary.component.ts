@@ -75,25 +75,25 @@ export class LossesSummaryComponent implements OnInit {
   }
 
   checkCondensingTurbine(loss: SSMTLosses) {
-    if (loss.condensingTurbineEfficiencyLoss) {
+    if (loss.condensingTurbineEfficiencyLoss || loss.condensingTurbineUsefulEnergy) {
       this.showCondensingTurbine = true;
     }
   }
 
   checkHighToLowTurbine(loss: SSMTLosses) {
-    if (loss.highToLowTurbineEfficiencyLoss) {
+    if (loss.highToLowTurbineEfficiencyLoss || loss.highToLowTurbineUsefulEnergy) {
       this.showHighToLowTurbine = true;
     }
   }
 
   checkHighToMediumTurbine(loss: SSMTLosses) {
-    if (loss.highToMediumTurbineEfficiencyLoss) {
+    if (loss.highToMediumTurbineEfficiencyLoss || loss.highToMediumTurbineUsefulEnergy) {
       this.showHighToMediumTurbine = true;
     }
   }
 
   checkMediumtoLowTurbine(loss: SSMTLosses) {
-    if (loss.mediumToLowTurbineEfficiencyLoss) {
+    if (loss.mediumToLowTurbineEfficiencyLoss || loss.mediumToLowTurbineUsefulEnergy) {
       this.showMediumToLowTurbine = true;
     }
   }

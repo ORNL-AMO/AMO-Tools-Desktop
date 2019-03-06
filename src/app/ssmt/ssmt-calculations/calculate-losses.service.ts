@@ -31,7 +31,7 @@ export class CalculateLossesService {
       ssmtLosses.blowdown = this.calculateBlowdown(resultsCpy.boilerOutput, settings);
       ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
       ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessUsage, resultsCpy.highPressureCondensate, settings);
-
+      ssmtLosses.highPressureProcessUsage = resultsCpy.highPressureProcessUsage.processUsage;
       //
       ssmtLosses.highPressureHeader = resultsCpy.highPressureSteamHeatLoss.heatLoss;
       if (inputCpy.turbineInput.condensingTurbine.useTurbine === true) {
@@ -49,6 +49,7 @@ export class CalculateLossesService {
         //header
         ssmtLosses.lowPressureHeader = resultsCpy.lowPressureSteamHeatLoss.heatLoss;
         //process
+        ssmtLosses.lowPressureProcessUsage = resultsCpy.lowPressureProcessUsage.processUsage;
         ssmtLosses.lowPressureProcessLoss = this.calculateProcessLoss(resultsCpy.lowPressureProcessUsage, resultsCpy.lowPressureCondensate, settings);
         //turbine
         if (inputCpy.turbineInput.highToLowTurbine.useTurbine === true) {
@@ -57,6 +58,7 @@ export class CalculateLossesService {
         }
 
         if (inputCpy.headerInput.numberOfHeaders === 3) {
+          ssmtLosses.mediumPressureProcessUsage = resultsCpy.mediumPressureProcessUsage.processUsage;
           ssmtLosses.mediumPressureHeader = resultsCpy.mediumPressureSteamHeatLoss.heatLoss;
           if (inputCpy.turbineInput.highToMediumTurbine.useTurbine === true) {
             ssmtLosses.highToMediumTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToMediumPressureTurbine);
@@ -230,6 +232,10 @@ export class CalculateLossesService {
       highToMediumTurbineUsefulEnergy: 0,
       highToLowTurbineUsefulEnergy: 0,
       mediumToLowTurbineUsefulEnergy: 0,
+      highPressureProcessUsage: 0,
+      mediumPressureProcessUsage: 0,
+      lowPressureProcessUsage: 0,
+
       allProcessUsageUsefulEnergy: 0,
       totalProcessLosses: 0,
       totalVentLosses: 0,
