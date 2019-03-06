@@ -79,6 +79,7 @@ export class ReportGraphsComponent implements OnInit {
     this.setPieData();
     this.setPieLabels();
     this.setWaterfallData();
+
   }
 
 
@@ -157,9 +158,10 @@ export class ReportGraphsComponent implements OnInit {
   setWaterfallData() {
     this.ssmt1WaterfallData = null;
     this.ssmt2WaterfallData = null;
-    this.ssmt1WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt1, this.settings.steamEnergyMeasurement + '/hr', '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses);
+
+    this.ssmt1WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt1, this.settings.steamEnergyMeasurement + '/hr', '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, null);
     if (this.modExists) {
-      this.ssmt2WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt2, this.settings.steamEnergyMeasurement + '/hr', '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses);
+      this.ssmt2WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt2, this.settings.steamEnergyMeasurement + '/hr', '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses[this.selectedSsmt2.index - 1].outputData);
     }
   }
 

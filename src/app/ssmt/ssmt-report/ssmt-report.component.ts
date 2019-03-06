@@ -10,6 +10,7 @@ import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SsmtReportService } from './ssmt-report.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { Co2SavingsModule } from '../../calculator/utilities/co2-savings/co2-savings.module';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -93,9 +94,13 @@ export class SsmtReportComponent implements OnInit {
         }
         this.getTableCellWidth();
         this.dataCalculated = true;
+        if (this.printView) {
+        }
       }, 10);
     } else {
       this.dataCalculated = true;
+      if (this.printView) {
+      }
     }
     if (this.assessment) {
       this.assessmentDirectories = new Array();

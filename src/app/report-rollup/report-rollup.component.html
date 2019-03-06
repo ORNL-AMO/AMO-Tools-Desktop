@@ -181,6 +181,24 @@
                             [printResults]="printResults"></app-fsat-report>
                     </div>
                 </div>
+
+
+                <!-- <div *ngIf="_ssmtAssessments.length > 0 && printSsmtRollup" class="row print-break-before">
+                    <div class="col-12">
+                        <app-ssmt-rollup-print [settings]="settings"></app-ssmt-rollup-print>
+                    </div>
+                </div> -->
+                <div class="assessment-item row" *ngFor="let item of _ssmtAssessments"
+                    id="{{'assessment_'+item.assessment.id}}">
+                    <div class="col-12">
+                        <app-ssmt-report *ngIf="item.assessment.ssmt" [assessment]="item.assessment"
+                            [settings]="item.settings" [inRollup]="true" [printView]="printView"
+                            [printExecutiveSummary]="printExecutiveSummary" [printEnergySummary]="printEnergySummary"
+                            [printLossesSummary]="printLossesSummary" [printInputData]="printInputData"
+                            [printReportGraphs]="printReportGraphs"></app-ssmt-report>
+                    </div>
+                </div>
+
             </div>
 
             <!-- app layout -->
@@ -322,10 +340,11 @@
 
 <app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="showRollupReportOptions"
     [showPsatReportOptions]="showPsatReportOptions" [showFsatReportOptions]="showFsatReportOptions"
-    [showPhastReportOptions]="showPhastReportOptions" [selectAll]="selectAll" [printReportGraphs]="printReportGraphs"
-    [printReportSankey]="printReportSankey" [printResults]="printResults" [printInputData]="printInputData"
-    [printEnergyUsed]="printEnergyUsed" [printExecutiveSummary]="printExecutiveSummary"
-    [printPsatRollup]="printPsatRollup" [printFsatRollup]="printFsatRollup" [printPhastRollup]="printPhastRollup"
-    (emitClosePrintModal)="closePrintModal($event)" (emitTogglePrint)="togglePrint($event)"
-    (emitPrint)="setPrintViewThenPrint()">
+    [showPhastReportOptions]="showPhastReportOptions" [showSsmtReportOptions]="showSsmtReportOptions"
+    [selectAll]="selectAll" [printReportGraphs]="printReportGraphs" [printReportSankey]="printReportSankey"
+    [printResults]="printResults" [printInputData]="printInputData" [printEnergyUsed]="printEnergyUsed"
+    [printExecutiveSummary]="printExecutiveSummary" [printEnergySummary]="printEnergySummary"
+    [printLossesSummary]="printLossesSummary" [printPsatRollup]="printPsatRollup" [printFsatRollup]="printFsatRollup"
+    [printPhastRollup]="printPhastRollup" (emitClosePrintModal)="closePrintModal($event)"
+    (emitTogglePrint)="togglePrint($event)" (emitPrint)="setPrintViewThenPrint()">
 </app-print-options-menu>
