@@ -244,9 +244,4 @@ export class HeaderFormComponent implements OnInit {
     this.exploreOpportunitiesService.currentTab.next('header');
     this.exploreOpportunitiesService.currentField.next(str);
   }
-
-  focusOut() {
-    // this.exploreOpportunitiesService.currentTab.next('header');
-    // this.exploreOpportunitiesService.currentField.next('default');
-  }
 }

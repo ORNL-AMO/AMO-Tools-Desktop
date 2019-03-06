@@ -2,7 +2,7 @@
 <div class="d-flex w-100 justify-content-center pl-2 pr-2">
   <span class="input-group-btn">
     <button (mouseenter)="emitUpdateTableString()" class="btn-copy-table" type="button" ngxClipboard [cbContent]="tableString"
-      (cbOnSuccess)="copySuccess()" [class.btn-success]="isCopied1">Copy Table</button>
+      (cbOnSuccess)="copySuccess()">Copy Table</button>
   </span>
 </div>
 
