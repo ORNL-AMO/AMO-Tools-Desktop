@@ -86,6 +86,7 @@ export class SsmtReportComponent implements OnInit {
             // this.calculateModelService.initResults();
             // this.calculateModelService.initData(modification.ssmt, this.settings, false, this.baselineOutput.sitePowerDemand);
             let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(modification.ssmt, this.settings, false, true, this.baselineOutput.sitePowerDemand);
+            modification.ssmt.outputData = resultData.outputData;
             this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
             this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
             let modLosses: SSMTLosses = this.calculateLossesService.calculateLosses(resultData.outputData, resultData.inputData, this.settings, modification.ssmt);
