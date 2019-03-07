@@ -17,31 +17,64 @@
       <br>
       <small class="text-muted">
         The energy removed as a percent (%) of the energy removed if turbine were an isentropic process (entropy in =
-        entropy out). Commonly, 55% to 80%.
+        entropy out). Commonly, 55% to 80%. 
+        This can be found in your manufacturer specifications. Single wheel turbines may be as low as 20% and larger, 
+        more complex turbines 65% or higher.
+        <br>
+        
         <hr>
       </small>
     </h6>
-    <!-- <div class="w-100 justify-content-center">
+    <div class="w-100 justify-content-center">
             <table class="table table-hover table-striped">
               <tbody>
                 <tr>
-                  <th class="w-50 text-center">Minimum</th>
-                  <th class="w-50 text-center">Maximum</th>
+                  <th class="w-50 text-center">Turbine Type</th>
+                  <th class="w-50 text-center">Exhaust Type</th>
+                  <th class="w-50 text-center">Average (%)</th>
                 </tr>
                 <tr>
-                  <td class="w-50 text-center">0</td>
-                  <td class="w-50 text-center">1</td>
+                  <td class="w-50 text-center">Single Stage</td>
+                  <td class="w-50 text-center">Back Pressure</td>
+                  <td class="w-50 text-center">53</td>
+                </tr>
+                <tr>
+                  <td class="w-50 text-center">Single Stage</td>
+                  <td class="w-50 text-center">Condensing</td>
+                  <td class="w-50 text-center">57</td>
+                </tr>
+                <tr>
+                  <td class="w-50 text-center">Multi-Stage <10MW</td>
+                  <td class="w-50 text-center">Back Pressure</td>
+                  <td class="w-50 text-center">60</td>
+                </tr>
+                <tr>
+                  <td class="w-50 text-center">Multi-Stage <10MW</td>
+                  <td class="w-50 text-center">Condensing</td>
+                  <td class="w-50 text-center">67</td>
+                </tr>
+                <tr>
+                  <td class="w-50 text-center">Multi-Stage >10MW</td>
+                  <td class="w-50 text-center">Back Pressure</td>
+                  <td class="w-50 text-center">75</td>
+                </tr>
+                <tr>
+                  <td class="w-50 text-center">Multi-Stage >10MW</td>
+                  <td class="w-50 text-center">Condensing</td>
+                  <td class="w-50 text-center">80</td>
                 </tr>
               </tbody>
             </table>
-          </div> -->
+          </div>
   </div>
   <div class="my-2" *ngIf="currentField == 'generationEfficiency'">
     <h6>
-      Generation Efficiency
+      Generator Efficiency
       <br>
       <small class="text-muted">
-        The conversion efficiency to electricity. Commonly 95%.
+        The ratio of net power generated to total fuel input to the cycle (the conversion efficiency to electricity). 
+        This can be found in your manufacturer specifications. 
+        Typically around 95%.
         <hr>
       </small>
     </h6>
