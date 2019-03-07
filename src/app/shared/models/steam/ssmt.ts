@@ -68,20 +68,20 @@ export const PressureTurbineOperationTypes: Array<{ value: number, display: stri
 ];
 
 export interface CondensingTurbine {
-    isentropicEfficiency: number;
-    generationEfficiency: number;
-    condenserPressure: number;
+    isentropicEfficiency?: number;
+    generationEfficiency?: number;
+    condenserPressure?: number;
     operationType: number;
-    operationValue: number;
+    operationValue?: number;
     useTurbine: boolean;
 }
 
 export interface PressureTurbine {
-    isentropicEfficiency: number;
-    generationEfficiency: number;
+    isentropicEfficiency?: number;
+    generationEfficiency?: number;
     operationType: number;
-    operationValue1: number;
-    operationValue2: number;
+    operationValue1?: number;
+    operationValue2?: number;
     useTurbine: boolean;
 }
 

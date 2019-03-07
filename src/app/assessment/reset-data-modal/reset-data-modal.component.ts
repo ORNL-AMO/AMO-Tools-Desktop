@@ -14,6 +14,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { CoreService } from '../../core/core.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { AssessmentService } from '../assessment.service';
+import { MockSsmt, MockSsmtSettings } from '../../core/mockSsmt';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -202,6 +203,19 @@ export class ResetDataModalComponent implements OnInit {
       //create
       this.createPhastExample(id);
     }
+    //ssmt
+    let ssmtExample: Assessment = this.assessmentDbService.getSsmtExample();
+    if(ssmtExample){
+      //exists
+      //delete
+      this.indexedDbService.deleteAssessment(ssmtExample.id).then(() => {
+        //create
+        this.createSsmtExample(id);
+      });
+    } else {
+      //create
+      this.createSsmtExample(id);
+    }
 
   }
 
@@ -243,8 +257,8 @@ export class ResetDataModalComponent implements OnInit {
     return new Promise((resolve, reject) => {
       MockFsat.directoryId = dirId;
       //add example
-      this.indexedDbService.addAssessment(MockFsat).then(() => {
-        MockFsatSettings.assessmentId = 3;
+      this.indexedDbService.addAssessment(MockFsat).then(assessmentId => {
+        MockFsatSettings.assessmentId = assessmentId;
         MockFsatSettings.facilityInfo.date = new Date().toDateString();
         //add settings
         this.indexedDbService.addSettings(MockFsatSettings).then(() => {
@@ -253,6 +267,21 @@ export class ResetDataModalComponent implements OnInit {
       });
     });
   }
+
+  createSsmtExample(dirId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      MockSsmt.directoryId = dirId;
+      //add example
+      this.indexedDbService.addAssessment(MockSsmt).then(assessmentId => {
+        MockSsmtSettings.assessmentId = assessmentId;
+        //add settings
+        this.indexedDbService.addSettings(MockSsmtSettings).then(() => {
+          resolve(true);
+        });
+      });
+    });
+  }
+
 
   resetFactoryUserAssessments() {
     //reset entire Db
