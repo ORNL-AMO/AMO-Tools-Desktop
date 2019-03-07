@@ -6,7 +6,7 @@ declare const packageJson;
 import { MockPhast, MockPhastSettings } from './mockPhast';
 import { MockPsat, MockPsatCalculator, MockPsatSettings } from './mockPsat';
 import { MockFsat, MockFsatSettings, MockFsatCalculator } from './mockFsat';
-
+import { MockSsmt, MockSsmtSettings } from './mockSsmt';
 @Injectable()
 export class CoreService {
 
@@ -14,6 +14,7 @@ export class CoreService {
   examplePhastId: number;
   examplePsatId: number;
   exampleFsatId: number;
+  exampleSsmtId: number;
   constructor(private indexedDbService: IndexedDbService) { }
 
   createExamples(): Promise<any> {
@@ -35,7 +36,12 @@ export class CoreService {
               MockFsatCalculator.assessmentId = fsatId;
               this.indexedDbService.addCalculator(MockFsatCalculator).then(() => {
           
-                resolve(true);
+                MockSsmt.directoryId = this.exampleDirectoryId;
+                this.indexedDbService.addAssessment(MockSsmt).then(ssmtId => {
+                  console.log('mock ssmt added');
+                  this.exampleSsmtId = ssmtId;
+                  resolve(true);
+                });
               });
             });
           });
@@ -66,7 +72,11 @@ export class CoreService {
               MockFsatSettings.assessmentId = this.exampleFsatId;
               MockFsatSettings.facilityInfo.date = new Date().toDateString();
               this.indexedDbService.addSettings(MockFsatSettings).then(() => {
-                resolve(true);
+
+                MockSsmtSettings.assessmentId = this.exampleSsmtId;
+                this.indexedDbService.addSettings(MockSsmtSettings).then(() =>{
+                  resolve(true);
+                });
               });
             });
           });

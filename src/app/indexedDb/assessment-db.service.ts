@@ -80,4 +80,19 @@ export class AssessmentDbService {
     return tmpExample;
   }
 
+  getSsmtExample(): Assessment {
+    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment: Assessment) => {
+      return (assessment.isExample === true);
+    });
+    let tmpExample: Assessment;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type === 'SSMT') {
+          tmpExample = example;
+        }
+      });
+    }
+    return tmpExample;
+  }
+
 }
