@@ -41,6 +41,9 @@ export class UpdateModalComponent implements OnInit {
     this.cd.detectChanges();
     setTimeout(() => {
       this.electronService.ipcRenderer.send('update', null);
+      setTimeout(() => {
+        this.updateError = true;
+      }, 120000)
     }, 500);
   }
 
