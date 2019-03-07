@@ -66,6 +66,7 @@ export class ReportRollupComponent implements OnInit {
   showPsatReportOptions: boolean = false;
   showFsatReportOptions: boolean = false;
   showPhastReportOptions: boolean = false;
+  showSsmtReportOptions: boolean = false;
   showRollupReportOptions: boolean;
   selectAll: boolean = false;
   printReportGraphs: boolean = false;
@@ -75,9 +76,10 @@ export class ReportRollupComponent implements OnInit {
   printPsatRollup: boolean = false;
   printPhastRollup: boolean = false;
   printFsatRollup: boolean = false;
-  //phast-specific options
   printEnergyUsed: boolean = false;
   printExecutiveSummary: boolean = false;
+  printEnergySummary: boolean = false;
+  printLossesSummary: boolean = false;
 
   gatheringAssessments: boolean = true;
   sidebarCollapsed: boolean = false;
@@ -87,6 +89,7 @@ export class ReportRollupComponent implements OnInit {
     this._phastAssessments = new Array<ReportItem>();
     this._psatAssessments = new Array<ReportItem>();
     this._fsatAssessments = new Array<ReportItem>();
+    this._ssmtAssessments = new Array<ReportItem>();
     this.selectedPhastCalcs = new Array<Calculator>();
     this.selectedPsatCalcs = new Array<Calculator>();
     this.selectedFsatCalcs = new Array<Calculator>();
@@ -170,7 +173,7 @@ export class ReportRollupComponent implements OnInit {
         if (items.length !== 0) {
           this._ssmtAssessments = items;
           this.numSsmt = this._ssmtAssessments.length;
-          //this.reportRollupService.initSsmtResultsArr(items);
+          this.reportRollupService.initSsmtResultsArr(items);
           if (!this.focusedAssessment) {
             this.focusedAssessment = this._ssmtAssessments[0].assessment;
           }
@@ -211,6 +214,7 @@ export class ReportRollupComponent implements OnInit {
     if (this.psatAssessmentSub) this.psatAssessmentSub.unsubscribe();
     if (this.selectedCalcsSub) this.selectedCalcsSub.unsubscribe();
     if (this.fsatAssessmentsSub) this.fsatAssessmentsSub.unsubscribe();
+    if (this.ssmtAssessmentsSub) this.ssmtAssessmentsSub.unsubscribe();
   }
 
   checkSettings() {
@@ -268,6 +272,9 @@ export class ReportRollupComponent implements OnInit {
     if (this.numPhasts > 0) {
       this.showPhastReportOptions = true;
     }
+    if (this.numSsmt > 0) {
+      this.showSsmtReportOptions = true;
+    }
     else {
       this.showPhastReportOptions = false;
     }
@@ -275,12 +282,15 @@ export class ReportRollupComponent implements OnInit {
     this.printPsatRollup = false;
     this.printFsatRollup = false;
     this.printPhastRollup = false;
+    // this.printSsmtRollup = false;
     this.printReportGraphs = false;
     this.printReportSankey = false;
     this.printResults = false;
     this.printInputData = false;
     this.printEnergyUsed = false;
     this.printExecutiveSummary = false;
+    this.printEnergySummary = false;
+    this.printLossesSummary = false;
   }
 
   togglePrint(section: string): void {
@@ -291,23 +301,29 @@ export class ReportRollupComponent implements OnInit {
           this.printPsatRollup = true;
           this.printPhastRollup = true;
           this.printFsatRollup = true;
+          // this.printSsmtRollup = true;
           this.printReportGraphs = true;
           this.printReportSankey = true;
           this.printResults = true;
           this.printInputData = true;
           this.printExecutiveSummary = true;
           this.printEnergyUsed = true;
+          this.printEnergySummary = true;
+          this.printLossesSummary = true;
         }
         else {
           this.printPsatRollup = false;
           this.printPhastRollup = false;
           this.printFsatRollup = false;
+          // this.printSsmtRollup = false;
           this.printResults = false;
           this.printReportGraphs = false;
           this.printReportSankey = false;
           this.printInputData = false;
           this.printExecutiveSummary = false;
           this.printEnergyUsed = false;
+          this.printEnergySummary = false;
+          this.printLossesSummary = false;
         }
         break;
       }
@@ -323,6 +339,10 @@ export class ReportRollupComponent implements OnInit {
         this.printFsatRollup = !this.printFsatRollup;
         break;
       }
+      // case "ssmtRollup": {
+      //   this.printSsmtRollup = !this.printSsmtRollup;
+      //   break;
+      // }
       case "reportGraphs": {
         this.printReportGraphs = !this.printReportGraphs;
         break;
@@ -347,6 +367,14 @@ export class ReportRollupComponent implements OnInit {
         this.printExecutiveSummary = !this.printExecutiveSummary;
         break;
       }
+      case "energySummary": {
+        this.printEnergySummary = !this.printEnergySummary;
+        break;
+      }
+      case "lossesSummary": {
+        this.printLossesSummary = !this.printLossesSummary;
+        break;
+      }
       default: {
         break;
       }
@@ -356,9 +384,13 @@ export class ReportRollupComponent implements OnInit {
   setPrintViewThenPrint() {
 
     this.printView = true;
+    let tmpPrintBuildTime = 100;
+    if (this._ssmtAssessments.length > 0) {
+      tmpPrintBuildTime += (500 * this._ssmtAssessments.length);
+    }
     setTimeout(() => {
       this.print();
-    }, 100);
+    }, tmpPrintBuildTime);
   }
 
   print() {
@@ -444,6 +476,14 @@ export class ReportRollupComponent implements OnInit {
   hideFsatModal() {
     this.fsatRollupModal.hide();
   }
+
+  // showSsmtModal() {
+  //   this.ssmtRollupModal.show();
+  // }
+
+  // hideSsmtModal() {
+  //   this.ssmtRollupModal.hide();
+  // }
 
   showPrintModal(): void {
     this.showPrintMenu = true;

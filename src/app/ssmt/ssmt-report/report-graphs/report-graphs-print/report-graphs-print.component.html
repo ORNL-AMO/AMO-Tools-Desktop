@@ -71,12 +71,12 @@
         <div class="row print-only-waterfall" *ngIf="printGraphs">
           <div class="col-12">
             <app-waterfall-graph *ngIf="!modExists"
-              [waterfallInput1]="reportGraphsService.getWaterfallData(baselineSsmt, waterfallStartColor, waterfallLossColor, waterfallNetColor, baselineLosses, modificationLosses)"
+              [waterfallInput1]="baselineWaterfallInput"
               [modExists]="modExists" [containerWidth]="1000" [containerHeight]="500">
             </app-waterfall-graph>
             <app-waterfall-graph *ngIf="modExists"
-              [waterfallInput1]="reportGraphsService.getWaterfallData(baselineSsmt, waterfallStartColor, waterfallLossColor, waterfallNetColor, baselineLosses, modificationLosses)"
-              [waterfallInput2]="reportGraphsService.getWaterfallData(ssmtOption, waterfallStartColor, waterfallLossColor, waterfallNetColor, baselineLosses, modificationLosses)"
+              [waterfallInput1]="baselineWaterfallInput"
+              [waterfallInput2]="modificationWaterfallInputs[i-1]"
               [modExists]="modExists" [containerWidth]="1000" [containerHeight]="500">
             </app-waterfall-graph>
           </div>

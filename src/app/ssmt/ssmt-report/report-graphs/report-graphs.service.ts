@@ -96,13 +96,13 @@ export class ReportGraphsService {
     return generationLabels;
   }
 
-  getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, units: string, startColor: string, lossColor: string, netColor: string, baselineLosses: SSMTLosses, modificationLosses?: Array<{ outputData: SSMTLosses, name: string }>) {
+  getWaterfallData(selectedSsmt: { name: string, ssmt: SSMT, index: number }, units: string, startColor: string, lossColor: string, netColor: string, baselineLosses: SSMTLosses, modificationLosses: SSMTLosses) {
     let tmpLosses: SSMTLosses;
     if (selectedSsmt.index == 0) {
       tmpLosses = baselineLosses;
     }
-    else if (modificationLosses !== undefined && modificationLosses !== null && modificationLosses.length > 0) {
-      tmpLosses = modificationLosses[selectedSsmt.index - 1].outputData;
+    else if (modificationLosses !== undefined && modificationLosses !== null) {
+      tmpLosses = modificationLosses;
     }
     else {
       throw "ERROR - Invalid index supplied for waterfall loss data array.";
@@ -146,7 +146,7 @@ export class ReportGraphsService {
     };
     let condensateLossNode: WaterfallItem = {
       value: tmpLosses.highPressureProcessLoss + tmpLosses.mediumPressureProcessLoss + tmpLosses.lowPressureProcessLoss,
-      label: 'Unreturned Condensate Losses',
+      label: 'Unreturned Condensate',
       isStartValue: false,
       isNetValue: false
     };
