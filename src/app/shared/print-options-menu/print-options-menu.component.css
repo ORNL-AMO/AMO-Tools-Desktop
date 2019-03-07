@@ -8,31 +8,14 @@
     }
 }
 
-.phast-modal .modal-dialog,
-.psat-modal .modal-dialog,
-.fsat-modal .modal-dialog{
-    top: 0px;
-    max-width: none;
-    margin: 10px;
+.modal-dialog{
+    top: inherit;
 }
 
-.phast-modal .modal-header{
-    background-color: #BF3D00;
-    color: #fff;
+.btn{
+    padding: 6px;
 }
 
-.psat-modal .modal-header{
-    background-color: #2980b9;
-    color: #fff;
-}
-
-.fsat-modal .modal-header{
-    background-color: #FFE400;
-    color: black;
-}
-
-.phast-modal .modal-body,
-.psat-modal .modal-body,
-.fsat-modal .modal-body{
-    height: 85vh;
+.modal-header, .modal-body, .modal-footer{
+    padding: 10px;
 }
