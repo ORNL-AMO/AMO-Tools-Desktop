@@ -64,15 +64,24 @@ export class HeaderFormComponent implements OnInit {
   }
 
   initForms() {
+    let baselineDeaeratorPressure: number = 0;
+    if (this.ssmt.boilerInput && this.ssmt.boilerInput.deaeratorPressure) {
+      baselineDeaeratorPressure = this.ssmt.boilerInput.deaeratorPressure;
+    }
+    let modificationDeaeratorPressure: number = 0;
+    if (this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput && this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure) {
+      modificationDeaeratorPressure = this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure;
+    }
+
     if (this.ssmt.headerInput.highPressure) {
-      this.baselineHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressure, this.settings, this.ssmt.boilerInput.deaeratorPressure);
+      this.baselineHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressure, this.settings, baselineDeaeratorPressure);
     } else {
-      this.baselineHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.ssmt.boilerInput.deaeratorPressure);
+      this.baselineHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, baselineDeaeratorPressure);
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure) {
-      this.modificationHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure, this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure);
+      this.modificationHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure, this.settings, modificationDeaeratorPressure);
     } else {
-      this.modificationHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.deaeratorPressure);
+      this.modificationHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, modificationDeaeratorPressure);
     }
 
     if (this.ssmt.headerInput.lowPressure) {

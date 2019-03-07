@@ -154,15 +154,17 @@ export class HeaderService {
     tmpCondensateReturnTempMin = this.convertUnitsService.roundVal(tmpCondensateReturnTempMin, 0);
 
     //return condensate max = saturated temp at dearator pressures
-    let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
-      {
-        saturatedPressure: deaeratorPressure
-      },
-      0,
-      settings
-    );
-    let tmpCondensateReturnTempMax: number = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);;
-
+    let tmpCondensateReturnTempMax: number = 1000000;
+    if (deaeratorPressure) {
+      let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
+        {
+          saturatedPressure: deaeratorPressure
+        },
+        0,
+        settings
+      );
+      tmpCondensateReturnTempMax = this.convertUnitsService.roundVal(satPropertiesOutput.saturatedTemperature, 0);;
+    }
     let tmpDesuperheatingTempMin: number = this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement);
     tmpDesuperheatingTempMin = this.convertUnitsService.roundVal(tmpDesuperheatingTempMin, 0);
 
