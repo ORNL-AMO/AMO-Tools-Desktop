@@ -62,6 +62,17 @@ export class ReportGraphsComponent implements OnInit {
   modExists: boolean = false;
   graphColors: Array<string>;
 
+  // waterfallBaselineInputColor: string = "#74E88B";
+  // waterfallBaselineNetColor: string = "#17ADD3";
+  // waterfallBaselineLossColor: string = "#ED6F5B";
+  waterfallBaselineInputColor: string = "#99EEAA";
+  waterfallBaselineNetColor: string = "#A3D9FF";
+  waterfallBaselineLossColor: string = "#F5B0A5";
+  waterfallModificationInputColor: string = "#4FB286";
+  waterfallModificationNetColor: string = "#A193AD";
+  waterfallModificationLossColor: string = "#FFC466";
+
+
   steamPowerUnit: string = 'kW';
 
 
@@ -156,12 +167,12 @@ export class ReportGraphsComponent implements OnInit {
 
   // waterfall functions
   setWaterfallData() {
-    this.ssmt1WaterfallData = null;
-    this.ssmt2WaterfallData = null;
+    // this.ssmt1WaterfallData = null;
+    // this.ssmt2WaterfallData = null;
 
-    this.ssmt1WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt1, this.settings.steamEnergyMeasurement + '/hr', '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, null);
+    this.ssmt1WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt1, this.settings.steamEnergyMeasurement + '/hr', this.waterfallBaselineInputColor, this.waterfallBaselineLossColor, this.waterfallBaselineNetColor, this.baselineLosses, null);
     if (this.modExists) {
-      this.ssmt2WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt2, this.settings.steamEnergyMeasurement + '/hr', '#74E88B', '#ED6F5B', '#17ADD3', this.baselineLosses, this.modificationLosses[this.selectedSsmt2.index - 1].outputData);
+      this.ssmt2WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt2, this.settings.steamEnergyMeasurement + '/hr', this.waterfallModificationInputColor, this.waterfallModificationLossColor, this.waterfallModificationNetColor, this.baselineLosses, this.selectedSsmt2.index === 0 ? null : this.modificationLosses[this.selectedSsmt2.index - 1].outputData);
     }
   }
 
