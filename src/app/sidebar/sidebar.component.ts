@@ -32,6 +32,8 @@ export class SidebarComponent implements OnInit {
   showModal: boolean;
   showVersionModal: boolean;
   updateSub: Subscription;
+  dashboardViewSub: Subscription;
+  currentDashboardView: string;
   constructor(private assessmentService: AssessmentService, private calculatorService: CalculatorService) { }
 
   ngOnInit() {
@@ -45,16 +47,20 @@ export class SidebarComponent implements OnInit {
       this.isUpdateAvailable = val;
     });
 
+    this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(val => {
+      this.currentDashboardView = val;
+    })
   }
 
   ngOnDestroy() {
     this.updateSub.unsubscribe();
+    this.dashboardViewSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.workingDirectory && !this.firstChange) {
       if (changes.workingDirectory.currentValue) {
-        if (changes.workingDirectory.previousValue.id !== changes.workingDirectory.currentValue.id) {
+        if (changes.workingDirectory.previousValue.id !== changes.workingDirectory.currentValue.id && this.currentDashboardView == 'assessment-dashboard') {
           this.toggleSelected(this.workingDirectory);
           if (this.workingDirectory.collapsed) {
             this.toggleDirectoryCollapse(this.workingDirectory);
