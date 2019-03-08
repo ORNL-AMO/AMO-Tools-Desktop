@@ -1,16 +1,13 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { DirectoryDbRef, Directory } from '../shared/models/directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
-import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { Assessment } from '../shared/models/assessment';
 import { ToastyService, ToastyConfig, ToastOptions } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
-import { SettingsService } from '../settings/settings.service';
 import { Calculator } from '../shared/models/calculators';
 import { Subscription } from 'rxjs';
 
@@ -19,7 +16,6 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { DeleteDataService } from '../indexedDb/delete-data.service';
-import { CoreService } from '../core/core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { ImportExportData } from '../shared/import-export/importExportModel';
 import { ImportService } from '../shared/import-export/import.service';
@@ -36,8 +32,6 @@ export class DashboardComponent implements OnInit {
   workingDirectory: Directory;
   isFirstChange: boolean = true;
   rootDirectoryRef: DirectoryDbRef;
-  view: string;
-
   showLandingScreen: boolean;
 
   newDirEventToggle: boolean = false;
@@ -73,10 +67,10 @@ export class DashboardComponent implements OnInit {
   selectedTool: string;
   selectedToolSub: Subscription;
   sidebarDataSub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private settingsService: SettingsService, private exportService: ExportService,
+  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
-    private deleteDataService: DeleteDataService, private coreService: CoreService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService) {
+    private deleteDataService: DeleteDataService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -143,7 +137,6 @@ export class DashboardComponent implements OnInit {
   }
 
   getWorkingDirectoryData() {
-    // this.updateDbData();
     this.workingDirectorySettings = this.settingsDbService.getByDirectoryId(this.workingDirectory.id);
     let tmpCalcs = this.calculatorDbService.getByDirectoryId(this.workingDirectory.id);
     if (tmpCalcs.length !== 0) {
