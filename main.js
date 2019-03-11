@@ -24,7 +24,14 @@ let available = null;
 app.on('ready', function () {
 
   // Initialize the window to our specified dimensions
-  win = new BrowserWindow({ width: 1000, height: 600 });
+  win = new BrowserWindow({
+    width: 1000,
+    height: 600,
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true
+    }
+  });
   win.maximize();
 
   // Specify entry point

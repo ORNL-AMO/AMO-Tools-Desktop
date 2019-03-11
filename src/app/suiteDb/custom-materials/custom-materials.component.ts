@@ -209,7 +209,7 @@ export class CustomMaterialsComponent implements OnInit {
     let fr: FileReader = new FileReader();
     fr.readAsText(this.fileReference.target.files[0]);
     fr.onloadend = (e) => {
-      let importJson = JSON.parse(fr.result);
+      let importJson = JSON.parse(JSON.stringify(fr.result));
       if (importJson.origin) {
         if (importJson.origin === 'AMO-TOOLS-DESKTOP-MATERIALS') {
           this.importFileError = null;

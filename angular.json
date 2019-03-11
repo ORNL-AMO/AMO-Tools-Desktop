@@ -61,8 +61,7 @@
               "src/assets/styles/toggle-switch.css"
             ],
             "scripts": [
-              "node_modules/chart.js/dist/Chart.bundle.min.js",
-              "src/jsRequireScript.js"
+
             ]
           },
           "configurations": {
@@ -110,8 +109,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
-              "node_modules/chart.js/dist/Chart.bundle.min.js",
-              "src/jsRequireScript.js"
+
             ],
             "styles": [
               "src/styles.css",
