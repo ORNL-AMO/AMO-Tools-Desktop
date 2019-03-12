@@ -125,7 +125,7 @@
           [isFan]="isFan" [pumpCurve]="pumpCurveService.getObjFromForm(pumpCurveForm)" [settings]="settings" [toggleCalculate]="toggleCalculate"
           [selectedFormView]="selectedFormView" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo"
           [curveConstants]="curveConstants" [lossCoefficient]="lossCoefficient" [graphSystemCurve]="graphSystemCurve"></app-pump-curve-graph>
-        <div class="d-flex pt-2 w-100 justify-content-center align-items-center">
+        <div *ngIf="graphPumpCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
           <p [innerHTML]="regEquation"></p>
         </div>
       </div>

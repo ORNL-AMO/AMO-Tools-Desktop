@@ -33,7 +33,6 @@ import { OutputSummaryComponent } from './psat-report/output-summary/output-summ
 import { PsatService } from './psat.service';
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
 import { SettingsModule } from '../settings/settings.module';
-import { ToastyModule } from 'ng2-toasty';
 import { CompareService } from './compare.service';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
@@ -86,7 +85,6 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     SharedModule,
     ModalModule.forRoot(),
     SettingsModule,
-    ToastyModule,
     JsonToCsvModule,
     HelpPanelModule,
     SystemCurveModule,
