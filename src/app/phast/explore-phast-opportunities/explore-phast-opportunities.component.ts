@@ -6,7 +6,6 @@ import { LossTab } from '../tabs';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { LossesService } from '../losses/losses.service';
-// import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
   selector: 'app-explore-phast-opportunities',

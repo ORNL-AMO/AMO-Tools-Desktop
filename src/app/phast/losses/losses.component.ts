@@ -1,11 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 import * as _ from 'lodash';
-import { ModalDirective } from 'ngx-bootstrap';
-import { PhastService } from '../phast.service';
 import { LossesService } from './losses.service';
 import { LossTab } from '../tabs';
 import { PhastCompareService } from '../phast-compare.service';
@@ -47,10 +44,7 @@ export class LossesComponent implements OnInit {
   lossTabSubscription: Subscription;
   modalOpenSubscription: Subscription;
   isModalOpen: boolean = false;
-  constructor(private lossesService: LossesService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService) {
-    this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-right';
+  constructor(private lossesService: LossesService, private phastCompareService: PhastCompareService) {
   }
 
   ngOnInit() {
@@ -72,16 +66,6 @@ export class LossesComponent implements OnInit {
       this.baselineSelected = false;
       this.modificationSelected = true;
     }
-
-    if (this.modificationExists && this.inSetup) {
-      let toastOptions: ToastOptions = {
-        title: 'Baseline is locked since there are modifications in use. If you wish to change your baseline data, use the Assessment tab.',
-        showClose: true,
-        theme: 'default',
-        timeout: 10000000
-      };
-      this.toastyService.warning(toastOptions);
-    }
     this.modalOpenSubscription = this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
@@ -91,7 +75,6 @@ export class LossesComponent implements OnInit {
 
 
   ngOnDestroy() {
-    this.toastyService.clearAll();
     if (this.lossTabSubscription) this.lossTabSubscription.unsubscribe();
     this.modalOpenSubscription.unsubscribe();
   }

@@ -32,7 +32,6 @@ export class PhastComponent implements OnInit {
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
 
-
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getContainerHeight();
