@@ -1,0 +1,16 @@
+.toasty-card{
+    position: fixed;
+    z-index: +1;
+    box-shadow: 6px 8px 18px 1px;
+    right: 15px;
+    min-width: 300px;
+    max-width: 500px;
+  }
+
+  .warning.card{
+      background-color: #D35400;
+  }
+
+  .warning .card-body{
+      background-color: #efefef;
+  }

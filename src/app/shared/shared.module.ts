@@ -26,6 +26,7 @@ import { ExportableResultsTableComponent } from './exportable-results-table/expo
 import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
 import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service
     PrintOptionsMenuComponent,
     ExportableResultsTableComponent,
     SettingsLabelPipe,
-    WaterfallGraphComponent
+    WaterfallGraphComponent,
+    ToastComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -66,7 +68,8 @@ import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service
     TabsTooltipComponent,
     PrintOptionsMenuComponent,
     SettingsLabelPipe,
-    WaterfallGraphComponent
+    WaterfallGraphComponent,
+    ToastComponent
   ],
   providers: [
     ValidationService,
