@@ -13,11 +13,11 @@
     <div class="form-group col-6">
       <select id="dataOrder" name="dataOrder" class="form-control" formControlName="dataOrder" (focus)="focusField('dataOrder')"
         (change)="emitCalculateChanges()" *ngIf="!isFan">
-        <option *ngFor="let order of orderOptions; let i = index" [ngValue]="i">{{order}}</option>
+        <option *ngFor="let order of orderOptions; let i = index" [ngValue]="order">{{order}}</option>
       </select>
       <select id="dataOrder" name="dataOrder" class="form-control" formControlName="dataOrder" (focus)="focusField('fanDataOrder')"
         (change)="emitCalculateChanges()" *ngIf="isFan">
-        <option *ngFor="let order of orderOptions; let i = index" [ngValue]="i">{{order}}</option>
+        <option *ngFor="let order of orderOptions; let i = index" [ngValue]="order">{{order}}</option>
       </select>
     </div>
     <div class="col-6">

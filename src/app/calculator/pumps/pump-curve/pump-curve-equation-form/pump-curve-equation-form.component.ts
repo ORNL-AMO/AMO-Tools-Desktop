@@ -64,21 +64,6 @@ export class PumpCurveEquationFormComponent implements OnInit {
     // }
   }
 
-  setOrder() {
-    if (this.pumpCurveForm.controls.headOrder.value + 2 < 3) {
-      this.pumpCurveForm.controls.headFlow3.patchValue(0);
-    }
-    if (this.pumpCurveForm.controls.headOrder.value + 2 < 4) {
-      this.pumpCurveForm.controls.headFlow4.patchValue(0);
-    }
-    if (this.pumpCurveForm.controls.headOrder.value + 2 < 5) {
-      this.pumpCurveForm.controls.headFlow5.patchValue(0);
-    }
-    if (this.pumpCurveForm.controls.headOrder.value + 2 < 6) {
-      this.pumpCurveForm.controls.headFlow6.patchValue(0);
-    }
-    this.emitCalculateChanges();
-  }
   getDisplayUnit(unit: string) {
     if (unit) {
       let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
