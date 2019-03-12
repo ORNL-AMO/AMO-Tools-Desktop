@@ -1,6 +1,3 @@
-// ./main.js
-//require('electron-reload')(__dirname);
-
 const { app, BrowserWindow, ipcMain, crashReporter } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -16,10 +13,7 @@ autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
 
-require('dotenv').config();
 let win = null;
-let available = null;
-
 
 app.on('ready', function () {
 

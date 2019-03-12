@@ -10,7 +10,7 @@ import { PsatModule } from '../psat/psat.module';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PhastSummaryComponent } from './report-summary/phast-summary/phast-summary.component';
 import { PhastRollupComponent } from './phast-rollup/phast-rollup.component';
-import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
+import { ModalModule } from 'ngx-bootstrap';
 import { PhastRollupGraphsComponent } from './phast-rollup/phast-rollup-graphs/phast-rollup-graphs.component';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
 
