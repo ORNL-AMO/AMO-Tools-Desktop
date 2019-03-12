@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { ToastyModule } from 'ng2-toasty';
-
 import { NgxElectronModule } from 'ngx-electron';
 import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
@@ -105,7 +102,6 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
-    ToastyModule.forRoot(),
     JsonToCsvModule,
     SuiteDbModule,
     ImportExportModule,

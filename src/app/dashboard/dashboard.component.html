@@ -181,7 +181,5 @@
         </div>
     </div>
 </div>
-<!--TOAST HERE-->
-<!-- <ng2-toasty></ng2-toasty> -->
 
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()" [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast>

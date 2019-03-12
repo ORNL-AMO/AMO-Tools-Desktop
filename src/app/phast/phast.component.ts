@@ -6,7 +6,6 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SettingsService } from '../settings/settings.service';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
@@ -67,14 +66,13 @@ export class PhastComponent implements OnInit {
   openModListSubscription: Subscription;
   selectedModSubscription: Subscription;
   addNewSubscription: Subscription;
-  exploreOppsToast: boolean = false;
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private settingsService: SettingsService,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
@@ -82,9 +80,6 @@ export class PhastComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService) {
-    this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-right';
-    this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
@@ -179,9 +174,9 @@ export class PhastComponent implements OnInit {
 
   ngAfterViewInit() {
     //after init show disclaimer toasty
-    this.disclaimerToast();
     setTimeout(() => {
       //initialize container height after content is rendered
+      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -391,17 +386,6 @@ export class PhastComponent implements OnInit {
   exportData() {
     //TODO: Logic for exporting data (csv?)
   }
-  //disclaimer for phast
-  disclaimerToast() {
-    let toastOptions: ToastOptions = {
-      title: 'Disclaimer:',
-      msg: 'Please keep in mind that this application is still in beta. Please let us know if you have any suggestions for improving our app.',
-      showClose: true,
-      timeout: 10000000,
-      theme: 'default'
-    };
-    this.toastyService.info(toastOptions);
-  }
 
   selectModificationModal() {
     this.isModalOpen = true;
@@ -428,11 +412,6 @@ export class PhastComponent implements OnInit {
     this.phastCompareService.setCompareVals(this._phast, this._phast.modifications.length - 1, false);
     this.closeAddNewModal();
     this.saveDb();
-  }
-
-  setExploreOppsToast(bool: boolean) {
-    this.exploreOppsToast = bool;
-    this.cd.detectChanges();
   }
 
   addNewMod() {
@@ -466,6 +445,23 @@ export class PhastComponent implements OnInit {
     tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this._phast.systemEfficiency)));
     tmpModification.exploreOpportunities = true;
     this.saveNewMod(tmpModification);
+  }
+
+  disclaimerToast() {
+    this.toastData.title = 'Disclaimer';
+    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+    this.showToast = true;
+    this.cd.detectChanges();
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    };
+    this.cd.detectChanges();
   }
 
 }

@@ -5,7 +5,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
 import { Assessment } from '../shared/models/assessment';
-// import { ToastyService, ToastyConfig, ToastOptions } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { Calculator } from '../shared/models/calculators';
@@ -424,14 +423,6 @@ export class DashboardComponent implements OnInit {
 
   //TOAST HERE
   addToast(msg: string) {
-    //   let toastOptions: ToastOptions = {
-    //     title: msg,
-    //     timeout: 2000,
-    //     showClose: true,
-    //     theme: 'default'
-    //   };
-    //   this.toastyService.warning(toastOptions);
-
     this.toastData.title = msg;
     this.toastData.setTimeoutVal = 2000;
     this.showToast = true;
