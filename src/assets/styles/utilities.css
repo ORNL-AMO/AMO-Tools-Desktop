@@ -79,6 +79,10 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     font-size: 15px;
 }
 
+.disable .loss-total{
+    border-top: #ddd solid 1px;
+}
+
 
 
 

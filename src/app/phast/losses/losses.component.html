@@ -3,7 +3,7 @@
     [ngClass]="{'panel-in-setup': inSetup, 'panel-in-assessment': !inSetup}">
     <div class="flex-column modification" (click)="togglePanel(baselineSelected)"
       [ngClass]="{'disabled': baselineSelected == false, 'w-50':!inSetup, 'modal-open': isModalOpen == true, 'w-100':inSetup}">
-      <div class="header justify-content-between ml-2 mr-2">
+      <div class="header d-flex justify-content-between align-items-center ml-2 mr-2" [ngStyle]="{'height.px': headerHeight}">
         <h3>Baseline</h3>
         <h5 class="pull-right panel-add" *ngIf="inSetup && !modificationExists && selectedTab.showAdd">
           <a class="small" [ngClass]="{'disabled': !baselineSelected}">
@@ -102,7 +102,8 @@
     <div class="flex-column w-50 modification" *ngIf="phast.modifications.length != 0 && !inSetup"
       (click)="togglePanel(modificationSelected)"
       [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
-      <div class="header justify-content-between ml-2 mr-2">
+      
+      <div class="header justify-content-between ml-2 mr-2" #modificationHeader>
         <h3 *ngIf="phast.modifications[modificationIndex]">{{phast.modifications[modificationIndex].phast.name}}</h3>
       </div>
       <div class="losses-container phast-losses-container" *ngIf="modificationIndex || modificationIndex == 0">

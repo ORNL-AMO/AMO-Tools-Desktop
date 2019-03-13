@@ -1,11 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
-
 import * as _ from 'lodash';
-import { ModalDirective } from 'ngx-bootstrap';
-import { PhastService } from '../phast.service';
 import { LossesService } from './losses.service';
 import { LossTab } from '../tabs';
 import { PhastCompareService } from '../phast-compare.service';
@@ -33,6 +30,12 @@ export class LossesComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
+  @ViewChild('modificationHeader') modificationHeader: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getHeaderHeight();
+  }
+
   // _modifications: Modification[];
   baselineSelected: boolean = true;
   modificationSelected: boolean = false;
@@ -47,6 +50,8 @@ export class LossesComponent implements OnInit {
   lossTabSubscription: Subscription;
   modalOpenSubscription: Subscription;
   isModalOpen: boolean = false;
+
+  headerHeight: number;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private phastCompareService: PhastCompareService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -99,6 +104,21 @@ export class LossesComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.modificationIndex) {
       this.toggleCalculate = !this.toggleCalculate;
+    }
+  }
+
+  ngAfterViewInit() {
+    //after init show disclaimer toasty
+    setTimeout(() => {
+      //initialize container height after content is rendered
+      this.getHeaderHeight();
+    }, 100);
+  }
+
+  getHeaderHeight() {
+    if (this.modificationHeader) {
+      this.headerHeight = this.modificationHeader.nativeElement.clientHeight;
+      console.log(this.headerHeight);
     }
   }
 
