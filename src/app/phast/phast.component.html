@@ -15,7 +15,7 @@
   </div>
 
   <!--Furnace Setup -->
-  <div *ngIf="mainTab == 'system-setup' && stepTab.step == 1" class="system-setup tab-content d-flex">
+  <div *ngIf="mainTab == 'system-setup' && stepTab.step == 1" class="tab-content d-flex">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen}">
       <!--Step: 1 System Basics (Settings)-->
@@ -32,7 +32,7 @@
       <app-help-panel [settingsTab]="specTab"></app-help-panel>
     </div>
   </div>
-  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="system-setup tab-content">
+  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="tab-content">
     <!--Step: 4 Heat Balance-->
     <app-losses *ngIf="stepTab.step  == 2" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true"
       [containerHeight]="containerHeight"></app-losses>
