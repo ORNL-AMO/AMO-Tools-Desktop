@@ -1,7 +1,51 @@
+<div class="d-flex modify-conditions">
+    <div class="flex-column w-50 modification panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+        <div class="header ml-2 mr-2">
+            <h3>Auxiliary Equipment</h3>
+            <h5 class="pull-right panel-add">
+                <a class="small">
+                    <span (click)="addEquipment()">+Add Equipment</span>
+                </a>
+            </h5>
+        </div>
+        <div class="card-form d-flex flex-column mr-3 ml-3"
+            *ngFor="let equipment of phast.auxEquipment; let index = index;">
+            <form class="name-input-form">
+                <div class="input-group">
+                    <input name="name" type="text" id="text" class="form-control name-input" (focus)="setField('name')"
+                        [(ngModel)]="equipment.name" (input)="calculate()" onfocus="this.select();">
+                    <span class="input-group-addon units" (click)="removeEquipment(index)">
+                        <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+                    </span>
+                </div>
+                <app-aux-equipment-form [equipment]="equipment" (emitCalculate)="calculate()" (emitSave)="emitSave()"
+                    (changeField)="setField($event)" [settings]="settings">
+                </app-aux-equipment-form>
+            </form>
+        </div>
+    </div>
+    <div class="w-50 d-flex flex-column help-panel pl-2 pr-2">
+        <div class="d-flex flex-wrap tabs primary">
+            <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+                <a class="border-left-0" (click)="setTab('results')">Results</a>
+            </div>
+            <div class="flex-fill panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+            </div>
+        </div>
+        <app-aux-equipment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-aux-equipment-help>
+        <app-aux-equipment-results *ngIf="tabSelect == 'results'" [results]="results" [resultsSum]="resultsSum">
+        </app-aux-equipment-results>
+    </div>
+</div>
+
+
+<!-- 
 <div class="modify-conditions panel-container row phast">
     <div class="col-12">
         <div class="row align-items-top calculator-panel">
-            <div class="modification panel-column col-6 align-top scroll-item" [ngStyle]="{'height.px': containerHeight}">
+            <div class="modification panel-column col-6 align-top scroll-item"
+                [ngStyle]="{'height.px': containerHeight}">
                 <div class="header">
                     <h3>Auxiliary Equipment</h3>
                     <h5 class="pull-right panel-add">
@@ -15,8 +59,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="pull-left">
-                                    <!--<label for="name">Equipment Name</label>-->
-                                    <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="equipment.name" (input)="calculate()"
+                                    <!--<label for="name">Equipment Name</label>--
+                                    <input name="name" type="text" id="text" class="form-control"
+                                        (focus)="setField('name')" [(ngModel)]="equipment.name" (input)="calculate()"
                                         onfocus="this.select();" />
                                 </div>
                                 <button class="close pull-right" aria-label="Close" (click)="removeEquipment(index)">
@@ -26,7 +71,9 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <app-aux-equipment-form [equipment]="equipment" (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="setField($event)"></app-aux-equipment-form>
+                                <app-aux-equipment-form [equipment]="equipment" (emitCalculate)="calculate()"
+                                    (emitSave)="emitSave()" (changeField)="setField($event)">
+                                </app-aux-equipment-form>
                             </div>
                         </div>
                     </form>
@@ -38,8 +85,10 @@
                         <ul class="tabs primary tab-row">
                             <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
                                 <a (click)="setTab('results')">Results</a>
-                            </li><!--
-						--><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                            </li>
+                            <!--
+						--
+                            <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                                 <a (click)="setTab('help')">Help</a>
                             </li>
                         </ul>
@@ -53,11 +102,12 @@
                     </div>
                     <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
                         <div class="col-11">
-                            <app-aux-equipment-results [results]="results" [resultsSum]="resultsSum"></app-aux-equipment-results>
+                            <app-aux-equipment-results [results]="results" [resultsSum]="resultsSum">
+                            </app-aux-equipment-results>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> -->

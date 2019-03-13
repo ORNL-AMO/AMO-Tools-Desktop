@@ -118,7 +118,6 @@ export class LossesComponent implements OnInit {
   getHeaderHeight() {
     if (this.modificationHeader) {
       this.headerHeight = this.modificationHeader.nativeElement.clientHeight;
-      console.log(this.headerHeight);
     }
   }
 

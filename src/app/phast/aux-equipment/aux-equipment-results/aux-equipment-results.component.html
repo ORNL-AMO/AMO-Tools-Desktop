@@ -1,20 +1,20 @@
-<div class="output-summary">
-  <table class="table table-hover">
-    <thead>
-      <th></th>
-      <th>Total Power Use</th>
-    </thead>
-    <tbody *ngIf="results">
+<div class="d-flex w-100 justify-content-center pt-3">
+  <table class="w-50 table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td></td>
+        <td class="bold text-center">Total Power Use</td>
+      </tr>
       <tr *ngFor="let result of results">
-        <td>{{result.name}}</td>
-        <td>{{result.totalPower | number:'2.2-2'}}
+        <td class="bold">{{result.name}}</td>
+        <td class="text-center"> {{result.totalPower | number:'2.2-2'}}
           <span *ngIf="result.motorPower == 'Calculated'">kW</span>
           <span *ngIf="result.motorPower == 'Rated'">hp</span>
         </td>
       </tr>
       <tr>
-        <td>Total Aux Equipment</td>
-        <td>{{resultsSum | number:'2.2-2'}} kW</td>
+        <td class="bold">Total Aux Equipment</td>
+        <td class="text-center">{{resultsSum | number:'2.2-2'}} kW</td>
       </tr>
     </tbody>
   </table>

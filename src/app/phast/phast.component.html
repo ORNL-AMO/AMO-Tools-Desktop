@@ -38,7 +38,7 @@
       [containerHeight]="containerHeight"></app-losses>
     <!--Step: 5 Aux Equipment-->
     <app-aux-equipment *ngIf="stepTab.step  == 3" [(phast)]="_phast" (save)="saveDb()"
-      [containerHeight]="containerHeight"></app-aux-equipment>
+      [containerHeight]="containerHeight" [settings]="settings"></app-aux-equipment>
     <!--Step: 6 Designed Energy-->
     <app-designed-energy *ngIf="stepTab.step  == 4" [(phast)]="_phast" [settings]="settings" (save)="saveDb()"
       [containerHeight]="containerHeight"></app-designed-energy>
