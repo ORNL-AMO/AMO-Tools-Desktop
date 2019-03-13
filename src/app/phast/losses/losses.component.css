@@ -1,3 +1,20 @@
+.panel-in-setup{
+  width: 50%;
+}
+
+.panel-in-assessment{
+  width: 80%;
+}
+
+
+.losses-container{
+  background-color: #fff;
+}
+
+.disabled .losses-container{
+  background-color: inherit;
+}
+
 .setup-dialog{
     width: 100%;
     position: absolute;
