@@ -3,10 +3,10 @@
     <tbody>
       <tr>
         <td></td>
-        <td class="bold text-center">Total Power Use</td>
+        <td class="bold text-center pr-2 pl-2">Total Power Use</td>
       </tr>
       <tr *ngFor="let result of results">
-        <td class="bold">{{result.name}}</td>
+        <td class="bold pr-2 pl-2">{{result.name}}</td>
         <td class="text-center"> {{result.totalPower | number:'2.2-2'}}
           <span *ngIf="result.motorPower == 'Calculated'">kW</span>
           <span *ngIf="result.motorPower == 'Rated'">hp</span>
