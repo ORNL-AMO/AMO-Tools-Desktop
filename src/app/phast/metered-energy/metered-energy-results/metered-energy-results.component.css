@@ -1,9 +1,14 @@
-tr > td:first-child,
-tr > th:first-child{
-    width: 50%;
+td, th{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
 }
 
-tr > td:not(:first-child),
-tr > th:not(:first-child){
-    width: 25%;
+tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.table{
+    width: auto;
 }

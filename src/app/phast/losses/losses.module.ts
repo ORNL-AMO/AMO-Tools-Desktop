@@ -38,7 +38,6 @@ import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
 import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power-losses-help/auxiliary-power-losses-help.component';
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
 import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
-import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
 
 import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy-input-help.component';
 
@@ -52,7 +51,6 @@ import { OperationsModule } from './operations/operations.module';
 import { OperationsHelpComponent } from './losses-help/operations-help/operations-help.component';
 import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-page.component';
 import { LossesResultPanelComponent } from './losses-result-panel/losses-result-panel.component';
-import { ToastyModule } from 'ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
@@ -78,8 +76,7 @@ import { ToastyModule } from 'ng2-toasty';
     EnergyInputExhaustGasLossesModule,
     OperationsModule,
     HeatSystemEfficiencyModule,
-    PhastReportModule,
-    ToastyModule
+    PhastReportModule
   ],
   declarations: [
     LossesComponent,
@@ -98,7 +95,6 @@ import { ToastyModule } from 'ng2-toasty';
     AuxiliaryPowerLossesHelpComponent,
     SlagHelpComponent,
     ExhaustGasHelpComponent,
-    EditConditionPropertiesComponent,
     EnergyInputHelpComponent,
     EnergyInputExhaustGasLossesHelpComponent,
     HeatSystemEfficiencyHelpComponent,
