@@ -50,10 +50,8 @@
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
-      <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings"
-        [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex"
-        (exploreOppsToast)="setExploreOppsToast($event)" (emitAddNewMod)="addNewMod()">
-      </app-explore-phast-opportunities>
+      <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"
+        (save)="saveDb()" [exploreModIndex]="modificationIndex" (exploreOppsToast)="hideToast($event)" (emitAddNewMod)="addNewMod()"></app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions'">
       <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings"
@@ -116,10 +114,9 @@
     </div>
   </div>
 </div>
-<!--disclaimer toast-->
-<ng2-toasty class="disclaimer" [ngClass]="{'explore-opps':exploreOppsToast}"></ng2-toasty>
 
-
+<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+	[setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'"></app-toast>
 
 <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_phast">

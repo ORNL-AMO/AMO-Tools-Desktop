@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
@@ -11,7 +11,7 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
-import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOutput } from '../shared/models/fans';
+import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -19,7 +19,6 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
   selector: 'app-fsat',
@@ -77,8 +76,9 @@ export class FsatComponent implements OnInit {
   fsatOptionsLength: number;
   fsat1: FSAT;
   fsat2: FSAT;
-  exploreOppsToast: boolean = false;
-
+  //exploreOppsToast: boolean = false;
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -92,12 +92,7 @@ export class FsatComponent implements OnInit {
     private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private cd: ChangeDetectorRef) {
-    this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-right';
-    this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
@@ -172,7 +167,6 @@ export class FsatComponent implements OnInit {
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
     });
-
   }
 
   ngOnDestroy() {
@@ -190,9 +184,9 @@ export class FsatComponent implements OnInit {
     this.calcTabSubscription.unsubscribe();
   }
   ngAfterViewInit() {
-    this.disclaimerToast();
     setTimeout(() => {
       this.getContainerHeight();
+      this.disclaimerToast();
     }, 100);
   }
 
@@ -437,21 +431,19 @@ export class FsatComponent implements OnInit {
   }
 
   disclaimerToast() {
-    let toastOptions: ToastOptions = {
-      title: 'Disclaimer:',
-      msg: 'Please keep in mind that this application is still in beta. Please let us know if you have any suggestions for improving our app.',
-      showClose: true,
-      timeout: 10000000,
-      theme: 'default'
-    };
-    this.toastyService.info(toastOptions);
+    this.toastData.title = 'Disclaimer';
+    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+    this.showToast = true;
+    this.cd.detectChanges();
   }
 
-  setExploreOppsToast(bool: boolean) {
-    this.exploreOppsToast = bool;
-    if (!this.exploreOppsToast) {
-      this.toastyService.clearAll();
-    }
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    };
     this.cd.detectChanges();
   }
 }
