@@ -157,6 +157,7 @@ export class PhastComponent implements OnInit {
           this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
             return val.phast.name === mod.name;
           });
+          this.cd.detectChanges();
         } else {
           this.modificationIndex = undefined;
         }
