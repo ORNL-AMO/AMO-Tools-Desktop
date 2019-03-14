@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { ToastyModule } from 'ng2-toasty';
 import { MeteredEnergyModule } from './metered-energy/metered-energy.module';
 import { LossesModule } from './losses/losses.module';
 import { DesignedEnergyModule } from './designed-energy/designed-energy.module';
@@ -64,7 +63,6 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     SharedModule,
     ModalModule,
     LossesModule,
-    ToastyModule,
     SettingsModule,
     AuxEquipmentModule,
     DesignedEnergyModule,

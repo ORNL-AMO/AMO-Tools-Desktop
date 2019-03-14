@@ -17,7 +17,6 @@ import { CreateFolderComponent } from './assessment-menu/create-folder/create-fo
 import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
 import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 import { SettingsModule } from '../settings/settings.module';
-import { ToastyModule } from 'ng2-toasty';
 
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { PhastSummaryCardComponent } from './assessment-grid-view/assessment-card/phast-summary-card/phast-summary-card.component';
@@ -72,7 +71,6 @@ import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
     ReactiveFormsModule,
     ModalModule,
     SettingsModule,
-    ToastyModule,
     ImportExportModule,
     PhastReportModule,
     PsatModule,

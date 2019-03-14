@@ -52,7 +52,6 @@ import { OperationsModule } from './operations/operations.module';
 import { OperationsHelpComponent } from './losses-help/operations-help/operations-help.component';
 import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-page.component';
 import { LossesResultPanelComponent } from './losses-result-panel/losses-result-panel.component';
-import { ToastyModule } from 'ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
@@ -78,8 +77,7 @@ import { ToastyModule } from 'ng2-toasty';
     EnergyInputExhaustGasLossesModule,
     OperationsModule,
     HeatSystemEfficiencyModule,
-    PhastReportModule,
-    ToastyModule
+    PhastReportModule
   ],
   declarations: [
     LossesComponent,

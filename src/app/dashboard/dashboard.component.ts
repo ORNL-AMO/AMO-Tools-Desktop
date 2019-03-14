@@ -5,7 +5,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
 import { Assessment } from '../shared/models/assessment';
-import { ToastyService, ToastyConfig, ToastOptions } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { Calculator } from '../shared/models/calculators';
@@ -67,13 +66,12 @@ export class DashboardComponent implements OnInit {
   selectedTool: string;
   selectedToolSub: Subscription;
   sidebarDataSub: Subscription;
-  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private exportService: ExportService,
+
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
+  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private suiteDbService: SuiteDbService, private reportRollupService: ReportRollupService, private exportService: ExportService,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
     private deleteDataService: DeleteDataService, private importService: ImportService, private changeDetectorRef: ChangeDetectorRef, private calculatorService: CalculatorService) {
-    this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-right';
-    this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
@@ -423,14 +421,20 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  //TOAST HERE
   addToast(msg: string) {
-    let toastOptions: ToastOptions = {
-      title: msg,
-      timeout: 2000,
-      showClose: true,
-      theme: 'default'
-    };
-    this.toastyService.warning(toastOptions);
+    this.toastData.title = msg;
+    this.toastData.setTimeoutVal = 2000;
+    this.showToast = true;
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
   }
 }
 
