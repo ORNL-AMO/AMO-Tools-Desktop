@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 
@@ -30,6 +30,12 @@ export class LossesComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
+  @ViewChild('modificationHeader') modificationHeader: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getHeaderHeight();
+  }
+
   // _modifications: Modification[];
   baselineSelected: boolean = true;
   modificationSelected: boolean = false;
@@ -44,6 +50,7 @@ export class LossesComponent implements OnInit {
   lossTabSubscription: Subscription;
   modalOpenSubscription: Subscription;
   isModalOpen: boolean = false;
+  headerHeight: number;
   constructor(private lossesService: LossesService, private phastCompareService: PhastCompareService) {
   }
 
@@ -82,6 +89,20 @@ export class LossesComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.modificationIndex) {
       this.toggleCalculate = !this.toggleCalculate;
+    }
+  }
+
+  ngAfterViewInit() {
+    //after init show disclaimer toasty
+    setTimeout(() => {
+      //initialize container height after content is rendered
+      this.getHeaderHeight();
+    }, 100);
+  }
+
+  getHeaderHeight() {
+    if (this.modificationHeader) {
+      this.headerHeight = this.modificationHeader.nativeElement.clientHeight;
     }
   }
 

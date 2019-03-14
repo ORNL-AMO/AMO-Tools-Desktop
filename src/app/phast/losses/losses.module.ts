@@ -38,7 +38,6 @@ import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
 import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power-losses-help/auxiliary-power-losses-help.component';
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
 import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
-import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
 
 import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy-input-help.component';
 
@@ -96,7 +95,6 @@ import { LossesResultPanelComponent } from './losses-result-panel/losses-result-
     AuxiliaryPowerLossesHelpComponent,
     SlagHelpComponent,
     ExhaustGasHelpComponent,
-    EditConditionPropertiesComponent,
     EnergyInputHelpComponent,
     EnergyInputExhaustGasLossesHelpComponent,
     HeatSystemEfficiencyHelpComponent,

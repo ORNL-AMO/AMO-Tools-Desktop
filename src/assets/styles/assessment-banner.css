@@ -1,0 +1,43 @@
+.banner .img-col{
+    padding-right: 0px;
+}
+
+.banner .nav-link.disabled {
+    color: #ABB2B9;
+}
+
+.banner .home-nav-item:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    color: #808B96;
+}
+
+.banner .nav-link{
+    padding: 6px;
+    font-size: medium;
+    color: #000;
+}
+
+.banner .nav-link:not(.disabled):hover{
+    cursor: pointer;
+    background-color: #808B96;
+}
+.banner .nav-link.disabled:hover{
+    cursor: default;
+    color: initial;
+}
+.banner .nav-link.active{
+    background: #fff;
+    font-weight: bold;
+    color: black;
+  }
+
+.banner .nav-item{
+    margin: .1rem;
+}
+
+.banner .nav-link.active{
+    background: #fff;
+    font-weight: bold;
+    color: black;
+  }
