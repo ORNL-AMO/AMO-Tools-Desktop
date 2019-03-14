@@ -274,26 +274,29 @@ export class PumpCurveService {
 
   getData(pumpCurve: PumpCurve, selectedFormView: string): Array<{ x: number, y: number }> {
     let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
+    let maxDataFlow: number;
     if (selectedFormView == 'Data') {
-      let maxDataFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
+      let tmpDataFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
+      maxDataFlow = tmpDataFlow.flow;
       let tmpArr = new Array<any>();
       pumpCurve.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);
-      })
+      });
       let results = regression.polynomial(tmpArr, { order: pumpCurve.dataOrder, precision: 10 });
       this.regEquation.next(results.string);
-      for (let i = 0; i <= maxDataFlow.flow; i = i + 10) {
+      for (let i = 0; i <= maxDataFlow; i = i + 10) {
         let yVal = results.predict(i);
         if (yVal[1] > 0) {
           data.push({
             x: i,
             y: yVal[1]
-          })
+          });
         }
       }
     } else if (selectedFormView == 'Equation') {
+      maxDataFlow = pumpCurve.maxFlow;
       this.regEquation.next(null);
-      for (let i = 0; i <= pumpCurve.maxFlow + 10; i = i + 10) {
+      for (let i = 0; i <= maxDataFlow + 10; i = i + 10) {
         let yVal = this.calculateY(pumpCurve, i);
         if (yVal > 0) {
           data.push({
@@ -414,7 +417,6 @@ export class PumpCurveService {
     let maxY: { x: number, y: number } = { x: 0, y: 0 };
     let tmpDataBaseline = dataBaseline;
     if (graphPumpCurve) {
-      // let baseMaxY = _.maxBy(dataBaseline, (val) => { return val.y });
       let baseMaxY = _.maxBy(tmpDataBaseline, (val) => { return val.y });
       if (baseMaxY === undefined) {
         let maxHead = _.maxBy(pumpCurve.dataRows, (val) => { return val.head });
@@ -452,6 +454,19 @@ export class PumpCurveService {
       }
     }
     max = maxY;
+    return max;
+  }
+
+  // use this function to get max y value in a data array
+  // this is to aid in repairing the max y value bug apparent
+  // in baseline pump/fan curves
+  getMaxYValue(data: Array<{x: number, y: number}>): number {
+    let max = 0;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].y > max) {
+        max = data[i].y;
+      }
+    }
     return max;
   }
 
