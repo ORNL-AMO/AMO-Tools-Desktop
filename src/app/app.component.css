@@ -610,9 +610,6 @@ Reports
       padding-left: 20px;
       padding-right: 20px;
     }
-    .results.scroll-item.print-height.hide-print {
-      width:100%;
-    }
     .report-data {
         border-top: #ddd solid 1px;
     }
