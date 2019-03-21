@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { HeaderInput, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../shared/models/steam/ssmt';
+import { HeaderInput, HeaderWithHighestPressure, HeaderNotHighestPressure, BoilerInput } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { HeaderService } from './header.service';
 import { SsmtService } from '../ssmt.service';
@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   modificationIndex: number;
   @Input()
-  deaeratorPressure: number;
+  boilerInput: BoilerInput;
   
   highPressureForm: FormGroup;
   mediumPressureForm: FormGroup;
@@ -62,10 +62,10 @@ export class HeaderComponent implements OnInit {
 
   initForms() {
     if (this.headerInput.highPressure) {
-      this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, this.deaeratorPressure);
+      this.highPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, this.boilerInput);
     }
     else {
-      this.highPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.deaeratorPressure);
+      this.highPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.boilerInput);
     }
 
     if (this.headerInput.mediumPressure) {

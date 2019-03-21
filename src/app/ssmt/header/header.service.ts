@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HeaderInput, HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
+import { HeaderInput, HeaderNotHighestPressure, HeaderWithHighestPressure, BoilerInput } from '../../shared/models/steam/ssmt';
 import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
@@ -18,8 +18,8 @@ export class HeaderService {
     };
   }
 
-  initHighestPressureHeaderForm(settings: Settings, deaeratorPressure: number): FormGroup {
-    let ranges: HeaderRanges = this.getRanges(settings, undefined, undefined, deaeratorPressure);
+  initHighestPressureHeaderForm(settings: Settings, boilerInput: BoilerInput): FormGroup {
+    let ranges: HeaderRanges = this.getRanges(settings, undefined, undefined, boilerInput.deaeratorPressure);
 
     return this.formBuilder.group({
       pressure: [undefined, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
@@ -31,8 +31,8 @@ export class HeaderService {
     });
   }
 
-  getHighestPressureHeaderFormFromObj(obj: HeaderWithHighestPressure, settings: Settings, deaeratorPressure: number): FormGroup {
-    let ranges: HeaderRanges = this.getRanges(settings, undefined, undefined, deaeratorPressure);
+  getHighestPressureHeaderFormFromObj(obj: HeaderWithHighestPressure, settings: Settings, boilerInput: BoilerInput): FormGroup {
+    let ranges: HeaderRanges = this.getRanges(settings, boilerInput, undefined, undefined);
     let form: FormGroup = this.formBuilder.group({
       pressure: [obj.pressure, [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
       processSteamUsage: [obj.processSteamUsage, [Validators.required, Validators.min(ranges.processUsageMin)]],
@@ -106,40 +106,22 @@ export class HeaderService {
     };
   }
 
-  getHeaderLabel(index: number, numberOfHeaders: number): string {
-    //index is 0 indexed
-    if (index === 0) {
-      return 'High Pressure';
+  getRanges(settings: Settings, boilerInput?: BoilerInput, pressureMin?: number, pressureMax?: number): HeaderRanges {
+    let tmpPressureMin: number;
+    if(boilerInput && boilerInput.steamTemperature){
+      let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
+        {
+          saturatedTemperature: boilerInput.steamTemperature
+        },
+        1,
+        settings
+      );
+      tmpPressureMin = satPropertiesOutput.saturatedPressure;
+    }else{
+      tmpPressureMin = this.convertUnitsService.value(-14.5).from('psia').to(settings.steamPressureMeasurement);
     }
-    else {
-      if (index === numberOfHeaders - 1) {
-        return 'Low Pressure';
-      } else {
-        if (numberOfHeaders === 3) {
-          if (index === 1) {
-            return 'Medium Pressure';
-          }
-        } else if (numberOfHeaders === 4) {
-          if (index === 1) {
-            return 'Medium High Pressure';
-          } else if (index === 2) {
-            return 'Medium Low Pressure';
-          }
-        } else if (numberOfHeaders === 5) {
-          if (index === 1) {
-            return 'Medium High Pressure';
-          } else if (index === 2) {
-            return 'Medium Pressure';
-          } else if (index === 3) {
-            return 'Medium Low Pressure';
-          }
-        }
-      }
-    }
-  }
 
-  getRanges(settings: Settings, pressureMin?: number, pressureMax?: number, deaeratorPressure?: number): HeaderRanges {
-    let tmpPressureMin: number = this.convertUnitsService.value(-14.5).from('psia').to(settings.steamPressureMeasurement);
+
     let tmpPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     if (pressureMin > tmpPressureMin) {
       tmpPressureMin = pressureMin;
@@ -155,10 +137,10 @@ export class HeaderService {
 
     //return condensate max = saturated temp at dearator pressures
     let tmpCondensateReturnTempMax: number = 1000000;
-    if (deaeratorPressure) {
+    if (boilerInput && boilerInput.deaeratorPressure) {
       let satPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
         {
-          saturatedPressure: deaeratorPressure
+          saturatedPressure: boilerInput.deaeratorPressure
         },
         0,
         settings
@@ -191,13 +173,13 @@ export class HeaderService {
   }
 
 
-  isHeaderValid(obj: HeaderInput, settings: Settings, deaeratorPressure: number): boolean {
+  isHeaderValid(obj: HeaderInput, settings: Settings, boilerInput: BoilerInput): boolean {
     if (obj) {
       let isHighPressureHeaderValid: boolean = true;
       let isMediumPressureHeaderValid: boolean = true;
       let isLowPressureHeaderValid: boolean = true;
       if (obj.highPressure) {
-        let tmpHighPressureFrom: FormGroup = this.getHighestPressureHeaderFormFromObj(obj.highPressure, settings, deaeratorPressure);
+        let tmpHighPressureFrom: FormGroup = this.getHighestPressureHeaderFormFromObj(obj.highPressure, settings, boilerInput);
         if (tmpHighPressureFrom.status === 'INVALID') {
           isHighPressureHeaderValid = false;
         }
