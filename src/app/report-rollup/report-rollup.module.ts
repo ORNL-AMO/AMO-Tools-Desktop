@@ -43,6 +43,7 @@ import { FsatRollupGraphsComponent } from './fsat-rollup/fsat-rollup-graphs/fsat
 import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-rollup-print.component';
 import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 import { SsmtSummaryComponent } from './report-summary/ssmt-summary/ssmt-summary.component';
+import { SsmtRollupComponent } from './ssmt-rollup/ssmt-rollup.component';
 
 @NgModule({
   imports: [
@@ -90,6 +91,7 @@ import { SsmtSummaryComponent } from './report-summary/ssmt-summary/ssmt-summary
     FsatRollupGraphsComponent,
     FsatRollupPrintComponent,
     SsmtSummaryComponent,
+    SsmtRollupComponent,
 
   ],
   providers: [ReportRollupService],
