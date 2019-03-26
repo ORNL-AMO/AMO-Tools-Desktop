@@ -16,13 +16,23 @@ export class CondensateConnectorComponent implements OnInit {
   isOneHeaderSystem: boolean;
   @Input()
   settings: Settings;
-  
+
+  condensateClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
   }
 
+  ngOnChanges() {
+    this.setClasses();
+  }
 
+  setClasses() {
+    this.condensateClasses = ['condensate'];
+    if (this.returnCondensate && this.returnCondensate.massFlow < 1e-3) {
+      this.condensateClasses = ['no-steam-flow']
+    }
+  }
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }

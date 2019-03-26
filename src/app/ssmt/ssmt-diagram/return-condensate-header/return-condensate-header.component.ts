@@ -22,16 +22,32 @@ export class ReturnCondensateHeaderComponent implements OnInit {
   settings: Settings;
   
   condensateMassFlow: number;
+  condensateClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
+
+  }
+
+  ngOnChanges(){
+    this.setCondensateMassFlow();
+    this.setClasses();
+  }
+
+  setCondensateMassFlow(){
     if (this.condensateFlashTank) {
       this.condensateMassFlow = this.condensateFlashTank.outletLiquidMassFlow;
     }else {
       this.condensateMassFlow = this.returnCondensate.massFlow;
     }
   }
-
+  
+  setClasses(){
+    this.condensateClasses = ['makeup-water'];
+    if(this.condensateMassFlow < 1e-3){
+      this.condensateClasses =  ['no-steam-flow'];
+    }
+  }
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);

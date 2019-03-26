@@ -153,3 +153,9 @@
 .result-tables .group-label{
     font-size: 14px;
 }
+
+
+.ssmt-diagram .no-steam-flow{
+    background-color: #D5D8DC;
+    color: #D5D8DC;
+}

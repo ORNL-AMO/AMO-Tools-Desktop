@@ -37,7 +37,7 @@
     color: white;
 }
 
-.highPressure .condensate {
+.highPressure .condensate, .highPressure .no-steam-flow:not(.process-usage) {
     border-top-right-radius: 25px;
 }
 
@@ -135,4 +135,12 @@
     height: 40px;
     left: 110px;
     bottom: 19px;
+}
+
+.highPressure .process-usage-holder .process-usage.no-steam-flow,
+.mediumPressure .process-usage-holder .process-usage.no-steam-flow,
+.lowPressure .process-usage-holder .process-usage.no-steam-flow{
+    background-color: #D5D8DC;
+    /* color: #D5D8DC; */
+    border: #808B96 solid 3px; 
 }

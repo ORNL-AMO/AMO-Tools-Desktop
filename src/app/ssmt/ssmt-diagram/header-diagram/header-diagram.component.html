@@ -31,12 +31,12 @@
   <div class="d-flex flex-fill">
     <div class="text-center process-usage-width" (mouseenter)="hoverProcessUsage()" (mouseleave)="hoverEquipment('default')">
       <div class="process-usage-holder">
-        <span class="process-usage">
+        <span class="process-usage" [ngClass]="steamClasses">
           Process Usage
         </span>
       </div>
     </div>
-    <div class="flex-fill condensate text-center" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
+    <div class="flex-fill text-center" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')" [ngClass]="condensateClasses">
       <div class="condensate-holder pr-1">
         <span class="fa fa-chevron-right"></span>
         <span class="condensate-mass-flow">
