@@ -25,6 +25,7 @@ export class HeaderDiagramComponent implements OnInit {
 
   steamClasses: Array<string>;
   condensateClasses: Array<string>;
+  pressureClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
@@ -36,12 +37,17 @@ export class HeaderDiagramComponent implements OnInit {
 
   setClasses() {
     this.steamClasses = [this.pressureLevel];
+    this.pressureClasses = [this.pressureLevel];
     if (this.steamUsage.massFlow < 1e-3) {
       this.steamClasses = ['no-steam-flow'];
     }
     this.condensateClasses = ['condensate'];
     if(this.condensate.massFlow < 1e-3){
       this.condensateClasses = ['no-steam-flow'];
+    }
+
+    if(this.header.massFlow < 1e-3){
+      this.pressureClasses.push('noSteamFlow');
     }
 
   }

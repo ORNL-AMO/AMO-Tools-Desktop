@@ -16,6 +16,8 @@ export class CondensateConnectorComponent implements OnInit {
   isOneHeaderSystem: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  isConnector: boolean;
 
   condensateClasses: Array<string>;
   constructor() { }

@@ -9,11 +9,20 @@
     color: white;
 }
 
+.highPressure.noSteamFlow .header-tube,
+.mediumPressure.noSteamFlow .header-tube,
+.lowPressure.noSteamFlow .header-tube{
+    background-color: #D5D8DC;
+    color: black;
+}
+
+.noSteamFlow .fa{
+    color: #D5D8DC;
+}
 
 .highPressure .process-usage-holder .process-usage{
     border: #C0392B solid 3px;
 }
-
 
 .mediumPressure .header-tube{
     background-color: #FFA726;

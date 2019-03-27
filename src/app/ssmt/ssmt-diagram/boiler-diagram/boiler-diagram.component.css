@@ -1,4 +1,18 @@
 
+.high-pressure.noSteamFlow,
+.blowdown.noSteamFlow, 
+.feedwater.noSteamFlow{
+    background-color: #D5D8DC;
+    color: #D5D8DC; 
+}
+
+
+.high-pressure.noSteamFlow .hidden-chevron,
+.blowdown.noSteamFlow .hidden-chevron, 
+.feedwater.noSteamFlow .hidden-chevron{
+    color: #D5D8DC; 
+}
+
 .boiler-img{
     height: 120px;
     z-index: +1;

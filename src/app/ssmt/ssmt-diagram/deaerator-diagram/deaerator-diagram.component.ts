@@ -19,11 +19,32 @@ export class DeaeratorDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
   
+  ventClasses: Array<string>;
+  feedwaterClasses: Array<string>;
+  inletSteamClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
   }
 
+  ngOnChanges(){
+    this.setClasses();
+  }
+
+  setClasses(){
+    this.ventClasses = [];
+    this.feedwaterClasses = [];
+    this.inletSteamClasses = [this.inletPressure];
+    if(this.deaerator.ventedSteamMassFlow < 1e-3){
+      this.ventClasses.push('no-steam-flow');
+    }
+    if(this.deaerator.feedwaterMassFlow < 1e-3){
+      this.feedwaterClasses.push('no-steam-flow');
+    }
+    if(this.deaerator.inletSteamMassFlow < 1e-3){
+      this.inletSteamClasses.push('no-steam-flow');
+    }
+  }
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
