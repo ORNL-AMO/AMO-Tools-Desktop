@@ -4,7 +4,7 @@
       (mouseenter)="hoverEquipment('condensateHovered')" (mouseleave)="hoverEquipment('default')"
       [ngClass]="inletCondensateClasses">
       <div class="inlet-temp-holder">
-        <span class="inlet-temp">{{flashTank.inletWaterTemperature | number:'1.0-1'}}
+        <span class="inlet-temp" *ngIf="flashTank.inletWaterMassFlow != 0">{{flashTank.inletWaterTemperature | number:'1.0-1'}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </span>
       </div>
@@ -18,7 +18,7 @@
         <div class="vented-steam-holder">
           <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('condensateFlashTankVentHovered')"
             (mouseleave)="hoverEquipment('ventsHovered')"></span>
-          <span class="vented-steam">
+          <span class="vented-steam" *ngIf="flashTank.outletGasMassFlow != 0">
             {{flashTank.outletGasMassFlow | number:'1.0-2'}}
             <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
           </span>

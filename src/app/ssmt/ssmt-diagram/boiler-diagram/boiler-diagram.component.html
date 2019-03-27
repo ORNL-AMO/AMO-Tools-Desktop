@@ -51,7 +51,7 @@
       <div class="d-flex flex-fill blowdown justify-content-center pl-2" (mouseenter)="hoverEquipment('blowdownHovered')"
         (mouseleave)="hoverEquipment('default')" [ngClass]="blowdownClasses">
         <div class="blowdown-holder">
-          <span class="blowdown-mass-flow">
+          <span class="blowdown-mass-flow" *ngIf="boiler.blowdownMassFlow != 0">
             {{boiler.blowdownMassFlow | number:'1.0-2'}}
             <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
           </span>

@@ -1,7 +1,7 @@
 <div class="d-flex flex-column h-100 w-100 justify-content-center">
   <div class="d-flex chevron-one justify-content-center flex-fill" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')">
     <div class="inlet-mass-flow-holder">
-      <span class="inlet-mass-flow">
+      <span class="inlet-mass-flow" *ngIf="turbine.massFlow != 0">
         {{turbine.massFlow | number:'1.0-2'}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </span>
@@ -19,7 +19,7 @@
   <div class="d-flex chevron-two justify-content-center flex-fill" [ngClass]="{'mb-1': noOutletConnection}"
     (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')">
     <div class="outlet-power-holder">
-      <span class="outlet-power">
+      <span class="outlet-power" *ngIf="turbine.powerOut != 0">
         {{turbine.powerOut | number:'1.0-1'}}             
         <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
       </span>

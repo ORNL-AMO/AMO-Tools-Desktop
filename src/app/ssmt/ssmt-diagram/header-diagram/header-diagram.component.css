@@ -24,12 +24,20 @@
     border: #C0392B solid 3px;
 }
 
+.highPressure .hidden-chevron{
+    color: #C0392B;
+}
+
 .mediumPressure .header-tube{
     background-color: #FFA726;
 }
 
 .mediumPressure .process-usage-holder .process-usage{
     border: #FFA726 solid 3px;
+}
+
+.mediumPressure .hidden-chevron{
+    color: #FFA726;
 }
 
 .lowPressure .header-tube{
@@ -39,6 +47,10 @@
 
 .lowPressure .process-usage-holder .process-usage{
      border: #FFEB3B solid 3px; 
+}
+
+.lowPressure .hidden-chevron{
+    color: #FFEB3B;
 }
 
 .condensate{

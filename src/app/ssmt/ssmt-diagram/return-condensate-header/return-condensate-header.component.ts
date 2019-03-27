@@ -44,7 +44,7 @@ export class ReturnCondensateHeaderComponent implements OnInit {
   
   setClasses(){
     this.condensateClasses = ['makeup-water'];
-    if(this.condensateMassFlow < 1e-3){
+    if(this.makeupWaterAndCondensateHeader.massFlow < 1e-3){
       this.condensateClasses =  ['no-steam-flow'];
     }
   }
