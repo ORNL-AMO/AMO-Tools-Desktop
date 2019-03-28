@@ -20,10 +20,34 @@ export class PrvDiagramComponent implements OnInit {
   emitSelectEquipment = new EventEmitter<string>();
   @Input()
   settings: Settings;
-  
+
+  inletSteamClasses: Array<string>;
+  outletSteamClasses: Array<string>;
+  feedwaterClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
+
+  }
+
+  ngOnChanges() {
+    this.setClasses();
+  }
+
+  setClasses() {
+    this.inletSteamClasses = [this.inletSteam];
+    if (this.prv.inletMassFlow < 1e-3) {
+      this.inletSteamClasses = ['no-steam-flow'];
+    }
+
+    this.outletSteamClasses = [this.outletSteam];
+    if (this.prv.outletMassFlow < 1e-3) {
+      this.outletSteamClasses = ['no-steam-flow'];
+    }
+    this.feedwaterClasses = [];
+    if (this.prv.feedwaterMassFlow != undefined && this.prv.feedwaterMassFlow < 1e-3) {
+      this.feedwaterClasses = ['no-steam-flow'];
+    }
   }
 
   hoverEquipment(str: string) {
@@ -50,10 +74,10 @@ export class PrvDiagramComponent implements OnInit {
     if (this.inletSteam === 'high-pressure') {
       if (this.outletSteam === 'medium-pressure') {
         this.emitSelectEquipment.emit('highToMediumPressurePRV');
-      }else {
+      } else {
         this.emitSelectEquipment.emit('lowPressurePRV');
       }
-    }else if (this.inletSteam === 'medium-pressure') {
+    } else if (this.inletSteam === 'medium-pressure') {
       this.emitSelectEquipment.emit('lowPressurePRV');
     }
   }
@@ -62,14 +86,14 @@ export class PrvDiagramComponent implements OnInit {
     if (this.inletSteam === 'high-pressure') {
       if (this.outletSteam === 'medium-pressure') {
         this.emitSetHover.emit('highToMediumPressurePRVHovered');
-      }else {
+      } else {
         this.emitSetHover.emit('lowPressurePRVHovered');
       }
-    }else if (this.inletSteam === 'medium-pressure') {
+    } else if (this.inletSteam === 'medium-pressure') {
       this.emitSetHover.emit('lowPressurePRVHovered');
     }
   }
-  
+
 
   hoverFeedwater() {
     if (this.outletSteam === 'low-pressure') {

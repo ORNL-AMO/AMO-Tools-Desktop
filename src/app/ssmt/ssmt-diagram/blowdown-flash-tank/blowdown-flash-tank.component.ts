@@ -17,11 +17,32 @@ export class BlowdownFlashTankComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  constructor() { }
+  steamPressureClasses: Array<string>;
+  outletCondensateClasses: Array<string>;
+  inletCondensateClasses: Array<string>;
 
   ngOnInit() {
   }
 
+  ngOnChanges() {
+    this.setClasses();
+  }
+
+  setClasses() {
+    this.steamPressureClasses = ['low-pressure'];
+    this.outletCondensateClasses = ['blowdown'];
+    this.inletCondensateClasses = ['blowdown'];
+    if (this.flashTank.outletGasMassFlow < 1e-3) {
+      this.steamPressureClasses = ['no-steam-flow']
+    }
+
+    if (this.flashTank.outletLiquidMassFlow < 1e-3) {
+      this.outletCondensateClasses = ['no-steam-flow'];
+    }
+    if (this.flashTank.inletWaterMassFlow < 1e-3) {
+      this.inletCondensateClasses = ['no-steam-flow'];
+    }
+  }
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }
