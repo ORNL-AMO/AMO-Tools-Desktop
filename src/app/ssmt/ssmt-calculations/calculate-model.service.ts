@@ -89,7 +89,7 @@ export class CalculateModelService {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(_ssmt));
     this.initResults();
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, _settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings, ssmtCopy.boilerInput.deaeratorPressure);
+    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings, ssmtCopy.boilerInput);
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, _settings);
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, _settings).valid;
 
