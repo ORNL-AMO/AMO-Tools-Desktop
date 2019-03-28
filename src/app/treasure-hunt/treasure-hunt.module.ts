@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { TreasureChestComponent } from './treasure-chest/treasure-chest.component';
 import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
 import { LightingReplacementCardComponent } from './treasure-chest/lighting-replacement-card/lighting-replacement-card.component';
+import { OpportunitySheetComponent } from './opportunity-sheet/opportunity-sheet.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,7 @@ import { LightingReplacementCardComponent } from './treasure-chest/lighting-repl
     ModalModule,
     FormsModule
   ],
-  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent, TreasureChestComponent, SummaryCardComponent, LightingReplacementCardComponent],
+  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent, TreasureChestComponent, SummaryCardComponent, LightingReplacementCardComponent, OpportunitySheetComponent],
   providers: [ TreasureHuntService ]
 })
 export class TreasureHuntModule { }

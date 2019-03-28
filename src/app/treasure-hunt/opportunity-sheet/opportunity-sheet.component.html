@@ -1,0 +1,107 @@
+<form>
+  <div class="d-flex flex-wrap">
+    <div class="col-12">
+      <label class="group-label w-100">Opportunity Details</label>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Process / Equipment</label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label>Plant</label>
+        <input type="text" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Business Unit</label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+    <div class="col-12 form-group">
+      <label class="group-label w-100">Description</label>
+      <textarea class="form-control w-100" rows="6"></textarea>
+    </div>
+    <div class="col-12">
+      <label class="group-label w-100">Energy Costs</label>
+    </div>
+    <div class="col-12">
+      <div class="form-group">
+        <label>Electricity</label>
+        <div class="input-group">
+          <input type="number" class="form-control">
+          <span class="input-group-addon units">$/kWh</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <label class="group-label w-100">Implementation Costs</label>
+    </div>
+    <div class="col-12">
+      <div class="form-group">
+        <label>Engineering Services</label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="form-group">
+        <label>Material</label>
+        <div class="input-group">
+          <input type="number" class="form-control">
+          <span class="input-group-addon units">$</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="form-group">
+        <label>Labor</label>
+        <select class="form-control">
+          <option value="'Contract'">Contract</option>
+          <option value="'In House'">In House</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-12" *ngFor="let otherCost of otherCosts">
+      <div class="form-groupd d-flex">
+        <div class="w-50 input-group pr-2">
+          <span class="input-group-addon units border-left">X</span>
+          <input type="text" class="form-control" [(ngModel)]="otherCost.description" name="otherCostDescription">
+        </div>
+        <div class="w-50 input-group">
+          <input class="form-control" type="number" [(ngModel)]="otherCost.cost" name="otherCost">
+          <span class="input-group-addon units">$</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 text-center pt-2">
+      <a class="click-link small" (click)="addOtherCost()">+Add Other Cost</a>
+    </div>
+    <div class="col-12">
+      <label class="group-label w-100">Addtional Savings</label>
+    </div>
+    <div class="col-12">
+      <div class="form-group d-flex">
+        <div class="w-50 input-group pr-2">
+          <span class="input-group-addon units border-left">X</span>
+          <input type="text" class="form-control" [(ngModel)]="additionalSavings.description"
+            name="additionalSavingsDescription">
+        </div>
+        <div class="w-50 input-group">
+          <input class="form-control" type="number" [(ngModel)]="additionalSavings.cost" name="additionalSavingsCost">
+          <span class="input-group-addon units">$</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <label class="group-label w-100">Opportunity Notes</label>
+      <textarea class="form-control w-100" rows="6"></textarea>
+    </div>
+
+  </div>
+</form>
