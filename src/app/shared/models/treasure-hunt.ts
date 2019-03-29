@@ -5,7 +5,7 @@ export interface TreasureHunt {
     lightingReplacements?: Array<LightingReplacementTreasureHunt>;
 }
 
-export interface TreasureHuntOpportunity {
+export interface OpportunitySheet {
     name: string,
     equipment: string,
     description: string,
@@ -32,6 +32,6 @@ export interface OtherCostItem {
 export interface LightingReplacementTreasureHunt {
     baseline: Array<LightingReplacementData>;
     modifications?: Array<LightingReplacementData>;
-    opportunity?: TreasureHuntOpportunity
+    opportunitySheet?: OpportunitySheet
     selected?: boolean;
 }
