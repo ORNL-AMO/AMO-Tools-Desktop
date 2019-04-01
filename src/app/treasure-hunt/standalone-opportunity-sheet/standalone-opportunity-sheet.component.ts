@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-standalone-opportunity-sheet',
@@ -6,6 +6,9 @@ import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular
   styleUrls: ['./standalone-opportunity-sheet.component.css']
 })
 export class StandaloneOpportunitySheetComponent implements OnInit {
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
+  
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -41,5 +44,13 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
 
   addModification() {
     this.modificationEnergyUse = JSON.parse(JSON.stringify(this.baselineEnergyUse));
+  }
+
+  save(){
+
+  }
+
+  cancel(){
+    this.emitCancel.emit(true);
   }
 }

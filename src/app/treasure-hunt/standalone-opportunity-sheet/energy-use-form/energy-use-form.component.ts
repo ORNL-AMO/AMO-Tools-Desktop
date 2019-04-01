@@ -7,11 +7,17 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class EnergyUseFormComponent implements OnInit {
   @Input()
-  energyItems: Array<{ type: string, amount: number }>; 
-  
+  energyItems: Array<{ type: string, amount: number }>;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  addEnergyField() {
+    this.energyItems.push({
+      type: 'Electricity',
+      amount: 0.0
+    })
+  }
 }

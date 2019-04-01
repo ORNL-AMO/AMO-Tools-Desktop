@@ -30,3 +30,12 @@
     font-size: larger;
     font-weight: bold;
 }
+
+.no-data:hover{
+    cursor: pointer;
+    background: #efefef;
+}
+
+.form-width{
+    width: 60%;
+}

@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="scroll-item w-75 d-flex flex-wrap bg-white">
+    <div class="scroll-item form-width d-flex flex-wrap bg-white">
       <app-general-details-form class="w-100"></app-general-details-form>
       <div class="col-12">
         <div class="header">
@@ -39,11 +39,21 @@
         <label class="group-label">Modification</label>
         <app-energy-use-form *ngIf="modificationEnergyUse.length != 0" [energyItems]="modificationEnergyUse">
         </app-energy-use-form>
-        <div class="p-3 w-100 justify-content-center" *ngIf="modificationEnergyUse.length == 0">
-          <button class="btn btn-primary btn-sm" (click)="addModification()">Add Modification</button>
+
+        <div class="p-3 no-data" (click)="addModification()" *ngIf="modificationEnergyUse.length == 0">
+          <h3>Once you've added your baseline energy use. 
+          </h3>
+          <button type="button" class="btn btn-primary">Add Modified Condition</button>
+          <p>Data will be copied from your current baseline condition.</p>
         </div>
+        <!-- <div class="p-3 w-100 justify-content-center" *ngIf="modificationEnergyUse.length == 0">
+          <button class="btn btn-primary btn-sm" (click)="addModification()">Add Modification</button>
+        </div> -->
       </div>
       <app-costs-form class="w-100"></app-costs-form>
     </div>
+    <!-- <div class="help-width">
+      
+    </div> -->
   </div>
 </div>
