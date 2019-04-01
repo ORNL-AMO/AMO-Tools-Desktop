@@ -5,7 +5,7 @@
   <table class="table table-striped table-hover">
     <thead>
       <tr>
-        <td [ngStyle]="{'width.%': 15}" class="bold"></td>
+        <td [ngStyle]="{'width.%': 15}" class="bold">($K/yr)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"
           [ngStyle]="{'width.%': tableCellWidth}" class="bold text-center">Baseline</td>
         <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationOutputs; let index = index;"
