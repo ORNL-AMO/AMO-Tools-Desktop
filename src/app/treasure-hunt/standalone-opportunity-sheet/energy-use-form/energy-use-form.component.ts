@@ -20,4 +20,8 @@ export class EnergyUseFormComponent implements OnInit {
       amount: 0.0
     })
   }
+
+  removeEnergyItem(index: number){
+    this.energyItems.splice(index, 1);
+  }
 }

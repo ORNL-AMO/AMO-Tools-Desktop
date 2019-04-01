@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEmitter, Input } from '@angular/core';
+import { OpportunitySheet } from '../../shared/models/treasure-hunt';
+import { TreasureHuntService } from '../treasure-hunt.service';
 
 @Component({
   selector: 'app-standalone-opportunity-sheet',
@@ -8,7 +10,9 @@ import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEm
 export class StandaloneOpportunitySheetComponent implements OnInit {
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  
+  @Input()
+  opportunitySheet: OpportunitySheet;
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -17,16 +21,19 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   }
 
 
-  baselineEnergyUse: Array<{ type: string, amount: number }> = [{
-    type: 'Electricity',
-    amount: 0
-  }];
+  // baselineEnergyUse: Array<{ type: string, amount: number }> = [{
+  //   type: 'Electricity',
+  //   amount: 0
+  // }];
 
-  modificationEnergyUse: Array<{ type: string, amount: number }> = [];
+  // modificationEnergyUse: Array<{ type: string, amount: number }> = [];
   containerHeight: number;
-  constructor() { }
+  constructor(private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
+    if(!this.opportunitySheet){
+      this.opportunitySheet = this.treasureHuntService.initOpportunitySheet();
+    }
   }
 
   ngAfterViewInit() {
@@ -43,11 +50,11 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
 
 
   addModification() {
-    this.modificationEnergyUse = JSON.parse(JSON.stringify(this.baselineEnergyUse));
+    this.opportunitySheet.modificationEnergyUseItems = JSON.parse(JSON.stringify(this.opportunitySheet.baselineEnergyUseItems));
   }
 
   save(){
-
+   // console.log(this.baselineEnergyUse);
   }
 
   cancel(){

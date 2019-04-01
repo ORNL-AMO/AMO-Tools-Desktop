@@ -7,7 +7,7 @@
   <div class="form-group">
     <label>Engineering Services</label>
     <div class="input-group">
-      <input type="number" class="form-control">
+      <input type="number" class="form-control" [ngModel]="opportunityCost.engineeringServices" name="engineeringServices">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -16,7 +16,7 @@
   <div class="form-group">
     <label>Material</label>
     <div class="input-group">
-      <input type="number" class="form-control">
+      <input type="number" class="form-control" [ngModel]="opportunityCost.material" name="material">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -25,19 +25,22 @@
   <div class="form-group">
     <label>Labor</label>
     <div class="input-group">
-      <input type="number" class="form-control">
+      <input type="number" class="form-control" [ngModel]="opportunityCost.labor" name="labor">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
 </div>
-<div class="col-12" *ngFor="let otherCost of otherCosts">
-  <div class="form-groupd d-flex">
+<div class="col-12" *ngFor="let otherCost of opportunityCost.otherCosts; let index = index;">
+  <div class="form-group d-flex">
     <div class="w-50 input-group pr-2">
-      <span class="input-group-addon units border-left">X</span>
-      <input type="text" class="form-control" [(ngModel)]="otherCost.description" name="otherCostDescription">
+      <input type="text" class="form-control" [(ngModel)]="otherCost.description"
+        name="{{'otherCostDescription_'+index}}">
+      <span class="input-group-addon units remove-item" (click)="removeOtherCostItem(index)">
+        <span class="fa fa-times"></span>
+      </span>
     </div>
     <div class="w-50 input-group">
-      <input class="form-control" type="number" [(ngModel)]="otherCost.cost" name="otherCost">
+      <input class="form-control" type="number" [(ngModel)]="otherCost.cost" name="{{'otherCost_'+index}}">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -45,26 +48,28 @@
 <div class="col-12 text-center pt-2">
   <a class="click-link small" (click)="addOtherCost()">+Add Other Cost</a>
 </div>
-<div class="col-12 text-center pt-2" *ngIf="!additionalSavings">
+<div class="col-12 text-center pt-2" *ngIf="!opportunityCost.additionalSavings">
   <a class="click-link small" (click)="addAdditionalSavings()">+Add Other Savings</a>
 </div>
-<div class="col-12" *ngIf="additionalSavings">
+<div class="col-12" *ngIf="opportunityCost.additionalSavings">
   <label class="group-label">Addtional Savings</label>
 </div>
-<div class="col-12" *ngIf="additionalSavings">
+<div class="col-12" *ngIf="opportunityCost.additionalSavings">
   <div class="form-group d-flex">
     <div class="w-50 input-group pr-2">
-      <span class="input-group-addon units border-left">X</span>
-      <input type="text" class="form-control" [(ngModel)]="additionalSavings.description"
+      <input type="text" class="form-control" [(ngModel)]="opportunityCost.additionalSavings.description"
         name="additionalSavingsDescription">
+      <span class="input-group-addon units remove-item" (click)="removeAdditionalSavings()">
+        <span class="fa fa-times"></span>
+      </span>
     </div>
     <div class="w-50 input-group">
-      <input class="form-control" type="number" [(ngModel)]="additionalSavings.cost" name="additionalSavingsCost">
+      <input class="form-control" type="number" [(ngModel)]="opportunityCost.additionalSavings.cost" name="additionalSavingsCost">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
 </div>
 <div class="col-12">
   <label class="group-label">Opportunity Notes</label>
-  <textarea class="form-control w-100" rows="6"></textarea>
+  <textarea class="form-control w-100" rows="6" [ngModel]="opportunityCost.costDescription" name="costDescription"></textarea>
 </div>

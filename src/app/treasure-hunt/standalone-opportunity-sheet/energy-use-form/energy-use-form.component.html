@@ -3,19 +3,22 @@
     <label>Energy Type</label>
     <label class="pl-2">Energy Use</label>
   </div>
-  <div class="form-group" *ngFor="let energyItem of energyItems">
-    <select class="form-control" [(ngModel)]="energyItem.type" name="type">
-      <option value="Electricity">Electricity</option>
-      <option value="Gas">Gas</option>
-      <option value="Compressed Air">Compressed Air</option>
-      <option value="Other Fuel">Other Fuel</option>
-      <option value="Steam">Steam</option>
-      <option value="Water">Water</option>
-      <option value="WWT">WWT</option>
+  <div class="form-group" *ngFor="let energyItem of energyItems; let index = index;">
+    <select class="form-control" [(ngModel)]="energyItem.type" name="{{'type_'+index}}">
+      <option [ngValue]="'Electricity'">Electricity</option>
+      <option [ngValue]="'Gas'">Gas</option>
+      <option [ngValue]="'Compressed Air'">Compressed Air</option>
+      <option [ngValue]="'Other Fuel'">Other Fuel</option>
+      <option [ngValue]="'Steam'">Steam</option>
+      <option [ngValue]="'Water'">Water</option>
+      <option [ngValue]="'WWT'">WWT</option>
     </select>
     <div class="input-group pl-2">
-      <input type="number" class="form-control" [(ngModel)]="energyItem.amount" name="amount">
+      <input type="number" class="form-control" [(ngModel)]="energyItem.amount" name="{{'amount_'+index}}">
       <span class="input-group-addon units">/yr</span>
+      <span class="input-group-addon units remove-item" (click)="removeEnergyItem(index)">
+        <span class="fa fa-times"></span>
+      </span>
     </div>
   </div>
   <div class="w-100 text-center p-2">
