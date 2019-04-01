@@ -1,0 +1,49 @@
+<div class="d-flex h-100 modify-conditions" #contentContainer>
+  <div class="d-flex flex-column w-100 h-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center justify-content-between">
+      <div class="d-flex pl-2 align-items-center">
+        <div class="text-center lighting-bulb">
+          <span class="fa fa-edit"></span>
+        </div>
+        <div class="pl-2">
+          <h3>Treasure Hunt Opportunity</h3>
+        </div>
+      </div>
+      <div class="d-flex pr-2">
+        <div class="d-flex help-holder">
+          <p class="help-text treasure-hunt-help">Once you've found some treasure, click the save icon to add the
+            treasure to your chest!
+            Click cancel to discard changes and return to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-ban"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-item w-75 d-flex flex-wrap bg-white">
+      <app-general-details-form class="w-100"></app-general-details-form>
+      <div class="col-12">
+        <div class="header">
+          <h3 class="ml-0">Energy Use</h3>
+        </div>
+      </div>
+      <div class="col-6">
+        <label class="group-label">Baseline</label>
+        <app-energy-use-form [energyItems]="baselineEnergyUse"></app-energy-use-form>
+      </div>
+      <!-- Modifications Start -->
+      <div class="col-6">
+        <label class="group-label">Modification</label>
+        <app-energy-use-form *ngIf="modificationEnergyUse.length != 0" [energyItems]="modificationEnergyUse">
+        </app-energy-use-form>
+        <div class="p-3 w-100 justify-content-center" *ngIf="modificationEnergyUse.length == 0">
+          <button class="btn btn-primary btn-sm" (click)="addModification()">Add Modification</button>
+        </div>
+      </div>
+      <app-costs-form class="w-100"></app-costs-form>
+    </div>
+  </div>
+</div>

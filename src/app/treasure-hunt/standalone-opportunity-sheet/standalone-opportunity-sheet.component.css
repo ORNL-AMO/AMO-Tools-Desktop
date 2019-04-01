@@ -1,0 +1,32 @@
+.action-item:hover{
+    cursor: pointer;
+    background: #efefef;
+}
+
+.header .fa.fa-edit{
+    font-size: -webkit-xxx-large;
+}
+
+.fa-save, .fa-ban{
+    font-size: xx-large;
+}
+
+.action-item:hover{
+    cursor: pointer;
+    background: #efefef;
+}
+
+.treasure-hunt-help{
+    margin-right: .5rem;
+    margin-bottom: 0px;
+}
+
+.btn.btn-primary{
+    padding: 6px;
+}
+
+
+.energy-label{
+    font-size: larger;
+    font-weight: bold;
+}

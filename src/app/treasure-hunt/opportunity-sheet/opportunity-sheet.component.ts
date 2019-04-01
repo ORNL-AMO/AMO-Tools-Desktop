@@ -8,28 +8,8 @@ import { OtherCostItem } from '../../shared/models/treasure-hunt';
 })
 export class OpportunitySheetComponent implements OnInit {
 
-
-  otherCosts: Array<OtherCostItem> = [];
-  additionalSavings: OtherCostItem;
   constructor() { }
 
   ngOnInit() {
   }
-
-  addOtherCost() {
-    this.otherCosts.push(
-      {
-        description: 'Other Cost #' + this.otherCosts.length,
-        cost: 0.0
-      }
-    )
-  }
-
-  addAdditionalSavings() {
-    this.additionalSavings = {
-      description: 'Other Savings',
-      cost: 0.0
-    }
-  }
-
 }

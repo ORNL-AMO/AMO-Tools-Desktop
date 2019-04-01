@@ -13,6 +13,20 @@
   </div>
 </div>
 <div class="d-flex pl-2 pr-2" *ngIf="selectedCalc == 'none'">
+  <div class="d-flex flex-column align-items-center lighting hunt-item" (click)="selectCalc('opportunity-sheet')">
+    <div class="calc-icon-div d-flex justify-content-center align-items-center">
+      <span class="fa fa-edit"></span>
+    </div>
+    <div class="d-flex flex-fill flex-column justify-content-center text-center pt-2">
+      <h5>Treasure Hunt Opportunity</h5>
+      <p class="help-text">
+        Description here..
+      </p>
+    </div>
+  </div>
+
+
+
   <div class="d-flex flex-column align-items-center lighting hunt-item" (click)="selectCalc('lighting-replacement')">
     <div class="calc-icon-div d-flex justify-content-center align-items-center">
       <span class="fa fa-lightbulb-o"></span>
@@ -52,14 +66,14 @@
   </div>
 </div>
 
-<app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true" (emitSave)="saveNewLighting($event)"
-  (emitCancel)="selectCalc('none')"></app-lighting-replacement>
+<app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
+  (emitSave)="saveNewLighting($event)" (emitCancel)="selectCalc('none')"></app-lighting-replacement>
+
+<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'"></app-standalone-opportunity-sheet>
 
 
-
-
-<div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="saveCalcModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
+<div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- <div class="modal-header p-1">
@@ -72,7 +86,7 @@
         <app-opportunity-sheet></app-opportunity-sheet>
       </div>
       <div class="modal-footer p-1">
-          <button class="btn btn-danger btn-sm pull-right" (click)="closeSaveCalcModal()">Cancel</button>
+        <button class="btn btn-danger btn-sm pull-right" (click)="closeSaveCalcModal()">Cancel</button>
         <button class="btn btn-success btn-sm pull-right" (click)="saveLighting()">Save</button>
       </div>
     </div>
