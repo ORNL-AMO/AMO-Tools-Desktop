@@ -69,7 +69,8 @@
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
   (emitSave)="saveNewLighting($event)" (emitCancel)="selectCalc('none')"></app-lighting-replacement>
 
-<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="selectCalc('none')">
+<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveNewOpportunitySheet($event)">
 </app-standalone-opportunity-sheet>
 
 

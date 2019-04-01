@@ -12,6 +12,8 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   emitCancel = new EventEmitter<boolean>();
   @Input()
   opportunitySheet: OpportunitySheet;
+  @Output('emitSave')
+  emitSave = new EventEmitter<OpportunitySheet>();
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
@@ -20,18 +22,12 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
     this.resizeTabs();
   }
 
-
-  // baselineEnergyUse: Array<{ type: string, amount: number }> = [{
-  //   type: 'Electricity',
-  //   amount: 0
-  // }];
-
-  // modificationEnergyUse: Array<{ type: string, amount: number }> = [];
   containerHeight: number;
+  tabSelect: string = 'help';
   constructor(private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
-    if(!this.opportunitySheet){
+    if (!this.opportunitySheet) {
       this.opportunitySheet = this.treasureHuntService.initOpportunitySheet();
     }
   }
@@ -53,11 +49,17 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
     this.opportunitySheet.modificationEnergyUseItems = JSON.parse(JSON.stringify(this.opportunitySheet.baselineEnergyUseItems));
   }
 
-  save(){
-   // console.log(this.baselineEnergyUse);
+  save() {
+    // console.log(this.baselineEnergyUse);
+    this.emitSave.emit(this.opportunitySheet);
   }
 
-  cancel(){
+  cancel() {
     this.emitCancel.emit(true);
   }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
 }

@@ -18,4 +18,7 @@
   <div class="summary-item col-3" *ngFor="let replacement of treasureHunt.lightingReplacements">
     <app-lighting-replacement-card [replacement]="replacement" [settings]="settings"></app-lighting-replacement-card>
   </div>
+  <div class="summary-item col-3" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
+    <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"></app-opportunity-sheet-card>
+  </div>
 </div>

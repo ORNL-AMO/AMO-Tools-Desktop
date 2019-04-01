@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
@@ -46,6 +46,16 @@ export class FindTreasureComponent implements OnInit {
   saveLighting() {
     this.treasureHunt.lightingReplacements.push(this.newLightingCalc);
     this.closeSaveCalcModal();
+    this.selectCalc('none');
+    this.emitSave.emit(this.treasureHunt);
+  }
+
+
+  saveNewOpportunitySheet(newSheet: OpportunitySheet){
+    if(!this.treasureHunt.opportunitySheets){
+      this.treasureHunt.opportunitySheets = new Array<OpportunitySheet>();
+    }
+    this.treasureHunt.opportunitySheets.push(newSheet);
     this.selectCalc('none');
     this.emitSave.emit(this.treasureHunt);
   }

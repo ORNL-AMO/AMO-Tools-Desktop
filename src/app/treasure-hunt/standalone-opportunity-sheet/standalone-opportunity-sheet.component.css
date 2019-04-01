@@ -39,3 +39,11 @@
 .form-width{
     width: 60%;
 }
+
+.help-panel{
+    width: 40%;
+}
+
+.help-holder{
+    max-width: 500px;
+}
