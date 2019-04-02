@@ -10,8 +10,8 @@ export class TreasureHuntSettingsComponent implements OnInit {
   @Input()
   settingsForm: FormGroup;
 
-  @Output('startSavePolling')
-  startSavePolling = new EventEmitter<boolean>();
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
 
   
   constructor() { }
@@ -19,4 +19,8 @@ export class TreasureHuntSettingsComponent implements OnInit {
   ngOnInit() {
   }
 
+
+  save(){
+    this.emitSave.emit(true);
+  }
 }

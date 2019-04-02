@@ -16,3 +16,8 @@ tbody{
 .group-label{
     font-weight: bold;
 }
+
+
+td.energy-item{
+    width: 33.333%;
+}

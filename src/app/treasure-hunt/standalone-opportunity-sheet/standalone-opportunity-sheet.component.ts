@@ -18,7 +18,7 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   emitSave = new EventEmitter<OpportunitySheet>();
   @Input()
   settings: Settings;
-  
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -56,8 +56,6 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   }
 
   save() {
-    // console.log(this.baselineEnergyUse);
-    console.log('save');
     this.emitSave.emit(this.opportunitySheet);
   }
 
@@ -70,18 +68,17 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   }
 
 
-  saveBaseline(baselineData: Array<{ type: string, amount: number }>){
+  saveBaseline(baselineData: Array<{ type: string, amount: number }>) {
     this.opportunitySheet.baselineEnergyUseItems = baselineData;
     this.getResults();
   }
 
-  saveModification(modificationData: Array<{ type: string, amount: number }>){
+  saveModification(modificationData: Array<{ type: string, amount: number }>) {
     this.opportunitySheet.modificationEnergyUseItems = modificationData;
     this.getResults();
   }
 
-  getResults(){
-    console.log('get results');
+  getResults() {
     this.opportunitySheetResults = this.opportunitySheetService.getResults(this.opportunitySheet, this.settings);
   }
 }

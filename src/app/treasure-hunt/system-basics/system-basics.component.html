@@ -6,7 +6,7 @@
     <app-application-settings [(settingsForm)]="settingsForm" [inPsat]="false" [inPhast]="false" [inTreasureHunt]="true"
       (startSavePolling)="save()">
     </app-application-settings>
-    <app-treasure-hunt-settings [(settingsForm)]="settingsForm" (startSavePolling)="save()">
+    <app-treasure-hunt-settings [(settingsForm)]="settingsForm" (emitSave)="save()">
     </app-treasure-hunt-settings>
   </div>
 </div>

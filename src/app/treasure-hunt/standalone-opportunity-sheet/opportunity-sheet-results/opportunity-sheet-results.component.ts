@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
+import { OpportunitySheetResults, OpportunitySheet } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-opportunity-sheet-results',
@@ -9,7 +9,8 @@ import { OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
 export class OpportunitySheetResultsComponent implements OnInit {
   @Input()
   opportunitySheetResults: OpportunitySheetResults;
-
+  @Input()
+  opportunitySheet: OpportunitySheet;
   constructor() { }
 
   ngOnInit() {

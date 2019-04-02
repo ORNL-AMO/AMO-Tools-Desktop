@@ -54,6 +54,7 @@ export class TreasureHuntComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
+
         if(!this.assessment.treasureHunt){
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
