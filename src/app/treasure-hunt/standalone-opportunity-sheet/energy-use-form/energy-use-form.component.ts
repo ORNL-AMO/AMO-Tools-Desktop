@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -11,7 +11,8 @@ export class EnergyUseFormComponent implements OnInit {
   energyItems: Array<{ type: string, amount: number }>;
   @Input()
   settings: Settings;
-
+  @Output('emitSave')
+  emitSave = new EventEmitter<Array<{ type: string, amount: number }>>();
   constructor() { }
 
   ngOnInit() {
@@ -44,5 +45,9 @@ export class EnergyUseFormComponent implements OnInit {
         return 'gal';
       }
     }
+  }
+
+  save() {
+    this.emitSave.emit(this.energyItems);
   }
 }

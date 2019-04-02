@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEmitter, Input } from '@angular/core';
-import { OpportunitySheet } from '../../shared/models/treasure-hunt';
+import { OpportunitySheet, OpportunitySheetResults } from '../../shared/models/treasure-hunt';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { Settings } from '../../shared/models/settings';
+import { OpportunitySheetService } from './opportunity-sheet.service';
 
 @Component({
   selector: 'app-standalone-opportunity-sheet',
@@ -27,12 +28,14 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
 
   containerHeight: number;
   tabSelect: string = 'help';
-  constructor(private treasureHuntService: TreasureHuntService) { }
+  opportunitySheetResults: OpportunitySheetResults;
+  constructor(private treasureHuntService: TreasureHuntService, private opportunitySheetService: OpportunitySheetService) { }
 
   ngOnInit() {
     if (!this.opportunitySheet) {
       this.opportunitySheet = this.treasureHuntService.initOpportunitySheet();
     }
+    this.getResults();
   }
 
   ngAfterViewInit() {
@@ -54,6 +57,7 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
 
   save() {
     // console.log(this.baselineEnergyUse);
+    console.log('save');
     this.emitSave.emit(this.opportunitySheet);
   }
 
@@ -65,4 +69,19 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
     this.tabSelect = str;
   }
 
+
+  saveBaseline(baselineData: Array<{ type: string, amount: number }>){
+    this.opportunitySheet.baselineEnergyUseItems = baselineData;
+    this.getResults();
+  }
+
+  saveModification(modificationData: Array<{ type: string, amount: number }>){
+    this.opportunitySheet.modificationEnergyUseItems = modificationData;
+    this.getResults();
+  }
+
+  getResults(){
+    console.log('get results');
+    this.opportunitySheetResults = this.opportunitySheetService.getResults(this.opportunitySheet, this.settings);
+  }
 }

@@ -15,8 +15,13 @@ export interface OpportunitySheet {
     plant?: string,
     businessUnits?: string,
     opportunityCost: OpportunityCost,
-    baselineEnergyUseItems?: Array<{ type: string, amount: number }>
-    modificationEnergyUseItems?: Array<{ type: string, amount: number }>
+    baselineEnergyUseItems?: Array<EnergyUseItem>,
+    modificationEnergyUseItems?: Array<EnergyUseItem>
+}
+
+export interface EnergyUseItem {
+    type: string, 
+    amount: number
 }
 
 export interface OpportunityCost {
@@ -39,4 +44,26 @@ export interface LightingReplacementTreasureHunt {
     modifications?: Array<LightingReplacementData>;
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
+}
+
+export interface OpportunitySheetResults {
+    electricityResults: OpportunitySheetResult,
+    gasResults: OpportunitySheetResult,
+    compressedAirResults: OpportunitySheetResult,
+    otherFuelResults: OpportunitySheetResult,
+    steamResults: OpportunitySheetResult,
+    waterResults: OpportunitySheetResult,
+    wasteWaterResults: OpportunitySheetResult,
+    totalEnergySavings: number,
+    totalCostSavings: number
+}
+
+
+export interface OpportunitySheetResult {
+    baselineEnergyUse: number,
+    baselineEnergyCost: number,
+    modificationEnergyUse: number,
+    modificationEnergyCost: number,
+    energySavings: number,
+    energyCostSavings: number
 }
