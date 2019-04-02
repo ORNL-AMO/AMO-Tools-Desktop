@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import { OpportunitySheet } from '../../shared/models/treasure-hunt';
 import { TreasureHuntService } from '../treasure-hunt.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-standalone-opportunity-sheet',
@@ -14,7 +15,9 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   opportunitySheet: OpportunitySheet;
   @Output('emitSave')
   emitSave = new EventEmitter<OpportunitySheet>();
-
+  @Input()
+  settings: Settings;
+  
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])

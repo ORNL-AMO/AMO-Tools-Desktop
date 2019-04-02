@@ -33,13 +33,14 @@
         </div>
         <div class="col-md-6 col-sm-12">
           <label class="group-label">Baseline</label>
-          <app-energy-use-form [(energyItems)]="opportunitySheet.baselineEnergyUseItems"></app-energy-use-form>
+          <app-energy-use-form [(energyItems)]="opportunitySheet.baselineEnergyUseItems" [settings]="settings">
+          </app-energy-use-form>
         </div>
         <!-- Modifications Start -->
         <div class="col-md-6 col-sm-12">
           <label class="group-label">Modification</label>
           <app-energy-use-form *ngIf="opportunitySheet.modificationEnergyUseItems.length != 0"
-            [(energyItems)]="opportunitySheet.modificationEnergyUseItems">
+            [(energyItems)]="opportunitySheet.modificationEnergyUseItems" [settings]="settings">
           </app-energy-use-form>
 
           <div class="p-3 no-data" (click)="addModification()"
@@ -72,7 +73,8 @@
           </div>
           <div class="d-flex justify-content-center pl-2 pr-2">
             <app-opportunity-sheet-help *ngIf="tabSelect == 'help'"></app-opportunity-sheet-help>
-            <app-opportunity-sheet-results *ngIf="tabSelect == 'results'" class="w-100" [opportunitySheet]="opportunitySheet">
+            <app-opportunity-sheet-results *ngIf="tabSelect == 'results'" class="w-100"
+              [opportunitySheet]="opportunitySheet">
             </app-opportunity-sheet-results>
           </div>
         </div>

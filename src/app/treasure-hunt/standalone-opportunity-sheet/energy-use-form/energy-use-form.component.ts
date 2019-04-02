@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-energy-use-form',
@@ -8,6 +9,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class EnergyUseFormComponent implements OnInit {
   @Input()
   energyItems: Array<{ type: string, amount: number }>;
+  @Input()
+  settings: Settings;
 
   constructor() { }
 
@@ -21,7 +24,25 @@ export class EnergyUseFormComponent implements OnInit {
     })
   }
 
-  removeEnergyItem(index: number){
+  removeEnergyItem(index: number) {
     this.energyItems.splice(index, 1);
+  }
+
+  getEnergyUnit(str: string): string {
+    if (str == 'Electricity' || str == 'Compressed Air') {
+      return 'kWh';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      if (str == 'Gas' || str == 'Other Fuel' || str == 'Steam') {
+        return 'MJ';
+      } else if (str == 'Water' || str == 'WWT') {
+        return 'L';
+      }
+    } else {
+      if (str == 'Gas' || str == 'Other Fuel' || str == 'Steam') {
+        return 'MMBtu';
+      } else if (str == 'Water' || str == 'WWT') {
+        return 'gal';
+      }
+    }
   }
 }

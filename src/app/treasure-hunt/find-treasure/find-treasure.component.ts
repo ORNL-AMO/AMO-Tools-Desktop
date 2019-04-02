@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-find-treasure',
@@ -12,6 +13,9 @@ export class FindTreasureComponent implements OnInit {
   treasureHunt: TreasureHunt;
   @Output('emitSave')
   emitSave = new EventEmitter<TreasureHunt>();
+  @Input()
+  settings: Settings;
+  
   @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
 
 

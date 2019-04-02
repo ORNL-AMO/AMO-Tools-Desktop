@@ -70,7 +70,7 @@
   (emitSave)="saveNewLighting($event)" (emitCancel)="selectCalc('none')"></app-lighting-replacement>
 
 <app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="selectCalc('none')"
-  (emitSave)="saveNewOpportunitySheet($event)">
+  (emitSave)="saveNewOpportunitySheet($event)" [settings]="settings">
 </app-standalone-opportunity-sheet>
 
 
