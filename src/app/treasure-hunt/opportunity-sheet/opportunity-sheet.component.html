@@ -1,5 +1,11 @@
 <form>
   <app-general-details-form class="w-100" [(opportunitySheet)]="opportunitySheet"></app-general-details-form>
+  <div class="col-12">
+    <div class="header">
+      <h3 class="ml-0">Energy Use</h3>
+    </div>
+    <p class="help-text pt-2 text-center">Energy use data will be filled out by calculator.</p>
+  </div>
   <app-costs-form class="w-100" [(opportunityCost)]="opportunitySheet.opportunityCost"></app-costs-form>
 </form>
 <div class="d-flex justify-content-end w-100 btn-items">

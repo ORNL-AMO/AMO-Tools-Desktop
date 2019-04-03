@@ -1,14 +1,13 @@
 <div class="card card-item w-100">
   <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
     <input type="checkbox" [(ngModel)]="replacement.selected">
-    <div class="d-flex align-items-center">{{replacement.name}}
+    <div class="d-flex align-items-center"><a (click)="editLighting()">{{title}}</a>
     </div>
     <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
     <div class="btn-group">
       <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
       </button>
       <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
-        <span class="dropdown-item">Rename / Move</span>
         <span class="dropdown-item">Delete</span>
         <span class="dropdown-item">Create Copy</span>
       </div>
@@ -50,5 +49,12 @@
         </td>
       </tr>
     </table>
+  </div>
+  <div class="card-footer summary-card-footer text-center">
+    <span class="fa fa-edit pr-1"></span>
+    <a class="click-link small" *ngIf="replacement.opportunitySheet" (click)="editOpportunitySheet()">Edit
+      Opportunity Sheet</a>
+    <a class="click-link small" *ngIf="!replacement.opportunitySheet" (click)="editOpportunitySheet()">+Add
+      Opportunity Sheet</a>
   </div>
 </div>

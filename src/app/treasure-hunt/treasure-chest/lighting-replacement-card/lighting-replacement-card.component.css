@@ -3,17 +3,11 @@ td{
     font-size: small;
 }
 
-
-  .fa-edit:hover{
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  .fa-edit{
-    padding-top: 4px;
-    font-size: larger;
-  }
+a:not([href]):not([tabindex]):hover {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
   .dropdown-menu.shown{
     display: grid;
@@ -42,10 +36,6 @@ td{
   cursor: pointer;
 }
 
-.summary-card-header{
-    padding: 6px;
-}
-
 .summary-card-body{
     height: 200px;
 }
@@ -53,4 +43,11 @@ td{
 .dropdown-toggle,
 .btn-primary{
   background-color: #2E4053;
+}
+
+
+.summary-card-header,
+.summary-card-body,
+.summary-card-footer{
+  padding: 6px;
 }
