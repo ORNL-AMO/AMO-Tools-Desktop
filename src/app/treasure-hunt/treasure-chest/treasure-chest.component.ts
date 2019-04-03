@@ -38,6 +38,7 @@ export class TreasureChestComponent implements OnInit {
     this.selectedEditLightingReplacement = lightingReplacement;
     this.lightingReplacementService.baselineData = lightingReplacement.baseline;
     this.lightingReplacementService.modificationData = lightingReplacement.modifications;
+    console.log('edit....')
     this.selectedEditOpportunitySheet = lightingReplacement.opportunitySheet;
     this.selectCalc('lighting-replacement');
   }
@@ -45,18 +46,36 @@ export class TreasureChestComponent implements OnInit {
   saveEditLighting(updatedData: LightingReplacementTreasureHunt) {
     this.selectedEditLightingReplacement.baseline = updatedData.baseline;
     this.selectedEditLightingReplacement.modifications = updatedData.modifications;
+    console.log(this.selectedEditOpportunitySheet);
     this.saveCalcModal.show();
   }
 
-  saveLighting(){
+  saveLighting() {
+    this.selectedEditLightingReplacement.opportunitySheet = this.selectedEditOpportunitySheet;
     this.treasureHunt.lightingReplacements[this.selectedEditIndex] = this.selectedEditLightingReplacement;
     this.emitUpdateTreasureHunt.emit(this.treasureHunt);
     this.selectedEditLightingReplacement = undefined;
     this.selectedEditOpportunitySheet = undefined;
     this.saveCalcModal.hide();
+    this.selectCalc('none');
   }
 
-  showOpportunitySheetModal(){
+  showOpportunitySheetModal() {
+    console.log(this.selectedEditOpportunitySheet);
     this.opportunitySheetModal.show();
+  }
+
+  hideOpportunitySheetModal() {
+    this.opportunitySheetModal.hide();
+  }
+
+  saveOpportunitySheet(editedOpportunitySheet: OpportunitySheet) {
+    this.selectedEditOpportunitySheet = editedOpportunitySheet;
+    console.log(this.selectedEditOpportunitySheet)
+    this.hideOpportunitySheetModal();
+  }
+
+  closeSaveCalcModal() {
+    this.saveCalcModal.hide();
   }
 }

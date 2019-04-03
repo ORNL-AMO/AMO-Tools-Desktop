@@ -49,17 +49,17 @@
         </button> -->
       </div>
       <div class="modal-body text-center">
-        <p class="help-text" *ngIf="selectedEditOpportunitySheet">There is no opportunity sheet filled out for this
+        <p class="help-text" *ngIf="!selectedEditOpportunitySheet">There is no opportunity sheet filled out for this
           opportunity. Would you like to add one
           before saving?</p>
-        <p class="help-text" *ngIf="!selectedEditOpportunitySheet">Would you like to edit your opportunity sheet before
+        <p class="help-text" *ngIf="selectedEditOpportunitySheet">Would you like to edit your opportunity sheet before
           saving?</p>
         <a class="click-link" (click)="showOpportunitySheetModal()">
           <span class="fa fa-edit"></span>
         </a> <br>
-        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="selectedEditOpportunitySheet">+Add
+        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="!selectedEditOpportunitySheet">+Add
           Opportunity Sheet</a>
-        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="!selectedEditOpportunitySheet">Edit
+        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="selectedEditOpportunitySheet">Edit
           Opportunity Sheet</a>
       </div>
       <div class="modal-footer p-1">

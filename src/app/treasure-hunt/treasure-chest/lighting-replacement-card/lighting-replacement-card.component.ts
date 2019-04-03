@@ -25,6 +25,9 @@ export class LightingReplacementCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(){
     if(!this.replacement.opportunitySheet){
       this.title = 'Lighting Replacement #' + (this.index + 1);
     }else{
