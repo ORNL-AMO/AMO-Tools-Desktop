@@ -1,4 +1,8 @@
 <form>
-  <app-general-details-form></app-general-details-form>
-  <app-costs-form></app-costs-form>
+  <app-general-details-form class="w-100" [(opportunitySheet)]="opportunitySheet"></app-general-details-form>
+  <app-costs-form class="w-100" [(opportunityCost)]="opportunitySheet.opportunityCost"></app-costs-form>
 </form>
+<div class="d-flex justify-content-end w-100 btn-items">
+  <button class="btn btn-danger btn-sm pull-right mr-2" (click)="hideOpportunitySheetModal()">Cancel</button>
+  <button class="btn btn-primary btn-sm pull-right" (click)="saveOpportunitySheet()">Save</button>
+</div>
