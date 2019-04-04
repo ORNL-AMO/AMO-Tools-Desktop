@@ -17,7 +17,8 @@
 
   <div class="summary-item col-3" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
     <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
-      (emitEditLighting)="editLighting($event, index)">
+      (emitEditLighting)="editLighting($event, index)"
+      (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)">
     </app-lighting-replacement-card>
   </div>
   <div class="summary-item col-3" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
@@ -75,9 +76,9 @@
   aria-labelledby="opportunitySheetModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-body pl-0 pr-0">
+      <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
         <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveOpportunitySheet($event)"
-          [opportunitySheet]="editOpportunitySheet">
+          [(opportunitySheet)]="selectedEditOpportunitySheet">
         </app-opportunity-sheet>
       </div>
     </div>

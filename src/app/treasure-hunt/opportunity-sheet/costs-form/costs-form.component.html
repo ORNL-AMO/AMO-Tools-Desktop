@@ -7,7 +7,7 @@
   <div class="form-group">
     <label>Engineering Services</label>
     <div class="input-group">
-      <input type="number" class="form-control" [ngModel]="opportunityCost.engineeringServices" name="engineeringServices">
+      <input type="number" class="form-control" [(ngModel)]="opportunityCost.engineeringServices" name="engineeringServices">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -16,7 +16,7 @@
   <div class="form-group">
     <label>Material</label>
     <div class="input-group">
-      <input type="number" class="form-control" [ngModel]="opportunityCost.material" name="material">
+      <input type="number" class="form-control" [(ngModel)]="opportunityCost.material" name="material">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -25,7 +25,7 @@
   <div class="form-group">
     <label>Labor</label>
     <div class="input-group">
-      <input type="number" class="form-control" [ngModel]="opportunityCost.labor" name="labor">
+      <input type="number" class="form-control" [(ngModel)]="opportunityCost.labor" name="labor">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -71,5 +71,5 @@
 </div>
 <div class="col-12">
   <label class="group-label">Opportunity Notes</label>
-  <textarea class="form-control w-100" rows="6" [ngModel]="opportunityCost.costDescription" name="costDescription"></textarea>
+  <textarea class="form-control w-100" rows="6" [(ngModel)]="opportunityCost.costDescription" name="costDescription"></textarea>
 </div>

@@ -50,5 +50,5 @@ a:not([href]):not([tabindex]):hover {
 }
 
 .fa .fa-edit{
-  font-size: larger;
+  font-size: large;
 }

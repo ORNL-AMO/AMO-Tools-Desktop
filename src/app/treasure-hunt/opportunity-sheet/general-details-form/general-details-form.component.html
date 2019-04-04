@@ -7,27 +7,27 @@
   <div class="col-md-6 col-sm-12">
     <div class="form-group">
       <label>Title</label>
-      <input type="text" class="form-control" [ngModel]="opportunitySheet.name" name="opportunitySheetName">
+      <input type="text" class="form-control" [(ngModel)]="opportunitySheet.name" name="opportunitySheetName">
     </div>
     <div class="form-group">
       <label>Process / Equipment</label>
-      <input type="text" class="form-control" [ngModel]="opportunitySheet.equipment" name="opportunitySheetEquipment">
+      <input type="text" class="form-control" [(ngModel)]="opportunitySheet.equipment" name="opportunitySheetEquipment">
     </div>
   </div>
   <div class="col-md-6 col-sm-12">
     <div class="form-group">
       <label>Plant</label>
-      <input type="text" class="form-control" [ngModel]="opportunitySheet.plant" name="opportunitySheetPlant">
+      <input type="text" class="form-control" [(ngModel)]="opportunitySheet.plant" name="opportunitySheetPlant">
     </div>
     <div class="form-group">
       <label>Business Unit</label>
-      <input type="text" class="form-control" [ngModel]="opportunitySheet.businessUnits"
+      <input type="text" class="form-control" [(ngModel)]="opportunitySheet.businessUnits"
         name="opportunitySheetBusinessUnits">
     </div>
   </div>
   <div class="col-12">
     <label class="group-label">Description</label>
-    <textarea class="form-control w-100" rows="6" [ngModel]="opportunitySheet.description"
+    <textarea class="form-control w-100" rows="6" [(ngModel)]="opportunitySheet.description"
       name="opportunitySheetDescription"></textarea>
   </div>
 </div>

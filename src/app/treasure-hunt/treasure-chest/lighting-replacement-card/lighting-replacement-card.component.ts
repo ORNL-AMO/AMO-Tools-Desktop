@@ -18,32 +18,23 @@ export class LightingReplacementCardComponent implements OnInit {
   emitEditOpportunitySheet = new EventEmitter<OpportunitySheet>();
   @Output('emitEditLighting')
   emitEditLighting = new EventEmitter<LightingReplacementTreasureHunt>();
-  
+
   dropdownOpen: boolean = false;
-  title: string;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  ngOnChanges(){
-    if(!this.replacement.opportunitySheet){
-      this.title = 'Lighting Replacement #' + (this.index + 1);
-    }else{
-      this.title = this.replacement.opportunitySheet.name;
-    }
-  }
-
   showDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
-  editOpportunitySheet(){
+  editOpportunitySheet() {
     this.emitEditOpportunitySheet.emit(this.replacement.opportunitySheet);
   }
 
-  editLighting(){
+  editLighting() {
     this.emitEditLighting.emit(this.replacement);
   }
 }

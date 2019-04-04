@@ -1,7 +1,16 @@
 <div class="card card-item w-100">
   <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
     <input type="checkbox" [(ngModel)]="replacement.selected">
-    <div class="d-flex align-items-center"><a (click)="editLighting()">{{title}}</a>
+    <div class="d-flex align-items-center">
+      <span class="fa fa-lightbulb-o pr-2 pt-0"></span>
+      <a (click)="editLighting()">
+        <span *ngIf="!replacement.opportunitySheet || !replacement.opportunitySheet.name">
+          Lighting Replacement #{{index+1}}
+        </span>
+        <span *ngIf="replacement.opportunitySheet && replacement.opportunitySheet.name">
+          {{replacement.opportunitySheet.name}}
+        </span>
+      </a>
     </div>
     <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
     <div class="btn-group">

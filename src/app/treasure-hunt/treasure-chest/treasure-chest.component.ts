@@ -38,7 +38,6 @@ export class TreasureChestComponent implements OnInit {
     this.selectedEditLightingReplacement = lightingReplacement;
     this.lightingReplacementService.baselineData = lightingReplacement.baseline;
     this.lightingReplacementService.modificationData = lightingReplacement.modifications;
-    console.log('edit....')
     this.selectedEditOpportunitySheet = lightingReplacement.opportunitySheet;
     this.selectCalc('lighting-replacement');
   }
@@ -46,7 +45,6 @@ export class TreasureChestComponent implements OnInit {
   saveEditLighting(updatedData: LightingReplacementTreasureHunt) {
     this.selectedEditLightingReplacement.baseline = updatedData.baseline;
     this.selectedEditLightingReplacement.modifications = updatedData.modifications;
-    console.log(this.selectedEditOpportunitySheet);
     this.saveCalcModal.show();
   }
 
@@ -61,7 +59,6 @@ export class TreasureChestComponent implements OnInit {
   }
 
   showOpportunitySheetModal() {
-    console.log(this.selectedEditOpportunitySheet);
     this.opportunitySheetModal.show();
   }
 
@@ -71,11 +68,27 @@ export class TreasureChestComponent implements OnInit {
 
   saveOpportunitySheet(editedOpportunitySheet: OpportunitySheet) {
     this.selectedEditOpportunitySheet = editedOpportunitySheet;
-    console.log(this.selectedEditOpportunitySheet)
+    if (this.selectedCalc == 'none') {
+      this.saveLightingReplacementOpportunitySheet();
+    }
     this.hideOpportunitySheetModal();
+
   }
 
   closeSaveCalcModal() {
     this.saveCalcModal.hide();
+  }
+
+  editLightingReplacementOpportunitySheet(opportunitySheet: OpportunitySheet, index: number) {
+    this.selectedEditIndex = index;
+    this.selectedEditOpportunitySheet = opportunitySheet;
+    this.opportunitySheetModal.show();
+  }
+
+  saveLightingReplacementOpportunitySheet() {
+    this.treasureHunt.lightingReplacements[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
+    this.emitUpdateTreasureHunt.emit(this.treasureHunt);
+    this.selectedEditLightingReplacement = undefined;
+    this.selectedEditOpportunitySheet = undefined;
   }
 }

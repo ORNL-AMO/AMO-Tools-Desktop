@@ -112,7 +112,7 @@
   aria-labelledby="opportunitySheetModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-body pl-0 pr-0">
+      <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
         <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveOpportunitySheet($event)"
           [opportunitySheet]="newOpportunitySheet">
         </app-opportunity-sheet>

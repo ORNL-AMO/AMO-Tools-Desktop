@@ -51,3 +51,8 @@ a:not([href]):not([tabindex]):hover {
 .summary-card-footer{
   padding: 6px;
 }
+
+
+.fa .fa-lightbulb-o{
+  font-size: large;
+}
