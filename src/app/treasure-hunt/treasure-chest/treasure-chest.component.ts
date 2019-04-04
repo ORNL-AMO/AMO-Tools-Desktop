@@ -24,6 +24,7 @@ export class TreasureChestComponent implements OnInit {
   selectedEditIndex: number;
   selectedEditLightingReplacement: LightingReplacementTreasureHunt;
   selectedEditOpportunitySheet: OpportunitySheet;
+  isSaveLighting: boolean;
   constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
@@ -32,6 +33,14 @@ export class TreasureChestComponent implements OnInit {
   selectCalc(str: string) {
     this.selectedCalc = str;
   }
+
+  cancelEditCalc() {
+    this.selectCalc('none');
+    this.selectedEditIndex = undefined;
+    this.selectedEditLightingReplacement = undefined;
+    this.selectedEditOpportunitySheet = undefined;
+  }
+
 
   editLighting(lightingReplacement: LightingReplacementTreasureHunt, index: number) {
     this.selectedEditIndex = index;
@@ -45,6 +54,7 @@ export class TreasureChestComponent implements OnInit {
   saveEditLighting(updatedData: LightingReplacementTreasureHunt) {
     this.selectedEditLightingReplacement.baseline = updatedData.baseline;
     this.selectedEditLightingReplacement.modifications = updatedData.modifications;
+    this.isSaveLighting = true;
     this.saveCalcModal.show();
   }
 
@@ -90,5 +100,28 @@ export class TreasureChestComponent implements OnInit {
     this.emitUpdateTreasureHunt.emit(this.treasureHunt);
     this.selectedEditLightingReplacement = undefined;
     this.selectedEditOpportunitySheet = undefined;
+  }
+
+  editStandaloneOpportunitySheet(opportunitySheet: OpportunitySheet, index: number) {
+
+    this.selectedEditIndex = index;
+    this.selectedEditOpportunitySheet = opportunitySheet;
+    this.selectCalc('opportunity-sheet');
+  }
+
+  saveEditOpportunity(opportunitySheet: OpportunitySheet) {
+    this.isSaveLighting = false;
+    this.selectedEditOpportunitySheet = opportunitySheet;
+    this.saveCalcModal.show();
+  }
+
+
+  saveEditOpportunitySheet() {
+    this.treasureHunt.opportunitySheets[this.selectedEditIndex] = this.selectedEditOpportunitySheet;
+    this.emitUpdateTreasureHunt.emit(this.treasureHunt);
+    this.selectedEditOpportunitySheet = undefined;
+    this.selectedEditIndex = undefined;
+    this.saveCalcModal.hide();
+    this.selectCalc('none');
   }
 }

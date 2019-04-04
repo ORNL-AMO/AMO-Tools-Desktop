@@ -23,7 +23,7 @@
   </div>
   <div class="summary-item col-3" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
     <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
-      (emitEditOpportunitySheet)="editOpportunitySheet($event)"></app-opportunity-sheet-card>
+      (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)"></app-opportunity-sheet-card>
   </div>
 </div>
 
@@ -31,11 +31,11 @@
 
 
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
-  (emitSave)="saveEditLighting($event)" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveEditLighting($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()"></app-lighting-replacement>
 
-<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="selectCalc('none')"
-  (emitSave)="saveNewOpportunitySheet($event)" [settings]="settings">
+<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="cancelEditCalc()"
+  (emitSave)="saveEditOpportunity($event)" [settings]="settings" [(opportunitySheet)]="selectedEditOpportunitySheet">
 </app-standalone-opportunity-sheet>
 
 
@@ -44,12 +44,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header p-1">
-        <h5 class="mb-0">Save Opportunity</h5>
+        <h5 class="mb-0">Save Changes</h5>
         <!-- <button class="close" (click)="closeSaveCalcModal()">
           <span aria-hidden="true">&times;</span>
         </button> -->
       </div>
-      <div class="modal-body text-center">
+      <div class="modal-body text-center" *ngIf="isSaveLighting">
         <p class="help-text" *ngIf="!selectedEditOpportunitySheet">There is no opportunity sheet filled out for this
           opportunity. Would you like to add one
           before saving?</p>
@@ -63,9 +63,15 @@
         <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="selectedEditOpportunitySheet">Edit
           Opportunity Sheet</a>
       </div>
+      <div class="modal-body text-center" *ngIf="!isSaveLighting">
+        <p class="help-text">Are you sure you want to save the changes to your existing opportunity? These changes cannot be
+          undone.</p>
+      </div>
       <div class="modal-footer p-1">
         <button class="btn btn-danger btn-sm pull-right" (click)="closeSaveCalcModal()">Cancel</button>
-        <button class="btn btn-primary btn-sm pull-right" (click)="saveLighting()">Save</button>
+        <button class="btn btn-primary btn-sm pull-right" (click)="saveLighting()" *ngIf="isSaveLighting">Save</button>
+        <button class="btn btn-primary btn-sm pull-right" (click)="saveEditOpportunitySheet()"
+          *ngIf="!isSaveLighting">Save</button>
       </div>
     </div>
   </div>

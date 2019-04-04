@@ -1,7 +1,16 @@
 <div class="card card-item w-100">
   <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
     <input type="checkbox" [(ngModel)]="opportunitySheet.selected">
-    <div class="d-flex align-items-center"><span class="fa fa-edit pr-2 pt-0"></span> {{opportunitySheet.name}}
+    <div class="d-flex align-items-center">
+      <span class="fa fa-edit pr-2 pt-0"></span>
+      <a (click)="editOpportunitySheet()">
+        <span *ngIf="!opportunitySheet.name">
+          Opportunity Sheet #{{index+1}}
+        </span>
+        <span *ngIf="opportunitySheet.name">
+          {{opportunitySheet.name}}
+        </span>
+      </a>
     </div>
     <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
     <div class="btn-group">
