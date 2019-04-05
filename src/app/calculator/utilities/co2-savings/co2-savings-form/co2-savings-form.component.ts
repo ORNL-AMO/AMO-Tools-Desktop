@@ -35,18 +35,18 @@ export class Co2SavingsFormComponent implements OnInit {
     this.eGridRegions = electricityGridRegions;
     // this.setFuelOptions();
     // this.setRegion();
-    if(this.data.fuelType){
-      let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.data.energySource == val.energySource });
+    if (this.data.fuelType) {
+      let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.data.energySource === val.energySource; });
       this.fuelOptions = tmpOtherFuel.fuelTypes;
     }
-    if(this.data.eGridRegion){
-      let tmpRegion: eGridRegion = _.find(this.eGridRegions, (val) => { return this.data.eGridRegion == val.region });
+    if (this.data.eGridRegion) {
+      let tmpRegion: eGridRegion = _.find(this.eGridRegions, (val) => { return this.data.eGridRegion === val.region; });
       this.subregions = tmpRegion.subregions;
     }
     this.calculate();
   }
 
-  changeEnergyType(){
+  changeEnergyType() {
     this.data.eGridRegion = undefined;
     this.data.eGridSubregion = undefined;
     this.data.electricityUse = undefined;
@@ -57,28 +57,28 @@ export class Co2SavingsFormComponent implements OnInit {
   }
 
   setFuelOptions() {
-    let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.data.energySource == val.energySource });
+    let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.data.energySource === val.energySource; });
     this.fuelOptions = tmpOtherFuel.fuelTypes;
     this.data.fuelType = undefined;
     this.data.totalEmissionOutputRate = undefined;
   }
   setFuel() {
-    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.data.fuelType == val.fuelType });
+    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.data.fuelType === val.fuelType; });
     this.data.totalEmissionOutputRate = tmpFuel.outputRate;
     this.calculate();
   }
   setRegion() {
-    let tmpRegion: eGridRegion = _.find(this.eGridRegions, (val) => { return this.data.eGridRegion == val.region });
+    let tmpRegion: eGridRegion = _.find(this.eGridRegions, (val) => { return this.data.eGridRegion === val.region; });
     this.subregions = tmpRegion.subregions;
     this.data.eGridSubregion = undefined;
     this.data.totalEmissionOutputRate = undefined;
   }
   setSubRegion() {
-    let tmpSubRegion: { subregion: string, outputRate: number } = _.find(this.subregions, (val) => { return this.data.eGridSubregion == val.subregion });
+    let tmpSubRegion: { subregion: string, outputRate: number } = _.find(this.subregions, (val) => { return this.data.eGridSubregion === val.subregion; });
     this.data.totalEmissionOutputRate = tmpSubRegion.outputRate;
     this.calculate();
   }
   calculate() {
-    this.emitCalculate.emit()
+    this.emitCalculate.emit();
   }
 }

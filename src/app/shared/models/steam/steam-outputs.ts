@@ -89,7 +89,7 @@ export interface BoilerOutput {
   steamQuality: number;
   steamMassFlow: number;
   steamEnergyFlow: number;
-  steamVolume: number;
+  steamVolume?: number;
 
   blowdownPressure: number;
   blowdownTemperature: number;
@@ -98,7 +98,7 @@ export interface BoilerOutput {
   blowdownQuality: number;
   blowdownMassFlow: number;
   blowdownEnergyFlow: number;
-  blowdownVolume: number;
+  blowdownVolume?: number;
 
   feedwaterPressure: number;
   feedwaterTemperature: number;
@@ -107,11 +107,11 @@ export interface BoilerOutput {
   feedwaterQuality: number;
   feedwaterMassFlow: number;
   feedwaterEnergyFlow: number;
-  feedwaterVolume: number;
+  feedwaterVolume?: number;
   boilerEnergy: number;
   fuelEnergy: number;
-  blowdownRate: number;
-  combustionEff: number;
+  blowdownRate?: number;
+  combustionEff?: number;
 }
 
 
@@ -125,8 +125,8 @@ export interface SteamPropertiesOutput {
   //SteamProperties() function call does not have these fields
   //these fields will be set during the SSMT calculation
   //and will need to be apart of objects with this type
-  massFlow?: number,
-  energyFlow?: number
+  massFlow?: number;
+  energyFlow?: number;
 }
 
 export interface DeaeratorOutput {
@@ -137,7 +137,7 @@ export interface DeaeratorOutput {
   feedwaterSpecificEnthalpy: number;
   feedwaterSpecificEntropy: number;
   feedwaterTemperature: number;
-  feedwaterVolume: number;
+  feedwaterVolume?: number;
   inletSteamEnergyFlow: number;
   inletSteamMassFlow: number;
   inletSteamPressure: number;
@@ -145,7 +145,7 @@ export interface DeaeratorOutput {
   inletSteamSpecificEnthalpy: number;
   inletSteamSpecificEntropy: number;
   inletSteamTemperature: number;
-  inletSteamVolume: number;
+  inletSteamVolume?: number;
   inletWaterEnergyFlow: number;
   inletWaterMassFlow: number;
   inletWaterPressure: number;
@@ -153,7 +153,7 @@ export interface DeaeratorOutput {
   inletWaterSpecificEnthalpy: number;
   inletWaterSpecificEntropy: number;
   inletWaterTemperature: number;
-  inletWaterVolume: number;
+  inletWaterVolume?: number;
   ventedSteamEnergyFlow: number;
   ventedSteamMassFlow: number;
   ventedSteamPressure: number;
@@ -161,7 +161,7 @@ export interface DeaeratorOutput {
   ventedSteamSpecificEnthalpy: number;
   ventedSteamSpecificEntropy: number;
   ventedSteamTemperature: number;
-  ventedSteamVolume: number;
+  ventedSteamVolume?: number;
 
 }
 
@@ -174,7 +174,7 @@ export interface FlashTankOutput {
   inletWaterSpecificEnthalpy: number;
   inletWaterSpecificEntropy: number;
   inletWaterTemperature: number;
-  inletWaterVolume: number;
+  inletWaterVolume?: number;
   outletGasEnergyFlow: number;
   outletGasMassFlow: number;
   outletGasPressure: number;
@@ -182,7 +182,7 @@ export interface FlashTankOutput {
   outletGasSpecificEnthalpy: number;
   outletGasSpecificEntropy: number;
   outletGasTemperature: number;
-  outletGasVolume: number;
+  outletGasVolume?: number;
   outletLiquidEnergyFlow: number;
   outletLiquidMassFlow: number;
   outletLiquidPressure: number;
@@ -190,7 +190,7 @@ export interface FlashTankOutput {
   outletLiquidSpecificEnthalpy: number;
   outletLiquidSpecificEntropy: number;
   outletLiquidTemperature: number;
-  outletLiquidVolume: number;
+  outletLiquidVolume?: number;
 }
 
 export interface HeaderOutput {
@@ -214,7 +214,7 @@ export interface HeaderOutputObj {
   specificEnthalpy: number;
   specificEntropy: number;
   temperature: number;
-  specificVolume: number;
+  specificVolume?: number;
   //this may not be needed on header output,
   //used during php calculation, still working through this piece
   // heatLoss?: HeatLossOutput;
@@ -242,26 +242,26 @@ export interface HeatLossOutput {
 }
 
 export interface PrvOutput {
-  feedwaterEnergyFlow: number;
-  feedwaterMassFlow: number;
-  feedwaterPressure: number;
-  feedwaterQuality: number;
-  feedwaterSpecificEnthalpy: number;
-  feedwaterSpecificEntropy: number;
-  feedwaterTemperature: number;
-  feedwaterVolume: number;
+  feedwaterEnergyFlow?: number;
+  feedwaterMassFlow?: number;
+  feedwaterPressure?: number;
+  feedwaterQuality?: number;
+  feedwaterSpecificEnthalpy?: number;
+  feedwaterSpecificEntropy?: number;
+  feedwaterTemperature?: number;
+  feedwaterVolume?: number;
   inletEnergyFlow: number;
   inletMassFlow: number;
   inletPressure: number;
   inletQuality: number;
-  inletVolume: number;
+  inletVolume?: number;
   inletSpecificEnthalpy: number;
   inletSpecificEntropy: number;
   inletTemperature: number;
   outletEnergyFlow: number;
   outletMassFlow: number;
   outletPressure: number;
-  outletVolume: number;
+  outletVolume?: number;
   outletQuality: number;
   outletSpecificEnthalpy: number;
   outletSpecificEntropy: number;
@@ -278,12 +278,12 @@ export interface TurbineOutput {
   inletSpecificEntropy: number;
   inletTemperature: number;
   isentropicEfficiency: number;
-  inletVolume: number;
+  inletVolume?: number;
   massFlow: number;
   outletEnergyFlow: number;
   outletPressure: number;
   outletQuality: number;
-  outletVolume: number;
+  outletVolume?: number;
   outletSpecificEnthalpy: number;
   outletSpecificEntropy: number;
   outletTemperature: number;
@@ -292,7 +292,7 @@ export interface TurbineOutput {
   outletIdealSpecificEnthalpy: number;
   outletIdealSpecificEntropy: number;
   outletIdealQuality: number;
-  outletIdealVolume: number;
+  outletIdealVolume?: number;
   powerOut: number;
 }
 
@@ -320,6 +320,8 @@ export interface ProcessSteamUsage {
 }
 
 export interface SSMTLosses {
+  fuelEnergy: number;
+  makeupWaterEnergy: number;
   stack: number;
   blowdown: number;
   highPressureHeader: number;
@@ -337,6 +339,18 @@ export interface SSMTLosses {
   highPressureProcessLoss: number;
   mediumPressureProcessLoss: number;
   lowPressureProcessLoss: number;
+  condensingTurbineUsefulEnergy: number;
+  highToMediumTurbineUsefulEnergy: number;
+  highToLowTurbineUsefulEnergy: number;
+  mediumToLowTurbineUsefulEnergy: number;
+  highPressureProcessUsage: number;
+  mediumPressureProcessUsage: number;
+  lowPressureProcessUsage: number;
+  allProcessUsageUsefulEnergy: number;
+  totalProcessLosses: number;
+  totalVentLosses: number;
+  totalTurbineLosses: number;
+  totalOtherLosses: number
 }
 
 export interface HeatExchangerOutput {

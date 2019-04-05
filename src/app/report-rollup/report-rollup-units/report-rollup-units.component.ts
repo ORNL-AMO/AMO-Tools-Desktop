@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { ReportRollupService, ReportItem } from '../report-rollup.service';
-import { Assessment } from '../../shared/models/assessment';
+import { ReportRollupService } from '../report-rollup.service';
 import { Subscription } from 'rxjs';
+import { ReportItem } from '../report-rollup-models';
 
 @Component({
   selector: 'app-report-rollup-units',
@@ -24,7 +24,7 @@ export class ReportRollupUnitsComponent implements OnInit {
     'kgce',
     'kgoe',
     'kWh'
-  ]
+  ];
   energyResultOptions: Array<any>;
   phastAssessments: Array<ReportItem>;
   tmpSettings: Settings;
@@ -35,21 +35,21 @@ export class ReportRollupUnitsComponent implements OnInit {
     this.tmpSettings = JSON.parse(JSON.stringify(this.settings));
     this.assessmentsSub = this.reportRollupService.phastAssessments.subscribe(val => {
       this.phastAssessments = val;
-    })
+    });
 
-    this.energyResultOptions = new Array()
+    this.energyResultOptions = new Array();
 
     this.energyOptions.forEach(val => {
       let tmpPossibility = {
         unit: val,
         display: this.getUnitName(val),
         displayUnit: this.getUnitDisplay(val)
-      }
+      };
       this.energyResultOptions.push(tmpPossibility);
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.assessmentsSub.unsubscribe();
   }
 
@@ -65,7 +65,7 @@ export class ReportRollupUnitsComponent implements OnInit {
     }
   }
 
-  saveUnits(){
+  saveUnits() {
     this.settings.phastRollupUnit = this.tmpSettings.phastRollupUnit;
     this.settings.phastRollupElectricityUnit = this.tmpSettings.phastRollupElectricityUnit;
     this.settings.phastRollupFuelUnit = this.tmpSettings.phastRollupFuelUnit;
@@ -74,7 +74,7 @@ export class ReportRollupUnitsComponent implements OnInit {
     this.closeUnitModal.emit(true);
   }
 
-  newUnit(){
+  newUnit() {
     this.reportRollupService.phastAssessments.next(this.phastAssessments);
   }
 }

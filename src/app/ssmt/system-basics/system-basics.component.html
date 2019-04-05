@@ -14,7 +14,7 @@
     <form>
       <div class="form-group">
         <label class="group-label w-100">Equipment Notes</label>
-        <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="saveChanges(true)" [(ngModel)]="ssmt.equipmentNotes"
+        <textarea name="equipmentNotes" rows="4" id="equipmentNotes" (input)="save()" [(ngModel)]="ssmt.equipmentNotes"
           placeholder="Add additional information for your equipment"></textarea>
       </div>
     </form>
@@ -24,7 +24,7 @@
       <div class="form-group">
         <label class="group-label w-100">
           Operating Conditions at time of Assessment</label>
-        <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="saveChanges(true)" [(ngModel)]="ssmt.operatingHours.operatingConditions"
+        <textarea name="operatingConditions" rows="4" id="operatingConditions" (input)="save()" [(ngModel)]="ssmt.operatingHours.operatingConditions"
           placeholder="Add note for operating conditions"></textarea>
       </div>
     </form>

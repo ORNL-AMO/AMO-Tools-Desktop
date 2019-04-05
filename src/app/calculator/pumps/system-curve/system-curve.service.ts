@@ -37,8 +37,14 @@ export class SystemCurveService {
   }
 
   //PUMPS
-  getPumpFluidPower(head: number, flow: number, specificGravity: number): number {
+  getPumpFluidPower(head: number, flow: number, specificGravity: number, settings: Settings): number {
     //from Daryl -> fluidPower = (head * flow * specificGravity) / 3960
+    if (settings.distanceMeasurement !== 'ft') {
+      head = this.convertUnitsService.value(head).from(settings.distanceMeasurement).to('ft');
+    }
+    if (settings.flowMeasurement !== 'gpm') {
+      flow = this.convertUnitsService.value(flow).from(settings.flowMeasurement).to('gpm');
+    }
     return (head * flow * specificGravity) / 3960;
   }
 
@@ -48,13 +54,13 @@ export class SystemCurveService {
         flowRate: [psat.inputs.flow_rate, [Validators.required, Validators.min(0)]],
         head: [psat.inputs.head, [Validators.required, Validators.min(0)]],
         pointAdjustment: [psat.name]
-      })
+      });
     } else {
       return this.formBuilder.group({
         flowRate: [2000, [Validators.required, Validators.min(0)]],
         head: [276.8, [Validators.required, Validators.min(0)]],
         pointAdjustment: ['']
-      })
+      });
     }
   }
 
@@ -63,18 +69,24 @@ export class SystemCurveService {
       return this.formBuilder.group({
         specificGravity: [psat.inputs.specific_gravity, [Validators.required, Validators.min(0)]],
         systemLossExponent: [1.420, [Validators.required, Validators.min(0)]]
-      })
+      });
     } else {
       return this.formBuilder.group({
         specificGravity: [1.0, [Validators.required, Validators.min(0)]],
         systemLossExponent: [1.000, [Validators.required, Validators.min(0)]]
-      })
+      });
     }
   }
 
   //FANS
   //head is really pressure for fans
-  getFanFluidPower(pressure: number, flow: number, compressibilityFactor: number): number {
+  getFanFluidPower(pressure: number, flow: number, compressibilityFactor: number, settings: Settings): number {
+    if (settings.fanPressureMeasurement !== 'inH2o') {
+      pressure = this.convertUnitsService.value(pressure).from(settings.fanPressureMeasurement).to('inH2o');
+    }
+    if (settings.fanFlowRate !== 'ft3/min') {
+      flow = this.convertUnitsService.value(flow).from(settings.fanFlowRate).to('ft3/min');
+    }
     return (pressure * flow * compressibilityFactor) / 6362;
   }
 
@@ -85,13 +97,13 @@ export class SystemCurveService {
         flowRate: [fsat.fieldData.flowRate, [Validators.required, Validators.min(0)]],
         head: [fsat.fieldData.outletPressure - fsat.fieldData.inletPressure, [Validators.required, Validators.min(0)]],
         pointAdjustment: [fsat.name]
-      })
+      });
     } else {
       return this.formBuilder.group({
         flowRate: [2000, [Validators.required, Validators.min(0)]],
         head: [276.8, [Validators.required, Validators.min(0)]],
         pointAdjustment: ['']
-      })
+      });
     }
   }
 
@@ -100,12 +112,12 @@ export class SystemCurveService {
       return this.formBuilder.group({
         specificGravity: [fsat.fieldData.compressibilityFactor, [Validators.required, Validators.min(0)]],
         systemLossExponent: [1.96969, [Validators.required, Validators.min(0)]]
-      })
+      });
     } else {
       return this.formBuilder.group({
         specificGravity: [.98, [Validators.required, Validators.min(0)]],
         systemLossExponent: [1.9, [Validators.required, Validators.min(0)]]
-      })
+      });
     }
   }
 
@@ -125,11 +137,11 @@ export class SystemCurveService {
     if (head >= 0) {
       let tmpFluidPower;
       if (isFan) {
-        tmpFluidPower = this.getFanFluidPower(staticHead, 0, curveConstants.form.controls.specificGravity.value);
+        tmpFluidPower = this.getFanFluidPower(staticHead, 0, curveConstants.form.controls.specificGravity.value, settings);
       } else {
-        tmpFluidPower = this.getPumpFluidPower(staticHead, 0, curveConstants.form.controls.specificGravity.value);
+        tmpFluidPower = this.getPumpFluidPower(staticHead, 0, curveConstants.form.controls.specificGravity.value, settings);
       }
-      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+      if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
       }
       data.push({
@@ -151,11 +163,11 @@ export class SystemCurveService {
       if (head >= 0) {
         let tmpFluidPower: number;
         if (isFan) {
-          tmpFluidPower = this.getFanFluidPower(head, i, curveConstants.form.controls.specificGravity.value);
+          tmpFluidPower = this.getFanFluidPower(head, i, curveConstants.form.controls.specificGravity.value, settings);
         } else {
-          tmpFluidPower = this.getPumpFluidPower(head, i, curveConstants.form.controls.specificGravity.value);
+          tmpFluidPower = this.getPumpFluidPower(head, i, curveConstants.form.controls.specificGravity.value, settings);
         }
-        if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
         }
         data.push({
@@ -177,11 +189,11 @@ export class SystemCurveService {
     if (head >= 0) {
       let tmpFluidPower: number;
       if (isFan) {
-        tmpFluidPower = this.getFanFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value);
+        tmpFluidPower = this.getFanFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value, settings);
       } else {
-        tmpFluidPower = this.getPumpFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value);;
+        tmpFluidPower = this.getPumpFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value, settings);;
       }
-      if (powerMeasurement != 'hp' && tmpFluidPower != 0) {
+      if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
       }
       data.push({

@@ -42,24 +42,24 @@ export class PreAssessmentMeteredComponent implements OnInit {
           electricityUsed: 0,
           electricityCollectionTime: 0
         }
-      }
+      };
     }
   }
 
 
-  calculate(){
+  calculate() {
     this.emitCalculate.emit(true);
   }
 
-  changeFuelField(str: string){
+  changeFuelField(str: string) {
     this.emitChangeField.emit({inputField: str, energyType: 'Fuel'});
   }
 
-  changeElectricField(str: string){
+  changeElectricField(str: string) {
     this.emitChangeField.emit({inputField: str, energyType: 'Electric'});
   }
 
-  changeSteamField(str: string){
+  changeSteamField(str: string) {
     this.emitChangeField.emit({inputField: str, energyType: 'Steam'});
   }
 

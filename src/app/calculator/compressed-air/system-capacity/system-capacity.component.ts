@@ -29,6 +29,7 @@ export class SystemCapacityComponent implements OnInit {
     totalCapacityOfCompressedAirSystem: 0,
     receiverCapacities: [0],
   };
+  currentField: string = 'default';
 
   constructor(private standaloneService: StandaloneService, private compressedAirService: CompressedAirService) { }
 
@@ -58,7 +59,7 @@ export class SystemCapacityComponent implements OnInit {
       four: 0,
       five: 0,
       six: 0,
-    }
+    };
     this.compressedAirService.systeCapacityInputs = this.inputs;
     this.calculate();
   }
@@ -71,5 +72,8 @@ export class SystemCapacityComponent implements OnInit {
 
   calculate() {
     this.outputs = this.standaloneService.airSystemCapacity(this.inputs, this.settings);
+  }
+  changeField($event) {
+    this.currentField = $event;
   }
 }

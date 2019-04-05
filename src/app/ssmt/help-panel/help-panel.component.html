@@ -34,6 +34,7 @@
     </div>
 
     <div *ngIf="tabSelect == 'results' && !inSetup">
+        <app-ssmt-results-panel [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex" [inModifyConditions]="true"></app-ssmt-results-panel>
         <!-- <app-fsat-results-panel [fsat]="fsat" [settings]="settings" [modificationIndex]="modificationIndex" [inSetup]="inSetup"></app-fsat-results-panel> -->
     </div>
 </div>

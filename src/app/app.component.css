@@ -463,6 +463,9 @@ In-Assessment Calculators
   margin-top: 10px;
   padding-left: 20px;
 }
+.meter-help {
+  margin-left:10px;
+}
   /* .calc-help h3 {
     font-size: 20px;
     font-weight: bold;
@@ -580,6 +583,7 @@ Reports
 }
 .output-summary .table td {
     padding: 0px;
+    vertical-align: middle;
 }
 
 
@@ -603,10 +607,8 @@ Reports
     }
 
     .report-header, .report-data .results {
-        padding: 10px 20px;
-    }
-    .report-header {
-
+      padding-left: 20px;
+      padding-right: 20px;
     }
     .report-data {
         border-top: #ddd solid 1px;
@@ -632,6 +634,15 @@ Reports
 .assessment-report.report-in-fsat .assessment-name,
 .assessment-report.report-in-rollup.report-in-fsat .assessment-name {
     background-image: url('../assets/images/ico-fsat-diagram.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 33px;
+    padding: 0px 0 0px 30px;
+}
+
+.assessment-report.report-in-ssmt .assessment-name,
+.assessment-report.report-in-rollup.report-in-ssmt .assessment-name {
+    background-image: url('../assets/images/ico-ssmt-diagram.png');
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 33px;
@@ -1183,6 +1194,14 @@ Calculators
   border: 0.1px solid rgba(123, 120, 120, 0.25);
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
+.ico-size4.general {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32) !important;
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
 
 
 .ico-col{
@@ -1640,7 +1659,6 @@ Help Panel Cards
 }
 .help-panel li {
   font-size: 16px;
-  color: #222;
 }
 
 .help-general {
@@ -1713,36 +1731,6 @@ No Data Messaging
   color: black;
   text-decoration: none;
 }
-
-/*
-Toasty Overrides ================================= */
-#toasty.toasty-position-bottom-right {
-  bottom: 75px;
-  right: 12px;
-}
-
-.explore-opps #toasty.toasty-position-bottom-right .toast{
-  width: 400px;
-  animation-name: explore-opps-toast;
-  animation-duration: 1.5s;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
-.explore-opps #toasty.toasty-position-bottom-right .toast-title{
-  font-size: 20px !important;
-}
-
-.explore-opps #toasty.toasty-position-bottom-right .toast-msg{
-  font-size: 18px !important;
-}
-
-@keyframes explore-opps-toast{
-  from {background-color: #db281b;}
-  to {background-color: #F97A1F;}
-}
-
-
 
 
 /*tmp color variables*/
@@ -2110,10 +2098,4 @@ Toasty Overrides ================================= */
   .report-column {
       margin: 0;
   }
-
-  #toasty {
-    display: none;
-  }
-
-
 }

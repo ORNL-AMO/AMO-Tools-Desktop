@@ -77,26 +77,35 @@ export class FanShaftPowerComponent implements OnInit {
 
   calcMotorShaftPower() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
-    let tmpVal = this.fanShaftPower.voltage * this.fanShaftPower.amps * Math.sqrt(3) * (this.fanShaftPower.powerFactorAtLoad/745);
+    let tmpVal = this.fanShaftPower.voltage * this.fanShaftPower.amps * Math.sqrt(3) * (this.fanShaftPower.powerFactorAtLoad / 745);
     this.shaftPowerForm.patchValue({
       motorShaftPower: tmpVal
-    })
+    });
     this.save();
   }
 
 
   setBeltEfficiency() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
-    let tmpEff: { name: string, efficiency: number } = this.driveTypes.find((type) => { return type.name == this.fanShaftPower.driveType });
+    let tmpEff: { name: string, efficiency: number } = this.driveTypes.find((type) => { return type.name === this.fanShaftPower.driveType; });
     this.shaftPowerForm.patchValue({
       efficiencyBelt: tmpEff.efficiency
-    })
+    });
     this.save();
   }
 
   save() {
     this.fanShaftPower = this.fsat203Service.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanShaftPower);
-    this.emitSave.emit(this.fanShaftPower);
+    if (this.shaftPowerForm.controls.isMethodOne.value === true) {
+      if (this.shaftPowerForm.controls.motorShaftPower.valid) {
+        this.emitSave.emit(this.fanShaftPower);
+      }
+    }
+    else {
+      if (this.fanShaftPower.motorShaftPower !== undefined && this.fanShaftPower.motorShaftPower !== null && !isNaN(this.fanShaftPower.motorShaftPower)) {
+        this.emitSave.emit(this.fanShaftPower);
+      }
+    }
   }
 
   focusField(str: string) {
@@ -115,10 +124,10 @@ export class FanShaftPowerComponent implements OnInit {
   }
 
 
-  setIsVfd(){
+  setIsVfd() {
     this.shaftPowerForm.patchValue({
       efficiencyVFD: 100
-    })
+    });
     this.save();
   }
 }

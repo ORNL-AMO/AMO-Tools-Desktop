@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FsatResultsData } from '../../report-rollup.service';
 import { Settings } from '../../../shared/models/settings';
+import { FsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-fsat-rollup-fan-summary-table',
@@ -23,7 +23,7 @@ export class FsatRollupFanSummaryTableComponent implements OnInit {
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {
     if (implementationCost) {
       let val = (implementationCost / (baselineCost - modCost)) * 12;
-      if (isNaN(val) == false) {
+      if (isNaN(val) === false) {
         return val;
       } else {
         return 0;

@@ -45,7 +45,7 @@ export class PneumaticAirComponent implements OnInit {
       pistonRodDiameter: 0,
       airPressure: 0,
       cyclesPerMinute: 0
-    }
+    };
     this.calculatePneumaticAirRequirement(this.inputs);
   }
 

@@ -4,7 +4,7 @@ import { PSAT } from '../../../shared/models/psat';
 
 @Injectable()
 export class NemaEnergyEfficiencyService {
-  nemaInputs:NemaInputs;
+  nemaInputs: NemaInputs;
   constructor(private formBuilder: FormBuilder) { }
 
   initForm(): FormGroup {
@@ -14,7 +14,7 @@ export class NemaEnergyEfficiencyService {
       efficiencyClass: [0, [Validators.required]],
       motorRPM: [1200, [Validators.required]],
       efficiency: ['', [Validators.min(1), Validators.max(100)]]
-    })
+    });
   }
 
   initFormFromPsat(psat: PSAT): FormGroup {
@@ -26,7 +26,7 @@ export class NemaEnergyEfficiencyService {
       efficiencyClass: [psat.inputs.efficiency_class, [Validators.required]],
       motorRPM: [psat.inputs.motor_rated_speed, [Validators.required]],
       efficiency: [psat.inputs.efficiency, [Validators.min(1), Validators.max(100)]]
-    })
+    });
   }
 
   initFormFromObj(obj: NemaInputs): FormGroup {
@@ -36,7 +36,7 @@ export class NemaEnergyEfficiencyService {
       efficiencyClass: [obj.efficiencyClass, [Validators.required]],
       motorRPM: [obj.motorRPM, [Validators.required]],
       efficiency: [obj.efficiency, [Validators.min(1), Validators.max(100)]]
-    })
+    });
   }
 
   getObjFromForm(form: FormGroup): NemaInputs {
@@ -46,14 +46,14 @@ export class NemaEnergyEfficiencyService {
       efficiencyClass: form.controls.efficiencyClass.value,
       motorRPM: form.controls.motorRPM.value,
       efficiency: form.controls.efficiency.value
-    }
+    };
   }
 }
 
 export interface NemaInputs {
-  frequency: string,
-  horsePower: string,
-  efficiencyClass: string,
-  motorRPM: number,
-  efficiency: number
+  frequency: string;
+  horsePower: string;
+  efficiencyClass: string;
+  motorRPM: number;
+  efficiency: number;
 }

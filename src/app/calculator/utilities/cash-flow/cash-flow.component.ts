@@ -39,7 +39,7 @@ export class CashFlowComponent implements OnInit {
         operationCost: 500,
         fuelCost: 500,
         junkCost: 500
-      }
+      };
     } else {
       this.cashFlowForm = this.cashFlowService.inputData;
     }
@@ -67,7 +67,7 @@ export class CashFlowComponent implements OnInit {
       operationCost: 500,
       fuelCost: 500,
       junkCost: 500
-    }
+    };
     this.cashFlowService.inputData = this.cashFlowForm;
     this.calculate();
   }

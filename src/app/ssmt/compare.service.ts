@@ -15,7 +15,7 @@ export class CompareService {
   setCompareVals(ssmt: SSMT, selectedModIndex?: number) {
     this.baselineSSMT = ssmt;
     if (ssmt.modifications) {
-      if (ssmt.modifications.length != 0) {
+      if (ssmt.modifications.length !== 0) {
         this.selectedModification.next(ssmt.modifications[selectedModIndex].ssmt);
         this.modifiedSSMT = this.selectedModification.value;
       } else {
@@ -45,7 +45,7 @@ export class CompareService {
         this.isFuelCostDifferent(baseline, modification) ||
         this.isElectricityCostDifferent(baseline, modification) ||
         this.isMakeUpWaterCostsDifferent(baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -60,7 +60,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.generalSteamOperations.sitePowerImport != modification.generalSteamOperations.sitePowerImport) {
+      if (baseline.generalSteamOperations.sitePowerImport !== modification.generalSteamOperations.sitePowerImport) {
         return true;
       } else {
         return false;
@@ -78,7 +78,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.generalSteamOperations.makeUpWaterTemperature != modification.generalSteamOperations.makeUpWaterTemperature) {
+      if (baseline.generalSteamOperations.makeUpWaterTemperature !== modification.generalSteamOperations.makeUpWaterTemperature) {
         return true;
       } else {
         return false;
@@ -96,7 +96,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.operatingHours.hoursPerYear != modification.operatingHours.hoursPerYear) {
+      if (baseline.operatingHours.hoursPerYear !== modification.operatingHours.hoursPerYear) {
         return true;
       } else {
         return false;
@@ -114,7 +114,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.operatingCosts.fuelCost != modification.operatingCosts.fuelCost) {
+      if (baseline.operatingCosts.fuelCost !== modification.operatingCosts.fuelCost) {
         return true;
       } else {
         return false;
@@ -132,7 +132,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.operatingCosts.electricityCost != modification.operatingCosts.electricityCost) {
+      if (baseline.operatingCosts.electricityCost !== modification.operatingCosts.electricityCost) {
         return true;
       } else {
         return false;
@@ -150,7 +150,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.operatingCosts.makeUpWaterCost != modification.operatingCosts.makeUpWaterCost) {
+      if (baseline.operatingCosts.makeUpWaterCost !== modification.operatingCosts.makeUpWaterCost) {
         return true;
       } else {
         return false;
@@ -180,7 +180,7 @@ export class CompareService {
         this.isDeaeratorVentRateDifferent(baseline, modification) ||
         this.isDeaeratorPressureDifferent(baseline, modification) ||
         this.isApproachTemperatureDifferent(baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -197,7 +197,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.fuelType != modification.boilerInput.fuelType) {
+      if (baseline.boilerInput.fuelType !== modification.boilerInput.fuelType) {
         return true;
       } else {
         return false;
@@ -215,7 +215,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.fuel != modification.boilerInput.fuel || baseline.boilerInput.fuelType != modification.boilerInput.fuelType) {
+      if (baseline.boilerInput.fuel !== modification.boilerInput.fuel || baseline.boilerInput.fuelType !== modification.boilerInput.fuelType) {
         return true;
       } else {
         return false;
@@ -233,7 +233,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.combustionEfficiency != modification.boilerInput.combustionEfficiency) {
+      if (baseline.boilerInput.combustionEfficiency !== modification.boilerInput.combustionEfficiency) {
         return true;
       } else {
         return false;
@@ -251,7 +251,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.blowdownRate != modification.boilerInput.blowdownRate) {
+      if (baseline.boilerInput.blowdownRate !== modification.boilerInput.blowdownRate) {
         return true;
       } else {
         return false;
@@ -269,7 +269,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.blowdownFlashed != modification.boilerInput.blowdownFlashed) {
+      if (baseline.boilerInput.blowdownFlashed !== modification.boilerInput.blowdownFlashed) {
         return true;
       } else {
         return false;
@@ -287,7 +287,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.preheatMakeupWater != modification.boilerInput.preheatMakeupWater) {
+      if (baseline.boilerInput.preheatMakeupWater !== modification.boilerInput.preheatMakeupWater) {
         return true;
       } else {
         return false;
@@ -305,7 +305,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.steamTemperature != modification.boilerInput.steamTemperature) {
+      if (baseline.boilerInput.steamTemperature !== modification.boilerInput.steamTemperature) {
         return true;
       } else {
         return false;
@@ -323,7 +323,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.deaeratorVentRate != modification.boilerInput.deaeratorVentRate) {
+      if (baseline.boilerInput.deaeratorVentRate !== modification.boilerInput.deaeratorVentRate) {
         return true;
       } else {
         return false;
@@ -341,7 +341,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.deaeratorPressure != modification.boilerInput.deaeratorPressure) {
+      if (baseline.boilerInput.deaeratorPressure !== modification.boilerInput.deaeratorPressure) {
         return true;
       } else {
         return false;
@@ -359,7 +359,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.boilerInput.approachTemperature != modification.boilerInput.approachTemperature) {
+      if (baseline.boilerInput.approachTemperature !== modification.boilerInput.approachTemperature) {
         return true;
       } else {
         return false;
@@ -380,21 +380,21 @@ export class CompareService {
     }
 
     if (baseline && modification) {
-      if (baseline.headerInput.numberOfHeaders == 1) {
+      if (baseline.headerInput.numberOfHeaders === 1) {
         return (
-          this.isHighPressureHeaderDifferent()
-        )
-      } else if (baseline.headerInput.numberOfHeaders == 2) {
+          this.isHighPressureHeaderDifferent(baseline, modification)
+        );
+      } else if (baseline.headerInput.numberOfHeaders === 2) {
         return (
-          this.isHighPressureHeaderDifferent() ||
-          this.isLowPressureHeaderDifferent()
-        )
-      } else if (baseline.headerInput.numberOfHeaders == 3) {
+          this.isHighPressureHeaderDifferent(baseline, modification) ||
+          this.isLowPressureHeaderDifferent(baseline, modification)
+        );
+      } else if (baseline.headerInput.numberOfHeaders === 3) {
         return (
-          this.isHighPressureHeaderDifferent() ||
-          this.isMediumPressureHeaderDifferent() ||
-          this.isLowPressureHeaderDifferent()
-        )
+          this.isHighPressureHeaderDifferent(baseline, modification) ||
+          this.isMediumPressureHeaderDifferent(baseline, modification) ||
+          this.isLowPressureHeaderDifferent(baseline, modification)
+        );
       }
     } else {
       return false;
@@ -417,7 +417,7 @@ export class CompareService {
         this.isHeatLossDifferent('highPressure', baseline, modification) ||
         this.isCondensateReturnTemperatureDifferent(baseline, modification) ||
         this.isFlashCondensateReturnDifferent(baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -439,7 +439,7 @@ export class CompareService {
         this.isFlashCondensateIntoHeaderDifferent('mediumPressure', baseline, modification) ||
         this.isDesuperheatSteamIntoNextHighestDifferent('mediumPressure', baseline, modification) ||
         this.isDesuperheatSteamTemperatureDifferent('mediumPressure', baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -460,7 +460,7 @@ export class CompareService {
         this.isFlashCondensateIntoHeaderDifferent('lowPressure', baseline, modification) ||
         this.isDesuperheatSteamIntoNextHighestDifferent('lowPressure', baseline, modification) ||
         this.isDesuperheatSteamTemperatureDifferent('lowPressure', baseline, modification)
-      )
+      );
     } else {
       return false;
     }
@@ -475,7 +475,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput[headerTypeString].pressure != modification.headerInput[headerTypeString].pressure) {
+      if (baseline.headerInput[headerTypeString].pressure !== modification.headerInput[headerTypeString].pressure) {
         return true;
       } else {
         return false;
@@ -492,7 +492,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput[headerTypeString].processSteamUsage != modification.headerInput[headerTypeString].processSteamUsage) {
+      if (baseline.headerInput[headerTypeString].processSteamUsage !== modification.headerInput[headerTypeString].processSteamUsage) {
         return true;
       } else {
         return false;
@@ -509,7 +509,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput[headerTypeString].condensationRecoveryRate != modification.headerInput[headerTypeString].condensationRecoveryRate) {
+      if (baseline.headerInput[headerTypeString].condensationRecoveryRate !== modification.headerInput[headerTypeString].condensationRecoveryRate) {
         return true;
       } else {
         return false;
@@ -526,7 +526,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput[headerTypeString].heatLoss != modification.headerInput[headerTypeString].heatLoss) {
+      if (baseline.headerInput[headerTypeString].heatLoss !== modification.headerInput[headerTypeString].heatLoss) {
         return true;
       } else {
         return false;
@@ -544,7 +544,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput.highPressure.condensateReturnTemperature != modification.headerInput.highPressure.condensateReturnTemperature) {
+      if (baseline.headerInput.highPressure.condensateReturnTemperature !== modification.headerInput.highPressure.condensateReturnTemperature) {
         return true;
       } else {
         return false;
@@ -561,7 +561,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput.highPressure.flashCondensateReturn != modification.headerInput.highPressure.flashCondensateReturn) {
+      if (baseline.headerInput.highPressure.flashCondensateReturn !== modification.headerInput.highPressure.flashCondensateReturn) {
         return true;
       } else {
         return false;
@@ -579,7 +579,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput[headerTypeString].flashCondensateIntoHeader != modification.headerInput[headerTypeString].flashCondensateIntoHeader) {
+      if (baseline.headerInput[headerTypeString].flashCondensateIntoHeader !== modification.headerInput[headerTypeString].flashCondensateIntoHeader) {
         return true;
       } else {
         return false;
@@ -596,7 +596,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput[headerTypeString].desuperheatSteamIntoNextHighest != modification.headerInput[headerTypeString].desuperheatSteamIntoNextHighest) {
+      if (baseline.headerInput[headerTypeString].desuperheatSteamIntoNextHighest !== modification.headerInput[headerTypeString].desuperheatSteamIntoNextHighest) {
         return true;
       } else {
         return false;
@@ -613,7 +613,7 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (baseline.headerInput[headerTypeString].desuperheatSteamTemperature != modification.headerInput[headerTypeString].desuperheatSteamTemperature) {
+      if (baseline.headerInput[headerTypeString].desuperheatSteamTemperature !== modification.headerInput[headerTypeString].desuperheatSteamTemperature) {
         return true;
       } else {
         return false;
@@ -636,11 +636,11 @@ export class CompareService {
 
     if (baseline && modification) {
       return (
-        this.isCondensingTurbineDifferent() ||
-        this.isHighToMediumTurbineDifferent() ||
-        this.isHighToLowTurbineDifferent() ||
-        this.isMediumToLowTurbineDifferent()
-      )
+        this.isCondensingTurbineDifferent(baseline, modification) ||
+        this.isHighToMediumTurbineDifferent(baseline, modification) ||
+        this.isHighToLowTurbineDifferent(baseline, modification) ||
+        this.isMediumToLowTurbineDifferent(baseline, modification)
+      );
     } else {
       return false;
     }
@@ -654,15 +654,19 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (
-        this.isIsentropicEfficiencyDifferent('condensingTurbine', baseline, modification) ||
-        this.isGenerationEfficiencyDifferent('condensingTurbine', baseline, modification) ||
-        this.isCondenserPressureDifferent('condensingTurbine', baseline, modification) ||
-        this.isOperationTypeDifferent('condensingTurbine', baseline, modification) ||
-        this.isOperationValueDifferent(baseline, modification) ||
-        this.isUseTurbineDifferent('condensingTurbine', baseline, modification)
-      ) {
-        return true;
+      if (baseline.turbineInput.condensingTurbine.useTurbine || modification.turbineInput.condensingTurbine.useTurbine) {
+        if (
+          this.isIsentropicEfficiencyDifferent('condensingTurbine', baseline, modification) ||
+          this.isGenerationEfficiencyDifferent('condensingTurbine', baseline, modification) ||
+          this.isCondenserPressureDifferent('condensingTurbine', baseline, modification) ||
+          this.isOperationTypeDifferent('condensingTurbine', baseline, modification) ||
+          this.isOperationValueDifferent(baseline, modification) ||
+          this.isUseTurbineDifferent('condensingTurbine', baseline, modification)
+        ) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -679,8 +683,12 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (this.isPressureTurbineDifferent('highToMediumTurbine', baseline, modification)) {
-        return true;
+      if (baseline.turbineInput.highToMediumTurbine.useTurbine || modification.turbineInput.highToMediumTurbine.useTurbine) {
+        if (this.isPressureTurbineDifferent('highToMediumTurbine', baseline, modification)) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -697,8 +705,12 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (this.isPressureTurbineDifferent('highToLowTurbine', baseline, modification)) {
-        return true;
+      if (baseline.turbineInput.highToLowTurbine.useTurbine || modification.turbineInput.highToLowTurbine.useTurbine) {
+        if (this.isPressureTurbineDifferent('highToLowTurbine', baseline, modification)) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -715,8 +727,12 @@ export class CompareService {
       modification = this.modifiedSSMT;
     }
     if (baseline && modification) {
-      if (this.isPressureTurbineDifferent('mediumToLowTurbine', baseline, modification)) {
-        return true;
+      if (baseline.turbineInput.mediumToLowTurbine.useTurbine || modification.turbineInput.mediumToLowTurbine.useTurbine) {
+        if (this.isPressureTurbineDifferent('mediumToLowTurbine', baseline, modification)) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -760,7 +776,7 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].isentropicEfficiency != modification.turbineInput[turbineTypeString].isentropicEfficiency) {
+        if (baseline.turbineInput[turbineTypeString].isentropicEfficiency !== modification.turbineInput[turbineTypeString].isentropicEfficiency) {
           return true;
         } else {
           return false;
@@ -785,7 +801,7 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].generationEfficiency != modification.turbineInput[turbineTypeString].generationEfficiency) {
+        if (baseline.turbineInput[turbineTypeString].generationEfficiency !== modification.turbineInput[turbineTypeString].generationEfficiency) {
           return true;
         } else {
           return false;
@@ -809,7 +825,7 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].condenserPressure != modification.turbineInput[turbineTypeString].condenserPressure) {
+        if (baseline.turbineInput[turbineTypeString].condenserPressure !== modification.turbineInput[turbineTypeString].condenserPressure) {
           return true;
         } else {
           return false;
@@ -833,7 +849,7 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].operationType != modification.turbineInput[turbineTypeString].operationType) {
+        if (baseline.turbineInput[turbineTypeString].operationType !== modification.turbineInput[turbineTypeString].operationType) {
           return true;
         } else {
           return false;
@@ -857,16 +873,14 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput.condensingTurbine && modification.turbineInput.condensingTurbine) {
-        if (baseline.turbineInput.condensingTurbine.operationValue != modification.turbineInput.condensingTurbine.operationValue) {
+        if (baseline.turbineInput.condensingTurbine.operationValue !== modification.turbineInput.condensingTurbine.operationValue) {
           return true;
         } else {
           return false;
         }
-      } else if (baseline.turbineInput.condensingTurbine && !modification.turbineInput.condensingTurbine || !baseline.turbineInput.condensingTurbine && modification.turbineInput.condensingTurbine) {
-        return true;
-      } else {
-        return false;
       }
+    } else if (baseline.turbineInput.condensingTurbine && !modification.turbineInput.condensingTurbine || !baseline.turbineInput.condensingTurbine && modification.turbineInput.condensingTurbine) {
+      return true;
     } else {
       return false;
     }
@@ -881,7 +895,7 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].useTurbine != modification.turbineInput[turbineTypeString].useTurbine) {
+        if (baseline.turbineInput[turbineTypeString].useTurbine !== modification.turbineInput[turbineTypeString].useTurbine) {
           return true;
         } else {
           return false;
@@ -905,8 +919,12 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].operationValue1 != modification.turbineInput[turbineTypeString].operationValue1) {
-          return true;
+        if (baseline.turbineInput[turbineTypeString].operationType != 2 && modification.turbineInput[turbineTypeString].operationType != 2) {
+          if (baseline.turbineInput[turbineTypeString].operationValue1 !== modification.turbineInput[turbineTypeString].operationValue1) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return false;
         }
@@ -929,8 +947,13 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.turbineInput[turbineTypeString] && modification.turbineInput[turbineTypeString]) {
-        if (baseline.turbineInput[turbineTypeString].operationValue2 != modification.turbineInput[turbineTypeString].operationValue2) {
-          return true;
+        if (baseline.turbineInput[turbineTypeString].operationType == 3 || modification.turbineInput[turbineTypeString].operationType == 3
+          || baseline.turbineInput[turbineTypeString].operationType == 4 || modification.turbineInput[turbineTypeString].operationType == 4) {
+          if (baseline.turbineInput[turbineTypeString].operationValue2 !== modification.turbineInput[turbineTypeString].operationValue2) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return false;
         }
@@ -949,16 +972,16 @@ export class CompareService {
     let badges: Array<{ badge: string, componentStr: string }> = [];
     if (baseline && modification) {
       if (this.checkOperationsDifferent(baseline, modification)) {
-        badges.push({ badge: 'Operations', componentStr: 'operations' })
+        badges.push({ badge: 'Operations', componentStr: 'operations' });
       }
       if (this.checkBoilerDifferent(baseline, modification)) {
-        badges.push({ badge: 'Boiler', componentStr: 'boiler' })
+        badges.push({ badge: 'Boiler', componentStr: 'boiler' });
       }
       if (this.checkHeaderDifferent(baseline, modification)) {
-        badges.push({ badge: 'Header', componentStr: 'header' })
+        badges.push({ badge: 'Header', componentStr: 'header' });
       }
       if (this.checkTurbinesDifferent(baseline, modification)) {
-        badges.push({ badge: 'Turbine', componentStr: 'turbine' })
+        badges.push({ badge: 'Turbine', componentStr: 'turbine' });
       }
     }
     return badges;

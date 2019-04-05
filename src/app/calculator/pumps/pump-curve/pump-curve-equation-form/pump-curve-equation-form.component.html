@@ -35,12 +35,12 @@
   <div class="form-group">
     <label for="headOrder">Order</label>
     <select id="headOrder" name="headOrder" class="form-control" formControlName="headOrder" (focus)="focusField('headOrder')"
-      (change)="setOrder()" *ngIf="!isFan">
-      <option *ngFor="let order of orderOptions; let i = index" [ngValue]="i">{{order}}</option>
+      (change)="emitCalculateChanges()" *ngIf="!isFan">
+      <option *ngFor="let order of orderOptions; let i = index" [ngValue]="order">{{order}}</option>
     </select>
     <select id="headOrder" name="headOrder" class="form-control" formControlName="headOrder" (focus)="focusField('pressureOrder')"
-      (change)="setOrder()" *ngIf="isFan">
-      <option *ngFor="let order of orderOptions; let i = index" [ngValue]="i">{{order}}</option>
+      (change)="emitCalculateChanges()" *ngIf="isFan">
+      <option *ngFor="let order of orderOptions; let i = index" [ngValue]="order">{{order}}</option>
     </select>
   </div>
 

@@ -19,7 +19,7 @@ export class FlashTankService {
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       inletWaterMassFlow: ['', [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
       tankPressure: ['', [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
-    })
+    });
     return tmpForm;
   }
 
@@ -31,7 +31,7 @@ export class FlashTankService {
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       inletWaterMassFlow: [inputObj.inletWaterMassFlow, [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
       tankPressure: [inputObj.tankPressure, [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
-    })
+    });
     return tmpForm;
   }
 
@@ -42,7 +42,7 @@ export class FlashTankService {
       quantityValue: form.controls.quantityValue.value,
       inletWaterMassFlow: form.controls.inletWaterMassFlow.value,
       tankPressure: form.controls.tankPressure.value,
-    }
+    };
     return input;
   }
 
@@ -57,7 +57,7 @@ export class FlashTankService {
       inletWaterMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
       tankPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       tankPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3))
-    }
+    };
     return ranges;
   }
 }

@@ -21,12 +21,12 @@ export class OpeningLossesHelpComponent implements OnInit {
   ngOnInit() {
   }
 
-  showViewFactor(){
+  showViewFactor() {
     this.lossesService.modalOpen.next(true);
     this.viewFactorModal.show();
   }
 
-  hideViewFactorModal(){
+  hideViewFactorModal() {
     this.lossesService.modalOpen.next(false);
     this.viewFactorModal.hide();
   }

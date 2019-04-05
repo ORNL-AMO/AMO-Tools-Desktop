@@ -62,8 +62,8 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     }
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.flueGasLossForm) {
-      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value != '') {
-        if (this.flueGasLossForm.controls.carbon.value == '') {
+      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
+        if (this.flueGasLossForm.controls.carbon.value === '') {
           this.setProperties();
         }
       }
@@ -76,8 +76,8 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.baselineSelected){
-      if(!changes.baselineSelected.firstChange){
+    if (changes.baselineSelected) {
+      if (!changes.baselineSelected.firstChange) {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
@@ -127,7 +127,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
     };
 
-    if (this.flueGasLossForm.controls.oxygenCalculationMethod.value == 'Oxygen in Flue Gas') {
+    if (this.flueGasLossForm.controls.oxygenCalculationMethod.value === 'Oxygen in Flue Gas') {
       if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
         this.calculationExcessAir = 0.0;
       } else {
@@ -136,7 +136,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       this.flueGasLossForm.patchValue({
         excessAirPercentage: this.calculationExcessAir
       });
-    } else if(this.flueGasLossForm.controls.oxygenCalculationMethod.value == 'Excess Air') {
+    } else if (this.flueGasLossForm.controls.oxygenCalculationMethod.value === 'Excess Air') {
       if (input.excessAir < 0) {
         this.calculationFlueGasO2 = 0.0;
       } else {
@@ -190,11 +190,11 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-      let newMaterial = this.options.filter(material => { return material.substance == event.substance });
-      if (newMaterial.length != 0) {
+      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
         this.flueGasLossForm.patchValue({
           gasTypeId: newMaterial[0].id
-        })
+        });
         this.setProperties();
       }
     }
@@ -205,7 +205,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   canCompare() {
     if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss && !this.inSetup) {
-      if (this.flueGasCompareService.compareLossType(this.lossIndex) == false) {
+      if (this.flueGasCompareService.compareLossType(this.lossIndex) === false) {
         return true;
       } else {
         return false;

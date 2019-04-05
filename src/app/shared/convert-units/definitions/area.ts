@@ -94,4 +94,4 @@ export const area = {
             , ratio: 1 / 10.7639
         }
     }
-}
+};

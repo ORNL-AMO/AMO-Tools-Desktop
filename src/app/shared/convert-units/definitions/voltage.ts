@@ -31,4 +31,4 @@ export const voltage = {
             , ratio: 1
         }
     }
-}
+};

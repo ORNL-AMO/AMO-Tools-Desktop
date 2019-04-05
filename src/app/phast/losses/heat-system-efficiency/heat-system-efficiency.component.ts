@@ -45,7 +45,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     else {
       this.idString = '_baseline';
     }
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -66,11 +66,11 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     if (val) {
       return this.formBuilder.group({
         efficiency: [val, Validators.required]
-      })
+      });
     }
     return this.formBuilder.group({
       efficiency: [90, Validators.required]
-    })
+    });
   }
 
   saveLosses() {

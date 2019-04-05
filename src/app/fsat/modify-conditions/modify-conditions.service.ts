@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 export class ModifyConditionsService {
   modifyConditionsTab: BehaviorSubject<string>;
   constructor() {
-    this.modifyConditionsTab = new BehaviorSubject<string>('fan-field-data')
+    this.modifyConditionsTab = new BehaviorSubject<string>('fan-field-data');
    }
 
 }

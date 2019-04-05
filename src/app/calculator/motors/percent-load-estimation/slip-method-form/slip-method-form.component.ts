@@ -31,7 +31,7 @@ export class SlipMethodFormComponent implements OnInit {
   }
 
   updateSynchronousSpeeds(calculate: boolean) {
-    if (this.form.controls.lineFrequency.value == 50) {
+    if (this.form.controls.lineFrequency.value === 50) {
       this.synchronousSpeeds = [
         500,
         600,
@@ -41,7 +41,7 @@ export class SlipMethodFormComponent implements OnInit {
         3000
       ];
     }
-    else if (this.form.controls.lineFrequency.value == 60) {
+    else if (this.form.controls.lineFrequency.value === 60) {
       this.synchronousSpeeds = [
         600,
         720,

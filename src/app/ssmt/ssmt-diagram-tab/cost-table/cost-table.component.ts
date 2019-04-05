@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { BoilerOutput, SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
@@ -15,10 +15,15 @@ export class CostTableComponent implements OnInit {
   outputData: SSMTOutput;
   @Input()
   settings: Settings;
-  
+  @Output('emitCalculateMarginalCosts')
+  emitCalculateMarginalCosts = new EventEmitter<boolean>();
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  calculateMarginalCosts(){
+    this.emitCalculateMarginalCosts.emit(true);
+  }
 }

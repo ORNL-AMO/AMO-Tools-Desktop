@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { GeneralSteamOperations } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { CompareService } from '../../compare.service';
 import { SsmtService } from '../../ssmt.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-general-operations',
@@ -12,7 +11,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 })
 export class GeneralOperationsComponent implements OnInit {
   @Input()
-  generalSteamOperations: GeneralSteamOperations;
+  form: FormGroup;
   @Input()
   settings: Settings;
   @Output('emitSave')
@@ -24,20 +23,12 @@ export class GeneralOperationsComponent implements OnInit {
   @Input()
   idString: string;
   
-  constructor(private ssmtService: SsmtService, private compareService: CompareService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
-    if(!this.generalSteamOperations.makeUpWaterTemperature){
-      let defaultVal: number = this.convertUnitsService.value(70).from('F').to(this.settings.steamTemperatureMeasurement);
-      defaultVal = this.convertUnitsService.roundVal(defaultVal, 1);
-      this.generalSteamOperations.makeUpWaterTemperature = this.convertUnitsService.value(70).from('F').to(this.settings.steamTemperatureMeasurement);
-    }
-    if(!this.generalSteamOperations.sitePowerImport){
-      this.generalSteamOperations.sitePowerImport = 0;
-    }
   }
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 
@@ -64,7 +55,7 @@ export class GeneralOperationsComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.ssmtService.currentField.next(str);
   }  
   focusOut() {

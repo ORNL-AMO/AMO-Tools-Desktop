@@ -33,20 +33,20 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
   }
 
   addNum(str: string) {
-    if (str == 'motorRPM') {
+    if (str === 'motorRPM') {
       this.nemaForm.patchValue({
         'motorRPM': this.nemaForm.controls.motorRPM.value + 1
-      })
+      });
     }
     this.calculate();
   }
 
   subtractNum(str: string) {
-    if (str == 'motorRPM') {
-      if (this.nemaForm.controls.motorRPM.value != 1) {
+    if (str === 'motorRPM') {
+      if (this.nemaForm.controls.motorRPM.value !== 1) {
         this.nemaForm.patchValue({
           'motorRPM': this.nemaForm.controls.motorRPM.value - 1
-        })
+        });
       }
     }
     this.calculate();
@@ -55,16 +55,16 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
 
   modifyPowerArrays() {
     //if efficiency class is specified efficiency
-    if(this.nemaForm.controls.efficiencyClass.value == 3){
-      this.nemaForm.controls.efficiency.setValidators([Validators.min(1), Validators.max(100), Validators.required])
-    }else{
+    if (this.nemaForm.controls.efficiencyClass.value === 3) {
+      this.nemaForm.controls.efficiency.setValidators([Validators.min(1), Validators.max(100), Validators.required]);
+    }else {
       this.nemaForm.controls.efficiency.clearValidators();
       this.nemaForm.controls.efficiency.reset();
     }
     this.calculate();
   }
 
-  calculate(){
+  calculate() {
     this.emitCalculate.emit(true);
   }
 

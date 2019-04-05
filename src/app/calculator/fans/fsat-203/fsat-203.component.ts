@@ -134,7 +134,7 @@ export class Fsat203Component implements OnInit {
         staticPressureRiseCorrected: 0,
         powerCorrected: 0,
         kpc: 0
-      }
+      };
     }
 
     if (!this.inAssessment) {
@@ -147,7 +147,7 @@ export class Fsat203Component implements OnInit {
 
   checkBasics() {
     let tmpForm: FormGroup = this.fsat203Service.getBasicsFormFromObject(this.inputs.FanRatedInfo, this.settings);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       this.basicsDone = true;
     } else {
       this.basicsDone = false;
@@ -155,7 +155,7 @@ export class Fsat203Component implements OnInit {
   }
 
   saveBasics(info: FanRatedInfo) {
-    if (info.traversePlanes != this.inputs.FanRatedInfo.traversePlanes) {
+    if (info.traversePlanes !== this.inputs.FanRatedInfo.traversePlanes) {
       this.setTraversePlanes(info.traversePlanes);
     }
     this.inputs.FanRatedInfo = info;
@@ -175,7 +175,7 @@ export class Fsat203Component implements OnInit {
     this.inputs.PlaneData.AddlTraversePlanes.forEach(plane => {
       plane.barometricPressure = info.globalBarometricPressure;
       this.checkTraversePlanes();
-    })
+    });
     this.inputs.PlaneData.InletMstPlane.barometricPressure = info.globalBarometricPressure;
     this.checkPlane('4');
     this.inputs.PlaneData.OutletMstPlane.barometricPressure = info.globalBarometricPressure;
@@ -184,7 +184,7 @@ export class Fsat203Component implements OnInit {
 
   checkGasDensity() {
     let tmpForm: FormGroup = this.fsat203Service.getGasDensityFormFromObj(this.inputs.BaseGasDensity, this.settings);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       this.gasDone = true;
     } else {
       this.gasDone = false;
@@ -198,13 +198,13 @@ export class Fsat203Component implements OnInit {
   }
 
   setTraversePlanes(num: number) {
-    if (num == 1) {
+    if (num === 1) {
       this.inputs.PlaneData.AddlTraversePlanes = [];
-    } else if (num == 2) {
+    } else if (num === 2) {
       this.inputs.PlaneData.AddlTraversePlanes = [
         this.getMockTraversePlane()
       ];
-    } else if (num == 3) {
+    } else if (num === 3) {
       this.inputs.PlaneData.AddlTraversePlanes = [
         this.getMockTraversePlane(),
         this.getMockTraversePlane()
@@ -214,39 +214,39 @@ export class Fsat203Component implements OnInit {
   }
 
   checkPlane(planeNumber: string) {
-    if (planeNumber == '1') {
+    if (planeNumber === '1') {
       let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanInletFlange, this.settings, planeNumber);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         this.plane1Done = true;
       } else {
         this.plane1Done = false;
       }
-    } else if (planeNumber == '2') {
+    } else if (planeNumber === '2') {
       let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FanEvaseOrOutletFlange, this.settings, planeNumber);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         this.plane2Done = true;
       } else {
         this.plane2Done = false;
       }
-    } else if (planeNumber == '3a') {
+    } else if (planeNumber === '3a') {
       let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.FlowTraverse, this.settings, planeNumber);
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.FlowTraverse);
       //todo: logic for checking readings valid
-      if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
+      if (tmpForm1.status === 'VALID' && tmpForm2.status === 'VALID') {
         this.plane3aDone = true;
       } else {
         this.plane3aDone = false;
       }
-    } else if (planeNumber == '4') {
+    } else if (planeNumber === '4') {
       let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.InletMstPlane, this.settings, planeNumber);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         this.plane4Done = true;
       } else {
         this.plane4Done = false;
       }
-    } else if (planeNumber == '5') {
+    } else if (planeNumber === '5') {
       let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.OutletMstPlane, this.settings, planeNumber);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         this.plane5Done = true;
       } else {
         this.plane5Done = false;
@@ -258,22 +258,22 @@ export class Fsat203Component implements OnInit {
 
   savePlane(event: { planeNumber: string, plane: Plane }) {
     //logic for saving planes
-    if (event.planeNumber == '1') {
+    if (event.planeNumber === '1') {
       this.inputs.PlaneData.FanInletFlange = event.plane;
       this.checkPlane(event.planeNumber);
-    } else if (event.planeNumber == '2') {
+    } else if (event.planeNumber === '2') {
       this.inputs.PlaneData.FanEvaseOrOutletFlange = event.plane;
       this.checkPlane(event.planeNumber);
-    } else if (event.planeNumber == '3a') {
+    } else if (event.planeNumber === '3a') {
       this.inputs.PlaneData.FlowTraverse = event.plane;
       this.checkPlane('3a');
-    } else if (event.planeNumber == '4') {
+    } else if (event.planeNumber === '4') {
       this.inputs.PlaneData.InletMstPlane = event.plane;
       this.checkPlane('4');
-    } else if (event.planeNumber == '5') {
+    } else if (event.planeNumber === '5') {
       this.inputs.PlaneData.OutletMstPlane = event.plane;
       this.checkPlane('5');
-    } else if (event.planeNumber == '3b' || event.planeNumber == '3c') {
+    } else if (event.planeNumber === '3b' || event.planeNumber === '3c') {
       this.saveAddlTraversePlane(event);
     }
 
@@ -286,9 +286,9 @@ export class Fsat203Component implements OnInit {
   }
 
   saveAddlTraversePlane(event: { planeNumber: string, plane: Plane }) {
-    if (event.planeNumber == '3b') {
+    if (event.planeNumber === '3b') {
       this.inputs.PlaneData.AddlTraversePlanes[0] = event.plane;
-    } else if (event.planeNumber == '3c') {
+    } else if (event.planeNumber === '3c') {
       this.inputs.PlaneData.AddlTraversePlanes[1] = event.plane;
     }
     this.checkTraversePlanes();
@@ -299,7 +299,7 @@ export class Fsat203Component implements OnInit {
       let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[0], this.settings, '3b');
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[0]);
       //todo: logic for checking readings valid
-      if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
+      if (tmpForm1.status === 'VALID' && tmpForm2.status === 'VALID') {
         this.plane3bDone = true;
       } else {
         this.plane3bDone = false;
@@ -311,7 +311,7 @@ export class Fsat203Component implements OnInit {
       let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[1], this.settings, '3c');
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.inputs.PlaneData.AddlTraversePlanes[1]);
       //todo: logic for checking readings valid
-      if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
+      if (tmpForm1.status === 'VALID' && tmpForm2.status === 'VALID') {
         this.plane3cDone = true;
       } else {
         this.plane3cDone = false;
@@ -323,7 +323,7 @@ export class Fsat203Component implements OnInit {
 
   checkShaftPower() {
     let tmpForm: FormGroup = this.fsat203Service.getShaftPowerFormFromObj(this.inputs.FanShaftPower);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID' && this.inputs.FanShaftPower.motorShaftPower !== null && this.inputs.FanShaftPower.motorShaftPower !== undefined && this.inputs.FanShaftPower.motorShaftPower !== NaN) {
       this.shaftPowerDone = true;
     } else {
       this.shaftPowerDone = false;
@@ -367,7 +367,7 @@ export class Fsat203Component implements OnInit {
         [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
         [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]
       ]
-    }
+    };
   }
 
   getCalculator() {
@@ -396,13 +396,13 @@ export class Fsat203Component implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       fan203Inputs: tmpFans203Inputs
-    }
+    };
     return tmpCalculator;
   }
 
   initForm() {
     this.inputs = this.fsat203Service.inputData;
-    if (this.inputs == undefined) {
+    if (this.inputs === undefined) {
       this.inputs = this.fsat203Service.getDefaultData();
       this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
     }
@@ -422,7 +422,7 @@ export class Fsat203Component implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

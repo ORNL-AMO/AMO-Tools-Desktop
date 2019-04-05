@@ -30,17 +30,6 @@ export class HeaderComponent implements OnInit {
   numInletOptions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   inletThermoQuantity: number = 0;
 
-  //enable functionality for exportable result tables
-  table0String: any;
-  table1String: any;
-  table2String: any;
-  table3String: any;
-  table4String: any;
-  table5String: any;
-  table6String: any;
-  table7String: any;
-  table8String: any;
-
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private headerService: HeaderService) { }
 
   ngOnInit() {
@@ -59,7 +48,7 @@ export class HeaderComponent implements OnInit {
     }, 50);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.headerService.headerInput = this.input;
   }
 
@@ -106,7 +95,7 @@ export class HeaderComponent implements OnInit {
         this.inletForms.push(tmpForm);
       }
     } else {
-      while (this.inletForms.length != this.headerPressureForm.controls.numInlets.value) {
+      while (this.inletForms.length !== this.headerPressureForm.controls.numInlets.value) {
         this.inletForms.pop();
       }
     }
@@ -121,14 +110,14 @@ export class HeaderComponent implements OnInit {
   calculate() {
     this.input = this.headerService.getObjFromForm(this.headerPressureForm, this.inletForms);
     this.headerService.headerInput = this.input;
-    if (this.headerPressureForm.status == 'VALID') {
+    if (this.headerPressureForm.status === 'VALID') {
       let formTest: boolean = true;
       this.inletForms.forEach(form => {
-        if (form.status != 'VALID') {
+        if (form.status !== 'VALID') {
           formTest = false;
         }
-      })
-      if (formTest == true) {
+      });
+      if (formTest === true) {
         this.results = this.steamService.header(this.input, this.settings);
       } else {
         this.results = this.getEmptyResults();
@@ -240,7 +229,7 @@ export class HeaderComponent implements OnInit {
         temperature: 0,
         specificVolume: 0
       }
-    }
+    };
 
     return emptyResults;
   }

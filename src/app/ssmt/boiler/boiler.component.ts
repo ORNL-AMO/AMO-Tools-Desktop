@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { BoilerService } from './boiler.service';
+import { BoilerService, BoilerRanges } from './boiler.service';
 import { BoilerInput } from '../../shared/models/steam/ssmt';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -26,6 +26,8 @@ export class BoilerComponent implements OnInit {
   emitSave = new EventEmitter<BoilerInput>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  modificationIndex: number;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -37,16 +39,12 @@ export class BoilerComponent implements OnInit {
     private compareService: CompareService) { }
 
   ngOnInit() {
-    if(!this.isBaseline){
+    if (!this.isBaseline) {
       this.idString = 'modification_';
     }
-    if (this.boilerInput) {
-      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
-    } else {
-      this.boilerForm = this.boilerService.initForm(this.settings);
-    }
+    this.initForm();
     this.setFuelTypes();
-    if (this.selected == false) {
+    if (this.selected === false) {
       this.disableForm();
     }
 
@@ -55,18 +53,29 @@ export class BoilerComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected == true) {
+      if (this.selected === true) {
         this.enableForm();
-      } else if (this.selected == false) {
+      } else if (this.selected === false) {
         this.disableForm();
       }
+    }
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.initForm();
+    }
+  }
+
+  initForm() {
+    if (this.boilerInput) {
+      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
+    } else {
+      this.boilerForm = this.boilerService.initForm(this.settings);
     }
   }
 
   setFuelTypes() {
-    if (this.boilerForm.controls.fuelType.value == 0) {
+    if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    } else if (this.boilerForm.controls.fuelType.value == 1) {
+    } else if (this.boilerForm.controls.fuelType.value === 1) {
       this.options = this.suiteDbService.selectGasFlueGasMaterials();
     }
   }
@@ -84,6 +93,15 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.fuel.disable();
     this.boilerForm.controls.blowdownFlashed.disable();
     this.boilerForm.controls.preheatMakeupWater.disable();
+  }
+
+  setPreheatMakeupWater() {
+    if (this.boilerForm.controls.preheatMakeupWater.value == true) {
+      this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required]);
+    } else {
+      this.boilerForm.controls.approachTemperature.setValidators([]);
+    }
+    this.save();
   }
 
   save() {

@@ -53,7 +53,7 @@ export class SystemDataFormComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges) {
         if (changes.exploreModIndex) {
             if (!changes.exploreModIndex.isFirstChange()) {
-                this.init()
+                this.init();
             }
         }
         if (changes.isVFD) {
@@ -72,7 +72,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initCost() {
-        if (this.baselineForm.controls.cost.value != this.modificationForm.controls.cost.value) {
+        if (this.baselineForm.controls.cost.value !== this.modificationForm.controls.cost.value) {
             this.showCost = true;
         } else {
             this.showCost = false;
@@ -80,7 +80,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initFlowRate() {
-        if (this.baselineForm.controls.flowRate.value != this.modificationForm.controls.flowRate.value) {
+        if (this.baselineForm.controls.flowRate.value !== this.modificationForm.controls.flowRate.value) {
             this.showFlowRate = true;
         } else {
             this.showFlowRate = false;
@@ -88,8 +88,8 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initPressure() {
-        if (this.baselineForm.controls.inletPressure.value != this.modificationForm.controls.inletPressure.value ||
-            this.baselineForm.controls.outletPressure.value != this.modificationForm.controls.outletPressure.value) {
+        if (this.baselineForm.controls.inletPressure.value !== this.modificationForm.controls.inletPressure.value ||
+            this.baselineForm.controls.outletPressure.value !== this.modificationForm.controls.outletPressure.value) {
             this.showPressure = true;
         } else {
             this.showPressure = false;
@@ -97,7 +97,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     initOperatingHours() {
-        if (this.baselineForm.controls.operatingHours.value != this.modificationForm.controls.operatingHours.value) {
+        if (this.baselineForm.controls.operatingHours.value !== this.modificationForm.controls.operatingHours.value) {
             this.showOperatingHours = true;
         } else {
             this.showOperatingHours = false;
@@ -113,7 +113,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     toggleSystemData() {
-        if (this.showSystemData == false) {
+        if (this.showSystemData === false) {
             this.showCost = false;
             this.showOperatingHours = false;
             this.toggleCost();
@@ -122,14 +122,14 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     toggleCost() {
-        if (this.showCost == false) {
+        if (this.showCost === false) {
             this.modificationForm.controls.cost.patchValue(this.baselineForm.controls.cost.value);
             this.calculate();
         }
     }
 
     togglePressure() {
-        if (this.showPressure == false) {
+        if (this.showPressure === false) {
             this.modificationForm.controls.inletPressure.patchValue(this.baselineForm.controls.inletPressure.value);
             this.modificationForm.controls.outletPressure.patchValue(this.baselineForm.controls.outletPressure.value);
             this.calculate();
@@ -137,14 +137,14 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     toggleOperatingHours() {
-        if (this.showOperatingHours == false) {
+        if (this.showOperatingHours === false) {
             this.modificationForm.controls.operatingHours.patchValue(this.baselineForm.controls.operatingHours.value);
             this.calculate();
         }
     }
 
     toggleFlowRate() {
-        if (this.showFlowRate == false) {
+        if (this.showFlowRate === false) {
             this.modificationForm.controls.flowRate.patchValue(this.baselineForm.controls.flowRate.value);
             this.calculate();
         }
@@ -167,7 +167,7 @@ export class SystemDataFormComponent implements OnInit {
     }
 
     showInletPressureModal() {
-        this.showPressureModal.emit('inlet')
+        this.showPressureModal.emit('inlet');
     }
 
     showOutletPressureModal() {

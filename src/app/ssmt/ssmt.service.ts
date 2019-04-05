@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SSMT } from '../shared/models/steam/ssmt';
 
 @Injectable()
 export class SsmtService {
@@ -17,11 +18,12 @@ export class SsmtService {
   headerPressureLevelHelp: BehaviorSubject<string>;
   numberOfHeadersHelp:  BehaviorSubject<number>;
   calcTab: BehaviorSubject<string>;
+  saveSSMT: BehaviorSubject<SSMT>;
   constructor() { 
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
-    this.steamModelTab = new BehaviorSubject<string>('operations')
+    this.steamModelTab = new BehaviorSubject<string>('operations');
     this.currentField = new BehaviorSubject<string>('default');
     this.openNewModificationModal = new BehaviorSubject<boolean>(false);
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -32,6 +34,6 @@ export class SsmtService {
     this.headerPressureLevelHelp = new BehaviorSubject<string>('highPressure');
     this.numberOfHeadersHelp = new BehaviorSubject<number>(1);
     this.calcTab = new BehaviorSubject<string>('boiler');
-
+    this.saveSSMT = new BehaviorSubject<SSMT>(undefined);
   }
 }

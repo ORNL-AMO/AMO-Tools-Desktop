@@ -30,7 +30,7 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
   ngOnInit() {
     this.lossData = new Array();
     if (this.phast.losses) {
-      if(this.phast.modifications){
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
       if (this.phast.losses.auxiliaryPowerLosses) {
@@ -42,14 +42,14 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
             this.phast.modifications.forEach(mod => {
               let modData = mod.phast.losses.auxiliaryPowerLosses[index];
               modificationData.push(modData);
-            })
+            });
           }
           this.lossData.push({
             baseline: loss,
             modifications: modificationData
-          })
+          });
           index++;
-        })
+        });
       }
     }
   }
@@ -59,10 +59,10 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool] !== true) {
         //set true/different
         this[diffBool] = true;
         //tell html to detect change

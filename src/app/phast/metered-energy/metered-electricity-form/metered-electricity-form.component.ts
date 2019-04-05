@@ -13,8 +13,8 @@ export class MeteredElectricityFormComponent implements OnInit {
   emitCalculate = new EventEmitter<boolean>();
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   @Input()
   inCalc: boolean;
 
@@ -23,8 +23,8 @@ export class MeteredElectricityFormComponent implements OnInit {
   ngOnInit() {
   }
  
-  focusField(str: string) {
-    this.changeField.emit(str);
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   calculate() {

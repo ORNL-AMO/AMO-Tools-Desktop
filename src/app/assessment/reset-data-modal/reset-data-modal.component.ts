@@ -14,6 +14,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { CoreService } from '../../core/core.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { AssessmentService } from '../assessment.service';
+import { MockSsmt, MockSsmtSettings } from '../../core/mockSsmt';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -110,7 +111,7 @@ export class ResetDataModalComponent implements OnInit {
       }
       setTimeout(() => {
         this.setAllDbData();
-      }, 1500)
+      }, 1500);
     }
   }
 
@@ -130,7 +131,7 @@ export class ResetDataModalComponent implements OnInit {
     this.indexedDbService.putSettings(tmpSettings).then(() => {
       this.settingsDbService.setAll().then(() => {
       });
-    })
+    });
   }
 
   resetFactoryExampleAssessments() {
@@ -140,7 +141,7 @@ export class ResetDataModalComponent implements OnInit {
       //create assessments
       this.createExampleAssessments(exampleDirectory.id);
     } else {
-      //example directory doesnt exists
+      //example directory doesn't exists
       //create example directory
       let tmpDirectory: Directory = {
         name: 'Examples',
@@ -148,7 +149,7 @@ export class ResetDataModalComponent implements OnInit {
         modifiedDate: new Date(),
         parentDirectoryId: 1,
         isExample: true
-      }
+      };
       //create example directory
       this.indexedDbService.addDirectory(tmpDirectory).then(dirId => {
         //add example settings
@@ -158,8 +159,8 @@ export class ResetDataModalComponent implements OnInit {
         this.indexedDbService.addSettings(tmpSettings).then(() => {
           //create assessments
           this.createExampleAssessments(dirId);
-        })
-      })
+        });
+      });
     }
   }
 
@@ -173,7 +174,7 @@ export class ResetDataModalComponent implements OnInit {
       this.indexedDbService.deleteAssessment(psatExample.id).then(() => {
         //create
         this.createPsatExample(id);
-      })
+      });
     } else {
       this.createPsatExample(id);
     }
@@ -185,7 +186,7 @@ export class ResetDataModalComponent implements OnInit {
       this.indexedDbService.deleteAssessment(fsatExample.id).then(() => {
         //create
         this.createFsatExample(id);
-      })
+      });
     } else {
       this.createFsatExample(id);
     }
@@ -197,10 +198,23 @@ export class ResetDataModalComponent implements OnInit {
       this.indexedDbService.deleteAssessment(phastExample.id).then(() => {
         //create
         this.createPhastExample(id);
-      })
+      });
     } else {
       //create
       this.createPhastExample(id);
+    }
+    //ssmt
+    let ssmtExample: Assessment = this.assessmentDbService.getSsmtExample();
+    if(ssmtExample){
+      //exists
+      //delete
+      this.indexedDbService.deleteAssessment(ssmtExample.id).then(() => {
+        //create
+        this.createSsmtExample(id);
+      });
+    } else {
+      //create
+      this.createSsmtExample(id);
     }
 
   }
@@ -214,10 +228,10 @@ export class ResetDataModalComponent implements OnInit {
         MockPhastSettings.assessmentId = mockPhastId;
         //add settings
         this.indexedDbService.addSettings(MockPhastSettings).then(() => {
-          resolve(true)
+          resolve(true);
         });
       });
-    })
+    });
   }
 
   createPsatExample(dirId: number): Promise<any> {
@@ -232,7 +246,7 @@ export class ResetDataModalComponent implements OnInit {
           //add psat calcs
           MockPsatCalculator.assessmentId = assessmentId;
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
-            resolve(true)
+            resolve(true);
           });
         });
       });
@@ -243,16 +257,31 @@ export class ResetDataModalComponent implements OnInit {
     return new Promise((resolve, reject) => {
       MockFsat.directoryId = dirId;
       //add example
-      this.indexedDbService.addAssessment(MockFsat).then(() => {
-        MockFsatSettings.assessmentId = 3;
+      this.indexedDbService.addAssessment(MockFsat).then(assessmentId => {
+        MockFsatSettings.assessmentId = assessmentId;
         MockFsatSettings.facilityInfo.date = new Date().toDateString();
         //add settings
         this.indexedDbService.addSettings(MockFsatSettings).then(() => {
           resolve(true);
         });
       });
-    })
+    });
   }
+
+  createSsmtExample(dirId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      MockSsmt.directoryId = dirId;
+      //add example
+      this.indexedDbService.addAssessment(MockSsmt).then(assessmentId => {
+        MockSsmtSettings.assessmentId = assessmentId;
+        //add settings
+        this.indexedDbService.addSettings(MockSsmtSettings).then(() => {
+          resolve(true);
+        });
+      });
+    });
+  }
+
 
   resetFactoryUserAssessments() {
     //reset entire Db
@@ -261,14 +290,14 @@ export class ResetDataModalComponent implements OnInit {
         this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
           this.coreService.createDirectory().then(() => {
             this.coreService.createDirectorySettings().then(() => {
-              //after dir setttings add check to see if we want to reset settings or keep existing
+              //after dir settings add check to see if we want to reset settings or keep existing
               if (!this.resetAppSettings) {
                 //keep existing
                 this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
                   this.coreService.createExamples().then(() => {
                     this.setAllDbData();
                   });
-                })
+                });
               } else {
                 //use reset settings
                 this.coreService.createExamples().then(() => {
@@ -289,10 +318,10 @@ export class ResetDataModalComponent implements OnInit {
           this.calculatorDbService.setAll().then(() => {
             this.assessmentService.updateSidebarData.next(true);
             this.hideResetSystemSettingsModal();
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
   resetFactoryCustomMaterials() {

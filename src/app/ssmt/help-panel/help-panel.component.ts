@@ -35,17 +35,17 @@ export class HelpPanelComponent implements OnInit {
     if (this.inSetup) {
       this.stepTabSubscription = this.ssmtService.stepTab.subscribe(tab => {
         this.stepTab = tab;
-      })
+      });
     }
     else {
       this.stepTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
         this.stepTab = val;
-      })
+      });
     }
 
     this.currentFieldSubscription = this.ssmtService.currentField.subscribe(val => {
       this.currentField = val;
-    })
+    });
   }
 
   ngAfterViewInit() {
@@ -70,7 +70,7 @@ export class HelpPanelComponent implements OnInit {
     }
   }
 
-  save(){
+  save() {
     
   }
 }

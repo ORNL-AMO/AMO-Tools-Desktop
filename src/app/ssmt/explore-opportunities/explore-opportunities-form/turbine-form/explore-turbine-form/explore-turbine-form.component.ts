@@ -30,23 +30,23 @@ export class ExploreTurbineFormComponent implements OnInit {
   showUseTurbine: boolean;
   showGenerationEfficiency: boolean;
   showIsentropicEfficiency: boolean;
-  
+  showBaseline: boolean;
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit() {
     this.initForm();
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.showFormToggle && !changes.showFormToggle.isFirstChange()){
-      if(this.showFormToggle == false){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.showFormToggle && !changes.showFormToggle.isFirstChange()) {
+      if (this.showFormToggle === false) {
         this.showUseTurbine = false;
         this.showGenerationEfficiency = false;
         this.showIsentropicEfficiency = false;
       }
     }
     
-    if(changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()){
+    if (changes.exploreModIndex && !changes.exploreModIndex.isFirstChange()) {
       this.showUseTurbine = false;
       this.showGenerationEfficiency = false;
       this.showIsentropicEfficiency = false;
@@ -61,40 +61,41 @@ export class ExploreTurbineFormComponent implements OnInit {
     if (this.showUseTurbine || this.showIsentropicEfficiency || this.showGenerationEfficiency) {
       this.emitShowTurbine.emit(true);
     }
+    this.showBaseline = this.baselineForm.controls.useTurbine.value;
   }
 
   initTurbineStatus() {
-    if (this.baselineForm.controls.useTurbine.value != this.modificationForm.controls.useTurbine.value) {
+    if (this.baselineForm.controls.useTurbine.value !== this.modificationForm.controls.useTurbine.value) {
       this.showUseTurbine = true;
     }
   }
 
   initIsentropicEfficiency() {
-    if (this.baselineForm.controls.isentropicEfficiency.value != this.modificationForm.controls.isentropicEfficiency.value) {
+    if (this.baselineForm.controls.isentropicEfficiency.value !== this.modificationForm.controls.isentropicEfficiency.value) {
       this.showIsentropicEfficiency = true;
     }
   }
 
   initGenerationEfficiency() {
-    if (this.baselineForm.controls.generationEfficiency.value != this.modificationForm.controls.generationEfficiency.value) {
+    if (this.baselineForm.controls.generationEfficiency.value !== this.modificationForm.controls.generationEfficiency.value) {
       this.showGenerationEfficiency = true;
     }
   }
 
   toggleTurbineStatus() {
-    if (this.showUseTurbine == false) {
+    if (this.showUseTurbine === false) {
       this.modificationForm.controls.useTurbine.patchValue(this.baselineForm.controls.useTurbine.value);
     }
   }
 
   toggleIsentropicEfficiency() {
-    if (this.showIsentropicEfficiency == false) {
+    if (this.showIsentropicEfficiency === false) {
       this.modificationForm.controls.isentropicEfficiency.patchValue(this.baselineForm.controls.isentropicEfficiency);
     }
   }
 
   toggleGenerationEfficiency() {
-    if (this.showGenerationEfficiency == false) {
+    if (this.showGenerationEfficiency === false) {
       this.modificationForm.controls.generationEfficiency.patchValue(this.baselineForm.controls.generationEfficiency);
     }
   }

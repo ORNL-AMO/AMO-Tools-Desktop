@@ -23,7 +23,7 @@ export class MotorDriveComponent implements OnInit {
     annualOperatingHours: 8760,
     averageMotorLoad: 50,
     electricityCost: 0
-  }
+  };
   settings: Settings;
   outputData: MotorDriveOutputs;
   tabSelect: string = 'results';
@@ -37,7 +37,7 @@ export class MotorDriveComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-    if(this.motorDriveService.motorDriveData){
+    if (this.motorDriveService.motorDriveData) {
       this.motorDriveData = this.motorDriveService.motorDriveData;
     }
     this.calculate(this.motorDriveData);
@@ -55,7 +55,7 @@ export class MotorDriveComponent implements OnInit {
       annualOperatingHours: 8760,
       averageMotorLoad: 50,
       electricityCost: this.settings.electricityCost
-    }
+    };
     this.calculate(this.motorDriveData);
   }
 
@@ -84,17 +84,17 @@ export interface MotorDriveInputs {
   motorPower: number,
   annualOperatingHours: number,
   averageMotorLoad: number,
-  electricityCost: number
+  electricityCost: number;
 }
 
 
 export interface MotorDriveOutputs {
-  vBeltResults: DriveResult
-  notchedResults: DriveResult
-  synchronousBeltDrive: DriveResult
+  vBeltResults: DriveResult;
+  notchedResults: DriveResult;
+  synchronousBeltDrive: DriveResult;
 }
 
 export interface DriveResult {
-  annualEnergyUse: number,
-  energyCost: number
+  annualEnergyUse: number;
+  energyCost: number;
 }

@@ -10,14 +10,14 @@ export interface ImportExportAssessment {
 }
 
 export interface ImportExportDirectory {
-    settings: Settings,
-    directory: Directory,
-    calculator?: Array<Calculator>
+    settings: Settings;
+    directory: Directory;
+    calculator?: Array<Calculator>;
 }
 
 export interface ImportExportData {
-    directories: Array<ImportExportDirectory>,
-    assessments: Array<ImportExportAssessment>,
-    calculators?: Array<Calculator>,
-    origin?: string
+    directories: Array<ImportExportDirectory>;
+    assessments: Array<ImportExportAssessment>;
+    calculators?: Array<Calculator>;
+    origin?: string;
 }

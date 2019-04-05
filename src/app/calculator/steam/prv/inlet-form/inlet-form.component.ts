@@ -39,7 +39,7 @@ export class InletFormComponent implements OnInit {
   }
 
   getOptionDisplay(): string {
-    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value == this.inletForm.controls.thermodynamicQuantity.value });
+    let selectedQuantity: Quantity = this.thermoOptions.find((option) => { return option.value === this.inletForm.controls.thermodynamicQuantity.value; });
     return selectedQuantity.display;
   }
 
@@ -53,16 +53,16 @@ export class InletFormComponent implements OnInit {
 
   getOptionDisplayUnit() {
     let displayUnit: string;
-    if (this.inletForm.controls.thermodynamicQuantity.value == 0) {
+    if (this.inletForm.controls.thermodynamicQuantity.value === 0) {
       displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
       return displayUnit;
-    } else if (this.inletForm.controls.thermodynamicQuantity.value == 1) {
+    } else if (this.inletForm.controls.thermodynamicQuantity.value === 1) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
       return displayUnit;
-    } else if (this.inletForm.controls.thermodynamicQuantity.value == 2) {
+    } else if (this.inletForm.controls.thermodynamicQuantity.value === 2) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
       return displayUnit;
-    } else if (this.inletForm.controls.thermodynamicQuantity.value == 3) {
+    } else if (this.inletForm.controls.thermodynamicQuantity.value === 3) {
       return displayUnit;
     }
   }

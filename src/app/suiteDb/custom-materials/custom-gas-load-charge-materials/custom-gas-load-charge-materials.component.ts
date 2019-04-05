@@ -39,11 +39,11 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
       if (val) {
         this.getSelected();
       }
-    })
+    });
 
     this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
       this.selectAll(val);
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -53,12 +53,12 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showModal && !changes.showModal.firstChange) {
-      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+      if (changes.showModal.currentValue !== changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
     if (changes.importing) {
-      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
+      if (changes.importing.currentValue === false && changes.importing.previousValue === true) {
         this.getCustomMaterials();
       }
     }
@@ -73,7 +73,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   getCustomMaterials() {
     this.indexedDbService.getAllGasLoadChargeMaterial().then(idbResults => {
       this.gasChargeMaterials = idbResults;
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.convertAllMaterials();
       }
     });
@@ -109,13 +109,13 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
     this.getCustomMaterials();
   }
   getSelected() {
-    let selected: Array<GasLoadChargeMaterial> = _.filter(this.gasChargeMaterials, (material) => { return material.selected == true });
+    let selected: Array<GasLoadChargeMaterial> = _.filter(this.gasChargeMaterials, (material) => { return material.selected === true; });
     this.customMaterialService.selectedGasLoadCharge = selected;
   }
 
   selectAll(val: boolean) {
     this.gasChargeMaterials.forEach(material => {
       material.selected = val;
-    })
+    });
   }
 }

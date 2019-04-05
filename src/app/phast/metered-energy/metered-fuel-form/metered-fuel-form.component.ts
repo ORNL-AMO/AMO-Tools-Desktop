@@ -20,8 +20,8 @@ export class MeteredFuelFormComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   @Input()
   inCalc: boolean;
   @Input()
@@ -49,13 +49,13 @@ export class MeteredFuelFormComponent implements OnInit {
     }
   }
 
-  focusField(str: string) {
-    this.changeField.emit(str);
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   showHideInputField() {
     this.inputs.userDefinedMeteredEnergy = !this.inputs.userDefinedMeteredEnergy;
-    if(!this.inputs.userDefinedMeteredEnergy){
+    if (!this.inputs.userDefinedMeteredEnergy) {
       this.calculate();
     }
   }

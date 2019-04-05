@@ -54,7 +54,7 @@ export class AssessmentDashboardComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.isFirstChange) {
-      this.view == 'grid';
+      this.view === 'grid';
     }
 
     if (this.isFirstChange) {
@@ -62,7 +62,7 @@ export class AssessmentDashboardComponent implements OnInit {
     }
   }
   changeView($event) {
-    if (this.view == $event && this.view == 'settings') {
+    if (this.view === $event && this.view === 'settings') {
       this.view = 'grid';
     } else {
       this.view = $event;
@@ -70,7 +70,7 @@ export class AssessmentDashboardComponent implements OnInit {
   }
 
   changeDirectory($event) {
-    if (this.view == 'settings') {
+    if (this.view === 'settings') {
       this.view = 'grid';
     }
     this.directoryChange.emit($event);

@@ -1,10 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
+import { ReportRollupService } from '../../report-rollup.service';
 import { Subscription } from 'rxjs';
+import { PsatResultsData } from '../../report-rollup-models';
 @Component({
   selector: 'app-psat-rollup-pump-summary',
   templateUrl: './psat-rollup-pump-summary.component.html',
@@ -12,7 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class PsatRollupPumpSummaryComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   printView: boolean;
 
@@ -58,7 +56,7 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
   ngOnInit() {
     this.resultData = new Array();
     this.resultsSub = this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
-      if (psats.length != 0) {
+      if (psats.length !== 0) {
         this.numPsats = psats.length;
         this.resultData = psats;
         if (this.printView) {
@@ -84,7 +82,7 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 
@@ -101,16 +99,16 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
-      if (graphOption == 'Energy Use') {
-        if (i == 1) {
+      if (graphOption === 'Energy Use') {
+        if (i === 1) {
           this.unit = 'kWh/yr';
         }
         num1 = data.baselineResults.annual_energy;
         if (data.modName) {
           num2 = data.modificationResults.annual_energy;
         }
-      } else if (graphOption == 'Cost') {
-        if (i == 1) {
+      } else if (graphOption === 'Cost') {
+        if (i === 1) {
           this.unit = "$/yr";
         }
         num1 = data.baselineResults.annual_cost;
@@ -138,7 +136,7 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {
     if (implementationCost) {
       let val = (implementationCost / (baselineCost - modCost)) * 12;
-      if (isNaN(val) == false) {
+      if (isNaN(val) === false) {
         return val;
       } else {
         return 0;

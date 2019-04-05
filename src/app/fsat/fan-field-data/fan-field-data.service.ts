@@ -23,7 +23,7 @@ export class FanFieldDataService {
       specificHeatRatio: [obj.specificHeatRatio, [Validators.required, Validators.min(0)]],
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
       measuredVoltage: [obj.measuredVoltage, Validators.required]
-    })
+    });
     for (let key in form.controls) {
       if (form.controls[key].value) {
         form.controls[key].markAsDirty();
@@ -44,13 +44,13 @@ export class FanFieldDataService {
       specificHeatRatio: form.controls.specificHeatRatio.value,
       compressibilityFactor: form.controls.compressibilityFactor.value,
       measuredVoltage: form.controls.measuredVoltage.value
-    }
+    };
     return newData;
   }
 
   isFanFieldDataValid(obj: FieldData): boolean {
     let form: FormGroup = this.getFormFromObj(obj);
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       return true;
     } else {
       return false;

@@ -36,7 +36,7 @@ export class WallLossesComponent implements OnInit {
 
   _wallLosses: Array<WallLossObj>;
   firstChange: boolean = true;
-  resultsUnit: string
+  resultsUnit: string;
   lossesLocked: boolean = false;
   showError: boolean = false;
   total: number = 0;
@@ -58,7 +58,7 @@ export class WallLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -90,14 +90,14 @@ export class WallLossesComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         //attempt to calculate tmpLoss results
         this.calculate(tmpLoss);
         //add object to component data array
         this._wallLosses.push(tmpLoss);
-      })
+      });
       this.total = this.getTotal();
     }
   }
@@ -129,7 +129,7 @@ export class WallLossesComponent implements OnInit {
 
   //calculate wall loss results
   calculate(loss: WallLossObj) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       let tmpWallLoss: WallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
       loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
     } else {
@@ -147,13 +147,13 @@ export class WallLossesComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpWallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
-    })
+    });
     //set input data to equal new data for update
     this.losses.wallLosses = tmpWallLosses;
     //emit to losses.component that data is updated and should be saved
@@ -165,14 +165,14 @@ export class WallLossesComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  getTotal(){
+  getTotal() {
     return _.sumBy(this._wallLosses, 'heatLoss');
   }
 }
 
 
 export interface WallLossObj {
-  form: FormGroup,
-  heatLoss?: number,
-  collapse: boolean
+  form: FormGroup;
+  heatLoss?: number;
+  collapse: boolean;
 }

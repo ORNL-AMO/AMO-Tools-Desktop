@@ -53,7 +53,7 @@ export class OperationsFormComponent implements OnInit {
 
   //General Operations Functions
   initOperatingHours() {
-    if (this.ssmt.operatingHours.hoursPerYear != this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours.hoursPerYear) {
+    if (this.ssmt.operatingHours.hoursPerYear !== this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours.hoursPerYear) {
       this.showHoursPerYear = true;
     } else {
       this.showHoursPerYear = false;
@@ -61,7 +61,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   initMakeupWaterTemp() {
-    if (this.ssmt.generalSteamOperations.makeUpWaterTemperature != this.ssmt.modifications[this.exploreModIndex].ssmt.generalSteamOperations.makeUpWaterTemperature) {
+    if (this.ssmt.generalSteamOperations.makeUpWaterTemperature !== this.ssmt.modifications[this.exploreModIndex].ssmt.generalSteamOperations.makeUpWaterTemperature) {
       this.showMakeupWaterTemp = true;
     } else {
       this.showMakeupWaterTemp = false;
@@ -79,7 +79,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   toggleOperationsData() {
-    if (this.showOperationsData == false) {
+    if (this.showOperationsData === false) {
       this.showMakeupWaterTemp = false;
       this.showHoursPerYear = false;
       this.toggleHoursPerYear();
@@ -88,14 +88,14 @@ export class OperationsFormComponent implements OnInit {
   }
 
   toggleHoursPerYear() {
-    if (this.showHoursPerYear == false) {
+    if (this.showHoursPerYear === false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours.hoursPerYear = this.ssmt.operatingHours.hoursPerYear;
       this.save();
     }
   }
 
   toggleMakeupWaterTemp() {
-    if (this.showMakeupWaterTemp == false) {
+    if (this.showMakeupWaterTemp === false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.generalSteamOperations.makeUpWaterTemperature = this.ssmt.generalSteamOperations.makeUpWaterTemperature;
       this.save();
     }
@@ -103,7 +103,7 @@ export class OperationsFormComponent implements OnInit {
 
   setBaselineOperatingHours() {
     this.ssmt.operatingHours.isCalculated = false;
-    this.save()
+    this.save();
   }
 
   setModificationOperatingHours() {
@@ -116,13 +116,13 @@ export class OperationsFormComponent implements OnInit {
     this.initFuelCosts();
     this.initElectricityCost();
     this.initMakeupWaterCost();
-    if(this.showFuelCost || this.showElectricityCost || this.showMakeupWaterCost){
+    if (this.showFuelCost || this.showElectricityCost || this.showMakeupWaterCost) {
       this.showUnitCosts = true;
     }
   }
 
   initFuelCosts() {
-    if (this.ssmt.operatingCosts.fuelCost != this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.fuelCost) {
+    if (this.ssmt.operatingCosts.fuelCost !== this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.fuelCost) {
       this.showFuelCost = true;
     } else {
       this.showFuelCost = false;
@@ -130,7 +130,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   initElectricityCost() {
-    if (this.ssmt.operatingCosts.electricityCost != this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.electricityCost) {
+    if (this.ssmt.operatingCosts.electricityCost !== this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.electricityCost) {
       this.showElectricityCost = true;
     } else {
       this.showElectricityCost = false;
@@ -138,7 +138,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   initMakeupWaterCost() {
-    if (this.ssmt.operatingCosts.makeUpWaterCost != this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.makeUpWaterCost) {
+    if (this.ssmt.operatingCosts.makeUpWaterCost !== this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.makeUpWaterCost) {
       this.showMakeupWaterCost = true;
     } else {
       this.showMakeupWaterCost = false;
@@ -146,26 +146,26 @@ export class OperationsFormComponent implements OnInit {
   }
 
   toggleFuelCost() {
-    if (this.showFuelCost == false) {
+    if (this.showFuelCost === false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.fuelCost = this.ssmt.operatingCosts.fuelCost;
       this.save();
     }
   }
   toggleMakeupWaterCost() {
-    if (this.showMakeupWaterTemp == false) {
+    if (this.showMakeupWaterTemp === false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.makeUpWaterCost = this.ssmt.operatingCosts.makeUpWaterCost;
       this.save();
     }
   }
   toggleElectricityCost() {
-    if (this.showElectricityCost == false) {
+    if (this.showElectricityCost === false) {
       this.ssmt.modifications[this.exploreModIndex].ssmt.operatingCosts.electricityCost = this.ssmt.operatingCosts.electricityCost;
       this.save();
     }
   }
 
   toggleUnitCosts() {
-    if(this.showUnitCosts == false){
+    if (this.showUnitCosts === false) {
       this.showElectricityCost = false;
       this.showMakeupWaterCost = false;
       this.showFuelCost = false;

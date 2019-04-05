@@ -29,10 +29,10 @@ export class HeadToolService {
 
   initHeadToolSuctionForm(settings: Settings) {
     let smallUnit, pressureUnit;
-    if (settings.distanceMeasurement == 'ft') {
-      smallUnit = 'in'
+    if (settings.distanceMeasurement === 'ft') {
+      smallUnit = 'in';
     } else {
-      smallUnit = 'mm'
+      smallUnit = 'mm';
     }
     return this.formBuilder.group({
       suctionPipeDiameter: [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), [Validators.required, Validators.min(0)]],
@@ -45,7 +45,7 @@ export class HeadToolService {
       dischargeLineLossCoefficients: [1, Validators.required],
       specificGravity: [1, [Validators.required, Validators.min(0)]],
       flowRate: [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), [Validators.required, Validators.min(0)]],
-    })
+    });
     // return this.formBuilder.group({
     //   'suctionPipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
     //   'suctionTankGasOverPressure': [0, Validators.required],
@@ -62,10 +62,10 @@ export class HeadToolService {
 
   initHeadToolForm(settings: Settings) {
     let smallUnit;
-    if (settings.distanceMeasurement == 'ft') {
-      smallUnit = 'in'
+    if (settings.distanceMeasurement === 'ft') {
+      smallUnit = 'in';
     } else {
-      smallUnit = 'mm'
+      smallUnit = 'mm';
     }
     return this.formBuilder.group({
       suctionPipeDiameter: [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), [Validators.required, Validators.min(0)]],
@@ -87,7 +87,7 @@ export class HeadToolService {
       // 'dischargeLineLossCoefficients': [1, Validators.required],
       // 'specificGravity': [1, Validators.required],
       // 'flowRate': [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), Validators.required],
-    })
+    });
   }
 
 
@@ -101,7 +101,7 @@ export class HeadToolService {
       dischargeGaugePressure: [headTool.dischargeGaugePressure, Validators.required],
       dischargeGaugeElevation: [headTool.dischargeGaugeElevation, Validators.required],
       dischargeLineLossCoefficients: [headTool.dischargeLineLossCoefficients, Validators.required],
-      specificGravity: [headTool.specificGravity,[Validators.required, Validators.min(0)]],
+      specificGravity: [headTool.specificGravity, [Validators.required, Validators.min(0)]],
       flowRate: [headTool.flowRate, [Validators.required, Validators.min(0)]],     // 'suctionPipeDiameter': [headTool.suctionPipeDiameter, Validators.required],
       // 'suctionGuagePressure': [headTool.suctionGaugePressure, Validators.required],
       // 'suctionGuageElevation': [headTool.suctionGaugeElevation, Validators.required],
@@ -112,7 +112,7 @@ export class HeadToolService {
       // 'dischargeLineLossCoefficients': [headTool.dischargeLineLossCoefficients, Validators.required],
       // 'specificGravity': [headTool.specificGravity, Validators.required],
       // 'flowRate': [headTool.flowRate, Validators.required],
-    })
+    });
   }
 
   getHeadToolSuctionFormFromObj(headToolSuction: HeadToolSuction): FormGroup {
@@ -136,7 +136,7 @@ export class HeadToolService {
       // 'dischargeLineLossCoefficients': [headToolSuction.dischargeLineLossCoefficients, Validators.required],
       // 'specificGravity': [headToolSuction.specificGravity, Validators.required],
       // 'flowRate': [headToolSuction.flowRate, Validators.required],
-    })
+    });
   }
 
   getHeadToolFromForm(form: FormGroup): HeadTool {
@@ -151,7 +151,7 @@ export class HeadToolService {
       dischargeGaugePressure: form.controls.dischargeGaugePressure.value,
       dischargeGaugeElevation: form.controls.dischargeGaugeElevation.value,
       dischargeLineLossCoefficients: form.controls.dischargeLineLossCoefficients.value,
-    }
+    };
     return headTool;
   }
 
@@ -167,11 +167,11 @@ export class HeadToolService {
       dischargeGaugePressure: form.controls.dischargeGaugePressure.value,
       dischargeGaugeElevation: form.controls.dischargeGaugeElevation.value,
       dischargeLineLossCoefficients: form.controls.dischargeLineLossCoefficients.value,
-    }
+    };
     return headToolSuction;
   }
 
   roundVal(val: number, digits: number) {
-    return Number(val.toFixed(digits))
+    return Number(val.toFixed(digits));
   }
 }

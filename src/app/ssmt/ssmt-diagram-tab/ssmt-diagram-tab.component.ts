@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
 import { CalculateModelService } from '../ssmt-calculations/calculate-model.service';
+import { SsmtService } from '../ssmt.service';
 
 @Component({
   selector: 'app-ssmt-diagram-tab',
@@ -16,46 +17,66 @@ export class SsmtDiagramTabComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
-  
+
   outputData: SSMTOutput;
   inputData: SSMTInputs;
   tabSelect: string = 'results';
   hoveredEquipment: string = 'default';
-  selectedTable: string = 'cost';
+  selectedTable: string = 'default';
 
   selectedSSMT: SSMT;
-  ssmtOptions: Array<SSMT>;
-  showOptions: boolean = false;
-  constructor(private calculateModelService: CalculateModelService, private cd: ChangeDetectorRef) { }
+  dataCalculated: boolean = false;
+  displayCalculators: boolean = false;
+  constructor(private calculateModelService: CalculateModelService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
     this.ssmt.name = 'Baseline';
-    this.selectedSSMT = this.ssmt;
-    this.ssmtOptions = new Array<SSMT>();
-    if(this.ssmt.modifications){
-      this.ssmtOptions.push(this.ssmt);
-      this.ssmt.modifications.forEach(modification => {
-        this.ssmtOptions.push(modification.ssmt);
-      })
-    }
-    if (this.ssmt.setupDone) {
+
+    if (this.ssmt.setupDone && !this.ssmt.resultsCalculated) {
+      setTimeout(() => {
+        this.ssmt.outputData = this.calculateModelService.initDataAndRun(this.ssmt, this.settings, true, false).outputData;
+        this.ssmt.resultsCalculated = true;
+        this.ssmtService.saveSSMT.next(this.ssmt);
+        this.selectedSSMT = this.ssmt;
+        this.calculateResults();
+      }, 100);
+    } else {
+      this.selectedSSMT = this.ssmt;
       this.calculateResults();
     }
   }
 
-  setOption(ssmt: SSMT){
-    this.selectedSSMT = ssmt;
-    this.calculateResults();
-    this.showOptions = false;
+  calculateResults() {
+    let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput };
+    if (this.selectedSSMT.resultsCalculated) {
+      let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(this.selectedSSMT);
+      resultsData = {
+        inputData: inputData,
+        outputData: this.selectedSSMT.outputData
+      };
+    } else {
+      if (this.selectedSSMT.name == 'Baseline') {
+        resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, false);
+      } else {
+        resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, false, this.ssmt.outputData.powerGenerationCost);
+      }
+    }
+    this.inputData = resultsData.inputData;
+    this.outputData = resultsData.outputData;
+    this.dataCalculated = true;
   }
 
-  calculateResults() {
-    this.calculateModelService.initResults();
-    this.calculateModelService.initData(this.selectedSSMT, this.settings, true);
-    let resultsData: {inputData: SSMTInputs, outputData: SSMTOutput} = this.calculateModelService.calculateModelRunner();
+  calculateResultsWithMarginalCosts() {
+    let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput };
+    if (this.selectedSSMT.name == 'Baseline') {
+      resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, true);
+    } else {
+      resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, true, this.ssmt.outputData.powerGenerationCost);
+    }
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;
   }
+
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -66,9 +87,5 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   selectTable(str: string) {
     this.selectedTable = str;
-  }
-
-  toggleShowOptions(){
-    this.showOptions = !this.showOptions;
   }
 }

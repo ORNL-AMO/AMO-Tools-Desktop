@@ -41,10 +41,10 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
       if (val) {
         this.getSelected();
       }
-    })
+    });
     this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
       this.selectAll(val);
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -54,12 +54,12 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showModal && !changes.showModal.firstChange) {
-      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+      if (changes.showModal.currentValue !== changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
     if (changes.importing) {
-      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
+      if (changes.importing.currentValue === false && changes.importing.previousValue === true) {
         this.getCustomMaterials();
       }
     }
@@ -74,7 +74,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   getCustomMaterials() {
     this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
       this.atmosphereSpecificHeatMaterials = idbResults;
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.convertAllMaterials();
       }
     });
@@ -113,12 +113,12 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   }
 
   getSelected() {
-    let selected: Array<AtmosphereSpecificHeat> = _.filter(this.atmosphereSpecificHeatMaterials, (material) => { return material.selected == true });
+    let selected: Array<AtmosphereSpecificHeat> = _.filter(this.atmosphereSpecificHeatMaterials, (material) => { return material.selected === true; });
     this.customMaterialService.selectedAtmosphere = selected;
   }
   selectAll(val: boolean) {
     this.atmosphereSpecificHeatMaterials.forEach(material => {
       material.selected = val;
-    })
+    });
   }
 }

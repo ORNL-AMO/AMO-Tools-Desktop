@@ -32,8 +32,8 @@
     <div class="d-flex">
       <app-boiler-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
         [thermodynamicQuantity]="input.thermodynamicQuantity"></app-boiler-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-boiler-results [results]="results" [settings]="settings" [inputData]="input"></app-boiler-results>
+      <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
+        <app-boiler-results class="w-100" [results]="results" [settings]="settings" [inputData]="input"></app-boiler-results>
       </div>
     </div>
   </div>

@@ -1,9 +1,9 @@
 export interface eGridRegion {
-    region: string,
+    region: string;
     subregions: Array<{
         subregion: string,
         outputRate: number
-    }>
+    }>;
 }
 
 export const electricityGridRegions: Array<eGridRegion> = [
@@ -171,4 +171,4 @@ export const electricityGridRegions: Array<eGridRegion> = [
             }
         ]
     }
-]
+];

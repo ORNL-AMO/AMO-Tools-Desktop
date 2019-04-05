@@ -56,7 +56,7 @@ export class GasLeakageLossesComponent implements OnInit {
     }
   }
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -81,12 +81,12 @@ export class GasLeakageLossesComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._leakageLosses.push(tmpLoss);
-      })
+      });
       this.total = this.getTotal();
     }
   }
@@ -115,7 +115,7 @@ export class GasLeakageLossesComponent implements OnInit {
   }
 
   calculate(loss: GasLeakageObj) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
       loss.heatLoss = this.phastService.leakageLosses(tmpLeakageLoss, this.settings);
     }
@@ -132,13 +132,13 @@ export class GasLeakageLossesComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
       tmpLeakageLoss.heatLoss = loss.heatLoss;
       tmpLeakageLosses.push(tmpLeakageLoss);
-    })
+    });
     this.losses.leakageLosses = tmpLeakageLosses;
     this.savedLoss.emit(true);
   }
@@ -151,7 +151,7 @@ export class GasLeakageLossesComponent implements OnInit {
 }
 
 export interface GasLeakageObj {
-  form: FormGroup,
-  heatLoss: number,
-  collapse: boolean
+  form: FormGroup;
+  heatLoss: number;
+  collapse: boolean;
 }

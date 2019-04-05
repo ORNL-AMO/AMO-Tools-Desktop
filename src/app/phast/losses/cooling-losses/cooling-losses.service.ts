@@ -11,7 +11,7 @@ export class CoolingLossesService {
   initLiquidCoolingForm(settings: Settings, lossNum: number): FormGroup {
     let defaultDensity: number = 8.338;
     let defaultSpecificHeat: number = 1;
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       defaultDensity = .999;
       defaultSpecificHeat = 4.187;
     }
@@ -52,14 +52,14 @@ export class CoolingLossesService {
         specificHeat: form.controls.avgSpecificHeat.value,
         correctionFactor: form.controls.correctionFactor.value
       }
-    }
+    };
     return tmpLoss;
   }
 
   initGasCoolingForm(settings: Settings, lossNum: number): FormGroup {
     let defaultDensity: number = .074887;
     let defaultSpecificHeat: number = .2371;
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       defaultDensity = 1.2;
       defaultSpecificHeat = 0.993;
     }
@@ -102,7 +102,7 @@ export class CoolingLossesService {
         gasDensity: form.controls.gasDensity.value,
         outletTemperature: form.controls.outletTemp.value
       }
-    }
+    };
     return tmpLoss;
   }
 
@@ -133,7 +133,7 @@ export class CoolingLossesService {
   }
   checkInletTemp(loss: GasCoolingLoss | LiquidCoolingLoss): string {
     if (loss.initialTemperature > loss.outletTemperature) {
-      return 'Inlet temperature is greater than outlet temperature'
+      return 'Inlet temperature is greater than outlet temperature';
     } else {
       return null;
     }
@@ -146,7 +146,7 @@ export class CoolingLossesService {
       temperatureWarning: this.checkInletTemp(loss),
       densityLiquidWarning: this.checkLiquidDensity(loss),
       liquidFlowWarning: this.checkGasFlow(loss)
-    }
+    };
   }
 
   checkLiquidDensity(loss: LiquidCoolingLoss): string {
@@ -165,7 +165,7 @@ export class CoolingLossesService {
       gasFlowWarning: this.checkGasFlow(loss),
       gasDensityWarning: this.checkGasDensity(loss),
       temperatureWarning: this.checkInletTemp(loss)
-    }
+    };
   }
 
   checkGasDensity(loss: GasCoolingLoss): string {

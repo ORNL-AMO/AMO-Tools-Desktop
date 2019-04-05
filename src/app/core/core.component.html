@@ -1,29 +1,64 @@
 <!-- <div #coreContainer> -->
 <div *ngIf="idbStarted">
     <div *ngIf="!hideTutorial" class="opening-tutorial">
-        <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()"></app-opening-tutorial>
-        
-        <app-psat-report-tutorial *ngIf="tutorialType == 'psat-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-report-tutorial>
-        <app-psat-tutorial *ngIf="tutorialType == 'psat-tutorial'" (closeTutorial)="closeTutorial()"></app-psat-tutorial>
-        <app-psat-assessment-tutorial *ngIf="tutorialType == 'psat-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-assessment-tutorial>
-        <app-psat-system-setup *ngIf="tutorialType == 'psat-system-setup'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-system-setup>
-        
-        <app-phast-tutorial *ngIf="tutorialType == 'phast-tutorial'" (closeTutorial)="closeTutorial()"></app-phast-tutorial>
-        <app-phast-setup-tutorial *ngIf="tutorialType == 'phast-setup-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-setup-tutorial>
-        <app-phast-assessment-tutorial *ngIf="tutorialType == 'phast-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-assessment-tutorial>
-        <app-phast-report-tutorial *ngIf="tutorialType == 'phast-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-report-tutorial>
-        
-        <app-fsat-tutorial *ngIf="tutorialType == 'fsat-tutorial'" (closeTutorial)="closeTutorial()"></app-fsat-tutorial>
-        <app-fsat-system-setup *ngIf="tutorialType == 'fsat-system-setup'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-system-setup>
-        <app-fsat-assessment-tutorial *ngIf="tutorialType == 'fsat-assessment-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-assessment-tutorial>
-        <app-fsat-report-tutorial *ngIf="tutorialType == 'fsat-report-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-report-tutorial>
-        
-        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
+        <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
+        </app-opening-tutorial>
+
+        <app-psat-report-tutorial *ngIf="tutorialType == 'psat-report-tutorial'" (closeTutorial)="closeTutorial()"
+            [inTutorials]="inTutorialsView"></app-psat-report-tutorial>
+        <app-psat-tutorial *ngIf="tutorialType == 'psat-tutorial'" (closeTutorial)="closeTutorial()">
+        </app-psat-tutorial>
+        <app-psat-assessment-tutorial *ngIf="tutorialType == 'psat-assessment-tutorial'"
+            (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-psat-assessment-tutorial>
+        <app-psat-system-setup *ngIf="tutorialType == 'psat-system-setup'" (closeTutorial)="closeTutorial()"
+            [inTutorials]="inTutorialsView"></app-psat-system-setup>
+
+        <app-phast-tutorial *ngIf="tutorialType == 'phast-tutorial'" (closeTutorial)="closeTutorial()">
+        </app-phast-tutorial>
+        <app-phast-setup-tutorial *ngIf="tutorialType == 'phast-setup-tutorial'" (closeTutorial)="closeTutorial()"
+            [inTutorials]="inTutorialsView"></app-phast-setup-tutorial>
+        <app-phast-assessment-tutorial *ngIf="tutorialType == 'phast-assessment-tutorial'"
+            (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-phast-assessment-tutorial>
+        <app-phast-report-tutorial *ngIf="tutorialType == 'phast-report-tutorial'" (closeTutorial)="closeTutorial()"
+            [inTutorials]="inTutorialsView"></app-phast-report-tutorial>
+
+        <app-fsat-tutorial *ngIf="tutorialType == 'fsat-tutorial'" (closeTutorial)="closeTutorial()">
+        </app-fsat-tutorial>
+        <app-fsat-system-setup *ngIf="tutorialType == 'fsat-system-setup'" (closeTutorial)="closeTutorial()"
+            [inTutorials]="inTutorialsView"></app-fsat-system-setup>
+        <app-fsat-assessment-tutorial *ngIf="tutorialType == 'fsat-assessment-tutorial'"
+            (closeTutorial)="closeTutorial()" [inTutorials]="inTutorialsView"></app-fsat-assessment-tutorial>
+        <app-fsat-report-tutorial *ngIf="tutorialType == 'fsat-report-tutorial'" (closeTutorial)="closeTutorial()"
+            [inTutorials]="inTutorialsView"></app-fsat-report-tutorial>
+
+        <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()"
+            [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
 
     </div>
 
     <router-outlet></router-outlet>
-    <app-update-modal *ngIf="showUpdateModal" (closeModal)="closeModal()" [updateError]="updateError"></app-update-modal>
+
+    <div class="card survey-card" [@survey]="showSurvey" *ngIf="!destroySurvey">
+        <div class="card-header text-center">
+            We want your feedback!
+            <button class="close pull-right" (click)="closeSurvey()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body p-2">
+            <p class="hard-text">
+                We thank you for using MEASUR as we build and improve. If you would like to help us in creating a
+                quality tool for you and others, please use this
+                <a (click)="closeSurvey()" href="https://www.surveymonkey.com/r/DOE-AMO-TOOLS" target="_blank">Survey
+                    Monkey</a> to provide feedback.
+            </p>
+        </div>
+    </div>
+
+
+
+    <app-update-modal *ngIf="showUpdateModal" (closeModal)="closeModal()" [updateError]="updateError">
+    </app-update-modal>
 </div>
 <!-- </div> -->
 <!-- <div bsModal #tutorialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tutorialModalLabel"

@@ -86,19 +86,27 @@ export const power = {
     },
     MJh: {
       name: {
-        singular: 'Megajoule',
-        plural: 'Megajoules',
-        display: '(MJ)'
+        singular: 'Megajoule per hour',
+        plural: 'Megajoules per hour',
+        display: '(MJ/hr)'
       },
       to_anchor: .372506136
     },
     kJh: {
       name: {
-        singular: 'Kilojoule'
-        , plural: 'Kilojoules',
-        display: '(kJ)'
+        singular: 'Kilojoule per hour'
+        , plural: 'Kilojoules per hour',
+        display: '(kJ/hr)'
       }
       , to_anchor: .000372506136
+    },
+    GJh: {
+      name: {
+        singular: 'Gigajoule per hour'
+        , plural: 'Gigajoules per hour',
+        display: '(GJ/hr)'
+      }
+      , to_anchor: 372.506136
     }
   },
   _anchors: {

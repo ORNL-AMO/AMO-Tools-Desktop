@@ -16,6 +16,7 @@
         <img *ngIf="assessment.type == 'PSAT'" class="psat icon-image pl-1 pr-1" src="assets/images/ico-psat-diagram.png">
         <img *ngIf="assessment.type == 'PHAST'" class="phast icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram.png">
         <img *ngIf="assessment.type == 'FSAT'" class="fsat icon-image pl-1 pr-1" src="assets/images/ico-fsat-diagram.png">
+        <img *ngIf="assessment.type == 'SSMT'" class="fsat icon-image pl-1 pr-1" src="assets/images/ico-ssmt-diagram.png">
         <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
       </li>
     </ul>

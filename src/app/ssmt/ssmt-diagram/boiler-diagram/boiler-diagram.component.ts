@@ -19,17 +19,40 @@ export class BoilerDiagramComponent implements OnInit {
   emitSelectEquipment = new EventEmitter<string>();
   @Input()
   settings: Settings;
-  
+
+  feedwaterClasses: Array<string>;
+  blowdownClasses: Array<string>;
+  steamClasses: Array<string>;
+
   constructor() { }
 
   ngOnInit() {
   }
 
-  hoverEquipment(str: string){
+  ngOnChanges() {
+    this.getClasses();
+  }
+
+  getClasses() {
+    this.feedwaterClasses = [];
+    if (this.boiler.feedwaterMassFlow < 1e-3) {
+      this.feedwaterClasses.push('noSteamFlow');
+    }
+    this.blowdownClasses = [];
+    if(this.boiler.blowdownMassFlow < 1e-3){
+      this.blowdownClasses.push('noSteamFlow');
+    }
+    this.steamClasses = [];
+    if(this.boiler.steamMassFlow < 1e-3){
+      this.steamClasses.push('noSteamFlow');
+    }
+  }
+
+  hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }
 
-  selectEquipment(str: string){
+  selectEquipment(str: string) {
     this.emitSelectEquipment.emit(str);
   }
 }

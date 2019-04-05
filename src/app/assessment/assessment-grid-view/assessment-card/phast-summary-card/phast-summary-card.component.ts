@@ -43,7 +43,7 @@ export class PhastSummaryCardComponent implements OnInit {
                         tmpSavings = tempVal.annualCostSavings;
                         this.modResults = tempVal;
                     }
-                })
+                });
             }
         }
     }

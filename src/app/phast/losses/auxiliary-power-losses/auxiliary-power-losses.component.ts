@@ -56,7 +56,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -82,12 +82,12 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._auxiliaryPowerLosses.push(tmpLoss);
-      })
+      });
     }
   }
 
@@ -106,7 +106,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   calculate(loss: AuxPowLossObj) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
       console.log('calculate, tmpLoss = ');
       console.log(tmpLoss);
@@ -123,13 +123,13 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpAuxLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
       tmpAuxLoss.powerUsed = loss.powerUsed;
       tmpAuxLosses.push(tmpAuxLoss);
-    })
+    });
     this.losses.auxiliaryPowerLosses = tmpAuxLosses;
     this.savedLoss.emit(true);
   }
@@ -153,7 +153,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
 }
 
 export interface AuxPowLossObj {
-  form: FormGroup,
-  powerUsed: number,
-  collapse: boolean
+  form: FormGroup;
+  powerUsed: number;
+  collapse: boolean;
 }

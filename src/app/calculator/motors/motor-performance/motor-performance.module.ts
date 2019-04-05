@@ -25,7 +25,7 @@ import { MotorPerformanceService } from './motor-performance.service';
   exports: [
     MotorPerformanceComponent
   ],
-  providers:[
+  providers: [
     MotorPerformanceService
   ]
 })

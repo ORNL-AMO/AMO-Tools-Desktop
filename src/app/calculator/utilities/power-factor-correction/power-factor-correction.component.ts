@@ -31,7 +31,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   ngOnInit() {
     this.calculate(this.inputData);
-    if(this.powerFactorCorrectionService.inputData){
+    if (this.powerFactorCorrectionService.inputData) {
       this.inputData = this.powerFactorCorrectionService.inputData;
     }
   }
@@ -42,7 +42,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.powerFactorCorrectionService.inputData = this.inputData;
   }
 
@@ -83,16 +83,16 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
 
 export interface PowerFactorCorrectionInputs {
-  existingDemand: number,
-  currentPowerFactor: number,
-  proposedPowerFactor: number
+  existingDemand: number;
+  currentPowerFactor: number;
+  proposedPowerFactor: number;
 }
 
 
 export interface PowerFactorCorrectionOutputs {
-  existingApparentPower: number,
-  existingReactivePower: number,
-  proposedApparentPower: number,
-  proposedReactivePower: number,
-  capacitancePowerRequired: number
+  existingApparentPower: number;
+  existingReactivePower: number;
+  proposedApparentPower: number;
+  proposedReactivePower: number;
+  capacitancePowerRequired: number;
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
+import { SsmtDiagramTabService } from '../ssmt-diagram-tab.service';
 
 @Component({
   selector: 'app-flash-tank-table',
@@ -14,12 +15,15 @@ export class FlashTankTableComponent implements OnInit {
   flashTankType: string;
   @Input()
   settings: Settings;
-  constructor() { }
+  constructor(private ssmtDiagramTabService: SsmtDiagramTabService) { }
 
   ngOnInit() {
-    if (this.flashTankType != 'Condensate' && this.flashTankType != 'Blowdown') {
+    if (this.flashTankType !== 'Condensate' && this.flashTankType !== 'Blowdown') {
       this.flashTankType = this.flashTankType + ' Pressure Condensate';
     }
   }
 
+  goToCalculator(){
+    this.ssmtDiagramTabService.setFlashTankCalculator(this.flashTank);
+  }
 }

@@ -53,6 +53,9 @@ export class EnergyUseComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    if(this.settings.unitsOfMeasure == 'Custom'){
+      this.settings.unitsOfMeasure = 'Imperial';
+    }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -137,7 +140,7 @@ export class EnergyUseComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       flowCalculations: tmpFlowCalculations
-    }
+    };
     return tmpCalculator;
   }
 
@@ -163,7 +166,7 @@ export class EnergyUseComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

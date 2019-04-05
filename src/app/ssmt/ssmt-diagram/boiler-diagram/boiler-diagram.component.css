@@ -1,4 +1,18 @@
 
+.high-pressure.noSteamFlow,
+.blowdown.noSteamFlow, 
+.feedwater.noSteamFlow{
+    background-color: #D5D8DC;
+    color: #D5D8DC; 
+}
+
+
+.high-pressure.noSteamFlow .hidden-chevron,
+.blowdown.noSteamFlow .hidden-chevron, 
+.feedwater.noSteamFlow .hidden-chevron{
+    color: #D5D8DC; 
+}
+
 .boiler-img{
     height: 120px;
     z-index: +1;
@@ -10,11 +24,6 @@
     padding-left: .25rem;
 }
 
-.feedwater-column{
-    margin-right: -5px;
-    padding-right: 5px;
-    width: 75px;
-}
 
 .blowdown-one{
     margin-top: 61px;
@@ -30,10 +39,8 @@
     margin-top: 14px;
 }
 
-.outlet-column{
-    margin-left: -5px;
-    padding-left: 5px;
-    width: 50px;
+.outlet-column, .feedwater-column{
+    width: 100px;
 }
 
 .down-pipe{
@@ -79,7 +86,8 @@
     position: absolute;
     width: 100px;
     z-index: +1;
-    right: 80px;
+    right: 90px;
+    text-align: right;
 }
 
 .boiler-img-holder .boiler-label:hover{
@@ -94,7 +102,8 @@
     z-index: +1;
     color: black;
     width: 100px;
-    left: -19px;
+    text-align: right;
+    right: -5px;
 }
 
 .boiler-temp-holder .boiler-temperature{
@@ -102,7 +111,8 @@
     z-index: +1;
     color: black;
     width: 75px;
-    left: 30px;
+    right: 25px;
+    text-align: right;
 }
 
 .feedwater-holder .feedwater-mass-flow{
@@ -111,7 +121,9 @@
     color: black;
     width: 100px;
     top: -22px;
-    right: -10px;
+    /* right: -10px; */
+    right: 0px;
+    text-align: right;
 }
 
 
@@ -120,5 +132,7 @@
     z-index: +1;
     color: black;
     width: 100px;
-    left: 40px;
+    /* left: 40px; */
+    bottom: 20px;
+    left: -15px;
 }

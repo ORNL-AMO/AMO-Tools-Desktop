@@ -31,7 +31,7 @@ export class HeadToolResultsComponent implements OnInit {
     this.tableString = this.copyTable.nativeElement.innerText;
   }
 
-  getUnit(val: number){
+  getUnit(val: number) {
     return this.convertUnitsService.value(val).from('ft').to(this.settings.distanceMeasurement);
   }
 

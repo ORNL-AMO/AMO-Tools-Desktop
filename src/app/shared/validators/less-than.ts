@@ -24,7 +24,7 @@ export class LessThanValidator {
             else {
                 return undefined;
             }
-        }
+        };
     }
 }
 

@@ -45,7 +45,7 @@ export class ModifyFieldDataFormComponent implements OnInit {
   getForm() {
     this.modifyFieldDataForm = this.formBuilder.group({
       implementationCosts: [this.fsat.implementationCosts],
-    })
+    });
   }
 
   focusField(str: string) {

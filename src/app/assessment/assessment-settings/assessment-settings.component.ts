@@ -28,7 +28,7 @@ export class AssessmentSettingsComponent implements OnInit {
 //add boolean for each section
   showGeneralSettings: boolean = false;
   showPsatSettings: boolean = false;
-  showPhastSettings:boolean = false;
+  showPhastSettings: boolean = false;
   showSteamSettings: boolean = false;
   showFsatSettings: boolean = false;
   showTutorialSettings: boolean = false;
@@ -41,7 +41,7 @@ export class AssessmentSettingsComponent implements OnInit {
     this.initializeSettings();
   }
 
-  initializeSettings(){
+  initializeSettings() {
     let results: Settings = this.settingsDbService.getByDirectoryId(this.directory.id);
     if (results) {
       this.settings = results;
@@ -64,7 +64,7 @@ export class AssessmentSettingsComponent implements OnInit {
       this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     } else {
       //no settings try again with parents parent directory
-      this.getParentDirectorySettings(parentDirectory.parentDirectoryId)
+      this.getParentDirectorySettings(parentDirectory.parentDirectoryId);
     }
   }
 
@@ -80,42 +80,42 @@ export class AssessmentSettingsComponent implements OnInit {
           this.settings = this.settingsDbService.getByDirectoryId(this.directory.id);
           this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
           this.emitUpdateDirectory.emit(true);
-        })
+        });
       }
-    )
+    );
   }
 
-  saveTutorialChanges(){
+  saveTutorialChanges() {
     this.indexedDbService.putSettings(this.settings).then(
       results => {
         this.settingsDbService.setAll().then(() => {
           this.settings = this.settingsDbService.getByDirectoryId(this.directory.id);
           this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
           this.emitUpdateDirectory.emit(true);
-        })
+        });
       }
-    )
+    );
   }
 
   //simple toggle function needed for each section
-  toggleGeneralSettings(){
+  toggleGeneralSettings() {
     this.showGeneralSettings = !this.showGeneralSettings;
   }
-  togglePsatSettings(){
+  togglePsatSettings() {
     this.showPsatSettings = !this.showPsatSettings;
   }
-  togglePhastSettings(){
+  togglePhastSettings() {
     this.showPhastSettings = !this.showPhastSettings;
   }
-  toggleSteamSettings(){
+  toggleSteamSettings() {
     this.showSteamSettings = !this.showSteamSettings;
   }
 
-  toggleFsatSettings(){
+  toggleFsatSettings() {
     this.showFsatSettings = !this.showFsatSettings;
   }
 
-  toggleTutorialSettings(){
+  toggleTutorialSettings() {
     this.showTutorialSettings = !this.showTutorialSettings;
   }
 

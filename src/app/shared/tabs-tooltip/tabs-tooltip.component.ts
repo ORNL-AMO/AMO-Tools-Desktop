@@ -30,15 +30,15 @@ export class TabsTooltipComponent implements OnInit {
 
 
   setMessage() {
-    if (this.badgeClass == 'loss-different') {
+    if (this.badgeClass === 'loss-different') {
       this.message = "different from baseline";
-    }else if (this.badgeClass == 'input-error') {
+    }else if (this.badgeClass === 'input-error') {
       this.message = "input error";
     }
-    else if (this.badgeClass == 'missing-data') {
+    else if (this.badgeClass === 'missing-data') {
       this.message = "missing data";
     }
-    else if (this.badgeClass == 'success') {
+    else if (this.badgeClass === 'success') {
       this.message = "all good";
     }
   }

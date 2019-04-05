@@ -48,7 +48,7 @@ export class FanDataFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.init()
+        this.init();
       }
     }
 
@@ -65,8 +65,8 @@ export class FanDataFormComponent implements OnInit {
   }
 
   initFanType() {
-    if (this.modificationForm.controls.fanType.value == 12) {
-      if (this.modificationForm.controls.fanEfficiency.value != this.baselineFanEfficiency) {
+    if (this.modificationForm.controls.fanType.value === 12) {
+      if (this.modificationForm.controls.fanEfficiency.value !== this.baselineFanEfficiency) {
         this.showFanType = true;
       }
     } else {
@@ -75,7 +75,7 @@ export class FanDataFormComponent implements OnInit {
   }
 
   initMotorDrive() {
-    if (this.baselineForm.controls.drive.value != this.modificationForm.controls.drive.value) {
+    if (this.baselineForm.controls.drive.value !== this.modificationForm.controls.drive.value) {
       this.showMotorDrive = true;
     } else {
       this.showMotorDrive = false;
@@ -84,7 +84,7 @@ export class FanDataFormComponent implements OnInit {
 
 
   toggleFanType() {
-    if (this.showFanType == false) {
+    if (this.showFanType === false) {
       this.disableFanType();
     }
   }
@@ -115,7 +115,7 @@ export class FanDataFormComponent implements OnInit {
       outletPressure: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.outletPressure,
       flowRate: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.flowRate,
       compressibility: this.fsat.modifications[this.exploreModIndex].fsat.fieldData.compressibilityFactor
-    }
+    };
     let tmpEfficiency: number = this.fsatService.optimalFanEfficiency(inputs, this.settings);
     tmpEfficiency = this.convertUnitsService.roundVal(tmpEfficiency, 2);
     this.modificationForm.controls.fanEfficiency.patchValue(tmpEfficiency);
@@ -133,6 +133,6 @@ export class FanDataFormComponent implements OnInit {
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
-    this.modifyConditionsService.modifyConditionsTab.next('fan-setup')
+    this.modifyConditionsService.modifyConditionsTab.next('fan-setup');
   }
 }

@@ -43,22 +43,22 @@ export class AssessmentService {
     if (str2) {
       this.subTab = str2;
     }
-    if (assessment.type == 'PSAT') {
+    if (assessment.type === 'PSAT') {
       if (assessment.psat.setupDone && !str && (!assessment.isExample)) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/psat/' + assessment.id);
-    } else if (assessment.type == 'PHAST') {
+    } else if (assessment.type === 'PHAST') {
       if (assessment.phast.setupDone && !str && (!assessment.isExample)) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/phast/' + assessment.id);
-    } else if (assessment.type == 'FSAT') {
+    } else if (assessment.type === 'FSAT') {
       if (assessment.fsat.setupDone && !str && !assessment.isExample) {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/fsat/' + assessment.id);
-    } else if (assessment.type == 'SSMT') {
+    } else if (assessment.type === 'SSMT') {
       if (assessment.ssmt.setupDone && !str && !assessment.isExample) {
         this.tab = 'assessment';
       }
@@ -74,7 +74,7 @@ export class AssessmentService {
       modifiedDate: new Date(),
       type: assessmentType,
       appVersion: packageJson.version
-    }
+    };
     return newAssessment;
   }
 
@@ -129,7 +129,7 @@ export class AssessmentService {
         electricityCost: .080
       },
       modifications: new Array()
-    }
+    };
     return newPhast;
   }
 
@@ -207,7 +207,7 @@ export class AssessmentService {
         fanSetupNotes: '',
         fluidNotes: ''
       }
-    }
+    };
     return newFsat;
   }
 
@@ -224,11 +224,11 @@ export class AssessmentService {
       },
       operatingCosts: {
         fuelCost: 5.78,
-        makeUpWaterCost: 0,
+        makeUpWaterCost: 0.03,
         electricityCost: .05
       },
       generalSteamOperations: {
-        sitePowerImport: 5000,
+        sitePowerImport: undefined,
         makeUpWaterTemperature: 50
       },
       implementationCosts: 0.0,
@@ -267,6 +267,6 @@ export class AssessmentService {
           useTurbine: false
         }
       }
-    }
+    };
   }
 }

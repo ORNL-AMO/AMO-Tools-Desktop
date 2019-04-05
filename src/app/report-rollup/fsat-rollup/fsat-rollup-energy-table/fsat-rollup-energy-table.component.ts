@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FsatResultsData, ReportRollupService } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { Settings } from '../../../shared/models/settings';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { FsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-fsat-rollup-energy-table',
@@ -29,7 +30,7 @@ export class FsatRollupEnergyTableComponent implements OnInit {
   getTotalCostPercent(value: number) {
     if (this.totalCost) {
       let percent = (value / this.totalCost) * 100;
-      let val = this.reportRollupService.transform(percent, 4)
+      let val = this.reportRollupService.transform(percent, 4);
       return val;
     }
   }
@@ -37,7 +38,7 @@ export class FsatRollupEnergyTableComponent implements OnInit {
   getTotalEnergyPercent(value: number) {
     if (this.totalEnergyUse) {
       let percent = (value / this.totalEnergyUse) * 100;
-      let val = this.reportRollupService.transform(percent, 4)
+      let val = this.reportRollupService.transform(percent, 4);
       return val;
     }
   }

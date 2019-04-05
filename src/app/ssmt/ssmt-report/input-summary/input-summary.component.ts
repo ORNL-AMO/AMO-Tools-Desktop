@@ -14,6 +14,8 @@ export class InputSummaryComponent implements OnInit {
   modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
   @Input()
   settings: Settings;
+  @Input()
+  printView: boolean;
 
   constructor() { }
 

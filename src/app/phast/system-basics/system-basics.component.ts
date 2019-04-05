@@ -38,7 +38,7 @@ export class SystemBasicsComponent implements OnInit {
     //get settings form (used as input into shared settings components)
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
     //phast need energyResultUnit
-    if (this.settingsForm.controls.energyResultUnit.value == '' || !this.settingsForm.controls.energyResultUnit.value) {
+    if (this.settingsForm.controls.energyResultUnit.value === '' || !this.settingsForm.controls.energyResultUnit.value) {
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
       this.saveChanges(true);
     }
@@ -69,7 +69,7 @@ export class SystemBasicsComponent implements OnInit {
       }
     }
     //used to inform user data updated
-    if (this.showUpdateData == false && this.phast.losses && !bool) {
+    if (this.showUpdateData === false && this.phast.losses && !bool) {
       this.dataUpdated = true;
     }
     //if assessment already has settings, update them
@@ -79,11 +79,11 @@ export class SystemBasicsComponent implements OnInit {
           this.settingsDbService.setAll().then(() => {
             //get updated settings
             this.updateSettings.emit(true);
-          })
+          });
         }
-      )
+      );
     }
-    //else if assessement does not have own settings create settings for assessment
+    //else if assessment does not have own settings create settings for assessment
     //base on setup in phast.component this should probably not occur but keeping for now
     else {
       this.settings.createdDate = new Date();
@@ -94,9 +94,9 @@ export class SystemBasicsComponent implements OnInit {
             this.isAssessmentSettings = true;
             //get updated settings
             this.updateSettings.emit(true);
-          })
+          });
         }
-      )
+      );
     }
   }
   //update/convert assessment data for new units
@@ -120,7 +120,7 @@ export class SystemBasicsComponent implements OnInit {
           if (mod.phast.designedEnergy) {
             mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.oldSettings, this.settings);
           }
-        })
+        });
       }
       //tell parent to save new data
       this.save.emit(true);

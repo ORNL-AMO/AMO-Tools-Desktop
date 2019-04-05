@@ -35,10 +35,10 @@ export class AddModificationComponent implements OnInit {
 
     this.assessmentTabSub = this.ssmtService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.assessmentTabSub.unsubscribe();
   }
 
@@ -46,9 +46,9 @@ export class AddModificationComponent implements OnInit {
     let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(this.ssmt)));
     let tmpModification: Modification = {
       ssmt: ssmtCopy,
-      exploreOpportunities: (this.assessmentTab == 'explore-opportunities')
-    }
+      exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
+    };
     tmpModification.ssmt.name = this.newModificationName;
-    this.save.emit(tmpModification)
+    this.save.emit(tmpModification);
   }
 }

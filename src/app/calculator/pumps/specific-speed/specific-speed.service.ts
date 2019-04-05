@@ -15,20 +15,20 @@ export class SpecificSpeedService {
   initForm(settings: Settings): FormGroup {
     let tmpFlowRate: number = 2000;
     let tmpHead: number = 277;
-    if (settings.flowMeasurement != 'gpm') {
+    if (settings.flowMeasurement !== 'gpm') {
       tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(settings.flowMeasurement);
-      tmpFlowRate = this.convertUnitsService.roundVal(tmpFlowRate, 2)
+      tmpFlowRate = this.convertUnitsService.roundVal(tmpFlowRate, 2);
     }
-    if (settings.distanceMeasurement != 'ft') {
+    if (settings.distanceMeasurement !== 'ft') {
       tmpHead = this.convertUnitsService.value(tmpHead).from('ft').to(settings.distanceMeasurement);
-      tmpHead = this.convertUnitsService.roundVal(tmpHead, 2)
+      tmpHead = this.convertUnitsService.roundVal(tmpHead, 2);
     }
     return this.formBuilder.group({
       pumpType: [0, Validators.required],
       pumpRPM: [1780, [Validators.required, Validators.min(0)]],
       flowRate: [tmpFlowRate, [Validators.required, Validators.min(0)]],
       head: [tmpHead, [Validators.required, Validators.min(0)]],
-    })
+    });
   }
 
   initFormFromPsat(psatInputs: PsatInputs): FormGroup {
@@ -37,7 +37,7 @@ export class SpecificSpeedService {
       pumpRPM: [psatInputs.pump_rated_speed, [Validators.required, Validators.min(0)]],
       flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
       head: [psatInputs.head, [Validators.required, Validators.min(0)]]
-    })
+    });
   }
 
 
@@ -47,7 +47,7 @@ export class SpecificSpeedService {
       pumpRPM: [obj.pumpRPM, Validators.required],
       flowRate: [obj.flowRate, Validators.required],
       head: [obj.head, Validators.required]
-    })
+    });
   }
 
   getObjFromForm(form: FormGroup): SpecificSpeedInputs {
@@ -56,6 +56,6 @@ export class SpecificSpeedService {
       pumpRPM: form.controls.pumpRPM.value,
       flowRate: form.controls.flowRate.value,
       head: form.controls.head.value
-    }
+    };
   }
 }

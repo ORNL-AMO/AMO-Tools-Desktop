@@ -6,7 +6,6 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST, Modification } from '../shared/models/phast/phast';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SettingsService } from '../settings/settings.service';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
@@ -32,7 +31,6 @@ export class PhastComponent implements OnInit {
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
-
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -67,14 +65,13 @@ export class PhastComponent implements OnInit {
   openModListSubscription: Subscription;
   selectedModSubscription: Subscription;
   addNewSubscription: Subscription;
-  exploreOppsToast: boolean = false;
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
   constructor(
     private assessmentService: AssessmentService,
     private phastService: PhastService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private settingsService: SettingsService,
     private lossesService: LossesService,
     private phastCompareService: PhastCompareService,
@@ -82,9 +79,6 @@ export class PhastComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService) {
-    this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-right';
-    this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
@@ -102,7 +96,7 @@ export class PhastComponent implements OnInit {
         //use copy of phast object of as modal provided to forms
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
         if (this._phast.modifications) {
-          if (this._phast.modifications.length != 0) {
+          if (this._phast.modifications.length !== 0) {
             if (!this._phast.modifications[0].exploreOpportunities) {
               this.phastService.assessmentTab.next('modify-conditions');
             }
@@ -113,7 +107,7 @@ export class PhastComponent implements OnInit {
         }
         //get settings
         this.getSettings();
-      })
+      });
       //check to see if we need to start on a specified tab
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
@@ -126,26 +120,26 @@ export class PhastComponent implements OnInit {
         //on tab change get container height
         this.getContainerHeight();
         this.checkTutorials();
-      })
+      });
       //subscription for stepTab
       this.stepTabSubscription = this.phastService.stepTab.subscribe(val => {
         this.stepTab = val;
         //on tab change get container height
         this.getContainerHeight();
-      })
+      });
       //specTab used for: system basics, operating hours and operating costs
       this.specTabSubscription = this.phastService.specTab.subscribe(val => {
         this.specTab = val;
-      })
+      });
       //tabs used for heat balance
       this.lossesTabSubscription = this.lossesService.lossesTab.subscribe(tab => {
         this.selectedLossTab = this.lossesService.getTab(tab);
-      })
+      });
       //modify conditions or explore opps tab
       this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(tab => {
         this.assessmentTab = tab;
         this.getContainerHeight();
-      })
+      });
     });
     //calculator tab
     this.calcTabSubscription = this.phastService.calcTab.subscribe(val => {
@@ -154,34 +148,35 @@ export class PhastComponent implements OnInit {
 
     this.openModListSubscription = this.lossesService.openModificationModal.subscribe(val => {
       if (val) {
-        this.selectModificationModal()
+        this.selectModificationModal();
       }
-    })
+    });
     this.selectedModSubscription = this.phastCompareService.selectedModification.subscribe(mod => {
-      if (this.mainTab == 'assessment') {
+      if (this.mainTab === 'assessment') {
         if (mod && this._phast) {
           this.modificationIndex = _.findIndex(this._phast.modifications, (val) => {
-            return val.phast.name == mod.name
-          })
+            return val.phast.name === mod.name;
+          });
+          this.cd.detectChanges();
         } else {
           this.modificationIndex = undefined;
         }
       }
-    })
+    });
 
     this.addNewSubscription = this.lossesService.openNewModal.subscribe(val => {
       if (val) {
         this.showAddNewModal();
       }
-    })
+    });
   }
 
 
   ngAfterViewInit() {
     //after init show disclaimer toasty
-    this.disclaimerToast();
     setTimeout(() => {
-      //intialize container height after content is rendered
+      //initialize container height after content is rendered
+      this.disclaimerToast();
       this.getContainerHeight();
     }, 100);
   }
@@ -250,17 +245,17 @@ export class PhastComponent implements OnInit {
   }
 
   checkTutorials() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab === 'system-setup') {
       if (!this.settingsDbService.globalSettings.disablePhastSetupTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('phast-setup-tutorial');
       }
-    } else if (this.mainTab == 'assessment') {
+    } else if (this.mainTab === 'assessment') {
       if (!this.settingsDbService.globalSettings.disablePhastAssessmentTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('phast-assessment-tutorial');
       }
-    } else if (this.mainTab == 'report') {
+    } else if (this.mainTab === 'report') {
       if (!this.settingsDbService.globalSettings.disablePhastReportTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('phast-report-tutorial');
@@ -272,6 +267,9 @@ export class PhastComponent implements OnInit {
     //get assessment settings
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (tmpSettings) {
+      if (tmpSettings.unitsOfMeasure == 'Custom') {
+        tmpSettings.unitsOfMeasure = 'Imperial';
+      }
       this.settings = tmpSettings;
       //sets which tabs will be used based on settings
       this.lossesService.setTabs(this.settings);
@@ -298,8 +296,8 @@ export class PhastComponent implements OnInit {
         results => {
           this.settingsDbService.setAll().then(() => {
             this.getSettings();
-          })
-        })
+          });
+        });
     }
     else {
       //if no settings for directory check parent directory
@@ -319,14 +317,14 @@ export class PhastComponent implements OnInit {
   }
   //logic for next step
   nextStep() {
-    if (this.stepTab.step == 1 && this.mainTab != 'assessment') {
+    if (this.stepTab.step === 1 && this.mainTab !== 'assessment') {
       if (this.specTab.next)
         this.phastService.goToSpec(this.specTab.next);
       else {
         this.phastService.goToStep(this.stepTab.next);
       }
     }
-    else if (this.stepTab.step == 2 || this.mainTab == 'assessment') {
+    else if (this.stepTab.step === 2 || this.mainTab === 'assessment') {
       if (this.selectedLossTab.next) {
         this.lossesService.lossesTab.next(this.selectedLossTab.next);
       } else {
@@ -338,12 +336,12 @@ export class PhastComponent implements OnInit {
   }
   //logic for previous step
   lastStep() {
-    if (this.mainTab == 'system-setup') {
-      if (this.stepTab.step == 1) {
+    if (this.mainTab === 'system-setup') {
+      if (this.stepTab.step === 1) {
         if (this.specTab.back) {
           this.phastService.goToSpec(this.specTab.back);
         }
-      } else if (this.stepTab.step == 2) {
+      } else if (this.stepTab.step === 2) {
         if (this.selectedLossTab.back) {
           this.lossesService.lossesTab.next(this.selectedLossTab.back);
         } else {
@@ -352,8 +350,8 @@ export class PhastComponent implements OnInit {
       } else if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
       }
-    } else if (this.mainTab == 'assessment') {
-      if (this.assessmentTab == 'modify-conditions') {
+    } else if (this.mainTab === 'assessment') {
+      if (this.assessmentTab === 'modify-conditions') {
         if (this.selectedLossTab.back) {
           this.lossesService.lossesTab.next(this.selectedLossTab.back);
         } else {
@@ -362,7 +360,7 @@ export class PhastComponent implements OnInit {
       } else {
         this.phastService.mainTab.next('system-setup');
       }
-    } else if (this.mainTab == 'system-setup') {
+    } else if (this.mainTab === 'system-setup') {
       if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
       }
@@ -387,17 +385,6 @@ export class PhastComponent implements OnInit {
 
   exportData() {
     //TODO: Logic for exporting data (csv?)
-  }
-  //disclaimer for phast
-  disclaimerToast() {
-    let toastOptions: ToastOptions = {
-      title: 'Disclaimer:',
-      msg: 'Please keep in mind that this application is still in beta. Please let us know if you have any suggestions for improving our app.',
-      showClose: true,
-      timeout: 10000000,
-      theme: 'default'
-    }
-    this.toastyService.info(toastOptions);
   }
 
   selectModificationModal() {
@@ -427,11 +414,6 @@ export class PhastComponent implements OnInit {
     this.saveDb();
   }
 
-  setExploreOppsToast(bool: boolean) {
-    this.exploreOppsToast = bool;
-    this.cd.detectChanges();
-  }
-
   addNewMod() {
     let modName: string = 'Scenario ' + (this._phast.modifications.length + 1);
     let tmpModification: Modification = {
@@ -456,13 +438,30 @@ export class PhastComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       }
-    }
+    };
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this._phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this._phast.operatingCosts)));
     tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this._phast.operatingHours)));
     tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this._phast.systemEfficiency)));
     tmpModification.exploreOpportunities = true;
     this.saveNewMod(tmpModification);
+  }
+
+  disclaimerToast() {
+    this.toastData.title = 'Disclaimer';
+    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+    this.showToast = true;
+    this.cd.detectChanges();
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    };
+    this.cd.detectChanges();
   }
 
 }

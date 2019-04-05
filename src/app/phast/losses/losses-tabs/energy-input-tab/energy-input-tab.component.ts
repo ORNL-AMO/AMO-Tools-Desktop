@@ -38,7 +38,7 @@ export class EnergyInputTabComponent implements OnInit {
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
-    })
+    });
     this.badgeHover = false;
   }
 
@@ -68,17 +68,17 @@ export class EnergyInputTabComponent implements OnInit {
     let testVal = false;
     if (this.energyInputCompareService.baselineEnergyInput) {
       this.energyInputCompareService.baselineEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     if (this.energyInputCompareService.modifiedEnergyInput && !this.inSetup) {
       this.energyInputCompareService.modifiedEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     return testVal;
   }
@@ -86,7 +86,7 @@ export class EnergyInputTabComponent implements OnInit {
 
   checkLossValid(loss: EnergyInputEAF) {
     let tmpForm: FormGroup = this.energyInputService.getFormFromLoss(loss);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;

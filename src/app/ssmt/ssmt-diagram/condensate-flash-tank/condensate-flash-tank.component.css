@@ -35,9 +35,9 @@
     width: 50px;
     opacity: 0.9;
     text-align: center;
-    right: 5px;
+    right: 0px;
     font-size: smaller;
-    bottom: -5px;
+    bottom: 10px;
 }
 
 
@@ -55,9 +55,10 @@
     position: absolute;
     z-index: +1;
     color: black;
-    width: 38px;
-    left: -42px;
-    top: 20px;
+    width: 100px;
+    top: 15px;
+    text-align: right;
+    right: 3px;
 }
 
 
@@ -65,9 +66,10 @@
     position: absolute;
     z-index: +1;
     color: black;
-    width: 80px;
-    right: 0px;
+    width: 100px;
     top: 20px;
+    text-align: right;
+    right: -15px;
 }
 
 .vents{

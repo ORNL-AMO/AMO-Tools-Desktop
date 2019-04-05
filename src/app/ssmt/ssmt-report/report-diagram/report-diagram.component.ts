@@ -15,7 +15,11 @@ export class ReportDiagramComponent implements OnInit {
   settings: Settings;
   @Input()
   baselineOutput: SSMTOutput;
-
+  @Input()
+  modificationOutputs: Array<{name: string, outputData: SSMTOutput}>;
+  @Input()
+  modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  
   constructor() { }
 
   ngOnInit() {

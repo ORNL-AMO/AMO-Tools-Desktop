@@ -3,10 +3,6 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
 import { PreAssessmentService } from '../../calculator/utilities/pre-assessment/pre-assessment.service';
-import { PreAssessment } from '../../calculator/utilities/pre-assessment/pre-assessment';
-import { MeteredEnergy } from '../../shared/models/phast/meteredEnergy';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
@@ -25,7 +21,7 @@ export class PreAssessmentTableComponent implements OnInit {
   // preAssessments: Array<PreAssessment>;
   graphColors: Array<string>;
   data: Array<{ name: string, type: string, energyUse: number, energyCost: number, percentEnergy: number, percentCost: number, color: string }>;
-  unit: string
+  unit: string;
   totalEnergyUse: number;
   totalEnergyCost: number;
   directorySettings: Settings;
@@ -68,10 +64,10 @@ export class PreAssessmentTableComponent implements OnInit {
           percentEnergy: energyResults[i].percent / 100,
           percentCost: costResults[i].percent / 100,
           color: energyResults[i].color
-        }
+        };
         i++;
         this.data.unshift(tmpData);
-      })
+      });
     }
   }
 

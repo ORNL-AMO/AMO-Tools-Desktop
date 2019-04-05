@@ -186,7 +186,7 @@ export class FsatBarChartComponent implements OnInit {
               + "<td style='text-align: right; font-weight: bold'>"
               + d[1].value + " " + unit
               + "</td>"
-              + "</tr>"
+              + "</tr>";
           }
           html = html + "</table></div>";
           return html;

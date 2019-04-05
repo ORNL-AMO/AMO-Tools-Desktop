@@ -49,7 +49,7 @@ export class Co2SavingsComponent implements OnInit {
       this.baselineData = this.co2SavingsService.baselineData;
       console.log(this.baselineData);
     }
-    if (this.co2SavingsService.modificationData && this.co2SavingsService.modificationData.length != 0) {
+    if (this.co2SavingsService.modificationData && this.co2SavingsService.modificationData.length !== 0) {
       this.modificationData = this.co2SavingsService.modificationData;
       this.modificationExists = true;
     }
@@ -87,11 +87,11 @@ export class Co2SavingsComponent implements OnInit {
   }
 
   togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
+    if (bool === this.baselineSelected) {
       this.baselineSelected = true;
       this.modifiedSelected = false;
     }
-    else if (bool == this.modifiedSelected) {
+    else if (bool === this.modifiedSelected) {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }
@@ -114,12 +114,12 @@ export class Co2SavingsComponent implements OnInit {
   calculate() {
     this.baselineData.forEach(data => {
       data = this.co2SavingsService.calculate(data);
-    })
+    });
     this.baselineTotal = _.sumBy(this.baselineData, 'totalEmissionOutput');
     if (this.modificationData) {
       this.modificationData.forEach(data => {
         data = this.co2SavingsService.calculate(data);
-      })
+      });
       this.modificationTotal = _.sumBy(this.modificationData, 'totalEmissionOutput');
     }
   }

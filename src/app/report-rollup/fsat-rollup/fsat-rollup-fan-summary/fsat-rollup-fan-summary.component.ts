@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { FsatResultsData, ReportRollupService } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { Subscription } from 'rxjs';
+import { FsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-fsat-rollup-fan-summary',
@@ -57,7 +58,7 @@ export class FsatRollupFanSummaryComponent implements OnInit {
   ngOnInit() {
     this.resultData = new Array();
     this.resultsSub = this.reportRollupService.fsatResults.subscribe((fsats: Array<FsatResultsData>) => {
-      if (fsats.length != 0) {
+      if (fsats.length !== 0) {
         this.numFsats = fsats.length;
         this.resultData = fsats;
         if (this.printView) {
@@ -100,16 +101,16 @@ export class FsatRollupFanSummaryComponent implements OnInit {
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
-      if (graphOption == 'Energy Use') {
-        if (i == 1) {
+      if (graphOption === 'Energy Use') {
+        if (i === 1) {
           this.unit = 'kWh/yr';
         }
         num1 = data.baselineResults.annualEnergy;
         if (data.modName) {
           num2 = data.modificationResults.annualEnergy;
         }
-      } else if (graphOption == 'Cost') {
-        if (i == 1) {
+      } else if (graphOption === 'Cost') {
+        if (i === 1) {
           this.unit = "$/yr";
         }
         num1 = data.baselineResults.annualCost;
@@ -136,7 +137,7 @@ export class FsatRollupFanSummaryComponent implements OnInit {
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {
     if (implementationCost) {
       let val = (implementationCost / (baselineCost - modCost)) * 12;
-      if (isNaN(val) == false) {
+      if (isNaN(val) === false) {
         return val;
       } else {
         return 0;
