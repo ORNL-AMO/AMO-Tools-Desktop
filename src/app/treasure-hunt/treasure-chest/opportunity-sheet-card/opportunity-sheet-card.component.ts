@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { OpportunitySheet } from '../../../shared/models/treasure-hunt';
+import { OpportunitySheet, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
+import { OpportunitySheetService } from '../../standalone-opportunity-sheet/opportunity-sheet.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-opportunity-sheet-card',
@@ -11,11 +13,15 @@ export class OpportunitySheetCardComponent implements OnInit {
   opportunitySheet: OpportunitySheet;
   @Output('emitEditOpportunitySheet')
   emitEditOpportunitySheet = new EventEmitter<OpportunitySheet>();
+  @Input()
+  settings: Settings;
 
   dropdownOpen: boolean = false;
-  constructor() { }
+  opportunityResults: OpportunitySheetResults;
+  constructor(private opportunitySheetService: OpportunitySheetService) { }
 
   ngOnInit() {
+    this.opportunityResults = this.opportunitySheetService.getResults(this.opportunitySheet, this.settings);
   }
 
   showDropdown() {

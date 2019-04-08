@@ -23,7 +23,7 @@
   </div>
   <div class="summary-item col-3" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
     <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
-      (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)"></app-opportunity-sheet-card>
+      (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"></app-opportunity-sheet-card>
   </div>
 </div>
 

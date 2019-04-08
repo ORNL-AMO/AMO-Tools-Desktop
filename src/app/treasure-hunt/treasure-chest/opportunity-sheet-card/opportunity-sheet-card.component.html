@@ -24,7 +24,55 @@
   </div>
   <div class="card-body scroll-item summary-card-body p-1">
     <table class="table">
-
+      <tr>
+        <td class="bold" colspan="2">Baseline Data:</td>
+      </tr>
+      <tr>
+        <td>
+          Electricity Use
+        </td>
+        <td>
+          {{opportunityResults.electricityResults.baselineEnergyUse}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Electricity Cost
+        </td>
+        <td>
+          {{opportunityResults.electricityResults.baselineEnergyCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td class="bold" colspan="2">Modification Data:</td>
+      </tr>
+      <tr>
+        <td>
+          Electricity Use
+        </td>
+        <td>
+          {{opportunityResults.electricityResults.modificationEnergyUse}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Electricity Cost
+        </td>
+        <td>
+          {{opportunityResults.electricityResults.modificationEnergyCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td class="bold" colspan="2">Savings:</td>
+      </tr>
+      <tr>
+        <td>
+          Total Savings
+        </td>
+        <td>
+          {{opportunityResults.totalCostSavings | currency:'USD'}}
+        </td>
+      </tr>
     </table>
   </div>
 </div>
