@@ -121,6 +121,13 @@
             {{boilerForm.controls.steamTemperature.errors.min.min}}
             <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
+        <span class="alert-warning pull-right small"
+          *ngIf="highPressureHeaderForm && highPressureHeaderForm.controls.pressure.invalid">
+          <span *ngIf="highPressureHeaderForm.controls.pressure.errors.boilerTemp">Temperature must be greater than the
+            saturation temperature at the highest pressure header.
+            ({{highPressureHeaderForm.controls.pressure.errors.boilerTemp.val | number:'1.0-1'}} <span
+              [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</span>
+        </span>
       </div>
 
       <div class="form-group">

@@ -222,7 +222,7 @@ export class HeaderService {
 
 
   boilerTempValidator(boilerTemp: number, settings: Settings): ValidatorFn {
-    return (valueControl: AbstractControl): { [key: string]: boolean } => {
+    return (valueControl: AbstractControl): { [key: string]: { val: number } } => {
       if (valueControl.value !== '' && valueControl.value !== null) {
         let saturatedProperties: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
           {
@@ -239,11 +239,11 @@ export class HeaderService {
         catch (e) {
           console.log(e);
           return {
-            boilerTemp: true
+            boilerTemp: { val: saturatedProperties.saturatedTemperature }
           };
         }
         return {
-          boilerTemp: true
+          boilerTemp: { val: saturatedProperties.saturatedTemperature }
         };
       }
       else {
