@@ -13,6 +13,20 @@
   </div>
 </div>
 <div class="d-flex pl-2 pr-2" *ngIf="selectedCalc == 'none'">
+  <div class="d-flex flex-column align-items-center lighting hunt-item" (click)="selectCalc('opportunity-sheet')">
+    <div class="calc-icon-div d-flex justify-content-center align-items-center">
+      <span class="fa fa-edit"></span>
+    </div>
+    <div class="d-flex flex-fill flex-column justify-content-center text-center pt-2">
+      <h5>Treasure Hunt Opportunity</h5>
+      <p class="help-text">
+        Description here..
+      </p>
+    </div>
+  </div>
+
+
+
   <div class="d-flex flex-column align-items-center lighting hunt-item" (click)="selectCalc('lighting-replacement')">
     <div class="calc-icon-div d-flex justify-content-center align-items-center">
       <span class="fa fa-lightbulb-o"></span>
@@ -52,30 +66,56 @@
   </div>
 </div>
 
-<app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true" (emitSave)="saveNewLighting($event)"
-  (emitCancel)="selectCalc('none')"></app-lighting-replacement>
+<app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
+  (emitSave)="saveNewLighting($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()"></app-lighting-replacement>
+
+<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveNewOpportunitySheet($event)" [settings]="settings">
+</app-standalone-opportunity-sheet>
 
 
-
-
-<div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="saveCalcModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-sm list-modal">
+<div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header p-1">
-        <h5>Name This Project</h5>
-        <button class="close" (click)="closeSaveCalcModal()">
+        <h5 class="mb-0">Save Opportunity</h5>
+        <!-- <button class="close" (click)="closeSaveCalcModal()">
           <span aria-hidden="true">&times;</span>
-        </button>
+        </button> -->
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="calcName">Name</label>
-          <input class="form-control" type="text" [(ngModel)]="calcName">
-        </div>
+      <div class="modal-body text-center">
+        <p class="help-text" *ngIf="showOpportunitySheetOnSave">There is no opportunity sheet filled out for this
+          opportunity. Would you like to add one
+          before saving?</p>
+        <p class="help-text" *ngIf="!showOpportunitySheetOnSave">Would you like to edit your opportunity sheet before
+          saving?</p>
+        <a class="click-link" (click)="showOpportunitySheetModal()">
+          <span class="fa fa-edit"></span>
+        </a> <br>
+        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="showOpportunitySheetOnSave">+Add
+          Opportunity Sheet</a>
+        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="!showOpportunitySheetOnSave">Edit
+          Opportunity Sheet</a>
       </div>
       <div class="modal-footer p-1">
-        <button class="btn btn-success btn-sm pull-right" (click)="saveLighting()">Save</button>
+        <button class="btn btn-danger btn-sm pull-right" (click)="closeSaveCalcModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm pull-right" (click)="saveLighting()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #opportunitySheetModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="opportunitySheetModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
+        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveOpportunitySheet($event)"
+          [opportunitySheet]="newOpportunitySheet">
+        </app-opportunity-sheet>
       </div>
     </div>
   </div>

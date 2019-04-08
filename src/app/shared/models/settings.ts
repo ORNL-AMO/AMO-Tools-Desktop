@@ -60,6 +60,13 @@ export interface Settings {
     disableFsatSetupTutorial?: boolean,
     disableFsatAssessmentTutorial?: boolean,
     disableFsatReportTutorial?: boolean,
+    thElectricityCost?: number,
+    thNaturalGasCost?: number,
+    thSteamCost?: number,
+    thCompressedAirCost?: number,
+    thOtherFuelCost?: number,
+    thWaterCost?: number,
+    thWaterWasteCost?: number
 }
 
 

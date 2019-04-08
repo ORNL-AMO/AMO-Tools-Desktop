@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-find-treasure',
@@ -12,13 +13,17 @@ export class FindTreasureComponent implements OnInit {
   treasureHunt: TreasureHunt;
   @Output('emitSave')
   emitSave = new EventEmitter<TreasureHunt>();
-  @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
+  @Input()
+  settings: Settings;
 
+  @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
+  @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
 
   selectedCalc: string = 'none';
 
   newLightingCalc: LightingReplacementTreasureHunt;
-  calcName: string;
+  newOpportunitySheet: OpportunitySheet;
+  showOpportunitySheetOnSave: boolean;
   constructor() { }
 
   ngOnInit() {
@@ -33,21 +38,46 @@ export class FindTreasureComponent implements OnInit {
   }
 
   saveNewLighting(newCalcToSave: LightingReplacementTreasureHunt) {
-    if (this.treasureHunt.lightingReplacements) {
-      this.calcName = 'Lighting Replacement #' + (this.treasureHunt.lightingReplacements.length + 1);
-    } else {
-      this.calcName = 'Lighting Replacement #1';
-    }
     this.newLightingCalc = newCalcToSave;
-    this.newLightingCalc.name = this.calcName;
     this.newLightingCalc.selected = true;
+    if (!this.newOpportunitySheet) {
+      this.showOpportunitySheetOnSave = true;
+    }
+    this.newLightingCalc.opportunitySheet = this.newOpportunitySheet;
     this.saveCalcModal.show();
   }
 
   saveLighting() {
     this.treasureHunt.lightingReplacements.push(this.newLightingCalc);
     this.closeSaveCalcModal();
+    this.newOpportunitySheet = undefined;
+    this.showOpportunitySheetOnSave = true;
     this.selectCalc('none');
     this.emitSave.emit(this.treasureHunt);
   }
+
+
+  saveNewOpportunitySheet(newSheet: OpportunitySheet) {
+    if (!this.treasureHunt.opportunitySheets) {
+      this.treasureHunt.opportunitySheets = new Array<OpportunitySheet>();
+    }
+    this.treasureHunt.opportunitySheets.push(newSheet);
+    this.selectCalc('none');
+    this.emitSave.emit(this.treasureHunt);
+  }
+
+  showOpportunitySheetModal() {
+    this.opportunitySheetModal.show();
+  }
+
+  hideOpportunitySheetModal() {
+    this.opportunitySheetModal.hide();
+  }
+
+  saveOpportunitySheet(newOppSheet: OpportunitySheet) {
+    this.newOpportunitySheet = newOppSheet;
+    this.showOpportunitySheetOnSave = false;
+    this.hideOpportunitySheetModal();
+  }
+
 }

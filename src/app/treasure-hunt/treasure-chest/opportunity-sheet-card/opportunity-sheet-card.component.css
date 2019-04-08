@@ -1,0 +1,54 @@
+td{
+    padding: 0px;
+    font-size: small;
+}
+
+a:not([href]):not([tabindex]):hover {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+  .dropdown-menu.shown{
+    display: grid;
+    padding: 0px;
+}
+
+.dropdown-item{
+    padding: .25rem;
+    font-size: small;
+}
+
+.dropdown-toggle::after{
+  margin-left: 0;
+}
+
+.dropdown-toggle{
+  padding: 3px;
+}
+
+.dropdown-menu.shown{
+  left: -160px;
+  background-color: #ececec;
+}
+
+.dropdown-item:hover{
+  cursor: pointer;
+}
+
+.summary-card-header{
+    padding: 6px;
+}
+
+.summary-card-body{
+    height: 200px;
+}
+
+.dropdown-toggle,
+.btn-primary{
+  background-color: #2E4053;
+}
+
+.fa .fa-edit{
+  font-size: large;
+}

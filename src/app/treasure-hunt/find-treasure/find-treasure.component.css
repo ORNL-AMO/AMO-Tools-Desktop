@@ -1,4 +1,4 @@
-.fa.fa-lightbulb-o{
+.fa.fa-lightbulb-o, .fa.fa-edit{
     font-size: -webkit-xxx-large;
 }
 
@@ -18,3 +18,12 @@
 }
 
 
+.modal-dialog{
+    top: 0px;
+    min-width: 750px;
+}
+
+
+.modal-footer .btn.btn-sm{
+    padding: 6px;
+}

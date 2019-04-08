@@ -15,8 +15,10 @@ export class LightingReplacementComponent implements OnInit {
   inTreasureHunt: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<LightingReplacementTreasureHunt>();
-  @Output()
+  @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
+  @Output('emitAddOpportunitySheet')
+  emitAddOpportunitySheet = new EventEmitter<boolean>();
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
@@ -174,5 +176,9 @@ export class LightingReplacementComponent implements OnInit {
 
   cancel() {
     this.emitCancel.emit(true);
+  }
+
+  addOpportunitySheet() {
+    this.emitAddOpportunitySheet.emit(true);
   }
 }
