@@ -69,16 +69,24 @@ export class HeaderComponent implements OnInit {
     }
 
     if (this.headerInput.mediumPressure) {
-      this.mediumPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.mediumPressure, this.settings, this.headerInput.lowPressure.pressure, this.headerInput.highPressure.pressure);
+      let min: number;
+      let max: number;
+      if (this.headerInput.lowPressure) {
+        min = this.headerInput.lowPressure.pressure;
+      }
+      if (this.headerInput.highPressure) {
+        max = this.headerInput.highPressure.pressure;
+      }
+      this.mediumPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.mediumPressure, this.settings, min, max);
     } else {
       this.mediumPressureForm = this.headerService.initHeaderForm(this.settings);
     }
 
     if (this.headerInput.lowPressure) {
       let pressureMax: number;
-      if (this.headerInput.numberOfHeaders == 3) {
+      if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressure) {
         pressureMax = this.headerInput.mediumPressure.pressure;
-      } else {
+      } else if (this.headerInput.highPressure) {
         pressureMax = this.headerInput.highPressure.pressure;
       }
       this.lowPressureForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressure, this.settings, undefined, pressureMax);
@@ -118,17 +126,25 @@ export class HeaderComponent implements OnInit {
 
   updatePressureMaxMins() {
     let pressureMax: number;
-    if (this.headerInput.numberOfHeaders == 3) {
+    if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressure) {
       pressureMax = this.headerInput.mediumPressure.pressure;
-    } else {
+    } else if (this.headerInput.numberOfHeaders != 3) {
       pressureMax = this.headerInput.highPressure.pressure;
     }
     let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, undefined, pressureMax);
     this.lowPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), Validators.min(ranges.pressureMin)]);
     this.lowPressureForm.controls.pressure.updateValueAndValidity();
-
-    ranges = this.headerService.getRanges(this.settings, undefined, this.headerInput.lowPressure.pressure, this.headerInput.highPressure.pressure);
+    let mediumPressureMin: number;
+    let mediumPressureMax: number;
+    if (this.headerInput.lowPressure) {
+      mediumPressureMin = this.headerInput.lowPressure.pressure;
+    }
+    if (this.headerInput.highPressure) {
+      mediumPressureMax = this.headerInput.highPressure.pressure;
+    }
+    ranges = this.headerService.getRanges(this.settings, undefined, mediumPressureMin, mediumPressureMax);
     this.mediumPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), Validators.min(ranges.pressureMin)]);
     this.mediumPressureForm.controls.pressure.updateValueAndValidity();
+
   }
 }

@@ -30,6 +30,8 @@ export class HeaderFormComponent implements OnInit {
   idString: string;
 
   headerLabel: string;
+  minPressureErrorMsg: string;
+  maxPressureErrorMsg: string;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -42,6 +44,13 @@ export class HeaderFormComponent implements OnInit {
     // if (this.pressureLevel === 'highPressure') {
     //   this.headerForm.controls.flashCondensateReturn.disable();
     // }
+    if(this.pressureLevel === 'highPressure'){
+      this.minPressureErrorMsg = 'Value must be higher than ';
+      this.maxPressureErrorMsg = 'Value must be lower than ';
+    }else{
+      this.minPressureErrorMsg = 'Value must be higher than lower pressure headers: ';
+      this.maxPressureErrorMsg = 'Value must be lower than higher pressure headers: ';
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
