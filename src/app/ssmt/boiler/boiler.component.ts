@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerRanges } from './boiler.service';
-import { BoilerInput } from '../../shared/models/steam/ssmt';
+import { BoilerInput, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from '../compare.service';
+import { HeaderService } from '../header/header.service';
 
 @Component({
   selector: 'app-boiler',
@@ -28,6 +29,8 @@ export class BoilerComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   modificationIndex: number;
+  @Input()
+  highPressureHeader: HeaderWithHighestPressure;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -35,8 +38,9 @@ export class BoilerComponent implements OnInit {
   options: any;
   showModal: boolean;
   idString: string = 'baseline_';
+  highPressureHeaderForm: FormGroup;
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
-    private compareService: CompareService) { }
+    private compareService: CompareService, private headerService: HeaderService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -69,6 +73,10 @@ export class BoilerComponent implements OnInit {
       this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
     } else {
       this.boilerForm = this.boilerService.initForm(this.settings);
+    }
+
+    if(this.highPressureHeader){
+      this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.highPressureHeader, this.settings, this.boilerInput);
     }
   }
 
@@ -106,6 +114,9 @@ export class BoilerComponent implements OnInit {
 
   save() {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+    if(this.highPressureHeader){
+      this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.highPressureHeader, this.settings, tmpBoiler);
+    }
     this.emitSave.emit(tmpBoiler);
   }
 

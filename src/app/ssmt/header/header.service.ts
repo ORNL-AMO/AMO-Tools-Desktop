@@ -176,13 +176,17 @@ export class HeaderService {
       if (obj.numberOfHeaders > 1) {
         if (obj.lowPressure) {
           let pressureMax: number;
-          if (obj.numberOfHeaders == 3) {
+          if (obj.numberOfHeaders == 3 && obj.mediumPressure) {
             pressureMax = obj.mediumPressure.pressure;
-          } else {
+          } else if (obj.highPressure) {
             pressureMax = obj.highPressure.pressure;
           }
-          let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressure, settings, undefined, pressureMax);
-          if (tmpLowPressureHeaderForm.status === 'INVALID') {
+          if (pressureMax) {
+            let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressure, settings, undefined, pressureMax);
+            if (tmpLowPressureHeaderForm.status === 'INVALID') {
+              isLowPressureHeaderValid = false;
+            }
+          } else {
             isLowPressureHeaderValid = false;
           }
         }
@@ -192,7 +196,7 @@ export class HeaderService {
       }
 
       if (obj.numberOfHeaders === 3) {
-        if (obj.mediumPressure) {
+        if (obj.mediumPressure && obj.highPressure && obj.lowPressure) {
           let pressureMax: number = obj.highPressure.pressure;
           let pressureMin: number = obj.lowPressure.pressure;
 
@@ -218,7 +222,7 @@ export class HeaderService {
 
 
   boilerTempValidator(boilerTemp: number, settings: Settings): ValidatorFn {
-    return (valueControl: AbstractControl): { [key: string]: boolean } => {
+    return (valueControl: AbstractControl): { [key: string]: { val: number } } => {
       if (valueControl.value !== '' && valueControl.value !== null) {
         let saturatedProperties: SaturatedPropertiesOutput = this.steamService.saturatedProperties(
           {
@@ -235,11 +239,11 @@ export class HeaderService {
         catch (e) {
           console.log(e);
           return {
-            boilerTemp: true
+            boilerTemp: { val: saturatedProperties.saturatedTemperature }
           };
         }
         return {
-          boilerTemp: true
+          boilerTemp: { val: saturatedProperties.saturatedTemperature }
         };
       }
       else {
