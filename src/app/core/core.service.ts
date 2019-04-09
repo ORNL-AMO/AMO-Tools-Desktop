@@ -28,17 +28,20 @@ export class CoreService {
           
           this.examplePsatId = psatId;
           MockPsatCalculator.assessmentId = this.examplePsatId;
+
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
           
             MockFsat.directoryId = this.exampleDirectoryId;
             this.indexedDbService.addAssessment(MockFsat).then(fsatId => {
               this.exampleFsatId = fsatId;
               MockFsatCalculator.assessmentId = fsatId;
+    
               this.indexedDbService.addCalculator(MockFsatCalculator).then(() => {
           
                 MockSsmt.directoryId = this.exampleDirectoryId;
                 this.indexedDbService.addAssessment(MockSsmt).then(ssmtId => {
                   console.log('mock ssmt added');
+        
                   this.exampleSsmtId = ssmtId;
                   resolve(true);
                 });
@@ -63,17 +66,21 @@ export class CoreService {
 
           delete MockPhastSettings.directoryId;
           MockPhastSettings.assessmentId = this.examplePhastId;
+
           this.indexedDbService.addSettings(MockPhastSettings).then(() => {
 
             MockPsatSettings.assessmentId = this.examplePsatId;
+  
             MockPsatSettings.facilityInfo.date = new Date().toDateString();
             this.indexedDbService.addSettings(MockPsatSettings).then(() => {
             
               MockFsatSettings.assessmentId = this.exampleFsatId;
+    
               MockFsatSettings.facilityInfo.date = new Date().toDateString();
               this.indexedDbService.addSettings(MockFsatSettings).then(() => {
 
                 MockSsmtSettings.assessmentId = this.exampleSsmtId;
+      
                 this.indexedDbService.addSettings(MockSsmtSettings).then(() =>{
                   resolve(true);
                 });
