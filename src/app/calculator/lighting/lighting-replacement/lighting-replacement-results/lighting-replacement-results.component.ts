@@ -12,9 +12,7 @@ export class LightingReplacementResultsComponent implements OnInit {
   @Input()
   modificationData: Array<LightingReplacementData>;
   @Input()
-  baselineResults: LightingReplacementResults;
-  @Input()
-  modificationResults: LightingReplacementResults;
+  lightingReplacementResults: LightingReplacementResults;
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;

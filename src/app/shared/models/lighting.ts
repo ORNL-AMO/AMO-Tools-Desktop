@@ -13,7 +13,15 @@ export interface LightingReplacementData {
   
   
   export interface LightingReplacementResults {
+    baselineResults: LightingReplacementResult,
+    modificationResults: LightingReplacementResult,
+    totalEnergySavings: number,
+    totalCostSavings: number
+  }
+
+  export interface LightingReplacementResult {
     totalElectricityUse: number;
     totalLighting: number;
     totalOperatingHours: number;
+    totalOperatingCosts: number;
   }
