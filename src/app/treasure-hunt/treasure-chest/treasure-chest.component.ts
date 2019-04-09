@@ -47,6 +47,8 @@ export class TreasureChestComponent implements OnInit {
     this.selectedEditLightingReplacement = lightingReplacement;
     this.lightingReplacementService.baselineData = lightingReplacement.baseline;
     this.lightingReplacementService.modificationData = lightingReplacement.modifications;
+    this.lightingReplacementService.baselineElectricityCost = lightingReplacement.baselineElectricityCost;
+    this.lightingReplacementService.modificationElectricityCost = lightingReplacement.modificationElectricityCost;
     this.selectedEditOpportunitySheet = lightingReplacement.opportunitySheet;
     this.selectCalc('lighting-replacement');
   }
@@ -54,6 +56,8 @@ export class TreasureChestComponent implements OnInit {
   saveEditLighting(updatedData: LightingReplacementTreasureHunt) {
     this.selectedEditLightingReplacement.baseline = updatedData.baseline;
     this.selectedEditLightingReplacement.modifications = updatedData.modifications;
+    this.selectedEditLightingReplacement.baselineElectricityCost = updatedData.baselineElectricityCost;
+    this.selectedEditLightingReplacement.modificationElectricityCost = updatedData.modificationElectricityCost;
     this.isSaveLighting = true;
     this.saveCalcModal.show();
   }

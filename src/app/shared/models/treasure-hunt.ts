@@ -44,6 +44,8 @@ export interface LightingReplacementTreasureHunt {
     modifications?: Array<LightingReplacementData>;
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
+    baselineElectricityCost?: number,
+    modificationElectricityCost?: number
 }
 
 export interface OpportunitySheetResults {

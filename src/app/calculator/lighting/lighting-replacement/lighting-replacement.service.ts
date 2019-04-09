@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { LightingReplacementResults, LightingReplacementData } from '../../../shared/models/lighting';
+import { LightingReplacementResults, LightingReplacementData, LightingReplacementResult } from '../../../shared/models/lighting';
+import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Injectable()
 export class LightingReplacementService {
 
   baselineData: Array<LightingReplacementData>;
   modificationData: Array<LightingReplacementData>;
+  baselineElectricityCost: number;
+  modificationElectricityCost: number;
   constructor() { }
 
   calculate(data: LightingReplacementData): LightingReplacementData {
@@ -31,13 +34,32 @@ export class LightingReplacementService {
     return data;
   }
 
-  getTotals(data: Array<LightingReplacementData>): LightingReplacementResults {
-    let tmpResults: LightingReplacementResults = {
-      totalElectricityUse: _.sumBy(data, 'electricityUse'),
-      totalLighting: _.sumBy(data, 'totalLighting'),
-      totalOperatingHours: _.sumBy(data, 'hoursPerYear')
+  getTotals(data: Array<LightingReplacementData>, cost: number): LightingReplacementResult {
+    let totalElectricityUse: number = _.sumBy(data, 'electricityUse');
+    let totalLighting: number = _.sumBy(data, 'totalLighting');
+    let totalOperatingHours: number = _.sumBy(data, 'hoursPerYear');
+    let totalOperatingCosts: number = totalElectricityUse * totalOperatingHours * cost;
+
+    let tmpResults: LightingReplacementResult = {
+      totalElectricityUse: totalElectricityUse,
+      totalLighting: totalLighting,
+      totalOperatingHours: totalOperatingHours,
+      totalOperatingCosts: totalOperatingCosts
     }
     return tmpResults;
+  }
+
+  getResults(lightingData: LightingReplacementTreasureHunt): LightingReplacementResults {
+    let baselineResults: LightingReplacementResult = this.getTotals(lightingData.baseline, lightingData.baselineElectricityCost);
+    let modificationResults: LightingReplacementResult = this.getTotals(lightingData.modifications, lightingData.modificationElectricityCost);
+    let totalEnergySavings: number = baselineResults.totalElectricityUse - modificationResults.totalElectricityUse;
+    let totalCostSavings: number = baselineResults.totalOperatingCosts - modificationResults.totalOperatingCosts;
+    return {
+      baselineResults: baselineResults,
+      modificationResults: modificationResults,
+      totalEnergySavings: totalEnergySavings,
+      totalCostSavings: totalCostSavings
+    }
   }
 
   getInitializedData(): Array<LightingReplacementData> {

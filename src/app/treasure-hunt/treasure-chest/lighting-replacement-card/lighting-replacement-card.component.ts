@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LightingReplacementTreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
+import { LightingReplacementResults } from '../../../shared/models/lighting';
+import { LightingReplacementService } from '../../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement-card',
@@ -20,10 +22,12 @@ export class LightingReplacementCardComponent implements OnInit {
   emitEditLighting = new EventEmitter<LightingReplacementTreasureHunt>();
 
   dropdownOpen: boolean = false;
+  lightingReplacementResults: LightingReplacementResults;
 
-  constructor() { }
+  constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
+    this.lightingReplacementResults = this.lightingReplacementService.getResults(this.replacement);
   }
 
   showDropdown() {

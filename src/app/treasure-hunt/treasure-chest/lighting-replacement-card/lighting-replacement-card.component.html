@@ -51,10 +51,18 @@
       </tr>
       <tr>
         <td>
-          Total Savings
+          Total Cost Savings
         </td>
         <td>
-          {{1000 | currency:'USD'}}
+          {{lightingReplacementResults.totalCostSavings | currency:'USD'}} /yr
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Total Energy Savings
+        </td>
+        <td>
+          {{lightingReplacementResults.totalEnergySavings | number:'1.0-0'}} kW
         </td>
       </tr>
     </table>

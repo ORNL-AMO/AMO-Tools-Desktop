@@ -19,6 +19,9 @@ export class LightingReplacementComponent implements OnInit {
   emitCancel = new EventEmitter<boolean>();
   @Output('emitAddOpportunitySheet')
   emitAddOpportunitySheet = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
+
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
@@ -29,24 +32,23 @@ export class LightingReplacementComponent implements OnInit {
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
-  settings: Settings;
   baselineData: Array<LightingReplacementData>;
-  baselineElectricityUse: number;
   modificationData: Array<LightingReplacementData> = [];
-  modificationElectricityUse: number;
-  baselineResults: LightingReplacementResults;
-  modificationResults: LightingReplacementResults;
-  baselineSelected: boolean = true;
-  modifiedSelected: boolean = false;
+  lightingReplacementResults: LightingReplacementResults;
   modificationExists: boolean = false;
   containerHeight: number;
+
+  baselineElectricityCost: number = 0;
+  modificationElectricityCost: number = 0;
   constructor(private settingsDbService: SettingsDbService, private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     if (this.lightingReplacementService.baselineData) {
       this.baselineData = this.lightingReplacementService.baselineData;
     } else {
@@ -56,6 +58,17 @@ export class LightingReplacementComponent implements OnInit {
     if (this.lightingReplacementService.modificationData) {
       this.modificationData = this.lightingReplacementService.modificationData;
       this.modificationExists = true;
+    }
+
+    if (this.lightingReplacementService.baselineElectricityCost) {
+      this.baselineElectricityCost = this.lightingReplacementService.baselineElectricityCost;
+    } else {
+      this.baselineElectricityCost = this.settings.electricityCost;
+    }
+    if (this.lightingReplacementService.modificationElectricityCost) {
+      this.modificationElectricityCost = this.lightingReplacementService.modificationElectricityCost;
+    } else {
+      this.modificationElectricityCost = this.settings.electricityCost;
     }
 
     this.calculate();
@@ -70,26 +83,23 @@ export class LightingReplacementComponent implements OnInit {
     if (!this.inTreasureHunt) {
       this.lightingReplacementService.baselineData = this.baselineData;
       this.lightingReplacementService.modificationData = this.modificationData;
+      this.lightingReplacementService.baselineElectricityCost = this.baselineElectricityCost;
+      this.lightingReplacementService.modificationElectricityCost = this.modificationElectricityCost;
+    } else {
+      this.lightingReplacementService.baselineData = undefined;
+      this.lightingReplacementService.modificationData = undefined;
+      this.lightingReplacementService.baselineElectricityCost = undefined;
+      this.lightingReplacementService.modificationElectricityCost = undefined;
     }
   }
 
   btnResetData() {
     this.baselineData = this.lightingReplacementService.getInitializedData();
-    this.modificationData = new Array<LightingReplacementResults>();
+    this.modificationData = new Array<LightingReplacementData>();
+    this.modificationExists = false;
     this.lightingReplacementService.baselineData = this.baselineData;
     this.lightingReplacementService.modificationData = this.modificationData;
     this.calculate();
-  }
-
-  togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
-      this.baselineSelected = true;
-      this.modifiedSelected = false;
-    }
-    else if (bool == this.modifiedSelected) {
-      this.modifiedSelected = true;
-      this.baselineSelected = false;
-    }
   }
 
   resizeTabs() {
@@ -110,11 +120,16 @@ export class LightingReplacementComponent implements OnInit {
     this.baselineData.forEach(data => {
       data = this.lightingReplacementService.calculate(data);
     })
-    this.baselineResults = this.lightingReplacementService.getTotals(this.baselineData);
     this.modificationData.forEach(data => {
       data = this.lightingReplacementService.calculate(data);
     })
-    this.modificationResults = this.lightingReplacementService.getTotals(this.modificationData);
+
+    this.lightingReplacementResults = this.lightingReplacementService.getResults({
+      baseline: this.baselineData,
+      modifications: this.modificationData,
+      baselineElectricityCost: this.baselineElectricityCost,
+      modificationElectricityCost: this.modificationElectricityCost
+    });
   }
 
   addBaselineFixture() {
@@ -142,7 +157,7 @@ export class LightingReplacementComponent implements OnInit {
   addModification() {
     this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
     this.modificationExists = true;
-    this.togglePanel(this.modifiedSelected);
+    this.calculate();
   }
 
   addModificationFixture() {
@@ -171,7 +186,7 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modifications: this.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modifications: this.modificationData, baselineElectricityCost: this.baselineElectricityCost, modificationElectricityCost: this.modificationElectricityCost });
   }
 
   cancel() {
