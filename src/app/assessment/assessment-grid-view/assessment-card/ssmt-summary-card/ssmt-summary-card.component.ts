@@ -33,8 +33,8 @@ export class SsmtSummaryCardComponent implements OnInit {
   ngOnInit() {
     this.assessmentCpy = JSON.parse(JSON.stringify(this.assessment));
     this.setupDone = this.assessmentCpy.ssmt.setupDone;
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessmentCpy);
     if (this.setupDone) {
-      this.settings = this.settingsDbService.getByAssessmentId(this.assessmentCpy);
       this.getBaselineData();
       if (this.assessmentCpy.ssmt.modifications) {
         this.getModificationData();
