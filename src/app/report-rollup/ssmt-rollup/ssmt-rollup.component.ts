@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-ssmt-rollup',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ssmt-rollup.component.css']
 })
 export class SsmtRollupComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   constructor() { }
 
