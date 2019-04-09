@@ -14,9 +14,22 @@ export class FeedwaterDiagramComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Input()
   settings: Settings;
+
+  feedwaterClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges() {
+    this.setClasses();
+  }
+
+  setClasses() {
+    this.feedwaterClasses = ['feedwater'];
+    if (this.deaerator.feedwaterMassFlow < 1e-3) {
+      this.feedwaterClasses = ['no-steam-flow'];
+    }
   }
 
   hoverEquipment(str: string) {

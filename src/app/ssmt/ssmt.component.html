@@ -14,7 +14,7 @@
         [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true"></app-boiler>
       <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true"
         [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
-        [isBaseline]="true" [deaeratorPressure]="_ssmt.boilerInput.deaeratorPressure"></app-header>
+        [isBaseline]="true" [boilerInput]="_ssmt.boilerInput"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput" [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders"
         [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>
     </div>

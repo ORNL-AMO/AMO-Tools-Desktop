@@ -26,6 +26,9 @@ export class TurbineDiagramComponent implements OnInit {
   settings: Settings;
   
   turbineLabel: string;
+
+  inletSteamClasses: Array<string>;
+  outletSteamClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
@@ -37,6 +40,19 @@ export class TurbineDiagramComponent implements OnInit {
       this.turbineLabel = 'HP to LP Turbine';
     } else if (this.turbineType === 'highToMedium') {
       this.turbineLabel = 'HP to MP Turbine';
+    }
+  }
+
+  ngOnChanges(){
+    this.setClasses();
+  }
+
+  setClasses() {
+    this.inletSteamClasses = [this.inletColor];
+    this.outletSteamClasses = [this.outletColor];
+    if (this.turbine.massFlow < 1e-3) {
+      this.inletSteamClasses = ['no-steam-flow'];
+      this.outletSteamClasses = ['no-steam-flow'];
     }
   }
 

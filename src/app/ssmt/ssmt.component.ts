@@ -275,7 +275,7 @@ export class SsmtComponent implements OnInit {
       let isBoilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
       let isHeaderValid: boolean;
       if (this._ssmt.boilerInput) {
-        isHeaderValid = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings, this._ssmt.boilerInput.deaeratorPressure);
+        isHeaderValid = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings, this._ssmt.boilerInput);
       }
       let isTurbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
       let operationsValid: boolean = this.operationsService.getForm(this._ssmt, this.settings).valid;
@@ -340,7 +340,7 @@ export class SsmtComponent implements OnInit {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
     let headerValid: boolean;
     if (this._ssmt.boilerInput) {
-      headerValid = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings, this._ssmt.boilerInput.deaeratorPressure);
+      headerValid = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings, this._ssmt.boilerInput);
     }
     let turbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
     let operationsValid: boolean = this.operationsService.getForm(this._ssmt, this.settings).valid;
