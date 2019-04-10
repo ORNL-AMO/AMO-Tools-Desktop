@@ -128,7 +128,7 @@ export class HeaderComponent implements OnInit {
     let pressureMax: number;
     if (this.headerInput.numberOfHeaders == 3 && this.headerInput.mediumPressure) {
       pressureMax = this.headerInput.mediumPressure.pressure;
-    } else if (this.headerInput.numberOfHeaders != 3) {
+    } else if (this.headerInput.numberOfHeaders != 3 && this.headerInput.highPressure) {
       pressureMax = this.headerInput.highPressure.pressure;
     }
     let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, undefined, pressureMax);
