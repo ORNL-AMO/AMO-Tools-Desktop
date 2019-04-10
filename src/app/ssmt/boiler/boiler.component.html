@@ -168,6 +168,11 @@
             {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span
               [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
         </span>
+        <span class="alert-warning pull-right small"
+          *ngIf="lowPressureHeaderForm && lowPressureHeaderForm.controls.pressure.invalid && lowPressureHeaderForm.controls.pressure.errors.greaterThan">
+          <span *ngIf="lowPressureHeaderForm.controls.pressure.errors.greaterThan">Lowest pressure header must be greater than
+            dearator pressure.</span>
+        </span>
       </div>
     </form>
   </div>
