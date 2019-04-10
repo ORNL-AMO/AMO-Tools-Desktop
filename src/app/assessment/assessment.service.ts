@@ -266,6 +266,12 @@ export class AssessmentService {
           operationValue2: undefined,
           useTurbine: false
         }
+      },
+      headerInput: {
+        numberOfHeaders: 1,
+        highPressure: undefined,
+        mediumPressure: undefined,
+        lowPressure: undefined
       }
     };
   }
