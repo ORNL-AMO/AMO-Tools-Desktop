@@ -46,6 +46,8 @@ import { SsmtSummaryComponent } from './report-summary/ssmt-summary/ssmt-summary
 import { SsmtRollupComponent } from './ssmt-rollup/ssmt-rollup.component';
 import { SsmtRollupGraphsComponent } from './ssmt-rollup/ssmt-rollup-graphs/ssmt-rollup-graphs.component';
 import { SsmtRollupSteamSummaryComponent } from './ssmt-rollup/ssmt-rollup-steam-summary/ssmt-rollup-steam-summary.component';
+import { SsmtRollupEnergyTableComponent } from './ssmt-rollup/ssmt-rollup-energy-table/ssmt-rollup-energy-table.component';
+import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-steam-summary-table/ssmt-rollup-steam-summary-table.component';
 
 @NgModule({
   imports: [
@@ -96,6 +98,8 @@ import { SsmtRollupSteamSummaryComponent } from './ssmt-rollup/ssmt-rollup-steam
     SsmtRollupComponent,
     SsmtRollupGraphsComponent,
     SsmtRollupSteamSummaryComponent,
+    SsmtRollupEnergyTableComponent,
+    SsmtRollupSteamSummaryTableComponent,
 
   ],
   providers: [ReportRollupService],
