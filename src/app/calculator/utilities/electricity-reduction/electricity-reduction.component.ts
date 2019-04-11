@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { ElectricityReductionService, ElectricityReductionData } from './electricity-reduction.service';
+import { ElectricityReductionService, ElectricityReductionData, ElectricityReductionResults } from './electricity-reduction.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -24,11 +24,12 @@ export class ElectricityReductionComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
 
-  // baselineData: Array<ElectricityReductionData>;
-  // modificationData: Array<ElectricityReductionData>;
   baselineForms: Array<FormGroup>;
   modificationForms: Array<FormGroup>;
   modificationExists = false;
+
+  baselineResults: ElectricityReductionResults;
+  modificationResults: ElectricityReductionResults;
 
   constructor(private settingsDbService: SettingsDbService, private electricityReductionService: ElectricityReductionService) { }
 
@@ -57,7 +58,7 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   setTab(str: string) {
-    this.currentField = str;
+    this.tabSelect = str;
   }
 
   changeField(str: string) {
@@ -72,6 +73,7 @@ export class ElectricityReductionComponent implements OnInit {
   removeBaselineEquipment(i: number) {
     this.electricityReductionService.removeBaselineEquipment(i);
     this.baselineForms.splice(i, 1);
+    this.refreshResults();
   }
 
   createModification() {
@@ -96,6 +98,7 @@ export class ElectricityReductionComponent implements OnInit {
     if (this.modificationForms.length < 1) {
       this.modificationExists = false;
     }
+    this.refreshResults();
   }
 
   loadForms() {
@@ -119,10 +122,25 @@ export class ElectricityReductionComponent implements OnInit {
     if (emitObj.isBaseline) {
       this.baselineForms[emitObj.index] = emitObj.form;
       this.electricityReductionService.updateBaselineDataArray(this.baselineForms);
+      this.baselineResults = this.electricityReductionService.calculate(true, this.settings);
     } else {
       this.modificationForms[emitObj.index] = emitObj.form;
       this.electricityReductionService.updateModificationDataArray(this.modificationForms);
+      this.modificationResults = this.electricityReductionService.calculate(false, this.settings);
     }
   }
 
+  refreshResults() {
+    this.electricityReductionService.updateBaselineDataArray(this.baselineForms);
+    this.baselineResults = this.electricityReductionService.calculate(true, this.settings);
+    if (this.modificationExists) {
+      this.electricityReductionService.updateModificationDataArray(this.modificationForms);
+      this.modificationResults = this.electricityReductionService.calculate(false, this.settings);
+    }
+  }
+
+  btnResetData() {
+    this.electricityReductionService.resetData(this.settings);
+    this.loadForms();
+  }
 }

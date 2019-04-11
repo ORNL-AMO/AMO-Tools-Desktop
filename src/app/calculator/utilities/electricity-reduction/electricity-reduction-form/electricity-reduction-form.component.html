@@ -144,8 +144,8 @@
       <span class="alert-danger pull-right small"
         *ngIf="form.controls.powerFactor.invalid && !form.controls.powerFactor.pristine">
         <span *ngIf="form.controls.powerFactor.errors.required">Value required.</span>
-        <span *ngIf="form.controls.powerFactor.errors.min">Value can't be less than
-          {{form.controls.powerFactor.errors.min.min}}.</span>
+        <span *ngIf="form.controls.powerFactor.errors.min">Value must be greater than
+          {{form.controls.powerFactor.errors.greaterThan}}.</span>
         <span *ngIf="form.controls.powerFactor.errors.max">Value can't be greater than
           {{form.controls.powerFactor.errors.max.max}}.</span>
       </span>
@@ -245,10 +245,11 @@
 
   </div>
 
-  <div class="form-section" *ngIf="form.controls.measurementMethod.value != 2 && form.controls.measurementMethod.value != 3">
+  <div class="form-section"
+    *ngIf="form.controls.measurementMethod.value != 2 && form.controls.measurementMethod.value != 3">
     <div class="form-group">
-      <label class="small" for="power">Power</label>
-      <span class="pull-right text-bold">power result here</span>
+      <label class="small bold" for="power">Power</label>
+      <span class="small pull-right bold">{{individualResults.power}} kW</span>
     </div>
   </div>
 
@@ -259,12 +260,12 @@
       <div class="input-group">
         <input class="form-control" name="power" id="{{'power_'+idString}}" formControlName="power" type="number"
           (input)="calculate()" (focus)="focusField('power')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">{{settings.powerMeasurement}}</span>
+        <span class="units input-group-addon">kW</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
         <span *ngIf="form.controls.power.errors.required">Value required.</span>
         <span *ngIf="form.controls.power.errors.min">Value can't be less than
-          {{form.controls.power.errors.min.min}}{{settings.powerMeasurement}}.</span>
+          {{form.controls.power.errors.min.min}}kW.</span>
       </span>
     </div>
   </div>
@@ -284,8 +285,8 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="energy">Energy</label>
-      <span class="pull-right text-bold">energy result here</span>
+      <label class="small bold" for="energy">Energy</label>
+      <span class="small pull-right bold">{{individualResults.energyUse}} kWh</span>
     </div>
   </div>
 
@@ -295,13 +296,13 @@
       <div class="input-group">
         <input class="form-control" name="energy" id="{{'energy_'+idString}}" formControlName="energy" type="number"
           (input)="calculate()" (focus)="focusField('energy')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">%</span>
+        <span class="units input-group-addon">kWh</span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="form.controls.energy.invalid && !form.controls.energy.pristine">
         <span *ngIf="form.controls.energy.errors.required">Value required.</span>
         <span *ngIf="form.controls.energy.errors.min">Value can't be less than
-          {{form.controls.energy.errors.min.min}}%.</span>
+          {{form.controls.energy.errors.min.min}}kWh.</span>
       </span>
     </div>
   </div>

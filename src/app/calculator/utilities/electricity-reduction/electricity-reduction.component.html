@@ -90,6 +90,7 @@
 
           <div class="d-flex justify-content-center px-2">
             <!-- app results if results tab -->
+            <app-electricity-reduction-results *ngIf="tabSelect == 'results'" [settings]="settings" [baselineResults]="baselineResults" [modificationResults]="modificationResults" [modificationExists]="modificationExists"></app-electricity-reduction-results>
             <!-- app help if help tab -->
             <app-electricity-reduction-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-electricity-reduction-help>
           </div>

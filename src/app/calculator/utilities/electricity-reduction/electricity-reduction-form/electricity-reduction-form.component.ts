@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
-import { ElectricityReductionService } from '../electricity-reduction.service';
+import { ElectricityReductionService, ElectricityReductionResults } from '../electricity-reduction.service';
+import * as d3 from 'd3';
 
 
 @Component({
@@ -26,9 +27,13 @@ export class ElectricityReductionFormComponent implements OnInit {
   measurementOptions: Array<{ value: number, name: string }>;
   idString: string;
 
+  individualResults: ElectricityReductionResults;
+  format: any;
+
   constructor(private electricityReductionService: ElectricityReductionService) { }
 
   ngOnInit() {
+    this.getFormat();
     if (this.isBaseline) {
       this.idString = this.index.toString();
     }
@@ -36,6 +41,7 @@ export class ElectricityReductionFormComponent implements OnInit {
       this.idString = 'modification_' + this.index;
     }
     this.initMeasurementOptions();
+    this.calculate();
   }
 
   initMeasurementOptions() {
@@ -60,6 +66,14 @@ export class ElectricityReductionFormComponent implements OnInit {
         isBaseline: this.isBaseline
       };
       this.emitCalculate.emit(emitObj);
+      this.individualResults = this.electricityReductionService.calculateIndividualEquipment(this.electricityReductionService.getObjFromForm(this.form));
+      this.individualResults = {
+        energyUse: this.format(this.individualResults.energyUse),
+        energyCost: this.format(this.individualResults.energyCost),
+        annualEnergySavings: this.format(this.individualResults.annualEnergySavings),
+        costSavings: this.format(this.individualResults.costSavings),
+        power: this.format(this.individualResults.power)
+      };
     }
   }
 
@@ -68,5 +82,9 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   focusOut() {
+  }
+
+  getFormat(): any {
+    this.format = d3.format(',.3f');
   }
 }
