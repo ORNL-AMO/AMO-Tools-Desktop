@@ -62,7 +62,6 @@ export class CalculateModelService {
   boilerFuelCost: number;
   makeupWaterCost: number;
   totalOperatingCost: number;
-  totalEnergyUse: number;
   powerGenerationCost: number;
   boilerFuelUsage: number;
   sitePowerImport: number;
@@ -2087,7 +2086,6 @@ export class CalculateModelService {
       boilerFuelCost: this.boilerFuelCost,
       makeupWaterCost: this.makeupWaterCost,
       totalOperatingCost: this.totalOperatingCost,
-      totalEnergyUse: this.totalEnergyUse,
       powerGenerationCost: this.powerGenerationCost,
       boilerFuelUsage: this.boilerFuelUsage,
 
