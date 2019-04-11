@@ -10,32 +10,32 @@ export class OpportunitySheetService {
 
 
   getResults(opportunitySheet: OpportunitySheet, settings: Settings): OpportunitySheetResults {
-    let baselineElectricityResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.thElectricityCost, 'Electricity');
-    let modificationElectricityResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.thElectricityCost, 'Electricity');
+    let baselineElectricityResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.electricityCost, 'Electricity');
+    let modificationElectricityResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.electricityCost, 'Electricity');
     let electricityResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineElectricityResult, modificationElectricityResult);
 
-    let baselineGasResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.thNaturalGasCost, 'Gas');
-    let modificationGasResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.thNaturalGasCost, 'Gas');
+    let baselineGasResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.fuelCost, 'Gas');
+    let modificationGasResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.fuelCost, 'Gas');
     let gasResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineGasResult, modificationGasResult);
 
-    let baselineCompressedAirResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.thCompressedAirCost, 'Compressed Air');
-    let modificationCompressedAirResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.thCompressedAirCost, 'Compressed Air');
+    let baselineCompressedAirResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.compressedAirCost, 'Compressed Air');
+    let modificationCompressedAirResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.compressedAirCost, 'Compressed Air');
     let compressedAirResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineCompressedAirResult, modificationCompressedAirResult);
 
-    let baselineOtherFuelResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.thOtherFuelCost, 'Other Fuel');
-    let modificationOtherFuelResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.thOtherFuelCost, 'Other Fuel');
+    let baselineOtherFuelResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.otherFuelCost, 'Other Fuel');
+    let modificationOtherFuelResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.otherFuelCost, 'Other Fuel');
     let otherFuelResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineOtherFuelResult, modificationOtherFuelResult);
 
-    let baselineSteamResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.thSteamCost, 'Steam');
-    let modificationSteamResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.thSteamCost, 'Steam');
+    let baselineSteamResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.steamCost, 'Steam');
+    let modificationSteamResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.steamCost, 'Steam');
     let steamResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineSteamResult, modificationSteamResult);
 
-    let baselineWaterResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.thWaterCost, 'Water');
-    let modificationWaterResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.thWaterCost, 'Water');
+    let baselineWaterResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.waterCost, 'Water');
+    let modificationWaterResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.waterCost, 'Water');
     let waterResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineWaterResult, modificationWaterResult);
 
-    let baselineWasterWaterResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.thWaterWasteCost, 'WWT');
-    let modificationWasteWaterResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.thWaterWasteCost, 'WWT');
+    let baselineWasterWaterResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.waterWasteCost, 'WWT');
+    let modificationWasteWaterResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.waterWasteCost, 'WWT');
     let wasteWaterResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineWasterWaterResult, modificationWasteWaterResult);
 
     let totalCostSavings: number = electricityResults.energyCostSavings + gasResults.energyCostSavings + compressedAirResults.energyCostSavings + otherFuelResults.energyCostSavings + steamResults.energyCostSavings + waterResults.energyCostSavings + waterResults.energyCostSavings;
