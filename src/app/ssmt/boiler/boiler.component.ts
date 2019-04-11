@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerRanges } from './boiler.service';
-import { BoilerInput, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
+import { BoilerInput, HeaderWithHighestPressure, HeaderInput } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
@@ -30,7 +30,7 @@ export class BoilerComponent implements OnInit {
   @Input()
   modificationIndex: number;
   @Input()
-  highPressureHeader: HeaderWithHighestPressure;
+  headerInput: HeaderInput;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -39,6 +39,7 @@ export class BoilerComponent implements OnInit {
   showModal: boolean;
   idString: string = 'baseline_';
   highPressureHeaderForm: FormGroup;
+  lowPressureHeaderForm: FormGroup;
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService) { }
 
@@ -74,10 +75,7 @@ export class BoilerComponent implements OnInit {
     } else {
       this.boilerForm = this.boilerService.initForm(this.settings);
     }
-
-    if(this.highPressureHeader){
-      this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.highPressureHeader, this.settings, this.boilerInput);
-    }
+    this.setPressureForms(this.boilerInput);
   }
 
   setFuelTypes() {
@@ -112,11 +110,23 @@ export class BoilerComponent implements OnInit {
     this.save();
   }
 
+  setPressureForms(boilerInput: BoilerInput) {
+    if (boilerInput) {
+      if (this.headerInput.highPressure) {
+        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, boilerInput);
+      }
+
+      if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressure) {
+        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
+      } else if (this.headerInput.lowPressure && this.headerInput.numberOfHeaders > 1) {
+        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressure, this.settings, boilerInput.deaeratorPressure, undefined);
+      }
+    }
+  }
+
   save() {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
-    if(this.highPressureHeader){
-      this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.highPressureHeader, this.settings, tmpBoiler);
-    }
+    this.setPressureForms(tmpBoiler);
     this.emitSave.emit(tmpBoiler);
   }
 
