@@ -58,6 +58,7 @@ import { FsatReportTutorialComponent } from '../tutorials/fsat-report-tutorial/f
 import { FsatAssessmentTutorialComponent } from '../tutorials/fsat-assessment-tutorial/fsat-assessment-tutorial.component';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { SharedModule } from '../shared/shared.module';
+import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,8 @@ import { SharedModule } from '../shared/shared.module';
     FsatModule,
     PreAssessmentModule,
     SsmtModule,
-    SharedModule
+    SharedModule,
+    TreasureHuntModule
   ],
   providers: [
     AssessmentService,

@@ -1,0 +1,10 @@
+.energy-label{
+    font-size: larger;
+    font-weight: bold;
+}
+
+
+.units.remove-item:hover{
+    cursor: pointer;
+    background-color: #efefef;
+}

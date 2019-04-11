@@ -28,11 +28,13 @@ export interface Calculator {
     energyEquivalencyInputs?: {
         energyEquivalencyFuel: EnergyEquivalencyFuel,
         energyEquivalencyElectric: EnergyEquivalencyElectric
-    };
-    flowCalculations?: FlowCalculations;
-    fanEfficiencyInputs?: FanEfficiencyInputs;
-    fan203Inputs?: Fan203Inputs;
-    selected?: boolean;
+    },
+    flowCalculations?: FlowCalculations,
+    fanEfficiencyInputs?: FanEfficiencyInputs,
+    fan203Inputs?: Fan203Inputs,
+    selected?: boolean,
+    
+
 }
 
 export interface HeadToolSuction {

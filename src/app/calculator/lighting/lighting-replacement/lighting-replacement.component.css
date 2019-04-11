@@ -1,6 +1,5 @@
 .header {
     font-size: -webkit-xxx-large;
-    padding-left: 12px;
 }
 
 
@@ -26,4 +25,27 @@
 }
 .fa.fa-lightbulb-o{
     font-size: -webkit-xxx-large;
+}
+
+
+.fa-save, .fa-times, .fa-edit{
+    font-size: xx-large;
+}
+
+.action-item:hover{
+    cursor: pointer;
+    background: #efefef;
+}
+
+.help-holder{
+    max-width: 500px;
+}
+
+.treasure-hunt-help{
+    margin-right: .5rem;
+    margin-bottom: 0px;
+}
+
+.add-fixture{
+    margin-top: 10px;
 }

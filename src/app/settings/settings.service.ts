@@ -12,47 +12,47 @@ export class SettingsService {
     this.setDontShow = new BehaviorSubject<boolean>(false);
   }
 
-  getSettingsForm(): FormGroup {
-    return this.formBuilder.group({
-      'language': ['', Validators.required],
-      'currency': ['', Validators.required],
-      'unitsOfMeasure': ['', Validators.required],
-      'distanceMeasurement': [''],
-      'flowMeasurement': [''],
-      'powerMeasurement': [''],
-      'pressureMeasurement': [''],
-      'steamPressureMeasurement': [''],
-      'steamTemperatureMeasurement': [''],
-      'steamSpecificEnthalpyMeasurement': [''],
-      'steamSpecificEntropyMeasurement': [''],
-      'steamSpecificVolumeMeasurement': [''],
-      'steamPowerMeasurement': [''],
-      'steamMassFlowMeasurement': [''],
-      'steamVolumeMeasurement': [''],
-      'steamVolumeFlowMeasurement': [''],
-      'steamVacuumPressure': [''],
-      'currentMeasurement': [''],
-      'viscosityMeasurement': [''],
-      'voltageMeasurement': [''],
-      'energySourceType': [''],
-      'furnaceType': [''],
-      'energyResultUnit': [''],
-      'customFurnaceName': [''],
-      'temperatureMeasurement': [''],
-      'phastRollupUnit': [''],
-      'defaultPanelTab': [''],
-      'fuelCost': [3.99],
-      'steamCost': [4.69],
-      'electricityCost': [.066],
-      'densityMeasurement': ['']
-    });
-  }
+  // getSettingsForm(): FormGroup {
+  //   return this.formBuilder.group({
+  //     'language': ['', Validators.required],
+  //     'currency': ['', Validators.required],
+  //     'unitsOfMeasure': ['', Validators.required],
+  //     'distanceMeasurement': [''],
+  //     'flowMeasurement': [''],
+  //     'powerMeasurement': [''],
+  //     'pressureMeasurement': [''],
+  //     'steamPressureMeasurement': [''],
+  //     'steamTemperatureMeasurement': [''],
+  //     'steamSpecificEnthalpyMeasurement': [''],
+  //     'steamSpecificEntropyMeasurement': [''],
+  //     'steamSpecificVolumeMeasurement': [''],
+  //     'steamPowerMeasurement': [''],
+  //     'steamMassFlowMeasurement': [''],
+  //     'steamVolumeMeasurement': [''],
+  //     'steamVolumeFlowMeasurement': [''],
+  //     'steamVacuumPressure': [''],
+  //     'currentMeasurement': [''],
+  //     'viscosityMeasurement': [''],
+  //     'voltageMeasurement': [''],
+  //     'energySourceType': [''],
+  //     'furnaceType': [''],
+  //     'energyResultUnit': [''],
+  //     'customFurnaceName': [''],
+  //     'temperatureMeasurement': [''],
+  //     'phastRollupUnit': [''],
+  //     'defaultPanelTab': [''],
+  //     'fuelCost': [3.99],
+  //     'steamCost': [4.69],
+  //     'electricityCost': [.066],
+  //     'densityMeasurement': ['']
+  //   });
+  // }
 
   getFormFromSettings(settings: Settings): FormGroup {
-    if (settings.steamPressureMeasurement === 'psi') {
+    if (settings.steamPressureMeasurement == 'psi') {
       settings.steamPressureMeasurement = 'psig';
     }
-    if (settings.steamPressureMeasurement === 'kPag') {
+    if (settings.steamPressureMeasurement == 'kPag') {
       settings.steamPressureMeasurement = 'kPag';
     }
     return this.formBuilder.group({
@@ -106,10 +106,17 @@ export class SettingsService {
       'disablePsatReportTutorial': settings.disablePsatReportTutorial || false,
       'disablePhastSetupTutorial': settings.disablePhastSetupTutorial || false,
       'disablePhastAssessmentTutorial': settings.disablePhastAssessmentTutorial || false,
-      'disablePhastReportTutorial': settings.disablePhastReportTutorial || false,    
+      'disablePhastReportTutorial': settings.disablePhastReportTutorial || false,
       'disableFsatSetupTutorial': settings.disableFsatSetupTutorial || false,
       'disableFsatAssessmentTutorial': settings.disableFsatAssessmentTutorial || false,
-      'disableFsatReportTutorial': settings.disableFsatReportTutorial || false
+      'disableFsatReportTutorial': settings.disableFsatReportTutorial || false,
+      'thElectricityCost': settings.thElectricityCost || 0,
+      'thNaturalGasCost': settings.thNaturalGasCost || 0,
+      'thSteamCost': settings.thSteamCost || 0,
+      'thCompressedAirCost': settings.thCompressedAirCost || 0,
+      'thOtherFuelCost': settings.thOtherFuelCost || 0,
+      'thWaterCost': settings.thWaterCost || 0,
+      'thWaterWasteCost': settings.thWaterWasteCost || 0
     });
   }
 
@@ -170,6 +177,13 @@ export class SettingsService {
       disableFsatSetupTutorial: form.controls.disableFsatSetupTutorial.value,
       disableFsatAssessmentTutorial: form.controls.disableFsatAssessmentTutorial.value,
       disableFsatReportTutorial: form.controls.disableFsatReportTutorial.value,
+      thElectricityCost: form.controls.thElectricityCost.value || 0,
+      thNaturalGasCost: form.controls.thNaturalGasCost.value || 0,
+      thSteamCost: form.controls.thSteamCost.value || 0,
+      thCompressedAirCost: form.controls.thCompressedAirCost.value || 0,
+      thOtherFuelCost: form.controls.thOtherFuelCost.value || 0,
+      thWaterCost: form.controls.thWaterCost.value || 0,
+      thWaterWasteCost: form.controls.thWaterWasteCost.value || 0
     };
     return tmpSettings;
   }
@@ -225,11 +239,18 @@ export class SettingsService {
       disablePsatReportTutorial: settings.disablePsatReportTutorial,
       disablePhastSetupTutorial: settings.disablePhastSetupTutorial,
       disablePhastAssessmentTutorial: settings.disablePhastAssessmentTutorial,
-      disablePhastReportTutorial: settings.disablePhastReportTutorial,    
+      disablePhastReportTutorial: settings.disablePhastReportTutorial,
       disableFsatSetupTutorial: settings.disableFsatSetupTutorial,
       disableFsatAssessmentTutorial: settings.disableFsatAssessmentTutorial,
-      disableFsatReportTutorial: settings.disableFsatReportTutorial
-    };
+      disableFsatReportTutorial: settings.disableFsatReportTutorial,
+      thElectricityCost: settings.thElectricityCost || 0,
+      thNaturalGasCost: settings.thNaturalGasCost || 0,
+      thSteamCost: settings.thSteamCost || 0,
+      thCompressedAirCost: settings.thCompressedAirCost || 0,
+      thOtherFuelCost: settings.thOtherFuelCost || 0,
+      thWaterCost: settings.thWaterCost || 0,
+      thWaterWasteCost: settings.thWaterWasteCost || 0
+    }
     return newSettings;
   }
 

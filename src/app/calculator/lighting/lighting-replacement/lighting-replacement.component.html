@@ -1,11 +1,30 @@
 <div class="d-flex h-100 modify-conditions general" #contentContainer>
   <div class="d-flex flex-column w-100 h-100 scroll-item">
-    <div #leftPanelHeader class="d-flex header pb-1 pt-1 align-items-center bg-white">
-      <div class="col-md-auto lighting-bulb">
-        <span class="fa fa-lightbulb-o" ></span>
+    <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+      [ngClass]="{'justify-content-between': inTreasureHunt}">
+      <div class="d-flex pl-2 align-items-center">
+        <div class="text-center lighting-bulb">
+          <span class="fa fa-lightbulb-o"></span>
+        </div>
+        <div class="pl-2">
+          <h3>Lighting Replacement</h3>
+        </div>
       </div>
-      <div class="pl-2">
-        <h3>Lighting Replacement</h3>
+      <div class="d-flex pr-2" *ngIf="inTreasureHunt">
+        <div class="d-flex help-holder">
+          <p class="help-text treasure-hunt-help">Click the save icon to add the
+            treasure to your chest! Add an opportunity sheet at any time or click cancel to discard changes and return
+            to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="addOpportunitySheet()">
+          <span class="fa fa-edit"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-times"></span>
+        </div>
       </div>
     </div>
     <!-- Baseline -->
@@ -14,15 +33,26 @@
         <div class="w-50">
           <div class="header mr-2 ml-2">
             <h3>Baseline</h3>
+            <a class="click-link pull-right small add-fixture" (click)="addBaselineFixture()">+Add Fixture</a>
           </div>
-          <div class="d-flex flex-column ml-4 mr-4 mb-4">
-            <div class="p-2">
-              <a class="click-link pull-right small" (click)="addBaselineFixture()">+Add Fixture</a>
+          <div class="d-flex flex-column ml-2 mr-2 mb-4">
+            <div class="form-group">
+              <label for="baselineElectricityCost">Electricity Cost</label>
+              <div class="input-group">
+                <input class="form-control" type="number" [(ngModel)]="baselineElectricityCost"
+                  name="baselineElectricityCost" (input)="calculate()">
+                <span class="input-group-addon units">$/kWh</span>
+              </div>
             </div>
+            <!-- <div class="p-0">
+              <a class="click-link pull-right small" (click)="addBaselineFixture()">+Add Fixture</a>
+            </div> -->
             <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
               <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Fixture #{{index+1}}
-                <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineFixture(index)"></span></label>
-              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()" (emitFocusField)="focusField($event)"></app-lighting-replacement-form>
+                <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large"
+                  (click)="removeBaselineFixture(index)"></span></label>
+              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()"
+                (emitFocusField)="focusField($event)"></app-lighting-replacement-form>
             </div>
             <div class="w-100 justify-content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
@@ -39,16 +69,27 @@
           <!-- Modification Header -->
           <div class="header mr-2 ml-2">
             <h3>Modification</h3>
+            <a class="click-link pull-right small add-fixture" (click)="addModificationFixture()">+Add Fixture</a>
           </div>
           <!-- Forms -->
-          <div class="d-flex flex-column ml-4 mr-4 mb-4">
-            <div class="p-2">
-              <a class="click-link pull-right small" (click)="addModificationFixture()">+Add Fixture</a>
+          <div class="d-flex flex-column ml-2 mr-2 mb-4">
+            <div class="form-group">
+              <label for="modificationElectricityCost">Electricity Cost</label>
+              <div class="input-group">
+                <input class="form-control" type="number" [(ngModel)]="modificationElectricityCost"
+                  name="modificationElectricityCost" (input)="calculate()">
+                <span class="input-group-addon units">$/kWh</span>
+              </div>
             </div>
+            <!-- <div class="p-0">
+              <a class="click-link pull-right small" (click)="addModificationFixture()">+Add Fixture</a>
+            </div> -->
             <div class="pb-2" *ngFor="let data of modificationData; let index = index;">
               <label class="group-label w-100 bold"><span class="fa fa-lightbulb-o pr-2"></span>Fixture #{{index+1}}
-                <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeModificationFixture(index)"></span></label>
-              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()" (emitFocusField)="focusField($event)"></app-lighting-replacement-form>
+                <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large"
+                  (click)="removeModificationFixture(index)"></span></label>
+              <app-lighting-replacement-form [data]="data" (emitCalculate)="calculate()"
+                (emitFocusField)="focusField($event)"></app-lighting-replacement-form>
             </div>
           </div>
         </div>
@@ -72,7 +113,8 @@
         <div class="d-flex flex-column mh-100 scroll-item">
           <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
             <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                (click)="setTab('results')">
                 <div>Results</div>
               </a>
             </div>
@@ -84,8 +126,9 @@
           </div>
           <div class="d-flex justify-content-center pl-2 pr-2">
             <app-lighting-replacement-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData"
-              [modificationData]="modificationData" [baselineResults]="baselineResults" [modificationResults]="modificationResults"></app-lighting-replacement-results>
-            <app-lighting-replacement-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-lighting-replacement-help>
+              [modificationData]="modificationData" [lightingReplacementResults]="lightingReplacementResults"></app-lighting-replacement-results>
+            <app-lighting-replacement-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
+            </app-lighting-replacement-help>
           </div>
         </div>
       </div>

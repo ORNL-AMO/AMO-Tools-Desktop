@@ -1,0 +1,23 @@
+.summary-item{
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+
+
+
+.report-btn{
+    font-size: small;
+    padding: 6px;
+    background-color: #2E4053;
+  }
+
+  .modal-dialog{
+    top: 0px;
+    min-width: 750px;
+}
+
+
+.modal-footer .btn.btn-sm{
+    padding: 6px;
+}

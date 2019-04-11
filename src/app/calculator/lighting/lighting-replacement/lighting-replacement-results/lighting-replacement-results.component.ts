@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { LightingReplacementData, LightingReplacementResults } from '../lighting-replacement.service';
+import { LightingReplacementData, LightingReplacementResults } from '../../../../shared/models/lighting';
 
 @Component({
   selector: 'app-lighting-replacement-results',
@@ -12,9 +12,7 @@ export class LightingReplacementResultsComponent implements OnInit {
   @Input()
   modificationData: Array<LightingReplacementData>;
   @Input()
-  baselineResults: LightingReplacementResults;
-  @Input()
-  modificationResults: LightingReplacementResults;
+  lightingReplacementResults: LightingReplacementResults;
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;

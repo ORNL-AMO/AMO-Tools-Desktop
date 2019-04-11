@@ -63,7 +63,8 @@ export class AssessmentService {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/ssmt/' + assessment.id);
-
+    } else if (assessment.type == 'TreasureHunt'){
+      this.router.navigateByUrl('/treasure-hunt/'+assessment.id);
     }
   }
 

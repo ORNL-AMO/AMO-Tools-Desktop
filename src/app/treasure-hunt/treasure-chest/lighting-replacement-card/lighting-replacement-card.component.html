@@ -1,0 +1,77 @@
+<div class="card card-item w-100">
+  <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
+    <input type="checkbox" [(ngModel)]="replacement.selected">
+    <div class="d-flex align-items-center">
+      <span class="fa fa-lightbulb-o pr-2 pt-0"></span>
+      <a (click)="editLighting()">
+        <span *ngIf="!replacement.opportunitySheet || !replacement.opportunitySheet.name">
+          Lighting Replacement #{{index+1}}
+        </span>
+        <span *ngIf="replacement.opportunitySheet && replacement.opportunitySheet.name">
+          {{replacement.opportunitySheet.name}}
+        </span>
+      </a>
+    </div>
+    <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
+      </button>
+      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+        <span class="dropdown-item">Delete</span>
+        <span class="dropdown-item">Create Copy</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-body scroll-item summary-card-body p-1">
+    <table class="table">
+      <tr>
+        <td class="bold" colspan="2">Baseline Data:</td>
+      </tr>
+      <tr>
+        <td>
+          Number of Fixtures
+        </td>
+        <td>
+          {{replacement.baseline.length}}
+        </td>
+      </tr>
+      <tr>
+        <td class="bold" colspan="2">Modification Data:</td>
+      </tr>
+      <tr>
+        <td>
+          Number of Fixtures
+        </td>
+        <td>
+          {{replacement.modifications.length}}
+        </td>
+      </tr>
+      <tr>
+        <td class="bold" colspan="2">Savings:</td>
+      </tr>
+      <tr>
+        <td>
+          Total Cost Savings
+        </td>
+        <td>
+          {{lightingReplacementResults.totalCostSavings | currency:'USD'}} /yr
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Total Energy Savings
+        </td>
+        <td>
+          {{lightingReplacementResults.totalEnergySavings | number:'1.0-0'}} kW
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="card-footer summary-card-footer text-center">
+    <span class="fa fa-edit pr-1"></span>
+    <a class="click-link small" *ngIf="replacement.opportunitySheet" (click)="editOpportunitySheet()">Edit
+      Opportunity Sheet</a>
+    <a class="click-link small" *ngIf="!replacement.opportunitySheet" (click)="editOpportunitySheet()">+Add
+      Opportunity Sheet</a>
+  </div>
+</div>

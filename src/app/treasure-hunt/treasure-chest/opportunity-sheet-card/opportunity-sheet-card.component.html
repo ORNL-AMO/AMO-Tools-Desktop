@@ -1,0 +1,78 @@
+<div class="card card-item w-100">
+  <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
+    <input type="checkbox" [(ngModel)]="opportunitySheet.selected">
+    <div class="d-flex align-items-center">
+      <span class="fa fa-edit pr-2 pt-0"></span>
+      <a (click)="editOpportunitySheet()">
+        <span *ngIf="!opportunitySheet.name">
+          Opportunity Sheet #{{index+1}}
+        </span>
+        <span *ngIf="opportunitySheet.name">
+          {{opportunitySheet.name}}
+        </span>
+      </a>
+    </div>
+    <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
+      </button>
+      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+        <span class="dropdown-item">Delete</span>
+        <span class="dropdown-item">Create Copy</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-body scroll-item summary-card-body p-1">
+    <table class="table">
+      <tr>
+        <td class="bold" colspan="2">Baseline Data:</td>
+      </tr>
+      <tr>
+        <td>
+          Electricity Use
+        </td>
+        <td>
+          {{opportunityResults.electricityResults.baselineEnergyUse}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Electricity Cost
+        </td>
+        <td>
+          {{opportunityResults.electricityResults.baselineEnergyCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td class="bold" colspan="2">Modification Data:</td>
+      </tr>
+      <tr>
+        <td>
+          Electricity Use
+        </td>
+        <td>
+          {{opportunityResults.electricityResults.modificationEnergyUse}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Electricity Cost
+        </td>
+        <td>
+          {{opportunityResults.electricityResults.modificationEnergyCost | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td class="bold" colspan="2">Savings:</td>
+      </tr>
+      <tr>
+        <td>
+          Total Savings
+        </td>
+        <td>
+          {{opportunityResults.totalCostSavings | currency:'USD'}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
