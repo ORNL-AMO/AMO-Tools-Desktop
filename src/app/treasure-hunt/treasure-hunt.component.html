@@ -14,8 +14,14 @@
       <app-system-basics *ngIf="subTab == 'settings'" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
       </app-system-basics>
-      <app-operating-hours *ngIf="subTab == 'operating-hours'" [treasureHunt]="assessment.treasureHunt" (emitSave)="saveTreasureHunt($event)">
+      <app-operating-hours *ngIf="subTab == 'operating-hours'" [treasureHunt]="assessment.treasureHunt"
+        (emitSave)="saveTreasureHunt($event)">
       </app-operating-hours>
+
+      <app-operation-costs *ngIf="subTab == 'operation-costs'" [treasureHunt]="assessment.treasureHunt"
+        (emitSave)="saveTreasureHunt($event)">
+      </app-operation-costs>
+
     </div>
     <div class="w-50">
       <app-help-panel></app-help-panel>

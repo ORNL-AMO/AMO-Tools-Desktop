@@ -6,6 +6,16 @@ export interface TreasureHunt {
     lightingReplacements?: Array<LightingReplacementTreasureHunt>;
     opportunitySheets?: Array<OpportunitySheet>;
     operatingHours?: OperatingHours;
+    currentEnergyUsage?: EnergyUsage
+}
+
+export interface EnergyUsage {
+    electricityUsage: number,
+    electricityCosts: number,
+    naturalGasUsage: number,
+    naturalGasCosts: number,
+    otherFuelUsage: number,
+    otherFuelCosts: number,
 }
 
 export interface OpportunitySheet {
