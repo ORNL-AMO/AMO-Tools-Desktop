@@ -22,6 +22,7 @@ import { OpportunitySheetHelpComponent } from './standalone-opportunity-sheet/op
 import { OpportunitySheetResultsComponent } from './standalone-opportunity-sheet/opportunity-sheet-results/opportunity-sheet-results.component';
 import { OpportunitySheetCardComponent } from './treasure-chest/opportunity-sheet-card/opportunity-sheet-card.component';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
+import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import { OpportunitySheetService } from './standalone-opportunity-sheet/opportun
     ModalModule,
     FormsModule
   ],
-  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent, TreasureChestComponent, SummaryCardComponent, LightingReplacementCardComponent, OpportunitySheetComponent, StandaloneOpportunitySheetComponent, EnergyUseFormComponent, CostsFormComponent, GeneralDetailsFormComponent, OpportunitySheetHelpComponent, OpportunitySheetResultsComponent, OpportunitySheetCardComponent],
+  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent, TreasureChestComponent, SummaryCardComponent, LightingReplacementCardComponent, OpportunitySheetComponent, StandaloneOpportunitySheetComponent, EnergyUseFormComponent, CostsFormComponent, GeneralDetailsFormComponent, OpportunitySheetHelpComponent, OpportunitySheetResultsComponent, OpportunitySheetCardComponent, OperatingHoursComponent],
   providers: [ TreasureHuntService, OpportunitySheetService ]
 })
 export class TreasureHuntModule { }

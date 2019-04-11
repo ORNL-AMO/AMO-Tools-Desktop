@@ -1,9 +1,11 @@
 import { LightingReplacementData } from "./lighting";
+import { OperatingHours } from "./operations";
 
 export interface TreasureHunt {
     name: string,
     lightingReplacements?: Array<LightingReplacementTreasureHunt>;
     opportunitySheets?: Array<OpportunitySheet>;
+    operatingHours?: OperatingHours;
 }
 
 export interface OpportunitySheet {
