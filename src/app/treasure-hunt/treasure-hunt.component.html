@@ -18,8 +18,8 @@
         (emitSave)="saveTreasureHunt($event)">
       </app-operating-hours>
 
-      <app-operation-costs *ngIf="subTab == 'operation-costs'" [treasureHunt]="assessment.treasureHunt"
-        (emitSave)="saveTreasureHunt($event)">
+      <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings"
+        [treasureHunt]="assessment.treasureHunt" (emitSave)="saveTreasureHunt($event)">
       </app-operation-costs>
 
     </div>

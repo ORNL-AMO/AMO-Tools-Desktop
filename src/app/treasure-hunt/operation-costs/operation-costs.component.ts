@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { TreasureHunt, EnergyUsage } from '../../shared/models/treasure-hunt';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-operation-costs',
@@ -11,6 +12,9 @@ export class OperationCostsComponent implements OnInit {
   treasureHunt: TreasureHunt;
   @Output('emitSave')
   emitSave = new EventEmitter<TreasureHunt>();
+  @Input()
+  settings: Settings;
+  
   constructor() { }
 
   ngOnInit() {
