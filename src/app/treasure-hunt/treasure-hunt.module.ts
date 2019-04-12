@@ -24,6 +24,7 @@ import { OpportunitySheetCardComponent } from './treasure-chest/opportunity-shee
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
 import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { OperationCostsComponent } from './operation-costs/operation-costs.compo
     LightingReplacementModule,
     SettingsModule,
     ModalModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   declarations: [
     TreasureHuntComponent, 

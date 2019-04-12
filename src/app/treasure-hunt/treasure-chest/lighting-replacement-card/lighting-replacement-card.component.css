@@ -1,14 +1,48 @@
+.card.treasure-hunt-card{
+  padding: .25rem;
+  font-size: small;
+  border-right: none;
+  border-left: none;
+}
+
+.col-item-br{
+  border-right: solid 2px gray;
+}
+
+.opp-sheet-col .fa.fa-edit{
+  text-align: center;
+  font-size: 35px;
+}
+
+
+.opportunity-name{
+  font-size: large;
+}
+
 /* td{
     padding: 0px;
     font-size: small;
 }
-
+*/
 a:not([href]):not([tabindex]):hover {
   color: blue;
   text-decoration: underline;
   cursor: pointer;
 }
 
+.card.not-selected{
+  background-color: #efefef;
+}
+
+
+.no-opp-sheet{
+  color: red;
+}
+
+.opp-sheet-exists{
+  color: green;
+}
+/*
   .dropdown-menu.shown{
     display: grid;
     padding: 0px;

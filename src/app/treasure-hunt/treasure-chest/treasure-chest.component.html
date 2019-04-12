@@ -3,19 +3,19 @@
     <div class="header mr-2 ml-2">
       <h3>Treasure Chest Inventory</h3>
     </div>
-    <div class="col-12">
+    <!-- <div class="col-12">
       <div class="card header-card">
-        <div class="card-body d-flex w-100 p-0">
-          <div class="col-2">
-            Implement Opportunity
+        <div class="card-body d-flex w-100 p-0 justify-content-center">
+          <div class="col-1 col-item-br">
+            Apply
           </div>
-          <div class="col-3 align-items-center">
-            <span>Name</span>
+          <div class="col-4 col-item-br text-center">
+            Name
           </div>
-          <div class="col-3">
+          <div class="col-3 col-item-br text-center">
             Percent Savings
           </div>
-          <div class="col-2">
+          <div class="col-2 col-item-br text-center">
             Opportunity Sheet
           </div>
           <div class="col-2">
@@ -23,20 +23,20 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
 
 
     <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
       <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
         (emitEditLighting)="editLighting($event, index)"
-        (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)">
+        (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)" [treasureHunt]="treasureHunt">
       </app-lighting-replacement-card>
     </div>
-    <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
+    <!-- <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
       <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
         (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings">
       </app-opportunity-sheet-card>
-    </div>
+    </div> -->
   </div>
   <div class="d-flex flex-column scroll-item flex-fill" [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">

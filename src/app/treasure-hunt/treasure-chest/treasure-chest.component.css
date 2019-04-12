@@ -30,6 +30,9 @@
 .card.header-card{
     padding: .25rem;
     font-size: small;
-    text-align: center;
     font-weight: bold;
+}
+
+.col-item-br{
+    border-right: solid;
 }

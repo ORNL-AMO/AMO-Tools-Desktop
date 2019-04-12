@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { LightingReplacementTreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
+import { LightingReplacementTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { LightingReplacementResults } from '../../../shared/models/lighting';
 import { LightingReplacementService } from '../../../calculator/lighting/lighting-replacement/lighting-replacement.service';
@@ -20,14 +20,17 @@ export class LightingReplacementCardComponent implements OnInit {
   emitEditOpportunitySheet = new EventEmitter<OpportunitySheet>();
   @Output('emitEditLighting')
   emitEditLighting = new EventEmitter<LightingReplacementTreasureHunt>();
+  @Input()
+  treasureHunt: TreasureHunt;
 
   dropdownOpen: boolean = false;
   lightingReplacementResults: LightingReplacementResults;
-
+  percentSavings: number;
   constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
     this.lightingReplacementResults = this.lightingReplacementService.getResults(this.replacement);
+    this.percentSavings = this.lightingReplacementResults.totalCostSavings / this.treasureHunt.currentEnergyUsage.electricityCosts;
   }
 
   showDropdown() {
@@ -40,5 +43,9 @@ export class LightingReplacementCardComponent implements OnInit {
 
   editLighting() {
     this.emitEditLighting.emit(this.replacement);
+  }
+
+  toggleSelected() {
+    this.replacement.selected = !this.replacement.selected;
   }
 }
