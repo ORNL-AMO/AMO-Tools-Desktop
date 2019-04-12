@@ -27,6 +27,10 @@
     width: 65%;
 }
 
+.result-column{
+    width: 35%;
+}
+
 .card.header-card{
     padding: .25rem;
     font-size: small;

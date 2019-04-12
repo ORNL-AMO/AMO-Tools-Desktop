@@ -19,3 +19,12 @@ td{
   .summary-card-body{
       height: 200px;
   }
+
+  .middle-border-item{
+    border-left: solid 2px gray;
+    border-right: solid 2px gray;
+  }
+
+  .total-savings-border{
+    border-bottom: solid 2px gray;
+  }

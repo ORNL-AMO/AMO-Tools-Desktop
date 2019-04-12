@@ -19,18 +19,22 @@
             <span *ngIf="replacement.opportunitySheet && replacement.opportunitySheet.name">
               {{replacement.opportunitySheet.name}}
             </span>
-          </a>
+          </a><br>
+          <span>Annual Cost Savings: {{lightingReplacementResults.totalCostSavings | currency:'USD'}}</span><br>
+          <span>Annual Energy Savings: {{lightingReplacementResults.totalEnergySavings | number:'1.0-0'}}</span>
         </div>
       </div>
     </div>
     <div class="col-3 col-item-br text-center">
       <span class="large pb-2">Electricity Cost Savings</span>
-      <app-percent-graph [value]="percentSavings" [fontSize]="32" [unit]="'%'" [title]="'something'" [chartClass]="'treasure-hunt'">
+      <app-percent-graph [value]="percentSavings" [fontSize]="32" [unit]="'%'" [title]="'something'"
+        [chartClass]="'treasure-hunt'">
       </app-percent-graph>
     </div>
     <div class="col-2 col-item-br opp-sheet-col">
       <div class="row align-items-center h-100">
-        <div class="col text-center" [ngClass]="{'no-opp-sheet': !replacement.opportunitySheet, 'opp-sheet-exists': replacement.opportunitySheet}">
+        <div class="col text-center"
+          [ngClass]="{'no-opp-sheet': !replacement.opportunitySheet, 'opp-sheet-exists': replacement.opportunitySheet}">
           <span class="fa fa-edit"></span><br>
           <span class="large pt-2" *ngIf="!replacement.opportunitySheet">Add Opportunity Sheet</span>
           <span class="large pt-2" *ngIf="replacement.opportunitySheet">Edit Opportunity Sheet</span>
@@ -40,9 +44,9 @@
     <div class="col-2">
       <div class="row align-items-center h-100">
         <div class="col text-center">
-          <a class="click-link">Edit</a><br>
+          <a class="click-link">Edit Opportunity</a><br>
           <a class="click-link danger">Delete</a><br>
-          <a class="click-link">Copy</a>
+          <a class="click-link">Create Copy</a>
         </div>
       </div>
     </div>

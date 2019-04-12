@@ -15,7 +15,7 @@
 }
 
 
-.opportunity-name{
+.opportunity-name a, .opportunity-name .fa{
   font-size: large;
 }
 
