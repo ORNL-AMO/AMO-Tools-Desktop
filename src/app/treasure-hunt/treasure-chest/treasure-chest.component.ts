@@ -25,9 +25,15 @@ export class TreasureChestComponent implements OnInit {
   selectedEditLightingReplacement: LightingReplacementTreasureHunt;
   selectedEditOpportunitySheet: OpportunitySheet;
   isSaveLighting: boolean;
+  tabSelect: string = 'results';
   constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
+  }
+
+
+  setTab(str: string){
+    this.tabSelect = str;
   }
 
   selectCalc(str: string) {

@@ -11,8 +11,17 @@
   <div *ngIf="mainTab == 'system-basics'" class="d-flex tab-content scroll-item"
     [ngStyle]="{'height.px': containerHeight}">
     <div class="w-50 panel-column modification">
-      <app-system-basics [(settings)]="settings" [assessment]="assessment" (updateSettings)="getSettings()">
+      <app-system-basics *ngIf="subTab == 'settings'" [(settings)]="settings" [assessment]="assessment"
+        (updateSettings)="getSettings()">
       </app-system-basics>
+      <app-operating-hours *ngIf="subTab == 'operating-hours'" [treasureHunt]="assessment.treasureHunt"
+        (emitSave)="saveTreasureHunt($event)">
+      </app-operating-hours>
+
+      <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings"
+        [treasureHunt]="assessment.treasureHunt" (emitSave)="saveTreasureHunt($event)">
+      </app-operation-costs>
+
     </div>
     <div class="w-50">
       <app-help-panel></app-help-panel>

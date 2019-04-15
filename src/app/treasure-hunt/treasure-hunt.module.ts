@@ -22,6 +22,9 @@ import { OpportunitySheetHelpComponent } from './standalone-opportunity-sheet/op
 import { OpportunitySheetResultsComponent } from './standalone-opportunity-sheet/opportunity-sheet-results/opportunity-sheet-results.component';
 import { OpportunitySheetCardComponent } from './treasure-chest/opportunity-sheet-card/opportunity-sheet-card.component';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
+import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
+import { OperationCostsComponent } from './operation-costs/operation-costs.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -29,9 +32,29 @@ import { OpportunitySheetService } from './standalone-opportunity-sheet/opportun
     LightingReplacementModule,
     SettingsModule,
     ModalModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
-  declarations: [TreasureHuntComponent, TreasureHuntBannerComponent, FindTreasureComponent, SystemBasicsComponent, HelpPanelComponent, TreasureChestComponent, SummaryCardComponent, LightingReplacementCardComponent, OpportunitySheetComponent, StandaloneOpportunitySheetComponent, EnergyUseFormComponent, CostsFormComponent, GeneralDetailsFormComponent, OpportunitySheetHelpComponent, OpportunitySheetResultsComponent, OpportunitySheetCardComponent],
+  declarations: [
+    TreasureHuntComponent, 
+    TreasureHuntBannerComponent, 
+    FindTreasureComponent, 
+    SystemBasicsComponent, 
+    HelpPanelComponent, 
+    TreasureChestComponent, 
+    SummaryCardComponent, 
+    LightingReplacementCardComponent, 
+    OpportunitySheetComponent, 
+    StandaloneOpportunitySheetComponent, 
+    EnergyUseFormComponent, 
+    CostsFormComponent, 
+    GeneralDetailsFormComponent, 
+    OpportunitySheetHelpComponent, 
+    OpportunitySheetResultsComponent, 
+    OpportunitySheetCardComponent, 
+    OperatingHoursComponent, 
+    OperationCostsComponent
+  ],
   providers: [ TreasureHuntService, OpportunitySheetService ]
 })
 export class TreasureHuntModule { }

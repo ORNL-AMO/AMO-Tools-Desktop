@@ -13,6 +13,7 @@
           <div *ngIf="showGeneralSettings">
             <p class="help-text">These will be default settings for any new assessments and folders.</p>
             <app-application-settings [(settingsForm)]="settingsForm" [generalSettings]="true" (startSavePolling)="updateSettings(false)"></app-application-settings>
+            <app-treasure-hunt-settings [(settingsForm)]="settingsForm" (emitSave)="updateSettings(false)"></app-treasure-hunt-settings>
           </div>
         </div>
 

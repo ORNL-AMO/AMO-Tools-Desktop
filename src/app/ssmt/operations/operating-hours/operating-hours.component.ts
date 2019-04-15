@@ -33,7 +33,7 @@ export class OperatingHoursComponent implements OnInit {
       let defaultHours: OperatingHours = {
         weeksPerYear: 52,
         daysPerWeek: 7,
-        shiftsPerDay: Infinity,
+        shiftsPerDay: 3,
         hoursPerShift: 8,
         hoursPerYear: 8736
       }

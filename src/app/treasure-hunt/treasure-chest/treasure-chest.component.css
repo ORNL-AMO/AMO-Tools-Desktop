@@ -21,3 +21,18 @@
 .modal-footer .btn.btn-sm{
     padding: 6px;
 }
+
+
+.panel-column{
+    width: 65%;
+}
+
+.card.header-card{
+    padding: .25rem;
+    font-size: small;
+    font-weight: bold;
+}
+
+.col-item-br{
+    border-right: solid;
+}
