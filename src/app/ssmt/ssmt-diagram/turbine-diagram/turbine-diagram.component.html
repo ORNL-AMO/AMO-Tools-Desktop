@@ -1,5 +1,6 @@
 <div class="d-flex flex-column h-100 w-100 justify-content-center">
-  <div class="d-flex chevron-one justify-content-center flex-fill" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')">
+  <div class="d-flex chevron-one justify-content-center flex-fill" (mouseenter)="hoverInlet()"
+    (mouseleave)="hoverEquipment('default')">
     <div class="inlet-mass-flow-holder">
       <span class="inlet-mass-flow" *ngIf="turbine.massFlow != 0">
         {{turbine.massFlow | number:'1.0-2'}}
@@ -10,9 +11,11 @@
   </div>
 
   <div class="d-flex justify-content-center">
-    <div class="d-flex turbine-img-holder" (click)="selectEquipment()" (mouseenter)="hoverTurbine()" (mouseleave)="hoverEquipment('default')">
+    <div class="d-flex turbine-img-holder" (click)="selectEquipment()" (mouseenter)="hoverTurbine()"
+      (mouseleave)="hoverEquipment('default')">
       <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-turbine.png" class="turbine-img">
       <span class="turbine-label">{{turbineLabel}}</span>
+      <span class="turbine-warning fa fa-exclamation-triangle" *ngIf="turbineWarnings"></span>
     </div>
   </div>
 
@@ -20,7 +23,7 @@
     (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')">
     <div class="outlet-power-holder">
       <span class="outlet-power" *ngIf="turbine.powerOut != 0">
-        {{turbine.powerOut | number:'1.0-1'}}             
+        {{turbine.powerOut | number:'1.0-1'}}
         <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
       </span>
     </div>

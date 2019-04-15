@@ -1,6 +1,27 @@
 <div class="d-flex flex-column">
   <label class="group-label">{{turbineName}} Steam Turbine Properties</label>
+  <div class="w-100 error pb-2 pt-2"
+    *ngIf="inletSteamCondensateWarning || outletPressureWarning || steamCondensingWarning || steamMassFlowWarning">
+    <span class="warning-label">Warning:<br></span>
+    <span *ngIf="inletSteamCondensateWarning">
+      **{{inletSteamCondensateWarning}}
+      <br>
+    </span>
+    <span *ngIf="outletPressureWarning">
+      **{{outletPressureWarning}}
+      <br>
+    </span>
+    <span *ngIf="steamCondensingWarning">
+      **{{steamCondensingWarning}}
+      <br>
+    </span>
+    <span *ngIf="steamMassFlowWarning">
+      **{{steamMassFlowWarning}}
+      <br>
+    </span>
+  </div>
   <app-turbine-results *ngIf="turbine" [settings]="settings" [results]="turbine"></app-turbine-results>
+
   <div class="w-100 text-center" *ngIf="turbine">
     <a class="click-link small" (click)="goToCalculator()"><span class="fa fa-calculator click-item pr-2"></span>Copy to
       Turbine Calculator</a>
