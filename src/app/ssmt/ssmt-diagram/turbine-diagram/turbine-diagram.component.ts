@@ -29,6 +29,7 @@ export class TurbineDiagramComponent implements OnInit {
 
   inletSteamClasses: Array<string>;
   outletSteamClasses: Array<string>;
+  turbineWarnings: boolean;
   constructor() { }
 
   ngOnInit() {
@@ -45,6 +46,7 @@ export class TurbineDiagramComponent implements OnInit {
 
   ngOnChanges(){
     this.setClasses();
+    this.checkWarnings();
   }
 
   setClasses() {
@@ -72,8 +74,19 @@ export class TurbineDiagramComponent implements OnInit {
     this.emitSelectEquipment.emit();
   }
 
-
   hoverTurbine() {
     this.emitSetHover.emit(this.turbineType + 'TurbineHovered');
+  }
+
+  checkWarnings(){
+    if(this.turbine.outletQuality < 1 || this.turbine.inletQuality < 1){
+      this.turbineWarnings = true;
+    }else if(this.turbine.outletPressure > this.turbine.inletPressure){
+      this.turbineWarnings = true;
+    }else if(this.turbine.massFlow < 0){
+      this.turbineWarnings = true;
+    }else{
+      this.turbineWarnings = false;
+    }
   }
 }

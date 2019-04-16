@@ -22,7 +22,11 @@
       </td>
     </tr>
     <tr>
-      <td class="bold">Phase</td>
+      <td class="bold">
+        <span class="error" *ngIf="steam.quality != 1 && steam.quality != 0">Saturated
+        </span>
+        <span *ngIf="steam.quality == 1 || steam.quality == 0">Phase</span>
+      </td>
       <td class="text-center">
         <span *ngIf="steam.quality == 0">Liquid</span>
         <span *ngIf="steam.quality == 1">Gas</span>
