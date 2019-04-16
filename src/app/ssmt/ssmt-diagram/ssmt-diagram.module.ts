@@ -21,13 +21,15 @@ import { OneHeaderConnectorComponent } from './one-header-connector/one-header-c
 import { FeedwaterDiagramComponent } from './feedwater-diagram/feedwater-diagram.component';
 import { ReturnCondensateConnectorComponent } from './return-condensate-connector/return-condensate-connector.component';
 import { HoverTableModule } from './hover-table/hover-table.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    HoverTableModule
+    HoverTableModule,
+    FormsModule
   ],
   declarations: [
     SsmtDiagramComponent,

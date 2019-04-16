@@ -1,24 +1,28 @@
 <div class="d-flex ssmt modify-conditions panel-container ssmt-diagram w-100" *ngIf="outputData && dataCalculated">
-  <div class="d-flex flex-column panel-column scroll-item diagram-container align-items-center"
+  <div class="panel-column scroll-item diagram-container align-items-center justify-content-center"
     [ngStyle]="{'height.px': containerHeight}">
-    <div class="d-flex justify-content-center pt-2">
-      <div class="form-group">
-        <select name="selectedSSMT" class="form-control w-100" id="selectedSSMT" (change)="calculateResults()"
-          [(ngModel)]="selectedSSMT">
-          <option [ngValue]="ssmt">Baseline</option>
-          <option *ngFor="let modification of ssmt.modifications" [ngValue]="modification.ssmt">
-            {{modification.ssmt.name}}</option>
-        </select>
+    <div class="row no-gutters justify-content-center">
+      <div class="col-auto pt-2 pl-3 pr-3">
+        <div class="form-group">
+          <select name="selectedSSMT" class="form-control w-100" id="selectedSSMT" (change)="calculateResults()"
+            [(ngModel)]="selectedSSMT">
+            <option [ngValue]="ssmt">Baseline</option>
+            <option *ngFor="let modification of ssmt.modifications" [ngValue]="modification.ssmt">
+              {{modification.ssmt.name}}</option>
+          </select>
+        </div>
       </div>
     </div>
-    <!-- <div class="d-flex w-100"> -->
-    <app-ssmt-diagram *ngIf="outputData.boilerOutput" [settings]="settings" [inputData]="inputData"
-      [outputData]="outputData" (emitTableSelected)="selectTable($event)" (emitHoverChange)="setHover($event)">
-    </app-ssmt-diagram>
-    <div *ngIf="!outputData.boilerOutput" class="alert-danger w-50 mx-auto bold p-2">
-      The model you selected is invalid, please fix your selected model or choose a different model.
+    <div class="row no-gutters justify-content-center">
+      <div class="col">
+        <app-ssmt-diagram *ngIf="outputData.boilerOutput" [settings]="settings" [inputData]="inputData"
+          [outputData]="outputData" (emitTableSelected)="selectTable($event)" (emitHoverChange)="setHover($event)">
+        </app-ssmt-diagram>
+        <div *ngIf="!outputData.boilerOutput" class="alert-danger w-50 mx-auto bold p-2">
+          The model you selected is invalid, please fix your selected model or choose a different model.
+        </div>
+      </div>
     </div>
-    <!-- </div> -->
   </div>
   <div class="d-flex flex-column flex-fill diagram-help-panel scroll-item" [ngStyle]="{'height.px': containerHeight}"
     *ngIf="outputData">
