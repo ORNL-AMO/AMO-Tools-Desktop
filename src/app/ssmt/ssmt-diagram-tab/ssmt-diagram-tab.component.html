@@ -13,13 +13,27 @@
         </div>
       </div>
     </div>
-    <div class="row no-gutters justify-content-center">
+    <div class="row no-gutters justify-content-center scale-helper"
+      [ngStyle]="{'transform': 'scale('+ scaleValue/100 +')'}">
       <div class="col">
         <app-ssmt-diagram *ngIf="outputData.boilerOutput" [settings]="settings" [inputData]="inputData"
           [outputData]="outputData" (emitTableSelected)="selectTable($event)" (emitHoverChange)="setHover($event)">
         </app-ssmt-diagram>
         <div *ngIf="!outputData.boilerOutput" class="alert-danger w-50 mx-auto bold p-2">
           The model you selected is invalid, please fix your selected model or choose a different model.
+        </div>
+      </div>
+    </div>
+    <div class="slide-container">
+      <div class="d-flex w-100">
+        <div class="p-0">
+          <span class="fa fa-search-minus"></span>
+        </div>
+        <div class="flex-fill pr-1 pl-1">
+          <input type="range" min="1" max="100" class="diagram-slider" id="myRange" [(ngModel)]="scaleValue">
+        </div>
+        <div class="p-0">
+          <span class="fa fa-search-plus"></span>
         </div>
       </div>
     </div>

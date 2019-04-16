@@ -27,6 +27,8 @@ export class SsmtDiagramTabComponent implements OnInit {
   selectedSSMT: SSMT;
   dataCalculated: boolean = false;
   displayCalculators: boolean = false;
+  scaleValue: number = 90;
+
   constructor(private calculateModelService: CalculateModelService, private ssmtService: SsmtService) { }
 
   ngOnInit() {

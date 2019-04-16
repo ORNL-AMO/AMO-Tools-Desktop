@@ -21,7 +21,6 @@ export class SsmtDiagramComponent implements OnInit {
   emitHoverChange = new EventEmitter<string>();
   
   hoveredEquipment: string = 'boilerHovered';
-  scaleValue: number = 50;
 
   constructor() { }
 

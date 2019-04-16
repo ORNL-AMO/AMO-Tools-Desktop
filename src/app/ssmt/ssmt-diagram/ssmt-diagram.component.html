@@ -1,5 +1,4 @@
-<div class="d-flex p-3 align-self-stretch ssmt-diagram" [ngClass]="hoveredEquipment" *ngIf="outputData"
-  [ngStyle]="{'transform': 'scale('+ scaleValue/100 +')'}">
+<div class="d-flex p-3 align-self-stretch ssmt-diagram" [ngClass]="hoveredEquipment" *ngIf="outputData">
   <div class="d-flex flex-grow">
     <app-feedwater-diagram [deaerator]="outputData.deaeratorOutput" (emitSetHover)="setHover($event)"
       [settings]="settings"></app-feedwater-diagram>
@@ -191,7 +190,4 @@
       </div>
     </div>
   </div>
-</div>
-<div class="slidecontainer">
-  <input type="range" min="1" max="100" value="50" class="slider" id="myRange" [(ngModel)]="scaleValue">
 </div>
