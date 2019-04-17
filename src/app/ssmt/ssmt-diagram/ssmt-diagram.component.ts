@@ -19,7 +19,9 @@ export class SsmtDiagramComponent implements OnInit {
   emitTableSelected = new EventEmitter<string>();
   @Output('emitHoverChange')
   emitHoverChange = new EventEmitter<string>();
+  
   hoveredEquipment: string = 'default';
+
   constructor() { }
 
   ngOnInit() {
