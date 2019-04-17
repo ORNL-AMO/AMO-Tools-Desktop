@@ -1,0 +1,65 @@
+<div class="d-flex flex-column">
+  <div class="header mr-2 ml-2">
+    <h3>Annual Energy Usage and Costs</h3>
+  </div>
+  <div class="p-4 card-form">
+    <div class="form-section">
+      <div class="form-group">
+        <label for="annualElectricityUsage">Electricity Usage</label>
+        <div class="input-group">
+          <input class="form-control" name="annualElectricityUsage" type="number"
+            [(ngModel)]="treasureHunt.currentEnergyUsage.electricityUsage" (input)="save()">
+          <span class="input-group-addon units">kWh/yr</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="annualElectricityCosts">Electricity Costs</label>
+        <div class="input-group">
+          <input class="form-control" name="annualElectricityCosts" type="number"
+            [(ngModel)]="treasureHunt.currentEnergyUsage.electricityCosts" (input)="save()">
+          <span class="input-group-addon units">$/yr</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label for="annualNaturalGasUsage">Natural Gas Usage</label>
+        <div class="input-group">
+          <input class="form-control" name="annualNaturalGasUsage" type="number"
+            [(ngModel)]="treasureHunt.currentEnergyUsage.naturalGasUsage" (input)="save()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/yr</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="annualNaturalGasCosts">Natural Gas Costs</label>
+        <div class="input-group">
+          <input class="form-control" name="annualNaturalGasCosts" type="number"
+            [(ngModel)]="treasureHunt.currentEnergyUsage.naturalGasCosts" (input)="save()">
+          <span class="input-group-addon units">$/yr</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label for="annualOtherFuelUsage">Other Fuel Usage</label>
+        <div class="input-group">
+          <input class="form-control" name="annualOtherFuelUsage" type="number"
+            [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelUsage" (input)="save()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/yr</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="annualOtherFuelCosts">Other Fuel Costs</label>
+        <div class="input-group">
+          <input class="form-control" name="annualOtherFuelCosts" type="number"
+            [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelCosts" (input)="save()">
+          <span class="input-group-addon units">$/yr</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

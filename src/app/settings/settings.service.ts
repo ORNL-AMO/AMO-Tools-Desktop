@@ -110,13 +110,10 @@ export class SettingsService {
       'disableFsatSetupTutorial': settings.disableFsatSetupTutorial || false,
       'disableFsatAssessmentTutorial': settings.disableFsatAssessmentTutorial || false,
       'disableFsatReportTutorial': settings.disableFsatReportTutorial || false,
-      'thElectricityCost': settings.thElectricityCost || 0,
-      'thNaturalGasCost': settings.thNaturalGasCost || 0,
-      'thSteamCost': settings.thSteamCost || 0,
-      'thCompressedAirCost': settings.thCompressedAirCost || 0,
-      'thOtherFuelCost': settings.thOtherFuelCost || 0,
-      'thWaterCost': settings.thWaterCost || 0,
-      'thWaterWasteCost': settings.thWaterWasteCost || 0
+      'compressedAirCost': settings.compressedAirCost || 0,
+      'otherFuelCost': settings.otherFuelCost || 0,
+      'waterCost': settings.waterCost || 0,
+      'waterWasteCost': settings.waterWasteCost || 0
     });
   }
 
@@ -177,13 +174,10 @@ export class SettingsService {
       disableFsatSetupTutorial: form.controls.disableFsatSetupTutorial.value,
       disableFsatAssessmentTutorial: form.controls.disableFsatAssessmentTutorial.value,
       disableFsatReportTutorial: form.controls.disableFsatReportTutorial.value,
-      thElectricityCost: form.controls.thElectricityCost.value || 0,
-      thNaturalGasCost: form.controls.thNaturalGasCost.value || 0,
-      thSteamCost: form.controls.thSteamCost.value || 0,
-      thCompressedAirCost: form.controls.thCompressedAirCost.value || 0,
-      thOtherFuelCost: form.controls.thOtherFuelCost.value || 0,
-      thWaterCost: form.controls.thWaterCost.value || 0,
-      thWaterWasteCost: form.controls.thWaterWasteCost.value || 0
+      compressedAirCost: form.controls.compressedAirCost.value || 0,
+      otherFuelCost: form.controls.otherFuelCost.value || 0,
+      waterCost: form.controls.waterCost.value || 0,
+      waterWasteCost: form.controls.waterWasteCost.value || 0
     };
     return tmpSettings;
   }
@@ -243,13 +237,10 @@ export class SettingsService {
       disableFsatSetupTutorial: settings.disableFsatSetupTutorial,
       disableFsatAssessmentTutorial: settings.disableFsatAssessmentTutorial,
       disableFsatReportTutorial: settings.disableFsatReportTutorial,
-      thElectricityCost: settings.thElectricityCost || 0,
-      thNaturalGasCost: settings.thNaturalGasCost || 0,
-      thSteamCost: settings.thSteamCost || 0,
-      thCompressedAirCost: settings.thCompressedAirCost || 0,
-      thOtherFuelCost: settings.thOtherFuelCost || 0,
-      thWaterCost: settings.thWaterCost || 0,
-      thWaterWasteCost: settings.thWaterWasteCost || 0
+      compressedAirCost: settings.compressedAirCost || 0,
+      otherFuelCost: settings.otherFuelCost || 0,
+      waterCost: settings.waterCost || 0,
+      waterWasteCost: settings.waterWasteCost || 0
     }
     return newSettings;
   }

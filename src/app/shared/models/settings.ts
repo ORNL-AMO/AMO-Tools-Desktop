@@ -46,9 +46,7 @@ export interface Settings {
     phastRollupSteamUnit?: string,
     phastRollupElectricityUnit?: string,
     defaultPanelTab?: string,
-    electricityCost?: number,
-    fuelCost?: number,
-    steamCost?: number,
+
     disableTutorial?: boolean,
     disableDashboardTutorial?: boolean,
     disablePsatSetupTutorial?: boolean,
@@ -60,13 +58,14 @@ export interface Settings {
     disableFsatSetupTutorial?: boolean,
     disableFsatAssessmentTutorial?: boolean,
     disableFsatReportTutorial?: boolean,
-    thElectricityCost?: number,
-    thNaturalGasCost?: number,
-    thSteamCost?: number,
-    thCompressedAirCost?: number,
-    thOtherFuelCost?: number,
-    thWaterCost?: number,
-    thWaterWasteCost?: number
+    //costs
+    electricityCost?: number,
+    fuelCost?: number,
+    steamCost?: number,
+    compressedAirCost?: number,
+    otherFuelCost?: number,
+    waterCost?: number,
+    waterWasteCost?: number
 }
 
 

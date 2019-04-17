@@ -1,4 +1,66 @@
-<div class="d-flex flex-fill justify-content-center" *ngIf="selectedCalc == 'none'">
+<div class="d-flex modify-conditions panel-container" *ngIf="selectedCalc == 'none'">
+  <div class="panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="header mr-2 ml-2">
+      <h3>Treasure Chest Inventory</h3>
+    </div>
+    <!-- <div class="col-12">
+      <div class="card header-card">
+        <div class="card-body d-flex w-100 p-0 justify-content-center">
+          <div class="col-1 col-item-br">
+            Apply
+          </div>
+          <div class="col-4 col-item-br text-center">
+            Name
+          </div>
+          <div class="col-3 col-item-br text-center">
+            Percent Savings
+          </div>
+          <div class="col-2 col-item-br text-center">
+            Opportunity Sheet
+          </div>
+          <div class="col-2">
+            Manage
+          </div>
+        </div>
+      </div>
+    </div>-->
+
+
+    <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
+      <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
+        (emitEditLighting)="editLighting($event, index)"
+        (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)" [treasureHunt]="treasureHunt">
+      </app-lighting-replacement-card>
+    </div>
+    <!-- <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
+      <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
+        (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings">
+      </app-opportunity-sheet-card>
+    </div> -->
+  </div>
+  <div class="d-flex flex-column scroll-item flex-fill" [ngStyle]="{'height.px': containerHeight}">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+          <div>Results</div>
+        </a>
+      </div>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center mr-2 ml-2">
+      <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- <div class="d-flex flex-fill justify-content-center" *ngIf="selectedCalc == 'none'">
   <div class="d-flex flex-column w-75">
     <p class="p-2 lead text-center mb-0">
       Take a look at all your treasure!
@@ -25,7 +87,7 @@
     <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
       (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"></app-opportunity-sheet-card>
   </div>
-</div>
+</div> -->
 
 
 
@@ -64,7 +126,8 @@
           Opportunity Sheet</a>
       </div>
       <div class="modal-body text-center" *ngIf="!isSaveLighting">
-        <p class="help-text">Are you sure you want to save the changes to your existing opportunity? These changes cannot be
+        <p class="help-text">Are you sure you want to save the changes to your existing opportunity? These changes
+          cannot be
           undone.</p>
       </div>
       <div class="modal-footer p-1">

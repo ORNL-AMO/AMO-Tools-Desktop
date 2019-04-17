@@ -1,47 +1,19 @@
 <form [formGroup]="settingsForm">
-  <label class="group-label w-100">
+  <!-- <label class="group-label w-100">
     Energy Unit Costs
-  </label>
+  </label> -->
   <div class="form-group">
-    <label for="thElectricityCost">Electricity</label>
+    <label for="compressedAirCost">Compressed Air</label>
     <div class="input-group">
-      <input type="number" class="form-control" formControlName="thElectricityCost" id="thElectricityCost"
-        (input)="save()">
-      <span class="input-group-addon units">$/kWh</span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="thNaturalGasCost">Natural Gas</label>
-    <div class="input-group">
-      <input type="number" class="form-control" formControlName="thNaturalGasCost" id="thNaturalGasCost"
-        (input)="save()">
-      <span class="units input-group-addon"
-        *ngIf="settingsForm.controls.unitsOfMeasure.value != 'Metric'">$/MMBtu</span>
-      <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/MJ</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="thSteamCost">Steam</label>
-    <div class="input-group">
-      <input type="number" class="form-control" formControlName="thSteamCost" id="thSteamCost" (input)="save()">
-      <span class="units input-group-addon"
-        *ngIf="settingsForm.controls.unitsOfMeasure.value != 'Metric'">$/MMBtu</span>
-      <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/MJ</span>
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="thCompressedAirCost">Compressed Air</label>
-    <div class="input-group">
-      <input type="number" class="form-control" formControlName="thCompressedAirCost" id="thCompressedAirCost"
+      <input type="number" class="form-control" formControlName="compressedAirCost" id="compressedAirCost"
         (input)="save()">
       <span class="input-group-addon units">$/kWh</span>
     </div>
   </div>
   <div class="form-group">
-    <label for="thOtherFuelCost">Other Fuel</label>
+    <label for="otherFuelCost">Other Fuel</label>
     <div class="input-group">
-      <input type="number" class="form-control" formControlName="thOtherFuelCost" id="thOtherFuelCost" (input)="save()">
+      <input type="number" class="form-control" formControlName="otherFuelCost" id="otherFuelCost" (input)="save()">
       <span class="units input-group-addon"
         *ngIf="settingsForm.controls.unitsOfMeasure.value != 'Metric'">$/MMBtu</span>
       <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/MJ</span>
@@ -51,17 +23,17 @@
       Additional Metrics
     </label> -->
   <div class="form-group">
-    <label for="thWaterCost">Water</label>
+    <label for="waterCost">Water</label>
     <div class="input-group">
-      <input type="number" class="form-control" formControlName="thWaterCost" id="thWaterCost" (input)="save()">
+      <input type="number" class="form-control" formControlName="waterCost" id="waterCost" (input)="save()">
       <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value != 'Metric'">$/gal</span>
       <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/L</span>
     </div>
   </div>
   <div class="form-group">
-    <label for="thWaterWasteCost">Waste Water</label>
+    <label for="waterWasteCost">Waste Water</label>
     <div class="input-group">
-      <input type="number" class="form-control" formControlName="thWaterWasteCost" id="thWaterWasteCost"
+      <input type="number" class="form-control" formControlName="waterWasteCost" id="waterWasteCost"
         (input)="save()">
       <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value != 'Metric'">$/gal</span>
       <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/L</span>

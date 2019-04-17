@@ -23,6 +23,9 @@ export class PercentGraphComponent implements OnInit {
   fontSize: number;
   @Input()
   unit: string;
+  @Input()
+  chartClass: string;
+
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

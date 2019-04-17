@@ -35,7 +35,8 @@ export class TreasureHuntComponent implements OnInit {
 
   mainTabSub: Subscription;
   mainTab: string;
-
+  subTab: string;
+  subTabSub: Subscription;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -68,10 +69,15 @@ export class TreasureHuntComponent implements OnInit {
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
     });
+
+    this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
+      this.subTab = val;
+    })
   }
 
   ngOnDestroy(){
     this.mainTabSub.unsubscribe();
+    this.subTabSub.unsubscribe();
   }
   getSettings() {
     //get assessment settings
