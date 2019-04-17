@@ -279,7 +279,7 @@ export const MockPsat: Assessment = {
             percent_annual_savings: 0
         }
     }
-}
+};
 
 export const MockPsatSettings: Settings = {
     language: "English",
@@ -355,7 +355,7 @@ export const MockPsatSettings: Settings = {
             email: 'AMO_ToolHelpDesk@ee.doe.gov'
         }
     }
-}
+};
 
 export const MockPsatCalculator: Calculator = {
     pumpCurve: {
@@ -481,4 +481,4 @@ export const MockPsatCalculator: Calculator = {
         sizeMargin: 0,
         efficiency: 95
     }
-}
+};

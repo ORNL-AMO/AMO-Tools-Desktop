@@ -6,7 +6,7 @@ declare const packageJson;
 import { MockPhast, MockPhastSettings } from './mockPhast';
 import { MockPsat, MockPsatCalculator, MockPsatSettings } from './mockPsat';
 import { MockFsat, MockFsatSettings, MockFsatCalculator } from './mockFsat';
-
+import { MockSsmt, MockSsmtSettings } from './mockSsmt';
 @Injectable()
 export class CoreService {
 
@@ -14,6 +14,7 @@ export class CoreService {
   examplePhastId: number;
   examplePsatId: number;
   exampleFsatId: number;
+  exampleSsmtId: number;
   constructor(private indexedDbService: IndexedDbService) { }
 
   createExamples(): Promise<any> {
@@ -27,21 +28,29 @@ export class CoreService {
           
           this.examplePsatId = psatId;
           MockPsatCalculator.assessmentId = this.examplePsatId;
+
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
           
             MockFsat.directoryId = this.exampleDirectoryId;
             this.indexedDbService.addAssessment(MockFsat).then(fsatId => {
               this.exampleFsatId = fsatId;
               MockFsatCalculator.assessmentId = fsatId;
+    
               this.indexedDbService.addCalculator(MockFsatCalculator).then(() => {
           
-                resolve(true);
+                MockSsmt.directoryId = this.exampleDirectoryId;
+                this.indexedDbService.addAssessment(MockSsmt).then(ssmtId => {
+                  console.log('mock ssmt added');
+        
+                  this.exampleSsmtId = ssmtId;
+                  resolve(true);
+                });
               });
             });
           });
         });
       });
-    })
+    });
   }
 
   createDirectorySettings(): Promise<any> {
@@ -57,22 +66,30 @@ export class CoreService {
 
           delete MockPhastSettings.directoryId;
           MockPhastSettings.assessmentId = this.examplePhastId;
+
           this.indexedDbService.addSettings(MockPhastSettings).then(() => {
 
             MockPsatSettings.assessmentId = this.examplePsatId;
+  
             MockPsatSettings.facilityInfo.date = new Date().toDateString();
             this.indexedDbService.addSettings(MockPsatSettings).then(() => {
             
               MockFsatSettings.assessmentId = this.exampleFsatId;
+    
               MockFsatSettings.facilityInfo.date = new Date().toDateString();
               this.indexedDbService.addSettings(MockFsatSettings).then(() => {
-                resolve(true);
+
+                MockSsmtSettings.assessmentId = this.exampleSsmtId;
+      
+                this.indexedDbService.addSettings(MockSsmtSettings).then(() =>{
+                  resolve(true);
+                });
               });
             });
           });
         });
       });
-    })
+    });
   }
 
   createDirectory(): Promise<any> {
@@ -82,7 +99,7 @@ export class CoreService {
         createdDate: new Date(),
         modifiedDate: new Date(),
         parentDirectoryId: null,
-      }
+      };
       this.indexedDbService.addDirectory(tmpDirectory).then(
         results => {
           tmpDirectory.parentDirectoryId = results;
@@ -91,8 +108,8 @@ export class CoreService {
           this.indexedDbService.addDirectory(tmpDirectory).then(dirId => {
             this.exampleDirectoryId = dirId;
             resolve(true);
-          })
-        })
-    })
+          });
+        });
+    });
   }
 }

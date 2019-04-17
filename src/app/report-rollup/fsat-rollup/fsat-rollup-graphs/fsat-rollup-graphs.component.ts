@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService, FsatResultsData } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { FsatService } from '../../../fsat/fsat.service';
 import { Subscription } from 'rxjs';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
+import { FsatResultsData } from '../../report-rollup-models';
 @Component({
   selector: 'app-fsat-rollup-graphs',
   templateUrl: './fsat-rollup-graphs.component.html',
@@ -45,9 +44,9 @@ export class FsatRollupGraphsComponent implements OnInit {
   ngOnInit() {
     this.graphColors = graphColors;
     this.resultsSub = this.reportRollupService.fsatResults.subscribe((fsats: Array<FsatResultsData>) => {
-      if (fsats.length != 0) {
-        this.totalEnergyUse = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualEnergy });
-        this.totalCost = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualCost });
+      if (fsats.length !== 0) {
+        this.totalEnergyUse = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualEnergy; });
+        this.totalCost = _.sumBy(fsats, (fsat) => { return fsat.baselineResults.annualCost; });
         this.resultData = fsats;
         this.getResults(this.resultData);
         this.getData();
@@ -75,7 +74,7 @@ export class FsatRollupGraphsComponent implements OnInit {
     if (resultsData) {
       resultsData.forEach(val => {
         let percent;
-        if (this.dataOption == 'cost') {
+        if (this.dataOption === 'cost') {
           percent = this.getTotalCostPercent(val.baselineResults.annualCost);
         } else {
           percent = this.getTotalEnergyPercent(val.baselineResults.annualEnergy);
@@ -84,9 +83,9 @@ export class FsatRollupGraphsComponent implements OnInit {
           name: val.name,
           percent: percent,
           color: graphColors[i]
-        })
+        });
         i++;
-      })
+      });
     }
   }
 
@@ -121,7 +120,7 @@ export class FsatRollupGraphsComponent implements OnInit {
       {
         backgroundColor: this.backgroundColors
       }
-    ]
+    ];
   }
 
   initPrintChartData() {

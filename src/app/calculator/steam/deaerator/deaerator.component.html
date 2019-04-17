@@ -32,8 +32,8 @@
     <div class="d-flex">
       <app-deaerator-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
         [waterThermodynamicQuantity]="input.waterThermodynamicQuantity" [steamThermodynamicQuantity]="input.steamThermodynamicQuantity"></app-deaerator-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-deaerator-results [results]="results" [settings]="settings"></app-deaerator-results>
+      <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
+        <app-deaerator-results class="w-100" [results]="results" [settings]="settings"></app-deaerator-results>
       </div>
     </div>
   </div>

@@ -88,9 +88,9 @@ export class PreAssessmentListItemComponent implements OnInit {
       this.editForm = this.formBuilder.group({
         'name': [this.calculator.name],
         'directoryId': [this.calculator.directoryId]
-      })
+      });
       this.editModal.show();
-    })
+    });
   }
 
   hideEditModal() {
@@ -98,11 +98,11 @@ export class PreAssessmentListItemComponent implements OnInit {
   }
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
     if (parentDir) {
       let str = parentDir.name + '/';
       while (parentDir.parentDirectoryId) {
-        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
         str = parentDir.name + '/' + str;
       }
       return str;
@@ -118,8 +118,8 @@ export class PreAssessmentListItemComponent implements OnInit {
       this.calculatorDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
         this.hideEditModal();
-      })
-    })
+      });
+    });
   }
 
   showDropdown() {
@@ -140,9 +140,9 @@ export class PreAssessmentListItemComponent implements OnInit {
       this.copyForm = this.formBuilder.group({
         'name': [this.calculator.name + ' (copy)', Validators.required],
         'directoryId': [this.calculator.directoryId, Validators.required]
-      })
+      });
       this.copyModal.show();
-    })
+    });
   }
 
   hideCopyModal() {
@@ -159,8 +159,8 @@ export class PreAssessmentListItemComponent implements OnInit {
       this.calculatorDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
         this.hideCopyModal();
-      })
-    })
+      });
+    });
   }
 
   deletePreAssessment() {
@@ -168,7 +168,7 @@ export class PreAssessmentListItemComponent implements OnInit {
       this.calculatorDbService.setAll().then(() => {
         this.hideDeleteModal();
         this.updateDirectory.emit(true);
-      })
-    })
+      });
+    });
   }
 }

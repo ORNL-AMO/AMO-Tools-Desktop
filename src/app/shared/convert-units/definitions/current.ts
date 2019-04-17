@@ -31,4 +31,4 @@ export const current = {
             , ratio: 1
         }
     }
-}
+};

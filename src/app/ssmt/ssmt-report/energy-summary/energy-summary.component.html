@@ -1,116 +1,239 @@
 <div class="output-summary">
 
-  <h4 class="show-print">Report Results</h4>
+  <h4 class="show-print">Energy Summary</h4>
 
   <table class="table table-striped table-hover">
-    <tbody>
+    <thead>
       <tr>
         <td [ngStyle]="{'width.%': 15}"></td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" class="bold text-center">Baseline</td>
-        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationOutputs" class="bold text-center">
+        <td [ngStyle]="{'width.%': tableCellWidth}" class="bold text-center"
+          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</td>
+        <td [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modification of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}" class="bold text-center">
           {{modification.name}}</td>
       </tr>
+    </thead>
+    <tbody>
       <tr>
-        <td class="bold">Power ($/yr)</td>
-        <td class="text-center">{{baselineOutput.powerGenerationCost | currency:'USD'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">
-          {{modResults.outputData.powerGenerationCost | currency:'USD'}}
+        <td class="bold">Power ($K/yr)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.powerGenerationCost / 1000 | currency:'USD'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.powerGenerationCost / 1000 | currency:'USD'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
       </tr>
       <tr>
-        <td>Generation (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{baselineOutput.powerGenerated | number:'1.0-1'}}
+        <td class="pl-4">Generation (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.powerGenerated | number:'1.0-1'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
         </td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.powerGenerated |
-          number:'1.0-1'}}
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.powerGenerated | number:'1.0-1'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
       </tr>
       <tr>
-        <td>Demand (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{baselineOutput.sitePowerDemand | number:'1.0-1'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.sitePowerDemand
-          |
-          number:'1.0-1'}}</td>
+        <td class="pl-4">Demand (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.sitePowerDemand | number:'1.0-1'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.sitePowerDemand | number:'1.0-1'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
       </tr>
       <tr>
-        <td>Import (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{baselineOutput.sitePowerImport | number:'1.0-1'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.sitePowerImport
-          |
-          number:'1.0-1'}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <table class="table table-striped table-hover pt-2">
-    <tbody>
-      <tr>
-        <td class="bold" [ngStyle]="{'width.%': 15}">Fuel ($/yr)</td>
-        <td class="text-center" [ngStyle]="{'width.%': tableCellWidth}">{{baselineOutput.boilerFuelCost |
-          currency:'USD'}}</td>
-        <td class="text-center" [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.boilerFuelCost
-          |
-          currency:'USD'}}</td>
+        <td class="pl-4">Import (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.sitePowerImport | number:'1.0-1'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.sitePowerImport | number:'1.0-1'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
       </tr>
       <tr>
-        <td>Boiler (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>/hr)</td>
-        <td class="text-center">{{baselineOutput.boilerOutput.fuelEnergy | number:'1.0-2'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.boilerOutput.fuelEnergy
-          |
-          number:'1.0-2'}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <table class="table table-striped table-hover pt-2">
-    <tbody>
-      <tr>
-        <td class="bold" [ngStyle]="{'width.%': 15}">Make-up Water ($/yr)</td>
-        <td class="text-center" [ngStyle]="{'width.%': tableCellWidth}">{{baselineOutput.makeupWaterCost |
-          currency:'USD'}}</td>
-        <td class="text-center" [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.makeupWaterCost
-          |
-          currency:'USD'}}</td>
+        <td class="bold" [ngStyle]="{'width.%': 15}">Fuel ($K/yr)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.boilerFuelCost / 1000 | currency:'USD'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.boilerFuelCost / 1000 | currency:'USD'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
       </tr>
       <tr>
-        <td>Flow (<span [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{baselineOutput.makeupWaterVolumeFlow | number:'1.0-2'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.makeupWaterVolumeFlow
-          |
-          number:'1.0-2'}}</td>
+        <td class="pl-4">Boiler (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.boilerOutput.fuelEnergy | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.boilerOutput.fuelEnergy | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
       </tr>
       <tr>
-        <td>Flow (<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>/yr)</td>
-        <td class="text-center">{{baselineOutput.annualMakeupWaterFlow | number:'1.0-2'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.annualMakeupWaterFlow
-          |
-          number:'1.0-2'}}</td>
+        <td class="bold">Make-up Water ($K/yr)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"> <span
+            *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.makeupWaterCost / 1000 | currency:'USD'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.makeupWaterCost / 1000 | currency:'USD'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
       </tr>
-    </tbody>
-  </table>
-  <table class="table table-striped table-hover pt-2">
-    <tbody>
+      <tr>
+        <td class="pl-4">Flow (<span [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.makeupWaterVolumeFlow | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.makeupWaterVolumeFlow | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="pl-4">Flow (<span [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>/yr)</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.annualMakeupWaterFlow | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.annualMakeupWaterFlow | number:'1.0-2'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
+      </tr>
       <tr>
         <td class="bold" [ngStyle]="{'width.%': 15}">Marginal Steam Costs</td>
-        <td class="text-center" [ngStyle]="{'width.%': tableCellWidth}"></td>
-        <td class="text-center" [ngStyle]="{'width.%': tableCellWidth}" *ngFor="let modResults of modificationOutputs"></td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        </td>
       </tr>
       <tr>
-        <td>HP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{baselineOutput.marginalHPCost |
-          currency:'USD'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.marginalHPCost
-          |
-          currency:'USD'}}</td>
+        <td class="pl-4">HP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)
+        </td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.marginalHPCost | currency:'USD'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.marginalHPCost | currency:'USD'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
       </tr>
-      <tr>
-        <td>MP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{baselineOutput.marginalMPCost | currency:'USD'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.marginalMPCost |
-          currency:'USD'}}</td>
+      <tr *ngIf="numberOfHeaders == 3">
+        <td class="pl-4">MP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)
+        </td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.marginalMPCost | currency:'USD'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.marginalMPCost | currency:'USD'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
       </tr>
-      <tr>
-        <td>LP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
-        <td class="text-center">{{baselineOutput.marginalLPCost | currency:'USD'}}</td>
-        <td class="text-center" *ngFor="let modResults of modificationOutputs">{{modResults.outputData.marginalLPCost |
-          currency:'USD'}}</td>
+      <tr *ngIf="numberOfHeaders > 1">
+        <td class="pl-4">LP Steam Cost ($/<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)
+        </td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <span *ngIf="baselineOutput.boilerOutput">
+            {{baselineOutput.marginalLPCost | currency:'USD'}}
+          </span>
+          <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <span *ngIf="modResults.outputData.boilerOutput">
+            {{modResults.outputData.marginalLPCost | currency:'USD'}}
+          </span>
+          <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
+        </td>
+      </tr>
+      <tr class="hide-print" *ngIf="inRollup">
+        <td>Use for Summary</td>
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+          <input *ngIf="baselineOutput.boilerOutput" name="{{'summarySelect_'+assessment.id}}" type="radio"
+            (change)="useModification()" [value]="-1" [(ngModel)]="selectedModificationIndex">
+          <span *ngIf="!baselineOutput.boilerOutput" class="alert-danger small">
+            Invalid Data
+          </span>
+        </td>
+        <td *ngFor="let modResults of modificationOutputs; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+          <input *ngIf="modResults.outputData.boilerOutput" name="{{'summarySelect_'+assessment.id}}" type="radio"
+            (change)="useModification()" [value]="index" [(ngModel)]="selectedModificationIndex">
+          <span *ngIf="!modResults.outputData.boilerOutput" class="alert-danger small">
+            Invalid Data
+          </span>
+        </td>
       </tr>
     </tbody>
   </table>

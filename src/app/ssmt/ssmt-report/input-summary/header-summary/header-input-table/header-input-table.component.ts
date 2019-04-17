@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { SSMTInputs, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../../../shared/models/steam/ssmt';
+import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
   selector: 'app-header-input-table',
@@ -15,7 +16,9 @@ export class HeaderInputTableComponent implements OnInit {
   headerLevel: string;
   @Input()
   numMods: number;
-
+  @Input()
+  settings: Settings;
+  
   pressureDiff: Array<boolean>;
   processSteamUsageDiff: Array<boolean>;
   condensationRecoveryRateDiff: Array<boolean>;
@@ -32,13 +35,13 @@ export class HeaderInputTableComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    if(this.headerLevel == 'high'){
+    if (this.headerLevel === 'high') {
       this.baseline = this.baselineInputData.headerInput.highPressure;
       this.tableLabel = 'High Pressure Header';
-    }else if(this.headerLevel == 'medium'){
+    }else if (this.headerLevel === 'medium') {
       this.baseline = this.baselineInputData.headerInput.mediumPressure;
       this.tableLabel = 'Medium Pressure Header';
-    }else if(this.headerLevel == 'low'){
+    }else if (this.headerLevel === 'low') {
       this.baseline = this.baselineInputData.headerInput.lowPressure;
       this.tableLabel = 'Low Pressure Header';
     }
@@ -56,11 +59,11 @@ export class HeaderInputTableComponent implements OnInit {
     if (this.modificationInputData) {
       this.numMods = this.modificationInputData.length;
       this.modificationInputData.forEach(mod => {
-        if(this.headerLevel == 'high'){
+        if (this.headerLevel === 'high') {
           this.modifications.push(mod.inputData.headerInput.highPressure);
-        }else if(this.headerLevel == 'medium'){
+        }else if (this.headerLevel === 'medium') { 
           this.modifications.push(mod.inputData.headerInput.mediumPressure);     
-        }else if(this.headerLevel == 'low'){                   
+        }else if (this.headerLevel === 'low') {                   
           this.modifications.push(mod.inputData.headerInput.lowPressure);
         }
 
@@ -72,7 +75,7 @@ export class HeaderInputTableComponent implements OnInit {
         this.condensateReturnTempDiff.push(false);
         this.desuperheatSteamDiff.push(false);
         this.desuperheatSteamTempDiff.push(false);
-      })
+      });
     }
   }
 
@@ -80,10 +83,10 @@ export class HeaderInputTableComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change

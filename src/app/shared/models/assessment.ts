@@ -15,8 +15,8 @@ export interface Assessment {
   createdDate?: Date,
   modifiedDate?: Date,
   type: string;
-  name: string,
-  selected?: boolean,
-  appVersion?: string,
-  isExample?: boolean
+  name: string;
+  selected?: boolean;
+  appVersion?: string;
+  isExample?: boolean;
 }

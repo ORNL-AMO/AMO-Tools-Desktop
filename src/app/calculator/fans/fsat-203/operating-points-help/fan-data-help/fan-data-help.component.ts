@@ -21,10 +21,10 @@ export class FanDataHelpComponent implements OnInit {
   ngOnInit() {
     this.planeTypeSub = this.fsat203Service.planeShape.subscribe(type => {
       this.planeType = type;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.planeTypeSub.unsubscribe();
   }
 

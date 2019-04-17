@@ -35,7 +35,7 @@ export class FsatResultsPanelComponent implements OnInit {
   constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
-    this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults(); })
+    this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults(); });
   }
 
   ngOnDestroy() {
@@ -44,7 +44,7 @@ export class FsatResultsPanelComponent implements OnInit {
 
   getResults() {
     this.baselineResults = this.fsatService.getResults(this.fsat, true, this.settings);
-    if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length != 0) {
+    if (!this.inSetup && this.fsat.modifications && this.fsat.modifications.length !== 0) {
       this.showModification = true;
       this.modificationName = this.fsat.modifications[this.modificationIndex].fsat.name;
       this.modificationResults = this.fsatService.getResults(this.fsat.modifications[this.modificationIndex].fsat, false, this.settings);
@@ -64,6 +64,6 @@ export class FsatResultsPanelComponent implements OnInit {
     }
     this.timeOut = setTimeout(() => {
       this.showResults = true;
-    }, 100)
+    }, 100);
   }
 }

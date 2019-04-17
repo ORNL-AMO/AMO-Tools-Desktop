@@ -33,17 +33,17 @@ export class CalculateInletPressureComponent implements OnInit {
         processRequirements: 0,
         inletSystemEffectLoss: 0,
         calculatedInletPressure: 0
-      }
+      };
     }
   }
 
   calculate() {
     let sum: number = 0;
     Object.keys(this.inletPressureData).map((key, index) => {
-      if (key.valueOf() != 'calculatedInletPressure') {
+      if (key.valueOf() !== 'calculatedInletPressure') {
         sum = sum + this.inletPressureData[key];
       }
-    })
+    });
     this.inletPressureData.calculatedInletPressure = (sum * -1);
     this.emitSave.emit(this.inletPressureData);
   }

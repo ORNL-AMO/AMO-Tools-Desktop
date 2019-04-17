@@ -12,7 +12,7 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()
   efficiencyImprovementInputs: EfficiencyImprovementInputs;
   @Input()
-  efficiencyImprovementOutputs: EfficiencyImprovementOutputs
+  efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
   @Output('calculate')
   calculate = new EventEmitter<EfficiencyImprovementInputs>();
   @Output('changeField')

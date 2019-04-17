@@ -29,7 +29,7 @@ export class ApplicationSettingsComponent implements OnInit {
 
   currencies: Array<string> = [
     '$ - US Dollar'
-  ]
+  ];
 
   energyOptions: Array<string> = [
     'MMBtu',
@@ -40,7 +40,7 @@ export class ApplicationSettingsComponent implements OnInit {
     'kgce',
     'kgoe',
     'kWh'
-  ]
+  ];
 
   energyResultOptions: Array<any>;
   constructor(private convertUnitsService: ConvertUnitsService, private settingsService: SettingsService) { }
@@ -54,9 +54,9 @@ export class ApplicationSettingsComponent implements OnInit {
         unit: val,
         display: this.getUnitName(val),
         displayUnit: this.getUnitDisplay(val)
-      }
+      };
       this.energyResultOptions.push(tmpPossibility);
-    })
+    });
   }
 
   setUnits() {
@@ -64,7 +64,7 @@ export class ApplicationSettingsComponent implements OnInit {
     this.startSavePolling.emit(false);
   }
 
-  save(){
+  save() {
     this.startSavePolling.emit(true);
   }
 

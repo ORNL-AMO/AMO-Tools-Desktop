@@ -60,4 +60,4 @@ export const speed = {
             , ratio: 1.609344
         }
     }
-}
+};

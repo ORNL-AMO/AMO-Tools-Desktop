@@ -50,28 +50,28 @@ export class ExploreAtmosphereFormComponent implements OnInit {
     this.showInletTemp = new Array<boolean>();
     let index: number = 0;
     this.phast.losses.atmosphereLosses.forEach(loss => {
-      let check: boolean = (loss.flowRate != this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].flowRate);
+      let check: boolean = (loss.flowRate !== this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].flowRate);
       if (!this.showAtmosphere && check) {
         this.showAtmosphere = check;
       }
       this.showFlowRate.push(check);
 
-      check = (loss.inletTemperature != this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].inletTemperature ||
-        loss.outletTemperature != this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].outletTemperature)
+      check = (loss.inletTemperature !== this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].inletTemperature ||
+        loss.outletTemperature !== this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].outletTemperature);
       if (!this.showAtmosphere && check) {
         this.showAtmosphere = check;
       }
       this.showInletTemp.push(check);
       let baselineWarningsCheck: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(loss);
-      this.baselineWarnings.push(baselineWarningsCheck)
+      this.baselineWarnings.push(baselineWarningsCheck);
       let modificationWarningsCheck: AtmosphereLossWarnings = this.atmosphereLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index]);
       this.modificationWarnings.push(modificationWarningsCheck);
       index++;
-    })
+    });
   }
 
   toggleAtmosphere() {
-    if (this.showAtmosphere == false) {
+    if (this.showAtmosphere === false) {
       let index: number = 0;
       this.phast.losses.atmosphereLosses.forEach(loss => {
         this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].flowRate = loss.flowRate;
@@ -81,14 +81,14 @@ export class ExploreAtmosphereFormComponent implements OnInit {
         this.showInletTemp[index] = false;
         this.checkModificationWarnings(index);
         index++;
-      })
-    }else{
+      });
+    }else {
       this.initData();
     }
   }
 
   toggleFlowRate(index: number, baselineFlowRate: number) {
-    if (this.showFlowRate[index] == false) {
+    if (this.showFlowRate[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].flowRate = baselineFlowRate;
       this.checkModificationWarnings(index);
     }
@@ -96,7 +96,7 @@ export class ExploreAtmosphereFormComponent implements OnInit {
 
 
   toggleInletTemp(index: number, loss: AtmosphereLoss) {
-    if (this.showInletTemp[index] == false) {
+    if (this.showInletTemp[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].inletTemperature = loss.inletTemperature;
       this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index].outletTemperature = loss.outletTemperature;
       this.checkModificationWarnings(index);
@@ -115,17 +115,17 @@ export class ExploreAtmosphereFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  checkBaselineWarnings(index: number){
+  checkBaselineWarnings(index: number) {
     this.baselineWarnings[index] = this.atmosphereLossesService.checkWarnings(this.phast.losses.atmosphereLosses[index]);
     this.calculate();
   }
 
-  checkModificationWarnings(index: number){
-    this.modificationWarnings[index] =this.atmosphereLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index]);
+  checkModificationWarnings(index: number) {
+    this.modificationWarnings[index] = this.atmosphereLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.atmosphereLosses[index]);
     this.calculate();
   }
 
   calculate() {
-    this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true);
   }
 }

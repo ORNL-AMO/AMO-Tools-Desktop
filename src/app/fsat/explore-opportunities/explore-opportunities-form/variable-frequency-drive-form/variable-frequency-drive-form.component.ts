@@ -62,11 +62,11 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
     return dsp;
   }
 
-  showInletPressureModal(){
-    this.showPressureModal.emit('inlet')
+  showInletPressureModal() {
+    this.showPressureModal.emit('inlet');
 }
 
-showOutletPressureModal(){
+showOutletPressureModal() {
     this.showPressureModal.emit('outlet');
 }
 }

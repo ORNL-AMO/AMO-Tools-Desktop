@@ -23,14 +23,14 @@ export class HoverPrvTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.prvType == 'highToMediumPressurePRV'){
+    if (this.prvType === 'highToMediumPressurePRV') {
       this.prv = this.outputData.highToMediumPressurePRV;
       this.prvLabel = 'High to Medium';
-    }else if(this.prvType == 'lowPressurePRV'){
+    }else if (this.prvType === 'lowPressurePRV') {
       this.prv = this.outputData.lowPressurePRV;
-      if(this.inputData.headerInput.numberOfHeaders == 3){
+      if (this.inputData.headerInput.numberOfHeaders === 3) {
         this.prvLabel = 'Medium to Low';
-      }else{
+      }else {
         this.prvLabel = 'High to Low';
       }
     }

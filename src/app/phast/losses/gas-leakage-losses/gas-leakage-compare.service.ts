@@ -16,7 +16,7 @@ export class GasLeakageCompareService {
     let isDiff: boolean = false;
     if (this.modifiedLeakageLoss) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -31,7 +31,7 @@ export class GasLeakageCompareService {
       this.compareLeakageGasTemperature(index) ||
       this.compareAmbientTemperature(index) ||
       this.compareSpecificGravity(index)
-    )
+    );
   }
   compareDraftPressure(index: number): boolean {
     return this.compare(this.baselineLeakageLoss[index].draftPressure, this.modifiedLeakageLoss[index].draftPressure);
@@ -55,11 +55,11 @@ export class GasLeakageCompareService {
       if (baseline.losses.leakageLosses) {
         let index = 0;
         baseline.losses.leakageLosses.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.leakageLosses[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.leakageLosses[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -72,18 +72,18 @@ export class GasLeakageCompareService {
       this.compare(baseline.leakageGasTemperature, modification.leakageGasTemperature) ||
       this.compare(baseline.ambientTemperature, modification.ambientTemperature) ||
       this.compare(baseline.specificGravity, modification.specificGravity)
-    )
+    );
   }
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

@@ -46,7 +46,7 @@ export class DirectoryCardComponent implements OnInit {
   }
 
   goToDirectory(dir) {
-    this.directoryChange.emit(dir)
+    this.directoryChange.emit(dir);
   }
 
   populateDirectories(directory: Directory) {
@@ -61,14 +61,14 @@ export class DirectoryCardComponent implements OnInit {
   showEditModal() {
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;
-      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
-      _.remove(this.directories, (dir) => { return dir.parentDirectoryId == this.directory.id });
+      _.remove(this.directories, (dir) => { return dir.id === this.directory.id; });
+      _.remove(this.directories, (dir) => { return dir.parentDirectoryId === this.directory.id; });
       this.editForm = this.formBuilder.group({
         'name': [this.directory.name],
         'directoryId': [this.directory.parentDirectoryId]
-      })
+      });
       this.editModal.show();
-    })
+    });
   }
 
   hideEditModal() {
@@ -76,11 +76,11 @@ export class DirectoryCardComponent implements OnInit {
   }
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
     if (parentDir) {
       let str = parentDir.name + '/';
       while (parentDir.parentDirectoryId) {
-        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
         str = parentDir.name + '/' + str;
       }
       return str;
@@ -97,7 +97,7 @@ export class DirectoryCardComponent implements OnInit {
         this.updateDirectory.emit(true);
         this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
-      })
-    })
+      });
+    });
   }
 }

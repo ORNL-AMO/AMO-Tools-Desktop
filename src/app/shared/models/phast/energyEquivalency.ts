@@ -1,19 +1,19 @@
 export interface EnergyEquivalencyElectric {
-    fuelFiredEfficiency: number,
-    electricallyHeatedEfficiency: number,
-    fuelFiredHeatInput: number
+    fuelFiredEfficiency: number;
+    electricallyHeatedEfficiency: number;
+    fuelFiredHeatInput: number;
 }
 
 export interface EnergyEquivalencyFuel {
-    electricallyHeatedEfficiency: number,
-    fuelFiredEfficiency: number,
-    electricalHeatInput: number
+    electricallyHeatedEfficiency: number;
+    fuelFiredEfficiency: number;
+    electricalHeatInput: number;
 }
 
 export interface EnergyEquivalencyFuelOutput {
-    fuelFiredHeatInput: number
+    fuelFiredHeatInput: number;
 }
 
 export interface EnergyEquivalencyElectricOutput {
-    electricalHeatInput: number
+    electricalHeatInput: number;
 }

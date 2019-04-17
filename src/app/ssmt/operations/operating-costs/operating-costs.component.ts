@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { OperatingCosts } from '../../../shared/models/operations';
 import { CompareService } from '../../compare.service';
 import { SsmtService } from '../../ssmt.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-operating-costs',
@@ -11,7 +11,7 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class OperatingCostsComponent implements OnInit {
   @Input()
-  operatingCosts: OperatingCosts;
+  form: FormGroup;
   @Input()
   settings: Settings;
   @Output('emitSave')
@@ -26,17 +26,6 @@ export class OperatingCostsComponent implements OnInit {
   constructor(private compareService: CompareService, private ssmtService: SsmtService) { }
 
   ngOnInit() {
-    if(!this.operatingCosts.electricityCost){
-      this.operatingCosts.electricityCost = this.settings.electricityCost;
-    }
-
-    if(!this.operatingCosts.fuelCost){
-      this.operatingCosts.fuelCost = this.settings.fuelCost;
-    }
-
-    if(!this.operatingCosts.makeUpWaterCost){
-      this.operatingCosts.makeUpWaterCost = 0;
-    }
   }
 
   save() {
@@ -75,7 +64,7 @@ export class OperatingCostsComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.ssmtService.currentField.next(str);
   }  
   focusOut() {

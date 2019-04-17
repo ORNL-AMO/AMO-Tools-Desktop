@@ -59,7 +59,7 @@ export const pressure = {
       , to_anchor: 1000
 
     }
-    ,hPa: {
+    , hPa: {
       name: {
         singular: 'Hectopascal'
         , plural: 'Hectopascals',
@@ -202,4 +202,4 @@ export const pressure = {
       , ratio: 1 / 0.00014503768078
     }
   }
-}
+};

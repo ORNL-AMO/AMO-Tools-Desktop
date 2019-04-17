@@ -80,13 +80,13 @@ export class TurbineComponent implements OnInit {
     this.input = this.turbineService.getObjFromForm(form);
     this.turbineService.turbineInput = this.input;
     if (this.input.inletPressure < this.input.outletSteamPressure) {
-      this.warning = "Outlet pressure of the turbine cannot be greater than the inlet pressure."
+      this.warning = "Outlet pressure of the turbine cannot be greater than the inlet pressure.";
     }
     else {
       this.warning = null;
     }
 
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       this.results = this.steamService.turbine(this.input, this.settings);
     } else {
       this.results = this.getEmptyResults();
@@ -120,7 +120,7 @@ export class TurbineComponent implements OnInit {
       outletIdealSpecificEntropy: 0,
       outletIdealQuality: 0,
       outletIdealVolume: 0
-    }
+    };
     return emptyResults;
   }
 }

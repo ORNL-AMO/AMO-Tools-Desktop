@@ -50,7 +50,7 @@ import { HoverTableModule } from './hover-table/hover-table.module';
   exports: [
     SsmtDiagramComponent
   ],
-  providers:[
+  providers: [
   ]
 })
 export class SsmtDiagramModule { }

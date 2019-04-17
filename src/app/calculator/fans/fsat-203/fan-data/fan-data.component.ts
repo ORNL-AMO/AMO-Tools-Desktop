@@ -59,23 +59,23 @@ export class FanDataComponent implements OnInit {
     this.velocityData = {
       pv3: 0,
       percent75Rule: 0
-    }
+    };
   }
 
   changeStepTab(str: string) {
-    if (str != '3a' && str != '3b' && str != '3c' && this.showReadings) {
+    if (str !== '3a' && str !== '3b' && str !== '3c' && this.showReadings) {
       this.toggleReadings();
     }
 
-    if (str == '3a') {
+    if (str === '3a') {
       this.calcVelocityData(this.planeData.FlowTraverse, str);
     }
 
-    if (str == '3b') {
+    if (str === '3b') {
       this.calcVelocityData(this.planeData.AddlTraversePlanes[0], str);
     }
 
-    if (str == '3c') {
+    if (str === '3c') {
       this.calcVelocityData(this.planeData.AddlTraversePlanes[1], str);
     }
     this.stepTab = str;
@@ -87,31 +87,31 @@ export class FanDataComponent implements OnInit {
   }
 
   savePlane(plane: Plane, str: string) {
-    if (str == '3a' || str == '3b' || str == '3c') {
+    if (str === '3a' || str === '3b' || str === '3c') {
       this.calcVelocityData(plane, str);
     }
-    this.emitSave.emit({ plane: plane, planeNumber: str })
+    this.emitSave.emit({ plane: plane, planeNumber: str });
   }
 
   calcVelocityData(plane: Plane, planeNum) {
     let formObj: FormGroup = this.fsat203Service.getPlaneFormFromObj(plane, this.settings, planeNum);
-    if (formObj.status == 'VALID') {
-      this.velocityData = this.fsatService.getVelocityPressureData(plane, this.settings)
+    if (formObj.status === 'VALID') {
+      this.velocityData = this.fsatService.getVelocityPressureData(plane, this.settings);
     } else {
-      this.velocityData = { pv3: 0, percent75Rule: 0 }
+      this.velocityData = { pv3: 0, percent75Rule: 0 };
     }
   }
 
   saveTraversePlane(plane: Plane, str: string) {
     this.calcVelocityData(plane, str);
-    this.emitSaveTraverse.emit({ plane: plane, planeNumber: str })
+    this.emitSaveTraverse.emit({ plane: plane, planeNumber: str });
   }
 
   savePlaneData(planeData: PlaneData) {
     this.emitSavePlaneData.emit(planeData);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 }

@@ -15,4 +15,4 @@ export const _each = {
             , ratio: 1
         }
     }
-}
+};

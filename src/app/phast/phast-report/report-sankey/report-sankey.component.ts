@@ -42,7 +42,7 @@ export class ReportSankeyComponent implements OnInit {
     this.baseline = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
     this.assessmentName = this.assessment.name.replace(/\s/g, '');
     this.assessmentName = this.assessmentName.replace('(', '');
-    this.assessmentName = this.assessmentName.replace(')','');
+    this.assessmentName = this.assessmentName.replace(')', '');
     this.phastOptions = new Array<any>();
     this.phastOptions.push({name: 'Baseline', phast: this.phast});
     this.phast1 = this.phastOptions[0];
@@ -68,7 +68,7 @@ export class ReportSankeyComponent implements OnInit {
     }
 
     let isMod;
-    if (this.phast1.name == this.phast.name) {
+    if (this.phast1.name === this.phast.name) {
       isMod = false;
     }
     else {
@@ -84,7 +84,7 @@ export class ReportSankeyComponent implements OnInit {
       return;
     }
     let isMod;
-    if (this.phast2.name == this.phast.name) {
+    if (this.phast2.name === this.phast.name) {
       isMod = false;
     }
     else {

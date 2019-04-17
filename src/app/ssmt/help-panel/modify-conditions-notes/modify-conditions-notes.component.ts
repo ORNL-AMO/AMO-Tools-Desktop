@@ -23,7 +23,7 @@ export class ModifyConditionsNotesComponent implements OnInit {
         boilerNotes: '',
         headerNotes: '',
         turbineNotes: ''
-      }
+      };
     }
 
   }

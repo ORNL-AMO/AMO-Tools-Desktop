@@ -3,6 +3,7 @@ import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import * as _ from 'lodash';
+
 @Component({
   selector: 'app-boiler-summary',
   templateUrl: './boiler-summary.component.html',
@@ -13,6 +14,10 @@ export class BoilerSummaryComponent implements OnInit {
   baselineInputData: SSMTInputs;
   @Input()
   modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  @Input()
+  settings: Settings;
+  @Input()
+  printView: boolean
 
   collapse: boolean = true;
   numMods: number = 0;
@@ -61,7 +66,7 @@ export class BoilerSummaryComponent implements OnInit {
         this.deaeratorVentRateDiff.push(false);
         this.deaeratorPressureDiff.push(false);
         this.approachTemperatureDiff.push(false);
-      })
+      });
     }
   }
 
@@ -69,10 +74,10 @@ export class BoilerSummaryComponent implements OnInit {
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
   checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
+    if (baselineVal !== modificationVal) {
+      //this[diffBool] gets corresponding variable
       //only set true once
-      if (this[diffBool][modIndex] != true) {
+      if (this[diffBool][modIndex] !== true) {
         //set true/different
         this[diffBool][modIndex] = true;
         //tell html to detect change
@@ -89,10 +94,10 @@ export class BoilerSummaryComponent implements OnInit {
   }
 
   getFuelType(fuelType: number, fuel: number): any {
-    if (fuelType == 0) {
-      return _.find(this.solidLiquidFuelTypes, (liquidFuel)=> {return liquidFuel.id == fuel}).substance;
-    } else if (fuelType == 1) {
-      return _.find(this.gasFuelTypes, (gasFuel)=> {return gasFuel.id == fuel}).substance;
+    if (fuelType === 0) {
+      return _.find(this.solidLiquidFuelTypes, (liquidFuel) => {return liquidFuel.id === fuel; }).substance;
+    } else if (fuelType === 1) {
+      return _.find(this.gasFuelTypes, (gasFuel) => {return gasFuel.id === fuel; }).substance;
     }
   }
 

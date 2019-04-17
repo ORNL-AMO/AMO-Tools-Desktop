@@ -90,12 +90,12 @@ export class FixtureLossesFormComponent implements OnInit {
 
   setSpecificHeat() {
     let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
     }
     this.lossesForm.patchValue({
       specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 3)
-    })
+    });
     this.save();
   }
   checkSpecificHeat() {
@@ -103,11 +103,11 @@ export class FixtureLossesFormComponent implements OnInit {
       let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
       if (material) {
         let val = material.specificHeatSolid;
-        if (this.settings.unitsOfMeasure == 'Metric') {
-          val = this.convertUnitsService.value(val).from('btulbF').to('kJkgC')
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          val = this.convertUnitsService.value(val).from('btulbF').to('kJkgC');
         }
         material.specificHeatSolid = this.roundVal(val, 3);
-        if (material.specificHeatSolid != this.lossesForm.controls.specificHeat.value) {
+        if (material.specificHeatSolid !== this.lossesForm.controls.specificHeat.value) {
           return true;
         } else {
           return false;
@@ -133,13 +133,13 @@ export class FixtureLossesFormComponent implements OnInit {
   }
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
     }
 
     this.lossesForm.patchValue({
       specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4)
-    })
+    });
     this.calculate.emit(true);
   }
   roundVal(val: number, digits: number) {
@@ -154,11 +154,11 @@ export class FixtureLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
-      let newMaterial = this.materials.filter(material => { return material.substance == event.substance })
-      if (newMaterial.length != 0) {
+      let newMaterial = this.materials.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
         this.lossesForm.patchValue({
           materialName: newMaterial[0].id
-        })
+        });
         this.setProperties();
       }
     }

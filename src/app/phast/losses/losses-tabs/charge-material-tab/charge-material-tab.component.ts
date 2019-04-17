@@ -40,7 +40,7 @@ export class ChargeMaterialTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
     this.badgeHover = false;
   }
 
@@ -74,39 +74,39 @@ export class ChargeMaterialTabComponent implements OnInit {
     let hasWarning: boolean = false;
     if (this.chargeMaterialCompareService.baselineMaterials) {
       this.chargeMaterialCompareService.baselineMaterials.forEach(material => {
-        if (this.checkMaterialValid(material) == false) {
+        if (this.checkMaterialValid(material) === false) {
           missingData = true;
         }
         let tmpHasWarning: boolean = this.checkWarningExists(material);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     if (this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
       this.chargeMaterialCompareService.modifiedMaterials.forEach(material => {
-        if (this.checkMaterialValid(material) == false) {
+        if (this.checkMaterialValid(material) === false) {
           missingData = true;
         }
         let tmpHasWarning: boolean = this.checkWarningExists(material);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
 
   checkWarningExists(material: ChargeMaterial): boolean {
-    if (material.chargeMaterialType == 'Gas') {
+    if (material.chargeMaterialType === 'Gas') {
       let warnings: GasMaterialWarnings = this.chargeMaterialService.checkGasWarnings(material.gasChargeMaterial);
       let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
       return tmpHasWarning;
-    } else if (material.chargeMaterialType == 'Liquid') {
+    } else if (material.chargeMaterialType === 'Liquid') {
       let warnings: LiquidMaterialWarnings = this.chargeMaterialService.checkLiquidWarnings(material.liquidChargeMaterial);
       let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
       return tmpHasWarning;
-    } else if (material.chargeMaterialType == 'Solid') {
+    } else if (material.chargeMaterialType === 'Solid') {
       let warnings: SolidMaterialWarnings = this.chargeMaterialService.checkSolidWarnings(material.solidChargeMaterial);
       let tmpHasWarning: boolean = this.chargeMaterialService.checkWarningsExist(warnings);
       return tmpHasWarning;
@@ -114,23 +114,23 @@ export class ChargeMaterialTabComponent implements OnInit {
   }
 
   checkMaterialValid(material: ChargeMaterial) {
-    if (material.chargeMaterialType == 'Gas') {
+    if (material.chargeMaterialType === 'Gas') {
       let tmpForm: FormGroup = this.chargeMaterialService.getGasChargeMaterialForm(material);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
-    } else if (material.chargeMaterialType == 'Solid') {
+    } else if (material.chargeMaterialType === 'Solid') {
       let tmpForm: FormGroup = this.chargeMaterialService.getSolidChargeMaterialForm(material);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
-    } else if (material.chargeMaterialType == 'Liquid') {
+    } else if (material.chargeMaterialType === 'Liquid') {
       let tmpForm: FormGroup = this.chargeMaterialService.getLiquidChargeMaterialForm(material);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;

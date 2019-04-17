@@ -45,7 +45,7 @@ export class BoilerComponent implements OnInit {
     }, 50);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
   }
 
   btnResetData() {
@@ -76,7 +76,7 @@ export class BoilerComponent implements OnInit {
   calculate(form: FormGroup) {
     this.input = this.boilerService.getObjFromForm(form);
     this.boilerService.boilerInput = this.input;
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       this.results = this.steamService.boiler(this.input, this.settings);
     } else {
       this.results = this.getEmptyResults();
@@ -113,7 +113,7 @@ export class BoilerComponent implements OnInit {
       fuelEnergy: 0,
       blowdownRate: 0,
       combustionEff: 0
-    }
+    };
     return results;
   }
 }

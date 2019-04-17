@@ -44,7 +44,7 @@ export class PipeSizingComponent implements OnInit {
       airlinePressure: 0,
       designVelocity: 20,
       atmosphericPressure: 14.7
-    }
+    };
     this.compressedAirService.pipeSizingInput = this.inputs;
     this.calculatePipeSize(this.inputs);
   }

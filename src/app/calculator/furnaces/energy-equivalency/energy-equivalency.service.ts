@@ -24,7 +24,7 @@ export class EnergyEquivalencyService {
       fuelFiredEfficiency: form.controls.fuelFiredEfficiency.value,
       electricallyHeatedEfficiency: form.controls.electricallyHeatedEfficiency.value,
       fuelFiredHeatInput: form.controls.fuelFiredHeatInput.value,
-    }
+    };
     return this.energyEquivalencyElectric;
   }
 
@@ -42,13 +42,13 @@ export class EnergyEquivalencyService {
       fuelFiredEfficiency: form.controls.fuelFiredEfficiency.value,
       electricallyHeatedEfficiency: form.controls.electricallyHeatedEfficiency.value,
       electricalHeatInput: form.controls.electricalHeatInput.value,
-    }
+    };
     return this.energyEquivalencyFuel;
   }
 
 
   initEquivalencyElectric(settings: Settings): EnergyEquivalencyElectric {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       this.energyEquivalencyElectric = {
         fuelFiredEfficiency: 60,
         electricallyHeatedEfficiency: 90,
@@ -71,7 +71,7 @@ export class EnergyEquivalencyService {
       electricallyHeatedEfficiency: 90,
       fuelFiredEfficiency: 60,
       electricalHeatInput: 1800
-    }
+    };
     return this.energyEquivalencyFuel;
   }
 }

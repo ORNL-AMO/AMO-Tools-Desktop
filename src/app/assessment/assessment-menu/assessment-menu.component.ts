@@ -73,12 +73,12 @@ export class AssessmentMenuComponent implements OnInit {
   }
 
   goToDirectory(dir) {
-    this.directoryChange.emit(dir)
+    this.directoryChange.emit(dir);
   }
 
   getBreadcrumbs(dirId: number) {
     let resultDir = this.directoryDbService.getById(dirId);
-    if (resultDir.id != this.directory.id) {
+    if (resultDir.id !== this.directory.id) {
       this.breadCrumbs.unshift(resultDir);
     }
     if (resultDir.parentDirectoryId) {
@@ -105,15 +105,15 @@ export class AssessmentMenuComponent implements OnInit {
   checkSelected() {
     let tmpArray = new Array();
     // let calcTest;
-    if(this.directory.calculators){
+    if (this.directory.calculators) {
       tmpArray = this.directory.calculators.filter(calc => {
-        return calc.selected == true;
-      })
+        return calc.selected === true;
+      });
       // if(this.directory.calculators[0].selected){
       //   calcTest = true;
       // }
     }
-    if (this.checkReport() || tmpArray.length != 0) {
+    if (this.checkReport() || tmpArray.length !== 0) {
       return true;
     } else {
       return false;
@@ -130,7 +130,7 @@ export class AssessmentMenuComponent implements OnInit {
             return assessment;
           }
         }
-      )
+      );
     }
     if (this.directory.subDirectory) {
       tmpArray2 = this.directory.subDirectory.filter(
@@ -139,9 +139,9 @@ export class AssessmentMenuComponent implements OnInit {
             return subDir;
           }
         }
-      )
+      );
     }
-    if (tmpArray.length != 0 || tmpArray2.length != 0) {
+    if (tmpArray.length !== 0 || tmpArray2.length !== 0) {
       return true;
     } else {
       return false;

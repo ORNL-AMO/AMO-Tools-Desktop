@@ -19,7 +19,7 @@ export class HeatLossService {
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       inletMassFlow: ['', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
       percentHeatLoss: ['', [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
-    })
+    });
     return tmpForm;
   }
 
@@ -31,7 +31,7 @@ export class HeatLossService {
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       inletMassFlow: [inputObj.inletMassFlow, [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
       percentHeatLoss: [inputObj.percentHeatLoss, [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
-    })
+    });
     return tmpForm;
   }
 
@@ -41,7 +41,7 @@ export class HeatLossService {
       thermodynamicQuantity: form.controls.thermodynamicQuantity.value,
       quantityValue: form.controls.quantityValue.value,
       inletMassFlow: form.controls.inletMassFlow.value,
-      percentHeatLoss: form.controls.percentHeatLoss.value,
+      percentHeatLoss: form.controls.percentHeatLoss.value || 0,
     }
     return input;
   }
@@ -57,7 +57,7 @@ export class HeatLossService {
       inletMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
       percentHeatLossMin: 0,
       percentHeatLossMax: 10
-    }
+    };
     return ranges;
   }
 }

@@ -17,7 +17,6 @@ import { CreateFolderComponent } from './assessment-menu/create-folder/create-fo
 import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
 import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 import { SettingsModule } from '../settings/settings.module';
-import { ToastyModule } from 'ng2-toasty';
 
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { PhastSummaryCardComponent } from './assessment-grid-view/assessment-card/phast-summary-card/phast-summary-card.component';
@@ -33,6 +32,8 @@ import { FsatSummaryCardComponent } from './assessment-grid-view/assessment-card
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.component';
 import { TreasureHuntCardComponent } from './assessment-grid-view/treasure-hunt-card/treasure-hunt-card.component';
+import { SsmtSummaryCardComponent } from './assessment-grid-view/assessment-card/ssmt-summary-card/ssmt-summary-card.component';
+import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { TreasureHuntCardComponent } from './assessment-grid-view/treasure-hunt-
     PreAssessmentListItemComponent,
     FsatSummaryCardComponent,
     ResetDataModalComponent,
-    TreasureHuntCardComponent
+    TreasureHuntCardComponent,
+    SsmtSummaryCardComponent
   ],
   exports: [
     AssessmentCreateComponent,
@@ -71,11 +73,11 @@ import { TreasureHuntCardComponent } from './assessment-grid-view/treasure-hunt-
     ReactiveFormsModule,
     ModalModule,
     SettingsModule,
-    ToastyModule,
     ImportExportModule,
     PhastReportModule,
     PsatModule,
-    FsatReportModule
+    FsatReportModule,
+    SsmtReportModule
   ],
   providers: []
 })

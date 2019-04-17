@@ -21,7 +21,7 @@ export class MeteredEnergyResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit == 'kWh') {
+    if (this.settings.energyResultUnit === 'kWh') {
       this.resultUnits.energyPerTimeUnit = 'kW';
     } else {
       this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit + '/hr';
@@ -32,14 +32,14 @@ export class MeteredEnergyResultsComponent implements OnInit {
 
   setEnergyIntensity() {
     let denominator: string = '/lb';
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       denominator = '/kg';
     }
-    if(this.settings.energyResultUnit == 'kWh'){
+    if (this.settings.energyResultUnit === 'kWh') {
       this.resultUnits.energyPerMassUnit = 'kW' + denominator;
-    }else if (this.settings.energyResultUnit == 'MMBtu') {
+    }else if (this.settings.energyResultUnit === 'MMBtu') {
       this.resultUnits.energyPerMassUnit = 'Btu' + denominator;
-    } else if (this.settings.energyResultUnit == 'GJ') {
+    } else if (this.settings.energyResultUnit === 'GJ') {
       this.resultUnits.energyPerMassUnit = 'kJ' + denominator;
     } else {
       this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + denominator;

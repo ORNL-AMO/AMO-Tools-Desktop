@@ -13,10 +13,10 @@ import { ExploreSystemEfficiencyFormComponent } from './explore-phast-opportunit
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LossesModule } from '../losses/losses.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { ToastyModule } from 'ng2-toasty';
 import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/explore-slag-form/explore-slag-form.component';
 import { ExploreCoolingFormComponent } from './explore-phast-opportunities-form/explore-cooling-form/explore-cooling-form.component';
 import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-form/explore-atmosphere-form/explore-atmosphere-form.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -25,7 +25,7 @@ import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-fo
     ReactiveFormsModule,
     LossesModule,
     ModalModule,
-    ToastyModule
+    SharedModule
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,

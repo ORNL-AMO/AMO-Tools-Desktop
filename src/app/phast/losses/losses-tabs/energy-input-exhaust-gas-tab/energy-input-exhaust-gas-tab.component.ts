@@ -42,7 +42,7 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
 
     this.badgeHover = false;
   }
@@ -76,25 +76,25 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
     let hasWarning: boolean = false;
     if (this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses) {
       this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
         if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
           hasWarning = true;
         }
-      })
+      });
     }
     if (this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses && !this.inSetup) {
       this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: { combustionTempWarning: string, heatWarning: string } = this.energyInputExhaustGasService.checkWarnings(loss, this.settings);
         if (warnings.combustionTempWarning != null || warnings.heatWarning != null) {
           hasWarning = true;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
@@ -102,7 +102,7 @@ export class EnergyInputExhaustGasTabComponent implements OnInit {
 
   checkLossValid(loss: EnergyInputExhaustGasLoss) {
     let tmpForm: FormGroup = this.energyInputExhaustGasService.getFormFromLoss(loss);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;

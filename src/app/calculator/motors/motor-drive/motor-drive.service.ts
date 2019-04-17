@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable()
 export class MotorDriveService {
-  motorDriveData: MotorDriveInputs
+  motorDriveData: MotorDriveInputs;
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromObj(inputObj: MotorDriveInputs): FormGroup {
@@ -23,7 +23,7 @@ export class MotorDriveService {
       annualOperatingHours: form.controls.annualOperatingHours.value,
       averageMotorLoad: form.controls.averageMotorLoad.value,
       electricityCost: form.controls.electricityCost.value,
-    }
+    };
     return inputs;
   }
 
@@ -46,7 +46,7 @@ export class MotorDriveService {
         energyCost: this.getCost(notchedEnergyUsed, data.electricityCost) / 1000,
         annualEnergyUse: notchedEnergyUsed / 1000
       }
-    }
+    };
     return motorDriveOutputs;
   }
 
@@ -55,7 +55,7 @@ export class MotorDriveService {
   }
 
   getEnergy(data: MotorDriveInputs): number {
-    return (data.motorPower * .746 * data.annualOperatingHours * (data.averageMotorLoad/100));
+    return (data.motorPower * .746 * data.annualOperatingHours * (data.averageMotorLoad / 100));
   }
 
   getVBeltEnergyUse(data: number): number {

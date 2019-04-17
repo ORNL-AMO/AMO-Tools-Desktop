@@ -1,0 +1,36 @@
+.output-summary .table {
+    font-size: small;
+}
+.output-summary .table th {
+    border: none;
+    padding: 0px 10px;
+}
+.output-summary .table td {
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
+
+
+@media print {
+    .show-print{
+        display: inline !important;
+    }
+    .hide-print{
+        display: none !important;
+    }
+
+    .chart-row{
+        padding: 0px !important;
+    }
+}
+
+
+.selected-modification{
+    z-index: 2;
+    background: #e5efe9;
+}

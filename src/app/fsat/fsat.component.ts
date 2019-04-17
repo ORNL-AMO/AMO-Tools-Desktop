@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
@@ -11,7 +11,7 @@ import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
-import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData, FsatOutput } from '../shared/models/fans';
+import { FSAT, Modification, BaseGasDensity, FanMotor, FanSetup, FieldData } from '../shared/models/fans';
 import * as _ from 'lodash';
 import { CompareService } from './compare.service';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -19,7 +19,6 @@ import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
   selector: 'app-fsat',
@@ -77,8 +76,9 @@ export class FsatComponent implements OnInit {
   fsatOptionsLength: number;
   fsat1: FSAT;
   fsat2: FSAT;
-  exploreOppsToast: boolean = false;
-
+  //exploreOppsToast: boolean = false;
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
     private fsatService: FsatService,
@@ -92,12 +92,7 @@ export class FsatComponent implements OnInit {
     private fanMotorService: FanMotorService,
     private fanFieldDataService: FanFieldDataService,
     private fanSetupService: FanSetupService,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private cd: ChangeDetectorRef) {
-    this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-right';
-    this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
@@ -108,7 +103,7 @@ export class FsatComponent implements OnInit {
         this.assessment = dbAssessment;
         this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
         if (this._fsat.modifications) {
-          if (this._fsat.modifications.length != 0) {
+          if (this._fsat.modifications.length !== 0) {
             this.modificationExists = true;
             this.modificationIndex = 0;
             this.compareService.setCompareVals(this._fsat, 0);
@@ -127,52 +122,51 @@ export class FsatComponent implements OnInit {
         if (tmpTab) {
           this.fsatService.mainTab.next(tmpTab);
         }
-      })
-    })
+      });
+    });
     this.mainTabSub = this.fsatService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
       this.checkTutorials();
-    })
+    });
     this.stepTabSub = this.fsatService.stepTab.subscribe(val => {
       this.stepTab = val;
-      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab == val });
+      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab === val; });
       this.getContainerHeight();
-    })
+    });
     this.assessmentTabSub = this.fsatService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
       this.getContainerHeight();
-    })
+    });
 
     this.addNewSub = this.fsatService.openNewModal.subscribe(val => {
       this.showAdd = val;
       if (val) {
         this.showAddNewModal();
       }
-    })
+    });
     this.openModSub = this.fsatService.openModificationModal.subscribe(val => {
       if (val) {
-        this.selectModificationModal()
+        this.selectModificationModal();
       }
-    })
+    });
     this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
       if (mod && this._fsat) {
         this.modificationIndex = _.findIndex(this._fsat.modifications, (val) => {
-          return val.fsat.name == mod.name
-        })
+          return val.fsat.name === mod.name;
+        });
       } else {
         this.modificationIndex = undefined;
       }
-    })
+    });
 
     this.modalOpenSubscription = this.fsatService.modalOpen.subscribe(isOpen => {
       this.isModalOpen = isOpen;
-    })
+    });
 
     this.calcTabSubscription = this.fsatService.calculatorTab.subscribe(val => {
       this.calcTab = val;
-    })
-
+    });
   }
 
   ngOnDestroy() {
@@ -190,24 +184,24 @@ export class FsatComponent implements OnInit {
     this.calcTabSubscription.unsubscribe();
   }
   ngAfterViewInit() {
-    this.disclaimerToast();
     setTimeout(() => {
       this.getContainerHeight();
+      this.disclaimerToast();
     }, 100);
   }
 
   checkTutorials() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab === 'system-setup') {
       if (!this.settingsDbService.globalSettings.disableFsatSetupTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('fsat-system-setup');
       }
-    } else if (this.mainTab == 'assessment') {
+    } else if (this.mainTab === 'assessment') {
       if (!this.settingsDbService.globalSettings.disableFsatAssessmentTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('fsat-assessment-tutorial');
       }
-    } else if (this.mainTab == 'report') {
+    } else if (this.mainTab === 'report') {
       if (!this.settingsDbService.globalSettings.disableFsatReportTutorial) {
         this.assessmentService.tutorialShown = false;
         this.assessmentService.showTutorial.next('fsat-report-tutorial');
@@ -250,7 +244,7 @@ export class FsatComponent implements OnInit {
       this.indexedDbService.putSettings(this.settings).then(() => {
         this.settingsDbService.setAll().then(() => {
         });
-      })
+      });
     }
   }
 
@@ -280,8 +274,8 @@ export class FsatComponent implements OnInit {
           this.settingsDbService.setAll().then(() => {
             // this.addToast('Settings Saved');
             this.getSettings();
-          })
-        })
+          });
+        });
     }
     else {
       //if no settings for directory check parent directory
@@ -342,7 +336,7 @@ export class FsatComponent implements OnInit {
 
   save() {
     if (this._fsat.modifications) {
-      if (this._fsat.modifications.length == 0) {
+      if (this._fsat.modifications.length === 0) {
         this.modificationExists = false;
       } else {
         this.modificationExists = true;
@@ -356,8 +350,8 @@ export class FsatComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.fsatService.updateData.next(true);
-      })
-    })
+      });
+    });
   }
 
   checkSetupDone(fsat: FSAT): boolean {
@@ -376,30 +370,30 @@ export class FsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab == 'system-basics') {
+    if (this.stepTab === 'system-basics') {
       return true;
-    } else if (this.stepTab == 'fsat-fluid') {
+    } else if (this.stepTab === 'fsat-fluid') {
       let isValid: boolean = this.fsatFluidService.isFanFluidValid(this._fsat.baseGasDensity);
       if (isValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'fan-setup') {
+    } else if (this.stepTab === 'fan-setup') {
       let isValid: boolean = this.fanSetupService.isFanSetupValid(this._fsat.fanSetup, false);
       if (isValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'fan-motor') {
+    } else if (this.stepTab === 'fan-motor') {
       let isValid: boolean = this.fanMotorService.isFanMotorValid(this._fsat.fanMotor);
       if (isValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'fan-field-data') {
+    } else if (this.stepTab === 'fan-field-data') {
       let isValid: boolean = this.fanFieldDataService.isFanFieldDataValid(this._fsat.fieldData);
       if (isValid) {
         return true;
@@ -410,7 +404,7 @@ export class FsatComponent implements OnInit {
   }
 
   continue() {
-    if (this.stepTab == 'fan-field-data') {
+    if (this.stepTab === 'fan-field-data') {
       this.fsatService.mainTab.next('assessment');
     } else {
       let assessmentTabIndex: number = this.stepTabIndex + 1;
@@ -420,7 +414,7 @@ export class FsatComponent implements OnInit {
   }
 
   back() {
-    if (this.stepTab != 'system-basics') {
+    if (this.stepTab !== 'system-basics') {
       let assessmentTabIndex: number = this.stepTabIndex - 1;
       let nextTab: string = this.stepTabs[assessmentTabIndex];
       this.fsatService.stepTab.next(nextTab);
@@ -428,30 +422,28 @@ export class FsatComponent implements OnInit {
   }
 
   goToReport() {
-    this.fsatService.mainTab.next('report')
+    this.fsatService.mainTab.next('report');
   }
 
   addNewMod() {
     let tmpModification: Modification = this.fsatService.getNewMod(this._fsat, this.settings);
-    this.saveNewMod(tmpModification)
+    this.saveNewMod(tmpModification);
   }
 
   disclaimerToast() {
-    let toastOptions: ToastOptions = {
-      title: 'Disclaimer:',
-      msg: 'Please keep in mind that this application is still in beta. Please let us know if you have any suggestions for improving our app.',
-      showClose: true,
-      timeout: 10000000,
-      theme: 'default'
-    }
-    this.toastyService.info(toastOptions);
+    this.toastData.title = 'Disclaimer';
+    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+    this.showToast = true;
+    this.cd.detectChanges();
   }
 
-  setExploreOppsToast(bool: boolean) {
-    this.exploreOppsToast = bool;
-    if (!this.exploreOppsToast) {
-      this.toastyService.clearAll();
-    }
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    };
     this.cd.detectChanges();
   }
 }

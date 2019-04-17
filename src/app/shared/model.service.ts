@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Directory } from './models/directory'
+import { Directory } from './models/directory';
 import { Assessment } from "./models/assessment";
 @Injectable()
 export class ModelService {
@@ -11,17 +11,17 @@ export class ModelService {
       name: 'Root',
       assessments: null,
       subDirectory: null
-    }
-    return newDirectory
+    };
+    return newDirectory;
   }
 
-  getNewDirectory(name: string){
+  getNewDirectory(name: string) {
     let newDirectory: Directory = {
       name: name,
       assessments: null,
       subDirectory: null
-    }
-    return newDirectory
+    };
+    return newDirectory;
   }
 
 }

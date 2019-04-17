@@ -1,16 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ReportRollupService, PhastResultsData, ReportItem } from './report-rollup.service';
+import { ReportRollupService } from './report-rollup.service';
 import { PhastReportService } from '../phast/phast-report/phast-report.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AssessmentService } from '../assessment/assessment.service';
 import { Calculator } from '../shared/models/calculators';
-import { SettingsService } from '../settings/settings.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { ActivatedRoute } from '../../../node_modules/@angular/router';
+import { ReportItem } from './report-rollup-models';
+
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',
@@ -25,6 +26,7 @@ export class ReportRollupComponent implements OnInit {
   _phastAssessments: Array<ReportItem>;
   _psatAssessments: Array<ReportItem>;
   _fsatAssessments: Array<ReportItem>;
+  _ssmtAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
   //debug
   selectedPhastCalcs: Array<Calculator>;
@@ -40,12 +42,15 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('phastRollupModal') public phastRollupModal: ModalDirective;
   @ViewChild('fsatRollupModal') public fsatRollupModal: ModalDirective;
+  @ViewChild('ssmtRollupModal') public ssmtRollupModal: ModalDirective;
+
   @ViewChild('reportHeader') reportHeader: ElementRef;
   // @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
 
   numPhasts: number = 0;
   numPsats: number = 0;
   numFsats: number = 0;
+  numSsmt: number = 0;
   sidebarHeight: number = 0;
   printView: boolean = false;
   reportAssessmentsSub: Subscription;
@@ -55,6 +60,7 @@ export class ReportRollupComponent implements OnInit {
   selectedPhastSub: Subscription;
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
+  ssmtAssessmentsSub: Subscription;
 
   showPrint: boolean = false;
   showPrintMenu: boolean = false;
@@ -62,6 +68,7 @@ export class ReportRollupComponent implements OnInit {
   showPsatReportOptions: boolean = false;
   showFsatReportOptions: boolean = false;
   showPhastReportOptions: boolean = false;
+  showSsmtReportOptions: boolean = false;
   showRollupReportOptions: boolean;
   selectAll: boolean = false;
   printReportGraphs: boolean = false;
@@ -71,34 +78,38 @@ export class ReportRollupComponent implements OnInit {
   printPsatRollup: boolean = false;
   printPhastRollup: boolean = false;
   printFsatRollup: boolean = false;
-  //phast-specific options
   printEnergyUsed: boolean = false;
   printExecutiveSummary: boolean = false;
+  printEnergySummary: boolean = false;
+  printLossesSummary: boolean = false;
 
-
-
+  gatheringAssessments: boolean = true;
+  sidebarCollapsed: boolean = false;
   constructor(private activatedRoute: ActivatedRoute, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    let url = this.activatedRoute.url;
-    console.log(url);
-    console.log(this.activatedRoute);
     this._phastAssessments = new Array<ReportItem>();
     this._psatAssessments = new Array<ReportItem>();
     this._fsatAssessments = new Array<ReportItem>();
+    this._ssmtAssessments = new Array<ReportItem>();
     this.selectedPhastCalcs = new Array<Calculator>();
     this.selectedPsatCalcs = new Array<Calculator>();
     this.selectedFsatCalcs = new Array<Calculator>();
     this.directoryIds = new Array<number>();
 
     setTimeout(() => {
+      this.gatheringAssessments = false;
+    }, 1000)
+
+    setTimeout(() => {
       this.assessmentsGathered = true;
       this.cd.detectChanges();
-    }, 2000);
+    }, 1500);
     setTimeout(() => {
       this.setSidebarHeight();
       this.initPrintLogic();
-    }, 2100);
+      this.cd.detectChanges();
+    }, 1600);
 
     this.settings = this.settingsDbService.globalSettings;
     this.checkSettings();
@@ -106,25 +117,25 @@ export class ReportRollupComponent implements OnInit {
     this.createdDate = new Date();
     this.reportAssessmentsSub = this.reportRollupService.reportAssessments.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           this._reportAssessments = items;
           // this.focusedAssessment = this._reportAssessments[this._reportAssessments.length - 1].assessment;
         }
       }
     });
     this.allPhastSub = this.reportRollupService.allPhastResults.subscribe(val => {
-      if (val.length != 0) {
+      if (val.length !== 0) {
         this.reportRollupService.initPhastCompare(val);
       }
     });
     this.selectedPhastSub = this.reportRollupService.selectedPhasts.subscribe(val => {
-      if (val.length != 0) {
+      if (val.length !== 0) {
         this.reportRollupService.getPhastResultsFromSelected(val);
       }
     });
     this.psatAssessmentSub = this.reportRollupService.psatAssessments.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           this._psatAssessments = items;
           this.numPsats = this._psatAssessments.length;
           if (!this.focusedAssessment) {
@@ -135,7 +146,7 @@ export class ReportRollupComponent implements OnInit {
     });
     this.phastAssessmentsSub = this.reportRollupService.phastAssessments.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           this.reportRollupService.initPhastResultsArr(items);
           this._phastAssessments = items;
           this.numPhasts = this._phastAssessments.length;
@@ -148,7 +159,7 @@ export class ReportRollupComponent implements OnInit {
 
     this.fsatAssessmentsSub = this.reportRollupService.fsatAssessments.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           this._fsatAssessments = items;
           this.numFsats = this._fsatAssessments.length;
           this.reportRollupService.initFsatResultsArr(items);
@@ -157,20 +168,34 @@ export class ReportRollupComponent implements OnInit {
           }
         }
       }
-    })
+    });
+
+    this.ssmtAssessmentsSub = this.reportRollupService.ssmtAssessments.subscribe(items => {
+      if (items) {
+        if (items.length !== 0) {
+          this._ssmtAssessments = items;
+          this.numSsmt = this._ssmtAssessments.length;
+          this.reportRollupService.initSsmtResultsArr(items);
+          if (!this.focusedAssessment) {
+            this.focusedAssessment = this._ssmtAssessments[0].assessment;
+          }
+        }
+      }
+    });
+
     //gets calculators for pre assessment rollup
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(items => {
       if (items) {
-        if (items.length != 0) {
+        if (items.length !== 0) {
           items.forEach(item => {
-            if (item.type == 'furnace') {
+            if (item.type === 'furnace') {
               this.selectedPhastCalcs.push(item);
-            } else if (item.type == 'pump') {
+            } else if (item.type === 'pump') {
               this.selectedPsatCalcs.push(item);
-            } else if (item.type == 'fan') {
+            } else if (item.type === 'fan') {
               this.selectedFsatCalcs.push(item);
             }
-          })
+          });
         }
       }
     });
@@ -191,6 +216,7 @@ export class ReportRollupComponent implements OnInit {
     if (this.psatAssessmentSub) this.psatAssessmentSub.unsubscribe();
     if (this.selectedCalcsSub) this.selectedCalcsSub.unsubscribe();
     if (this.fsatAssessmentsSub) this.fsatAssessmentsSub.unsubscribe();
+    if (this.ssmtAssessmentsSub) this.ssmtAssessmentsSub.unsubscribe();
   }
 
   checkSettings() {
@@ -198,14 +224,14 @@ export class ReportRollupComponent implements OnInit {
       this.settings.phastRollupElectricityUnit = 'kWh';
     }
     if (!this.settings.phastRollupFuelUnit) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.settings.phastRollupFuelUnit = 'GJ';
       } else {
         this.settings.phastRollupFuelUnit = 'MMBtu';
       }
     }
     if (!this.settings.phastRollupSteamUnit) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.settings.phastRollupSteamUnit = 'GJ';
       } else {
         this.settings.phastRollupSteamUnit = 'MMBtu';
@@ -248,6 +274,9 @@ export class ReportRollupComponent implements OnInit {
     if (this.numPhasts > 0) {
       this.showPhastReportOptions = true;
     }
+    if (this.numSsmt > 0) {
+      this.showSsmtReportOptions = true;
+    }
     else {
       this.showPhastReportOptions = false;
     }
@@ -255,12 +284,15 @@ export class ReportRollupComponent implements OnInit {
     this.printPsatRollup = false;
     this.printFsatRollup = false;
     this.printPhastRollup = false;
+    // this.printSsmtRollup = false;
     this.printReportGraphs = false;
     this.printReportSankey = false;
     this.printResults = false;
     this.printInputData = false;
     this.printEnergyUsed = false;
     this.printExecutiveSummary = false;
+    this.printEnergySummary = false;
+    this.printLossesSummary = false;
   }
 
   togglePrint(section: string): void {
@@ -271,23 +303,29 @@ export class ReportRollupComponent implements OnInit {
           this.printPsatRollup = true;
           this.printPhastRollup = true;
           this.printFsatRollup = true;
+          // this.printSsmtRollup = true;
           this.printReportGraphs = true;
           this.printReportSankey = true;
           this.printResults = true;
           this.printInputData = true;
           this.printExecutiveSummary = true;
           this.printEnergyUsed = true;
+          this.printEnergySummary = true;
+          this.printLossesSummary = true;
         }
         else {
           this.printPsatRollup = false;
           this.printPhastRollup = false;
           this.printFsatRollup = false;
+          // this.printSsmtRollup = false;
           this.printResults = false;
           this.printReportGraphs = false;
           this.printReportSankey = false;
           this.printInputData = false;
           this.printExecutiveSummary = false;
           this.printEnergyUsed = false;
+          this.printEnergySummary = false;
+          this.printLossesSummary = false;
         }
         break;
       }
@@ -303,6 +341,10 @@ export class ReportRollupComponent implements OnInit {
         this.printFsatRollup = !this.printFsatRollup;
         break;
       }
+      // case "ssmtRollup": {
+      //   this.printSsmtRollup = !this.printSsmtRollup;
+      //   break;
+      // }
       case "reportGraphs": {
         this.printReportGraphs = !this.printReportGraphs;
         break;
@@ -327,6 +369,14 @@ export class ReportRollupComponent implements OnInit {
         this.printExecutiveSummary = !this.printExecutiveSummary;
         break;
       }
+      case "energySummary": {
+        this.printEnergySummary = !this.printEnergySummary;
+        break;
+      }
+      case "lossesSummary": {
+        this.printLossesSummary = !this.printLossesSummary;
+        break;
+      }
       default: {
         break;
       }
@@ -336,9 +386,13 @@ export class ReportRollupComponent implements OnInit {
   setPrintViewThenPrint() {
 
     this.printView = true;
+    let tmpPrintBuildTime = 100;
+    if (this._ssmtAssessments.length > 0) {
+      tmpPrintBuildTime += (500 * this._ssmtAssessments.length);
+    }
     setTimeout(() => {
       this.print();
-    }, 100);
+    }, tmpPrintBuildTime);
   }
 
   print() {
@@ -389,7 +443,7 @@ export class ReportRollupComponent implements OnInit {
         if (diff > 0 && diff < 50) {
           this.focusedAssessment = item.assessment;
         }
-      })
+      });
     }
   }
 
@@ -425,6 +479,14 @@ export class ReportRollupComponent implements OnInit {
     this.fsatRollupModal.hide();
   }
 
+  showSsmtModal() {
+    this.ssmtRollupModal.show();
+  }
+
+  hideSsmtModal() {
+    this.ssmtRollupModal.hide();
+  }
+
   showPrintModal(): void {
     this.showPrintMenu = true;
   }
@@ -434,5 +496,9 @@ export class ReportRollupComponent implements OnInit {
       this.initPrintLogic();
     }
     this.showPrintMenu = false;
+  }
+
+  collapseSidebar() {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

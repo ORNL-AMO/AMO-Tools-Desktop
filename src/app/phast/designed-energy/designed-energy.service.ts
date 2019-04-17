@@ -32,7 +32,7 @@ export class DesignedEnergyService {
         steamEnergyUsed += this.calculateSteamZoneEnergyUsed(zone.designedEnergySteam);
         electricityEnergyUsed += this.calculateElectricityZoneEnergyUsed(zone.designedEnergyElectricity);
         fuelEnergyUsed += this.calculateFuelZoneEnergyUsed(zone.designedEnergyFuel);
-      })
+      });
       steamEnergyUsed = this.convertSteamEnergyUsed(steamEnergyUsed, settings);
       electricityEnergyUsed = this.convertUnitsService.value(electricityEnergyUsed).from('kWh').to(settings.energyResultUnit);
       fuelEnergyUsed = this.convertFuelEnergyUsed(fuelEnergyUsed, settings);
@@ -68,16 +68,16 @@ export class DesignedEnergyService {
   }
 
   convertIntensity(num: number, settings: Settings): number {
-    if (settings.energyResultUnit == 'MMBtu') {
+    if (settings.energyResultUnit === 'MMBtu') {
       num = this.convertUnitsService.value(num).from('MMBtu').to('Btu');
-    } else if (settings.energyResultUnit == 'GJ') {
+    } else if (settings.energyResultUnit === 'GJ') {
       num = this.convertUnitsService.value(num).from('GJ').to('kJ');
     }
     return num;
   }
 
   convertFuelEnergyUsed(val: number, settings: Settings): number {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       val = this.convertUnitsService.value(val).from('GJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('MMBtu').to(settings.energyResultUnit);
@@ -86,7 +86,7 @@ export class DesignedEnergyService {
   }
 
   convertSteamEnergyUsed(val: number, settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
@@ -97,7 +97,7 @@ export class DesignedEnergyService {
 }
 
 export interface DesignedResults {
-  designedEnergyUsed: number,
-  designedEnergyIntensity: number,
-  designedElectricityUsed: number,
+  designedEnergyUsed: number;
+  designedEnergyIntensity: number;
+  designedElectricityUsed: number;
 }

@@ -37,28 +37,28 @@ export class OtherTabComponent implements OnInit {
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
-    })
+    });
 
     this.compareSubscription = this.otherLossesCompareService.inputError.subscribe(val => {
       this.inputError = val;
       this.setBadgeClass();
-    })
+    });
 
     this.badgeHover = false;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    }else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent && !this.inSetup){
+    }else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -75,17 +75,17 @@ export class OtherTabComponent implements OnInit {
     let testVal = false;
     if (this.otherLossesCompareService.baselineOtherLoss) {
       this.otherLossesCompareService.baselineOtherLoss.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     if (this.otherLossesCompareService.modifiedOtherLoss && !this.inSetup) {
       this.otherLossesCompareService.modifiedOtherLoss.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     return testVal;
   }
@@ -93,7 +93,7 @@ export class OtherTabComponent implements OnInit {
 
   checkLossValid(loss: OtherLoss) {
       let tmpForm: FormGroup = this.otherLossesService.getFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;

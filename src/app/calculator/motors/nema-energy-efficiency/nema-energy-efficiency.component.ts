@@ -70,7 +70,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     if (this.calculator) {
       this.calcExists = true;
       if (this.calculator.nemaInputs) {
-        this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromObj(this.calculator.nemaInputs)
+        this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromObj(this.calculator.nemaInputs);
       } else {
         if (this.psat) {
           this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
@@ -89,11 +89,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
 
   btnResetData() {
     this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
-    if (this.settings.powerMeasurement != 'hp') {
-      if (this.nemaForm.controls.horsePower.value == '200') {
+    if (this.settings.powerMeasurement !== 'hp') {
+      if (this.nemaForm.controls.horsePower.value === '200') {
         this.nemaForm.patchValue({
           horsePower: '150'
-        })
+        });
       }
     }
     this.calculate();
@@ -109,7 +109,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       nemaInputs: tmpNemaInputs
-    }
+    };
     return tmpCalculator;
   }
 
@@ -118,11 +118,11 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromObj(this.nemaEnergyEfficiencyService.nemaInputs);
     } else {
       this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
-      if (this.settings.powerMeasurement != 'hp') {
-        if (this.nemaForm.controls.horsePower.value == 200) {
+      if (this.settings.powerMeasurement !== 'hp') {
+        if (this.nemaForm.controls.horsePower.value === 200) {
           this.nemaForm.patchValue({
             horsePower: 150
-          })
+          });
         }
       }
     }
@@ -143,7 +143,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

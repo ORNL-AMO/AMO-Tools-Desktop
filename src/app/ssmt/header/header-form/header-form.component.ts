@@ -30,33 +30,56 @@ export class HeaderFormComponent implements OnInit {
   idString: string;
 
   headerLabel: string;
+  minPressureErrorMsg: string;
+  maxPressureErrorMsg: string;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
-    if (this.selected == false) {
+    if (this.selected === false) {
       this.disableForm();
     } else {
       this.enableForm();
     }
-
-    if (this.pressureLevel == 'highPressure') {
-      this.headerForm.controls.flashCondensateReturn.disable();
-    }
+    this.setErrorMsgs();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected == false) {
+      if (this.selected === false) {
         this.disableForm();
       } else {
         this.enableForm();
       }
     }
+
+    if (changes.numberOfHeaders && !changes.numberOfHeaders.isFirstChange()) {
+      this.setErrorMsgs();
+    }
   }
 
+  setErrorMsgs() {
+    if (this.pressureLevel === 'highPressure') {
+      if (this.numberOfHeaders == 1) {
+        this.minPressureErrorMsg = 'Value must be greater than dearator pressure: ';
+      } else {
+        this.minPressureErrorMsg = 'Value must be greater than ';
+
+      }
+      this.maxPressureErrorMsg = 'Value must be less than ';
+    } else {
+      if (this.pressureLevel === 'lowPressure') {
+        this.minPressureErrorMsg = 'Value must be greater than dearator pressure: ';
+      } else {
+        this.minPressureErrorMsg = 'Value must be greater than low pressure header: ';
+      }
+      this.maxPressureErrorMsg = 'Value must be less than higher pressure headers: ';
+    }
+  }
+
+
   enableForm() {
-    if (this.pressureLevel == 'highPressure') {
-      // this.headerForm.controls.flashCondensateReturn.enable();
+    if (this.pressureLevel === 'highPressure') {
+      this.headerForm.controls.flashCondensateReturn.enable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.enable();
       this.headerForm.controls.desuperheatSteamIntoNextHighest.enable();
@@ -64,8 +87,8 @@ export class HeaderFormComponent implements OnInit {
   }
 
   disableForm() {
-    if (this.pressureLevel == 'highPressure') {
-      //  this.headerForm.controls.flashCondensateReturn.disable();
+    if (this.pressureLevel === 'highPressure') {
+      this.headerForm.controls.flashCondensateReturn.disable();
     } else {
       this.headerForm.controls.flashCondensateIntoHeader.disable();
       this.headerForm.controls.desuperheatSteamIntoNextHighest.disable();
@@ -83,7 +106,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   save() {
-    if (this.pressureLevel == 'highPressure') {
+    if (this.pressureLevel === 'highPressure') {
       let tmpHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.headerForm);
       this.emitSave.emit(tmpHeader);
     } else {
@@ -93,12 +116,12 @@ export class HeaderFormComponent implements OnInit {
   }
 
   setDesuperheatSteam() {
-    let ranges: HeaderRanges = this.headerService.getRanges(this.settings)
+    let ranges: HeaderRanges = this.headerService.getRanges(this.settings);
     let tmpDesuperheatSteamTemperatureValidators: Array<ValidatorFn>;
-    if (this.headerForm.controls.desuperheatSteamIntoNextHighest.value == true) {
-      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+    if (this.headerForm.controls.desuperheatSteamIntoNextHighest.value === true) {
+      tmpDesuperheatSteamTemperatureValidators = [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     } else {
-      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]
+      tmpDesuperheatSteamTemperatureValidators = [Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)];
     }
     this.headerForm.controls.desuperheatSteamTemperature.setValidators(tmpDesuperheatSteamTemperatureValidators);
     this.headerForm.controls.desuperheatSteamTemperature.reset(this.headerForm.controls.desuperheatSteamTemperature.value);

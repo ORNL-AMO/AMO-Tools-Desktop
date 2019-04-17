@@ -21,7 +21,7 @@ export class OpeningLossesService {
       'percentTimeOpen': ['', Validators.required],
       'emissivity': [0.9, Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   getFormFromLoss(loss: OpeningLoss): FormGroup {
@@ -37,7 +37,7 @@ export class OpeningLossesService {
       'percentTimeOpen': [loss.percentTimeOpen, Validators.required],
       'emissivity': [loss.emissivity, Validators.required],
       'name': [loss.name]
-    })
+    });
   }
 
   getLossFromForm(form: FormGroup): OpeningLoss {
@@ -111,13 +111,13 @@ export class OpeningLossesService {
       lengthWarning: this.checkLength(loss),
       heightWarning: this.checkHeight(loss),
       viewFactorWarning: this.checkViewFactor(loss)
-    }
+    };
   }
 
   checkLength(loss: OpeningLoss): string {
-    if (loss.lengthOfOpening <= 0 && loss.openingType == 'Round') {
+    if (loss.lengthOfOpening <= 0 && loss.openingType === 'Round') {
       return 'Opening Diameter must be greater than 0';
-    } else if (loss.lengthOfOpening <= 0 && loss.openingType == 'Rectangular (or Square)') {
+    } else if (loss.lengthOfOpening <= 0 && loss.openingType === 'Rectangular (or Square)') {
       return 'Opening Length must be greater than 0';
     } else {
       return null;
@@ -158,7 +158,7 @@ export class OpeningLossesService {
 
   checkTemperature(loss: OpeningLoss): string {
     if (loss.ambientTemperature > loss.insideTemperature) {
-      return 'Ambient Temperature cannot be greater than Average Zone Temperature'
+      return 'Ambient Temperature cannot be greater than Average Zone Temperature';
     } else {
       return null;
     }

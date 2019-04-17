@@ -16,7 +16,7 @@ export class EnergyInputExhaustGasService {
       'totalHeatInput': [0, Validators.required],
       'electricalPowerInput': ['', Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss): FormGroup {
@@ -27,7 +27,7 @@ export class EnergyInputExhaustGasService {
       'totalHeatInput': [energyInputExhaustGas.totalHeatInput, Validators.required],
       'electricalPowerInput': [energyInputExhaustGas.electricalPowerInput, Validators.required],
       'name': [energyInputExhaustGas.name]
-    })
+    });
     return tmpGroup;
   }
 
@@ -40,7 +40,7 @@ export class EnergyInputExhaustGasService {
       electricalPowerInput: form.controls.electricalPowerInput.value,
       otherLosses: 0.0,
       name: form.controls.name.value
-    }
+    };
     return tmpExhaustGas;
   }
 
@@ -48,7 +48,7 @@ export class EnergyInputExhaustGasService {
     return {
       combustionTempWarning: this.checkCombustionTemp(energyInputExhaustGas),
       heatWarning: this.checkHeatInput(energyInputExhaustGas, settings)
-    }
+    };
   }
   checkHeatInput(energyInputExhaustGas: EnergyInputExhaustGasLoss, settings: Settings): string {
     if (settings.unitsOfMeasure === 'Imperial') {

@@ -1,0 +1,8 @@
+.fa-calculator{
+    font-size: large;
+}
+
+.fa-calculator:hover{
+    cursor: pointer;
+    color: blue;
+}

@@ -1,11 +1,6 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { ReportRollupService, PhastResultsData } from '../report-rollup.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
-import { PhastService } from '../../phast/phast.service';
-import { PhastResults, ShowResultsCategories } from '../../shared/models/phast/phast';
-import { PhastResultsService } from '../../phast/phast-results.service';
 import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
@@ -113,17 +108,17 @@ export class RollupBarChartComponent implements OnInit {
   }
 
   initChart() {
-    if (this.assessmentType == "phast") {
+    if (this.assessmentType === "phast") {
       if (this.printView) {
         this.ngChart.nativeElement.className = "printing-phast-rollup-bar-chart";
       }
     }
-    else if (this.assessmentType == "psat") {
+    else if (this.assessmentType === "psat") {
       if (this.printView) {
         this.ngChart.nativeElement.className = "printing-psat-rollup-bar-chart";
       }
     }
-    else if (this.assessmentType == "fsat") {
+    else if (this.assessmentType === "fsat") {
       if (this.printView) {
         this.ngChart.nativeElement.className = "printing-fsat-rollup-bar-chart";
       }
@@ -212,7 +207,7 @@ export class RollupBarChartComponent implements OnInit {
                 + "<td style='text-align: right; font-weight: bold'>"
                 + d[1].value + " " + unit
                 + "</td>"
-                + "</tr>"
+                + "</tr>";
             }
             html = html + "</table></div>";
             return html;
@@ -252,10 +247,10 @@ export class RollupBarChartComponent implements OnInit {
 
   downloadChart() {
     if (!this.title) {
-      if (this.assessmentType == "phast") {
+      if (this.assessmentType === "phast") {
         this.exportName = "phast-rollup-bar-graph";
       }
-      else if (this.assessmentType == "fsat") {
+      else if (this.assessmentType === "fsat") {
         this.exportName = "fsat-rollup-bar-graph";
       }
       else {

@@ -97,11 +97,11 @@ export class FsatReportComponent implements OnInit {
       this.fsatReportService.showPrint.subscribe(printVal => {
         //shows loading print view
         this.showPrintDiv = printVal;
-        if (printVal == true) {
+        if (printVal === true) {
           //use delay to show loading before print payload starts
           setTimeout(() => {
             this.showPrint = printVal;
-          }, 20)
+          }, 20);
         } else {
           this.showPrint = printVal;
         }
@@ -118,7 +118,7 @@ export class FsatReportComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    }, 100)
+    }, 100);
   }
 
   getContainerHeight() {
@@ -149,10 +149,10 @@ export class FsatReportComponent implements OnInit {
   }
 
   getDirectoryList(id: number) {
-    if (id && id != 1) {
+    if (id && id !== 1) {
       let results = this.directoryDbService.getById(id);
       this.assessmentDirectories.push(results);
-      if (results.parentDirectoryId != 1) {
+      if (results.parentDirectoryId !== 1) {
         this.getDirectoryList(results.parentDirectoryId);
       }
     }

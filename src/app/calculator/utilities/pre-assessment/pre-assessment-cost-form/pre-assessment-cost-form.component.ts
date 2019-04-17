@@ -18,18 +18,18 @@ export class PreAssessmentCostFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(!this.preAssessment.fuelCost){
+    if (!this.preAssessment.fuelCost) {
       this.preAssessment.fuelCost = this.settings.fuelCost;
     }
-    if(!this.preAssessment.steamCost){
+    if (!this.preAssessment.steamCost) {
       this.preAssessment.steamCost = this.settings.steamCost;
     }
-    if(!this.preAssessment.electricityCost){
+    if (!this.preAssessment.electricityCost) {
       this.preAssessment.electricityCost = this.settings.electricityCost;
     }
   }
 
-  calculate(){
+  calculate() {
     this.emitCalculate.emit(true);
   }
 

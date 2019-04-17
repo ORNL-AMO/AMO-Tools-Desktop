@@ -32,7 +32,7 @@ export class RatedMotorFormComponent implements OnInit {
   showEfficiencyClass: boolean = false;
   showMotorEfficiency: boolean = false;
 
-  efficiencyClasses: Array<{ value: number, display: string }>
+  efficiencyClasses: Array<{ value: number, display: string }>;
   constructor(
     private convertUnitsService: ConvertUnitsService,
     private psatService: PsatService,
@@ -48,7 +48,7 @@ export class RatedMotorFormComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.isFirstChange()) {
-        this.init()
+        this.init();
       }
     }
   }
@@ -59,7 +59,7 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   initEfficiencyClass() {
-    if (this.baselineForm.controls.efficiencyClass.value != this.modificationForm.controls.efficiencyClass.value) {
+    if (this.baselineForm.controls.efficiencyClass.value !== this.modificationForm.controls.efficiencyClass.value) {
       this.showEfficiencyClass = true;
     } else {
       this.showEfficiencyClass = false;
@@ -67,20 +67,20 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   initMotorEfficiency() {
-    if (this.modificationForm.controls.efficiencyClass.value == 3) {
+    if (this.modificationForm.controls.efficiencyClass.value === 3) {
       this.showMotorEfficiency = true;
       this.modificationForm.controls.specifiedEfficiency.enable();
     } else {
       this.modificationForm.controls.specifiedEfficiency.patchValue(90);
       this.modificationForm.controls.specifiedEfficiency.disable();
     }
-    if (this.baselineForm.controls.efficiencyClass.value == 3) {
+    if (this.baselineForm.controls.efficiencyClass.value === 3) {
       this.showMotorEfficiency = true;
     } else {
       this.baselineForm.controls.specifiedEfficiency.patchValue(90);
     }
 
-    if (this.baselineForm.controls.efficiencyClass.value != 3 && this.modificationForm.controls.efficiencyClass.value != 3) {
+    if (this.baselineForm.controls.efficiencyClass.value !== 3 && this.modificationForm.controls.efficiencyClass.value !== 3) {
       this.showMotorEfficiency = false;
     }
   }
@@ -91,7 +91,7 @@ export class RatedMotorFormComponent implements OnInit {
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
-    this.modifyConditionsService.modifyConditionsTab.next('fan-motor')
+    this.modifyConditionsService.modifyConditionsTab.next('fan-motor');
   }
 
   getUnit(unit: string) {
@@ -117,13 +117,13 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   toggleEfficiencyClass() {
-    if (this.showEfficiencyClass == false) {
+    if (this.showEfficiencyClass === false) {
       this.modificationForm.controls.efficiencyClass.patchValue(this.baselineForm.controls.efficiencyClass.value);
       this.calculate();
     }
   }
   toggleMotorEfficiency() {
-    if (this.showMotorEfficiency == false) {
+    if (this.showMotorEfficiency === false) {
       this.modificationForm.controls.specifiedEfficiency.patchValue(this.baselineForm.controls.specifiedEfficiency.value);
       this.calculate();
     }

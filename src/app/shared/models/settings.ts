@@ -70,24 +70,24 @@ export interface Settings {
 
 
 export interface FacilityInfo {
-    companyName?: string,
-    facilityName?: string,
-    address?: StreetAddress,
-    facilityContact?: Contact,
-    assessmentContact?: Contact,
-    date?: string
+    companyName?: string;
+    facilityName?: string;
+    address?: StreetAddress;
+    facilityContact?: Contact;
+    assessmentContact?: Contact;
+    date?: string;
 }
 
 export interface StreetAddress {
-    street?: string,
-    city?: string,
-    state?: string,
-    country?: string,
-    zip?: string
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    zip?: string;
 }
 
 export interface Contact {
-    contactName?: string,
-    phoneNumber?: number,
-    email?: string
+    contactName?: string;
+    phoneNumber?: number;
+    email?: string;
 }

@@ -23,7 +23,7 @@ export class PsatReportTutorialComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.next();
-    }, 1000)
+    }, 1000);
  }
 
   next() {
@@ -38,7 +38,7 @@ export class PsatReportTutorialComponent implements OnInit {
     this.showItem[this.index] = true;
   }
   close() {
-     if(this.dontShow && !this.inTutorials){
+     if (this.dontShow && !this.inTutorials) {
         this.sendDontShow();
      }
     this.closeTutorial.emit(true);

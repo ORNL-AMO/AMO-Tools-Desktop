@@ -47,13 +47,13 @@ export class O2EnrichmentFormComponent implements OnInit {
     let o2CombAirDirty: boolean = this.o2Form.controls.o2CombAir.dirty;
     let combAirTempEnrichedDirty: boolean = this.o2Form.controls.combAirTemp.dirty;
 
-    this.o2Form.controls.combAirTempEnriched.setValidators([Validators.required, Validators.min(tmpRanges.combAirTempEnrichedMin), Validators.max(tmpRanges.combAirTempEnrichedMax)])
+    this.o2Form.controls.combAirTempEnriched.setValidators([Validators.required, Validators.min(tmpRanges.combAirTempEnrichedMin), Validators.max(tmpRanges.combAirTempEnrichedMax)]);
     this.o2Form.controls.combAirTempEnriched.reset(this.o2Form.controls.combAirTempEnriched.value);
 
-    this.o2Form.controls.o2CombAir.setValidators([Validators.required, Validators.max(tmpRanges.o2CombAirMax)])
+    this.o2Form.controls.o2CombAir.setValidators([Validators.required, Validators.max(tmpRanges.o2CombAirMax)]);
     this.o2Form.controls.o2CombAir.reset(this.o2Form.controls.o2CombAir.value);
 
-    this.o2Form.controls.combAirTemp.setValidators([Validators.required, Validators.min(tmpRanges.combAirTempMin), Validators.max(tmpRanges.combAirTempMax)])
+    this.o2Form.controls.combAirTemp.setValidators([Validators.required, Validators.min(tmpRanges.combAirTempMin), Validators.max(tmpRanges.combAirTempMax)]);
     this.o2Form.controls.combAirTemp.reset(this.o2Form.controls.combAirTemp.value);
 
     if (combAirTempDirty) {
@@ -67,7 +67,7 @@ export class O2EnrichmentFormComponent implements OnInit {
     }
   }
 
-  plot(){
+  plot() {
     
   }
 }

@@ -19,3 +19,9 @@
 .list-modal .modal-body{
     max-height: 80vh;
 }
+
+
+.diagram-content.scroll-item{
+    overflow-x: auto;
+    overflow-y: hidden;
+}

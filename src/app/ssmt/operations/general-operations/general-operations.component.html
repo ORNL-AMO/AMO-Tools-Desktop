@@ -1,21 +1,39 @@
 <div class="d-flex flex-column ml-2 mr-2">
   <label class="group-label">General Details</label>
-  <div class="form-group">
-    <label for="{{idString+'sitePowerImport'}}">Site Power Import</label>
-    <div class="input-group">
-      <input name="sitePowerImport" type="number" step="any" class="form-control" id="{{idString+'sitePowerImport'}}"
-        (input)="save()" [(ngModel)]="generalSteamOperations.sitePowerImport" [disabled]="!selected" [ngClass]="{'indicate-different': isSitePowerImportDifferent()}"
-        (focus)="focusField('sitePowerImport')" (blur)="focusOut()">
-      <span class="units input-group-addon" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label for="{{idString+'sitePowerImport'}}">Site Power Import</label>
+      <div class="input-group">
+        <input name="sitePowerImport" type="number" step="any" class="form-control" id="{{idString+'sitePowerImport'}}"
+          (input)="save()" formControlName="sitePowerImport"
+          [ngClass]="{'indicate-different': isSitePowerImportDifferent()}" (focus)="focusField('sitePowerImport')"
+          (blur)="focusOut()">
+        <span class="units input-group-addon" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.sitePowerImport.invalid && !form.controls.sitePowerImport.pristine">
+        <span *ngIf="form.controls.sitePowerImport.errors.required">Value Required</span>
+      </span>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="{{idString+'makeUpWaterTemperature'}}">Make-up Water Temperature</label>
-    <div class="input-group">
-      <input name="makeUpWaterTemperature" type="number" step="any" class="form-control" id="{{idString+'makeUpWaterTemperature'}}"
-        (input)="save()" [(ngModel)]="generalSteamOperations.makeUpWaterTemperature" [disabled]="!selected" [ngClass]="{'indicate-different': isMakeUpWaterTemperatureDifferent()}"
-        (focus)="focusField('makeUpWaterTemperature')" (blur)="focusOut()" min="0">
-      <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+    <div class="form-group">
+      <label for="{{idString+'makeUpWaterTemperature'}}">Make-up Water Temperature</label>
+      <div class="input-group">
+        <input name="makeUpWaterTemperature" type="number" step="any" class="form-control"
+          id="{{idString+'makeUpWaterTemperature'}}" (input)="save()" formControlName="makeUpWaterTemperature"
+          [ngClass]="{'indicate-different': isMakeUpWaterTemperatureDifferent()}"
+          (focus)="focusField('makeUpWaterTemperature')" (blur)="focusOut()" min="0">
+        <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.makeUpWaterTemperature.invalid && !form.controls.makeUpWaterTemperature.pristine">
+        <span *ngIf="form.controls.makeUpWaterTemperature.errors.required">Value Required</span>
+        <span *ngIf="form.controls.makeUpWaterTemperature.errors.max">Value can't be greater than
+          {{form.controls.makeUpWaterTemperature.errors.max.max}}
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+        <span *ngIf="form.controls.makeUpWaterTemperature.errors.min">Value can't be less than
+          {{form.controls.makeUpWaterTemperature.errors.min.min}}
+          <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+      </span>
     </div>
-  </div>
+  </form>
 </div>

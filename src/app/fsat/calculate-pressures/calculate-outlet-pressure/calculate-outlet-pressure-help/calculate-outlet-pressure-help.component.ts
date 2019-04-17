@@ -12,7 +12,7 @@ export class CalculateOutletPressureHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.currentField == 'inletLoss'){
+    if (this.currentField === 'inletLoss') {
       this.currentField = 'outletSystemEffectLoss';
     }
   }

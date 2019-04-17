@@ -11,23 +11,61 @@
       <div class="modal-body scroll-item">
         <label>Application</label>
         <ul>
-          <li>Fixed: Changed name of the tool as it appears in Start Menus to MEASUR</li>
+          <li>Added: Popup to home page to ask for tool feedback</li>
+          <li>Added: Tutorial Setting for "All Hide/Show"</li>
+          <li>Enhanced: Changed name of "Contact" page to "Feedback" and added link for tool feedback survey</li>
+          <li>Enhanced: Style updates for consistency throughout the tool</li>
+          <li>Enhanced: Added button for "Copy Table" to most tables throughout tool</li>
+          <li>Enhanced: Esc button now closes popup graphs</li>
+          <li>Fixed: Several grammar/spelling issues in tool</li>
+
         </ul>
         <label>Pumps</label>
         <ul>
-          <li>Fixed: Several bugs regarding warnings</li>
+          <li>Fixed: Bug relating to using the backspace to clear the name of a new scenario in Explore Opportunities
+          </li>
+          <li>Fixed: Clarified that "Cost" field in Field Data is "Electricity Cost"</li>
+        </ul>
+        <label>Process Heating</label>
+        <ul>
+          <li>Enhanced: Help text for "Number of Phases" in Aux Equipment
+          </li>
+          <li>Fixed: Updated field title for "Motor Phase" field in Aux Equipment to "Number of Phases"</li>
         </ul>
         <label>Fans</label>
         <ul>
-          <li> Fixed: Several bugs regarding warnings</li>
+          <li>Fixed: Updated field title for "Cost" field in Field Data to "Electricity Cost"</li>
+        </ul>
+        <label>Steam</label>
+        <ul>
+          <li>New Feature - Steam System Modeling Tool - allows users to compare current steam systems to modified
+            scenarios to analyze potential energy savings
+          </li>
+          <li>Added - Steam Reports and dynamic diagram</li>
         </ul>
         <label>Calculators</label>
         <ul>
-          <li> Enhanced: Validation logic and warnings for pump and fan calculators</li>
-          <li> Fixed: Bug regarding calculation of fluid power for pump curve, fan curve and the two system curve calculators</li>
+          <li>Added: Lighting Calculator to home screen</li>
+          <li>Enhanced: Styling of Motor - Replace/Rewind to fit into the Treasure Hunt Styling</li>
+          <li>Enhanced: Help text for Compressed Air - Bag Method calculator and Compressed Air - System Capacity
+            calculator</li>
+          <li>Enhanced: Reduced the maximum width of the unit converter calculator</li>
+          <li>Enhanced: Set the right side of the unit converter to a result instead of an updating input field</li>
+          <li>Enhanced: Styling of Motor - Replace Existing motor to fit into the Treasure Hunt Styling</li>
+          <li>Enhanced: Calculator help text for Process Heating - O2 Enrichment & Efficiency Improvement</li>
+          <li>Fixed: Bug where field help text was not always showing up in pre-assessment calculator</li>
+          <li>Fixed: Bug in pump & fan curves and system curves where tool was not converting from non-standard imperial
+            units before sending it to the suite for calculations</li>
+          <li>Fixed: Suite bug where the Steam - Flash Tank calculator would not properly identify if incoming steam was
+            superheated or saturated, leading to errors</li>
+          <li>Fixed: Several small bugs relating to calculator icons</li>
+          <li>Fixed: Bug relating to the Fan - Fan Analysis calculator not allowing progression when using "Use Custom
+            Density"</li>
         </ul>
         <label>Known Issues</label>
         <ul>
+          <li>The calculations for the Steam application will take longer than the others due to its iterative
+            calculations</li>
           <li>The Mac and Linux releases have significantly slower app start times than in previous builds</li>
           <li>Renaming an export in Windows Download menu can delete the file extension (.json)</li>
           <li>Assessments made in a previous release may experience errors</li>

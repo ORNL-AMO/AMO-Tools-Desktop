@@ -321,7 +321,7 @@ export class PhastPieChartComponent implements OnInit {
         return function (t) {
           return arc(interpolate(t));
         };
-      })
+      });
     path.exit().remove();
 
     let text = this.svg.selectAll("text").remove();
@@ -442,7 +442,7 @@ export class PhastPieChartComponent implements OnInit {
     let pointer = this.svg.selectAll("path.pointer")
       .data(pieValuesData)
       .enter()
-      .append("path")
+      .append("path");
     pointer.style('opacity', 0).transition().duration(750).ease(d3.easeLinear).style('opacity', 1);
     pointer.attr("class", "pointer")
       .style("fill", "none")

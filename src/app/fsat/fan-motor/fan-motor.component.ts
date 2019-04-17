@@ -34,7 +34,7 @@ export class FanMotorComponent implements OnInit {
   @Input()
   fsat: FSAT;
 
-  efficiencyClasses: Array<{ value: number, display: string }>
+  efficiencyClasses: Array<{ value: number, display: string }>;
 
   // horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
   // horsePowersPremium: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500];
@@ -96,18 +96,18 @@ export class FanMotorComponent implements OnInit {
   }
 
   init() {
-    this.fanMotorForm = this.fanMotorService.getFormFromObj(this.fanMotor)
+    this.fanMotorForm = this.fanMotorService.getFormFromObj(this.fanMotor);
     this.checkWarnings();
   }
 
   changeLineFreq() {
-    if (this.fanMotorForm.controls.lineFrequency.value == 60) {
-      if (this.fanMotorForm.controls.motorRpm.value == 1485) {
+    if (this.fanMotorForm.controls.lineFrequency.value === 60) {
+      if (this.fanMotorForm.controls.motorRpm.value === 1485) {
         this.fanMotorForm.controls.motorRpm.patchValue(1780);
       }
-    } else if (this.fanMotorForm.controls.lineFrequency.value == 50) {
-      if (this.fanMotorForm.controls.motorRpm.value == 1780) {
-        this.fanMotorForm.controls.motorRpm.patchValue(1485)
+    } else if (this.fanMotorForm.controls.lineFrequency.value === 50) {
+      if (this.fanMotorForm.controls.motorRpm.value === 1780) {
+        this.fanMotorForm.controls.motorRpm.patchValue(1485);
       }
     }
     this.save();
@@ -125,7 +125,7 @@ export class FanMotorComponent implements OnInit {
     if (!this.disableFLA()) {
       let tmpEfficiency: number;
       //use efficiency class value if not specified efficiency class for efficiency
-      if (this.fanMotorForm.controls.efficiencyClass.value != 3) {
+      if (this.fanMotorForm.controls.efficiencyClass.value !== 3) {
         tmpEfficiency = this.fanMotorForm.controls.efficiencyClass.value;
       } else {
         tmpEfficiency = this.fanMotorForm.controls.specifiedEfficiency.value;
@@ -144,7 +144,7 @@ export class FanMotorComponent implements OnInit {
       );
       return estEfficiency;
     } else {
-      return null
+      return null;
     }
   }
 
@@ -160,13 +160,13 @@ export class FanMotorComponent implements OnInit {
   disableFLA(): boolean {
     if (!this.disableFLAOptimized) {
       if (
-        this.fanMotorForm.controls.lineFrequency.status == 'VALID' &&
-        this.fanMotorForm.controls.motorRatedPower.status == 'VALID' &&
-        this.fanMotorForm.controls.motorRpm.status == 'VALID' &&
-        this.fanMotorForm.controls.efficiencyClass.status == 'VALID' &&
-        this.fanMotorForm.controls.motorRatedVoltage.status == 'VALID'
+        this.fanMotorForm.controls.lineFrequency.status === 'VALID' &&
+        this.fanMotorForm.controls.motorRatedPower.status === 'VALID' &&
+        this.fanMotorForm.controls.motorRpm.status === 'VALID' &&
+        this.fanMotorForm.controls.efficiencyClass.status === 'VALID' &&
+        this.fanMotorForm.controls.motorRatedVoltage.status === 'VALID'
       ) {
-        if (this.fanMotorForm.controls.efficiencyClass.value != 3) {
+        if (this.fanMotorForm.controls.efficiencyClass.value !== 3) {
           return false;
         } else {
           if (this.fanMotorForm.controls.lineFrequency.value) {

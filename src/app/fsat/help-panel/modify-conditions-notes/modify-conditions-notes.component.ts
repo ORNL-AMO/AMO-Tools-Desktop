@@ -19,7 +19,7 @@ export class ModifyConditionsNotesComponent implements OnInit {
   ngOnInit() {
   }
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 

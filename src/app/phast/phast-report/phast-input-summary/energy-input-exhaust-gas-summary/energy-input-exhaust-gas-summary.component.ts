@@ -23,7 +23,7 @@ export class EnergyInputExhaustGasSummaryComponent implements OnInit {
   ngOnInit() {
     this.lossData = new Array();
     if (this.phast.losses) {
-      if(this.phast.modifications){
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
       if (this.phast.losses.energyInputExhaustGasLoss) {
@@ -35,14 +35,14 @@ export class EnergyInputExhaustGasSummaryComponent implements OnInit {
             this.phast.modifications.forEach(mod => {
               let modData = mod.phast.losses.energyInputExhaustGasLoss[index];
               modificationData.push(modData);
-            })
+            });
           }
           this.lossData.push({
             baseline: loss,
             modifications: modificationData
-          })
+          });
           index++;
-        })
+        });
       }
     }
   }

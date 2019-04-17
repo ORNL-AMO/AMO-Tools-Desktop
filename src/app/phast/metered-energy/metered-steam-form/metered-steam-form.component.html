@@ -6,7 +6,7 @@
     <div class="form-group">
       <label for="totalHeatSteam">Heat Content of Steam</label>
       <div class="input-group">
-        <input name="totalHeatSteam" type="number" step="any" id="totalHeatSteam" class="form-control" (focus)="focusField('totalHeatSteam')"
+        <input name="totalHeatSteam" type="number" step="any" id="totalHeatSteam" class="form-control" (focus)="changeField('totalHeatSteam')"
           [(ngModel)]="inputs.totalHeatSteam" (input)="calculate()" onfocus="this.select();" />
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
@@ -15,7 +15,7 @@
     <div class="form-group">
       <label for="flowRate">Steam Flow during Data Collection</label>
       <div class="input-group">
-        <input name="flowRate" type="number" step="any" id="flowRate" class="form-control" (focus)="focusField('steamFlowRate')"
+        <input name="flowRate" type="number" step="any" id="flowRate" class="form-control" (focus)="changeField('steamFlowRate')"
           [(ngModel)]="inputs.flowRate" (input)="calculate()" onfocus="this.select();" />
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg</span>
@@ -24,7 +24,7 @@
     <div class="form-group">
       <label for="collectionTime">Data Collection Time</label>
       <div class="input-group">
-        <input name="collectionTime" type="number" step="any" id="collectionTime" class="form-control" (focus)="focusField('steamCollectionTime')"
+        <input name="collectionTime" type="number" step="any" id="collectionTime" class="form-control" (focus)="changeField('steamCollectionTime')"
           [(ngModel)]="inputs.collectionTime" (input)="calculate()" onfocus="this.select();" />
         <span class="input-group-addon units">hrs</span>
       </div>

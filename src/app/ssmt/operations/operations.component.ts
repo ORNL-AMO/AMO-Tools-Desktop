@@ -1,6 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { SSMT } from '../../shared/models/steam/ssmt';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { SSMT, GeneralSteamOperations } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+import { OperationsService } from './operations.service';
+import { OperatingHours, OperatingCosts } from '../../shared/models/operations';
 
 @Component({
   selector: 'app-operations',
@@ -13,24 +16,64 @@ export class OperationsComponent implements OnInit {
   @Input()
   settings: Settings;
   @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
+  emitSave = new EventEmitter<SSMT>();
   @Input()
   selected: boolean;
   @Input()
   inSetup: boolean;
   @Input()
   isBaseline: boolean;
+  @Input()
+  modificationIndex: number;
 
   idString: string = 'baseline_';
-  constructor() { }
+
+  operationsForm: FormGroup;
+
+  constructor(private operationsService: OperationsService) { }
 
   ngOnInit() {
+    this.initForm();
     if (!this.isBaseline) {
       this.idString = 'modification_';
     }
+    if (this.selected === false) {
+      this.disableForm();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (this.selected === true) {
+        this.enableForm();
+      } else if (this.selected === false) {
+        this.disableForm();
+      }
+    }
+    if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
+      this.initForm();
+    }
+  }
+
+  initForm(){
+    this.operationsForm = this.operationsService.getForm(this.ssmt, this.settings);
+  }
+
+  disableForm() {
+    this.operationsForm.disable();
+  }
+
+  enableForm() {
+    this.operationsForm.enable();
   }
 
   save() {
-    this.emitSave.emit(true);
+    let newData: {
+      operatingHours: OperatingHours, operatingCosts: OperatingCosts, generalSteamOperations: GeneralSteamOperations
+    } = this.operationsService.getOperationsDataFromForm(this.operationsForm);
+    this.ssmt.operatingCosts = newData.operatingCosts;
+    this.ssmt.operatingHours = newData.operatingHours;
+    this.ssmt.generalSteamOperations = newData.generalSteamOperations;
+    this.emitSave.emit(this.ssmt);
   }
 }

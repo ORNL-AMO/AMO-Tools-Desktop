@@ -25,14 +25,14 @@ export class PhastSettingsComponent implements OnInit {
     'kgce',
     'kgoe',
     'kWh'
-  ]
+  ];
 
   fuelFiredOptions: Array<string> = [
     'Ladle Heater',
     'Reheat Furnace',
     'Tundish Heater',
     'Custom Fuel Furnace'
-  ]
+  ];
 
   electrotechOptions: Array<string> = [
     'Electrical Infrared',
@@ -41,14 +41,14 @@ export class PhastSettingsComponent implements OnInit {
     'Vacuum Furnace',
     'Electric Arc Furnace (EAF)',
     'Custom Electrotechnology'
-  ]
+  ];
 
   // electricOptions: Array<string>;
   energyResultOptions: Array<any>;
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
-    if (!this.settingsForm.controls.furnaceType.value || this.settingsForm.controls.furnaceType.value == '') {
+    if (!this.settingsForm.controls.furnaceType.value || this.settingsForm.controls.furnaceType.value === '') {
       this.setOptions();
     }
     if (this.disable) {
@@ -62,17 +62,17 @@ export class PhastSettingsComponent implements OnInit {
         unit: val,
         display: this.getUnitName(val),
         displayUnit: this.getUnitDisplay(val)
-      }
+      };
       this.energyResultOptions.push(tmpPossibility);
-    })
+    });
   }
 
   setOptions() {
-    if (this.settingsForm.controls.energySourceType.value == 'Fuel') {
+    if (this.settingsForm.controls.energySourceType.value === 'Fuel') {
       // this.settingsForm.patchValue({
       //   furnaceType: 'Ladle Heater'
       // });
-    } else if (this.settingsForm.controls.energySourceType.value == 'Electricity') {
+    } else if (this.settingsForm.controls.energySourceType.value === 'Electricity') {
       this.settingsForm.patchValue({
         furnaceType: 'Electrical Infrared',
         energyResultUnit: 'kWh'

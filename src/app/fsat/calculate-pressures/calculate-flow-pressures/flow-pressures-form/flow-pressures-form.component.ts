@@ -58,11 +58,11 @@ export class FlowPressuresFormComponent implements OnInit {
     this.emitFormSelect.emit(str);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 
-  changePlane(str: string){
+  changePlane(str: string) {
     this.emitChangePlane.emit(str);
   }
 
@@ -83,22 +83,22 @@ export class FlowPressuresFormComponent implements OnInit {
 
   savePlane(event: { planeNumber: string, plane: Plane }) {
     //logic for saving planes
-    if (event.planeNumber == '1') {
+    if (event.planeNumber === '1') {
       this.fsat.fieldData.planeData.FanInletFlange = event.plane;
       this.checkPlane(event.planeNumber);
-    } else if (event.planeNumber == '2') {
+    } else if (event.planeNumber === '2') {
       this.fsat.fieldData.planeData.FanEvaseOrOutletFlange = event.plane;
       this.checkPlane(event.planeNumber);
-    } else if (event.planeNumber == '3a') {
+    } else if (event.planeNumber === '3a') {
       this.fsat.fieldData.planeData.FlowTraverse = event.plane;
       this.checkPlane('3a');
-    } else if (event.planeNumber == '4') {
+    } else if (event.planeNumber === '4') {
       this.fsat.fieldData.planeData.InletMstPlane = event.plane;
       this.checkPlane('4');
-    } else if (event.planeNumber == '5') {
+    } else if (event.planeNumber === '5') {
       this.fsat.fieldData.planeData.OutletMstPlane = event.plane;
       this.checkPlane('5');
-    } else if (event.planeNumber == '3b' || event.planeNumber == '3c') {
+    } else if (event.planeNumber === '3b' || event.planeNumber === '3c') {
       this.saveAddlTraversePlane(event);
     }
     this.calculate();
@@ -106,9 +106,9 @@ export class FlowPressuresFormComponent implements OnInit {
 
 
   saveAddlTraversePlane(event: { planeNumber: string, plane: Plane }) {
-    if (event.planeNumber == '3b') {
+    if (event.planeNumber === '3b') {
       this.fsat.fieldData.planeData.AddlTraversePlanes[0] = event.plane;
-    } else if (event.planeNumber == '3c') {
+    } else if (event.planeNumber === '3c') {
       this.fsat.fieldData.planeData.AddlTraversePlanes[1] = event.plane;
     }
     this.checkTraversePlanes();
@@ -124,39 +124,39 @@ export class FlowPressuresFormComponent implements OnInit {
   }
 
   checkPlane(planeNumber: string) {
-    if (planeNumber == '1') {
+    if (planeNumber === '1') {
       let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FanInletFlange, this.settings, planeNumber);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         this.plane1Done = true;
       } else {
         this.plane1Done = false;
       }
-    } else if (planeNumber == '2') {
+    } else if (planeNumber === '2') {
       let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FanEvaseOrOutletFlange, this.settings, planeNumber);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         this.plane2Done = true;
       } else {
         this.plane2Done = false;
       }
-    } else if (planeNumber == '3a') {
+    } else if (planeNumber === '3a') {
       let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.FlowTraverse, this.settings, planeNumber);
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.fsat.fieldData.planeData.FlowTraverse);
       //todo: logic for checking readings valid
-      if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
+      if (tmpForm1.status === 'VALID' && tmpForm2.status === 'VALID') {
         this.plane3aDone = true;
       } else {
         this.plane3aDone = false;
       }
-    } else if (planeNumber == '4') {
+    } else if (planeNumber === '4') {
       let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.InletMstPlane, this.settings, planeNumber);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         this.plane4Done = true;
       } else {
         this.plane4Done = false;
       }
-    } else if (planeNumber == '5') {
+    } else if (planeNumber === '5') {
       let tmpForm: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.OutletMstPlane, this.settings, planeNumber);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         this.plane5Done = true;
       } else {
         this.plane5Done = false;
@@ -170,7 +170,7 @@ export class FlowPressuresFormComponent implements OnInit {
       let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[0], this.settings, '3b');
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[0]);
       //todo: logic for checking readings valid
-      if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
+      if (tmpForm1.status === 'VALID' && tmpForm2.status === 'VALID') {
         this.plane3bDone = true;
       } else {
         this.plane3bDone = false;
@@ -182,7 +182,7 @@ export class FlowPressuresFormComponent implements OnInit {
       let tmpForm1: FormGroup = this.fsat203Service.getPlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[1], this.settings, '3b');
       let tmpForm2: FormGroup = this.fsat203Service.getTraversePlaneFormFromObj(this.fsat.fieldData.planeData.AddlTraversePlanes[1]);
       //todo: logic for checking readings valid
-      if (tmpForm1.status == 'VALID' && tmpForm2.status == 'VALID') {
+      if (tmpForm1.status === 'VALID' && tmpForm2.status === 'VALID') {
         this.plane3cDone = true;
       } else {
         this.plane3cDone = false;
@@ -195,7 +195,7 @@ export class FlowPressuresFormComponent implements OnInit {
 
   checkBasics() {
     let tmpForm: FormGroup = this.fsat203Service.getBasicsFormFromObject(this.fsat.fieldData.fanRatedInfo, this.settings);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       this.basicsDone = true;
     } else {
       this.basicsDone = false;

@@ -48,14 +48,14 @@ export class AirCapacityFormComponent implements OnInit {
   }
 
   getTankSize() {
-    if(this.settings.unitsOfMeasure == 'Metric'){
+    if (this.settings.unitsOfMeasure === 'Metric') {
       this.tankCubicFoot = this.inputs.tankSize;
-    }else{
+    }else {
       this.tankCubicFoot = this.convertUnitsService.value(this.inputs.tankSize).from('gal').to('ft3');
     }
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 }

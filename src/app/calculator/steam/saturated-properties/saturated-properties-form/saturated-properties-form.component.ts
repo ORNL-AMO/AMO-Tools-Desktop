@@ -30,21 +30,21 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     this.setValidators();
   }
 
-  setValidators(){
-    if(this.saturatedPropertiesForm.controls.pressureOrTemperature.value == 0){
+  setValidators() {
+    if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 0) {
       this.saturatedPropertiesForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
-      this.saturatedPropertiesForm.controls.saturatedTemperature.clearValidators()
+      this.saturatedPropertiesForm.controls.saturatedTemperature.clearValidators();
       this.saturatedPropertiesForm.controls.saturatedTemperature.reset(this.saturatedPropertiesForm.controls.saturatedTemperature.value);
-    }else if(this.saturatedPropertiesForm.controls.pressureOrTemperature.value == 1){
+    }else if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 1) {
       this.saturatedPropertiesForm.controls.saturatedTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
-      this.saturatedPropertiesForm.controls.saturatedPressure.clearValidators()
+      this.saturatedPropertiesForm.controls.saturatedPressure.clearValidators();
       this.saturatedPropertiesForm.controls.saturatedPressure.reset(this.saturatedPropertiesForm.controls.saturatedPressure.value);
     }
     this.cd.detectChanges();
   }
 
   calculate() {
-    if(this.saturatedPropertiesForm.status == 'INVALID'){
+    if (this.saturatedPropertiesForm.status === 'INVALID') {
       this.output = {
         saturatedPressure: 0,
         saturatedTemperature: 0,
@@ -57,12 +57,12 @@ export class SaturatedPropertiesFormComponent implements OnInit {
         liquidVolume: 0,
         gasVolume: 0,
         evaporationVolume: 0
-      }
+      };
     }
     this.emitCalculate.emit(this.saturatedPropertiesForm);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 

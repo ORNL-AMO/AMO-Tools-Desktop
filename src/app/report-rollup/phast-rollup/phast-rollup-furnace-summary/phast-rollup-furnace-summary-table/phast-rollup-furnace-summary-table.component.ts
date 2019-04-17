@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { PhastResultsData } from '../../../report-rollup.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PhastResultsService } from '../../../../phast/phast-results.service';
 import { PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
+import { PhastResultsData } from '../../../report-rollup-models';
 
 @Component({
   selector: 'app-phast-rollup-furnace-summary-table',
@@ -39,7 +39,7 @@ export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
     }
 
     if (resultCategories.showExGas) {
-      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100
+      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100;
     }
   }
 }

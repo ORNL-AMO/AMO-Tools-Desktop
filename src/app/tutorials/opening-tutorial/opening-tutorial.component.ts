@@ -22,7 +22,7 @@ export class OpeningTutorialComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.next();
-    }, 1000)
+    }, 1000);
  }
 
   next() {
@@ -37,13 +37,13 @@ export class OpeningTutorialComponent implements OnInit {
     this.showItem[this.index] = true;
   }
   close() {
-    if(this.dontShow){
+    if (this.dontShow) {
       this.sendDontShow();
     }
     this.closeTutorial.emit(true);
   }
 
-  sendDontShow(){
+  sendDontShow() {
     this.settingsDbService.globalSettings.disableTutorial = this.dontShow;
     this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
       this.settingsDbService.setAll();

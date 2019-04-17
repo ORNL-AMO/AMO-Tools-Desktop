@@ -51,7 +51,7 @@ export class TurbineService {
       generationEfficiency: [, [Validators.required, Validators.min(50), Validators.max(100)]],
       condenserPressure: [, [Validators.required, Validators.min(tmpCondensingPressureMin), Validators.max(tmpCondensingPressureMax)]],
       operationType: [0, Validators.required],
-      operationValue: [, [Validators.required, Validators.min(tmpOperationValueRanges.min), Validators.max(tmpOperationValueRanges.max)]], //min/max for fixed flow,
+      operationValue: [, [Validators.required, Validators.min(tmpOperationValueRanges.min)]], //min/max for fixed flow,
       useTurbine: [false, Validators.required]
     })
   }
@@ -67,7 +67,7 @@ export class TurbineService {
       generationEfficiency: [obj.generationEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]],
       condenserPressure: [obj.condenserPressure, [Validators.required, Validators.min(tmpCondensingPressureMin), Validators.max(tmpCondensingPressureMax)]],
       operationType: [obj.operationType, Validators.required],
-      operationValue: [obj.operationValue, [Validators.required, Validators.min(tmpOperationValueRanges.min), Validators.max(tmpOperationValueRanges.max)]],
+      operationValue: [obj.operationValue, [Validators.required, Validators.min(tmpOperationValueRanges.min)]],
       useTurbine: [obj.useTurbine, Validators.required]
     })
     for (let key in form.controls) {
@@ -134,11 +134,11 @@ export class TurbineService {
     let operationValue1Validators: Array<ValidatorFn>;
     let operationValue2Validators: Array<ValidatorFn>;
     if (obj) {
-      let value1Max: number = obj.operationValue2 || 10000;
-      let value2Min: number = obj.operationValue1 || 1;
+      let value1Max: number = obj.operationValue2;
+      let value2Min: number = obj.operationValue1 || 0;
       if (obj.operationType == 0) {
         //steam flow
-        operationValue1Validators = [Validators.required, Validators.min(1), Validators.max(10000)];
+        operationValue1Validators = [Validators.required, Validators.min(0)];
         operationValue2Validators = [];
       } else if (obj.operationType == 1) {
         //power generation
@@ -151,14 +151,14 @@ export class TurbineService {
       } else if (obj.operationType == 3) {
         //power range
         operationValue1Validators = [Validators.required, Validators.min(0), Validators.max(value1Max)];
-        operationValue2Validators = [Validators.required, Validators.min(value2Min), Validators.max(10000)];
+        operationValue2Validators = [Validators.required, Validators.min(value2Min)];
       } else if (obj.operationType == 4) {
         //flow range
         operationValue1Validators = [Validators.required, Validators.min(0), Validators.max(value1Max)];
-        operationValue2Validators = [Validators.required, Validators.min(value2Min), Validators.max(10000)];
+        operationValue2Validators = [Validators.required, Validators.min(value2Min)];
       }
     } else {
-      operationValue1Validators = [Validators.required, Validators.min(1), Validators.max(10000)];
+      operationValue1Validators = [Validators.required, Validators.min(0)];
       operationValue2Validators = [];
     }
     return {

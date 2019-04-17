@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuxEquipment } from '../../shared/models/phast/auxEquipment';
 import { PHAST } from '../../shared/models/phast/phast';
 import { AuxEquipmentService } from './aux-equipment.service';
-import { SettingsService } from '../../settings/settings.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-aux-equipment',
   templateUrl: 'aux-equipment.component.html',
@@ -16,7 +16,9 @@ export class AuxEquipmentComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
-  
+  @Input()
+  settings: Settings;
+
   tabSelect: string = 'results';
   currentField: string = 'fuelType';
 

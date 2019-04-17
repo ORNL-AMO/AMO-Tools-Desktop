@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
+import { Assessment } from '../../../shared/models/assessment';
+import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 
 @Component({
   selector: 'app-executive-summary',
@@ -16,10 +18,28 @@ export class ExecutiveSummaryComponent implements OnInit {
   modificationOutputs: Array<SSMTOutput>;
   @Input()
   tableCellWidth: number;
+  @Input()
+  inRollup: boolean;
+  @Input()
+  assessment: Assessment;
+  @Input()
+  printView: boolean;
 
-  constructor() { }
+  selectedModificationIndex: number;
+  constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    if (this.inRollup) {
+      this.reportRollupService.selectedSsmt.forEach(val => {
+        if (val) {
+          val.forEach(assessment => {
+            if (assessment.assessmentId === this.assessment.id) {
+              this.selectedModificationIndex = assessment.selectedIndex;
+            }
+          });
+        }
+      });
+    }
   }
 
   getSavingsPercentage(baselineCost: number, modificationCost: number): number {
@@ -27,5 +47,8 @@ export class ExecutiveSummaryComponent implements OnInit {
     return tmpSavingsPercent;
   }
 
+  useModification() {
+    this.reportRollupService.updateSelectedSsmt({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
 
 }

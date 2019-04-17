@@ -36,4 +36,4 @@ export const coreRoutes: Routes = [
     path: 'treasure-hunt/:id',
     component: TreasureHuntComponent
   }
-]
+];

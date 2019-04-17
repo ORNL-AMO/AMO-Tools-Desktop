@@ -119,7 +119,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeGraph();
-    }, 100)
+    }, 100);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -166,16 +166,16 @@ export class SpecificSpeedGraphComponent implements OnInit {
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = true;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
@@ -185,26 +185,26 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -212,7 +212,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -220,7 +220,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       if (this.hoverBtnExpand) {
         this.displayExpandTooltip = true;
       }
@@ -228,7 +228,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
       }
@@ -292,7 +292,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     //not specified pump efficiency
     if (
       this.speedForm.valid &&
-      this.speedForm.controls.pumpType.value != 11
+      this.speedForm.controls.pumpType.value !== 11
     ) {
       return true;
     } else {
@@ -457,7 +457,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       this.rowData[j] = this.rowData[j + 1];
       this.keyColors[j] = this.keyColors[j + 1];
     }
-    if (i != this.tableData.length - 1) {
+    if (i !== this.tableData.length - 1) {
       this.deleteCount += 1;
     }
     this.tableData.pop();
@@ -559,7 +559,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
     if (this.expanded) {
-      if (event.code == 'Escape') {
+      if (event.code === 'Escape') {
         this.contractChart();
       }
     }

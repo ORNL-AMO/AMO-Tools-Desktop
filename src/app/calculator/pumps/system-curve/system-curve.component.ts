@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms'
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
@@ -60,7 +60,7 @@ export class SystemCurveComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    //in assesssment
+    //in assessment
     if (this.inAssessment) {
       if (this.isFan) {
         this.fsat.name = 'Baseline';
@@ -76,7 +76,7 @@ export class SystemCurveComponent implements OnInit {
           this.curveConstants.form.patchValue({
             specificGravity: this.calculator.systemCurve.specificGravity,
             systemLossExponent: this.calculator.systemCurve.systemLossExponent
-          })
+          });
           this.showForm = true;
         } else {
           this.initializeCalculator();
@@ -85,7 +85,7 @@ export class SystemCurveComponent implements OnInit {
           this.curveConstants.form.patchValue({
             specificGravity: this.calculator.systemCurve.specificGravity,
             systemLossExponent: this.calculator.systemCurve.systemLossExponent
-          })
+          });
           this.showForm = true;
         }
       }
@@ -96,7 +96,7 @@ export class SystemCurveComponent implements OnInit {
         this.curveConstants.form.patchValue({
           specificGravity: this.calculator.systemCurve.specificGravity,
           systemLossExponent: this.calculator.systemCurve.systemLossExponent
-        })
+        });
         this.showForm = true;
       }
     }
@@ -171,13 +171,13 @@ export class SystemCurveComponent implements OnInit {
       this.calculator.systemCurve.selectedP2Name = "Baseline";
     }
 
-    let p1 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name });
+    let p1 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; });
     if (p1 === undefined) {
       p1 = {
         flowRate: 0,
         head: 0,
         modName: this.calculator.systemCurve.selectedP1Name
-      }
+      };
     }
     this.pointOne.form.patchValue({
       flowRate: p1.flowRate,
@@ -185,7 +185,7 @@ export class SystemCurveComponent implements OnInit {
       pointAdjustment: p1.modName
     });
 
-    let p2 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name });
+    let p2 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; });
     this.pointTwo.form.patchValue({
       flowRate: p2.flowRate,
       head: p2.head,
@@ -220,40 +220,40 @@ export class SystemCurveComponent implements OnInit {
   }
 
   convertPumpDefaults(settings: Settings) {
-    if (settings.flowMeasurement != 'gpm') {
+    if (settings.flowMeasurement !== 'gpm') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('gpm').to(settings.flowMeasurement);
       this.pointOne.form.patchValue({
         flowRate: this.psatService.roundVal(tmpVal, 2)
-      })
+      });
     }
-    if (settings.distanceMeasurement != 'ft') {
+    if (settings.distanceMeasurement !== 'ft') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.head.value).from('ft').to(settings.distanceMeasurement);
       let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.head.value).from('ft').to(settings.distanceMeasurement);
       this.pointOne.form.patchValue({
         head: this.psatService.roundVal(tmpVal, 2)
-      })
+      });
       this.pointTwo.form.patchValue({
         head: this.psatService.roundVal(tmpVal2, 2)
-      })
+      });
     }
   }
 
   convertFanDefaults(settings: Settings) {
-    if (settings.fanPressureMeasurement != 'inH2o') {
+    if (settings.fanPressureMeasurement !== 'inH2o') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('inH2o').to(settings.fanPressureMeasurement);
       this.pointOne.form.patchValue({
         flowRate: this.psatService.roundVal(tmpVal, 2)
-      })
+      });
     }
-    if (settings.fanFlowRate != 'ft3/min') {
+    if (settings.fanFlowRate !== 'ft3/min') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.head.value).from('ft3/min').to(settings.fanFlowRate);
       let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.head.value).from('ft3/min').to(settings.fanFlowRate);
       this.pointOne.form.patchValue({
         head: this.psatService.roundVal(tmpVal, 2)
-      })
+      });
       this.pointTwo.form.patchValue({
         head: this.psatService.roundVal(tmpVal2, 2)
-      })
+      });
     }
   }
 
@@ -272,7 +272,7 @@ export class SystemCurveComponent implements OnInit {
     this.pointTwo.form.patchValue({
       flowRate: '',
       head: ''
-    })
+    });
     this.calculateP1Flow();
     this.calculateP2Flow();
   }
@@ -292,7 +292,7 @@ export class SystemCurveComponent implements OnInit {
     this.pointTwo.form.patchValue({
       flowRate: '',
       head: ''
-    })
+    });
   }
 
 
@@ -326,7 +326,7 @@ export class SystemCurveComponent implements OnInit {
     this.pointTwo.form.patchValue({
       flowRate: 0,
       head: 200
-    })
+    });
     this.calculateP1Flow();
     this.calculateP2Flow();
   }
@@ -345,10 +345,10 @@ export class SystemCurveComponent implements OnInit {
       this.calculator = {
         assessmentId: this.assessment.id,
         systemCurve: systemCurve
-      }
+      };
     }
     if (reset) {
-      this.setPointValuesFromCalc(true)
+      this.setPointValuesFromCalc(true);
       this.saveCalculator();
     }
   }
@@ -389,7 +389,7 @@ export class SystemCurveComponent implements OnInit {
       dataPoints: dataPoints,
       selectedP1Name: dataPoints[0].modName,
       selectedP2Name: dataPoints[1].modName
-    }
+    };
     return systemCurve;
   }
 
@@ -442,7 +442,7 @@ export class SystemCurveComponent implements OnInit {
         selectedP1Name: "Baseline1",
         selectedP2Name: "Baseline"
       };
-      return systemCurve
+      return systemCurve;
     }
   }
 
@@ -451,10 +451,10 @@ export class SystemCurveComponent implements OnInit {
     this.calculator.systemCurve.systemLossExponent = this.curveConstants.form.controls.systemLossExponent.value;
     this.calculator.systemCurve.selectedP1Name = this.pointOne.form.controls.pointAdjustment.value;
     this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
-    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name }).flowRate = this.pointOne.form.controls.flowRate.value;
-    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP1Name }).head = this.pointOne.form.controls.head.value;
-    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name }).flowRate = this.pointTwo.form.controls.flowRate.value;
-    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName == this.calculator.systemCurve.selectedP2Name }).head = this.pointTwo.form.controls.head.value;
+    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; }).flowRate = this.pointOne.form.controls.flowRate.value;
+    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; }).head = this.pointOne.form.controls.head.value;
+    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; }).flowRate = this.pointTwo.form.controls.flowRate.value;
+    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; }).head = this.pointTwo.form.controls.head.value;
     if (!this.saving || this.calcExists) {
       if (this.calcExists) {
         this.indexedDbService.putCalculator(this.calculator).then(() => {
@@ -468,7 +468,7 @@ export class SystemCurveComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }
@@ -480,16 +480,16 @@ export class SystemCurveComponent implements OnInit {
 
   //calculations
   calculateP1Flow() {
-    if (this.pointOne.form.status == 'VALID') {
+    if (this.pointOne.form.status === 'VALID') {
       if (!this.isFan) {
-        let tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
-        if (this.settings.powerMeasurement != 'hp') {
+        let tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value, this.settings);
+        if (this.settings.powerMeasurement !== 'hp') {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
         }
         this.pointOne.fluidPower = tmpFluidPower;
       } else {
-        let tmpFluidPower = this.systemCurveService.getFanFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
-        if (this.settings.fanPowerMeasurement != 'hp') {
+        let tmpFluidPower = this.systemCurveService.getFanFluidPower(this.pointOne.form.controls.head.value, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value, this.settings);
+        if (this.settings.fanPowerMeasurement !== 'hp') {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.fanPowerMeasurement);
         }
         this.pointOne.fluidPower = tmpFluidPower;
@@ -498,16 +498,16 @@ export class SystemCurveComponent implements OnInit {
   }
 
   calculateP2Flow() {
-    if (this.pointTwo.form.status == 'VALID') {
+    if (this.pointTwo.form.status === 'VALID') {
       if (!this.isFan) {
-        let tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
-        if (this.settings.powerMeasurement != 'hp') {
+        let tmpFluidPower = this.systemCurveService.getPumpFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value, this.settings);
+        if (this.settings.powerMeasurement !== 'hp') {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
         }
         this.pointTwo.fluidPower = tmpFluidPower;
       } else {
-        let tmpFluidPower = this.systemCurveService.getFanFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
-        if (this.settings.fanPowerMeasurement != 'hp') {
+        let tmpFluidPower = this.systemCurveService.getFanFluidPower(this.pointTwo.form.controls.head.value, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value, this.settings);
+        if (this.settings.fanPowerMeasurement !== 'hp') {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.fanPowerMeasurement);
         }
         this.pointTwo.fluidPower = tmpFluidPower;
@@ -517,7 +517,7 @@ export class SystemCurveComponent implements OnInit {
 
 
   calculateValues() {
-    if (this.pointOne.form.status == 'VALID' && this.pointTwo.form.status == 'VALID' && this.curveConstants.form.status == 'VALID') {
+    if (this.pointOne.form.status === 'VALID' && this.pointTwo.form.status === 'VALID' && this.curveConstants.form.status === 'VALID') {
       this.lossCoefficient = this.systemCurveService.getLossCoefficient(
         this.pointOne.form.controls.flowRate.value,
         this.pointOne.form.controls.head.value,

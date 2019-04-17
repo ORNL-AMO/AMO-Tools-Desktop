@@ -7,6 +7,7 @@ import { SSMT } from '../../../shared/models/steam/ssmt';
 import { BoilerService } from '../../boiler/boiler.service';
 import { TurbineService } from '../../turbine/turbine.service';
 import { HeaderService } from '../../header/header.service';
+import { OperationsService } from '../../operations/operations.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -38,16 +39,16 @@ export class ModifyConditionsTabsComponent implements OnInit {
   turbineBadgeClass: Array<string>;
   updateDataSub: Subscription;
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private boilerService: BoilerService, private turbineService: TurbineService,
-    private headerService: HeaderService) { }
+    private headerService: HeaderService, private operationsService: OperationsService) { }
 
   ngOnInit() {
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
       this.modelTab = val;
-    })
+    });
 
     this.updateDataSub = this.ssmtService.updateData.subscribe(val => {
       this.setBadgeClass();
-    })
+    });
 
     this.displayOperationsTooltip = false;
     this.operationsBadgeHover = false;
@@ -83,14 +84,12 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setOperationsBadgeClass(baseline: SSMT, modification?: SSMT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest: boolean = true;
-    //TODO:
-    // let validBaselineTest = this.operationsService.isFanFieldDataValid(baseline.operations);
+    let validBaselineTest = this.operationsService.getForm(baseline, this.settings).valid;
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
       //TODO:
-      // validModTest = this.fanFieldDataService.isFanFieldDataValid(modification.operations);
+      validModTest = this.operationsService.getForm(modification, this.settings).valid;
       isDifferent = this.compareService.checkOperationsDifferent();
     }
     let inputError: boolean;
@@ -128,11 +127,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   setHeaderBadgeClass(baseline: SSMT, modification?: SSMT) {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.headerService.isHeaderValid(baseline.headerInput, this.settings);
+    let validBaselineTest = this.headerService.isHeaderValid(baseline.headerInput, this.settings, baseline.boilerInput);
     let validModTest = true;
     let isDifferent = false;
     if (modification) {
-      validModTest = this.headerService.isHeaderValid(modification.headerInput, this.settings);
+      validModTest = this.headerService.isHeaderValid(modification.headerInput, this.settings, modification.boilerInput);
       isDifferent = this.compareService.checkHeaderDifferent();
     }
     let inputError: boolean;

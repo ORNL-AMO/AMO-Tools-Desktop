@@ -20,7 +20,7 @@ export class NotesComponent implements OnInit {
   }
 
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 }

@@ -20,15 +20,15 @@ export class HoverFlashTankTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.flashTankType == 'High Pressure') {
+    if (this.flashTankType === 'High Pressure') {
       this.flashTank = this.outputData.highPressureCondensateFlashTank;
       this.flashTankType = this.flashTankType + ' Condensate';
-    } else if (this.flashTankType == 'Medium Pressure') {
+    } else if (this.flashTankType === 'Medium Pressure') {
       this.flashTank = this.outputData.mediumPressureCondensateFlashTank;
       this.flashTankType = this.flashTankType + ' Condensate';
-    } else if (this.flashTankType == 'Condensate') {
+    } else if (this.flashTankType === 'Condensate') {
       this.flashTank = this.outputData.condensateFlashTank;
-    } else if (this.flashTankType == 'Blowdown') {
+    } else if (this.flashTankType === 'Blowdown') {
       this.flashTank = this.outputData.blowdownFlashTank;
     }
   }

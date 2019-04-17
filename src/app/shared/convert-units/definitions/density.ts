@@ -45,4 +45,4 @@ export const density = {
             , ratio: 16.0185
         }
     }
-}
+};

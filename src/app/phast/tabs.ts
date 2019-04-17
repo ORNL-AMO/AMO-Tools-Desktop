@@ -27,7 +27,7 @@ export const stepTabs: Array<StepTab> = [
         tabName: 'Metered Energy',
         back: 4
     }
-]
+];
 
 export const specTabs: Array<StepTab> = [
     {
@@ -45,14 +45,14 @@ export const specTabs: Array<StepTab> = [
     //     tabName: 'Operating Costs',
     //     back: 2
     // }
-]
+];
 
 
 export interface StepTab {
-    step: number,
-    tabName: string,
-    next?: number,
-    back?: number
+    step: number;
+    tabName: string;
+    next?: number;
+    back?: number;
 }
 
 export const defaultTabs: Array<LossTab> = [
@@ -101,14 +101,14 @@ export const defaultTabs: Array<LossTab> = [
         showAdd: true  
     },
 
-]
+];
 
 export interface LossTab {
-    step?: number,
-    tabName: string,
-    next?: number,
-    back?: number,
-    lastStep?: boolean,
-    componentStr: string,
-    showAdd?: boolean
+    step?: number;
+    tabName: string;
+    next?: number;
+    back?: number;
+    lastStep?: boolean;
+    componentStr: string;
+    showAdd?: boolean;
 }

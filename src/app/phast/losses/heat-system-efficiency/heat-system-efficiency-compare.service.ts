@@ -8,18 +8,18 @@ export class HeatSystemEfficiencyCompareService {
   modification: PHAST;
 
   constructor() { }
-  compareEfficiency(){
-    if(this.baseline && this.modification){
-      return this.compare(this.baseline.systemEfficiency, this.modification.systemEfficiency)
-    }else{
+  compareEfficiency() {
+    if (this.baseline && this.modification) {
+      return this.compare(this.baseline.systemEfficiency, this.modification.systemEfficiency);
+    }else {
       return false;
     }
   }
 
-  combaseBaseModEfficiency(baseline: PHAST, modification: PHAST){
-    if(baseline && modification){
-      return this.compare(baseline.systemEfficiency, modification.systemEfficiency)
-    }else{
+  combaseBaseModEfficiency(baseline: PHAST, modification: PHAST) {
+    if (baseline && modification) {
+      return this.compare(baseline.systemEfficiency, modification.systemEfficiency);
+    }else {
       return false;
     }
   }
@@ -28,7 +28,7 @@ export class HeatSystemEfficiencyCompareService {
     //if both exist
     if (a && b) {
       //compare
-      if (a != b) {
+      if (a !== b) {
         //not equal
         return true;
       } else {
@@ -39,7 +39,7 @@ export class HeatSystemEfficiencyCompareService {
     //check one exists
     else if ((a && !b) || (!a && b)) {
       //not equal
-      return true
+      return true;
     } else {
       //equal
       return false;

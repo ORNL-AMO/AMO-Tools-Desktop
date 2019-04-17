@@ -66,18 +66,10 @@
     <div class="d-flex">
       <app-header-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
         [thermodynamicQuantity]="inletThermoQuantity"></app-header-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
-        <app-header-results *ngIf="results.header" [results]="results.header" [settings]="settings" [name]="'Combined Header'" (tableStringEmitter)="updateTable0String($event)"></app-header-results>
-        <app-header-results *ngIf="results.inlet1" [results]="results.inlet1" [settings]="settings" [name]="'Inlet 1'"></app-header-results>
-        <app-header-results *ngIf="input.numInlets > 1" [results]="results.inlet2" [settings]="settings" [name]="'Inlet 2'"></app-header-results>
-        <app-header-results *ngIf="input.numInlets > 2" [results]="results.inlet3" [settings]="settings" [name]="'Inlet 3'"></app-header-results>
-        <app-header-results *ngIf="input.numInlets > 3" [results]="results.inlet4" [settings]="settings" [name]="'Inlet 4'"></app-header-results>
-        <app-header-results *ngIf="input.numInlets > 4" [results]="results.inlet5" [settings]="settings" [name]="'Inlet 5'"></app-header-results>
-        <app-header-results *ngIf="input.numInlets > 5" [results]="results.inlet6" [settings]="settings" [name]="'Inlet 6'"></app-header-results>
-        <app-header-results *ngIf="input.numInlets > 6" [results]="results.inlet7" [settings]="settings" [name]="'Inlet 7'"></app-header-results>
-        <app-header-results *ngIf="input.numInlets > 7" [results]="results.inlet8" [settings]="settings" [name]="'Inlet 8'"></app-header-results>
-        <app-header-results *ngIf="input.numInlets > 8" [results]="results.inlet9" [settings]="settings" [name]="'Inlet 9'"></app-header-results>
-      </div>
+      <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
+        <app-header-results *ngIf="results" class="w-100" [results]="results" [settings]="settings" (tableStringEmitter)="updateTable0String($event)"
+        [numberOfInlets]="headerPressureForm.controls.numInlets.value"></app-header-results>
+ </div>
     </div>
   </div>
 </div>

@@ -30,7 +30,7 @@ export class FlueGasLossesService {
       'SO2': ['', Validators.required],
       'O2': ['', Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   initFormMass(lossNum: number): FormGroup {
@@ -53,7 +53,7 @@ export class FlueGasLossesService {
       'moisture': ['', Validators.required],
       'nitrogen': ['', Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   initByVolumeFormFromLoss(loss: FlueGas): FormGroup {
@@ -77,7 +77,7 @@ export class FlueGasLossesService {
       'SO2': [loss.flueGasByVolume.SO2, Validators.required],
       'O2': [loss.flueGasByVolume.O2, Validators.required],
       'name': [loss.name]
-    })
+    });
   }
 
   initByMassFormFromLoss(loss: FlueGas): FormGroup {
@@ -100,7 +100,7 @@ export class FlueGasLossesService {
       'moisture': [loss.flueGasByMass.moisture, Validators.required],
       'nitrogen': [loss.flueGasByMass.nitrogen, Validators.required],
       'name': [loss.name]
-    })
+    });
   }
 
   buildByMassLossFromForm(form: FormGroup): FlueGas {
@@ -125,7 +125,7 @@ export class FlueGasLossesService {
         moisture: form.controls.moisture.value,
         nitrogen: form.controls.nitrogen.value
       }
-    }
+    };
     return tmpFlueGas;
   }
 
@@ -152,7 +152,7 @@ export class FlueGasLossesService {
         SO2: form.controls.SO2.value,
         O2: form.controls.O2.value
       }
-    }
+    };
     return tmpFlueGas;
   }
 
@@ -161,7 +161,7 @@ export class FlueGasLossesService {
       combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
       excessAirWarning: this.checkExcessAirWarning(flueGas),
       o2Warning: this.checkO2Warning(flueGas)
-    }
+    };
   }
 
   checkFlueGasByMassWarnings(flueGas: FlueGasByMass): FlueGasWarnings {
@@ -171,11 +171,11 @@ export class FlueGasLossesService {
       combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
       excessAirWarning: this.checkExcessAirWarning(flueGas),
       o2Warning: this.checkO2Warning(flueGas)
-    }
+    };
   }
   checkMoistureInAir(flueGas: FlueGasByMass): string {
     if (flueGas.moistureInAirComposition < 0) {
-      return 'Moisture in Combustion Air must be equal or greater than 0%'
+      return 'Moisture in Combustion Air must be equal or greater than 0%';
     } else if (flueGas.moistureInAirComposition > 100) {
       return 'Moisture in Combustion Air must be less than or equal to 100%';
     } else {
@@ -184,7 +184,7 @@ export class FlueGasLossesService {
   }
   checkUnburnedCarbon(flueGas: FlueGasByMass): string {
     if (flueGas.unburnedCarbonInAsh < 0) {
-      return 'Unburned Carbon in Ash must be equal or greater than 0%'
+      return 'Unburned Carbon in Ash must be equal or greater than 0%';
     } else if (flueGas.unburnedCarbonInAsh > 100) {
       return 'Unburned Carbon in Ash must be less than or equal to 100%';
     } else {
@@ -230,5 +230,5 @@ export interface FlueGasWarnings {
   unburnedCarbonInAshWarning?: string;
   combustionAirTempWarning: string;
   excessAirWarning: string;
-  o2Warning: string
+  o2Warning: string;
 }

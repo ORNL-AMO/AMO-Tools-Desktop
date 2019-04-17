@@ -12,7 +12,7 @@ export class FsatWarningService {
 
   checkFieldDataWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanFieldDataWarnings {
     let ratedPowerWarning: string = null;
-    if(!isModification){
+    if (!isModification) {
       ratedPowerWarning = this.checkRatedPower(fsat, settings, isModification);
     }
     
@@ -23,7 +23,7 @@ export class FsatWarningService {
       ratedPowerError: ratedPowerWarning,
       outletPressureError: this.checkOutletPressure(fsat),
       //specificHeatRatioError: this.checkSpecificHeatRatio(fsat)
-    }
+    };
 
     return warnings;
   }
@@ -81,7 +81,7 @@ export class FsatWarningService {
 
   checkRatedPower(fsat: FSAT, settings: Settings, isModification: boolean) {
     let motorPowerStr: string;
-    if (fsat.fieldData.loadEstimatedMethod == 0) {
+    if (fsat.fieldData.loadEstimatedMethod === 0) {
       motorPowerStr = 'Motor Power';
     } else {
       motorPowerStr = 'Motor Current';
@@ -97,7 +97,7 @@ export class FsatWarningService {
     } else {
       if (fsat.fieldData.motorPower && tmpVal) {
         let val, compare;
-        if (settings.fanPowerMeasurement == 'hp') {
+        if (settings.fanPowerMeasurement === 'hp') {
           val = this.convertUnitsService.value(tmpVal).from(settings.fanPowerMeasurement).to('kW');
           if (isModification) {
             let isModValid: boolean = this.fsatService.checkValid(fsat, isModification);
@@ -155,7 +155,7 @@ export class FsatWarningService {
   //MOTOR
   checkMotorWarnings(fsat: FSAT, settings: Settings, isModification: boolean): FanMotorWarnings {
     let efficiencyError: string = null;
-    if (fsat.fanMotor.efficiencyClass == 3) {
+    if (fsat.fanMotor.efficiencyClass === 3) {
       efficiencyError = this.checkEfficiency(fsat);
     }
     return {
@@ -164,7 +164,7 @@ export class FsatWarningService {
       flaError: this.checkFLA(fsat, settings),
       efficiencyError: efficiencyError,
       ratedPowerError: this.checkRatedPower(fsat, settings, isModification)
-    }
+    };
   }
 
   checkEfficiency(fsat: FSAT) {
@@ -172,7 +172,7 @@ export class FsatWarningService {
       if (fsat.fanMotor.specifiedEfficiency > 100) {
         return "Unrealistic efficiency, cannot be greater than 100%";
       }
-      else if (fsat.fanMotor.specifiedEfficiency == 0) {
+      else if (fsat.fanMotor.specifiedEfficiency === 0) {
         return "Cannot have 0% efficiency";
       }
       else if (fsat.fanMotor.specifiedEfficiency < 0) {
@@ -197,7 +197,7 @@ export class FsatWarningService {
   }
 
   checkMotorRpm(fsat: FSAT) {
-    let range: { min: number, max: number } = this.getMotorRpmMinMax(fsat.fanMotor.lineFrequency, fsat.fanMotor.efficiencyClass)
+    let range: { min: number, max: number } = this.getMotorRpmMinMax(fsat.fanMotor.lineFrequency, fsat.fanMotor.efficiencyClass);
     if (fsat.fanMotor.motorRpm < range.min) {
       return 'Motor RPM too small for selected efficiency class';
     } else if (fsat.fanMotor.motorRpm > range.max) {
@@ -211,17 +211,17 @@ export class FsatWarningService {
     let rpmRange = {
       min: 1,
       max: 3600
-    }
-    if (lineFreqEnum == 0 && (effClass == 0 || effClass == 1)) { // if 60Hz and Standard or Energy Efficiency
+    };
+    if (lineFreqEnum === 0 && (effClass === 0 || effClass === 1)) { // if 60Hz and Standard or Energy Efficiency
       rpmRange.min = 540;
       rpmRange.max = 3600;
-    } else if (lineFreqEnum == 1 && (effClass == 0 || effClass == 1)) { // if 50Hz and Standard or Energy Efficiency
+    } else if (lineFreqEnum === 1 && (effClass === 0 || effClass === 1)) { // if 50Hz and Standard or Energy Efficiency
       rpmRange.min = 450;
       rpmRange.max = 3300;
-    } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency
+    } else if (lineFreqEnum === 0 && effClass === 2) { // if 60Hz and Premium Efficiency
       rpmRange.min = 1080;
       rpmRange.max = 3600;
-    } else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
+    } else if (lineFreqEnum === 1 && effClass === 2) { // if 50Hz and Premium Efficiency
       rpmRange.min = 900;
       rpmRange.max = 3000;
     }
@@ -272,7 +272,7 @@ export class FsatWarningService {
       //fanEfficiencyError: fanEfficiencyError,
       fanSpeedError: this.checkFanSpeed(fanSetup),
       // specifiedDriveEfficiencyError: this.checkSpecifiedDriveEfficiency(fanSetup)
-    }
+    };
   }
 
   // checkFanEfficiency(fanSetup: FanSetup) {
@@ -396,12 +396,12 @@ export class FsatWarningService {
 
 export interface FanFieldDataWarnings {
   // flowRateError: string,
-  voltageError: string,
-  costError: string,
+  voltageError: string;
+  costError: string;
   //opFractionError: string,
-  ratedPowerError: string,
+  ratedPowerError: string;
   // marginError: string,
-  outletPressureError: string,
+  outletPressureError: string;
   //specificHeatRatioError: string,
   //compressibilityFactorError: string
 }

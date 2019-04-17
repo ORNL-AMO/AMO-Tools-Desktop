@@ -2,7 +2,7 @@ import { Assessment } from './assessment';
 import { Calculator } from './calculators';
 import { TreasureHunt } from './treasure-hunt';
 export interface Directory {
-  name: string,
+  name: string;
   assessments?: Assessment[];
   subDirectory?: Directory[],
   calculators?:  Calculator[],
@@ -18,10 +18,10 @@ export interface Directory {
 
 
 export interface DirectoryDbRef {
-  name?: string,
-  id?: number,
-  parentDirectoryId?: number,
-  settingsId?: number,
+  name?: string;
+  id?: number;
+  parentDirectoryId?: number;
+  settingsId?: number;
   createdDate?: Date;
   modifiedDate?: Date;
 }

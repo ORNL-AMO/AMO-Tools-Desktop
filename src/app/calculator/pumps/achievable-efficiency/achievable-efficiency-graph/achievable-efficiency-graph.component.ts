@@ -148,7 +148,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeGraph();
-    }, 100)
+    }, 100);
   }
 
   initColumnTitles() {
@@ -181,16 +181,16 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = true;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
@@ -200,26 +200,26 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -227,7 +227,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -235,7 +235,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       if (this.hoverBtnExpand) {
         this.displayExpandTooltip = true;
       }
@@ -243,7 +243,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
       }
@@ -295,7 +295,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.settings
       );
       return tmpResults.average;
-    } else { return 0 }
+    } else { return 0; }
   }
   calculateYmax(flow: number) {
     if (this.checkForm()) {
@@ -305,14 +305,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.settings
       );
       return tmpResults.max;
-    } else { return 0 }
+    } else { return 0; }
   }
 
   checkForm() {
     if (
-      this.efficiencyForm.controls.pumpType.status == 'VALID' &&
-      this.efficiencyForm.controls.flowRate.status == 'VALID' &&
-      this.efficiencyForm.controls.pumpType.value != 'Specified Optimal Efficiency'
+      this.efficiencyForm.controls.pumpType.status === 'VALID' &&
+      this.efficiencyForm.controls.flowRate.status === 'VALID' &&
+      this.efficiencyForm.controls.pumpType.value !== 'Specified Optimal Efficiency'
     ) {
       return true;
     } else {
@@ -321,7 +321,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
   makeGraph() {
-    if (this.efficiencyForm.controls.pumpType.value != this.pumpType) {
+    if (this.efficiencyForm.controls.pumpType.value !== this.pumpType) {
       this.curveChanged = true;
       this.pumpType = this.efficiencyForm.controls.pumpType.value;
     }
@@ -346,7 +346,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       min: 0,
       max: 5000
     };
-    this.x = this.lineChartHelperService.setScale("linear", xRange, xDomain)
+    this.x = this.lineChartHelperService.setScale("linear", xRange, xDomain);
     this.xAxis = this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 16, 0, 0, 0);
     let yRange: { min: number, max: number };
     yRange = {
@@ -430,7 +430,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       flowRate: flowRate.toString(),
       averageEfficiency: avgEfficiency.toString(),
       maxEfficiency: maxEfficiency.toString()
-    }
+    };
     this.tableData.push(dataPiece);
     let colors = {
       borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
@@ -470,7 +470,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       this.keyColors[j] = this.keyColors[j + 1];
     }
 
-    if (i != this.rowData.length - 1) {
+    if (i !== this.rowData.length - 1) {
       this.deleteCount += 1;
     }
     this.tableData.pop();
@@ -501,7 +501,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           x: i,
           y: this.calculateYaverage(i),
           flowRate: i
-        })
+        });
       }
     }
     return data;
@@ -514,7 +514,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           x: i,
           y: this.calculateYmax(i),
           flowRate: i
-        })
+        });
       }
     }
     return data;
@@ -607,7 +607,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   closeExpandedGraph(event) {
     if (this.expanded) {
-      if (event.code == 'Escape') {
+      if (event.code === 'Escape') {
         this.contractChart();
       }
     }

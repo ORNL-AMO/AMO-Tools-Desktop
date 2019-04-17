@@ -102,11 +102,11 @@ export class PhastReportComponent implements OnInit {
       this.phastReportService.showPrint.subscribe(printVal => {
         //shows loading print view
         this.showPrintDiv = printVal;
-        if (printVal == true) {
+        if (printVal === true) {
           //use delay to show loading before print payload starts
           setTimeout(() => {
             this.showPrint = printVal;
-          }, 20)
+          }, 20);
         } else {
           this.showPrint = printVal;
         }
@@ -125,7 +125,7 @@ export class PhastReportComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    }, 100)
+    }, 100);
   }
 
   getContainerHeight() {
@@ -181,11 +181,11 @@ export class PhastReportComponent implements OnInit {
   }
 
   getDirectoryList(id: number): void {
-    if (id && id != 1) {
+    if (id && id !== 1) {
       let tmpDir: Directory = this.directoryDbService.getById(id);
       if (tmpDir) {
         this.assessmentDirectories.push(tmpDir);
-        if (tmpDir.parentDirectoryId != 1) {
+        if (tmpDir.parentDirectoryId !== 1) {
           this.getDirectoryList(tmpDir.parentDirectoryId);
         }
       }

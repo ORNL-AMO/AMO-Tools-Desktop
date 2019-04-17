@@ -18,7 +18,7 @@ export class WallLossesService {
       'conditionFactor': [1.394, Validators.required],
       'surfaceEmissivity': [0.9, Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   //get form from WallLoss
@@ -33,7 +33,7 @@ export class WallLossesService {
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
       'surfaceShape': [wallLoss.surfaceShape],
       'name': [wallLoss.name]
-    })
+    });
   }
   //get WallLoss from form
   getWallLossFromForm(wallLossForm: FormGroup): WallLoss {
@@ -47,7 +47,7 @@ export class WallLossesService {
       conditionFactor: wallLossForm.controls.conditionFactor.value,
       correctionFactor: wallLossForm.controls.correctionFactor.value,
       name: wallLossForm.controls.name.value
-    }
+    };
     return tmpWallLoss;
   }
 
@@ -57,7 +57,7 @@ export class WallLossesService {
       surfaceAreaWarning: this.checkSurfaceArea(loss),
       surfaceTempWarning: this.checkTemperature(loss),
       emissivityWarning: this.checkSurfaceEmissivity(loss)
-    }
+    };
   }
 
   checkWindVelocity(loss: WallLoss): string {

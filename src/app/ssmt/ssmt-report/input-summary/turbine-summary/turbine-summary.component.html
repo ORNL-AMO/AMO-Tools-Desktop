@@ -1,7 +1,8 @@
 <div class="card summary-card">
   <div class="card-header" (click)="toggleCollapse()">
     <h5>Turbine Data
-      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+      <span class="pull-right fa hide-print"
+        [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
     </h5>
   </div>
 
@@ -22,16 +23,20 @@
           </thead>
         </table>
         <app-turbine-input-table *ngIf="showCondensingTurbine" [baselineTurbine]="baselineCondensingTurbineData"
-          [modificationTurbines]="modificationCondensingTurbineData" [turbineType]="'condensing'" [numMods]="numMods"></app-turbine-input-table>
+          [modificationTurbines]="modificationCondensingTurbineData" [turbineType]="'condensing'" [numMods]="numMods"
+          [settings]="settings"></app-turbine-input-table>
 
         <app-turbine-input-table *ngIf="showHighToLowTurbine" [baselineTurbine]="baselineHighToLowTurbineData"
-          [modificationTurbines]="modificationHighToLowTurbineData" [numMods]="numMods" [turbineType]="'highToLow'"></app-turbine-input-table>
+          [modificationTurbines]="modificationHighToLowTurbineData" [numMods]="numMods" [turbineType]="'highToLow'"
+          [settings]="settings"></app-turbine-input-table>
 
         <app-turbine-input-table *ngIf="showHighToMediumTurbine" [baselineTurbine]="baselineHighToMediumTurbineData"
-          [modificationTurbines]="modificationHighToMediumTurbineData" [numMods]="numMods" [turbineType]="'highToMedium'"></app-turbine-input-table>
+          [modificationTurbines]="modificationHighToMediumTurbineData" [numMods]="numMods"
+          [turbineType]="'highToMedium'" [settings]="settings"></app-turbine-input-table>
 
         <app-turbine-input-table *ngIf="showMediumToLowTurbine" [baselineTurbine]="baselineMediumToLowTurbineData"
-          [modificationTurbines]="modificationMediumToLowTurbineData" [numMods]="numMods" [turbineType]="'mediumToLow'"></app-turbine-input-table>
+          [modificationTurbines]="modificationMediumToLowTurbineData" [numMods]="numMods" [turbineType]="'mediumToLow'"
+          [settings]="settings"></app-turbine-input-table>
       </div>
     </div>
   </div>

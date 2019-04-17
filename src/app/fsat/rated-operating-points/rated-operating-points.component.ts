@@ -50,7 +50,7 @@ export class RatedOperatingPointsComponent implements OnInit {
 
   addDataRow() {
     this.operatingPoints.push({
-      pointDescription: 'Point ' + (this.operatingPoints.length+1),
+      pointDescription: 'Point ' + (this.operatingPoints.length + 1),
       correspondingTo: '',
       fullSpeed: 'Yes',
       gasFlowRate: 0,
@@ -60,19 +60,19 @@ export class RatedOperatingPointsComponent implements OnInit {
       fanSpeed: 0,
       staticHead: 0,
       collapse: false
-    })
+    });
   }
 }
 
 export interface RatedOperatingDataPoint {
-  pointDescription: string,
-  correspondingTo: string,
-  fullSpeed: string,
-  gasFlowRate: number,
-  pressure: number,
-  density: number,
-  fanPower: number,
-  fanSpeed: number,
-  staticHead: number,
-  collapse: boolean
+  pointDescription: string;
+  correspondingTo: string;
+  fullSpeed: string;
+  gasFlowRate: number;
+  pressure: number;
+  density: number;
+  fanPower: number;
+  fanSpeed: number;
+  staticHead: number;
+  collapse: boolean;
 }

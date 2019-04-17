@@ -27,7 +27,7 @@ export class ChargeMaterialService {
   //gas charge material form from GasChargeMaterial
   getGasChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
-    if (chargeMaterial.gasChargeMaterial.thermicReactionType != 0) {
+    if (chargeMaterial.gasChargeMaterial.thermicReactionType !== 0) {
       reactionType = 'Exothermic';
     }
     return this.formBuilder.group({
@@ -48,7 +48,7 @@ export class ChargeMaterialService {
   //GasChargeMaterial from gasForm
   buildGasChargeMaterial(gasForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
-    if (gasForm.controls.endothermicOrExothermic.value == 'Exothermic') {
+    if (gasForm.controls.endothermicOrExothermic.value === 'Exothermic') {
       reactionType = 1;
     }
     let tmpGasMaterial: ChargeMaterial = {
@@ -66,7 +66,7 @@ export class ChargeMaterialService {
         reactionHeat: gasForm.controls.heatOfReaction.value,
         additionalHeat: gasForm.controls.additionalHeatRequired.value
       }
-    }
+    };
     return tmpGasMaterial;
   }
 
@@ -93,7 +93,7 @@ export class ChargeMaterialService {
   //liquid charge material form from LiquidChargeMaterial
   getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
-    if (chargeMaterial.liquidChargeMaterial.thermicReactionType != 0) {
+    if (chargeMaterial.liquidChargeMaterial.thermicReactionType !== 0) {
       reactionType = 'Exothermic';
     }
     return this.formBuilder.group({
@@ -111,13 +111,13 @@ export class ChargeMaterialService {
       'endothermicOrExothermic': [reactionType, Validators.required],
       'additionalHeatRequired': [chargeMaterial.liquidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
-    })
+    });
   }
 
   //build LiquidChargeMaterial from liquidForm
   buildLiquidChargeMaterial(liquidForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
-    if (liquidForm.controls.endothermicOrExothermic.value == 'Exothermic') {
+    if (liquidForm.controls.endothermicOrExothermic.value === 'Exothermic') {
       reactionType = 1;
     }
     let tmpLiquidMaterial: ChargeMaterial = {
@@ -137,7 +137,7 @@ export class ChargeMaterialService {
         reactionHeat: liquidForm.controls.heatOfReaction.value,
         additionalHeat: liquidForm.controls.additionalHeatRequired.value
       }
-    }
+    };
     return tmpLiquidMaterial;
   }
 
@@ -168,7 +168,7 @@ export class ChargeMaterialService {
   //solid material form from SolidChargeMaterial
   getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
-    if (chargeMaterial.solidChargeMaterial.thermicReactionType != 0) {
+    if (chargeMaterial.solidChargeMaterial.thermicReactionType !== 0) {
       reactionType = 'Exothermic';
     }
     //FUEL FIRED SOLID
@@ -190,14 +190,14 @@ export class ChargeMaterialService {
       'endothermicOrExothermic': [reactionType, Validators.required],
       'additionalHeatRequired': [chargeMaterial.solidChargeMaterial.additionalHeat, Validators.required],
       'name': [chargeMaterial.name]
-    })
+    });
   }
 
 
   //SolidChargeMaterial from form
   buildSolidChargeMaterial(solidForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
-    if (solidForm.controls.endothermicOrExothermic.value == 'Exothermic') {
+    if (solidForm.controls.endothermicOrExothermic.value === 'Exothermic') {
       reactionType = 1;
     }
     let tmpSolidMaterial: ChargeMaterial = {
@@ -220,7 +220,7 @@ export class ChargeMaterialService {
         reactionHeat: solidForm.controls.heatOfReaction.value,
         additionalHeat: solidForm.controls.additionalHeatRequired.value
       }
-    }
+    };
     return tmpSolidMaterial;
   }
 
@@ -272,7 +272,7 @@ export class ChargeMaterialService {
     if (material.percentReacted < 0) {
       return 'Feed Gas Reacted must be positive';
     } else if (material.percentReacted > 100) {
-      return 'Feed Gas Reacted must be less than or equal to 100%'
+      return 'Feed Gas Reacted must be less than or equal to 100%';
     } else {
       return null;
     }
@@ -288,7 +288,7 @@ export class ChargeMaterialService {
       specificHeatGasVaporWarning: this.checkSpecificHeatOfVapor(material),
       feedGasReactedWarning: this.checkPercentReacted(material),
       heatOfReactionWarning: this.checkHeatOfReaction(material)
-    }
+    };
   }
 
   checkSpecificHeatGas(material: GasChargeMaterial): string {
@@ -324,7 +324,7 @@ export class ChargeMaterialService {
       inletOverVaporizingWarning: this.checkInletOverVaporizing(material),
       outletOverVaporizingWarning: this.checkOutletOverVaporizing(material),
       materialLatentHeatWarning: this.checkLiquidLatentHeat(material)
-    }
+    };
   }
 
   checkLiquidLatentHeat(material: LiquidChargeMaterial): string {
@@ -346,7 +346,7 @@ export class ChargeMaterialService {
   }
 
   checkDischargeTemp(material: LiquidChargeMaterial): string {
-    if ((material.dischargeTemperature > material.vaporizingTemperature) && material.percentVaporized == 0) {
+    if ((material.dischargeTemperature > material.vaporizingTemperature) && material.percentVaporized === 0) {
       return 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
     } else if ((material.dischargeTemperature < material.vaporizingTemperature) && material.percentVaporized > 0) {
       return 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
@@ -394,7 +394,7 @@ export class ChargeMaterialService {
       heatOfReactionWarning: this.checkHeatOfReaction(material),
       dischargeTempWarning: this.checkDischargeTemperature(material),
       initialOverMeltWarning: this.checkInitialOverMelting(material)
-    }
+    };
   }
 
   checkSpecificHeatOfSolid(material: SolidChargeMaterial): string {
@@ -444,7 +444,7 @@ export class ChargeMaterialService {
 
   checkPercentMelted(material: SolidChargeMaterial): string {
     if (material.chargeMelted < 0) {
-      return 'Charge Melted must be equal or greater than 0%'
+      return 'Charge Melted must be equal or greater than 0%';
     } else if (material.chargeMelted > 100) {
       return 'Charge Melted must be less than or equal to 100%';
     } else {
@@ -463,7 +463,7 @@ export class ChargeMaterialService {
   }
 
   checkDischargeTemperature(material: SolidChargeMaterial): string {
-    if ((material.dischargeTemperature > material.meltingPoint) && material.chargeMelted == 0) {
+    if ((material.dischargeTemperature > material.meltingPoint) && material.chargeMelted === 0) {
       return 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
     } else if ((material.dischargeTemperature < material.meltingPoint) && material.chargeMelted > 0) {
       return 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';

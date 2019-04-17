@@ -33,7 +33,7 @@ export class CombinedHeatPowerComponent implements OnInit {
     displacedThermalEfficiency: 0,
     chpAvailability: 0,
     thermalUtilization: 0
-  }
+  };
 
   results: CombinedHeatPowerOutput = {
     annualOperationSavings: 0,
@@ -43,7 +43,7 @@ export class CombinedHeatPowerComponent implements OnInit {
     thermalCredit: 0,
     incrementalOandM: 0,
     totalOperatingCosts: 0
-  }
+  };
   currentField: string = 'annualOperatingHours';
   tabSelect: string = 'results';
   constructor(private settingsDbService: SettingsDbService, private combinedHeatPowerService: CombinedHeatPowerService, private standaloneService: StandaloneService) { }

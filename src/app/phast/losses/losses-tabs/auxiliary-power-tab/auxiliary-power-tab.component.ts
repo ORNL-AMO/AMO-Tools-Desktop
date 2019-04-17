@@ -37,7 +37,7 @@ export class AuxiliaryPowerTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
 
     this.badgeHover = false;
   }
@@ -72,25 +72,25 @@ export class AuxiliaryPowerTabComponent implements OnInit {
     let hasWarning: boolean = false;
     if (this.auxiliaryPowerCompareService.baselineAuxLosses) {
       this.auxiliaryPowerCompareService.baselineAuxLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: string = this.auxiliaryPowerLossesService.checkWarnings(loss);
         if (warnings != null) {
           hasWarning = true;
         }
-      })
+      });
     }
     if (this.auxiliaryPowerCompareService.modifiedAuxLosses && !this.inSetup) {
       this.auxiliaryPowerCompareService.modifiedAuxLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: string = this.auxiliaryPowerLossesService.checkWarnings(loss);
         if (warnings != null) {
           hasWarning = true;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
@@ -98,7 +98,7 @@ export class AuxiliaryPowerTabComponent implements OnInit {
 
   checkLossValid(loss: AuxiliaryPowerLoss) {
     let tmpForm: FormGroup = this.auxiliaryPowerLossesService.getFormFromLoss(loss);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;
