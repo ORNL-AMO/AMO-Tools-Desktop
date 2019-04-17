@@ -17,10 +17,12 @@
 .inner-system-padding{
     padding-left: 3rem;
 }
-/* 
+ 
 .ssmt-diagram{
     transform-origin: center top;
-} */
+    /* min-width: 875px; */
+    width: 900px;
+}
 
 
 

@@ -20,7 +20,7 @@ export class SsmtDiagramComponent implements OnInit {
   @Output('emitHoverChange')
   emitHoverChange = new EventEmitter<string>();
   
-  hoveredEquipment: string = 'boilerHovered';
+  hoveredEquipment: string = 'default';
 
   constructor() { }
 
@@ -28,7 +28,7 @@ export class SsmtDiagramComponent implements OnInit {
   }
 
   setHover(str: string) {
-    //this.hoveredEquipment = str;
+    this.hoveredEquipment = str;
     this.emitHoverChange.emit(this.hoveredEquipment);
   }
 

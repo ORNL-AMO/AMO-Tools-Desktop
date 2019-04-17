@@ -1,15 +1,15 @@
   
    .diagram-container{
-       width: 70% !important;
+       /* width: 70% !important; */
        font-size: small;
-       min-width: 875px;
-       overflow-x: auto;
+       /* min-width: 875px; */
+       /* overflow-x: auto; */
    }
    
    
-   .diagram-help-panel{
+   /* .diagram-help-panel{
        width: 30%;
-   }
+   } */
    
    .boiler-table-height{
        height: 160px;
@@ -28,64 +28,21 @@
    }
 
 
-.select-scenario-box{
-    background-color: #F39C12;
-    position: relative;
-}
-
-.scenario-options{
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #F39C12;
-}
-
-.scenario-option:hover, .selected-option:hover{
-    cursor: pointer;
-    background-color: lightgray;
-}
-
-.scenario-option{
-    border-top: solid;
-}
 
 .form-control{
     font-size: large;
 }
 
 
-.ssmt-diagram{
+/* .ssmt-diagram{
     min-width: 1120px;
+} */
+
+
+.btn.scale-btn{
+  padding: 6px;
+  font-size: small;
 }
-
-.close-calc{
-    position: fixed;
-    bottom: 0;
-    text-align: center;
-    z-index: 4;
-}
-
-.close-calc a{
-    background-color: white;
-    font-size: xx-large;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: solid 3px #F39C12;
-    border-radius: 15px;
-}
-
-
-
-.slide-container {
-    position: fixed;
-    bottom: 0;
-    width: 73%;
-    padding-top: 6px;
-    padding-left: 12px;
-    padding-right: 12px;
-    z-index: 5;
-    opacity: .5;
-  }
 
   /* The slider itself */
 .diagram-slider {
@@ -119,7 +76,8 @@
   }
 
   .scale-helper{
-    transform-origin: center top;
+    transform-origin: left top;
+    min-width: 875px; 
   }
 
   .fa .fa-serch-plus, .fa .fa-search-minus{
