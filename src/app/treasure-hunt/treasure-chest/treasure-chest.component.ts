@@ -33,9 +33,15 @@ export class TreasureChestComponent implements OnInit {
   deleteItemName: string;
   deleteItemIndex: number;
   deleteItemType: string;
+  numItems: number = 0;
+  numLightingReplacements: number = 0;
+  numOppSheets: number = 0;
   constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
+    this.numLightingReplacements = this.treasureHunt.lightingReplacements.length;
+    this.numOppSheets = this.treasureHunt.opportunitySheets.length;
+    this.numItems = this.numLightingReplacements + this.numOppSheets;
   }
 
 
@@ -173,6 +179,10 @@ export class TreasureChestComponent implements OnInit {
 
   showCreateCopyModal(){
     
+  }
+
+  saveTreasureHunt(){
+    this.emitUpdateTreasureHunt.emit(this.treasureHunt);
   }
 
 

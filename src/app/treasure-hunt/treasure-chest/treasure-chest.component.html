@@ -1,14 +1,19 @@
 <div class="d-flex modify-conditions panel-container" *ngIf="selectedCalc == 'none'">
   <div class="panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 mb-2">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'all'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('all')">
-          <div>All Items</div>
+          <div>All Items ({{numItems}})</div>
         </a>
       </div>
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'lighting-replacement'}">
         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('lighting-replacement')">
-          <div>Lighting Replacements</div>
+          <div>Lighting Replacements ({{numLightingReplacements}})</div>
+        </a>
+      </div>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'opportunity-sheet'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('opportunity-sheet')">
+          <div>Opportunity Sheets ({{numOppSheets}})</div>
         </a>
       </div>
     </div>
@@ -17,15 +22,19 @@
         <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
           (emitEditLighting)="editLighting($event, index)"
           (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)"
-          (emitDeleteLightingReplacement)="showDeleteLightingModal($event, index)" [treasureHunt]="treasureHunt">
+          (emitDeleteLightingReplacement)="showDeleteLightingModal($event, index)" [treasureHunt]="treasureHunt"
+          (emitSaveTreasureHunt)="saveTreasureHunt()">
         </app-lighting-replacement-card>
       </div>
     </div>
-    <!-- <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
-      <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
-        (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings">
-      </app-opportunity-sheet-card>
-    </div> -->
+    <div *ngIf="tabSelect == 'all' || tabSelect == 'opportunity-sheet'">
+      <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
+        <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
+          (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="saveTreasureHunt()">
+        </app-opportunity-sheet-card>
+      </div>
+    </div>
   </div>
   <div class="d-flex flex-column scroll-item result-column" [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">

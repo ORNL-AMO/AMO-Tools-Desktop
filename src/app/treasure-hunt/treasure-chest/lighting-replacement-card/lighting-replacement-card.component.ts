@@ -24,19 +24,17 @@ export class LightingReplacementCardComponent implements OnInit {
   treasureHunt: TreasureHunt;
   @Output('emitDeleteLightingReplacement')
   emitDeleteLightingReplacement = new EventEmitter<string>();
+  @Output('emitSaveTreasureHunt')
+  emitSaveTreasureHunt = new EventEmitter<boolean>();
 
-  dropdownOpen: boolean = false;
+
   lightingReplacementResults: LightingReplacementResults;
   percentSavings: number;
   constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
     this.lightingReplacementResults = this.lightingReplacementService.getResults(this.replacement);
-    this.percentSavings = this.lightingReplacementResults.totalCostSavings / this.treasureHunt.currentEnergyUsage.electricityCosts;
-  }
-
-  showDropdown() {
-    this.dropdownOpen = !this.dropdownOpen;
+    this.percentSavings = (this.lightingReplacementResults.totalCostSavings / this.treasureHunt.currentEnergyUsage.electricityCosts) * 100;
   }
 
   editOpportunitySheet() {
@@ -49,6 +47,7 @@ export class LightingReplacementCardComponent implements OnInit {
 
   toggleSelected() {
     this.replacement.selected = !this.replacement.selected;
+    this.emitSaveTreasureHunt.emit(true);
   }
 
   deleteLighting() {
