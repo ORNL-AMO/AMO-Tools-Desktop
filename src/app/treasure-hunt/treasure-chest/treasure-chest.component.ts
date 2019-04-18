@@ -19,6 +19,8 @@ export class TreasureChestComponent implements OnInit {
 
   @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
   @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
+  @ViewChild('deletedItemModal') public deletedItemModal: ModalDirective;
+
 
   selectedCalc: string = 'none';
   selectedEditIndex: number;
@@ -26,13 +28,17 @@ export class TreasureChestComponent implements OnInit {
   selectedEditOpportunitySheet: OpportunitySheet;
   isSaveLighting: boolean;
   tabSelect: string = 'results';
+
+  deleteItemName: string;
+  deleteItemIndex: number;
+  deleteItemType: string;
   constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
   }
 
 
-  setTab(str: string){
+  setTab(str: string) {
     this.tabSelect = str;
   }
 
@@ -71,7 +77,7 @@ export class TreasureChestComponent implements OnInit {
   saveLighting() {
     this.selectedEditLightingReplacement.opportunitySheet = this.selectedEditOpportunitySheet;
     this.treasureHunt.lightingReplacements[this.selectedEditIndex] = this.selectedEditLightingReplacement;
-    this.emitUpdateTreasureHunt.emit(this.treasureHunt);
+    this.save();
     this.selectedEditLightingReplacement = undefined;
     this.selectedEditOpportunitySheet = undefined;
     this.saveCalcModal.hide();
@@ -107,7 +113,7 @@ export class TreasureChestComponent implements OnInit {
 
   saveLightingReplacementOpportunitySheet() {
     this.treasureHunt.lightingReplacements[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
-    this.emitUpdateTreasureHunt.emit(this.treasureHunt);
+    this.save();
     this.selectedEditLightingReplacement = undefined;
     this.selectedEditOpportunitySheet = undefined;
   }
@@ -125,13 +131,44 @@ export class TreasureChestComponent implements OnInit {
     this.saveCalcModal.show();
   }
 
-
   saveEditOpportunitySheet() {
     this.treasureHunt.opportunitySheets[this.selectedEditIndex] = this.selectedEditOpportunitySheet;
-    this.emitUpdateTreasureHunt.emit(this.treasureHunt);
+    this.save();
     this.selectedEditOpportunitySheet = undefined;
     this.selectedEditIndex = undefined;
     this.saveCalcModal.hide();
     this.selectCalc('none');
   }
+
+  showDeleteLightingModal(name: string, index: number) {
+    this.deleteItemIndex = index;
+    this.deleteItemType = 'lightingReplacement';
+    this.deleteItemName = name;
+    this.deletedItemModal.show();
+  }
+
+  save() {
+    this.emitUpdateTreasureHunt.emit(this.treasureHunt);
+  }
+
+  deleteItem() {
+    if (this.deleteItemType == 'lightingReplacement') {
+      this.treasureHunt.lightingReplacements.splice(this.deleteItemIndex, 1);
+    }
+    this.save();
+    this.deletedItemModal.hide();
+  }
+
+  cancelDelete() {
+    this.deletedItemModal.hide();
+    this.deleteItemIndex = undefined;
+    this.deleteItemType = undefined;
+    this.deleteItemName = undefined;
+  }
+
+  showCreateCopyModal(){
+    
+  }
+
+
 }

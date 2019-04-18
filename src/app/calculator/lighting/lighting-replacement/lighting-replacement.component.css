@@ -1,4 +1,4 @@
-.header {
+.header .fa.fa-lightbulb-o{
     font-size: -webkit-xxx-large;
 }
 
@@ -45,7 +45,4 @@
 
 .add-fixture{
     margin-top: 10px;
-}
-.fa.fa-lightbulb-o{
-    font-size: -webkit-xxx-large;
 }

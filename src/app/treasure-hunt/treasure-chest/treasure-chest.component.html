@@ -3,33 +3,11 @@
     <div class="header mr-2 ml-2">
       <h3>Treasure Chest Inventory</h3>
     </div>
-    <!-- <div class="col-12">
-      <div class="card header-card">
-        <div class="card-body d-flex w-100 p-0 justify-content-center">
-          <div class="col-1 col-item-br">
-            Apply
-          </div>
-          <div class="col-4 col-item-br text-center">
-            Name
-          </div>
-          <div class="col-3 col-item-br text-center">
-            Percent Savings
-          </div>
-          <div class="col-2 col-item-br text-center">
-            Opportunity Sheet
-          </div>
-          <div class="col-2">
-            Manage
-          </div>
-        </div>
-      </div>
-    </div>-->
-
-
     <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
       <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
         (emitEditLighting)="editLighting($event, index)"
-        (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)" [treasureHunt]="treasureHunt">
+        (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)"
+        (emitDeleteLightingReplacement)="showDeleteLightingModal($event, index)" [treasureHunt]="treasureHunt">
       </app-lighting-replacement-card>
     </div>
     <!-- <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
@@ -57,41 +35,7 @@
   </div>
 </div>
 
-
-
-
-<!-- <div class="d-flex flex-fill justify-content-center" *ngIf="selectedCalc == 'none'">
-  <div class="d-flex flex-column w-75">
-    <p class="p-2 lead text-center mb-0">
-      Take a look at all your treasure!
-    </p>
-    <div class="p-1 mx-auto">
-      <button class="btn btn-primary report-btn">View Report</button>
-    </div>
-    <br>
-    <hr class="w-100 m-0">
-  </div>
-</div>
-<div class="d-flex flex-wrap w-100 pt-2" *ngIf="selectedCalc == 'none'">
-  <div class="summary-item col-3">
-    <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
-  </div>
-
-  <div class="summary-item col-3" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
-    <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
-      (emitEditLighting)="editLighting($event, index)"
-      (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)">
-    </app-lighting-replacement-card>
-  </div>
-  <div class="summary-item col-3" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
-    <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
-      (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"></app-opportunity-sheet-card>
-  </div>
-</div> -->
-
-
-
-
+<!--edit-->
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
   (emitSave)="saveEditLighting($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"></app-lighting-replacement>
@@ -149,6 +93,22 @@
         <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveOpportunitySheet($event)"
           [(opportunitySheet)]="selectedEditOpportunitySheet">
         </app-opportunity-sheet>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #deletedItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="deletedItemModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body p-2 text-center" *ngIf="deletedItemModal.isShown">
+        Are you sure you want to delete "{{deleteItemName}}"?<br>
+        <span class="small danger">This cannot be undone.</span>
+      </div>
+      <div class="modal-footer p-2 justify-content-end delete-modal">
+        <button class="btn btn-danger" (click)="deleteItem()">Delete</button>
+        <button class="btn btn-primary" (click)="cancelDelete()">Cancel</button>
       </div>
     </div>
   </div>

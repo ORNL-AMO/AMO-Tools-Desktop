@@ -14,16 +14,10 @@
   font-size: 35px;
 }
 
-
 .opportunity-name a, .opportunity-name .fa{
   font-size: large;
 }
 
-/* td{
-    padding: 0px;
-    font-size: small;
-}
-*/
 a:not([href]):not([tabindex]):hover {
   color: blue;
   text-decoration: underline;
@@ -34,59 +28,19 @@ a:not([href]):not([tabindex]):hover {
   background-color: #efefef;
 }
 
-
-.no-opp-sheet{
-  color: red;
+.no-opp-sheet, .click-link.danger{
+  color: red !important;
 }
 
 .opp-sheet-exists{
   color: green;
 }
-/*
-  .dropdown-menu.shown{
-    display: grid;
-    padding: 0px;
-}
 
-.dropdown-item{
-    padding: .25rem;
-    font-size: small;
-}
-
-.dropdown-toggle::after{
-  margin-left: 0;
-}
-
-.dropdown-toggle{
-  padding: 3px;
-}
-
-.dropdown-menu.shown{
-  left: -160px;
-  background-color: #ececec;
-}
-
-.dropdown-item:hover{
+.opp-sheet-col .no-opp-sheet:hover, .opp-sheet-col .opp-sheet-exists:hover{
   cursor: pointer;
+  text-decoration: underline;
 }
 
-.summary-card-body{
-    height: 200px;
-}
-
-.dropdown-toggle,
-.btn-primary{
-  background-color: #2E4053;
-}
-
-
-.summary-card-header,
-.summary-card-body,
-.summary-card-footer{
-  padding: 6px;
-}
-
-
-.fa .fa-lightbulb-o{
-  font-size: large;
+/* .graph-col{
+  background-color: #efefef;
 } */

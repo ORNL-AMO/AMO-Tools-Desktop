@@ -40,3 +40,11 @@
 .col-item-br{
     border-right: solid;
 }
+
+.delete-modal .btn{
+    padding: 6px;
+}
+
+.small.danger{
+    color: red;    
+}

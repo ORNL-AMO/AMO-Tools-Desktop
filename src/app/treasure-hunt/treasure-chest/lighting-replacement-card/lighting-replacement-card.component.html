@@ -25,16 +25,17 @@
         </div>
       </div>
     </div>
-    <div class="col-3 col-item-br text-center">
-      <span class="large pb-2">Electricity Cost Savings</span>
+    <div class="col-3 col-item-br text-center graph-col">
+      <div class="large pt-2">Electricity Cost Savings</div>
       <app-percent-graph [value]="percentSavings" [fontSize]="32" [unit]="'%'" [title]="'something'"
-        [chartClass]="'treasure-hunt'">
+        [chartClass]="'treasure-hunt-card'">
       </app-percent-graph>
     </div>
     <div class="col-2 col-item-br opp-sheet-col">
       <div class="row align-items-center h-100">
         <div class="col text-center"
-          [ngClass]="{'no-opp-sheet': !replacement.opportunitySheet, 'opp-sheet-exists': replacement.opportunitySheet}">
+          [ngClass]="{'no-opp-sheet': !replacement.opportunitySheet, 'opp-sheet-exists': replacement.opportunitySheet}"
+          (click)="editOpportunitySheet()">
           <span class="fa fa-edit"></span><br>
           <span class="large pt-2" *ngIf="!replacement.opportunitySheet">Add Opportunity Sheet</span>
           <span class="large pt-2" *ngIf="replacement.opportunitySheet">Edit Opportunity Sheet</span>
@@ -44,90 +45,11 @@
     <div class="col-2">
       <div class="row align-items-center h-100">
         <div class="col text-center">
-          <a class="click-link">Edit Opportunity</a><br>
-          <a class="click-link danger">Delete</a><br>
-          <a class="click-link">Create Copy</a>
+          <a class="click-link" (click)="editLighting()">Edit Opportunity</a><br>
+          <a class="click-link danger" (click)="deleteLighting()">Delete</a><br>
+          <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
-<!-- <div class="card card-item w-100">
-  <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
-    <input type="checkbox" [(ngModel)]="replacement.selected">
-    <div class="d-flex align-items-center">
-      <span class="fa fa-lightbulb-o pr-2 pt-0"></span>
-      <a (click)="editLighting()">
-        <span *ngIf="!replacement.opportunitySheet || !replacement.opportunitySheet.name">
-          Lighting Replacement #{{index+1}}
-        </span>
-        <span *ngIf="replacement.opportunitySheet && replacement.opportunitySheet.name">
-          {{replacement.opportunitySheet.name}}
-        </span>
-      </a>
-    </div>
-    <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> --
-    <div class="btn-group">
-      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
-      </button>
-      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
-        <span class="dropdown-item">Delete</span>
-        <span class="dropdown-item">Create Copy</span>
-      </div>
-    </div>
-  </div>
-  <div class="card-body scroll-item summary-card-body p-1">
-    <table class="table">
-      <tr>
-        <td class="bold" colspan="2">Baseline Data:</td>
-      </tr>
-      <tr>
-        <td>
-          Number of Fixtures
-        </td>
-        <td>
-          {{replacement.baseline.length}}
-        </td>
-      </tr>
-      <tr>
-        <td class="bold" colspan="2">Modification Data:</td>
-      </tr>
-      <tr>
-        <td>
-          Number of Fixtures
-        </td>
-        <td>
-          {{replacement.modifications.length}}
-        </td>
-      </tr>
-      <tr>
-        <td class="bold" colspan="2">Savings:</td>
-      </tr>
-      <tr>
-        <td>
-          Total Cost Savings
-        </td>
-        <td>
-          {{lightingReplacementResults.totalCostSavings | currency:'USD'}} /yr
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Total Energy Savings
-        </td>
-        <td>
-          {{lightingReplacementResults.totalEnergySavings | number:'1.0-0'}} kW
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div class="card-footer summary-card-footer text-center">
-    <span class="fa fa-edit pr-1"></span>
-    <a class="click-link small" *ngIf="replacement.opportunitySheet" (click)="editOpportunitySheet()">Edit
-      Opportunity Sheet</a>
-    <a class="click-link small" *ngIf="!replacement.opportunitySheet" (click)="editOpportunitySheet()">+Add
-      Opportunity Sheet</a>
-  </div>
-</div> -->

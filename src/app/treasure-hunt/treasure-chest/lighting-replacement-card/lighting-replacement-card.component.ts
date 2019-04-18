@@ -22,6 +22,8 @@ export class LightingReplacementCardComponent implements OnInit {
   emitEditLighting = new EventEmitter<LightingReplacementTreasureHunt>();
   @Input()
   treasureHunt: TreasureHunt;
+  @Output('emitDeleteLightingReplacement')
+  emitDeleteLightingReplacement = new EventEmitter<string>();
 
   dropdownOpen: boolean = false;
   lightingReplacementResults: LightingReplacementResults;
@@ -47,5 +49,13 @@ export class LightingReplacementCardComponent implements OnInit {
 
   toggleSelected() {
     this.replacement.selected = !this.replacement.selected;
+  }
+
+  deleteLighting() {
+    let name: string = 'Lighting Replacement #' + (this.index + 1);
+    if (this.replacement.opportunitySheet && this.replacement.opportunitySheet.name) {
+      name = this.replacement.opportunitySheet.name;
+    }
+    this.emitDeleteLightingReplacement.emit(name);
   }
 }
