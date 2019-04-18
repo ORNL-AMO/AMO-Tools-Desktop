@@ -25,11 +25,9 @@
         </div>
       </div>
     </div>
-    <div class="col-3 col-item-br text-center graph-col">
+    <div class="col-3 col-item-br text-center graph-col treasure-hunt-item">
       <div class="large pt-2">Electricity Cost Savings</div>
-      <app-percent-graph [value]="percentSavings" [fontSize]="32" [unit]="'%'" [title]="'something'"
-        [chartClass]="'treasure-hunt-card'">
-      </app-percent-graph>
+      <app-treasure-hunt-gauge [value]="percentSavings" [chartHeight]="85" [chartWidth]="175"></app-treasure-hunt-gauge>
     </div>
     <div class="col-2 col-item-br opp-sheet-col">
       <div class="row align-items-center h-100">

@@ -1,14 +1,25 @@
 <div class="d-flex modify-conditions panel-container" *ngIf="selectedCalc == 'none'">
   <div class="panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <div class="header mr-2 ml-2">
-      <h3>Treasure Chest Inventory</h3>
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'all'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('all')">
+          <div>All Items</div>
+        </a>
+      </div>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'lighting-replacement'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('lighting-replacement')">
+          <div>Lighting Replacements</div>
+        </a>
+      </div>
     </div>
-    <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
-      <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
-        (emitEditLighting)="editLighting($event, index)"
-        (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)"
-        (emitDeleteLightingReplacement)="showDeleteLightingModal($event, index)" [treasureHunt]="treasureHunt">
-      </app-lighting-replacement-card>
+    <div *ngIf="tabSelect == 'all' || tabSelect == 'lighting-replacement'">
+      <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
+        <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
+          (emitEditLighting)="editLighting($event, index)"
+          (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)"
+          (emitDeleteLightingReplacement)="showDeleteLightingModal($event, index)" [treasureHunt]="treasureHunt">
+        </app-lighting-replacement-card>
+      </div>
     </div>
     <!-- <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
       <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
@@ -18,13 +29,13 @@
   </div>
   <div class="d-flex flex-column scroll-item result-column" [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': helpTabSelect == 'results'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setHelpTab('results')">
           <div>Results</div>
         </a>
       </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': helpTabSelect == 'help'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setHelpTab('help')">
           <div>Help</div>
         </a>
       </div>

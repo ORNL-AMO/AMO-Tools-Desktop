@@ -16,8 +16,3 @@ h1 {
     50% {opacity: 0;}
     100% {opacity: 100;}
 }
-
-
-.treasure-hunt .c3, .treasure-hunt-card .c3{
-    max-height: 75px;
-}

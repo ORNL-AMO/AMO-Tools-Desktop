@@ -27,7 +27,8 @@ export class TreasureChestComponent implements OnInit {
   selectedEditLightingReplacement: LightingReplacementTreasureHunt;
   selectedEditOpportunitySheet: OpportunitySheet;
   isSaveLighting: boolean;
-  tabSelect: string = 'results';
+  tabSelect: string = 'all';
+  helpTabSelect: string = 'results';
 
   deleteItemName: string;
   deleteItemIndex: number;
@@ -40,6 +41,10 @@ export class TreasureChestComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  setHelpTab(str: string) {
+    this.helpTabSelect = str;
   }
 
   selectCalc(str: string) {
