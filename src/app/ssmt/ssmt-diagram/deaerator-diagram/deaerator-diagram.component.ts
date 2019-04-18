@@ -69,7 +69,7 @@ export class DeaeratorDiagramComponent implements OnInit {
     let massFlowWarning: boolean = false;
     let inletEnthalpyWarning: boolean = false;
     let enthalpyFeedwaterWarning: boolean = false;
-    if (this.deaerator.inletSteamMassFlow || this.deaerator.inletSteamMassFlow == 0) {
+    if (this.deaerator.inletSteamMassFlow < 0 || this.deaerator.inletSteamMassFlow == 0) {
       massFlowWarning = true;
     }
 
@@ -81,6 +81,7 @@ export class DeaeratorDiagramComponent implements OnInit {
 
     if (this.deaerator.feedwaterSpecificEnthalpy > this.deaerator.inletWaterSpecificEnthalpy && this.deaerator.feedwaterSpecificEnthalpy > this.deaerator.inletSteamSpecificEnthalpy) {
       enthalpyFeedwaterWarning = true;
+
     }
     if (energyWarning || massFlowWarning || inletEnthalpyWarning || enthalpyFeedwaterWarning) {
       this.deaeratorWarnings = true;
