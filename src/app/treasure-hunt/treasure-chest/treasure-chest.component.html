@@ -28,10 +28,11 @@
       </div>
     </div>
     <div *ngIf="tabSelect == 'all' || tabSelect == 'opportunity-sheet'">
-      <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
-        <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
+      <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;">
+        <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet" [index]="index"
           (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"
-          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="saveTreasureHunt()">
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="saveTreasureHunt()"
+          (emitDeleteOpportunity)="showDeleteOpportunityModal($event, index)">
         </app-opportunity-sheet-card>
       </div>
     </div>

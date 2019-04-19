@@ -19,6 +19,10 @@ export class OpportunitySheetCardComponent implements OnInit {
   treasureHunt: TreasureHunt;
   @Output('emitSaveTreasureHunt')
   emitSaveTreasureHunt = new EventEmitter<boolean>();
+  @Output('emitDeleteOpportunity')
+  emitDeleteOpportunity = new EventEmitter<string>();
+  @Input()
+  index: number;
 
   dropdownOpen: boolean = false;
   opportunityResults: OpportunitySheetResults;
@@ -39,4 +43,11 @@ export class OpportunitySheetCardComponent implements OnInit {
     this.emitSaveTreasureHunt.emit(true);
   }
 
+  deleteOpportunitySheet() {
+    let name: string = 'Opportunity Sheet #' + (this.index + 1)
+    if (this.opportunitySheet.name) {
+      name = this.opportunitySheet.name;
+    }
+    this.emitDeleteOpportunity.emit(name);
+  }
 }

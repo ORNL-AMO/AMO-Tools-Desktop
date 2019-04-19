@@ -158,6 +158,13 @@ export class TreasureChestComponent implements OnInit {
     this.deletedItemModal.show();
   }
 
+  showDeleteOpportunityModal(name: string, index: number) {
+    this.deleteItemIndex = index;
+    this.deleteItemType = 'opportunitySheet';
+    this.deleteItemName = name;
+    this.deletedItemModal.show();
+  }
+
   save() {
     this.emitUpdateTreasureHunt.emit(this.treasureHunt);
   }
@@ -165,6 +172,8 @@ export class TreasureChestComponent implements OnInit {
   deleteItem() {
     if (this.deleteItemType == 'lightingReplacement') {
       this.treasureHunt.lightingReplacements.splice(this.deleteItemIndex, 1);
+    } else if (this.deleteItemType == 'opportunitySheet') {
+      this.treasureHunt.opportunitySheets.splice(this.deleteItemIndex, 1);
     }
     this.save();
     this.deletedItemModal.hide();
@@ -177,11 +186,11 @@ export class TreasureChestComponent implements OnInit {
     this.deleteItemName = undefined;
   }
 
-  showCreateCopyModal(){
-    
+  showCreateCopyModal() {
+
   }
 
-  saveTreasureHunt(){
+  saveTreasureHunt() {
     this.emitUpdateTreasureHunt.emit(this.treasureHunt);
   }
 
