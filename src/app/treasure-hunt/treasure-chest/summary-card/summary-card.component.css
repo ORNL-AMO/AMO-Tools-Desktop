@@ -1,30 +1,17 @@
-td{
-    padding: 0px;
-    font-size: small;
-}
-/* a:not([href]):not([tabindex]):hover {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
-  a:not([href]):not([tabindex]){
-    color: blue;
-  } */
-
-  .summary-card-header{
-      padding: 6px;
-  }
-
-  .summary-card-body{
-      height: 200px;
+  .card-body{
+    padding: .5rem;
   }
 
   .middle-border-item{
-    border-left: solid 2px gray;
-    border-right: solid 2px gray;
+    border-left: solid 2px #2E4053;
+    border-right: solid 2px #2E4053;
   }
 
   .total-savings-border{
-    border-bottom: solid 2px gray;
+    border-bottom: solid 2px #2E4053;
+  }
+
+  .card{
+    border-right: #2E4053 solid 5px;
+    border-left: #2E4053 solid 5px;
   }

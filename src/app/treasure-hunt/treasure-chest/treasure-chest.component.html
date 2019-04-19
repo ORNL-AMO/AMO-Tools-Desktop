@@ -1,5 +1,5 @@
 <div class="d-flex modify-conditions panel-container" *ngIf="selectedCalc == 'none'">
-  <div class="panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+  <div class="scroll-item chest-column" [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2 mb-2">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'all'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('all')">
@@ -49,8 +49,8 @@
         </a>
       </div>
     </div>
-    <div class="d-flex justify-content-center mr-2 ml-2">
-      <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
+    <div class="d-flex justify-content-center mr-3 ml-3">
+      <app-summary-card class="w-100" [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
     </div>
   </div>
 </div>
