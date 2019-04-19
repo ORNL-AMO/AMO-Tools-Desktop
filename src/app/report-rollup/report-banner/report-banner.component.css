@@ -1,6 +1,6 @@
 .report-banner {
-	border-bottom: #ddd solid 1px;
 	padding: 8px;
+	background-color: #145A32;
 }
 
 	.report-banner:after {
@@ -20,6 +20,13 @@
 		padding: 6px 10px;
     }
 
+
+		.efficiency-title{
+			font-size: 24px;
+			margin-bottom: 0px;
+			color: white;
+			font-family: 'Muli', sans-serif;
+		}
 @media print {
 
 }

@@ -40,7 +40,7 @@ export class FlueGasTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
     this.badgeHover = false;
   }
 
@@ -70,11 +70,11 @@ export class FlueGasTabComponent implements OnInit {
   }
 
   checkWarningExists(loss: FlueGas): boolean {
-    if (loss.flueGasType == 'By Mass') {
+    if (loss.flueGasType === 'By Mass') {
       let warnings: FlueGasWarnings = this.flueGasLossesService.checkFlueGasByMassWarnings(loss.flueGasByMass);
       let tmpHasWarning: boolean = this.flueGasLossesService.checkWarningsExist(warnings);
       return tmpHasWarning;
-    } else if (loss.flueGasType == 'By Volume') {
+    } else if (loss.flueGasType === 'By Volume') {
       let warnings: FlueGasWarnings = this.flueGasLossesService.checkFlueGasByVolumeWarnings(loss.flueGasByVolume);
       let tmpHasWarning: boolean = this.flueGasLossesService.checkWarningsExist(warnings);
       return tmpHasWarning;
@@ -86,41 +86,41 @@ export class FlueGasTabComponent implements OnInit {
     let hasWarning: boolean = false;
     if (this.flueGasCompareService.baselineFlueGasLoss) {
       this.flueGasCompareService.baselineFlueGasLoss.forEach(loss => {
-        if (this.checkMaterialValid(loss) == false) {
+        if (this.checkMaterialValid(loss) === false) {
           missingData = true;
         }
         let tmpHasWarning: boolean = this.checkWarningExists(loss);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     if (this.flueGasCompareService.modifiedFlueGasLoss && !this.inSetup) {
       this.flueGasCompareService.modifiedFlueGasLoss.forEach(loss => {
-        if (this.checkMaterialValid(loss) == false) {
+        if (this.checkMaterialValid(loss) === false) {
           missingData = true;
         }
         let tmpHasWarning: boolean = this.checkWarningExists(loss);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
 
 
   checkMaterialValid(loss: FlueGas) {
-    if (loss.flueGasType == 'By Volume') {
+    if (loss.flueGasType === 'By Volume') {
       let tmpForm: FormGroup = this.flueGasLossesService.initByVolumeFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;
       }
-    } else if (loss.flueGasType == 'By Mass') {
+    } else if (loss.flueGasType === 'By Mass') {
       let tmpForm: FormGroup = this.flueGasLossesService.initByMassFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;

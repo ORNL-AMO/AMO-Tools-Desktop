@@ -99,7 +99,7 @@ export class FanEfficiencyComponent implements OnInit {
       this.saveCalculator();
     }
 
-    if (this.fanEfficiencyForm.status == 'VALID') {
+    if (this.fanEfficiencyForm.status === 'VALID') {
       this.fanEfficiency = this.fsatService.optimalFanEfficiency(tmpFanEfficiencyInputs, this.settings);
     } else {
       this.fanEfficiency = 0;
@@ -120,9 +120,9 @@ export class FanEfficiencyComponent implements OnInit {
     if (this.calculator) {
       this.calcExists = true;
       if (this.calculator.fanEfficiencyInputs) {
-        this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.calculator.fanEfficiencyInputs)
+        this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.calculator.fanEfficiencyInputs);
       } else {
-        if (this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType != 12) {
+        if (this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType !== 12) {
           this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromFsat(this.fsat);
         } else {
           this.fanEfficiencyForm = this.fanEfficiencyService.initForm();
@@ -138,7 +138,7 @@ export class FanEfficiencyComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    if (this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType != 12) {
+    if (this.fsat && this.fsat.fanSetup && this.fsat.fanSetup.fanType !== 12) {
       this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromFsat(this.fsat);
     } else {
       this.fanEfficiencyForm = this.fanEfficiencyService.initForm();
@@ -147,7 +147,7 @@ export class FanEfficiencyComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       fanEfficiencyInputs: tmpFanEfficiencyInputs
-    }
+    };
     return tmpCalculator;
   }
 
@@ -173,7 +173,7 @@ export class FanEfficiencyComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

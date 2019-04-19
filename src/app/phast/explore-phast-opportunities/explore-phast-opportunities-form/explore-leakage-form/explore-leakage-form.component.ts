@@ -65,12 +65,12 @@ export class ExploreLeakageFormComponent implements OnInit {
       tmpWarnings = this.gasLeakageLossesService.checkLeakageWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
       index++;
-    })
+    });
   }
 
 
   initOpening(area1: number, area2: number) {
-    if (area1 != area2) {
+    if (area1 !== area2) {
       return true;
     } else {
       return false;
@@ -78,7 +78,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
 
   toggleLeakage() {
-    if (this.showLeakage == false) {
+    if (this.showLeakage === false) {
       let index: number = 0;
       this.phast.losses.leakageLosses.forEach(loss => {
         let baselineArea: number = loss.openingArea;
@@ -93,7 +93,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
 
   toggleOpening(index: number, baselineArea: number) {
-    if (this.showOpening[index] == false) {
+    if (this.showOpening[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea = baselineArea;
       this.checkModificationWarnings(index);
       this.calculate();
@@ -101,7 +101,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
 
   togglePressure(index: number, baselinePressure: number) {
-    if (this.showPressure[index] == false) {
+    if (this.showPressure[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].draftPressure = baselinePressure;
       this.checkModificationWarnings(index);
       this.calculate();
@@ -117,7 +117,7 @@ export class ExploreLeakageFormComponent implements OnInit {
       back: 6,
       componentStr: 'gas-leakage-losses',
       showAdd: true
-    })
+    });
   }
 
   checkBaselineWarnings(index: number) {
@@ -137,7 +137,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
 
   calculate() {
-    this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true);
   }
 
 }

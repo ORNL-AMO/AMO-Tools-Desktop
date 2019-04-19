@@ -16,7 +16,7 @@ export class AuxiliaryPowerLossesService {
       powerFactor: ['', Validators.required],
       operatingTime: ['', Validators.required],
       name: ['Loss #' + lossNum]
-    })
+    });
   }
 
   getLossFromForm(form: FormGroup): AuxiliaryPowerLoss {
@@ -27,7 +27,7 @@ export class AuxiliaryPowerLossesService {
       powerFactor: form.controls.powerFactor.value,
       operatingTime: form.controls.operatingTime.value,
       name: form.controls.name.value
-    }
+    };
     return tmpLoss;
   }
 
@@ -39,7 +39,7 @@ export class AuxiliaryPowerLossesService {
       powerFactor: [loss.powerFactor, Validators.required],
       operatingTime: [loss.operatingTime, Validators.required],
       name: [loss.name]
-    })
+    });
   }
 
   checkWarnings(loss: AuxiliaryPowerLoss): string {

@@ -7,6 +7,7 @@ import { CompareService } from '../compare.service';
 import { TurbineService } from '../turbine/turbine.service';
 import { BoilerService } from '../boiler/boiler.service';
 import { HeaderService } from '../header/header.service';
+import { OperationsService } from '../operations/operations.service';
 
 @Component({
   selector: 'app-ssmt-tabs',
@@ -46,38 +47,39 @@ export class SsmtTabsComponent implements OnInit {
   calcTab: string;
   calcTabSubscription: Subscription;
   constructor(private ssmtService: SsmtService, private compareService: CompareService, private cd: ChangeDetectorRef,
-    private turbineService: TurbineService, private boilerService: BoilerService, private headerService: HeaderService) { }
+    private turbineService: TurbineService, private boilerService: BoilerService, private headerService: HeaderService,
+    private operationsService: OperationsService) { }
 
   ngOnInit() {
     this.mainTabSubscription = this.ssmtService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.checkStepTabStatus();
-    })
+    });
     this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
       this.stepTab = val;
       this.checkStepTabStatus();
-    })
+    });
     this.assessmentTabSubscrption = this.ssmtService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
-    })
+    });
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
       this.modelTab = val;
       this.checkStepTabStatus();
-    })
+    });
 
     this.updateDataSubscription = this.ssmtService.updateData.subscribe(val => {
       this.checkStepTabStatus();
-    })
+    });
 
     this.modSubscription = this.compareService.selectedModification.subscribe(val => {
       this.selectedModification = val;
       this.cd.detectChanges();
-    })
+    });
 
     this.calcTabSubscription = this.ssmtService.calcTab.subscribe(val => {
       this.calcTab = val;
       this.cd.detectChanges();
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -96,15 +98,21 @@ export class SsmtTabsComponent implements OnInit {
 
   changeStepTab(str: string) {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings);
-    if (str == 'system-basics' || str == 'operations' || str == 'boiler') {
+    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings, this.ssmt.boilerInput);
+    let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
+    if (str === 'system-basics' || str === 'operations') {
       this.ssmtService.stepTab.next(str);
-    } else if (str == 'header') {
-      if (boilerValid) {
+    }
+    else if (str === 'boiler') {
+      if (operationsValid) {
         this.ssmtService.stepTab.next(str);
       }
-    } else if (str == 'turbine') {
-      if (boilerValid && headerValid) {
+    } else if (str === 'header') {
+      if (boilerValid && operationsValid) {
+        this.ssmtService.stepTab.next(str);
+      }
+    } else if (str === 'turbine') {
+      if (boilerValid && operationsValid && headerValid) {
         this.ssmtService.stepTab.next(str);
       }
     }
@@ -123,7 +131,10 @@ export class SsmtTabsComponent implements OnInit {
   }
 
   checkOperationsStatus() {
-    if (this.stepTab == 'operations') {
+    let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
+    if (!operationsValid) {
+      this.operationsTabStatus = ['missing-data'];
+    } else if (this.stepTab === 'operations') {
       this.operationsTabStatus = ['success', 'active'];
     } else {
       this.operationsTabStatus = ['success'];
@@ -131,7 +142,7 @@ export class SsmtTabsComponent implements OnInit {
   }
 
   checkSettingsStatus() {
-    if (this.stepTab == 'system-basics') {
+    if (this.stepTab === 'system-basics') {
       this.settingsStatus = ['success', 'active'];
     } else {
       this.settingsStatus = ['success'];
@@ -140,38 +151,44 @@ export class SsmtTabsComponent implements OnInit {
 
   checkBoilerStatus() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
-    if (!boilerValid) {
+    let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
+    if (!operationsValid) {
+      this.boilerTabStatus = ['disabled'];
+    } else if (!boilerValid) {
       this.boilerTabStatus = ['missing-data'];
     } else {
       this.boilerTabStatus = ['success'];
     }
 
-    if (this.stepTab == 'boiler') {
+    if (this.stepTab === 'boiler') {
       this.boilerTabStatus.push('active');
     }
   }
 
   checkHeaderStatus() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings);
-    if (!boilerValid) {
-      this.headerTabStatus = ['disabled']
+    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings, this.ssmt.boilerInput);
+    let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
+    if (!boilerValid || !operationsValid) {
+      this.headerTabStatus = ['disabled'];
     } else if (!headerValid) {
       this.headerTabStatus = ['missing-data'];
     } else {
       this.headerTabStatus = ['success'];
     }
 
-    if (this.stepTab == 'header') {
+    if (this.stepTab === 'header') {
       this.headerTabStatus.push('active');
     }
   }
 
   checkTurbineStatus() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.settings, this.ssmt.boilerInput);
     let turbineValid: boolean = this.turbineService.isTurbineValid(this.ssmt.turbineInput, this.ssmt.headerInput, this.settings);
-    if (!boilerValid || !headerValid) {
+    let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
+
+    if (!boilerValid || !headerValid || !operationsValid) {
       this.turbineTabStatus = ['disabled'];
     } else if (!turbineValid) {
       this.turbineTabStatus = ['missing-data'];
@@ -179,7 +196,7 @@ export class SsmtTabsComponent implements OnInit {
       this.turbineTabStatus = ['success'];
     }
 
-    if (this.stepTab == 'turbine') {
+    if (this.stepTab === 'turbine') {
       this.turbineTabStatus.push('active');
     }
   }
@@ -208,7 +225,7 @@ export class SsmtTabsComponent implements OnInit {
     }
   }
 
-  changeCalcTab(str: string){
+  changeCalcTab(str: string) {
     this.ssmtService.calcTab.next(str);
   }
 }

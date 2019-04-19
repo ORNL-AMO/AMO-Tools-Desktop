@@ -99,7 +99,7 @@
             <!-- <span class="alert-danger pull-right small" *ngIf="error.currentCombAirTemp !== null">{{error.currentCombAirTemp}}</span> -->
             <span class="alert-danger pull-right small" *ngIf="form.controls.currentCombustionAirTemp.invalid && !form.controls.currentCombustionAirTemp.pristine">
               <span *ngIf="form.controls.currentCombustionAirTemp.errors.required">Value required.</span>
-              <span *ngIf="form.controls.currentCombustionAirTemp.errors.lessThan">Combustion air tempurature must be
+              <span *ngIf="form.controls.currentCombustionAirTemp.errors.lessThan">Combustion air temperature must be
                 less than flue gas temperature.</span>
             </span>
           </div>

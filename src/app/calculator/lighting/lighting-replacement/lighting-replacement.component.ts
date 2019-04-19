@@ -54,7 +54,6 @@ export class LightingReplacementComponent implements OnInit {
     } else {
       this.baselineData = this.lightingReplacementService.getInitializedData();
     }
-
     if (this.lightingReplacementService.modificationData) {
       this.modificationData = this.lightingReplacementService.modificationData;
       this.modificationExists = true;

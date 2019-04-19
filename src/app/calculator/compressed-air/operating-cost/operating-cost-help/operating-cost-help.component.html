@@ -7,17 +7,6 @@
   </h5>
   <hr class="my-1 hr-spacer">
 
-  <div class="my-2" *ngIf="currentField == 'airFlow'">
-    <h6>
-      Air Flow
-      <br>
-      <small class="text-muted">
-        Volumetric flow rate of the air in the compressor system, referenced to the compressor inlet conditions.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
 
   <div class="help-content">
     <div class="my-2" *ngIf="currentField == 'motorBhp'">
@@ -28,6 +17,7 @@
           Input power required at the compressor input shaft for a specific speed, capacity and pressure condition. Generally
           shown on the compressor panel.
         </small>
+        <hr>
       </h6>
     </div>
     <div class="my-2" *ngIf="currentField == 'bhpUnloaded'">
@@ -36,6 +26,7 @@
         <br>
         <small class="text-muted">
           Brake horse power in the un-loaded condition.</small>
+          <hr>
       </h6>
     </div>
     <div class="my-2" *ngIf="currentField == 'annualOperatingHours'">
@@ -44,6 +35,7 @@
         <br>
         <small class="text-muted">
           Time for which the compressor operates in a year.</small>
+          <hr>
       </h6>
     </div>
     <div class="my-2" *ngIf="currentField == 'runTimeUnloaded'">
@@ -53,6 +45,7 @@
         <small class="text-muted">
           Percentage of time the compressor runs in un-loaded condition.
         </small>
+        <hr>
       </h6>
     </div>
   </div>
@@ -62,6 +55,7 @@
       <br>
       <small class="text-muted">
         Percentage of time the compressor runs in loaded condition.</small>
+        <hr>
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'efficiencyLoaded'">
@@ -71,6 +65,7 @@
       <small class="text-muted">
 
         Percentage of efficiency in loaded condition.</small>
+        <hr>
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'efficiencyUnloaded'">
@@ -79,6 +74,7 @@
       <br>
       <small class="text-muted">
         Percentage of efficiency in un-loaded condition.</small>
+        <hr>
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'costOfElectricity'">
@@ -87,6 +83,7 @@
       <br>
       <small class="text-muted">
         Cost of electricity per kWh.</small>
+        <hr>
     </h6>
   </div>
 </div>

@@ -46,7 +46,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
   curveArea: any;
   xMaxDefault: number = 4000;
   xMinDefault: number = 0;
-  // yMinDefualt: number = 0.01;
+  // yMinDefault: number = 0.01;
   yMinDefault: number = 1;
   yMaxDefault: number = 100000;
   htmlElement: any;
@@ -197,16 +197,16 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = true;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
@@ -216,26 +216,26 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -243,7 +243,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -251,7 +251,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       if (this.hoverBtnExpand) {
         this.displayExpandTooltip = true;
       }
@@ -259,7 +259,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
       }
@@ -380,7 +380,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
     this.temp600p = [100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5, 4.9, 4.8, 4.7, 4.6, 4.5, 4.4, 4.3, 4.2, 4.1, 4, 3.9, 3.8, 3.7, 3.6, 3.5, 3.4, 3.3, 3.2, 3.1, 3, 2.9, 2.8, 2.7, 2.6, 2.5, 2.4, 2.3, 2.2, 2.1, 2, 1.9, 1.8, 1.7, 1.6, 1.5, 1.4, 1.3, 1.2, 1.1, 1, 0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55, 0.5, 0.49, 0.48, 0.47, 0.46, 0.45, 0.44, 0.43, 0.42, 0.41, 0.4, 0.39, 0.38, 0.37, 0.36, 0.35, 0.34, 0.33, 0.32, 0.31, 0.3, 0.29, 0.28, 0.27, 0.26, 0.25, 0.24, 0.23, 0.22, 0.21, 0.2, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.1, 0.095, 0.09, 0.085, 0.08, 0.075, 0.07, 0.065, 0.06, 0.055, 0.05, 0.045, 0.04, 0.035, 0.03, 0.025, 0.02, 0.015, 0.01, 0.0095, 0.009, 0.0085, 0.008, 0.0075, 0.007, 0.0065, 0.006, 0.0055, 0.005, 0.0045, 0.004, 0.0035, 0.003, 0.0025, 0.002, 0.0015, 0.001];
     this.temp600e = [2865.33, 2891.79, 2921.02, 2953.16, 2988.35, 3026.61, 3067.75, 3111.43, 3157.18, 3204.48, 3252.82, 3301.68, 3350.61, 3399.19, 3447.03, 3493.84, 3503.05, 3512.21, 3521.32, 3530.37, 3539.36, 3548.3, 3557.18, 3565.99, 3574.75, 3583.44, 3592.07, 3600.64, 3609.14, 3617.59, 3625.97, 3630.13, 3634.29, 3638.42, 3642.54, 3646.65, 3650.74, 3654.81, 3658.87, 3662.92, 3666.95, 3667.75, 3668.56, 3669.36, 3670.16, 3670.96, 3671.76, 3672.56, 3673.36, 3674.16, 3674.96, 3675.76, 3676.56, 3677.36, 3678.15, 3678.95, 3679.74, 3680.54, 3681.33, 3682.13, 3682.92, 3683.71, 3684.51, 3685.3, 3686.09, 3686.88, 3687.67, 3688.46, 3689.25, 3690.03, 3690.82, 3691.61, 3692.39, 3693.18, 3693.97, 3694.75, 3695.54, 3696.32, 3697.1, 3697.88, 3698.67, 3699.06, 3699.45, 3699.84, 3700.23, 3700.62, 3701.01, 3701.4, 3701.79, 3702.18, 3702.57, 3702.65, 3702.73, 3702.8, 3702.88, 3702.96, 3703.04, 3703.11, 3703.19, 3703.27, 3703.35, 3703.43, 3703.5, 3703.58, 3703.66, 3703.74, 3703.82, 3703.89, 3703.97, 3704.05, 3704.13, 3704.2, 3704.28, 3704.36, 3704.44, 3704.52, 3704.59, 3704.67, 3704.75, 3704.83, 3704.9, 3704.98, 3705.06, 3705.14, 3705.22, 3705.29, 3705.37, 3705.45, 3705.53, 3705.6, 3705.68, 3705.72, 3705.76, 3705.8, 3705.84, 3705.88, 3705.91, 3705.95, 3705.99, 3706.03, 3706.07, 3706.11, 3706.15, 3706.19, 3706.23, 3706.26, 3706.3, 3706.34, 3706.38, 3706.38, 3706.39, 3706.39, 3706.4, 3706.4, 3706.4, 3706.41, 3706.41, 3706.42, 3706.42, 3706.42, 3706.43, 3706.43, 3706.44, 3706.44, 3706.44, 3706.45, 3706.45];
 
-    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement != this.defaultEnthalpyUnit) {
+    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement !== this.defaultEnthalpyUnit) {
       this.enthalpyArray = this.convertArray(this.enthalpyArray, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
 
       this.quality01e = this.convertArray(this.quality01e, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
@@ -419,7 +419,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
       this.temp600e = this.convertArray(this.temp600e, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
     }
 
-    if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement != this.defaultPressureUnit) {
+    if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement !== this.defaultPressureUnit) {
       this.pressureArray = this.convertArray(this.pressureArray, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
       this.quality01p = this.convertArray(this.quality01p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
       this.quality02p = this.convertArray(this.quality02p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
@@ -470,14 +470,14 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
   }
 
   convertVal(val: number, from: string, to: string) {
-    if (val != undefined) {
+    if (val !== undefined) {
       val = this.convertUnitsService.value(val).from(from).to(to);
     }
     return val;
   }
   roundVal(val: number, digits: number) {
     let test = Number(val.toFixed(digits));
-    return test
+    return test;
   }
 
 
@@ -494,12 +494,12 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
     this.yMin = this.yMinDefault;
 
     //enthalpy-pressure graph
-    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement != this.defaultEnthalpyUnit) {
+    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement !== this.defaultEnthalpyUnit) {
       this.xMax = this.convertVal(this.xMax, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
       this.xMin = this.convertVal(this.xMin, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
     }
 
-    if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement != 'kPa') {
+    if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement !== 'kPa') {
       this.yMax = this.convertVal(this.yMax, 'kPa', this.settings.steamPressureMeasurement);
       this.yMin = this.convertVal(this.yMin, 'kPa', this.settings.steamPressureMeasurement);
     }
@@ -521,7 +521,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
         right: 20,
         bottom: 50,
         left: 70
-      }
+      };
       this.width = containerWidth - this.margin.left - this.margin.right;
       this.height = containerHeight - this.margin.top - this.margin.bottom;
     }
@@ -535,7 +535,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
         right: containerWidth * 0.05,
         bottom: containerHeight * 0.1,
         left: containerWidth * 0.05
-      }
+      };
 
       this.width = containerWidth - this.margin.left - this.margin.right;
       this.height = containerHeight - this.margin.top - this.margin.bottom;
@@ -676,7 +676,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
       return {
         'pressure': pressureArray[i],
         'enthalpy': enthalpyArray[i]
-      }
+      };
     });
     return dataset;
   }
@@ -698,7 +698,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
         return y(d.pressure);
       });
 
-    if (count == 0) {
+    if (count === 0) {
       this.svg.append("path")
         .data([dataset])
         .attr("class", "line")
@@ -707,7 +707,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
         .style('stroke', '#777')
         .style('stroke-width', '1.5px');
     }
-    else if (count == 1) {
+    else if (count === 1) {
       this.svg.append("path")
         .data([dataset])
         .attr("class", "line")
@@ -757,7 +757,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
   }
 
   addXAxisLabel() {
-    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement != this.defaultEnthalpyUnit) {
+    if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement !== this.defaultEnthalpyUnit) {
       this.xAxisLabel = "Enthalpy (Btu/lb)";
     }
     else {
@@ -816,7 +816,7 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
       x.domain([this.xMin, this.xMax]);
       y.domain([this.yMin, this.yMax]);
 
-      if (this.settings.steamSpecificEnthalpyMeasurement != this.defaultEnthalpyUnit) {
+      if (this.settings.steamSpecificEnthalpyMeasurement !== this.defaultEnthalpyUnit) {
         liquidEnthalpy = this.convertVal(liquidEnthalpy, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
         gasEnthalpy = this.convertVal(gasEnthalpy, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement);
       }
@@ -825,12 +825,12 @@ export class SaturatedPropertiesPhGraphComponent implements OnInit {
       let pointADataset = {
         'pressure': pressure,
         'enthalpy': liquidEnthalpy
-      }
+      };
 
       let pointBDataset = {
         'pressure': pressure,
         'enthalpy': gasEnthalpy
-      }
+      };
 
       let lineDataset = this.getDataSet([pressure, pressure], [liquidEnthalpy, gasEnthalpy]);
 

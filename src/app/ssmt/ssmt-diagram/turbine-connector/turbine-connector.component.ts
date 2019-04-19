@@ -14,10 +14,24 @@ export class TurbineConnectorComponent implements OnInit {
   noInletConnection: boolean;
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
+  @Input()
+  massFlow: number;
 
+  connectorClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(){
+    this.getClasses();
+  }
+
+  getClasses(){
+    this.connectorClasses = [this.inletColor];
+    if(this.massFlow < 1e-3){
+      this.connectorClasses = ['no-steam-flow'];
+    }
   }
 
   hoverEquipment(str: string) {
@@ -25,9 +39,9 @@ export class TurbineConnectorComponent implements OnInit {
   }
 
   hoverConnector() {
-    if (this.inletColor == 'makeup-water') {
+    if (this.inletColor === 'makeup-water') {
       this.emitSetHover.emit('makeupWaterCondensateHovered');
-    } else if (this.inletColor == 'low-pressure') {
+    } else if (this.inletColor === 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
     }
   }

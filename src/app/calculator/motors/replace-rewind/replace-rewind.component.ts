@@ -1,6 +1,6 @@
 
 import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
-import { ReplaceRewindService } from './replace-rewind.service'
+import { ReplaceRewindService } from './replace-rewind.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 
@@ -32,7 +32,7 @@ export class ReplaceRewindComponent implements OnInit {
     annualEnergySavings: 0,
     costSavings: 0,
     simplePayback: 0
-  }
+  };
 
   rewoundMotorInputs: ReplaceRewindData;
   newMotorInputs: ReplaceRewindData;
@@ -138,24 +138,24 @@ export class ReplaceRewindComponent implements OnInit {
 
 
 export interface ReplaceRewindData {
-  operatingHours: number,
-  motorSize: number,
-  load: number,
-  electricityCost: number,
-  currentEfficiency: number,
-  rewindEfficiencyLoss: number,
-  costOfRewind: number,
-  newEfficiency: number,
-  purchaseCost: number,
+  operatingHours: number;
+  motorSize: number;
+  load: number;
+  electricityCost: number;
+  currentEfficiency: number;
+  rewindEfficiencyLoss: number;
+  costOfRewind: number;
+  newEfficiency: number;
+  purchaseCost: number;
 }
 
 export interface ReplaceRewindResults {
-  differentialCost: number,
-  rewoundEnergyUse: number,
-  rewoundEnergyCost: number,
-  newEnergyUse: number,
-  newEnergyCost: number,
-  annualEnergySavings: number,
-  costSavings: number,
-  simplePayback: number
+  differentialCost: number;
+  rewoundEnergyUse: number;
+  rewoundEnergyCost: number;
+  newEnergyUse: number;
+  newEnergyCost: number;
+  annualEnergySavings: number;
+  costSavings: number;
+  simplePayback: number;
 }

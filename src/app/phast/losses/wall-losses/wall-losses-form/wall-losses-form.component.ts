@@ -91,7 +91,7 @@ export class WallLossesFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
-  //check iputs for errors
+  //check inputs for errors
   checkWarnings() {
     let tmpLoss: WallLoss = this.wallLossesService.getWallLossFromForm(this.wallLossesForm);
     this.warnings = this.wallLossesService.checkWarnings(tmpLoss);
@@ -110,7 +110,7 @@ export class WallLossesFormComponent implements OnInit {
     let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
     this.wallLossesForm.patchValue({
       conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
-    })
+    });
     this.calculate.emit(true);
     this.save();
   }
@@ -128,11 +128,11 @@ export class WallLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
-      let newMaterial = this.surfaceOptions.filter(material => { return material.surface == event.surface })
-      if (newMaterial.length != 0) {
+      let newMaterial = this.surfaceOptions.filter(material => { return material.surface === event.surface; });
+      if (newMaterial.length !== 0) {
         this.wallLossesForm.patchValue({
           surfaceShape: newMaterial[0].id
-        })
+        });
         this.setProperties();
       }
     }

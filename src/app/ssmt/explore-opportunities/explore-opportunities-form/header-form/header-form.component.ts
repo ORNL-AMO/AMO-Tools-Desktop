@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { SSMT, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
-import { HeaderService } from '../../../header/header.service';
-import { FormGroup } from '@angular/forms';
+import { HeaderService, HeaderRanges } from '../../../header/header.service';
+import { FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-header-form',
@@ -64,35 +64,48 @@ export class HeaderFormComponent implements OnInit {
   }
 
   initForms() {
+
     if (this.ssmt.headerInput.highPressure) {
-      this.baselineHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressure, this.settings);
+      this.baselineHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressure, this.settings, this.ssmt.boilerInput);
     } else {
-      this.baselineHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings);
+      this.baselineHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.ssmt.boilerInput);
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure) {
-      this.modificationHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure, this.settings);
+      this.modificationHighPressureForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure, this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput);
     } else {
-      this.modificationHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings);
+      this.modificationHighPressureForm = this.headerService.initHighestPressureHeaderForm(this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput);
     }
 
     if (this.ssmt.headerInput.lowPressure) {
-      this.baselineLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.lowPressure, this.settings);
+      let pressureMax: number;
+      if (this.ssmt.headerInput.numberOfHeaders == 3) {
+        pressureMax = this.ssmt.headerInput.mediumPressure.pressure;
+      } else {
+        pressureMax = this.ssmt.headerInput.highPressure.pressure;
+      }
+      this.baselineLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.lowPressure, this.settings, undefined, pressureMax);
     } else {
       this.baselineLowPressureForm = this.headerService.initHeaderForm(this.settings);
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure) {
-      this.modificationLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure, this.settings);
+      let pressureMax: number;
+      if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.numberOfHeaders == 3) {
+        pressureMax = this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure.pressure;
+      } else {
+        pressureMax = this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.pressure;
+      }
+      this.modificationLowPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure, this.settings, undefined, pressureMax);
     } else {
       this.modificationLowPressureForm = this.headerService.initHeaderForm(this.settings);
     }
 
     if (this.ssmt.headerInput.mediumPressure) {
-      this.baselineMediumPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.mediumPressure, this.settings);
+      this.baselineMediumPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.mediumPressure, this.settings, this.ssmt.headerInput.lowPressure.pressure, this.ssmt.headerInput.highPressure.pressure);
     } else {
       this.baselineMediumPressureForm = this.headerService.initHeaderForm(this.settings);
     }
     if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure) {
-      this.modificationMediumPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure, this.settings);
+      this.modificationMediumPressureForm = this.headerService.getHeaderFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure, this.settings, this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.pressure, this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.pressure);
     } else {
       this.modificationMediumPressureForm = this.headerService.initHeaderForm(this.settings);
     }
@@ -116,17 +129,17 @@ export class HeaderFormComponent implements OnInit {
   }
 
   initHighPressureHeatLoss() {
-    if (this.baselineHighPressureForm.controls.heatLoss.value != this.modificationHighPressureForm.controls.heatLoss.value) {
+    if (this.baselineHighPressureForm.controls.heatLoss.value !== this.modificationHighPressureForm.controls.heatLoss.value) {
       this.showHighPressureHeatLoss = true;
     }
   }
   initMediumPressureHeatLoss() {
-    if (this.baselineMediumPressureForm.controls.heatLoss.value != this.modificationMediumPressureForm.controls.heatLoss.value) {
+    if (this.baselineMediumPressureForm.controls.heatLoss.value !== this.modificationMediumPressureForm.controls.heatLoss.value) {
       this.showMediumPressureHeatLoss = true;
     }
   }
   initLowPressureHeatLoss() {
-    if (this.baselineLowPressureForm.controls.heatLoss.value != this.modificationLowPressureForm.controls.heatLoss.value) {
+    if (this.baselineLowPressureForm.controls.heatLoss.value !== this.modificationLowPressureForm.controls.heatLoss.value) {
       this.showLowPressureHeatLoss = true;
     }
   }
@@ -145,21 +158,21 @@ export class HeaderFormComponent implements OnInit {
   }
 
   toggleHighPressureHeatLoss() {
-    if (this.showHighPressureHeatLoss == false) {
+    if (this.showHighPressureHeatLoss === false) {
       this.modificationHighPressureForm.controls.heatLoss.patchValue(this.baselineHighPressureForm.controls.heatLoss.value);
       this.save();
     }
   }
 
   toggleMediumPressureHeatLoss() {
-    if (this.showMediumPressureHeatLoss == false) {
+    if (this.showMediumPressureHeatLoss === false) {
       this.modificationMediumPressureForm.controls.heatLoss.patchValue(this.baselineMediumPressureForm.controls.heatLoss.value);
       this.save();
     }
   }
 
   toggleLowPressureHeatLoss() {
-    if (this.showLowPressureHeatLoss == false) {
+    if (this.showLowPressureHeatLoss === false) {
       this.modificationLowPressureForm.controls.heatLoss.patchValue(this.baselineLowPressureForm.controls.heatLoss.value);
       this.save();
     }
@@ -179,17 +192,17 @@ export class HeaderFormComponent implements OnInit {
   }
 
   initHighPressureSteamUsage() {
-    if (this.baselineHighPressureForm.controls.processSteamUsage.value != this.modificationHighPressureForm.controls.processSteamUsage.value) {
+    if (this.baselineHighPressureForm.controls.processSteamUsage.value !== this.modificationHighPressureForm.controls.processSteamUsage.value) {
       this.showHighPressureSteamUsage = true;
     }
   }
   initMediumPressureSteamUsage() {
-    if (this.baselineMediumPressureForm.controls.processSteamUsage.value != this.modificationMediumPressureForm.controls.processSteamUsage.value) {
+    if (this.baselineMediumPressureForm.controls.processSteamUsage.value !== this.modificationMediumPressureForm.controls.processSteamUsage.value) {
       this.showMediumPressureSteamUsage = true;
     }
   }
   initLowPressureSteamUsage() {
-    if (this.baselineLowPressureForm.controls.processSteamUsage.value != this.modificationLowPressureForm.controls.processSteamUsage.value) {
+    if (this.baselineLowPressureForm.controls.processSteamUsage.value !== this.modificationLowPressureForm.controls.processSteamUsage.value) {
       this.showLowPressureSteamUsage = true;
     }
   }
@@ -207,21 +220,21 @@ export class HeaderFormComponent implements OnInit {
     }
   }
   toggleHighPressureSteamUsage() {
-    if (this.showHighPressureSteamUsage == false) {
+    if (this.showHighPressureSteamUsage === false) {
       this.modificationHighPressureForm.controls.processSteamUsage.patchValue(this.baselineHighPressureForm.controls.processSteamUsage.value);
       this.save();
     }
   }
 
   toggleMediumPressureSteamUsage() {
-    if (this.showMediumPressureSteamUsage == false) {
+    if (this.showMediumPressureSteamUsage === false) {
       this.modificationMediumPressureForm.controls.processSteamUsage.patchValue(this.baselineMediumPressureForm.controls.processSteamUsage.value);
       this.save();
     }
   }
 
   toggleLowPressureSteamUsage() {
-    if (this.showLowPressureSteamUsage == false) {
+    if (this.showLowPressureSteamUsage === false) {
       this.modificationLowPressureForm.controls.processSteamUsage.patchValue(this.baselineLowPressureForm.controls.processSteamUsage.value);
       this.save();
     }
@@ -231,12 +244,13 @@ export class HeaderFormComponent implements OnInit {
     // add rest of baseline if we ever enable baseline
     // let tmpBaselineHighPressureHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.baselineHighPressureForm);
     // this.ssmt.headerInput.highPressure = tmpBaselineHighPressureHeader;
-    let tmpModificationHighPressureHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.modificationHighPressureForm)
+    let tmpModificationHighPressureHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.modificationHighPressureForm);
     this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure = tmpModificationHighPressureHeader;
     let tmpModificationMediumPressureHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.modificationMediumPressureForm);
     this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure = tmpModificationMediumPressureHeader;
     let tmpModificationLowPressureHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.modificationLowPressureForm);
     this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure = tmpModificationLowPressureHeader;
+    this.updatePressureMaxMins();
     this.emitSave.emit(this.ssmt);
   }
 
@@ -245,8 +259,21 @@ export class HeaderFormComponent implements OnInit {
     this.exploreOpportunitiesService.currentField.next(str);
   }
 
-  focusOut() {
-    // this.exploreOpportunitiesService.currentTab.next('header');
-    // this.exploreOpportunitiesService.currentField.next('default');
+
+  updatePressureMaxMins() {
+    // add rest of baseline if we ever enable baseline
+    let pressureMax: number;
+    if (this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.numberOfHeaders == 3) {
+      pressureMax = this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressure.pressure;
+    } else {
+      pressureMax = this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.pressure;
+    }
+    let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, undefined, pressureMax);
+    this.modificationLowPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), Validators.min(ranges.pressureMin)]);
+    this.modificationLowPressureForm.controls.pressure.updateValueAndValidity();
+
+    ranges = this.headerService.getRanges(this.settings, undefined, this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressure.pressure, this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressure.pressure);
+    this.modificationMediumPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), Validators.min(ranges.pressureMin)]);
+    this.modificationMediumPressureForm.controls.pressure.updateValueAndValidity();
   }
 }

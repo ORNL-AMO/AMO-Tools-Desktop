@@ -61,9 +61,9 @@ export class HeatLossComponent implements OnInit {
   }
 
   initForm() {
-    if(this.heatLossService.heatLossInput){
+    if (this.heatLossService.heatLossInput) {
       this.heatLossForm = this.heatLossService.getFormFromObj(this.heatLossService.heatLossInput, this.settings);
-    }else{
+    }else {
       this.heatLossForm = this.heatLossService.initForm(this.settings);
     }
   }
@@ -77,7 +77,7 @@ export class HeatLossComponent implements OnInit {
   calculate(form: FormGroup) {
     this.input = this.heatLossService.getObjFromForm(form);
     this.heatLossService.heatLossInput = this.input;
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       this.results = this.steamService.heatLoss(this.input, this.settings);
     } else {
       this.results = this.getEmptyResults();
@@ -101,7 +101,7 @@ export class HeatLossComponent implements OnInit {
       outletSpecificEnthalpy: 0,
       outletSpecificEntropy: 0,
       outletTemperature: 0
-    }
+    };
 
     return emptyResults;
   }

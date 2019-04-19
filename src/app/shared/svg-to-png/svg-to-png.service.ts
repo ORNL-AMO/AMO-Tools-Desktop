@@ -12,7 +12,7 @@ export class SvgToPngService {
     let exportFunc = require("save-svg-as-png/saveSvgAsPng.js");
     let svg;
     for (let i = 0; i < element.nativeElement.children.length; i++) {
-      if (element.nativeElement.children[i].nodeName.trim() == "svg") {
+      if (element.nativeElement.children[i].nodeName.trim() === "svg") {
         console.log("found an svg");
         svg = element.nativeElement.children[i];
       }
@@ -25,8 +25,8 @@ export class SvgToPngService {
       dlLink.setAttribute("type", "image");
       dlLink.setAttribute("href", data);
       dlLink.setAttribute("download", fn);
-      dlLink.click()
-    })
+      dlLink.click();
+    });
   }
 
 

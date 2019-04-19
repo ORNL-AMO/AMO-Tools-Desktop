@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-header-summary',
@@ -11,6 +12,10 @@ export class HeaderSummaryComponent implements OnInit {
   baselineInputData: SSMTInputs;
   @Input()
   modificationInputData: Array<{ name: string, inputData: SSMTInputs }>;
+  @Input()
+  settings: Settings;
+  @Input()
+  printView: boolean;
 
   collapse: boolean = true;
   numMods: number = 0;

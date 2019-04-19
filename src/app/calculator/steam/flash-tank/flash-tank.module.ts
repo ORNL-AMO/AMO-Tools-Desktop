@@ -17,6 +17,6 @@ import { SharedModule } from '../../../shared/shared.module';
   ],
   declarations: [FlashTankComponent, FlashTankFormComponent, FlashTankResultsComponent, FlashTankHelpComponent],
   providers: [FlashTankService],
-  exports: [FlashTankComponent]
+  exports: [FlashTankComponent, FlashTankResultsComponent]
 })
 export class FlashTankModule { }

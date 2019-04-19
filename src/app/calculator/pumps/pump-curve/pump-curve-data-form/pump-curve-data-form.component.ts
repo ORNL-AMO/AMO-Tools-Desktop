@@ -29,7 +29,7 @@ export class PumpCurveDataFormComponent implements OnInit {
   dataForm: any;
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
-  ]
+  ];
   //regEquation: string = null;
   //rSq: string = null;
   maxFlowWarnings: Array<string> = [];

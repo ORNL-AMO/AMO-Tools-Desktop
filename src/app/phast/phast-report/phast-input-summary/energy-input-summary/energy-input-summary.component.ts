@@ -23,7 +23,7 @@ export class EnergyInputSummaryComponent implements OnInit {
   ngOnInit() {
     this.lossData = new Array();
     if (this.phast.losses) {
-      if(this.phast.modifications){
+      if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
       if (this.phast.losses.energyInputEAF) {
@@ -35,14 +35,14 @@ export class EnergyInputSummaryComponent implements OnInit {
             this.phast.modifications.forEach(mod => {
               let modData = mod.phast.losses.energyInputEAF[index];
               modificationData.push(modData);
-            })
+            });
           }
           this.lossData.push({
             baseline: loss,
             modifications: modificationData
-          })
+          });
           index++;
-        })
+        });
       }
     }
   }

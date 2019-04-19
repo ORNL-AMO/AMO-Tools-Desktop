@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { BoilerService } from './boiler.service';
-import { BoilerInput } from '../../shared/models/steam/ssmt';
-import { FormGroup } from '@angular/forms';
+import { BoilerService, BoilerRanges } from './boiler.service';
+import { BoilerInput, HeaderWithHighestPressure, HeaderInput } from '../../shared/models/steam/ssmt';
+import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from '../compare.service';
+import { HeaderService } from '../header/header.service';
 
 @Component({
   selector: 'app-boiler',
@@ -26,6 +27,10 @@ export class BoilerComponent implements OnInit {
   emitSave = new EventEmitter<BoilerInput>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  modificationIndex: number;
+  @Input()
+  headerInput: HeaderInput;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -33,40 +38,50 @@ export class BoilerComponent implements OnInit {
   options: any;
   showModal: boolean;
   idString: string = 'baseline_';
+  highPressureHeaderForm: FormGroup;
+  lowPressureHeaderForm: FormGroup;
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
-    private compareService: CompareService) { }
+    private compareService: CompareService, private headerService: HeaderService) { }
 
   ngOnInit() {
-    if(!this.isBaseline){
+    if (!this.isBaseline) {
       this.idString = 'modification_';
     }
+    this.initForm();
+    this.setFuelTypes();
+    if (this.selected === false) {
+      this.disableForm();
+    }
+
+    //this.boilerForm.controls.preheatMakeupWater.disable();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (this.selected === true) {
+        this.enableForm();
+      } else if (this.selected === false) {
+        this.disableForm();
+      }
+    }
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.initForm();
+    }
+  }
+
+  initForm() {
     if (this.boilerInput) {
       this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
     } else {
       this.boilerForm = this.boilerService.initForm(this.settings);
     }
-    this.setFuelTypes();
-    if (this.selected == false) {
-      this.disableForm();
-    }
-
-    this.boilerForm.controls.preheatMakeupWater.disable();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.selected && !changes.selected.isFirstChange()) {
-      if (this.selected == true) {
-        this.enableForm();
-      } else if (this.selected == false) {
-        this.disableForm();
-      }
-    }
+    this.setPressureForms(this.boilerInput);
   }
 
   setFuelTypes() {
-    if (this.boilerForm.controls.fuelType.value == 0) {
+    if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    } else if (this.boilerForm.controls.fuelType.value == 1) {
+    } else if (this.boilerForm.controls.fuelType.value === 1) {
       this.options = this.suiteDbService.selectGasFlueGasMaterials();
     }
   }
@@ -76,18 +91,42 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.fuelType.enable();
     this.boilerForm.controls.fuel.enable();
     this.boilerForm.controls.blowdownFlashed.enable();
-    //this.boilerForm.controls.preheatMakeupWater.enable();
+    this.boilerForm.controls.preheatMakeupWater.enable();
   }
 
   disableForm() {
     this.boilerForm.controls.fuelType.disable();
     this.boilerForm.controls.fuel.disable();
     this.boilerForm.controls.blowdownFlashed.disable();
-    // this.boilerForm.controls.preheatMakeupWater.disable();
+    this.boilerForm.controls.preheatMakeupWater.disable();
+  }
+
+  setPreheatMakeupWater() {
+    if (this.boilerForm.controls.preheatMakeupWater.value == true) {
+      this.boilerForm.controls.approachTemperature.setValidators([Validators.min(0.000005), Validators.required]);
+    } else {
+      this.boilerForm.controls.approachTemperature.setValidators([]);
+    }
+    this.save();
+  }
+
+  setPressureForms(boilerInput: BoilerInput) {
+    if (boilerInput) {
+      if (this.headerInput.highPressure) {
+        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, boilerInput);
+      }
+
+      if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressure) {
+        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
+      } else if (this.headerInput.lowPressure && this.headerInput.numberOfHeaders > 1) {
+        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressure, this.settings, boilerInput.deaeratorPressure, undefined);
+      }
+    }
   }
 
   save() {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+    this.setPressureForms(tmpBoiler);
     this.emitSave.emit(tmpBoiler);
   }
 

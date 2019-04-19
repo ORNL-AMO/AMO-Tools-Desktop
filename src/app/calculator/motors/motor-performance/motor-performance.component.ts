@@ -51,10 +51,10 @@ export class MotorPerformanceComponent implements OnInit {
     //use system settings for standalone calculator
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
-      if (this.settings.powerMeasurement != 'hp') {
+      if (this.settings.powerMeasurement !== 'hp') {
         this.performanceForm.patchValue({
           horsePower: '150'
-        })
+        });
       }
     }
 
@@ -103,7 +103,7 @@ export class MotorPerformanceComponent implements OnInit {
     if (this.calculator) {
       this.calcExists = true;
       if (this.calculator.motorPerformanceInputs) {
-        this.performanceForm = this.motorPerformanceService.initFormFromObj(this.calculator.motorPerformanceInputs)
+        this.performanceForm = this.motorPerformanceService.initFormFromObj(this.calculator.motorPerformanceInputs);
       } else {
         if (this.psat) {
           this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
@@ -130,7 +130,7 @@ export class MotorPerformanceComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       motorPerformanceInputs: tmpMotorPerformanceInputs
-    }
+    };
     return tmpCalculator;
   }
 
@@ -156,7 +156,7 @@ export class MotorPerformanceComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

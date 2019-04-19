@@ -61,7 +61,7 @@ export class AssessmentCreateComponent implements OnInit {
     if (this.type) {
       this.newAssessmentForm.patchValue({
         assessmentType: this.type
-      })
+      });
     }
 
   }
@@ -102,12 +102,12 @@ export class AssessmentCreateComponent implements OnInit {
       this.createModal.onHidden.subscribe(() => {
         this.assessmentService.tab = 'system-setup';
         //psat
-        if (this.newAssessmentForm.controls.assessmentType.value == 'Pump') {
+        if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
           tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
           let tmpPsat = this.assessmentService.getNewPsat();
           tmpAssessment.psat = tmpPsat;
-          if (this.settings.powerMeasurement != 'hp') {
+          if (this.settings.powerMeasurement !== 'hp') {
             tmpAssessment.psat.inputs.motor_rated_power = 150;
           }
           tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
@@ -115,12 +115,12 @@ export class AssessmentCreateComponent implements OnInit {
             this.assessmentDbService.setAll().then(() => {
               tmpAssessment.id = assessmentId;
               this.assessmentService.createAssessment.next(false);
-              this.router.navigateByUrl('/psat/' + tmpAssessment.id)
-            })
-          })
+              this.router.navigateByUrl('/psat/' + tmpAssessment.id);
+            });
+          });
         }
         //phast
-        else if (this.newAssessmentForm.controls.assessmentType.value == 'Furnace') {
+        else if (this.newAssessmentForm.controls.assessmentType.value === 'Furnace') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PHAST');
           tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
           let tmpPhast = this.assessmentService.getNewPhast();
@@ -131,7 +131,7 @@ export class AssessmentCreateComponent implements OnInit {
             electricityCost: this.settings.electricityCost || .066,
             steamCost: this.settings.steamCost || 4.69,
             fuelCost: this.settings.fuelCost || 3.99
-          }
+          };
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
             this.assessmentDbService.setAll().then(() => {
               tmpAssessment.id = assessmentId;
@@ -141,7 +141,7 @@ export class AssessmentCreateComponent implements OnInit {
           });
         }
         //fsat
-        else if (this.newAssessmentForm.controls.assessmentType.value == 'Fan') {
+        else if (this.newAssessmentForm.controls.assessmentType.value === 'Fan') {
           let tmpAssessment = this.assessmentService.getNewAssessment('FSAT');
           tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
           tmpAssessment.directoryId = this.directory.id;
@@ -162,16 +162,16 @@ export class AssessmentCreateComponent implements OnInit {
                 parentDirectoryId: this.directory.parentDirectoryId,
                 createdDate: this.directory.createdDate,
                 modifiedDate: this.directory.modifiedDate
-              }
+              };
               this.indexedDbService.putDirectory(tmpDirRef).then(results => {
                 this.assessmentService.createAssessment.next(false);
-                this.router.navigateByUrl('/fsat/' + tmpAssessment.id)
+                this.router.navigateByUrl('/fsat/' + tmpAssessment.id);
               });
-            })
+            });
           });
         }
         //ssmt
-        else if (this.newAssessmentForm.controls.assessmentType.value == 'Steam') {
+        else if (this.newAssessmentForm.controls.assessmentType.value === 'Steam') {
           let tmpAssessment = this.assessmentService.getNewAssessment('SSMT');
           tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
           tmpAssessment.directoryId = this.directory.id;
@@ -191,12 +191,12 @@ export class AssessmentCreateComponent implements OnInit {
                 parentDirectoryId: this.directory.parentDirectoryId,
                 createdDate: this.directory.createdDate,
                 modifiedDate: this.directory.modifiedDate
-              }
+              };
               this.indexedDbService.putDirectory(tmpDirRef).then(results => {
                 this.assessmentService.createAssessment.next(false);
-                this.router.navigateByUrl('/ssmt/' + tmpAssessment.id)
+                this.router.navigateByUrl('/ssmt/' + tmpAssessment.id);
               });
-            })
+            });
           });
         } if (this.newAssessmentForm.controls.assessmentType.value == 'TreasureHunt') {
           let tmpAssessment = this.assessmentService.getNewAssessment('TreasureHunt');
@@ -226,7 +226,7 @@ export class AssessmentCreateComponent implements OnInit {
             })
           });
         }
-      })
+      });
     }
   }
 
@@ -244,9 +244,9 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   onKey(str: string) {
-    if (str != '') {
+    if (str !== '') {
       let temp = this.allAssessments.filter(f => f.name.toLowerCase().indexOf(str.toLowerCase()) >= 0);
-      if (temp.length != 0) {
+      if (temp.length !== 0) {
         this.filteredAssessments = temp;
       } else {
         this.filteredAssessments = this.allAssessments;
@@ -263,11 +263,11 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
     if (parentDir) {
       let str = parentDir.name + '/';
       while (parentDir.parentDirectoryId) {
-        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
         str = parentDir.name + '/' + str;
       }
       return str;
@@ -290,7 +290,7 @@ export class AssessmentCreateComponent implements OnInit {
     let tmpFolder: Directory = {
       name: this.newFolderForm.controls.folderName.value,
       parentDirectoryId: this.newFolderForm.controls.directoryId.value
-    }
+    };
     let tmpSettings: Settings = this.settingsDbService.getByDirectoryId(this.newFolderForm.controls.directoryId.value);
     delete tmpSettings.facilityInfo;
     delete tmpSettings.id;
@@ -299,7 +299,7 @@ export class AssessmentCreateComponent implements OnInit {
         companyName: this.newFolderForm.controls.companyName.value,
         facilityName: this.newFolderForm.controls.facilityName.value,
         date: new Date().toLocaleDateString()
-      }
+      };
     }
     this.indexedDbService.addDirectory(tmpFolder).then((newDirId) => {
       tmpSettings.directoryId = newDirId;
@@ -309,12 +309,12 @@ export class AssessmentCreateComponent implements OnInit {
             this.getAllDirectories();
             this.newAssessmentForm.patchValue({
               'directoryId': newDirId
-            })
+            });
             this.cancelNewFolder();
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
   initFolderForm() {
@@ -323,6 +323,6 @@ export class AssessmentCreateComponent implements OnInit {
       'companyName': [''],
       'facilityName': [''],
       'directoryId': [this.directory.id, Validators.required]
-    })
+    });
   }
 }

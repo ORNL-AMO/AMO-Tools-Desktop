@@ -38,24 +38,24 @@ export class HelpPanelComponent implements OnInit {
   ngOnInit() {
     this.currentFieldSub = this.helpPanelService.currentField.subscribe(val => {
       this.currentField = val;
-    })
+    });
     if (this.inSetup) {
       this.stepTabSub = this.fsatService.stepTab.subscribe(tab => {
         this.stepTab = tab;
-      })
+      });
     }
     else {
       this.stepTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
         this.stepTab = val;
-      })
+      });
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.containerHeight){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight) {
       this.getContainerHeight();
     }
   }
@@ -82,7 +82,7 @@ export class HelpPanelComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  save(){
+  save() {
     this.emitSave.emit(true);
   }
 }

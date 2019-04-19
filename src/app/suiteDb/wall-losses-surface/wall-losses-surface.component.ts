@@ -50,8 +50,8 @@ export class WallLossesSurfaceComponent implements OnInit {
       this.allMaterials = this.suiteDbService.selectWallLossesSurface();
       this.indexedDbService.getWallLossesSurface().then(idbResults => {
         this.allCustomMaterials = idbResults;
-        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface == material.surface }).id;
-        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.surface == material.surface }).id;
+        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.surface === material.surface; }).id;
         this.setExisting();
       });
     }
@@ -66,10 +66,10 @@ export class WallLossesSurfaceComponent implements OnInit {
     if (this.canAdd) {
       this.canAdd = false;
       let suiteDbResult = this.suiteDbService.insertWallLossesSurface(this.newMaterial);
-      if (suiteDbResult == true) {
+      if (suiteDbResult === true) {
         this.indexedDbService.addWallLossesSurface(this.newMaterial).then(idbResults => {
           this.closeModal.emit(this.newMaterial);
-        })
+        });
       }
     }
   }
@@ -77,7 +77,7 @@ export class WallLossesSurfaceComponent implements OnInit {
   updateMaterial() {
     this.newMaterial.id = this.sdbEditMaterialId;
     let suiteDbResult = this.suiteDbService.updateWallLossesSurface(this.newMaterial);
-    if (suiteDbResult == true) {
+    if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       this.indexedDbService.putWallLossesSurface(this.newMaterial).then(val => {
@@ -89,7 +89,7 @@ export class WallLossesSurfaceComponent implements OnInit {
   deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteWallLossesSurface(this.sdbEditMaterialId);
-      if (suiteDbResult == true) {
+      if (suiteDbResult === true) {
         this.indexedDbService.deleteWallLossesSurface(this.idbEditMaterialId).then(val => {
           this.closeModal.emit(this.newMaterial);
         });
@@ -103,21 +103,21 @@ export class WallLossesSurfaceComponent implements OnInit {
         id: this.existingMaterial.id,
         surface: this.existingMaterial.surface,
         conditionFactor: this.existingMaterial.conditionFactor
-      }
+      };
     }
     else if (this.selectedMaterial) {
       this.newMaterial = {
         surface: this.selectedMaterial.surface + ' (mod)',
         conditionFactor: this.selectedMaterial.conditionFactor
-      }
+      };
       this.checkMaterialName();
     }
   }
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.sdbEditMaterialId) {
-        return material.surface.toLowerCase().trim() == this.newMaterial.surface.toLowerCase().trim();
+      if (material.id !== this.sdbEditMaterialId) {
+        return material.surface.toLowerCase().trim() === this.newMaterial.surface.toLowerCase().trim();
       }
     });
 
@@ -125,7 +125,7 @@ export class WallLossesSurfaceComponent implements OnInit {
       this.nameError = 'This name is in use by another material';
       this.isValidMaterialName = false;
     }
-    else if (this.newMaterial.surface.toLowerCase().trim() == '') {
+    else if (this.newMaterial.surface.toLowerCase().trim() === '') {
       this.nameError = 'The material must have a name';
       this.isValidMaterialName = false;
     }
@@ -137,7 +137,7 @@ export class WallLossesSurfaceComponent implements OnInit {
 
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.surface.toLowerCase().trim() == this.newMaterial.surface.toLowerCase().trim() })
+    let test = _.filter(this.allMaterials, (material) => { return material.surface.toLowerCase().trim() === this.newMaterial.surface.toLowerCase().trim(); });
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing surface';
       this.isValidMaterialName = false;

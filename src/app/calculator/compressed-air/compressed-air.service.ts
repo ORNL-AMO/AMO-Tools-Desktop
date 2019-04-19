@@ -16,7 +16,7 @@ export class CompressedAirService {
   } = {
       inputsArray: new Array<BagMethodInput>(),
       operatingHours: 0
-    }
+    };
 
   pnuematicValveInputs: PneumaticValve = {
     inletPressure: 0,
@@ -122,7 +122,7 @@ export class CompressedAirService {
       airFlowRequirement: 0,
       initialTankPressure: 0,
       finalTankPressure: 0
-    }
+    };
     this.meteredStorageInputs = {
       method: 2,
       lengthOfDemand: 0,
@@ -131,7 +131,7 @@ export class CompressedAirService {
       initialTankPressure: 0,
       finalTankPressure: 0,
       meteredControl: 0,
-    }
+    };
     this.bridgeCompressorInputs = {
       method: 3,
       distanceToCompressorRoom: 0,
@@ -139,12 +139,12 @@ export class CompressedAirService {
       airDemand: 0,
       allowablePressureDrop: 0,
       atmosphericPressure: 14.7
-    }
+    };
     this.generalMethodInputs = {
       airDemand: 0,
       allowablePressureDrop: 0,
       method: 0,
       atmosphericPressure: 14.7,
-    }
+    };
   }
 }

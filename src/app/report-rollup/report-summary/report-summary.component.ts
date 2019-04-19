@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
-import { PhastResultsData } from '../report-rollup.service';
+import { PhastResultsData } from '../report-rollup-models';
 
 @Component({
   selector: 'app-report-summary',
@@ -17,6 +17,8 @@ export class ReportSummaryComponent implements OnInit {
   showPsatModal = new EventEmitter<boolean>();
   @Output('showFsatModal')
   showFsatModal = new EventEmitter<boolean>();
+  @Output('showSsmtModal')
+  showSsmtModal = new EventEmitter<boolean>();
   @Input()
   phastResults: Array<PhastResultsData>;
   @Input()
@@ -25,7 +27,8 @@ export class ReportSummaryComponent implements OnInit {
   numPsats: number;
   @Input()
   numFsats: number;
-
+  @Input()
+  numSsmt: number;
 
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();
@@ -52,14 +55,18 @@ export class ReportSummaryComponent implements OnInit {
     this.showPsatModal.emit(true);
   }
 
-  showFanModal(){
+  showFanModal() {
     this.showFsatModal.emit(true);
+  }
+
+  showSteamModal(){
+    this.showSsmtModal.emit(true);
   }
 
   collapseSummary(str: string) {
     this.showSummary = str;
     setTimeout(() => {
       this.hideSummary.emit(true);
-    },250)
+    }, 250);
   }
 }

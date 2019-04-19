@@ -15,17 +15,17 @@ export class HoverTurbineTableComponent implements OnInit {
   @Input()
   outputData: SSMTOutput;
 
-  turbine: TurbineOutput
+  turbine: TurbineOutput;
   constructor() { }
 
   ngOnInit() {
-    if (this.turbineType == 'condensing') {
+    if (this.turbineType === 'condensing') {
       this.turbine = this.outputData.condensingTurbine;
-    } else if (this.turbineType == 'highToLow') {
+    } else if (this.turbineType === 'highToLow') {
       this.turbine = this.outputData.highToLowPressureTurbine;
-    } else if (this.turbineType == 'highToMedium') {
+    } else if (this.turbineType === 'highToMedium') {
       this.turbine = this.outputData.highPressureToMediumPressureTurbine;
-    } else if (this.turbineType == 'mediumToLow') {
+    } else if (this.turbineType === 'mediumToLow') {
       this.turbine = this.outputData.mediumToLowPressureTurbine;
     }
   }

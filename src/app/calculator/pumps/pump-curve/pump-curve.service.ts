@@ -31,7 +31,6 @@ export class PumpCurveService {
 
 
   getFormFromObj(inputObj: PumpCurve): FormGroup {
-    let headOrder = inputObj.headOrder - 2;
     let measurementOption = 1;
     if (inputObj.measurementOption == 'Diameter') {
       measurementOption = 0;
@@ -51,9 +50,9 @@ export class PumpCurveService {
 
     let tmpForm: FormGroup = this.formBuilder.group({
       dataRows: [tmpFormArray],
-      dataOrder: [inputObj.dataRows.length || null],
+      dataOrder: [inputObj.dataOrder],
       maxFlow: [inputObj.maxFlow, [Validators.required, Validators.min(0), Validators.max(1000000)]],
-      headOrder: [headOrder],
+      headOrder: [inputObj.headOrder],
       headConstant: [inputObj.headConstant, [Validators.required, Validators.min(0)]],
       measurementOption: [measurementOption],
       measurementOption2: [measurementOption],
@@ -85,11 +84,9 @@ export class PumpCurveService {
       };
       dataRows.push(dataRow);
     }
-    let headOrder = form.controls.headOrder.value + 2;
-
     pumpCurve = {
       dataRows: dataRows,
-      dataOrder: dataRows.length,
+      dataOrder: form.controls.dataOrder.value,
       measurementOption: form.controls.measurementOption.value == 1 ? "Speed" : "Diameter",
       baselineMeasurement: form.controls.baselineMeasurement.value,
       modifiedMeasurement: form.controls.modifiedMeasurement.value,
@@ -97,7 +94,7 @@ export class PumpCurveService {
       exploreHead: form.controls.exploreHead.value,
       exploreFlow: form.controls.exploreFlow.value,
       explorePumpEfficiency: form.controls.explorePumpEfficiency.value,
-      headOrder: headOrder,
+      headOrder: form.controls.headOrder.value,
       headConstant: form.controls.headConstant.value,
       headFlow: form.controls.headFlow.value,
       headFlow2: form.controls.headFlow2.value,
@@ -277,26 +274,29 @@ export class PumpCurveService {
 
   getData(pumpCurve: PumpCurve, selectedFormView: string): Array<{ x: number, y: number }> {
     let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
+    let maxDataFlow: number;
     if (selectedFormView == 'Data') {
-      let maxDataFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
+      let tmpDataFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
+      maxDataFlow = tmpDataFlow.flow;
       let tmpArr = new Array<any>();
       pumpCurve.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);
-      })
+      });
       let results = regression.polynomial(tmpArr, { order: pumpCurve.dataOrder, precision: 10 });
       this.regEquation.next(results.string);
-      for (let i = 0; i <= maxDataFlow.flow; i = i + 10) {
+      for (let i = 0; i <= maxDataFlow; i = i + 10) {
         let yVal = results.predict(i);
         if (yVal[1] > 0) {
           data.push({
             x: i,
             y: yVal[1]
-          })
+          });
         }
       }
     } else if (selectedFormView == 'Equation') {
+      maxDataFlow = pumpCurve.maxFlow;
       this.regEquation.next(null);
-      for (let i = 0; i <= pumpCurve.maxFlow + 10; i = i + 10) {
+      for (let i = 0; i <= maxDataFlow + 10; i = i + 10) {
         let yVal = this.calculateY(pumpCurve, i);
         if (yVal > 0) {
           data.push({
@@ -417,7 +417,6 @@ export class PumpCurveService {
     let maxY: { x: number, y: number } = { x: 0, y: 0 };
     let tmpDataBaseline = dataBaseline;
     if (graphPumpCurve) {
-      // let baseMaxY = _.maxBy(dataBaseline, (val) => { return val.y });
       let baseMaxY = _.maxBy(tmpDataBaseline, (val) => { return val.y });
       if (baseMaxY === undefined) {
         let maxHead = _.maxBy(pumpCurve.dataRows, (val) => { return val.head });
@@ -455,6 +454,19 @@ export class PumpCurveService {
       }
     }
     max = maxY;
+    return max;
+  }
+
+  // use this function to get max y value in a data array
+  // this is to aid in repairing the max y value bug apparent
+  // in baseline pump/fan curves
+  getMaxYValue(data: Array<{x: number, y: number}>): number {
+    let max = 0;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].y > max) {
+        max = data[i].y;
+      }
+    }
     return max;
   }
 

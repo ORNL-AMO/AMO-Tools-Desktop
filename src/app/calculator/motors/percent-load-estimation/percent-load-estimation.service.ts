@@ -89,7 +89,7 @@ export class PercentLoadEstimationService {
       ratedVoltage: 0,
       ratedCurrent: 0,
       powerFactor: 0
-    }
+    };
     return this.fieldMeasurementInputs;
   }
 
@@ -129,7 +129,7 @@ export class PercentLoadEstimationService {
       ratedVoltage: form.controls.ratedVoltage.value,
       ratedCurrent: form.controls.ratedCurrent.value,
       powerFactor: form.controls.powerFactor.value
-    }
+    };
     return this.fieldMeasurementInputs;
   }
 
@@ -141,7 +141,7 @@ export class PercentLoadEstimationService {
       percentLoad: this.percentLoad(data),
       maxVoltageDeviation: this.voltageDeviation(data),
       voltageUnbalance: this.voltageUnbalance(data)
-    }
+    };
     return outputs;
   }
 
@@ -187,29 +187,29 @@ export class PercentLoadEstimationService {
 }
 
 export interface SlipMethod {
-  synchronousSpeed: number,
-  measuredSpeed: number,
-  nameplateFullLoadSpeed: number
+  synchronousSpeed: number;
+  measuredSpeed: number;
+  nameplateFullLoadSpeed: number;
 }
 
 
 export interface FieldMeasurementInputs {
-  phase1Voltage: number,
-  phase1Amps: number,
-  phase2Voltage: number,
-  phase2Amps: number,
-  phase3Voltage: number,
-  phase3Amps: number,
-  ratedVoltage: number,
-  ratedCurrent: number,
-  powerFactor: number
+  phase1Voltage: number;
+  phase1Amps: number;
+  phase2Voltage: number;
+  phase2Amps: number;
+  phase3Voltage: number;
+  phase3Amps: number;
+  ratedVoltage: number;
+  ratedCurrent: number;
+  powerFactor: number;
 }
 
 export interface FieldMeasurementOutputs {
-  averageVoltage: number,
-  averageCurrent: number,
-  inputPower: number,
-  percentLoad: number,
-  maxVoltageDeviation: number,
-  voltageUnbalance: number
+  averageVoltage: number;
+  averageCurrent: number;
+  inputPower: number;
+  percentLoad: number;
+  maxVoltageDeviation: number;
+  voltageUnbalance: number;
 }

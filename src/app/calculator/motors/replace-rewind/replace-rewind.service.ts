@@ -91,7 +91,7 @@ export class ReplaceRewindService {
       costOfRewind: isNewMotor ? null : form.controls.costOfRewind.value,
       newEfficiency: isNewMotor ? form.controls.newEfficiency.value : null,
       purchaseCost: isNewMotor ? form.controls.purchaseCost.value : null
-    }
+    };
     return this.replaceRewindData;
   }
 
@@ -120,7 +120,7 @@ export class ReplaceRewindService {
       annualEnergySavings: 0,
       costSavings: 0,
       simplePayback: 0
-    }
+    };
     results.differentialCost = this.getDifferentialCost(inputs);
     results.rewoundEnergyUse = this.getRewoundEnergyUse(inputs);
     results.rewoundEnergyCost = this.getRewoundEnergyCost(inputs, results);

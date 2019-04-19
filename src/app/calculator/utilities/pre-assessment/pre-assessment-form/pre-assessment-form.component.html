@@ -14,7 +14,7 @@
     </label>
   </div>
 
-  <div class="d-flex flex-column pre-assessement-form" [@collapsed]="assessment.collapsedState">
+  <div class="d-flex flex-column pre-assessment-form" [@collapsed]="assessment.collapsedState">
     <div class="d-flex w-100 justify-content-center pt-1 pb-1" *ngIf="assessment.collapsedState != 'closed'">
       <div class="btn-group btn-group-sm align-self-center">
         <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setAssessmentType('Metered')"

@@ -72,17 +72,17 @@ export class ExploreFixturesFormComponent implements OnInit {
       this.baselineWarnings.push(tmpWarnings);
       tmpWarnings = this.fixtureLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index]);
       this.modificationWarnings.push(tmpWarnings);
-      check = (loss.materialName != this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].materialName)
+      check = (loss.materialName !== this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].materialName);
       if (!this.showFixtures && check) {
         this.showFixtures = check;
       }
       this.showMaterial.push(check);
       index++;
-    })
+    });
   }
 
   initFeedRate(rate1: number, rate2: number) {
-    if (rate1 != rate2) {
+    if (rate1 !== rate2) {
       return true;
     } else {
       return false;
@@ -93,18 +93,18 @@ export class ExploreFixturesFormComponent implements OnInit {
     this.showInitialTemp = new Array<boolean>();
     let index: number = 0;
     this.phast.losses.fixtureLosses.forEach(loss => {
-      let check = (loss.initialTemperature != this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature)
+      let check = (loss.initialTemperature !== this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature);
       if (!this.showAllTemp && check) {
         this.showAllTemp = check;
       }
       this.showInitialTemp.push(check);
       index++;
-    })
+    });
   }
 
 
   toggleFixtures() {
-    if (this.showFixtures == false) {
+    if (this.showFixtures === false) {
       let index: number = 0;
       this.phast.losses.fixtureLosses.forEach(loss => {
         let baselineFeedRate: number = loss.feedRate;
@@ -120,7 +120,7 @@ export class ExploreFixturesFormComponent implements OnInit {
   }
 
   toggleFeedRate(index: number, baselineFeedRate: number) {
-    if (this.showFeedRate[index] == false) {
+    if (this.showFeedRate[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].feedRate = baselineFeedRate;
       this.checkModificationWarnings(index);
       this.calculate();
@@ -128,26 +128,26 @@ export class ExploreFixturesFormComponent implements OnInit {
   }
 
   toggleMaterial(index: number, materialName: number) {
-    if (this.showMaterial[index] == false) {
+    if (this.showMaterial[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].materialName = materialName;
       this.calculate();
     }
   }
 
   toggleAllTemp() {
-    if (this.showAllTemp == false) {
+    if (this.showAllTemp === false) {
       let index: number = 0;
       this.phast.losses.fixtureLosses.forEach(loss => {
         this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature = loss.initialTemperature;
         this.checkModificationWarnings(index);
         index++;
-      })
+      });
       this.calculate();
     }
   }
 
   toggleInletTemp(index: number, baselineTemp: number) {
-    if (this.showInitialTemp[index] == false) {
+    if (this.showInitialTemp[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].initialTemperature = baselineTemp;
       this.checkModificationWarnings(index);
       this.calculate();
@@ -175,13 +175,13 @@ export class ExploreFixturesFormComponent implements OnInit {
       back: 1,
       componentStr: 'fixture-losses',
       showAdd: true
-    })
+    });
   }
 
 
   setSpecificHeat(loss: FixtureLoss) {
-    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(loss.materialName)
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    let material: SolidLoadChargeMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(loss.materialName);
+    if (this.settings.unitsOfMeasure === 'Metric') {
       material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
     }
     loss.specificHeat = Number(material.specificHeatSolid.toFixed(3));
@@ -194,6 +194,6 @@ export class ExploreFixturesFormComponent implements OnInit {
   }
 
   calculate() {
-    this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true);
   }
 }

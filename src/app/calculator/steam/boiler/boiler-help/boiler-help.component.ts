@@ -46,16 +46,16 @@ export class BoilerHelpComponent implements OnInit {
 
   getOptionDisplayUnit() {
     let displayUnit: string;
-    if (this.thermodynamicQuantity == 0) {
+    if (this.thermodynamicQuantity === 0) {
       displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
       return displayUnit;
-    } else if (this.thermodynamicQuantity == 1) {
+    } else if (this.thermodynamicQuantity === 1) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
       return displayUnit;
-    } else if (this.thermodynamicQuantity == 2) {
+    } else if (this.thermodynamicQuantity === 2) {
       displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
       return displayUnit;
-    } else if (this.thermodynamicQuantity == 3) {
+    } else if (this.thermodynamicQuantity === 3) {
       return displayUnit;
     }
   }

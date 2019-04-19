@@ -19,7 +19,7 @@ export class PrvService {
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       inletMassFlow: ['', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
       outletPressure: ['', [Validators.required, Validators.min(ranges.outletPressureMin), Validators.max(ranges.outletPressureMax)]],
-    })
+    });
     return tmpForm;
   }
 
@@ -31,7 +31,7 @@ export class PrvService {
       quantityValue: [inputObj.quantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       inletMassFlow: [inputObj.inletMassFlow, [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
       outletPressure: [inputObj.outletPressure, [Validators.required, Validators.min(ranges.outletPressureMin), Validators.max(ranges.outletPressureMax)]],
-    })
+    });
     return tmpForm;
   }
 
@@ -42,7 +42,7 @@ export class PrvService {
       feedwaterThermodynamicQuantity: [2, Validators.required],
       feedwaterQuantityValue: ['', [Validators.required, Validators.min(ranges.feedwaterQuantityValueMin), Validators.max(ranges.feedwaterQuantityValueMax)]],
       desuperheatingTemp: ['', [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
-    })
+    });
     return tmpForm;
   }
 
@@ -53,7 +53,7 @@ export class PrvService {
       feedwaterThermodynamicQuantity: [inputObj.feedwaterThermodynamicQuantity || 2],
       feedwaterQuantityValue: [inputObj.feedwaterQuantityValue, [Validators.required, Validators.min(ranges.feedwaterQuantityValueMin), Validators.max(ranges.feedwaterQuantityValueMax)]],
       desuperheatingTemp: [inputObj.desuperheatingTemp, [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
-    })
+    });
     return tmpForm;
   }
 
@@ -79,7 +79,7 @@ export class PrvService {
       feedwaterThermodynamicQuantity: feedwaterThermodynamicQuantity,
       feedwaterQuantityValue: feedwaterQuantityValue,
       desuperheatingTemp: desuperheatingTemp
-    }
+    };
     return input;
   }
 
@@ -95,7 +95,7 @@ export class PrvService {
       inletMassFlowMax: Number(this.convertUnitsService.value(10000).from('klb').to(settings.steamMassFlowMeasurement).toFixed(0)),
       outletPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       outletPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3))
-    }
+    };
     return ranges;
   }
 
@@ -108,7 +108,7 @@ export class PrvService {
       feedwaterQuantityValueMax: feedwaterMinMax.max,
       desuperheatingTempMin: Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(0)),
       desuperheatingTempMax: Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(0))
-    }
+    };
     return ranges;
   }
 

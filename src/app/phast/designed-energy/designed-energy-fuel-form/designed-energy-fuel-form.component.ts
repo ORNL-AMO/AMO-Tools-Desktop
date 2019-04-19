@@ -16,16 +16,16 @@ export class DesignedEnergyFuelFormComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  focusField(str: string) {
-    this.changeField.emit(str);
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
   }
 
   calculate() {

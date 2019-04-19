@@ -60,12 +60,12 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   initData() {
-    if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
+    if (this.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
       this.baselineFlueGas = this.phast.losses.flueGasLosses[0].flueGasByMass;
     } else {
       this.baselineFlueGas = this.phast.losses.flueGasLosses[0].flueGasByVolume;
     }
-    if (this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
+    if (this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
       this.modifiedFlueGas = this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasByMass;
     } else {
       this.modifiedFlueGas = this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasByVolume;
@@ -79,7 +79,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   initExcessAir() {
-    if (this.baselineFlueGas.excessAirPercentage != this.modifiedFlueGas.excessAirPercentage) {
+    if (this.baselineFlueGas.excessAirPercentage !== this.modifiedFlueGas.excessAirPercentage) {
       this.showExcessAir = true;
     } else {
       this.showExcessAir = false;
@@ -87,7 +87,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   initO2() {
-    if (this.baselineFlueGas.o2InFlueGas != this.modifiedFlueGas.o2InFlueGas) {
+    if (this.baselineFlueGas.o2InFlueGas !== this.modifiedFlueGas.o2InFlueGas) {
       this.showO2 = true;
     } else {
       this.showO2 = false;
@@ -95,7 +95,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   initAirTemp() {
-    if (this.baselineFlueGas.combustionAirTemperature != this.modifiedFlueGas.combustionAirTemperature) {
+    if (this.baselineFlueGas.combustionAirTemperature !== this.modifiedFlueGas.combustionAirTemperature) {
       this.showAirTemp = true;
     } else {
       this.showAirTemp = false;
@@ -111,7 +111,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   toggleFlueGas() {
-    if (this.showFlueGas == false) {
+    if (this.showFlueGas === false) {
       this.showExcessAir = false;
       this.showAirTemp = false;
       this.showO2 = false;
@@ -122,32 +122,32 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   toggleAirTemp() {
-    if (this.showAirTemp == false) {
+    if (this.showAirTemp === false) {
       this.modifiedFlueGas.combustionAirTemperature = this.baselineFlueGas.combustionAirTemperature;
       this.checkModificationWarnings(this.modifiedFlueGas);
     }
   }
 
   toggleExcessAir() {
-    if (this.showExcessAir == false) {
+    if (this.showExcessAir === false) {
       this.modifiedFlueGas.excessAirPercentage = this.baselineFlueGas.excessAirPercentage;
       this.checkModificationWarnings(this.modifiedFlueGas);
     }
   }
 
   toggleO2() {
-    if (this.showO2 == false) {
+    if (this.showO2 === false) {
       this.modifiedFlueGas.o2InFlueGas = this.baselineFlueGas.o2InFlueGas;
       this.checkModificationWarnings(this.modifiedFlueGas);
     }
   }
 
   changeMethod(num: number) {
-    if (num == 1) {
+    if (num === 1) {
       this.baselineFlueGas.o2InFlueGas = 0;
       this.baselineFlueGas.excessAirPercentage = 0;
       this.checkBaselineWarnings(this.baselineFlueGas);
-    } else if (num == 2) {
+    } else if (num === 2) {
       this.modifiedFlueGas.o2InFlueGas = 0;
       this.modifiedFlueGas.excessAirPercentage = 0;
       this.checkModificationWarnings(this.modifiedFlueGas);
@@ -162,7 +162,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
       let input = this.buildInput(loss);
       loss.excessAirPercentage = this.phastService.flueGasCalculateExcessAir(input);
     }
-    if (num == 1) {
+    if (num === 1) {
       this.checkBaselineWarnings(loss);
     } else {
       this.checkModificationWarnings(loss);
@@ -176,7 +176,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
       let input = this.buildInput(loss);
       loss.o2InFlueGas = this.phastService.flueGasCalculateO2(input);
     }
-    if (num == 1) {
+    if (num === 1) {
       this.checkBaselineWarnings(loss);
     } else {
       this.checkModificationWarnings(loss);
@@ -224,7 +224,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   calculate() {
-    this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true);
   }
 
   focusField(str: string) {
@@ -233,7 +233,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
       tabName: 'Flue Gas',
       step: 1,
       componentStr: 'flue-gas-losses'
-    })
+    });
   }
 
 }

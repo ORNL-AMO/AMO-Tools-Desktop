@@ -1,6 +1,21 @@
-td{
-    padding: 0px;
-    font-size: small;
+.card.treasure-hunt-card{
+  padding: .25rem;
+  font-size: small;
+  border-right: #2E4053 solid 5px;
+  border-left: #2E4053 solid 5px;
+}
+
+.col-item-br{
+  border-right: solid 2px #2E4053;
+}
+
+.opp-sheet-col .fa.fa-edit{
+  text-align: center;
+  font-size: 35px;
+}
+
+.opportunity-name a, .opportunity-name .fa{
+  font-size: large;
 }
 
 a:not([href]):not([tabindex]):hover {
@@ -9,46 +24,19 @@ a:not([href]):not([tabindex]):hover {
   cursor: pointer;
 }
 
-  .dropdown-menu.shown{
-    display: grid;
-    padding: 0px;
+.card.not-selected{
+  background-color: #efefef;
 }
 
-.dropdown-item{
-    padding: .25rem;
-    font-size: small;
+.no-opp-sheet, .click-link.danger{
+  color: red !important;
 }
 
-.dropdown-toggle::after{
-  margin-left: 0;
+.opp-sheet-exists{
+  color: green;
 }
 
-.dropdown-toggle{
-  padding: 3px;
-}
-
-.dropdown-menu.shown{
-  left: -160px;
-  background-color: #ececec;
-}
-
-.dropdown-item:hover{
+/* .opp-sheet-col .no-opp-sheet:hover, .opp-sheet-col .opp-sheet-exists:hover{
   cursor: pointer;
-}
-
-.summary-card-header{
-    padding: 6px;
-}
-
-.summary-card-body{
-    height: 200px;
-}
-
-.dropdown-toggle,
-.btn-primary{
-  background-color: #2E4053;
-}
-
-.fa .fa-edit{
-  font-size: large;
-}
+  text-decoration: underline;
+} */

@@ -38,11 +38,11 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
       if (val) {
         this.getSelected();
       }
-    })
+    });
 
     this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
       this.selectAll(val);
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -52,12 +52,12 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showModal && !changes.showModal.firstChange) {
-      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+      if (changes.showModal.currentValue !== changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
     if (changes.importing) {
-      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
+      if (changes.importing.currentValue === false && changes.importing.previousValue === true) {
         this.getCustomMaterials();
       }
     }
@@ -75,7 +75,7 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   getCustomMaterials() {
     this.indexedDbService.getAllSolidLoadChargeMaterial().then(idbResults => {
       this.solidChargeMaterials = idbResults;
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.convertAllMaterials();
       }
     });
@@ -111,12 +111,12 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
     this.getCustomMaterials();
   }
   getSelected() {
-    let selected: Array<SolidLoadChargeMaterial> = _.filter(this.solidChargeMaterials, (material) => { return material.selected == true });
+    let selected: Array<SolidLoadChargeMaterial> = _.filter(this.solidChargeMaterials, (material) => { return material.selected === true; });
     this.customMaterialService.selectedSolidCharge = selected;
   }
   selectAll(val: boolean) {
     this.solidChargeMaterials.forEach(material => {
       material.selected = val;
-    })
+    });
   }
 }

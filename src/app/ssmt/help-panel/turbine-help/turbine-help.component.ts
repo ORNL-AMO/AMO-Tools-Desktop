@@ -20,13 +20,13 @@ export class TurbineHelpComponent implements OnInit {
   ngOnInit() {
     this.turbineHelpSubscription = this.ssmtService.turbineOperationHelp.subscribe(val => {
       this.currentTurbine = val;
-    })
+    });
     this.turbineOperationValueSubscription = this.ssmtService.turbineOperationValue.subscribe(val => {
       this.currentOperationValue = val;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.turbineHelpSubscription.unsubscribe();
     this.turbineOperationValueSubscription.unsubscribe();
   }

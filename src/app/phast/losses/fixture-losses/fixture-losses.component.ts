@@ -56,7 +56,7 @@ export class FixtureLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -82,12 +82,12 @@ export class FixtureLossesComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._fixtureLosses.push(tmpLoss);
-      })
+      });
       this.total = this.getTotal();
     }
   }
@@ -108,7 +108,7 @@ export class FixtureLossesComponent implements OnInit {
   }
 
   calculate(loss: FixtureLossObj) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       let tmpLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.fixtureLosses(tmpLoss, this.settings);
     } else {
@@ -128,7 +128,7 @@ export class FixtureLossesComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpFixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
@@ -152,7 +152,7 @@ export class FixtureLossesComponent implements OnInit {
 }
 
 export interface FixtureLossObj {
-  form: FormGroup,
-  heatLoss: number,
-  collapse: boolean
+  form: FormGroup;
+  heatLoss: number;
+  collapse: boolean;
 }

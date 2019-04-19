@@ -123,11 +123,11 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         tmpArray = this.preAssessmentService.getResults(this.preAssessments, this.directorySettings, this.resultType);
       }
       tmpArray.forEach(val => {
-        if (isNaN(val.percent) == false && val.percent != 0) {
+        if (isNaN(val.percent) === false && val.percent !== 0) {
           this.values.unshift(val.percent);
           this.labels.unshift(val.name + ": " + val.percent.toFixed(2) + "%");
         }
-      })
+      });
       if (this.values.length > 0) {
         this.destroy = true;
       }

@@ -1,46 +1,44 @@
-<div class="no-data no-data-phast" *ngIf="_exhaustGasLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_exhaustGasLosses.length == 0 && inSetup && !lossesLocked"
+  (click)="addLoss()">
   <h3>You have no Exhaust Gas Losses</h3>
   <h4>Add some now.</h4>
 </div>
-<div class="no-data no-data-phast no-data-no-add" *ngIf="(_exhaustGasLosses.length == 0 && lossesLocked) || (_exhaustGasLosses.length == 0 && !inSetup)">
+<div class="no-data no-data-phast no-data-no-add"
+  *ngIf="(_exhaustGasLosses.length == 0 && lossesLocked) || (_exhaustGasLosses.length == 0 && !inSetup)">
   <h3>You have no Exhaust Gas Losses</h3>
   <h4>To add Exhaust Gas Losses you will need to delete your current modifications and return to system setup.</h4>
 </div>
 
-<div class="card-form" *ngFor="let loss of _exhaustGasLosses; let lossIndex = index;">
-  <div class="row">
-    <div class="col-12">
-      <form class="name-input-form" [formGroup]="loss.form">
-        <div class="input-group">
-          <span class="input-group-addon units left" (click)="collapseLoss(loss)">
-            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
-            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
-          </span>
-          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name">
-          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
-            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
-          </span>
-        </div>
-      </form>
+<div class="card-form d-flex flex-column" *ngFor="let loss of _exhaustGasLosses; let lossIndex = index;">
+  <form class="name-input-form" [formGroup]="loss.form">
+    <div class="input-group">
+      <span class="input-group-addon units left" (click)="collapseLoss(loss)">
+        <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+        <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+      </span>
+      <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input"
+        formControlName="name">
+      <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked"
+        (click)="removeLoss(lossIndex)">
+        <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+      </span>
     </div>
+  </form>
+  <div *ngIf="!loss.collapse">
+    <app-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form"
+      (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
+      [lossIndex]="lossIndex" [settings]="settings" [inSetup]="inSetup" [isBaseline]="isBaseline">
+    </app-exhaust-gas-form>
   </div>
-  <div class="row" *ngIf="!loss.collapse">
-    <div class="col-12">
-      <app-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" [inSetup]="inSetup" [isBaseline]="isBaseline"></app-exhaust-gas-form>
-    </div>
-  </div>
-  <div class="row loss-total">
-    <div class="col-12">
-      <div class="form-group">
-        <label class="bold">Exhaust Gas Total</label>
-        <div *ngIf="loss.heatLoss" class="text-center bold">
-          {{loss.heatLoss | sigFigs:'6'}}
-          <span>{{resultsUnit}}</span>
-        </div>
-        <div *ngIf="!loss.heatLoss" class="text-center bold">
-          &mdash; &mdash;
-        </div>
+  <div class="d-flex loss-total">
+    <div class="form-group">
+      <label class="bold">Exhaust Gas Total</label>
+      <div *ngIf="loss.heatLoss" class="text-center bold">
+        {{loss.heatLoss | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+      </div>
+      <div *ngIf="!loss.heatLoss" class="text-center bold">
+        &mdash; &mdash;
       </div>
     </div>
   </div>

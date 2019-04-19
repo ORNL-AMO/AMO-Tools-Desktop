@@ -9,17 +9,17 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
 import { Directory } from '../shared/models/directory';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
-import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput, SSMTInputs } from '../shared/models/steam/ssmt';
+import { SSMT, Modification, BoilerInput, HeaderInput, TurbineInput } from '../shared/models/steam/ssmt';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
-import { SteamService } from '../calculator/steam/steam.service';
 import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
 import { AssessmentService } from '../assessment/assessment.service';
 import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
+import { OperationsService } from './operations/operations.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -43,7 +43,7 @@ export class SsmtComponent implements OnInit {
     'boiler',
     'header',
     'turbine'
-  ]
+  ];
 
   containerHeight: number;
   assessment: Assessment;
@@ -71,6 +71,9 @@ export class SsmtComponent implements OnInit {
 
   calcTab: string;
   calcTabSubscription: Subscription;
+
+  saveSsmtSub: Subscription;
+  modListOpen: boolean = false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private indexedDbService: IndexedDbService,
@@ -80,11 +83,11 @@ export class SsmtComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
-    private steamService: SteamService,
     private headerService: HeaderService,
     private turbineService: TurbineService,
     private boilerService: BoilerService,
-    private assessmentService: AssessmentService
+    private assessmentService: AssessmentService,
+    private operationsService: OperationsService
   ) { }
 
   ngOnInit() {
@@ -96,7 +99,7 @@ export class SsmtComponent implements OnInit {
         this.assessment = dbAssessment;
         this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
         if (this._ssmt.modifications) {
-          if (this._ssmt.modifications.length != 0) {
+          if (this._ssmt.modifications.length !== 0) {
             this.modificationExists = true;
             this.modificationIndex = 0;
             this.compareService.setCompareVals(this._ssmt, 0);
@@ -111,9 +114,9 @@ export class SsmtComponent implements OnInit {
         }
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
-        // if (tmpTab) {
-        //   this.ssmtService.mainTab.next(tmpTab);
-        // }
+        if (tmpTab) {
+          this.ssmtService.mainTab.next(tmpTab);
+        }
       });
     });
     this.subscribeTabs();
@@ -123,37 +126,43 @@ export class SsmtComponent implements OnInit {
       if (val) {
         this.showAddNewModal();
       }
-    })
+    });
 
     this.selectedModSubscription = this.compareService.selectedModification.subscribe(mod => {
       if (mod && this._ssmt) {
         this.modificationIndex = _.findIndex(this._ssmt.modifications, (val) => {
-          return val.ssmt.name == mod.name
-        })
+          return val.ssmt.name === mod.name;
+        });
       } else {
         this.modificationIndex = undefined;
       }
-    })
+    });
 
     this.openModificationSelectSubscription = this.ssmtService.openModificationSelectModal.subscribe(val => {
       if (val) {
-        this.selectModificationModal()
+        this.selectModificationModal();
       }
-    })
+    });
 
     this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
-    })
+    });
 
     this.calcTabSubscription = this.ssmtService.calcTab.subscribe(val => {
       this.calcTab = val;
+    });
+
+    this.saveSsmtSub = this.ssmtService.saveSSMT.subscribe(newSSMT => {
+      if (newSSMT) {
+        this.saveSsmt(newSSMT);
+      }
     })
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    }, 100)
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -170,27 +179,29 @@ export class SsmtComponent implements OnInit {
     this.ssmtService.assessmentTab.next('explore-opportunities');
     this.ssmtService.steamModelTab.next('operations');
     this.calcTabSubscription.unsubscribe();
+    this.ssmtService.saveSSMT.next(undefined);
+    this.saveSsmtSub.unsubscribe();
   }
 
   subscribeTabs() {
     this.mainTabSubscription = this.ssmtService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
-    })
+    });
     this.stepTabSubscription = this.ssmtService.stepTab.subscribe(val => {
       this.stepTab = val;
-      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab == val });
+      this.stepTabIndex = _.findIndex(this.stepTabs, function (tab) { return tab === val; });
 
       this.getContainerHeight();
-    })
+    });
     this.modelTabSubscription = this.ssmtService.steamModelTab.subscribe(val => {
       this.modelTab = val;
       this.getContainerHeight();
-    })
+    });
     this.assessmentTabSubscription = this.ssmtService.assessmentTab.subscribe(val => {
       this.assessmentTab = val;
       this.getContainerHeight();
-    })
+    });
   }
 
   saveSettings(newSettings: Settings) {
@@ -199,7 +210,7 @@ export class SsmtComponent implements OnInit {
       this.indexedDbService.putSettings(this.settings).then(() => {
         this.settingsDbService.setAll().then(() => {
         });
-      })
+      });
     }
   }
 
@@ -227,8 +238,8 @@ export class SsmtComponent implements OnInit {
         results => {
           this.settingsDbService.setAll().then(() => {
             this.getSettings();
-          })
-        })
+          });
+        });
     }
     else {
       //if no settings for directory check parent directory
@@ -239,7 +250,7 @@ export class SsmtComponent implements OnInit {
 
   save() {
     if (this._ssmt.modifications) {
-      if (this._ssmt.modifications.length == 0) {
+      if (this._ssmt.modifications.length === 0) {
         this.modificationExists = false;
       } else {
         this.modificationExists = true;
@@ -250,30 +261,25 @@ export class SsmtComponent implements OnInit {
     this.checkSetupDone();
     this.compareService.setCompareVals(this._ssmt, this.modificationIndex);
     this.assessment.ssmt = (JSON.parse(JSON.stringify(this._ssmt)));
-
-    // if (this._ssmt.setupDone) {
-    //   this.calculateModelService.iterateModel(this._ssmt, this.settings);
-    //   //console.log(outputData);
-    // }
-
-
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.ssmtService.updateData.next(true);
-      })
-    })
+      });
+    });
   }
-
-
 
   checkSetupDone() {
     if (this.modificationExists) {
       this._ssmt.setupDone = true;
     } else {
       let isBoilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
-      let isHeaderValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
+      let isHeaderValid: boolean;
+      if (this._ssmt.boilerInput) {
+        isHeaderValid = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings, this._ssmt.boilerInput);
+      }
       let isTurbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
-      if (isBoilerValid && isHeaderValid && isTurbineValid) {
+      let operationsValid: boolean = this.operationsService.getForm(this._ssmt, this.settings).valid;
+      if (isBoilerValid && isHeaderValid && isTurbineValid && operationsValid) {
         this._ssmt.setupDone = true;
       } else {
         this._ssmt.setupDone = false;
@@ -283,16 +289,19 @@ export class SsmtComponent implements OnInit {
 
   saveBoiler(boilerData: BoilerInput) {
     this._ssmt.boilerInput = boilerData;
+    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveHeaderData(headerInput: HeaderInput) {
     this._ssmt.headerInput = headerInput;
+    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveTurbineData(turbineData: TurbineInput) {
     this._ssmt.turbineInput = turbineData;
+    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
@@ -302,13 +311,13 @@ export class SsmtComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'system-setup') {
-      if (this.stepTab != 'system-basics') {
+    if (this.mainTab === 'system-setup') {
+      if (this.stepTab !== 'system-basics') {
         let assessmentTabIndex: number = this.stepTabIndex - 1;
         let nextTab: string = this.stepTabs[assessmentTabIndex];
         this.ssmtService.stepTab.next(nextTab);
       }
-    } else if (this.mainTab == 'assessment') {
+    } else if (this.mainTab === 'assessment') {
       this.ssmtService.mainTab.next('system-setup');
     }
   }
@@ -318,7 +327,7 @@ export class SsmtComponent implements OnInit {
   }
 
   continue() {
-    if (this.stepTab == 'turbine') {
+    if (this.stepTab === 'turbine') {
       this.ssmtService.mainTab.next('assessment');
     } else {
       let assessmentTabIndex: number = this.stepTabIndex + 1;
@@ -329,24 +338,28 @@ export class SsmtComponent implements OnInit {
 
   getCanContinue() {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this._ssmt.boilerInput, this.settings);
-    let headerValid: boolean = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings);
+    let headerValid: boolean;
+    if (this._ssmt.boilerInput) {
+      headerValid = this.headerService.isHeaderValid(this._ssmt.headerInput, this.settings, this._ssmt.boilerInput);
+    }
     let turbineValid: boolean = this.turbineService.isTurbineValid(this._ssmt.turbineInput, this._ssmt.headerInput, this.settings);
-    if (this.stepTab == 'operations' || this.stepTab == 'system-basics') {
+    let operationsValid: boolean = this.operationsService.getForm(this._ssmt, this.settings).valid;
+    if (this.stepTab === 'operations' || this.stepTab === 'system-basics') {
       return true;
-    } else if (this.stepTab == 'boiler') {
-      if (boilerValid) {
+    } else if (this.stepTab === 'boiler') {
+      if (boilerValid && operationsValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'header') {
-      if (boilerValid && headerValid) {
+    } else if (this.stepTab === 'header') {
+      if (boilerValid && headerValid && operationsValid) {
         return true;
       } else {
         return false;
       }
-    } else if (this.stepTab == 'turbine') {
-      if (boilerValid && headerValid && turbineValid) {
+    } else if (this.stepTab === 'turbine') {
+      if (boilerValid && headerValid && turbineValid && operationsValid) {
         return true;
       } else {
         return false;
@@ -373,6 +386,7 @@ export class SsmtComponent implements OnInit {
 
   selectModificationModal() {
     this.ssmtService.modalOpen.next(true);
+    this.modListOpen = true;
     this.changeModificationModal.show();
   }
 
@@ -380,6 +394,7 @@ export class SsmtComponent implements OnInit {
     this.ssmtService.modalOpen.next(false);
     this.ssmtService.openModificationSelectModal.next(false);
     this.changeModificationModal.hide();
+    this.modListOpen = false;
     this.ssmtService.updateData.next(true);
   }
 

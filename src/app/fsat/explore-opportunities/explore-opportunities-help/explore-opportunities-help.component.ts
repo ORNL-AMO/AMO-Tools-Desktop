@@ -26,14 +26,14 @@ export class ExploreOpportunitiesHelpComponent implements OnInit {
   ngOnInit() {
     this.stepTabSub = this.modifyConditionsService.modifyConditionsTab.subscribe(val => {
       this.stepTab = val;
-    })
+    });
 
     this.currentFieldSub = this.helpPanelService.currentField.subscribe(val => {
       this.currentField = val;
-    })
+    });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.stepTabSub.unsubscribe();
     this.currentFieldSub.unsubscribe();
   }

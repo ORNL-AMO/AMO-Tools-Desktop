@@ -21,11 +21,34 @@ export class FlashTankDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  steamPressureClasses: Array<string>;
+  outletCondensateClasses: Array<string>;
+  inletCondensateClasses: Array<string>;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  ngOnChanges() {
+    this.setClasses();
+  }
+
+  setClasses() {
+    this.steamPressureClasses = [this.steamPressure];
+    this.outletCondensateClasses = ['condensate'];
+    this.inletCondensateClasses = ['condensate'];
+    if (this.flashTank.outletGasMassFlow < 1e-3) {
+      this.steamPressureClasses = ['no-steam-flow']
+    }
+
+    if (this.flashTank.outletLiquidMassFlow < 1e-3) {
+      this.outletCondensateClasses = ['no-steam-flow'];
+    }
+    if (this.flashTank.inletWaterMassFlow < 1e-3) {
+      this.inletCondensateClasses = ['no-steam-flow'];
+    }
+  }
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }
@@ -35,47 +58,47 @@ export class FlashTankDiagramComponent implements OnInit {
   }
 
   hoverHeader() {
-    if (this.steamPressure == 'medium-pressure') {
+    if (this.steamPressure === 'medium-pressure') {
       this.emitSetHover.emit('mediumPressureHovered');
-    } else if (this.steamPressure == 'low-pressure') {
+    } else if (this.steamPressure === 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
     }
   }
 
   selectEquipment() {
-    if (this.flashTankType == 'highPressure') {
+    if (this.flashTankType === 'highPressure') {
       this.emitSelectEquipment.emit('highPressureFlashTank');
-    } else if (this.flashTankType == 'mediumPressure') {
+    } else if (this.flashTankType === 'mediumPressure') {
       this.emitSelectEquipment.emit('mediumPressureFlashTank');
     }
   }
 
   hoverFlashTank() {
-    if (this.flashTankType == 'highPressure') {
+    if (this.flashTankType === 'highPressure') {
       this.emitSetHover.emit('highPressureFlashTankHovered');
-    } else if (this.flashTankType == 'mediumPressure') {
+    } else if (this.flashTankType === 'mediumPressure') {
       this.emitSetHover.emit('mediumPressureFlashTankHovered');
     }
   }
 
   hoverOutletGas() {
-    if (this.flashTankType == 'highPressure') {
+    if (this.flashTankType === 'highPressure') {
       this.emitSetHover.emit('highPressureFlashTankOutletSteamHovered');
-    } else if (this.flashTankType == 'mediumPressure') {
+    } else if (this.flashTankType === 'mediumPressure') {
       this.emitSetHover.emit('mediumPressureFlashTankOutletSteamHovered');
     }
   }
 
   hoverInlet() {
-    if (this.flashTankType == 'mediumPressure') {
+    if (this.flashTankType === 'mediumPressure') {
       this.emitSetHover.emit('mediumPressureFlashTankInletCondensateHovered');
     }
   }
 
   hoverOutlet() {
-    if (this.flashTankType == 'highPressure') {
+    if (this.flashTankType === 'highPressure') {
       this.emitSetHover.emit('highPressureFlashTankOutletCondensateHovered');
-    } else if (this.flashTankType == 'mediumPressure') {
+    } else if (this.flashTankType === 'mediumPressure') {
       this.emitSetHover.emit('mediumPressureFlashTankOutletCondensateHovered');
     }
   }

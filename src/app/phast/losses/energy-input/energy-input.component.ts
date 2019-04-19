@@ -60,7 +60,7 @@ export class EnergyInputComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -91,12 +91,12 @@ export class EnergyInputComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._energyInputs.push(tmpLoss);
-      })
+      });
     }
   }
 
@@ -122,14 +122,14 @@ export class EnergyInputComponent implements OnInit {
     loss.collapse = !loss.collapse;
   }
   calculate(loss: EnInputObj) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       // let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       loss.results = {
         energyInputHeatDelivered: tmpResults.energyInputHeatDelivered,
         energyInputTotalChemEnergy: tmpResults.energyInputTotalChemEnergy,
         grossHeatInput: tmpResults.grossHeatInput
-      }
+      };
       // let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
       // this.energyInputTotal = tmpResults.grossHeatInput;
       // this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
@@ -138,7 +138,7 @@ export class EnergyInputComponent implements OnInit {
         energyInputHeatDelivered: null,
         energyInputTotalChemEnergy: null,
         grossHeatInput: null
-      }
+      };
       this.energyInputTotal = 0;
       this.electricalHeatDelivered = 0;
     }
@@ -151,12 +151,12 @@ export class EnergyInputComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpEnergyInput = this.energyInputService.getLossFromForm(loss.form);
       tmpEnergyInputs.push(tmpEnergyInput);
-    })
+    });
     this.losses.energyInputEAF = tmpEnergyInputs;
     this.savedLoss.emit(true);
   }
@@ -168,13 +168,13 @@ export class EnergyInputComponent implements OnInit {
 }
 
 export interface EnInputObj {
-  form: FormGroup,
-  results: EnInputResultsObj
-  collapse: boolean
+  form: FormGroup;
+  results: EnInputResultsObj;
+  collapse: boolean;
 }
 
 export interface EnInputResultsObj {
-  energyInputHeatDelivered: number,
-  energyInputTotalChemEnergy: number,
-  grossHeatInput: number
+  energyInputHeatDelivered: number;
+  energyInputTotalChemEnergy: number;
+  grossHeatInput: number;
 }

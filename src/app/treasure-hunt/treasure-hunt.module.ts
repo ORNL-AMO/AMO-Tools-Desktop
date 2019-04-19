@@ -25,6 +25,7 @@ import { OpportunitySheetService } from './standalone-opportunity-sheet/opportun
 import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
 import { SharedModule } from '../shared/shared.module';
+import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
 
 @NgModule({
   imports: [
@@ -53,7 +54,7 @@ import { SharedModule } from '../shared/shared.module';
     OpportunitySheetResultsComponent, 
     OpportunitySheetCardComponent, 
     OperatingHoursComponent, 
-    OperationCostsComponent
+    OperationCostsComponent, TreasureHuntGaugeComponent
   ],
   providers: [ TreasureHuntService, OpportunitySheetService ]
 })

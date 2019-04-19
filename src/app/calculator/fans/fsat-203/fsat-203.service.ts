@@ -21,11 +21,11 @@ export class Fsat203Service {
   getBasicsFormFromObject(obj: FanRatedInfo, settings: Settings): FormGroup {
     let pressureMin: number = 10;
     let pressureMax: number = 60;
-    if (settings.fanBarometricPressure != 'inHg') {
+    if (settings.fanBarometricPressure !== 'inHg') {
       pressureMax = this.convertUnitsService.value(pressureMax).from('inHg').to(settings.fanBarometricPressure);
-      pressureMax = Number(pressureMax.toFixed(0))
+      pressureMax = Number(pressureMax.toFixed(0));
       pressureMin = this.convertUnitsService.value(pressureMin).from('inHg').to(settings.fanBarometricPressure);
-      pressureMin = Number(pressureMin.toFixed(0))
+      pressureMin = Number(pressureMin.toFixed(0));
     }
     let form = this.formBuilder.group({
       fanSpeed: [obj.fanSpeed, [Validators.required, Validators.min(0), Validators.max(5000)]],
@@ -38,7 +38,7 @@ export class Fsat203Service {
       traversePlanes: [obj.traversePlanes, Validators.required],
       globalBarometricPressure: [obj.globalBarometricPressure, [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]]
       //planarBarometricPressure: [obj.planarBarometricPressure, Validators.required]
-    })
+    });
     return form;
   }
 
@@ -54,7 +54,7 @@ export class Fsat203Service {
       upDownStream: form.controls.upDownStream.value,
       traversePlanes: form.controls.traversePlanes.value,
       globalBarometricPressure: form.controls.globalBarometricPressure.value
-    }
+    };
     return obj;
   }
 
@@ -72,8 +72,8 @@ export class Fsat203Service {
       dewPoint: [obj.dewPoint, [Validators.min(ranges.dewPointMin), Validators.max(ranges.dewPointMax)]],
       gasDensity: [obj.gasDensity, [Validators.required, Validators.min(0), Validators.max(ranges.gasDensityMax)]],
       specificHeatGas: [obj.specificHeatGas]
-    })
-    this.setCustomValidators(form, ranges)
+    });
+    this.setCustomValidators(form, ranges);
     this.setRelativeHumidityValidators(form);
     this.setWetBulbValidators(form, ranges);
     this.setDewPointValidators(form, ranges);
@@ -94,42 +94,42 @@ export class Fsat203Service {
       dewPointMin: -30,
       dewPointMax: 1000,
       gasDensityMax: .2
-    }
-    if (settings.fanBarometricPressure != 'inHg') {
+    };
+    if (settings.fanBarometricPressure !== 'inHg') {
       ranges.barPressureMax = this.convertUnitsService.value(ranges.barPressureMax).from('inHg').to(settings.fanBarometricPressure);
-      ranges.barPressureMax = Number(ranges.barPressureMax.toFixed(0))
+      ranges.barPressureMax = Number(ranges.barPressureMax.toFixed(0));
       ranges.barPressureMin = this.convertUnitsService.value(ranges.barPressureMin).from('inHg').to(settings.fanBarometricPressure);
-      ranges.barPressureMin = Number(ranges.barPressureMin.toFixed(0))
+      ranges.barPressureMin = Number(ranges.barPressureMin.toFixed(0));
     }
-    if (settings.fanTemperatureMeasurement != 'F') {
+    if (settings.fanTemperatureMeasurement !== 'F') {
       ranges.dryBulbTempMin = this.convertUnitsService.value(ranges.dryBulbTempMin).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.dryBulbTempMin = Number(ranges.dryBulbTempMin.toFixed(0))
+      ranges.dryBulbTempMin = Number(ranges.dryBulbTempMin.toFixed(0));
       ranges.dryBulbTempMax = this.convertUnitsService.value(ranges.dryBulbTempMax).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.dryBulbTempMax = Number(ranges.dryBulbTempMax.toFixed(0))
+      ranges.dryBulbTempMax = Number(ranges.dryBulbTempMax.toFixed(0));
       ranges.wetBulbTempMin = this.convertUnitsService.value(ranges.wetBulbTempMin).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.wetBulbTempMin = Number(ranges.wetBulbTempMin.toFixed(0))
+      ranges.wetBulbTempMin = Number(ranges.wetBulbTempMin.toFixed(0));
       ranges.wetBulbTempMax = this.convertUnitsService.value(ranges.wetBulbTempMax).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.wetBulbTempMax = Number(ranges.wetBulbTempMax.toFixed(0))
+      ranges.wetBulbTempMax = Number(ranges.wetBulbTempMax.toFixed(0));
       ranges.dewPointMin = this.convertUnitsService.value(ranges.dewPointMin).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.dewPointMin = Number(ranges.dewPointMin.toFixed(0))
+      ranges.dewPointMin = Number(ranges.dewPointMin.toFixed(0));
       ranges.dewPointMax = this.convertUnitsService.value(ranges.dewPointMax).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.dewPointMax = Number(ranges.dewPointMax.toFixed(0))
+      ranges.dewPointMax = Number(ranges.dewPointMax.toFixed(0));
     }
-    if (settings.densityMeasurement != 'lbscf') {
+    if (settings.densityMeasurement !== 'lbscf') {
       ranges.gasDensityMax = this.convertUnitsService.value(ranges.gasDensityMax).from('lbscf').to(settings.densityMeasurement);
-      ranges.gasDensityMax = Number(ranges.gasDensityMax.toFixed(0))
+      ranges.gasDensityMax = Number(ranges.gasDensityMax.toFixed(0));
     }
-    if (settings.fanPressureMeasurement != 'inH2o') {
+    if (settings.fanPressureMeasurement !== 'inH2o') {
       ranges.staticPressureMin = this.convertUnitsService.value(ranges.staticPressureMin).from('inH2o').to(settings.fanPressureMeasurement);
-      ranges.staticPressureMin = Number(ranges.staticPressureMin.toFixed(0))
+      ranges.staticPressureMin = Number(ranges.staticPressureMin.toFixed(0));
       ranges.staticPressureMax = this.convertUnitsService.value(ranges.staticPressureMax).from('inH2o').to(settings.fanPressureMeasurement);
-      ranges.staticPressureMax = Number(ranges.staticPressureMax.toFixed(0))
+      ranges.staticPressureMax = Number(ranges.staticPressureMax.toFixed(0));
     }
     return ranges;
   }
 
   setCustomValidators(form: FormGroup, ranges: GasDensityRanges) {
-    if (form.controls.inputType.value == 'custom') {
+    if (form.controls.inputType.value === 'custom') {
       //dryBulbTemp
       form.controls.dryBulbTemp.setValidators([Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]);
       form.controls.dryBulbTemp.reset(form.controls.dryBulbTemp.value);
@@ -184,7 +184,7 @@ export class Fsat203Service {
   }
 
   setRelativeHumidityValidators(form: FormGroup) {
-    if (form.controls.inputType.value == 'relativeHumidity') {
+    if (form.controls.inputType.value === 'relativeHumidity') {
       form.controls.relativeHumidity.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       form.controls.relativeHumidity.reset(form.controls.relativeHumidity.value);
       if (form.controls.relativeHumidity.value) {
@@ -200,7 +200,7 @@ export class Fsat203Service {
   }
 
   setWetBulbValidators(form: FormGroup, ranges: GasDensityRanges) {
-    if (form.controls.inputType.value == 'wetBulb') {
+    if (form.controls.inputType.value === 'wetBulb') {
       form.controls.wetBulbTemp.setValidators([Validators.required, Validators.min(ranges.wetBulbTempMin), Validators.max(ranges.wetBulbTempMax)]);
       form.controls.wetBulbTemp.reset(form.controls.wetBulbTemp.value);
       if (form.controls.wetBulbTemp.value) {
@@ -226,7 +226,7 @@ export class Fsat203Service {
   }
 
   setDewPointValidators(form: FormGroup, ranges: GasDensityRanges) {
-    if (form.controls.inputType.value == 'dewPoint') {
+    if (form.controls.inputType.value === 'dewPoint') {
       form.controls.dewPoint.setValidators([Validators.required, Validators.min(ranges.dewPointMin), Validators.max(ranges.dewPointMax)]);
       form.controls.dewPoint.reset(form.controls.dewPoint.value);
       if (form.controls.dewPoint.value) {
@@ -254,7 +254,7 @@ export class Fsat203Service {
       dewPoint: form.controls.dewPoint.value,
       gasDensity: form.controls.gasDensity.value,
       specificHeatGas: form.controls.specificHeatGas.value
-    }
+    };
     return fanGasDensity;
   }
 
@@ -265,7 +265,7 @@ export class Fsat203Service {
       pitotTubeCoefficient: [obj.pitotTubeCoefficient, [Validators.required, Validators.max(1)]],
       numTraverseHoles: [obj.numTraverseHoles, [Validators.required, Validators.min(1), Validators.max(10)]],
       numInsertionPoints: [obj.numInsertionPoints, [Validators.min(1), Validators.max(10)]]
-    })
+    });
     return form;
   }
 
@@ -288,14 +288,14 @@ export class Fsat203Service {
       dryBulbTemp: [obj.dryBulbTemp, [Validators.required, Validators.min(ranges.dryBulbTempMin), Validators.max(ranges.dryBulbTempMax)]],
       barometricPressure: [obj.barometricPressure, [Validators.required, Validators.min(ranges.barPressureMin), Validators.max(ranges.barPressureMax)]],
       numInletBoxes: [obj.numInletBoxes]
-    })
+    });
     this.setPlaneValidators(form, planeNum, obj.planeType, ranges);
     return form;
   }
 
   setPlaneValidators(form: FormGroup, planeNum: string, planeType: string, ranges: PlaneRanges) {
     //1, 4
-    if (planeNum == '1' || planeNum == '4') {
+    if (planeNum === '1' || planeNum === '4') {
       form.controls.numInletBoxes.setValidators([Validators.required]);
       form.controls.numInletBoxes.reset(form.controls.numInletBoxes.value);
       if (form.controls.numInletBoxes.value) {
@@ -310,7 +310,7 @@ export class Fsat203Service {
     }
 
     //!1 !2
-    if (planeNum != '1' && planeNum != '2') {
+    if (planeNum !== '1' && planeNum !== '2') {
       form.controls.staticPressure.setValidators([Validators.required, Validators.min(ranges.staticPressureMin), Validators.max(ranges.staticPressureMax)]);
       form.controls.staticPressure.reset(form.controls.staticPressure.value);
       if (form.controls.staticPressure.value) {
@@ -325,7 +325,7 @@ export class Fsat203Service {
     }
 
     //Rectangular
-    if (planeType == 'Rectangular') {
+    if (planeType === 'Rectangular') {
       form.controls.width.setValidators([Validators.required, Validators.min(0)]);
       form.controls.width.reset(form.controls.width.value);
       if (form.controls.width.value) {
@@ -348,24 +348,24 @@ export class Fsat203Service {
       barPressureMax: 60,
       dryBulbTempMin: -100,
       dryBulbTempMax: 1000
-    }
-    if (settings.fanBarometricPressure != 'inHg') {
+    };
+    if (settings.fanBarometricPressure !== 'inHg') {
       ranges.barPressureMax = this.convertUnitsService.value(ranges.barPressureMax).from('inHg').to(settings.fanBarometricPressure);
-      ranges.barPressureMax = Number(ranges.barPressureMax.toFixed(0))
+      ranges.barPressureMax = Number(ranges.barPressureMax.toFixed(0));
       ranges.barPressureMin = this.convertUnitsService.value(ranges.barPressureMin).from('inHg').to(settings.fanBarometricPressure);
-      ranges.barPressureMin = Number(ranges.barPressureMin.toFixed(0))
+      ranges.barPressureMin = Number(ranges.barPressureMin.toFixed(0));
     }
-    if (settings.fanPressureMeasurement != 'inH2o') {
+    if (settings.fanPressureMeasurement !== 'inH2o') {
       ranges.staticPressureMin = this.convertUnitsService.value(ranges.staticPressureMin).from('inH2o').to(settings.fanPressureMeasurement);
-      ranges.staticPressureMin = Number(ranges.staticPressureMin.toFixed(0))
+      ranges.staticPressureMin = Number(ranges.staticPressureMin.toFixed(0));
       ranges.staticPressureMax = this.convertUnitsService.value(ranges.staticPressureMax).from('inH2o').to(settings.fanPressureMeasurement);
-      ranges.staticPressureMax = Number(ranges.staticPressureMax.toFixed(0))
+      ranges.staticPressureMax = Number(ranges.staticPressureMax.toFixed(0));
     }
-    if (settings.fanTemperatureMeasurement != 'F') {
+    if (settings.fanTemperatureMeasurement !== 'F') {
       ranges.dryBulbTempMin = this.convertUnitsService.value(ranges.dryBulbTempMin).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.dryBulbTempMin = Number(ranges.dryBulbTempMin.toFixed(0))
+      ranges.dryBulbTempMin = Number(ranges.dryBulbTempMin.toFixed(0));
       ranges.dryBulbTempMax = this.convertUnitsService.value(ranges.dryBulbTempMax).from('F').to(settings.fanTemperatureMeasurement);
-      ranges.dryBulbTempMax = Number(ranges.dryBulbTempMax.toFixed(0))
+      ranges.dryBulbTempMax = Number(ranges.dryBulbTempMax.toFixed(0));
     }
     return ranges;
   }
@@ -404,7 +404,7 @@ export class Fsat203Service {
       driveType: [obj.driveType],
       efficiencyClass: [obj.efficiencyClass],
       frequency: [obj.frequency]
-    })
+    });
     return form;
   }
 
@@ -449,7 +449,7 @@ export class Fsat203Service {
       totalPressureLossBtwnPlanes2and5: [obj.totalPressureLossBtwnPlanes2and5, [Validators.required, Validators.min(0)]],
       inletSEF: [obj.inletSEF, Validators.required],
       outletSEF: [obj.outletSEF, Validators.required]
-    })
+    });
     return form;
   }
 
@@ -936,10 +936,10 @@ export interface GasDensityRanges {
 
 
 export interface PlaneRanges {
-  staticPressureMin: number,
-  staticPressureMax: number,
-  barPressureMin: number,
-  barPressureMax: number,
-  dryBulbTempMin: number,
-  dryBulbTempMax: number
+  staticPressureMin: number;
+  staticPressureMax: number;
+  barPressureMin: number;
+  barPressureMax: number;
+  dryBulbTempMin: number;
+  dryBulbTempMax: number;
 }

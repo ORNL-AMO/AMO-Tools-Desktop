@@ -54,7 +54,7 @@ export class SlagComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -79,12 +79,12 @@ export class SlagComponent implements OnInit {
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._slagLosses.push(tmpLoss);
-      })
+      });
     }
   }
 
@@ -103,7 +103,7 @@ export class SlagComponent implements OnInit {
   }
 
   calculate(loss: SlagLossObj) {
-    if (loss.form.status == 'VALID') {
+    if (loss.form.status === 'VALID') {
       let tmpLoss: Slag = this.slagService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.slagOtherMaterialLosses(tmpLoss, this.settings);
     } else {
@@ -118,13 +118,13 @@ export class SlagComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpSlag = this.slagService.getLossFromForm(loss.form);
       tmpSlag.heatLoss = loss.heatLoss;
       tmpSlagLosses.push(tmpSlag);
-    })
+    });
     this.losses.slagLosses = tmpSlagLosses;
     this.savedLoss.emit(true);
   }
@@ -135,7 +135,7 @@ export class SlagComponent implements OnInit {
 }
 
 export interface SlagLossObj {
-  form: FormGroup,
-  heatLoss?: number,
-  collapse: boolean
+  form: FormGroup;
+  heatLoss?: number;
+  collapse: boolean;
 }

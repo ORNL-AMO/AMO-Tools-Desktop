@@ -34,8 +34,6 @@ import { ModifyFieldDataFormComponent } from './modify-conditions/modify-field-d
 import { FsatResultsModule } from './fsat-results/fsat-results.module';
 import { FsatReportModule } from './fsat-report/fsat-report.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
-// import { FsatReportSankeyComponent } from './fsat-report/fsat-report-sankey/fsat-report-sankey.component';
-
 import { ConvertFsatService } from './convert-fsat.service';
 import { FsatSankeyModule } from './fsat-sankey/fsat-sankey.module';
 import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
@@ -43,7 +41,6 @@ import { MotorPerformanceModule } from '../calculator/motors/motor-performance/m
 import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
 import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
 import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-efficiency.module';
-import { ToastyModule } from '../../../node_modules/ng2-toasty';
 import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
 import { FsatWarningService } from './fsat-warning.service';
 import { CalculatePressuresModule } from './calculate-pressures/calculate-pressures.module';
@@ -68,7 +65,6 @@ import { CalculatePressuresModule } from './calculate-pressures/calculate-pressu
     MotorPerformanceModule,
     PumpCurveModule,
     FanEfficiencyModule,
-    ToastyModule,
     CalculatePressuresModule
   ],
   declarations: [

@@ -24,6 +24,9 @@ import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 import { PrintOptionsMenuComponent } from './print-options-menu/print-options-menu.component';
 import { ExportableResultsTableComponent } from './exportable-results-table/exportable-results-table.component';
 import { SettingsLabelPipe } from './pipes/settings-label.pipe';
+import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
+import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
   imports: [
@@ -47,7 +50,9 @@ import { SettingsLabelPipe } from './pipes/settings-label.pipe';
     TabsTooltipComponent,
     PrintOptionsMenuComponent,
     ExportableResultsTableComponent,
-    SettingsLabelPipe
+    SettingsLabelPipe,
+    WaterfallGraphComponent,
+    ToastComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -62,7 +67,9 @@ import { SettingsLabelPipe } from './pipes/settings-label.pipe';
     ExportableResultsTableComponent,
     TabsTooltipComponent,
     PrintOptionsMenuComponent,
-    SettingsLabelPipe
+    SettingsLabelPipe,
+    WaterfallGraphComponent,
+    ToastComponent
   ],
   providers: [
     ValidationService,
@@ -70,7 +77,8 @@ import { SettingsLabelPipe } from './pipes/settings-label.pipe';
     ConvertUnitsService,
     UpdateDataService,
     SvgToPngService,
-    LineChartHelperService
+    LineChartHelperService,
+    WaterfallGraphService
   ]
 })
 

@@ -39,21 +39,21 @@ export class GasLeakageTabComponent implements OnInit {
       this.isDifferent = this.checkDifferent();
       this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
+    });
 
     this.badgeHover = false;
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    }else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent && !this.inSetup){
+    }else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -72,27 +72,27 @@ export class GasLeakageTabComponent implements OnInit {
     let hasWarning: boolean = false;
     if (this.gasLeakageCompareService.baselineLeakageLoss) {
       this.gasLeakageCompareService.baselineLeakageLoss.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(loss);
         let tmpHasWarning: boolean = this.gasLeakageLossesService.checkWarningsExist(warnings);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     if (this.gasLeakageCompareService.modifiedLeakageLoss && !this.inSetup) {
       this.gasLeakageCompareService.modifiedLeakageLoss.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           missingData = true;
         }
         let warnings: LeakageWarnings = this.gasLeakageLossesService.checkLeakageWarnings(loss);
         let tmpHasWarning: boolean = this.gasLeakageLossesService.checkWarningsExist(warnings);
-        if (tmpHasWarning == true) {
+        if (tmpHasWarning === true) {
           hasWarning = tmpHasWarning;
         }
-      })
+      });
     }
     return { missingData: missingData, hasWarning: hasWarning };
   }
@@ -100,7 +100,7 @@ export class GasLeakageTabComponent implements OnInit {
 
   checkLossValid(loss: LeakageLoss) {
       let tmpForm: FormGroup = this.gasLeakageLossesService.initFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;

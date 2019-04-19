@@ -33,8 +33,7 @@
       [settings]="settings"></app-find-treasure>
   </div>
 
-  <div *ngIf="mainTab == 'treasure-chest'" class="d-flex tab-content scroll-item"
-    [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'treasure-chest'" class="d-flex tab-content scroll-item">
     <app-treasure-chest class="w-100" [treasureHunt]="assessment.treasureHunt" [settings]="settings"
       (emitUpdateTreasureHunt)="saveTreasureHunt($event)"></app-treasure-chest>
   </div>

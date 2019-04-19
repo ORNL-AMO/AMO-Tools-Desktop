@@ -84,7 +84,7 @@ export class ReportGraphsComponent implements OnInit {
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
     if (this.phast.losses) {
       this.baselineResults = this.phastResultsService.getResults(this.phast, this.settings);
-      this.resultsArray.push({ name: 'Baseline', data: this.baselineResults })
+      this.resultsArray.push({ name: 'Baseline', data: this.baselineResults });
       this.selectedPhast1 = this.resultsArray[0];
       this.baselinePhast = this.resultsArray[0];
       //get pie chart 1 data
@@ -93,12 +93,12 @@ export class ReportGraphsComponent implements OnInit {
       this.selectedPhast1PieValues = selectedPhast1PieResults.map(datas => datas.val);
       this.selectedPhast1ExportName = this.assessment.name + "-" + this.selectedPhast1.name;
       if (this.phast.modifications) {
-        if (this.phast.modifications.length != 0) {
+        if (this.phast.modifications.length !== 0) {
           this.modExists = true;
           this.phast.modifications.forEach(mod => {
             let tmpResults = this.phastResultsService.getResults(mod.phast, this.settings);
             this.resultsArray.push({ name: mod.phast.name, data: tmpResults });
-          })
+          });
           this.selectedPhast2 = this.resultsArray[1];
           //get pie chart 2 data
           selectedPhast2PieResults = this.getPieData(this.selectedPhast2.data, this.showResultsCats);
@@ -113,7 +113,7 @@ export class ReportGraphsComponent implements OnInit {
       }
     } else {
       this.baselineResults = this.phastResultsService.initResults();
-      this.resultsArray.push({ name: 'Baseline', data: this.baselineResults })
+      this.resultsArray.push({ name: 'Baseline', data: this.baselineResults });
       this.selectedPhast1 = this.resultsArray[0];
       selectedPhast1PieResults = this.getPieData(this.selectedPhast1.data, this.showResultsCats);
       this.selectedPhast1PieLabels = selectedPhast1PieResults.map(datas => datas.label);
@@ -322,6 +322,6 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   roundVal(val: number, digits: number): number {
-    return Number((Math.round(val * 100) / 100).toFixed(digits))
+    return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 }

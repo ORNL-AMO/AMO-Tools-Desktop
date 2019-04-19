@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { ToastyModule } from 'ng2-toasty';
-
 import { NgxElectronModule } from 'ngx-electron';
 import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
@@ -61,6 +58,7 @@ import { FsatReportTutorialComponent } from '../tutorials/fsat-report-tutorial/f
 import { FsatAssessmentTutorialComponent } from '../tutorials/fsat-assessment-tutorial/fsat-assessment-tutorial.component';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -105,7 +103,6 @@ import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
-    ToastyModule.forRoot(),
     JsonToCsvModule,
     SuiteDbModule,
     ImportExportModule,
@@ -113,7 +110,8 @@ import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
     FsatModule,
     PreAssessmentModule,
     SsmtModule,
-    TreasureHuntModule
+    TreasureHuntModule,
+    SharedModule
   ],
   providers: [
     AssessmentService,

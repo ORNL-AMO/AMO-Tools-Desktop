@@ -47,7 +47,7 @@ export class LossesTabsComponent implements OnInit {
     // console.log(this.lossTabs);
     this.lossesService.lossesTab.subscribe(val => {
       this.selectedTab = this.lossesService.getTab(val);
-    })
+    });
   }
 
   tabChange(tab: LossTab) {

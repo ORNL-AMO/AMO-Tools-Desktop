@@ -41,6 +41,13 @@ import { FsatRollupFanSummaryComponent } from './fsat-rollup/fsat-rollup-fan-sum
 import { FsatRollupFanSummaryTableComponent } from './fsat-rollup/fsat-rollup-fan-summary-table/fsat-rollup-fan-summary-table.component';
 import { FsatRollupGraphsComponent } from './fsat-rollup/fsat-rollup-graphs/fsat-rollup-graphs.component';
 import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-rollup-print.component';
+import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
+import { SsmtSummaryComponent } from './report-summary/ssmt-summary/ssmt-summary.component';
+import { SsmtRollupComponent } from './ssmt-rollup/ssmt-rollup.component';
+import { SsmtRollupGraphsComponent } from './ssmt-rollup/ssmt-rollup-graphs/ssmt-rollup-graphs.component';
+import { SsmtRollupSteamSummaryComponent } from './ssmt-rollup/ssmt-rollup-steam-summary/ssmt-rollup-steam-summary.component';
+import { SsmtRollupEnergyTableComponent } from './ssmt-rollup/ssmt-rollup-energy-table/ssmt-rollup-energy-table.component';
+import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-steam-summary-table/ssmt-rollup-steam-summary-table.component';
 
 @NgModule({
   imports: [
@@ -52,7 +59,8 @@ import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-r
     FormsModule,
     ReactiveFormsModule,
     PreAssessmentModule,
-    FsatReportModule
+    FsatReportModule,
+    SsmtReportModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -86,6 +94,12 @@ import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-r
     FsatRollupFanSummaryTableComponent,
     FsatRollupGraphsComponent,
     FsatRollupPrintComponent,
+    SsmtSummaryComponent,
+    SsmtRollupComponent,
+    SsmtRollupGraphsComponent,
+    SsmtRollupSteamSummaryComponent,
+    SsmtRollupEnergyTableComponent,
+    SsmtRollupSteamSummaryTableComponent,
 
   ],
   providers: [ReportRollupService],

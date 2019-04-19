@@ -134,7 +134,7 @@ export class UnitConverterComponent implements OnInit {
       measure: 'specificVolume',
       display: 'Specific Volume'
     }
-  ]
+  ];
 
   constructor(private convertUnitsService: ConvertUnitsService, private unitConverterService: UnitConverterService) { }
 
@@ -153,7 +153,7 @@ export class UnitConverterComponent implements OnInit {
     if (this.unitConverterService.value1) {
       this.value1 = this.unitConverterService.value1;
     } else {
-      this.value1 = 1
+      this.value1 = 1;
     }
     if (this.unitConverterService.from) {
       this.from = this.unitConverterService.from;
@@ -175,9 +175,9 @@ export class UnitConverterComponent implements OnInit {
         unit: unit,
         display: this.getUnitName(unit),
         displayUnit: this.getUnitDisplay(unit)
-      }
+      };
       this.possibilities.push(tmpPossibility);
-    })
+    });
     if (!this.to) {
       this.to = this.possibilities[1].unit;
     }
@@ -199,9 +199,9 @@ export class UnitConverterComponent implements OnInit {
           unit: unit,
           display: this.getUnitName(unit),
           displayUnit: this.getUnitDisplay(unit)
-        }
+        };
         this.possibilities.push(tmpPossibility);
-      })
+      });
       this.from = this.possibilities[0].unit;
       this.to = this.possibilities[1].unit;
       this.value1 = 1;
@@ -210,7 +210,7 @@ export class UnitConverterComponent implements OnInit {
   }
 
   getValue1() {
-    if (this.from && this.to && (this.value2 || this.value2 == 0)) {
+    if (this.from && this.to && (this.value2 || this.value2 === 0)) {
       this.value1 = this.convertUnitsService.value(this.value2).from(this.to).to(this.from);
     } else {
       this.value1 = 0;
@@ -218,7 +218,7 @@ export class UnitConverterComponent implements OnInit {
   }
 
   getValue2() {
-    if (this.from && this.to && (this.value1 || this.value1 == 0)) {
+    if (this.from && this.to && (this.value1 || this.value1 === 0)) {
       this.value2 = this.convertUnitsService.value(this.value1).from(this.from).to(this.to);
     } else {
       this.value2 = 0;

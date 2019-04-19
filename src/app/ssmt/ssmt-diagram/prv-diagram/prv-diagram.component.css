@@ -81,7 +81,7 @@
 
 .feedwater{
     position: absolute;
-    width: 60px;
+    width: 56px;
     bottom: 13px;
     right: 25px;
     text-align: center;
@@ -95,4 +95,10 @@
     left: -55px;
     width: 50px;
     text-align: center;
+}
+
+
+.feedwater.no-steam-flow{
+    background-color: #D5D8DC;
+    color: #D5D8DC;
 }

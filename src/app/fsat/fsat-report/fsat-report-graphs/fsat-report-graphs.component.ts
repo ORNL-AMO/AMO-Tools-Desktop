@@ -104,13 +104,13 @@ export class FsatReportGraphsComponent implements OnInit {
 
 
   selectNewFsat(dropDownIndex: number): void {
-    if (dropDownIndex == 1) {
+    if (dropDownIndex === 1) {
       this.selectedFsat1PieLabels = this.allChartData.pieLabels[this.selectedFsat1.index];
       this.selectedFsat1PieValues = this.allChartData.pieValues[this.selectedFsat1.index];
       this.selectedFsat1BarValues = this.allChartData.barValues[this.selectedFsat1.index];
       this.selectedFsat1ExportName = this.assessment.name + '-' + this.selectedFsat1.name;
     }
-    else if (dropDownIndex == 2) {
+    else if (dropDownIndex === 2) {
       this.selectedFsat2PieLabels = this.allChartData.pieLabels[this.selectedFsat2.index];
       this.selectedFsat2PieValues = this.allChartData.pieValues[this.selectedFsat2.index];
       this.selectedFsat2BarValues = this.allChartData.barValues[this.selectedFsat2.index];
@@ -132,7 +132,7 @@ export class FsatReportGraphsComponent implements OnInit {
       let tmpBarValues = new Array<number>();
       let tmpFsat = this.fsatOptions[i].fsat;
       let isBaseline: boolean;
-      if (i == 0 || (i != 0 && (this.fsatOptions[i].fsat.modifications !== undefined && this.fsatOptions[i].fsat.modifications.length > 0))) {
+      if (i === 0 || (i !== 0 && (this.fsatOptions[i].fsat.modifications !== undefined && this.fsatOptions[i].fsat.modifications.length > 0))) {
         isBaseline = true;
       }
       else {

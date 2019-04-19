@@ -48,5 +48,5 @@ export const frequency = {
       , ratio: 1
     }
   }
-}
+};
 

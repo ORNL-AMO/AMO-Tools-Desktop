@@ -18,13 +18,13 @@ export class SettingsDbService {
           this.allSettings = settings;
           this.globalSettings = this.getByDirectoryId(1);
           this.globalSettings = this.checkSettings(this.globalSettings);
-          resolve(true)
-        })
+          resolve(true);
+        });
       } else {
         this.allSettings = [];
         resolve(false);
       }
-    })
+    });
   }
 
   getAll(): Array<Settings> {
@@ -32,13 +32,13 @@ export class SettingsDbService {
   }
 
   getById(id: number): Settings {
-    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.id == id })
+    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.id === id; });
     selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;
   }
 
   getByDirectoryId(id: number): Settings {
-    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.directoryId == id });
+    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.directoryId === id; });
     if (!selectedSettings) {
       selectedSettings = this.globalSettings;
     }
@@ -47,7 +47,7 @@ export class SettingsDbService {
   }
 
   getByAssessmentId(assessment: Assessment, neededFromAssessment?: boolean): Settings {
-    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.assessmentId == assessment.id });
+    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.assessmentId === assessment.id; });
     if (!selectedSettings && !neededFromAssessment) {
       selectedSettings = this.getByDirectoryId(assessment.directoryId);
     }
@@ -73,11 +73,11 @@ export class SettingsDbService {
       settings = this.settingService.setSteamUnits(settings);
     }
 
-    if (!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement == 'kghr' || settings.steamMassFlowMeasurement == 'lbhr') {
+    if (!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement === 'kghr' || settings.steamMassFlowMeasurement === 'lbhr') {
       settings.steamMassFlowMeasurement = 'klb';
     }
 
-    if (!settings.steamPowerMeasurement || settings.steamPowerMeasurement == 'MMBtu') {
+    if (!settings.steamPowerMeasurement || settings.steamPowerMeasurement === 'MMBtu') {
       settings.steamPowerMeasurement = 'kW';
     }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput, HeatExchangerOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 
@@ -25,90 +25,94 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   ngOnInit() {
     this.numberOfHeaders = this.inputData.headerInput.numberOfHeaders;
-    if (this.hoveredProperty == 'boilerSteamHovered') {
+    if (this.hoveredProperty === 'boilerSteamHovered') {
       this.boilerSteamHovered();
-    } else if (this.hoveredProperty == 'boilerFeedwaterHovered') {
+    } else if (this.hoveredProperty === 'boilerFeedwaterHovered') {
       this.boilerFeedwaterHovered();
-    } else if (this.hoveredProperty == 'boilerBlowdownHovered') {
+    } else if (this.hoveredProperty === 'boilerBlowdownHovered') {
       this.boilerBlowdownHovered();
-    } else if (this.hoveredProperty == 'mediumPressurePRVInletHovered') {
+    } else if (this.hoveredProperty === 'mediumPressurePRVInletHovered') {
       this.mediumPressurePRVInletHovered();
-    } else if (this.hoveredProperty == 'highPressurePRVInletHovered') {
+    } else if (this.hoveredProperty === 'highPressurePRVInletHovered') {
       this.highPressurePRVInletHovered();
-    } else if (this.hoveredProperty == 'lowPressurePRVOutletHovered') {
+    } else if (this.hoveredProperty === 'lowPressurePRVOutletHovered') {
       this.lowPressurePRVOutletHovered();
-    } else if (this.hoveredProperty == 'mediumPressurePRVOutletHovered') {
+    } else if (this.hoveredProperty === 'mediumPressurePRVOutletHovered') {
       this.mediumPressurePRVOutletHovered();
-    } else if (this.hoveredProperty == 'mediumPressurePRVFeedwaterHovered') {
+    } else if (this.hoveredProperty === 'mediumPressurePRVFeedwaterHovered') {
       this.mediumPressurePRVFeedwaterHovered();
-    } else if (this.hoveredProperty == 'lowPressurePRVFeedwaterHovered') {
+    } else if (this.hoveredProperty === 'lowPressurePRVFeedwaterHovered') {
       this.lowPressurePRVFeedwaterHovered();
-    } else if (this.hoveredProperty == 'condensingTurbineInletHovered') {
+    } else if (this.hoveredProperty === 'condensingTurbineInletHovered') {
       this.condensingTurbineInletHovered();
-    } else if (this.hoveredProperty == 'mediumToLowTurbineInletHovered') {
+    } else if (this.hoveredProperty === 'mediumToLowTurbineInletHovered') {
       this.mediumToLowTurbineInletHovered();
-    } else if (this.hoveredProperty == 'highToLowTurbineInletHovered') {
+    } else if (this.hoveredProperty === 'highToLowTurbineInletHovered') {
       this.highToLowTurbineInletHovered();
-    } else if (this.hoveredProperty == 'highToMediumTurbineInletHovered') {
+    } else if (this.hoveredProperty === 'highToMediumTurbineInletHovered') {
       this.highToMediumTurbineInletHovered();
-    } else if (this.hoveredProperty == 'condensingTurbineOutletHovered') {
+    } else if (this.hoveredProperty === 'condensingTurbineOutletHovered') {
       this.condensingTurbineOutletHovered();
-    } else if (this.hoveredProperty == 'mediumToLowTurbineOutletHovered') {
+    } else if (this.hoveredProperty === 'mediumToLowTurbineOutletHovered') {
       this.mediumToLowTurbineOutletHovered();
-    } else if (this.hoveredProperty == 'highToLowTurbineOutletHovered') {
+    } else if (this.hoveredProperty === 'highToLowTurbineOutletHovered') {
       this.highToLowTurbineOutletHovered();
-    } else if (this.hoveredProperty == 'highToMediumTurbineOutletHovered') {
+    } else if (this.hoveredProperty === 'highToMediumTurbineOutletHovered') {
       this.highToMediumTurbineOutletHovered();
-    } else if (this.hoveredProperty == 'lowPressureProcessSteamInletHovered') {
+    } else if (this.hoveredProperty === 'lowPressureProcessSteamInletHovered') {
       this.lowPressureProcessSteamInletHovered();
-    } else if (this.hoveredProperty == 'mediumPressureProcessSteamInletHovered') {
+    } else if (this.hoveredProperty === 'mediumPressureProcessSteamInletHovered') {
       this.mediumPressureProcessSteamInletHovered();
-    } else if (this.hoveredProperty == 'highPressureProcessSteamInletHovered') {
+    } else if (this.hoveredProperty === 'highPressureProcessSteamInletHovered') {
       this.highPressureProcessSteamInletHovered();
-    } else if (this.hoveredProperty == 'lowPressureCondensateHovered') {
+    } else if (this.hoveredProperty === 'lowPressureCondensateHovered') {
       this.lowPressureCondensateHovered();
-    } else if (this.hoveredProperty == 'mediumPressureCondensateHovered') {
+    } else if (this.hoveredProperty === 'mediumPressureCondensateHovered') {
       this.mediumPressureCondensateHovered();
-    } else if (this.hoveredProperty == 'highPressureCondensateHovered') {
+    } else if (this.hoveredProperty === 'highPressureCondensateHovered') {
       this.highPressureCondensateHovered();
-    } else if (this.hoveredProperty == 'highPressureFlashTankOutletSteamHovered') {
+    } else if (this.hoveredProperty === 'highPressureFlashTankOutletSteamHovered') {
       this.highPressureFlashTankOutletSteamHovered();
-    } else if (this.hoveredProperty == 'mediumPressureFlashTankOutletSteamHovered') {
+    } else if (this.hoveredProperty === 'mediumPressureFlashTankOutletSteamHovered') {
       this.mediumPressureFlashTankOutletSteamHovered();
-    } else if (this.hoveredProperty == 'mediumPressureFlashTankInletCondensateHovered') {
+    } else if (this.hoveredProperty === 'mediumPressureFlashTankInletCondensateHovered') {
       this.mediumPressureFlashTankInletCondensateHovered();
-    } else if (this.hoveredProperty == 'highPressureFlashTankOutletCondensateHovered') {
+    } else if (this.hoveredProperty === 'highPressureFlashTankOutletCondensateHovered') {
       this.highPressureFlashTankOutletCondensateHovered();
-    } else if (this.hoveredProperty == 'mediumPressureFlashTankOutletCondensateHovered') {
+    } else if (this.hoveredProperty === 'mediumPressureFlashTankOutletCondensateHovered') {
       this.mediumPressureFlashTankOutletCondensateHovered();
-    } else if (this.hoveredProperty == 'condensateFlashTankInletHovered') {
+    } else if (this.hoveredProperty === 'condensateFlashTankInletHovered') {
       this.condensateFlashTankInletHovered();
-    } else if (this.hoveredProperty == 'condensateFlashTankVentHovered') {
+    } else if (this.hoveredProperty === 'condensateFlashTankVentHovered') {
       this.condensateFlashTankVentHovered();
-    } else if (this.hoveredProperty == 'boilerBlowdownFlashedLiquidHovered') {
+    } else if (this.hoveredProperty === 'boilerBlowdownFlashedLiquidHovered') {
       this.boilerBlowdownFlashedLiquidHovered();
-    } else if (this.hoveredProperty == 'boilerBlowdownFlashedHovered') {
+    } else if (this.hoveredProperty === 'boilerBlowdownFlashedHovered') {
       this.boilerBlowdownFlashedHovered();
-    } else if (this.hoveredProperty == 'makeupWaterPropertiesHovered') {
+    } else if (this.hoveredProperty === 'makeupWaterPropertiesHovered') {
       this.makeupWaterPropertiesHovered();
-    } else if (this.hoveredProperty == 'returnCondensateHovered') {
+    } else if (this.hoveredProperty === 'returnCondensateHovered') {
       this.returnCondensateHovered();
-    } else if (this.hoveredProperty == 'makeupWaterCondensatePropertiesHovered') {
+    } else if (this.hoveredProperty === 'makeupWaterCondensatePropertiesHovered') {
       this.makeupWaterCondensatePropertiesHovered();
-    } else if (this.hoveredProperty == 'deaeratorInletSteamHovered') {
+    } else if (this.hoveredProperty === 'deaeratorInletSteamHovered') {
       this.deaeratorInletSteamHovered();
-    } else if (this.hoveredProperty == 'deaeratorVentHovered') {
+    } else if (this.hoveredProperty === 'deaeratorVentHovered') {
       this.deaeratorVentHovered();
-    } else if (this.hoveredProperty == 'deaeratorFeedwaterHovered') {
+    } else if (this.hoveredProperty === 'deaeratorFeedwaterHovered') {
       this.deaeratorFeedwaterHovered();
-    } else if (this.hoveredProperty == 'feedwaterHovered') {
+    } else if (this.hoveredProperty === 'feedwaterHovered') {
       this.boilerFeedwaterHovered();
-    }else if (this.hoveredProperty == 'ventedLowPressureSteam'){
+    } else if (this.hoveredProperty === 'ventedLowPressureSteam') {
       this.hoverVentedLowPressureSteam();
+    } else if (this.hoveredProperty === 'heatExchangerHotOutlet') {
+      this.hoverHeatExchangerHotOutlet();
+    }else if(this.hoveredProperty === 'heatExchangerColdOutlet'){
+      this.hoverHeatExchangerColdOutlet();
     }
   }
 
-  hoverVentedLowPressureSteam(){
+  hoverVentedLowPressureSteam() {
     this.label = 'Low Pressure Vented Steam';
     let ventedSteam: SteamPropertiesOutput = this.outputData.ventedLowPressureSteam;
     this.setSteamProperties(ventedSteam);
@@ -124,7 +128,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: deaerator.feedwaterSpecificEntropy,
       quality: deaerator.feedwaterQuality,
       massFlow: deaerator.feedwaterMassFlow
-    }
+    };
   }
   deaeratorInletSteamHovered() {
     this.label = 'Deaerator Steam Use';
@@ -136,7 +140,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: deaerator.inletSteamSpecificEntropy,
       quality: deaerator.inletSteamQuality,
       massFlow: deaerator.inletSteamMassFlow
-    }
+    };
   }
   deaeratorVentHovered() {
     this.label = 'Deaerator Vented Steam';
@@ -148,7 +152,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: deaerator.ventedSteamSpecificEntropy,
       quality: deaerator.ventedSteamQuality,
       massFlow: deaerator.ventedSteamMassFlow
-    }
+    };
   }
   makeupWaterCondensatePropertiesHovered() {
     this.label = 'Condensate and Make-Up Water';
@@ -186,7 +190,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
   condensateFlashTankInletHovered() {
     this.label = 'All Condensate Condensate';
     let flashTank: FlashTankOutput = this.outputData.condensateFlashTank;
-    this.setFlashTankInletCondensate(flashTank)
+    this.setFlashTankInletCondensate(flashTank);
   }
 
   mediumPressureFlashTankInletCondensateHovered() {
@@ -215,7 +219,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: flashTank.outletLiquidSpecificEntropy,
       quality: flashTank.outletLiquidQuality,
       massFlow: flashTank.outletLiquidMassFlow
-    }
+    };
   }
 
   setFlashTankInletCondensate(flashTank: FlashTankOutput) {
@@ -226,7 +230,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: flashTank.inletWaterSpecificEntropy,
       quality: flashTank.inletWaterQuality,
       massFlow: flashTank.inletWaterMassFlow
-    }
+    };
   }
 
   mediumPressureFlashTankOutletSteamHovered() {
@@ -249,7 +253,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: flashTank.outletGasSpecificEntropy,
       quality: flashTank.outletGasQuality,
       massFlow: flashTank.outletGasMassFlow
-    }
+    };
   }
   highPressureCondensateHovered() {
     this.label = 'High Pressure Condensate';
@@ -275,7 +279,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: steamData.specificEntropy,
       quality: steamData.quality,
       massFlow: steamData.massFlow
-    }
+    };
   }
 
 
@@ -360,7 +364,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: steamData.inletSpecificEntropy,
       quality: steamData.inletQuality,
       massFlow: massFlow
-    }
+    };
   }
 
   setOutletSteam(steamData: TurbineOutput | PrvOutput, massFlow: number) {
@@ -371,7 +375,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: steamData.outletSpecificEntropy,
       quality: steamData.outletQuality,
       massFlow: massFlow
-    }
+    };
   }
 
   mediumPressurePRVFeedwaterHovered() {
@@ -381,7 +385,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
   }
 
   lowPressurePRVFeedwaterHovered() {
-    if (this.numberOfHeaders == 3) {
+    if (this.numberOfHeaders === 3) {
       this.label = 'Medium to Low PRV Feedwater';
     } else {
       this.label = 'High to Low PRV Inlet';
@@ -398,7 +402,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: steamData.feedwaterSpecificEntropy,
       quality: steamData.feedwaterQuality,
       massFlow: steamData.feedwaterMassFlow
-    }
+    };
   }
 
   mediumPressurePRVInletHovered() {
@@ -409,7 +413,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   highPressurePRVInletHovered() {
     let prv: PrvOutput;
-    if (this.numberOfHeaders == 3) {
+    if (this.numberOfHeaders === 3) {
       this.label = 'High to Medium PRV Inlet';
       prv = this.outputData.highToMediumPressurePRV;
     } else {
@@ -420,7 +424,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
   }
 
   lowPressurePRVOutletHovered() {
-    if (this.numberOfHeaders == 3) {
+    if (this.numberOfHeaders === 3) {
       this.label = 'Medium to Low PRV Outlet';
     } else {
       this.label = 'High to Low PRV Outlet';
@@ -445,13 +449,13 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: boilerOutput.steamSpecificEntropy,
       quality: boilerOutput.steamQuality,
       massFlow: boilerOutput.steamMassFlow
-    }
+    };
   }
 
   boilerFeedwaterHovered() {
-    if (this.hoveredProperty == 'boilerFeedwaterHovered') {
+    if (this.hoveredProperty === 'boilerFeedwaterHovered') {
       this.label = 'Boiler Feedwater';
-    } else if (this.hoveredProperty == 'feedwaterHovered') {
+    } else if (this.hoveredProperty === 'feedwaterHovered') {
       this.label = 'Feedwater';
     }
     let boilerOutput: BoilerOutput = this.outputData.boilerOutput;
@@ -468,7 +472,33 @@ export class HoverSteamPropertiesComponent implements OnInit {
       specificEntropy: boilerOutput.blowdownSpecificEntropy,
       quality: boilerOutput.blowdownQuality,
       massFlow: boilerOutput.blowdownMassFlow
+    };
+  }
+
+
+  hoverHeatExchangerHotOutlet() {
+    this.label = 'Boiler Blowdown Drain';
+    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
+    this.steam = {
+      pressure: heatExchangerOutput.hotOutletPressure,
+      temperature: heatExchangerOutput.hotOutletTemperature,
+      specificEnthalpy: heatExchangerOutput.hotOutletSpecificEnthalpy,
+      specificEntropy: heatExchangerOutput.hotOutletSpecificEntropy,
+      quality: heatExchangerOutput.hotOutletQuality,
+      massFlow: heatExchangerOutput.hotOutletMassFlow
     }
   }
 
+  hoverHeatExchangerColdOutlet() {
+    this.label = 'Makeup Water';
+    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
+    this.steam = {
+      pressure: heatExchangerOutput.coldOutletPressure,
+      temperature: heatExchangerOutput.coldOutletTemperature,
+      specificEnthalpy: heatExchangerOutput.coldOutletSpecificEnthalpy,
+      specificEntropy: heatExchangerOutput.coldOutletSpecificEntropy,
+      quality: heatExchangerOutput.coldOutletQuality,
+      massFlow: heatExchangerOutput.coldOutletMassFlow
+    }
+  }
 }

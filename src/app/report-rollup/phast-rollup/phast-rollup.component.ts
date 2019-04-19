@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PhastResultsData } from '../report-rollup.service';
 import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
-import { PreAssessment } from '../../calculator/utilities/pre-assessment/pre-assessment';
+import { PhastResultsData } from '../report-rollup-models';
+
 @Component({
   selector: 'app-phast-rollup',
   templateUrl: './phast-rollup.component.html',
@@ -19,7 +19,7 @@ export class PhastRollupComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (!this.calculators || this.calculators.length == 0) {
+    if (!this.calculators || this.calculators.length === 0) {
       this.showPreAssessment = false;
     }
     else {

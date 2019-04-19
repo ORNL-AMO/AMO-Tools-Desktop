@@ -153,19 +153,19 @@ export class TurbineFormComponent implements OnInit {
     this.emitSave.emit(this.ssmt);
   }
 
-  saveHighToLowTurbine(){
+  saveHighToLowTurbine() {
     let tmpHighToLowTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.modificationHighToLowTurbineForm);
     this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToLowTurbine = tmpHighToLowTurbine;
     this.save();
   }
 
-  saveHighToMediumTurbine(){
+  saveHighToMediumTurbine() {
     let tmpHighToMediumTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.modificationHighToMediumForm);
     this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.highToMediumTurbine = tmpHighToMediumTurbine;
     this.save();
   }
 
-  saveMediumToLowTurbine(){
+  saveMediumToLowTurbine() {
     let tmpMediumToLowTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.modificationMediumToLowForm);
     this.ssmt.modifications[this.exploreModIndex].ssmt.turbineInput.mediumToLowTurbine = tmpMediumToLowTurbine;
     this.save();

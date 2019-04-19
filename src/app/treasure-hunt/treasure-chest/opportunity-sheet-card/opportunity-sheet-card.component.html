@@ -1,78 +1,54 @@
-<div class="card card-item w-100">
-  <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
-    <input type="checkbox" [(ngModel)]="opportunitySheet.selected">
-    <div class="d-flex align-items-center">
-      <span class="fa fa-edit pr-2 pt-0"></span>
-      <a (click)="editOpportunitySheet()">
-        <span *ngIf="!opportunitySheet.name">
-          Opportunity Sheet #{{index+1}}
-        </span>
-        <span *ngIf="opportunitySheet.name">
-          {{opportunitySheet.name}}
-        </span>
-      </a>
-    </div>
-    <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
-    <div class="btn-group">
-      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
-      </button>
-      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
-        <span class="dropdown-item">Delete</span>
-        <span class="dropdown-item">Create Copy</span>
+<div class="card treasure-hunt-card" [ngClass]="{'not-selected': !opportunitySheet.selected}">
+  <div class="card-body d-flex w-100 p-0">
+    <div class="col-1 col-item-br">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <app-animated-checkmark [active]="opportunitySheet.selected" (click)="toggleSelected()">
+          </app-animated-checkmark>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="card-body scroll-item summary-card-body p-1">
-    <table class="table">
-      <tr>
-        <td class="bold" colspan="2">Baseline Data:</td>
-      </tr>
-      <tr>
-        <td>
-          Electricity Use
-        </td>
-        <td>
-          {{opportunityResults.electricityResults.baselineEnergyUse}}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Electricity Cost
-        </td>
-        <td>
-          {{opportunityResults.electricityResults.baselineEnergyCost | currency:'USD'}}
-        </td>
-      </tr>
-      <tr>
-        <td class="bold" colspan="2">Modification Data:</td>
-      </tr>
-      <tr>
-        <td>
-          Electricity Use
-        </td>
-        <td>
-          {{opportunityResults.electricityResults.modificationEnergyUse}}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Electricity Cost
-        </td>
-        <td>
-          {{opportunityResults.electricityResults.modificationEnergyCost | currency:'USD'}}
-        </td>
-      </tr>
-      <tr>
-        <td class="bold" colspan="2">Savings:</td>
-      </tr>
-      <tr>
-        <td>
-          Total Savings
-        </td>
-        <td>
-          {{opportunityResults.totalCostSavings | currency:'USD'}}
-        </td>
-      </tr>
-    </table>
+    <div class="col-4 col-item-br opportunity-name">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <span class="fa fa-edit pr-2 pt-0"></span>
+          <a (click)="editOpportunitySheet()">
+            <span *ngIf="!opportunitySheet.name">
+              Opportunity Sheet #{{index+1}}
+            </span>
+            <span *ngIf="opportunitySheet.name">
+              {{opportunitySheet.name}}
+            </span>
+          </a><br>
+          <span>Annual Cost Savings: {{opportunityResults.totalCostSavings | currency:'USD'}}</span><br>
+          <span>Annual Electricty Savings: {{opportunityResults.electricityResults.energySavings | number:'1.0-0'}}
+            kWh</span><br>
+          <span>Annual Natural Gas Savings: {{opportunityResults.gasResults.energySavings | number:'1.0-0'}}
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/yr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span></span>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-3 col-item-br text-center graph-col treasure-hunt-item">
+      <div class="large pt-2">Utility Cost Savings</div>
+      <app-treasure-hunt-gauge [value]="percentSavings" [chartHeight]="85"></app-treasure-hunt-gauge>
+    </div>
+    <div class="col-2 col-item-br">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <span class="large">&mdash; &mdash;</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <a class="click-link" (click)="editOpportunitySheet()">Edit Opportunity</a><br>
+          <a class="click-link danger" (click)="deleteOpportunitySheet()">Delete</a><br>
+          <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -22,7 +22,7 @@ export class FanBasicsComponent implements OnInit {
 
   planes: Array<number> = [
     1, 2, 3
-  ]
+  ];
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {

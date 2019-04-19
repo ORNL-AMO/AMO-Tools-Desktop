@@ -17,7 +17,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class O2EnrichmentComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   inAssessment: boolean;
   @Input()
@@ -57,6 +57,9 @@ export class O2EnrichmentComponent implements OnInit {
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
+    }
+    if(this.settings.unitsOfMeasure == 'Custom'){
+      this.settings.unitsOfMeasure = 'Imperial';
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
@@ -108,7 +111,7 @@ export class O2EnrichmentComponent implements OnInit {
 
   calculate() {
     this.o2Enrichment = this.o2EnrichmentService.getObjFromForm(this.o2Form);
-    if (this.o2Form.status == 'VALID') {
+    if (this.o2Form.status === 'VALID') {
       this.o2EnrichmentOutput = this.phastService.o2Enrichment(this.o2Enrichment, this.settings);
     } else {
       this.o2EnrichmentOutput = {
@@ -140,7 +143,7 @@ export class O2EnrichmentComponent implements OnInit {
     if (this.calculator) {
       this.calcExists = true;
       if (this.calculator.o2Enrichment) {
-        this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.calculator.o2Enrichment)
+        this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.calculator.o2Enrichment);
       } else {
         this.o2Form = this.o2EnrichmentService.initForm(this.settings);
         let tmpO2Enrichment: O2Enrichment = this.o2EnrichmentService.getObjFromForm(this.o2Form);
@@ -159,7 +162,7 @@ export class O2EnrichmentComponent implements OnInit {
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       o2Enrichment: tmpO2Enrichment
-    }
+    };
     return tmpCalculator;
   }
 
@@ -185,7 +188,7 @@ export class O2EnrichmentComponent implements OnInit {
             this.calculator.id = result;
             this.calcExists = true;
             this.saving = false;
-          })
+          });
         });
       }
     }

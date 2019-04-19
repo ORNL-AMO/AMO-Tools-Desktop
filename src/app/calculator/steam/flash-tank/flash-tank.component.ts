@@ -76,7 +76,7 @@ export class FlashTankComponent implements OnInit {
   calculate(form: FormGroup) {
     this.input = this.flashTankService.getObjFromForm(form);
     this.flashTankService.flashTankInput = this.input;
-    if (form.status == 'VALID') {
+    if (form.status === 'VALID') {
       this.results = this.steamService.flashTank(this.input, this.settings);
     } else {
       this.results = this.getEmptyResults();
@@ -109,7 +109,7 @@ export class FlashTankComponent implements OnInit {
       outletLiquidSpecificEntropy: 0,
       outletLiquidTemperature: 0,
       outletLiquidVolume: 0
-    }
+    };
 
     return emptyResults;
   }

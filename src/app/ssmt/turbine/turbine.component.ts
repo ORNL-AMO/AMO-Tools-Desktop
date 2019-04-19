@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { TurbineInput, CondensingTurbine, PressureTurbine } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -25,6 +25,8 @@ export class TurbineComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   numberOfHeaders: number;
+  @Input()
+  modificationIndex: number;
 
   condensingTurbineForm: FormGroup;
   highToLowTurbineForm: FormGroup;
@@ -41,6 +43,12 @@ export class TurbineComponent implements OnInit {
       this.turbineInput = this.turbineService.initTurbineInputObj();
     }
     this.initForms();
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
+      this.initForms();
+    }
   }
 
   initForms() {
@@ -86,18 +94,18 @@ export class TurbineComponent implements OnInit {
   saveHighLowPressureTurbine() {
     let tmpPressureTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.highToLowTurbineForm);
     this.turbineInput.highToLowTurbine = tmpPressureTurbine;
-    this.emitSave.emit(this.turbineInput)
+    this.emitSave.emit(this.turbineInput);
   }
 
   saveHighMediumPressureTurbine() {
     let tmpPressureTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.highToMediumTurbineForm);
     this.turbineInput.highToMediumTurbine = tmpPressureTurbine;
-    this.emitSave.emit(this.turbineInput)
+    this.emitSave.emit(this.turbineInput);
   }
 
   saveMediumLowPressureTurbine() {
     let tmpPressureTurbine: PressureTurbine = this.turbineService.getPressureTurbineFromForm(this.mediumToLowTurbineForm);
     this.turbineInput.mediumToLowTurbine = tmpPressureTurbine;
-    this.emitSave.emit(this.turbineInput)
+    this.emitSave.emit(this.turbineInput);
   }
 }

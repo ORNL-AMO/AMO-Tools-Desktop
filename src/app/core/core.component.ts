@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges, HostListener, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AssessmentService } from '../assessment/assessment.service';
 import { Subscription } from 'rxjs';
@@ -12,11 +11,21 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { Router } from '../../../node_modules/@angular/router';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
-  styleUrls: ['./core.component.css']
+  styleUrls: ['./core.component.css'],
+  animations: [
+    trigger('survey', [
+      state('show', style({
+        bottom: '20px'
+      })),
+      transition('hide => show', animate('.5s ease-in')),
+      transition('show => hide', animate('.5s ease-out'))
+    ])
+  ]
 })
 
 export class CoreComponent implements OnInit {
@@ -38,6 +47,9 @@ export class CoreComponent implements OnInit {
   dashboardTab: string;
   dashboardViewSub: Subscription;
   updateError: boolean = false;
+
+  showSurvey: string = 'hide';
+  destroySurvey: boolean = false;
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
@@ -45,44 +57,48 @@ export class CoreComponent implements OnInit {
 
   ngOnInit() {
     this.electronService.ipcRenderer.once('available', (event, arg) => {
-      if (arg == true) {
+      if (arg === true) {
         this.showUpdateModal = true;
         this.assessmentService.updateAvailable.next(true);
         this.changeDetectorRef.detectChanges();
       }
-    })
+    });
 
     this.electronService.ipcRenderer.once('error', (event, arg) => {
-      if (arg == true) {
+      if (arg === true) {
         this.updateError = true;
       }
-    })
+    });
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
 
-    if (this.electronService.process.platform == 'win32') {
+    if (this.electronService.process.platform === 'win32') {
       this.showScreenshot = false;
     }
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(val => {
       this.dashboardTab = val;
-    })
+    });
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
-      this.inTutorialsView = (this.router.url == '/') && this.dashboardTab == 'tutorials';
+      this.inTutorialsView = (this.router.url === '/') && this.dashboardTab === 'tutorials';
       if (val && !this.assessmentService.tutorialShown) {
         this.showTutorial = true;
         this.hideTutorial = false;
         this.tutorialType = val;
         this.changeDetectorRef.detectChanges();
       }
-    })
+    });
 
-    if (this.suiteDbService.hasStarted == false) {
+    if (this.suiteDbService.hasStarted === false) {
       this.suiteDbService.startup();
     }
-    if (this.indexedDbService.db == undefined) {
+    if (this.indexedDbService.db === undefined) {
       this.initData();
     }
+
+    setTimeout(() => {
+      this.showSurvey = 'show';
+    }, 3500);
   }
 
   ngOnDestroy() {
@@ -97,7 +113,7 @@ export class CoreComponent implements OnInit {
   initData() {
     this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
       this.indexedDbService.getAllDirectories().then(val => {
-        if (val.length == 0) {
+        if (val.length === 0) {
           this.coreService.createDirectory().then(() => {
             this.coreService.createExamples().then(() => {
               this.coreService.createDirectorySettings().then(() => {
@@ -108,8 +124,8 @@ export class CoreComponent implements OnInit {
         } else {
           this.setAllDbData();
         }
-      })
-    })
+      });
+    });
   }
 
   setAllDbData() {
@@ -119,12 +135,18 @@ export class CoreComponent implements OnInit {
           this.calculatorDbService.setAll().then(() => {
             this.idbStarted = true;
             this.changeDetectorRef.detectChanges();
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
+  closeSurvey() {
+    this.showSurvey = 'hide';
+    setTimeout(() => {
+      this.destroySurvey = true;
+    }, 500);
+  }
 
 
   closeModal() {

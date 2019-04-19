@@ -45,7 +45,7 @@ export class PsatSummaryCardComponent implements OnInit {
                         this.maxCostSavings = tmpSavingCalc;
                         this.maxEnergySavings = tmpSavingEnergy;
                     }
-                })
+                });
             }
         }
     }

@@ -76,7 +76,7 @@ export class FanFieldDataComponent implements OnInit {
 
     this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
       this.getBodyHeight();
-    })
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -168,8 +168,8 @@ export class FanFieldDataComponent implements OnInit {
       barometricPressure: this.fsat.baseGasDensity.barometricPressure,
       flowRate: this.fieldDataForm.controls.flowRate.value,
       specificHeatRatio: this.fieldDataForm.controls.specificHeatRatio.value
-    }
-    let calcCompFactor: number = this.fsatService.compressibilityFactor(inputs, this.settings)
+    };
+    let calcCompFactor: number = this.fsatService.compressibilityFactor(inputs, this.settings);
     this.fieldDataForm.patchValue({
       compressibilityFactor: Number(calcCompFactor.toFixed(3))
     });
@@ -215,7 +215,7 @@ export class FanFieldDataComponent implements OnInit {
     this.fieldData.inletPressureData = inletPressureData;
     this.fieldDataForm.patchValue({
       inletPressure: this.fieldData.inletPressureData.calculatedInletPressure
-    })
+    });
     this.save();
   }
 
@@ -233,7 +233,7 @@ export class FanFieldDataComponent implements OnInit {
       inletPressure: this.fieldData.inletPressure,
       outletPressure: this.fieldData.outletPressure,
       flowRate: this.fieldData.flowRate
-    })
+    });
     this.save();
   }
 
@@ -242,11 +242,11 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   saveAndClose() {
-    if (this.pressureCalcType == 'flow') {
+    if (this.pressureCalcType === 'flow') {
       this.saveFlowAndPressure(this.fsatCopy);
-    } else if (this.pressureCalcType == 'inlet') {
+    } else if (this.pressureCalcType === 'inlet') {
       this.saveInletPressure(this.inletPressureCopy);
-    } else if (this.pressureCalcType == 'outlet') {
+    } else if (this.pressureCalcType === 'outlet') {
       this.saveOutletPressure(this.outletPressureCopy);
     }
     this.hidePressureModal();

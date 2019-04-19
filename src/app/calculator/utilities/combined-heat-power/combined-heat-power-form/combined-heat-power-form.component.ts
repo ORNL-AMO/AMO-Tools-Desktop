@@ -26,7 +26,7 @@ export class CombinedHeatPowerFormComponent implements OnInit {
   options: Array<string> = [
     'Cost Avoided',
     'Standby Rate'
-  ]
+  ];
   constructor() { }
 
   ngOnInit() {
@@ -41,9 +41,9 @@ export class CombinedHeatPowerFormComponent implements OnInit {
   }
 
   setCalculationOption() {
-    if (this.inputs.option == 0) {
+    if (this.inputs.option === 0) {
       this.inputs.percentAvgkWhElectricCostAvoidedOrStandbyRate = 75;
-    } else if (this.inputs.option == 1) {
+    } else if (this.inputs.option === 1) {
       this.inputs.percentAvgkWhElectricCostAvoidedOrStandbyRate = 0;
     }
     this.calculate();

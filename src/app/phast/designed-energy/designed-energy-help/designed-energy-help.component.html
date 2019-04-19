@@ -1,0 +1,166 @@
+<div class="p-2 pt-3 d-flex flex-column help-info meter-help">
+  <h5>
+    Designed Energy Help
+    <br>
+    <small class="text-muted">
+      Enter data about the design of processing heating equipment. This allows the user to compare PHAST calculations
+      to the design
+      of the equipment.
+      <br>
+      <hr class="my-1">
+      <!-- <span *ngIf="showElectricity"> -->
+      <strong>Electric: </strong>This method calculates total energy used by a furnace by
+      multiplying total rated capacity of
+      burners (Btu/hr) used in different heat zones with annual operating hours, percentage rated capacity used and
+      duty cycle.
+      <br>
+      <hr class="my-1">
+      <!-- </span> -->
+      <!-- <span *ngIf="showFuel"> -->
+      <strong>Fuel: </strong>This method calculates total energy used by a furnace by multiplying total rated
+      capacity
+      of burners
+      (Btu/hr) used in different heat zones with annual operating hours, percentage rated capacity used and duty
+      cycle.
+      <br>
+      <hr class="my-1">
+      <!-- </span> -->
+      <!-- <span *ngIf="showSteam"> -->
+      <strong>Steam: </strong>This method calculates total energy used by a furnace by
+      multiplying total heat of steam (Btu/lb)
+      used in different heat zones with steam flow rate, annual operating hours, percentage rated capacity used and
+      duty cycle.
+     <br>
+      <!-- </span> -->
+    </small>
+  </h5>
+  <hr class="my-1">
+  <br>
+
+
+  <div class="help-content">
+
+    <!-- steam help -->
+
+    <div class="my-2" *ngIf="currentField == 'steamTotalHeat'">
+      <h6>
+        Heat Content of Steam
+        <br>
+        <small class="text-muted">
+          Total heat contained in steam. This can be calculated with the steam properties tool, based on the
+          temperature
+          and pressure
+          of the steam.
+        </small>
+      </h6>
+      <hr class="my-1">
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'steamFlow'">
+      <h6>
+        Steam Flow Rate
+        <br>
+        <small class="text-muted">
+          Designed flow rate of steam.
+        </small>
+      </h6>
+      <hr class="my-1">
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'steamPercentOperatingHours'">
+      <h6>
+        Percent of Operating Hours
+        <br>
+        <small class="text-muted">
+          Percent of operating hours that the zone is running.
+        </small>
+      </h6>
+      <hr class="my-1">
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'steamPercentCapacityUsed'">
+      <h6>
+        Percent of Rated Capacity Used
+        <br>
+        <small class="text-muted">
+          % of capacity in use by furnace.
+        </small>
+      </h6>
+      <hr class="my-1">
+    </div>
+  </div>
+
+  <!-- electric help -->
+  <div class="my-2" *ngIf="currentField == 'electricitykwRating'">
+    <h6>
+      kW Rating for all sections
+      <br>
+      <small class="text-muted">
+        Total rated capacity of all sections in zone.
+      </small>
+    </h6>
+    <hr class="my-1">
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'electricityPercentCapacityUsed'">
+    <h6>
+      Percent of Rated Capacity Used
+      <br>
+      <small class="text-muted">
+        % of capacity in use by furnace.
+      </small>
+    </h6>
+    <hr class="my-1">
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'electricityPercentOperatingHours'">
+    <h6>
+      Percent of Operating Hours
+      <br>
+      <small class="text-muted">
+        Percent of operating hours that the zone is running.
+      </small>
+    </h6>
+    <hr class="my-1">
+  </div>
+
+  <!-- fuel help -->
+  <div class="my-2" *ngIf="currentField == 'fuelTotalBurnerCapacity'">
+    <h6>
+      Total Burner Rated Capacity
+      <br>
+      <small class="text-muted">
+        Total rated capacity of all burners in zone.
+      </small>
+    </h6>
+    <hr class="my-1">
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'fuelPercentCapacityUsed'">
+    <h6>
+      Percent of Rated Capacity Used
+      <br>
+      <small class="text-muted">
+        % of capacity in use by furnace.
+      </small>
+    </h6>
+    <hr class="my-1">
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'fuelPercentOperatingHours'">
+    <h6>
+      Percent of Operating Hours
+      <br>
+      <small class="text-muted">
+        Percent of operating hours that the zone is running.
+      </small>
+    </h6>
+    <hr class="my-1">
+  </div>
+</div>
+
+<!--<p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on s
+  </p>-->

@@ -26,17 +26,35 @@ export class TurbineDiagramComponent implements OnInit {
   settings: Settings;
   
   turbineLabel: string;
+
+  inletSteamClasses: Array<string>;
+  outletSteamClasses: Array<string>;
+  turbineWarnings: boolean;
   constructor() { }
 
   ngOnInit() {
-    if (this.turbineType == 'condensing') {
+    if (this.turbineType === 'condensing') {
       this.turbineLabel = 'Condensing Turbine';
-    } else if (this.turbineType == 'mediumToLow') {
+    } else if (this.turbineType === 'mediumToLow') {
       this.turbineLabel = 'MP to LP Turbine';
-    } else if (this.turbineType == 'highToLow') {
+    } else if (this.turbineType === 'highToLow') {
       this.turbineLabel = 'HP to LP Turbine';
-    } else if (this.turbineType == 'highToMedium') {
+    } else if (this.turbineType === 'highToMedium') {
       this.turbineLabel = 'HP to MP Turbine';
+    }
+  }
+
+  ngOnChanges(){
+    this.setClasses();
+    this.checkWarnings();
+  }
+
+  setClasses() {
+    this.inletSteamClasses = [this.inletColor];
+    this.outletSteamClasses = [this.outletColor];
+    if (this.turbine.massFlow < 1e-3) {
+      this.inletSteamClasses = ['no-steam-flow'];
+      this.outletSteamClasses = ['no-steam-flow'];
     }
   }
 
@@ -56,8 +74,19 @@ export class TurbineDiagramComponent implements OnInit {
     this.emitSelectEquipment.emit();
   }
 
-
   hoverTurbine() {
     this.emitSetHover.emit(this.turbineType + 'TurbineHovered');
+  }
+
+  checkWarnings(){
+    if(this.turbine.outletQuality < 1 || this.turbine.inletQuality < 1){
+      this.turbineWarnings = true;
+    }else if(this.turbine.outletPressure > this.turbine.inletPressure){
+      this.turbineWarnings = true;
+    }else if(this.turbine.massFlow < 0){
+      this.turbineWarnings = true;
+    }else{
+      this.turbineWarnings = false;
+    }
   }
 }

@@ -1,4 +1,4 @@
-<app-condensate-handling-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save($event)"
+<app-condensate-handling-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings" (emitSave)="save()"
   [baselineHighPressureForm]="baselineHighPressureForm" [modificationHighPressureForm]="modificationHighPressureForm"
   [baselineMediumPressureForm]="baselineMediumPressureForm" [modificationMediumPressureForm]="modificationMediumPressureForm"
   [baselineLowPressureForm]="baselineLowPressureForm" [modificationLowPressureForm]="modificationLowPressureForm"></app-condensate-handling-form>
@@ -160,14 +160,14 @@
         <div class="input-group">
           <input name="baselineHPSteamUsage" type="number" step="any" id="baselineHPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="baselineHighPressureForm.controls.processSteamUsage.invalid && !baselineHighPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
           <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
-            {{baselineHighPressureForm.controls.processSteamUsage.errors.max.max}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            {{baselineHighPressureForm.controls.processSteamUsage.errors.max.max}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineHighPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
-            {{baselineHighPressureForm.controls.processSteamUsage.errors.min.min}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            {{baselineHighPressureForm.controls.processSteamUsage.errors.min.min}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </span>
       </div>
     </form>
@@ -204,16 +204,16 @@
         <div class="input-group">
           <input name="baselineMPSteamUsage" type="number" step="any" id="baselineMPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="baselineMediumPressureForm.controls.processSteamUsage.invalid && !baselineMediumPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
           <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
             {{baselineMediumPressureForm.controls.processSteamUsage.errors.max.max}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineMediumPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
             {{baselineMediumPressureForm.controls.processSteamUsage.errors.min.min}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </span>
       </div>
     </form>
@@ -223,17 +223,17 @@
         <div class="input-group">
           <input name="modificationMPSteamUsage" type="number" step="any" id="modificationMPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="modificationMediumPressureForm.controls.processSteamUsage.invalid && !modificationMediumPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
           <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.max">Value can't be greater
             than
             {{modificationMediumPressureForm.controls.processSteamUsage.errors.max.max}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationMediumPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
             {{modificationMediumPressureForm.controls.processSteamUsage.errors.min.min}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </span>
       </div>
     </form>
@@ -251,16 +251,16 @@
         <div class="input-group">
           <input name="baselineLPSteamUsage" type="number" step="any" id="baselineLPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="baselineLowPressureForm.controls.processSteamUsage.invalid && !baselineLowPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
           <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
             {{baselineLowPressureForm.controls.processSteamUsage.errors.max.max}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="baselineLowPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
             {{baselineLowPressureForm.controls.processSteamUsage.errors.min.min}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </span>
       </div>
     </form>
@@ -270,16 +270,16 @@
         <div class="input-group">
           <input name="modificationLPSteamUsage" type="number" step="any" id="modificationLPSteamUsage" class="form-control"
             (focus)="focusField('processSteamUsage')" (input)="save()" formControlName="processSteamUsage" />
-          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
+          <span class="units input-group-addon"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="modificationLowPressureForm.controls.processSteamUsage.invalid && !modificationLowPressureForm.controls.processSteamUsage.pristine">
           <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.required">Value Required</span>
           <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.max">Value can't be greater than
             {{modificationLowPressureForm.controls.processSteamUsage.errors.max.max}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
           <span *ngIf="modificationLowPressureForm.controls.processSteamUsage.errors.min">Value can't be less than
             {{modificationLowPressureForm.controls.processSteamUsage.errors.min.min}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr.</span>
+            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
         </span>
       </div>
     </form>

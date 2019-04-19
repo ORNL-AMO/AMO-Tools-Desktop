@@ -28,7 +28,8 @@ export interface OpportunitySheet {
     businessUnits?: string,
     opportunityCost: OpportunityCost,
     baselineEnergyUseItems?: Array<EnergyUseItem>,
-    modificationEnergyUseItems?: Array<EnergyUseItem>
+    modificationEnergyUseItems?: Array<EnergyUseItem>,
+    selected?: boolean
 }
 
 export interface EnergyUseItem {

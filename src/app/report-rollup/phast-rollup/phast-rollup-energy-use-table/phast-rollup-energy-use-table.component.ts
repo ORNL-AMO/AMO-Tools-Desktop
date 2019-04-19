@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { ReportRollupService } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { PhastResultsData } from '../../report-rollup-models';
 
 
 @Component({
@@ -48,14 +48,14 @@ export class PhastRollupEnergyUseTableComponent implements OnInit {
 
   getResultPercent(value: number, sum: number): number {
     let percent = (value / sum) * 100;
-    let val = this.reportRollupService.transform(percent, 4)
+    let val = this.reportRollupService.transform(percent, 4);
     return val;
   }
 
   getConvertedPercent(value: number, sum: number, settings: Settings) {
     let convertVal = this.getConvertedValue(value, settings, this.settings.phastRollupUnit);
     let percent = (convertVal / sum) * 100;
-    let val = this.reportRollupService.transform(percent, 4)
+    let val = this.reportRollupService.transform(percent, 4);
     return val;
   }
 
