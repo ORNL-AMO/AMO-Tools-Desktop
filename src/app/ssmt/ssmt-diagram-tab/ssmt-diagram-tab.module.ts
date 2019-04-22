@@ -19,6 +19,8 @@ import { DeaeratorModule } from '../../calculator/steam/deaerator/deaerator.modu
 import { PrvModule } from '../../calculator/steam/prv/prv.module';
 import { FlashTankModule } from '../../calculator/steam/flash-tank/flash-tank.module';
 import { HeatExchangerTableComponent } from './heat-exchanger-table/heat-exchanger-table.component';
+import { HoverTableModule } from '../ssmt-diagram/hover-table/hover-table.module';
+import { ResultsTableComponent } from './results-table/results-table.component';
 
 @NgModule({
   imports: [
@@ -30,7 +32,8 @@ import { HeatExchangerTableComponent } from './heat-exchanger-table/heat-exchang
     TurbineModule,
     DeaeratorModule,
     PrvModule,
-    FlashTankModule
+    FlashTankModule,
+    HoverTableModule
   ],
   declarations: [
     SsmtDiagramTabComponent,
@@ -45,6 +48,8 @@ import { HeatExchangerTableComponent } from './heat-exchanger-table/heat-exchang
     DiagramSummaryTableComponent,
 
     HeatExchangerTableComponent,
+
+    ResultsTableComponent,
   ],
   exports: [
     SsmtDiagramTabComponent

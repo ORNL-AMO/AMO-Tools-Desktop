@@ -18,6 +18,8 @@ export class CondensateConnectorComponent implements OnInit {
   settings: Settings;
   @Input()
   isConnector: boolean;
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
 
   condensateClasses: Array<string>;
   constructor() { }
@@ -43,5 +45,9 @@ export class CondensateConnectorComponent implements OnInit {
     if (this.returnCondensate) {
       this.emitSetHover.emit('returnCondensateHovered');
     }
+  }
+
+  selectEquipment(str: string){
+    this.emitSelectEquipment.emit(str);
   }
 }

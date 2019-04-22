@@ -42,7 +42,7 @@ export class MakeupWaterDiagramComponent implements OnInit {
     this.emitSetHover.emit(str);
   }
 
-  selectHeatExchanger() {
-    this.emitSelectEquipment.emit('heat-exchanger');
+  selectEquipment(str:string) {
+    this.emitSelectEquipment.emit(str);
   }
 }

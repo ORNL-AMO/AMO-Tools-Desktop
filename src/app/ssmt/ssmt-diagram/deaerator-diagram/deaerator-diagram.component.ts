@@ -60,8 +60,16 @@ export class DeaeratorDiagramComponent implements OnInit {
     }
   }
 
-  selectEquipment() {
-    this.emitSelectEquipment.emit('deaerator');
+  selectPressure() {
+    if (this.inletPressure === 'high-pressure') {
+      this.selectEquipment('highPressureHovered');
+    } else if (this.inletPressure === 'low-pressure') {
+      this.selectEquipment('lowPressureHovered');
+    }
+  }
+
+  selectEquipment(str: string) {
+    this.emitSelectEquipment.emit(str);
   }
 
   checkWarnings() {

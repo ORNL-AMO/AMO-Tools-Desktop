@@ -51,8 +51,8 @@ export class CondensateFlashTankComponent implements OnInit {
     this.emitSetHover.emit(str);
   }
 
-  selectEquipment() {
-    this.emitSelectEquipment.emit('condensateFlashTank');
+  selectEquipment(str: string) {
+    this.emitSelectEquipment.emit(str);
   }
 
   checkWarnings(){

@@ -1,6 +1,7 @@
 <div class="d-flex flex-column w-100 h-100">
   <div class="d-flex align-items-start down-arrow h-100">
-    <div class="d-flex h-100 high-pressure align-items-center" (mouseenter)="hoverEquipment('highPressureHovered')" (mouseleave)="hoverEquipment('default')">
+    <div class="d-flex h-100 high-pressure align-items-center" (mouseenter)="hoverEquipment('highPressureHovered')"
+      (mouseleave)="hoverEquipment('default')" (click)="selectEquipment('highPressureHovered')">
       <span class="fa fa-chevron-down"></span>
     </div>
   </div>

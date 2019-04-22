@@ -46,7 +46,7 @@ export class BlowdownFlashTankComponent implements OnInit {
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }
-  selectEquipment() {
-    this.emitSelectEquipment.emit('blowdownFlashTank');
+  selectEquipment(str: string) {
+    this.emitSelectEquipment.emit(str);
   }
 }

@@ -15,13 +15,15 @@
       <div class="col-auto pt-2 pl-3 pr-3">
         <div class="d-flex w-100">
           <div class="p-0">
-            <button class="btn btn-default scale-btn" (click)="scaleDown()"><span class="fa fa-search-minus"></span></button>
+            <button class="btn btn-default scale-btn" (click)="scaleDown()"><span
+                class="fa fa-search-minus"></span></button>
           </div>
           <div class="flex-fill pr-1 pl-1">
             <input type="range" min="1" max="150" class="diagram-slider" id="myRange" [(ngModel)]="scaleValue">
           </div>
           <div class="p-0">
-            <button class="btn btn-default scale-btn" (click)="scaleUp()"><span class="fa fa-search-plus"></span></button>
+            <button class="btn btn-default scale-btn" (click)="scaleUp()"><span
+                class="fa fa-search-plus"></span></button>
           </div>
         </div>
       </div>
@@ -54,54 +56,8 @@
     </div>
     <div class="d-flex justify-content-center mr-2 ml-2">
       <div class="pt-4 result-tables" *ngIf="tabSelect == 'results' && dataCalculated && outputData.boilerOutput">
-        <!--summary-->
-        <app-diagram-summary-table *ngIf="selectedTable == 'default'" [inputData]="inputData"
-          [powerGenerated]="outputData.powerGenerated" [boiler]="outputData.boilerOutput"
-          [annualMakeupWaterFlow]="outputData.annualMakeupWaterFlow" [makeupWaterCost]="outputData.makeupWaterCost"
-          [boilerFuelCost]="outputData.boilerFuelCost" [powerGenerationCost]="outputData.powerGenerationCost"
-          [totalOperatingCost]="outputData.totalOperatingCost" [boilerFuelUsage]="outputData.boilerFuelUsage"
-          [settings]="settings"></app-diagram-summary-table>
-        <app-cost-table *ngIf="selectedTable == 'cost'" [inputData]="inputData" [outputData]="outputData"
-          [settings]="settings" (emitCalculateMarginalCosts)="calculateResultsWithMarginalCosts()"></app-cost-table>
-        <!--boiler-->
-        <app-boiler-table *ngIf="selectedTable == 'boiler'" [boiler]="outputData.boilerOutput" [inputData]="inputData"
-          [settings]="settings"></app-boiler-table>
-        <!--turbines-->
-        <app-turbine-table *ngIf="selectedTable == 'highToLowPressureTurbine'" [turbineName]="'High to Low Pressure'"
-          [turbine]="outputData.highToLowPressureTurbine" [settings]="settings">
-        </app-turbine-table>
-        <app-turbine-table *ngIf="selectedTable == 'highPressureToMediumPressureTurbine'"
-          [turbineName]="'High to Medium Pressure'" [turbine]="outputData.highPressureToMediumPressureTurbine"
-          [settings]="settings"></app-turbine-table>
-        <app-turbine-table *ngIf="selectedTable == 'mediumToLowPressureTurbine'"
-          [turbineName]="'Medium to Low Pressure'" [turbine]="outputData.mediumToLowPressureTurbine"
-          [settings]="settings"></app-turbine-table>
-        <app-turbine-table *ngIf="selectedTable == 'condensingTurbine'" [turbineName]="'Condensing'"
-          [turbine]="outputData.condensingTurbine" [settings]="settings">
-        </app-turbine-table>
-
-        <app-flash-tank-table *ngIf="selectedTable == 'highPressureFlashTank'"
-          [flashTank]="outputData.highPressureCondensateFlashTank" [flashTankType]="'High'" [settings]="settings">
-        </app-flash-tank-table>
-        <app-flash-tank-table *ngIf="selectedTable == 'mediumPressureFlashTank'"
-          [flashTank]="outputData.mediumPressureCondensateFlashTank" [flashTankType]="'Medium'" [settings]="settings">
-        </app-flash-tank-table>
-        <app-flash-tank-table *ngIf="selectedTable == 'condensateFlashTank'"
-          [flashTank]="outputData.condensateFlashTank" [flashTankType]="'Condensate'" [settings]="settings">
-        </app-flash-tank-table>
-        <app-flash-tank-table *ngIf="selectedTable == 'blowdownFlashTank'" [flashTank]="outputData.blowdownFlashTank"
-          [flashTankType]="'Blowdown'" [settings]="settings"></app-flash-tank-table>
-        <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prvType]="'highToMediumPressurePRV'"
-          [settings]="settings" [inputData]="inputData" [prv]="outputData.highToMediumPressurePRV"></app-prv-table>
-        <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'" [settings]="settings"
-          [inputData]="inputData" [prv]="outputData.lowPressurePRV"></app-prv-table>
-        <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="outputData.deaeratorOutput"
-          [settings]="settings" [inputData]="inputData"></app-deaerator-table>
-
-        <app-heat-exchanger-table *ngIf="selectedTable == 'heat-exchanger'" [outputData]="outputData"
-          [settings]="settings" [inputData]="inputData"></app-heat-exchanger-table>
-
-
+        <app-results-table [outputData]="outputData" [selectedTable]="selectedTable" [inputData]="inputData"
+          [settings]="settings"></app-results-table>
         <div class="d-flex w-100 pt-2 justify-content-center">
           <a class="click-link small" (click)="selectTable('default')" *ngIf="selectedTable != 'default'">Back to
             General Summary</a>

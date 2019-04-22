@@ -10,7 +10,7 @@
         </span>
       </div>
       <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverEquipment('condensateFlashTankInletHovered')"
-        (mouseleave)="hoverEquipment('condensateHovered')"></span>
+        (mouseleave)="hoverEquipment('condensateHovered')" (click)="selectEquipment('condensateFlashTankInletHovered')"></span>
     </div>
 
     <div class="d-flex align-self-end align-items-center flex-fill">
@@ -18,7 +18,7 @@
         (mouseleave)="hoverEquipment('default')" [ngClass]="steamPressureClasses">
         <div class="vented-steam-holder">
           <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('condensateFlashTankVentHovered')"
-            (mouseleave)="hoverEquipment('ventsHovered')"></span>
+            (mouseleave)="hoverEquipment('ventsHovered')" (click)="selectEquipment('condensateFlashTankVentHovered')"></span>
           <span class="vented-steam" *ngIf="flashTank.outletGasMassFlow != 0">
             {{flashTank.outletGasMassFlow | number:'1.0-2'}}
             <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
@@ -26,7 +26,7 @@
         </div>
 
       </div>
-      <div class="d-flex justify-content-center" (click)="selectEquipment()">
+      <div class="d-flex justify-content-center" (click)="selectEquipment('condensateFlashTank')">
         <div class="flash-tank-img-holder">
           <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-flash-tank.png" class="flash-tank-img"
             (mouseenter)="hoverEquipment('condensateFlashTankHovered')" (mouseleave)="hoverEquipment('default')">

@@ -70,6 +70,15 @@ export class TurbineDiagramComponent implements OnInit {
     this.emitSetHover.emit(this.turbineType + 'TurbineOutletHovered');
   }
 
+  selectInlet() {
+    this.emitSelectEquipment.emit(this.turbineType + 'TurbineInletHovered');
+  }
+
+  selectOutlet() {
+    this.emitSelectEquipment.emit(this.turbineType + 'TurbineOutletHovered');
+  }
+
+
   selectEquipment() {
     this.emitSelectEquipment.emit();
   }
