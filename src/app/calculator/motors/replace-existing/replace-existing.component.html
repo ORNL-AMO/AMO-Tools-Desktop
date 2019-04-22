@@ -1,14 +1,38 @@
 <div class="d-flex h-100 modify-conditions general standalone-calculator" #contentContainer>
   <div class="d-flex flex-column w-100 h-100 scroll-item">
-    <div #leftPanelHeader class="d-flex header mx-2 pb-1 pt-1 align-items-center bg-white">
+    <!-- <div #leftPanelHeader class="d-flex header mx-2 pb-1 pt-1 align-items-center bg-white">
       <div class="col-md-auto">
         <img src="assets/images/calculator-icons/motor-icons/replace.png" class="ico-size4">
       </div>
       <div class="pl-2">
         <h3>Replace Existing Motor - Efficiency Upgrade</h3>
       </div>
+    </div> -->
+    <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+      [ngClass]="{'justify-content-between': inTreasureHunt}">
+      <div class="d-flex pl-2 align-items-center">
+        <img src="assets/images/calculator-icons/motor-icons/replace.png" class="ico-size4">
+        <div class="pl-2">
+          <h3>Replace Existing Motor - Efficiency Upgrade</h3>
+        </div>
+      </div>
+      <div class="d-flex pr-2" *ngIf="inTreasureHunt">
+        <div class="d-flex help-holder">
+          <p class="help-text treasure-hunt-help">Click the save icon to add the
+            treasure to your chest! Add an opportunity sheet at any time or click cancel to discard changes and return
+            to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="addOpportunitySheet()">
+          <span class="fa fa-edit"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-times"></span>
+        </div>
+      </div>
     </div>
-
     <!-- existing motor -->
     <div class="d-flex">
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px' : containerHeight}">
@@ -18,8 +42,9 @@
           </div>
           <div class="d-flex flex-column mx-4 mb-4">
             <div class="pb-2">
-              <app-replace-existing-form [(inputs)]="existingMotorInputs" [isReplacementMotor]="false" [settings]="settings"
-                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"></app-replace-existing-form>
+              <app-replace-existing-form [(inputs)]="existingMotorInputs" [isReplacementMotor]="false"
+                [settings]="settings" (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)">
+              </app-replace-existing-form>
             </div>
             <div class="w-100 justify-content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10">
@@ -36,8 +61,9 @@
           </div>
           <div class="d-flex flex-column mx-4 mb-4">
             <div class="pb-2">
-              <app-replace-existing-form [(inputs)]="replacementMotorInputs" [isReplacementMotor]="true" [settings]="settings"
-                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"></app-replace-existing-form>
+              <app-replace-existing-form [(inputs)]="replacementMotorInputs" [isReplacementMotor]="true"
+                [settings]="settings" (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)">
+              </app-replace-existing-form>
             </div>
           </div>
         </div>
@@ -48,7 +74,8 @@
         <div class="d-flex flex-column mh-100 scroll-item">
           <div class="d-flex flex-wrap tabs primary mx-2 sticky-top">
             <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                (click)="setTab('results')">
                 <div>Results</div>
               </a>
             </div>
@@ -59,8 +86,10 @@
             </div>
           </div>
           <div class="d-flex justify-content-center px-2">
-            <app-replace-existing-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-replace-existing-help>
-            <app-replace-existing-results class="p-2" *ngIf="tabSelect == 'results'" [results]="results"></app-replace-existing-results>
+            <app-replace-existing-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
+            </app-replace-existing-help>
+            <app-replace-existing-results class="p-2" *ngIf="tabSelect == 'results'" [results]="results">
+            </app-replace-existing-results>
           </div>
         </div>
       </div>

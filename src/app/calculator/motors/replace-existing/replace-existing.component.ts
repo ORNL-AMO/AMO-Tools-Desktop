@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { ReplaceExistingService } from './replace-existing.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
@@ -9,6 +9,18 @@ import { Settings } from '../../../shared/models/settings';
   styleUrls: ['./replace-existing.component.css']
 })
 export class ReplaceExistingComponent implements OnInit {
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<ReplaceExistingData>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
+  @Output('emitAddOpportunitySheet')
+  emitAddOpportunitySheet = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
+
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
 
@@ -20,7 +32,6 @@ export class ReplaceExistingComponent implements OnInit {
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
-  settings: Settings;
   results: ReplaceExistingResults = {
     existingEnergyUse: 0,
     newEnergyUse: 0,
@@ -41,7 +52,9 @@ export class ReplaceExistingComponent implements OnInit {
   ngOnInit() {
     this.initMotorInputs();
     this.calculate(this.inputs);
-    this.settings = this.settingsDbService.globalSettings;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -131,6 +144,19 @@ export class ReplaceExistingComponent implements OnInit {
       purchaseCost: this.replacementMotorInputs.purchaseCost
     };
     this.results = this.replaceExistingService.getResults(this.inputs);
+  }
+
+  
+  save() {
+    //this.emitSave.emit({ baseline: this.baselineData, modifications: this.modificationData, baselineElectricityCost: this.baselineElectricityCost, modificationElectricityCost: this.modificationElectricityCost });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
+  }
+
+  addOpportunitySheet() {
+    this.emitAddOpportunitySheet.emit(true);
   }
 }
 
