@@ -62,4 +62,9 @@ a:not([href]):not([tabindex]){
     background-attachment: fixed;
     background-position: bottom center; 
     background-size: 100%;
+    min-height: 100%;
+}
+
+.fa.fa-edit.small{
+    font-size:18px;
 }

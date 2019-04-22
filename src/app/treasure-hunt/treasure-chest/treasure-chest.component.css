@@ -48,3 +48,12 @@
 .small.danger{
     color: red;    
 }
+
+
+.skyline{
+    background-image: url('../../../assets/images/industrial-skyline.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom center; 
+    background-size: 100%;
+}
