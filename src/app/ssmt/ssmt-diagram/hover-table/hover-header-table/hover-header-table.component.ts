@@ -21,6 +21,7 @@ export class HoverHeaderTableComponent implements OnInit {
   header: HeaderOutputObj;
   heatLoss: HeatLossOutput;
   headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
+  condensingWarning: boolean;
   constructor() { }
 
   ngOnInit() {
@@ -36,6 +37,12 @@ export class HoverHeaderTableComponent implements OnInit {
       this.header = this.outputData.lowPressureHeader;
       this.heatLoss = this.outputData.lowPressureSteamHeatLoss;
       this.headerInput = this.inputData.headerInput.lowPressure;
+    }
+
+    if(this.header.quality < 1){
+      this.condensingWarning = true;
+    }else{
+      this.condensingWarning = false;
     }
   }
 

@@ -48,12 +48,10 @@
     box-shadow: 0px 0px 6px 0px #FFE400 !important;
 }
 
-/* .ssmt-summary:hover{
+.ssmt-summary:hover{
     cursor: pointer;
     box-shadow: 0px 0px 6px 0px #F39C12 !important;
-} */
-
-
+}
 
 .coming-soon .summary-header {
     border-bottom: #ddd solid 1px;

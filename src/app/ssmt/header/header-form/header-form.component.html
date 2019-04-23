@@ -15,13 +15,14 @@
     <span class="alert-danger pull-right small"
       *ngIf="headerForm.controls.pressure.invalid && !headerForm.controls.pressure.pristine">
       <span *ngIf="headerForm.controls.pressure.errors.required">Value Required</span>
-      <span *ngIf="headerForm.controls.pressure.errors.max">Value can't be greater than
+      <span *ngIf="headerForm.controls.pressure.errors.max">{{maxPressureErrorMsg}}
         {{headerForm.controls.pressure.errors.max.max}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="headerForm.controls.pressure.errors.min">Value can't be less than
-        {{headerForm.controls.pressure.errors.min.min}}
+      <span *ngIf="headerForm.controls.pressure.errors.greaterThan">{{minPressureErrorMsg}}
+        {{headerForm.controls.pressure.errors.greaterThan}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="headerForm.controls.pressure.errors.boilerTemp">Temperature of steam in boiler is too low for this pressure value.</span>
+      <span *ngIf="headerForm.controls.pressure.errors.boilerTemp">Temperature of steam in boiler is too low for this
+        pressure value.</span>
     </span>
   </div>
 
@@ -79,9 +80,10 @@
     <span class="alert-danger pull-right small"
       *ngIf="headerForm.controls.condensateReturnTemperature.invalid && !headerForm.controls.condensateReturnTemperature.pristine">
       <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.required">Value Required</span>
-      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.max">Value can't be greater than
-        {{headerForm.controls.condensateReturnTemperature.errors.max.max}}
-        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+      <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.max">Value must be lower than saturation
+        temperature at deaerator pressure.
+        ({{headerForm.controls.condensateReturnTemperature.errors.max.max}}
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</span>
       <span *ngIf="headerForm.controls.condensateReturnTemperature.errors.min">Value can't be less than
         {{headerForm.controls.condensateReturnTemperature.errors.min.min}}
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>

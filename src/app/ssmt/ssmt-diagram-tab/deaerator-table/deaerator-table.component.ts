@@ -17,12 +17,56 @@ export class DeaeratorTableComponent implements OnInit {
   @Input()
   inputData: SSMTInputs;
 
+
+  notEnoughEnergyWarning: string;
+  massFlowWarnings: string;
+  inletEnthalpyWarning: string;
+  enthalpyFeedwaterWarning: string;
   constructor(private ssmtDiagramTabService: SsmtDiagramTabService) { }
 
   ngOnInit() {
   }
 
-  goToCalculator(){
+  ngOnChanges() {
+    this.checkWarnings();
+  }
+
+  goToCalculator() {
     this.ssmtDiagramTabService.setDeaeratorCalculator(this.deaerator, this.inputData);
+  }
+
+  checkWarnings() {
+    this.notEnoughEnergyWarning = this.checkEnergyWarning();
+    if (this.deaerator.inletSteamMassFlow < 0) {
+      this.massFlowWarnings = 'Negative steam flow';
+    } else if (this.deaerator.inletSteamMassFlow == 0) {
+      this.massFlowWarnings = 'No mass flow';
+    } else {
+      this.massFlowWarnings = undefined;
+    }
+
+    if (this.deaerator.inletSteamSpecificEnthalpy == this.deaerator.inletWaterSpecificEnthalpy) {
+      this.inletEnthalpyWarning = 'Steam and water specific enthalpy are equal';
+    } else if (this.deaerator.inletSteamSpecificEnthalpy < this.deaerator.inletWaterSpecificEnthalpy) {
+      this.inletEnthalpyWarning = 'Water specific enthalpy greater than steam.';
+    } else {
+      this.inletEnthalpyWarning = undefined;
+    }
+
+    if (this.deaerator.feedwaterSpecificEnthalpy > this.deaerator.inletWaterSpecificEnthalpy && this.deaerator.feedwaterSpecificEnthalpy > this.deaerator.inletSteamSpecificEnthalpy) {
+      this.enthalpyFeedwaterWarning = 'Steam specific enthalpy too low for feedwater requirements';
+    } else {
+      this.enthalpyFeedwaterWarning = undefined;
+    }
+  }
+
+  checkEnergyWarning(): string {
+    let energyIn: number = this.deaerator.inletSteamEnergyFlow + this.deaerator.inletWaterEnergyFlow;
+    let energyOut: number = this.deaerator.feedwaterEnergyFlow + this.deaerator.ventedSteamEnergyFlow;
+    if (energyIn - energyOut > (1e-7)) {
+      return 'Not enough energy to operate correctly';
+    } else {
+      return undefined;
+    }
   }
 }

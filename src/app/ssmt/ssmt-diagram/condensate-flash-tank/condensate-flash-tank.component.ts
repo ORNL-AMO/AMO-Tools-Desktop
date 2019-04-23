@@ -22,12 +22,13 @@ export class CondensateFlashTankComponent implements OnInit {
   steamPressureClasses: Array<string>;
   outletCondensateClasses: Array<string>;
   inletCondensateClasses: Array<string>;
-
+  flashTankWarning: boolean;
   ngOnInit() {
   }
 
   ngOnChanges() {
     this.setClasses();
+    this.checkWarnings();
   }
 
   setClasses() {
@@ -54,4 +55,13 @@ export class CondensateFlashTankComponent implements OnInit {
     this.emitSelectEquipment.emit('condensateFlashTank');
   }
 
+  checkWarnings(){
+    if(this.flashTank.outletGasMassFlow == 0){
+      this.flashTankWarning = true;
+    }else if(this.flashTank.inletWaterQuality == 1){
+      this.flashTankWarning = true;
+    }else{
+      this.flashTankWarning = false;
+    }
+  }
 }

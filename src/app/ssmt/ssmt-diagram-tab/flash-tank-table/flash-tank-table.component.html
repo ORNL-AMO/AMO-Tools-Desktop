@@ -1,5 +1,15 @@
 <div class="d-flex flex-column">
   <label class="group-label">{{flashTankType}} Flash Tank</label>
+  <div class="w-100 error pb-2 pt-2 text-center" *ngIf="noSteamFlashingWarning || superheatedSteamWarning">
+    <span class="warning-label">Warning:<br></span>
+    <span *ngIf="noSteamFlashingWarning">
+      <span class="fa fa-exclamation-triangle"></span> {{noSteamFlashingWarning}}
+      <br>
+    </span>
+    <span *ngIf="superheatedSteamWarning">
+      <span class="fa fa-exclamation-triangle"></span> {{superheatedSteamWarning}}
+    </span>
+  </div>
   <app-flash-tank-results *ngIf="flashTank" [results]="flashTank" [settings]="settings"></app-flash-tank-results>
   <div class="w-100 text-center" *ngIf="flashTank">
     <a class="click-link small" (click)="goToCalculator()"><span class="fa fa-calculator click-item pr-2"></span>Copy to

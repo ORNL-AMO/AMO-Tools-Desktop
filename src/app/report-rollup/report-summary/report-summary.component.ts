@@ -17,6 +17,8 @@ export class ReportSummaryComponent implements OnInit {
   showPsatModal = new EventEmitter<boolean>();
   @Output('showFsatModal')
   showFsatModal = new EventEmitter<boolean>();
+  @Output('showSsmtModal')
+  showSsmtModal = new EventEmitter<boolean>();
   @Input()
   phastResults: Array<PhastResultsData>;
   @Input()
@@ -57,8 +59,8 @@ export class ReportSummaryComponent implements OnInit {
     this.showFsatModal.emit(true);
   }
 
-  showSsmtModal(){
-
+  showSteamModal(){
+    this.showSsmtModal.emit(true);
   }
 
   collapseSummary(str: string) {

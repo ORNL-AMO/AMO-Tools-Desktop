@@ -121,6 +121,13 @@
             {{boilerForm.controls.steamTemperature.errors.min.min}}
             <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
+        <span class="alert-warning pull-right small"
+          *ngIf="highPressureHeaderForm && highPressureHeaderForm.controls.pressure.invalid">
+          <span *ngIf="highPressureHeaderForm.controls.pressure.errors.boilerTemp">Temperature must be greater than the
+            saturation temperature at the highest pressure header.
+            ({{highPressureHeaderForm.controls.pressure.errors.boilerTemp.val | number:'1.0-1'}} <span
+              [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</span>
+        </span>
       </div>
 
       <div class="form-group">
@@ -160,6 +167,11 @@
           <span *ngIf="boilerForm.controls.deaeratorPressure.errors.min">Value can't be less than
             {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span
               [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+        </span>
+        <span class="alert-warning pull-right small"
+          *ngIf="lowPressureHeaderForm && lowPressureHeaderForm.controls.pressure.invalid && lowPressureHeaderForm.controls.pressure.errors.greaterThan">
+          <span *ngIf="lowPressureHeaderForm.controls.pressure.errors.greaterThan">Lowest pressure header must be greater than
+            dearator pressure.</span>
         </span>
       </div>
     </form>

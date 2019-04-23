@@ -43,7 +43,6 @@ export interface SSMTOutput {
   boilerFuelCost: number;
   makeupWaterCost: number;
   totalOperatingCost: number;
-  totalEnergyUse: number;
   powerGenerationCost: number;
   boilerFuelUsage: number;
   marginalHPCost: number;

@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerRanges } from './boiler.service';
-import { BoilerInput } from '../../shared/models/steam/ssmt';
+import { BoilerInput, HeaderWithHighestPressure, HeaderInput } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from '../compare.service';
+import { HeaderService } from '../header/header.service';
 
 @Component({
   selector: 'app-boiler',
@@ -28,6 +29,8 @@ export class BoilerComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   modificationIndex: number;
+  @Input()
+  headerInput: HeaderInput;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -35,8 +38,10 @@ export class BoilerComponent implements OnInit {
   options: any;
   showModal: boolean;
   idString: string = 'baseline_';
+  highPressureHeaderForm: FormGroup;
+  lowPressureHeaderForm: FormGroup;
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
-    private compareService: CompareService) { }
+    private compareService: CompareService, private headerService: HeaderService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -70,6 +75,7 @@ export class BoilerComponent implements OnInit {
     } else {
       this.boilerForm = this.boilerService.initForm(this.settings);
     }
+    this.setPressureForms(this.boilerInput);
   }
 
   setFuelTypes() {
@@ -104,8 +110,23 @@ export class BoilerComponent implements OnInit {
     this.save();
   }
 
+  setPressureForms(boilerInput: BoilerInput) {
+    if (boilerInput) {
+      if (this.headerInput.highPressure) {
+        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, boilerInput);
+      }
+
+      if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressure) {
+        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
+      } else if (this.headerInput.lowPressure && this.headerInput.numberOfHeaders > 1) {
+        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressure, this.settings, boilerInput.deaeratorPressure, undefined);
+      }
+    }
+  }
+
   save() {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+    this.setPressureForms(tmpBoiler);
     this.emitSave.emit(tmpBoiler);
   }
 

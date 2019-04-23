@@ -324,6 +324,17 @@ export class SteamService {
     results.inletWaterEnergyFlow = this.convertEnergyFlowOutput(results.inletWaterEnergyFlow, settings);
     results.outletGasEnergyFlow = this.convertEnergyFlowOutput(results.outletGasEnergyFlow, settings);
     results.outletLiquidEnergyFlow = this.convertEnergyFlowOutput(results.outletLiquidEnergyFlow, settings);
+    if (results.outletGasMassFlow < 0) {
+      results.outletGasMassFlow = 0;
+      results.outletGasEnergyFlow = 0;
+      results.outletLiquidEnergyFlow = results.inletWaterEnergyFlow;
+      results.outletLiquidMassFlow = results.inletWaterMassFlow;
+      results.outletLiquidPressure = results.inletWaterPressure;
+      results.outletLiquidQuality = results.inletWaterQuality;
+      results.outletLiquidSpecificEnthalpy = results.inletWaterSpecificEnthalpy;
+      results.outletLiquidSpecificEntropy = results.inletWaterSpecificEntropy;
+      results.outletLiquidTemperature = results.inletWaterTemperature;
+    }
     return results;
   }
 

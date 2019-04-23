@@ -9,7 +9,8 @@
         <app-operations *ngIf="modelTab == 'operations'" [ssmt]="ssmt" [settings]="settings"
           (emitSave)="saveBaselineSsmt($event)" [selected]="baselineSelected" [isBaseline]="true"></app-operations>
         <app-boiler *ngIf="modelTab == 'boiler'" [selected]="baselineSelected" [settings]="settings"
-          [boilerInput]="ssmt.boilerInput" (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true"></app-boiler>
+          [boilerInput]="ssmt.boilerInput" (emitSave)="saveBaselineBoiler($event)" [isBaseline]="true"
+          [headerInput]="ssmt.headerInput"></app-boiler>
         <app-header *ngIf="modelTab == 'header'" [selected]="baselineSelected" [settings]="settings"
           [headerInput]="ssmt.headerInput" (emitSave)="saveBaselineHeader($event)" [isBaseline]="true"
           [boilerInput]="ssmt.boilerInput"></app-header>
@@ -30,7 +31,8 @@
           [modificationIndex]="modificationIndex"></app-operations>
         <app-boiler *ngIf="modelTab == 'boiler'" [selected]="modifiedSelected" [settings]="settings"
           [boilerInput]="ssmt.modifications[modificationIndex].ssmt.boilerInput" (emitSave)="saveModBoiler($event)"
-          [modificationIndex]="modificationIndex">
+          [modificationIndex]="modificationIndex"
+          [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput">
         </app-boiler>
         <app-header *ngIf="modelTab == 'header'" [selected]="modifiedSelected" [settings]="settings"
           [headerInput]="ssmt.modifications[modificationIndex].ssmt.headerInput" (emitSave)="saveModHeader($event)"
