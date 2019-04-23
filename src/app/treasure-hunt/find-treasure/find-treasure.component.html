@@ -114,7 +114,8 @@
 </app-standalone-opportunity-sheet>
 
 <app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="selectCalc('none')"
-  (emitSave)="saveNewOpportunitySheet($event)" [settings]="settings" [inTreasureHunt]="true"></app-replace-existing>
+  (emitSave)="saveNewReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="opperatingHoursPerYear"></app-replace-existing>
 
 
 
@@ -145,7 +146,7 @@
       </div>
       <div class="modal-footer p-1">
         <button class="btn btn-danger btn-sm pull-right" (click)="closeSaveCalcModal()">Cancel</button>
-        <button class="btn btn-primary btn-sm pull-right" (click)="saveLighting()">Save</button>
+        <button class="btn btn-primary btn-sm pull-right" (click)="saveNewCalc()">Save</button>
       </div>
     </div>
   </div>

@@ -21,7 +21,8 @@ export class ReplaceExistingComponent implements OnInit {
   emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-
+  @Input()
+  opperatingHours: number
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
@@ -50,6 +51,13 @@ export class ReplaceExistingComponent implements OnInit {
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    if (this.settingsDbService.globalSettings.defaultPanelTab) {
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
+
     if (this.replaceExistingService.replaceExistingData) {
       this.inputs = this.replaceExistingService.replaceExistingData;
     } else {
@@ -57,12 +65,6 @@ export class ReplaceExistingComponent implements OnInit {
     }
     this.initForm();
     this.calculate();
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
-    if (this.settingsDbService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
-    }
   }
 
   ngAfterViewInit() {
@@ -80,7 +82,11 @@ export class ReplaceExistingComponent implements OnInit {
   }
 
   initMotorInputs() {
-    this.inputs = this.replaceExistingService.initReplaceExistingData();
+    let oppHours: number = 5200;
+    if (this.opperatingHours) {
+      oppHours = this.opperatingHours;
+    }
+    this.inputs = this.replaceExistingService.initReplaceExistingData(this.settings, oppHours);
   }
 
   initForm() {
@@ -113,9 +119,8 @@ export class ReplaceExistingComponent implements OnInit {
     this.results = this.replaceExistingService.getResults(this.inputs);
   }
 
-
   save() {
-    //this.emitSave.emit({ baseline: this.baselineData, modifications: this.modificationData, baselineElectricityCost: this.baselineElectricityCost, modificationElectricityCost: this.modificationElectricityCost });
+    this.emitSave.emit(this.inputs);
   }
 
   cancel() {

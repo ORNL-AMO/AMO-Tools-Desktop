@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class ReplaceExistingService {
@@ -46,12 +47,12 @@ export class ReplaceExistingService {
     };
   }
 
-  initReplaceExistingData(): ReplaceExistingData {
+  initReplaceExistingData(settings: Settings, operatingHours: number): ReplaceExistingData {
     return {
-      operatingHours: 5200,
+      operatingHours: operatingHours,
       motorSize: 150,
       load: 75,
-      electricityCost: 0.12,
+      electricityCost: settings.electricityCost,
       existingEfficiency: 92,
       newEfficiency: 96,
       purchaseCost: 13000
