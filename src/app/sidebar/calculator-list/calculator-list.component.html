@@ -185,6 +185,9 @@
       <li [ngClass]="{'selected': selectedCalculator == 'electricity-reduction'}">
         <span class="sidebar-item" (click)="selectCalculator('electricity-reduction')">Electricity Reduction</span>
       </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'natural-gas-reduction'}">
+          <span class="sidebar-item" (click)="selectCalculator('natural-gas-reduction')">Natural Gas Reduction</span>
+        </li>
     </ul>
   </li>
 </ul>

@@ -1,20 +1,20 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
+import { NaturalGasReductionResults } from '../natural-gas-reduction.service';
 import { Settings } from '../../../../shared/models/settings';
-import { ElectricityReductionResults } from '../electricity-reduction.service';
 import * as d3 from 'd3';
 
 @Component({
-  selector: 'app-electricity-reduction-results',
-  templateUrl: './electricity-reduction-results.component.html',
-  styleUrls: ['./electricity-reduction-results.component.css']
+  selector: 'app-natural-gas-reduction-results',
+  templateUrl: './natural-gas-reduction-results.component.html',
+  styleUrls: ['./natural-gas-reduction-results.component.css']
 })
-export class ElectricityReductionResultsComponent implements OnInit, OnChanges {
+export class NaturalGasReductionResultsComponent implements OnInit, OnChanges {
   @Input()
   settings: Settings;
   @Input()
-  baselineResults: ElectricityReductionResults;
+  baselineResults: NaturalGasReductionResults;
   @Input()
-  modificationResults: ElectricityReductionResults;
+  modificationResults: NaturalGasReductionResults;
   @Input()
   modificationExists: boolean;
 
@@ -46,6 +46,7 @@ export class ElectricityReductionResultsComponent implements OnInit, OnChanges {
   setFormat(): any {
     this.format = d3.format(',.3f');
   }
+
   setCurrencyFormat(): void {
     this.currencyFormat = d3.format('$,.2f');
   }
