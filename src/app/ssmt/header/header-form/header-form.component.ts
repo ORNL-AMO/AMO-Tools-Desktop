@@ -30,6 +30,8 @@ export class HeaderFormComponent implements OnInit {
   idString: string;
 
   headerLabel: string;
+  minPressureErrorMsg: string;
+  maxPressureErrorMsg: string;
   constructor(private headerService: HeaderService, private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -38,10 +40,7 @@ export class HeaderFormComponent implements OnInit {
     } else {
       this.enableForm();
     }
-
-    // if (this.pressureLevel === 'highPressure') {
-    //   this.headerForm.controls.flashCondensateReturn.disable();
-    // }
+    this.setErrorMsgs();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,7 +51,31 @@ export class HeaderFormComponent implements OnInit {
         this.enableForm();
       }
     }
+
+    if (changes.numberOfHeaders && !changes.numberOfHeaders.isFirstChange()) {
+      this.setErrorMsgs();
+    }
   }
+
+  setErrorMsgs() {
+    if (this.pressureLevel === 'highPressure') {
+      if (this.numberOfHeaders == 1) {
+        this.minPressureErrorMsg = 'Value must be greater than dearator pressure: ';
+      } else {
+        this.minPressureErrorMsg = 'Value must be greater than ';
+
+      }
+      this.maxPressureErrorMsg = 'Value must be less than ';
+    } else {
+      if (this.pressureLevel === 'lowPressure') {
+        this.minPressureErrorMsg = 'Value must be greater than dearator pressure: ';
+      } else {
+        this.minPressureErrorMsg = 'Value must be greater than low pressure header: ';
+      }
+      this.maxPressureErrorMsg = 'Value must be less than higher pressure headers: ';
+    }
+  }
+
 
   enableForm() {
     if (this.pressureLevel === 'highPressure') {

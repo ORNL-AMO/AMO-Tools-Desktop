@@ -115,3 +115,11 @@
     border-bottom-right-radius: 25px;
     margin-bottom: 1px;
 }
+
+.deaerator-warning{
+    font-size: 40px;
+    color: red;
+    position: absolute;
+    right: 48px;
+    bottom: 20px;
+}

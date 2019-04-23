@@ -11,7 +11,7 @@
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings" (emitSave)="saveSsmt($event)"
         [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true"></app-boiler>
+        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" [headerInput]="_ssmt.headerInput"></app-boiler>
       <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true"
         [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
         [isBaseline]="true" [boilerInput]="_ssmt.boilerInput"></app-header>

@@ -15,6 +15,9 @@ export class FlashTankTableComponent implements OnInit {
   flashTankType: string;
   @Input()
   settings: Settings;
+
+  noSteamFlashingWarning: string;
+  superheatedSteamWarning: string;
   constructor(private ssmtDiagramTabService: SsmtDiagramTabService) { }
 
   ngOnInit() {
@@ -23,7 +26,24 @@ export class FlashTankTableComponent implements OnInit {
     }
   }
 
+  ngOnChanges(){
+    this.checkWarnings();
+  }
+
   goToCalculator(){
     this.ssmtDiagramTabService.setFlashTankCalculator(this.flashTank);
+  }
+
+  checkWarnings(){
+    if(this.flashTank.outletGasMassFlow == 0){
+      this.noSteamFlashingWarning = 'No steam flashing.';
+    }else{
+      this.noSteamFlashingWarning = undefined;
+    }
+    if(this.flashTank.inletWaterQuality == 1){
+      this.superheatedSteamWarning = 'Inlet is superheated steam.'
+    }else{
+      this.superheatedSteamWarning = undefined;
+    }
   }
 }

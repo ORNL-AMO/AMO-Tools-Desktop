@@ -26,13 +26,16 @@ export class HeaderDiagramComponent implements OnInit {
   steamClasses: Array<string>;
   condensateClasses: Array<string>;
   pressureClasses: Array<string>;
+  condensingWarning: boolean;
   constructor() { }
 
   ngOnInit() {
+
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.setClasses();
+    this.checkWarnings();
   }
 
   setClasses() {
@@ -42,11 +45,11 @@ export class HeaderDiagramComponent implements OnInit {
       this.steamClasses = ['no-steam-flow'];
     }
     this.condensateClasses = ['condensate'];
-    if(this.condensate.massFlow < 1e-3){
+    if (this.condensate.massFlow < 1e-3) {
       this.condensateClasses = ['no-steam-flow'];
     }
 
-    if(this.header.massFlow < 1e-3){
+    if (this.header.massFlow < 1e-3) {
       this.pressureClasses.push('noSteamFlow');
     }
 
@@ -70,5 +73,13 @@ export class HeaderDiagramComponent implements OnInit {
 
   hoverProcessUsageInlet() {
     this.emitSetHover.emit(this.pressureLevel + 'ProcessSteamInletHovered');
+  }
+
+  checkWarnings() {
+    if (this.header.quality < 1) {
+      this.condensingWarning = true;
+    } else {
+      this.condensingWarning = false;
+    }
   }
 }

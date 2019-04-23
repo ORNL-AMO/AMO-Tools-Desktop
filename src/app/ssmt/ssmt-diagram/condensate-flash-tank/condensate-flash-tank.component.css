@@ -75,3 +75,11 @@
 .vents{
     width: 50px;
 }
+
+.condensing-warning{
+    font-size: 40px;
+    color: red;
+    position: absolute;
+    right: 55px;
+    top: 0px;
+}

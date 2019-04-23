@@ -27,7 +27,10 @@
       <td class="text-center"> {{header.temperature | number:'1.0-1'}}
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </td>
-      <td class="bold">Phase</td>
+      <td class="bold">
+        <span class="error" *ngIf="condensingWarning == true">Saturated</span>
+        <span *ngIf="condensingWarning == false">Phase</span>
+      </td>
       <td class="text-center">
         <span *ngIf="header.quality == 0">Liquid</span>
         <span *ngIf="header.quality == 1">Gas</span>

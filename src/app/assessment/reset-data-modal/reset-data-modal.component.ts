@@ -205,7 +205,7 @@ export class ResetDataModalComponent implements OnInit {
     }
     //ssmt
     let ssmtExample: Assessment = this.assessmentDbService.getSsmtExample();
-    if(ssmtExample){
+    if (ssmtExample) {
       //exists
       //delete
       this.indexedDbService.deleteAssessment(ssmtExample.id).then(() => {
@@ -289,22 +289,24 @@ export class ResetDataModalComponent implements OnInit {
       results => {
         this.indexedDbService.db = this.indexedDbService.initDb().then(() => {
           this.coreService.createDirectory().then(() => {
-            this.coreService.createDirectorySettings().then(() => {
-              //after dir settings add check to see if we want to reset settings or keep existing
-              if (!this.resetAppSettings) {
-                //keep existing
-                this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
-                  this.coreService.createExamples().then(() => {
+            //after dir settings add check to see if we want to reset settings or keep existing
+            if (!this.resetAppSettings) {
+              //keep existing
+              this.indexedDbService.putSettings(this.settingsDbService.globalSettings).then(() => {
+                this.coreService.createExamples().then(() => {
+                  this.coreService.createDirectorySettings().then(() => {
                     this.setAllDbData();
                   });
                 });
-              } else {
-                //use reset settings
-                this.coreService.createExamples().then(() => {
+              });
+            } else {
+              //use reset settings
+              this.coreService.createExamples().then(() => {
+                this.coreService.createDirectorySettings().then(() => {
                   this.setAllDbData();
                 });
-              }
-            });
+              });
+            }
           });
         });
       });
