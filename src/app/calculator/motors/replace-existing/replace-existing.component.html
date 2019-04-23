@@ -35,27 +35,24 @@
     </div>
     <!-- existing motor -->
     <div class="d-flex">
-      <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px' : containerHeight}">
-        <div class="w-50">
-          <div class="header mx-2">
-            <h3>Existing Motor</h3>
+      <div class="scroll-item col-8 bg-white" [ngStyle]="{'height.px' : containerHeight}">
+        <div class="d-flex flex-column p-2">
+          <div class="header">
+            <h3>Motor Properties</h3>
           </div>
-          <div class="d-flex flex-column mx-4 mb-4">
-            <div class="pb-2">
-              <app-replace-existing-form [(inputs)]="existingMotorInputs" [isReplacementMotor]="false"
-                [settings]="settings" (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)">
-              </app-replace-existing-form>
-            </div>
-            <div class="w-100 justify-content-center btn-group btn-group-sm">
-              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10">
-                Reset Data
-              </button>
-            </div>
+          <div class="pb-2">
+            <app-replace-existing-form [(replaceExistingForm)]="replaceExistingForm" [settings]="settings"
+              (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)">
+            </app-replace-existing-form>
+          </div>
+          <div class="w-100 justify-content-center btn-group btn-group-sm">
+            <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="resetData()">
+              Reset Data
+            </button>
           </div>
         </div>
-
         <!-- replacement motor -->
-        <div class="w-50">
+        <!-- <div class="w-50">
           <div class="header mx-2">
             <h3>Replacement Motor</h3>
           </div>
@@ -66,7 +63,7 @@
               </app-replace-existing-form>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <!-- help/result -->

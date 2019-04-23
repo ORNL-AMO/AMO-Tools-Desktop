@@ -1,91 +1,53 @@
 import { Injectable } from '@angular/core';
-import { ReplaceExistingData, ReplaceExistingResults } from './replace-existing.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
 
 @Injectable()
 export class ReplaceExistingService {
-  replaceExistingData: ReplaceExistingData = {
-    operatingHours: 5200,
-    motorSize: 150,
-    load: 75,
-    electricityCost: 0.12,
-    existingEfficiency: 92,
-    newEfficiency: 96,
-    purchaseCost: 13000
-  };
+  
+  replaceExistingData: ReplaceExistingData;
   constructor(private formBuilder: FormBuilder) { }
 
-  initForm(isReplacementMotor: boolean): FormGroup {
-    if (isReplacementMotor) {
-      let tmpForm: FormGroup = this.formBuilder.group({
-        operatingHours: [5200, [Validators.required, Validators.min(0)]],
-        motorSize: [150, [Validators.required, Validators.min(0)]],
-        load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
-        electricityCost: [0.12, [Validators.required, Validators.min(0)]],
-        newEfficiency: [96, [Validators.required, Validators.min(0), Validators.max(100)]],
-        purchaseCost: [1300, [Validators.required, Validators.min(0)]]
-      });
-      tmpForm.controls.operatingHours.disable();
-      tmpForm.controls.motorSize.disable();
-      tmpForm.controls.load.disable();
-      tmpForm.controls.electricityCost.disable();
-      return tmpForm;
-    }
-    else {
-      let tmpForm: FormGroup = this.formBuilder.group({
-        operatingHours: [5200, [Validators.required, Validators.min(0)]],
-        motorSize: [150, [Validators.required, Validators.min(0)]],
-        load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
-        electricityCost: [0.12, [Validators.required, Validators.min(0)]],
-        existingEfficiency: [92, [Validators.required, Validators.min(0), Validators.max(100)]]
-      });
-      return tmpForm;
-    }
+  initForm(): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      operatingHours: [5200, [Validators.required, Validators.min(0)]],
+      motorSize: [150, [Validators.required, Validators.min(0)]],
+      load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
+      electricityCost: [0.12, [Validators.required, Validators.min(0)]],
+      newEfficiency: [96, [Validators.required, Validators.min(0), Validators.max(100)]],
+      existingEfficiency: [96, [Validators.required, Validators.min(0), Validators.max(100)]],
+      purchaseCost: [1300, [Validators.required, Validators.min(0)]]
+    });
+    return tmpForm;
   }
 
-  getFormFromObj(inputObj: ReplaceExistingData, isReplacementMotor: boolean): FormGroup {
-    if (isReplacementMotor) {
-      let tmpForm: FormGroup = this.formBuilder.group({
-        operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
-        motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
-        load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
-        electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
-        newEfficiency: [inputObj.newEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
-        purchaseCost: [inputObj.purchaseCost, [Validators.required, Validators.min(0)]]
-      });
-      tmpForm.controls.operatingHours.disable();
-      tmpForm.controls.motorSize.disable();
-      tmpForm.controls.load.disable();
-      tmpForm.controls.electricityCost.disable();
-      return tmpForm;
-    }
-    else {
-      let tmpForm: FormGroup = this.formBuilder.group({
-        operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
-        motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
-        existingEfficiency: [inputObj.existingEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
-        load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
-        electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
-      });
-      return tmpForm;
-    }
+  getFormFromObj(inputObj: ReplaceExistingData): FormGroup {
+    let tmpForm: FormGroup = this.formBuilder.group({
+      operatingHours: [inputObj.operatingHours, [Validators.required, Validators.min(0)]],
+      motorSize: [inputObj.motorSize, [Validators.required, Validators.min(0)]],
+      load: [inputObj.load, [Validators.required, Validators.min(0), Validators.max(100)]],
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
+      newEfficiency: [inputObj.newEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      existingEfficiency: [inputObj.existingEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      purchaseCost: [inputObj.purchaseCost, [Validators.required, Validators.min(0)]]
+    });
+    return tmpForm;
   }
 
-  getObjFromForm(form: FormGroup, isReplacementMotor: boolean): ReplaceExistingData {
-    this.replaceExistingData = {
-      operatingHours: isReplacementMotor ? null : form.controls.operatingHours.value,
-      motorSize: isReplacementMotor ? null : form.controls.motorSize.value,
-      existingEfficiency: isReplacementMotor ? null : form.controls.existingEfficiency.value,
-      load: isReplacementMotor ? null : form.controls.load.value,
-      electricityCost: isReplacementMotor ? null : form.controls.electricityCost.value,
-      newEfficiency: isReplacementMotor ? form.controls.newEfficiency.value : null,
-      purchaseCost: isReplacementMotor ? form.controls.purchaseCost.value : null
+  getObjFromForm(form: FormGroup): ReplaceExistingData {
+    return {
+      operatingHours: form.controls.operatingHours.value,
+      motorSize: form.controls.motorSize.value,
+      existingEfficiency: form.controls.existingEfficiency.value,
+      load: form.controls.load.value,
+      electricityCost: form.controls.electricityCost.value,
+      newEfficiency: form.controls.newEfficiency.value,
+      purchaseCost: form.controls.purchaseCost.value
     };
-    return this.replaceExistingData;
   }
 
   initReplaceExistingData(): ReplaceExistingData {
-    this.replaceExistingData = {
+    return {
       operatingHours: 5200,
       motorSize: 150,
       load: 75,
@@ -94,7 +56,6 @@ export class ReplaceExistingService {
       newEfficiency: 96,
       purchaseCost: 13000
     };
-    return this.replaceExistingData;
   }
 
   getResults(inputs: ReplaceExistingData): ReplaceExistingResults {

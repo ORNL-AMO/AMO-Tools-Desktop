@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, Output, 
 import { ReplaceExistingService } from './replace-existing.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-replace-existing',
@@ -43,15 +45,18 @@ export class ReplaceExistingComponent implements OnInit {
   };
   inputs: ReplaceExistingData;
 
-  replacementMotorInputs: ReplaceExistingData;
-  existingMotorInputs: ReplaceExistingData;
-
+  replaceExistingForm: FormGroup;
 
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.initMotorInputs();
-    this.calculate(this.inputs);
+    if (this.replaceExistingService.replaceExistingData) {
+      this.inputs = this.replaceExistingService.replaceExistingData;
+    } else {
+      this.initMotorInputs();
+    }
+    this.initForm();
+    this.calculate();
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
@@ -66,32 +71,26 @@ export class ReplaceExistingComponent implements OnInit {
     }, 100);
   }
 
-  initMotorInputs() {
-    this.inputs = this.replaceExistingService.initReplaceExistingData();
-    this.existingMotorInputs = {
-      operatingHours: this.inputs.operatingHours,
-      motorSize: this.inputs.motorSize,
-      load: this.inputs.load,
-      electricityCost: this.inputs.electricityCost,
-      existingEfficiency: this.inputs.existingEfficiency,
-      newEfficiency: null,
-      purchaseCost: null
-    };
-    this.replacementMotorInputs = {
-      operatingHours: this.existingMotorInputs.operatingHours,
-      motorSize: this.existingMotorInputs.motorSize,
-      load: this.existingMotorInputs.load,
-      electricityCost: this.existingMotorInputs.electricityCost,
-      existingEfficiency: null,
-      newEfficiency: this.inputs.newEfficiency,
-      purchaseCost: this.inputs.purchaseCost
-    };
+  ngOnDestroy() {
+    if (!this.inTreasureHunt) {
+      this.replaceExistingService.replaceExistingData = this.inputs;
+    } else {
+      this.replaceExistingService.replaceExistingData = undefined;
+    }
   }
 
+  initMotorInputs() {
+    this.inputs = this.replaceExistingService.initReplaceExistingData();
+  }
 
-  btnResetData() {
+  initForm() {
+    this.replaceExistingForm = this.replaceExistingService.getFormFromObj(this.inputs);
+  }
+
+  resetData() {
     this.initMotorInputs();
-    this.calculate(this.inputs);
+    this.initForm();
+    this.calculate();
   }
 
   resizeTabs() {
@@ -109,44 +108,12 @@ export class ReplaceExistingComponent implements OnInit {
     this.currentField = str;
   }
 
-  calculate(_inputs: ReplaceExistingData) {
-    //case of calculate replacement motor
-    if (_inputs.newEfficiency === null) {
-      this.existingMotorInputs = _inputs;
-      this.replacementMotorInputs = {
-        operatingHours: this.existingMotorInputs.operatingHours,
-        motorSize: this.existingMotorInputs.motorSize,
-        load: this.existingMotorInputs.load,
-        electricityCost: this.existingMotorInputs.electricityCost,
-        existingEfficiency: null,
-        newEfficiency: this.replacementMotorInputs.newEfficiency,
-        purchaseCost: this.replacementMotorInputs.purchaseCost
-      };
-    }
-    else {
-      this.replacementMotorInputs = {
-        operatingHours: this.existingMotorInputs.operatingHours,
-        motorSize: this.existingMotorInputs.motorSize,
-        load: this.existingMotorInputs.load,
-        electricityCost: this.existingMotorInputs.electricityCost,
-        existingEfficiency: null,
-        newEfficiency: _inputs.newEfficiency,
-        purchaseCost: _inputs.purchaseCost
-      };
-    }
-    this.inputs = {
-      operatingHours: this.existingMotorInputs.operatingHours,
-      motorSize: this.existingMotorInputs.motorSize,
-      load: this.existingMotorInputs.load,
-      electricityCost: this.existingMotorInputs.electricityCost,
-      existingEfficiency: this.existingMotorInputs.existingEfficiency,
-      newEfficiency: this.replacementMotorInputs.newEfficiency,
-      purchaseCost: this.replacementMotorInputs.purchaseCost
-    };
+  calculate() {
+    this.inputs = this.replaceExistingService.getObjFromForm(this.replaceExistingForm);
     this.results = this.replaceExistingService.getResults(this.inputs);
   }
 
-  
+
   save() {
     //this.emitSave.emit({ baseline: this.baselineData, modifications: this.modificationData, baselineElectricityCost: this.baselineElectricityCost, modificationElectricityCost: this.modificationElectricityCost });
   }
@@ -161,21 +128,3 @@ export class ReplaceExistingComponent implements OnInit {
 }
 
 
-export interface ReplaceExistingData {
-  operatingHours: number;
-  motorSize: number;
-  existingEfficiency: number;
-  load: number;
-  electricityCost: number;
-  newEfficiency: number;
-  purchaseCost: number;
-}
-export interface ReplaceExistingResults {
-  existingEnergyUse: number;
-  newEnergyUse: number;
-  existingEnergyCost: number;
-  newEnergyCost: number;
-  annualEnergySavings: number;
-  costSavings: number;
-  simplePayback: number;
-}
