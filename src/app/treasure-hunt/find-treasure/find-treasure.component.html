@@ -16,7 +16,7 @@
             Add more details to each opportunity by clicking the <span class="fa fa-edit small"></span> icon and filling
             out an opportunity sheet. </li>
           <li>
-            "Treasure Chest" tab to view a summary of your found treasure. </li>
+            Click the "Treasure Chest" tab to view a summary of your found treasure. </li>
         </ul>
       </div>
     </div>
@@ -115,7 +115,7 @@
 
 <app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="selectCalc('none')"
   (emitSave)="saveNewReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
-  [opperatingHours]="opperatingHoursPerYear"></app-replace-existing>
+  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()"></app-replace-existing>
 
 
 

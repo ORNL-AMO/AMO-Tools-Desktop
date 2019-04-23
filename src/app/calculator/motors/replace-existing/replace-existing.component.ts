@@ -42,7 +42,8 @@ export class ReplaceExistingComponent implements OnInit {
     newEnergyCost: 0,
     annualEnergySavings: 0,
     costSavings: 0,
-    simplePayback: 0
+    simplePayback: 0,
+    percentSavings: 0
   };
   inputs: ReplaceExistingData;
 

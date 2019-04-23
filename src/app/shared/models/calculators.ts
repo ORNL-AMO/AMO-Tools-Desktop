@@ -132,4 +132,5 @@ export interface ReplaceExistingResults {
     annualEnergySavings: number;
     costSavings: number;
     simplePayback: number;
+    percentSavings: number
 }

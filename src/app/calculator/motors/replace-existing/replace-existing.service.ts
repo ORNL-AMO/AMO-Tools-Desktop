@@ -67,7 +67,8 @@ export class ReplaceExistingService {
       newEnergyCost: 0,
       annualEnergySavings: 0,
       costSavings: 0,
-      simplePayback: 0
+      simplePayback: 0,
+      percentSavings: 0
     };
 
     results.existingEnergyUse = this.getExistingEnergyUse(inputs);
@@ -104,4 +105,7 @@ export class ReplaceExistingService {
   }
 
   //may want to add percent savings as a result. talk to kristina first
+  getPercentSavings(){
+
+  }
 }

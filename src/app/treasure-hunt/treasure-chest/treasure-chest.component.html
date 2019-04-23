@@ -21,18 +21,28 @@
       <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
         <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
           (emitEditLighting)="editLighting($event, index)"
-          (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)"
-          (emitDeleteLightingReplacement)="showDeleteLightingModal($event, index)" [treasureHunt]="treasureHunt"
-          (emitSaveTreasureHunt)="saveTreasureHunt()">
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'lightingReplacement')"
+          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'lightingReplacement')"
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()">
         </app-lighting-replacement-card>
+      </div>
+    </div>
+    <div *ngIf="tabSelect == 'all'">
+      <div class="col-12" *ngFor="let replaceExistingMotor of treasureHunt.replaceExistingMotors; let index = index;">
+        <app-replace-existing-motor-card [replaceExistingMotor]="replaceExistingMotor" [index]="index"
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'replaceExistingMotor')"
+          [settings]="settings" [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+          (emitDeleteReplaceExistingMotor)="showDeleteItem($event, index, 'replaceExistingMotor')"
+          (emitEditReplaceExistingMotor)="editReplaceExistingMotor($event, index)">
+        </app-replace-existing-motor-card>
       </div>
     </div>
     <div *ngIf="tabSelect == 'all' || tabSelect == 'opportunity-sheet'">
       <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;">
         <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet" [index]="index"
           (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"
-          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="saveTreasureHunt()"
-          (emitDeleteOpportunity)="showDeleteOpportunityModal($event, index)">
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+          (emitDeleteOpportunity)="showDeleteItem($event, index, 'opportunitySheet')">
         </app-opportunity-sheet-card>
       </div>
     </div>
@@ -65,6 +75,11 @@
   (emitSave)="saveEditOpportunity($event)" [settings]="settings" [(opportunitySheet)]="selectedEditOpportunitySheet">
 </app-standalone-opportunity-sheet>
 
+<app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveEditReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+</app-replace-existing>
+
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
@@ -76,7 +91,7 @@
           <span aria-hidden="true">&times;</span>
         </button> -->
       </div>
-      <div class="modal-body text-center" *ngIf="isSaveLighting">
+      <div class="modal-body text-center" *ngIf="itemType != 'opportunitySheet'">
         <p class="help-text" *ngIf="!selectedEditOpportunitySheet">There is no opportunity sheet filled out for this
           opportunity. Would you like to add one
           before saving?</p>
@@ -90,16 +105,17 @@
         <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="selectedEditOpportunitySheet">Edit
           Opportunity Sheet</a>
       </div>
-      <div class="modal-body text-center" *ngIf="!isSaveLighting">
+      <div class="modal-body text-center" *ngIf="itemType == 'opportunitySheet'">
         <p class="help-text">Are you sure you want to save the changes to your existing opportunity? These changes
           cannot be
           undone.</p>
       </div>
       <div class="modal-footer p-1">
-        <button class="btn btn-danger btn-sm pull-right" (click)="closeSaveCalcModal()">Cancel</button>
-        <button class="btn btn-primary btn-sm pull-right" (click)="saveLighting()" *ngIf="isSaveLighting">Save</button>
+        <button class="btn btn-danger btn-sm pull-right" (click)="hideSaveCalcModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm pull-right" (click)="saveEditCalc()"
+          *ngIf="itemType != 'opportunitySheet'">Save</button>
         <button class="btn btn-primary btn-sm pull-right" (click)="saveEditOpportunitySheet()"
-          *ngIf="!isSaveLighting">Save</button>
+          *ngIf="itemType == 'opportunitySheet'">Save</button>
       </div>
     </div>
   </div>
@@ -111,7 +127,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
-        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveOpportunitySheet($event)"
+        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveItemOpportunitySheet($event)"
           [(opportunitySheet)]="selectedEditOpportunitySheet">
         </app-opportunity-sheet>
       </div>
