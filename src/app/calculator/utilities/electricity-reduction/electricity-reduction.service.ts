@@ -176,6 +176,7 @@ export class ElectricityReductionService {
         break;
       case 3:
         form.controls.energy.setValidators([Validators.required, Validators.min(0)]);
+        break;
     }
     return form;
   }

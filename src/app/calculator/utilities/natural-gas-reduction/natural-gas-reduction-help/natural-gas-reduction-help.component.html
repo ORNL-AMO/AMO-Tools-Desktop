@@ -1,0 +1,231 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Natural Gas Reduction
+    <br>
+    <small class="text-muted">
+      This calculator is used to quantify the energy savings associated with reducing natural gas usage.
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        This calculator can be used to quantify typical natural gas energy savings opportunities like
+        <hr class="my-1">Reduce the operation time of equipment which uses natural gas
+        <hr class="my-1">Decrease the flow rate of the "fluid" being heated. (The most common "fluids" heated are water
+        and air)
+        <hr class="my-1">Turn off equipment that uses natural gas
+        <hr class="my-1">Change set point to a lower temperature
+        <hr class="my-1">
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'hoursPerDay'">
+    <h6>
+      Hours per Day
+      <small class="text-muted">
+        <br>
+        Number of hours per day the equipment is on. This is not necessarily how long the shift is. Be sure to include
+        normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'daysPerMonth'">
+    <h6>
+      Days per Month
+      <small class="text-muted">
+        <br>
+        Number of days per month the equipment is on. Be sure to include normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'monthsPerYear'">
+    <h6>
+      Months per Year
+      <small class="text-muted">
+        <br>
+        Numbers of months per year.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fuelCost'">
+    <h6>
+      Fuel Cost
+      <small class="text-muted">
+        <br>
+        Per unit cost of natural gas in ($/{{settings.energyResultUnit}}).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'systemEfficiency'">
+    <h6>
+      System Efficiency
+      <small class="text-muted">
+        <br>
+        Specify the natural gas system efficiency.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'measurementMethod'">
+    <h6>
+      Method of Measurement
+      <small class="text-muted">
+        <br>
+        Choose the method to be used to determine natural gas consumption.
+        <hr class="my-1">Flow Meter Method - The best way to measure natural gas consumption is with a flow meter. Pay
+        attention to the units in the meter before entering data.
+        <hr class="my-1">Mass Flow Method for Air - This method uses the mass flow of air heated by the natural gas to
+        back-calculate the natural gas consumption. The mass flow of air can be determined either from a mass flow meter
+        or using nameplate data. Using mass flow meter readings is much more accurate than the nameplate readings. Mass
+        flow calculations use ASHRAE accepted formulae to calculate consumption.
+        <hr class="my-1">Mass Flow Method for Water - This method uses the mass flow of water heated by the natural gas
+        to back-calculate the natural gas consumption. The mass flow of water can be determined either from a mass flow
+        meter or using nameplate data.
+        <hr class="my-1">Other Method - Choose this option if you are using an off sheet method to determine the natural
+        gas consumption.
+        <hr class="my-1">
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flowRate'">
+    <h6>
+      Flow Rate
+      <small class="text-muted">
+        <br>
+        Enter the flow reading from the flow meter in cubic feet per minute.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'units'">
+    <h6>
+      Number of Unit
+      <small class="text-muted">
+        <br>
+        The number of identical units in the specified system. When units of different size have been combined
+        previously, enter 1.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'isNameplate'">
+    <h6>
+      Air Flow Measurement
+      <small class="text-muted">
+        <br>
+        Air flow may be either measured or taken from the equipment nameplate. (Measured data is more accurate)
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'areaOfDuct'">
+    <h6>
+      Area of Duct
+      <small class="text-muted">
+        <br>
+        The area of the duct where air heated by the natural gas is flowing.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'airVelocity'">
+    <h6>
+      Air Velocity
+      <small class="text-muted">
+        <br>
+        The velocity of air heated by natural gas measured by a mass flow meter.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'airFlow'">
+    <h6>
+      Air Flow Rate
+      <small class="text-muted">
+        <br>
+        Air flow rate as given by the equipment nameplate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'airInletTemperature'">
+    <h6>
+      Inlet Temperature
+      <small class="text-muted">
+        <br>
+        Input the average temperature of the incoming air.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'airOutletTemperature'">
+    <h6>
+      Outlet Temperature
+      <small class="text-muted">
+        <br>
+        Input the average temperature of the discharge air.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'waterFlowRate'">
+    <h6>
+      Water Flow Rate
+      <small class="text-muted">
+        <br>
+        Water flow rate as given by the equipment nameplate or the meter reading of water flow rate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'waterInletTemperature'">
+    <h6>
+      Inlet Temperature
+      <small class="text-muted">
+        <br>
+        Input the average temperature of the incoming water.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'waterOutletTemperature'">
+    <h6>
+      Outlet Temperature
+      <small class="text-muted">
+        <br>
+        Input the average temperature of the discharge water.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'consumption'">
+    <h6>
+      Consumption
+      <small class="text-muted">
+        <br>
+        Enter the off sheet calculated value for energy consumption in {{settings.energyResultUnit}}.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+</div>

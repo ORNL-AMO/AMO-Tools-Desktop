@@ -18,6 +18,7 @@ import { PowerFactorCorrectionModule } from './power-factor-correction/power-fac
 import { UnitConverterService } from './unit-converter/unit-converter.service';
 import { Co2SavingsModule } from './co2-savings/co2-savings.module';
 import { ElectricityReductionModule } from './electricity-reduction/electricity-reduction.module';
+import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-reduction.module';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,7 @@ import { ElectricityReductionModule } from './electricity-reduction/electricity-
         CashFlowComponent,
         CashFlowHelpComponent,
         CashFlowFormComponent,
-        CashFlowDiagramComponent
+        CashFlowDiagramComponent,
     ],
     exports: [
         UnitConverterComponent,
@@ -43,7 +44,8 @@ import { ElectricityReductionModule } from './electricity-reduction/electricity-
         PreAssessmentModule,
         PowerFactorCorrectionModule,
         Co2SavingsModule,
-        ElectricityReductionModule
+        ElectricityReductionModule,
+        NaturalGasReductionModule
     ],
     providers: [
         CashFlowService,
