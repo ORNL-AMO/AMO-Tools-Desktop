@@ -36,7 +36,19 @@ import { HoverHeatExchangerComponent } from './hover-heat-exchanger/hover-heat-e
     HoverHeatExchangerComponent
   ],
   exports: [
-    HoverTableComponent
+    HoverTableComponent,
+    HoverBoilerTableComponent,
+    HoverTurbineTableComponent,
+    HoverHeaderTableComponent,
+    HoverFlashTankTableComponent,
+    HoverPrvTableComponent,
+    HoverCondensateTableComponent,
+    HoverMakeupWaterComponent,
+    HoverBlowdownTableComponent,
+    HoverProcessUsageComponent,
+    HoverDeaeratorTableComponent,
+    HoverSteamPropertiesComponent,
+    HoverHeatExchangerComponent
   ]
 })
 export class HoverTableModule { }

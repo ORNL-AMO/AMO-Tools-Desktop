@@ -14,6 +14,8 @@ export class FeedwaterDiagramComponent implements OnInit {
   emitSetHover = new EventEmitter<string>();
   @Input()
   settings: Settings;
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
 
   feedwaterClasses: Array<string>;
   constructor() { }
@@ -34,5 +36,9 @@ export class FeedwaterDiagramComponent implements OnInit {
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
+  }
+
+  selectEquipment(str: string) {
+    this.emitSelectEquipment.emit(str);
   }
 }

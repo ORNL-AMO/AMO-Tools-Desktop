@@ -20,7 +20,9 @@ export class ReturnCondensateHeaderComponent implements OnInit {
   deaerator: DeaeratorOutput;
   @Input()
   settings: Settings;
-  
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
+
   condensateMassFlow: number;
   condensateClasses: Array<string>;
   constructor() { }
@@ -29,23 +31,23 @@ export class ReturnCondensateHeaderComponent implements OnInit {
 
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.setCondensateMassFlow();
     this.setClasses();
   }
 
-  setCondensateMassFlow(){
+  setCondensateMassFlow() {
     if (this.condensateFlashTank) {
       this.condensateMassFlow = this.condensateFlashTank.outletLiquidMassFlow;
-    }else {
+    } else {
       this.condensateMassFlow = this.returnCondensate.massFlow;
     }
   }
-  
-  setClasses(){
+
+  setClasses() {
     this.condensateClasses = ['makeup-water'];
-    if(this.makeupWaterAndCondensateHeader.massFlow < 1e-3){
-      this.condensateClasses =  ['no-steam-flow'];
+    if (this.makeupWaterAndCondensateHeader.massFlow < 1e-3) {
+      this.condensateClasses = ['no-steam-flow'];
     }
   }
 
@@ -53,4 +55,7 @@ export class ReturnCondensateHeaderComponent implements OnInit {
     this.emitSetHover.emit(str);
   }
 
+  selectEquipment(str: string) {
+    this.emitSelectEquipment.emit(str);
+  }
 }

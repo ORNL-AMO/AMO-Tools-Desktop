@@ -91,6 +91,7 @@ export class SsmtDiagramTabComponent implements OnInit {
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;
     this.dataCalculated = true;
+    this.selectedTable = 'default';
   }
 
   calculateResultsWithMarginalCosts() {

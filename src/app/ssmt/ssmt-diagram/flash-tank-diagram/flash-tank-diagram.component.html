@@ -1,19 +1,19 @@
 <div class="d-flex h-100 w-100 flash-tank-diagram">
   <div class="d-flex flex-column justify-content-end h-100">
     <div class="d-flex down-pipe justify-content-center" [ngClass]="steamPressureClasses" (mouseenter)="hoverHeader()"
-      (mouseleave)="hoverEquipment('default')">
+      (mouseleave)="hoverEquipment('default')" (click)="selectHeader()">
       <span class="fa fa-chevron-down hidden-chevron"></span>
     </div>
   </div>
   <div class="d-flex flex-column h-100 flex-fill">
-    <div class="d-flex align-self-end flex-fill" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')" [ngClass]="inletCondensateClasses">
+    <div class="d-flex align-self-end flex-fill" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')" [ngClass]="inletCondensateClasses" (click)="selectCondensate()">
       <span class="fa fa-chevron-down mb-auto" [ngClass]="{'hidden-chevron':flashTankType == 'highPressure'}"
         (mouseenter)="hoverInlet()" (mouseleave)="hoverCondensate()"></span>
     </div>
 
     <div class="d-flex align-self-end align-items-center flex-fill w-100">
       <div class="d-flex outletGas h-100 w-100 justify-content-center" [ngClass]="steamPressureClasses" (mouseenter)="hoverHeader()"
-        (mouseleave)="hoverEquipment('default')">
+        (mouseleave)="hoverEquipment('default')" (click)="selectHeader()">
         <span class="fa fa-chevron-left" (mouseenter)="hoverOutletGas()" (mouseleave)="hoverHeader()"></span>
         {{flashTank.outletGasMassFlow | number:'1.0-2'}}
         <span class="pl-1" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
@@ -30,7 +30,7 @@
 
     <div class="d-flex align-self-end flex-fill chevron-margin" (mouseenter)="hoverCondensate()" (mouseleave)="hoverEquipment('default')">
       <div class="d-flex" [ngClass]="outletCondensateClasses">
-        <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverOutlet()" (mouseleave)="hoverHeader()"></span>
+        <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverOutlet()" (mouseleave)="hoverHeader()" (click)="selectOutlet()"></span>
       </div>
     </div>
   </div>

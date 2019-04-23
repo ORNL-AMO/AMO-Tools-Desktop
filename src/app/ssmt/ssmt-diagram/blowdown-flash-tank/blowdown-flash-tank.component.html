@@ -1,11 +1,12 @@
 <div class="d-flex h-100 flex-column justify-content-center">
   <div class="d-flex align-self-center flex-fill low-pressure-margin"
     (mouseenter)="hoverEquipment('lowPressureHovered')" (mouseleave)="hoverEquipment('default')"
-    [ngClass]="steamPressureClasses">
+    [ngClass]="steamPressureClasses" (click)="selectEquipment('lowPressureHovered')">
     <div class="outlet-steam-holder">
       <span class="fa fa-chevron-up" (mouseenter)="hoverEquipment('boilerBlowdownFlashedHovered')"
         (mouseleave)="hoverEquipment('lowPressureHovered')"></span>
-      <span class="outlet-steam-mass-flow" *ngIf="flashTank.outletGasMassFlow != 0">{{flashTank.outletGasMassFlow | number:'1.0-2'}}
+      <span class="outlet-steam-mass-flow"
+        *ngIf="flashTank.outletGasMassFlow != 0">{{flashTank.outletGasMassFlow | number:'1.0-2'}}
         <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
       </span>
 
@@ -14,14 +15,16 @@
 
   <div class="d-flex align-items-center justify-content-center flash-tank-diagram">
     <div class="d-flex outlet-chevron justify-content-center" (mouseenter)="hoverEquipment('blowdownHovered')"
-      (mouseleave)="hoverEquipment('default')" [ngClass]="inletCondensateClasses">
+      (mouseleave)="hoverEquipment('default')" [ngClass]="inletCondensateClasses"
+      (click)="selectEquipment('blowdownHovered')">
       <div class="outlet-blowdown-holder">
         <span class="fa fa-chevron-down hidden-chevron" (mouseenter)="hoverEquipment('boilerBlowdownHovered')"
           (mouseleave)="hoverEquipment('blowdownHovered')"></span>
       </div>
     </div>
     <div class="d-flex tank-pipe justify-content-center" (mouseenter)="hoverEquipment('blowdownHovered')"
-      (mouseleave)="hoverEquipment('default')" [ngClass]="outletCondensateClasses">
+      (mouseleave)="hoverEquipment('default')" [ngClass]="outletCondensateClasses"
+      (click)="selectEquipment('blowdownHovered')">
       <div class="outlet-blowdown-holder">
         <span class="outlet-blowdown" *ngIf="flashTank.outletLiquidMassFlow != 0">
           {{flashTank.outletLiquidMassFlow | number:'1.0-2'}}
@@ -32,7 +35,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-center">
-      <div class="flash-tank-img-holder" (click)="selectEquipment()">
+      <div class="flash-tank-img-holder" (click)="selectEquipment('blowdownFlashTank')">
         <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-flash-tank.png" class="flash-tank-img"
           (mouseenter)="hoverEquipment('blowdownFlashTankHovered')" (mouseleave)="hoverEquipment('default')">
         <span class="flash-tank-label" (mouseenter)="hoverEquipment('blowdownFlashTankHovered')"
@@ -41,9 +44,11 @@
       </div>
     </div>
     <div class="d-flex tank-pipe justify-content-center" (mouseenter)="hoverEquipment('blowdownHovered')"
-      (mouseleave)="hoverEquipment('default')" [ngClass]="outletCondensateClasses">
+      (mouseleave)="hoverEquipment('default')" [ngClass]="outletCondensateClasses"
+      (click)="selectEquipment('blowdownHovered')">
       <div class="inlet-blowdown-holder">
-        <span class="inlet-blowdown" *ngIf="flashTank.inletWaterMassFlow != 0">{{flashTank.inletWaterMassFlow | number:'1.0-2'}}
+        <span class="inlet-blowdown"
+          *ngIf="flashTank.inletWaterMassFlow != 0">{{flashTank.inletWaterMassFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
         <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('boilerBlowdownHovered')"

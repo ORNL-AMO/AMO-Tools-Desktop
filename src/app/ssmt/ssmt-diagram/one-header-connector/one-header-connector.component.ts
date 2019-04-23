@@ -8,7 +8,8 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class OneHeaderConnectorComponent implements OnInit {
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
-
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
@@ -17,5 +18,9 @@ export class OneHeaderConnectorComponent implements OnInit {
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
+  }
+
+  selectEquipment(str: string){
+    this.emitSelectEquipment.emit(str);
   }
 }

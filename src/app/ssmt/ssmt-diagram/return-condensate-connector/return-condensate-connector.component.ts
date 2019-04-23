@@ -14,6 +14,8 @@ export class ReturnCondensateConnectorComponent implements OnInit {
   deaerator: DeaeratorOutput;
   @Input()
   settings: Settings;
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
 
   makeupWaterClasses: Array<string>;
   constructor() { }
@@ -21,13 +23,13 @@ export class ReturnCondensateConnectorComponent implements OnInit {
   ngOnInit() {
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.setClasses();
   }
 
-  setClasses(){
+  setClasses() {
     this.makeupWaterClasses = [];
-    if(this.deaerator.inletWaterMassFlow < 1e-3){
+    if (this.deaerator.inletWaterMassFlow < 1e-3) {
       this.makeupWaterClasses = ['no-steam-flow'];
     }
 
@@ -35,5 +37,9 @@ export class ReturnCondensateConnectorComponent implements OnInit {
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
+  }
+
+  selectEquipment(str: string) {
+    this.emitSelectEquipment.emit(str);
   }
 }

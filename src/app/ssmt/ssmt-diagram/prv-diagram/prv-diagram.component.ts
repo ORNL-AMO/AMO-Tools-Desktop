@@ -54,11 +54,27 @@ export class PrvDiagramComponent implements OnInit {
     this.emitSetHover.emit(str);
   }
 
+  selectInlet() {
+    if (this.inletSteam === 'medium-pressure') {
+      this.emitSelectEquipment.emit('mediumPressurePRVInletHovered');
+    } else if (this.inletSteam === 'high-pressure') {
+      this.emitSelectEquipment.emit('highPressurePRVInletHovered');
+    }
+  }
+
   hoverInlet() {
     if (this.inletSteam === 'medium-pressure') {
       this.emitSetHover.emit('mediumPressurePRVInletHovered');
     } else if (this.inletSteam === 'high-pressure') {
       this.emitSetHover.emit('highPressurePRVInletHovered');
+    }
+  }
+
+  selectOutlet() {
+    if (this.outletSteam === 'low-pressure') {
+      this.emitSelectEquipment.emit('lowPressurePRVOutletHovered');
+    } else if (this.outletSteam === 'medium-pressure') {
+      this.emitSelectEquipment.emit('mediumPressurePRVOutletHovered');
     }
   }
 
@@ -94,12 +110,19 @@ export class PrvDiagramComponent implements OnInit {
     }
   }
 
-
   hoverFeedwater() {
     if (this.outletSteam === 'low-pressure') {
       this.emitSetHover.emit('lowPressurePRVFeedwaterHovered');
     } else if (this.outletSteam === 'medium-pressure') {
       this.emitSetHover.emit('mediumPressurePRVFeedwaterHovered');
+    }
+  }
+
+  selectFeedwater() {
+    if (this.outletSteam === 'low-pressure') {
+      this.emitSelectEquipment.emit('lowPressurePRVFeedwaterHovered');
+    } else if (this.outletSteam === 'medium-pressure') {
+      this.emitSelectEquipment.emit('mediumPressurePRVFeedwaterHovered');
     }
   }
 }

@@ -22,6 +22,8 @@ export class HeaderDiagramComponent implements OnInit {
   settings: Settings;
   @Input()
   ventedLowPressureSteam: SteamPropertiesOutput;
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
 
   steamClasses: Array<string>;
   condensateClasses: Array<string>;
@@ -81,5 +83,21 @@ export class HeaderDiagramComponent implements OnInit {
     } else {
       this.condensingWarning = false;
     }
+  }
+
+  selectProcessUsage(){
+    this.emitSelectEquipment.emit(this.pressureLevel + 'ProcessSteamHovered');
+  }
+
+  selectCondensate(){
+    this.emitSelectEquipment.emit(this.pressureLevel + 'CondensateHovered');
+  }
+
+  selectHeader() {
+    this.emitSelectEquipment.emit(this.pressureLevel + 'Hovered');
+  }
+
+  selectProcessUsageInlet(){
+    this.emitSelectEquipment.emit(this.pressureLevel + 'ProcessSteamInletHovered');
   }
 }

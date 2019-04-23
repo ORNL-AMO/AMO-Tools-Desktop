@@ -57,11 +57,23 @@ export class FlashTankDiagramComponent implements OnInit {
     this.emitSetHover.emit('condensateHovered');
   }
 
+  selectCondensate() {
+    this.emitSelectEquipment.emit('condensateHovered');
+  }
+
   hoverHeader() {
     if (this.steamPressure === 'medium-pressure') {
       this.emitSetHover.emit('mediumPressureHovered');
     } else if (this.steamPressure === 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
+    }
+  }
+
+  selectHeader() {
+    if (this.steamPressure === 'medium-pressure') {
+      this.emitSelectEquipment.emit('mediumPressureHovered');
+    } else if (this.steamPressure === 'low-pressure') {
+      this.emitSelectEquipment.emit('lowPressureHovered');
     }
   }
 
@@ -89,9 +101,23 @@ export class FlashTankDiagramComponent implements OnInit {
     }
   }
 
+  selectOutletGas(){
+    if (this.flashTankType === 'highPressure') {
+      this.emitSelectEquipment.emit('highPressureFlashTankOutletSteamHovered');
+    } else if (this.flashTankType === 'mediumPressure') {
+      this.emitSelectEquipment.emit('mediumPressureFlashTankOutletSteamHovered');
+    }
+  }
+
   hoverInlet() {
     if (this.flashTankType === 'mediumPressure') {
       this.emitSetHover.emit('mediumPressureFlashTankInletCondensateHovered');
+    }
+  }
+
+  selectInlet(){
+    if (this.flashTankType === 'mediumPressure') {
+      this.emitSelectEquipment.emit('mediumPressureFlashTankInletCondensateHovered');
     }
   }
 
@@ -100,6 +126,14 @@ export class FlashTankDiagramComponent implements OnInit {
       this.emitSetHover.emit('highPressureFlashTankOutletCondensateHovered');
     } else if (this.flashTankType === 'mediumPressure') {
       this.emitSetHover.emit('mediumPressureFlashTankOutletCondensateHovered');
+    }
+  }
+
+  selectOutlet() {
+    if (this.flashTankType === 'highPressure') {
+      this.emitSelectEquipment.emit('highPressureFlashTankOutletCondensateHovered');
+    } else if (this.flashTankType === 'mediumPressure') {
+      this.emitSelectEquipment.emit('mediumPressureFlashTankOutletCondensateHovered');
     }
   }
 }
