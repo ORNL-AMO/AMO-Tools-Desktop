@@ -49,9 +49,7 @@ export class ElectricityReductionService {
     };
 
     let obj: ElectricityReductionData = {
-      hoursPerDay: 0,
-      daysPerMonth: 30,
-      monthsPerYear: 12,
+      operatingHours: 0,
       electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.12,
       measurementMethod: 0,
       multimeterData: defaultMultimeterObj,
@@ -68,9 +66,7 @@ export class ElectricityReductionService {
     let initObj: ElectricityReductionData = this.initObject(settings);
 
     let form: FormGroup = this.formBuilder.group({
-      hoursPerDay: [initObj.hoursPerDay, [Validators.required, Validators.min(0), Validators.max(24)]],
-      daysPerMonth: [initObj.daysPerMonth, [Validators.required, Validators.min(0), Validators.max(31)]],
-      monthsPerYear: [initObj.monthsPerYear, [Validators.required, Validators.min(0), Validators.max(12)]],
+      operatingHours: [initObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       electricityCost: [initObj.electricityCost],
       measurementMethod: [initObj.measurementMethod],
 
@@ -125,9 +121,7 @@ export class ElectricityReductionService {
 
   getFormFromObj(initObj: ElectricityReductionData): FormGroup {
     let form: FormGroup = this.formBuilder.group({
-      hoursPerDay: [initObj.hoursPerDay, [Validators.required, Validators.min(0), Validators.max(24)]],
-      daysPerMonth: [initObj.daysPerMonth, [Validators.required, Validators.min(0), Validators.max(31)]],
-      monthsPerYear: [initObj.monthsPerYear, [Validators.required, Validators.min(0), Validators.max(12)]],
+      operatingHours: [initObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       electricityCost: [initObj.electricityCost],
       measurementMethod: [initObj.measurementMethod],
 
@@ -207,9 +201,7 @@ export class ElectricityReductionService {
     };
 
     let obj: ElectricityReductionData = {
-      hoursPerDay: form.controls.hoursPerDay.value,
-      daysPerMonth: form.controls.daysPerMonth.value,
-      monthsPerYear: form.controls.monthsPerYear.value,
+      operatingHours: form.controls.operatingHours.value,
       electricityCost: form.controls.electricityCost.value,
       measurementMethod: form.controls.measurementMethod.value,
       multimeterData: multimeterObj,
@@ -282,9 +274,7 @@ export class ElectricityReductionService {
         loadFactor: tmpData[i].nameplateData.loadFactor
       };
       tmpData[i] = {
-        hoursPerDay: tmpData[i].hoursPerDay,
-        daysPerMonth: tmpData[i].daysPerMonth,
-        monthsPerYear: tmpData[i].monthsPerYear,
+        operatingHours: tmpData[i].operatingHours,
         electricityCost: tmpData[i].electricityCost,
         measurementMethod: tmpData[i].measurementMethod,
         multimeterData: tmpData[i].multimeterData,
@@ -317,9 +307,7 @@ export interface ElectricityReductionInput {
 }
 
 export interface ElectricityReductionData {
-  hoursPerDay: number,
-  daysPerMonth: number,
-  monthsPerYear: number,
+  operatingHours: number,
   electricityCost: number,
   measurementMethod: number, // 0 = multimeter reading, 1 = name plate data, 2 = power meter method, 3 = offsheet / other method
   multimeterData: MultimeterReadingData,

@@ -1,58 +1,23 @@
 <form [formGroup]="form">
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="{{'hoursPerDay_'+idString}}">Hours / Day</label>
+      <label class="small" for="{{'operatingHours_'+idString}}">Annual Operating Hours</label>
       <div class="input-group">
-        <input class="form-control" name="hoursPerDay" id="{{'hoursPerDay_'+idString}}" formControlName="hoursPerDay"
-          type="number" (input)="calculate()" (focus)="focusField('hoursPerDay')" (blur)="focusOut()"
-          onfocus="this.select();">
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.hoursPerDay.invalid && !form.controls.hoursPerDay.pristine">
-        <span *ngIf="form.controls.hoursPerDay.errors.required">Value required.</span>
-        <span *ngIf="form.controls.hoursPerDay.errors.max">Value can't be greater than
-          {{form.controls.hoursPerDay.errors.max.max}}.</span>
-        <span *ngIf="form.controls.hoursPerDay.errors.min">Value can't be less than
-          {{form.controls.hoursPerDay.errors.min.min}}.</span>
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="{{'daysPerMonth_'+idString}}">Days / Month</label>
-      <div class="input-group">
-        <input class="form-control" name="daysPerMonth" id="{{'daysPerMonth_'+idString}}" formControlName="daysPerMonth"
-          type="number" (input)="calculate()" (focus)="focusField('daysPerMonth')" (blur)="focusOut()"
-          onfocus="this.select();">
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.daysPerMonth.invalid && !form.controls.daysPerMonth.pristine">
-        <span *ngIf="form.controls.daysPerMonth.errors.required">Value required.</span>
-        <span *ngIf="form.controls.daysPerMonth.errors.max">Value can't be greater than
-          {{form.controls.daysPerMonth.errors.max.max}}.</span>
-        <span *ngIf="form.controls.daysPerMonth.errors.min">Value can't be less than
-          {{form.controls.daysPerMonth.errors.min.min}}.</span>
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="{{'monthsPerYear_'+idString}}">Months / Year</label>
-      <div class="input-group">
-        <input class="form-control" name="monthsPerYear" id="{{'monthsPerYear_'+idString}}"
-          formControlName="monthsPerYear" type="number" (input)="calculate()" (focus)="focusField('monthsPerYear')"
+        <input class="form-control" name="operatingHours" id="{{'operatingHours_'+idString}}"
+          formControlName="operatingHours" type="number" (input)="calculate()" (focus)="focusField('operatingHours')"
           (blur)="focusOut()" onfocus="this.select();">
+        <span class="units input-group-addon">hrs/yr</span>
       </div>
       <span class="alert-danger pull-right small"
-        *ngIf="form.controls.monthsPerYear.invalid && !form.controls.monthsPerYear.pristine">
-        <span *ngIf="form.controls.monthsPerYear.errors.required">Value required.</span>
-        <span *ngIf="form.controls.monthsPerYear.errors.max">Value can't be greater than
-          {{form.controls.monthsPerYear.errors.max.max}}.</span>
-        <span *ngIf="form.controls.monthsPerYear.errors.min">Value can't be less than
-          {{form.controls.monthsPerYear.errors.min.min}}.</span>
+        *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+        <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+        <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+          {{form.controls.operatingHours.errors.max.max}}.</span>
+        <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
+          {{form.controls.operatingHours.errors.min.min}}.</span>
       </span>
     </div>
-  </div>
 
-  <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{'electricityCost_'+idString}}">Electricity Cost</label>
       <div class="input-group">
@@ -247,9 +212,13 @@
 
   <div class="form-section"
     *ngIf="form.controls.measurementMethod.value != 2 && form.controls.measurementMethod.value != 3">
-    <div class="form-group">
-      <label class="small bold" for="power">Power</label>
-      <span class="small pull-right bold">{{individualResults.power}} kW</span>
+    <div class="row">
+      <div class="col-6">
+        <label class="small bold" for="power">Power</label>
+      </div>
+      <div class="col-6 text-center">
+        <span class="small bold">{{individualResults.power}} kW</span>
+      </div>
     </div>
   </div>
 
@@ -284,9 +253,13 @@
       </span>
     </div>
 
-    <div class="form-group">
-      <label class="small bold" for="energy">Energy</label>
-      <span class="small pull-right bold">{{individualResults.energyUse}} kWh</span>
+    <div class="row">
+      <div class="col-6">
+        <label class="small bold" for="power">Energy</label>
+      </div>
+      <div class="col-6 text-center">
+        <span class="small bold">{{individualResults.energyUse}} kWh</span>
+      </div>
     </div>
   </div>
 

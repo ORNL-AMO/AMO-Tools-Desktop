@@ -65,7 +65,7 @@ export class NaturalGasReductionFormComponent implements OnInit {
         isBaseline: this.isBaseline
       };
       this.emitCalculate.emit(emitObj);
-      this.individualResults = this.naturalGasReductionService.calculateIndividualEquipment(this.naturalGasReductionService.getObjFromForm(this.form));
+      this.individualResults = this.naturalGasReductionService.calculateIndividualEquipment(this.naturalGasReductionService.getObjFromForm(this.form), this.settings);
     }
   }
 
@@ -74,7 +74,6 @@ export class NaturalGasReductionFormComponent implements OnInit {
   }
 
   focusOut() {
-
   }
 
   getFormat(): any {
