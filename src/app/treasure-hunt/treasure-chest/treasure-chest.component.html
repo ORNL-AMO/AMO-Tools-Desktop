@@ -69,7 +69,8 @@
 <!--edit-->
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
   (emitSave)="saveEditLighting($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"></app-lighting-replacement>
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-lighting-replacement>
 
 <app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="cancelEditCalc()"
   (emitSave)="saveEditOpportunity($event)" [settings]="settings" [(opportunitySheet)]="selectedEditOpportunitySheet">

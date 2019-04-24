@@ -1,7 +1,4 @@
 export interface LightingReplacementData {
-    hoursPerDay?: number,
-    daysPerMonth?: number,
-    monthsPerYear?: number,
     hoursPerYear?: number,
     wattsPerLamp?: number,
     lampsPerFixture?: number,
