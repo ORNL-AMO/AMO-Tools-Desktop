@@ -270,6 +270,12 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
 }
 
+
+.treasure-hunt-calc .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34),#2E4053);
+}
+
+
 .calc-img{
     width: 90%;
 }

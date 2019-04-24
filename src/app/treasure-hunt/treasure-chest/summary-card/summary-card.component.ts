@@ -6,6 +6,8 @@ import { LightingReplacementService } from '../../../calculator/lighting/lightin
 import { LightingReplacementResults } from '../../../shared/models/lighting';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Subscription } from 'rxjs';
+import { ReplaceExistingService } from '../../../calculator/motors/replace-existing/replace-existing.service';
+import { ReplaceExistingResults } from '../../../shared/models/calculators';
 
 @Component({
   selector: 'app-summary-card',
@@ -33,9 +35,13 @@ export class SummaryCardComponent implements OnInit {
 
   totalOtherGasCostSavings: number;
   totalOtherGasEnergySavings: number;
-  
+
   getResultsSubscription: Subscription;
-  constructor(private opportunitySheetService: OpportunitySheetService, private lightingReplacementService: LightingReplacementService, private treasureHuntService: TreasureHuntService) { }
+  constructor(
+    private opportunitySheetService: OpportunitySheetService,
+    private lightingReplacementService: LightingReplacementService,
+    private treasureHuntService: TreasureHuntService,
+    private replaceExistingService: ReplaceExistingService) { }
 
   ngOnInit() {
     this.totalBaselineCost = this.treasureHunt.currentEnergyUsage.electricityCosts + this.treasureHunt.currentEnergyUsage.naturalGasCosts + this.treasureHunt.currentEnergyUsage.otherFuelCosts;
@@ -44,7 +50,7 @@ export class SummaryCardComponent implements OnInit {
     })
   }
 
-  calculateData(){
+  calculateData() {
     this.initVals();
     this.calculateValues();
     this.totalSavings = this.totalElectricityCostSavings + this.totalNaturalGasCostSavings + this.totalOtherGasCostSavings;
@@ -73,6 +79,11 @@ export class SummaryCardComponent implements OnInit {
     this.totalElectricityCostSavings = this.totalElectricityCostSavings + lightingResults.totalCostSavings;
     this.totalElectricityEnergySavings = this.totalElectricityEnergySavings + lightingResults.totalEnergySavings;
 
+    let replaceMotorResults: { totalCostSavings: number, totalEnergySavings: number } = this.getReplaceExistingMotorSavings();
+    this.totalElectricityCostSavings = this.totalElectricityCostSavings + replaceMotorResults.totalCostSavings;
+    this.totalElectricityEnergySavings = this.totalElectricityEnergySavings + replaceMotorResults.totalEnergySavings;
+
+
     let oppSheetResults: { totalElectricityCostSavings: number, totalElectricityEnergySavings: number, totalNaturalGasCostSavings: number, totalNaturalGasEnergySavings: number, totalOtherGasCostSavings: number, totalOtherGasEnergySavings: number } = this.getOpportunitySheetSavings();
     this.totalElectricityCostSavings = this.totalElectricityCostSavings + oppSheetResults.totalElectricityCostSavings;
     this.totalElectricityEnergySavings = this.totalElectricityEnergySavings + oppSheetResults.totalElectricityEnergySavings;
@@ -92,6 +103,19 @@ export class SummaryCardComponent implements OnInit {
         let results: LightingReplacementResults = this.lightingReplacementService.getResults(replacement);
         totalCostSavings = totalCostSavings + results.totalCostSavings;
         totalEnergySavings = totalEnergySavings + results.totalEnergySavings;
+      }
+    })
+    return { totalCostSavings: totalCostSavings, totalEnergySavings: totalEnergySavings }
+  }
+
+  getReplaceExistingMotorSavings(): { totalCostSavings: number, totalEnergySavings: number } {
+    let totalCostSavings: number = 0;
+    let totalEnergySavings: number = 0;
+    this.treasureHunt.replaceExistingMotors.forEach(replacement => {
+      if (replacement.selected) {
+        let results: ReplaceExistingResults = this.replaceExistingService.getResults(replacement.replaceExistingData);
+        totalCostSavings = totalCostSavings + results.costSavings;
+        totalEnergySavings = totalEnergySavings + results.annualEnergySavings;
       }
     })
     return { totalCostSavings: totalCostSavings, totalEnergySavings: totalEnergySavings }

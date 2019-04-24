@@ -112,3 +112,25 @@ export interface SpecificSpeedInputs {
     flowRate: number;
     head: number;
 }
+
+
+
+export interface ReplaceExistingData {
+    operatingHours: number;
+    motorSize: number;
+    existingEfficiency: number;
+    load: number;
+    electricityCost: number;
+    newEfficiency: number;
+    purchaseCost: number;
+}
+export interface ReplaceExistingResults {
+    existingEnergyUse: number;
+    newEnergyUse: number;
+    existingEnergyCost: number;
+    newEnergyCost: number;
+    annualEnergySavings: number;
+    costSavings: number;
+    simplePayback: number;
+    percentSavings: number
+}

@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
+import { ReplaceExistingData } from '../../shared/models/calculators';
 
 @Component({
   selector: 'app-find-treasure',
@@ -23,10 +24,13 @@ export class FindTreasureComponent implements OnInit {
 
   newLightingCalc: LightingReplacementTreasureHunt;
   newOpportunitySheet: OpportunitySheet;
+  newReplaceExistingMotor: ReplaceExistingMotorTreasureHunt;
   showOpportunitySheetOnSave: boolean;
+  opperatingHoursPerYear: number;
   constructor() { }
 
   ngOnInit() {
+    this.opperatingHoursPerYear = this.treasureHunt.operatingHours.hoursPerYear;
   }
 
   selectCalc(str: string) {
@@ -36,6 +40,15 @@ export class FindTreasureComponent implements OnInit {
   closeSaveCalcModal() {
     this.saveCalcModal.hide();
   }
+
+  saveNewCalc() {
+    if (this.selectedCalc == 'lighting-replacement') {
+      this.saveLighting();
+    } else if (this.selectedCalc == 'replace-existing') {
+      this.saveReplaceExistingMotor();
+    }
+  }
+
 
   saveNewLighting(newCalcToSave: LightingReplacementTreasureHunt) {
     this.newLightingCalc = newCalcToSave;
@@ -80,4 +93,27 @@ export class FindTreasureComponent implements OnInit {
     this.hideOpportunitySheetModal();
   }
 
+  saveNewReplaceExistingMotor(replaceExistingData: ReplaceExistingData) {
+    this.newReplaceExistingMotor = {
+      replaceExistingData: replaceExistingData,
+      selected: true,
+      opportunitySheet: this.newOpportunitySheet
+    }
+    if (!this.newReplaceExistingMotor.opportunitySheet) {
+      this.showOpportunitySheetOnSave = true;
+    }
+    this.saveCalcModal.show();
+  }
+
+  saveReplaceExistingMotor() {
+    if (!this.treasureHunt.replaceExistingMotors) {
+      this.treasureHunt.replaceExistingMotors = new Array<ReplaceExistingMotorTreasureHunt>();
+    }
+    this.treasureHunt.replaceExistingMotors.push(this.newReplaceExistingMotor);
+    this.closeSaveCalcModal();
+    this.newOpportunitySheet = undefined;
+    this.showOpportunitySheetOnSave = true;
+    this.selectCalc('none');
+    this.emitSave.emit(this.treasureHunt);
+  }
 }

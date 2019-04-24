@@ -26,6 +26,8 @@ import { OperatingHoursComponent } from './operating-hours/operating-hours.compo
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
 import { SharedModule } from '../shared/shared.module';
 import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
+import { ReplaceExistingModule } from '../calculator/motors/replace-existing/replace-existing.module';
+import { ReplaceExistingMotorCardComponent } from './treasure-chest/replace-existing-motor-card/replace-existing-motor-card.component';
 
 @NgModule({
   imports: [
@@ -34,7 +36,8 @@ import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-
     SettingsModule,
     ModalModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    ReplaceExistingModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -54,7 +57,7 @@ import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-
     OpportunitySheetResultsComponent, 
     OpportunitySheetCardComponent, 
     OperatingHoursComponent, 
-    OperationCostsComponent, TreasureHuntGaugeComponent
+    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent
   ],
   providers: [ TreasureHuntService, OpportunitySheetService ]
 })

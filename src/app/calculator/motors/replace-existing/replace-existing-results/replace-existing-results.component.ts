@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { ReplaceExistingResults } from '../replace-existing.component';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { ReplaceExistingResults } from '../../../../shared/models/calculators';
 
 @Component({
   selector: 'app-replace-existing-results',
