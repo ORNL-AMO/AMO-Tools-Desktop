@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular
 import { MotorDriveService } from './motor-drive.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { MotorDriveInputs, MotorDriveOutputs } from '../../../shared/models/calculators';
 
 @Component({
   selector: 'app-motor-drive',
@@ -22,13 +23,16 @@ export class MotorDriveComponent implements OnInit {
     motorPower: 5,
     annualOperatingHours: 8760,
     averageMotorLoad: 50,
-    electricityCost: 0
+    electricityCost: 0,
+    baselineDriveType: 0,
+    modificationDriveType: 0
   };
   settings: Settings;
   outputData: MotorDriveOutputs;
   tabSelect: string = 'results';
   currentField: string;
   headerHeight: number;
+  percentSavings: number;
   constructor(private motorDriveService: MotorDriveService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
@@ -54,7 +58,9 @@ export class MotorDriveComponent implements OnInit {
       motorPower: 5,
       annualOperatingHours: 8760,
       averageMotorLoad: 50,
-      electricityCost: this.settings.electricityCost
+      electricityCost: this.settings.electricityCost,
+      baselineDriveType: 0,
+      modificationDriveType: 0
     };
     this.calculate(this.motorDriveData);
   }
@@ -69,6 +75,7 @@ export class MotorDriveComponent implements OnInit {
     this.motorDriveData = data;
     this.motorDriveService.motorDriveData = this.motorDriveData;
     this.outputData = this.motorDriveService.getResults(data);
+    this.percentSavings = ((this.outputData.baselineResult.energyCost - this.outputData.modificationResult.energyCost) / this.outputData.baselineResult.energyCost) * 100;
   }
 
   setTab(str: string) {
@@ -80,21 +87,3 @@ export class MotorDriveComponent implements OnInit {
 }
 
 
-export interface MotorDriveInputs {
-  motorPower: number,
-  annualOperatingHours: number,
-  averageMotorLoad: number,
-  electricityCost: number;
-}
-
-
-export interface MotorDriveOutputs {
-  vBeltResults: DriveResult;
-  notchedResults: DriveResult;
-  synchronousBeltDrive: DriveResult;
-}
-
-export interface DriveResult {
-  annualEnergyUse: number;
-  energyCost: number;
-}

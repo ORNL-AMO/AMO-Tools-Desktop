@@ -134,3 +134,30 @@ export interface ReplaceExistingResults {
     simplePayback: number;
     percentSavings: number
 }
+
+
+export interface MotorDriveInputs {
+    motorPower: number;
+    annualOperatingHours: number;
+    averageMotorLoad: number;
+    electricityCost: number;
+    baselineDriveType: number;
+    modificationDriveType: number;
+}
+
+
+export interface MotorDriveOutputs {
+    vBeltResults: DriveResult;
+    notchedResults: DriveResult;
+    synchronousBeltDrive: DriveResult;
+    baselineResult: DriveResult;
+    modificationResult: DriveResult;
+    annualCostSavings: number;
+    annualEnergySavings: number;
+}
+
+export interface DriveResult {
+    annualEnergyUse: number;
+    energyCost: number;
+    driveEfficiency: number;
+}

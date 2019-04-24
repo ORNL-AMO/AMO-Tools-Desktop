@@ -9,7 +9,8 @@
       </div>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-motor-drive-form [data]="motorDriveData" (emitCalculate)="calculate($event)" (changeField)="changeField($event)"></app-motor-drive-form>
+      <app-motor-drive-form [data]="motorDriveData" (emitCalculate)="calculate($event)"
+        (changeField)="changeField($event)"></app-motor-drive-form>
       <div class="w-100 justify-content-center btn-group btn-group-sm">
         <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
           Reset Data
@@ -32,11 +33,19 @@
     </div>
     <div class="d-flex mr-2 ml-2">
       <app-motor-drive-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-motor-drive-help>
-      <div class="d-flex flex-column w-100 align-items-center pt-4" *ngIf="tabSelect == 'results'">
+      <div class="d-flex flex-column w-100 align-items-center" *ngIf="tabSelect == 'results'">
         <div class="d-block w-100">
-          <app-motor-drive-graph class="w-100" [results]="outputData"></app-motor-drive-graph>
+          <div class="d-flex flex-column w-100">
+            <div class="pt-3">
+              <h5 class="text-center">Percent Savings</h5>
+            </div>
+            <div class="d-flex w-100 justify-content-center">
+              <app-percent-graph [value]="percentSavings" [fontSize]="32" [unit]="'%'" [title]="'motor-drive'">
+              </app-percent-graph>
+            </div>
+          </div>
         </div>
-        <div class="d-block w-100 pt-4">
+        <div class="d-block w-100 pt-2">
           <app-motor-drive-table [results]="outputData"></app-motor-drive-table>
         </div>
         <div class="pr-4 pl-4 pt-1 d-flex flex-column help-info">
