@@ -1,14 +1,15 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
-import { ReplaceExistingData } from "./calculators";
+import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
 
 export interface TreasureHunt {
     name: string,
     lightingReplacements?: Array<LightingReplacementTreasureHunt>;
     opportunitySheets?: Array<OpportunitySheet>;
     replaceExistingMotors?: Array<ReplaceExistingMotorTreasureHunt>;
+    motorDrives?: Array<MotorDriveInputsTreasureHunt>;
     operatingHours?: OperatingHours;
-    currentEnergyUsage?: EnergyUsage
+    currentEnergyUsage?: EnergyUsage;
 }
 
 export interface EnergyUsage {
@@ -89,4 +90,10 @@ export interface OpportunitySheetResult {
     modificationEnergyCost: number,
     energySavings: number,
     energyCostSavings: number
+}
+
+export interface MotorDriveInputsTreasureHunt{
+    motorDriveInputs?: MotorDriveInputs;
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
 }

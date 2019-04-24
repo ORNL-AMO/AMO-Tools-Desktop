@@ -79,6 +79,24 @@
             </p>
           </div>
         </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img class="calc-img" src="assets/images/calculator-icons/motor-icons/motor-drive.png"
+                (click)="selectCalc('motor-drive')">
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a (click)="selectCalc('motor-drive')"> Motor Drive</a>
+            <p>
+              The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched
+              V-Belt drive, and
+              Synchronous Belt Drive. Synchronous belts are the most efficient, however cost analysis and application
+              should
+              be considered.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -118,6 +136,10 @@
   (emitSave)="saveNewReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
   [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
 </app-replace-existing>
+
+<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveNewMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()"></app-motor-drive>
 
 
 

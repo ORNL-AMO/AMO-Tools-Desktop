@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { MotorDriveService } from './motor-drive.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
@@ -10,9 +10,21 @@ import { MotorDriveInputs, MotorDriveOutputs } from '../../../shared/models/calc
   styleUrls: ['./motor-drive.component.css']
 })
 export class MotorDriveComponent implements OnInit {
-
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<MotorDriveInputs>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
+  @Output('emitAddOpportunitySheet')
+  emitAddOpportunitySheet = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
+  @Input()
+  opperatingHours: number
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer') contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -27,16 +39,19 @@ export class MotorDriveComponent implements OnInit {
     baselineDriveType: 0,
     modificationDriveType: 0
   };
-  settings: Settings;
+
   outputData: MotorDriveOutputs;
   tabSelect: string = 'results';
   currentField: string;
   headerHeight: number;
   percentSavings: number;
+  containerHeight: number;
   constructor(private motorDriveService: MotorDriveService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.settings = this.settingsDbService.globalSettings;
+    if(!this.settings){
+      this.settings = this.settingsDbService.globalSettings;
+    }
     this.motorDriveData.electricityCost = this.settings.electricityCost;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
@@ -68,6 +83,7 @@ export class MotorDriveComponent implements OnInit {
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
 
@@ -83,6 +99,18 @@ export class MotorDriveComponent implements OnInit {
   }
   changeField(str: string) {
     this.currentField = str;
+  }
+
+  save() {
+    this.emitSave.emit(this.motorDriveData);
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
+  }
+
+  addOpportunitySheet() {
+    this.emitAddOpportunitySheet.emit(true);
   }
 }
 
