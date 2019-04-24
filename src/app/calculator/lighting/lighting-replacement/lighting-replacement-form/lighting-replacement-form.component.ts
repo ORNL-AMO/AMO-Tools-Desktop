@@ -17,9 +17,7 @@ export class LightingReplacementFormComponent implements OnInit {
   emitFocusField = new EventEmitter<string>();
 
 
-  monthsPerYearError: string = null;
-  daysPerMonthError: string = null;
-  hoursPerDayError: string = null;
+  hoursPerYearError: string = null;
   wattsPerLampError: string = null;
   lumensPerLampError: string = null;
   lampsPerFixtureError: string = null;
@@ -35,60 +33,19 @@ export class LightingReplacementFormComponent implements OnInit {
     this.emitCalculate.emit(true);
   }
 
-  addHourPerDay() {
-    this.data.hoursPerDay++;
-    this.calculate();
-  }
-  subtractHourPerDay() {
-    this.data.hoursPerDay--;
-    this.calculate();
-  }
-  subtractDayPerMonth() {
-    this.data.daysPerMonth--;
-    this.calculate();
-  }
-  addDayPerMonth() {
-    this.data.daysPerMonth++;
-    this.calculate();
-  }
-  subtractMonthPerYear() {
-    this.data.monthsPerYear--;
-    this.calculate();
-  }
-  addMonthPerYear() {
-    this.data.monthsPerYear++;
-    this.calculate();
-  }
-
   focusField(str: string){
     this.emitFocusField.emit(str);
   }
 
   checkWarnings(){
-    if(this.data.hoursPerDay > 24){
-      this.hoursPerDayError = "Hours per day can't exceed 24";
-    }else if(this.data.hoursPerDay < 0){
-      this.hoursPerDayError = "Hours per day must be positive";
+    if(this.data.hoursPerYear > 8760){
+      this.hoursPerYearError = "Hours per year cannot exceed ";
+    }else if(this.data.hoursPerYear < 0){
+      this.hoursPerYearError = "Hours per day must be positive";
     }else{
-      this.hoursPerDayError = null;
+      this.hoursPerYearError = null;
     }
-
-    if(this.data.daysPerMonth > 31){
-      this.daysPerMonthError = "Days per month can't exceed 31";
-    }else if(this.data.daysPerMonth < 0){
-      this.daysPerMonthError = "Days per month must be positive";
-    }else{
-      this.daysPerMonthError = null;
-    }
-
-    if(this.data.monthsPerYear > 12){
-      this.monthsPerYearError = "Months per year can't exceed 12";
-    }else if(this.data.monthsPerYear < 0){
-      this.monthsPerYearError = "Months per year must be positive";
-    }else{
-      this.monthsPerYearError = null;
-    }
-
+    
     if(this.data.wattsPerLamp < 0){
       this.wattsPerLampError = "Watts per lamp must be positive";
     }else{
