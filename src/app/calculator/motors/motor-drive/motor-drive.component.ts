@@ -3,6 +3,7 @@ import { MotorDriveService } from './motor-drive.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { MotorDriveInputs, MotorDriveOutputs } from '../../../shared/models/calculators';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-motor-drive',
@@ -31,15 +32,8 @@ export class MotorDriveComponent implements OnInit {
     this.resizeTabs();
   }
 
-  motorDriveData: MotorDriveInputs = {
-    motorPower: 5,
-    annualOperatingHours: 8760,
-    averageMotorLoad: 50,
-    electricityCost: 0,
-    baselineDriveType: 0,
-    modificationDriveType: 0
-  };
-
+  motorDriveData: MotorDriveInputs;
+  motorDriveForm: FormGroup;
   outputData: MotorDriveOutputs;
   tabSelect: string = 'results';
   currentField: string;
@@ -52,13 +46,15 @@ export class MotorDriveComponent implements OnInit {
     if(!this.settings){
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.motorDriveData.electricityCost = this.settings.electricityCost;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     if (this.motorDriveService.motorDriveData) {
       this.motorDriveData = this.motorDriveService.motorDriveData;
+    }else{
+      this.motorDriveData = this.motorDriveService.getDefaultData(this.settings);
     }
+    this.motorDriveForm = this.motorDriveService.getFormFromObj(this.motorDriveData);
     this.calculate(this.motorDriveData);
   }
 
@@ -68,15 +64,17 @@ export class MotorDriveComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy(){
+    if(!this.inTreasureHunt){
+      this.motorDriveService.motorDriveData = this.motorDriveData;
+    }else{
+      this.motorDriveService.motorDriveData = undefined;
+    }
+  }
+
   btnResetData() {
-    this.motorDriveData = {
-      motorPower: 5,
-      annualOperatingHours: 8760,
-      averageMotorLoad: 50,
-      electricityCost: this.settings.electricityCost,
-      baselineDriveType: 0,
-      modificationDriveType: 0
-    };
+    this.motorDriveData = this.motorDriveService.getDefaultData(this.settings);
+    this.motorDriveForm = this.motorDriveService.getFormFromObj(this.motorDriveData);
     this.calculate(this.motorDriveData);
   }
 

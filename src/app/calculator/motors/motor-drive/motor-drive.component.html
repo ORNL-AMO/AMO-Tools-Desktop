@@ -32,7 +32,7 @@
             <h3>Motor Properties</h3>
           </div>
           <div class="pb-2">
-            <app-motor-drive-form [data]="motorDriveData" (emitCalculate)="calculate($event)"
+            <app-motor-drive-form [form]="motorDriveForm" (emitCalculate)="calculate($event)"
               (changeField)="changeField($event)"></app-motor-drive-form>
             <div class="w-100 justify-content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">

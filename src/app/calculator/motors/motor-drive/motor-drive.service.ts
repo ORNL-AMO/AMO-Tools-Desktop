@@ -1,11 +1,23 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MotorDriveInputs, MotorDriveOutputs, DriveResult } from '../../../shared/models/calculators';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class MotorDriveService {
   motorDriveData: MotorDriveInputs;
   constructor(private formBuilder: FormBuilder) { }
+
+  getDefaultData(settings: Settings): MotorDriveInputs{
+    return {
+      motorPower: 5,
+      annualOperatingHours: 8760,
+      averageMotorLoad: 50,
+      electricityCost: settings.electricityCost,
+      baselineDriveType: 0,
+      modificationDriveType: 0
+    }
+  }
 
   getFormFromObj(inputObj: MotorDriveInputs): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
@@ -38,20 +50,20 @@ export class MotorDriveService {
     let notchedEnergyUsed: number = this.getNotchedEnergyUse(energy);
     //0
     let vBeltResults: DriveResult = {
-      energyCost: this.getCost(vBeltEnergyUsed, data.electricityCost) / 1000,
-      annualEnergyUse: vBeltEnergyUsed / 1000,
+      energyCost: this.getCost(vBeltEnergyUsed, data.electricityCost),
+      annualEnergyUse: vBeltEnergyUsed,
       driveEfficiency: 93
     };
     //1
     let notchedResults: DriveResult = {
-      energyCost: this.getCost(notchedEnergyUsed, data.electricityCost) / 1000,
-      annualEnergyUse: notchedEnergyUsed / 1000,
+      energyCost: this.getCost(notchedEnergyUsed, data.electricityCost),
+      annualEnergyUse: notchedEnergyUsed,
       driveEfficiency: 95
     };
     //2
     let synchronousBeltDrive: DriveResult = {
-      energyCost: this.getCost(synchronousBeltEnergyUsed, data.electricityCost) / 1000,
-      annualEnergyUse: synchronousBeltEnergyUsed / 1000,
+      energyCost: this.getCost(synchronousBeltEnergyUsed, data.electricityCost),
+      annualEnergyUse: synchronousBeltEnergyUsed,
       driveEfficiency: 98
     };
     let baselineResult: DriveResult = vBeltResults;

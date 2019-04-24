@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from 'http2';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
-import { ReplaceExistingData } from '../../shared/models/calculators';
+import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
+import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -28,6 +29,8 @@ export class TreasureChestComponent implements OnInit {
   selectedEditLightingReplacement: LightingReplacementTreasureHunt;
   selectedEditReplaceExistingMotor: ReplaceExistingMotorTreasureHunt;
   selectedEditOpportunitySheet: OpportunitySheet;
+  selectedEditMotorDrive: MotorDriveInputsTreasureHunt;
+
   tabSelect: string = 'all';
   helpTabSelect: string = 'results';
 
@@ -38,7 +41,10 @@ export class TreasureChestComponent implements OnInit {
   numLightingReplacements: number = 0;
   numOppSheets: number = 0;
   opperatingHoursPerYear: number;
-  constructor(private lightingReplacementService: LightingReplacementService, private replaceExistingService: ReplaceExistingService) { }
+  constructor(
+    private lightingReplacementService: LightingReplacementService,
+    private replaceExistingService: ReplaceExistingService,
+    private motorDriveService: MotorDriveService) { }
 
   ngOnInit() {
     this.numLightingReplacements = this.treasureHunt.lightingReplacements.length;
@@ -97,6 +103,8 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.opportunitySheets.splice(this.deleteItemIndex, 1);
     } else if (this.itemType == 'replaceExistingMotor') {
       this.treasureHunt.replaceExistingMotors.splice(this.deleteItemIndex, 1);
+    } else if (this.itemType == 'motorDrive') {
+      this.treasureHunt.motorDrives.splice(this.deleteItemIndex, 1);
     }
     this.save();
     this.hideDeleteItemModal();
@@ -109,11 +117,13 @@ export class TreasureChestComponent implements OnInit {
     this.deleteItemName = undefined;
   }
 
-  saveEditCalc(){
-    if(this.itemType == 'lightingReplacement'){
+  saveEditCalc() {
+    if (this.itemType == 'lightingReplacement') {
       this.saveLighting();
-    }else if(this.itemType == 'replaceExistingMotor'){
+    } else if (this.itemType == 'replaceExistingMotor') {
       this.saveReplaceExistingMotor();
+    } else if (this.itemType == 'motorDrive') {
+      this.saveMotorDrive();
     }
   }
 
@@ -197,6 +207,33 @@ export class TreasureChestComponent implements OnInit {
     this.selectCalc('none');
   }
 
+  //motor drive
+  editMotorDrive(motorDrive: MotorDriveInputsTreasureHunt, index: number) {
+    this.selectedEditMotorDrive = motorDrive;
+    this.motorDriveService.motorDriveData = motorDrive.motorDriveInputs;
+    this.selectedEditOpportunitySheet = motorDrive.opportunitySheet;
+    this.itemType = 'motorDrive';
+    this.selectedEditIndex = index;
+    this.selectCalc('motor-drive');
+  }
+
+  saveEditMotorDrive(updateData: MotorDriveInputs) {
+    this.selectedEditMotorDrive.motorDriveInputs = updateData;
+    this.showSaveCalcModal();
+  }
+
+  saveMotorDrive() {
+    this.selectedEditMotorDrive.opportunitySheet = this.selectedEditOpportunitySheet;
+    this.treasureHunt.motorDrives[this.selectedEditIndex] = this.selectedEditMotorDrive;
+    this.save();
+    this.selectedEditOpportunitySheet = undefined;
+    this.selectedEditMotorDrive = undefined;
+    this.selectedEditIndex = undefined;
+    this.itemType = undefined;
+    this.hideSaveCalcModal();
+    this.selectCalc('none');
+  }
+
   //item opportunity sheets
   saveItemOpportunitySheet(editedOpportunitySheet: OpportunitySheet) {
     this.selectedEditOpportunitySheet = editedOpportunitySheet;
@@ -204,6 +241,8 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.lightingReplacements[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
     } else if (this.itemType == 'replaceExistingMotor') {
       this.treasureHunt.replaceExistingMotors[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
+    } else if (this.itemType == 'motorDrive') {
+      this.treasureHunt.motorDrives[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
     }
     this.save();
     this.hideOpportunitySheetModal();
