@@ -35,16 +35,7 @@ export class ReplaceExistingComponent implements OnInit {
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
-  results: ReplaceExistingResults = {
-    existingEnergyUse: 0,
-    newEnergyUse: 0,
-    existingEnergyCost: 0,
-    newEnergyCost: 0,
-    annualEnergySavings: 0,
-    costSavings: 0,
-    simplePayback: 0,
-    percentSavings: 0
-  };
+  results: ReplaceExistingResults;
   inputs: ReplaceExistingData;
 
   replaceExistingForm: FormGroup;

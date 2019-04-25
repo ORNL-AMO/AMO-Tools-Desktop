@@ -3,6 +3,7 @@
     <tr>
       <td>&nbsp;</td>
       <td class="bold text-center">Existing Motor</td>
+      <td class="bold text-center">Rewound Motor</td>
       <td class="bold text-center">New Motor</td>
     </tr>
     <tr>
@@ -10,6 +11,7 @@
         Energy Use
       </td>
       <td>{{results.existingEnergyUse | number : '1.0-2'}} kWh/yr</td>
+      <td>{{results.rewoundEnergyUse | number : '1.0-2'}} kWh/yr</td>
       <td>{{results.newEnergyUse | number : '1.0-2'}} kWh/yr</td>
     </tr>
     <tr>
@@ -17,6 +19,7 @@
         Energy Cost
       </td>
       <td>{{results.existingEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
+      <td>{{results.rewoundEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
       <td>{{results.newEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
     </tr>
     <tr>
