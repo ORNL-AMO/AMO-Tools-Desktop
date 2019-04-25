@@ -370,11 +370,11 @@ export class PumpCurveComponent implements OnInit {
         form: this.systemCurveService.initPumpCurveConstants()
       };
       this.pointOne = {
-        form: this.systemCurveService.initPumpPointForm(),
+        form: this.systemCurveService.initDefaultPoints(1),
         fluidPower: 0
       };
       this.pointTwo = {
-        form: this.systemCurveService.initPumpPointForm(),
+        form: this.systemCurveService.initDefaultPoints(2),
         fluidPower: 0
       };
     } else {
@@ -382,11 +382,11 @@ export class PumpCurveComponent implements OnInit {
         form: this.systemCurveService.initFanCurveConstants()
       };
       this.pointOne = {
-        form: this.systemCurveService.initFanPointForm(),
+        form: this.systemCurveService.initDefaultPoints(1),
         fluidPower: 0
       };
       this.pointTwo = {
-        form: this.systemCurveService.initFanPointForm(),
+        form: this.systemCurveService.initDefaultPoints(2),
         fluidPower: 0
       };
     }
