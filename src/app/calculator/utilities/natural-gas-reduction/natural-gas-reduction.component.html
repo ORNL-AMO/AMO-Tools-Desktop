@@ -19,7 +19,7 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addBaselineEquipment()">+Add Equipment</a>
             </div>
-            <div class="pb-2" *ngFor="let form of baselineForms; let i = index;">
+            <div class="mb-4 p-2 form-card" *ngFor="let form of baselineForms; let i = index;">
               <label class="group-label w-100 bold">
                 <span class="fa fa-lightbulb-o pr-2"></span>Equipment #{{i + 1}}
                 <span *ngIf="baselineForms.length != 1" class="fa fa-times-circle-o pull-right large"
@@ -50,7 +50,7 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addModificationEquipment()">+Add Equipment</a>
             </div>
-            <div class="pb-2" *ngFor="let form of modificationForms; let i = index;">
+            <div class="mb-4 p-2 form-card" *ngFor="let form of modificationForms; let i = index;">
               <label class="group-label w-100 bold">
                 <span class="fa fa-lightbulb-o pr-2"></span>Equipment #{{i + 1}}
                 <span class="fa fa-times-circle-o pull-right large" (click)="removeModificationEquipment(i)"></span>
