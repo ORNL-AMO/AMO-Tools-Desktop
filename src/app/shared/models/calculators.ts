@@ -28,13 +28,11 @@ export interface Calculator {
     energyEquivalencyInputs?: {
         energyEquivalencyFuel: EnergyEquivalencyFuel,
         energyEquivalencyElectric: EnergyEquivalencyElectric
-    },
-    flowCalculations?: FlowCalculations,
-    fanEfficiencyInputs?: FanEfficiencyInputs,
-    fan203Inputs?: Fan203Inputs,
-    selected?: boolean,
-    
-
+    };
+    flowCalculations?: FlowCalculations;
+    fanEfficiencyInputs?: FanEfficiencyInputs;
+    fan203Inputs?: Fan203Inputs;
+    selected?: boolean;
 }
 
 export interface HeadToolSuction {
@@ -113,4 +111,53 @@ export interface SpecificSpeedInputs {
     pumpRPM: number;
     flowRate: number;
     head: number;
+}
+
+
+
+export interface ReplaceExistingData {
+    operatingHours: number;
+    motorSize: number;
+    existingEfficiency: number;
+    load: number;
+    electricityCost: number;
+    newEfficiency: number;
+    purchaseCost: number;
+}
+export interface ReplaceExistingResults {
+    existingEnergyUse: number;
+    newEnergyUse: number;
+    existingEnergyCost: number;
+    newEnergyCost: number;
+    annualEnergySavings: number;
+    costSavings: number;
+    simplePayback: number;
+    percentSavings: number
+}
+
+
+export interface MotorDriveInputs {
+    motorPower: number;
+    annualOperatingHours: number;
+    averageMotorLoad: number;
+    electricityCost: number;
+    baselineDriveType: number;
+    modificationDriveType: number;
+}
+
+
+export interface MotorDriveOutputs {
+    vBeltResults: DriveResult;
+    notchedResults: DriveResult;
+    synchronousBeltDrive: DriveResult;
+    baselineResult: DriveResult;
+    modificationResult: DriveResult;
+    annualCostSavings: number;
+    annualEnergySavings: number;
+}
+
+export interface DriveResult {
+    annualEnergyUse: number;
+    energyCost: number;
+    driveEfficiency: number;
 }

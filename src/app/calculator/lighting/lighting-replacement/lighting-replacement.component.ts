@@ -4,6 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { LightingReplacementService } from './lighting-replacement.service';
 import { LightingReplacementData, LightingReplacementResults } from '../../../shared/models/lighting';
 import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-lighting-replacement',
@@ -21,7 +22,8 @@ export class LightingReplacementComponent implements OnInit {
   emitAddOpportunitySheet = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-
+  @Input()
+  operatingHours: OperatingHours;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
@@ -52,7 +54,7 @@ export class LightingReplacementComponent implements OnInit {
     if (this.lightingReplacementService.baselineData) {
       this.baselineData = this.lightingReplacementService.baselineData;
     } else {
-      this.baselineData = this.lightingReplacementService.getInitializedData();
+      this.baselineData = this.lightingReplacementService.getInitializedData(this.operatingHours);
     }
     if (this.lightingReplacementService.modificationData) {
       this.modificationData = this.lightingReplacementService.modificationData;
@@ -93,7 +95,7 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   btnResetData() {
-    this.baselineData = this.lightingReplacementService.getInitializedData();
+    this.baselineData = this.lightingReplacementService.getInitializedData(this.operatingHours);
     this.modificationData = new Array<LightingReplacementData>();
     this.modificationExists = false;
     this.lightingReplacementService.baselineData = this.baselineData;
@@ -132,18 +134,8 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   addBaselineFixture() {
-    this.baselineData.push({
-      hoursPerDay: 0,
-      daysPerMonth: 30,
-      monthsPerYear: 12,
-      hoursPerYear: 0,
-      wattsPerLamp: 0,
-      lampsPerFixture: 0,
-      numberOfFixtures: 0,
-      lumensPerLamp: 0,
-      totalLighting: 0,
-      electricityUse: 0
-    });
+    let newFixtureData: LightingReplacementData = this.lightingReplacementService.getDefaultData(this.operatingHours);
+    this.baselineData.push(newFixtureData);
     this.calculate();
   }
 
@@ -160,18 +152,8 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   addModificationFixture() {
-    this.modificationData.push({
-      hoursPerDay: 0,
-      daysPerMonth: 30,
-      monthsPerYear: 12,
-      hoursPerYear: 0,
-      wattsPerLamp: 0,
-      lampsPerFixture: 0,
-      numberOfFixtures: 0,
-      lumensPerLamp: 0,
-      totalLighting: 0,
-      electricityUse: 0
-    });
+    let newFixtureData: LightingReplacementData = this.lightingReplacementService.getDefaultData(this.operatingHours);
+    this.modificationData.push(newFixtureData);
     this.calculate();
   }
 

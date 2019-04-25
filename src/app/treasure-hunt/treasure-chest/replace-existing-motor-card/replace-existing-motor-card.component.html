@@ -1,0 +1,54 @@
+<div class="card treasure-hunt-card" [ngClass]="{'not-selected': !replaceExistingMotor.selected}">
+  <div class="card-body d-flex w-100 p-0">
+    <div class="col-1 col-item-br">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <app-animated-checkmark [active]="replaceExistingMotor.selected" (click)="toggleSelected()">
+          </app-animated-checkmark>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 col-item-br opportunity-name">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <span class="fa fa-wrench pr-2 pt-0"></span>
+          <a (click)="editMotorReplacement()">
+            <span *ngIf="!replaceExistingMotor.opportunitySheet || !replaceExistingMotor.opportunitySheet.name">
+              Replace Motor #{{index+1}}
+            </span>
+            <span *ngIf="replaceExistingMotor.opportunitySheet && replaceExistingMotor.opportunitySheet.name">
+              {{replaceExistingMotor.opportunitySheet.name}}
+            </span>
+          </a><br>
+          <span>Annual Cost Savings: {{replaceExistingMotorResults.costSavings | currency:'USD'}}</span><br>
+          <span>Annual Electricity Savings: {{replaceExistingMotorResults.annualEnergySavings | number:'1.0-0'}}
+            kWh</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 col-item-br text-center graph-col treasure-hunt-item">
+      <div class="large pt-2">Electricity Cost Savings</div>
+      <app-treasure-hunt-gauge [value]="percentSavings" [chartHeight]="85"></app-treasure-hunt-gauge>
+    </div>
+    <div class="col-2 col-item-br opp-sheet-col">
+      <div class="row align-items-center h-100">
+        <div class="col text-center"
+          [ngClass]="{'no-opp-sheet': !replaceExistingMotor.opportunitySheet, 'opp-sheet-exists': replaceExistingMotor.opportunitySheet}"
+          (click)="editOpportunitySheet()">
+          <span class="fa fa-edit"></span><br>
+          <span class="large pt-2" *ngIf="!replaceExistingMotor.opportunitySheet">Add Opportunity Sheet</span>
+          <span class="large pt-2" *ngIf="replaceExistingMotor.opportunitySheet">Edit Opportunity Sheet</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <a class="click-link" (click)="editMotorReplacement()">Edit Opportunity</a><br>
+          <a class="click-link danger" (click)="deleteMotorReplacement()">Delete</a><br>
+          <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

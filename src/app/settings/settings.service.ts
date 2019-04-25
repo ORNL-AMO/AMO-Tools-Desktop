@@ -49,10 +49,10 @@ export class SettingsService {
   // }
 
   getFormFromSettings(settings: Settings): FormGroup {
-    if (settings.steamPressureMeasurement == 'psi') {
+    if (settings.steamPressureMeasurement === 'psi') {
       settings.steamPressureMeasurement = 'psig';
     }
-    if (settings.steamPressureMeasurement == 'kPag') {
+    if (settings.steamPressureMeasurement === 'kPag') {
       settings.steamPressureMeasurement = 'kPag';
     }
     return this.formBuilder.group({

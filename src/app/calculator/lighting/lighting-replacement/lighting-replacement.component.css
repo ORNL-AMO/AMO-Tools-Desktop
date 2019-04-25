@@ -1,4 +1,4 @@
-.header {
+.header .fa.fa-lightbulb-o{
     font-size: -webkit-xxx-large;
 }
 
@@ -22,9 +22,6 @@
 
 .btn-margin-10 {
     margin: 10px 0px;
-}
-.fa.fa-lightbulb-o{
-    font-size: -webkit-xxx-large;
 }
 
 

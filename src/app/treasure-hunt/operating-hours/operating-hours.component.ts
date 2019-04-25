@@ -68,9 +68,9 @@ export class OperatingHoursComponent implements OnInit {
     this.save();
     this.treasureHunt.operatingHours.isCalculated = true;
     this.treasureHunt.operatingHours.hoursPerYear = this.treasureHunt.operatingHours.hoursPerShift * this.treasureHunt.operatingHours.shiftsPerDay * this.treasureHunt.operatingHours.daysPerWeek * this.treasureHunt.operatingHours.weeksPerYear;
-    if(this.treasureHunt.operatingHours.hoursPerYear > 8760){
+    if (this.treasureHunt.operatingHours.hoursPerYear > 8760) {
       this.hoursPerYearError = "Number of hours/year is greater than hours in a year."
-    }else{
+    } else {
       this.hoursPerYearError = null;
     }
   }
@@ -119,5 +119,13 @@ export class OperatingHoursComponent implements OnInit {
 
   save() {
     this.emitSave.emit(this.treasureHunt);
+  }
+
+  focusOut() {
+
+  }
+
+  focusField(str: string) {
+
   }
 }

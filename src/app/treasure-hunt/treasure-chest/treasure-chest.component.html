@@ -1,104 +1,103 @@
-<div class="d-flex modify-conditions panel-container" *ngIf="selectedCalc == 'none'">
-  <div class="panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
-    <div class="header mr-2 ml-2">
-      <h3>Treasure Chest Inventory</h3>
-    </div>
-    <!-- <div class="col-12">
-      <div class="card header-card">
-        <div class="card-body d-flex w-100 p-0 justify-content-center">
-          <div class="col-1 col-item-br">
-            Apply
-          </div>
-          <div class="col-4 col-item-br text-center">
-            Name
-          </div>
-          <div class="col-3 col-item-br text-center">
-            Percent Savings
-          </div>
-          <div class="col-2 col-item-br text-center">
-            Opportunity Sheet
-          </div>
-          <div class="col-2">
-            Manage
-          </div>
-        </div>
+<div class="d-flex modify-conditions panel-container skyline" *ngIf="selectedCalc == 'none'">
+  <div class="scroll-item chest-column" [ngStyle]="{'height.px': containerHeight}">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 mb-2">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'all'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('all')">
+          <div>All Items ({{numItems}})</div>
+        </a>
       </div>
-    </div>-->
-
-
-    <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
-      <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
-        (emitEditLighting)="editLighting($event, index)"
-        (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)" [treasureHunt]="treasureHunt">
-      </app-lighting-replacement-card>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'lighting-replacement'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('lighting-replacement')">
+          <div>Lighting Replacements ({{numLightingReplacements}})</div>
+        </a>
+      </div>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'opportunity-sheet'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('opportunity-sheet')">
+          <div>Opportunity Sheets ({{numOppSheets}})</div>
+        </a>
+      </div>
     </div>
-    <!-- <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
-      <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
-        (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings">
-      </app-opportunity-sheet-card>
-    </div> -->
+    <!--lighting replacement-->
+    <div *ngIf="tabSelect == 'all' || tabSelect == 'lighting-replacement'">
+      <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
+        <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
+          (emitEditLighting)="editLighting($event, index)"
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'lightingReplacement')"
+          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'lightingReplacement')"
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()">
+        </app-lighting-replacement-card>
+      </div>
+    </div>
+    <!--replace existing motor-->
+    <div *ngIf="tabSelect == 'all'">
+      <div class="col-12" *ngFor="let replaceExistingMotor of treasureHunt.replaceExistingMotors; let index = index;">
+        <app-replace-existing-motor-card [replaceExistingMotor]="replaceExistingMotor" [index]="index"
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'replaceExistingMotor')"
+          [settings]="settings" [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+          (emitDeleteReplaceExistingMotor)="showDeleteItem($event, index, 'replaceExistingMotor')"
+          (emitEditReplaceExistingMotor)="editReplaceExistingMotor($event, index)">
+        </app-replace-existing-motor-card>
+      </div>
+    </div>
+    <!--motor drive-->
+    <div *ngIf="tabSelect == 'all'">
+      <div class="col-12" *ngFor="let motorDrive of treasureHunt.motorDrives; let index = index;">
+        <app-motor-drive-card [motorDrive]="motorDrive" [index]="index"
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'motorDrive')" [settings]="settings"
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+          (emitDeleteItem)="showDeleteItem($event, index, 'motorDrive')" (emitEditItem)="editMotorDrive($event, index)">
+        </app-motor-drive-card>
+      </div>
+    </div>
+    <!--standalone opportunity sheet-->
+    <div *ngIf="tabSelect == 'all' || tabSelect == 'opportunity-sheet'">
+      <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;">
+        <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet" [index]="index"
+          (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+          (emitDeleteOpportunity)="showDeleteItem($event, index, 'opportunitySheet')">
+        </app-opportunity-sheet-card>
+      </div>
+    </div>
   </div>
-  <div class="d-flex flex-column scroll-item flex-fill" [ngStyle]="{'height.px': containerHeight}">
+  <div class="d-flex flex-column scroll-item result-column" [ngStyle]="{'height.px': containerHeight}">
     <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': helpTabSelect == 'results'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setHelpTab('results')">
           <div>Results</div>
         </a>
       </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': helpTabSelect == 'help'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setHelpTab('help')">
           <div>Help</div>
         </a>
       </div>
     </div>
-    <div class="d-flex justify-content-center mr-2 ml-2">
-      <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
+    <div class="d-flex justify-content-center mr-3 ml-3">
+      <app-summary-card class="w-100" [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
     </div>
   </div>
 </div>
 
-
-
-
-<!-- <div class="d-flex flex-fill justify-content-center" *ngIf="selectedCalc == 'none'">
-  <div class="d-flex flex-column w-75">
-    <p class="p-2 lead text-center mb-0">
-      Take a look at all your treasure!
-    </p>
-    <div class="p-1 mx-auto">
-      <button class="btn btn-primary report-btn">View Report</button>
-    </div>
-    <br>
-    <hr class="w-100 m-0">
-  </div>
-</div>
-<div class="d-flex flex-wrap w-100 pt-2" *ngIf="selectedCalc == 'none'">
-  <div class="summary-item col-3">
-    <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
-  </div>
-
-  <div class="summary-item col-3" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
-    <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
-      (emitEditLighting)="editLighting($event, index)"
-      (emitEditOpportunitySheet)="editLightingReplacementOpportunitySheet($event, index)">
-    </app-lighting-replacement-card>
-  </div>
-  <div class="summary-item col-3" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets">
-    <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet"
-      (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"></app-opportunity-sheet-card>
-  </div>
-</div> -->
-
-
-
-
+<!--edit calcs-->
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
   (emitSave)="saveEditLighting($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"></app-lighting-replacement>
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-lighting-replacement>
 
 <app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="cancelEditCalc()"
   (emitSave)="saveEditOpportunity($event)" [settings]="settings" [(opportunitySheet)]="selectedEditOpportunitySheet">
 </app-standalone-opportunity-sheet>
+
+<app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveEditReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+</app-replace-existing>
+
+<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveEditMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+</app-motor-drive>
 
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
@@ -111,7 +110,7 @@
           <span aria-hidden="true">&times;</span>
         </button> -->
       </div>
-      <div class="modal-body text-center" *ngIf="isSaveLighting">
+      <div class="modal-body text-center" *ngIf="itemType != 'opportunitySheet'">
         <p class="help-text" *ngIf="!selectedEditOpportunitySheet">There is no opportunity sheet filled out for this
           opportunity. Would you like to add one
           before saving?</p>
@@ -125,16 +124,17 @@
         <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="selectedEditOpportunitySheet">Edit
           Opportunity Sheet</a>
       </div>
-      <div class="modal-body text-center" *ngIf="!isSaveLighting">
+      <div class="modal-body text-center" *ngIf="itemType == 'opportunitySheet'">
         <p class="help-text">Are you sure you want to save the changes to your existing opportunity? These changes
           cannot be
           undone.</p>
       </div>
       <div class="modal-footer p-1">
-        <button class="btn btn-danger btn-sm pull-right" (click)="closeSaveCalcModal()">Cancel</button>
-        <button class="btn btn-primary btn-sm pull-right" (click)="saveLighting()" *ngIf="isSaveLighting">Save</button>
+        <button class="btn btn-danger btn-sm pull-right" (click)="hideSaveCalcModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm pull-right" (click)="saveEditCalc()"
+          *ngIf="itemType != 'opportunitySheet'">Save</button>
         <button class="btn btn-primary btn-sm pull-right" (click)="saveEditOpportunitySheet()"
-          *ngIf="!isSaveLighting">Save</button>
+          *ngIf="itemType == 'opportunitySheet'">Save</button>
       </div>
     </div>
   </div>
@@ -146,9 +146,25 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
-        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveOpportunitySheet($event)"
+        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveItemOpportunitySheet($event)"
           [(opportunitySheet)]="selectedEditOpportunitySheet">
         </app-opportunity-sheet>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #deletedItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="deletedItemModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body p-2 text-center" *ngIf="deletedItemModal.isShown">
+        Are you sure you want to delete "{{deleteItemName}}"?<br>
+        <span class="small danger">This cannot be undone.</span>
+      </div>
+      <div class="modal-footer p-2 justify-content-end delete-modal">
+        <button class="btn btn-danger" (click)="deleteItem()">Delete</button>
+        <button class="btn btn-primary" (click)="cancelDelete()">Cancel</button>
       </div>
     </div>
   </div>

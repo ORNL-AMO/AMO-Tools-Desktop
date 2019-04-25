@@ -23,8 +23,12 @@
 }
 
 
-.panel-column{
+.chest-column{
     width: 65%;
+}
+
+.result-column{
+    width: 35%;
 }
 
 .card.header-card{
@@ -35,4 +39,21 @@
 
 .col-item-br{
     border-right: solid;
+}
+
+.delete-modal .btn{
+    padding: 6px;
+}
+
+.small.danger{
+    color: red;    
+}
+
+
+.skyline{
+    background-image: url('../../../assets/images/industrial-skyline.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom center; 
+    background-size: 100%;
 }

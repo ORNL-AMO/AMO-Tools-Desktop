@@ -1,45 +1,36 @@
-<div class="card card-item w-100">
-  <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center">
-      Treasure Chest Summary
+<div class="mt-2 card">
+  <div class="card-body d-flex flex-column justify-content-center">
+    <div class="p-2 total-savings-border text-center treasure-hunt-item">
+      <h5 class="mb-0 text-center">Total Cost Savings</h5>
+      <app-treasure-hunt-gauge [value]="percentSavings"></app-treasure-hunt-gauge>
+      <span>Baseline Costs: {{totalBaselineCost | currency:'USD'}}</span><br>
+      <span>Modified Costs: {{totalModificationCost | currency:'USD'}}</span>
     </div>
-    <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
-    <!-- <div class="btn-group">
-      <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()">
-      </button>
-      <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
-        <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
-        <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
-        <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+    <div class="row no-gutters align-items-end treasure-hunt-item">
+      <div class="col-4 text-center">
+        <h6 class="mb-0 text-center pt-2">Electricity Savings</h6>
+        <app-treasure-hunt-gauge [value]="percentElectricitySavings" [chartHeight]="85"></app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHunt.currentEnergyUsage.electricityCosts | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHunt.currentEnergyUsage.electricityCosts - totalElectricityCostSavings| currency:'USD'}}</span>
       </div>
-    </div> -->
-  </div>
-  <div class="card-body scroll-item summary-card-body p-1">
-    <table class="table">
-      <tr>
-        <td>
-          Lighting Replacement
-        </td>
-        <td>
-          {{treasureHunt.lightingReplacements.length}}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Total Projects
-        </td>
-        <td>
-          {{treasureHunt.lightingReplacements.length}}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Total Savings
-        </td>
-        <td>
-          {{1000 | currency:'USD'}}
-        </td>
-      </tr>
-    </table>
+      <div class="col-4 middle-border-item text-center treasure-hunt-item">
+        <h6 class="mb-0 text-center pt-2">Natural Gas Savings</h6>
+        <app-treasure-hunt-gauge [value]="percentGasSavings" [chartHeight]="85"></app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHunt.currentEnergyUsage.naturalGasCosts | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHunt.currentEnergyUsage.naturalGasCosts - totalNaturalGasCostSavings| currency:'USD'}}</span>
+      </div>
+      <div class="col-4 text-center treasure-hunt-item">
+        <h6 class="mb-0 text-center pt-2">Other Fuel Savings</h6>
+        <app-treasure-hunt-gauge [value]="percentOtherGasSavings" [chartHeight]="85"></app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHunt.currentEnergyUsage.otherFuelCosts | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHunt.currentEnergyUsage.otherFuelCosts - totalOtherGasCostSavings| currency:'USD'}}</span>
+      </div>
+    </div>
   </div>
 </div>

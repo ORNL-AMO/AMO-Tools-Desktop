@@ -29,7 +29,7 @@ export class TreasureHuntComponent implements OnInit {
   onResize(event) {
     this.getContainerHeight();
   }
-  
+
   assessment: Assessment;
   settings: Settings;
 
@@ -56,7 +56,7 @@ export class TreasureHuntComponent implements OnInit {
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
 
-        if(!this.assessment.treasureHunt){
+        if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
             lightingReplacements: new Array<LightingReplacementTreasureHunt>()
@@ -75,7 +75,7 @@ export class TreasureHuntComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.subTabSub.unsubscribe();
   }
@@ -133,11 +133,11 @@ export class TreasureHuntComponent implements OnInit {
     }
   }
 
-  saveTreasureHunt(treasureHunt: TreasureHunt){
+  saveTreasureHunt(treasureHunt: TreasureHunt) {
     this.assessment.treasureHunt = treasureHunt;
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
-        // this.ssmtService.updateData.next(true);
+        this.treasureHuntService.getResults.next(true);
       })
     })
   }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { LightingReplacementResults, LightingReplacementData, LightingReplacementResult } from '../../../shared/models/lighting';
 import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class LightingReplacementService {
@@ -13,16 +14,16 @@ export class LightingReplacementService {
   constructor() { }
 
   calculate(data: LightingReplacementData): LightingReplacementData {
-    data = this.calculateOperatingHours(data);
+    // data = this.calculateOperatingHours(data);
     data = this.calculateElectricityUse(data);
     data = this.calculateTotalLighting(data);
     return data;
   }
 
-  calculateOperatingHours(data: LightingReplacementData): LightingReplacementData {
-    data.hoursPerYear = data.hoursPerDay * data.daysPerMonth * data.monthsPerYear;
-    return data;
-  }
+  // calculateOperatingHours(data: LightingReplacementData): LightingReplacementData {
+  //   data.hoursPerYear = data.hoursPerDay * data.daysPerMonth * data.monthsPerYear;
+  //   return data;
+  // }
 
   calculateElectricityUse(data: LightingReplacementData): LightingReplacementData {
     data.electricityUse = data.wattsPerLamp * data.lampsPerFixture * data.numberOfFixtures * (1 / 1000) * data.hoursPerYear;
@@ -62,19 +63,25 @@ export class LightingReplacementService {
     }
   }
 
-  getInitializedData(): Array<LightingReplacementData> {
-    return [{
-      hoursPerDay: 0,
-      daysPerMonth: 30,
-      monthsPerYear: 12,
-      hoursPerYear: 0,
+  getDefaultData(operatingHours?: OperatingHours): LightingReplacementData {
+    let hoursPerYear: number = 8736;
+    if (operatingHours) {
+      hoursPerYear = operatingHours.hoursPerYear;
+    }
+    return {
+      hoursPerYear: hoursPerYear,
       wattsPerLamp: 0,
       lampsPerFixture: 0,
       numberOfFixtures: 0,
       lumensPerLamp: 0,
       totalLighting: 0,
       electricityUse: 0
-    }]
+    }
+  }
+
+  getInitializedData(operatingHours?: OperatingHours): Array<LightingReplacementData> {
+    let data: LightingReplacementData = this.getDefaultData(operatingHours);
+    return [data]
   }
 }
 

@@ -1,18 +1,32 @@
 import { Injectable } from '@angular/core';
-import { MotorDriveInputs, MotorDriveOutputs } from './motor-drive.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MotorDriveInputs, MotorDriveOutputs, DriveResult } from '../../../shared/models/calculators';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class MotorDriveService {
   motorDriveData: MotorDriveInputs;
   constructor(private formBuilder: FormBuilder) { }
 
+  getDefaultData(settings: Settings): MotorDriveInputs{
+    return {
+      motorPower: 5,
+      annualOperatingHours: 8760,
+      averageMotorLoad: 50,
+      electricityCost: settings.electricityCost,
+      baselineDriveType: 0,
+      modificationDriveType: 0
+    }
+  }
+
   getFormFromObj(inputObj: MotorDriveInputs): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
       motorPower: [inputObj.motorPower, [Validators.required]],
       annualOperatingHours: [inputObj.annualOperatingHours, [Validators.required, Validators.min(0)]],
       averageMotorLoad: [inputObj.averageMotorLoad, [Validators.required]],
-      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]]
+      electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
+      baselineDriveType: [inputObj.baselineDriveType, [Validators.required]],
+      modificationDriveType: [inputObj.modificationDriveType, [Validators.required]]
     });
     return tmpForm;
   }
@@ -23,6 +37,8 @@ export class MotorDriveService {
       annualOperatingHours: form.controls.annualOperatingHours.value,
       averageMotorLoad: form.controls.averageMotorLoad.value,
       electricityCost: form.controls.electricityCost.value,
+      baselineDriveType: form.controls.baselineDriveType.value,
+      modificationDriveType: form.controls.modificationDriveType.value,
     };
     return inputs;
   }
@@ -32,22 +48,47 @@ export class MotorDriveService {
     let vBeltEnergyUsed: number = this.getVBeltEnergyUse(energy);
     let synchronousBeltEnergyUsed: number = this.getSynchronousEnergyUse(energy);
     let notchedEnergyUsed: number = this.getNotchedEnergyUse(energy);
-
-    let motorDriveOutputs: MotorDriveOutputs = {
-      vBeltResults: {
-        energyCost: this.getCost(vBeltEnergyUsed, data.electricityCost) / 1000,
-        annualEnergyUse: vBeltEnergyUsed / 1000
-      },
-      synchronousBeltDrive: {
-        energyCost: this.getCost(synchronousBeltEnergyUsed, data.electricityCost) / 1000,
-        annualEnergyUse: synchronousBeltEnergyUsed / 1000
-      },
-      notchedResults: {
-        energyCost: this.getCost(notchedEnergyUsed, data.electricityCost) / 1000,
-        annualEnergyUse: notchedEnergyUsed / 1000
-      }
+    //0
+    let vBeltResults: DriveResult = {
+      energyCost: this.getCost(vBeltEnergyUsed, data.electricityCost),
+      annualEnergyUse: vBeltEnergyUsed,
+      driveEfficiency: 93
     };
-    return motorDriveOutputs;
+    //1
+    let notchedResults: DriveResult = {
+      energyCost: this.getCost(notchedEnergyUsed, data.electricityCost),
+      annualEnergyUse: notchedEnergyUsed,
+      driveEfficiency: 95
+    };
+    //2
+    let synchronousBeltDrive: DriveResult = {
+      energyCost: this.getCost(synchronousBeltEnergyUsed, data.electricityCost),
+      annualEnergyUse: synchronousBeltEnergyUsed,
+      driveEfficiency: 98
+    };
+    let baselineResult: DriveResult = vBeltResults;
+    let modificationResults: DriveResult = vBeltResults;
+    if (data.baselineDriveType == 1) {
+      baselineResult = notchedResults;
+    } else if (data.baselineDriveType == 2) {
+      baselineResult = synchronousBeltDrive;
+    }
+    if (data.modificationDriveType == 1) {
+      modificationResults = notchedResults;
+    } else if (data.modificationDriveType == 2) {
+      modificationResults = synchronousBeltDrive;
+    }
+    let annualCostSavings: number = baselineResult.energyCost - modificationResults.energyCost;
+    let annualEnergySavings: number = baselineResult.annualEnergyUse - modificationResults.annualEnergyUse;
+    return {
+      vBeltResults: vBeltResults,
+      notchedResults: notchedResults,
+      synchronousBeltDrive: synchronousBeltDrive,
+      baselineResult: baselineResult,
+      modificationResult: modificationResults,
+      annualCostSavings: annualCostSavings,
+      annualEnergySavings: annualEnergySavings
+    };
   }
 
   getCost(data: number, cost: number) {
