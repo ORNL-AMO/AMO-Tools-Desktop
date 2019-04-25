@@ -120,6 +120,20 @@
             {{results.synchronousBeltDrive.energyCost | currency:'USD':'symbol':'0.0-0'}}
           </td>
         </tr>
+        <tr>
+          <td>
+            Direct Drive
+          </td>
+          <td>
+            {{results.directDrive.driveEfficiency | number:'1.0-0'}}
+          </td>
+          <td>
+            {{results.directDrive.annualEnergyUse | number:'1.0-0'}}
+          </td>
+          <td>
+            {{results.directDrive.energyCost | currency:'USD':'symbol':'0.0-0'}}
+          </td>
+        </tr>
       </tbody>
     </table>
     <app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">

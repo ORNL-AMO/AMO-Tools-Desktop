@@ -44,39 +44,57 @@ export class MotorDriveService {
   }
 
   getResults(data: MotorDriveInputs): MotorDriveOutputs {
+    let vBeltEfficiency: number = 93;
+    let notchedBeltEfficiency: number = 95;
+    let synchronousBeltEfficiency: number = 98;
+    let directDriveEfficiency: number = 100;
+
+
     let energy: number = this.getEnergy(data);
-    let vBeltEnergyUsed: number = this.getVBeltEnergyUse(energy);
-    let synchronousBeltEnergyUsed: number = this.getSynchronousEnergyUse(energy);
-    let notchedEnergyUsed: number = this.getNotchedEnergyUse(energy);
+    let vBeltEnergyUsed: number = this.getEnergyUse(energy, vBeltEfficiency);
+    let synchronousBeltEnergyUsed: number = this.getEnergyUse(energy, synchronousBeltEfficiency);
+    let notchedEnergyUsed: number = this.getEnergyUse(energy, notchedBeltEfficiency);
+    let directDriveEnergyUsed: number = this.getEnergyUse(energy, directDriveEfficiency);
     //0
     let vBeltResults: DriveResult = {
       energyCost: this.getCost(vBeltEnergyUsed, data.electricityCost),
       annualEnergyUse: vBeltEnergyUsed,
-      driveEfficiency: 93
+      driveEfficiency: vBeltEfficiency
     };
     //1
     let notchedResults: DriveResult = {
       energyCost: this.getCost(notchedEnergyUsed, data.electricityCost),
       annualEnergyUse: notchedEnergyUsed,
-      driveEfficiency: 95
+      driveEfficiency: notchedBeltEfficiency
     };
     //2
     let synchronousBeltDrive: DriveResult = {
       energyCost: this.getCost(synchronousBeltEnergyUsed, data.electricityCost),
       annualEnergyUse: synchronousBeltEnergyUsed,
-      driveEfficiency: 98
+      driveEfficiency: synchronousBeltEfficiency
     };
+    //3
+    let directDrive: DriveResult = {
+      energyCost: this.getCost(directDriveEnergyUsed, data.electricityCost),
+      annualEnergyUse: directDriveEnergyUsed,
+      driveEfficiency: directDriveEfficiency
+    };
+
     let baselineResult: DriveResult = vBeltResults;
     let modificationResults: DriveResult = vBeltResults;
     if (data.baselineDriveType == 1) {
       baselineResult = notchedResults;
     } else if (data.baselineDriveType == 2) {
       baselineResult = synchronousBeltDrive;
+    } else if(data.baselineDriveType == 3){
+      baselineResult = directDrive;
     }
     if (data.modificationDriveType == 1) {
       modificationResults = notchedResults;
     } else if (data.modificationDriveType == 2) {
       modificationResults = synchronousBeltDrive;
+    } else if(data.modificationDriveType == 3){
+      modificationResults = directDrive;
     }
     let annualCostSavings: number = baselineResult.energyCost - modificationResults.energyCost;
     let annualEnergySavings: number = baselineResult.annualEnergyUse - modificationResults.annualEnergyUse;
@@ -84,6 +102,7 @@ export class MotorDriveService {
       vBeltResults: vBeltResults,
       notchedResults: notchedResults,
       synchronousBeltDrive: synchronousBeltDrive,
+      directDrive: directDrive,
       baselineResult: baselineResult,
       modificationResult: modificationResults,
       annualCostSavings: annualCostSavings,
@@ -99,16 +118,7 @@ export class MotorDriveService {
     return (data.motorPower * .746 * data.annualOperatingHours * (data.averageMotorLoad / 100));
   }
 
-  getVBeltEnergyUse(data: number): number {
-    return data / .93;
+  getEnergyUse(energy: number, efficiency: number){
+    return energy / (efficiency / 100);
   }
-
-  getSynchronousEnergyUse(data: number): number {
-    return data / .98;
-  }
-
-  getNotchedEnergyUse(data: number): number {
-    return data / .95;
-  }
-
 }
