@@ -6,7 +6,9 @@
         {{header.pressure | number:'1.0-2'}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
       </span>
-      <span class="condensing-warning fa fa-exclamation-triangle" *ngIf="condensingWarning">
+      <span class="condensing-warning-holder" *ngIf="condensingWarning">
+        <span class="condensing-warning fa fa-exclamation-triangle">
+        </span>
       </span>
       <div class="vented-steam-holder" *ngIf="ventedLowPressureSteam">
         <span class="vented-steam">

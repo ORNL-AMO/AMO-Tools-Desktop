@@ -67,14 +67,15 @@
 }
 
 
-.condensing-warning{
+.condensing-warning-holder .condensing-warning{
+    position: absolute;
     font-size: 40px;
     color: red;
-    position: fixed;
-    padding-left: 20px;
+    left: 10px;
+    top: 5px;
 }
 
-.header-data-holder, .process-usage-holder, .condensate-holder, .vented-steam-holder{
+.header-data-holder, .process-usage-holder, .condensate-holder, .vented-steam-holder, .condensing-warning-holder{
     position: relative;
 }
 
