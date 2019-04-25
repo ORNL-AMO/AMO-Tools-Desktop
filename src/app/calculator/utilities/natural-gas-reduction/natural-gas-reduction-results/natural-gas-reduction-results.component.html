@@ -4,19 +4,19 @@
     <tr>
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
-        {{format(baselineResults.energyUse)}} {{settings.energyResultUnit}}/yr
+        {{baselineResults.energyUse | number:'.1-3'}} {{settings.energyResultUnit}}/yr
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Energy Cost</td>
       <td class="text-center w-50">
-        {{currencyFormat(baselineResults.energyCost)}}/yr
+        {{baselineResults.energyCost | currency}}/yr
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Total Flow</td>
       <td class="text-center w-50">
-        {{format(baselineResults.totalFlow)}} {{settings.flowMeasurement}}/yr
+        {{baselineResults.totalFlow | number:'.1-3'}} {{settings.flowMeasurement}}/yr
       </td>
     </tr>
   </tbody>
@@ -33,19 +33,19 @@
     <tr>
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
-        {{format(modificationResults.energyUse)}} {{settings.energyResultUnit}}/yr
+        {{modificationResults.energyUse | number:'.1-3'}} {{settings.energyResultUnit}}/yr
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Energy Cost</td>
       <td class="text-center w-50">
-        {{currencyFormat(modificationResults.energyCost)}}/yr
+        {{modificationResults.energyCost | currency}}/yr
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Total Flow</td>
       <td class="text-center w-50">
-        {{format(modificationResults.totalFlow)}} {{settings.flowMeasurement}}/yr
+        {{modificationResults.totalFlow | number:'.1-3'}} {{settings.flowMeasurement}}/yr
       </td>
     </tr>
   </tbody>
@@ -58,11 +58,11 @@
   <tbody>
     <tr>
       <td class="bold w-50">Annual Energy Savings</td>
-      <td class="text-center w-50">{{format(annualEnergySavings)}} {{settings.energyResultUnit}}/yr</td>
+      <td class="text-center w-50">{{annualEnergySavings | number:'.1-3'}} {{settings.energyResultUnit}}/yr</td>
     </tr>
     <tr>
       <td class="bold w-50">Annual Cost Savings</td>
-      <td class="text-center w-50">{{currencyFormat(annualCostSavings)}}/yr</td>
+      <td class="text-center w-50">{{annualCostSavings | currency}}/yr</td>
     </tr>
   </tbody>
 </table>

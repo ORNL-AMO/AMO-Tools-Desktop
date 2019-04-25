@@ -3,7 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-declare var calculatorAddon: any;
+import { ElectricityReductionData, MultimeterReadingData, NameplateData, PowerMeterData, OtherMethodData, ElectricityReductionResults, ElectricityReductionInput } from '../../../shared/models/standalone';
+import { StandaloneService } from '../../standalone.service';
 
 @Injectable()
 export class ElectricityReductionService {
@@ -11,11 +12,7 @@ export class ElectricityReductionService {
   baselineData: Array<ElectricityReductionData>;
   modificationData: Array<ElectricityReductionData>;
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
-
-  test() {
-    console.log(calculatorAddon);
-  }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   resetData(settings: Settings) {
     this.baselineData = new Array<ElectricityReductionData>();
@@ -60,63 +57,6 @@ export class ElectricityReductionService {
     };
 
     return obj;
-  }
-
-  initForm(settings?: Settings): FormGroup {
-    let initObj: ElectricityReductionData = this.initObject(settings);
-
-    let form: FormGroup = this.formBuilder.group({
-      operatingHours: [initObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      electricityCost: [initObj.electricityCost],
-      measurementMethod: [initObj.measurementMethod],
-
-      // multimeter data
-      numberOfPhases: [initObj.multimeterData.numberOfPhases],
-      supplyVoltage: [initObj.multimeterData.supplyVoltage],
-      averageCurrent: [initObj.multimeterData.averageCurrent],
-      powerFactor: [initObj.multimeterData.powerFactor],
-
-      // nameplate data
-      ratedMotorPower: [initObj.nameplateData.ratedMotorPower],
-      variableSpeedMotor: [initObj.nameplateData.variableSpeedMotor],
-      operationalFrequency: [initObj.nameplateData.operationalFrequency],
-      lineFrequency: [initObj.nameplateData.lineFrequency],
-      motorAndDriveEfficiency: [initObj.nameplateData.motorAndDriveEfficiency],
-      loadFactor: [initObj.nameplateData.loadFactor],
-
-      // power meter data
-      power: [initObj.powerMeterData.power],
-
-      // offsheet / other data
-      energy: [initObj.otherMethodData.energy],
-
-      units: [initObj.units]
-    });
-    switch (form.controls.measurementMethod.value) {
-      case 0:
-        form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
-        form.controls.numberOfPhases.setValidators([Validators.required]);
-        form.controls.supplyVoltage.setValidators([Validators.required, Validators.min(0)]);
-        form.controls.averageCurrent.setValidators([Validators.required, Validators.min(0)]);
-        form.controls.powerFactor.setValidators([GreaterThanValidator.greaterThan(0), Validators.max(1)]);
-        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
-        break;
-      case 1:
-        form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
-        form.controls.ratedMotorPower.setValidators([Validators.required, Validators.min(0)]);
-        form.controls.operationalFrequency.setValidators([Validators.required, Validators.min(0)]);
-        form.controls.motorAndDriveEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-        form.controls.loadFactor.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
-        break;
-      case 2:
-        form.controls.power.setValidators([Validators.required, Validators.min(0)]);
-        form.controls.units.setValidators([Validators.required, Validators.min(1)]);
-        break;
-      case 3:
-        form.controls.energy.setValidators([Validators.required, Validators.min(0)]);
-    }
-    return form;
   }
 
   getFormFromObj(initObj: ElectricityReductionData): FormGroup {
@@ -263,88 +203,47 @@ export class ElectricityReductionService {
 
   calculate(isBaseline: boolean, settings: Settings): ElectricityReductionResults {
     let tmpData = isBaseline ? this.baselineData : this.modificationData;
-    //need to loop through for conversions prior to calculation
-    for (let i = 0; i < tmpData.length; i++) {
-      let tmpNameplateData = {
-        ratedMotorPower: this.convertUnitsService.value(tmpData[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW'),
-        variableSpeedMotor: tmpData[i].nameplateData.variableSpeedMotor,
-        operationalFrequency: tmpData[i].nameplateData.operationalFrequency,
-        lineFrequency: tmpData[i].nameplateData.lineFrequency,
-        motorAndDriveEfficiency: tmpData[i].nameplateData.motorAndDriveEfficiency,
-        loadFactor: tmpData[i].nameplateData.loadFactor
-      };
-      tmpData[i] = {
-        operatingHours: tmpData[i].operatingHours,
-        electricityCost: tmpData[i].electricityCost,
-        measurementMethod: tmpData[i].measurementMethod,
-        multimeterData: tmpData[i].multimeterData,
-        nameplateData: tmpNameplateData,
-        powerMeterData: tmpData[i].powerMeterData,
-        otherMethodData: tmpData[i].otherMethodData,
-        units: tmpData[i].units
-      };
-    }
+    tmpData = this.convertInputs(tmpData, settings);
+
     let inputObj: ElectricityReductionInput = {
       electricityReductionInputVec: tmpData
     };
-    let results: ElectricityReductionResults = calculatorAddon.electricityReduction(inputObj);
+    let results: ElectricityReductionResults = this.standaloneService.electricityReduction(inputObj);
     return results;
   }
 
-  calculateIndividualEquipment(input: ElectricityReductionData): ElectricityReductionResults {
+  calculateIndividualEquipment(input: ElectricityReductionData, settings: Settings): ElectricityReductionResults {
     let inputArray: Array<ElectricityReductionData> = [input];
+    inputArray = this.convertInputs(inputArray, settings);
     let inputObj: ElectricityReductionInput = {
       electricityReductionInputVec: inputArray
     };
-    let results: ElectricityReductionResults = calculatorAddon.electricityReduction(inputObj);
+    let results: ElectricityReductionResults = this.standaloneService.electricityReduction(inputObj);
     return results;
   }
-}
 
-
-export interface ElectricityReductionInput {
-  electricityReductionInputVec: Array<ElectricityReductionData>
-}
-
-export interface ElectricityReductionData {
-  operatingHours: number,
-  electricityCost: number,
-  measurementMethod: number, // 0 = multimeter reading, 1 = name plate data, 2 = power meter method, 3 = offsheet / other method
-  multimeterData: MultimeterReadingData,
-  nameplateData: NameplateData,
-  powerMeterData: PowerMeterData,
-  otherMethodData: OtherMethodData,
-  units: number
-}
-
-export interface MultimeterReadingData {
-  numberOfPhases: number,
-  supplyVoltage: number,
-  averageCurrent: number,
-  powerFactor: number
-}
-
-export interface NameplateData {
-  ratedMotorPower: number,
-  variableSpeedMotor: boolean,
-  operationalFrequency: number,
-  lineFrequency: number,
-  motorAndDriveEfficiency: number,
-  loadFactor: number
-}
-
-export interface PowerMeterData {
-  power: number,
-}
-
-export interface OtherMethodData {
-  energy: number;
-}
-
-export interface ElectricityReductionResults {
-  energyUse: number,
-  energyCost: number,
-  annualEnergySavings: number,
-  costSavings: number,
-  power: number
+  convertInputs(inputArray: Array<ElectricityReductionData>, settings: Settings): Array<ElectricityReductionData> {
+    //need to loop through for conversions prior to calculation
+    for (let i = 0; i < inputArray.length; i++) {
+      let tmpNameplateData = {
+        ratedMotorPower: this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW'),
+        variableSpeedMotor: inputArray[i].nameplateData.variableSpeedMotor,
+        operationalFrequency: inputArray[i].nameplateData.operationalFrequency,
+        lineFrequency: inputArray[i].nameplateData.lineFrequency,
+        motorAndDriveEfficiency: inputArray[i].nameplateData.motorAndDriveEfficiency,
+        loadFactor: inputArray[i].nameplateData.loadFactor
+      };
+      inputArray[i] = {
+        operatingHours: inputArray[i].operatingHours,
+        electricityCost: inputArray[i].electricityCost,
+        measurementMethod: inputArray[i].measurementMethod,
+        multimeterData: inputArray[i].multimeterData,
+        nameplateData: tmpNameplateData,
+        powerMeterData: inputArray[i].powerMeterData,
+        otherMethodData: inputArray[i].otherMethodData,
+        units: inputArray[i].units
+      };
+    }
+    return inputArray;
+  }
 }

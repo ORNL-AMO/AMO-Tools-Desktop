@@ -24,13 +24,13 @@
         <input class="form-control" name="fuelCost" id="{{'fuelCost_'+idString}}" formControlName="fuelCost"
           type="number" (input)="calculate()" (focus)="focusField('fuelCost')" (blur)="focusOut()"
           onfocus="this.select();">
-        <span class="units input-group-addon">$/{{settings.energyResultUnit}}</span>
-      </div>
-      <span class="alert-danger pull-right small"
+        <span class="units input-group-addon">$/<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
+        </span>
+      </div> <span class="alert-danger pull-right small"
         *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">
         <span *ngIf="form.controls.fuelCost.errors.required">Value required.</span>
         <span *ngIf="form.controls.fuelCost.errors.min">Value can't be less than
-          {{form.controls.fuelCost.errors.min.min}}$/kWh.</span>
+          {{form.controls.fuelCost.errors.min.min}}.</span>
       </span>
     </div>
 
@@ -138,7 +138,7 @@
         <input class="form-control" name="airInletTemperature" id="{{'airInletTemperature_'+idString}}"
           formControlName="airInletTemperature" type="number" (input)="calculate()"
           (focus)="focusField('airInletTemperature')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">&deg;{{settings.temperatureMeasurement}}</span>
+        <span class="units input-group-addon" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="form.controls.airInletTemperature.invalid && !form.controls.airInletTemperature.pristine">
@@ -152,7 +152,7 @@
         <input class="form-control" name="airOutletTemperature" id="{{'airOutletTemperature_'+idString}}"
           formControlName="airOutletTemperature" type="number" (input)="calculate()"
           (focus)="focusField('airOutletTemperature')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">&deg;{{settings.temperatureMeasurement}}</span>
+        <span class="units input-group-addon" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="form.controls.airOutletTemperature.invalid && !form.controls.airOutletTemperature.pristine">
@@ -165,7 +165,8 @@
         <label class="small bold" for="{{'airHeatFlow_'+idString}}">Heat Flow Rate</label>
       </div>
       <div class="col-6 text-center">
-        <span class="small bold">{{format(individualResults.heatFlow)}} {{settings.energyResultUnit}}/hr</span>
+        <span class="small bold">{{individualResults.heatFlow | number:'.1-3'}}
+          <span [innerHTML]="settings.energyResultUnit | settingsLabel:'/hr'"></span></span>
       </div>
     </div>
 
@@ -215,7 +216,7 @@
         <input class="form-control" name="waterInletTemperature" id="{{'waterInletTemperature_'+idString}}"
           formControlName="waterInletTemperature" type="number" (input)="calculate()"
           (focus)="focusField('waterInletTemperature')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">&deg;{{settings.temperatureMeasurement}}</span>
+        <span class="units input-group-addon" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="form.controls.waterInletTemperature.invalid && !form.controls.waterInletTemperature.pristine">
@@ -231,7 +232,7 @@
         <input class="form-control" name="waterOutletTemperature" id="{{'waterOutletTemperature_'+idString}}"
           formControlName="waterOutletTemperature" type="number" (input)="calculate()"
           (focus)="focusField('waterOutletTemperature')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">&deg;{{settings.temperatureMeasurement}}</span>
+        <span class="units input-group-addon" [innerHTML]="settings.temperatureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="form.controls.waterOutletTemperature.invalid && !form.controls.waterOutletTemperature.pristine">
@@ -246,7 +247,8 @@
         <label class="small bold" for="{{'waterHeatFlow_'+idString}}">Heat Flow Rate</label>
       </div>
       <div class="col-6 text-center">
-        <span class="small bold">{{format(individualResults.heatFlow)}} {{settings.energyResultUnit}}/hr</span>
+        <span class="small bold">{{individualResults.heatFlow | number:'.1-3'}}
+          <span [innerHTML]="settings.energyResultUnit | settingsLabel:'/hr'"></span></span>
       </div>
     </div>
 
@@ -277,7 +279,8 @@
         <input class="form-control" name="consumption" id="{{'consumption_'+idString}}" formControlName="consumption"
           type="number" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()"
           onfocus="this.select();">
-        <span class="units input-group-addon">{{settings.energyResultUnit}}/yr</span>
+        <span class="units input-group-addon"><span
+            [innerHTML]="settings.energyResultUnit | settingsLabel:'/yr'"></span></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="form.controls.consumption.invalid && !form.controls.consumption.pristine">
@@ -307,7 +310,8 @@
         <label class="small bold" for="energy">Energy Subtotal</label>
       </div>
       <div class="col-6 text-center">
-        <span class="small bold">{{format(individualResults.energyUse)}} {{settings.energyResultUnit}}/yr</span>
+        <span class="small bold">{{individualResults.energyUse | number:'.1-3'}}
+          <span [innerHTML]="settings.energyResultUnit | settingsLabel:'/yr'"></span></span>
       </div>
     </div>
   </div>

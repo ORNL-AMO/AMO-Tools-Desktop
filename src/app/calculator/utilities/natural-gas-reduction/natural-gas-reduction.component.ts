@@ -2,7 +2,8 @@ import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { NaturalGasReductionResults, NaturalGasReductionService, NaturalGasReductionData } from './natural-gas-reduction.service';
+import { NaturalGasReductionService } from './natural-gas-reduction.service';
+import { NaturalGasReductionResults, NaturalGasReductionData } from '../../../shared/models/standalone';
 
 @Component({
   selector: 'app-natural-gas-reduction',

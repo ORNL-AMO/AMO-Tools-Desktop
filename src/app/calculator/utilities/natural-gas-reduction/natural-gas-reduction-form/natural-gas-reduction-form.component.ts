@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { OuterSubscriber } from 'rxjs/OuterSubscriber';
-import { NaturalGasReductionResults, NaturalGasReductionService } from '../natural-gas-reduction.service';
-import * as d3 from 'd3';
+import { NaturalGasReductionService } from '../natural-gas-reduction.service';
+import { NaturalGasReductionResults } from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-natural-gas-reduction-form',
@@ -24,31 +23,25 @@ export class NaturalGasReductionFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  measurementOptions: Array<{ value: number, name: string }>;
+  measurementOptions: Array<{ value: number, name: string }> = [
+    { value: 0, name: 'Flow Meter Method' },
+    { value: 1, name: 'Mass Flow of Air' },
+    { value: 2, name: 'Mass Flow of Water' },
+    { value: 3, name: 'Offsheet / Other Method' }
+  ];
   idString: string;
   individualResults: NaturalGasReductionResults;
-  format: any;
 
   constructor(private naturalGasReductionService: NaturalGasReductionService) { }
 
   ngOnInit() {
-    this.getFormat();
     if (this.isBaseline) {
       this.idString = this.index.toString();
     }
     else {
       this.idString = 'modification_' + this.index;
     }
-    this.initMeasurementOptions();
     this.calculate();
-  }
-
-  initMeasurementOptions() {
-    this.measurementOptions = new Array<{ value: number, name: string }>();
-    this.measurementOptions.push({ value: 0, name: 'Flow Meter Method' });
-    this.measurementOptions.push({ value: 1, name: 'Mass Flow of Air' });
-    this.measurementOptions.push({ value: 2, name: 'Mass Flow of Water' });
-    this.measurementOptions.push({ value: 3, name: 'Offsheet / Other Method' });
   }
 
   changeMeasurementMethod() {
@@ -75,9 +68,4 @@ export class NaturalGasReductionFormComponent implements OnInit {
 
   focusOut() {
   }
-
-  getFormat(): any {
-    this.format = d3.format(',.3f');
-  }
-
 }

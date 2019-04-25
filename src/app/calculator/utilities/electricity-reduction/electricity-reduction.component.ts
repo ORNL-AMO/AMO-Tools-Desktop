@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { ElectricityReductionService, ElectricityReductionData, ElectricityReductionResults } from './electricity-reduction.service';
+import { ElectricityReductionService } from './electricity-reduction.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { ElectricityReductionResults, ElectricityReductionData } from '../../../shared/models/standalone';
 
 @Component({
   selector: 'app-electricity-reduction',

@@ -3,7 +3,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
-declare var calculatorAddon: any;
+import { StandaloneService } from '../../standalone.service';
+import {
+  NaturalGasReductionData, FlowMeterMethodData, NaturalGasOtherMethodData, AirMassFlowMeasuredData,
+  AirMassFlowNameplateData, AirMassFlowData, WaterMassFlowData, NaturalGasReductionInput, NaturalGasReductionResults
+} from '../../../shared/models/standalone';
 
 @Injectable()
 export class NaturalGasReductionService {
@@ -11,11 +15,7 @@ export class NaturalGasReductionService {
   baselineData: Array<NaturalGasReductionData>;
   modificationData: Array<NaturalGasReductionData>;
 
-  constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
-
-  test() {
-    console.log(calculatorAddon);
-  }
+  constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   resetData(settings: Settings) {
     this.baselineData = new Array<NaturalGasReductionData>();
@@ -27,7 +27,7 @@ export class NaturalGasReductionService {
     let defaultFlowMeterData: FlowMeterMethodData = {
       flowRate: 5
     };
-    let defaultOtherData: OtherMethodData = {
+    let defaultOtherData: NaturalGasOtherMethodData = {
       consumption: 89900.00
     };
     let defaultAirMassFlowMeasuredData: AirMassFlowMeasuredData = {
@@ -64,13 +64,7 @@ export class NaturalGasReductionService {
     return obj;
   }
 
-  initForm(settings?: Settings) {
-    return this.getFormFromObj(this.initObject(settings), settings);
-  }
-
-  getFormFromObj(obj: NaturalGasReductionData, settings?: Settings): FormGroup {
-    // let initObj: NaturalGasReductionData = this.initObject(settings);
-
+  getFormFromObj(obj: NaturalGasReductionData): FormGroup {
     let form: FormGroup = this.fb.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [obj.fuelCost, [Validators.required, Validators.min(0)]],
@@ -163,7 +157,7 @@ export class NaturalGasReductionService {
       outletTemperature: form.controls.waterOutletTemperature.value,
       systemEfficiency: form.controls.waterSystemEfficiency.value
     };
-    let otherMethodData: OtherMethodData = {
+    let otherMethodData: NaturalGasOtherMethodData = {
       consumption: form.controls.consumption.value
     };
     let data: NaturalGasReductionData = {
@@ -227,76 +221,28 @@ export class NaturalGasReductionService {
   }
 
   calculate(isBaseline: boolean, settings: Settings) {
-    let tmpData = isBaseline ? this.baselineData : this.modificationData;
-    //need loop to support conversion
-    for (let i = 0; i < tmpData.length; i++) {
-      let tmpFlowMeterMethodData: FlowMeterMethodData = tmpData[i].flowMeterMethodData;
-      let tmpAirMassFlowMeasuredData: AirMassFlowMeasuredData = tmpData[i].airMassFlowData.airMassFlowMeasuredData;
-      let tmpAirMassFlowNameplateData: AirMassFlowNameplateData = tmpData[i].airMassFlowData.airMassFlowNameplateData;
-      let tmpAirMassFlowData: AirMassFlowData = tmpData[i].airMassFlowData;
-      let tmpWaterMassFlowData: WaterMassFlowData = tmpData[i].waterMassFlowData;
-      let tmpOtherMethodData: OtherMethodData = tmpData[i].otherMethodData;
-      let tmp = tmpData[i];
-      if (settings.unitsOfMeasure == 'Metric') {
-        tmpFlowMeterMethodData = {
-          flowRate: this.convertUnitsService.value(tmp.flowMeterMethodData.flowRate).from('m3/h').to('ft3/h')
-        };
-        tmpAirMassFlowMeasuredData = {
-          areaOfDuct: this.convertUnitsService.value(tmp.airMassFlowData.airMassFlowMeasuredData.areaOfDuct).from('cm2').to('ft2'),
-          airVelocity: this.convertUnitsService.value(tmp.airMassFlowData.airMassFlowMeasuredData.airVelocity).from('m').to('ft')
-        };
-        tmpAirMassFlowNameplateData = {
-          airFlow: this.convertUnitsService.value(tmp.airMassFlowData.airMassFlowNameplateData.airFlow).from('L/s').to('ft3/min')
-        };
-        tmpAirMassFlowData = {
-          isNameplate: tmp.airMassFlowData.isNameplate,
-          airMassFlowMeasuredData: tmpAirMassFlowMeasuredData,
-          airMassFlowNameplateData: tmpAirMassFlowNameplateData,
-          inletTemperature: this.convertUnitsService.value(tmp.airMassFlowData.inletTemperature).from('C').to('F'),
-          outletTemperature: this.convertUnitsService.value(tmp.airMassFlowData.outletTemperature).from('C').to('F'),
-          systemEfficiency: tmp.airMassFlowData.systemEfficiency
-        }
-        tmpWaterMassFlowData = {
-          waterFlow: this.convertUnitsService.value(tmp.waterMassFlowData.waterFlow).from('L/s').to('gpm'),
-          inletTemperature: this.convertUnitsService.value(tmp.waterMassFlowData.inletTemperature).from('C').to('F'),
-          outletTemperature: this.convertUnitsService.value(tmp.waterMassFlowData.outletTemperature).from('C').to('F'),
-          systemEfficiency: tmpWaterMassFlowData.systemEfficiency
-        };
-        tmpOtherMethodData = {
-          consumption: this.convertUnitsService.value(tmp.otherMethodData.consumption).from(settings.energyResultUnit).to('MMBtu')
-        };
-      }
-
-      tmpData[i] = {
-        operatingHours: tmp.operatingHours,
-        fuelCost: tmp.fuelCost,
-        measurementMethod: tmp.measurementMethod,
-        flowMeterMethodData: tmpFlowMeterMethodData,
-        otherMethodData: tmpOtherMethodData,
-        airMassFlowData: tmpAirMassFlowData,
-        waterMassFlowData: tmpWaterMassFlowData,
-        units: tmp.units
-      };
-    }
+    let inputArray = isBaseline ? this.baselineData : this.modificationData;
+    inputArray = this.convertInput(inputArray, settings);
     let inputObj: NaturalGasReductionInput = {
-      naturalGasReductionInputVec: tmpData
+      naturalGasReductionInputVec: inputArray
     };
-    let results: NaturalGasReductionResults = calculatorAddon.naturalGasReduction(inputObj);
-    if (settings.unitsOfMeasure == 'Metric') {
-      results = {
-        energyUse: this.convertUnitsService.value(results.energyUse).from('MMBtu').to(settings.energyResultUnit),
-        energyCost: results.energyCost,
-        annualEnergySavings: results.annualEnergySavings,
-        costSavings: results.costSavings,
-        heatFlow: this.convertUnitsService.value(results.heatFlow).from('MMBtu').to(settings.energyResultUnit),
-        totalFlow: settings.unitsOfMeasure == 'Metric' ? this.convertUnitsService.value(results.totalFlow).from('ft3/h').to('m3/h') : results.totalFlow
-      };
-    }
+    let results: NaturalGasReductionResults = this.standaloneService.naturalGasReduction(inputObj);
+    results = this.convertResults(results, settings);
     return results;
   }
 
   calculateIndividualEquipment(input: NaturalGasReductionData, settings: Settings): NaturalGasReductionResults {
     let inputArray: Array<NaturalGasReductionData> = [input];
+    inputArray = this.convertInput(inputArray, settings);
+    let inputObj: NaturalGasReductionInput = {
+      naturalGasReductionInputVec: inputArray
+    };
+    let results: NaturalGasReductionResults = this.standaloneService.naturalGasReduction(inputObj);
+    results = this.convertResults(results, settings);
+    return results;
+  }
+
+  convertInput(inputArray: Array<NaturalGasReductionData>, settings: Settings): Array<NaturalGasReductionData> {
     //need loop to support conversion
     for (let i = 0; i < inputArray.length; i++) {
       let tmpFlowMeterMethodData: FlowMeterMethodData = inputArray[i].flowMeterMethodData;
@@ -304,7 +250,7 @@ export class NaturalGasReductionService {
       let tmpAirMassFlowNameplateData: AirMassFlowNameplateData = inputArray[i].airMassFlowData.airMassFlowNameplateData;
       let tmpAirMassFlowData: AirMassFlowData = inputArray[i].airMassFlowData;
       let tmpWaterMassFlowData: WaterMassFlowData = inputArray[i].waterMassFlowData;
-      let tmpOtherMethodData: OtherMethodData = inputArray[i].otherMethodData;
+      let tmpOtherMethodData: NaturalGasOtherMethodData = inputArray[i].otherMethodData;
       let tmp = inputArray[i];
       if (settings.unitsOfMeasure == 'Metric') {
         tmpFlowMeterMethodData = {
@@ -347,12 +293,10 @@ export class NaturalGasReductionService {
         units: tmp.units
       };
     }
+    return inputArray;
+  }
 
-
-    let inputObj: NaturalGasReductionInput = {
-      naturalGasReductionInputVec: inputArray
-    };
-    let results: NaturalGasReductionResults = calculatorAddon.naturalGasReduction(inputObj);
+  convertResults(results: NaturalGasReductionResults, settings: Settings): NaturalGasReductionResults {
     if (settings.unitsOfMeasure == 'Metric') {
       results = {
         energyUse: this.convertUnitsService.value(results.energyUse).from('MMBtu').to(settings.energyResultUnit),
@@ -360,66 +304,9 @@ export class NaturalGasReductionService {
         annualEnergySavings: results.annualEnergySavings,
         costSavings: results.costSavings,
         heatFlow: this.convertUnitsService.value(results.heatFlow).from('MMBtu').to(settings.energyResultUnit),
-        totalFlow: settings.unitsOfMeasure == 'Metric' ? this.convertUnitsService.value(results.totalFlow).from('ft3/h').to('m3/h') : results.totalFlow
+        totalFlow: this.convertUnitsService.value(results.totalFlow).from('ft3/h').to('m3/h')
       };
     }
     return results;
   }
 }
-
-export interface NaturalGasReductionInput {
-  naturalGasReductionInputVec: Array<NaturalGasReductionData>
-};
-
-export interface NaturalGasReductionData {
-  operatingHours: number,
-  fuelCost: number,
-  measurementMethod: number,
-  flowMeterMethodData: FlowMeterMethodData,
-  otherMethodData: OtherMethodData,
-  airMassFlowData: AirMassFlowData,
-  waterMassFlowData: WaterMassFlowData,
-  units: number
-};
-
-export interface FlowMeterMethodData {
-  flowRate: number
-};
-
-export interface OtherMethodData {
-  consumption: number
-};
-
-export interface AirMassFlowData {
-  isNameplate: boolean,
-  airMassFlowMeasuredData: AirMassFlowMeasuredData,
-  airMassFlowNameplateData: AirMassFlowNameplateData,
-  inletTemperature: number,
-  outletTemperature: number,
-  systemEfficiency: number
-};
-
-export interface AirMassFlowMeasuredData {
-  areaOfDuct: number,
-  airVelocity: number
-};
-
-export interface AirMassFlowNameplateData {
-  airFlow: number
-};
-
-export interface WaterMassFlowData {
-  waterFlow: number,
-  inletTemperature: number,
-  outletTemperature: number,
-  systemEfficiency: number
-};
-
-export interface NaturalGasReductionResults {
-  energyUse: number,
-  energyCost: number,
-  annualEnergySavings: number,
-  costSavings: number,
-  heatFlow: number,
-  totalFlow: number
-};

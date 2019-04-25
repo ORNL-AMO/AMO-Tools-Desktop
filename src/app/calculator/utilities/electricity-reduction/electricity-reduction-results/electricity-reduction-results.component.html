@@ -4,19 +4,19 @@
     <tr>
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
-        {{format(baselineResults.energyUse)}} kWh
+        {{baselineResults.energyUse | number:'.1-3'}} kWh
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Energy Cost</td>
       <td class="text-center w-50">
-        {{currencyFormat(baselineResults.energyCost)}}
+        {{baselineResults.energyCost | currency}}
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Power</td>
       <td class="text-center w-50">
-        {{format(baselineResults.power)}} kW
+        {{baselineResults.power | number:'.1-3'}} kW
       </td>
     </tr>
   </tbody>
@@ -33,19 +33,19 @@
     <tr>
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
-        {{format(modificationResults.energyUse)}} kWh
+        {{modificationResults.energyUse | number:'.1-3'}} kWh
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Energy Cost</td>
       <td class="text-center w-50">
-        {{currencyFormat(modificationResults.energyCost)}}
+        {{modificationResults.energyCost | currency}}
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Power</td>
       <td class="text-center w-50">
-        {{format(modificationResults.power)}} kW
+        {{modificationResults.power | number:'.1-3'}} kW
       </td>
     </tr>
   </tbody>
@@ -58,11 +58,11 @@
   <tbody>
     <tr>
       <td class="bold w-50">Annual Energy Savings</td>
-      <td class="text-center w-50">{{format(annualEnergySavings)}} kWh</td>
+      <td class="text-center w-50">{{annualEnergySavings | number:'.1-3'}} kWh</td>
     </tr>
     <tr>
       <td class="bold w-50">Annual Cost Savings</td>
-      <td class="text-center w-50">{{currencyFormat(annualCostSavings)}}</td>
+      <td class="text-center w-50">{{annualCostSavings | currency}}</td>
     </tr>
   </tbody>
 </table>

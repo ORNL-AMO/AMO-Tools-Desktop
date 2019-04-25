@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
-import { NaturalGasReductionResults } from '../natural-gas-reduction.service';
 import { Settings } from '../../../../shared/models/settings';
-import * as d3 from 'd3';
+import { NaturalGasReductionResults } from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-natural-gas-reduction-results',
@@ -20,8 +19,6 @@ export class NaturalGasReductionResultsComponent implements OnInit, OnChanges {
 
   annualEnergySavings: number;
   annualCostSavings: number;
-  format: any;
-  currencyFormat: any;
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;
@@ -33,22 +30,12 @@ export class NaturalGasReductionResultsComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    this.setFormat();
-    this.setCurrencyFormat();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if ((changes.baselineResults || changes.modificationResults) && this.modificationExists) {
       this.getSavings();
     }
-  }
-
-  setFormat(): any {
-    this.format = d3.format(',.3f');
-  }
-
-  setCurrencyFormat(): void {
-    this.currencyFormat = d3.format('$,.2f');
   }
 
   getSavings(): void {

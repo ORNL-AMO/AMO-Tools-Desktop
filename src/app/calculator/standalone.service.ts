@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 declare var standaloneAddon: any;
+declare var calculatorAddon: any;
 import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
-  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity
+  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, 
+  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-
 
 @Injectable()
 export class StandaloneService {
@@ -299,5 +300,13 @@ export class StandaloneService {
     } else {
       return standaloneAddon.usableAirCapacity(inputCpy);
     }
+  }
+
+  electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResults {
+    return calculatorAddon.electricityReduction(inputObj);
+  }
+
+  naturalGasReduction(inputObj: NaturalGasReductionInput): NaturalGasReductionResults {
+    return calculatorAddon.naturalGasReduction(inputObj);
   }
 }
