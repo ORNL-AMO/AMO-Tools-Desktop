@@ -50,6 +50,27 @@ export class NaturalGasReductionComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  ngOnDestory() {
+    let baselineData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
+    for (let i = 0; i < this.baselineForms.length; i++) {
+      baselineData.push(this.naturalGasReductionService.getObjFromForm(this.baselineForms[i]));
+    }
+    this.naturalGasReductionService.baselineData = baselineData;
+    if (this.modificationExists) {
+      let modificationData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
+      for (let i = 0; i < this.baselineForms.length; i++) {
+        modificationData.push(this.naturalGasReductionService.getObjFromForm(this.modificationForms[i]));
+      }
+      this.naturalGasReductionService.modificationData = modificationData;
+    }
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;

@@ -50,6 +50,27 @@ export class ElectricityReductionComponent implements OnInit {
       this.loadForms();
     }
   }
+  
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
+  ngOnDestroy() {
+    let baselineData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
+    for (let i = 0; i < this.baselineForms.length; i++) {
+      baselineData.push(this.electricityReductionService.getObjFromForm(this.baselineForms[i]));
+    }
+    this.electricityReductionService.baselineData = baselineData;
+    if (this.modificationExists) {
+      let modificationData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
+      for (let i = 0; i < this.baselineForms.length; i++) {
+        modificationData.push(this.electricityReductionService.getObjFromForm(this.modificationForms[i]));
+      }
+      this.electricityReductionService.modificationData = modificationData;
+    }
+  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
