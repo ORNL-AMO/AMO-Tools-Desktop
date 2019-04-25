@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
-import { ReplaceExistingData } from '../../shared/models/calculators';
+import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
 
 @Component({
   selector: 'app-find-treasure',
@@ -25,6 +25,8 @@ export class FindTreasureComponent implements OnInit {
   newLightingCalc: LightingReplacementTreasureHunt;
   newOpportunitySheet: OpportunitySheet;
   newReplaceExistingMotor: ReplaceExistingMotorTreasureHunt;
+  newMotorDrive: MotorDriveInputsTreasureHunt;
+
   showOpportunitySheetOnSave: boolean;
   opperatingHoursPerYear: number;
   constructor() { }
@@ -46,10 +48,19 @@ export class FindTreasureComponent implements OnInit {
       this.saveLighting();
     } else if (this.selectedCalc == 'replace-existing') {
       this.saveReplaceExistingMotor();
+    } else if (this.selectedCalc == 'motor-drive') {
+      this.saveMotorDrive();
     }
   }
+  
+  showOpportunitySheetModal() {
+    this.opportunitySheetModal.show();
+  }
 
-
+  hideOpportunitySheetModal() {
+    this.opportunitySheetModal.hide();
+  }
+  //lighting replacement
   saveNewLighting(newCalcToSave: LightingReplacementTreasureHunt) {
     this.newLightingCalc = newCalcToSave;
     this.newLightingCalc.selected = true;
@@ -69,7 +80,7 @@ export class FindTreasureComponent implements OnInit {
     this.emitSave.emit(this.treasureHunt);
   }
 
-
+  //standalone opp sheets
   saveNewOpportunitySheet(newSheet: OpportunitySheet) {
     if (!this.treasureHunt.opportunitySheets) {
       this.treasureHunt.opportunitySheets = new Array<OpportunitySheet>();
@@ -79,20 +90,13 @@ export class FindTreasureComponent implements OnInit {
     this.emitSave.emit(this.treasureHunt);
   }
 
-  showOpportunitySheetModal() {
-    this.opportunitySheetModal.show();
-  }
-
-  hideOpportunitySheetModal() {
-    this.opportunitySheetModal.hide();
-  }
-
   saveOpportunitySheet(newOppSheet: OpportunitySheet) {
     this.newOpportunitySheet = newOppSheet;
     this.showOpportunitySheetOnSave = false;
     this.hideOpportunitySheetModal();
   }
 
+  //replace existing
   saveNewReplaceExistingMotor(replaceExistingData: ReplaceExistingData) {
     this.newReplaceExistingMotor = {
       replaceExistingData: replaceExistingData,
@@ -110,6 +114,31 @@ export class FindTreasureComponent implements OnInit {
       this.treasureHunt.replaceExistingMotors = new Array<ReplaceExistingMotorTreasureHunt>();
     }
     this.treasureHunt.replaceExistingMotors.push(this.newReplaceExistingMotor);
+    this.closeSaveCalcModal();
+    this.newOpportunitySheet = undefined;
+    this.showOpportunitySheetOnSave = true;
+    this.selectCalc('none');
+    this.emitSave.emit(this.treasureHunt);
+  }
+
+  //motor drive
+  saveNewMotorDrive(motorDriveInputs: MotorDriveInputs) {
+    this.newMotorDrive = {
+      motorDriveInputs: motorDriveInputs,
+      selected: true,
+      opportunitySheet: this.newOpportunitySheet
+    }
+    if (!this.newMotorDrive.opportunitySheet) {
+      this.showOpportunitySheetOnSave = true;
+    }
+    this.saveCalcModal.show();
+  }
+
+  saveMotorDrive() {
+    if (!this.treasureHunt.motorDrives) {
+      this.treasureHunt.motorDrives = new Array<MotorDriveInputsTreasureHunt>();
+    }
+    this.treasureHunt.motorDrives.push(this.newMotorDrive);
     this.closeSaveCalcModal();
     this.newOpportunitySheet = undefined;
     this.showOpportunitySheetOnSave = true;

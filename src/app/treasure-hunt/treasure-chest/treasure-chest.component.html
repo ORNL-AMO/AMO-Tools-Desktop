@@ -17,6 +17,7 @@
         </a>
       </div>
     </div>
+    <!--lighting replacement-->
     <div *ngIf="tabSelect == 'all' || tabSelect == 'lighting-replacement'">
       <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
         <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
@@ -27,6 +28,7 @@
         </app-lighting-replacement-card>
       </div>
     </div>
+    <!--replace existing motor-->
     <div *ngIf="tabSelect == 'all'">
       <div class="col-12" *ngFor="let replaceExistingMotor of treasureHunt.replaceExistingMotors; let index = index;">
         <app-replace-existing-motor-card [replaceExistingMotor]="replaceExistingMotor" [index]="index"
@@ -37,6 +39,17 @@
         </app-replace-existing-motor-card>
       </div>
     </div>
+    <!--motor drive-->
+    <div *ngIf="tabSelect == 'all'">
+      <div class="col-12" *ngFor="let motorDrive of treasureHunt.motorDrives; let index = index;">
+        <app-motor-drive-card [motorDrive]="motorDrive" [index]="index"
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'motorDrive')" [settings]="settings"
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+          (emitDeleteItem)="showDeleteItem($event, index, 'motorDrive')" (emitEditItem)="editMotorDrive($event, index)">
+        </app-motor-drive-card>
+      </div>
+    </div>
+    <!--standalone opportunity sheet-->
     <div *ngIf="tabSelect == 'all' || tabSelect == 'opportunity-sheet'">
       <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;">
         <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet" [index]="index"
@@ -66,7 +79,7 @@
   </div>
 </div>
 
-<!--edit-->
+<!--edit calcs-->
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
   (emitSave)="saveEditLighting($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
@@ -80,6 +93,11 @@
   (emitSave)="saveEditReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
   [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
 </app-replace-existing>
+
+<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveEditMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+</app-motor-drive>
 
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"

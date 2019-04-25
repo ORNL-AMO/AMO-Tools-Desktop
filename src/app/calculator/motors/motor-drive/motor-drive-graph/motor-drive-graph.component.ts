@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, HostListener } from '@angular/core';
-import { MotorDriveOutputs } from '../motor-drive.component';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { MotorDriveOutputs } from '../../../../shared/models/calculators';
 
 @Component({
   selector: 'app-motor-drive-graph',

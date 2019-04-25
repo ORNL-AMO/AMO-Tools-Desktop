@@ -28,6 +28,8 @@ import { SharedModule } from '../shared/shared.module';
 import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
 import { ReplaceExistingModule } from '../calculator/motors/replace-existing/replace-existing.module';
 import { ReplaceExistingMotorCardComponent } from './treasure-chest/replace-existing-motor-card/replace-existing-motor-card.component';
+import { MotorDriveModule } from '../calculator/motors/motor-drive/motor-drive.module';
+import { MotorDriveCardComponent } from './treasure-chest/motor-drive-card/motor-drive-card.component';
 
 @NgModule({
   imports: [
@@ -37,7 +39,8 @@ import { ReplaceExistingMotorCardComponent } from './treasure-chest/replace-exis
     ModalModule,
     FormsModule,
     SharedModule,
-    ReplaceExistingModule
+    ReplaceExistingModule,
+    MotorDriveModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -57,7 +60,7 @@ import { ReplaceExistingMotorCardComponent } from './treasure-chest/replace-exis
     OpportunitySheetResultsComponent, 
     OpportunitySheetCardComponent, 
     OperatingHoursComponent, 
-    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent
+    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent
   ],
   providers: [ TreasureHuntService, OpportunitySheetService ]
 })

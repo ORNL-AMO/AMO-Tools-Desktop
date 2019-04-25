@@ -7,7 +7,8 @@ import { LightingReplacementResults } from '../../../shared/models/lighting';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { ReplaceExistingService } from '../../../calculator/motors/replace-existing/replace-existing.service';
-import { ReplaceExistingResults } from '../../../shared/models/calculators';
+import { ReplaceExistingResults, MotorDriveOutputs } from '../../../shared/models/calculators';
+import { MotorDriveService } from '../../../calculator/motors/motor-drive/motor-drive.service';
 
 @Component({
   selector: 'app-summary-card',
@@ -41,7 +42,8 @@ export class SummaryCardComponent implements OnInit {
     private opportunitySheetService: OpportunitySheetService,
     private lightingReplacementService: LightingReplacementService,
     private treasureHuntService: TreasureHuntService,
-    private replaceExistingService: ReplaceExistingService) { }
+    private replaceExistingService: ReplaceExistingService,
+    private motorDriveService: MotorDriveService) { }
 
   ngOnInit() {
     this.totalBaselineCost = this.treasureHunt.currentEnergyUsage.electricityCosts + this.treasureHunt.currentEnergyUsage.naturalGasCosts + this.treasureHunt.currentEnergyUsage.otherFuelCosts;
@@ -83,6 +85,9 @@ export class SummaryCardComponent implements OnInit {
     this.totalElectricityCostSavings = this.totalElectricityCostSavings + replaceMotorResults.totalCostSavings;
     this.totalElectricityEnergySavings = this.totalElectricityEnergySavings + replaceMotorResults.totalEnergySavings;
 
+    let motorDriveResults: { totalCostSavings: number, totalEnergySavings: number } = this.getMotorDriveSavings()
+    this.totalElectricityCostSavings = this.totalElectricityCostSavings + motorDriveResults.totalCostSavings;
+    this.totalElectricityEnergySavings = this.totalElectricityEnergySavings + motorDriveResults.totalEnergySavings;
 
     let oppSheetResults: { totalElectricityCostSavings: number, totalElectricityEnergySavings: number, totalNaturalGasCostSavings: number, totalNaturalGasEnergySavings: number, totalOtherGasCostSavings: number, totalOtherGasEnergySavings: number } = this.getOpportunitySheetSavings();
     this.totalElectricityCostSavings = this.totalElectricityCostSavings + oppSheetResults.totalElectricityCostSavings;
@@ -115,6 +120,19 @@ export class SummaryCardComponent implements OnInit {
       if (replacement.selected) {
         let results: ReplaceExistingResults = this.replaceExistingService.getResults(replacement.replaceExistingData);
         totalCostSavings = totalCostSavings + results.costSavings;
+        totalEnergySavings = totalEnergySavings + results.annualEnergySavings;
+      }
+    })
+    return { totalCostSavings: totalCostSavings, totalEnergySavings: totalEnergySavings }
+  }
+
+  getMotorDriveSavings(): { totalCostSavings: number, totalEnergySavings: number } {
+    let totalCostSavings: number = 0;
+    let totalEnergySavings: number = 0;
+    this.treasureHunt.motorDrives.forEach(drives => {
+      if (drives.selected) {
+        let results: MotorDriveOutputs = this.motorDriveService.getResults(drives.motorDriveInputs);
+        totalCostSavings = totalCostSavings + results.annualCostSavings;
         totalEnergySavings = totalEnergySavings + results.annualEnergySavings;
       }
     })
