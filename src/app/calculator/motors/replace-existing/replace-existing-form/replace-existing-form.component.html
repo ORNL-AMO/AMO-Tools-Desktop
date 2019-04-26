@@ -132,8 +132,8 @@
         </div>
       </div>
 
-      <label class="group-label">Rewound Motor</label>
-      <div class="form-group">
+      <label class="group-label" *ngIf="!inTreasureHunt">Rewound Motor</label>
+      <div class="form-group" *ngIf="!inTreasureHunt">
         <label for="rewindEfficiencyLoss">Rewind Efficiency Loss</label>
         <div class="input-group calc-addon-group">
           <input name="rewindEfficiencyLoss" type="number" min="0" step="1" class="form-control"
@@ -150,7 +150,7 @@
             {{replaceExistingForm.controls.rewindEfficiencyLoss.errors.max.max}}%.</span>
         </span>
       </div>
-      <div class="form-group">
+      <div class="form-group" *ngIf="!inTreasureHunt">
         <label for="rewindCost">Cost of Rewind</label>
         <div class="input-group calc-addon-group">
           <input name="rewindCost" type="number" min="0" step="1" class="form-control" id="rewindCost"
