@@ -150,6 +150,7 @@ export interface MotorDriveOutputs {
     vBeltResults: DriveResult;
     notchedResults: DriveResult;
     synchronousBeltDrive: DriveResult;
+    directDrive: DriveResult;
     baselineResult: DriveResult;
     modificationResult: DriveResult;
     annualCostSavings: number;

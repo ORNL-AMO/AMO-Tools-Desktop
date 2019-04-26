@@ -21,7 +21,8 @@ export class MotorDriveFormComponent implements OnInit {
   driveTypes: Array<{ display: string, value: number }> = [
     { display: 'V Belt Drive', value: 0 },
     { display: 'Notched V Belt Drive', value: 1 },
-    { display: 'Synchronous Belt Drive', value: 2 }
+    { display: 'Synchronous Belt Drive', value: 2 },
+    { display: 'Direct Drive', value: 3 }
   ]
   constructor(private motorDriveServce: MotorDriveService) { }
 
