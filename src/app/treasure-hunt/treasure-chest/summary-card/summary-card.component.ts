@@ -103,39 +103,45 @@ export class SummaryCardComponent implements OnInit {
   getTotalLightingSavings(): { totalCostSavings: number, totalEnergySavings: number } {
     let totalCostSavings: number = 0;
     let totalEnergySavings: number = 0;
-    this.treasureHunt.lightingReplacements.forEach(replacement => {
-      if (replacement.selected) {
-        let results: LightingReplacementResults = this.lightingReplacementService.getResults(replacement);
-        totalCostSavings = totalCostSavings + results.totalCostSavings;
-        totalEnergySavings = totalEnergySavings + results.totalEnergySavings;
-      }
-    })
+    if (this.treasureHunt.lightingReplacements) {
+      this.treasureHunt.lightingReplacements.forEach(replacement => {
+        if (replacement.selected) {
+          let results: LightingReplacementResults = this.lightingReplacementService.getResults(replacement);
+          totalCostSavings = totalCostSavings + results.totalCostSavings;
+          totalEnergySavings = totalEnergySavings + results.totalEnergySavings;
+        }
+      });
+    }
     return { totalCostSavings: totalCostSavings, totalEnergySavings: totalEnergySavings }
   }
 
   getReplaceExistingMotorSavings(): { totalCostSavings: number, totalEnergySavings: number } {
     let totalCostSavings: number = 0;
     let totalEnergySavings: number = 0;
-    this.treasureHunt.replaceExistingMotors.forEach(replacement => {
-      if (replacement.selected) {
-        let results: ReplaceExistingResults = this.replaceExistingService.getResults(replacement.replaceExistingData);
-        totalCostSavings = totalCostSavings + results.costSavings;
-        totalEnergySavings = totalEnergySavings + results.annualEnergySavings;
-      }
-    })
+    if (this.treasureHunt.replaceExistingMotors) {
+      this.treasureHunt.replaceExistingMotors.forEach(replacement => {
+        if (replacement.selected) {
+          let results: ReplaceExistingResults = this.replaceExistingService.getResults(replacement.replaceExistingData);
+          totalCostSavings = totalCostSavings + results.costSavings;
+          totalEnergySavings = totalEnergySavings + results.annualEnergySavings;
+        }
+      });
+    }
     return { totalCostSavings: totalCostSavings, totalEnergySavings: totalEnergySavings }
   }
 
   getMotorDriveSavings(): { totalCostSavings: number, totalEnergySavings: number } {
     let totalCostSavings: number = 0;
     let totalEnergySavings: number = 0;
-    this.treasureHunt.motorDrives.forEach(drives => {
-      if (drives.selected) {
-        let results: MotorDriveOutputs = this.motorDriveService.getResults(drives.motorDriveInputs);
-        totalCostSavings = totalCostSavings + results.annualCostSavings;
-        totalEnergySavings = totalEnergySavings + results.annualEnergySavings;
-      }
-    })
+    if (this.treasureHunt.motorDrives) {
+      this.treasureHunt.motorDrives.forEach(drives => {
+        if (drives.selected) {
+          let results: MotorDriveOutputs = this.motorDriveService.getResults(drives.motorDriveInputs);
+          totalCostSavings = totalCostSavings + results.annualCostSavings;
+          totalEnergySavings = totalEnergySavings + results.annualEnergySavings;
+        }
+      });
+    }
     return { totalCostSavings: totalCostSavings, totalEnergySavings: totalEnergySavings }
   }
 
