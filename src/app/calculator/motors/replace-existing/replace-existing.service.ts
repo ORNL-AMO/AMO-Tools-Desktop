@@ -81,6 +81,7 @@ export class ReplaceExistingService {
     results.simplePayback = this.getSimplePayback(inputs, results);
     results.rewoundEnergyUse = this.getRewoundEnergyUse(inputs);
     results.rewoundEnergyCost = this.getRewoundEnergyCost(inputs, results);
+    results.percentSavings = this.getPercentSavings(results);
     return results;
   }
 
@@ -114,7 +115,7 @@ export class ReplaceExistingService {
   }
 
   //may want to add percent savings as a result. talk to kristina first
-  getPercentSavings() {
-
+  getPercentSavings(results: ReplaceExistingResults): number {
+    return ((results.existingEnergyCost - results.newEnergyCost) / results.existingEnergyCost) * 100;
   }
 }
