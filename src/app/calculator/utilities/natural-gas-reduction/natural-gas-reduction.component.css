@@ -1,0 +1,30 @@
+.header .fa.fa-lightbulb-o {
+    font-size: -webkit-xxx-large;
+    padding-left: 12px;
+}
+
+.fa.fa-times-circle-o:hover {
+    cursor: pointer;
+}
+
+.no-data {
+    background: none;
+}
+
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
+
+.form-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 20px 0 grey;
+}

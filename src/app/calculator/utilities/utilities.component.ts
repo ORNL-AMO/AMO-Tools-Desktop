@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { CalculatorService } from '../calculator.service';
+import { Settings } from '../../shared/models/settings';
 
 
 @Component({
