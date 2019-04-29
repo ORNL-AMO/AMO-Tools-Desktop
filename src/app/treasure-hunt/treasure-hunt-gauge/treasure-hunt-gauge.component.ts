@@ -55,14 +55,19 @@ export class TreasureHuntGaugeComponent implements OnInit {
         columns: [
           ['data', 0]
         ],
-        type: 'gauge'
+        type: 'gauge',
+        min: 0,
+        max: 50
       },
       legend: {
         show: false
       },
       gauge: {
         label: {
-          show: false
+          show: false,
+          format: function (value: number, ratio) {
+            return value.toFixed(2) + '%'; //returning here the value and not the ratio
+          }
         },
         min: 0,
         max: 50
