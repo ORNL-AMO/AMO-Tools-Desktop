@@ -30,6 +30,7 @@ import { ReplaceExistingModule } from '../calculator/motors/replace-existing/rep
 import { ReplaceExistingMotorCardComponent } from './treasure-chest/replace-existing-motor-card/replace-existing-motor-card.component';
 import { MotorDriveModule } from '../calculator/motors/motor-drive/motor-drive.module';
 import { MotorDriveCardComponent } from './treasure-chest/motor-drive-card/motor-drive-card.component';
+import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
 
 @NgModule({
   imports: [
@@ -60,7 +61,7 @@ import { MotorDriveCardComponent } from './treasure-chest/motor-drive-card/motor
     OpportunitySheetResultsComponent, 
     OpportunitySheetCardComponent, 
     OperatingHoursComponent, 
-    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent
+    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent, TreasureChestMenuComponent
   ],
   providers: [ TreasureHuntService, OpportunitySheetService ]
 })

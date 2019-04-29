@@ -31,7 +31,8 @@ export class TreasureChestComponent implements OnInit {
   selectedEditOpportunitySheet: OpportunitySheet;
   selectedEditMotorDrive: MotorDriveInputsTreasureHunt;
 
-  tabSelect: string = 'all';
+  displayEnergyType: string = 'All';
+  displayCalculatorType: string = 'All';
   helpTabSelect: string = 'results';
 
   deleteItemName: string;
@@ -46,8 +47,11 @@ export class TreasureChestComponent implements OnInit {
   ngOnInit() {
   }
   //utilities
-  setTab(str: string) {
-    this.tabSelect = str;
+  setCaclulatorType(str: string){
+    this.displayCalculatorType = str;
+  }
+  setEnergyType(str: string) {
+   this.displayEnergyType = str;
   }
   setHelpTab(str: string) {
     this.helpTabSelect = str;

@@ -1,0 +1,18 @@
+<div class="col-6 mx-auto">
+  <div class="form-group">
+    <label for="energyType" class="large">Energy Type</label>
+    <select class="form-control" id="energyType" [(ngModel)]="displayEnergyType" (change)="setEnergyType()">
+      <option *ngFor="let option of energyTypeOptions" [ngValue]="option.value">{{option.value}} ({{option.numCalcs}})
+      </option>
+    </select>
+  </div>
+</div>
+<div class="col-6 mx-auto">
+  <div class="form-group">
+    <label for="calculatorType" class="large">Calculator Type</label>
+    <select class="form-control" id="calculatorType" (change)="setCalculatorType()" [(ngModel)]="displayCalculatorType">
+      <option *ngFor="let option of calculatorTypeOptions" [ngValue]="option.value">{{option.value}}
+        ({{option.numCalcs}})</option>
+    </select>
+  </div>
+</div>
