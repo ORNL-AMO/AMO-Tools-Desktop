@@ -59,7 +59,7 @@ export class TreasureHuntComponent implements OnInit {
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
-            lightingReplacements: new Array<LightingReplacementTreasureHunt>()
+            setupDone: false
           }
         }
         this.getSettings();
@@ -137,6 +137,7 @@ export class TreasureHuntComponent implements OnInit {
 
   saveTreasureHunt(treasureHunt: TreasureHunt) {
     this.assessment.treasureHunt = treasureHunt;
+    this.assessment.treasureHunt.setupDone = this.checkSetupDone();
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.treasureHuntService.getResults.next(true);
@@ -144,8 +145,30 @@ export class TreasureHuntComponent implements OnInit {
     })
   }
 
+  checkSetupDone() {
+    if (this.assessment.treasureHunt.operatingHours && this.assessment.treasureHunt.currentEnergyUsage) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   getCanContinue() {
-    return true;
+    if (this.subTab == 'settings') {
+      return true;
+    } else if (this.subTab == 'operating-hours') {
+      if (this.assessment.treasureHunt.operatingHours) {
+        return true;
+      } else {
+        return false
+      }
+    } else if (this.subTab == 'operation-costs') {
+      if (this.assessment.treasureHunt.setupDone) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   back() {

@@ -28,6 +28,7 @@ export class OperationCostsComponent implements OnInit {
         otherFuelCosts: 0
       }
       this.treasureHunt.currentEnergyUsage = defaultUsage;
+      this.save();
     }
   }
 

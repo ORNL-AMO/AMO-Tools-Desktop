@@ -37,9 +37,6 @@ export class TreasureChestComponent implements OnInit {
   deleteItemName: string;
   deleteItemIndex: number;
   itemType: string;
-  numItems: number = 0;
-  numLightingReplacements: number = 0;
-  numOppSheets: number = 0;
   opperatingHoursPerYear: number;
   constructor(
     private lightingReplacementService: LightingReplacementService,
@@ -47,10 +44,6 @@ export class TreasureChestComponent implements OnInit {
     private motorDriveService: MotorDriveService) { }
 
   ngOnInit() {
-    this.numLightingReplacements = this.treasureHunt.lightingReplacements.length;
-    this.numOppSheets = this.treasureHunt.opportunitySheets.length;
-    this.numItems = this.numLightingReplacements + this.numOppSheets;
-    this.opperatingHoursPerYear = this.treasureHunt.operatingHours.hoursPerYear;
   }
   //utilities
   setTab(str: string) {
