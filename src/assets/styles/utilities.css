@@ -59,6 +59,11 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     color: black;
 }
 
+.treasure-hunt .btn-primary{
+    background-color: #2E4053;
+    border-color: #2E4053;
+}
+
 .fan-block i{
     color:#FFE400
   }

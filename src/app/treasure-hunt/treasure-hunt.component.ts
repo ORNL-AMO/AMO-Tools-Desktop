@@ -78,6 +78,8 @@ export class TreasureHuntComponent implements OnInit {
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.subTabSub.unsubscribe();
+    this.treasureHuntService.mainTab.next('system-basics');
+    this.treasureHuntService.subTab.next('settings');
   }
   getSettings() {
     //get assessment settings
@@ -140,5 +142,27 @@ export class TreasureHuntComponent implements OnInit {
         this.treasureHuntService.getResults.next(true);
       })
     })
+  }
+
+  getCanContinue() {
+    return true;
+  }
+
+  back() {
+    if (this.subTab == 'operating-hours') {
+      this.treasureHuntService.subTab.next('settings');
+    } else if (this.subTab == 'operation-costs') {
+      this.treasureHuntService.subTab.next('operating-hours');
+    }
+  }
+
+  continue() {
+    if (this.subTab == 'settings') {
+      this.treasureHuntService.subTab.next('operating-hours');
+    } else if (this.subTab == 'operating-hours') {
+      this.treasureHuntService.subTab.next('operation-costs');
+    } else if (this.subTab == 'operation-costs') {
+      this.treasureHuntService.mainTab.next('find-treasure');
+    }
   }
 }
