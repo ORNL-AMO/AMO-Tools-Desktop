@@ -9,13 +9,19 @@ import { ReplaceExistingResults } from '../../../../shared/models/calculators';
 export class ReplaceExistingResultsComponent implements OnInit {
   @Input()
   results: ReplaceExistingResults;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('copyTable') copyTable: ElementRef;
   tableString: any;
 
+  numCols: number = 2;
   constructor() { }
 
   ngOnInit() {
+    if(this.inTreasureHunt){
+      this.numCols = 1;
+    }
   }
 
   updateTableString() {

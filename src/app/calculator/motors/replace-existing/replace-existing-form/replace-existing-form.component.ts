@@ -15,7 +15,9 @@ export class ReplaceExistingFormComponent implements OnInit {
   emitCalculate = new EventEmitter<boolean>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-
+  @Input()
+  inTreasureHunt: boolean;
+  
   constructor() { }
 
   ngOnInit() {

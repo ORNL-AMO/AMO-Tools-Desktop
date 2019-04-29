@@ -3,9 +3,12 @@
     Replace Existing Motor - Efficiency Upgrade
     <br>
     <small class="text-muted">
-      Improving the energy efficiency of an electric motor can save energy, reduce operating costs, and improve productivity. Usually,
-      the annual energy cost of running a motor is many times greater than its initial purchase price. For this reason, even
-      a small efficiency improvement in motors that are large or have high operating hours can make financial sense. Consider
+      Improving the energy efficiency of an electric motor can save energy, reduce operating costs, and improve
+      productivity. Usually,
+      the annual energy cost of running a motor is many times greater than its initial purchase price. For this reason,
+      even
+      a small efficiency improvement in motors that are large or have high operating hours can make financial sense.
+      Consider
       buying an energy-efficient motor in the following circumstances:
       <ul class="text-muted">
         <li> For all new installations</li>
@@ -42,9 +45,12 @@
       Efficiency of Existing Motor
       <br>
       <small class="text-muted">
-        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it consumes
-        to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric motor
-        efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
+        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power
+        it consumes
+        to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric
+        motor
+        efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality,
+        and
         operating conditions. Enter this value as a percentage.
         <hr>
       </small>
@@ -55,8 +61,10 @@
       Load
       <br>
       <small class="text-muted">
-        The ratio of the average load the motor draws when it is in operation to full rated load. Maximum efficiency is usually around
-        75% with drastic decreases in efficiency below about 50%. If this is the case, consider replacing your motor with
+        The ratio of the average load the motor draws when it is in operation to full rated load. Maximum efficiency is
+        usually around
+        75% with drastic decreases in efficiency below about 50%. If this is the case, consider replacing your motor
+        with
         a correctly sized motor.
         <hr>
       </small>
@@ -78,9 +86,12 @@
       Efficiency of New Motor
       <br>
       <small class="text-muted">
-        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power it consumes
-        to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric motor
-        efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality, and
+        Motor efficiency is the ratio between the amount of mechanical work the motor performs and the electrical power
+        it consumes
+        to do the work, represented by a percentage. A higher percentage represents a more efficient motor. Electric
+        motor
+        efficiency is dependent on (but not limited to) design, materials, construction, rating, load, power quality,
+        and
         operating conditions. Enter this value as a percentage.
         <hr>
       </small>
@@ -92,6 +103,31 @@
       <br>
       <small class="text-muted">
         The price for purchasing a new motor in $.
+
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'rewindEfficiencyLoss'">
+    <h6>
+      Rewind Efficiency Loss
+      <br>
+      <small class="text-muted">
+        Rewinding a motor usually comes with a loss in efficiency somewhere between 1 and 2%. When considering the
+        choice between
+        rewinding a standard efficiency motor or purchasing a new high efficiency motor, the difference in efficiency is
+        around 4 to 5% in favor of the high efficiency motor, which will also have a much longer service life.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'rewindCost'">
+    <h6>
+      Cost of Rewind
+      <br>
+      <small class="text-muted">
+        The price of rewinding your motor in $.
 
         <hr>
       </small>

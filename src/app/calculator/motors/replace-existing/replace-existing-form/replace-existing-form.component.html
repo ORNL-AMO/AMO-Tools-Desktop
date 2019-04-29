@@ -131,6 +131,40 @@
           </span>
         </div>
       </div>
+
+      <label class="group-label" *ngIf="!inTreasureHunt">Rewound Motor</label>
+      <div class="form-group" *ngIf="!inTreasureHunt">
+        <label for="rewindEfficiencyLoss">Rewind Efficiency Loss</label>
+        <div class="input-group calc-addon-group">
+          <input name="rewindEfficiencyLoss" type="number" min="0" step="1" class="form-control"
+            id="rewindEfficiencyLoss" formControlName="rewindEfficiencyLoss" (input)="calculate()"
+            onfocus="this.select();" (focus)="focusField('rewindEfficiencyLoss')">
+          <span class="units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.rewindEfficiencyLoss.invalid && !replaceExistingForm.controls.rewindEfficiencyLoss.pristine">
+          <span *ngIf="replaceExistingForm.controls.rewindEfficiencyLoss.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.rewindEfficiencyLoss.errors.min">Value cannot not be lower than
+            {{replaceExistingForm.controls.rewindEfficiencyLoss.errors.min.min}}%.</span>
+          <span *ngIf="replaceExistingForm.controls.rewindEfficiencyLoss.errors.max">Value cannot not be greater than
+            {{replaceExistingForm.controls.rewindEfficiencyLoss.errors.max.max}}%.</span>
+        </span>
+      </div>
+      <div class="form-group" *ngIf="!inTreasureHunt">
+        <label for="rewindCost">Cost of Rewind</label>
+        <div class="input-group calc-addon-group">
+          <input name="rewindCost" type="number" min="0" step="1" class="form-control" id="rewindCost"
+            formControlName="rewindCost" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('rewindCost')">
+          <span class="units">$</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.rewindCost.invalid && !replaceExistingForm.controls.rewindCost.pristine">
+          <span *ngIf="replaceExistingForm.controls.rewindCost.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.rewindCost.errors.min">Value cannot not be lower than
+            ${{replaceExistingForm.controls.rewindCost.errors.min.min}}.</span>
+        </span>
+      </div>
     </div>
   </div>
 </form>

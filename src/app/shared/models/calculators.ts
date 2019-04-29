@@ -123,6 +123,8 @@ export interface ReplaceExistingData {
     electricityCost: number;
     newEfficiency: number;
     purchaseCost: number;
+    rewindEfficiencyLoss: number;
+    rewindCost: number;
 }
 export interface ReplaceExistingResults {
     existingEnergyUse: number;
@@ -132,7 +134,9 @@ export interface ReplaceExistingResults {
     annualEnergySavings: number;
     costSavings: number;
     simplePayback: number;
-    percentSavings: number
+    percentSavings: number;
+    rewoundEnergyUse: number;
+    rewoundEnergyCost: number;
 }
 
 

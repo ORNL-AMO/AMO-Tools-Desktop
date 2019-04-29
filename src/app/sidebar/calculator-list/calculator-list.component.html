@@ -18,11 +18,11 @@
         <span class="sidebar-item" (click)="selectCalculator('motor-drive')">Motor Drive</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'replace-existing'}">
-        <span class="sidebar-item" (click)="selectCalculator('replace-existing')">Replace Existing Motor</span>
+        <span class="sidebar-item" (click)="selectCalculator('replace-existing')">Replace vs Rewind</span>
       </li>
-      <li [ngClass]="{'selected': selectedCalculator == 'replace-rewind'}">
+      <!-- <li [ngClass]="{'selected': selectedCalculator == 'replace-rewind'}">
         <span class="sidebar-item" (click)="selectCalculator('replace-rewind')">Replace vs Rewind</span>
-      </li>
+      </li> -->
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'pumps'}">

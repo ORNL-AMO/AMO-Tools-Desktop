@@ -1,8 +1,19 @@
+<div class="d-flex flex-column w-100" *ngIf="inTreasureHunt">
+  <div class="pt-3">
+    <h5 class="text-center">Percent Savings</h5>
+  </div>
+  <div class="d-flex w-100 justify-content-center">
+    <app-percent-graph [value]="results.percentSavings" [fontSize]="32" [unit]="'%'" [title]="'replace-existing'">
+    </app-percent-graph>
+  </div>
+</div>
+
 <table #copyTable class="table table-hover table-striped">
   <tbody>
     <tr>
       <td>&nbsp;</td>
       <td class="bold text-center">Existing Motor</td>
+      <td *ngIf="!inTreasureHunt" class="bold text-center">Rewound Motor</td>
       <td class="bold text-center">New Motor</td>
     </tr>
     <tr>
@@ -10,6 +21,7 @@
         Energy Use
       </td>
       <td>{{results.existingEnergyUse | number : '1.0-2'}} kWh/yr</td>
+      <td *ngIf="!inTreasureHunt">{{results.rewoundEnergyUse | number : '1.0-2'}} kWh/yr</td>
       <td>{{results.newEnergyUse | number : '1.0-2'}} kWh/yr</td>
     </tr>
     <tr>
@@ -17,25 +29,39 @@
         Energy Cost
       </td>
       <td>{{results.existingEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
+      <td *ngIf="!inTreasureHunt">{{results.rewoundEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
       <td>{{results.newEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
     </tr>
     <tr>
-      <td class="bold">
+      <td colspan="2" class="bold">
         Annual Energy Savings
       </td>
-      <td colspan="2">{{results.annualEnergySavings | number : '1.0-2'}} kWh/yr</td>
+      <td *ngIf="!inTreasureHunt">
+        {{results.existingEnergyUse - results.rewoundEnergyUse | number : '1.0-2'}} kWh/yr
+      </td>
+      <td colspan="2" *ngIf="inTreasureHunt">{{results.annualEnergySavings | number : '1.0-2'}} kWh/yr</td>
+      <td *ngIf="!inTreasureHunt">{{results.annualEnergySavings | number : '1.0-2'}} kWh/yr</td>
     </tr>
     <tr>
-      <td class="bold">
+      <td colspan="2" class="bold">
         Cost Savings
       </td>
-      <td colspan="2">{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
+      <td *ngIf="!inTreasureHunt">
+        {{results.existingEnergyCost - results.rewoundEnergyCost | currency:'USD':'1.0-0'}} /yr
+      </td>
+      <td colspan="2" *ngIf="inTreasureHunt">{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
+      <td *ngIf="!inTreasureHunt">{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
+
     </tr>
     <tr>
-      <td class="bold">
+      <td colspan="2" class="bold">
         Simple Payback
       </td>
-      <td colspan="2">{{results.simplePayback | number : '1.0-2'}} yrs</td>
+      <td *ngIf="!inTreasureHunt">
+        &mdash;
+      </td>
+      <td colspan="2" *ngIf="inTreasureHunt">{{results.simplePayback | number : '1.0-2'}} yrs</td>
+      <td *ngIf="!inTreasureHunt">{{results.simplePayback | number : '1.0-2'}} yrs</td>
     </tr>
   </tbody>
 </table>

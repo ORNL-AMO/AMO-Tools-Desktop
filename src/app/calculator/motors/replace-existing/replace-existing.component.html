@@ -5,7 +5,8 @@
       <div class="d-flex pl-2 align-items-center">
         <img src="assets/images/calculator-icons/motor-icons/replace.png" class="ico-size4">
         <div class="pl-2">
-          <h3>Replace Existing Motor - Efficiency Upgrade</h3>
+          <h3 *ngIf="inTreasureHunt">Replace Existing Motor - Efficiency Upgrade</h3>
+          <h3 *ngIf="!inTreasureHunt">Replace vs Rewind</h3>
         </div>
       </div>
       <div class="d-flex pr-2" *ngIf="inTreasureHunt">
@@ -34,7 +35,7 @@
           </div>
           <div class="pb-2">
             <app-replace-existing-form [(replaceExistingForm)]="replaceExistingForm" [settings]="settings"
-              (emitCalculate)="calculate()" (emitChangeField)="changeField($event)">
+              (emitCalculate)="calculate()" (emitChangeField)="changeField($event)" [inTreasureHunt]="inTreasureHunt">
             </app-replace-existing-form>
           </div>
           <div class="w-100 justify-content-center btn-group btn-group-sm">
@@ -64,7 +65,7 @@
           <div class="d-flex justify-content-center px-2">
             <app-replace-existing-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
             </app-replace-existing-help>
-            <app-replace-existing-results class="p-2" *ngIf="tabSelect == 'results'" [results]="results">
+            <app-replace-existing-results class="p-2" *ngIf="tabSelect == 'results'" [results]="results" [inTreasureHunt]="inTreasureHunt">
             </app-replace-existing-results>
           </div>
         </div>
