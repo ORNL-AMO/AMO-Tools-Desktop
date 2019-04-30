@@ -32,14 +32,18 @@ export class TreasureHuntBannerComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
   }
 
 
   changeTab(str: string) {
-    this.treasureHuntService.mainTab.next(str);
+    if (str == 'system-basics') {
+      this.treasureHuntService.mainTab.next(str);
+    } else if (this.assessment.treasureHunt.setupDone == true) {
+      this.treasureHuntService.mainTab.next(str);
+    }
   }
 
   goHome() {
@@ -54,7 +58,7 @@ export class TreasureHuntBannerComponent implements OnInit {
     this.router.navigateByUrl('/dashboard');
   }
 
-  changeSubTab(str: string){
+  changeSubTab(str: string) {
     this.treasureHuntService.subTab.next(str)
   }
 }

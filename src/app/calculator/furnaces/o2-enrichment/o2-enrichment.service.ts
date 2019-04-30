@@ -13,6 +13,8 @@ export class O2EnrichmentService {
 
   initForm(settings: Settings): FormGroup {
     let defaultO2Enrichment: O2Enrichment = {
+      operatingHours: 8640,
+      operatingHoursEnriched: 8640,
       o2CombAir: 21,
       o2CombAirEnriched: 100,
       flueGasTemp: 1800,
@@ -21,7 +23,9 @@ export class O2EnrichmentService {
       o2FlueGasEnriched: 1,
       combAirTemp: 900,
       combAirTempEnriched: 80,
-      fuelConsumption: 10
+      fuelConsumption: 10,
+      fuelCost: settings.fuelCost,
+      fuelCostEnriched: settings.fuelCost
     };
     if (settings.unitsOfMeasure === 'Metric') {
       defaultO2Enrichment.flueGasTemp = this.convertUnitsService.roundVal(this.convertUnitsService.value(defaultO2Enrichment.flueGasTemp).from('F').to('C'), 2);
@@ -34,6 +38,8 @@ export class O2EnrichmentService {
     let ranges: O2EnrichmentMinMax = this.getMinMaxRanges(settings);
 
     return this.formBuilder.group({
+      operatingHours: [defaultO2Enrichment.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      operatingHoursEnriched: [defaultO2Enrichment.operatingHoursEnriched, [Validators.required, Validators.min(0), Validators.max(8760)]],
       o2CombAir: [defaultO2Enrichment.o2CombAir, Validators.required],
       o2CombAirEnriched: [defaultO2Enrichment.o2CombAirEnriched, [Validators.required, Validators.min(ranges.o2CombAirEnrichedMin), Validators.max(ranges.o2CombAirEnrichedMax)]],
       flueGasTemp: [defaultO2Enrichment.flueGasTemp, [Validators.required, Validators.min(ranges.flueGasTempMin), Validators.max(ranges.flueGasTempMax)]],
@@ -42,13 +48,17 @@ export class O2EnrichmentService {
       o2FlueGasEnriched: [defaultO2Enrichment.o2FlueGasEnriched, [Validators.required, Validators.min(ranges.o2FlueGasEnrichedMin), Validators.max(ranges.o2FlueGasEnrichedMax)]],
       combAirTemp: [defaultO2Enrichment.combAirTemp, [Validators.required, Validators.min(ranges.combAirTempMin), Validators.max(ranges.combAirTempMax)]],
       combAirTempEnriched: [defaultO2Enrichment.combAirTempEnriched, [Validators.required, Validators.min(ranges.combAirTempEnrichedMin), Validators.max(ranges.combAirTempEnrichedMax)]],
-      fuelConsumption: [defaultO2Enrichment.fuelConsumption, Validators.required]
+      fuelConsumption: [defaultO2Enrichment.fuelConsumption, Validators.required],
+      fuelCost: [settings.fuelCost, [Validators.required, Validators.min(0)]],
+      fuelCostEnriched: [settings.fuelCost, [Validators.required, Validators.min(0)]]
     });
   }
 
   initFormFromObj(settings: Settings, obj: O2Enrichment): FormGroup {
     let ranges: O2EnrichmentMinMax = this.getMinMaxRanges(settings, JSON.parse(JSON.stringify(obj)));
     return this.formBuilder.group({
+      operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      operatingHoursEnriched: [obj.operatingHoursEnriched, [Validators.required, Validators.min(0), Validators.max(8760)]],
       o2CombAir: [obj.o2CombAir, Validators.required],
       o2CombAirEnriched: [obj.o2CombAirEnriched, [Validators.required, Validators.min(ranges.o2CombAirEnrichedMin), Validators.max(ranges.o2CombAirEnrichedMax)]],
       flueGasTemp: [obj.flueGasTemp, [Validators.required, Validators.min(ranges.flueGasTempMin), Validators.max(ranges.flueGasTempMax)]],
@@ -57,12 +67,16 @@ export class O2EnrichmentService {
       o2FlueGasEnriched: [obj.o2FlueGasEnriched, [Validators.required, Validators.min(ranges.o2FlueGasEnrichedMin), Validators.max(ranges.o2FlueGasEnrichedMax)]],
       combAirTemp: [obj.combAirTemp, [Validators.required, Validators.min(ranges.combAirTempMin), Validators.max(ranges.combAirTempMax)]],
       combAirTempEnriched: [obj.combAirTempEnriched, [Validators.required, Validators.min(ranges.combAirTempEnrichedMin), Validators.max(ranges.combAirTempEnrichedMax)]],
-      fuelConsumption: [obj.fuelConsumption, Validators.required]
+      fuelConsumption: [obj.fuelConsumption, Validators.required],
+      fuelCost: [obj.fuelCost, [Validators.required, Validators.min(0)]],
+      fuelCostEnriched: [obj.fuelCostEnriched, [Validators.required, Validators.min(0)]]
     });
   }
 
   getObjFromForm(form: FormGroup): O2Enrichment {
     return {
+      operatingHours: form.controls.operatingHours.value,
+      operatingHoursEnriched: form.controls.operatingHoursEnriched.value,
       o2CombAir: form.controls.o2CombAir.value,
       o2CombAirEnriched: form.controls.o2CombAirEnriched.value,
       flueGasTemp: form.controls.flueGasTemp.value,
@@ -71,7 +85,9 @@ export class O2EnrichmentService {
       o2FlueGasEnriched: form.controls.o2FlueGasEnriched.value,
       combAirTemp: form.controls.combAirTemp.value,
       combAirTempEnriched: form.controls.combAirTempEnriched.value,
-      fuelConsumption: form.controls.fuelConsumption.value
+      fuelConsumption: form.controls.fuelConsumption.value,
+      fuelCost: form.controls.fuelCost.value,
+      fuelCostEnriched: form.controls.fuelCostEnriched.value
     };
   }
 
@@ -130,11 +146,11 @@ export class O2EnrichmentService {
   }
 
 
-  getGraphData(settings: Settings, o2EnrichmentPoint: any, line: any): {data: Array<any>, onGraph: boolean} {
+  getGraphData(settings: Settings, o2EnrichmentPoint: any, line: any): { data: Array<any>, onGraph: boolean } {
     line.fuelSavings = 0.0;
     let data = [];
     let onGraph = false;
-    let returnObj: {data: Array<any>, onGraph: boolean};
+    let returnObj: { data: Array<any>, onGraph: boolean };
 
     for (let i = 0; i <= 100; i += .5) {
       o2EnrichmentPoint.o2CombAirEnriched = i;

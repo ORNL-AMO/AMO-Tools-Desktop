@@ -39,16 +39,13 @@
   </div>
 
   <!--footer-->
-  <!--<div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
-    <div class="pull-left" *ngIf="stepTab != 'system-basics' || mainTab == 'assessment'">
+  <div #footer id="thuntFooter" class="footer hide-print" *ngIf="mainTab == 'system-basics'">
+    <div class="pull-left" *ngIf="subTab != 'settings'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
-    <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
+    <div class="pull-right">
       <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
     </div>
-    <div class="pull-right" *ngIf="mainTab == 'assessment'">
-      <button class="btn btn-primary" (click)="goToReport()">View Report</button>
-    </div>
-  </div> -->
+  </div>
   <!--end footer-->
 </div>

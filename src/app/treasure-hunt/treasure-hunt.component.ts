@@ -59,7 +59,7 @@ export class TreasureHuntComponent implements OnInit {
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
-            lightingReplacements: new Array<LightingReplacementTreasureHunt>()
+            setupDone: false
           }
         }
         this.getSettings();
@@ -78,6 +78,8 @@ export class TreasureHuntComponent implements OnInit {
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.subTabSub.unsubscribe();
+    this.treasureHuntService.mainTab.next('system-basics');
+    this.treasureHuntService.subTab.next('settings');
   }
   getSettings() {
     //get assessment settings
@@ -135,10 +137,55 @@ export class TreasureHuntComponent implements OnInit {
 
   saveTreasureHunt(treasureHunt: TreasureHunt) {
     this.assessment.treasureHunt = treasureHunt;
+    this.assessment.treasureHunt.setupDone = this.checkSetupDone();
     this.indexedDbService.putAssessment(this.assessment).then(results => {
       this.assessmentDbService.setAll().then(() => {
         this.treasureHuntService.getResults.next(true);
       })
     })
+  }
+
+  checkSetupDone() {
+    if (this.assessment.treasureHunt.operatingHours && this.assessment.treasureHunt.currentEnergyUsage) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getCanContinue() {
+    if (this.subTab == 'settings') {
+      return true;
+    } else if (this.subTab == 'operating-hours') {
+      if (this.assessment.treasureHunt.operatingHours) {
+        return true;
+      } else {
+        return false
+      }
+    } else if (this.subTab == 'operation-costs') {
+      if (this.assessment.treasureHunt.setupDone) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  back() {
+    if (this.subTab == 'operating-hours') {
+      this.treasureHuntService.subTab.next('settings');
+    } else if (this.subTab == 'operation-costs') {
+      this.treasureHuntService.subTab.next('operating-hours');
+    }
+  }
+
+  continue() {
+    if (this.subTab == 'settings') {
+      this.treasureHuntService.subTab.next('operating-hours');
+    } else if (this.subTab == 'operating-hours') {
+      this.treasureHuntService.subTab.next('operation-costs');
+    } else if (this.subTab == 'operation-costs') {
+      this.treasureHuntService.mainTab.next('find-treasure');
+    }
   }
 }

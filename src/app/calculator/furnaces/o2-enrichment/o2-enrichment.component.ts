@@ -38,7 +38,9 @@ export class O2EnrichmentComponent implements OnInit {
     availableHeatEnriched: 0.0,
     availableHeatInput: 0.0,
     fuelConsumptionEnriched: 0.0,
-    fuelSavingsEnriched: 0.0
+    fuelSavingsEnriched: 0.0,
+    annualFuelCost: 0.0,
+    annualFuelCostEnriched: 0.0,
   };
 
   originalLines = [];
@@ -118,9 +120,13 @@ export class O2EnrichmentComponent implements OnInit {
         availableHeatEnriched: 0.0,
         availableHeatInput: 0.0,
         fuelConsumptionEnriched: 0.0,
-        fuelSavingsEnriched: 0.0
+        fuelSavingsEnriched: 0.0,
+        annualFuelCost: 0.0,
+        annualFuelCostEnriched: 0.0
       };
     }
+    this.o2EnrichmentOutput.annualFuelCost = this.o2Enrichment.fuelCost * this.o2Enrichment.operatingHours;
+    this.o2EnrichmentOutput.annualFuelCostEnriched = this.o2Enrichment.fuelCostEnriched * this.o2Enrichment.operatingHoursEnriched;
     if (!this.inAssessment) {
       this.o2EnrichmentService.o2Enrichment = this.o2Enrichment;
       this.o2EnrichmentService.lines = this.lines;

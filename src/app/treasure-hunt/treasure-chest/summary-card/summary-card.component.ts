@@ -159,28 +159,30 @@ export class SummaryCardComponent implements OnInit {
     let totalNaturalGasEnergySavings: number = 0;
     let totalOtherGasCostSavings: number = 0;
     let totalOtherGasEnergySavings: number = 0;
-    this.treasureHunt.opportunitySheets.forEach(oppSheet => {
-      if (oppSheet.selected) {
-        let oppSheetResults: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, this.settings);
-        //electricity
-        totalElectricityCostSavings = totalElectricityCostSavings + oppSheetResults.electricityResults.energyCostSavings;
-        totalElectricityEnergySavings = totalElectricityEnergySavings + oppSheetResults.electricityResults.energySavings;
-        //compressed air (electricity)
-        totalElectricityCostSavings = totalElectricityCostSavings + oppSheetResults.compressedAirResults.energyCostSavings;
-        totalElectricityEnergySavings = totalElectricityEnergySavings + oppSheetResults.compressedAirResults.energySavings;
+    if (this.treasureHunt.opportunitySheets) {
+      this.treasureHunt.opportunitySheets.forEach(oppSheet => {
+        if (oppSheet.selected) {
+          let oppSheetResults: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, this.settings);
+          //electricity
+          totalElectricityCostSavings = totalElectricityCostSavings + oppSheetResults.electricityResults.energyCostSavings;
+          totalElectricityEnergySavings = totalElectricityEnergySavings + oppSheetResults.electricityResults.energySavings;
+          //compressed air (electricity)
+          totalElectricityCostSavings = totalElectricityCostSavings + oppSheetResults.compressedAirResults.energyCostSavings;
+          totalElectricityEnergySavings = totalElectricityEnergySavings + oppSheetResults.compressedAirResults.energySavings;
 
-        //natural gas
-        totalNaturalGasCostSavings = totalNaturalGasCostSavings + oppSheetResults.gasResults.energyCostSavings;
-        totalNaturalGasEnergySavings = totalNaturalGasEnergySavings + oppSheetResults.gasResults.energySavings;
-        //steam (natural gas)
-        totalNaturalGasCostSavings = totalNaturalGasCostSavings + oppSheetResults.steamResults.energyCostSavings;
-        totalNaturalGasEnergySavings = totalNaturalGasEnergySavings + oppSheetResults.steamResults.energySavings;
+          //natural gas
+          totalNaturalGasCostSavings = totalNaturalGasCostSavings + oppSheetResults.gasResults.energyCostSavings;
+          totalNaturalGasEnergySavings = totalNaturalGasEnergySavings + oppSheetResults.gasResults.energySavings;
+          //steam (natural gas)
+          totalNaturalGasCostSavings = totalNaturalGasCostSavings + oppSheetResults.steamResults.energyCostSavings;
+          totalNaturalGasEnergySavings = totalNaturalGasEnergySavings + oppSheetResults.steamResults.energySavings;
 
-        //other fuel
-        totalOtherGasCostSavings = totalOtherGasCostSavings + oppSheetResults.otherFuelResults.energyCostSavings;
-        totalOtherGasEnergySavings = totalOtherGasEnergySavings + oppSheetResults.otherFuelResults.energySavings;
-      }
-    })
+          //other fuel
+          totalOtherGasCostSavings = totalOtherGasCostSavings + oppSheetResults.otherFuelResults.energyCostSavings;
+          totalOtherGasEnergySavings = totalOtherGasEnergySavings + oppSheetResults.otherFuelResults.energySavings;
+        }
+      })
+    }
     return {
       totalElectricityCostSavings: totalElectricityCostSavings,
       totalElectricityEnergySavings: totalElectricityEnergySavings,

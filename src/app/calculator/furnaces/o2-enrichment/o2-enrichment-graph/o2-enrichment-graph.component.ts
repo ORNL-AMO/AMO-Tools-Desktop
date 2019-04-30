@@ -318,6 +318,8 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     let data = [];
 
     this.o2EnrichmentPoint = {
+      operatingHours: this.o2Enrichment.operatingHours,
+      operatingHoursEnriched: this.o2Enrichment.operatingHoursEnriched,
       o2CombAir: this.o2Enrichment.o2CombAir,
       o2CombAirEnriched: 0,
       flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -326,7 +328,9 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       o2FlueGasEnriched: line.o2FlueGasEnriched,
       combAirTemp: this.o2Enrichment.combAirTemp,
       combAirTempEnriched: line.combAirTempEnriched,
-      fuelConsumption: this.o2Enrichment.fuelConsumption
+      fuelConsumption: this.o2Enrichment.fuelConsumption,
+      fuelCost: this.o2Enrichment.fuelCost,
+      fuelCostEnriched: this.o2Enrichment.fuelCostEnriched
     };
     let graphData: { data: Array<any>, onGraph: boolean } = this.o2EnrichmentService.getGraphData(this.settings, this.o2EnrichmentPoint, line);
     onGraph = graphData.onGraph;
@@ -569,6 +573,8 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     this.rowData = new Array<Array<string>>();
     this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
     const o2EnrichmentPoint = {
+      operatingHours: this.o2Enrichment.operatingHours,
+      operatingHoursEnriched: this.o2Enrichment.operatingHoursEnriched,
       o2CombAir: this.o2Enrichment.o2CombAir,
       o2CombAirEnriched: this.xPosition,
       flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -577,7 +583,9 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       o2FlueGasEnriched: this.mainLine.o2FlueGasEnriched,
       combAirTemp: this.o2Enrichment.combAirTemp,
       combAirTempEnriched: this.mainLine.combAirTempEnriched,
-      fuelConsumption: this.o2Enrichment.fuelConsumption
+      fuelConsumption: this.o2Enrichment.fuelConsumption,
+      fuelCost: this.o2Enrichment.fuelCost,
+      fuelCostEnriched: this.o2Enrichment.fuelCostEnriched
     };
     let o2InAirData: string = (this.xPosition != null) ? format1(this.xPosition).toString() : format1(this.o2Enrichment.o2CombAirEnriched).toString();
     let fuelSavingsData: string;
@@ -613,6 +621,8 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       let flueO2Data: string;
       let fuelTempData: string;
       const o2EnrichmentPoint = {
+        operatingHours: this.o2Enrichment.operatingHours,
+        operatingHoursEnriched: this.o2Enrichment.operatingHoursEnriched,  
         o2CombAir: this.o2Enrichment.o2CombAir,
         o2CombAirEnriched: this.xPosition,
         flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -621,7 +631,9 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
         o2FlueGasEnriched: this.lines[i].o2FlueGasEnriched,
         combAirTemp: this.o2Enrichment.combAirTemp,
         combAirTempEnriched: this.lines[i].combAirTempEnriched,
-        fuelConsumption: this.o2Enrichment.fuelConsumption
+        fuelConsumption: this.o2Enrichment.fuelConsumption,
+        fuelCost: this.o2Enrichment.fuelCost,
+        fuelCostEnriched: this.o2Enrichment.fuelCostEnriched  
       };
       if (this.xPosition == null) {
         o2EnrichmentPoint.o2CombAirEnriched = this.lines[i].o2CombAirEnriched;
