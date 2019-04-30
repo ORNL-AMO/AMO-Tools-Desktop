@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHuntResults, TreasureHunt, OpportunitySheetResults } from '../../shared/models/treasure-hunt';
+import { TreasureHuntResults, TreasureHunt, OpportunitySheetResults, UtilityUsageData } from '../../shared/models/treasure-hunt';
 import { LightingReplacementResults } from '../../shared/models/lighting';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { ReplaceExistingResults, MotorDriveOutputs } from '../../shared/models/calculators';
@@ -73,6 +73,25 @@ export class TreasureHuntReportService {
     return results;
   }
 
+  //electricity
+  //calcs: lighting replacement, replace existing motor, motor drive
+  getElectricityUtilityUsage(treasureHunt: TreasureHunt): UtilityUsageData {
+    let lightingResults: { totalCostSavings: number, totalEnergySavings: number } = this.getTotalLightingSavings(treasureHunt);
+    let replaceMotorResults: { totalCostSavings: number, totalEnergySavings: number } = this.getReplaceExistingMotorSavings(treasureHunt);
+    let motorDriveResults: { totalCostSavings: number, totalEnergySavings: number } = this.getMotorDriveSavings(treasureHunt);
+    let totalElectricityUsageSavings: number = lightingResults.totalEnergySavings + replaceMotorResults.totalEnergySavings + motorDriveResults.totalEnergySavings;
+    let totalElectricitCostSavings: number = lightingResults.totalCostSavings + replaceMotorResults.totalCostSavings + motorDriveResults.totalCostSavings;
+    return {
+      baselineEnergyUsage: treasureHunt.currentEnergyUsage.electricityUsage,
+      baselineEnergyCost: treasureHunt.currentEnergyUsage.electricityCosts,
+      modifiedEnergyUsage: treasureHunt.currentEnergyUsage.electricityUsage - totalElectricityUsageSavings,
+      modifiedEnergyCost: treasureHunt.currentEnergyUsage.electricityCosts - totalElectricitCostSavings,
+      energySavings: totalElectricityUsageSavings,
+      costSavings: totalElectricitCostSavings,
+      // implementationCost?: number,
+      // paybackPeriod?: number
+    }
+  }
   //Lighting Replacements
   getTotalLightingSavings(treasureHunt: TreasureHunt): { totalCostSavings: number, totalEnergySavings: number } {
     let totalCostSavings: number = 0;
@@ -120,6 +139,104 @@ export class TreasureHuntReportService {
     }
     return { totalCostSavings: totalCostSavings, totalEnergySavings: totalEnergySavings }
   }
+
+  
+  //natural gas
+  getNaturalGasUtilityUsage(treasureHunt: TreasureHunt): UtilityUsageData {
+    return {
+      baselineEnergyUsage: treasureHunt.currentEnergyUsage.naturalGasUsage,
+      baselineEnergyCost: treasureHunt.currentEnergyUsage.naturalGasCosts,
+      modifiedEnergyUsage: treasureHunt.currentEnergyUsage.naturalGasUsage,
+      modifiedEnergyCost: treasureHunt.currentEnergyUsage.naturalGasCosts,
+      energySavings: 0,
+      costSavings: 0,
+      // implementationCost?: number,
+      // paybackPeriod?: number
+    }
+  }
+
+  //water
+  getWaterUtilityUsage(treasureHunt: TreasureHunt): UtilityUsageData {
+    return {
+      baselineEnergyUsage: 0,
+      baselineEnergyCost: 0,
+      modifiedEnergyUsage: 0,
+      modifiedEnergyCost: 0,
+      energySavings: 0,
+      costSavings: 0,
+      // implementationCost?: number,
+      // paybackPeriod?: number
+    }
+  }
+  //waste water
+  getWasteWaterUsage(treasureHunt: TreasureHunt): UtilityUsageData {
+    return {
+      baselineEnergyUsage: 0,
+      baselineEnergyCost: 0,
+      modifiedEnergyUsage: 0,
+      modifiedEnergyCost: 0,
+      energySavings: 0,
+      costSavings: 0,
+      // implementationCost?: number,
+      // paybackPeriod?: number
+    }
+  }
+  //other fuel
+  getOtherFuelUsage(treasureHunt: TreasureHunt): UtilityUsageData {
+    return {
+      baselineEnergyUsage: treasureHunt.currentEnergyUsage.otherFuelUsage,
+      baselineEnergyCost: treasureHunt.currentEnergyUsage.otherFuelCosts,
+      modifiedEnergyUsage: treasureHunt.currentEnergyUsage.otherFuelUsage,
+      modifiedEnergyCost: treasureHunt.currentEnergyUsage.otherFuelCosts,
+      energySavings: 0,
+      costSavings: 0,
+      // implementationCost?: number,
+      // paybackPeriod?: number
+    }
+  }
+  //compressed air
+  getCompressedAirUsage(treasureHunt: TreasureHunt): UtilityUsageData {
+    return {
+      baselineEnergyUsage: 0,
+      baselineEnergyCost: 0,
+      modifiedEnergyUsage: 0,
+      modifiedEnergyCost: 0,
+      energySavings: 0,
+      costSavings: 0,
+      // implementationCost?: number,
+      // paybackPeriod?: number
+    }
+  }
+  //steam
+  getSteamUsage(treasureHunt: TreasureHunt): UtilityUsageData {
+    return {
+      baselineEnergyUsage: 0,
+      baselineEnergyCost: 0,
+      modifiedEnergyUsage: 0,
+      modifiedEnergyCost: 0,
+      energySavings: 0,
+      costSavings: 0,
+      // implementationCost?: number,
+      // paybackPeriod?: number
+    }
+  }
+  //other
+  getOtherUsage(treasureHunt: TreasureHunt): UtilityUsageData {
+    return {
+      baselineEnergyUsage: 0,
+      baselineEnergyCost: 0,
+      modifiedEnergyUsage: 0,
+      modifiedEnergyCost: 0,
+      energySavings: 0,
+      costSavings: 0,
+      // implementationCost?: number,
+      // paybackPeriod?: number
+    }
+  }
+
+
+
+
 
   //Stand Alone Opportunity Sheets
   getOpportunitySheetSavings(treasureHunt: TreasureHunt, settings: Settings): {
