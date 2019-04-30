@@ -98,3 +98,32 @@ export interface MotorDriveInputsTreasureHunt{
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
 }
+
+
+export interface TreasureHuntResults {
+    totalSavings: number;
+    percentSavings: number;
+    totalBaselineCost: number;
+    totalModificationCost: number;
+
+    electricity: UtilityUsageData,
+    naturalGas: UtilityUsageData,
+    water: UtilityUsageData,
+    wasteWater: UtilityUsageData,
+    otherFuel: UtilityUsageData,
+    compressedAir: UtilityUsageData,
+    steam: UtilityUsageData,
+    other: UtilityUsageData
+}
+
+export interface UtilityUsageData {
+    baselineEnergyUsage: number,
+    baselineEnergyCost: number,
+    modifiedEnergyUsage: number,
+    modifiedEnergyCost: number,
+    energySavings: number,
+    costSavings: number,
+    implementationCost?: number,
+    paybackPeriod?: number
+    
+}

@@ -78,7 +78,7 @@
     <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'executiveSummary' && !showPrint) || (showPrint && printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-executive-summary></app-executive-summary>
+      <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"></app-executive-summary>
     </div>
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'reportGraphs' && !showPrint) || (showPrint && printReportGraphs)) && dataCalculated"

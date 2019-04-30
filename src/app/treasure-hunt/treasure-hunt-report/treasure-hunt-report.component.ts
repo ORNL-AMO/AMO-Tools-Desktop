@@ -3,6 +3,8 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { TreasureHuntResults } from '../../shared/models/treasure-hunt';
+import { TreasureHuntReportService } from './treasure-hunt-report.service';
 
 @Component({
   selector: 'app-treasure-hunt-report',
@@ -26,11 +28,15 @@ export class TreasureHuntReportComponent implements OnInit {
   currentTab: string = 'executiveSummary';
   assessmentDirectories: Array<Directory> = [];
   dataCalculated: boolean = true;
-  constructor(private directoryDbService: DirectoryDbService) { }
+  treasureHuntResults: TreasureHuntResults;
+  constructor(private directoryDbService: DirectoryDbService, private treasureHuntReportService: TreasureHuntReportService) { }
 
   ngOnInit() {
     if (this.assessment) {
       this.getDirectoryList(this.assessment.id);
+    }
+    if (this.assessment.treasureHunt.setupDone == true) {
+      this.treasureHuntResults = this.treasureHuntReportService.calculateCostAndEnergyResults(this.assessment.treasureHunt, this.settings);
     }
   }
 

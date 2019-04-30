@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { TreasureHuntResults } from '../../../shared/models/treasure-hunt';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-executive-summary',
@@ -6,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./executive-summary.component.css']
 })
 export class ExecutiveSummaryComponent implements OnInit {
-
+  @Input()
+  treasureHuntResults: TreasureHuntResults;
+  @Input()
+  settings: Settings;
+  
   constructor() { }
 
   ngOnInit() {

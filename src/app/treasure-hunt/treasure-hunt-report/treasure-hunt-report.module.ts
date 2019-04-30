@@ -5,6 +5,7 @@ import { ExecutiveSummaryComponent } from './executive-summary/executive-summary
 import { OpportunitySummaryComponent } from './opportunity-summary/opportunity-summary.component';
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { SharedModule } from '../../shared/shared.module';
+import { TreasureHuntService } from '../treasure-hunt.service';
 
 @NgModule({
   imports: [
