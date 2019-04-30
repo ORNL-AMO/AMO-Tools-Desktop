@@ -20,11 +20,13 @@
 				(click)="changeTab('system-basics')">Facility Basics</a>
 		</div>
 		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'find-treasure'}"
+			<a class="nav-link"
+				[ngClass]="{'active': mainTab == 'find-treasure', 'disabled': assessment.treasureHunt.setupDone != true}"
 				(click)="changeTab('find-treasure')">Find Treasure</a>
 		</div>
 		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'treasure-chest'}"
+			<a class="nav-link"
+				[ngClass]="{'active': mainTab == 'treasure-chest', 'disabled': assessment.treasureHunt.setupDone != true}"
 				(click)="changeTab('treasure-chest')">Treasure Chest</a>
 		</div>
 		<!-- <div class="nav-item">

@@ -10,6 +10,7 @@ export interface TreasureHunt {
     motorDrives?: Array<MotorDriveInputsTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
+    setupDone: boolean;
 }
 
 export interface EnergyUsage {

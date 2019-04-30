@@ -1,6 +1,9 @@
 <div class="d-flex modify-conditions panel-container skyline" *ngIf="selectedCalc == 'none'">
   <div class="scroll-item chest-column" [ngStyle]="{'height.px': containerHeight}">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 mb-2">
+    <div class="col-12">
+      <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt" (emitChangeCalculatorType)="setCaclulatorType($event)"></app-treasure-chest-menu>
+    </div>
+    <!-- <div class="d-flex flex-wrap tabs primary mr-2 ml-2 mb-2">
       <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'all'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('all')">
           <div>All Items ({{numItems}})</div>
@@ -16,9 +19,9 @@
           <div>Opportunity Sheets ({{numOppSheets}})</div>
         </a>
       </div>
-    </div>
+    </div> -->
     <!--lighting replacement-->
-    <div *ngIf="tabSelect == 'all' || tabSelect == 'lighting-replacement'">
+    <div *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Lighting Replacement') && (displayEnergyType == 'All' || displayEnergyType == 'Electricity')">
       <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
         <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
           (emitEditLighting)="editLighting($event, index)"
@@ -29,7 +32,7 @@
       </div>
     </div>
     <!--replace existing motor-->
-    <div *ngIf="tabSelect == 'all'">
+    <div *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Replace Existing Motor') && (displayEnergyType == 'All' || displayEnergyType == 'Electricity')">
       <div class="col-12" *ngFor="let replaceExistingMotor of treasureHunt.replaceExistingMotors; let index = index;">
         <app-replace-existing-motor-card [replaceExistingMotor]="replaceExistingMotor" [index]="index"
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'replaceExistingMotor')"
@@ -40,7 +43,7 @@
       </div>
     </div>
     <!--motor drive-->
-    <div *ngIf="tabSelect == 'all'">
+    <div *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Motor Drive') && (displayEnergyType == 'All' || displayEnergyType == 'Electricity')">
       <div class="col-12" *ngFor="let motorDrive of treasureHunt.motorDrives; let index = index;">
         <app-motor-drive-card [motorDrive]="motorDrive" [index]="index"
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'motorDrive')" [settings]="settings"
@@ -50,7 +53,7 @@
       </div>
     </div>
     <!--standalone opportunity sheet-->
-    <div *ngIf="tabSelect == 'all' || tabSelect == 'opportunity-sheet'">
+    <div *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Opportunity Sheet') && (displayEnergyType == 'All' || displayEnergyType == 'Other')">
       <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;">
         <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet" [index]="index"
           (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"
@@ -60,9 +63,10 @@
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column scroll-item result-column" [ngStyle]="{'height.px': containerHeight}">
-    <div class="d-flex flex-wrap tabs primary mr-2 ml-2">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': helpTabSelect == 'results'}">
+  <div class="d-flex scroll-item result-column justify-content-center mr-3 ml-3"
+    [ngStyle]="{'height.px': containerHeight}">
+    <!-- <div class="d-flex flex-wrap tabs primary mr-2 ml-2"> -->
+    <!-- <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': helpTabSelect == 'results'}">
         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setHelpTab('results')">
           <div>Results</div>
         </a>
@@ -72,10 +76,10 @@
           <div>Help</div>
         </a>
       </div>
-    </div>
-    <div class="d-flex justify-content-center mr-3 ml-3">
-      <app-summary-card class="w-100" [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
-    </div>
+    </div> -->
+    <!-- <div class="d-flex"> -->
+    <app-summary-card class="w-100" [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
+    <!--   </div> -->
   </div>
 </div>
 

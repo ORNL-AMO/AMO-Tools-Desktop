@@ -21,13 +21,13 @@ export class TreasureHuntGaugeComponent implements OnInit {
   @ViewChild('tHuntChart') tHuntChart: ElementRef;
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.initChart();
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.value && !changes.value.isFirstChange()) {
@@ -56,19 +56,26 @@ export class TreasureHuntGaugeComponent implements OnInit {
           ['data', 0]
         ],
         type: 'gauge',
+        min: 0,
+        max: 50
       },
       legend: {
         show: false
       },
       gauge: {
         label: {
-          show: false
-        }
+          show: false,
+          format: function (value: number, ratio) {
+            return value.toFixed(2) + '%'; //returning here the value and not the ratio
+          }
+        },
+        min: 0,
+        max: 50
       },
       color: {
         pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
         threshold: {
-          values: [25, 50, 75, 101]
+          values: [25, 50]
         }
       },
       tooltip: {

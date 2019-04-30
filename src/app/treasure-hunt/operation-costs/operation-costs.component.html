@@ -5,7 +5,7 @@
   <div class="p-4 card-form">
     <div class="form-section">
       <div class="form-group">
-        <label for="annualElectricityUsage">Electricity Usage</label>
+        <label for="annualElectricityUsage">Electricity Consumption</label>
         <div class="input-group">
           <input class="form-control" name="annualElectricityUsage" type="number"
             [(ngModel)]="treasureHunt.currentEnergyUsage.electricityUsage" (input)="save()">
@@ -24,7 +24,7 @@
 
     <div class="form-section">
       <div class="form-group">
-        <label for="annualNaturalGasUsage">Natural Gas Usage</label>
+        <label for="annualNaturalGasUsage">Natural Gas Consumption</label>
         <div class="input-group">
           <input class="form-control" name="annualNaturalGasUsage" type="number"
             [(ngModel)]="treasureHunt.currentEnergyUsage.naturalGasUsage" (input)="save()">
@@ -44,7 +44,7 @@
 
     <div class="form-section">
       <div class="form-group">
-        <label for="annualOtherFuelUsage">Other Fuel Usage</label>
+        <label for="annualOtherFuelUsage">Other Fuel Consumption</label>
         <div class="input-group">
           <input class="form-control" name="annualOtherFuelUsage" type="number"
             [(ngModel)]="treasureHunt.currentEnergyUsage.otherFuelUsage" (input)="save()">
