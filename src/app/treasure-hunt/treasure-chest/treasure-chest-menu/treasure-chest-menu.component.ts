@@ -49,11 +49,12 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setCalculatorOptions() {
+    this.calculatorTypeOptions = new Array();
     let numCalcs: number = 0;
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Electricity') {
       numCalcs = numCalcs + this.checkElectricity();
     }
-    if (this.displayEnergyType == 'All') {
+    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Other') {
       numCalcs = numCalcs + this.checkOpportunitySheets();
     }
     this.calculatorTypeOptions.unshift({ value: 'All', numCalcs: numCalcs });
