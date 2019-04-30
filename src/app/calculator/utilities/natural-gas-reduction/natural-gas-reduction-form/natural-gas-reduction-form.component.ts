@@ -22,6 +22,8 @@ export class NaturalGasReductionFormComponent implements OnInit {
   emitCalculate = new EventEmitter<{ form: FormGroup, index: number, isBaseline: boolean }>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+  @Output('emitRemoveEquipment')
+  emitRemoveEquipment = new EventEmitter<{ index: number, isBaseline: boolean }>();
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Flow Meter Method' },
@@ -31,6 +33,7 @@ export class NaturalGasReductionFormComponent implements OnInit {
   ];
   idString: string;
   individualResults: NaturalGasReductionResults;
+  isEditingName: boolean = false;
 
   constructor(private naturalGasReductionService: NaturalGasReductionService) { }
 
@@ -60,6 +63,18 @@ export class NaturalGasReductionFormComponent implements OnInit {
       this.emitCalculate.emit(emitObj);
       this.individualResults = this.naturalGasReductionService.calculateIndividualEquipment(this.naturalGasReductionService.getObjFromForm(this.form), this.settings);
     }
+  }
+
+  removeEquipment(i: number) {
+    this.emitRemoveEquipment.emit({ index: i, isBaseline: this.isBaseline });
+  }
+
+  editEquipmentName() {
+    this.isEditingName = true;
+  }
+
+  doneEditingName() {
+    this.isEditingName = false;
   }
 
   focusField(str: string) {

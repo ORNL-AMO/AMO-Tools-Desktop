@@ -157,9 +157,10 @@ export interface CalculateUsableCapacity {
 //======= electricity reduction objects =======
 export interface ElectricityReductionInput {
   electricityReductionInputVec: Array<ElectricityReductionData>
-}
+};
 
 export interface ElectricityReductionData {
+  name: string,
   operatingHours: number,
   electricityCost: number,
   measurementMethod: number, // 0 = multimeter reading, 1 = name plate data, 2 = power meter method, 3 = offsheet / other method
@@ -168,14 +169,14 @@ export interface ElectricityReductionData {
   powerMeterData: PowerMeterData,
   otherMethodData: OtherMethodData,
   units: number
-}
+};
 
 export interface MultimeterReadingData {
   numberOfPhases: number,
   supplyVoltage: number,
   averageCurrent: number,
   powerFactor: number
-}
+};
 
 export interface NameplateData {
   ratedMotorPower: number,
@@ -184,15 +185,15 @@ export interface NameplateData {
   lineFrequency: number,
   motorAndDriveEfficiency: number,
   loadFactor: number
-}
+};
 
 export interface PowerMeterData {
   power: number,
-}
+};
 
 export interface OtherMethodData {
   energy: number;
-}
+};
 
 export interface ElectricityReductionResults {
   energyUse: number,
@@ -200,7 +201,7 @@ export interface ElectricityReductionResults {
   annualEnergySavings: number,
   costSavings: number,
   power: number
-}
+};
 
 //====== end electricity reduction objects ====
 
@@ -210,6 +211,7 @@ export interface NaturalGasReductionInput {
 };
 
 export interface NaturalGasReductionData {
+  name: string,
   operatingHours: number,
   fuelCost: number,
   measurementMethod: number,

@@ -30,7 +30,7 @@
     <!-- Baseline -->
     <div class="d-flex">
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
-        <div class="w-50">
+        <div class="w-50 panel-column baseline">
           <div class="header mr-2 ml-2">
             <h3>Baseline</h3>
             <a class="click-link pull-right small add-fixture" (click)="addBaselineFixture()">+Add Fixture</a>
@@ -65,7 +65,7 @@
 
 
         <!-- Modifications Start -->
-        <div *ngIf="modificationExists" class="w-50">
+        <div *ngIf="modificationExists" class="w-50 panel-column modification">
           <!-- Modification Header -->
           <div class="header mr-2 ml-2">
             <h3>Modification</h3>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <!-- No content message -->
-        <div class="w-50" *ngIf="!modificationExists">
+        <div class="w-50 panel-column modification" *ngIf="!modificationExists">
           <div class="header mr-2 ml-2">
             <h3>Modification</h3>
           </div>
@@ -126,7 +126,8 @@
           </div>
           <div class="d-flex justify-content-center pl-2 pr-2">
             <app-lighting-replacement-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData"
-              [modificationData]="modificationData" [lightingReplacementResults]="lightingReplacementResults"></app-lighting-replacement-results>
+              [modificationData]="modificationData" [lightingReplacementResults]="lightingReplacementResults">
+            </app-lighting-replacement-results>
             <app-lighting-replacement-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
             </app-lighting-replacement-help>
           </div>

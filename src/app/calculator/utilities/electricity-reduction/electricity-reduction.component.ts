@@ -51,7 +51,7 @@ export class ElectricityReductionComponent implements OnInit {
       this.loadForms();
     }
   }
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
@@ -66,7 +66,7 @@ export class ElectricityReductionComponent implements OnInit {
     this.electricityReductionService.baselineData = baselineData;
     if (this.modificationExists) {
       let modificationData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
-      for (let i = 0; i < this.baselineForms.length; i++) {
+      for (let i = 0; i < this.modificationForms.length; i++) {
         modificationData.push(this.electricityReductionService.getObjFromForm(this.modificationForms[i]));
       }
       this.electricityReductionService.modificationData = modificationData;
@@ -87,8 +87,9 @@ export class ElectricityReductionComponent implements OnInit {
     this.currentField = str;
   }
 
+
   addBaselineEquipment() {
-    this.electricityReductionService.addBaselineEquipment(this.settings);
+    this.electricityReductionService.addBaselineEquipment(this.baselineForms.length, this.settings);
     this.baselineForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.baselineData[this.electricityReductionService.baselineData.length - 1]));
   }
 
@@ -110,7 +111,7 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    this.electricityReductionService.addModificationEquipment(this.settings);
+    this.electricityReductionService.addModificationEquipment(this.modificationForms.length, this.settings);
     this.modificationForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.modificationData[this.electricityReductionService.modificationData.length - 1]));
   }
 
@@ -121,6 +122,10 @@ export class ElectricityReductionComponent implements OnInit {
       this.modificationExists = false;
     }
     this.refreshResults();
+  }
+
+  removeEquipment(emitObj: { index: number, isBaseline: boolean }) {
+    emitObj.isBaseline ? this.removeBaselineEquipment(emitObj.index) : this.removeModificationEquipment(emitObj.index);
   }
 
   loadForms() {
@@ -163,6 +168,7 @@ export class ElectricityReductionComponent implements OnInit {
 
   btnResetData() {
     this.electricityReductionService.resetData(this.settings);
+    this.modificationExists = false;
     this.loadForms();
   }
 }

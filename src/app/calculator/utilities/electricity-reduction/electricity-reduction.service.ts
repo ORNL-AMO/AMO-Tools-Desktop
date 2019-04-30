@@ -17,10 +17,25 @@ export class ElectricityReductionService {
   resetData(settings: Settings) {
     this.baselineData = new Array<ElectricityReductionData>();
     this.modificationData = new Array<ElectricityReductionData>();
-    this.baselineData.push(this.initObject(settings));
+
+    this.baselineData.push(this.initObject(0, settings));
   }
 
-  initObject(settings?: Settings): ElectricityReductionData {
+  getEquipmentName(index: number, isBaseline: boolean) {
+    try {
+      return isBaseline ? this.baselineData[index].name !== null ? this.baselineData[index].name : 'Equipment #' + (index + 1) : this.modificationData[index].name !== null ? this.modificationData[index].name : 'Equipment #' + (index + 1);
+    }
+    catch {
+      return 'Equipment #' + (index + 1);
+    }
+  }
+
+  saveEquipmentName(name: string, index: number, isBaseline: boolean) {
+    isBaseline ? this.baselineData[index] = this.baselineData[index]
+      : this.modificationData[index] = this.modificationData[index];
+  }
+
+  initObject(index: number, settings?: Settings): ElectricityReductionData {
     let defaultMultimeterObj: MultimeterReadingData = {
       numberOfPhases: 3,
       supplyVoltage: 0,
@@ -46,6 +61,7 @@ export class ElectricityReductionService {
     };
 
     let obj: ElectricityReductionData = {
+      name: 'Equipment #' + (index + 1),
       operatingHours: 0,
       electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.12,
       measurementMethod: 0,
@@ -61,6 +77,7 @@ export class ElectricityReductionService {
 
   getFormFromObj(initObj: ElectricityReductionData): FormGroup {
     let form: FormGroup = this.formBuilder.group({
+      name: [initObj.name, [Validators.required]],
       operatingHours: [initObj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       electricityCost: [initObj.electricityCost],
       measurementMethod: [initObj.measurementMethod],
@@ -141,6 +158,7 @@ export class ElectricityReductionService {
     };
 
     let obj: ElectricityReductionData = {
+      name: form.controls.name.value,
       operatingHours: form.controls.operatingHours.value,
       electricityCost: form.controls.electricityCost.value,
       measurementMethod: form.controls.measurementMethod.value,
@@ -150,15 +168,14 @@ export class ElectricityReductionService {
       otherMethodData: otherMethodData,
       units: form.controls.units.value
     };
-
     return obj;
   }
 
-  addBaselineEquipment(settings?: Settings) {
+  addBaselineEquipment(index: number, settings?: Settings) {
     if (this.baselineData === null || this.baselineData === undefined) {
       this.baselineData = new Array<ElectricityReductionData>();
     }
-    this.baselineData.push(this.initObject(settings ? settings : null));
+    this.baselineData.push(this.initObject(index, settings ? settings : null));
   }
 
   removeBaselineEquipment(index: number) {
@@ -172,11 +189,11 @@ export class ElectricityReductionService {
     }
   }
 
-  addModificationEquipment(settings?: Settings) {
+  addModificationEquipment(index: number, settings?: Settings) {
     if (this.modificationData === null || this.modificationData === undefined) {
       this.modificationData = new Array<ElectricityReductionData>();
     }
-    this.modificationData.push(this.initObject(settings ? settings : null));
+    this.modificationData.push(this.initObject(index, settings ? settings : null));
   }
 
   removeModificationEquipment(index: number) {
@@ -204,7 +221,6 @@ export class ElectricityReductionService {
   calculate(isBaseline: boolean, settings: Settings): ElectricityReductionResults {
     let tmpData = isBaseline ? this.baselineData : this.modificationData;
     tmpData = this.convertInputs(tmpData, settings);
-
     let inputObj: ElectricityReductionInput = {
       electricityReductionInputVec: tmpData
     };
@@ -234,6 +250,7 @@ export class ElectricityReductionService {
         loadFactor: inputArray[i].nameplateData.loadFactor
       };
       inputArray[i] = {
+        name: inputArray[i].name,
         operatingHours: inputArray[i].operatingHours,
         electricityCost: inputArray[i].electricityCost,
         measurementMethod: inputArray[i].measurementMethod,

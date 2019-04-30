@@ -24,7 +24,12 @@
     margin: 10px 0px;
 }
 
-.form-card {
-    border-radius: 10px;
-    box-shadow: 0 4px 20px 0 grey;
+.panel-column.baseline {
+    background: #ececec;
+    box-shadow: none;
+    transition: ease-in-out 0.2s all;
+}
+
+.panel-column.modification {
+    box-shadow: 0px 0px 69px -1px rgba(0, 0, 0, 0.2);
 }

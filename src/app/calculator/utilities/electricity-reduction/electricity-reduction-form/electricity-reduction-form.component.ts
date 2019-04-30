@@ -23,6 +23,8 @@ export class ElectricityReductionFormComponent implements OnInit {
   emitCalculate = new EventEmitter<{ form: FormGroup, index: number, isBaseline: boolean }>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+  @Output('emitRemoveEquipment')
+  emitRemoveEquipment = new EventEmitter<{ index: number, isBaseline: boolean }>();
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Multimeter Reading' },
@@ -33,6 +35,8 @@ export class ElectricityReductionFormComponent implements OnInit {
   idString: string;
 
   individualResults: ElectricityReductionResults;
+
+  isEditingName: boolean = false;
 
   constructor(private electricityReductionService: ElectricityReductionService) { }
 
@@ -49,6 +53,11 @@ export class ElectricityReductionFormComponent implements OnInit {
   changeMeasurementMethod() {
     let tmpObject = this.electricityReductionService.getObjFromForm(this.form);
     this.form = this.electricityReductionService.getFormFromObj(tmpObject);
+    this.calculate();
+  }
+
+  setNumberOfPhases(val: number) {
+    this.form.controls.numberOfPhases.setValue(val);
     this.calculate();
   }
 
@@ -69,6 +78,18 @@ export class ElectricityReductionFormComponent implements OnInit {
         power: this.individualResults.power
       };
     }
+  }
+
+  removeEquipment(i: number) {
+    this.emitRemoveEquipment.emit({ index: i, isBaseline: this.isBaseline });
+  }
+
+  editEquipmentName() {
+    this.isEditingName = true;
+  }
+
+  doneEditingName() {
+    this.isEditingName = false;
   }
 
   focusField(str: string) {

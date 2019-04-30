@@ -11,7 +11,7 @@
     <!-- baseline -->
     <div class="d-flex">
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
-        <div class="w-50">
+        <div class="w-50 panel-column baseline">
           <div class="header mx-2">
             <h3>Baseline</h3>
           </div>
@@ -19,17 +19,15 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addBaselineEquipment()">+Add Equipment</a>
             </div>
-            <div class="mb-4 p-2 form-card" *ngFor="let form of baselineForms; let i = index;">
-              <label class="group-label w-100 bold">
-                <span class="fa fa-lightbulb-o pr-2"></span>Equipment #{{i + 1}}
-                <span *ngIf="baselineForms.length != 1" class="fa fa-times-circle-o pull-right large"
-                  (click)="removeBaselineEquipment(i)"></span>
-              </label>
-              <!-- app form -->
+            
+            <!-- app form -->
+            <div *ngFor="let form of baselineForms; let i = index;">
               <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="true"
-                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)">
+                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"
+                (emitRemoveEquipment)="removeEquipment($event)">
               </app-electricity-reduction-form>
             </div>
+
             <div class="w-100 justify content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
                 Reset Data
@@ -39,7 +37,7 @@
         </div>
 
         <!-- Modification -->
-        <div *ngIf="modificationExists" class="w-50">
+        <div *ngIf="modificationExists" class="w-50 panel-column modification">
           <!-- Modification Header -->
           <div class="header mx-2">
             <h3>Modification</h3>
@@ -49,20 +47,17 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addModificationEquipment()">+Add Equipment</a>
             </div>
-            <div class="mb-4 p-2 form-card" *ngFor="let form of modificationForms; let i = index;">
-              <label class="group-label w-100 bold">
-                <span class="fa fa-lightbulb-o pr-2"></span>Equipment #{{i + 1}}
-                <span class="fa fa-times-circle-o pull-right large" (click)="removeModificationEquipment(i)"></span>
-              </label>
-              <!-- app form -->
+            <!-- app form -->
+            <div *ngFor="let form of modificationForms; let i = index;">
               <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="false"
-                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)">
+                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"
+                (emitRemoveEquipment)="removeEquipment($event)">
               </app-electricity-reduction-form>
             </div>
           </div>
         </div>
         <!-- no content message -->
-        <div class="w-50" *ngIf="!modificationExists">
+        <div class="w-50 panel-column modification" *ngIf="!modificationExists">
           <div class="header mx-2">
             <h3>Modification</h3>
           </div>

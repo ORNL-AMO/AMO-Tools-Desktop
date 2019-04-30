@@ -1,13 +1,12 @@
-.header .fa.fa-lightbulb-o{
+.header .fa.fa-lightbulb-o {
     font-size: -webkit-xxx-large;
 }
 
-
-.fa.fa-times-circle-o:hover{
+.fa.fa-times-circle-o:hover {
     cursor: pointer;
 }
 
-.no-data{
+.no-data {
     background: none;
 }
 
@@ -24,25 +23,34 @@
     margin: 10px 0px;
 }
 
-
-.fa-save, .fa-times, .fa-edit{
+.fa-save, .fa-times, .fa-edit {
     font-size: xx-large;
 }
 
-.action-item:hover{
+.action-item:hover {
     cursor: pointer;
     background: #efefef;
 }
 
-.help-holder{
+.help-holder {
     max-width: 500px;
 }
 
-.treasure-hunt-help{
+.treasure-hunt-help {
     margin-right: .5rem;
     margin-bottom: 0px;
 }
 
-.add-fixture{
+.add-fixture {
     margin-top: 10px;
+}
+
+.panel-column.baseline {
+    background: #ececec;
+    box-shadow: none;
+    transition: ease-in-out 0.2s all;
+}
+
+.panel-column.modification {
+    box-shadow: 0px 0px 69px -1px rgba(0, 0, 0, 0.2);
 }

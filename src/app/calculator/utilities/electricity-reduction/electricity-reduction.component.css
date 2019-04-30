@@ -1,14 +1,13 @@
-.header .fa.fa-lightbulb-o{
+.header .fa.fa-lightbulb-o {
     font-size: -webkit-xxx-large;
     padding-left: 12px;
 }
 
-
-.fa.fa-times-circle-o:hover{
+.fa.fa-times-circle-o:hover {
     cursor: pointer;
 }
 
-.no-data{
+.no-data {
     background: none;
 }
 
@@ -28,4 +27,14 @@
 .form-card {
     border-radius: 10px;
     box-shadow: 0 4px 20px 0 grey;
+}
+
+.panel-column.baseline {
+    background: #ececec;
+    box-shadow: none;
+    transition: ease-in-out 0.2s all;
+}
+
+.panel-column.modification {
+    box-shadow: 0px 0px 69px -1px rgba(0, 0, 0, 0.2);
 }

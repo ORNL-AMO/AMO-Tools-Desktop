@@ -65,7 +65,7 @@ export class NaturalGasReductionComponent implements OnInit {
     this.naturalGasReductionService.baselineData = baselineData;
     if (this.modificationExists) {
       let modificationData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
-      for (let i = 0; i < this.baselineForms.length; i++) {
+      for (let i = 0; i < this.modificationForms.length; i++) {
         modificationData.push(this.naturalGasReductionService.getObjFromForm(this.modificationForms[i]));
       }
       this.naturalGasReductionService.modificationData = modificationData;
@@ -87,7 +87,7 @@ export class NaturalGasReductionComponent implements OnInit {
   }
 
   addBaselineEquipment() {
-    this.naturalGasReductionService.addBaselineEquipment(this.settings);
+    this.naturalGasReductionService.addBaselineEquipment(this.baselineForms.length, this.settings);
     this.baselineForms.push(this.naturalGasReductionService.getFormFromObj(this.naturalGasReductionService.baselineData[this.naturalGasReductionService.baselineData.length - 1]));
   }
 
@@ -109,7 +109,7 @@ export class NaturalGasReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    this.naturalGasReductionService.addModificationEquipment(this.settings);
+    this.naturalGasReductionService.addModificationEquipment(this.modificationForms.length, this.settings);
     this.modificationForms.push(this.naturalGasReductionService.getFormFromObj(this.naturalGasReductionService.modificationData[this.naturalGasReductionService.modificationData.length - 1]));
   }
 
@@ -120,6 +120,10 @@ export class NaturalGasReductionComponent implements OnInit {
       this.modificationExists = false;
     }
     this.refreshResults();
+  }
+
+  removeEquipment(emitObj: { index: number, isBaseline: boolean }) {
+    emitObj.isBaseline ? this.removeBaselineEquipment(emitObj.index) : this.removeModificationEquipment(emitObj.index);
   }
 
   loadForms() {
