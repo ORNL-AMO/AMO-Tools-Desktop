@@ -12,7 +12,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
-import { LightingReplacementTreasureHunt, TreasureHunt } from '../shared/models/treasure-hunt';
+import { TreasureHunt } from '../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-treasure-hunt',

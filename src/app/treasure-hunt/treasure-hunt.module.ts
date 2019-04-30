@@ -31,6 +31,7 @@ import { ReplaceExistingMotorCardComponent } from './treasure-chest/replace-exis
 import { MotorDriveModule } from '../calculator/motors/motor-drive/motor-drive.module';
 import { MotorDriveCardComponent } from './treasure-chest/motor-drive-card/motor-drive-card.component';
 import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
+import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu
     FormsModule,
     SharedModule,
     ReplaceExistingModule,
-    MotorDriveModule
+    MotorDriveModule,
+    TreasureHuntReportModule
   ],
   declarations: [
     TreasureHuntComponent, 
