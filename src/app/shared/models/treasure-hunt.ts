@@ -117,8 +117,20 @@ export interface TreasureHuntResults {
     otherFuel: UtilityUsageData,
     compressedAir: UtilityUsageData,
     steam: UtilityUsageData,
-    other: UtilityUsageData
+    other: UtilityUsageData,
+    opportunitySummaries: Array<OpportunitySummary>
 }
+
+export interface OpportunitySummary {
+    opportunityName: string,
+    utilityType: string,
+    costSavings: number,
+    totalCost: number,
+    totalEnergySavings: number,
+    payback: number,
+    opportunityCost: OpportunityCost
+}
+
 
 export interface UtilityUsageData {
     baselineEnergyUsage: number,

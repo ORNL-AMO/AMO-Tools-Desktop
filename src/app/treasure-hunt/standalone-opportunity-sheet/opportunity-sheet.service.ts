@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem } from '../../shared/models/treasure-hunt';
+import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, OpportunityCost } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import * as _ from 'lodash';
 
@@ -39,7 +39,7 @@ export class OpportunitySheetService {
     let wasteWaterResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineWasterWaterResult, modificationWasteWaterResult);
 
     let totalCostSavings: number = electricityResults.energyCostSavings + gasResults.energyCostSavings + compressedAirResults.energyCostSavings + otherFuelResults.energyCostSavings + steamResults.energyCostSavings + waterResults.energyCostSavings + waterResults.energyCostSavings;
-    let totalImplementationCost: number = this.getOppSheetImplementationCost(opportunitySheet);
+    let totalImplementationCost: number = this.getOppSheetImplementationCost(opportunitySheet.opportunityCost);
     return {
       electricityResults: electricityResults,
       gasResults: gasResults,
@@ -79,17 +79,17 @@ export class OpportunitySheetService {
     }
   }
 
-  getOppSheetImplementationCost(opportunitySheet: OpportunitySheet): number {
+  getOppSheetImplementationCost(opportunityCost: OpportunityCost): number {
     let implementationCost: number = 0;
-    if (opportunitySheet.opportunityCost) {
-      implementationCost = implementationCost + opportunitySheet.opportunityCost.engineeringServices + opportunitySheet.opportunityCost.labor + opportunitySheet.opportunityCost.material;
-      if (opportunitySheet.opportunityCost.otherCosts) {
-        opportunitySheet.opportunityCost.otherCosts.forEach(cost => {
+    if (opportunityCost) {
+      implementationCost = implementationCost + opportunityCost.engineeringServices + opportunityCost.labor + opportunityCost.material;
+      if (opportunityCost.otherCosts) {
+        opportunityCost.otherCosts.forEach(cost => {
           implementationCost = implementationCost + cost.cost;
         })
       }
-      if (opportunitySheet.opportunityCost.additionalSavings) {
-        implementationCost = implementationCost - opportunitySheet.opportunityCost.additionalSavings.cost;
+      if (opportunityCost.additionalSavings) {
+        implementationCost = implementationCost - opportunityCost.additionalSavings.cost;
       }
     }
     return implementationCost;

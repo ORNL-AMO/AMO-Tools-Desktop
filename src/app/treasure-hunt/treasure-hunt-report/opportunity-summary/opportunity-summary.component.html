@@ -1,3 +1,99 @@
-<p>
-  opportunity-summary works!
-</p>
+<div class="d-flex flex-column output-summary">
+
+  <h4 class="show-print">Executive Summary</h4>
+
+  <table class="table table-striped table-hover">
+    <tbody>
+      <tr class="bold">
+        <td>
+          Opportunity
+        </td>
+        <td>
+          Utility
+        </td>
+        <td>
+          Energy Savings
+        </td>
+        <td>
+
+        </td>
+        <td>
+          Cost Savings
+        </td>
+        <td>
+          Material Cost
+        </td>
+        <td>
+          Labor Cost
+        </td>
+        <td>
+          Other Cost
+        </td>
+        <td>
+          Total Cost
+        </td>
+        <td>
+          Simple Payback
+        </td>
+      </tr>
+      <tr *ngFor="let opportunity of opportunitySummaries">
+        <!--name-->
+        <td>
+          {{opportunity.opportunityName}}
+        </td>
+        <!--type-->
+        <td>
+          {{opportunity.utilityType}}
+        </td>
+        <!--energy savings-->
+        <td>
+          {{opportunity.totalEnergySavings | number:'1.0-0'}}
+        </td>
+        <!--unit-->
+        <td>
+          <span *ngIf="opportunity.utilityType == 'Electricity'">kWh</span>
+          
+          <span *ngIf="opportunity.utilityType == 'Compressed Air'">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+          </span>
+
+          <span *ngIf="opportunity.utilityType == 'Water' || opportunity.utilityType == 'Waste Water'">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+          </span>
+
+          <span
+            *ngIf="opportunity.utilityType == 'Natural Gas' || opportunity.utilityType == 'Steam' || opportunity.utilityType == 'Other Fuel'">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+          </span>
+        </td>
+        <!--cost savings-->
+        <td>
+          {{opportunity.costSavings | currency:'USD'}}
+        </td>
+        <!--material cost-->
+        <td>
+          {{getMaterialCost(opportunity.opportunityCost) | currency:'USD'}}
+        </td>
+        <!--labor cost-->
+        <td>
+          {{getLaborCost(opportunity.opportunityCost) | currency:'USD'}}
+        </td>
+        <!--other cost-->
+        <td>
+          {{getOtherCost(opportunity.opportunityCost) | currency:'USD'}}
+        </td>
+        <!--total cost-->
+        <td>
+          {{opportunity.totalCost | currency:'USD'}}
+        </td>
+        <!--payback-->
+        <td>
+          {{opportunity.payback | number:'1.0-2'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
