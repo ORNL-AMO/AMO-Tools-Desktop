@@ -14,27 +14,27 @@
     <div class="row align-items-end treasure-hunt-item">
       <div class="col-4 text-center">
         <h6 class="mb-0 text-center pt-2">Electricity Savings</h6>
-        <app-treasure-hunt-gauge [value]="treasureHuntResults.percentElectricitySavings" [chartHeight]="75"></app-treasure-hunt-gauge>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.electricity.percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
         <span class="small">Baseline Costs: <br>
-          {{treasureHunt.currentEnergyUsage.electricityCosts | currency:'USD'}}</span><br>
+          {{treasureHuntResults.electricity.baselineEnergyCost | currency:'USD'}}</span><br>
         <span class="small">Modified Costs: <br>
-          {{treasureHunt.currentEnergyUsage.electricityCosts - treasureHuntResults.totalElectricityCostSavings| currency:'USD'}}</span>
+          {{treasureHuntResults.electricity.modifiedEnergyCost | currency:'USD'}}</span>
       </div>
       <div class="col-4 middle-border-item text-center treasure-hunt-item">
         <h6 class="mb-0 text-center pt-2">Natural Gas Savings</h6>
-        <app-treasure-hunt-gauge [value]="percentGasSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.naturalGas.percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
         <span class="small">Baseline Costs: <br>
-          {{treasureHunt.currentEnergyUsage.naturalGasCosts | currency:'USD'}}</span><br>
+          {{treasureHuntResults.naturalGas.baselineEnergyCost | currency:'USD'}}</span><br>
         <span class="small">Modified Costs: <br>
-          {{treasureHunt.currentEnergyUsage.naturalGasCosts - treasureHuntResults.totalNaturalGasCostSavings| currency:'USD'}}</span>
+          {{treasureHuntResults.naturalGas.modifiedEnergyCost | currency:'USD'}}</span>
       </div>
       <div class="col-4 text-center treasure-hunt-item">
         <h6 class="mb-0 text-center pt-2">Other Fuel Savings</h6>
-        <app-treasure-hunt-gauge [value]="percentOtherGasSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.otherFuel.percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
         <span class="small">Baseline Costs: <br>
-          {{treasureHunt.currentEnergyUsage.otherFuelCosts | currency:'USD'}}</span><br>
+          {{treasureHuntResults.otherFuel.baselineEnergyCost | currency:'USD'}}</span><br>
         <span class="small">Modified Costs: <br>
-          {{treasureHunt.currentEnergyUsage.otherFuelCosts - treasureHuntResults.totalOtherGasCostSavings| currency:'USD'}}</span>
+          {{treasureHuntResults.otherFuel.modifiedEnergyCost | currency:'USD'}}</span>
       </div>
     </div>
   </div>

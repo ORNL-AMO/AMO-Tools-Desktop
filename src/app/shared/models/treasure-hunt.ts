@@ -124,6 +124,7 @@ export interface UtilityUsageData {
     energySavings: number,
     costSavings: number,
     implementationCost?: number,
-    paybackPeriod?: number
+    paybackPeriod?: number,
+    percentSavings: number
     
 }

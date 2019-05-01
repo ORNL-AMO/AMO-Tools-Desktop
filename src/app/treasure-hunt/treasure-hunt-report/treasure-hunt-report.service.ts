@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHuntResults, TreasureHunt, OpportunitySheetResults, UtilityUsageData } from '../../shared/models/treasure-hunt';
+import { TreasureHuntResults, TreasureHunt, OpportunitySheetResults, UtilityUsageData, OpportunitySheetResult } from '../../shared/models/treasure-hunt';
 import { LightingReplacementResults } from '../../shared/models/lighting';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { ReplaceExistingResults, MotorDriveOutputs } from '../../shared/models/calculators';
@@ -17,8 +17,9 @@ export class TreasureHuntReportService {
     private opportunitySheetService: OpportunitySheetService) { }
 
   calculateTreasureHuntResults(treasureHunt: TreasureHunt, settings: Settings): TreasureHuntResults {
-    let totalBaselineCost: number = treasureHunt.currentEnergyUsage.electricityCosts + treasureHunt.currentEnergyUsage.naturalGasCosts + treasureHunt.currentEnergyUsage.otherFuelCosts;    ;
-
+    //total baseline set in setup
+    let totalBaselineCost: number = treasureHunt.currentEnergyUsage.electricityCosts + treasureHunt.currentEnergyUsage.naturalGasCosts + treasureHunt.currentEnergyUsage.otherFuelCosts;;
+    //calculate utility usages for each type of utility
     let electricity: UtilityUsageData = this.getElectricityUtilityUsage(treasureHunt);
     let naturalGas: UtilityUsageData = this.getNaturalGasUtilityUsage(treasureHunt);
     let water: UtilityUsageData = this.getWaterUtilityUsage(treasureHunt);
@@ -27,16 +28,12 @@ export class TreasureHuntReportService {
     let compressedAir: UtilityUsageData = this.getCompressedAirUsage(treasureHunt);
     let steam: UtilityUsageData = this.getSteamUsage(treasureHunt);
     let other: UtilityUsageData = this.getOtherUsage(treasureHunt);
-    
-    let totalModificationCost: number = electricity.modifiedEnergyCost + naturalGas.modifiedEnergyCost + water.modifiedEnergyCost + wasteWater.modifiedEnergyCost + otherFuel.modifiedEnergyCost + compressedAir.modifiedEnergyCost + steam.modifiedEnergyCost + other.modifiedEnergyCost;
-    let totalSavings: number = totalBaselineCost - totalModificationCost;
-    let percentSavings: number = (totalSavings / totalBaselineCost) * 100;
-  
-    return {
-      totalSavings: totalSavings,
-      percentSavings: percentSavings,
+    //initialize results
+    let thuntResults: TreasureHuntResults = {
+      totalSavings: 0,
+      percentSavings: 0,
       totalBaselineCost: totalBaselineCost,
-      totalModificationCost: totalModificationCost,
+      totalModificationCost: 0,
 
       electricity: electricity,
       naturalGas: naturalGas,
@@ -46,65 +43,14 @@ export class TreasureHuntReportService {
       compressedAir: compressedAir,
       steam: steam,
       other: other
-    }
-  }
-
-
-
-  // calculateCostAndEnergyResults(treasureHunt: TreasureHunt, settings: Settings): TreasureHuntResults {
-  //   let thuntResults: TreasureHuntResults = this.initResults();
-  //   thuntResults.totalBaselineCost = treasureHunt.currentEnergyUsage.electricityCosts + treasureHunt.currentEnergyUsage.naturalGasCosts + treasureHunt.currentEnergyUsage.otherFuelCosts;
-  //   thuntResults = this.calculateCostAndEnergyValues(treasureHunt, settings, thuntResults);
-  //   thuntResults.totalSavings = thuntResults.totalElectricityCostSavings + thuntResults.totalNaturalGasCostSavings + thuntResults.totalOtherGasCostSavings;
-  //   thuntResults.totalModificationCost = thuntResults.totalBaselineCost - thuntResults.totalSavings;
-  //   thuntResults.percentSavings = (thuntResults.totalSavings / thuntResults.totalBaselineCost) * 100;
-  //   thuntResults.percentElectricitySavings = (thuntResults.totalElectricityCostSavings / treasureHunt.currentEnergyUsage.electricityCosts) * 100;
-  //   thuntResults.percentGasSavings = (thuntResults.totalNaturalGasCostSavings / treasureHunt.currentEnergyUsage.naturalGasCosts) * 100;
-  //   thuntResults.percentOtherGasSavings = (thuntResults.totalOtherGasCostSavings / treasureHunt.currentEnergyUsage.otherFuelCosts) * 100;
-  //   return thuntResults;
-  // }
-
-  // initResults(): TreasureHuntResults {
-  //   return {
-  //     totalSavings: 0,
-  //     percentSavings: 0,
-  //     percentGasSavings: 0,
-  //     percentElectricitySavings: 0,
-  //     percentOtherGasSavings: 0,
-  //     totalBaselineCost: 0,
-  //     totalModificationCost: 0,
-  //     totalElectricityCostSavings: 0,
-  //     totalElectricityEnergySavings: 0,
-  //     totalNaturalGasCostSavings: 0,
-  //     totalNaturalGasEnergySavings: 0,
-  //     totalOtherGasCostSavings: 0,
-  //     totalOtherGasEnergySavings: 0
-  //   }
-  // }
-
-  calculateCostAndEnergyValues(treasureHunt: TreasureHunt, settings: Settings, results: TreasureHuntResults): TreasureHuntResults {
-    let lightingResults: { totalCostSavings: number, totalEnergySavings: number } = this.getTotalLightingSavings(treasureHunt);
-    results.totalElectricityCostSavings = results.totalElectricityCostSavings + lightingResults.totalCostSavings;
-    results.totalElectricityEnergySavings = results.totalElectricityEnergySavings + lightingResults.totalEnergySavings;
-
-    let replaceMotorResults: { totalCostSavings: number, totalEnergySavings: number } = this.getReplaceExistingMotorSavings(treasureHunt);
-    results.totalElectricityCostSavings = results.totalElectricityCostSavings + replaceMotorResults.totalCostSavings;
-    results.totalElectricityEnergySavings = results.totalElectricityEnergySavings + replaceMotorResults.totalEnergySavings;
-
-    let motorDriveResults: { totalCostSavings: number, totalEnergySavings: number } = this.getMotorDriveSavings(treasureHunt);
-    results.totalElectricityCostSavings = results.totalElectricityCostSavings + motorDriveResults.totalCostSavings;
-    results.totalElectricityEnergySavings = results.totalElectricityEnergySavings + motorDriveResults.totalEnergySavings;
-
-    let oppSheetResults: { totalElectricityCostSavings: number, totalElectricityEnergySavings: number, totalNaturalGasCostSavings: number, totalNaturalGasEnergySavings: number, totalOtherGasCostSavings: number, totalOtherGasEnergySavings: number } = this.getOpportunitySheetSavings(treasureHunt, settings);
-    results.totalElectricityCostSavings = results.totalElectricityCostSavings + oppSheetResults.totalElectricityCostSavings;
-    results.totalElectricityEnergySavings = results.totalElectricityEnergySavings + oppSheetResults.totalElectricityEnergySavings;
-
-    results.totalNaturalGasCostSavings = results.totalNaturalGasCostSavings + oppSheetResults.totalNaturalGasCostSavings;
-    results.totalElectricityEnergySavings = results.totalElectricityEnergySavings + oppSheetResults.totalNaturalGasEnergySavings;
-
-    results.totalOtherGasCostSavings = results.totalOtherGasCostSavings + oppSheetResults.totalOtherGasCostSavings;
-    results.totalOtherGasEnergySavings = results.totalOtherGasEnergySavings + oppSheetResults.totalOtherGasEnergySavings;
-    return results;
+    };
+    //calculate and update results from standalone opp sheets
+    thuntResults = this.getOpportunitySheetSavings(treasureHunt, settings, thuntResults);
+    //final summary calculations
+    thuntResults.totalModificationCost = thuntResults.electricity.modifiedEnergyCost + thuntResults.naturalGas.modifiedEnergyCost + thuntResults.water.modifiedEnergyCost + thuntResults.wasteWater.modifiedEnergyCost + thuntResults.otherFuel.modifiedEnergyCost + thuntResults.compressedAir.modifiedEnergyCost + thuntResults.steam.modifiedEnergyCost + thuntResults.other.modifiedEnergyCost;
+    thuntResults.totalSavings = thuntResults.totalBaselineCost - thuntResults.totalModificationCost;
+    thuntResults.percentSavings = (thuntResults.totalSavings / thuntResults.totalBaselineCost) * 100;
+    return thuntResults;
   }
 
   //electricity
@@ -122,6 +68,7 @@ export class TreasureHuntReportService {
       modifiedEnergyCost: treasureHunt.currentEnergyUsage.electricityCosts - totalElectricitCostSavings,
       energySavings: totalElectricityUsageSavings,
       costSavings: totalElectricitCostSavings,
+      percentSavings: (totalElectricitCostSavings / treasureHunt.currentEnergyUsage.electricityCosts) * 100
       // implementationCost?: number,
       // paybackPeriod?: number
     }
@@ -184,6 +131,7 @@ export class TreasureHuntReportService {
       modifiedEnergyCost: treasureHunt.currentEnergyUsage.naturalGasCosts,
       energySavings: 0,
       costSavings: 0,
+      percentSavings: 0
       // implementationCost?: number,
       // paybackPeriod?: number
     }
@@ -198,6 +146,7 @@ export class TreasureHuntReportService {
       modifiedEnergyCost: 0,
       energySavings: 0,
       costSavings: 0,
+      percentSavings: 0
       // implementationCost?: number,
       // paybackPeriod?: number
     }
@@ -211,6 +160,7 @@ export class TreasureHuntReportService {
       modifiedEnergyCost: 0,
       energySavings: 0,
       costSavings: 0,
+      percentSavings: 0
       // implementationCost?: number,
       // paybackPeriod?: number
     }
@@ -224,6 +174,7 @@ export class TreasureHuntReportService {
       modifiedEnergyCost: treasureHunt.currentEnergyUsage.otherFuelCosts,
       energySavings: 0,
       costSavings: 0,
+      percentSavings: 0
       // implementationCost?: number,
       // paybackPeriod?: number
     }
@@ -237,6 +188,7 @@ export class TreasureHuntReportService {
       modifiedEnergyCost: 0,
       energySavings: 0,
       costSavings: 0,
+      percentSavings: 0
       // implementationCost?: number,
       // paybackPeriod?: number
     }
@@ -250,6 +202,7 @@ export class TreasureHuntReportService {
       modifiedEnergyCost: 0,
       energySavings: 0,
       costSavings: 0,
+      percentSavings: 0
       // implementationCost?: number,
       // paybackPeriod?: number
     }
@@ -263,61 +216,40 @@ export class TreasureHuntReportService {
       modifiedEnergyCost: 0,
       energySavings: 0,
       costSavings: 0,
+      percentSavings: 0
       // implementationCost?: number,
       // paybackPeriod?: number
     }
   }
-
-
-
-
-
   //Stand Alone Opportunity Sheets
-  getOpportunitySheetSavings(treasureHunt: TreasureHunt, settings: Settings): {
-    totalElectricityCostSavings: number,
-    totalElectricityEnergySavings: number,
-    totalNaturalGasCostSavings: number,
-    totalNaturalGasEnergySavings: number,
-    totalOtherGasCostSavings: number,
-    totalOtherGasEnergySavings: number
-  } {
-    let totalElectricityCostSavings: number = 0
-    let totalElectricityEnergySavings: number = 0;
-    let totalNaturalGasCostSavings: number = 0;
-    let totalNaturalGasEnergySavings: number = 0;
-    let totalOtherGasCostSavings: number = 0;
-    let totalOtherGasEnergySavings: number = 0;
+  getOpportunitySheetSavings(treasureHunt: TreasureHunt, settings: Settings, thuntResults: TreasureHuntResults): TreasureHuntResults {
     if (treasureHunt.opportunitySheets) {
       treasureHunt.opportunitySheets.forEach(oppSheet => {
         if (oppSheet.selected) {
           let oppSheetResults: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, settings);
           //electricity
-          totalElectricityCostSavings = totalElectricityCostSavings + oppSheetResults.electricityResults.energyCostSavings;
-          totalElectricityEnergySavings = totalElectricityEnergySavings + oppSheetResults.electricityResults.energySavings;
-          //compressed air (electricity)
-          totalElectricityCostSavings = totalElectricityCostSavings + oppSheetResults.compressedAirResults.energyCostSavings;
-          totalElectricityEnergySavings = totalElectricityEnergySavings + oppSheetResults.compressedAirResults.energySavings;
-
+          thuntResults.electricity = this.addOppSheetResultProperties(thuntResults.electricity, oppSheetResults.electricityResults);
+          //compressed air
+          thuntResults.compressedAir = this.addOppSheetResultProperties(thuntResults.compressedAir, oppSheetResults.compressedAirResults);
           //natural gas
-          totalNaturalGasCostSavings = totalNaturalGasCostSavings + oppSheetResults.gasResults.energyCostSavings;
-          totalNaturalGasEnergySavings = totalNaturalGasEnergySavings + oppSheetResults.gasResults.energySavings;
-          //steam (natural gas)
-          totalNaturalGasCostSavings = totalNaturalGasCostSavings + oppSheetResults.steamResults.energyCostSavings;
-          totalNaturalGasEnergySavings = totalNaturalGasEnergySavings + oppSheetResults.steamResults.energySavings;
-
+          thuntResults.naturalGas = this.addOppSheetResultProperties(thuntResults.naturalGas, oppSheetResults.gasResults);
+          //steam
+          thuntResults.steam = this.addOppSheetResultProperties(thuntResults.steam, oppSheetResults.steamResults);
           //other fuel
-          totalOtherGasCostSavings = totalOtherGasCostSavings + oppSheetResults.otherFuelResults.energyCostSavings;
-          totalOtherGasEnergySavings = totalOtherGasEnergySavings + oppSheetResults.otherFuelResults.energySavings;
+          thuntResults.otherFuel = this.addOppSheetResultProperties(thuntResults.otherFuel, oppSheetResults.otherFuelResults);
         }
       })
     }
-    return {
-      totalElectricityCostSavings: totalElectricityCostSavings,
-      totalElectricityEnergySavings: totalElectricityEnergySavings,
-      totalNaturalGasCostSavings: totalNaturalGasCostSavings,
-      totalNaturalGasEnergySavings: totalNaturalGasEnergySavings,
-      totalOtherGasCostSavings: totalOtherGasCostSavings,
-      totalOtherGasEnergySavings: totalOtherGasEnergySavings
-    }
+    return thuntResults;
   }
+
+  addOppSheetResultProperties(utilityUsageData: UtilityUsageData, oppSheetResult: OpportunitySheetResult): UtilityUsageData {
+    utilityUsageData.modifiedEnergyUsage = utilityUsageData.modifiedEnergyUsage - oppSheetResult.energySavings;
+    utilityUsageData.modifiedEnergyCost = utilityUsageData.modifiedEnergyCost - oppSheetResult.energyCostSavings;
+    utilityUsageData.energySavings = utilityUsageData.energySavings + oppSheetResult.energySavings;
+    utilityUsageData.costSavings = utilityUsageData.costSavings + oppSheetResult.energyCostSavings;
+    utilityUsageData.percentSavings = (utilityUsageData.costSavings / utilityUsageData.baselineEnergyCost) * 100;
+    return utilityUsageData;
+  }
+
 }

@@ -36,7 +36,7 @@ export class TreasureHuntReportComponent implements OnInit {
       this.getDirectoryList(this.assessment.id);
     }
     if (this.assessment.treasureHunt.setupDone == true) {
-      this.treasureHuntResults = this.treasureHuntReportService.calculateCostAndEnergyResults(this.assessment.treasureHunt, this.settings);
+      this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
     }
   }
 
