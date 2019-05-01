@@ -6,13 +6,14 @@ import { OpportunitySummaryComponent } from './opportunity-summary/opportunity-s
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { SharedModule } from '../../shared/shared.module';
 import { TreasureHuntService } from '../treasure-hunt.service';
+import { OpportunityPaybackTableComponent } from './opportunity-payback-table/opportunity-payback-table.component';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule
   ],
-  declarations: [TreasureHuntReportComponent, ExecutiveSummaryComponent, OpportunitySummaryComponent, ReportGraphsComponent],
+  declarations: [TreasureHuntReportComponent, ExecutiveSummaryComponent, OpportunitySummaryComponent, ReportGraphsComponent, OpportunityPaybackTableComponent],
   exports: [TreasureHuntReportComponent]
 })
 export class TreasureHuntReportModule { }

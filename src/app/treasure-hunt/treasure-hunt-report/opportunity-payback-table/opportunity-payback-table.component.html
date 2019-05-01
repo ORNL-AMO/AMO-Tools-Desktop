@@ -1,0 +1,75 @@
+<div class="d-flex flex-column output-summary align-items-center">
+
+  <h4 class="show-print">Identified Opportunites</h4>
+
+  <table class="table table-striped table-hover">
+    <tbody>
+      <tr class="bold">
+        <td>
+          Payback Length
+        </td>
+        <td>
+          Number of Opportunites
+        </td>
+        <td>
+          Total Savings
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Less than 1 year
+        </td>
+        <td>
+          {{lessThanOneYear.numOpportunities}}
+        </td>
+        <td>
+          {{lessThanOneYear.totalSavings | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          1 to 2 years
+        </td>
+        <td>
+          {{oneToTwoYears.numOpportunities}}
+        </td>
+        <td>
+          {{oneToTwoYears.totalSavings | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          2 to 3 years
+        </td>
+        <td>
+          {{twoToThreeYears.numOpportunities}}
+        </td>
+        <td>
+          {{twoToThreeYears.totalSavings | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          More than 3 years
+        </td>
+        <td>
+          {{moreThanThreeYears.numOpportunities}}
+        </td>
+        <td>
+          {{moreThanThreeYears.totalSavings | currency:'USD'}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Total
+        </td>
+        <td>
+          {{totals.numOpportunities}}
+        </td>
+        <td>
+          {{totals.totalSavings | currency:'USD'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

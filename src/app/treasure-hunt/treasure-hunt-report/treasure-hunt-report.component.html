@@ -79,6 +79,8 @@
       *ngIf="((currentTab == 'executiveSummary' && !showPrint) || (showPrint && printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"></app-executive-summary>
+      <app-opportunity-payback-table [opportunitySummaries]="treasureHuntResults.opportunitySummaries">
+      </app-opportunity-payback-table>
     </div>
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'reportGraphs' && !showPrint) || (showPrint && printReportGraphs)) && dataCalculated"
