@@ -52,7 +52,7 @@ export class FindTreasureComponent implements OnInit {
       this.saveMotorDrive();
     }
   }
-  
+
   showOpportunitySheetModal() {
     this.opportunitySheetModal.show();
   }
@@ -72,6 +72,9 @@ export class FindTreasureComponent implements OnInit {
   }
 
   saveLighting() {
+    if (!this.treasureHunt.lightingReplacements) {
+      this.treasureHunt.lightingReplacements = new Array<LightingReplacementTreasureHunt>();
+    }
     this.treasureHunt.lightingReplacements.push(this.newLightingCalc);
     this.closeSaveCalcModal();
     this.newOpportunitySheet = undefined;
