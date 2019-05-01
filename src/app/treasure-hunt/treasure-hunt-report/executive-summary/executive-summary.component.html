@@ -3,8 +3,8 @@
   <h4 class="show-print">Executive Summary</h4>
 
   <table class="table table-striped table-hover">
-    <thead>
-      <tr>
+    <tbody>
+      <tr class="bold">
         <td colspan="2">
           Utility
         </td>
@@ -33,51 +33,275 @@
           Payback
         </td>
       </tr>
-    </thead>
-    <tbody>
       <!--Electricity-->
-      <tr>
-        <td>
+      <tr *ngIf="treasureHuntResults.electricity.baselineEnergyUsage != 0">
+        <td class="bold">
           Electricity
         </td>
         <td>
           kWh
         </td>
         <td>
-          
+          {{treasureHuntResults.electricity.baselineEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.electricity.modifiedEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.electricity.energySavings | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.electricity.baselineEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.electricity.modifiedEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.electricity.costSavings | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.electricity.implementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.electricity.paybackPeriod | number:'1.0-2'}}
         </td>
       </tr>
       <!--Natural Gas-->
-      <tr>
-
+      <tr *ngIf="treasureHuntResults.naturalGas.baselineEnergyUsage != 0">
+        <td class="bold">
+          Natural Gas
+        </td>
+        <td>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+        </td>
+        <td>
+          {{treasureHuntResults.naturalGas.baselineEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.naturalGas.modifiedEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.naturalGas.energySavings | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.naturalGas.baselineEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.naturalGas.modifiedEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.naturalGas.costSavings | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.naturalGas.implementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.naturalGas.paybackPeriod | number:'1.0-2'}}
+        </td>
       </tr>
       <!--Water-->
-      <tr>
-
+      <tr *ngIf="treasureHuntResults.water.baselineEnergyUsage != 0">
+        <td class="bold">
+          Water
+        </td>
+        <td>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+        </td>
+        <td>
+          {{treasureHuntResults.water.baselineEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.water.modifiedEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.water.energySavings | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.water.baselineEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.water.modifiedEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.water.costSavings | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.water.implementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.water.paybackPeriod | number:'1.0-2'}}
+        </td>
       </tr>
       <!--Waste Water-->
-      <tr>
-
+      <tr *ngIf="treasureHuntResults.wasteWater.baselineEnergyUsage != 0">
+        <td class="bold">
+          Waste Water
+        </td>
+        <td>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+        </td>
+        <td>
+          {{treasureHuntResults.wasteWater.baselineEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.wasteWater.modifiedEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.wasteWater.energySavings | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.wasteWater.baselineEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.wasteWater.modifiedEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.wasteWater.costSavings | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.wasteWater.implementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.wasteWater.paybackPeriod | number:'1.0-2'}}
+        </td>
       </tr>
       <!--Other Fuel-->
-      <tr>
-
+      <tr *ngIf="treasureHuntResults.otherFuel.baselineEnergyUsage != 0">
+        <td class="bold">
+          Other Fuel
+        </td>
+        <td>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+        </td>
+        <td>
+          {{treasureHuntResults.otherFuel.baselineEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.otherFuel.modifiedEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.otherFuel.energySavings | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.otherFuel.baselineEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.otherFuel.modifiedEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.otherFuel.costSavings | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.otherFuel.implementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.otherFuel.paybackPeriod | number:'1.0-2'}}
+        </td>
       </tr>
       <!--Compressed Air-->
-      <tr>
-
+      <tr *ngIf="treasureHuntResults.compressedAir.baselineEnergyUsage != 0">
+        <td class="bold">
+          Compressed Air
+        </td>
+        <td>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+        </td>
+        <td>
+          {{treasureHuntResults.compressedAir.baselineEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.compressedAir.modifiedEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.compressedAir.energySavings | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.compressedAir.baselineEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.compressedAir.modifiedEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.compressedAir.costSavings | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.compressedAir.implementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.compressedAir.paybackPeriod | number:'1.0-2'}}
+        </td>
       </tr>
       <!--Steam-->
-      <tr>
-
+      <tr *ngIf="treasureHuntResults.steam.baselineEnergyUsage != 0">
+        <td class="bold">
+          Steam
+        </td>
+        <td>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+        </td>
+        <td>
+          {{treasureHuntResults.steam.baselineEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.steam.modifiedEnergyUsage | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.steam.energySavings | number:'1.0-1'}}
+        </td>
+        <td>
+          {{treasureHuntResults.steam.baselineEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.steam.modifiedEnergyCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.steam.costSavings | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.steam.implementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.steam.paybackPeriod | number:'1.0-2'}}
+        </td>
       </tr>
-      <!--Other-->
-      <tr>
-
+      <!--Other -->
+      <tr *ngIf="treasureHuntResults.other.implementationCost != 0">
+        <td colspan="8" class="bold">
+          Other
+        </td>
+        <td>
+          {{treasureHuntResults.other.implementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.other.paybackPeriod | number:'1.0-2'}}
+        </td>
       </tr>
       <!--Total-->
       <tr>
-
+        <td colspan="5" class="bold">
+          Total
+        </td>
+        <td>
+          {{treasureHuntResults.totalBaselineCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.totalModificationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.totalSavings | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.totalImplementationCost | currency:'USD':'1.0-0'}}
+        </td>
+        <td>
+          {{treasureHuntResults.paybackPeriod  | number:'1.0-2'}}
+        </td>
       </tr>
     </tbody>
   </table>

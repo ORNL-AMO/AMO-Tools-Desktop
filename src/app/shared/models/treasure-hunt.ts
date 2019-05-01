@@ -80,7 +80,8 @@ export interface OpportunitySheetResults {
     waterResults: OpportunitySheetResult,
     wasteWaterResults: OpportunitySheetResult,
     totalEnergySavings: number,
-    totalCostSavings: number
+    totalCostSavings: number,
+    totalImplementationCost: number
 }
 
 
@@ -106,6 +107,9 @@ export interface TreasureHuntResults {
     totalBaselineCost: number;
     totalModificationCost: number;
 
+    totalImplementationCost?: number,
+    paybackPeriod?: number,
+
     electricity: UtilityUsageData,
     naturalGas: UtilityUsageData,
     water: UtilityUsageData,
@@ -126,5 +130,4 @@ export interface UtilityUsageData {
     implementationCost?: number,
     paybackPeriod?: number,
     percentSavings: number
-    
 }

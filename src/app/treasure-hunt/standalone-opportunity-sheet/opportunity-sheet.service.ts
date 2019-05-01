@@ -39,6 +39,7 @@ export class OpportunitySheetService {
     let wasteWaterResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineWasterWaterResult, modificationWasteWaterResult);
 
     let totalCostSavings: number = electricityResults.energyCostSavings + gasResults.energyCostSavings + compressedAirResults.energyCostSavings + otherFuelResults.energyCostSavings + steamResults.energyCostSavings + waterResults.energyCostSavings + waterResults.energyCostSavings;
+    let totalImplementationCost: number = this.getOppSheetImplementationCost(opportunitySheet);
     return {
       electricityResults: electricityResults,
       gasResults: gasResults,
@@ -48,7 +49,8 @@ export class OpportunitySheetService {
       waterResults: waterResults,
       wasteWaterResults: wasteWaterResults,
       totalEnergySavings: 0,
-      totalCostSavings: totalCostSavings
+      totalCostSavings: totalCostSavings,
+      totalImplementationCost: totalImplementationCost
     };
   }
 
@@ -77,4 +79,19 @@ export class OpportunitySheetService {
     }
   }
 
+  getOppSheetImplementationCost(opportunitySheet: OpportunitySheet): number {
+    let implementationCost: number = 0;
+    if (opportunitySheet.opportunityCost) {
+      implementationCost = implementationCost + opportunitySheet.opportunityCost.engineeringServices + opportunitySheet.opportunityCost.labor + opportunitySheet.opportunityCost.material;
+      if (opportunitySheet.opportunityCost.otherCosts) {
+        opportunitySheet.opportunityCost.otherCosts.forEach(cost => {
+          implementationCost = implementationCost + cost.cost;
+        })
+      }
+      if (opportunitySheet.opportunityCost.additionalSavings) {
+        implementationCost = implementationCost - opportunitySheet.opportunityCost.additionalSavings.cost;
+      }
+    }
+    return implementationCost;
+  }
 }
