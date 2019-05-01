@@ -14,8 +14,8 @@
       </td>
     </tr>
     <tr *ngFor="let data of baselineData; let index = index;">
-      <td class="bold">Fixture #{{index+1 | number:'1.0-0'}}</td>
-      <td class="text-center">{{data.hoursPerYear | number:'1.0-0'}}
+      <td class="bold">{{data.name}}</td>
+      <td class="text-center">{{data.operatingHours | number:'1.0-0'}}
       </td>
       <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
       <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
@@ -25,32 +25,34 @@
 <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
 </app-exportable-results-table>
 
-<label class="group-label" *ngIf="modificationData.length != 0">Modification Summary</label>
-<table #copyTable1 class="table table-hover table-striped" *ngIf="modificationData.length != 0">
-  <tbody>
-    <tr>
-      <td>&nbsp;</td>
-      <td class="bold text-center">Operating Hours
-        (hrs/yr)
-      </td>
-      <td class="bold text-center">Electricity Use
-        (kWh/yr)
-      </td>
-      <td class="bold text-center">Total Lighting
-        (lumens)
-      </td>
-    </tr>
-    <tr *ngFor="let data of modificationData; let index = index;">
-      <td class="bold">Fixture #{{index+1 | number:'1.0-0'}}</td>
-      <td class="text-center">{{data.hoursPerYear | number:'1.0-0'}}
-      </td>
-      <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
-      <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
-    </tr>
-  </tbody>
-</table>
-<app-exportable-results-table *ngIf="modificationData.length != 0" [tableString]="table1String"
-  (updateTableString)="updateTable1String()"></app-exportable-results-table>
+<div *ngIf="modificationExists">
+  <label class="group-label" *ngIf="modificationData.length != 0">Modification Summary</label>
+  <table #copyTable1 class="table table-hover table-striped" *ngIf="modificationData.length != 0">
+    <tbody>
+      <tr>
+        <td>&nbsp;</td>
+        <td class="bold text-center">Operating Hours
+          (hrs/yr)
+        </td>
+        <td class="bold text-center">Electricity Use
+          (kWh/yr)
+        </td>
+        <td class="bold text-center">Total Lighting
+          (lumens)
+        </td>
+      </tr>
+      <tr *ngFor="let data of modificationData; let index = index;">
+        <td class="bold">{{data.name}}</td>
+        <td class="text-center">{{data.operatingHours | number:'1.0-0'}}
+        </td>
+        <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
+        <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <app-exportable-results-table *ngIf="modificationData.length != 0" [tableString]="table1String"
+    (updateTableString)="updateTable1String()"></app-exportable-results-table>
+</div>
 
 <label class="group-label">Totals</label>
 <table #copyTable2 class="table table-hover table-striped">
@@ -86,7 +88,8 @@
       <td class="text-center">{{lightingReplacementResults.modificationResults.totalElectricityUse | number:'1.0-0'}}
       </td>
       <td class="text-center">{{lightingReplacementResults.modificationResults.totalLighting | number:'1.0-0'}}</td>
-      <td class="text-center">{{lightingReplacementResults.modificationResults.totalOperatingCosts | currency:'USD'}}</td>
+      <td class="text-center">{{lightingReplacementResults.modificationResults.totalOperatingCosts | currency:'USD'}}
+      </td>
     </tr>
   </tbody>
 </table>

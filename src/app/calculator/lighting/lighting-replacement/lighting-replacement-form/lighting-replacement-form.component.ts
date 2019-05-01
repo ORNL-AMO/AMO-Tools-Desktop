@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { LightingReplacementData } from '../../../../shared/models/lighting';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-lighting-replacement-form',
@@ -8,64 +9,59 @@ import { LightingReplacementData } from '../../../../shared/models/lighting';
 })
 export class LightingReplacementFormComponent implements OnInit {
   @Input()
-  data: LightingReplacementData;
+  form: FormGroup;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<boolean>();
+  emitCalculate = new EventEmitter<{ form: FormGroup, index: number, isBaseline: boolean }>();
+  @Output('emitRemoveFixture')
+  emitRemoveFixture = new EventEmitter<{ index: number, isBaseline: boolean }>();
   @Input()
   index: number;
   @Output('emitFocusField')
   emitFocusField = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
 
-
-  hoursPerYearError: string = null;
-  wattsPerLampError: string = null;
-  lumensPerLampError: string = null;
-  lampsPerFixtureError: string = null;
-  numberOfFixturesError: string = null;
+  idString: string;
+  isEditingName: boolean = false;
   constructor() { }
 
   ngOnInit() {
-    this.checkWarnings();
+    if (this.isBaseline) {
+      this.idString = this.index.toString();
+    }
+    else {
+      this.idString = 'modification_' + this.index;
+    }
+    this.calculate();
   }
 
   calculate() {
-    this.checkWarnings();
-    this.emitCalculate.emit(true);
+    if (this.form.valid) {
+      let emitObj = {
+        form: this.form,
+        index: this.index,
+        isBaseline: this.isBaseline
+      };
+      this.emitCalculate.emit(emitObj);
+    }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.emitFocusField.emit(str);
   }
 
-  checkWarnings(){
-    if(this.data.hoursPerYear > 8760){
-      this.hoursPerYearError = "Hours per year cannot exceed ";
-    }else if(this.data.hoursPerYear < 0){
-      this.hoursPerYearError = "Hours per day must be positive";
-    }else{
-      this.hoursPerYearError = null;
-    }
-    
-    if(this.data.wattsPerLamp < 0){
-      this.wattsPerLampError = "Watts per lamp must be positive";
-    }else{
-      this.wattsPerLampError = null;
-    }
+  removeFixture(i: number) {
+    this.emitRemoveFixture.emit({ index: i, isBaseline: this.isBaseline });
+  }
 
-    if(this.data.lumensPerLamp < 0){
-      this.lumensPerLampError = "Lumens per lamp must be positive";
-    }else{
-      this.lumensPerLampError = null;
-    }
-    if(this.data.lampsPerFixture < 0){
-      this.lampsPerFixtureError = "Lamps per fixture must be positive";
-    }else{
-      this.lampsPerFixtureError = null;
-    }
-    if(this.data.numberOfFixtures < 0){
-      this.numberOfFixturesError = "Number of fixtures must be positive";
-    }else{
-      this.numberOfFixturesError = null;
-    }
+  editFixtureName() {
+    this.isEditingName = true;
+  }
+
+  doneEditingName() {
+    this.isEditingName = false;
+  }
+
+  focusOut() {
   }
 }

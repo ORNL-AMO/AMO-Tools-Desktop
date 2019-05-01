@@ -1,24 +1,25 @@
 export interface LightingReplacementData {
-    hoursPerYear?: number,
-    wattsPerLamp?: number,
-    lampsPerFixture?: number,
-    numberOfFixtures?: number,
-    lumensPerLamp?: number,
-    totalLighting?: number,
-    electricityUse?: number
-  }
-  
-  
-  export interface LightingReplacementResults {
-    baselineResults: LightingReplacementResult,
-    modificationResults: LightingReplacementResult,
-    totalEnergySavings: number,
-    totalCostSavings: number
-  }
+  name?: string,
+  operatingHours?: number,
+  wattsPerLamp?: number,
+  lampsPerFixture?: number,
+  numberOfFixtures?: number,
+  lumensPerLamp?: number,
+  totalLighting?: number,
+  electricityUse?: number
+}
 
-  export interface LightingReplacementResult {
-    totalElectricityUse: number;
-    totalLighting: number;
-    totalOperatingHours: number;
-    totalOperatingCosts: number;
-  }
+
+export interface LightingReplacementResults {
+  baselineResults: LightingReplacementResult,
+  modificationResults: LightingReplacementResult,
+  totalEnergySavings: number,
+  totalCostSavings: number
+}
+
+export interface LightingReplacementResult {
+  totalElectricityUse: number;
+  totalLighting: number;
+  totalOperatingHours: number;
+  totalOperatingCosts: number;
+}
