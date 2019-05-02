@@ -136,14 +136,15 @@
     </div>
   </div>
 
-  <div *ngIf="!ssmt1WaterfallNoData || !ssmt1WaterfallNoData" class="row justify-content-center mt-5 hide-print">
+  <div class="row justify-content-center mt-5 hide-print">
     <div class="col-12" #waterfallChartContainer>
-      <app-waterfall-graph *ngIf="!modExists" [waterfallInput1]="ssmt1WaterfallData" [modExists]="modExists"
-        [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
+      <app-waterfall-graph *ngIf="!modExists && !ssmt1WaterfallNoData" [waterfallInput1]="ssmt1WaterfallData"
+        [modExists]="modExists" [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
       </app-waterfall-graph>
-      <app-waterfall-graph *ngIf="modExists" [waterfallInput1]="ssmt1WaterfallData"
-        [waterfallInput2]="ssmt2WaterfallData" [changeWaterfall]="changeWaterfall" [modExists]="modExists"
-        [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()"></app-waterfall-graph>
+      <app-waterfall-graph *ngIf="modExists && (!ssmt1WaterfallNoData || !ssmt2WaterfallNoData)"
+        [waterfallInput1]="ssmt1WaterfallData" [waterfallInput2]="ssmt2WaterfallData"
+        [changeWaterfall]="changeWaterfall" [modExists]="modExists" [containerWidth]="getWaterfallWidth()"
+        [containerHeight]="getWaterfallHeight()"></app-waterfall-graph>
     </div>
   </div>
 
