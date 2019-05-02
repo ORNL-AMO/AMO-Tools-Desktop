@@ -133,7 +133,7 @@
 
   <!--Non Highest Pressure-->
   <div class="form-group" *ngIf="pressureLevel != 'highPressure'">
-    <label for="{{idString+pressureLevel+'_desuperheatSteamIntoNextHighest'}}">Desuperheat Steam Into
+    <label for="{{idString+pressureLevel+'_desuperheatSteamIntoNextHighest'}}">Desuperheat Steam out of
       <span
         *ngIf="numberOfHeaders == 2 && pressureLevel == 'lowPressure' || numberOfHeaders == 3 && pressureLevel == 'mediumPressure'">Highest
         Pressure</span>
