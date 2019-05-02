@@ -75,6 +75,7 @@ export class FindTreasureComponent implements OnInit {
     if (!this.treasureHunt.lightingReplacements) {
       this.treasureHunt.lightingReplacements = new Array<LightingReplacementTreasureHunt>();
     }
+    this.newLightingCalc.opportunitySheet = this.newOpportunitySheet;
     this.treasureHunt.lightingReplacements.push(this.newLightingCalc);
     this.closeSaveCalcModal();
     this.newOpportunitySheet = undefined;
@@ -116,6 +117,7 @@ export class FindTreasureComponent implements OnInit {
     if (!this.treasureHunt.replaceExistingMotors) {
       this.treasureHunt.replaceExistingMotors = new Array<ReplaceExistingMotorTreasureHunt>();
     }
+    this.newReplaceExistingMotor.opportunitySheet = this.newOpportunitySheet;
     this.treasureHunt.replaceExistingMotors.push(this.newReplaceExistingMotor);
     this.closeSaveCalcModal();
     this.newOpportunitySheet = undefined;
@@ -141,6 +143,7 @@ export class FindTreasureComponent implements OnInit {
     if (!this.treasureHunt.motorDrives) {
       this.treasureHunt.motorDrives = new Array<MotorDriveInputsTreasureHunt>();
     }
+    this.newMotorDrive.opportunitySheet = this.newOpportunitySheet;
     this.treasureHunt.motorDrives.push(this.newMotorDrive);
     this.closeSaveCalcModal();
     this.newOpportunitySheet = undefined;
