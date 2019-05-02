@@ -5,15 +5,19 @@ import { ExecutiveSummaryComponent } from './executive-summary/executive-summary
 import { OpportunitySummaryComponent } from './opportunity-summary/opportunity-summary.component';
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { SharedModule } from '../../shared/shared.module';
-import { TreasureHuntService } from '../treasure-hunt.service';
-import { OpportunityPaybackTableComponent } from './opportunity-payback-table/opportunity-payback-table.component';
+import { OpportunityPaybackTableComponent } from './opportunity-payback/opportunity-payback-table/opportunity-payback-table.component';
+import { OpportunityPaybackComponent } from './opportunity-payback/opportunity-payback.component';
+import { OpportunityPaybackDonutComponent } from './opportunity-payback/opportunity-payback-donut/opportunity-payback-donut.component';
+import { OpportunityPaybackBarChartComponent } from './opportunity-payback/opportunity-payback-bar-chart/opportunity-payback-bar-chart.component';
+import { OpportunityPaybackService } from './opportunity-payback.service';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule
   ],
-  declarations: [TreasureHuntReportComponent, ExecutiveSummaryComponent, OpportunitySummaryComponent, ReportGraphsComponent, OpportunityPaybackTableComponent],
-  exports: [TreasureHuntReportComponent]
+  declarations: [TreasureHuntReportComponent, ExecutiveSummaryComponent, OpportunitySummaryComponent, ReportGraphsComponent, OpportunityPaybackTableComponent, OpportunityPaybackComponent, OpportunityPaybackDonutComponent, OpportunityPaybackBarChartComponent],
+  exports: [TreasureHuntReportComponent],
+  providers: [OpportunityPaybackService]
 })
 export class TreasureHuntReportModule { }

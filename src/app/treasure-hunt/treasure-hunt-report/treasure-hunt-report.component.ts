@@ -3,8 +3,9 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { TreasureHuntResults } from '../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitiesPaybackDetails } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
+import { OpportunityPaybackService } from './opportunity-payback.service';
 
 @Component({
   selector: 'app-treasure-hunt-report',
@@ -29,7 +30,9 @@ export class TreasureHuntReportComponent implements OnInit {
   assessmentDirectories: Array<Directory> = [];
   dataCalculated: boolean = true;
   treasureHuntResults: TreasureHuntResults;
-  constructor(private directoryDbService: DirectoryDbService, private treasureHuntReportService: TreasureHuntReportService) { }
+  opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
+  constructor(private directoryDbService: DirectoryDbService, private treasureHuntReportService: TreasureHuntReportService,
+    private opportunityPaybackService: OpportunityPaybackService) { }
 
   ngOnInit() {
     if (this.assessment) {
@@ -37,6 +40,7 @@ export class TreasureHuntReportComponent implements OnInit {
     }
     if (this.assessment.treasureHunt.setupDone == true) {
       this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
+      this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
     }
   }
 
