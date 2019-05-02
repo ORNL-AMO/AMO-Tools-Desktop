@@ -106,10 +106,12 @@ export class LightingReplacementService {
   }
 
   updateModificationDataArray(modificationForms: Array<FormGroup>): void {
-    for (let i = 0; i < this.modificationData.length; i++) {
-      this.modificationData[i] = this.getObjFromForm(modificationForms[i]);
-      this.modificationData[i] = this.calculateElectricityUse(this.modificationData[i]);
-      this.modificationData[i] = this.calculateTotalLighting(this.modificationData[i]);
+    if (this.modificationData !== undefined && this.modificationData !== null) {
+      for (let i = 0; i < this.modificationData.length; i++) {
+        this.modificationData[i] = this.getObjFromForm(modificationForms[i]);
+        this.modificationData[i] = this.calculateElectricityUse(this.modificationData[i]);
+        this.modificationData[i] = this.calculateTotalLighting(this.modificationData[i]);
+      }
     }
   }
 

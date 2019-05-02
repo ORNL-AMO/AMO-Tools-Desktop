@@ -35,6 +35,8 @@ export class LightingReplacementComponent implements OnInit {
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
+  baselineSelected: boolean = true;
+  modifiedSelected: boolean = false;
 
   baselineForms: Array<FormGroup>;
   modificationForms: Array<FormGroup>;
@@ -216,5 +218,15 @@ export class LightingReplacementComponent implements OnInit {
     this.lightingReplacementService.resetData(this.settings);
     this.modificationExists = false;
     this.loadForms();
+  }
+
+  togglePanel(bool: boolean) {
+    if (bool == this.baselineSelected) {
+      this.baselineSelected = true;
+      this.modifiedSelected = false;
+    } else if (bool == this.modifiedSelected) {
+      this.modifiedSelected = true;
+      this.baselineSelected = false;
+    }
   }
 }

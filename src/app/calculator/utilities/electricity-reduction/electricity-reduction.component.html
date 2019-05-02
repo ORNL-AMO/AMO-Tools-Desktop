@@ -11,7 +11,8 @@
     <!-- baseline -->
     <div class="d-flex">
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
-        <div class="w-50 panel-column baseline">
+        <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
+          [ngClass]="{'disabled': baselineSelected == false}">
           <div class="header mx-2">
             <h3>Baseline</h3>
           </div>
@@ -19,7 +20,7 @@
             <div class="p-2">
               <a class="click-link pull-right small" (click)="addBaselineEquipment()">+Add Equipment</a>
             </div>
-            
+
             <!-- app form -->
             <div *ngFor="let form of baselineForms; let i = index;">
               <app-electricity-reduction-form [index]="i" [settings]="settings" [form]="form" [isBaseline]="true"
@@ -29,7 +30,8 @@
             </div>
 
             <div class="w-100 justify content-center btn-group btn-group-sm">
-              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+                (click)="btnResetData()">
                 Reset Data
               </button>
             </div>
@@ -37,7 +39,8 @@
         </div>
 
         <!-- Modification -->
-        <div *ngIf="modificationExists" class="w-50 panel-column modification">
+        <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="togglePanel(modifiedSelected)"
+          [ngClass]="{'disabled': modifiedSelected == false}">
           <!-- Modification Header -->
           <div class="header mx-2">
             <h3>Modification</h3>
@@ -57,13 +60,15 @@
           </div>
         </div>
         <!-- no content message -->
-        <div class="w-50 panel-column modification" *ngIf="!modificationExists">
+        <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="togglePanel(modifiedSelected)"
+          [ngClass]="{'disabled': modifiedSelected == false}">
           <div class="header mx-2">
             <h3>Modification</h3>
           </div>
           <div class="p-3 no-data">
             <h3>Once you have set up your baseline..</h3>
-            <button type="button" class="btn btn-primary" (click)="createModification()">Add Modified Condition</button>
+            <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+              Condition</button>
             <p>Data will be copied from your current baseline condition.</p>
           </div>
         </div>

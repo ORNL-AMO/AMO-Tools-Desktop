@@ -24,12 +24,12 @@
     margin: 10px 0px;
 }
 
-.panel-column.baseline {
-    background: #ececec;
-    box-shadow: none;
-    transition: ease-in-out 0.2s all;
+.panel-column.disabled {
+    background-color: #ececec;
+    transition: all 0.2s ease-in-out;
 }
 
-.panel-column.modification {
-    box-shadow: 0px 0px 69px -1px rgba(0, 0, 0, 0.2);
+.panel-column.disabled:hover {
+    cursor: pointer;
+    background-color: #fff;
 }

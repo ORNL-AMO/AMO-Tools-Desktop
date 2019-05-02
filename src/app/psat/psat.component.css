@@ -1,4 +1,4 @@
-.psat-container{
+.psat-container {
     height: 100vh;
 }
 
@@ -10,19 +10,16 @@
     margin-top: 25px;
 }
 
-
-
-
-.list-modal{
+.list-modal {
     top: .5rem;
     max-width: 95%;
     height: 90%;
 }
 
-.list-modal .modal-content{
+.list-modal .modal-content {
     height: 100%;
 }
 
-.list-modal .modal-body{
+.list-modal .modal-body {
     max-height: 80vh;
 }

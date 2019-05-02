@@ -24,16 +24,16 @@ h3 {
     margin: 10px 0px;
 }
 
-.panel-column.baseline {
+/* .panel-column.baseline {
     background: #ddd;
     box-shadow: none;
     transition: ease-in-out 0.2s all;
-}
+} */
 
-.panel-column.baseline:hover {
+/* .panel-column.baseline:hover {
     background: #fff;
-}
-
+} */
+/* 
 .panel-column.modification {
     box-shadow: 0px 0px 69px -1px rgba(0, 0, 0, 0.2);
-}
+} */

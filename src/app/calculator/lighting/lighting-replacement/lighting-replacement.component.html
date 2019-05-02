@@ -30,7 +30,8 @@
     <!-- Baseline -->
     <div class="d-flex">
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
-        <div class="w-50 panel-column baseline">
+        <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
+          [ngClass]="{'disabled': baselineSelected == false}">
           <div class="header mr-2 ml-2">
             <h3>Baseline</h3>
             <a class="click-link pull-right small add-fixture" (click)="addBaselineFixture()">+Add Fixture</a>
@@ -48,12 +49,12 @@
             <div *ngFor="let form of baselineForms; let index = index;">
               <app-lighting-replacement-form [form]="form" [isBaseline]="true" [index]="index"
                 (emitCalculate)="calculate($event)" (emitFocusField)="focusField($event)"
-                (emitRemoveFixture)="emitRemoveFixture($event)">
+                (emitRemoveFixture)="removeFixture($event)">
               </app-lighting-replacement-form>
             </div>
 
             <div class="w-100 justify-content-center btn-group btn-group-sm">
-              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active" (click)="btnResetData()">
                 Reset Data
               </button>
             </div>
@@ -63,7 +64,8 @@
 
 
         <!-- Modifications Start -->
-        <div *ngIf="modificationExists" class="w-50 panel-column modification">
+        <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="togglePanel(modifiedSelected)"
+          [ngClass]="{'disabled': modifiedSelected == false}">
           <!-- Modification Header -->
           <div class="header mr-2 ml-2">
             <h3>Modification</h3>
@@ -83,13 +85,14 @@
             <div *ngFor="let form of modificationForms; let index = index;">
               <app-lighting-replacement-form [form]="form" [index]="index" [isBaseline]="false"
                 (emitCalculate)="calculate($event)" (emitFocusField)="focusField($event)"
-                (emitRemoveFixture)="emitRemoveFixture($event)"></app-lighting-replacement-form>
+                (emitRemoveFixture)="removeFixture($event)"></app-lighting-replacement-form>
             </div>
 
           </div>
         </div>
         <!-- No content message -->
-        <div class="w-50 panel-column modification" *ngIf="!modificationExists">
+        <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="togglePanel(modifiedSelected)"
+          [ngClass]="{'disabled': modifiedSelected == false}">
           <div class="header mr-2 ml-2">
             <h3>Modification</h3>
           </div>
@@ -97,7 +100,7 @@
             <h3>
               Once you have set up your baseline..
             </h3>
-            <button type="button" class="btn btn-primary" (click)="createModification()">Add Modified Condition</button>
+            <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified Condition</button>
             <p>Data will be copied from your current baseline condition.</p>
           </div>
         </div>
