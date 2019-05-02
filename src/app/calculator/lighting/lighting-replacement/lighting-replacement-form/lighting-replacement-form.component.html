@@ -16,19 +16,19 @@
 
     <div class="form-section">
       <div class="form-group">
-        <label for="operatingHours">Operating Hours</label>
+        <label for="hoursPerYear">Operating Hours</label>
         <div class="input-group">
-          <input name="operatingHours" formControlName="operatingHours" type="number" step="1" min="0"
-            class="form-control" id="operatingHours" (input)="calculate()" (focus)="focusField('hoursPerYear')">
+          <input name="hoursPerYear" formControlName="hoursPerYear" type="number" step="1" min="0" class="form-control"
+            id="hoursPerYear" (input)="calculate()" (focus)="focusField('hoursPerYear')">
           <span class="input-group-addon units">hrs/yr</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
-          <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
-          <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
-            {{form.controls.operatingHours.errors.max.max}}.</span>
-          <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
-            {{form.controls.operatingHours.errors.min.min}}.</span>
+          *ngIf="form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine">
+          <span *ngIf="form.controls.hoursPerYear.errors.required">Value required.</span>
+          <span *ngIf="form.controls.hoursPerYear.errors.max">Value can't be greater than
+            {{form.controls.hoursPerYear.errors.max.max}}.</span>
+          <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
+            {{form.controls.hoursPerYear.errors.min.min}}.</span>
         </span>
       </div>
     </div>

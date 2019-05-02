@@ -1,6 +1,6 @@
 export interface LightingReplacementData {
   name?: string,
-  operatingHours?: number,
+  hoursPerYear?: number,
   wattsPerLamp?: number,
   lampsPerFixture?: number,
   numberOfFixtures?: number,
