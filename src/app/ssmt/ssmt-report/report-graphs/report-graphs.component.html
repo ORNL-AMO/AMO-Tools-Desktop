@@ -53,11 +53,14 @@
       </div>
       <!-- generation graph -->
       <div class="row print-solo">
-        <div class="col-12">
+        <div *ngIf="!ssmt1GenerationNoData" class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
             [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues"
             [exportName]="ssmt1GenerationExportName">
           </app-pie-chart>
+        </div>
+        <div *ngIf="ssmt1GenerationNoData" class="col-12 text-center py-2">
+          No Turbine Data
         </div>
       </div>
 
@@ -87,11 +90,14 @@
         </div>
       </div>
       <div class="row print-solo">
-        <div class="col-12">
+        <div *ngIf="!ssmt1GenerationNoData" class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
             [labels]="ssmt1GenerationPieLabels" [values]="ssmt1GenerationPieValues"
             [exportName]="ssmt1GenerationExportName">
           </app-pie-chart>
+        </div>
+        <div *ngIf="ssmt1GenerationNoData" class="col-12 text-center py-2">
+          No Turbine Data
         </div>
       </div>
     </div>
@@ -117,11 +123,14 @@
         </div>
       </div>
       <div class="row print-solo">
-        <div class="col-12">
+        <div *ngIf="!ssmt2GenerationNoData" class="col-12">
           <app-pie-chart [graphColors]="graphColors" [printView]="false" [chartContainerWidth]="getPieWidth()"
             [labels]="ssmt2GenerationPieLabels" [values]="ssmt2GenerationPieValues"
             [exportName]="ssmt2GenerationExportName">
           </app-pie-chart>
+        </div>
+        <div *ngIf="ssmt2GenerationNoData" class="col-12 text-center py-2">
+          No Turbine Data
         </div>
       </div>
     </div>
@@ -129,12 +138,13 @@
 
   <div class="row justify-content-center mt-5 hide-print">
     <div class="col-12" #waterfallChartContainer>
-      <app-waterfall-graph *ngIf="!modExists" [waterfallInput1]="ssmt1WaterfallData" [modExists]="modExists"
-        [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
+      <app-waterfall-graph *ngIf="!modExists && !ssmt1WaterfallNoData" [waterfallInput1]="ssmt1WaterfallData"
+        [modExists]="modExists" [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()">
       </app-waterfall-graph>
-      <app-waterfall-graph *ngIf="modExists" [waterfallInput1]="ssmt1WaterfallData"
-        [waterfallInput2]="ssmt2WaterfallData" [changeWaterfall]="changeWaterfall" [modExists]="modExists"
-        [containerWidth]="getWaterfallWidth()" [containerHeight]="getWaterfallHeight()"></app-waterfall-graph>
+      <app-waterfall-graph *ngIf="modExists && (!ssmt1WaterfallNoData || !ssmt2WaterfallNoData)"
+        [waterfallInput1]="ssmt1WaterfallData" [waterfallInput2]="ssmt2WaterfallData"
+        [changeWaterfall]="changeWaterfall" [modExists]="modExists" [containerWidth]="getWaterfallWidth()"
+        [containerHeight]="getWaterfallHeight()"></app-waterfall-graph>
     </div>
   </div>
 

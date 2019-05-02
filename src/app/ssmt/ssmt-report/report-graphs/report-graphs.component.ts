@@ -75,6 +75,10 @@ export class ReportGraphsComponent implements OnInit {
 
   steamPowerUnit: string = 'kW';
 
+  ssmt1GenerationNoData: boolean = false;
+  ssmt2GenerationNoData: boolean = false;
+  ssmt1WaterfallNoData: boolean = false;
+  ssmt2WaterfallNoData: boolean = false;
 
   constructor(private reportGraphsService: ReportGraphsService) { }
 
@@ -90,7 +94,28 @@ export class ReportGraphsComponent implements OnInit {
     this.setPieData();
     this.setPieLabels();
     this.setWaterfallData();
+    this.handleNoDataMessage();
+  }
 
+  handleNoDataMessage() {
+    if (this.ssmt1GenerationPieValues === undefined || this.ssmt1GenerationPieValues === null || this.ssmt1GenerationPieValues.length <= 0) {
+      this.ssmt1GenerationNoData = true;
+    }
+    if (this.ssmt2GenerationPieValues === undefined || this.ssmt2GenerationPieValues === null || this.ssmt2GenerationPieValues.length <= 0) {
+      this.ssmt2GenerationNoData = true;
+    }
+    this.ssmt1WaterfallNoData = true;
+    for (let i = 0; i < this.ssmt1WaterfallData.inputObjects.length; i++) {
+      if (this.ssmt1WaterfallData.inputObjects[i].value > 0) {
+        this.ssmt1WaterfallNoData = false;
+      }
+    }
+    this.ssmt2WaterfallNoData = true;
+    for (let i = 0; i < this.ssmt2WaterfallData.inputObjects.length; i++) {
+      if (this.ssmt2WaterfallData.inputObjects[i].value > 0) {
+        this.ssmt2WaterfallNoData = false;
+      }
+    }
   }
 
 
@@ -167,9 +192,6 @@ export class ReportGraphsComponent implements OnInit {
 
   // waterfall functions
   setWaterfallData() {
-    // this.ssmt1WaterfallData = null;
-    // this.ssmt2WaterfallData = null;
-
     this.ssmt1WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt1, this.settings.steamEnergyMeasurement + '/hr', this.waterfallBaselineInputColor, this.waterfallBaselineLossColor, this.waterfallBaselineNetColor, this.baselineLosses, null);
     if (this.modExists) {
       this.ssmt2WaterfallData = this.reportGraphsService.getWaterfallData(this.selectedSsmt2, this.settings.steamEnergyMeasurement + '/hr', this.waterfallModificationInputColor, this.waterfallModificationLossColor, this.waterfallModificationNetColor, this.baselineLosses, this.selectedSsmt2.index === 0 ? null : this.modificationLosses[this.selectedSsmt2.index - 1].outputData);
