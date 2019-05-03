@@ -136,7 +136,8 @@ export class LightingReplacementService {
     let totalElectricityUse: number = _.sumBy(data, 'electricityUse');
     let totalLighting: number = _.sumBy(data, 'totalLighting');
     let totalOperatingHours: number = _.sumBy(data, 'hoursPerYear');
-    let totalOperatingCosts: number = totalElectricityUse * totalOperatingHours * cost;
+    let totalOperatingCosts: number = totalElectricityUse * cost;
+
     let tmpResults: LightingReplacementResult = {
       totalElectricityUse: totalElectricityUse,
       totalLighting: totalLighting,

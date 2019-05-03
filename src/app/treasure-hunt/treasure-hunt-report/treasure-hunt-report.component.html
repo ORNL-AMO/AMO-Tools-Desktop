@@ -63,6 +63,9 @@
       <li (click)="setTab('opportunitySummary')" [ngClass]="{'active': currentTab == 'opportunitySummary'}">
         <a>Opportunity Summary</a>
       </li>
+      <li (click)="setTab('opportunityPayback')" [ngClass]="{'active': currentTab == 'opportunityPayback'}">
+        <a>Opportunity Payback Details</a>
+      </li>
       <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
         <a>Report Graphs</a>
       </li>
@@ -83,13 +86,20 @@
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'reportGraphs' && !showPrint) || (showPrint && printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-report-graphs></app-report-graphs>
+      <app-report-graphs [treasureHuntResults]="treasureHuntResults"></app-report-graphs>
     </div>
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'opportunitySummary' && !showPrint) || (showPrint && printReportOpportunitySummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-opportunity-summary [opportunitySummaries]="treasureHuntResults.opportunitySummaries" [settings]="settings">
       </app-opportunity-summary>
+    </div>
+
+    <div class="results scroll-item print-height"
+      *ngIf="((currentTab == 'opportunityPayback' && !showPrint) || (showPrint && printReportOpportunityPayback)) && dataCalculated"
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-opportunity-payback [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+      </app-opportunity-payback>
     </div>
 
     <!-- <div class="results scroll-item hide-print" *ngIf="!dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">

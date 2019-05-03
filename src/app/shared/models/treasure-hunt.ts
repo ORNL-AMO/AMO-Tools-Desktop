@@ -84,7 +84,6 @@ export interface OpportunitySheetResults {
     totalImplementationCost: number
 }
 
-
 export interface OpportunitySheetResult {
     baselineEnergyUse: number,
     baselineEnergyCost: number,
@@ -99,7 +98,6 @@ export interface MotorDriveInputsTreasureHunt{
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
 }
-
 
 export interface TreasureHuntResults {
     totalSavings: number;
@@ -131,7 +129,6 @@ export interface OpportunitySummary {
     opportunityCost: OpportunityCost
 }
 
-
 export interface UtilityUsageData {
     baselineEnergyUsage: number,
     baselineEnergyCost: number,
@@ -142,4 +139,13 @@ export interface UtilityUsageData {
     implementationCost?: number,
     paybackPeriod?: number,
     percentSavings: number
+}
+
+
+export interface OpportunitiesPaybackDetails {
+    lessThanOneYear: { numOpportunities: number, totalSavings: number };
+    oneToTwoYears: { numOpportunities: number, totalSavings: number };
+    twoToThreeYears: { numOpportunities: number, totalSavings: number };
+    moreThanThreeYears: { numOpportunities: number, totalSavings: number };
+    totals: { numOpportunities: number, totalSavings: number };
 }

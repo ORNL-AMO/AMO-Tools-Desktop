@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-report-graphs',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./report-graphs.component.css']
 })
 export class ReportGraphsComponent implements OnInit {
+  @Input()
+  treasureHuntResults: TreasureHuntResults;
 
   constructor() { }
 
