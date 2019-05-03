@@ -46,7 +46,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
         // },
         y: {
           label: {
-            text: "Cost Savings ($)",
+            text: "Cost Savings",
             position: 'outer-middle'
           },
           tick: {

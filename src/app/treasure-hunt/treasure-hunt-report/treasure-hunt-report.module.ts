@@ -11,6 +11,7 @@ import { OpportunityPaybackDonutComponent } from './opportunity-payback/opportun
 import { OpportunityPaybackBarChartComponent } from './opportunity-payback/opportunity-payback-bar-chart/opportunity-payback-bar-chart.component';
 import { OpportunityPaybackService } from './opportunity-payback.service';
 import { CostPieChartComponent } from './report-graphs/cost-pie-chart/cost-pie-chart.component';
+import { UtilityDonutChartComponent } from './report-graphs/utility-donut-chart/utility-donut-chart.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { CostPieChartComponent } from './report-graphs/cost-pie-chart/cost-pie-c
     OpportunityPaybackComponent, 
     OpportunityPaybackDonutComponent, 
     OpportunityPaybackBarChartComponent,
-    CostPieChartComponent
+    CostPieChartComponent,
+    UtilityDonutChartComponent
   ],
   exports: [TreasureHuntReportComponent],
   providers: [OpportunityPaybackService]
