@@ -3,11 +3,10 @@
 }
 
 @media print {
-    .hide-print{
+    .hide-print {
         display: none !important;
     }
-
-    .report-column{
+    .report-column {
         border: none !important;
         box-shadow: none !important;
         margin-top: none !important;
@@ -15,18 +14,18 @@
     }
 }
 
-.psat-losses-container{
-  padding-top: 0px;
+.psat-losses-container {
+    padding-top: 0px;
 }
 
-.modify-conditions{
+.modify-conditions {
     min-height: 100%;
 }
 
-.help-panel{
+.help-panel {
     padding-left: 0px;
 }
 
-.row-min-height{
+.row-min-height {
     min-height: 100%;
-  }
+}

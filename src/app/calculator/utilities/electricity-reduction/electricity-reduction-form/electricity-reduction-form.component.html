@@ -1,283 +1,302 @@
-<form [formGroup]="form">
-  <div class="form-section">
-    <div class="form-group">
-      <label class="small" for="{{'operatingHours_'+idString}}">Annual Operating Hours</label>
-      <div class="input-group">
-        <input class="form-control" name="operatingHours" id="{{'operatingHours_'+idString}}"
-          formControlName="operatingHours" type="number" (input)="calculate()" (focus)="focusField('operatingHours')"
-          (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">hrs/yr</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
-        <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
-        <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
-          {{form.controls.operatingHours.errors.max.max}}.</span>
-        <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
-          {{form.controls.operatingHours.errors.min.min}}.</span>
+<div class="mb-4 p-2 form-card">
+
+  <form [formGroup]="form">
+
+    <label *ngIf="!isEditingName" class="group-label w-100 bold">
+      <span (click)="editEquipmentName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{form.controls.name.value}}</span>
+      <span class="fa fa-times-circle-o pull-right large" (click)="removeEquipment(index)"></span>
+    </label>
+    <label *ngIf="isEditingName" class="group-label w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
+        <span *ngIf="form.controls.name.errors.required">Please enter a name.</span>
       </span>
-    </div>
+    </label>
 
-    <div class="form-group">
-      <label class="small" for="{{'electricityCost_'+idString}}">Electricity Cost</label>
-      <div class="input-group">
-        <input class="form-control" name="electricityCost" id="{{'electricityCost_'+idString}}"
-          formControlName="electricityCost" type="number" (input)="calculate()" (focus)="focusField('electricityCost')"
-          (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">$/kWh</span>
+
+
+    <div class="form-section">
+      <div class="form-group">
+        <label class="small" for="{{'operatingHours_'+idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+          <input class="form-control" name="operatingHours" id="{{'operatingHours'+idString}}"
+            formControlName="operatingHours" type="number" (input)="calculate()" (focus)="focusField('operatingHours')"
+            (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+          <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+          <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+            {{form.controls.operatingHours.errors.max.max}}.</span>
+          <span *ngIf="form.controls.operatingHours.errors.min">Value can't be less than
+            {{form.controls.operatingHours.errors.min.min}}.</span>
+        </span>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
-        <span *ngIf="form.controls.electricityCost.errors.required">Value required.</span>
-        <span *ngIf="form.controls.electricityCost.errors.min">Value can't be less than
-          {{form.controls.electricityCost.errors.min.min}}.</span>
-      </span>
+
+      <div class="form-group">
+        <label class="small" for="{{'electricityCost_'+idString}}">Electricity Cost</label>
+        <div class="input-group">
+          <input class="form-control" name="electricityCost" id="{{'electricityCost_'+idString}}"
+            formControlName="electricityCost" type="number" (input)="calculate()"
+            (focus)="focusField('electricityCost')" (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">$/kWh</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
+          <span *ngIf="form.controls.electricityCost.errors.required">Value required.</span>
+          <span *ngIf="form.controls.electricityCost.errors.min">Value can't be less than
+            {{form.controls.electricityCost.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'measurementMethod_'+idString}}">Measurement Method</label>
+        <select class="form-control" name="measurementMethod" id="{{'measurementMethod_'+idString}}"
+          formControlName="measurementMethod" (change)="changeMeasurementMethod()"
+          (focus)="focusField('measurementMethod')" (blur)="focusOut()">
+          <option *ngFor="let option of measurementOptions" [ngValue]="option.value">{{option.name}}</option>
+        </select>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label class="small" for="{{'measurementMethod_'+idString}}">Measurement Method</label>
-      <select class="form-control" name="measurementMethod" id="{{'measurementMethod_'+idString}}"
-        formControlName="measurementMethod" (change)="changeMeasurementMethod()"
-        (focus)="focusField('measurementMethod')" (blur)="focusOut()">
-        <option *ngFor="let option of measurementOptions" [ngValue]="option.value">{{option.name}}</option>
-      </select>
-    </div>
-  </div>
+    <!-- Multimeter Reading Form Section -->
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
 
-  <!-- Multimeter Reading Form Section -->
-  <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
-    <div class="form-group">
-      <label class="small" for="numberOfPhases">Number of Phases</label>
-      <div class="input-group">
-        <div class="d-flex flex-column">
-          <div class="d-flex">
-            <label class="w-100" for="{{'onePhase_'+idString}}">
-              <input type="radio" name="numberOfPhases" id="{{'onePhase_'+idString}}" formControlName="numberOfPhases"
-                value="1" (focus)="focusField('numberOfPhases')">1
-            </label>
+      <div class="row pt-1">
+        <div class="col-6">
+          <label class="small" for="numberOfPhases">Number of Phases</label>
+        </div>
+        <div class="col-6 text-center">
+          <div class="btn-col d-flex flex-column form-row-pad-fix">
+            <div class="btn-group btn-group-sm align-self-center">
+              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setNumberOfPhases(1)"
+                [ngClass]="{'active':  form.controls.numberOfPhases.value == 1}"
+                (focus)="focusField('numberOfPhases')">1</button>
+              <button type="button" class="btn btn-secondary btn-sm toggle-btn" (click)="setNumberOfPhases(3)"
+                [ngClass]="{'active': form.controls.numberOfPhases.value == 3}"
+                (focus)="focusField('numberOfPhases')">3</button>
+            </div>
           </div>
-          <div class="d-flex">
-            <label class="w-100" for="{{'threePhases_'+idString}}">
-              <input type="radio" name="numberOfPhases" id="{{'threePhases_'+idString}}"
-                formControlName="numberOfPhases" value="3" (focus)="focusField('numberOfPhases')"
-                [checked]="form.controls.numberOfPhases.value === 3">3
-            </label>
-          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'supplyVoltage_'+idString}}">Supply Voltage</label>
+        <div class="input-group">
+          <input class="form-control" name="supplyVoltage" id="{{'supplyVoltage_'+idString}}"
+            formControlName="supplyVoltage" type="number" (input)="calculate()" (focus)="focusField('supplyVoltage')"
+            (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">V</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.supplyVoltage.invalid && !form.controls.supplyVoltage.pristine">
+          <span *ngIf="form.controls.supplyVoltage.errors.required">Value required.</span>
+          <span *ngIf="form.controls.supplyVoltage.errors.min">Value can't be less than
+            {{form.controls.supplyVoltage.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'averageCurrent_'+idString}}">Average Current</label>
+        <div class="input-group">
+          <input class="form-control" name="averageCurrent" id="{{'averageCurrent_'+idString}}"
+            formControlName="averageCurrent" type="number" (input)="calculate()" (focus)="focusField('averageCurrent')"
+            (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">A</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.averageCurrent.invalid && !form.controls.averageCurrent.pristine">
+          <span *ngIf="form.controls.averageCurrent.errors.required">Value required.</span>
+          <span *ngIf="form.controls.averageCurrent.errors.min">Value can't be less than
+            {{form.controls.averageCurrent.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'powerFactor_'+idString}}">Power Factor</label>
+        <div class="input-group">
+          <input class="form-control" name="powerFactor" id="{{'powerFactor_'+idString}}" formControlName="powerFactor"
+            type="number" (input)="calculate()" (focus)="focusField('powerFactor')" (blur)="focusOut()"
+            onfocus="this.select();">
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.powerFactor.invalid && !form.controls.powerFactor.pristine">
+          <span *ngIf="form.controls.powerFactor.errors.required">Value required.</span>
+          <span *ngIf="form.controls.powerFactor.errors.greaterThan">Value must be greater than
+            {{form.controls.powerFactor.errors.greaterThan}}.</span>
+          <span *ngIf="form.controls.powerFactor.errors.max">Value can't be greater than
+            {{form.controls.powerFactor.errors.max.max}}.</span>
+        </span>
+      </div>
+
+    </div>
+
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
+
+      <div class="form-group">
+        <label class="small" for="{{'ratedMotorPower_'+idString}}">Rated Motor Power</label>
+        <div class="input-group">
+          <input class="form-control" name="ratedMotorPower" id="{{'ratedMotorPower_'+idString}}"
+            formControlName="ratedMotorPower" type="number" (input)="calculate()"
+            (focus)="focusField('ratedMotorPower')" (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon" [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.ratedMotorPower.invalid && !form.controls.ratedMotorPower.pristine">
+          <span *ngIf="form.controls.ratedMotorPower.errors.required">Value required.</span>
+          <span *ngIf="form.controls.ratedMotorPower.errors.min">Value can't be less than
+            {{form.controls.ratedMotorPower.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'variableSpeedMotor_'+idString}}">Variable Speed Motor?</label>
+        <select class="form-control" name="variableSpeedMotor" id="{{'variableSpeedMotor_'+idString}}"
+          formControlName="variableSpeedMotor" (change)="calculate()" (focus)="focusField('variableSpeedMotor')"
+          (blur)="focusOut()">
+          <option [ngValue]="true">Yes</option>
+          <option [ngValue]="false">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'operationalFrequency_'+idString}}">Operational Frequency</label>
+        <div class="input-group">
+          <input class="form-control" name="operationalFrequency" id="{{'operationalFrequency_'+idString}}"
+            formControlName="operationalFrequency" type="number" (input)="calculate()"
+            (focus)="focusField('operationalFrequency')" (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">Hz</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.operationalFrequency.invalid && !form.controls.operationalFrequency.pristine">
+          <span *ngIf="form.controls.operationalFrequency.errors.required">Value required.</span>
+          <span *ngIf="form.controls.operationalFrequency.errors.min">Value can't be less than
+            {{form.controls.operationalFrequency.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'lineFrequency_'+idString}}">Line Frequency</label>
+        <select class="form-control" name="lineFrequency" id="{{'lineFrequency_'+idString}}"
+          formControlName="lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')"
+          (blur)="focusOut()">
+          <option [ngValue]="60">60 Hz</option>
+          <option [ngValue]="50">50 Hz</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'motorAndDriveEfficiency_'+idString}}">Motor & Drive Efficiency</label>
+        <div class="input-group">
+          <input class="form-control" name="motorAndDriveEfficiency" id="{{'motorAndDriveEfficiency_'+idString}}"
+            formControlName="motorAndDriveEfficiency" type="number" (input)="calculate()"
+            (focus)="focusField('motorAndDriveEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.motorAndDriveEfficiency.invalid && !form.controls.motorAndDriveEfficiency.pristine">
+          <span *ngIf="form.controls.motorAndDriveEfficiency.errors.required">Value required.</span>
+          <span *ngIf="form.controls.motorAndDriveEfficiency.errors.min">Value can't be less than
+            {{form.controls.motorAndDriveEfficiency.errors.min.min}}.</span>
+          <span *ngIf="form.controls.motorAndDriveEfficiency.errors.max">Value can't be greater than
+            {{form.controls.motorAndDriveEfficiency.errors.max.max}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'loadFactor_'+idString}}">Load Factor</label>
+        <div class="input-group">
+          <input class="form-control" name="loadFactor" id="{{'loadFactor_'+idString}}" formControlName="loadFactor"
+            type="number" (input)="calculate()" (focus)="focusField('loadFactor')" (blur)="focusOut()"
+            onfocus="this.select();">
+          <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.loadFactor.invalid && !form.controls.loadFactor.pristine">
+          <span *ngIf="form.controls.loadFactor.errors.required">Value required.</span>
+          <span *ngIf="form.controls.loadFactor.errors.min">Value can't be less than
+            {{form.controls.loadFactor.errors.min.min}}.</span>
+          <span *ngIf="form.controls.loadFactor.errors.max">Value can't be greater than
+            {{form.controls.loadFactor.errors.max.max}}.</span>
+        </span>
+      </div>
+
+    </div>
+
+    <div class="form-section"
+      *ngIf="form.controls.measurementMethod.value != 2 && form.controls.measurementMethod.value != 3">
+      <div class="row">
+        <div class="col-6">
+          <label class="small bold" for="power">Power</label>
+        </div>
+        <div class="col-6 text-center">
+          <span class="small bold">{{individualResults.power | number:'.0-1'}} kW</span>
         </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="small" for="{{'supplyVoltage_'+idString}}">Supply Voltage</label>
-      <div class="input-group">
-        <input class="form-control" name="supplyVoltage" id="{{'supplyVoltage_'+idString}}"
-          formControlName="supplyVoltage" type="number" (input)="calculate()" (focus)="focusField('supplyVoltage')"
-          (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">V</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.supplyVoltage.invalid && !form.controls.supplyVoltage.pristine">
-        <span *ngIf="form.controls.supplyVoltage.errors.required">Value required.</span>
-        <span *ngIf="form.controls.supplyVoltage.errors.min">Value can't be less than
-          {{form.controls.supplyVoltage.errors.min.min}}.</span>
-      </span>
-    </div>
 
-    <div class="form-group">
-      <label class="small" for="{{'averageCurrent_'+idString}}">Average Current</label>
-      <div class="input-group">
-        <input class="form-control" name="averageCurrent" id="{{'averageCurrent_'+idString}}"
-          formControlName="averageCurrent" type="number" (input)="calculate()" (focus)="focusField('averageCurrent')"
-          (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">A</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.averageCurrent.invalid && !form.controls.averageCurrent.pristine">
-        <span *ngIf="form.controls.averageCurrent.errors.required">Value required.</span>
-        <span *ngIf="form.controls.averageCurrent.errors.min">Value can't be less than
-          {{form.controls.averageCurrent.errors.min.min}}.</span>
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="{{'powerFactor_'+idString}}">Power Factor</label>
-      <div class="input-group">
-        <input class="form-control" name="powerFactor" id="{{'powerFactor_'+idString}}" formControlName="powerFactor"
-          type="number" (input)="calculate()" (focus)="focusField('powerFactor')" (blur)="focusOut()"
-          onfocus="this.select();">
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.powerFactor.invalid && !form.controls.powerFactor.pristine">
-        <span *ngIf="form.controls.powerFactor.errors.required">Value required.</span>
-        <span *ngIf="form.controls.powerFactor.errors.min">Value must be greater than
-          {{form.controls.powerFactor.errors.greaterThan}}.</span>
-        <span *ngIf="form.controls.powerFactor.errors.max">Value can't be greater than
-          {{form.controls.powerFactor.errors.max.max}}.</span>
-      </span>
-    </div>
-
-  </div>
-
-  <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
-
-    <div class="form-group">
-      <label class="small" for="{{'ratedMotorPower_'+idString}}">Rated Motor Power</label>
-      <div class="input-group">
-        <input class="form-control" name="ratedMotorPower" id="{{'ratedMotorPower_'+idString}}"
-          formControlName="ratedMotorPower" type="number" (input)="calculate()" (focus)="focusField('ratedMotorPower')"
-          (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon" [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.ratedMotorPower.invalid && !form.controls.ratedMotorPower.pristine">
-        <span *ngIf="form.controls.ratedMotorPower.errors.required">Value required.</span>
-        <span *ngIf="form.controls.ratedMotorPower.errors.min">Value can't be less than
-          {{form.controls.ratedMotorPower.errors.min.min}}.</span>
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="{{'variableSpeedMotor_'+idString}}">Variable Speed Motor?</label>
-      <select class="form-control" name="variableSpeedMotor" id="{{'variableSpeedMotor_'+idString}}"
-        formControlName="variableSpeedMotor" (change)="calculate()" (focus)="focusField('variableSpeedMotor')"
-        (blur)="focusOut()">
-        <option [ngValue]="true">Yes</option>
-        <option [ngValue]="false">No</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="{{'operationalFrequency_'+idString}}">Operational Frequency</label>
-      <div class="input-group">
-        <input class="form-control" name="operationalFrequency" id="{{'operationalFrequency_'+idString}}"
-          formControlName="operationalFrequency" type="number" (input)="calculate()"
-          (focus)="focusField('operationalFrequency')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">Hz</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.operationalFrequency.invalid && !form.controls.operationalFrequency.pristine">
-        <span *ngIf="form.controls.operationalFrequency.errors.required">Value required.</span>
-        <span *ngIf="form.controls.operationalFrequency.errors.min">Value can't be less than
-          {{form.controls.operationalFrequency.errors.min.min}}.</span>
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="{{'lineFrequency_'+idString}}">Line Frequency</label>
-      <select class="form-control" name="lineFrequency" id="{{'lineFrequency_'+idString}}"
-        formControlName="lineFrequency" (change)="calculate()" (focus)="focusField('lineFrequency')"
-        (blur)="focusOut()">
-        <option [ngValue]="60">60 Hz</option>
-        <option [ngValue]="50">50 Hz</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="{{'motorAndDriveEfficiency_'+idString}}">Motor & Drive Efficiency</label>
-      <div class="input-group">
-        <input class="form-control" name="motorAndDriveEfficiency" id="{{'motorAndDriveEfficiency_'+idString}}"
-          formControlName="motorAndDriveEfficiency" type="number" (input)="calculate()"
-          (focus)="focusField('motorAndDriveEfficiency')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">%</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.motorAndDriveEfficiency.invalid && !form.controls.motorAndDriveEfficiency.pristine">
-        <span *ngIf="form.controls.motorAndDriveEfficiency.errors.required">Value required.</span>
-        <span *ngIf="form.controls.motorAndDriveEfficiency.errors.min">Value can't be less than
-          {{form.controls.motorAndDriveEfficiency.errors.min.min}}.</span>
-        <span *ngIf="form.controls.motorAndDriveEfficiency.errors.max">Value can't be greater than
-          {{form.controls.motorAndDriveEfficiency.errors.max.max}}.</span>
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="{{'loadFactor_'+idString}}">Load Factor</label>
-      <div class="input-group">
-        <input class="form-control" name="loadFactor" id="{{'loadFactor_'+idString}}" formControlName="loadFactor"
-          type="number" (input)="calculate()" (focus)="focusField('loadFactor')" (blur)="focusOut()"
-          onfocus="this.select();">
-        <span class="units input-group-addon">%</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.loadFactor.invalid && !form.controls.loadFactor.pristine">
-        <span *ngIf="form.controls.loadFactor.errors.required">Value required.</span>
-        <span *ngIf="form.controls.loadFactor.errors.min">Value can't be less than
-          {{form.controls.loadFactor.errors.min.min}}.</span>
-        <span *ngIf="form.controls.loadFactor.errors.max">Value can't be greater than
-          {{form.controls.loadFactor.errors.max.max}}.</span>
-      </span>
-    </div>
-
-  </div>
-
-  <div class="form-section"
-    *ngIf="form.controls.measurementMethod.value != 2 && form.controls.measurementMethod.value != 3">
-    <div class="row">
-      <div class="col-6">
-        <label class="small bold" for="power">Power</label>
-      </div>
-      <div class="col-6 text-center">
-        <span class="small bold">{{individualResults.power | number:'.0-1'}} kW</span>
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 2">
+      <div class="form-group">
+        <label class="small" for="{{'power_'+idString}}">Power</label>
+        <div class="input-group">
+          <input class="form-control" name="power" id="{{'power_'+idString}}" formControlName="power" type="number"
+            (input)="calculate()" (focus)="focusField('power')" (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">kW</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
+          <span *ngIf="form.controls.power.errors.required">Value required.</span>
+          <span *ngIf="form.controls.power.errors.min">Value can't be less than
+            {{form.controls.power.errors.min.min}}.</span>
+        </span>
       </div>
     </div>
-  </div>
 
-
-  <div class="form-section" *ngIf="form.controls.measurementMethod.value == 2">
-    <div class="form-group">
-      <label class="small" for="{{'power_'+idString}}">Power</label>
-      <div class="input-group">
-        <input class="form-control" name="power" id="{{'power_'+idString}}" formControlName="power" type="number"
-          (input)="calculate()" (focus)="focusField('power')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">kW</span>
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value != 3">
+      <div class="form-group">
+        <label class="small" for="{{'units_'+idString}}">Units</label>
+        <div class="input-group">
+          <input class="form-control" name="units" id="{{'units_'+idString}}" formControlName="units" type="number"
+            (input)="calculate()" (focus)="focusField('units')" (blur)="focusOut()" onfocus="this.select();">
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.units.invalid && !form.controls.units.pristine">
+          <span *ngIf="form.controls.units.errors.required">Value required.</span>
+          <span *ngIf="form.controls.units.errors.min">Value can't be less than
+            {{form.controls.units.errors.min.min}}.</span>
+        </span>
       </div>
-      <span class="alert-danger pull-right small" *ngIf="form.controls.power.invalid && !form.controls.power.pristine">
-        <span *ngIf="form.controls.power.errors.required">Value required.</span>
-        <span *ngIf="form.controls.power.errors.min">Value can't be less than
-          {{form.controls.power.errors.min.min}}.</span>
-      </span>
-    </div>
-  </div>
 
-  <div class="form-section" *ngIf="form.controls.measurementMethod.value != 3">
-    <div class="form-group">
-      <label class="small" for="{{'units_'+idString}}">Units</label>
-      <div class="input-group">
-        <input class="form-control" name="units" id="{{'units_'+idString}}" formControlName="units" type="number"
-          (input)="calculate()" (focus)="focusField('units')" (blur)="focusOut()" onfocus="this.select();">
-      </div>
-      <span class="alert-danger pull-right small" *ngIf="form.controls.units.invalid && !form.controls.units.pristine">
-        <span *ngIf="form.controls.units.errors.required">Value required.</span>
-        <span *ngIf="form.controls.units.errors.min">Value can't be less than
-          {{form.controls.units.errors.min.min}}.</span>
-      </span>
-    </div>
-
-    <div class="row">
-      <div class="col-6">
-        <label class="small bold" for="power">Energy</label>
-      </div>
-      <div class="col-6 text-center">
-        <span class="small bold">{{individualResults.energyUse | number:'.0'}} kWh</span>
+      <div class="row">
+        <div class="col-6">
+          <label class="small bold" for="power">Energy</label>
+        </div>
+        <div class="col-6 text-center">
+          <span class="small bold">{{individualResults.energyUse | number:'.0'}} kWh</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="form-section" *ngIf="form.controls.measurementMethod.value == 3">
-    <div class="form-group">
-      <label class="small" for="{{'energy_'+idString}}">Energy</label>
-      <div class="input-group">
-        <input class="form-control" name="energy" id="{{'energy_'+idString}}" formControlName="energy" type="number"
-          (input)="calculate()" (focus)="focusField('energy')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">kWh</span>
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 3">
+      <div class="form-group">
+        <label class="small" for="{{'energy_'+idString}}">Energy</label>
+        <div class="input-group">
+          <input class="form-control" name="energy" id="{{'energy_'+idString}}" formControlName="energy" type="number"
+            (input)="calculate()" (focus)="focusField('energy')" (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">kWh</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.energy.invalid && !form.controls.energy.pristine">
+          <span *ngIf="form.controls.energy.errors.required">Value required.</span>
+          <span *ngIf="form.controls.energy.errors.min">Value can't be less than
+            {{form.controls.energy.errors.min.min}}.</span>
+        </span>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="form.controls.energy.invalid && !form.controls.energy.pristine">
-        <span *ngIf="form.controls.energy.errors.required">Value required.</span>
-        <span *ngIf="form.controls.energy.errors.min">Value can't be less than
-          {{form.controls.energy.errors.min.min}}.</span>
-      </span>
     </div>
-  </div>
 
-</form>
+  </form>
+</div>
