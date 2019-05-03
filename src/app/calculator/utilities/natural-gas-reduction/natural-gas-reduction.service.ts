@@ -20,10 +20,10 @@ export class NaturalGasReductionService {
   resetData(settings: Settings) {
     this.baselineData = new Array<NaturalGasReductionData>();
     this.modificationData = new Array<NaturalGasReductionData>();
-    this.baselineData.push(this.initObject(settings));
+    this.baselineData.push(this.initObject(0, settings));
   }
 
-  initObject(settings?: Settings): NaturalGasReductionData {
+  initObject(index: number, settings?: Settings): NaturalGasReductionData {
     let defaultFlowMeterData: FlowMeterMethodData = {
       flowRate: 5
     };
@@ -52,6 +52,7 @@ export class NaturalGasReductionService {
       systemEfficiency: 80
     };
     let obj: NaturalGasReductionData = {
+      name: 'Equipment #' + (index + 1),
       operatingHours: 8640,
       fuelCost: settings && settings.fuelCost ? settings.fuelCost : 0.12,
       measurementMethod: 0,
@@ -66,6 +67,7 @@ export class NaturalGasReductionService {
 
   getFormFromObj(obj: NaturalGasReductionData): FormGroup {
     let form: FormGroup = this.fb.group({
+      name: [obj.name, Validators.required],
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [obj.fuelCost, [Validators.required, Validators.min(0)]],
       measurementMethod: [obj.measurementMethod],
@@ -161,6 +163,7 @@ export class NaturalGasReductionService {
       consumption: form.controls.consumption.value
     };
     let data: NaturalGasReductionData = {
+      name: form.controls.name.value,
       operatingHours: form.controls.operatingHours.value,
       fuelCost: form.controls.fuelCost.value,
       measurementMethod: form.controls.measurementMethod.value,
@@ -173,11 +176,11 @@ export class NaturalGasReductionService {
     return data;
   }
 
-  addBaselineEquipment(settings?: Settings) {
+  addBaselineEquipment(index: number, settings?: Settings) {
     if (this.baselineData === undefined || this.baselineData === null) {
       this.baselineData = new Array<NaturalGasReductionData>();
     }
-    this.baselineData.push(this.initObject(settings ? settings : null));
+    this.baselineData.push(this.initObject(index, settings ? settings : null));
   }
 
   removeBaselineEquipment(index: number) {
@@ -191,11 +194,11 @@ export class NaturalGasReductionService {
     }
   }
 
-  addModificationEquipment(settings?: Settings) {
+  addModificationEquipment(index: number, settings?: Settings) {
     if (this.modificationData === null || this.modificationData === undefined) {
       this.modificationData = new Array<NaturalGasReductionData>();
     }
-    this.modificationData.push(this.initObject(settings ? settings : null));
+    this.modificationData.push(this.initObject(index, settings ? settings : null));
   }
 
   removeModificationEquipment(index: number) {
@@ -283,6 +286,7 @@ export class NaturalGasReductionService {
       }
 
       inputArray[i] = {
+        name: tmp.name,
         operatingHours: tmp.operatingHours,
         fuelCost: tmp.fuelCost,
         measurementMethod: tmp.measurementMethod,

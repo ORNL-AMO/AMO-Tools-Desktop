@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { LightingReplacementData, LightingReplacementResults } from '../../../../shared/models/lighting';
+import { LightingReplacementService } from '../lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement-results',
@@ -8,11 +9,13 @@ import { LightingReplacementData, LightingReplacementResults } from '../../../..
 })
 export class LightingReplacementResultsComponent implements OnInit {
   @Input()
-  baselineData: Array<LightingReplacementData>;
-  @Input()
-  modificationData: Array<LightingReplacementData>;
-  @Input()
   lightingReplacementResults: LightingReplacementResults;
+  @Input()
+  modificationExists: boolean;
+  @Input()
+  baselineElectricityCost: number;
+  @Input()
+  modificationElectricityCost: number;
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;
@@ -22,10 +25,25 @@ export class LightingReplacementResultsComponent implements OnInit {
   table2String: any;
   @ViewChild('copyTable3') copyTable3: ElementRef;
   table3String: any;
-  
-  constructor() { }
+
+  baselineData: Array<LightingReplacementData> = new Array<LightingReplacementData>();
+  modificationData: Array<LightingReplacementData> = new Array<LightingReplacementData>();
+
+  constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
+    this.getAllResults();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.lightingReplacementResults && !changes.lightingReplacementResults.firstChange) {
+      this.getAllResults();
+    }
+  }
+
+  getAllResults() {
+    this.baselineData = this.lightingReplacementService.baselineData;
+    this.modificationData = this.lightingReplacementService.modificationData;
   }
 
   updateTable0String() {
@@ -39,7 +57,7 @@ export class LightingReplacementResultsComponent implements OnInit {
   updateTable2String() {
     this.table2String = this.copyTable2.nativeElement.innerText;
   }
-  
+
   updateTable3String() {
     this.table3String = this.copyTable3.nativeElement.innerText;
   }

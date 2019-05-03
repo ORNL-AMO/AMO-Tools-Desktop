@@ -1,38 +1,89 @@
-<div class="form-section">
-  <div class="form-group">
-    <label for="hoursPerYear">Operating Hours</label>
-    <div class="input-group">
-      <input name="hoursPerYear" type="number" step="1" min="0" max="12" class="form-control" id="hoursPerYear"
-        (input)="calculate()" [(ngModel)]="data.hoursPerYear" (focus)="focusField('hoursPerYear')">
-      <span class="input-group-addon units">hrs/yr</span>
-    </div>
-    <span class="alert-danger pull-right small" *ngIf="hoursPerYearError !== null">{{hoursPerYearError}}</span>
+<div class="mb-4 p-2 form-card">
+  <form [formGroup]="form">
 
-  </div>
-</div>
-<div class="form-section">
-  <div class="form-group">
-    <label for="wattsPerLamp">Watts Per Lamp</label>
-    <input name="wattsPerLamp" type="number" step="any" class="form-control" id="wattsPerLamp" (input)="calculate()"
-      [(ngModel)]="data.wattsPerLamp" (focus)="focusField('wattsPerLamp')">
-    <span class="alert-danger pull-right small" *ngIf="wattsPerLampError !== null">{{wattsPerLampError}}</span>
-  </div>
-  <div class="form-group">
-    <label for="lumensPerLamp">Lumens Per Lamp</label>
-    <input name="lumensPerLamp" type="number" step="any" class="form-control" id="lumensPerLamp" (input)="calculate()"
-      [(ngModel)]="data.lumensPerLamp" (focus)="focusField('lumensPerLamp')">
-    <span class="alert-danger pull-right small" *ngIf="lumensPerLampError !== null">{{lumensPerLampError}}</span>
-  </div>
-  <div class="form-group">
-    <label for="lampsPerFixture">Lamps Per Fixture</label>
-    <input name="lampsPerFixture" type="number" step="any" class="form-control" id="lampsPerFixture"
-      (input)="calculate()" [(ngModel)]="data.lampsPerFixture" (focus)="focusField('lampsPerFixture')">
-    <span class="alert-danger pull-right small" *ngIf="lampsPerFixtureError !== null">{{lampsPerFixtureError}}</span>
-  </div>
-  <div class="form-group">
-    <label for="numberOfFixtures">Number of Fixtures</label>
-    <input name="numberOfFixtures" type="number" step="any" class="form-control" id="numberOfFixtures"
-      (input)="calculate()" [(ngModel)]="data.numberOfFixtures" (focus)="focusField('numberOfFixtures')">
-    <span class="alert-danger pull-right small" *ngIf="numberOfFixturesError !== null">{{numberOfFixturesError}}</span>
-  </div>
+    <label *ngIf="!isEditingName" class="group-label w-100 bold">
+      <span (click)="editFixtureName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{form.controls.name.value}}</span>
+      <span class="fa fa-times-circle-o pull-right large" (click)="removeFixture(index)"></span>
+    </label>
+    <label *ngIf="isEditingName" class="group-label w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
+        <span *ngIf="form.controls.name.errors.required">Please enter a name.</span>
+      </span>
+    </label>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label for="hoursPerYear">Operating Hours</label>
+        <div class="input-group">
+          <input name="hoursPerYear" formControlName="hoursPerYear" type="number" step="1" min="0" class="form-control"
+            id="hoursPerYear" (input)="calculate()" (focus)="focusField('hoursPerYear')">
+          <span class="input-group-addon units">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine">
+          <span *ngIf="form.controls.hoursPerYear.errors.required">Value required.</span>
+          <span *ngIf="form.controls.hoursPerYear.errors.max">Value can't be greater than
+            {{form.controls.hoursPerYear.errors.max.max}}.</span>
+          <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
+            {{form.controls.hoursPerYear.errors.min.min}}.</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-section">
+
+      <div class="form-group">
+        <label for="wattsPerLamp">Watts Per Lamp</label>
+        <input name="wattsPerLamp" formControlName="wattsPerLamp" type="number" step="any" class="form-control"
+          id="wattsPerLamp" (input)="calculate()" (focus)="focusField('wattsPerLamp')">
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.wattsPerLamp.invalid && !form.controls.wattsPerLamp.pristine">
+          <span *ngIf="form.controls.wattsPerLamp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.wattsPerLamp.errors.min">Value can't be less than
+            {{form.controls.wattsPerLamp.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="lumensPerLamp">Lumens Per Lamp</label>
+        <input name="lumensPerLamp" formControlName="lumensPerLamp" type="number" step="any" class="form-control"
+          id="lumensPerLamp" (input)="calculate()" (focus)="focusField('lumensPerLamp')">
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.lumensPerLamp.invalid && !form.controls.lumensPerLamp.pristine">
+          <span *ngIf="form.controls.lumensPerLamp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.lumensPerLamp.errors.min">Value can't be less than
+            {{form.controls.lumensPerLamp.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="lampsPerFixture">Lamps Per Fixture</label>
+        <input name="lampsPerFixture" formControlName="lampsPerFixture" type="number" step="any" class="form-control"
+          id="lampsPerFixture" (input)="calculate()" (focus)="focusField('lampsPerFixture')">
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.lampsPerFixture.invalid && !form.controls.lampsPerFixture.pristine">
+          <span *ngIf="form.controls.lampsPerFixture.errors.required">Value required.</span>
+          <span *ngIf="form.controls.lampsPerFixture.errors.min">Value can't be less than
+            {{form.controls.lampsPerFixture.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="numberOfFixtures">Number of Fixtures</label>
+        <input name="numberOfFixtures" formControlName="numberOfFixtures" type="number" step="any" class="form-control"
+          id="numberOfFixtures" (input)="calculate()" (focus)="focusField('numberOfFixtures')">
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.numberOfFixtures.invalid && !form.controls.numberOfFixtures.pristine">
+          <span *ngIf="form.controls.numberOfFixtures.errors.required">Value required.</span>
+          <span *ngIf="form.controls.numberOfFixtures.errors.min">Value can't be less than
+            {{form.controls.numberOfFixtures.errors.min.min}}.</span>
+        </span>
+      </div>
+
+    </div>
+
+  </form>
 </div>
