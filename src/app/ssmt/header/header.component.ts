@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit {
 
   initForms() {
     let minHighPressure: number;
-    if(this.headerInput.numberOfHeaders == 1){
+    if (this.headerInput.numberOfHeaders == 1) {
       minHighPressure = this.boilerInput.deaeratorPressure;
     }
     if (this.headerInput.highPressure) {
@@ -100,7 +100,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  changeNumberOfHeaders(){
+  changeNumberOfHeaders() {
     this.save();
     this.initForms();
   }
@@ -142,7 +142,7 @@ export class HeaderComponent implements OnInit {
       pressureMax = this.headerInput.highPressure.pressure;
     }
     let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, this.boilerInput.deaeratorPressure, pressureMax);
-    this.lowPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), GreaterThanValidator.greaterThan(ranges.pressureMin)]);
+    this.lowPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), Validators.min(ranges.pressureMin)]);
     this.lowPressureForm.controls.pressure.updateValueAndValidity();
     let mediumPressureMin: number;
     let mediumPressureMax: number;
@@ -153,7 +153,7 @@ export class HeaderComponent implements OnInit {
       mediumPressureMax = this.headerInput.highPressure.pressure;
     }
     ranges = this.headerService.getRanges(this.settings, undefined, mediumPressureMin, mediumPressureMax);
-    this.mediumPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), GreaterThanValidator.greaterThan(ranges.pressureMin)]);
+    this.mediumPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), Validators.min(ranges.pressureMin)]);
     this.mediumPressureForm.controls.pressure.updateValueAndValidity();
 
   }

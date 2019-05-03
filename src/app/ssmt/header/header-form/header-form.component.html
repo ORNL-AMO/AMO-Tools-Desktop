@@ -18,8 +18,8 @@
       <span *ngIf="headerForm.controls.pressure.errors.max">{{maxPressureErrorMsg}}
         {{headerForm.controls.pressure.errors.max.max}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="headerForm.controls.pressure.errors.greaterThan">{{minPressureErrorMsg}}
-        {{headerForm.controls.pressure.errors.greaterThan}}
+      <span *ngIf="headerForm.controls.pressure.errors.min">{{minPressureErrorMsg}}
+        {{headerForm.controls.pressure.errors.min.min}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
       <span *ngIf="headerForm.controls.pressure.errors.boilerTemp">Temperature of steam in boiler is too low for this
         pressure value.</span>

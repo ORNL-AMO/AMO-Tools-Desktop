@@ -60,7 +60,7 @@ export class HeaderFormComponent implements OnInit {
   setErrorMsgs() {
     if (this.pressureLevel === 'highPressure') {
       if (this.numberOfHeaders == 1) {
-        this.minPressureErrorMsg = 'Value must be greater than dearator pressure: ';
+        this.minPressureErrorMsg = 'Value can\'t be less than deaerator pressure: ';
       } else {
         this.minPressureErrorMsg = 'Value must be greater than ';
 
@@ -68,7 +68,7 @@ export class HeaderFormComponent implements OnInit {
       this.maxPressureErrorMsg = 'Value must be less than ';
     } else {
       if (this.pressureLevel === 'lowPressure') {
-        this.minPressureErrorMsg = 'Value must be greater than dearator pressure: ';
+        this.minPressureErrorMsg = 'Value can\'t be less than deaerator pressure: ';
       } else {
         this.minPressureErrorMsg = 'Value must be greater than low pressure header: ';
       }
