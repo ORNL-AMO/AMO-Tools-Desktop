@@ -32,7 +32,6 @@ export class O2EnrichmentFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.o2EnrichmentOutput) {
-      console.log('o2EnrichmentOutput changes');
       this.annualCostSavings = this.o2EnrichmentOutput.annualFuelCost - this.o2EnrichmentOutput.annualFuelCostEnriched;
     }
   }
@@ -77,7 +76,7 @@ export class O2EnrichmentFormComponent implements OnInit {
   }
 
   plot() {
-    
+
   }
 }
 

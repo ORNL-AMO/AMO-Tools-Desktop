@@ -60,7 +60,7 @@ export class O2EnrichmentComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    if(this.settings.unitsOfMeasure == 'Custom'){
+    if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -125,8 +125,8 @@ export class O2EnrichmentComponent implements OnInit {
         annualFuelCostEnriched: 0.0
       };
     }
-    this.o2EnrichmentOutput.annualFuelCost = this.o2Enrichment.fuelCost * this.o2Enrichment.operatingHours;
-    this.o2EnrichmentOutput.annualFuelCostEnriched = this.o2Enrichment.fuelCostEnriched * this.o2Enrichment.operatingHoursEnriched;
+    this.o2EnrichmentOutput.annualFuelCost = this.o2Enrichment.fuelCost * this.o2Enrichment.operatingHours * this.o2Enrichment.fuelConsumption;
+    this.o2EnrichmentOutput.annualFuelCostEnriched = this.o2Enrichment.fuelCostEnriched * this.o2Enrichment.operatingHoursEnriched * this.o2EnrichmentOutput.fuelConsumptionEnriched;
     if (!this.inAssessment) {
       this.o2EnrichmentService.o2Enrichment = this.o2Enrichment;
       this.o2EnrichmentService.lines = this.lines;
