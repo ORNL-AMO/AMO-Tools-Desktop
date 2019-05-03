@@ -169,8 +169,8 @@
               [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
         </span>
         <span class="alert-warning pull-right small"
-          *ngIf="lowPressureHeaderForm && lowPressureHeaderForm.controls.pressure.invalid && lowPressureHeaderForm.controls.pressure.errors.greaterThan">
-          <span *ngIf="lowPressureHeaderForm.controls.pressure.errors.greaterThan">Lowest pressure header must be greater than
+          *ngIf="lowPressureHeaderForm && lowPressureHeaderForm.controls.pressure.invalid && lowPressureHeaderForm.controls.pressure.errors.min">
+          <span *ngIf="lowPressureHeaderForm.controls.pressure.errors.min">Lowest pressure header can't be less than
             dearator pressure.</span>
         </span>
       </div>
