@@ -86,7 +86,7 @@
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'reportGraphs' && !showPrint) || (showPrint && printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-report-graphs></app-report-graphs>
+      <app-report-graphs [treasureHuntResults]="treasureHuntResults"></app-report-graphs>
     </div>
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'opportunitySummary' && !showPrint) || (showPrint && printReportOpportunitySummary)) && dataCalculated"

@@ -1,3 +1,10 @@
-<p>
-  report-graphs works!
-</p>
+<div class="row">
+  <div class="col-6">
+    <label class="group-label w-100 large">Current Cost Status</label>
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true"></app-cost-pie-chart>
+  </div>
+  <div class="col-6">
+    <label class="group-label w-100 large">Projected Cost Status</label>
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false"></app-cost-pie-chart>
+  </div>
+</div>
