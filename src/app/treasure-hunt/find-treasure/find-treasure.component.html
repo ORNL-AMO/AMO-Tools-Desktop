@@ -1,112 +1,86 @@
 <div class="skyline" *ngIf="selectedCalc == 'none'">
-  <div class="d-flex">
-    <div class="col-10 mx-auto">
-      <div class="calc-content-container calculator-list">
-        <h1 class="p-2 lead text-center mb-0">
-          Find ways to save your hard earned treasure!
-        </h1>
-        <ul class="help-text text-center mb-0">
-          <li>
-            Use one of the following calculators to determine savings opportunities within your manufacturing facility.
-          </li>
-          <li>
-            Once an opportunity has been found, save the opportunity to your "Treasure Chest".
-          </li>
-          <li>
-            Add more details to each opportunity by clicking the <span class="fa fa-edit small"></span> icon and filling
-            out an opportunity sheet. </li>
-          <li>
-            Click the "Treasure Chest" tab to view a summary of your found treasure. </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="d-flex lighting">
-    <div class="col-10 mx-auto">
-      <div class="calc-content-container calculator-list">
-        <h4 class="mb-1">Lighting Calculators</h4>
-        <div class="d-flex calc-item-row w-100">
-          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-            <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <!-- <img class="calc-img" src="assets/images/calculator-icons/motor-icons/nema.png" (click)="selectCalc('lighting-replacement')"> -->
-              <span class="fa fa-lightbulb-o" (click)="selectCalc('lighting-replacement')"></span>
-            </div>
-          </div>
-          <div class="d-flex flex-fill flex-column justify-content-center">
-            <a (click)="selectCalc('lighting-replacement')">Lighting Replacement</a>
-            <p>
-              The calculator is designed to quantify the energy savings associated with lighting opportunities.
-            </p>
-          </div>
+  <div class="d-flex flex-wrap justify-content-center">
+    <div class="card m-2">
+      <div class="card-body d-flex p-2 justify-content-center align-items-center">
+        <div class="p-2 pr-4">
+          <img src="assets/images/treasure-map.png" class="map-img-container">
         </div>
-
-      </div>
-    </div>
-  </div>
-  <div class="d-flex motors">
-    <div class="col-10 mx-auto">
-      <div class="calc-content-container calculator-list">
-        <h4 class="mb-1">Motors Calculators</h4>
-        <div class="d-flex calc-item-row w-100">
-          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-            <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace.png"
-                (click)="selectCalc('replace-existing')">
-            </div>
-          </div>
-          <div class="d-flex flex-fill flex-column justify-content-center">
-            <a (click)="selectCalc('replace-existing')"> Replace Existing Motor</a>
-            <p>
-              This calculator calculates the energy savings, cost savings, and payback period for replacing an
-              existing
-              motor with a higher efficiency motor.
-            </p>
-          </div>
-        </div>
-        <div class="d-flex calc-item-row w-100">
-          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-            <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img class="calc-img" src="assets/images/calculator-icons/motor-icons/motor-drive.png"
-                (click)="selectCalc('motor-drive')">
-            </div>
-          </div>
-          <div class="d-flex flex-fill flex-column justify-content-center">
-            <a (click)="selectCalc('motor-drive')"> Motor Drive</a>
-            <p>
-              The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched
-              V-Belt drive, and
-              Synchronous Belt Drive. Synchronous belts are the most efficient, however cost analysis and application
-              should
-              be considered.
-            </p>
-          </div>
+        <div class="d-flex flex-column calculator-list">
+          <h1 class="p-2 lead text-center mb-0">
+            Find ways to save your hard earned treasure!
+          </h1>
+          <ul class="help-text text-center mb-0">
+            <li>
+              Use one of the following calculators to determine savings opportunities within your manufacturing
+              facility.
+            </li>
+            <li>
+              Once an opportunity has been found, save the opportunity to your "Treasure Chest".
+            </li>
+            <li>
+              Add more details to each opportunity by clicking the <span class="fa fa-edit small"></span> icon and
+              filling
+              out an opportunity sheet. </li>
+            <li>
+              Click the "Treasure Chest" tab to view a summary of your found treasure. </li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="col-10 mx-auto treasure-hunt-calc">
-    <div class="calc-content-container calculator-list">
-      <h4 class="mb-1">Miscellaneous Calculators</h4>
-      <div class="d-flex calc-item-row w-100">
-        <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-          <div class="calc-icon-div d-flex justify-content-center align-items-center">
-            <span class="fa fa-edit"></span>
-          </div>
+  <div class="d-flex flex-wrap justify-content-center">
+    <div class="card calc-card-item lighting m-2" (click)="selectCalc('lighting-replacement')">
+      <div class="card-body d-flex flex-column p-2 justify-content-center align-items-center">
+        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+          <span class="fa fa-lightbulb-o"></span>
         </div>
-        <div class="d-flex flex-fill flex-column justify-content-center">
-          <a (click)="selectCalc('opportunity-sheet')">Custom Savings Opportunity</a>
-          <p>
-            This calculator provides a space to add a Treasure Hunt Opportunity without using a calculator (such as
-            after having done off-sheet calculations). Enter Baseline and Modification Utility use to calculate savings.
-          </p>
-        </div>
+        <a class="pt-2">Lighting Replacement</a>
+        <p class="mb-0 text-center help-text">
+          The calculator is designed to quantify the energy savings associated with lighting opportunities.
+        </p>
       </div>
-
     </div>
+    <div class="card calc-card-item motors m-2" (click)="selectCalc('replace-existing')">
+      <div class="card-body d-flex flex-column p-2 justify-content-center align-items-center">
+        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+          <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace.png">
+        </div>
+        <a class="pt-2"> Replace Existing Motor</a>
+        <p class="mb-0 text-center help-text">
+          This calculator calculates the energy savings, cost savings, and payback period for replacing an
+          existing motor with a higher efficiency motor.
+        </p>
+      </div>
+    </div>
+
+    <div class="card calc-card-item motors m-2" (click)="selectCalc('motor-drive')">
+      <div class="card-body d-flex flex-column p-2 justify-content-center align-items-center">
+        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+          <img class="calc-img" src="assets/images/calculator-icons/motor-icons/motor-drive.png">
+        </div>
+        <a class="pt-2"> Motor Drive</a>
+        <p class="mb-0 text-center help-text">
+          The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched
+          V-Belt drive, and Synchronous Belt Drive.
+        </p>
+      </div>
+    </div>
+
+    <div class="card calc-card-item motors m-2" (click)="selectCalc('opportunity-sheet')">
+      <div class="card-body d-flex flex-column p-2 justify-content-center align-items-center">
+        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+          <span class="fa fa-edit"></span>
+        </div>
+        <a class="pt-2">Custom Savings Opportunity</a>
+        <p class="mb-0 text-center help-text">
+          This calculator provides a space to add a Treasure Hunt Opportunity without using a calculator (such as
+          after having done off-sheet calculations). Enter Baseline and Modification Utility use to calculate savings.
+        </p>
+      </div>
+    </div>
+
   </div>
 </div>
-
 
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
   (emitSave)="saveNewLighting($event)" (emitCancel)="selectCalc('none')"
