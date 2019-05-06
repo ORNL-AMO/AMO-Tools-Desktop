@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-opportunity-sheet-help',
@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./opportunity-sheet-help.component.css']
 })
 export class OpportunitySheetHelpComponent implements OnInit {
-
+  @Input()
+  currentField: string;
+  
   constructor() { }
 
   ngOnInit() {

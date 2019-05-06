@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { OpportunitySheet } from '../../../shared/models/treasure-hunt';
 
 @Component({
@@ -9,9 +9,14 @@ import { OpportunitySheet } from '../../../shared/models/treasure-hunt';
 export class GeneralDetailsFormComponent implements OnInit {
   @Input()
   opportunitySheet: OpportunitySheet;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
   }
 
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
+  }
 }

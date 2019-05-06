@@ -13,6 +13,8 @@ export class EnergyUseFormComponent implements OnInit {
   settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<Array<{ type: string, amount: number }>>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
@@ -49,5 +51,9 @@ export class EnergyUseFormComponent implements OnInit {
 
   save() {
     this.emitSave.emit(this.energyItems);
+  }
+
+  focusField(str: string) {
+    this.emitChangeField.emit(str);
   }
 }

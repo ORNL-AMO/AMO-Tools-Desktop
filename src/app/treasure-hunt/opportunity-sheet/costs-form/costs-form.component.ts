@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { OtherCostItem, OpportunitySheet, OpportunityCost } from '../../../shared/models/treasure-hunt';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { OpportunityCost } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-costs-form',
@@ -9,7 +9,8 @@ import { OtherCostItem, OpportunitySheet, OpportunityCost } from '../../../share
 export class CostsFormComponent implements OnInit {
   @Input()
   opportunityCost: OpportunityCost;
-
+  @Output('emitChangeField')
+  emitChangefield = new EventEmitter<string>();
   // otherCosts: Array<OtherCostItem> = [];
   // additionalSavings: OtherCostItem;
   constructor() { }
@@ -40,5 +41,9 @@ export class CostsFormComponent implements OnInit {
 
   removeAdditionalSavings(){
     this.opportunityCost.additionalSavings = undefined;
+  }
+
+  focusField(str: string){
+    this.emitChangefield.emit(str);
   }
 }
