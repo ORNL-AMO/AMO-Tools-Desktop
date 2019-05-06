@@ -12,6 +12,10 @@ export class ExecutiveSummaryComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   @Input()
   settings: Settings;
+  @Input()
+  showFullSummary: boolean;
+  @Input()
+  title: string;
   
   constructor() { }
 

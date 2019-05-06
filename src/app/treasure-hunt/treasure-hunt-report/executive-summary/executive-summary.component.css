@@ -1,5 +1,6 @@
 .output-summary .table {
     font-size: small;
+    width: auto;
 }
 .output-summary .table th {
     border: none;
