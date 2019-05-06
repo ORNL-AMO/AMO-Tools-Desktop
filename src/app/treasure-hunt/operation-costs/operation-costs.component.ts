@@ -14,7 +14,7 @@ export class OperationCostsComponent implements OnInit {
   emitSave = new EventEmitter<TreasureHunt>();
   @Input()
   settings: Settings;
-  
+
   constructor() { }
 
   ngOnInit() {
