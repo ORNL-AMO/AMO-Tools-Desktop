@@ -258,7 +258,7 @@
 
     <div class="form-section" *ngIf="form.controls.measurementMethod.value != 3">
       <div class="form-group">
-        <label class="small" for="{{'units_'+idString}}">Units</label>
+        <label class="small" for="{{'units_'+idString}}"># of Units</label>
         <div class="input-group">
           <input class="form-control" name="units" id="{{'units_'+idString}}" formControlName="units" type="number"
             (input)="calculate()" (focus)="focusField('units')" (blur)="focusOut()" onfocus="this.select();">
@@ -276,7 +276,7 @@
           <label class="small bold" for="power">Energy</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{individualResults.energyUse | number:'.0'}} kWh</span>
+          <span class="small bold">{{individualResults.energyUse | number:'.0-0'}} kWh</span>
         </div>
       </div>
     </div>
