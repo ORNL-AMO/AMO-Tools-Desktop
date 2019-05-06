@@ -29,12 +29,12 @@
           {{treasureHuntResults.naturalGas.modifiedEnergyCost | currency:'USD'}}</span>
       </div>
       <div class="col-4 text-center treasure-hunt-item">
-        <h6 class="mb-0 text-center pt-2">Other Fuel Savings</h6>
-        <app-treasure-hunt-gauge [value]="treasureHuntResults.otherFuel.percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
+        <h6 class="mb-0 text-center pt-2">Other Utility Savings</h6>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.other.percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
         <span class="small">Baseline Costs: <br>
-          {{treasureHuntResults.otherFuel.baselineEnergyCost | currency:'USD'}}</span><br>
+          {{treasureHuntResults.other.baselineEnergyCost | currency:'USD'}}</span><br>
         <span class="small">Modified Costs: <br>
-          {{treasureHuntResults.otherFuel.modifiedEnergyCost | currency:'USD'}}</span>
+          {{treasureHuntResults.other.modifiedEnergyCost | currency:'USD'}}</span>
       </div>
     </div>
   </div>
