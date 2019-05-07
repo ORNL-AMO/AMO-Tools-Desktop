@@ -3,19 +3,19 @@
 }
 
 
-.hunt-item:hover{
+.calc-card-item:hover{
     cursor: pointer;
-    background: #CCD1D1;
-    border-radius: 25px;
+    /* background: #CCD1D1; */
+    /* border-radius: 25px; */
     box-shadow: 0px 0px 5px 3px #2E4053
 }
 
-.hunt-item{
+/* .hunt-item{
     width: 225px;
     padding-top: .75rem;
     padding-right: .75rem;
     padding-left: .75rem;
-}
+} */
 
 
 .modal-dialog{
@@ -67,4 +67,12 @@ a:not([href]):not([tabindex]){
 
 .fa.fa-edit.small{
     font-size:18px;
+}
+
+.map-img-container{
+    width: 125px;
+}
+
+.calc-card-item{
+    width: 300px;
 }
