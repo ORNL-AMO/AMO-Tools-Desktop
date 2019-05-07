@@ -5,27 +5,30 @@
 </div>
 <div class="col-12">
   <div class="form-group">
-    <label>Engineering Services</label>
+    <label for="engineeringServices">Engineering Services</label>
     <div class="input-group">
-      <input type="number" class="form-control" [(ngModel)]="opportunityCost.engineeringServices" name="engineeringServices">
+      <input type="number" class="form-control" [(ngModel)]="opportunityCost.engineeringServices"
+        name="engineeringServices" id="engineeringServices" (focus)="focusField('engineeringServices')">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
 </div>
 <div class="col-12">
   <div class="form-group">
-    <label>Material</label>
+    <label for="material">Material</label>
     <div class="input-group">
-      <input type="number" class="form-control" [(ngModel)]="opportunityCost.material" name="material">
+      <input type="number" class="form-control" [(ngModel)]="opportunityCost.material" name="material"
+        id="material" (focus)="focusField('material')">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
 </div>
 <div class="col-12">
   <div class="form-group">
-    <label>Labor</label>
+    <label for="labor">Labor</label>
     <div class="input-group">
-      <input type="number" class="form-control" [(ngModel)]="opportunityCost.labor" name="labor">
+      <input type="number" class="form-control" [(ngModel)]="opportunityCost.labor" name="labor"
+        id="labor" (focus)="focusField('labor')">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -34,13 +37,15 @@
   <div class="form-group d-flex">
     <div class="w-50 input-group pr-2">
       <input type="text" class="form-control" [(ngModel)]="otherCost.description"
-        name="{{'otherCostDescription_'+index}}">
+        name="{{'otherCostDescription_'+index}}" id="{{'otherCostDescription_'+index}}"
+        (focus)="focusField('otherCostDescription')">
       <span class="input-group-addon units remove-item" (click)="removeOtherCostItem(index)">
         <span class="fa fa-times"></span>
       </span>
     </div>
     <div class="w-50 input-group">
-      <input class="form-control" type="number" [(ngModel)]="otherCost.cost" name="{{'otherCost_'+index}}">
+      <input class="form-control" type="number" [(ngModel)]="otherCost.cost" name="{{'otherCost_'+index}}"
+        id="{{'otherCost_'+index}}" (focus)="focusField('otherCost')">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -58,18 +63,21 @@
   <div class="form-group d-flex">
     <div class="w-50 input-group pr-2">
       <input type="text" class="form-control" [(ngModel)]="opportunityCost.additionalSavings.description"
-        name="additionalSavingsDescription">
+        name="additionalSavingsDescription" id="additionalSavingsDescription"
+        (focus)="focusField('additionalSavingsDescription')">
       <span class="input-group-addon units remove-item" (click)="removeAdditionalSavings()">
         <span class="fa fa-times"></span>
       </span>
     </div>
     <div class="w-50 input-group">
-      <input class="form-control" type="number" [(ngModel)]="opportunityCost.additionalSavings.cost" name="additionalSavingsCost">
+      <input class="form-control" type="number" [(ngModel)]="opportunityCost.additionalSavings.cost"
+        name="additionalSavingsCost" id="additionalSavingsCost" (focus)="focusField('additionalSavingsCost')">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
 </div>
 <div class="col-12">
-  <label class="group-label">Opportunity Notes</label>
-  <textarea class="form-control w-100" rows="6" [(ngModel)]="opportunityCost.costDescription" name="costDescription"></textarea>
+  <label class="group-label" for="costDescription">Opportunity Notes</label>
+  <textarea class="form-control w-100" rows="6" [(ngModel)]="opportunityCost.costDescription" name="costDescription"
+    id="costDescription" (focus)="focusField('costDescription')"></textarea>
 </div>

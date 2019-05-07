@@ -20,6 +20,16 @@ export interface EnergyUsage {
     naturalGasCosts: number,
     otherFuelUsage: number,
     otherFuelCosts: number,
+    waterUsage: number,
+    waterCosts: number,
+    wasteWaterUsage: number,
+    wasteWaterCosts: number,
+    compressedAirUsage: number,
+    compressedAirCosts: number,
+    steamUsage: number,
+    steamCosts: number,
+    otherUtilityUsage: number,
+    otherUtilityCosts: number
 }
 
 export interface OpportunitySheet {

@@ -241,10 +241,10 @@ export class TreasureHuntReportService {
     let results: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } =
     {
       utilityUsageData: {
-        baselineEnergyUsage: 0,
-        baselineEnergyCost: 0,
-        modifiedEnergyUsage: 0,
-        modifiedEnergyCost: 0,
+        baselineEnergyUsage: treasureHunt.currentEnergyUsage.waterUsage,
+        baselineEnergyCost: treasureHunt.currentEnergyUsage.waterCosts,
+        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.waterUsage,
+        modifiedEnergyCost: treasureHunt.currentEnergyUsage.wasteWaterCosts,
         energySavings: 0,
         costSavings: 0,
         percentSavings: 0,
@@ -260,10 +260,10 @@ export class TreasureHuntReportService {
     let results: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } =
     {
       utilityUsageData: {
-        baselineEnergyUsage: 0,
-        baselineEnergyCost: 0,
-        modifiedEnergyUsage: 0,
-        modifiedEnergyCost: 0,
+        baselineEnergyUsage: treasureHunt.currentEnergyUsage.wasteWaterUsage,
+        baselineEnergyCost: treasureHunt.currentEnergyUsage.wasteWaterCosts,
+        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.wasteWaterUsage,
+        modifiedEnergyCost: treasureHunt.currentEnergyUsage.wasteWaterCosts,
         energySavings: 0,
         costSavings: 0,
         percentSavings: 0,
@@ -298,10 +298,10 @@ export class TreasureHuntReportService {
     let results: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } =
     {
       utilityUsageData: {
-        baselineEnergyUsage: 0,
-        baselineEnergyCost: 0,
-        modifiedEnergyUsage: 0,
-        modifiedEnergyCost: 0,
+        baselineEnergyUsage: treasureHunt.currentEnergyUsage.compressedAirUsage,
+        baselineEnergyCost: treasureHunt.currentEnergyUsage.compressedAirCosts,
+        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.compressedAirUsage,
+        modifiedEnergyCost: treasureHunt.currentEnergyUsage.compressedAirCosts,
         energySavings: 0,
         costSavings: 0,
         percentSavings: 0,
@@ -317,10 +317,10 @@ export class TreasureHuntReportService {
     let results: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } =
     {
       utilityUsageData: {
-        baselineEnergyUsage: 0,
-        baselineEnergyCost: 0,
-        modifiedEnergyUsage: 0,
-        modifiedEnergyCost: 0,
+        baselineEnergyUsage: treasureHunt.currentEnergyUsage.steamUsage,
+        baselineEnergyCost: treasureHunt.currentEnergyUsage.steamCosts,
+        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.steamUsage,
+        modifiedEnergyCost: treasureHunt.currentEnergyUsage.steamCosts,
         energySavings: 0,
         costSavings: 0,
         percentSavings: 0,
@@ -336,10 +336,10 @@ export class TreasureHuntReportService {
     let results: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } =
     {
       utilityUsageData: {
-        baselineEnergyUsage: 0,
-        baselineEnergyCost: 0,
-        modifiedEnergyUsage: 0,
-        modifiedEnergyCost: 0,
+        baselineEnergyUsage: treasureHunt.currentEnergyUsage.otherFuelUsage,
+        baselineEnergyCost: treasureHunt.currentEnergyUsage.otherUtilityCosts,
+        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.otherFuelUsage,
+        modifiedEnergyCost: treasureHunt.currentEnergyUsage.otherUtilityCosts,
         energySavings: 0,
         costSavings: 0,
         percentSavings: 0,

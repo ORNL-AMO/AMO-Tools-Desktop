@@ -29,6 +29,7 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   containerHeight: number;
   tabSelect: string = 'help';
   opportunitySheetResults: OpportunitySheetResults;
+  currentField: string = 'default';
   constructor(private treasureHuntService: TreasureHuntService, private opportunitySheetService: OpportunitySheetService) { }
 
   ngOnInit() {
@@ -80,5 +81,9 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
 
   getResults() {
     this.opportunitySheetResults = this.opportunitySheetService.getResults(this.opportunitySheet, this.settings);
+  }
+
+  changeField(str: string){
+    this.currentField = str;
   }
 }

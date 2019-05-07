@@ -14,7 +14,7 @@ export class OperationCostsComponent implements OnInit {
   emitSave = new EventEmitter<TreasureHunt>();
   @Input()
   settings: Settings;
-  
+
   constructor() { }
 
   ngOnInit() {
@@ -25,7 +25,17 @@ export class OperationCostsComponent implements OnInit {
         naturalGasUsage: 0,
         naturalGasCosts: 0,
         otherFuelUsage: 0,
-        otherFuelCosts: 0
+        otherFuelCosts: 0,
+        waterUsage: 0,
+        waterCosts: 0,
+        wasteWaterUsage: 0,
+        wasteWaterCosts: 0,
+        compressedAirUsage: 0,
+        compressedAirCosts: 0,
+        steamUsage: 0,
+        steamCosts: 0,
+        otherUtilityUsage: 0,
+        otherUtilityCosts: 0
       }
       this.treasureHunt.currentEnergyUsage = defaultUsage;
       this.save();
