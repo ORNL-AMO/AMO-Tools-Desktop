@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { NaturalGasReductionService } from '../natural-gas-reduction.service';
-import { NaturalGasReductionResults } from '../../../../shared/models/standalone';
+import { NaturalGasReductionResult } from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-natural-gas-reduction-form',
@@ -32,7 +32,7 @@ export class NaturalGasReductionFormComponent implements OnInit {
     { value: 3, name: 'Offsheet / Other Method' }
   ];
   idString: string;
-  individualResults: NaturalGasReductionResults;
+  individualResults: NaturalGasReductionResult;
   isEditingName: boolean = false;
 
   constructor(private naturalGasReductionService: NaturalGasReductionService) { }

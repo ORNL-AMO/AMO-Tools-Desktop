@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { NaturalGasReductionService } from './natural-gas-reduction.service';
 import { NaturalGasReductionResults, NaturalGasReductionData } from '../../../shared/models/standalone';
+import { NaturalGasReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-natural-gas-reduction',
@@ -12,7 +14,19 @@ import { NaturalGasReductionResults, NaturalGasReductionData } from '../../../sh
 })
 export class NaturalGasReductionComponent implements OnInit {
   @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<NaturalGasReductionTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
+  @Output('emitAddOpportunitySheet')
+  emitAddOpportunitySheet = new EventEmitter<boolean>();
+  @Input()
   settings: Settings;
+  @Input()
+  operatingHours: OperatingHours;
+
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -30,8 +44,7 @@ export class NaturalGasReductionComponent implements OnInit {
   modificationForms: Array<FormGroup>;
   modificationExists = false;
 
-  baselineResults: NaturalGasReductionResults;
-  modificationResults: NaturalGasReductionResults;
+  naturalGasReductionResults: NaturalGasReductionResults;
 
   constructor(private settingsDbService: SettingsDbService, private naturalGasReductionService: NaturalGasReductionService) { }
 
@@ -96,7 +109,7 @@ export class NaturalGasReductionComponent implements OnInit {
   removeBaselineEquipment(i: number) {
     this.naturalGasReductionService.removeBaselineEquipment(i);
     this.baselineForms.splice(i, 1);
-    this.refreshResults();
+    this.getResults();
   }
 
   createModification() {
@@ -121,7 +134,7 @@ export class NaturalGasReductionComponent implements OnInit {
     if (this.modificationForms.length < 1) {
       this.modificationExists = false;
     }
-    this.refreshResults();
+    this.getResults();
   }
 
   removeEquipment(emitObj: { index: number, isBaseline: boolean }) {
@@ -148,22 +161,25 @@ export class NaturalGasReductionComponent implements OnInit {
   calculate(emitObj: { form: FormGroup, index: number, isBaseline: boolean }) {
     if (emitObj.isBaseline) {
       this.baselineForms[emitObj.index] = emitObj.form;
-      this.naturalGasReductionService.updateBaselineDataArray(this.baselineForms);
-      this.baselineResults = this.naturalGasReductionService.calculate(true, this.settings);
+      //this.naturalGasReductionService.updateBaselineDataArray(this.baselineForms);
+      // this.baselineResults = this.naturalGasReductionService.calculate(true, this.settings);
     } else {
       this.modificationForms[emitObj.index] = emitObj.form;
-      this.naturalGasReductionService.updateModificationDataArray(this.modificationForms);
-      this.modificationResults = this.naturalGasReductionService.calculate(false, this.settings);
+      //this.naturalGasReductionService.updateModificationDataArray(this.modificationForms);
+      // this.modificationResults = this.naturalGasReductionService.calculate(false, this.settings);
     }
+    this.getResults();
+    //this.naturalGasReductionResults = this.naturalGasReductionService.getResults(this.settings, this.naturalGasReductionService.baselineData, this.naturalGasReductionService.modificationData);
   }
 
-  refreshResults() {
+  getResults() {
     this.naturalGasReductionService.updateBaselineDataArray(this.baselineForms);
-    this.baselineResults = this.naturalGasReductionService.calculate(true, this.settings);
+    // this.baselineResults = this.naturalGasReductionService.calculate(true, this.settings);
     if (this.modificationExists) {
       this.naturalGasReductionService.updateModificationDataArray(this.modificationForms);
-      this.modificationResults = this.naturalGasReductionService.calculate(false, this.settings);
+      // this.modificationResults = this.naturalGasReductionService.calculate(false, this.settings);
     }
+    this.naturalGasReductionResults = this.naturalGasReductionService.getResults(this.settings, this.naturalGasReductionService.baselineData, this.naturalGasReductionService.modificationData);
   }
 
   btnResetData() {
@@ -180,5 +196,17 @@ export class NaturalGasReductionComponent implements OnInit {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }
+  }
+
+  save() {
+    this.emitSave.emit({ baseline: this.naturalGasReductionService.baselineData, modification: this.naturalGasReductionService.modificationData });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
+  }
+
+  addOpportunitySheet() {
+    this.emitAddOpportunitySheet.emit(true);
   }
 }

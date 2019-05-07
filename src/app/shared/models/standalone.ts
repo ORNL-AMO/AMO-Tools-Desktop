@@ -256,10 +256,15 @@ export interface WaterMassFlowData {
 };
 
 export interface NaturalGasReductionResults {
+  baselineResults: NaturalGasReductionResult,
+  modificationResults: NaturalGasReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number,
+}
+
+export interface NaturalGasReductionResult {
   energyUse: number,
   energyCost: number,
-  annualEnergySavings: number,
-  costSavings: number,
   heatFlow: number,
   totalFlow: number
 };

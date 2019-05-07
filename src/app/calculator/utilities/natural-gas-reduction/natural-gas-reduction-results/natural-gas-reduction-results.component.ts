@@ -7,18 +7,13 @@ import { NaturalGasReductionResults } from '../../../../shared/models/standalone
   templateUrl: './natural-gas-reduction-results.component.html',
   styleUrls: ['./natural-gas-reduction-results.component.css']
 })
-export class NaturalGasReductionResultsComponent implements OnInit, OnChanges {
+export class NaturalGasReductionResultsComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  baselineResults: NaturalGasReductionResults;
-  @Input()
-  modificationResults: NaturalGasReductionResults;
+  results: NaturalGasReductionResults;
   @Input()
   modificationExists: boolean;
-
-  annualEnergySavings: number;
-  annualCostSavings: number;
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;
@@ -32,18 +27,18 @@ export class NaturalGasReductionResultsComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if ((changes.baselineResults || changes.modificationResults) && this.modificationExists) {
-      this.getSavings();
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if ((changes.baselineResults || changes.modificationResults) && this.modificationExists) {
+  //     this.getSavings();
+  //   }
+  // }
 
-  getSavings(): void {
-    if (this.modificationExists) {
-      this.annualEnergySavings = this.baselineResults.energyUse - this.modificationResults.energyUse;
-      this.annualCostSavings = this.baselineResults.energyCost - this.modificationResults.energyCost;
-    }
-  }
+  // getSavings(): void {
+  //   if (this.modificationExists) {
+  //     this.annualEnergySavings = this.baselineResults.energyUse - this.modificationResults.energyUse;
+  //     this.annualCostSavings = this.baselineResults.energyCost - this.modificationResults.energyCost;
+  //   }
+  // }
 
   updateTable0String() {
     this.table0String = this.copyTable0.nativeElement.innerText;
