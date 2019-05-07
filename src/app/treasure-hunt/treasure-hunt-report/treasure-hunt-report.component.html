@@ -81,7 +81,17 @@
     <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'executiveSummary' && !showPrint) || (showPrint && printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"></app-executive-summary>
+      <!-- <label class="group-label">Cost Summary</label> -->
+      <div class="d-flex justify-content-center">
+        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
+          [showFullSummary]="false" [title]="'Cost Summary'"></app-executive-summary>
+      </div>
+      <div class="d-flex justify-content-center">
+        <!-- <label class="group-label">Detailed Summary</label> -->
+        <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
+          [showFullSummary]="true" [title]="'Detailed Summary'">
+        </app-executive-summary>
+      </div>
     </div>
     <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'reportGraphs' && !showPrint) || (showPrint && printReportGraphs)) && dataCalculated"
