@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { FormGroup } from '@angular/forms';
+import { LightingReplacementService } from '../lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement-form',
@@ -9,11 +10,11 @@ import { FormGroup } from '@angular/forms';
 })
 export class LightingReplacementFormComponent implements OnInit {
   @Input()
-  form: FormGroup;
+  data: LightingReplacementData;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<{ form: FormGroup, index: number, isBaseline: boolean }>();
+  emitCalculate = new EventEmitter<LightingReplacementData>();
   @Output('emitRemoveFixture')
-  emitRemoveFixture = new EventEmitter<{ index: number, isBaseline: boolean }>();
+  emitRemoveFixture = new EventEmitter<number>();
   @Input()
   index: number;
   @Output('emitFocusField')
@@ -23,27 +24,24 @@ export class LightingReplacementFormComponent implements OnInit {
 
   idString: string;
   isEditingName: boolean = false;
-  constructor() { }
+  form: FormGroup;
+
+  constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
+    //need to actually use the id string..
     if (this.isBaseline) {
-      this.idString = this.index.toString();
+      this.idString = 'baseline_' + this.index;
     }
     else {
       this.idString = 'modification_' + this.index;
     }
-    this.calculate();
+    this.form = this.lightingReplacementService.getFormFromObj(this.data);
   }
 
   calculate() {
-    if (this.form.valid) {
-      let emitObj = {
-        form: this.form,
-        index: this.index,
-        isBaseline: this.isBaseline
-      };
-      this.emitCalculate.emit(emitObj);
-    }
+    let tmpObj: LightingReplacementData = this.lightingReplacementService.getObjFromForm(this.form);
+    this.emitCalculate.emit(tmpObj);
   }
 
   focusField(str: string) {
@@ -51,7 +49,7 @@ export class LightingReplacementFormComponent implements OnInit {
   }
 
   removeFixture(i: number) {
-    this.emitRemoveFixture.emit({ index: i, isBaseline: this.isBaseline });
+    this.emitRemoveFixture.emit(this.index);
   }
 
   editFixtureName() {

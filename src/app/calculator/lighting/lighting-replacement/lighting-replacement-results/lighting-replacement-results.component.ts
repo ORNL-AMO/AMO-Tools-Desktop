@@ -16,6 +16,11 @@ export class LightingReplacementResultsComponent implements OnInit {
   baselineElectricityCost: number;
   @Input()
   modificationElectricityCost: number;
+  @Input()
+  baselineData: LightingReplacementData;
+  @Input()
+  modificationData: LightingReplacementData;
+
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;
@@ -26,25 +31,9 @@ export class LightingReplacementResultsComponent implements OnInit {
   @ViewChild('copyTable3') copyTable3: ElementRef;
   table3String: any;
 
-  baselineData: Array<LightingReplacementData> = new Array<LightingReplacementData>();
-  modificationData: Array<LightingReplacementData> = new Array<LightingReplacementData>();
+  constructor() { }
 
-  constructor(private lightingReplacementService: LightingReplacementService) { }
-
-  ngOnInit() {
-    this.getAllResults();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.lightingReplacementResults && !changes.lightingReplacementResults.firstChange) {
-      this.getAllResults();
-    }
-  }
-
-  getAllResults() {
-    this.baselineData = this.lightingReplacementService.baselineData;
-    this.modificationData = this.lightingReplacementService.modificationData;
-  }
+  ngOnInit() { }
 
   updateTable0String() {
     this.table0String = this.copyTable0.nativeElement.innerText;

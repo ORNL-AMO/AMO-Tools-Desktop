@@ -36,10 +36,9 @@ export class LightingReplacementComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
   baselineSelected: boolean = true;
-  modifiedSelected: boolean = false;
 
-  baselineForms: Array<FormGroup>;
-  modificationForms: Array<FormGroup>;
+  baselineData: Array<LightingReplacementData>;
+  modificationData: Array<LightingReplacementData>;
 
   lightingReplacementResults: LightingReplacementResults;
   modificationExists: boolean = false;
@@ -56,14 +55,7 @@ export class LightingReplacementComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    if (this.lightingReplacementService.baselineData === undefined || this.lightingReplacementService.baselineData === null) {
-      this.addBaselineFixture();
-    } else {
-      this.loadForms();
-    }
+    this.initData();
 
     if (this.lightingReplacementService.baselineElectricityCost) {
       this.baselineElectricityCost = this.lightingReplacementService.baselineElectricityCost;
@@ -75,10 +67,9 @@ export class LightingReplacementComponent implements OnInit {
     } else {
       this.modificationElectricityCost = this.settings.electricityCost;
     }
-
-    this.updateElectricityCost(true);
-    this.updateElectricityCost(false);
+    this.getResults();
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
@@ -87,8 +78,8 @@ export class LightingReplacementComponent implements OnInit {
 
   ngOnDestroy() {
     if (!this.inTreasureHunt) {
-      this.lightingReplacementService.updateBaselineDataArray(this.baselineForms);
-      this.lightingReplacementService.updateModificationDataArray(this.modificationForms);
+      this.lightingReplacementService.baselineData = this.baselineData;
+      this.lightingReplacementService.modificationData = this.modificationData;
       this.lightingReplacementService.baselineElectricityCost = this.baselineElectricityCost;
       this.lightingReplacementService.modificationElectricityCost = this.modificationElectricityCost;
     } else {
@@ -114,96 +105,80 @@ export class LightingReplacementComponent implements OnInit {
     this.currentField = str;
   }
 
+  initData() {
+    if (this.lightingReplacementService.baselineData) {
+      this.baselineData = this.lightingReplacementService.baselineData;
+    } else {
+      let tmpObj: LightingReplacementData = this.lightingReplacementService.initObject(0, this.operatingHours)
+      this.baselineData = [tmpObj];
+    }
+    if (this.lightingReplacementService.modificationData) {
+      this.modificationData = this.lightingReplacementService.modificationData;
+    }
+  }
+
   addBaselineFixture() {
-    this.lightingReplacementService.addBaselineFixture(this.baselineForms.length);
-    this.baselineForms.push(this.lightingReplacementService.getFormFromObj(this.lightingReplacementService.baselineData[this.lightingReplacementService.baselineData.length - 1]));
+    let tmpObj: LightingReplacementData = this.lightingReplacementService.initObject(this.baselineData.length, this.operatingHours);
+    this.baselineData.push(tmpObj);
+    this.getResults();
   }
 
   removeBaselineFixture(index: number) {
-    this.lightingReplacementService.removeBaselineFixture(index);
-    this.baselineForms.splice(index, 1);
-    this.refreshResults();
+    this.baselineData.splice(index, 1);
+    this.getResults();
   }
 
   createModification() {
-    this.lightingReplacementService.createModification();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.baselineForms.length; i++) {
-      let tmpObj: LightingReplacementData = this.lightingReplacementService.getObjFromForm(this.baselineForms[i]);
-      let modForm: FormGroup = this.lightingReplacementService.getFormFromObj(tmpObj);
-      this.modificationForms.push(modForm);
-    }
+    this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
     this.modificationExists = true;
+    this.getResults();
   }
 
   addModificationFixture() {
-    this.lightingReplacementService.addModificationFixture(this.modificationForms.length);
-    this.modificationForms.push(this.lightingReplacementService.getFormFromObj(this.lightingReplacementService.modificationData[this.lightingReplacementService.modificationData.length - 1]));
+    let tmpObj: LightingReplacementData = this.lightingReplacementService.initObject(this.modificationData.length, this.operatingHours);
+    this.modificationData.push(tmpObj);
+    this.getResults();
   }
 
   removeModificationFixture(index: number) {
-    this.lightingReplacementService.removeModificationFixture(index);
-    this.modificationForms.splice(index, 1);
-    if (this.modificationForms.length < 1) {
+    this.modificationData.splice(index, 1);
+    if (this.modificationData.length === 0) {
       this.modificationExists = false;
     }
-    this.refreshResults();
+    this.getResults();
   }
 
-  removeFixture(emitObj: { index: number, isBaseline: boolean }) {
-    emitObj.isBaseline ? this.removeBaselineFixture(emitObj.index) : this.removeModificationFixture(emitObj.index);
+  updateBaselineData(data: LightingReplacementData, index: number) {
+    this.baselineData[index] = data;
+    this.getResults();
   }
 
-  loadForms() {
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.lightingReplacementService.baselineData.length; i++) {
-      this.baselineForms.push(this.lightingReplacementService.getFormFromObj(this.lightingReplacementService.baselineData[i]));
-    }
-    this.lightingReplacementService.initModificationData();
-    for (let i = 0; i < this.lightingReplacementService.modificationData.length; i++) {
-      this.modificationForms.push(this.lightingReplacementService.getFormFromObj(this.lightingReplacementService.modificationData[i]));
-    }
-    if (!this.modificationExists) {
-      if (this.modificationForms.length > 0) {
-        this.modificationExists = true;
-      }
-    }
+  updateModificationData(data: LightingReplacementData, index: number) {
+    this.modificationData[index] = data;
+    this.getResults();
   }
 
-  calculate(emitObj: { form: FormGroup, index: number, isBaseline: boolean }) {
-    if (emitObj.isBaseline) {
-      this.baselineForms[emitObj.index] = emitObj.form;
-    } else {
-      this.modificationForms[emitObj.index] = emitObj.form;
-    }
-    this.refreshResults();
-  }
-
-  refreshResults() {
-    this.lightingReplacementService.updateBaselineDataArray(this.baselineForms);
-    if (this.modificationExists) {
-      this.lightingReplacementService.updateModificationDataArray(this.modificationForms);
-    }
-    this.updateElectricityCost(true);
-    this.updateElectricityCost(false);
-    this.lightingReplacementResults = this.lightingReplacementService.calculateResults();
-  }
-
-  updateElectricityCost(isBaseline: boolean) {
-    if (isBaseline) {
-      this.lightingReplacementService.baselineElectricityCost = this.baselineElectricityCost;
-    } else {
-      this.lightingReplacementService.modificationElectricityCost = this.modificationElectricityCost;
-    }
+  getResults() {
+    let tHuntObj: LightingReplacementTreasureHunt = this.getTreasureHuntObject();
+    this.lightingReplacementResults = this.lightingReplacementService.getResults(tHuntObj);
   }
 
   focusField(str: string) {
     this.currentField = str;
   }
 
+  getTreasureHuntObject(): LightingReplacementTreasureHunt {
+    return {
+      baseline: this.baselineData,
+      modifications: this.modificationData,
+      baselineElectricityCost: this.baselineElectricityCost,
+      modificationElectricityCost: this.modificationElectricityCost
+    }
+  }
+
   save() {
-    this.emitSave.emit({ baseline: this.lightingReplacementService.baselineData, modifications: this.lightingReplacementService.modificationData, baselineElectricityCost: this.baselineElectricityCost, modificationElectricityCost: this.modificationElectricityCost });
+    let tHuntObj: LightingReplacementTreasureHunt = this.getTreasureHuntObject();
+    this.emitSave.emit(tHuntObj);
   }
 
   cancel() {
@@ -215,18 +190,13 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   btnResetData() {
-    this.lightingReplacementService.resetData(this.settings);
+    let tmpObj: LightingReplacementData = this.lightingReplacementService.initObject(0, this.operatingHours)
+    this.baselineData = [tmpObj];
+    this.modificationData = new Array<LightingReplacementData>();
     this.modificationExists = false;
-    this.loadForms();
   }
 
-  togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
-      this.baselineSelected = true;
-      this.modifiedSelected = false;
-    } else if (bool == this.modifiedSelected) {
-      this.modifiedSelected = true;
-      this.baselineSelected = false;
-    }
+  togglePanel() {
+    this.baselineSelected = !this.baselineSelected;
   }
 }
