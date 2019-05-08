@@ -4,19 +4,19 @@
     <tr>
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
-        {{baselineResults.energyUse | number:'.0-0'}} kWh
+        {{electricityReductionResults.baselineResults.energyUse | number:'.0-0'}} kWh
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Energy Cost</td>
       <td class="text-center w-50">
-        {{baselineResults.energyCost | currency}}
+        {{electricityReductionResults.baselineResults.energyCost | currency}}
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Power</td>
       <td class="text-center w-50">
-        {{baselineResults.power | number:'.0-1'}} kW
+        {{electricityReductionResults.baselineResults.power | number:'.0-1'}} kW
       </td>
     </tr>
   </tbody>
@@ -33,19 +33,19 @@
     <tr>
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
-        {{modificationResults.energyUse | number:'.0-0'}} kWh
+        {{electricityReductionResults.modificationResults.energyUse | number:'.0-0'}} kWh
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Energy Cost</td>
       <td class="text-center w-50">
-        {{modificationResults.energyCost | currency}}
+        {{electricityReductionResults.modificationResults.energyCost | currency}}
       </td>
     </tr>
     <tr>
       <td class="bold w-50">Power</td>
       <td class="text-center w-50">
-        {{modificationResults.power | number:'.0-1'}} kW
+        {{electricityReductionResults.modificationResults.power | number:'.0-1'}} kW
       </td>
     </tr>
   </tbody>
@@ -58,11 +58,11 @@
   <tbody>
     <tr>
       <td class="bold w-50">Annual Energy Savings</td>
-      <td class="text-center w-50">{{annualEnergySavings | number:'.0-0'}} kWh</td>
+      <td class="text-center w-50">{{electricityReductionResults.annualEnergySavings | number:'.0-0'}} kWh</td>
     </tr>
     <tr>
       <td class="bold w-50">Annual Cost Savings</td>
-      <td class="text-center w-50">{{annualCostSavings | currency}}</td>
+      <td class="text-center w-50">{{electricityReductionResults.annualCostSavings | currency}}</td>
     </tr>
   </tbody>
 </table>

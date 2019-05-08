@@ -196,12 +196,17 @@ export interface OtherMethodData {
 };
 
 export interface ElectricityReductionResults {
+  baselineResults: ElectricityReductionResult,
+  modificationResults: ElectricityReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number,
+};
+
+export interface ElectricityReductionResult {
   energyUse: number,
   energyCost: number,
-  annualEnergySavings: number,
-  costSavings: number,
-  power: number
-};
+  power: number;
+}
 
 //====== end electricity reduction objects ====
 

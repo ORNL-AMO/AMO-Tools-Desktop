@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { ElectricityReductionData, MultimeterReadingData, NameplateData, PowerMeterData, OtherMethodData, ElectricityReductionResults, ElectricityReductionInput } from '../../../shared/models/standalone';
+import { ElectricityReductionData, MultimeterReadingData, NameplateData, PowerMeterData, OtherMethodData, ElectricityReductionResults, ElectricityReductionInput, ElectricityReductionResult } from '../../../shared/models/standalone';
 import { StandaloneService } from '../../standalone.service';
 
 @Injectable()
@@ -218,48 +218,68 @@ export class ElectricityReductionService {
     }
   }
 
-  calculate(isBaseline: boolean, settings: Settings): ElectricityReductionResults {
-    let tmpData = isBaseline ? this.baselineData : this.modificationData;
-    tmpData = this.convertInputs(tmpData, settings);
+  getResults(settings: Settings, baseline: Array<ElectricityReductionData>, modification?: Array<ElectricityReductionData>): ElectricityReductionResults {
+    let baselineResults: ElectricityReductionResult = this.calculate(baseline, settings);
+    let modificationResults: ElectricityReductionResult;
+    let annualEnergySavings: number = 0;
+    let annualCostSavings: number = 0;
+    if (modification) {
+      modificationResults = this.calculate(modification, settings);
+    }
+    let naturalGasReductionResults: ElectricityReductionResults = {
+      baselineResults: baselineResults,
+      modificationResults: modificationResults,
+      annualCostSavings: annualCostSavings,
+      annualEnergySavings: annualEnergySavings
+    }
+    if (modificationResults) {
+      naturalGasReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
+      naturalGasReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
+    }
+    return naturalGasReductionResults;
+  }
+  calculate(input: Array<ElectricityReductionData>, settings: Settings): ElectricityReductionResult {
+    let inputArray: Array<ElectricityReductionData> = this.convertInputs(input, settings);
     let inputObj: ElectricityReductionInput = {
-      electricityReductionInputVec: tmpData
+      electricityReductionInputVec: inputArray
     };
-    let results: ElectricityReductionResults = this.standaloneService.electricityReduction(inputObj);
+    let results: ElectricityReductionResult = this.standaloneService.electricityReduction(inputObj);
     return results;
   }
-
-  calculateIndividualEquipment(input: ElectricityReductionData, settings: Settings): ElectricityReductionResults {
+  
+  calculateIndividualEquipment(input: ElectricityReductionData, settings: Settings): ElectricityReductionResult {
     let inputArray: Array<ElectricityReductionData> = [input];
     inputArray = this.convertInputs(inputArray, settings);
     let inputObj: ElectricityReductionInput = {
       electricityReductionInputVec: inputArray
     };
-    let results: ElectricityReductionResults = this.standaloneService.electricityReduction(inputObj);
+    let results: ElectricityReductionResult = this.standaloneService.electricityReduction(inputObj);
     return results;
   }
 
   convertInputs(inputArray: Array<ElectricityReductionData>, settings: Settings): Array<ElectricityReductionData> {
     //need to loop through for conversions prior to calculation
     for (let i = 0; i < inputArray.length; i++) {
-      let tmpNameplateData = {
-        ratedMotorPower: this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW'),
-        variableSpeedMotor: inputArray[i].nameplateData.variableSpeedMotor,
-        operationalFrequency: inputArray[i].nameplateData.operationalFrequency,
-        lineFrequency: inputArray[i].nameplateData.lineFrequency,
-        motorAndDriveEfficiency: inputArray[i].nameplateData.motorAndDriveEfficiency,
-        loadFactor: inputArray[i].nameplateData.loadFactor
-      };
-      inputArray[i] = {
-        name: inputArray[i].name,
-        operatingHours: inputArray[i].operatingHours,
-        electricityCost: inputArray[i].electricityCost,
-        measurementMethod: inputArray[i].measurementMethod,
-        multimeterData: inputArray[i].multimeterData,
-        nameplateData: tmpNameplateData,
-        powerMeterData: inputArray[i].powerMeterData,
-        otherMethodData: inputArray[i].otherMethodData,
-        units: inputArray[i].units
-      };
+      inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW');
+      // let tmpNameplateData = {
+      //   ratedMotorPower: this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW'),
+      //   variableSpeedMotor: inputArray[i].nameplateData.variableSpeedMotor,
+      //   operationalFrequency: inputArray[i].nameplateData.operationalFrequency,
+      //   lineFrequency: inputArray[i].nameplateData.lineFrequency,
+      //   motorAndDriveEfficiency: inputArray[i].nameplateData.motorAndDriveEfficiency,
+      //   loadFactor: inputArray[i].nameplateData.loadFactor
+      // };
+      // inputArray[i] = {
+      //   name: inputArray[i].name,
+      //   operatingHours: inputArray[i].operatingHours,
+      //   electricityCost: inputArray[i].electricityCost,
+      //   measurementMethod: inputArray[i].measurementMethod,
+      //   multimeterData: inputArray[i].multimeterData,
+      //   nameplateData: tmpNameplateData,
+      //   powerMeterData: inputArray[i].powerMeterData,
+      //   otherMethodData: inputArray[i].otherMethodData,
+      //   units: inputArray[i].units
+      // };
     }
     return inputArray;
   }

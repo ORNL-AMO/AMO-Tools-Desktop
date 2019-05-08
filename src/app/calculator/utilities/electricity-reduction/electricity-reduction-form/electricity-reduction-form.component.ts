@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { ElectricityReductionService } from '../electricity-reduction.service';
-import { ElectricityReductionResults } from '../../../../shared/models/standalone';
+import { ElectricityReductionResults, ElectricityReductionResult } from '../../../../shared/models/standalone';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class ElectricityReductionFormComponent implements OnInit {
   ];
   idString: string;
 
-  individualResults: ElectricityReductionResults;
+  individualResults: ElectricityReductionResult;
 
   isEditingName: boolean = false;
 
@@ -70,13 +70,13 @@ export class ElectricityReductionFormComponent implements OnInit {
       };
       this.emitCalculate.emit(emitObj);
       this.individualResults = this.electricityReductionService.calculateIndividualEquipment(this.electricityReductionService.getObjFromForm(this.form), this.settings);
-      this.individualResults = {
-        energyUse: this.individualResults.energyUse,
-        energyCost: this.individualResults.energyCost,
-        annualEnergySavings: this.individualResults.annualEnergySavings,
-        costSavings: this.individualResults.costSavings,
-        power: this.individualResults.power
-      };
+      // this.individualResults = {
+      //   energyUse: this.individualResults.energyUse,
+      //   energyCost: this.individualResults.energyCost,
+      //   annualEnergySavings: this.individualResults.annualEnergySavings,
+      //   costSavings: this.individualResults.costSavings,
+      //   power: this.individualResults.power
+      // };
     }
   }
 

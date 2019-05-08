@@ -14,7 +14,7 @@
           <span class="fa fa-truck pr-2 pt-0"></span>
           <a (click)="editNaturalGasReduction()">
             <span *ngIf="!naturalGasReduction.opportunitySheet || !naturalGasReduction.opportunitySheet.name">
-              Natural Gas Replacement #{{index+1}}
+              Natural Gas Reduction #{{index+1}}
             </span>
             <span *ngIf="naturalGasReduction.opportunitySheet && naturalGasReduction.opportunitySheet.name">
               {{naturalGasReduction.opportunitySheet.name}}
@@ -46,7 +46,7 @@
     <div class="col-2">
       <div class="row align-items-center h-100">
         <div class="col text-center">
-          <a class="click-link" (click)="editNaturalGasReplacement()">Edit Opportunity</a><br>
+          <a class="click-link" (click)="editNaturalGasReduction()">Edit Opportunity</a><br>
           <a class="click-link danger" (click)="deleteLighting()">Delete</a><br>
           <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
         </div>

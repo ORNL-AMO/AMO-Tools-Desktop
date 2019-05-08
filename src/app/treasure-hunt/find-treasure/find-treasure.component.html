@@ -91,6 +91,18 @@
       </div>
     </div>
 
+    <div class="card calc-card-item motors m-2" (click)="selectCalc('electricity-reduction')">
+      <div class="card-body d-flex flex-column p-2 justify-content-center align-items-center">
+        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+          <span class="fa fa-bolt"></span>
+        </div>
+        <a class="pt-2">Electricity Reduction</a>
+        <p class="mb-0 text-center help-text">
+          DESCRIPTION NEEDED
+        </p>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -116,6 +128,12 @@
   (emitSave)="saveNewNaturalGasReduction($event)" (emitCancel)="selectCalc('none')"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-natural-gas-reduction>
+
+<app-electricity-reduction *ngIf="selectedCalc == 'electricity-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveNewElectricityReduction($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-electricity-reduction>
+
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
