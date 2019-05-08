@@ -18,7 +18,7 @@ export class NaturalGasReductionCardComponent implements OnInit {
   index: number;
   @Output('emitEditOpportunitySheet')
   emitEditOpportunitySheet = new EventEmitter<OpportunitySheet>();
-  @Output('emitEditLighting')
+  @Output('emitEditNaturalGasReduction')
   emitEditNaturalGasReduction = new EventEmitter<NaturalGasReductionTreasureHunt>();
   @Input()
   treasureHunt: TreasureHunt;
@@ -34,8 +34,7 @@ export class NaturalGasReductionCardComponent implements OnInit {
 
   ngOnInit() {
     this.naturalGasReductionResults = this.naturalGasReductionService.getResults(this.settings, this.naturalGasReduction.baseline, this.naturalGasReduction.modification);
-    console.log(this.naturalGasReductionResults)
-    this.percentSavings = (this.naturalGasReductionResults.annualEnergySavings / this.treasureHunt.currentEnergyUsage.electricityCosts) * 100;
+    this.percentSavings = (this.naturalGasReductionResults.annualEnergySavings / this.treasureHunt.currentEnergyUsage.naturalGasCosts) * 100;
   }
 
   editOpportunitySheet() {

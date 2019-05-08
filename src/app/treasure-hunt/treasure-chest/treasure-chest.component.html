@@ -108,15 +108,20 @@
   (emitSave)="saveEditOpportunity($event)" [settings]="settings" [(opportunitySheet)]="selectedEditOpportunitySheet">
 </app-standalone-opportunity-sheet>
 
-<app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="selectCalc('none')"
+<app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="cancelEditCalc()"
   (emitSave)="saveEditReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
   [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
 </app-replace-existing>
 
-<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="selectCalc('none')"
+<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="cancelEditCalc()"
   (emitSave)="saveEditMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
   [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
 </app-motor-drive>
+
+<app-natural-gas-reduction *ngIf="selectedCalc == 'natural-gas-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveEditNaturalGasReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="opperatingHoursPerYear"></app-natural-gas-reduction>
 
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"

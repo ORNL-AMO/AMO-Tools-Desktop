@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from 'http2';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
+import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -30,6 +31,7 @@ export class TreasureChestComponent implements OnInit {
   selectedEditReplaceExistingMotor: ReplaceExistingMotorTreasureHunt;
   selectedEditOpportunitySheet: OpportunitySheet;
   selectedEditMotorDrive: MotorDriveInputsTreasureHunt;
+  selectedEditNaturalGasReduction: NaturalGasReductionTreasureHunt;
 
   displayEnergyType: string = 'All';
   displayCalculatorType: string = 'All';
@@ -42,16 +44,17 @@ export class TreasureChestComponent implements OnInit {
   constructor(
     private lightingReplacementService: LightingReplacementService,
     private replaceExistingService: ReplaceExistingService,
-    private motorDriveService: MotorDriveService) { }
+    private motorDriveService: MotorDriveService,
+    private naturalGasReductionService: NaturalGasReductionService) { }
 
   ngOnInit() {
   }
   //utilities
-  setCaclulatorType(str: string){
+  setCaclulatorType(str: string) {
     this.displayCalculatorType = str;
   }
   setEnergyType(str: string) {
-   this.displayEnergyType = str;
+    this.displayEnergyType = str;
   }
   setHelpTab(str: string) {
     this.helpTabSelect = str;
@@ -82,6 +85,9 @@ export class TreasureChestComponent implements OnInit {
     this.selectedEditIndex = undefined;
     this.selectedEditLightingReplacement = undefined;
     this.selectedEditOpportunitySheet = undefined;
+    this.selectedEditReplaceExistingMotor = undefined;
+    this.selectedEditMotorDrive = undefined;
+    this.selectedEditNaturalGasReduction = undefined;
   }
   showDeleteItem(name: string, index: number, type: string) {
     this.deleteItemIndex = index;
@@ -102,6 +108,8 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.replaceExistingMotors.splice(this.deleteItemIndex, 1);
     } else if (this.itemType == 'motorDrive') {
       this.treasureHunt.motorDrives.splice(this.deleteItemIndex, 1);
+    } else if (this.itemType == 'naturalGasReduction') {
+      this.treasureHunt.naturalGasReductions.splice(this.deleteItemIndex, 1);
     }
     this.save();
     this.hideDeleteItemModal();
@@ -121,6 +129,8 @@ export class TreasureChestComponent implements OnInit {
       this.saveReplaceExistingMotor();
     } else if (this.itemType == 'motorDrive') {
       this.saveMotorDrive();
+    } if (this.itemType == 'naturalGasReduction') {
+      this.saveNaturalGasReduction();
     }
   }
 
@@ -240,10 +250,11 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.replaceExistingMotors[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
     } else if (this.itemType == 'motorDrive') {
       this.treasureHunt.motorDrives[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
+    } else if (this.itemType == 'naturalGasReduction') {
+      this.treasureHunt.naturalGasReductions[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
     }
     this.save();
     this.hideOpportunitySheetModal();
-    this.selectedEditOpportunitySheet = undefined;
   }
 
   editItemOpportunitySheet(opportunitySheet: OpportunitySheet, index: number, type: string) {
@@ -253,7 +264,30 @@ export class TreasureChestComponent implements OnInit {
     this.showOpportunitySheetModal();
   }
 
+  //natural gas reduction 
+  editNaturalGasReduction(ngReduction: NaturalGasReductionTreasureHunt, index: number) {
+    this.selectedEditIndex = index;
+    this.selectedEditNaturalGasReduction = ngReduction;
+    this.naturalGasReductionService.baselineData = ngReduction.baseline;
+    this.naturalGasReductionService.modificationData = ngReduction.modification;
+    this.selectedEditOpportunitySheet = ngReduction.opportunitySheet;
+    this.itemType = 'naturalGasReduction';
+    this.selectCalc('natural-gas-reduction');
+  }
 
+  saveEditNaturalGasReduction(updatedData: NaturalGasReductionTreasureHunt) {
+    this.selectedEditNaturalGasReduction.baseline = updatedData.baseline;
+    this.selectedEditNaturalGasReduction.modification = updatedData.modification;
+    this.showSaveCalcModal();
+  }
 
-
+  saveNaturalGasReduction() {
+    this.selectedEditNaturalGasReduction.opportunitySheet = this.selectedEditOpportunitySheet;
+    this.treasureHunt.naturalGasReductions[this.selectedEditIndex] = this.selectedEditNaturalGasReduction;
+    this.save();
+    this.selectedEditNaturalGasReduction = undefined;
+    this.selectedEditOpportunitySheet = undefined;
+    this.hideSaveCalcModal();
+    this.selectCalc('none');
+  }
 }
