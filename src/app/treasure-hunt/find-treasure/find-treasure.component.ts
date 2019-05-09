@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
 import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
@@ -26,6 +26,7 @@ export class FindTreasureComponent implements OnInit {
   newOpportunitySheet: OpportunitySheet;
   newReplaceExistingMotor: ReplaceExistingMotorTreasureHunt;
   newMotorDrive: MotorDriveInputsTreasureHunt;
+  newNaturalGasReductionTreasureHunt: NaturalGasReductionTreasureHunt;
 
   showOpportunitySheetOnSave: boolean;
   opperatingHoursPerYear: number;
@@ -43,6 +44,14 @@ export class FindTreasureComponent implements OnInit {
     this.saveCalcModal.hide();
   }
 
+  closeSaveCalcModalAndSave() {
+    this.closeSaveCalcModal();
+    this.newOpportunitySheet = undefined;
+    this.showOpportunitySheetOnSave = true;
+    this.selectCalc('none');
+    this.emitSave.emit(this.treasureHunt);
+  }
+
   saveNewCalc() {
     if (this.selectedCalc == 'lighting-replacement') {
       this.saveLighting();
@@ -50,6 +59,8 @@ export class FindTreasureComponent implements OnInit {
       this.saveReplaceExistingMotor();
     } else if (this.selectedCalc == 'motor-drive') {
       this.saveMotorDrive();
+    } else if(this.selectedCalc == 'natural-gas-reduction'){
+      this.saveNaturalGasReduction();
     }
   }
 
@@ -77,11 +88,7 @@ export class FindTreasureComponent implements OnInit {
     }
     this.newLightingCalc.opportunitySheet = this.newOpportunitySheet;
     this.treasureHunt.lightingReplacements.push(this.newLightingCalc);
-    this.closeSaveCalcModal();
-    this.newOpportunitySheet = undefined;
-    this.showOpportunitySheetOnSave = true;
-    this.selectCalc('none');
-    this.emitSave.emit(this.treasureHunt);
+    this.closeSaveCalcModalAndSave();
   }
 
   //standalone opp sheets
@@ -119,11 +126,7 @@ export class FindTreasureComponent implements OnInit {
     }
     this.newReplaceExistingMotor.opportunitySheet = this.newOpportunitySheet;
     this.treasureHunt.replaceExistingMotors.push(this.newReplaceExistingMotor);
-    this.closeSaveCalcModal();
-    this.newOpportunitySheet = undefined;
-    this.showOpportunitySheetOnSave = true;
-    this.selectCalc('none');
-    this.emitSave.emit(this.treasureHunt);
+    this.closeSaveCalcModalAndSave();
   }
 
   //motor drive
@@ -145,10 +148,27 @@ export class FindTreasureComponent implements OnInit {
     }
     this.newMotorDrive.opportunitySheet = this.newOpportunitySheet;
     this.treasureHunt.motorDrives.push(this.newMotorDrive);
-    this.closeSaveCalcModal();
-    this.newOpportunitySheet = undefined;
-    this.showOpportunitySheetOnSave = true;
-    this.selectCalc('none');
-    this.emitSave.emit(this.treasureHunt);
+    this.closeSaveCalcModalAndSave();
   }
+
+  //natural gas reduction
+  saveNewNaturalGasReduction(ngReductionTh: NaturalGasReductionTreasureHunt) {
+    this.newNaturalGasReductionTreasureHunt = ngReductionTh;
+    this.newNaturalGasReductionTreasureHunt.selected = true;
+    if (!this.newOpportunitySheet) {
+      this.showOpportunitySheetOnSave = true;
+    }
+    this.newNaturalGasReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
+    this.saveCalcModal.show();
+  }
+
+  saveNaturalGasReduction() {
+    if (!this.treasureHunt.naturalGasReductions) {
+      this.treasureHunt.naturalGasReductions = new Array<NaturalGasReductionTreasureHunt>();
+    }
+    this.newNaturalGasReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
+    this.treasureHunt.naturalGasReductions.push(this.newNaturalGasReductionTreasureHunt);
+    this.closeSaveCalcModalAndSave();
+  }
+
 }

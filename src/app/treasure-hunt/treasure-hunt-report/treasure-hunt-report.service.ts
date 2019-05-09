@@ -7,6 +7,8 @@ import { Settings } from '../../shared/models/settings';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { OpportunitySheetService } from '../standalone-opportunity-sheet/opportunity-sheet.service';
+import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
+import { NaturalGasReductionResults } from '../../shared/models/standalone';
 
 @Injectable()
 export class TreasureHuntReportService {
@@ -14,7 +16,8 @@ export class TreasureHuntReportService {
   constructor(private lightingReplacementService: LightingReplacementService,
     private motorDriveService: MotorDriveService,
     private replaceExistingService: ReplaceExistingService,
-    private opportunitySheetService: OpportunitySheetService) { }
+    private opportunitySheetService: OpportunitySheetService,
+    private naturalGasReductionService: NaturalGasReductionService) { }
 
   calculateTreasureHuntResults(treasureHunt: TreasureHunt, settings: Settings): TreasureHuntResults {
     //total baseline set in setup
@@ -27,7 +30,7 @@ export class TreasureHuntReportService {
     let electricity: UtilityUsageData = electricityCalc.utilityUsageData;
     opportunitySummaries = electricityCalc.opportunitySummaries;
 
-    let naturalGasCalc: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } = this.getNaturalGasUtilityUsage(treasureHunt, opportunitySummaries);
+    let naturalGasCalc: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } = this.getNaturalGasUtilityUsage(treasureHunt, opportunitySummaries, settings);
     let naturalGas: UtilityUsageData = naturalGasCalc.utilityUsageData;
     opportunitySummaries = naturalGasCalc.opportunitySummaries;
 
@@ -105,19 +108,19 @@ export class TreasureHuntReportService {
     let replaceMotorResults: { totalCostSavings: number, totalEnergySavings: number, totalImplementationCost: number, opportunitySummaries: Array<OpportunitySummary> } = this.getReplaceExistingMotorSavings(treasureHunt, lightingResults.opportunitySummaries);
     let motorDriveResults: { totalCostSavings: number, totalEnergySavings: number, totalImplementationCost: number, opportunitySummaries: Array<OpportunitySummary> } = this.getMotorDriveSavings(treasureHunt, replaceMotorResults.opportunitySummaries);
     let totalElectricityUsageSavings: number = lightingResults.totalEnergySavings + replaceMotorResults.totalEnergySavings + motorDriveResults.totalEnergySavings;
-    let totalElectricitCostSavings: number = lightingResults.totalCostSavings + replaceMotorResults.totalCostSavings + motorDriveResults.totalCostSavings;
+    let totalElectricityCostSavings: number = lightingResults.totalCostSavings + replaceMotorResults.totalCostSavings + motorDriveResults.totalCostSavings;
     let totalImplementationCost: number = lightingResults.totalImplementationCost + replaceMotorResults.totalImplementationCost + motorDriveResults.totalImplementationCost;
-    let paybackPeriod: number = totalImplementationCost / totalElectricitCostSavings;
+    let paybackPeriod: number = totalImplementationCost / totalElectricityCostSavings;
     let results: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } =
     {
       utilityUsageData: {
         baselineEnergyUsage: treasureHunt.currentEnergyUsage.electricityUsage,
         baselineEnergyCost: treasureHunt.currentEnergyUsage.electricityCosts,
         modifiedEnergyUsage: treasureHunt.currentEnergyUsage.electricityUsage - totalElectricityUsageSavings,
-        modifiedEnergyCost: treasureHunt.currentEnergyUsage.electricityCosts - totalElectricitCostSavings,
+        modifiedEnergyCost: treasureHunt.currentEnergyUsage.electricityCosts - totalElectricityCostSavings,
         energySavings: totalElectricityUsageSavings,
-        costSavings: totalElectricitCostSavings,
-        percentSavings: (totalElectricitCostSavings / treasureHunt.currentEnergyUsage.electricityCosts) * 100,
+        costSavings: totalElectricityCostSavings,
+        percentSavings: (totalElectricityCostSavings / treasureHunt.currentEnergyUsage.electricityCosts) * 100,
         implementationCost: totalImplementationCost,
         paybackPeriod: paybackPeriod
       },
@@ -217,23 +220,59 @@ export class TreasureHuntReportService {
 
 
   //natural gas
-  getNaturalGasUtilityUsage(treasureHunt: TreasureHunt, opportunitySummaries: Array<OpportunitySummary>): { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } {
+  //calcs: natural gas reduction
+  getNaturalGasUtilityUsage(treasureHunt: TreasureHunt, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } {
+    let naturalGasReductionResults: { totalCostSavings: number, totalEnergySavings: number, totalImplementationCost: number, opportunitySummaries: Array<OpportunitySummary> } = this.getNaturalGasReductionSavings(treasureHunt, opportunitySummaries, settings);
+    let totalNaturalGasUsageSavings: number = naturalGasReductionResults.totalEnergySavings;
+    let totalNaturalGasCostSavings: number = naturalGasReductionResults.totalCostSavings;
+    let totalImplementationCost: number = naturalGasReductionResults.totalImplementationCost;
+    let paybackPeriod: number = totalImplementationCost / totalNaturalGasCostSavings;
     let results: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } =
     {
       utilityUsageData: {
         baselineEnergyUsage: treasureHunt.currentEnergyUsage.naturalGasUsage,
         baselineEnergyCost: treasureHunt.currentEnergyUsage.naturalGasCosts,
-        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.naturalGasUsage,
-        modifiedEnergyCost: treasureHunt.currentEnergyUsage.naturalGasCosts,
-        energySavings: 0,
-        costSavings: 0,
-        percentSavings: 0,
-        implementationCost: 0,
-        paybackPeriod: 0
+        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.naturalGasUsage - totalNaturalGasUsageSavings,
+        modifiedEnergyCost: treasureHunt.currentEnergyUsage.naturalGasCosts - totalNaturalGasCostSavings,
+        energySavings: totalNaturalGasUsageSavings,
+        costSavings: totalNaturalGasCostSavings,
+        percentSavings: (totalNaturalGasCostSavings / treasureHunt.currentEnergyUsage.naturalGasCosts) * 100,
+        implementationCost: totalImplementationCost,
+        paybackPeriod: paybackPeriod
       },
       opportunitySummaries: opportunitySummaries
     }
     return results;
+  }
+
+  //natural gas reduction
+  getNaturalGasReductionSavings(treasureHunt: TreasureHunt, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): { totalCostSavings: number, totalEnergySavings: number, totalImplementationCost: number, opportunitySummaries: Array<OpportunitySummary> } {
+    let totalCostSavings: number = 0;
+    let totalEnergySavings: number = 0;
+    let totalImplementationCost: number = 0;
+    if (treasureHunt.naturalGasReductions) {
+      let index: number = 1;
+      treasureHunt.naturalGasReductions.forEach(ngReduction => {
+        if (ngReduction.selected) {
+          let name: string = 'Natural Gas Reduction #' + index;
+          let results: NaturalGasReductionResults = this.naturalGasReductionService.getResults(settings, ngReduction.baseline, ngReduction.modification);
+          totalCostSavings = totalCostSavings + results.annualCostSavings;
+          totalEnergySavings = totalEnergySavings + results.annualEnergySavings;
+          let opportunityCost: OpportunityCost;
+          if (ngReduction.opportunitySheet) {
+            totalImplementationCost = totalImplementationCost + this.opportunitySheetService.getOppSheetImplementationCost(ngReduction.opportunitySheet.opportunityCost);
+            if (ngReduction.opportunitySheet.name) {
+              name = ngReduction.opportunitySheet.name;
+            }
+            opportunityCost = ngReduction.opportunitySheet.opportunityCost;
+          }
+          let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Natural Gas', results.annualCostSavings, results.annualEnergySavings, opportunityCost);
+          opportunitySummaries.push(oppSummary);
+        }
+        index++;
+      });
+    }
+    return { totalCostSavings: totalCostSavings, totalEnergySavings: totalEnergySavings, totalImplementationCost: totalImplementationCost, opportunitySummaries: opportunitySummaries }
   }
 
   //water

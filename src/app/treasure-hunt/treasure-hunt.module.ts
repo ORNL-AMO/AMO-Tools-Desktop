@@ -33,6 +33,8 @@ import { MotorDriveCardComponent } from './treasure-chest/motor-drive-card/motor
 import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
 import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-report.service';
+import { NaturalGasReductionModule } from '../calculator/utilities/natural-gas-reduction/natural-gas-reduction.module';
+import { NaturalGasReductionCardComponent } from './treasure-chest/natural-gas-reduction-card/natural-gas-reduction-card.component';
 
 @NgModule({
   imports: [
@@ -44,7 +46,8 @@ import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-
     SharedModule,
     ReplaceExistingModule,
     MotorDriveModule,
-    TreasureHuntReportModule
+    TreasureHuntReportModule,
+    NaturalGasReductionModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -64,7 +67,7 @@ import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-
     OpportunitySheetResultsComponent, 
     OpportunitySheetCardComponent, 
     OperatingHoursComponent, 
-    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent, TreasureChestMenuComponent
+    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent, TreasureChestMenuComponent, NaturalGasReductionCardComponent
   ],
   providers: [ TreasureHuntService, OpportunitySheetService, TreasureHuntReportService ]
 })

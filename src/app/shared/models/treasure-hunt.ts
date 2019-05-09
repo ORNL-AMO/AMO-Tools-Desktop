@@ -1,6 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
+import { NaturalGasReductionData } from "./standalone";
 
 export interface TreasureHunt {
     name: string,
@@ -8,6 +9,7 @@ export interface TreasureHunt {
     opportunitySheets?: Array<OpportunitySheet>;
     replaceExistingMotors?: Array<ReplaceExistingMotorTreasureHunt>;
     motorDrives?: Array<MotorDriveInputsTreasureHunt>;
+    naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     setupDone: boolean;
@@ -80,6 +82,15 @@ export interface LightingReplacementTreasureHunt {
     baselineElectricityCost?: number,
     modificationElectricityCost?: number
 }
+
+
+export interface NaturalGasReductionTreasureHunt {
+    baseline: Array<NaturalGasReductionData>;
+    modification: Array<NaturalGasReductionData>;
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
+}
+
 
 export interface OpportunitySheetResults {
     electricityResults: OpportunitySheetResult,
@@ -159,3 +170,4 @@ export interface OpportunitiesPaybackDetails {
     moreThanThreeYears: { numOpportunities: number, totalSavings: number };
     totals: { numOpportunities: number, totalSavings: number };
 }
+

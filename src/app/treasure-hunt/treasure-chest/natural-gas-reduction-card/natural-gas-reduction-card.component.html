@@ -1,0 +1,56 @@
+<div class="card treasure-hunt-card" [ngClass]="{'not-selected': !naturalGasReduction.selected}">
+  <div class="card-body d-flex w-100 p-0">
+    <div class="col-1 col-item-br">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <app-animated-checkmark [active]="naturalGasReduction.selected" (click)="toggleSelected()">
+          </app-animated-checkmark>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 col-item-br opportunity-name">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <span class="fa fa-truck pr-2 pt-0"></span>
+          <a (click)="editNaturalGasReduction()">
+            <span *ngIf="!naturalGasReduction.opportunitySheet || !naturalGasReduction.opportunitySheet.name">
+              Natural Gas Replacement #{{index+1}}
+            </span>
+            <span *ngIf="naturalGasReduction.opportunitySheet && naturalGasReduction.opportunitySheet.name">
+              {{naturalGasReduction.opportunitySheet.name}}
+            </span>
+          </a><br>
+          <span>Annual Cost Savings: {{naturalGasReductionResults.annualCostSavings | currency:'USD'}}</span><br>
+          <span>Annual Natural Gas Savings: {{naturalGasReductionResults.annualEnergySavings | number:'1.0-0'}}
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'">MMBtu/yr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ/yr</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 col-item-br text-center graph-col treasure-hunt-item">
+      <div class="large pt-2">Fuel Cost Savings</div>
+      <app-treasure-hunt-gauge [value]="percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
+    </div>
+    <div class="col-2 col-item-br opp-sheet-col">
+      <div class="row align-items-center h-100">
+        <div class="col text-center"
+          [ngClass]="{'no-opp-sheet': !naturalGasReduction.opportunitySheet, 'opp-sheet-exists': naturalGasReduction.opportunitySheet}"
+          (click)="editOpportunitySheet()">
+          <span class="fa fa-edit"></span><br>
+          <span class="large pt-2" *ngIf="!naturalGasReduction.opportunitySheet">Add Opportunity Sheet</span>
+          <span class="large pt-2" *ngIf="naturalGasReduction.opportunitySheet">Edit Opportunity Sheet</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="row align-items-center h-100">
+        <div class="col text-center">
+          <a class="click-link" (click)="editNaturalGasReplacement()">Edit Opportunity</a><br>
+          <a class="click-link danger" (click)="deleteLighting()">Delete</a><br>
+          <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
