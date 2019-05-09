@@ -27,6 +27,9 @@
           Labor Cost
         </td>
         <td>
+          Engineering Cost
+        </td>
+        <td>
           Other Cost
         </td>
         <td>
@@ -83,6 +86,10 @@
         <!--labor cost-->
         <td>
           {{getLaborCost(opportunity.opportunityCost) | currency:'USD'}}
+        </td>
+        <!--engineering cost-->
+        <td>
+          {{getEngineeringCost(opportunity.opportunityCost) | currency:'USD'}}
         </td>
         <!--other cost-->
         <td>

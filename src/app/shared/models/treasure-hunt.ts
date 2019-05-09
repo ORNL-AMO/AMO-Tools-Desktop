@@ -27,9 +27,7 @@ export interface EnergyUsage {
     compressedAirUsage: number,
     compressedAirCosts: number,
     steamUsage: number,
-    steamCosts: number,
-    otherUtilityUsage: number,
-    otherUtilityCosts: number
+    steamCosts: number
 }
 
 export interface OpportunitySheet {
