@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { ElectricityReductionService } from './electricity-reduction.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { ElectricityReductionResults, ElectricityReductionData } from '../../../shared/models/standalone';
+import { ElectricityReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-electricity-reduction',
@@ -12,7 +14,18 @@ import { ElectricityReductionResults, ElectricityReductionData } from '../../../
 })
 export class ElectricityReductionComponent implements OnInit {
   @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<ElectricityReductionTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
+  @Output('emitAddOpportunitySheet')
+  emitAddOpportunitySheet = new EventEmitter<boolean>();
+  @Input()
   settings: Settings;
+  @Input()
+  operatingHours: OperatingHours;
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -31,8 +44,7 @@ export class ElectricityReductionComponent implements OnInit {
   modificationForms: Array<FormGroup>;
   modificationExists = false;
 
-  baselineResults: ElectricityReductionResults;
-  modificationResults: ElectricityReductionResults;
+  electricityReductionResults: ElectricityReductionResults;
 
   constructor(private settingsDbService: SettingsDbService, private electricityReductionService: ElectricityReductionService) { }
 
@@ -52,6 +64,7 @@ export class ElectricityReductionComponent implements OnInit {
     else {
       this.loadForms();
     }
+    this.getResults();
   }
 
   ngAfterViewInit() {
@@ -61,17 +74,22 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    let baselineData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
-    for (let i = 0; i < this.baselineForms.length; i++) {
-      baselineData.push(this.electricityReductionService.getObjFromForm(this.baselineForms[i]));
-    }
-    this.electricityReductionService.baselineData = baselineData;
-    if (this.modificationExists) {
-      let modificationData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
-      for (let i = 0; i < this.modificationForms.length; i++) {
-        modificationData.push(this.electricityReductionService.getObjFromForm(this.modificationForms[i]));
+    if (!this.inTreasureHunt) {
+      let baselineData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
+      for (let i = 0; i < this.baselineForms.length; i++) {
+        baselineData.push(this.electricityReductionService.getObjFromForm(this.baselineForms[i]));
       }
-      this.electricityReductionService.modificationData = modificationData;
+      this.electricityReductionService.baselineData = baselineData;
+      if (this.modificationExists) {
+        let modificationData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
+        for (let i = 0; i < this.modificationForms.length; i++) {
+          modificationData.push(this.electricityReductionService.getObjFromForm(this.modificationForms[i]));
+        }
+        this.electricityReductionService.modificationData = modificationData;
+      }
+    } else {
+      this.electricityReductionService.baselineData = undefined;
+      this.electricityReductionService.modificationData = undefined;
     }
   }
 
@@ -98,7 +116,7 @@ export class ElectricityReductionComponent implements OnInit {
   removeBaselineEquipment(i: number) {
     this.electricityReductionService.removeBaselineEquipment(i);
     this.baselineForms.splice(i, 1);
-    this.refreshResults();
+    this.getResults();
   }
 
   createModification() {
@@ -123,7 +141,7 @@ export class ElectricityReductionComponent implements OnInit {
     if (this.modificationForms.length < 1) {
       this.modificationExists = false;
     }
-    this.refreshResults();
+    this.getResults();
   }
 
   removeEquipment(emitObj: { index: number, isBaseline: boolean }) {
@@ -150,22 +168,24 @@ export class ElectricityReductionComponent implements OnInit {
   calculate(emitObj: { form: FormGroup, index: number, isBaseline: boolean }) {
     if (emitObj.isBaseline) {
       this.baselineForms[emitObj.index] = emitObj.form;
-      this.electricityReductionService.updateBaselineDataArray(this.baselineForms);
-      this.baselineResults = this.electricityReductionService.calculate(true, this.settings);
+      // this.electricityReductionService.updateBaselineDataArray(this.baselineForms);
+      // this.baselineResults = this.electricityReductionService.calculate(true, this.settings);
     } else {
       this.modificationForms[emitObj.index] = emitObj.form;
-      this.electricityReductionService.updateModificationDataArray(this.modificationForms);
-      this.modificationResults = this.electricityReductionService.calculate(false, this.settings);
+      // this.electricityReductionService.updateModificationDataArray(this.modificationForms);
+      //this.modificationResults = this.electricityReductionService.calculate(false, this.settings);
     }
+    this.getResults();
   }
 
-  refreshResults() {
+  getResults() {
     this.electricityReductionService.updateBaselineDataArray(this.baselineForms);
-    this.baselineResults = this.electricityReductionService.calculate(true, this.settings);
+    //this.baselineResults = this.electricityReductionService.calculate(true, this.settings);
     if (this.modificationExists) {
       this.electricityReductionService.updateModificationDataArray(this.modificationForms);
-      this.modificationResults = this.electricityReductionService.calculate(false, this.settings);
+      //this.modificationResults = this.electricityReductionService.calculate(false, this.settings);
     }
+    this.electricityReductionResults = this.electricityReductionService.getResults(this.settings, this.electricityReductionService.baselineData, this.electricityReductionService.modificationData);
   }
 
   btnResetData() {
@@ -182,5 +202,17 @@ export class ElectricityReductionComponent implements OnInit {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }
+  }
+
+  save() {
+    this.emitSave.emit({ baseline: this.electricityReductionService.baselineData, modification: this.electricityReductionService.modificationData });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
+  }
+
+  addOpportunitySheet() {
+    this.emitAddOpportunitySheet.emit(true);
   }
 }

@@ -6,7 +6,7 @@ import {
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
   PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, 
-  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult
+  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -302,7 +302,7 @@ export class StandaloneService {
     }
   }
 
-  electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResults {
+  electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {
     return calculatorAddon.electricityReduction(inputObj);
   }
 

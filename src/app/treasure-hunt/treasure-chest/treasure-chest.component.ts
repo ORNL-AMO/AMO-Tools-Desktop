@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from 'http2';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -7,6 +7,7 @@ import { ReplaceExistingService } from '../../calculator/motors/replace-existing
 import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
+import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -32,6 +33,7 @@ export class TreasureChestComponent implements OnInit {
   selectedEditOpportunitySheet: OpportunitySheet;
   selectedEditMotorDrive: MotorDriveInputsTreasureHunt;
   selectedEditNaturalGasReduction: NaturalGasReductionTreasureHunt;
+  selectedEditElectricityReduction: ElectricityReductionTreasureHunt;
 
   displayEnergyType: string = 'All';
   displayCalculatorType: string = 'All';
@@ -45,7 +47,8 @@ export class TreasureChestComponent implements OnInit {
     private lightingReplacementService: LightingReplacementService,
     private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService,
-    private naturalGasReductionService: NaturalGasReductionService) { }
+    private naturalGasReductionService: NaturalGasReductionService,
+    private electricityReductionService: ElectricityReductionService) { }
 
   ngOnInit() {
   }
@@ -110,6 +113,8 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.motorDrives.splice(this.deleteItemIndex, 1);
     } else if (this.itemType == 'naturalGasReduction') {
       this.treasureHunt.naturalGasReductions.splice(this.deleteItemIndex, 1);
+    } else if (this.itemType == 'electricityReduction') {
+      this.treasureHunt.electricityReductions.splice(this.deleteItemIndex, 1);
     }
     this.save();
     this.hideDeleteItemModal();
@@ -129,8 +134,10 @@ export class TreasureChestComponent implements OnInit {
       this.saveReplaceExistingMotor();
     } else if (this.itemType == 'motorDrive') {
       this.saveMotorDrive();
-    } if (this.itemType == 'naturalGasReduction') {
+    } else if (this.itemType == 'naturalGasReduction') {
       this.saveNaturalGasReduction();
+    } else if (this.itemType == 'electricityReduction') {
+      this.saveElectricityReduction();
     }
   }
 
@@ -286,6 +293,33 @@ export class TreasureChestComponent implements OnInit {
     this.treasureHunt.naturalGasReductions[this.selectedEditIndex] = this.selectedEditNaturalGasReduction;
     this.save();
     this.selectedEditNaturalGasReduction = undefined;
+    this.selectedEditOpportunitySheet = undefined;
+    this.hideSaveCalcModal();
+    this.selectCalc('none');
+  }
+
+  //electricity reduction 
+  editElectricityReduction(electricityReduction: ElectricityReductionTreasureHunt, index: number) {
+    this.selectedEditIndex = index;
+    this.selectedEditElectricityReduction = electricityReduction;
+    this.electricityReductionService.baselineData = electricityReduction.baseline;
+    this.electricityReductionService.modificationData = electricityReduction.modification;
+    this.selectedEditOpportunitySheet = electricityReduction.opportunitySheet;
+    this.itemType = 'electricityReduction';
+    this.selectCalc('electricity-reduction');
+  }
+
+  saveEditElectricityReduction(updatedData: ElectricityReductionTreasureHunt) {
+    this.selectedEditElectricityReduction.baseline = updatedData.baseline;
+    this.selectedEditElectricityReduction.modification = updatedData.modification;
+    this.showSaveCalcModal();
+  }
+
+  saveElectricityReduction() {
+    this.selectedEditElectricityReduction.opportunitySheet = this.selectedEditOpportunitySheet;
+    this.treasureHunt.electricityReductions[this.selectedEditIndex] = this.selectedEditElectricityReduction;
+    this.save();
+    this.selectedEditElectricityReduction = undefined;
     this.selectedEditOpportunitySheet = undefined;
     this.hideSaveCalcModal();
     this.selectCalc('none');

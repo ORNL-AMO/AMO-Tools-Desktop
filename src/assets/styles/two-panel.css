@@ -155,7 +155,7 @@
 .treasure-hunt .btn-secondary:not([disabled]):not(.disabled).active{
     background-color: #2E4053;
     transition: all .5s ease-in-out;
-    color: black;
+    color: white;
 }
 
 .panel-add a{

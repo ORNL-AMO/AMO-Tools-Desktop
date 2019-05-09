@@ -56,6 +56,7 @@
         </app-motor-drive-card>
       </div>
     </div>
+    <!--natural gas reduction-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Natural Gas Reduction') && (displayEnergyType == 'All' || displayEnergyType == 'Natural Gas')">
       <div class="col-12" *ngFor="let naturalGasReduction of treasureHunt.naturalGasReductions; let index = index;">
@@ -64,6 +65,17 @@
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'naturalGasReduction')"
           (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'naturalGasReduction')"
           [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"></app-natural-gas-reduction-card>
+      </div>
+    </div>
+    <!--electricity reduction-->
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity Reduction') && (displayEnergyType == 'All' || displayEnergyType == 'Electricity')">
+      <div class="col-12" *ngFor="let electricityReduction of treasureHunt.electricityReductions; let index = index;">
+        <app-electricity-reduction-card [electricityReduction]="electricityReduction" [settings]="settings"
+          [index]="index" (emitEditElectricityReduction)="editElectricityReduction($event, index)"
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'electricityReduction')"
+          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'electricityReduction')"
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"></app-electricity-reduction-card>
       </div>
     </div>
     <!--standalone opportunity sheet-->
@@ -123,6 +135,10 @@
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="opperatingHoursPerYear"></app-natural-gas-reduction>
 
+<app-electricity-reduction *ngIf="selectedCalc == 'electricity-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveEditElectricityReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="opperatingHoursPerYear"></app-electricity-reduction>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

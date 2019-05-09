@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
 import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
@@ -27,6 +27,7 @@ export class FindTreasureComponent implements OnInit {
   newReplaceExistingMotor: ReplaceExistingMotorTreasureHunt;
   newMotorDrive: MotorDriveInputsTreasureHunt;
   newNaturalGasReductionTreasureHunt: NaturalGasReductionTreasureHunt;
+  newElectricityReductionTreasureHunt: ElectricityReductionTreasureHunt;
 
   showOpportunitySheetOnSave: boolean;
   opperatingHoursPerYear: number;
@@ -59,8 +60,10 @@ export class FindTreasureComponent implements OnInit {
       this.saveReplaceExistingMotor();
     } else if (this.selectedCalc == 'motor-drive') {
       this.saveMotorDrive();
-    } else if(this.selectedCalc == 'natural-gas-reduction'){
+    } else if (this.selectedCalc == 'natural-gas-reduction') {
       this.saveNaturalGasReduction();
+    } else if (this.selectedCalc == 'electricity-reduction') {
+      this.saveElectricityReduction();
     }
   }
 
@@ -171,4 +174,23 @@ export class FindTreasureComponent implements OnInit {
     this.closeSaveCalcModalAndSave();
   }
 
+  //electricity reduction
+  saveNewElectricityReduction(electricityReductionTh: ElectricityReductionTreasureHunt) {
+    this.newElectricityReductionTreasureHunt = electricityReductionTh;
+    this.newElectricityReductionTreasureHunt.selected = true;
+    if (!this.newOpportunitySheet) {
+      this.showOpportunitySheetOnSave = true;
+    }
+    this.newElectricityReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
+    this.saveCalcModal.show();
+  }
+
+  saveElectricityReduction() {
+    if (!this.treasureHunt.electricityReductions) {
+      this.treasureHunt.electricityReductions = new Array<ElectricityReductionTreasureHunt>();
+    }
+    this.newElectricityReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
+    this.treasureHunt.electricityReductions.push(this.newElectricityReductionTreasureHunt);
+    this.closeSaveCalcModalAndSave();
+  }
 }

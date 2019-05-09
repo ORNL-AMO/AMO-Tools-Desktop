@@ -73,17 +73,22 @@ export class NaturalGasReductionComponent implements OnInit {
   }
 
   ngOnDestory() {
-    let baselineData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
-    for (let i = 0; i < this.baselineForms.length; i++) {
-      baselineData.push(this.naturalGasReductionService.getObjFromForm(this.baselineForms[i]));
-    }
-    this.naturalGasReductionService.baselineData = baselineData;
-    if (this.modificationExists) {
-      let modificationData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
-      for (let i = 0; i < this.modificationForms.length; i++) {
-        modificationData.push(this.naturalGasReductionService.getObjFromForm(this.modificationForms[i]));
+    if (!this.inTreasureHunt) {
+      let baselineData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
+      for (let i = 0; i < this.baselineForms.length; i++) {
+        baselineData.push(this.naturalGasReductionService.getObjFromForm(this.baselineForms[i]));
       }
-      this.naturalGasReductionService.modificationData = modificationData;
+      this.naturalGasReductionService.baselineData = baselineData;
+      if (this.modificationExists) {
+        let modificationData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
+        for (let i = 0; i < this.modificationForms.length; i++) {
+          modificationData.push(this.naturalGasReductionService.getObjFromForm(this.modificationForms[i]));
+        }
+        this.naturalGasReductionService.modificationData = modificationData;
+      }
+    } else {
+      this.naturalGasReductionService.baselineData = undefined;
+      this.naturalGasReductionService.modificationData = undefined;
     }
   }
 
