@@ -56,17 +56,6 @@ export class LightingReplacementComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
     this.initData();
-
-    if (this.lightingReplacementService.baselineElectricityCost) {
-      this.baselineElectricityCost = this.lightingReplacementService.baselineElectricityCost;
-    } else {
-      this.baselineElectricityCost = this.settings.electricityCost;
-    }
-    if (this.lightingReplacementService.modificationElectricityCost) {
-      this.modificationElectricityCost = this.lightingReplacementService.modificationElectricityCost;
-    } else {
-      this.modificationElectricityCost = this.settings.electricityCost;
-    }
     this.getResults();
   }
 
@@ -114,6 +103,20 @@ export class LightingReplacementComponent implements OnInit {
     }
     if (this.lightingReplacementService.modificationData) {
       this.modificationData = this.lightingReplacementService.modificationData;
+      if(this.modificationData.length != 0){
+        this.modificationExists = true;
+      }
+    }
+
+    if (this.lightingReplacementService.baselineElectricityCost) {
+      this.baselineElectricityCost = this.lightingReplacementService.baselineElectricityCost;
+    } else {
+      this.baselineElectricityCost = this.settings.electricityCost;
+    }
+    if (this.lightingReplacementService.modificationElectricityCost) {
+      this.modificationElectricityCost = this.lightingReplacementService.modificationElectricityCost;
+    } else {
+      this.modificationElectricityCost = this.settings.electricityCost;
     }
   }
 
@@ -131,6 +134,7 @@ export class LightingReplacementComponent implements OnInit {
   createModification() {
     this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
     this.modificationExists = true;
+    this.setModificationSelected();
     this.getResults();
   }
 
@@ -149,13 +153,25 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   updateBaselineData(data: LightingReplacementData, index: number) {
-    this.baselineData[index] = data;
+    this.updateDataArray(this.baselineData, data, index);
     this.getResults();
   }
 
   updateModificationData(data: LightingReplacementData, index: number) {
-    this.modificationData[index] = data;
+    // this.modificationData[index] = data;
+    this.updateDataArray(this.modificationData, data, index);
     this.getResults();
+  }
+
+  updateDataArray(dataArray: Array<LightingReplacementData>, data: LightingReplacementData, index: number) {
+    dataArray[index].name = data.name;
+    dataArray[index].hoursPerYear = data.hoursPerYear;
+    dataArray[index].wattsPerLamp = data.wattsPerLamp;
+    dataArray[index].lampsPerFixture = data.lampsPerFixture;
+    dataArray[index].numberOfFixtures = data.numberOfFixtures;
+    dataArray[index].lumensPerLamp = data.lumensPerLamp;
+    dataArray[index].totalLighting = data.totalLighting;
+    dataArray[index].electricityUse = data.electricityUse;
   }
 
   getResults() {
@@ -194,9 +210,18 @@ export class LightingReplacementComponent implements OnInit {
     this.baselineData = [tmpObj];
     this.modificationData = new Array<LightingReplacementData>();
     this.modificationExists = false;
+    this.getResults();
   }
 
-  togglePanel() {
-    this.baselineSelected = !this.baselineSelected;
+  setBaselineSelected() {
+    if (this.baselineSelected == false) {
+      this.baselineSelected = true;
+    }
+  }
+
+  setModificationSelected() {
+    if (this.baselineSelected == true) {
+      this.baselineSelected = false;
+    }
   }
 }

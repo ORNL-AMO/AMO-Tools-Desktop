@@ -36,18 +36,18 @@ export class LightingReplacementResultsComponent implements OnInit {
   ngOnInit() { }
 
   updateTable0String() {
-    this.table0String = this.copyTable0.nativeElement.innerText;
+    this.table0String = this.copyTable0.nativeElement.innerText + this.copyTable1.nativeElement.innerText + this.copyTable2.nativeElement.innerText + this.copyTable3.nativeElement.innerText;
   }
 
-  updateTable1String() {
-    this.table1String = this.copyTable1.nativeElement.innerText;
-  }
+  // updateTable1String() {
+  //   this.table1String = this.copyTable1.nativeElement.innerText;
+  // }
 
-  updateTable2String() {
-    this.table2String = this.copyTable2.nativeElement.innerText;
-  }
+  // updateTable2String() {
+  //   this.table2String = this.copyTable2.nativeElement.innerText;
+  // }
 
-  updateTable3String() {
-    this.table3String = this.copyTable3.nativeElement.innerText;
-  }
+  // updateTable3String() {
+  //   this.table3String = this.copyTable3.nativeElement.innerText;
+  // }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { FormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
@@ -21,6 +21,8 @@ export class LightingReplacementFormComponent implements OnInit {
   emitFocusField = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  selected: boolean;
 
   idString: string;
   isEditingName: boolean = false;
@@ -29,7 +31,6 @@ export class LightingReplacementFormComponent implements OnInit {
   constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
-    //need to actually use the id string..
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
     }
@@ -37,6 +38,19 @@ export class LightingReplacementFormComponent implements OnInit {
       this.idString = 'modification_' + this.index;
     }
     this.form = this.lightingReplacementService.getFormFromObj(this.data);
+    if (this.selected == false) {
+      this.form.disable();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected == false) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    }
   }
 
   calculate() {
