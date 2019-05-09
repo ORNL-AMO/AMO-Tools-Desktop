@@ -52,7 +52,7 @@
         <!--unit-->
         <td>
           <span *ngIf="opportunity.utilityType == 'Electricity'">kWh</span>
-          
+
           <span *ngIf="opportunity.utilityType == 'Compressed Air'">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
@@ -67,6 +67,9 @@
             *ngIf="opportunity.utilityType == 'Natural Gas' || opportunity.utilityType == 'Steam' || opportunity.utilityType == 'Other Fuel'">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+          </span>
+          <span *ngIf="opportunity.utilityType == 'Mixed'">
+            &mdash;
           </span>
         </td>
         <!--cost savings-->

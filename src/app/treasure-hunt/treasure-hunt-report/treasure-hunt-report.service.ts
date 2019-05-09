@@ -336,9 +336,9 @@ export class TreasureHuntReportService {
     let results: { utilityUsageData: UtilityUsageData, opportunitySummaries: Array<OpportunitySummary> } =
     {
       utilityUsageData: {
-        baselineEnergyUsage: treasureHunt.currentEnergyUsage.otherFuelUsage,
+        baselineEnergyUsage: treasureHunt.currentEnergyUsage.otherUtilityUsage,
         baselineEnergyCost: treasureHunt.currentEnergyUsage.otherUtilityCosts,
-        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.otherFuelUsage,
+        modifiedEnergyUsage: treasureHunt.currentEnergyUsage.otherUtilityUsage,
         modifiedEnergyCost: treasureHunt.currentEnergyUsage.otherUtilityCosts,
         energySavings: 0,
         costSavings: 0,
@@ -427,7 +427,7 @@ export class TreasureHuntReportService {
             //more then one energy source in opp sheet, implemenetation cost in other
             thuntResults.other.implementationCost = thuntResults.other.implementationCost + oppSheetResults.totalImplementationCost;
             thuntResults.other.paybackPeriod = thuntResults.other.implementationCost / thuntResults[energyTypeInUse].costSavings;
-            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, 'Other', oppSheetResults.totalCostSavings, oppSheetResults.totalEnergySavings, oppSheet.opportunityCost);
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, 'Mixed', oppSheetResults.totalCostSavings, oppSheetResults.totalEnergySavings, oppSheet.opportunityCost);
             thuntResults.opportunitySummaries.push(oppSummary);
           }
           //add implementation costs to total

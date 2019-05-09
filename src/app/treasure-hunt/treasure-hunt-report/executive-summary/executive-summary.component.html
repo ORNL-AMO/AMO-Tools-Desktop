@@ -276,10 +276,10 @@
       <!--Other -->
       <tr *ngIf="treasureHuntResults.other.implementationCost != 0">
         <td colspan="8" class="bold" *ngIf="showFullSummary">
-          Other
+          Mixed
         </td>
         <td class="bold" *ngIf="!showFullSummary">
-          Other
+          Mixed
         </td>
         <td>
           {{treasureHuntResults.other.implementationCost | currency:'USD':'1.0-0'}}
