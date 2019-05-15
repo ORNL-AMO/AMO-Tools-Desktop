@@ -38,7 +38,6 @@ export class NaturalGasReductionComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
   baselineSelected: boolean = true;
-  modifiedSelected: boolean = false;
 
   modificationExists = false;
 
@@ -168,16 +167,6 @@ export class NaturalGasReductionComponent implements OnInit {
     this.modificationData = new Array<NaturalGasReductionData>();
     this.modificationExists = false;
     this.getResults();
-  }
-
-  togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
-      this.baselineSelected = true;
-      this.modifiedSelected = false;
-    } else if (bool == this.modifiedSelected) {
-      this.modifiedSelected = true;
-      this.baselineSelected = false;
-    }
   }
 
   save() {

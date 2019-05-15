@@ -81,7 +81,7 @@ export class NaturalGasReductionFormComponent implements OnInit {
     this.individualResults = this.naturalGasReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
 
-  removeEquipment(i: number) {
+  removeEquipment() {
     this.emitRemoveEquipment.emit(this.index);
   }
 
