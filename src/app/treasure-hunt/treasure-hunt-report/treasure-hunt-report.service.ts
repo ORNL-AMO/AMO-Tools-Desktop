@@ -77,10 +77,11 @@ export class TreasureHuntReportService {
     //calculate and update results from standalone opp sheets
     thuntResults = this.getOpportunitySheetSavings(treasureHunt, settings, thuntResults);
     //final summary calculations
-    thuntResults.totalModificationCost = thuntResults.totalBaselineCost - thuntResults.electricity.costSavings - thuntResults.naturalGas.costSavings - thuntResults.water.costSavings - thuntResults.wasteWater.costSavings - thuntResults.otherFuel.costSavings - thuntResults.compressedAir.costSavings - thuntResults.steam.costSavings - thuntResults.other.costSavings;
+    thuntResults.totalModificationCost = thuntResults.totalBaselineCost - thuntResults.electricity.costSavings - thuntResults.naturalGas.costSavings - thuntResults.water.costSavings - thuntResults.wasteWater.costSavings - thuntResults.otherFuel.costSavings - thuntResults.compressedAir.costSavings - thuntResults.steam.costSavings;
     thuntResults.totalSavings = thuntResults.totalBaselineCost - thuntResults.totalModificationCost;
     thuntResults.percentSavings = (thuntResults.totalSavings / thuntResults.totalBaselineCost) * 100;
     thuntResults.paybackPeriod = thuntResults.totalImplementationCost / thuntResults.totalSavings;
+    thuntResults.hasMixed = thuntResults.electricity.hasMixed || thuntResults.naturalGas.hasMixed || thuntResults.water.hasMixed || thuntResults.wasteWater.hasMixed || thuntResults.otherFuel.hasMixed || thuntResults.compressedAir.hasMixed || thuntResults.steam.hasMixed;
     return thuntResults;
   }
 
@@ -395,7 +396,7 @@ export class TreasureHuntReportService {
             totalCostSavings = totalCostSavings + oppSheetResults.gasResults.energyCostSavings;
             totalEnergySavings = totalEnergySavings + oppSheetResults.gasResults.energySavings;
           }
-          //water 
+          //water
           if (oppSheetResults.waterResults.baselineEnergyUse != 0) {
             thuntResults.water = this.addOppSheetResultProperties(thuntResults.water, oppSheetResults.waterResults, numEnergyTypes);
             energyTypeInUse = 'water';
@@ -453,11 +454,13 @@ export class TreasureHuntReportService {
   addOppSheetResultProperties(utilityUsageData: UtilityUsageData, oppSheetResult: OpportunitySheetResult, numEnergyTypes: number): UtilityUsageData {
     utilityUsageData.modifiedEnergyUsage = utilityUsageData.modifiedEnergyUsage - oppSheetResult.energySavings;
     utilityUsageData.energySavings = utilityUsageData.energySavings + oppSheetResult.energySavings;
-    if (numEnergyTypes == 1) {
-      utilityUsageData.modifiedEnergyCost = utilityUsageData.modifiedEnergyCost - oppSheetResult.energyCostSavings;
-      utilityUsageData.costSavings = utilityUsageData.costSavings + oppSheetResult.energyCostSavings;
-      utilityUsageData.percentSavings = (utilityUsageData.costSavings / utilityUsageData.baselineEnergyCost) * 100;
+    utilityUsageData.modifiedEnergyCost = utilityUsageData.modifiedEnergyCost - oppSheetResult.energyCostSavings;
+    utilityUsageData.costSavings = utilityUsageData.costSavings + oppSheetResult.energyCostSavings;
+    utilityUsageData.percentSavings = (utilityUsageData.costSavings / utilityUsageData.baselineEnergyCost) * 100;
+    if (numEnergyTypes > 1) {
+      utilityUsageData.hasMixed = true
     }
+
     return utilityUsageData;
   }
 

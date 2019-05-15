@@ -35,6 +35,9 @@
         <td>
           Payback
         </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+
+        </td>
       </tr>
       <!--Electricity-->
       <tr *ngIf="treasureHuntResults.electricity.baselineEnergyUsage != 0">
@@ -67,6 +70,9 @@
         </td>
         <td>
           {{treasureHuntResults.electricity.paybackPeriod | number:'1.0-2'}}
+        </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+          <span *ngIf="treasureHuntResults.electricity.hasMixed == true" class="fa fa-asterisk"></span>
         </td>
       </tr>
       <!--Natural Gas-->
@@ -102,6 +108,9 @@
         <td>
           {{treasureHuntResults.naturalGas.paybackPeriod | number:'1.0-2'}}
         </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+          <span *ngIf="treasureHuntResults.naturalGas.hasMixed == true" class="fa fa-asterisk"></span>
+        </td>
       </tr>
       <!--Water-->
       <tr *ngIf="treasureHuntResults.water.baselineEnergyUsage != 0">
@@ -135,6 +144,9 @@
         </td>
         <td>
           {{treasureHuntResults.water.paybackPeriod | number:'1.0-2'}}
+        </td>
+        <td *ngIf="treasureHuntResults.water.hasMixed == true">
+          <span *ngIf="treasureHuntResults.hasMixed == true" class="fa fa-asterisk"></span>
         </td>
       </tr>
       <!--Waste Water-->
@@ -170,6 +182,9 @@
         <td>
           {{treasureHuntResults.wasteWater.paybackPeriod | number:'1.0-2'}}
         </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+          <span *ngIf="treasureHuntResults.wasteWater.hasMixed == true" class="fa fa-asterisk"></span>
+        </td>
       </tr>
       <!--Other Fuel-->
       <tr *ngIf="treasureHuntResults.otherFuel.baselineEnergyUsage != 0">
@@ -203,6 +218,9 @@
         </td>
         <td>
           {{treasureHuntResults.otherFuel.paybackPeriod | number:'1.0-2'}}
+        </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+          <span *ngIf="treasureHuntResults.otherFuel.hasMixed == true" class="fa fa-asterisk"></span>
         </td>
       </tr>
       <!--Compressed Air-->
@@ -238,6 +256,9 @@
         <td>
           {{treasureHuntResults.compressedAir.paybackPeriod | number:'1.0-2'}}
         </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+          <span *ngIf="treasureHuntResults.compressedAir.hasMixed == true" class="fa fa-asterisk"></span>
+        </td>
       </tr>
       <!--Steam-->
       <tr *ngIf="treasureHuntResults.steam.baselineEnergyUsage != 0">
@@ -272,6 +293,9 @@
         <td>
           {{treasureHuntResults.steam.paybackPeriod | number:'1.0-2'}}
         </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+          <span *ngIf="treasureHuntResults.steam.hasMixed == true" class="fa fa-asterisk"></span>
+        </td>
       </tr>
       <!--Other -->
       <tr *ngIf="treasureHuntResults.other.implementationCost != 0">
@@ -282,13 +306,16 @@
           Mixed
         </td>
         <td>
-          {{treasureHuntResults.other.costSavings | currency:'USD':'1.0-0'}}
+          <!-- {{treasureHuntResults.other.costSavings | currency:'USD':'1.0-0'}} -->
         </td>
         <td>
           {{treasureHuntResults.other.implementationCost | currency:'USD':'1.0-0'}}
         </td>
         <td>
           {{treasureHuntResults.other.paybackPeriod | number:'1.0-2'}}
+        </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+          <span class="fa fa-asterisk"></span>
         </td>
       </tr>
       <!--Total-->
@@ -314,8 +341,14 @@
         <td>
           {{treasureHuntResults.paybackPeriod  | number:'1.0-2'}}
         </td>
+        <td *ngIf="treasureHuntResults.hasMixed == true">
+
+        </td>
       </tr>
     </tbody>
   </table>
+</div>
 
+<div class="alert-warning small" *ngIf="treasureHuntResults.hasMixed == true && showFullSummary">
+  <span class="fa fa-asterisk"></span> Implementation costs for opportunities with multiple utility types are added to "Mixed".
 </div>

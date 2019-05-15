@@ -124,7 +124,8 @@ export interface TreasureHuntResults {
     compressedAir: UtilityUsageData,
     steam: UtilityUsageData,
     other: UtilityUsageData,
-    opportunitySummaries: Array<OpportunitySummary>
+    opportunitySummaries: Array<OpportunitySummary>,
+    hasMixed?: boolean
 }
 
 export interface OpportunitySummary {
@@ -146,7 +147,8 @@ export interface UtilityUsageData {
     costSavings: number,
     implementationCost?: number,
     paybackPeriod?: number,
-    percentSavings: number
+    percentSavings: number,
+    hasMixed?: boolean
 }
 
 
