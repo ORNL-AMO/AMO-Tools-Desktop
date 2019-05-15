@@ -40,12 +40,11 @@ export class NaturalGasReductionComponent implements OnInit {
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
 
-  baselineForms: Array<FormGroup>;
-  modificationForms: Array<FormGroup>;
   modificationExists = false;
 
   naturalGasReductionResults: NaturalGasReductionResults;
-
+  baselineData: Array<NaturalGasReductionData>;
+  modificationData: Array<NaturalGasReductionData>;
   constructor(private settingsDbService: SettingsDbService, private naturalGasReductionService: NaturalGasReductionService) { }
 
   ngOnInit() {
@@ -55,15 +54,8 @@ export class NaturalGasReductionComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    if (this.naturalGasReductionService.baselineData === undefined || this.naturalGasReductionService.baselineData === null || this.naturalGasReductionService.baselineData.length < 1) {
-      this.addBaselineEquipment();
-    }
-    else {
-      this.loadForms();
-    }
+    this.initData();
+    this.getResults();
   }
 
   ngAfterViewInit() {
@@ -74,18 +66,8 @@ export class NaturalGasReductionComponent implements OnInit {
 
   ngOnDestory() {
     if (!this.inTreasureHunt) {
-      let baselineData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
-      for (let i = 0; i < this.baselineForms.length; i++) {
-        baselineData.push(this.naturalGasReductionService.getObjFromForm(this.baselineForms[i]));
-      }
-      this.naturalGasReductionService.baselineData = baselineData;
-      if (this.modificationExists) {
-        let modificationData: Array<NaturalGasReductionData> = new Array<NaturalGasReductionData>();
-        for (let i = 0; i < this.modificationForms.length; i++) {
-          modificationData.push(this.naturalGasReductionService.getObjFromForm(this.modificationForms[i]));
-        }
-        this.naturalGasReductionService.modificationData = modificationData;
-      }
+      this.naturalGasReductionService.baselineData = this.baselineData;
+      this.naturalGasReductionService.modificationData = this.modificationData;
     } else {
       this.naturalGasReductionService.baselineData = undefined;
       this.naturalGasReductionService.modificationData = undefined;
@@ -106,91 +88,86 @@ export class NaturalGasReductionComponent implements OnInit {
     this.currentField = str;
   }
 
-  addBaselineEquipment() {
-    this.naturalGasReductionService.addBaselineEquipment(this.baselineForms.length, this.settings);
-    this.baselineForms.push(this.naturalGasReductionService.getFormFromObj(this.naturalGasReductionService.baselineData[this.naturalGasReductionService.baselineData.length - 1]));
-  }
-
-  removeBaselineEquipment(i: number) {
-    this.naturalGasReductionService.removeBaselineEquipment(i);
-    this.baselineForms.splice(i, 1);
-    this.getResults();
-  }
-
-  createModification() {
-    this.naturalGasReductionService.createModification();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.baselineForms.length; i++) {
-      let tmpObj: NaturalGasReductionData = this.naturalGasReductionService.getObjFromForm(this.baselineForms[i]);
-      let modForm: FormGroup = this.naturalGasReductionService.getFormFromObj(tmpObj);
-      this.modificationForms.push(modForm);
+  initData() {
+    if (this.naturalGasReductionService.baselineData) {
+      this.baselineData = this.naturalGasReductionService.baselineData;
+    } else {
+      let tmpObj: NaturalGasReductionData = this.naturalGasReductionService.initObject(0, this.settings, this.operatingHours);
+      this.baselineData = [tmpObj];
     }
-    this.modificationExists = true;
-  }
-
-  addModificationEquipment() {
-    this.naturalGasReductionService.addModificationEquipment(this.modificationForms.length, this.settings);
-    this.modificationForms.push(this.naturalGasReductionService.getFormFromObj(this.naturalGasReductionService.modificationData[this.naturalGasReductionService.modificationData.length - 1]));
-  }
-
-  removeModificationEquipment(i: number) {
-    this.naturalGasReductionService.removeModificationEquipment(i);
-    this.modificationForms.splice(i, 1);
-    if (this.modificationForms.length < 1) {
-      this.modificationExists = false;
-    }
-    this.getResults();
-  }
-
-  removeEquipment(emitObj: { index: number, isBaseline: boolean }) {
-    emitObj.isBaseline ? this.removeBaselineEquipment(emitObj.index) : this.removeModificationEquipment(emitObj.index);
-  }
-
-  loadForms() {
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.naturalGasReductionService.baselineData.length; i++) {
-      this.baselineForms.push(this.naturalGasReductionService.getFormFromObj(this.naturalGasReductionService.baselineData[i]));
-    }
-    this.naturalGasReductionService.initModificationData();
-    for (let i = 0; i < this.naturalGasReductionService.modificationData.length; i++) {
-      this.modificationForms.push(this.naturalGasReductionService.getFormFromObj(this.naturalGasReductionService.modificationData[i]));
-    }
-    if (!this.modificationExists) {
-      if (this.modificationForms.length > 0) {
+    if (this.naturalGasReductionService.modificationData) {
+      this.modificationData = this.naturalGasReductionService.modificationData
+      if (this.modificationData.length != 0) {
         this.modificationExists = true;
       }
     }
   }
 
-  calculate(emitObj: { form: FormGroup, index: number, isBaseline: boolean }) {
-    if (emitObj.isBaseline) {
-      this.baselineForms[emitObj.index] = emitObj.form;
-      //this.naturalGasReductionService.updateBaselineDataArray(this.baselineForms);
-      // this.baselineResults = this.naturalGasReductionService.calculate(true, this.settings);
-    } else {
-      this.modificationForms[emitObj.index] = emitObj.form;
-      //this.naturalGasReductionService.updateModificationDataArray(this.modificationForms);
-      // this.modificationResults = this.naturalGasReductionService.calculate(false, this.settings);
+
+  addBaselineEquipment() {
+    let tmpObj: NaturalGasReductionData = this.naturalGasReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours);
+    this.baselineData.push(tmpObj);
+    this.getResults();
+  }
+
+  removeBaselineEquipment(i: number) {
+    this.baselineData.splice(i, 1);
+    this.getResults();
+  }
+
+  createModification() {
+    this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
+    this.getResults();
+    this.modificationExists = true;
+    this.setModificationSelected();
+  }
+
+  addModificationEquipment() {
+    let tmpObj: NaturalGasReductionData = this.naturalGasReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours);
+    this.modificationData.push(tmpObj);
+    this.getResults();
+  }
+
+  removeModificationEquipment(i: number) {
+    this.modificationData.splice(i, 1);
+    if (this.modificationData.length === 0) {
+      this.modificationExists = false;
     }
     this.getResults();
-    //this.naturalGasReductionResults = this.naturalGasReductionService.getResults(this.settings, this.naturalGasReductionService.baselineData, this.naturalGasReductionService.modificationData);
+  }
+
+  updateBaselineData(data: NaturalGasReductionData, index: number) {
+    this.updateDataArray(this.baselineData, data, index);
+    this.getResults();
+  }
+
+  updateModificationData(data: NaturalGasReductionData, index: number) {
+    this.updateDataArray(this.modificationData, data, index);
+    this.getResults();
+  }
+
+  updateDataArray(dataArray: Array<NaturalGasReductionData>, data: NaturalGasReductionData, index: number) {
+    dataArray[index].name = data.name;
+    dataArray[index].operatingHours = data.operatingHours;
+    dataArray[index].fuelCost = data.fuelCost;
+    dataArray[index].measurementMethod = data.measurementMethod;
+    dataArray[index].flowMeterMethodData = data.flowMeterMethodData;
+    dataArray[index].otherMethodData = data.otherMethodData;
+    dataArray[index].airMassFlowData = data.airMassFlowData;
+    dataArray[index].waterMassFlowData = data.waterMassFlowData;
+    dataArray[index].units = data.units;
   }
 
   getResults() {
-    this.naturalGasReductionService.updateBaselineDataArray(this.baselineForms);
-    // this.baselineResults = this.naturalGasReductionService.calculate(true, this.settings);
-    if (this.modificationExists) {
-      this.naturalGasReductionService.updateModificationDataArray(this.modificationForms);
-      // this.modificationResults = this.naturalGasReductionService.calculate(false, this.settings);
-    }
-    this.naturalGasReductionResults = this.naturalGasReductionService.getResults(this.settings, this.naturalGasReductionService.baselineData, this.naturalGasReductionService.modificationData);
+    this.naturalGasReductionResults = this.naturalGasReductionService.getResults(this.settings, this.baselineData, this.modificationData);
   }
 
   btnResetData() {
-    this.naturalGasReductionService.resetData(this.settings);
+    let tmpObj: NaturalGasReductionData = this.naturalGasReductionService.initObject(0, this.settings, this.operatingHours)
+    this.baselineData = [tmpObj];
+    this.modificationData = new Array<NaturalGasReductionData>();
     this.modificationExists = false;
-    this.loadForms();
+    this.getResults();
   }
 
   togglePanel(bool: boolean) {
@@ -204,7 +181,7 @@ export class NaturalGasReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.naturalGasReductionService.baselineData, modification: this.naturalGasReductionService.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
   }
 
   cancel() {
@@ -213,5 +190,17 @@ export class NaturalGasReductionComponent implements OnInit {
 
   addOpportunitySheet() {
     this.emitAddOpportunitySheet.emit(true);
+  }
+
+  setBaselineSelected() {
+    if (this.baselineSelected == false) {
+      this.baselineSelected = true;
+    }
+  }
+
+  setModificationSelected() {
+    if (this.baselineSelected == true) {
+      this.baselineSelected = false;
+    }
   }
 }

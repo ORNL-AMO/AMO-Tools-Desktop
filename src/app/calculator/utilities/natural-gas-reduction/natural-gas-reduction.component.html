@@ -30,20 +30,18 @@
     <!-- baseline -->
     <div class="d-flex">
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
-        <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
+        <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
           [ngClass]="{'disabled': baselineSelected == false}">
           <div class="header mx-2">
             <h3>Baseline</h3>
+            <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
           </div>
-          <div class="d-flex flex-column mx-4 mb-4">
-            <div class="p-2">
-              <a class="click-link pull-right small" (click)="addBaselineEquipment()">+Add Equipment</a>
-            </div>
+          <div class="d-flex flex-column ml-2 mr-2 mb-4">
             <!-- app form -->
-            <div *ngFor="let form of baselineForms; let i = index;">
-              <app-natural-gas-reduction-form [settings]="settings" [form]="form" [index]="i" [isBaseline]="true"
-                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"
-                (emitRemoveEquipment)="removeEquipment($event)">
+            <div *ngFor="let data of baselineData; let index = index;">
+              <app-natural-gas-reduction-form [settings]="settings" [data]="data" [index]="index" [isBaseline]="true"
+                (emitCalculate)="updateBaselineData($event, index)" (emitChangeField)="changeField($event)"
+                (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected">
               </app-natural-gas-reduction-form>
             </div>
 
@@ -58,29 +56,27 @@
 
 
         <!-- Modification -->
-        <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="togglePanel(modifiedSelected)"
-          [ngClass]="{'disabled': modifiedSelected == false}">
+        <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="setModificationSelected()"
+          [ngClass]="{'disabled': baselineSelected == true}">
           <!-- Modification Header -->
-          <div class="header mx-2">
+          <div class="header mr-2 ml-2">
             <h3>Modification</h3>
+            <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
           </div>
           <!-- forms -->
-          <div class="d-flex flex-column mx-4 mb-4">
-            <div class="p-2">
-              <a class="click-link pull-right small" (click)="addModificationEquipment()">+Add Equipment</a>
-            </div>
+          <div class="d-flex flex-column ml-2 mr-2 mb-4">
             <!-- app form -->
-            <div *ngFor="let form of modificationForms; let i = index;">
-              <app-natural-gas-reduction-form [settings]="settings" [form]="form" [index]="i" [isBaseline]="false"
-                (emitCalculate)="calculate($event)" (emitChangeField)="changeField($event)"
-                (emitRemoveEquipment)="removeEquipment($event)">
+            <div *ngFor="let data of modificationData; let index = index;">
+              <app-natural-gas-reduction-form [settings]="settings" [data]="data" [index]="index" [isBaseline]="false"
+                (emitCalculate)="updateModificationData($event, index)" (emitChangeField)="changeField($event)"
+                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected">
               </app-natural-gas-reduction-form>
             </div>
           </div>
         </div>
         <!-- no content message -->
-        <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="togglePanel(modifiedSelected)"
-          [ngClass]="{'disabled': modifiedSelected == false}">
+        <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"
+          [ngClass]="{'disabled': baselineSelected == true}">
           <div class="header mx-2">
             <h3>Modification</h3>
           </div>

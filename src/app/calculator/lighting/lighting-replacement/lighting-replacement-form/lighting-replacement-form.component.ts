@@ -62,7 +62,7 @@ export class LightingReplacementFormComponent implements OnInit {
     this.emitFocusField.emit(str);
   }
 
-  removeFixture(i: number) {
+  removeFixture() {
     this.emitRemoveFixture.emit(this.index);
   }
 
