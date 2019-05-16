@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { NaturalGasReductionService } from '../natural-gas-reduction.service';
-import { NaturalGasReductionResult } from '../../../../shared/models/standalone';
+import { NaturalGasReductionResult, NaturalGasReductionData } from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-natural-gas-reduction-form',
@@ -13,17 +13,20 @@ export class NaturalGasReductionFormComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  form: FormGroup;
+  data: NaturalGasReductionData;
+  @Output('emitCalculate')
+  emitCalculate = new EventEmitter<NaturalGasReductionData>();
+  @Output('emitRemoveEquipment')
+  emitRemoveEquipment = new EventEmitter<number>();
   @Input()
   index: number;
-  @Input()
-  isBaseline: boolean;
-  @Output('emitCalculate')
-  emitCalculate = new EventEmitter<{ form: FormGroup, index: number, isBaseline: boolean }>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  @Output('emitRemoveEquipment')
-  emitRemoveEquipment = new EventEmitter<{ index: number, isBaseline: boolean }>();
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  selected: boolean;
+
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Flow Meter Method' },
@@ -34,39 +37,52 @@ export class NaturalGasReductionFormComponent implements OnInit {
   idString: string;
   individualResults: NaturalGasReductionResult;
   isEditingName: boolean = false;
+  form: FormGroup;
 
   constructor(private naturalGasReductionService: NaturalGasReductionService) { }
 
   ngOnInit() {
     if (this.isBaseline) {
-      this.idString = this.index.toString();
+      this.idString = 'baseline_' + this.index;
     }
     else {
       this.idString = 'modification_' + this.index;
     }
-    this.calculate();
+    this.form = this.naturalGasReductionService.getFormFromObj(this.data);
+    if (this.selected == false) {
+      this.form.disable();
+    }
+    this.calculateIndividualResult();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected == false) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    }
   }
 
   changeMeasurementMethod() {
-    let tmpObject = this.naturalGasReductionService.getObjFromForm(this.form);
-    this.form = this.naturalGasReductionService.getFormFromObj(tmpObject);
+    this.naturalGasReductionService.setValidators(this.form);
     this.calculate();
   }
 
   calculate() {
-    if (this.form.valid) {
-      let emitObj = {
-        form: this.form,
-        index: this.index,
-        isBaseline: this.isBaseline
-      };
-      this.emitCalculate.emit(emitObj);
-      this.individualResults = this.naturalGasReductionService.calculateIndividualEquipment(this.naturalGasReductionService.getObjFromForm(this.form), this.settings);
-    }
+    let tmpObj: NaturalGasReductionData = this.naturalGasReductionService.getObjFromForm(this.form);
+    this.calculateIndividualResult();
+    this.emitCalculate.emit(tmpObj);
   }
 
-  removeEquipment(i: number) {
-    this.emitRemoveEquipment.emit({ index: i, isBaseline: this.isBaseline });
+  calculateIndividualResult(){
+    let tmpObj: NaturalGasReductionData = this.naturalGasReductionService.getObjFromForm(this.form);
+    this.individualResults = this.naturalGasReductionService.calculateIndividualEquipment(tmpObj, this.settings);
+  }
+
+  removeEquipment() {
+    this.emitRemoveEquipment.emit(this.index);
   }
 
   editEquipmentName() {

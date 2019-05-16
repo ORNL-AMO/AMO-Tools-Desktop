@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { ElectricityReductionData, MultimeterReadingData, NameplateData, PowerMeterData, OtherMethodData, ElectricityReductionResults, ElectricityReductionInput, ElectricityReductionResult } from '../../../shared/models/standalone';
 import { StandaloneService } from '../../standalone.service';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class ElectricityReductionService {
@@ -14,28 +15,7 @@ export class ElectricityReductionService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
-  resetData(settings: Settings) {
-    this.baselineData = new Array<ElectricityReductionData>();
-    this.modificationData = new Array<ElectricityReductionData>();
-
-    this.baselineData.push(this.initObject(0, settings));
-  }
-
-  getEquipmentName(index: number, isBaseline: boolean) {
-    try {
-      return isBaseline ? this.baselineData[index].name !== null ? this.baselineData[index].name : 'Equipment #' + (index + 1) : this.modificationData[index].name !== null ? this.modificationData[index].name : 'Equipment #' + (index + 1);
-    }
-    catch {
-      return 'Equipment #' + (index + 1);
-    }
-  }
-
-  saveEquipmentName(name: string, index: number, isBaseline: boolean) {
-    isBaseline ? this.baselineData[index] = this.baselineData[index]
-      : this.modificationData[index] = this.modificationData[index];
-  }
-
-  initObject(index: number, settings?: Settings): ElectricityReductionData {
+  initObject(index: number, settings: Settings, operatingHours: OperatingHours): ElectricityReductionData {
     let defaultMultimeterObj: MultimeterReadingData = {
       numberOfPhases: 3,
       supplyVoltage: 0,
@@ -60,10 +40,19 @@ export class ElectricityReductionService {
       energy: 400000
     };
 
+    let hoursPerYear: number = 8736;
+    if (operatingHours) {
+      hoursPerYear = operatingHours.hoursPerYear;
+    }
+    let fuelCost: number = .12;
+    if (settings && settings.fuelCost) {
+      fuelCost = settings.fuelCost;
+    }
+
     let obj: ElectricityReductionData = {
       name: 'Equipment #' + (index + 1),
-      operatingHours: 0,
-      electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.12,
+      operatingHours: hoursPerYear,
+      electricityCost: fuelCost,
       measurementMethod: 0,
       multimeterData: defaultMultimeterObj,
       nameplateData: defaultNameplateObj,
@@ -104,6 +93,11 @@ export class ElectricityReductionService {
 
       units: [initObj.units]
     });
+    form = this.setValidators(form);
+    return form;
+  }
+
+  setValidators(form: FormGroup): FormGroup {
     switch (form.controls.measurementMethod.value) {
       case 0:
         form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
@@ -171,60 +165,16 @@ export class ElectricityReductionService {
     return obj;
   }
 
-  addBaselineEquipment(index: number, settings?: Settings) {
-    if (this.baselineData === null || this.baselineData === undefined) {
-      this.baselineData = new Array<ElectricityReductionData>();
-    }
-    this.baselineData.push(this.initObject(index, settings ? settings : null));
-  }
-
-  removeBaselineEquipment(index: number) {
-    this.baselineData.splice(index, 1);
-  }
-
-  createModification() {
-    this.modificationData = new Array<ElectricityReductionData>();
-    for (let i = 0; i < this.baselineData.length; i++) {
-      this.modificationData.push(this.baselineData[i]);
-    }
-  }
-
-  addModificationEquipment(index: number, settings?: Settings) {
-    if (this.modificationData === null || this.modificationData === undefined) {
-      this.modificationData = new Array<ElectricityReductionData>();
-    }
-    this.modificationData.push(this.initObject(index, settings ? settings : null));
-  }
-
-  removeModificationEquipment(index: number) {
-    this.modificationData.splice(index, 1);
-  }
-
-  initModificationData() {
-    if (this.modificationData === undefined || this.modificationData === null) {
-      this.modificationData = new Array<ElectricityReductionData>();
-    }
-  }
-
-  updateBaselineDataArray(baselineForms: Array<FormGroup>): void {
-    for (let i = 0; i < this.baselineData.length; i++) {
-      this.baselineData[i] = this.getObjFromForm(baselineForms[i]);
-    }
-  }
-
-  updateModificationDataArray(modificationForms: Array<FormGroup>): void {
-    for (let i = 0; i < this.modificationData.length; i++) {
-      this.modificationData[i] = this.getObjFromForm(modificationForms[i]);
-    }
-  }
-
   getResults(settings: Settings, baseline: Array<ElectricityReductionData>, modification?: Array<ElectricityReductionData>): ElectricityReductionResults {
-    let baselineResults: ElectricityReductionResult = this.calculate(baseline, settings);
+    let baselineInpCpy: Array<ElectricityReductionData> = JSON.parse(JSON.stringify(baseline));
+
+    let baselineResults: ElectricityReductionResult = this.calculate(baselineInpCpy, settings);
     let modificationResults: ElectricityReductionResult;
     let annualEnergySavings: number = 0;
     let annualCostSavings: number = 0;
     if (modification) {
-      modificationResults = this.calculate(modification, settings);
+      let modificationInpCpy: Array<ElectricityReductionData> = JSON.parse(JSON.stringify(modification));
+      modificationResults = this.calculate(modificationInpCpy, settings);
     }
     let naturalGasReductionResults: ElectricityReductionResults = {
       baselineResults: baselineResults,
@@ -246,9 +196,9 @@ export class ElectricityReductionService {
     let results: ElectricityReductionResult = this.standaloneService.electricityReduction(inputObj);
     return results;
   }
-  
+
   calculateIndividualEquipment(input: ElectricityReductionData, settings: Settings): ElectricityReductionResult {
-    let inputArray: Array<ElectricityReductionData> = [input];
+    let inputArray: Array<ElectricityReductionData> = JSON.parse(JSON.stringify([input]));
     inputArray = this.convertInputs(inputArray, settings);
     let inputObj: ElectricityReductionInput = {
       electricityReductionInputVec: inputArray

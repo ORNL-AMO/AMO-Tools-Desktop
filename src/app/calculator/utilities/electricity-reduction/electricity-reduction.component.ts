@@ -40,12 +40,11 @@ export class ElectricityReductionComponent implements OnInit {
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
 
-  baselineForms: Array<FormGroup>;
-  modificationForms: Array<FormGroup>;
   modificationExists = false;
 
   electricityReductionResults: ElectricityReductionResults;
-
+  baselineData: Array<ElectricityReductionData>;
+  modificationData: Array<ElectricityReductionData>;
   constructor(private settingsDbService: SettingsDbService, private electricityReductionService: ElectricityReductionService) { }
 
   ngOnInit() {
@@ -56,14 +55,7 @@ export class ElectricityReductionComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    if (this.electricityReductionService.baselineData === undefined || this.electricityReductionService.baselineData === null || this.electricityReductionService.baselineData.length < 1) {
-      this.addBaselineEquipment();
-    }
-    else {
-      this.loadForms();
-    }
+    this.initData();
     this.getResults();
   }
 
@@ -75,18 +67,8 @@ export class ElectricityReductionComponent implements OnInit {
 
   ngOnDestroy() {
     if (!this.inTreasureHunt) {
-      let baselineData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
-      for (let i = 0; i < this.baselineForms.length; i++) {
-        baselineData.push(this.electricityReductionService.getObjFromForm(this.baselineForms[i]));
-      }
-      this.electricityReductionService.baselineData = baselineData;
-      if (this.modificationExists) {
-        let modificationData: Array<ElectricityReductionData> = new Array<ElectricityReductionData>();
-        for (let i = 0; i < this.modificationForms.length; i++) {
-          modificationData.push(this.electricityReductionService.getObjFromForm(this.modificationForms[i]));
-        }
-        this.electricityReductionService.modificationData = modificationData;
-      }
+      this.electricityReductionService.baselineData = this.baselineData;
+      this.electricityReductionService.modificationData = this.modificationData;
     } else {
       this.electricityReductionService.baselineData = undefined;
       this.electricityReductionService.modificationData = undefined;
@@ -107,91 +89,86 @@ export class ElectricityReductionComponent implements OnInit {
     this.currentField = str;
   }
 
-
-  addBaselineEquipment() {
-    this.electricityReductionService.addBaselineEquipment(this.baselineForms.length, this.settings);
-    this.baselineForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.baselineData[this.electricityReductionService.baselineData.length - 1]));
-  }
-
-  removeBaselineEquipment(i: number) {
-    this.electricityReductionService.removeBaselineEquipment(i);
-    this.baselineForms.splice(i, 1);
-    this.getResults();
-  }
-
-  createModification() {
-    this.electricityReductionService.createModification();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.baselineForms.length; i++) {
-      let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.baselineForms[i]);
-      let modForm: FormGroup = this.electricityReductionService.getFormFromObj(tmpObj);
-      this.modificationForms.push(modForm);
+  initData() {
+    if (this.electricityReductionService.baselineData) {
+      this.baselineData = this.electricityReductionService.baselineData;
+    } else {
+      let tmpObj: ElectricityReductionData = this.electricityReductionService.initObject(0, this.settings, this.operatingHours);
+      this.baselineData = [tmpObj];
     }
-    this.modificationExists = true;
-  }
-
-  addModificationEquipment() {
-    this.electricityReductionService.addModificationEquipment(this.modificationForms.length, this.settings);
-    this.modificationForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.modificationData[this.electricityReductionService.modificationData.length - 1]));
-  }
-
-  removeModificationEquipment(i: number) {
-    this.electricityReductionService.removeModificationEquipment(i);
-    this.modificationForms.splice(i, 1);
-    if (this.modificationForms.length < 1) {
-      this.modificationExists = false;
-    }
-    this.getResults();
-  }
-
-  removeEquipment(emitObj: { index: number, isBaseline: boolean }) {
-    emitObj.isBaseline ? this.removeBaselineEquipment(emitObj.index) : this.removeModificationEquipment(emitObj.index);
-  }
-
-  loadForms() {
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.electricityReductionService.baselineData.length; i++) {
-      this.baselineForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.baselineData[i]));
-    }
-    this.electricityReductionService.initModificationData();
-    for (let i = 0; i < this.electricityReductionService.modificationData.length; i++) {
-      this.modificationForms.push(this.electricityReductionService.getFormFromObj(this.electricityReductionService.modificationData[i]));
-    }
-    if (!this.modificationExists) {
-      if (this.modificationForms.length > 0) {
+    if (this.electricityReductionService.modificationData) {
+      this.modificationData = this.electricityReductionService.modificationData
+      if (this.modificationData.length != 0) {
         this.modificationExists = true;
       }
     }
   }
 
-  calculate(emitObj: { form: FormGroup, index: number, isBaseline: boolean }) {
-    if (emitObj.isBaseline) {
-      this.baselineForms[emitObj.index] = emitObj.form;
-      // this.electricityReductionService.updateBaselineDataArray(this.baselineForms);
-      // this.baselineResults = this.electricityReductionService.calculate(true, this.settings);
-    } else {
-      this.modificationForms[emitObj.index] = emitObj.form;
-      // this.electricityReductionService.updateModificationDataArray(this.modificationForms);
-      //this.modificationResults = this.electricityReductionService.calculate(false, this.settings);
+  addBaselineEquipment() {
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours);
+    this.baselineData.push(tmpObj);
+    this.getResults();
+  }
+
+  removeBaselineEquipment(i: number) {
+    this.baselineData.splice(i, 1);
+    this.getResults();
+  }
+
+  createModification() {
+    this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
+    this.getResults();
+    this.modificationExists = true;
+    this.setModificationSelected();
+  }
+
+  addModificationEquipment() {
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours);
+    this.modificationData.push(tmpObj);
+    this.getResults();
+  }
+
+  removeModificationEquipment(i: number) {
+    this.modificationData.splice(i, 1);
+    if (this.modificationData.length === 0) {
+      this.modificationExists = false;
     }
     this.getResults();
   }
 
+  updateBaselineData(data: ElectricityReductionData, index: number) {
+    this.updateDataArray(this.baselineData, data, index);
+    this.getResults();
+  }
+
+  updateModificationData(data: ElectricityReductionData, index: number) {
+    this.updateDataArray(this.modificationData, data, index);
+    this.getResults();
+  }
+
+  updateDataArray(dataArray: Array<ElectricityReductionData>, data: ElectricityReductionData, index: number) {
+    dataArray[index].name = data.name;
+    dataArray[index].operatingHours = data.operatingHours;
+    dataArray[index].electricityCost = data.electricityCost;
+    dataArray[index].measurementMethod = data.measurementMethod;
+    dataArray[index].multimeterData = data.multimeterData;
+    dataArray[index].otherMethodData = data.otherMethodData;
+    dataArray[index].powerMeterData = data.powerMeterData;
+    dataArray[index].nameplateData = data.nameplateData;
+    dataArray[index].units = data.units;
+  }
+
+
   getResults() {
-    this.electricityReductionService.updateBaselineDataArray(this.baselineForms);
-    //this.baselineResults = this.electricityReductionService.calculate(true, this.settings);
-    if (this.modificationExists) {
-      this.electricityReductionService.updateModificationDataArray(this.modificationForms);
-      //this.modificationResults = this.electricityReductionService.calculate(false, this.settings);
-    }
-    this.electricityReductionResults = this.electricityReductionService.getResults(this.settings, this.electricityReductionService.baselineData, this.electricityReductionService.modificationData);
+    this.electricityReductionResults = this.electricityReductionService.getResults(this.settings, this.baselineData, this.modificationData);
   }
 
   btnResetData() {
-    this.electricityReductionService.resetData(this.settings);
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.initObject(0, this.settings, this.operatingHours)
+    this.baselineData = [tmpObj];
+    this.modificationData = new Array<ElectricityReductionData>();
     this.modificationExists = false;
-    this.loadForms();
+    this.getResults();
   }
 
   togglePanel(bool: boolean) {
@@ -205,7 +182,7 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.electricityReductionService.baselineData, modification: this.electricityReductionService.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
   }
 
   cancel() {
@@ -215,4 +192,16 @@ export class ElectricityReductionComponent implements OnInit {
   addOpportunitySheet() {
     this.emitAddOpportunitySheet.emit(true);
   }
+  setBaselineSelected() {
+    if (this.baselineSelected == false) {
+      this.baselineSelected = true;
+    }
+  }
+
+  setModificationSelected() {
+    if (this.baselineSelected == true) {
+      this.baselineSelected = false;
+    }
+  }
+
 }

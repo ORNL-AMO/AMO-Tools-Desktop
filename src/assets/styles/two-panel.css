@@ -158,6 +158,11 @@
     color: white;
 }
 
+.panel-column.disabled .form-card{
+    background-color: #ececec;
+    transition: all 0.2s ease-in-out;
+}
+
 .panel-add a{
     padding-top: 5px;
     font-size: 15px;

@@ -8,6 +8,7 @@ import {
   NaturalGasReductionData, FlowMeterMethodData, NaturalGasOtherMethodData, AirMassFlowMeasuredData,
   AirMassFlowNameplateData, AirMassFlowData, WaterMassFlowData, NaturalGasReductionInput, NaturalGasReductionResults, NaturalGasReductionResult
 } from '../../../shared/models/standalone';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class NaturalGasReductionService {
@@ -17,13 +18,13 @@ export class NaturalGasReductionService {
 
   constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
-  resetData(settings: Settings) {
-    this.baselineData = new Array<NaturalGasReductionData>();
-    this.modificationData = new Array<NaturalGasReductionData>();
-    this.baselineData.push(this.initObject(0, settings));
-  }
+  // resetData(settings: Settings) {
+  //   this.baselineData = new Array<NaturalGasReductionData>();
+  //   this.modificationData = new Array<NaturalGasReductionData>();
+  //   this.baselineData.push(this.initObject(0, settings));
+  // }
 
-  initObject(index: number, settings?: Settings): NaturalGasReductionData {
+  initObject(index: number, settings: Settings, operatingHours: OperatingHours): NaturalGasReductionData {
     let defaultFlowMeterData: FlowMeterMethodData = {
       flowRate: 5
     };
@@ -51,10 +52,18 @@ export class NaturalGasReductionService {
       outletTemperature: 40,
       systemEfficiency: 80
     };
+    let hoursPerYear: number = 8736;
+    if (operatingHours) {
+      hoursPerYear = operatingHours.hoursPerYear;
+    }
+    let fuelCost: number = .12;
+    if (settings && settings.fuelCost) {
+      fuelCost = settings.fuelCost;
+    }
     let obj: NaturalGasReductionData = {
       name: 'Equipment #' + (index + 1),
-      operatingHours: 8640,
-      fuelCost: settings && settings.fuelCost ? settings.fuelCost : 0.12,
+      operatingHours: hoursPerYear,
+      fuelCost: fuelCost,
       measurementMethod: 0,
       flowMeterMethodData: defaultFlowMeterData,
       otherMethodData: defaultOtherData,
@@ -98,6 +107,11 @@ export class NaturalGasReductionService {
 
       units: [obj.units, [Validators.required, Validators.min(0)]]
     });
+    form = this.setValidators(form);
+    return form;
+  }
+
+  setValidators(form: FormGroup): FormGroup {
     switch (form.controls.measurementMethod.value) {
       case 0:
         form.controls.flowRate.setValidators([Validators.required, Validators.min(0)]);
@@ -176,60 +190,15 @@ export class NaturalGasReductionService {
     return data;
   }
 
-  addBaselineEquipment(index: number, settings?: Settings) {
-    if (this.baselineData === undefined || this.baselineData === null) {
-      this.baselineData = new Array<NaturalGasReductionData>();
-    }
-    this.baselineData.push(this.initObject(index, settings ? settings : null));
-  }
-
-  removeBaselineEquipment(index: number) {
-    this.baselineData.splice(index, 1);
-  }
-
-  createModification() {
-    this.modificationData = new Array<NaturalGasReductionData>();
-    for (let i = 0; i < this.baselineData.length; i++) {
-      this.modificationData.push(this.baselineData[i]);
-    }
-  }
-
-  addModificationEquipment(index: number, settings?: Settings) {
-    if (this.modificationData === null || this.modificationData === undefined) {
-      this.modificationData = new Array<NaturalGasReductionData>();
-    }
-    this.modificationData.push(this.initObject(index, settings ? settings : null));
-  }
-
-  removeModificationEquipment(index: number) {
-    this.modificationData.splice(index, 1);
-  }
-
-  initModificationData() {
-    if (this.modificationData === undefined || this.modificationData === null) {
-      this.modificationData = new Array<NaturalGasReductionData>();
-    }
-  }
-
-  updateBaselineDataArray(baselineForms: Array<FormGroup>): void {
-    for (let i = 0; i < this.baselineData.length; i++) {
-      this.baselineData[i] = this.getObjFromForm(baselineForms[i]);
-    }
-  }
-
-  updateModificationDataArray(modificationForms: Array<FormGroup>): void {
-    for (let i = 0; i < this.modificationData.length; i++) {
-      this.modificationData[i] = this.getObjFromForm(modificationForms[i]);
-    }
-  }
-
   getResults(settings: Settings, baseline: Array<NaturalGasReductionData>, modification?: Array<NaturalGasReductionData>): NaturalGasReductionResults {
-    let baselineResults: NaturalGasReductionResult = this.calculate(baseline, settings);
+    let baselineInpCpy: Array<NaturalGasReductionData> = JSON.parse(JSON.stringify(baseline));
+    let baselineResults: NaturalGasReductionResult = this.calculate(baselineInpCpy, settings);
     let modificationResults: NaturalGasReductionResult;
     let annualEnergySavings: number = 0;
     let annualCostSavings: number = 0;
     if (modification) {
-      modificationResults = this.calculate(modification, settings);
+      let modificationInpCpy: Array<NaturalGasReductionData> = JSON.parse(JSON.stringify(modification));
+      modificationResults = this.calculate(modificationInpCpy, settings);
     }
     let naturalGasReductionResults: NaturalGasReductionResults = {
       baselineResults: baselineResults,
@@ -256,7 +225,7 @@ export class NaturalGasReductionService {
   }
 
   calculateIndividualEquipment(input: NaturalGasReductionData, settings: Settings): NaturalGasReductionResult {
-    let inputArray: Array<NaturalGasReductionData> = [input];
+    let inputArray: Array<NaturalGasReductionData> = JSON.parse(JSON.stringify([input]));
     inputArray = this.convertInput(inputArray, settings);
     let inputObj: NaturalGasReductionInput = {
       naturalGasReductionInputVec: inputArray

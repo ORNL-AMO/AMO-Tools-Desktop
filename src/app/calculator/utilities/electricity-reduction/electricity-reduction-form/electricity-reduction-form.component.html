@@ -21,7 +21,7 @@
       <div class="form-group">
         <label class="small" for="{{'operatingHours_'+idString}}">Annual Operating Hours</label>
         <div class="input-group">
-          <input class="form-control" name="operatingHours" id="{{'operatingHours'+idString}}"
+          <input class="form-control" name="operatingHours" id="{{'operatingHours_'+idString}}"
             formControlName="operatingHours" type="number" (input)="calculate()" (focus)="focusField('operatingHours')"
             (blur)="focusOut()" onfocus="this.select();">
           <span class="units input-group-addon">hrs/yr</span>
