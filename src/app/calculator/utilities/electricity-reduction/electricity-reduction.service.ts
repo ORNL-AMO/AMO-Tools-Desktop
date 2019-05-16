@@ -238,6 +238,7 @@ export class ElectricityReductionService {
     }
     return naturalGasReductionResults;
   }
+  
   calculate(input: Array<ElectricityReductionData>, settings: Settings): ElectricityReductionResult {
     let inputArray: Array<ElectricityReductionData> = this.convertInputs(input, settings);
     let inputObj: ElectricityReductionInput = {
@@ -261,25 +262,6 @@ export class ElectricityReductionService {
     //need to loop through for conversions prior to calculation
     for (let i = 0; i < inputArray.length; i++) {
       inputArray[i].nameplateData.ratedMotorPower = this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW');
-      // let tmpNameplateData = {
-      //   ratedMotorPower: this.convertUnitsService.value(inputArray[i].nameplateData.ratedMotorPower).from(settings.powerMeasurement).to('kW'),
-      //   variableSpeedMotor: inputArray[i].nameplateData.variableSpeedMotor,
-      //   operationalFrequency: inputArray[i].nameplateData.operationalFrequency,
-      //   lineFrequency: inputArray[i].nameplateData.lineFrequency,
-      //   motorAndDriveEfficiency: inputArray[i].nameplateData.motorAndDriveEfficiency,
-      //   loadFactor: inputArray[i].nameplateData.loadFactor
-      // };
-      // inputArray[i] = {
-      //   name: inputArray[i].name,
-      //   operatingHours: inputArray[i].operatingHours,
-      //   electricityCost: inputArray[i].electricityCost,
-      //   measurementMethod: inputArray[i].measurementMethod,
-      //   multimeterData: inputArray[i].multimeterData,
-      //   nameplateData: tmpNameplateData,
-      //   powerMeterData: inputArray[i].powerMeterData,
-      //   otherMethodData: inputArray[i].otherMethodData,
-      //   units: inputArray[i].units
-      // };
     }
     return inputArray;
   }
