@@ -33,7 +33,7 @@ export class ElectricityReductionCardComponent implements OnInit {
 
   ngOnInit() {
     this.electricityReductionResults = this.electricityReductionService.getResults(this.settings, this.electricityReduction.baseline, this.electricityReduction.modification);
-    this.percentSavings = (this.electricityReductionResults.annualEnergySavings / this.treasureHunt.currentEnergyUsage.naturalGasCosts) * 100;
+    this.percentSavings = (this.electricityReductionResults.annualCostSavings / this.treasureHunt.currentEnergyUsage.electricityCosts) * 100;
   }
 
   editOpportunitySheet() {
