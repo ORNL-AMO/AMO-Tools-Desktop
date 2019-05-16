@@ -36,7 +36,7 @@
             <h3>Baseline</h3>
             <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
           </div>
-          <div class="d-flex flex-column mx-4 mb-4">
+          <div class="d-flex flex-column ml-2 mr-2 mb-4">
 
             <!-- app form -->
             <div *ngFor="let data of baselineData; let index = index;">
@@ -64,7 +64,7 @@
             <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
           </div>
           <!-- forms -->
-          <div class="d-flex flex-column mx-4 mb-4">
+          <div class="d-flex flex-column ml-2 mr-2 mb-4">
             <!-- app form -->
             <div *ngFor="let data of modificationData; let index = index;">
               <app-electricity-reduction-form [index]="index" [settings]="settings" [data]="data" [isBaseline]="false"
