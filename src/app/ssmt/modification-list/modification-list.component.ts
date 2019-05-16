@@ -131,7 +131,7 @@ export class ModificationListComponent implements OnInit {
     if (!ssmt) {
       ssmt = this.ssmt;
     }
-    let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(this.ssmt)));
+    let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(ssmt)));
     let tmpModification: Modification = {
       ssmt: ssmtCopy,
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
