@@ -57,7 +57,7 @@
     <div class="d-flex justify-content-center mr-2 ml-2">
       <div class="pt-4 result-tables" *ngIf="tabSelect == 'results' && dataCalculated && outputData.boilerOutput">
         <app-results-table [outputData]="outputData" [selectedTable]="selectedTable" [inputData]="inputData"
-          [settings]="settings"></app-results-table>
+          [settings]="settings" (emitCalculateResultsWithMarginalCosts)="calculateResultsWithMarginalCosts()"></app-results-table>
         <div class="d-flex w-100 pt-2 justify-content-center">
           <a class="click-link small" (click)="selectTable('default')" *ngIf="selectedTable != 'default'">Back to
             General Summary</a>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
@@ -17,8 +17,14 @@ export class ResultsTableComponent implements OnInit {
   inputData: SSMTInputs;
   @Input()
   selectedTable: string;
+  @Output('emitCalculateResultsWithMarginalCosts')
+  emitCalculateResultsWithMarginalCosts = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  calculateResultsWithMarginalCosts(){
+    this.emitCalculateResultsWithMarginalCosts.emit(true);
   }
 }
