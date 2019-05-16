@@ -36,10 +36,9 @@ export class LightingReplacementComponent implements OnInit {
   currentField: string;
   tabSelect: string = 'results';
   baselineSelected: boolean = true;
-  modifiedSelected: boolean = false;
 
-  baselineForms: Array<FormGroup>;
-  modificationForms: Array<FormGroup>;
+  baselineData: Array<LightingReplacementData>;
+  modificationData: Array<LightingReplacementData>;
 
   lightingReplacementResults: LightingReplacementResults;
   modificationExists: boolean = false;
@@ -56,29 +55,10 @@ export class LightingReplacementComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    if (this.lightingReplacementService.baselineData === undefined || this.lightingReplacementService.baselineData === null) {
-      this.addBaselineFixture();
-    } else {
-      this.loadForms();
-    }
-
-    if (this.lightingReplacementService.baselineElectricityCost) {
-      this.baselineElectricityCost = this.lightingReplacementService.baselineElectricityCost;
-    } else {
-      this.baselineElectricityCost = this.settings.electricityCost;
-    }
-    if (this.lightingReplacementService.modificationElectricityCost) {
-      this.modificationElectricityCost = this.lightingReplacementService.modificationElectricityCost;
-    } else {
-      this.modificationElectricityCost = this.settings.electricityCost;
-    }
-
-    this.updateElectricityCost(true);
-    this.updateElectricityCost(false);
+    this.initData();
+    this.getResults();
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
@@ -87,8 +67,8 @@ export class LightingReplacementComponent implements OnInit {
 
   ngOnDestroy() {
     if (!this.inTreasureHunt) {
-      this.lightingReplacementService.updateBaselineDataArray(this.baselineForms);
-      this.lightingReplacementService.updateModificationDataArray(this.modificationForms);
+      this.lightingReplacementService.baselineData = this.baselineData;
+      this.lightingReplacementService.modificationData = this.modificationData;
       this.lightingReplacementService.baselineElectricityCost = this.baselineElectricityCost;
       this.lightingReplacementService.modificationElectricityCost = this.modificationElectricityCost;
     } else {
@@ -114,96 +94,107 @@ export class LightingReplacementComponent implements OnInit {
     this.currentField = str;
   }
 
-  addBaselineFixture() {
-    this.lightingReplacementService.addBaselineFixture(this.baselineForms.length);
-    this.baselineForms.push(this.lightingReplacementService.getFormFromObj(this.lightingReplacementService.baselineData[this.lightingReplacementService.baselineData.length - 1]));
-  }
-
-  removeBaselineFixture(index: number) {
-    this.lightingReplacementService.removeBaselineFixture(index);
-    this.baselineForms.splice(index, 1);
-    this.refreshResults();
-  }
-
-  createModification() {
-    this.lightingReplacementService.createModification();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.baselineForms.length; i++) {
-      let tmpObj: LightingReplacementData = this.lightingReplacementService.getObjFromForm(this.baselineForms[i]);
-      let modForm: FormGroup = this.lightingReplacementService.getFormFromObj(tmpObj);
-      this.modificationForms.push(modForm);
+  initData() {
+    if (this.lightingReplacementService.baselineData) {
+      this.baselineData = this.lightingReplacementService.baselineData;
+    } else {
+      let tmpObj: LightingReplacementData = this.lightingReplacementService.initObject(0, this.operatingHours)
+      this.baselineData = [tmpObj];
     }
-    this.modificationExists = true;
-  }
-
-  addModificationFixture() {
-    this.lightingReplacementService.addModificationFixture(this.modificationForms.length);
-    this.modificationForms.push(this.lightingReplacementService.getFormFromObj(this.lightingReplacementService.modificationData[this.lightingReplacementService.modificationData.length - 1]));
-  }
-
-  removeModificationFixture(index: number) {
-    this.lightingReplacementService.removeModificationFixture(index);
-    this.modificationForms.splice(index, 1);
-    if (this.modificationForms.length < 1) {
-      this.modificationExists = false;
-    }
-    this.refreshResults();
-  }
-
-  removeFixture(emitObj: { index: number, isBaseline: boolean }) {
-    emitObj.isBaseline ? this.removeBaselineFixture(emitObj.index) : this.removeModificationFixture(emitObj.index);
-  }
-
-  loadForms() {
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.lightingReplacementService.baselineData.length; i++) {
-      this.baselineForms.push(this.lightingReplacementService.getFormFromObj(this.lightingReplacementService.baselineData[i]));
-    }
-    this.lightingReplacementService.initModificationData();
-    for (let i = 0; i < this.lightingReplacementService.modificationData.length; i++) {
-      this.modificationForms.push(this.lightingReplacementService.getFormFromObj(this.lightingReplacementService.modificationData[i]));
-    }
-    if (!this.modificationExists) {
-      if (this.modificationForms.length > 0) {
+    if (this.lightingReplacementService.modificationData) {
+      this.modificationData = this.lightingReplacementService.modificationData;
+      if(this.modificationData.length != 0){
         this.modificationExists = true;
       }
     }
-  }
 
-  calculate(emitObj: { form: FormGroup, index: number, isBaseline: boolean }) {
-    if (emitObj.isBaseline) {
-      this.baselineForms[emitObj.index] = emitObj.form;
+    if (this.lightingReplacementService.baselineElectricityCost) {
+      this.baselineElectricityCost = this.lightingReplacementService.baselineElectricityCost;
     } else {
-      this.modificationForms[emitObj.index] = emitObj.form;
+      this.baselineElectricityCost = this.settings.electricityCost;
     }
-    this.refreshResults();
-  }
-
-  refreshResults() {
-    this.lightingReplacementService.updateBaselineDataArray(this.baselineForms);
-    if (this.modificationExists) {
-      this.lightingReplacementService.updateModificationDataArray(this.modificationForms);
-    }
-    this.updateElectricityCost(true);
-    this.updateElectricityCost(false);
-    this.lightingReplacementResults = this.lightingReplacementService.calculateResults();
-  }
-
-  updateElectricityCost(isBaseline: boolean) {
-    if (isBaseline) {
-      this.lightingReplacementService.baselineElectricityCost = this.baselineElectricityCost;
+    if (this.lightingReplacementService.modificationElectricityCost) {
+      this.modificationElectricityCost = this.lightingReplacementService.modificationElectricityCost;
     } else {
-      this.lightingReplacementService.modificationElectricityCost = this.modificationElectricityCost;
+      this.modificationElectricityCost = this.settings.electricityCost;
     }
+  }
+
+  addBaselineFixture() {
+    let tmpObj: LightingReplacementData = this.lightingReplacementService.initObject(this.baselineData.length, this.operatingHours);
+    this.baselineData.push(tmpObj);
+    this.getResults();
+  }
+
+  removeBaselineFixture(index: number) {
+    this.baselineData.splice(index, 1);
+    this.getResults();
+  }
+
+  createModification() {
+    this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
+    this.modificationExists = true;
+    this.setModificationSelected();
+    this.getResults();
+  }
+
+  addModificationFixture() {
+    let tmpObj: LightingReplacementData = this.lightingReplacementService.initObject(this.modificationData.length, this.operatingHours);
+    this.modificationData.push(tmpObj);
+    this.getResults();
+  }
+
+  removeModificationFixture(index: number) {
+    this.modificationData.splice(index, 1);
+    if (this.modificationData.length === 0) {
+      this.modificationExists = false;
+    }
+    this.getResults();
+  }
+
+  updateBaselineData(data: LightingReplacementData, index: number) {
+    this.updateDataArray(this.baselineData, data, index);
+    this.getResults();
+  }
+
+  updateModificationData(data: LightingReplacementData, index: number) {
+    // this.modificationData[index] = data;
+    this.updateDataArray(this.modificationData, data, index);
+    this.getResults();
+  }
+
+  updateDataArray(dataArray: Array<LightingReplacementData>, data: LightingReplacementData, index: number) {
+    dataArray[index].name = data.name;
+    dataArray[index].hoursPerYear = data.hoursPerYear;
+    dataArray[index].wattsPerLamp = data.wattsPerLamp;
+    dataArray[index].lampsPerFixture = data.lampsPerFixture;
+    dataArray[index].numberOfFixtures = data.numberOfFixtures;
+    dataArray[index].lumensPerLamp = data.lumensPerLamp;
+    dataArray[index].totalLighting = data.totalLighting;
+    dataArray[index].electricityUse = data.electricityUse;
+  }
+
+  getResults() {
+    let tHuntObj: LightingReplacementTreasureHunt = this.getTreasureHuntObject();
+    this.lightingReplacementResults = this.lightingReplacementService.getResults(tHuntObj);
   }
 
   focusField(str: string) {
     this.currentField = str;
   }
 
+  getTreasureHuntObject(): LightingReplacementTreasureHunt {
+    return {
+      baseline: this.baselineData,
+      modifications: this.modificationData,
+      baselineElectricityCost: this.baselineElectricityCost,
+      modificationElectricityCost: this.modificationElectricityCost
+    }
+  }
+
   save() {
-    this.emitSave.emit({ baseline: this.lightingReplacementService.baselineData, modifications: this.lightingReplacementService.modificationData, baselineElectricityCost: this.baselineElectricityCost, modificationElectricityCost: this.modificationElectricityCost });
+    let tHuntObj: LightingReplacementTreasureHunt = this.getTreasureHuntObject();
+    this.emitSave.emit(tHuntObj);
   }
 
   cancel() {
@@ -215,17 +206,21 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   btnResetData() {
-    this.lightingReplacementService.resetData(this.settings);
+    let tmpObj: LightingReplacementData = this.lightingReplacementService.initObject(0, this.operatingHours)
+    this.baselineData = [tmpObj];
+    this.modificationData = new Array<LightingReplacementData>();
     this.modificationExists = false;
-    this.loadForms();
+    this.getResults();
   }
 
-  togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
+  setBaselineSelected() {
+    if (this.baselineSelected == false) {
       this.baselineSelected = true;
-      this.modifiedSelected = false;
-    } else if (bool == this.modifiedSelected) {
-      this.modifiedSelected = true;
+    }
+  }
+
+  setModificationSelected() {
+    if (this.baselineSelected == true) {
       this.baselineSelected = false;
     }
   }

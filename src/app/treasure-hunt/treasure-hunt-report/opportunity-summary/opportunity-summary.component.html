@@ -27,6 +27,9 @@
           Labor Cost
         </td>
         <td>
+          Engineering Cost
+        </td>
+        <td>
           Other Cost
         </td>
         <td>
@@ -52,7 +55,7 @@
         <!--unit-->
         <td>
           <span *ngIf="opportunity.utilityType == 'Electricity'">kWh</span>
-          
+
           <span *ngIf="opportunity.utilityType == 'Compressed Air'">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
@@ -68,6 +71,9 @@
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
           </span>
+          <span *ngIf="opportunity.utilityType == 'Mixed'">
+            &mdash;
+          </span>
         </td>
         <!--cost savings-->
         <td>
@@ -80,6 +86,10 @@
         <!--labor cost-->
         <td>
           {{getLaborCost(opportunity.opportunityCost) | currency:'USD'}}
+        </td>
+        <!--engineering cost-->
+        <td>
+          {{getEngineeringCost(opportunity.opportunityCost) | currency:'USD'}}
         </td>
         <!--other cost-->
         <td>

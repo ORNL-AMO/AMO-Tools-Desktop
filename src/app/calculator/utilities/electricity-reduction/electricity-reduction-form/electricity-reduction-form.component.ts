@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { ElectricityReductionService } from '../electricity-reduction.service';
-import { ElectricityReductionResults, ElectricityReductionResult } from '../../../../shared/models/standalone';
+import { ElectricityReductionResult, ElectricityReductionData } from '../../../../shared/models/standalone';
 
 
 @Component({
@@ -12,19 +12,22 @@ import { ElectricityReductionResults, ElectricityReductionResult } from '../../.
 })
 export class ElectricityReductionFormComponent implements OnInit {
   @Input()
-  form: FormGroup;
-  @Input()
   settings: Settings;
   @Input()
-  index: number;
-  @Input()
-  isBaseline: boolean;
+  data: ElectricityReductionData;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<{ form: FormGroup, index: number, isBaseline: boolean }>();
+  emitCalculate = new EventEmitter<ElectricityReductionData>();
+  @Output('emitRemoveEquipment')
+  emitRemoveEquipment = new EventEmitter<number>();
+  @Input()
+  index: number;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  @Output('emitRemoveEquipment')
-  emitRemoveEquipment = new EventEmitter<{ index: number, isBaseline: boolean }>();
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  selected: boolean;
+
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Multimeter Reading' },
@@ -37,51 +40,57 @@ export class ElectricityReductionFormComponent implements OnInit {
   individualResults: ElectricityReductionResult;
 
   isEditingName: boolean = false;
+  form: FormGroup;
 
   constructor(private electricityReductionService: ElectricityReductionService) { }
 
   ngOnInit() {
     if (this.isBaseline) {
-      this.idString = this.index.toString();
+      this.idString = 'baseline_' + this.index;
     }
     else {
       this.idString = 'modification_' + this.index;
     }
-    this.calculate();
+    this.form = this.electricityReductionService.getFormFromObj(this.data);
+    if (this.selected == false) {
+      this.form.disable();
+    }
+    this.calculateIndividualResult();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected == false) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    }
   }
 
   changeMeasurementMethod() {
-    let tmpObject = this.electricityReductionService.getObjFromForm(this.form);
-    this.form = this.electricityReductionService.getFormFromObj(tmpObject);
+    this.electricityReductionService.setValidators(this.form);
     this.calculate();
   }
 
   setNumberOfPhases(val: number) {
-    this.form.controls.numberOfPhases.setValue(val);
+    this.form.controls.numberOfPhases.patchValue(val);
     this.calculate();
   }
 
   calculate() {
-    if (this.form.valid) {
-      let emitObj = {
-        form: this.form,
-        index: this.index,
-        isBaseline: this.isBaseline
-      };
-      this.emitCalculate.emit(emitObj);
-      this.individualResults = this.electricityReductionService.calculateIndividualEquipment(this.electricityReductionService.getObjFromForm(this.form), this.settings);
-      // this.individualResults = {
-      //   energyUse: this.individualResults.energyUse,
-      //   energyCost: this.individualResults.energyCost,
-      //   annualEnergySavings: this.individualResults.annualEnergySavings,
-      //   costSavings: this.individualResults.costSavings,
-      //   power: this.individualResults.power
-      // };
-    }
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
+    this.calculateIndividualResult();
+    this.emitCalculate.emit(tmpObj);
   }
 
-  removeEquipment(i: number) {
-    this.emitRemoveEquipment.emit({ index: i, isBaseline: this.isBaseline });
+  removeEquipment() {
+    this.emitRemoveEquipment.emit(this.index);
+  }
+
+  calculateIndividualResult(){
+    let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
+    this.individualResults = this.electricityReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
 
   editEquipmentName() {

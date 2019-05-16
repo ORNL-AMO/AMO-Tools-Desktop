@@ -15,19 +15,19 @@
     </tr>
     <tr *ngFor="let data of baselineData; let index = index;">
       <td class="bold">{{data.name}}</td>
-      <td class="text-center">{{data.operatingHours | number:'1.0-0'}}
+      <td class="text-center">{{data.hoursPerYear | number:'1.0-0'}}
       </td>
       <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
       <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
     </tr>
   </tbody>
 </table>
-<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
-</app-exportable-results-table>
+<!-- <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table> -->
 
 <div *ngIf="modificationExists">
-  <label class="group-label" *ngIf="modificationData.length != 0">Modification Summary</label>
-  <table #copyTable1 class="table table-hover table-striped" *ngIf="modificationData.length != 0">
+  <label class="group-label">Modification Summary</label>
+  <table #copyTable1 class="table table-hover table-striped">
     <tbody>
       <tr>
         <td>&nbsp;</td>
@@ -43,15 +43,15 @@
       </tr>
       <tr *ngFor="let data of modificationData; let index = index;">
         <td class="bold">{{data.name}}</td>
-        <td class="text-center">{{data.operatingHours | number:'1.0-0'}}
+        <td class="text-center">{{data.hoursPerYear | number:'1.0-0'}}
         </td>
         <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
         <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
       </tr>
     </tbody>
   </table>
-  <app-exportable-results-table *ngIf="modificationData.length != 0" [tableString]="table1String"
-    (updateTableString)="updateTable1String()"></app-exportable-results-table>
+  <!-- <app-exportable-results-table [tableString]="table1String"
+    (updateTableString)="updateTable1String()"></app-exportable-results-table> -->
 </div>
 
 <label class="group-label">Totals</label>
@@ -93,8 +93,8 @@
     </tr>
   </tbody>
 </table>
-<app-exportable-results-table [tableString]="table2String" (updateTableString)="updateTable2String()">
-</app-exportable-results-table>
+<!-- <app-exportable-results-table [tableString]="table2String" (updateTableString)="updateTable2String()">
+</app-exportable-results-table> -->
 
 <table #copyTable3 class="table table-hover table-striped pt-2">
   <tbody>
@@ -115,5 +115,5 @@
     </tr>
   </tbody>
 </table>
-<app-exportable-results-table [tableString]="table3String" (updateTableString)="updateTable3String()">
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
 </app-exportable-results-table>

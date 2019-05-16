@@ -34,7 +34,7 @@ export class NaturalGasReductionCardComponent implements OnInit {
 
   ngOnInit() {
     this.naturalGasReductionResults = this.naturalGasReductionService.getResults(this.settings, this.naturalGasReduction.baseline, this.naturalGasReduction.modification);
-    this.percentSavings = (this.naturalGasReductionResults.annualEnergySavings / this.treasureHunt.currentEnergyUsage.naturalGasCosts) * 100;
+    this.percentSavings = (this.naturalGasReductionResults.annualCostSavings / this.treasureHunt.currentEnergyUsage.naturalGasCosts) * 100;
   }
 
   editOpportunitySheet() {
