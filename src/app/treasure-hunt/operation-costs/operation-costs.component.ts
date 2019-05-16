@@ -33,9 +33,7 @@ export class OperationCostsComponent implements OnInit {
         compressedAirUsage: 0,
         compressedAirCosts: 0,
         steamUsage: 0,
-        steamCosts: 0,
-        otherUtilityUsage: 0,
-        otherUtilityCosts: 0
+        steamCosts: 0
       }
       this.treasureHunt.currentEnergyUsage = defaultUsage;
       this.save();

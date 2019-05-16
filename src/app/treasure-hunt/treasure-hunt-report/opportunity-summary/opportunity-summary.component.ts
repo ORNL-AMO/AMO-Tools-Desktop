@@ -45,4 +45,12 @@ export class OpportunitySummaryComponent implements OnInit {
       return 0;
     }
   }
+
+  getEngineeringCost(oppCost: OpportunityCost): number {
+    if (oppCost){
+      return oppCost.engineeringServices;
+    }else{
+      return 0;
+    }
+  }
 }
