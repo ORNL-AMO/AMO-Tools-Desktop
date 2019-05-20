@@ -1,4 +1,14 @@
 <div class="help-panel">
+    <div *ngIf="lossesTab.componentStr === '' || lossesTab.componentStr === null || lossesTab.componentStr === undefined" class="p-2 pt-3 d-flex flex-column help-info">
+        <h5>
+            Explore Opportunities Help
+            <br>
+            <small class="text-muted">
+                Use the list on the left to discover potential opportunities for energy and cost savings within your system.
+            </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+    </div>
     <app-charge-material-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'charge-material'"></app-charge-material-help>
     <app-wall-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'wall-losses'"></app-wall-losses-help>
     <app-atmosphere-losses-help [settings]="settings" [currentField]="currentField" *ngIf="lossesTab.componentStr == 'atmosphere-losses'"></app-atmosphere-losses-help>
