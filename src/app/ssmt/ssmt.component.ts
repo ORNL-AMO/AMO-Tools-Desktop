@@ -20,6 +20,7 @@ import { BoilerService } from './boiler/boiler.service';
 import { AssessmentService } from '../assessment/assessment.service';
 import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
 import { OperationsService } from './operations/operations.service';
+import { SuiteTestService } from './ssmt-calculations/suite-test.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -87,10 +88,12 @@ export class SsmtComponent implements OnInit {
     private turbineService: TurbineService,
     private boilerService: BoilerService,
     private assessmentService: AssessmentService,
-    private operationsService: OperationsService
+    private operationsService: OperationsService,
+    private suiteTestService: SuiteTestService
   ) { }
 
   ngOnInit() {
+    this.suiteTestService.testSuite();
     //this.steamService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
@@ -112,6 +115,7 @@ export class SsmtComponent implements OnInit {
           this.modificationExists = false;
           this.compareService.setCompareVals(this._ssmt);
         }
+
         this.getSettings();
         let tmpTab = this.assessmentService.getTab();
         if (tmpTab) {

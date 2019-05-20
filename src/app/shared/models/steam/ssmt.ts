@@ -130,9 +130,9 @@ export interface BoilerInput {
 
 export interface HeaderInput {
     numberOfHeaders: number;
-    highPressure: HeaderWithHighestPressure;
-    mediumPressure?: HeaderNotHighestPressure;
-    lowPressure?: HeaderNotHighestPressure;
+    highPressureHeader: HeaderWithHighestPressure;
+    mediumPressureHeader?: HeaderNotHighestPressure;
+    lowPressureHeader?: HeaderNotHighestPressure;
 }
 
 export interface HeaderWithHighestPressure {
