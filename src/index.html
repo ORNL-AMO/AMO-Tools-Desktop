@@ -2,6 +2,7 @@
 <html>
 
 <head>
+	<script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 	<meta charset="utf-8">
 	<title>MEASUR</title>
 	<base href="./">
@@ -68,23 +69,27 @@
 		}
 
 		@-webkit-keyframes sk-bouncedelay {
+
 			0%,
 			80%,
 			100% {
 				-webkit-transform: scale(0)
 			}
+
 			40% {
 				-webkit-transform: scale(1.0)
 			}
 		}
 
 		@keyframes sk-bouncedelay {
+
 			0%,
 			80%,
 			100% {
 				-webkit-transform: scale(0);
 				transform: scale(0);
 			}
+
 			40% {
 				-webkit-transform: scale(1.0);
 				transform: scale(1.0);
@@ -95,6 +100,12 @@
 </head>
 
 <body>
+	<div id="google_translate_element"></div>
+	<script type="text/javascript">
+		function googleTranslateElementInit() {
+			new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+		}
+	</script>
 	<app-root>
 
 		<div class="loading-screen container-fluid">
