@@ -39,7 +39,7 @@ export interface OpportunitySheet {
     description: string,
     originator?: string,
     date: Date,
-    plant?: string,
+    owner?: string,
     businessUnits?: string,
     opportunityCost: OpportunityCost,
     baselineEnergyUseItems?: Array<EnergyUseItem>,

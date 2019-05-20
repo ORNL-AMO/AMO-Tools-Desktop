@@ -22,7 +22,7 @@ export class TreasureHuntService {
       description: '',
       originator: '',
       date: new Date(),
-      plant: '',
+      owner: '',
       businessUnits: '',
       opportunityCost: {
         engineeringServices: 0,
@@ -37,6 +37,6 @@ export class TreasureHuntService {
         amount: 0
       }],
       modificationEnergyUseItems: []
-    }
+    };
   }
 }

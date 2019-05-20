@@ -6,7 +6,7 @@
   </div>
   <div class="col-md-6 col-sm-12">
     <div class="form-group">
-      <label for="opportunitySheetName">Title</label>
+      <label for="opportunitySheetName">Project Title</label>
       <input type="text" class="form-control" [(ngModel)]="opportunitySheet.name" name="opportunitySheetName"
         id="opportunitySheetName" (focus)="focusField('opportunitySheetName')">
     </div>
@@ -18,12 +18,12 @@
   </div>
   <div class="col-md-6 col-sm-12">
     <div class="form-group">
-      <label for="opportunitySheetPlant">Plant</label>
-      <input type="text" class="form-control" [(ngModel)]="opportunitySheet.plant" name="opportunitySheetPlant"
-        id="opportunitySheetPlant" (focus)="focusField('opportunitySheetPlant')">
+      <label for="opportunitySheetOwner">Project Owner / Lead</label>
+      <input type="text" class="form-control" [(ngModel)]="opportunitySheet.owner" name="opportunitySheetOwner"
+        id="opportunitySheetOwner" (focus)="focusField('opportunitySheetOwner')">
     </div>
     <div class="form-group">
-      <label for="opportunitySheetBusinessUnits">Business Unit</label>
+      <label for="opportunitySheetBusinessUnits">Plant / Business Unit</label>
       <input type="text" class="form-control" [(ngModel)]="opportunitySheet.businessUnits"
         name="opportunitySheetBusinessUnits" id="opportunitySheetBusinessUnits" (focus)="focusField('opportunitySheetBusinessUnits')">
     </div>
