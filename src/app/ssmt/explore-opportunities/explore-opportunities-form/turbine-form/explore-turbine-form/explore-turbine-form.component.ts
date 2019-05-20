@@ -25,7 +25,8 @@ export class ExploreTurbineFormComponent implements OnInit {
   emitShowTurbine = new EventEmitter<boolean>();
   @Input()
   showFormToggle: boolean;
-
+  @Input()
+  exploreModIndex: number;
 
   showUseTurbine: boolean;
   showGenerationEfficiency: boolean;
