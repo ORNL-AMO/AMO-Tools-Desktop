@@ -154,7 +154,8 @@ export interface OpportunitySummary {
     totalCost: number,
     totalEnergySavings: number,
     payback: number,
-    opportunityCost: OpportunityCost
+    opportunityCost: OpportunityCost,
+    mixedIndividualResults?: Array<OpportunitySummary>
 }
 
 export interface UtilityUsageData {

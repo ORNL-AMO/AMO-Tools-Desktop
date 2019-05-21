@@ -94,7 +94,7 @@ export class TreasureHuntReportService {
     return currentEnergyUsage.electricityCosts + currentEnergyUsage.naturalGasCosts + currentEnergyUsage.otherFuelCosts + currentEnergyUsage.waterCosts + currentEnergyUsage.wasteWaterCosts + currentEnergyUsage.compressedAirCosts + currentEnergyUsage.steamCosts;
   }
 
-  getNewOpportunitySummary(opportunityName: string, utilityType: string, costSavings: number, totalEnergySavings: number, opportunityCost: OpportunityCost): OpportunitySummary {
+  getNewOpportunitySummary(opportunityName: string, utilityType: string, costSavings: number, totalEnergySavings: number, opportunityCost: OpportunityCost, mixedIndividualResults?: Array<OpportunitySummary>): OpportunitySummary {
     let totalCost: number = this.opportunitySheetService.getOppSheetImplementationCost(opportunityCost)
     return {
       opportunityName: opportunityName,
@@ -103,7 +103,8 @@ export class TreasureHuntReportService {
       totalCost: totalCost,
       payback: totalCost / costSavings,
       opportunityCost: opportunityCost,
-      totalEnergySavings: totalEnergySavings
+      totalEnergySavings: totalEnergySavings,
+      mixedIndividualResults: mixedIndividualResults
     }
   }
 
@@ -431,6 +432,7 @@ export class TreasureHuntReportService {
     if (treasureHunt.opportunitySheets) {
       treasureHunt.opportunitySheets.forEach(oppSheet => {
         if (oppSheet.selected) {
+          let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
           let oppSheetResults: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, settings);
           let numEnergyTypes: number = 0;
           let energyTypeInUse: string;
@@ -450,6 +452,8 @@ export class TreasureHuntReportService {
             energyTypeLabel = 'Electricity';
             totalCostSavings = totalCostSavings + oppSheetResults.electricityResults.energyCostSavings;
             totalEnergySavings = totalEnergySavings + oppSheetResults.electricityResults.energySavings;
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.electricityResults.energyCostSavings, oppSheetResults.electricityResults.energySavings, oppSheet.opportunityCost)
+            mixedIndividualSummaries.push(oppSummary);
           }
           //compressed air
           if (oppSheetResults.compressedAirResults.baselineEnergyUse != 0) {
@@ -458,6 +462,8 @@ export class TreasureHuntReportService {
             energyTypeLabel = 'Compressed Air';
             totalCostSavings = totalCostSavings + oppSheetResults.compressedAirResults.energyCostSavings;
             totalEnergySavings = totalEnergySavings + oppSheetResults.compressedAirResults.energySavings;
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.compressedAirResults.energyCostSavings, oppSheetResults.compressedAirResults.energySavings, oppSheet.opportunityCost)
+            mixedIndividualSummaries.push(oppSummary);
           }
           //natural gas
           if (oppSheetResults.gasResults.baselineEnergyUse != 0) {
@@ -466,6 +472,8 @@ export class TreasureHuntReportService {
             energyTypeLabel = 'Natural Gas';
             totalCostSavings = totalCostSavings + oppSheetResults.gasResults.energyCostSavings;
             totalEnergySavings = totalEnergySavings + oppSheetResults.gasResults.energySavings;
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.gasResults.energyCostSavings, oppSheetResults.gasResults.energySavings, oppSheet.opportunityCost)
+            mixedIndividualSummaries.push(oppSummary);
           }
           //water
           if (oppSheetResults.waterResults.baselineEnergyUse != 0) {
@@ -474,6 +482,8 @@ export class TreasureHuntReportService {
             energyTypeLabel = 'Water';
             totalCostSavings = totalCostSavings + oppSheetResults.waterResults.energyCostSavings;
             totalEnergySavings = totalEnergySavings + oppSheetResults.waterResults.energySavings;
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.waterResults.energyCostSavings, oppSheetResults.waterResults.energySavings, oppSheet.opportunityCost)
+            mixedIndividualSummaries.push(oppSummary);
           }
           //waste water
           if (oppSheetResults.wasteWaterResults.baselineEnergyUse != 0) {
@@ -482,6 +492,8 @@ export class TreasureHuntReportService {
             energyTypeLabel = 'Waste Water';
             totalCostSavings = totalCostSavings + oppSheetResults.wasteWaterResults.energyCostSavings;
             totalEnergySavings = totalEnergySavings + oppSheetResults.wasteWaterResults.energySavings;
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.wasteWaterResults.energyCostSavings, oppSheetResults.wasteWaterResults.energySavings, oppSheet.opportunityCost)
+            mixedIndividualSummaries.push(oppSummary);
           }
           //steam
           if (oppSheetResults.steamResults.baselineEnergyUse != 0) {
@@ -490,6 +502,8 @@ export class TreasureHuntReportService {
             energyTypeLabel = 'Steam';
             totalCostSavings = totalCostSavings + oppSheetResults.steamResults.energyCostSavings;
             totalEnergySavings = totalEnergySavings + oppSheetResults.steamResults.energySavings;
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.steamResults.energyCostSavings, oppSheetResults.steamResults.energySavings, oppSheet.opportunityCost)
+            mixedIndividualSummaries.push(oppSummary);
           }
           //other fuel
           if (oppSheetResults.otherFuelResults.baselineEnergyUse != 0) {
@@ -498,6 +512,8 @@ export class TreasureHuntReportService {
             energyTypeLabel = 'Other Fuel';
             totalCostSavings = totalCostSavings + oppSheetResults.otherFuelResults.energyCostSavings;
             totalEnergySavings = totalEnergySavings + oppSheetResults.otherFuelResults.energySavings;
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, energyTypeLabel, oppSheetResults.otherFuelResults.energyCostSavings, oppSheetResults.otherFuelResults.energySavings, oppSheet.opportunityCost)
+            mixedIndividualSummaries.push(oppSummary);
           }
 
           //if only one energy source in opp sheet
@@ -511,7 +527,7 @@ export class TreasureHuntReportService {
             thuntResults.other.costSavings = thuntResults.other.costSavings + totalCostSavings;
             thuntResults.other.implementationCost = thuntResults.other.implementationCost + oppSheetResults.totalImplementationCost;
             thuntResults.other.paybackPeriod = thuntResults.other.implementationCost / thuntResults.other.costSavings;
-            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, 'Mixed', oppSheetResults.totalCostSavings, oppSheetResults.totalEnergySavings, oppSheet.opportunityCost);
+            let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(oppSheet.name, 'Mixed', oppSheetResults.totalCostSavings, oppSheetResults.totalEnergySavings, oppSheet.opportunityCost, mixedIndividualSummaries);
             thuntResults.opportunitySummaries.push(oppSummary);
           }
           //add implementation costs to total
@@ -531,6 +547,7 @@ export class TreasureHuntReportService {
     if (numEnergyTypes > 1) {
       utilityUsageData.hasMixed = true
     }
+
 
     return utilityUsageData;
   }
