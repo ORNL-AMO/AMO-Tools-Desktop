@@ -60,6 +60,11 @@ a:not([href]):not([tabindex]){
   border-bottom: #F39C12 groove 6px;
   border-image: linear-gradient(to right,#F0F3F4, #F39C12) 80 / 2;
 }
+
+.list-row.treasure-hunt{
+  border-bottom: #2E4053 groove 6px;
+  border-image: linear-gradient(to right, #F0F3F4, #2E4053) 80 / 2;
+}
 .dropdown-menu.shown{
   display: grid;
   padding: 0px;
@@ -97,6 +102,11 @@ background-color: #FFE400;
 .ssmt .dropdown-toggle,
 .ssmt .btn-primary{
 background-color: #F39C12;
+}
+
+.treasure-hunt .dropdown-toggle,
+.treasure-hunt .btn-primary{
+  background-color: #2E4053;
 }
 
 .dropdown-menu.shown{

@@ -29,7 +29,7 @@ export class AssessmentListItemComponent implements OnInit {
   @ViewChild('editModal') public editModal: ModalDirective;
   @ViewChild('copyModal') public copyModal: ModalDirective;
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
-  
+
   directories: Array<Directory>;
 
   editForm: FormGroup;
@@ -52,8 +52,10 @@ export class AssessmentListItemComponent implements OnInit {
       this.isSetup = this.assessment.psat.setupDone;
     } else if (this.assessment.fsat) {
       this.isSetup = this.assessment.fsat.setupDone;
-    } else if(this.assessment.ssmt){
+    } else if (this.assessment.ssmt) {
       this.isSetup = this.assessment.ssmt.setupDone;
+    } else if (this.assessment.treasureHunt) {
+      this.isSetup = this.assessment.treasureHunt.setupDone;
     }
     if (this.isChecked) {
       this.assessment.selected = this.isChecked;
