@@ -16,6 +16,7 @@ export class OpportunitySummaryComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.opportunitySummaries);
   }
 
   getMaterialCost(oppCost: OpportunityCost): number {

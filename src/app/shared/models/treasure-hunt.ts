@@ -39,7 +39,7 @@ export interface OpportunitySheet {
     description: string,
     originator?: string,
     date: Date,
-    plant?: string,
+    owner?: string,
     businessUnits?: string,
     opportunityCost: OpportunityCost,
     baselineEnergyUseItems?: Array<EnergyUseItem>,
@@ -154,7 +154,8 @@ export interface OpportunitySummary {
     totalCost: number,
     totalEnergySavings: number,
     payback: number,
-    opportunityCost: OpportunityCost
+    opportunityCost: OpportunityCost,
+    mixedIndividualResults?: Array<OpportunitySummary>
 }
 
 export interface UtilityUsageData {
