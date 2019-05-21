@@ -42,6 +42,10 @@ export class TreasureHuntReportComponent implements OnInit {
       this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
       this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
     }
+
+    if(this.inRollup){
+      this.setTab('opportunitySummary');
+    }
   }
 
   setTab(str: string) {

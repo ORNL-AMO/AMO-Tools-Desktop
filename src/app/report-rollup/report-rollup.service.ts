@@ -31,12 +31,14 @@ export class ReportRollupService {
   psatAssessments: BehaviorSubject<Array<ReportItem>>;
   fsatAssessments: BehaviorSubject<Array<ReportItem>>;
   ssmtAssessments: BehaviorSubject<Array<ReportItem>>;
+  treasureHuntAssessments: BehaviorSubject<Array<ReportItem>>;
 
   assessmentsArray: Array<ReportItem>;
   phastArray: Array<ReportItem>;
   psatArray: Array<ReportItem>;
   fsatArray: Array<ReportItem>;
   ssmtArray: Array<ReportItem>;
+  treasureHuntArray: Array<ReportItem>;
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
   psatResults: BehaviorSubject<Array<PsatResultsData>>;
   allPsatResults: BehaviorSubject<Array<AllPsatResultsData>>;
@@ -77,6 +79,7 @@ export class ReportRollupService {
     this.psatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.fsatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.ssmtAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
+    this.treasureHuntAssessments = new BehaviorSubject<Array<ReportItem>>(Array<ReportItem>());
 
     this.selectedPsats = new BehaviorSubject<Array<PsatCompare>>(new Array<PsatCompare>());
     this.psatResults = new BehaviorSubject<Array<PsatResultsData>>(new Array<PsatResultsData>());
@@ -114,6 +117,13 @@ export class ReportRollupService {
         assessment: assessment,
         settings: tmpSettings
       })
+    } else if (assessment.treasureHunt) {
+      this.treasureHuntArray.push(
+        {
+          assessment: assessment,
+          settings: tmpSettings
+        }
+      )
     }
   }
 
@@ -123,6 +133,7 @@ export class ReportRollupService {
     this.psatArray = new Array<ReportItem>();
     this.fsatArray = new Array<ReportItem>();
     this.ssmtArray = new Array<ReportItem>();
+    this.treasureHuntArray = new Array<ReportItem>();
     let selected = directory.assessments.filter((val) => { return val.selected; });
     selected.forEach(assessment => {
       this.pushAssessment(assessment);
@@ -137,6 +148,7 @@ export class ReportRollupService {
     this.psatAssessments.next(this.psatArray);
     this.fsatAssessments.next(this.fsatArray);
     this.ssmtAssessments.next(this.ssmtArray);
+    this.treasureHuntAssessments.next(this.treasureHuntArray);
     this.reportAssessments.next(this.assessmentsArray);
 
   }
