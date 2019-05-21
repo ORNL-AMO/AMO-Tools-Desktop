@@ -176,7 +176,7 @@
 
       <div class="row">
         <div class="col-6">
-          <label class="small bold" for="nozzleFlowRate">Nozzle Flow Rate</label>
+          <label class="small bold">Nozzle Flow Rate</label>
         </div>
         <div class="col-6 text-center">
           <span class="small bold">{{individualResults.singleNozzleFlowRate | number:'.0-1'}}
@@ -312,6 +312,21 @@
         </span>
       </div>
 
+    </div>
+
+    <div class="form-group"
+      *ngIf="form.controls.measurementMethod.value != 3 && form.controls.measurementMethod.value != 2">
+      <label class="small" for="{{'units_'+idString}}"># of Units</label>
+      <div class="input-group">
+        <input class="form-control" name="units" id="{{'units_'+idString}}" formControlName="units" type="number"
+          (input)="calculate()" (focus)="focusField('numberOfUnits')" (blur)="focusOut()" onfocus="this.select();">
+        <span class="units input-group-addon">$/kWh</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="form.controls.units.invalid && !form.controls.units.pristine">
+        <span *ngIf="form.controls.units.errors.required">Value required.</span>
+        <span *ngIf="form.controls.units.errors.min">Value can't be less than
+          {{form.controls.units.errors.min.min}}.</span>
+      </span>
     </div>
 
   </form>
