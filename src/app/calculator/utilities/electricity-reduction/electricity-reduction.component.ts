@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener, Input, Output, 
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { ElectricityReductionService } from './electricity-reduction.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
 import { ElectricityReductionResults, ElectricityReductionData } from '../../../shared/models/standalone';
 import { ElectricityReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
@@ -97,7 +96,7 @@ export class ElectricityReductionComponent implements OnInit {
       this.baselineData = [tmpObj];
     }
     if (this.electricityReductionService.modificationData) {
-      this.modificationData = this.electricityReductionService.modificationData
+      this.modificationData = this.electricityReductionService.modificationData;
       if (this.modificationData.length != 0) {
         this.modificationExists = true;
       }
@@ -169,16 +168,6 @@ export class ElectricityReductionComponent implements OnInit {
     this.modificationData = new Array<ElectricityReductionData>();
     this.modificationExists = false;
     this.getResults();
-  }
-
-  togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
-      this.baselineSelected = true;
-      this.modifiedSelected = false;
-    } else if (bool == this.modifiedSelected) {
-      this.modifiedSelected = true;
-      this.baselineSelected = false;
-    }
   }
 
   save() {

@@ -5,6 +5,7 @@ import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirReductionData, CompressedAirFlowMeterMethodData, BagMethodData, PressureMethodData, CompressedAirOtherMethodData, CompressorElectricityData, CompressedAirReductionResults, CompressedAirReductionInput, CompressedAirReductionResult } from '../../../shared/models/standalone';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class CompressedAirReductionService {
@@ -14,28 +15,8 @@ export class CompressedAirReductionService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
-  resetData(settings: Settings) {
-    this.baselineData = new Array<CompressedAirReductionData>();
-    this.modificationData = new Array<CompressedAirReductionData>();
 
-    this.baselineData.push(this.initObject(0, settings));
-  }
-
-  getEquipmentName(index: number, isBaseline: boolean) {
-    try {
-      return isBaseline ? this.baselineData[index].name !== null ? this.baselineData[index].name : 'Equipment #' + (index + 1) : this.modificationData[index].name !== null ? this.modificationData[index].name : 'Equipment #' + (index + 1);
-    }
-    catch {
-      return 'Equipment #' + (index + 1);
-    }
-  }
-
-  saveEquipmentName(name: string, index: number, isBaseline: boolean) {
-    isBaseline ? this.baselineData[index] = this.baselineData[index]
-      : this.modificationData[index] = this.modificationData[index];
-  }
-
-  initObject(index: number, settings?: Settings): CompressedAirReductionData {
+  initObject(index: number, settings: Settings, operatingHours: OperatingHours): CompressedAirReductionData {
     let defaultFlowMeterObj: CompressedAirFlowMeterMethodData = {
       meterReading: 0.2
     };
@@ -54,13 +35,17 @@ export class CompressedAirReductionService {
     };
     let defaultCompressorElectricityObj: CompressorElectricityData = {
       compressorControl: 0,
-      compressorControlAdjustment: 0.25,
+      compressorControlAdjustment: 25,
       compressorSpecificPowerControl: 0,
       compressorSpecificPower: 0.21
     };
+    let hoursPerYear: number = 8736;
+    if (operatingHours) {
+      hoursPerYear = operatingHours.hoursPerYear;
+    }
     let obj: CompressedAirReductionData = {
       name: 'Equipment #' + (index + 1),
-      hoursPerYear: 8640,
+      hoursPerYear: hoursPerYear,
       utilityType: 0,
       utilityCost: settings && settings.electricityCost ? settings.electricityCost : 0.12,
       measurementMethod: 0,
@@ -104,8 +89,14 @@ export class CompressedAirReductionService {
       compressorSpecificPowerControl: [inputObj.compressorElectricityData.compressorSpecificPowerControl],
       compressorSpecificPower: [inputObj.compressorElectricityData.compressorSpecificPower],
 
-      units: [inputObj.units, [Validators.required, Validators.min(1)]]
+      units: [inputObj.units]
     });
+    form = this.setValidators(form);
+    return form;
+  }
+
+  setValidators(form: FormGroup): FormGroup {
+    form.controls.units.setValidators([Validators.required, Validators.min(0)]);
     switch (form.controls.measurementMethod.value) {
       case 0:
         form.controls.meterReading.setValidators([Validators.required, Validators.min(0)]);
@@ -125,15 +116,14 @@ export class CompressedAirReductionService {
         form.controls.units.clearValidators();
         break;
     }
-
-    if (inputObj.utilityType == 1) {
+    if (form.controls.utilityType.value == 1) {
       form.controls.utilityCost.setValidators([Validators.required, Validators.min(0)]);
       form.controls.compressorControl.setValidators([Validators.required]);
-      if (inputObj.compressorElectricityData.compressorControl == 8) {
+      if (form.controls.compressorControl.value == 8) {
         form.controls.compressorControlAdjustment.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
       }
-      if (inputObj.compressorElectricityData.compressorSpecificPowerControl == 4) {
-        form.controls.compressorSpecificPower.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      if (form.controls.compressorSpecificPowerControl.value == 4) {
+        form.controls.compressorSpecificPower.setValidators([Validators.required, Validators.min(0)]);
       }
     }
     return form;
@@ -178,62 +168,17 @@ export class CompressedAirReductionService {
     return obj;
   }
 
-  addBaselineEquipment(index: number, settings?: Settings) {
-    if (this.baselineData === null || this.baselineData === undefined) {
-      this.baselineData = new Array<CompressedAirReductionData>();
-    }
-    this.baselineData.push(this.initObject(index, settings ? settings : null));
-  }
-
-  removeBaselineEquipment(index: number) {
-    this.baselineData.splice(index, 1);
-  }
-
-  createModification() {
-    this.modificationData = new Array<CompressedAirReductionData>();
-    for (let i = 0; i < this.baselineData.length; i++) {
-      this.modificationData.push(this.baselineData[i]);
-    }
-  }
-
-  addModificationEquipment(index: number, settings?: Settings) {
-    if (this.modificationData === null || this.modificationData === undefined) {
-      this.modificationData = new Array<CompressedAirReductionData>();
-    }
-    this.modificationData.push(this.initObject(index, settings ? settings : null));
-  }
-
-  removeModificationEquipment(index: number) {
-    this.modificationData.splice(index, 1);
-  }
-
-  initModificationData() {
-    if (this.modificationData === undefined || this.modificationData === null) {
-      this.modificationData = new Array<CompressedAirReductionData>();
-    }
-  }
-
-  updateBaselineDataArray(baselineForms: Array<FormGroup>): void {
-    for (let i = 0; i < this.baselineData.length; i++) {
-      this.baselineData[i] = this.getObjFromForm(baselineForms[i]);
-    }
-  }
-
-  updateModificationDataArray(modificationForms: Array<FormGroup>): void {
-    for (let i = 0; i < this.modificationData.length; i++) {
-      this.modificationData[i] = this.getObjFromForm(modificationForms[i]);
-    }
-  }
-
   getResults(settings: Settings, baseline: Array<CompressedAirReductionData>, modification?: Array<CompressedAirReductionData>): CompressedAirReductionResults {
-    let baselineResults: CompressedAirReductionResult = this.calculate(baseline, settings);
+    let baselineInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(baseline));
+    let baselineResults: CompressedAirReductionResult = this.calculate(baselineInpCpy, settings);
     let modificationResults: CompressedAirReductionResult;
     let annualEnergySavings: number = 0;
     let annualCostSavings: number = 0;
     let flowRateReduction: number = 0;
     let annualConsumptionReduction: number = 0;
     if (modification) {
-      modificationResults = this.calculate(modification, settings);
+      let modificationInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(modification));
+      modificationResults = this.calculate(modificationInpCpy, settings);
     }
     let compressedAirReductionResults: CompressedAirReductionResults = {
       baselineResults: baselineResults,
@@ -262,7 +207,7 @@ export class CompressedAirReductionService {
   }
 
   calculateIndividualEquipment(input: CompressedAirReductionData, settings: Settings) {
-    let inputArray: Array<CompressedAirReductionData> = [input];
+    let inputArray: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify([input]));
     inputArray = this.convertInputs(inputArray, settings);
     let inputObj: CompressedAirReductionInput = {
       compressedAirReductionInputVec: inputArray

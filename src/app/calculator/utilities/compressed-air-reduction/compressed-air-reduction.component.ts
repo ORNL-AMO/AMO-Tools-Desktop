@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CompressedAirReductionService } from './compressed-air-reduction.service';
 import { CompressedAirReductionData, CompressedAirReductionResults } from '../../../shared/models/standalone';
@@ -40,11 +39,11 @@ export class CompressedAirReductionComponent implements OnInit {
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
 
-  baselineForms: Array<FormGroup>;
-  modificationForms: Array<FormGroup>;
   modificationExists = false;
 
   compressedAirReductionResults: CompressedAirReductionResults;
+  baselineData: Array<CompressedAirReductionData>;
+  modificationData: Array<CompressedAirReductionData>;
 
   constructor(private settingsDbService: SettingsDbService, private compressedAirReductionService: CompressedAirReductionService) { }
 
@@ -56,14 +55,7 @@ export class CompressedAirReductionComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    if (this.compressedAirReductionService.baselineData === undefined || this.compressedAirReductionService.baselineData === null || this.compressedAirReductionService.baselineData.length < 1) {
-      this.addBaselineEquipment();
-    }
-    else {
-      this.loadForms();
-    }
+    this.initData();
     this.getResults();
   }
 
@@ -71,6 +63,16 @@ export class CompressedAirReductionComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy() {
+    if (!this.inTreasureHunt) {
+      this.compressedAirReductionService.baselineData = this.baselineData;
+      this.compressedAirReductionService.modificationData = this.modificationData;
+    } else {
+      this.compressedAirReductionService.baselineData = undefined;
+      this.compressedAirReductionService.modificationData = undefined;
+    }
   }
 
   resizeTabs() {
@@ -87,98 +89,91 @@ export class CompressedAirReductionComponent implements OnInit {
     this.currentField = str;
   }
 
-  addBaselineEquipment() {
-    this.compressedAirReductionService.addBaselineEquipment(this.baselineForms.length, this.settings);
-    this.baselineForms.push(this.compressedAirReductionService.getFormFromObj(this.compressedAirReductionService.baselineData[this.compressedAirReductionService.baselineData.length - 1]));
-  }
-
-  removeBaselineEquipment(i: number) {
-    this.compressedAirReductionService.removeBaselineEquipment(i);
-    this.baselineForms.splice(i, 1);
-    this.getResults();
-  }
-
-  createModification() {
-    this.compressedAirReductionService.createModification();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.baselineForms.length; i++) {
-      let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.getObjFromForm(this.baselineForms[i]);
-      let modForm: FormGroup = this.compressedAirReductionService.getFormFromObj(tmpObj);
-      this.modificationForms.push(modForm);
+  initData() {
+    if (this.compressedAirReductionService.baselineData) {
+      this.baselineData = this.compressedAirReductionService.baselineData;
+    } else {
+      let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(0, this.settings, this.operatingHours);
+      this.baselineData = [tmpObj];
     }
-    this.modificationExists = true;
-  }
-
-  addModificationEquipment() {
-    this.compressedAirReductionService.addModificationEquipment(this.modificationForms.length, this.settings);
-    this.modificationForms.push(this.compressedAirReductionService.getFormFromObj(this.compressedAirReductionService.modificationData[this.compressedAirReductionService.modificationData.length - 1]));
-  }
-
-  removeModificationEquipment(i: number) {
-    this.compressedAirReductionService.removeModificationEquipment(i);
-    this.modificationForms.splice(i, 1);
-    if (this.modificationForms.length < 1) {
-      this.modificationExists = false;
-    }
-    this.getResults();
-  }
-
-  removeEquipment(emitObj: { index: number, isBaseline: boolean }) {
-    emitObj.isBaseline ? this.removeBaselineEquipment(emitObj.index) : this.removeModificationEquipment(emitObj.index);
-  }
-
-  loadForms() {
-    this.baselineForms = new Array<FormGroup>();
-    this.modificationForms = new Array<FormGroup>();
-    for (let i = 0; i < this.compressedAirReductionService.baselineData.length; i++) {
-      this.baselineForms.push(this.compressedAirReductionService.getFormFromObj(this.compressedAirReductionService.baselineData[i]));
-    }
-    this.compressedAirReductionService.initModificationData();
-    for (let i = 0; i < this.compressedAirReductionService.modificationData.length; i++) {
-      this.modificationForms.push(this.compressedAirReductionService.getFormFromObj(this.compressedAirReductionService.modificationData[i]));
-    }
-    if (!this.modificationExists) {
-      if (this.modificationForms.length > 0) {
+    if (this.compressedAirReductionService.modificationData) {
+      this.modificationData = this.compressedAirReductionService.modificationData;
+      if (this.modificationData.length != 0) {
         this.modificationExists = true;
       }
     }
   }
 
-  calculate(emitObj: { form: FormGroup, index: number, isBaseline: boolean }) {
-    if (emitObj.isBaseline) {
-      this.baselineForms[emitObj.index] = emitObj.form;
-    } else {
-      this.modificationForms[emitObj.index] = emitObj.form;
+  addBaselineEquipment() {
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours);
+    this.baselineData.push(tmpObj);
+    this.getResults();
+  }
+
+  removeBaselineEquipment(i: number) {
+    this.baselineData.splice(i, 1);
+    this.getResults();
+  }
+
+  createModification() {
+    this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
+    this.getResults();
+    this.modificationExists = true;
+    this.setModificationSelected();
+  }
+
+  addModificationEquipment() {
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours);
+    this.modificationData.push(tmpObj);
+    this.getResults();
+  }
+
+  removeModificationEquipment(i: number) {
+    this.modificationData.splice(i, 1);
+    if (this.modificationData.length === 0) {
+      this.modificationExists = false;
     }
     this.getResults();
   }
 
+  updateBaselineData(data: CompressedAirReductionData, index: number) {
+    this.updateDataArray(this.baselineData, data, index);
+    this.getResults();
+  }
+
+  updateModificationData(data: CompressedAirReductionData, index: number) {
+    this.updateDataArray(this.modificationData, data, index);
+    this.getResults();
+  }
+
+  updateDataArray(dataArray: Array<CompressedAirReductionData>, data: CompressedAirReductionData, index: number) {
+    dataArray[index].name = data.name;
+    dataArray[index].hoursPerYear = data.hoursPerYear;
+    dataArray[index].utilityType = data.utilityType;
+    dataArray[index].utilityCost = data.utilityCost;
+    dataArray[index].measurementMethod = data.measurementMethod;
+    dataArray[index].flowMeterMethodData = data.flowMeterMethodData;
+    dataArray[index].bagMethodData = data.bagMethodData;
+    dataArray[index].pressureMethodData = data.pressureMethodData;
+    dataArray[index].otherMethodData = data.otherMethodData;
+    dataArray[index].compressorElectricityData = data.compressorElectricityData;
+    dataArray[index].units = data.units;
+  }
+
   getResults() {
-    this.compressedAirReductionService.updateBaselineDataArray(this.baselineForms);
-    if (this.modificationExists) {
-      this.compressedAirReductionService.updateModificationDataArray(this.modificationForms);
-    }
-    this.compressedAirReductionResults = this.compressedAirReductionService.getResults(this.settings, this.compressedAirReductionService.baselineData, this.compressedAirReductionService.modificationData);
+    this.compressedAirReductionResults = this.compressedAirReductionService.getResults(this.settings, this.baselineData, this.modificationData);
   }
 
   btnResetData() {
-    this.compressedAirReductionService.resetData(this.settings);
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(0, this.settings, this.operatingHours);
+    this.baselineData = [tmpObj];
+    this.modificationData = new Array<CompressedAirReductionData>();
     this.modificationExists = false;
-    this.loadForms();
-  }
-
-  togglePanel(bool: boolean) {
-    if (bool == this.baselineSelected) {
-      this.baselineSelected = true;
-      this.modifiedSelected = false;
-    } else if (bool == this.modifiedSelected) {
-      this.modifiedSelected = true;
-      this.baselineSelected = false;
-    }
+    this.getResults();
   }
 
   save() {
-    this.emitSave.emit({ baseline: this.compressedAirReductionService.baselineData, modification: this.compressedAirReductionService.modificationData });
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
   }
 
   cancel() {
@@ -187,5 +182,17 @@ export class CompressedAirReductionComponent implements OnInit {
 
   addOpportunitySheet() {
     this.emitAddOpportunitySheet.emit(true);
+  }
+
+  setBaselineSelected() {
+    if (this.baselineSelected == false) {
+      this.baselineSelected = true;
+    }
+  }
+
+  setModificationSelected() {
+    if (this.baselineSelected == true) {
+      this.baselineSelected = false;
+    }
   }
 }

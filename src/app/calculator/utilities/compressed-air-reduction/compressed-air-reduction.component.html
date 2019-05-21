@@ -32,7 +32,7 @@
     <!-- baseline -->
     <div class="d-flex">
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
-        <div class="modification baseline w-50 panel-column" (click)="togglePanel(baselineSelected)"
+        <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
           [ngClass]="{'disabled': baselineSelected == false}">
           <div class="header mx-2">
             <h3>Baseline</h3>
@@ -42,8 +42,12 @@
               <a class="click-link pull-right small" (click)="addBaselineEquipment()">+Add Equipment</a>
             </div>
 
-            <div *ngFor="let form of baselineForms; let i = index;">
+            <div *ngFor="let data of baselineData; let i = index;">
               <!-- app form -->
+              <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="true"
+                (emitCalculate)="updateBaselineData($event, i)" (emitChangeField)="changeField($event)"
+                (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected">
+              </app-compressed-air-reduction-form>
             </div>
 
             <div class="w-100 justify content-center btn-group btn-group-sm">
@@ -56,8 +60,8 @@
         </div>
 
         <!-- modification -->
-        <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="togglePanel(modifiedSelected)"
-          [ngClass]="{'disabled': modifiedSelected == false}">
+        <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="setModificationSelected()"
+          [ngClass]="{'disabled': baselineSelected == true}">
           <!-- modification header -->
           <div class="header mx-2">
             <h3>Modification</h3>
@@ -68,15 +72,19 @@
               <a class="click-link pull-right small" (click)="addModificationEquipment()">+Add Equipment</a>
             </div>
 
-            <div *ngFor="let form of modificationForms; let i = index;">
+            <div *ngFor="let data of modificationData; let i = index;">
               <!-- app form -->
+              <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="false"
+                (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
+                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected">
+              </app-compressed-air-reduction-form>
             </div>
 
           </div>
         </div>
 
         <!-- no content message -->
-        <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="togglePanel(modifiedSelected)"
+        <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"
           [ngClass]="{'disabled': modifiedSelected == false}">
           <div class="header mx-2">
             <h3>Modification</h3>
@@ -110,8 +118,12 @@
 
           <div class="d-flex justify-content-center px-2">
             <!-- app results if results tab -->
+            <app-compressed-air-reduction-results [settings]="settings"
+              [compressedAirReductionResults]="compressedAirReductionResults" [modificationExists]="modificationExists">
+            </app-compressed-air-reduction-results>
 
             <!-- app help if help tab -->
+            <app-compressed-air-reduction-help></app-compressed-air-reduction-help>
           </div>
 
         </div>
