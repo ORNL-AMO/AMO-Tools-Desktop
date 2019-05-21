@@ -33,6 +33,8 @@ import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.component';
 import { SsmtSummaryCardComponent } from './assessment-grid-view/assessment-card/ssmt-summary-card/ssmt-summary-card.component';
 import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
+import { TreasureHuntSummaryCardComponent } from './assessment-grid-view/assessment-card/treasure-hunt-summary-card/treasure-hunt-summary-card.component';
+import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,8 @@ import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
     PreAssessmentListItemComponent,
     FsatSummaryCardComponent,
     ResetDataModalComponent,
-    SsmtSummaryCardComponent
+    SsmtSummaryCardComponent,
+    TreasureHuntSummaryCardComponent
   ],
   exports: [
     AssessmentCreateComponent,
@@ -75,7 +78,8 @@ import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
     PhastReportModule,
     PsatModule,
     FsatReportModule,
-    SsmtReportModule
+    SsmtReportModule,
+    TreasureHuntReportModule
   ],
   providers: []
 })

@@ -65,6 +65,9 @@ export class AssessmentService {
       }
       this.router.navigateByUrl('/ssmt/' + assessment.id);
     } else if (assessment.type == 'TreasureHunt') {
+      if (assessment.treasureHunt.setupDone && !str && !assessment.isExample) {
+        this.tab = 'treasure-chest';
+      }
       this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
     }
   }
