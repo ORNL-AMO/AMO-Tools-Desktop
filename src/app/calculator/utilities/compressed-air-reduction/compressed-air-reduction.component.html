@@ -118,12 +118,12 @@
 
           <div class="d-flex justify-content-center px-2">
             <!-- app results if results tab -->
-            <app-compressed-air-reduction-results [settings]="settings"
+            <app-compressed-air-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
               [compressedAirReductionResults]="compressedAirReductionResults" [modificationExists]="modificationExists">
             </app-compressed-air-reduction-results>
 
             <!-- app help if help tab -->
-            <app-compressed-air-reduction-help></app-compressed-air-reduction-help>
+            <app-compressed-air-reduction-help *ngIf="tabSelect === 'help'" [settings]="settings" [currentField]="currentField"></app-compressed-air-reduction-help>
           </div>
 
         </div>

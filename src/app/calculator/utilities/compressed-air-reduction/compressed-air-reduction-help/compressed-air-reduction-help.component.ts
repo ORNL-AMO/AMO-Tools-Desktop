@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {Settings} from "../../../../shared/models/settings";
 
 @Component({
   selector: 'app-compressed-air-reduction-help',
@@ -7,6 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CompressedAirReductionHelpComponent implements OnInit {
 
+  @Input()
+  settings: Settings;
+  @Input()
+  currentField: string;
   constructor() { }
 
   ngOnInit() {
