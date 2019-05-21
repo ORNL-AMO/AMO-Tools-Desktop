@@ -320,7 +320,6 @@
       <div class="input-group">
         <input class="form-control" name="units" id="{{'units_'+idString}}" formControlName="units" type="number"
           (input)="calculate()" (focus)="focusField('numberOfUnits')" (blur)="focusOut()" onfocus="this.select();">
-        <span class="units input-group-addon">$/kWh</span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="form.controls.units.invalid && !form.controls.units.pristine">
         <span *ngIf="form.controls.units.errors.required">Value required.</span>

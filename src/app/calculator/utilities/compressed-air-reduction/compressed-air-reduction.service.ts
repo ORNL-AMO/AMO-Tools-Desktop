@@ -213,6 +213,7 @@ export class CompressedAirReductionService {
       compressedAirReductionInputVec: inputArray
     };
     let results: CompressedAirReductionResult = this.standaloneService.compressedAirReduction(inputObj);
+    results = this.convertResults(results, settings);
     return results;
   }
 
@@ -230,5 +231,16 @@ export class CompressedAirReductionService {
       }
     }
     return inputArray;
+  }
+
+  convertResults(results: CompressedAirReductionResult, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
+      results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
+      results.singleNozzeFlowRate = this.convertUnitsService.value(results.singleNozzeFlowRate).from('ft3').to('m3');
+      results.consumption = this.convertUnitsService.value(results.consumption).from('f3').to('m3');
+    } else if (settings.unitsOfMeasure == 'Imperial') {
+      results.consumption = results.consumption / 1000;
+    }
+    return results;
   }
 }
