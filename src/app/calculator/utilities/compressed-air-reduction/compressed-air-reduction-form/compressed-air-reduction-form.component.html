@@ -299,7 +299,7 @@
         <div class="input-group">
           <input class="form-control" name="compressorSpecificPower" id="{{'compressorSpecificPower_'+idString}}"
             formControlName="compressorSpecificPower" type="number" (input)="calculate()"
-            (focus)="focusField('compressorSpecificPower`')" (blur)="focusOut()" onfocus="this.select();">
+            (focus)="focusField('compressorSpecificPower')" (blur)="focusOut()" onfocus="this.select();">
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/SCFM</span>
           <span class="units input-group-addon"
             *ngIf="settings.unitsOfMeasure == 'Metric'">kW/(m<sup>3</sup>/min)</span>
