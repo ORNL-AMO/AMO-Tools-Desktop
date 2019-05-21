@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Injectable } from '@angular/core';
 declare var standaloneAddon: any;
 declare var calculatorAddon: any;
@@ -25,7 +26,7 @@ export class StandaloneService {
   }
 
   pneumaticAirRequirement(input: PneumaticAirRequirementInput, settings: Settings): PneumaticAirRequirementOutput {
-    let inputCpy: PneumaticAirRequirementInput = JSON.parse(JSON.stringify(input));
+    const inputCpy: PneumaticAirRequirementInput = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
       //metric: cm imperial: in
       inputCpy.cylinderDiameter = this.convertUnitsService.value(inputCpy.cylinderDiameter).from('cm').to('in');
@@ -96,7 +97,7 @@ export class StandaloneService {
   receiverTankSizeBridgingCompressor(input: ReceiverTankBridgingCompressor, settings: Settings): number {
     let inputCpy: ReceiverTankBridgingCompressor = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
-      //metric: m imperial: ft 
+      //metric: m imperial: ft
       inputCpy.distanceToCompressorRoom = this.convertUnitsService.value(inputCpy.distanceToCompressorRoom).from('m').to('ft');
       inputCpy.speedOfAir = this.convertUnitsService.value(inputCpy.speedOfAir).from('m').to('ft');
       // metric: m3 imperial:scfm (ft3)
@@ -117,7 +118,7 @@ export class StandaloneService {
   receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage, settings: Settings): number {
     let inputCpy: ReceiverTankMeteredStorage = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
-      //metric: m imperial: ft 
+      //metric: m imperial: ft
       inputCpy.airFlowRequirement = this.convertUnitsService.value(inputCpy.airFlowRequirement).from('m3').to('ft3');
       inputCpy.meteredControl = this.convertUnitsService.value(inputCpy.meteredControl).from('m3').to('ft3');
       //metric:kPaa imperial: psia
