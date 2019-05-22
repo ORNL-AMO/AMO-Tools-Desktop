@@ -19,6 +19,7 @@ import { UnitConverterService } from './unit-converter/unit-converter.service';
 import { Co2SavingsModule } from './co2-savings/co2-savings.module';
 import { ElectricityReductionModule } from './electricity-reduction/electricity-reduction.module';
 import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-reduction.module';
+import { CompressedAirReductionModule } from './compressed-air-reduction/compressed-air-reduction.module';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-r
         PowerFactorCorrectionModule,
         Co2SavingsModule,
         ElectricityReductionModule,
-        NaturalGasReductionModule
+        NaturalGasReductionModule,
+        CompressedAirReductionModule
     ],
     providers: [
         CashFlowService,
