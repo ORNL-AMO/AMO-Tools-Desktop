@@ -18,9 +18,11 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { FSAT, FsatOutput } from '../shared/models/fans';
 import { FsatService } from '../fsat/fsat.service';
-import { ReportItem, PsatCompare, PsatResultsData, AllPsatResultsData, PhastCompare, PhastResultsData, AllPhastResultsData, FsatCompare, FsatResultsData, AllFsatResultsData, AllSsmtResultsData, SsmtCompare, SsmtResultsData } from './report-rollup-models';
+import { ReportItem, PsatCompare, PsatResultsData, AllPsatResultsData, PhastCompare, PhastResultsData, AllPhastResultsData, FsatCompare, FsatResultsData, AllFsatResultsData, AllSsmtResultsData, SsmtCompare, SsmtResultsData, TreasureHuntResultsData } from './report-rollup-models';
 import { CalculateModelService } from '../ssmt/ssmt-calculations/calculate-model.service';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
+import { TreasureHuntReportService } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
+import { TreasureHuntResults } from '../shared/models/treasure-hunt';
 
 
 @Injectable()
@@ -39,6 +41,7 @@ export class ReportRollupService {
   fsatArray: Array<ReportItem>;
   ssmtArray: Array<ReportItem>;
   treasureHuntArray: Array<ReportItem>;
+
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
   psatResults: BehaviorSubject<Array<PsatResultsData>>;
   allPsatResults: BehaviorSubject<Array<AllPsatResultsData>>;
@@ -55,6 +58,8 @@ export class ReportRollupService {
   ssmtResults: BehaviorSubject<Array<SsmtResultsData>>;
   allSsmtResults: BehaviorSubject<Array<AllSsmtResultsData>>;
 
+  allTreasureHuntResults: BehaviorSubject<Array<TreasureHuntResultsData>>;
+
   calcsArray: Array<Calculator>;
   selectedCalcs: BehaviorSubject<Array<Calculator>>;
 
@@ -68,7 +73,8 @@ export class ReportRollupService {
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
     private fsatService: FsatService,
-    private calculateModelService: CalculateModelService
+    private calculateModelService: CalculateModelService,
+    private treasureHuntReportService: TreasureHuntReportService
   ) {
     this.initSummary();
   }
@@ -99,6 +105,8 @@ export class ReportRollupService {
 
     this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
+
+    this.allTreasureHuntResults = new BehaviorSubject<Array<TreasureHuntResultsData>>(new Array<TreasureHuntResultsData>())
   }
 
 
@@ -485,6 +493,25 @@ export class ReportRollupService {
     });
     this.ssmtResults.next(tmpResultsArr);
   }
+
+
+  getTreasureHuntResultsArray(thuntItems: Array<ReportItem>){
+    let tmpResultsArr: Array<TreasureHuntResultsData> = new Array<TreasureHuntResultsData>();
+    thuntItems.forEach(item => {
+      if(item.assessment.treasureHunt){
+        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(item.assessment.treasureHunt, item.settings);
+        tmpResultsArr.push(
+          {
+            treasureHuntResults: thuntResults,
+            assessment: item.assessment
+          }
+        );
+      }
+    });
+    this.allTreasureHuntResults.next(tmpResultsArr);
+  }
+
+
 
   checkSettings(settings: Settings) {
     if (!settings.energyResultUnit) {

@@ -193,8 +193,7 @@ export class ReportRollupComponent implements OnInit {
         if (items.length !== 0) {
           this._treasureHuntAssessments = items;
           this.numTreasureHunt = this._treasureHuntAssessments.length;
-          //this.numSsmt = this._ssmtAssessments.length;
-          //this.reportRollupService.initSsmtResultsArr(items);
+          this.reportRollupService.getTreasureHuntResultsArray(this._treasureHuntAssessments);
           if (!this.focusedAssessment) {
             this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
           }
@@ -236,6 +235,7 @@ export class ReportRollupComponent implements OnInit {
     if (this.selectedCalcsSub) this.selectedCalcsSub.unsubscribe();
     if (this.fsatAssessmentsSub) this.fsatAssessmentsSub.unsubscribe();
     if (this.ssmtAssessmentsSub) this.ssmtAssessmentsSub.unsubscribe();
+    if (this.treasureHuntAssesmentsSub) this.treasureHuntAssesmentsSub.unsubscribe();
   }
 
   checkSettings() {

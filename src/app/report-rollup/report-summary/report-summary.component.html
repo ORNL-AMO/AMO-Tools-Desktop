@@ -84,8 +84,7 @@
                     (click)="showSteamModal()" [ngClass]="{'disabled': numSsmt == 0}">
                     <app-ssmt-summary [numSsmt]="numSsmt" [settings]="settings"></app-ssmt-summary>
                 </li>
-                <li *ngIf="numTreasureHunt != 0" [hidden]="showSummary == 'closed'"
-                    class="treasure-hunt-summary disabled coming-soon"
+                <li *ngIf="numTreasureHunt != 0" [hidden]="showSummary == 'closed'" class="treasure-hunt-summary"
                     [ngClass]="{'disabled': numTreasureHunt == 0}">
                     <app-treasure-hunt-summary [numTreasureHunt]="numTreasureHunt"></app-treasure-hunt-summary>
                 </li>
