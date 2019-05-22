@@ -162,9 +162,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
   calculate() {
     let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.getObjFromForm(this.form);
     this.calculateIndividualResult();
-    console.log(tmpObj);
     this.emitCalculate.emit(tmpObj);
-    console.log('calculated');
   }
 
   removeEquipment() {
