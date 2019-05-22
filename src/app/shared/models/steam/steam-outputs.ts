@@ -1,23 +1,24 @@
+//THIS MODEL HAS BEEN UPDATED TO MATCH THE SUITE RETURN VALUES
 export interface SSMTOutput {
   boilerOutput: BoilerOutput;
 
-  highPressureHeader: HeaderOutputObj;
+  highPressureHeaderSteam: HeaderOutputObj;
   highPressureSteamHeatLoss: HeatLossOutput;
 
-  lowPressurePRV: PrvOutput;
-  highToMediumPressurePRV: PrvOutput;
+  mediumPressureToLowPressurePrv: PrvOutput;
+  highPressureToMediumPressurePrv: PrvOutput;
 
-  highToLowPressureTurbine: TurbineOutput;
+  highPressureToLowPressureTurbine: TurbineOutput;
   highPressureToMediumPressureTurbine: TurbineOutput;
   highPressureCondensateFlashTank: FlashTankOutput;
 
-  lowPressureHeader: HeaderOutputObj;
+  lowPressureHeaderSteam: HeaderOutputObj;
   lowPressureSteamHeatLoss: HeatLossOutput;
 
-  mediumToLowPressureTurbine: TurbineOutput;
+  mediumPressureToLowPressureTurbine: TurbineOutput;
   mediumPressureCondensateFlashTank: FlashTankOutput;
 
-  mediumPressureHeader: HeaderOutputObj;
+  mediumPressureHeaderSteam: HeaderOutputObj;
   mediumPressureSteamHeatLoss: HeatLossOutput;
 
   blowdownFlashTank: FlashTankOutput;
@@ -30,35 +31,50 @@ export interface SSMTOutput {
   condensateFlashTank: FlashTankOutput;
 
   makeupWater: SteamPropertiesOutput;
-  makeupWaterAndCondensateHeader: HeaderOutputObj;
+  makeupWaterAndCondensate: HeaderOutputObj;
 
   condensingTurbine: TurbineOutput;
   deaeratorOutput: DeaeratorOutput;
 
-  highPressureProcessUsage: ProcessSteamUsage;
+  highPressureProcessSteamUsage: ProcessSteamUsage;
   mediumPressureProcessUsage: ProcessSteamUsage;
   lowPressureProcessUsage: ProcessSteamUsage;
 
-  powerGenerated: number;
-  boilerFuelCost: number;
-  makeupWaterCost: number;
-  totalOperatingCost: number;
-  powerGenerationCost: number;
-  boilerFuelUsage: number;
-  marginalHPCost: number;
-  marginalMPCost: number;
-  marginalLPCost: number;
+  // powerGenerated: number;
+  // boilerFuelCost: number;
+  // makeupWaterCost: number;
+  // totalOperatingCost: number;
+  // powerGenerationCost: number;
+  //boilerFuelUsage: number;
+  marginalHPCost?: number;
+  marginalMPCost?: number;
+  marginalLPCost?: number;
 
 
-  makeupWaterVolumeFlow: number;
-  annualMakeupWaterFlow: number;
+  // makeupWaterVolumeFlow: number;
+  // annualMakeupWaterFlow: number;
 
-  ventedLowPressureSteam: SteamPropertiesOutput;
+  lowPressureVentedSteam: SteamPropertiesOutput;
   heatExchangerOutput: HeatExchangerOutput;
 
-  sitePowerImport: number;
-  sitePowerDemand: number;
+  // sitePowerImport: number;
+  // sitePowerDemand: number;
+  operationsOutput: SSMTOperationsOutput
 
+}
+
+export interface SSMTOperationsOutput {
+  powerGenerated: number,
+  boilerFuelCost: number,
+  makeupWaterCost: number,
+  totalOperatingCost: number,
+  powerGenerationCost: number,
+  boilerFuelUsage: number,
+  sitePowerImport: number,
+  sitePowerDemand: number,
+  makeupWaterVolumeFlow: number,
+  //makeupWaterVolumeFlowAnnual (stuite) = annualMakeupWaterFlow (desktop)
+  makeupWaterVolumeFlowAnnual: number
 }
 
 //export interface SSMTOperationsOutput {
