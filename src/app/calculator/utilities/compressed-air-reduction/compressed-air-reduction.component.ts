@@ -138,9 +138,6 @@ export class CompressedAirReductionComponent implements OnInit {
 
   updateBaselineData(data: CompressedAirReductionData, index: number) {
     this.updateDataArray(this.baselineData, data, index);
-    if (index == 0) {
-      this.updateAllUtilityType();
-    }
     this.getResults();
   }
 
@@ -161,20 +158,6 @@ export class CompressedAirReductionComponent implements OnInit {
     dataArray[index].otherMethodData = data.otherMethodData;
     dataArray[index].compressorElectricityData = data.compressorElectricityData;
     dataArray[index].units = data.units;
-  }
-
-  updateAllUtilityType() {
-    console.log('updating utility type');
-    for (let i = 1; i < this.baselineData.length; i++) {
-      this.baselineData[i].utilityType = this.baselineData[0].utilityType;
-    }
-    if (this.modificationExists) {
-      for (let i = 0; i < this.modificationData.length; i++) {
-        console.log('modification i = ' + i);
-        this.modificationData[i].utilityType = this.baselineData[0].utilityType;
-        console.log(this.modificationData[i].utilityType);
-      }
-    }
   }
 
   getResults() {

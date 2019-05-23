@@ -222,12 +222,12 @@ export class CompressedAirReductionService {
     // need to loop through for conversions prior to calculation
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
-        inputArray[i].flowMeterMethodData.meterReading = this.convertUnitsService.value(inputArray[i].flowMeterMethodData.meterReading).from('m3').to('f3');
+        inputArray[i].flowMeterMethodData.meterReading = this.convertUnitsService.value(inputArray[i].flowMeterMethodData.meterReading).from('m3').to('ft3');
         inputArray[i].bagMethodData.height = this.convertUnitsService.value(inputArray[i].bagMethodData.height).from('cm').to('in');
         inputArray[i].bagMethodData.diameter = this.convertUnitsService.value(inputArray[i].bagMethodData.diameter).from('cm').to('in');
         inputArray[i].pressureMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].pressureMethodData.supplyPressure).from('barg').to('psig');
         inputArray[i].otherMethodData.consumption = this.convertUnitsService.value(inputArray[i].otherMethodData.consumption).from('m3').to('ft3');
-        let conversionHelper = this.convertUnitsService.value(1).from('m3').to('f3');
+        let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
         inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
         if (inputArray[i].utilityType == 0) {
           inputArray[i].utilityCost = inputArray[i].utilityCost / conversionHelper;
@@ -241,7 +241,7 @@ export class CompressedAirReductionService {
     if (settings.unitsOfMeasure == 'Metric') {
       results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
       results.singleNozzeFlowRate = this.convertUnitsService.value(results.singleNozzeFlowRate).from('ft3').to('m3');
-      results.consumption = this.convertUnitsService.value(results.consumption).from('f3').to('m3');
+      results.consumption = this.convertUnitsService.value(results.consumption).from('ft3').to('m3');
     } else if (settings.unitsOfMeasure == 'Imperial') {
       results.consumption = results.consumption / 1000;
     }

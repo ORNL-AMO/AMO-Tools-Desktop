@@ -34,16 +34,17 @@
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
         <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
           [ngClass]="{'disabled': baselineSelected == false}">
-          <div class="header mx-2 mb-2">
+          <div class="header mx-2 mb-4">
             <h3>Baseline</h3>
             <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
           </div>
-          <div class="d-flex flex-column ml-2 mr-2 mb-4">
+          <div class="d-flex flex-column mx-4 mb-4">
             <!-- app form -->
             <div *ngFor="let data of baselineData; let i = index;">
               <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="true"
                 (emitCalculate)="updateBaselineData($event, i)" (emitChangeField)="changeField($event)"
-                (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected">
+                (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected"
+                [utilityType]="baselineData[0].utilityType">
               </app-compressed-air-reduction-form>
             </div>
             <div class="w-100 justify content-center btn-group btn-group-sm">
@@ -59,7 +60,7 @@
         <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="setModificationSelected()"
           [ngClass]="{'disabled': baselineSelected == true}">
           <!-- modification header -->
-          <div class="header mx-2 mb-2">
+          <div class="header mx-2 mb-4">
             <h3>Modification</h3>
             <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
           </div>
@@ -69,7 +70,8 @@
               <!-- app form -->
               <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="false"
                 (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
-                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected">
+                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
+                [utilityType]="baselineData[0].utilityType">
               </app-compressed-air-reduction-form>
             </div>
           </div>

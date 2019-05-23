@@ -26,6 +26,8 @@ export class CompressedAirReductionFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
   @Input()
   selected: boolean;
+  @Input()
+  utilityType: number;
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Flow Meter' },
@@ -95,11 +97,9 @@ export class CompressedAirReductionFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('hi');
-    if (changes.data) {
-      console.log('changes to data');
-      console.log(this.index);
-      console.log(this.data);
-      this.form = this.compressedAirReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
+    if (changes.utilityType && !changes.utilityType.firstChange) {
+      console.log('changes to utilityType');
+      this.form.patchValue({ utilityType: this.utilityType });
     }
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
