@@ -96,9 +96,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('hi');
     if (changes.utilityType && !changes.utilityType.firstChange) {
-      console.log('changes to utilityType');
       this.form.patchValue({ utilityType: this.utilityType });
     }
     if (changes.selected && !changes.selected.firstChange) {
