@@ -34,13 +34,13 @@
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
         <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
           [ngClass]="{'disabled': baselineSelected == false}">
-          <div class="header mx-2">
+          <div class="header mx-2 mb-2">
             <h3>Baseline</h3>
             <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
           </div>
-          <div class="d-flex flex-column mx-4 mb-4">
+          <div class="d-flex flex-column ml-2 mr-2 mb-4">
+            <!-- app form -->
             <div *ngFor="let data of baselineData; let i = index;">
-              <!-- app form -->
               <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="true"
                 (emitCalculate)="updateBaselineData($event, i)" (emitChangeField)="changeField($event)"
                 (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected">
@@ -59,7 +59,7 @@
         <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="setModificationSelected()"
           [ngClass]="{'disabled': baselineSelected == true}">
           <!-- modification header -->
-          <div class="header mx-2">
+          <div class="header mx-2 mb-2">
             <h3>Modification</h3>
             <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
           </div>
@@ -111,11 +111,13 @@
           <div class="d-flex justify-content-center px-2">
             <!-- app results if results tab -->
             <app-compressed-air-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
-              [compressedAirReductionResults]="compressedAirReductionResults" [modificationExists]="modificationExists">
+              [compressedAirReductionResults]="compressedAirReductionResults" [modificationExists]="modificationExists"
+              [utilityType]="baselineData[0].utilityType">
             </app-compressed-air-reduction-results>
 
             <!-- app help if help tab -->
-            <app-compressed-air-reduction-help *ngIf="tabSelect === 'help'" [settings]="settings" [currentField]="currentField"></app-compressed-air-reduction-help>
+            <app-compressed-air-reduction-help *ngIf="tabSelect === 'help'" [settings]="settings"
+              [currentField]="currentField"></app-compressed-air-reduction-help>
           </div>
 
         </div>

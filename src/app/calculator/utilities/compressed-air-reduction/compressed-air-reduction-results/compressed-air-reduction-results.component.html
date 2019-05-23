@@ -1,14 +1,15 @@
 <label class="group-label">Baseline Results</label>
 <table #copyTable0 class="table table-hover table-striped">
   <tbody>
-    <tr>
+    <tr *ngIf="utilityType == 1">
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
         {{compressedAirReductionResults.baselineResults.energyUse | number:'.0-0'}} kWh
       </td>
     </tr>
     <tr>
-      <td class="bold w-50">Energy Cost</td>
+      <td class="bold w-50" *ngIf="utilityType == 1">Energy Cost</td>
+      <td class="bold w-50" *ngIf="utilityType == 0">Compressed Air Cost</td>
       <td class="text-center w-50">
         {{compressedAirReductionResults.baselineResults.energyCost | currency}}
       </td>
@@ -40,14 +41,15 @@
 <label class="group-label" *ngIf="modificationExists">Modification Summary</label>
 <table *ngIf="modificationExists" #copyTable1 class="table table-hover table-striped">
   <tbody>
-    <tr>
+    <tr *ngIf="utilityType == 1">
       <td class="bold w-50">Energy Use</td>
       <td class="text-center w-50">
         {{compressedAirReductionResults.modificationResults.energyUse | number:'.0-0'}} kWh
       </td>
     </tr>
     <tr>
-      <td class="bold w-50">Energy Cost</td>
+      <td class="bold w-50" *ngIf="utilityType == 1">Energy Cost</td>
+      <td class="bold w-50" *ngIf="utilityType == 0">Compressed Air Cost</td>
       <td class="text-center w-50">
         {{compressedAirReductionResults.modificationResults.energyCost | currency}}
       </td>
@@ -76,7 +78,7 @@
 <label class="group-label" *ngIf="modificationExists">Savings</label>
 <table *ngIf="modificationExists" #copyTable2 class="table table-hover table-striped">
   <tbody>
-    <tr>
+    <tr *ngIf="utilityType == 1">
       <td class="bold w-50">Annual Energy Savings</td>
       <td class="text-center w-50">{{compressedAirReductionResults.annualEnergySavings | number:'.0-0'}} kWh</td>
     </tr>

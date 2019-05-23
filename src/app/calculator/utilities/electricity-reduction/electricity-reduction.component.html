@@ -32,7 +32,7 @@
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
         <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
           [ngClass]="{'disabled': baselineSelected == false}">
-          <div class="header mx-2">
+          <div class="header mx-2 mb-2">
             <h3>Baseline</h3>
             <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
           </div>
@@ -77,7 +77,7 @@
         <!-- no content message -->
         <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"
           [ngClass]="{'disabled': baselineSelected == true}">
-          <div class="header mx-2">
+          <div class="header mx-2 mb-2">
             <h3>Modification</h3>
           </div>
           <div class="p-3 no-data">
