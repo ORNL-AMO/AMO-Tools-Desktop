@@ -77,9 +77,9 @@
 .boiler-img-holder .fuel-energy{
     position: absolute;
     top: 110px;
-    width: 100px;
+    /* width: 100px; */
     z-index: +1;
-    left: -13px;
+    left: -40px;
 }
 
 .boiler-img-holder .stack-loss{
