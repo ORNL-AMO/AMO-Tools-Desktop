@@ -26,6 +26,8 @@ export class CompressedAirReductionFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
   @Input()
   selected: boolean;
+  @Input()
+  utilityType: number;
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Flow Meter' },
@@ -34,7 +36,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
     { value: 3, name: 'Offsheet / Other Method' }
   ];
   utilityTypes: Array<{ value: number, name: string }> = [
-    { value: 0, name: 'None' },
+    { value: 0, name: 'Compressed Air' },
     { value: 1, name: 'Electricity' }
   ];
   nozzleTypes: Array<{ value: number, name: string }> = [
@@ -86,7 +88,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
     else {
       this.idString = 'modification_' + this.index;
     }
-    this.form = this.compressedAirReductionService.getFormFromObj(this.data);
+    this.form = this.compressedAirReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
     if (this.selected == false) {
       this.form.disable();
     }
@@ -94,11 +96,17 @@ export class CompressedAirReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.utilityType && !changes.utilityType.firstChange) {
+      this.form.patchValue({ utilityType: this.utilityType });
+    }
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
         this.form.disable();
       } else {
         this.form.enable();
+        if (this.index != 0 || !this.isBaseline) {
+          this.form.controls.utilityType.disable();
+        }
       }
     }
   }

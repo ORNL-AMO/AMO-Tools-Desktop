@@ -37,7 +37,7 @@ export class CompressedAirReductionService {
       compressorControl: 0,
       compressorControlAdjustment: 25,
       compressorSpecificPowerControl: 0,
-      compressorSpecificPower: 0.21
+      compressorSpecificPower: 0.16
     };
     let hoursPerYear: number = 8736;
     if (operatingHours) {
@@ -59,11 +59,11 @@ export class CompressedAirReductionService {
     return obj;
   }
 
-  getFormFromObj(inputObj: CompressedAirReductionData): FormGroup {
+  getFormFromObj(inputObj: CompressedAirReductionData, index: number, isBaseline): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      utilityType: [inputObj.utilityType],
+      utilityType: [{ value: inputObj.utilityType, disabled: (index != 0 || !isBaseline) }],
       measurementMethod: [inputObj.measurementMethod],
 
       // flow meter method data
@@ -203,6 +203,7 @@ export class CompressedAirReductionService {
       compressedAirReductionInputVec: inputArray
     };
     let results: CompressedAirReductionResult = this.standaloneService.compressedAirReduction(inputObj);
+    results = this.convertResults(results, settings);
     return results;
   }
 
@@ -221,13 +222,16 @@ export class CompressedAirReductionService {
     // need to loop through for conversions prior to calculation
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
-        inputArray[i].flowMeterMethodData.meterReading = this.convertUnitsService.value(inputArray[i].flowMeterMethodData.meterReading).from('m3').to('f3');
+        inputArray[i].flowMeterMethodData.meterReading = this.convertUnitsService.value(inputArray[i].flowMeterMethodData.meterReading).from('m3').to('ft3');
         inputArray[i].bagMethodData.height = this.convertUnitsService.value(inputArray[i].bagMethodData.height).from('cm').to('in');
         inputArray[i].bagMethodData.diameter = this.convertUnitsService.value(inputArray[i].bagMethodData.diameter).from('cm').to('in');
         inputArray[i].pressureMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].pressureMethodData.supplyPressure).from('barg').to('psig');
         inputArray[i].otherMethodData.consumption = this.convertUnitsService.value(inputArray[i].otherMethodData.consumption).from('m3').to('ft3');
-        let conversionHelper = this.convertUnitsService.value(1).from('m3').to('f3');
+        let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
         inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
+        if (inputArray[i].utilityType == 0) {
+          inputArray[i].utilityCost = inputArray[i].utilityCost / conversionHelper;
+        }
       }
     }
     return inputArray;
@@ -237,7 +241,7 @@ export class CompressedAirReductionService {
     if (settings.unitsOfMeasure == 'Metric') {
       results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
       results.singleNozzeFlowRate = this.convertUnitsService.value(results.singleNozzeFlowRate).from('ft3').to('m3');
-      results.consumption = this.convertUnitsService.value(results.consumption).from('f3').to('m3');
+      results.consumption = this.convertUnitsService.value(results.consumption).from('ft3').to('m3');
     } else if (settings.unitsOfMeasure == 'Imperial') {
       results.consumption = results.consumption / 1000;
     }
