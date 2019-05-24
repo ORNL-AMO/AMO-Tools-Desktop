@@ -14,6 +14,8 @@ export class CompressedAirReductionResultsComponent implements OnInit {
   compressedAirReductionResults: CompressedAirReductionResults;
   @Input()
   modificationExists: boolean;
+  @Input()
+  utilityType: number;
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;
