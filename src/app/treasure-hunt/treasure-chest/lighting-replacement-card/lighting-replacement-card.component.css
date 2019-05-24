@@ -44,3 +44,6 @@ a:not([href]):not([tabindex]):hover {
 /* .graph-col{
   background-color: #efefef;
 } */
+  .calc-icon{
+    width: 25px;
+  }
