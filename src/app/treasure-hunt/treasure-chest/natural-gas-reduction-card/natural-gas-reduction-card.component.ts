@@ -22,8 +22,8 @@ export class NaturalGasReductionCardComponent implements OnInit {
   emitEditNaturalGasReduction = new EventEmitter<NaturalGasReductionTreasureHunt>();
   @Input()
   treasureHunt: TreasureHunt;
-  @Output('emitDeleteLightingReplacement')
-  emitDeleteLightingReplacement = new EventEmitter<string>();
+  @Output('emitDeleteItem')
+  emitDeleteItem = new EventEmitter<string>();
   @Output('emitSaveTreasureHunt')
   emitSaveTreasureHunt = new EventEmitter<boolean>();
 
@@ -50,11 +50,11 @@ export class NaturalGasReductionCardComponent implements OnInit {
     this.emitSaveTreasureHunt.emit(true);
   }
 
-  deleteLighting() {
+  deleteItem() {
     let name: string = 'Natural Gas Replacement #' + (this.index + 1);
     if (this.naturalGasReduction.opportunitySheet && this.naturalGasReduction.opportunitySheet.name) {
       name = this.naturalGasReduction.opportunitySheet.name;
     }
-    this.emitDeleteLightingReplacement.emit(name);
+    this.emitDeleteItem.emit(name);
   }
 }

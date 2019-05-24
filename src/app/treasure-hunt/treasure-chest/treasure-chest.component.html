@@ -28,7 +28,7 @@
         <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
           (emitEditLighting)="editLighting($event, index)"
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'lightingReplacement')"
-          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'lightingReplacement')"
+          (emitDeleteItem)="showDeleteItem($event, index, 'lightingReplacement')"
           [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()">
         </app-lighting-replacement-card>
       </div>
@@ -63,7 +63,7 @@
         <app-natural-gas-reduction-card [naturalGasReduction]="naturalGasReduction" [settings]="settings"
           [index]="index" (emitEditNaturalGasReduction)="editNaturalGasReduction($event, index)"
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'naturalGasReduction')"
-          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'naturalGasReduction')"
+          (emitDeleteItem)="showDeleteItem($event, index, 'naturalGasReduction')"
           [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"></app-natural-gas-reduction-card>
       </div>
     </div>
@@ -74,8 +74,19 @@
         <app-electricity-reduction-card [electricityReduction]="electricityReduction" [settings]="settings"
           [index]="index" (emitEditElectricityReduction)="editElectricityReduction($event, index)"
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'electricityReduction')"
-          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'electricityReduction')"
+          (emitDeleteItem)="showDeleteItem($event, index, 'electricityReduction')"
           [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"></app-electricity-reduction-card>
+      </div>
+    </div>
+    <!--compressed air reduction-->
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Compressed Air Reduction') && (displayEnergyType == 'All' || displayEnergyType == 'Compressed Air')">
+      <div class="col-12" *ngFor="let compressedAirReduction of treasureHunt.compressedAirReductions; let index = index;">
+        <app-compressed-air-reduction-card [compressedAirReduction]="compressedAirReduction" [settings]="settings"
+          [index]="index" (emitEditCompressedAirReduction)="editCompressedAirReduction($event, index)"
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'compressedAirReduction')"
+          (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirReduction')"
+          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"></app-compressed-air-reduction-card>
       </div>
     </div>
     <!--standalone opportunity sheet-->

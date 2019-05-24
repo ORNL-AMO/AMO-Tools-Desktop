@@ -4,6 +4,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CompressedAirReductionService } from './compressed-air-reduction.service';
 import { CompressedAirReductionData, CompressedAirReductionResults } from '../../../shared/models/standalone';
+import { CompressedAirReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-compressed-air-reduction',
@@ -14,8 +15,7 @@ export class CompressedAirReductionComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<any>();
-  // emitSave = new EventEmitter<CompressedAirReductionTreasurehunt>();
+  emitSave = new EventEmitter<CompressedAirReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
   @Output('emitAddOpportunitySheet')
