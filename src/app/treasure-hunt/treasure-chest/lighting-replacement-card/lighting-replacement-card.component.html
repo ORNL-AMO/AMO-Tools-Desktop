@@ -34,7 +34,7 @@
         <div class="col text-center"
           [ngClass]="{'no-opp-sheet': !replacement.opportunitySheet, 'opp-sheet-exists': replacement.opportunitySheet}"
           (click)="editOpportunitySheet()">
-          <span class="fa fa-edit"></span><br>
+          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
           <span class="large pt-2" *ngIf="!replacement.opportunitySheet">Add Opportunity Sheet</span>
           <span class="large pt-2" *ngIf="replacement.opportunitySheet">Edit Opportunity Sheet</span>
         </div>

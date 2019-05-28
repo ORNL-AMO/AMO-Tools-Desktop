@@ -37,7 +37,8 @@
         <div class="col text-center"
           [ngClass]="{'no-opp-sheet': !naturalGasReduction.opportunitySheet, 'opp-sheet-exists': naturalGasReduction.opportunitySheet}"
           (click)="editOpportunitySheet()">
-          <span class="fa fa-edit"></span><br>
+          <!-- <span class="fa fa-edit"></span><br> -->
+          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
           <span class="large pt-2" *ngIf="!naturalGasReduction.opportunitySheet">Add Opportunity Sheet</span>
           <span class="large pt-2" *ngIf="naturalGasReduction.opportunitySheet">Edit Opportunity Sheet</span>
         </div>

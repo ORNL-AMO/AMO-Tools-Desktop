@@ -36,6 +36,10 @@ a:not([href]):not([tabindex]):hover {
   color: green;
 }
 
+.no-opp-sheet .calc-icon{
+  opacity: .5;
+}
+
 .opp-sheet-col .no-opp-sheet:hover, .opp-sheet-col .opp-sheet-exists:hover{
   cursor: pointer;
   text-decoration: underline;
@@ -45,5 +49,5 @@ a:not([href]):not([tabindex]):hover {
   background-color: #efefef;
 } */
   .calc-icon{
-    width: 25px;
+    width: 35px;
   }
