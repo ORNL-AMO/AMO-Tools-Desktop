@@ -1,21 +1,21 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, Input, Output, EventEmitter } from '@angular/core';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { ElectricityReductionService } from './electricity-reduction.service';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ElectricityReductionResults, ElectricityReductionData } from '../../../shared/models/standalone';
-import { ElectricityReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { CompressedAirReductionService } from './compressed-air-reduction.service';
+import { CompressedAirReductionData, CompressedAirReductionResults } from '../../../shared/models/standalone';
 
 @Component({
-  selector: 'app-electricity-reduction',
-  templateUrl: './electricity-reduction.component.html',
-  styleUrls: ['./electricity-reduction.component.css']
+  selector: 'app-compressed-air-reduction',
+  templateUrl: './compressed-air-reduction.component.html',
+  styleUrls: ['./compressed-air-reduction.component.css']
 })
-export class ElectricityReductionComponent implements OnInit {
+export class CompressedAirReductionComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<ElectricityReductionTreasureHunt>();
+  emitSave = new EventEmitter<any>();
+  // emitSave = new EventEmitter<CompressedAirReductionTreasurehunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
   @Output('emitAddOpportunitySheet')
@@ -41,10 +41,11 @@ export class ElectricityReductionComponent implements OnInit {
 
   modificationExists = false;
 
-  electricityReductionResults: ElectricityReductionResults;
-  baselineData: Array<ElectricityReductionData>;
-  modificationData: Array<ElectricityReductionData>;
-  constructor(private settingsDbService: SettingsDbService, private electricityReductionService: ElectricityReductionService) { }
+  compressedAirReductionResults: CompressedAirReductionResults;
+  baselineData: Array<CompressedAirReductionData>;
+  modificationData: Array<CompressedAirReductionData>;
+
+  constructor(private settingsDbService: SettingsDbService, private compressedAirReductionService: CompressedAirReductionService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -66,11 +67,11 @@ export class ElectricityReductionComponent implements OnInit {
 
   ngOnDestroy() {
     if (!this.inTreasureHunt) {
-      this.electricityReductionService.baselineData = this.baselineData;
-      this.electricityReductionService.modificationData = this.modificationData;
+      this.compressedAirReductionService.baselineData = this.baselineData;
+      this.compressedAirReductionService.modificationData = this.modificationData;
     } else {
-      this.electricityReductionService.baselineData = undefined;
-      this.electricityReductionService.modificationData = undefined;
+      this.compressedAirReductionService.baselineData = undefined;
+      this.compressedAirReductionService.modificationData = undefined;
     }
   }
 
@@ -89,14 +90,14 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   initData() {
-    if (this.electricityReductionService.baselineData) {
-      this.baselineData = this.electricityReductionService.baselineData;
+    if (this.compressedAirReductionService.baselineData) {
+      this.baselineData = this.compressedAirReductionService.baselineData;
     } else {
-      let tmpObj: ElectricityReductionData = this.electricityReductionService.initObject(0, this.settings, this.operatingHours);
+      let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(0, this.settings, this.operatingHours);
       this.baselineData = [tmpObj];
     }
-    if (this.electricityReductionService.modificationData) {
-      this.modificationData = this.electricityReductionService.modificationData;
+    if (this.compressedAirReductionService.modificationData) {
+      this.modificationData = this.compressedAirReductionService.modificationData;
       if (this.modificationData.length != 0) {
         this.modificationExists = true;
       }
@@ -104,7 +105,7 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   addBaselineEquipment() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours);
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours);
     this.baselineData.push(tmpObj);
     this.getResults();
   }
@@ -122,7 +123,7 @@ export class ElectricityReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours);
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours);
     this.modificationData.push(tmpObj);
     this.getResults();
   }
@@ -135,37 +136,38 @@ export class ElectricityReductionComponent implements OnInit {
     this.getResults();
   }
 
-  updateBaselineData(data: ElectricityReductionData, index: number) {
+  updateBaselineData(data: CompressedAirReductionData, index: number) {
     this.updateDataArray(this.baselineData, data, index);
     this.getResults();
   }
 
-  updateModificationData(data: ElectricityReductionData, index: number) {
+  updateModificationData(data: CompressedAirReductionData, index: number) {
     this.updateDataArray(this.modificationData, data, index);
     this.getResults();
   }
 
-  updateDataArray(dataArray: Array<ElectricityReductionData>, data: ElectricityReductionData, index: number) {
+  updateDataArray(dataArray: Array<CompressedAirReductionData>, data: CompressedAirReductionData, index: number) {
     dataArray[index].name = data.name;
-    dataArray[index].operatingHours = data.operatingHours;
-    dataArray[index].electricityCost = data.electricityCost;
+    dataArray[index].hoursPerYear = data.hoursPerYear;
+    dataArray[index].utilityType = data.utilityType;
+    dataArray[index].utilityCost = data.utilityCost;
     dataArray[index].measurementMethod = data.measurementMethod;
-    dataArray[index].multimeterData = data.multimeterData;
+    dataArray[index].flowMeterMethodData = data.flowMeterMethodData;
+    dataArray[index].bagMethodData = data.bagMethodData;
+    dataArray[index].pressureMethodData = data.pressureMethodData;
     dataArray[index].otherMethodData = data.otherMethodData;
-    dataArray[index].powerMeterData = data.powerMeterData;
-    dataArray[index].nameplateData = data.nameplateData;
+    dataArray[index].compressorElectricityData = data.compressorElectricityData;
     dataArray[index].units = data.units;
   }
 
-
   getResults() {
-    this.electricityReductionResults = this.electricityReductionService.getResults(this.settings, this.baselineData, this.modificationData);
+    this.compressedAirReductionResults = this.compressedAirReductionService.getResults(this.settings, this.baselineData, this.modificationData);
   }
 
   btnResetData() {
-    let tmpObj: ElectricityReductionData = this.electricityReductionService.initObject(0, this.settings, this.operatingHours)
+    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(0, this.settings, this.operatingHours);
     this.baselineData = [tmpObj];
-    this.modificationData = new Array<ElectricityReductionData>();
+    this.modificationData = new Array<CompressedAirReductionData>();
     this.modificationExists = false;
     this.getResults();
   }
@@ -181,6 +183,7 @@ export class ElectricityReductionComponent implements OnInit {
   addOpportunitySheet() {
     this.emitAddOpportunitySheet.emit(true);
   }
+
   setBaselineSelected() {
     if (this.baselineSelected == false) {
       this.baselineSelected = true;
@@ -192,5 +195,4 @@ export class ElectricityReductionComponent implements OnInit {
       this.baselineSelected = false;
     }
   }
-
 }

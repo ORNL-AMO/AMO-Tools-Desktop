@@ -1,4 +1,4 @@
-<div class="card card-item" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT'}">
+<div class="card card-item" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt'}">
   <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <div class="d-flex align-items-center">
@@ -24,6 +24,7 @@
     <app-phast-summary-card *ngIf="assessment.type == 'PHAST'" [assessment]="assessment"></app-phast-summary-card>
     <app-fsat-summary-card *ngIf="assessment.type == 'FSAT'" [assessment]="assessment"></app-fsat-summary-card>
     <app-ssmt-summary-card *ngIf="assessment.type == 'SSMT'" [assessment]="assessment"></app-ssmt-summary-card>
+    <app-treasure-hunt-summary-card *ngIf="assessment.type == 'TreasureHunt'" [assessment]="assessment"></app-treasure-hunt-summary-card>
   </div>
   <div class="card-footer summary-card-footer">
     <div class="last-updated pull-right">Last updated {{assessment.modifiedDate | date }}</div>

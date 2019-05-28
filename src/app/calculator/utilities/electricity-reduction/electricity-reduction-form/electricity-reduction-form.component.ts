@@ -4,7 +4,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { ElectricityReductionService } from '../electricity-reduction.service';
 import { ElectricityReductionResult, ElectricityReductionData } from '../../../../shared/models/standalone';
 
-
 @Component({
   selector: 'app-electricity-reduction-form',
   templateUrl: './electricity-reduction-form.component.html',
@@ -36,9 +35,7 @@ export class ElectricityReductionFormComponent implements OnInit {
     { value: 3, name: 'Offsheet / Other Method' }
   ];
   idString: string;
-
   individualResults: ElectricityReductionResult;
-
   isEditingName: boolean = false;
   form: FormGroup;
 
@@ -88,7 +85,7 @@ export class ElectricityReductionFormComponent implements OnInit {
     this.emitRemoveEquipment.emit(this.index);
   }
 
-  calculateIndividualResult(){
+  calculateIndividualResult() {
     let tmpObj: ElectricityReductionData = this.electricityReductionService.getObjFromForm(this.form);
     this.individualResults = this.electricityReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }

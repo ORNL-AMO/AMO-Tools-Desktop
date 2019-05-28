@@ -62,7 +62,12 @@ export class TreasureHuntComponent implements OnInit {
             setupDone: false
           }
         }
+
         this.getSettings();
+        let tmpTab = this.assessmentService.getTab();
+        if (tmpTab) {
+          this.treasureHuntService.mainTab.next(tmpTab);
+        }
       })
     })
 
@@ -78,7 +83,7 @@ export class TreasureHuntComponent implements OnInit {
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.subTabSub.unsubscribe();
-    this.treasureHuntService.mainTab.next('system-basics');
+    this.treasureHuntService.mainTab.next('system-setup');
     this.treasureHuntService.subTab.next('settings');
   }
   getSettings() {
