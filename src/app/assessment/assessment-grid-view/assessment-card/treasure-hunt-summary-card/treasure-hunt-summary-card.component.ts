@@ -30,7 +30,7 @@ export class TreasureHuntSummaryCardComponent implements OnInit {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
     this.setupDone = this.assessment.treasureHunt.setupDone;
     if (this.setupDone) {
-      this.results = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
+      this.results = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(this.assessment.treasureHunt, this.settings);
       this.numberOfOpportunities = this.results.opportunitySummaries.length;
       this.setUtilitySavings();
     }

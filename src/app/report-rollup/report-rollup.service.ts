@@ -499,7 +499,7 @@ export class ReportRollupService {
     let tmpResultsArr: Array<TreasureHuntResultsData> = new Array<TreasureHuntResultsData>();
     thuntItems.forEach(item => {
       if(item.assessment.treasureHunt){
-        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(item.assessment.treasureHunt, item.settings);
+        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(item.assessment.treasureHunt, item.settings);
         tmpResultsArr.push(
           {
             treasureHuntResults: thuntResults,
