@@ -102,7 +102,7 @@
       *ngIf="((currentTab == 'opportunitySummary' && !showPrint) || (showPrint && printReportOpportunitySummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
       <app-opportunity-summary [opportunitySummaries]="treasureHuntResults.opportunitySummaries" [settings]="settings"
-        [inRollup]="inRollup" (emitUpdateOpportunities)="updateResults($event)">
+        [inRollup]="inRollup" (emitUpdateOpportunities)="updateResults($event)" [assessment]="assessment">
       </app-opportunity-summary>
     </div>
 

@@ -22,7 +22,6 @@ export class TreasureHuntSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.treasureHuntAssessmentsSub = this.reportRollupService.allTreasureHuntResults.subscribe(val => {
-      console.log(val);
       this.getTotalSavings(val);
     })
   }

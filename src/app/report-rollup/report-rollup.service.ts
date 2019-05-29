@@ -22,7 +22,8 @@ import { ReportItem, PsatCompare, PsatResultsData, AllPsatResultsData, PhastComp
 import { CalculateModelService } from '../ssmt/ssmt-calculations/calculate-model.service';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
 import { TreasureHuntReportService } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
-import { TreasureHuntResults } from '../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitySummary } from '../shared/models/treasure-hunt';
+import { OpportunitySummaryService } from '../treasure-hunt/treasure-hunt-report/opportunity-summary.service';
 
 
 @Injectable()
@@ -74,7 +75,8 @@ export class ReportRollupService {
     private calculatorDbService: CalculatorDbService,
     private fsatService: FsatService,
     private calculateModelService: CalculateModelService,
-    private treasureHuntReportService: TreasureHuntReportService
+    private treasureHuntReportService: TreasureHuntReportService,
+    private opportunitySummaryService: OpportunitySummaryService
   ) {
     this.initSummary();
   }
@@ -494,12 +496,13 @@ export class ReportRollupService {
     this.ssmtResults.next(tmpResultsArr);
   }
 
-
-  getTreasureHuntResultsArray(thuntItems: Array<ReportItem>){
+  //TREASURE HUNT
+  initTreasureHuntResultsArray(thuntItems: Array<ReportItem>) {
     let tmpResultsArr: Array<TreasureHuntResultsData> = new Array<TreasureHuntResultsData>();
     thuntItems.forEach(item => {
-      if(item.assessment.treasureHunt){
-        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(item.assessment.treasureHunt, item.settings);
+      if (item.assessment.treasureHunt) {
+        let opportunitySummaries: Array<OpportunitySummary> = this.opportunitySummaryService.getOpportunitySummaries(item.assessment.treasureHunt, item.settings)
+        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, item.assessment.treasureHunt.currentEnergyUsage);
         tmpResultsArr.push(
           {
             treasureHuntResults: thuntResults,
@@ -512,6 +515,13 @@ export class ReportRollupService {
   }
 
 
+  updateTreasureHuntResults(opportunitySummaries: Array<OpportunitySummary>, assessmentId: number) {
+    let currentResults: Array<TreasureHuntResultsData> = this.allTreasureHuntResults.value;
+    let resultToBeUpdated: TreasureHuntResultsData = currentResults.find(result => { return result.assessment.id == assessmentId });
+    let updatedResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, resultToBeUpdated.assessment.treasureHunt.currentEnergyUsage);
+    resultToBeUpdated.treasureHuntResults = updatedResults;
+    this.allTreasureHuntResults.next(currentResults);     
+  }
 
   checkSettings(settings: Settings) {
     if (!settings.energyResultUnit) {

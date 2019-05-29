@@ -6,7 +6,7 @@ import { FSAT, FsatOutput } from '../shared/models/fans';
 import { Assessment } from '../shared/models/assessment';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
-import { TreasureHunt, TreasureHuntResults } from '../shared/models/treasure-hunt';
+import { TreasureHunt, TreasureHuntResults, OpportunitySummary } from '../shared/models/treasure-hunt';
 
 export interface ReportItem {
     assessment: Assessment;
@@ -139,5 +139,5 @@ export interface AllSsmtResultsData {
 
 export interface TreasureHuntResultsData{
     assessment: Assessment;
-    treasureHuntResults: TreasureHuntResults
+    treasureHuntResults: TreasureHuntResults;
 }

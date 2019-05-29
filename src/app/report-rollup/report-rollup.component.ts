@@ -193,7 +193,7 @@ export class ReportRollupComponent implements OnInit {
         if (items.length !== 0) {
           this._treasureHuntAssessments = items;
           this.numTreasureHunt = this._treasureHuntAssessments.length;
-          this.reportRollupService.getTreasureHuntResultsArray(this._treasureHuntAssessments);
+          this.reportRollupService.initTreasureHuntResultsArray(this._treasureHuntAssessments);
           if (!this.focusedAssessment) {
             this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
           }
