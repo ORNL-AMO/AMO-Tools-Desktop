@@ -42,10 +42,11 @@
           Simple Payback
         </td>
       </tr>
-      <tr *ngFor="let opportunity of opportunitySummaries">
+      <tr *ngFor="let opportunity of opportunitySummaries"
+        [ngClass]="{'selected-opportunity': inRollup == true && opportunity.selected == true}">
         <!--apply opportunity to rollup report-->
         <td class="text-center" *ngIf="inRollup">
-          <input type="checkbox" [(ngModel)]="opportunity.selected" (change)="updateOpportunities()"/>
+          <input type="checkbox" [(ngModel)]="opportunity.selected" (change)="updateOpportunities()" />
         </td>
         <!--name-->
         <td>

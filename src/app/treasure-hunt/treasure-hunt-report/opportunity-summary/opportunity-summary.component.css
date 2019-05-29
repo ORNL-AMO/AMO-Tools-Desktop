@@ -44,3 +44,8 @@ tr > td{
 thead td{
     width: 10%;
 }
+
+.selected-opportunity{
+    z-index: 2;
+    background: #e5efe9 !important;
+}
