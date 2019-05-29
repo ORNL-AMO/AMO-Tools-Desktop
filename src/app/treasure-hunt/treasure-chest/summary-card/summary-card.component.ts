@@ -31,7 +31,7 @@ export class SummaryCardComponent implements OnInit {
 
   ngOnInit() {
     this.getResultsSubscription = this.treasureHuntService.getResults.subscribe(val => {
-      this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(this.treasureHunt, this.settings);
+      this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
     });
   }
 
