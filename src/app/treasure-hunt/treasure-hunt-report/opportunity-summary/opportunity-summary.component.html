@@ -5,8 +5,11 @@
   <table class="table table-striped table-hover">
     <tbody>
       <tr class="bold">
+        <td *ngIf="inRollup">
+          Use Opportunity
+        </td>
         <td>
-          Opportunity
+          Opportunity Name
         </td>
         <td>
           Utility
@@ -39,7 +42,12 @@
           Simple Payback
         </td>
       </tr>
-      <tr *ngFor="let opportunity of opportunitySummaries">
+      <tr *ngFor="let opportunity of opportunitySummaries"
+        [ngClass]="{'selected-opportunity': inRollup == true && opportunity.selected == true}">
+        <!--apply opportunity to rollup report-->
+        <td class="text-center" *ngIf="inRollup">
+          <input type="checkbox" [(ngModel)]="opportunity.selected" (change)="updateOpportunities()" />
+        </td>
         <!--name-->
         <td>
           {{opportunity.opportunityName}}
