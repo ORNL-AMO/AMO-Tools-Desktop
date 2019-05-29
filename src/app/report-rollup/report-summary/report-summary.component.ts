@@ -29,6 +29,8 @@ export class ReportSummaryComponent implements OnInit {
   numFsats: number;
   @Input()
   numSsmt: number;
+  @Input()
+  numTreasureHunt: number;
 
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();

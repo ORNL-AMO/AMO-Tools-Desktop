@@ -18,9 +18,12 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { FSAT, FsatOutput } from '../shared/models/fans';
 import { FsatService } from '../fsat/fsat.service';
-import { ReportItem, PsatCompare, PsatResultsData, AllPsatResultsData, PhastCompare, PhastResultsData, AllPhastResultsData, FsatCompare, FsatResultsData, AllFsatResultsData, AllSsmtResultsData, SsmtCompare, SsmtResultsData } from './report-rollup-models';
+import { ReportItem, PsatCompare, PsatResultsData, AllPsatResultsData, PhastCompare, PhastResultsData, AllPhastResultsData, FsatCompare, FsatResultsData, AllFsatResultsData, AllSsmtResultsData, SsmtCompare, SsmtResultsData, TreasureHuntResultsData } from './report-rollup-models';
 import { CalculateModelService } from '../ssmt/ssmt-calculations/calculate-model.service';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
+import { TreasureHuntReportService } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
+import { TreasureHuntResults, OpportunitySummary } from '../shared/models/treasure-hunt';
+import { OpportunitySummaryService } from '../treasure-hunt/treasure-hunt-report/opportunity-summary.service';
 
 
 @Injectable()
@@ -31,12 +34,15 @@ export class ReportRollupService {
   psatAssessments: BehaviorSubject<Array<ReportItem>>;
   fsatAssessments: BehaviorSubject<Array<ReportItem>>;
   ssmtAssessments: BehaviorSubject<Array<ReportItem>>;
+  treasureHuntAssessments: BehaviorSubject<Array<ReportItem>>;
 
   assessmentsArray: Array<ReportItem>;
   phastArray: Array<ReportItem>;
   psatArray: Array<ReportItem>;
   fsatArray: Array<ReportItem>;
   ssmtArray: Array<ReportItem>;
+  treasureHuntArray: Array<ReportItem>;
+
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
   psatResults: BehaviorSubject<Array<PsatResultsData>>;
   allPsatResults: BehaviorSubject<Array<AllPsatResultsData>>;
@@ -53,6 +59,8 @@ export class ReportRollupService {
   ssmtResults: BehaviorSubject<Array<SsmtResultsData>>;
   allSsmtResults: BehaviorSubject<Array<AllSsmtResultsData>>;
 
+  allTreasureHuntResults: BehaviorSubject<Array<TreasureHuntResultsData>>;
+
   calcsArray: Array<Calculator>;
   selectedCalcs: BehaviorSubject<Array<Calculator>>;
 
@@ -66,7 +74,9 @@ export class ReportRollupService {
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
     private fsatService: FsatService,
-    private calculateModelService: CalculateModelService
+    private calculateModelService: CalculateModelService,
+    private treasureHuntReportService: TreasureHuntReportService,
+    private opportunitySummaryService: OpportunitySummaryService
   ) {
     this.initSummary();
   }
@@ -77,6 +87,7 @@ export class ReportRollupService {
     this.psatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.fsatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
     this.ssmtAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
+    this.treasureHuntAssessments = new BehaviorSubject<Array<ReportItem>>(Array<ReportItem>());
 
     this.selectedPsats = new BehaviorSubject<Array<PsatCompare>>(new Array<PsatCompare>());
     this.psatResults = new BehaviorSubject<Array<PsatResultsData>>(new Array<PsatResultsData>());
@@ -96,6 +107,8 @@ export class ReportRollupService {
 
     this.calcsArray = new Array<Calculator>();
     this.selectedCalcs = new BehaviorSubject<Array<Calculator>>(new Array<Calculator>());
+
+    this.allTreasureHuntResults = new BehaviorSubject<Array<TreasureHuntResultsData>>(new Array<TreasureHuntResultsData>())
   }
 
 
@@ -114,6 +127,13 @@ export class ReportRollupService {
         assessment: assessment,
         settings: tmpSettings
       })
+    } else if (assessment.treasureHunt) {
+      this.treasureHuntArray.push(
+        {
+          assessment: assessment,
+          settings: tmpSettings
+        }
+      )
     }
   }
 
@@ -123,6 +143,7 @@ export class ReportRollupService {
     this.psatArray = new Array<ReportItem>();
     this.fsatArray = new Array<ReportItem>();
     this.ssmtArray = new Array<ReportItem>();
+    this.treasureHuntArray = new Array<ReportItem>();
     let selected = directory.assessments.filter((val) => { return val.selected; });
     selected.forEach(assessment => {
       this.pushAssessment(assessment);
@@ -137,6 +158,7 @@ export class ReportRollupService {
     this.psatAssessments.next(this.psatArray);
     this.fsatAssessments.next(this.fsatArray);
     this.ssmtAssessments.next(this.ssmtArray);
+    this.treasureHuntAssessments.next(this.treasureHuntArray);
     this.reportAssessments.next(this.assessmentsArray);
 
   }
@@ -472,6 +494,33 @@ export class ReportRollupService {
       tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
     this.ssmtResults.next(tmpResultsArr);
+  }
+
+  //TREASURE HUNT
+  initTreasureHuntResultsArray(thuntItems: Array<ReportItem>) {
+    let tmpResultsArr: Array<TreasureHuntResultsData> = new Array<TreasureHuntResultsData>();
+    thuntItems.forEach(item => {
+      if (item.assessment.treasureHunt) {
+        let opportunitySummaries: Array<OpportunitySummary> = this.opportunitySummaryService.getOpportunitySummaries(item.assessment.treasureHunt, item.settings)
+        let thuntResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, item.assessment.treasureHunt.currentEnergyUsage);
+        tmpResultsArr.push(
+          {
+            treasureHuntResults: thuntResults,
+            assessment: item.assessment
+          }
+        );
+      }
+    });
+    this.allTreasureHuntResults.next(tmpResultsArr);
+  }
+
+
+  updateTreasureHuntResults(opportunitySummaries: Array<OpportunitySummary>, assessmentId: number) {
+    let currentResults: Array<TreasureHuntResultsData> = this.allTreasureHuntResults.value;
+    let resultToBeUpdated: TreasureHuntResultsData = currentResults.find(result => { return result.assessment.id == assessmentId });
+    let updatedResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, resultToBeUpdated.assessment.treasureHunt.currentEnergyUsage);
+    resultToBeUpdated.treasureHuntResults = updatedResults;
+    this.allTreasureHuntResults.next(currentResults);     
   }
 
   checkSettings(settings: Settings) {

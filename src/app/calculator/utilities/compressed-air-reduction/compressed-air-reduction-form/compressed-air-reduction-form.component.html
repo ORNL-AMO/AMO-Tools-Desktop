@@ -38,8 +38,7 @@
         <label class="small" for="{{'utilityType_'+idString}}">Utility Type</label>
         <div class="input-group">
           <select class="form-control" name="utilityType" id="{{'utilityType_'+idString}}" formControlName="utilityType"
-            (change)="changeUtilityType()" (focus)="focusField('utilityType')" (blur)="focusOut()"
-            [disabled]="index !== 0 && !isBaseline">
+            (change)="changeUtilityType()" (focus)="focusField('utilityType')" (blur)="focusOut()">
             <option *ngFor="let type of utilityTypes" [ngValue]="type.value">{{type.name}}</option>
           </select>
         </div>
