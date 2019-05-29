@@ -649,6 +649,15 @@ Reports
     padding: 0px 0 0px 30px;
 }
 
+.assessment-report.report-in-treasure-hunt .assessment-name,
+.assessment-report.report-in-rollup.report-in-treasure-hunt .assessment-name {
+    background-image: url('../assets/images/treasure-hunt.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 60px;
+    padding: 0px 0 0px 55px;
+}
+
 
 .assessment-report .report-header:after {
     display: table;

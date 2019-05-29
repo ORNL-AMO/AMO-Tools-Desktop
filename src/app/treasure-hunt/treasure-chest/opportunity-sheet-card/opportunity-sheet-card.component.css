@@ -40,3 +40,6 @@ a:not([href]):not([tabindex]):hover {
   cursor: pointer;
   text-decoration: underline;
 } */
+  .calc-icon{
+    width: 35px;
+  }

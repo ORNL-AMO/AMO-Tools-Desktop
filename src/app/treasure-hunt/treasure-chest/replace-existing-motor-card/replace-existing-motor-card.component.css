@@ -41,3 +41,11 @@
     text-decoration: underline;
   }
   
+
+  .no-opp-sheet .calc-icon{
+    opacity: .5;
+  }
+
+  .calc-icon{
+    width: 35px;
+  }

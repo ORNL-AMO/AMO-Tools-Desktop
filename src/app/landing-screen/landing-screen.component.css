@@ -120,12 +120,7 @@ img.fan-image{
 .landing-menu{
 	z-index: +1;
 }
-.p2.align-items-center.steam{
-	padding-top: 15px !important;
-}
-.p2.align-items-center{
-	padding-top: 0px !important;
-}
+
 a.click-link.p-0.steam {
 	margin-left: 15px;
 }
@@ -152,4 +147,20 @@ a.click-link.p-0.fan {
 }
 span.former-name.steam {
 	margin-left: 5px;
+}
+
+.p-2.align-items-center.treasure-hunt {
+	width: 90px;
+	height: 81px;
+	background: linear-gradient(rgba(228, 219, 219, 0.34), #2E4053);
+	border-radius: 15px;
+	border: 0.1px solid rgba(123, 120, 120, 0.25);
+	margin-left: 10px;
+	box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+img.treasure-hunt-image {
+    width: 75px;
+    height: 85px;
+    padding-bottom: 25px;
 }

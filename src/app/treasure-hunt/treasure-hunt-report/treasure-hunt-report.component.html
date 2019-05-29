@@ -1,11 +1,11 @@
-<div class="assessment-report treasure-hunt" *ngIf="assessment && settings"
-  [ngClass]="{'assessment-report-padding': inSSMT, 'report-in-rollup': inRollup}">
+<div class="assessment-report treasure-hunt report-in-treasure-hunt" *ngIf="assessment && settings"
+  [ngClass]="{'report-in-rollup': inRollup}">
 
   <div class="report-cover">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
     <div class="report-title">
-      <h4>Steam System Efficiency Report:</h4>
+      <h4>Treasure Hunt Report:</h4>
       <h4>{{assessment.name}}</h4>
       <h5>{{settings.createdDate| date:'medium'}}</h5>
     </div>
