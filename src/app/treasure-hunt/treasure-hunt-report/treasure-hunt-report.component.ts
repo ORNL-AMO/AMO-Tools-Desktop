@@ -32,7 +32,7 @@ export class TreasureHuntReportComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   constructor(private directoryDbService: DirectoryDbService, private treasureHuntReportService: TreasureHuntReportService,
-    private opportunityPaybackService: OpportunityPaybackService, private opportunitySummaryService: OpportunitySummaryService) { }
+    private opportunityPaybackService: OpportunityPaybackService) { }
 
   ngOnInit() {
     if (this.assessment) {
@@ -60,6 +60,11 @@ export class TreasureHuntReportComponent implements OnInit {
     //     this.getDirectoryList(results.parentDirectoryId);
     //   }
     // }
+  }
+
+  updateResults(opportunitySummaries: Array<OpportunitySummary>) {
+    this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, this.assessment.treasureHunt.currentEnergyUsage);
+    this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
   }
 
 }

@@ -13,11 +13,13 @@ import { OpportunityPaybackService } from './opportunity-payback.service';
 import { CostPieChartComponent } from './report-graphs/cost-pie-chart/cost-pie-chart.component';
 import { UtilityDonutChartComponent } from './report-graphs/utility-donut-chart/utility-donut-chart.component';
 import { OpportunitySummaryService } from './opportunity-summary.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   declarations: [
     TreasureHuntReportComponent, 
