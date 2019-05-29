@@ -76,3 +76,11 @@ a:not([href]):not([tabindex]){
 .calc-card-item{
     width: 300px;
 }
+
+.opp-sheet-icon-sm{
+    width: 35px;
+}
+
+.save-opportunity{
+    width: 75px;
+}

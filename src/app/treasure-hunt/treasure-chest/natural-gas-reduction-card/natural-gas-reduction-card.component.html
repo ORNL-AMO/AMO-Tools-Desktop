@@ -11,7 +11,7 @@
     <div class="col-4 col-item-br opportunity-name">
       <div class="row align-items-center h-100">
         <div class="col text-center">
-          <span class="fa fa-truck pr-2 pt-0"></span>
+          <img src="assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png" class="calc-icon">
           <a (click)="editNaturalGasReduction()">
             <span *ngIf="!naturalGasReduction.opportunitySheet || !naturalGasReduction.opportunitySheet.name">
               Natural Gas Reduction #{{index+1}}
@@ -37,7 +37,8 @@
         <div class="col text-center"
           [ngClass]="{'no-opp-sheet': !naturalGasReduction.opportunitySheet, 'opp-sheet-exists': naturalGasReduction.opportunitySheet}"
           (click)="editOpportunitySheet()">
-          <span class="fa fa-edit"></span><br>
+          <!-- <span class="fa fa-edit"></span><br> -->
+          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
           <span class="large pt-2" *ngIf="!naturalGasReduction.opportunitySheet">Add Opportunity Sheet</span>
           <span class="large pt-2" *ngIf="naturalGasReduction.opportunitySheet">Edit Opportunity Sheet</span>
         </div>
