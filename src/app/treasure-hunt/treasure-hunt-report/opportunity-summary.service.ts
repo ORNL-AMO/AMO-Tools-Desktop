@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { LightingReplacementResults } from '../../shared/models/lighting';
@@ -8,15 +8,16 @@ import { ReplaceExistingService } from '../../calculator/motors/replace-existing
 import { ReplaceExistingResults, MotorDriveOutputs } from '../../shared/models/calculators';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
-import { ElectricityReductionResults, NaturalGasReductionResults } from '../../shared/models/standalone';
+import { ElectricityReductionResults, NaturalGasReductionResults, CompressedAirReductionResult, CompressedAirReductionResults } from '../../shared/models/standalone';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
+import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 
 @Injectable()
 export class OpportunitySummaryService {
 
   constructor(private opportunitySheetService: OpportunitySheetService, private lightingReplacementService: LightingReplacementService,
     private replaceExistingService: ReplaceExistingService, private motorDriveService: MotorDriveService, private electricityReductionService: ElectricityReductionService,
-    private naturalGasReductionService: NaturalGasReductionService) { }
+    private naturalGasReductionService: NaturalGasReductionService, private compressedAirReductionService: CompressedAirReductionService) { }
 
   getOpportunitySummaries(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySummary> {
     let opportunitySummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
@@ -30,8 +31,13 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getElectricityReductionSummaries(treasureHunt.electricityReductions, opportunitySummaries, settings);
     //natural gas reduction
     opportunitySummaries = this.getNaturalGasReductionSummaries(treasureHunt.naturalGasReductions, opportunitySummaries, settings);
+    //compressed air reduction
+    opportunitySummaries = this.getCompressedAirReductionSummaries(treasureHunt.compressedAirReductions, opportunitySummaries, settings);
+
+
     //standalone opp sheets
-    opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings)
+    opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings);
+
 
     return opportunitySummaries;
   }
@@ -170,6 +176,38 @@ export class OpportunitySummaryService {
     }
     return opportunitySummaries;
   }
+
+  //getCompressedAirReductionSummaries
+  getCompressedAirReductionSummaries(compressedAirReductions: Array<CompressedAirReductionTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+    if (compressedAirReductions) {
+      let index: number = 1;
+      compressedAirReductions.forEach(compressedAirReduction => {
+        if (compressedAirReduction.selected) {
+          let name: string = 'Compressed Air Reduction #' + index;
+          let results: CompressedAirReductionResults = this.compressedAirReductionService.getResults(settings, compressedAirReduction.baseline, compressedAirReduction.modification);
+          let opportunityCost: OpportunityCost;
+          if (compressedAirReduction.opportunitySheet) {
+            if (compressedAirReduction.opportunitySheet.name) {
+              name = compressedAirReduction.opportunitySheet.name;
+            }
+            opportunityCost = compressedAirReduction.opportunitySheet.opportunityCost;
+          }
+          let oppSummary: OpportunitySummary;
+          if (compressedAirReduction.baseline[0].utilityType == 0) {
+            oppSummary = this.getNewOpportunitySummary(name, 'Compressed Air', results.annualCostSavings, results.annualEnergySavings, opportunityCost);
+          }
+          else {
+            oppSummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost);
+          }
+
+          opportunitySummaries.push(oppSummary);
+        }
+        index++;
+      });
+    }
+    return opportunitySummaries;
+  }
+
 
   //stand alone opp sheets
   getOpportunitySheetSummaries(opportunitySheets: Array<OpportunitySheet>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {

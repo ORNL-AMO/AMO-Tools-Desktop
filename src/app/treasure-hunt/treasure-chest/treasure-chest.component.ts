@@ -343,7 +343,7 @@ export class TreasureChestComponent implements OnInit {
     this.compressedAirReductionService.baselineData = compressedairReduction.baseline;
     this.compressedAirReductionService.modificationData = compressedairReduction.modification;
     this.selectedEditOpportunitySheet = compressedairReduction.opportunitySheet;
-    this.itemType = 'compressedairReduction';
+    this.itemType = 'compressedAirReduction';
     this.selectCalc('compressed-air-reduction');
   }
 
