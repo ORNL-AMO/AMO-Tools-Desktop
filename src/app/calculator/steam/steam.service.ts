@@ -534,14 +534,14 @@ export class SteamService {
     //comes back as tonnes   
     if (inputCpy.turbineProperty === 0) {
       //mass flow
-      results.massFlow = this.convertUnitsService.value(results.massFlow).from('tonne').to(settings.steamMassFlowMeasurement) * 1000;
+      results.massFlow = this.convertUnitsService.value(results.massFlow).from('tonne').to(settings.steamMassFlowMeasurement);
       results.outletEnergyFlow = this.convertUnitsService.value(results.outletEnergyFlow).from('kJ').to(settings.steamEnergyMeasurement) * 1000000;
       results.inletEnergyFlow = this.convertUnitsService.value(results.inletEnergyFlow).from('kJ').to(settings.steamEnergyMeasurement) * 1000000;
       results.energyOut = this.convertUnitsService.value(results.energyOut).from('kJ').to(settings.steamEnergyMeasurement) * 1000000;
       results.powerOut = this.convertUnitsService.value(results.powerOut).from('kJh').to(settings.steamPowerMeasurement) * 1000000;
     } else {
       //power out
-      results.massFlow = this.convertUnitsService.value(results.massFlow).from('kg').to(settings.steamMassFlowMeasurement) * 1000;
+      results.massFlow = this.convertUnitsService.value(results.massFlow).from('kg').to(settings.steamMassFlowMeasurement);
       results.outletEnergyFlow = this.convertUnitsService.value(results.outletEnergyFlow).from('MJ').to(settings.steamEnergyMeasurement);
       results.inletEnergyFlow = this.convertUnitsService.value(results.inletEnergyFlow).from('MJ').to(settings.steamEnergyMeasurement);
       results.energyOut = this.convertUnitsService.value(results.energyOut).from('MJ').to(settings.steamEnergyMeasurement);
