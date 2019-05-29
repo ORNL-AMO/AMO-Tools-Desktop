@@ -103,6 +103,17 @@
       </div>
     </div>
 
+    <div class="card calc-card-item motors m-2" (click)="selectCalc('compressed-air-reduction')">
+      <div class="card-body d-flex flex-column p-2 justify-content-center align-items-center">
+        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png" class="calc-img">
+        </div>
+        <a class="pt-2">Compressed Air Reduction</a>
+        <p class="mb-0 text-center help-text">
+          This calculator reduces the compressed air use. Real description needed.
+        </p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -133,6 +144,11 @@
   (emitSave)="saveNewElectricityReduction($event)" (emitCancel)="selectCalc('none')"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-electricity-reduction>
+
+<app-compressed-air-reduction *ngIf="selectedCalc == 'compressed-air-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveNewCompressedAirReduction($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-reduction>
 
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"

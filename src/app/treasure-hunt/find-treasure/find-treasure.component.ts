@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
 import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
@@ -28,6 +28,8 @@ export class FindTreasureComponent implements OnInit {
   newMotorDrive: MotorDriveInputsTreasureHunt;
   newNaturalGasReductionTreasureHunt: NaturalGasReductionTreasureHunt;
   newElectricityReductionTreasureHunt: ElectricityReductionTreasureHunt;
+  newCompressedAirReductionTreasureHunt: CompressedAirReductionTreasureHunt;
+
 
   showOpportunitySheetOnSave: boolean;
   opperatingHoursPerYear: number;
@@ -64,6 +66,8 @@ export class FindTreasureComponent implements OnInit {
       this.saveNaturalGasReduction();
     } else if (this.selectedCalc == 'electricity-reduction') {
       this.saveElectricityReduction();
+    } else if (this.selectedCalc == 'compressed-air-reduction') {
+      this.saveCompressedAirReduction();
     }
   }
 
@@ -191,6 +195,26 @@ export class FindTreasureComponent implements OnInit {
     }
     this.newElectricityReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
     this.treasureHunt.electricityReductions.push(this.newElectricityReductionTreasureHunt);
+    this.closeSaveCalcModalAndSave();
+  }
+
+  //compressed air reduction
+  saveNewCompressedAirReduction(compressedAirReductionTh: CompressedAirReductionTreasureHunt) {
+    this.newCompressedAirReductionTreasureHunt = compressedAirReductionTh;
+    this.newCompressedAirReductionTreasureHunt.selected = true;
+    if (!this.newOpportunitySheet) {
+      this.showOpportunitySheetOnSave = true;
+    }
+    this.newCompressedAirReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
+    this.saveCalcModal.show();
+  }
+
+  saveCompressedAirReduction() {
+    if (!this.treasureHunt.compressedAirReductions) {
+      this.treasureHunt.compressedAirReductions = new Array<CompressedAirReductionTreasureHunt>();
+    }
+    this.newCompressedAirReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
+    this.treasureHunt.compressedAirReductions.push(this.newCompressedAirReductionTreasureHunt);
     this.closeSaveCalcModalAndSave();
   }
 }

@@ -37,6 +37,8 @@ import { NaturalGasReductionModule } from '../calculator/utilities/natural-gas-r
 import { NaturalGasReductionCardComponent } from './treasure-chest/natural-gas-reduction-card/natural-gas-reduction-card.component';
 import { ElectricityReductionModule } from '../calculator/utilities/electricity-reduction/electricity-reduction.module';
 import { ElectricityReductionCardComponent } from './treasure-chest/electricity-reduction-card/electricity-reduction-card.component';
+import { CompressedAirReductionModule } from '../calculator/utilities/compressed-air-reduction/compressed-air-reduction.module';
+import { CompressedAirReductionCardComponent } from './treasure-chest/compressed-air-reduction-card/compressed-air-reduction-card.component';
 
 @NgModule({
   imports: [
@@ -50,7 +52,8 @@ import { ElectricityReductionCardComponent } from './treasure-chest/electricity-
     MotorDriveModule,
     TreasureHuntReportModule,
     NaturalGasReductionModule,
-    ElectricityReductionModule
+    ElectricityReductionModule,
+    CompressedAirReductionModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -70,7 +73,7 @@ import { ElectricityReductionCardComponent } from './treasure-chest/electricity-
     OpportunitySheetResultsComponent, 
     OpportunitySheetCardComponent, 
     OperatingHoursComponent, 
-    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent, TreasureChestMenuComponent, NaturalGasReductionCardComponent, ElectricityReductionCardComponent
+    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent, TreasureChestMenuComponent, NaturalGasReductionCardComponent, ElectricityReductionCardComponent, CompressedAirReductionCardComponent
   ],
   providers: [ TreasureHuntService, OpportunitySheetService, TreasureHuntReportService ]
 })
