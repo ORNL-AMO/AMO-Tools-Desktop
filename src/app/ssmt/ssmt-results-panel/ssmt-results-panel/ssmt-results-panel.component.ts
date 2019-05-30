@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput, SSMTLosses } from '../../../shared/models/steam/steam-outputs';
@@ -38,7 +38,7 @@ export class SsmtResultsPanelComponent implements OnInit {
   annualSavings: number;
   modValid: boolean;
   baselineValid: boolean;
-  constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService) { }
+  constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService, ) { }
 
   ngOnInit() {
     this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); });
@@ -46,6 +46,12 @@ export class SsmtResultsPanelComponent implements OnInit {
 
   ngOnDestroy() {
     this.updateDataSub.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modificationIndex && !changes.modificationIndex.firstChange) {
+      this.getResults();
+    }
   }
 
   getResults() {
@@ -83,7 +89,6 @@ export class SsmtResultsPanelComponent implements OnInit {
       this.showResults = true;
       this.checkValid();
     }
-
 
   }
 
