@@ -4,7 +4,8 @@
       [ngClass]="{'justify-content-between': inTreasureHunt}">
       <div class="d-flex pl-2 align-items-center">
         <div class="text-center">
-          <span class="fa fa-bolt"></span>
+          <img src="assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png"
+            class="electricity-icon">
         </div>
         <div class="pl-2">
           <h3>Electricity Reduction</h3>
@@ -17,7 +18,7 @@
             to method selection.</p>
         </div>
         <div class="pl-2 pr-2 border-right border-left action-item" (click)="addOpportunitySheet()">
-          <span class="fa fa-edit"></span>
+          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="opp-sheet-icon">
         </div>
         <div class="pl-2 pr-2 border-right action-item" (click)="save()">
           <span class="fa fa-save"></span>
@@ -32,7 +33,7 @@
       <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
         <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
           [ngClass]="{'disabled': baselineSelected == false}">
-          <div class="header mx-2">
+          <div class="header mx-2 mb-4">
             <h3>Baseline</h3>
             <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
           </div>
@@ -59,7 +60,7 @@
         <div *ngIf="modificationExists" class="w-50 panel-column modification" (click)="setModificationSelected()"
           [ngClass]="{'disabled': baselineSelected == true}">
           <!-- Modification Header -->
-          <div class="header mx-2">
+          <div class="header mx-2 mb-4">
             <h3>Modification</h3>
             <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
           </div>
@@ -77,7 +78,7 @@
         <!-- no content message -->
         <div class="w-50 panel-column modification" *ngIf="!modificationExists" (click)="setModificationSelected()"
           [ngClass]="{'disabled': baselineSelected == true}">
-          <div class="header mx-2">
+          <div class="header mx-2 mb-2">
             <h3>Modification</h3>
           </div>
           <div class="p-3 no-data">
@@ -116,7 +117,6 @@
             <app-electricity-reduction-help *ngIf="tabSelect == 'help'" [currentField]="currentField">
             </app-electricity-reduction-help>
           </div>
-
         </div>
       </div>
     </div>

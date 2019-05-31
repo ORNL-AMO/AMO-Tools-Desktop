@@ -11,7 +11,7 @@
       <div class="col-4 col-item-br opportunity-name">
         <div class="row align-items-center h-100">
           <div class="col text-center">
-            <span class="fa fa-car pr-2 pt-0"></span>
+            <img src="assets/images/calculator-icons/motor-icons/motor-drive.png" class="motor-drive-icon">
             <a (click)="editItem()">
               <span *ngIf="!motorDrive.opportunitySheet || !motorDrive.opportunitySheet.name">
                 Motor Drive #{{index+1}}
@@ -35,7 +35,7 @@
           <div class="col text-center"
             [ngClass]="{'no-opp-sheet': !motorDrive.opportunitySheet, 'opp-sheet-exists': motorDrive.opportunitySheet}"
             (click)="editOpportunitySheet()">
-            <span class="fa fa-edit"></span><br>
+            <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
             <span class="large pt-2" *ngIf="!motorDrive.opportunitySheet">Add Opportunity Sheet</span>
             <span class="large pt-2" *ngIf="motorDrive.opportunitySheet">Edit Opportunity Sheet</span>
           </div>

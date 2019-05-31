@@ -22,8 +22,8 @@ export class LightingReplacementCardComponent implements OnInit {
   emitEditLighting = new EventEmitter<LightingReplacementTreasureHunt>();
   @Input()
   treasureHunt: TreasureHunt;
-  @Output('emitDeleteLightingReplacement')
-  emitDeleteLightingReplacement = new EventEmitter<string>();
+  @Output('emitDeleteItem')
+  emitDeleteItem = new EventEmitter<string>();
   @Output('emitSaveTreasureHunt')
   emitSaveTreasureHunt = new EventEmitter<boolean>();
 
@@ -50,11 +50,11 @@ export class LightingReplacementCardComponent implements OnInit {
     this.emitSaveTreasureHunt.emit(true);
   }
 
-  deleteLighting() {
+  deleteItem() {
     let name: string = 'Lighting Replacement #' + (this.index + 1);
     if (this.replacement.opportunitySheet && this.replacement.opportunitySheet.name) {
       name = this.replacement.opportunitySheet.name;
     }
-    this.emitDeleteLightingReplacement.emit(name);
+    this.emitDeleteItem.emit(name);
   }
 }

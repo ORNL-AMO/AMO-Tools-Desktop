@@ -10,8 +10,7 @@
     vertical-align: middle;
 }
 
-tr > td:not(:first-child),
-tr > th:not(:first-child){
+tr > td{
     text-align: center;
 }
 
@@ -44,4 +43,9 @@ tr > th:not(:first-child){
 
 thead td{
     width: 10%;
+}
+
+.selected-opportunity{
+    z-index: 2;
+    background: #e5efe9 !important;
 }

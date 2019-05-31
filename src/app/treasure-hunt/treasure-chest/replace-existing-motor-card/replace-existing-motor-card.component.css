@@ -41,3 +41,21 @@
     text-decoration: underline;
   }
   
+
+  .no-opp-sheet .calc-icon{
+    opacity: .5;
+  }
+
+  .calc-icon{
+    width: 35px;
+  }
+
+  .replace-existing-icon{
+    background-color: lightgray;
+    padding-right: 3px;
+    border-radius: 19px;
+    width: 40px;
+    padding-left: 3px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }

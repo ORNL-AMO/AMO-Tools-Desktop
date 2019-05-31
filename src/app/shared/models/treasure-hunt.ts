@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData } from "./standalone";
 
 export interface TreasureHunt {
     name: string,
@@ -11,6 +11,7 @@ export interface TreasureHunt {
     motorDrives?: Array<MotorDriveInputsTreasureHunt>;
     naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
     electricityReductions?: Array<ElectricityReductionTreasureHunt>;
+    compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     setupDone: boolean;
@@ -78,22 +79,29 @@ export interface LightingReplacementTreasureHunt {
     modifications?: Array<LightingReplacementData>;
     opportunitySheet?: OpportunitySheet
     selected?: boolean;
-    baselineElectricityCost?: number,
-    modificationElectricityCost?: number
+    baselineElectricityCost?: number;
+    modificationElectricityCost?: number;
 }
 
 
 export interface NaturalGasReductionTreasureHunt {
     baseline: Array<NaturalGasReductionData>;
     modification: Array<NaturalGasReductionData>;
-    opportunitySheet?: OpportunitySheet
+    opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
 export interface ElectricityReductionTreasureHunt {
     baseline: Array<ElectricityReductionData>;
     modification: Array<ElectricityReductionData>;
-    opportunitySheet?: OpportunitySheet
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface CompressedAirReductionTreasureHunt {
+    baseline: Array<CompressedAirReductionData>;
+    modification: Array<CompressedAirReductionData>;
+    opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
 
@@ -155,7 +163,8 @@ export interface OpportunitySummary {
     totalEnergySavings: number,
     payback: number,
     opportunityCost: OpportunityCost,
-    mixedIndividualResults?: Array<OpportunitySummary>
+    mixedIndividualResults?: Array<OpportunitySummary>,
+    selected: boolean
 }
 
 export interface UtilityUsageData {

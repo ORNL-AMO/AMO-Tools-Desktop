@@ -14,11 +14,14 @@ import { CostPieChartComponent } from './report-graphs/cost-pie-chart/cost-pie-c
 import { UtilityDonutChartComponent } from './report-graphs/utility-donut-chart/utility-donut-chart.component';
 import { CostSummaryChartComponent } from './report-graphs/cost-summary-chart/cost-summary-chart.component';
 import { CostSummaryChartService } from './report-graphs/cost-summary-chart/cost-summary-chart.service';
+import { OpportunitySummaryService } from './opportunity-summary.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   declarations: [
     TreasureHuntReportComponent,
@@ -34,9 +37,6 @@ import { CostSummaryChartService } from './report-graphs/cost-summary-chart/cost
     CostSummaryChartComponent
   ],
   exports: [TreasureHuntReportComponent],
-  providers: [
-    OpportunityPaybackService,
-    CostSummaryChartService
-  ]
+  providers: [OpportunityPaybackService, OpportunitySummaryService, CostSummaryChartService]
 })
 export class TreasureHuntReportModule { }

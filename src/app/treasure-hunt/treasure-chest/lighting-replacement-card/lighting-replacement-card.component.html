@@ -11,7 +11,7 @@
     <div class="col-4 col-item-br opportunity-name">
       <div class="row align-items-center h-100">
         <div class="col text-center">
-          <span class="fa fa-lightbulb-o pr-2 pt-0"></span>
+          <img src="assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png" class="calc-icon">
           <a (click)="editLighting()">
             <span *ngIf="!replacement.opportunitySheet || !replacement.opportunitySheet.name">
               Lighting Replacement #{{index+1}}
@@ -34,7 +34,7 @@
         <div class="col text-center"
           [ngClass]="{'no-opp-sheet': !replacement.opportunitySheet, 'opp-sheet-exists': replacement.opportunitySheet}"
           (click)="editOpportunitySheet()">
-          <span class="fa fa-edit"></span><br>
+          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
           <span class="large pt-2" *ngIf="!replacement.opportunitySheet">Add Opportunity Sheet</span>
           <span class="large pt-2" *ngIf="replacement.opportunitySheet">Edit Opportunity Sheet</span>
         </div>
@@ -44,7 +44,7 @@
       <div class="row align-items-center h-100">
         <div class="col text-center">
           <a class="click-link" (click)="editLighting()">Edit Opportunity</a><br>
-          <a class="click-link danger" (click)="deleteLighting()">Delete</a><br>
+          <a class="click-link danger" (click)="deleteItem()">Delete</a><br>
           <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
         </div>
       </div>

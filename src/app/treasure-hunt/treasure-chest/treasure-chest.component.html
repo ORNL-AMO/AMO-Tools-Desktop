@@ -28,8 +28,8 @@
         <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
           (emitEditLighting)="editLighting($event, index)"
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'lightingReplacement')"
-          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'lightingReplacement')"
-          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()">
+          (emitDeleteItem)="showDeleteItem($event, index, 'lightingReplacement')" [treasureHunt]="treasureHunt"
+          (emitSaveTreasureHunt)="save()">
         </app-lighting-replacement-card>
       </div>
     </div>
@@ -63,8 +63,8 @@
         <app-natural-gas-reduction-card [naturalGasReduction]="naturalGasReduction" [settings]="settings"
           [index]="index" (emitEditNaturalGasReduction)="editNaturalGasReduction($event, index)"
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'naturalGasReduction')"
-          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'naturalGasReduction')"
-          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"></app-natural-gas-reduction-card>
+          (emitDeleteItem)="showDeleteItem($event, index, 'naturalGasReduction')" [treasureHunt]="treasureHunt"
+          (emitSaveTreasureHunt)="save()"></app-natural-gas-reduction-card>
       </div>
     </div>
     <!--electricity reduction-->
@@ -74,8 +74,20 @@
         <app-electricity-reduction-card [electricityReduction]="electricityReduction" [settings]="settings"
           [index]="index" (emitEditElectricityReduction)="editElectricityReduction($event, index)"
           (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'electricityReduction')"
-          (emitDeleteLightingReplacement)="showDeleteItem($event, index, 'electricityReduction')"
-          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"></app-electricity-reduction-card>
+          (emitDeleteItem)="showDeleteItem($event, index, 'electricityReduction')" [treasureHunt]="treasureHunt"
+          (emitSaveTreasureHunt)="save()"></app-electricity-reduction-card>
+      </div>
+    </div>
+    <!--compressed air reduction-->
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Compressed Air Reduction') && (displayEnergyType == 'All' || displayEnergyType == 'Compressed Air')">
+      <div class="col-12"
+        *ngFor="let compressedAirReduction of treasureHunt.compressedAirReductions; let index = index;">
+        <app-compressed-air-reduction-card [compressedAirReduction]="compressedAirReduction" [settings]="settings"
+          [index]="index" (emitEditCompressedAirReduction)="editCompressedAirReduction($event, index)"
+          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'compressedAirReduction')"
+          (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirReduction')" [treasureHunt]="treasureHunt"
+          (emitSaveTreasureHunt)="save()"></app-compressed-air-reduction-card>
       </div>
     </div>
     <!--standalone opportunity sheet-->
@@ -140,6 +152,12 @@
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="opperatingHoursPerYear"></app-electricity-reduction>
 
+<app-compressed-air-reduction *ngIf="selectedCalc == 'compressed-air-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveEditCompressedAirReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="opperatingHoursPerYear"></app-compressed-air-reduction>
+
+
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
@@ -157,7 +175,7 @@
         <p class="help-text" *ngIf="selectedEditOpportunitySheet">Would you like to edit your opportunity sheet before
           saving?</p>
         <a class="click-link" (click)="showOpportunitySheetModal()">
-          <span class="fa fa-edit"></span>
+          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="save-opportunity">
         </a> <br>
         <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="!selectedEditOpportunitySheet">+Add
           Opportunity Sheet</a>
