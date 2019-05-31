@@ -37,14 +37,6 @@ export class ExecutiveSummaryComponent implements OnInit {
     this.prepChartData();
   }
 
-  // ngAfterViewInit() {
-  //   this.chartContainerHeight = this.getChartHeight();
-  //   this.chartContainerWidth = this.getChartWidth();
-  //   console.log('chartContainerHeight = ' + this.chartContainerHeight);
-  //   console.log('chartContainerWidth = ' + this.chartContainerWidth);
-  // }
-
-
   prepChartData(): void {
     let dataTitles = new Array<string>();
     let data = new Array<Array<number>>();

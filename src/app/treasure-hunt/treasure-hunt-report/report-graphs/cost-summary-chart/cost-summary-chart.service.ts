@@ -92,7 +92,6 @@ export class CostSummaryChartService {
     if (!tickFormat) {
       tickFormat = null;
     }
-    // xAxis = d3.axisBottom(scale);
     xAxis = d3.axisBottom()
       .scale(scale)
       .tickSizeInner(tickSizeInner)
@@ -179,9 +178,6 @@ export class CostSummaryChartService {
   }
 
   appendLegend(svg: d3.Selection<any>, width: number, height: number, graphColors: Array<string>, titles: Array<string>) {
-
-    let legendItemCount = titles.length;
-
     for (let i = 0; i < titles.length; i++) {
       svg.append('circle')
         .attr('class', 'stacked-bar-legend-item stacked-bar-legend-item-circle')
