@@ -40,6 +40,7 @@ export class TreasureHuntGaugeComponent implements OnInit {
       this.chart.load({
         columns: [
           ['data', this.value],
+          ['someOtherData', 20]
         ]
       });
     }

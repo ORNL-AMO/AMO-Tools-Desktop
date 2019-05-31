@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ElectricityReductionTreasureHunt, TreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
 import { ElectricityReductionResults } from '../../../shared/models/standalone';
@@ -26,9 +26,15 @@ export class ElectricityReductionCardComponent implements OnInit {
   emitDeleteItem = new EventEmitter<string>();
   @Output('emitSaveTreasureHunt')
   emitSaveTreasureHunt = new EventEmitter<boolean>();
+  @Input()
+  displayCalculatorType: string;
+  @Input()
+  displayEnergyType: string;
+
 
   electricityReductionResults: ElectricityReductionResults;
   percentSavings: number;
+  hideCard: boolean = false;
   constructor(private electricityReductionService: ElectricityReductionService) { }
 
   ngOnInit() {
@@ -36,6 +42,23 @@ export class ElectricityReductionCardComponent implements OnInit {
     this.percentSavings = (this.electricityReductionResults.annualCostSavings / this.treasureHunt.currentEnergyUsage.electricityCosts) * 100;
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.displayCalculatorType || changes.displayEnergyType) {
+      this.checkHideCard();
+    }
+  }
+
+  checkHideCard() {
+    if (this.displayEnergyType == 'Electricity' || this.displayEnergyType == 'All') {
+      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Electricity Reduction') {
+        this.hideCard = false;
+      } else {
+        this.hideCard = true;
+      }
+    } else {
+      this.hideCard = true;
+    }
+  }
   editOpportunitySheet() {
     this.emitEditOpportunitySheet.emit(this.electricityReduction.opportunitySheet);
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { MotorDriveInputsTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { MotorDriveService } from '../../../calculator/motors/motor-drive/motor-drive.service';
@@ -26,9 +26,14 @@ export class MotorDriveCardComponent implements OnInit {
   emitDeleteItem = new EventEmitter<string>();
   @Output('emitSaveTreasureHunt')
   emitSaveTreasureHunt = new EventEmitter<boolean>();
+  @Input()
+  displayCalculatorType: string;
+  @Input()
+  displayEnergyType: string;
 
   motorDriveResults: MotorDriveOutputs;
   percentSavings: number;
+  hideCard: boolean = false;
   constructor(private motorDriveService: MotorDriveService) { }
 
   ngOnInit() {
@@ -36,6 +41,23 @@ export class MotorDriveCardComponent implements OnInit {
     this.percentSavings = (this.motorDriveResults.annualCostSavings / this.treasureHunt.currentEnergyUsage.electricityCosts) * 100;
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.displayCalculatorType || changes.displayEnergyType) {
+      this.checkHideCard();
+    }
+  }
+
+  checkHideCard() {
+    if (this.displayEnergyType == 'Electricity' || this.displayEnergyType == 'All') {
+      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Motor Drive') {
+        this.hideCard = false;
+      } else {
+        this.hideCard = true;
+      }
+    } else {
+      this.hideCard = true;
+    }
+  }
   editOpportunitySheet() {
     this.emitEditOpportunitySheet.emit(this.motorDrive.opportunitySheet);
   }

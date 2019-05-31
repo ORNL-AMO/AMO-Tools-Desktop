@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ReplaceExistingMotorTreasureHunt, TreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { ReplaceExistingResults } from '../../../shared/models/calculators';
@@ -26,15 +26,38 @@ export class ReplaceExistingMotorCardComponent implements OnInit {
   emitDeleteReplaceExistingMotor = new EventEmitter<string>();
   @Output('emitSaveTreasureHunt')
   emitSaveTreasureHunt = new EventEmitter<boolean>();
+  @Input()
+  displayCalculatorType: string;
+  @Input()
+  displayEnergyType: string;
 
 
   replaceExistingMotorResults: ReplaceExistingResults;
   percentSavings: number;
+  hideCard: boolean = false;
   constructor(private replaceExistingService: ReplaceExistingService) { }
 
   ngOnInit() {
     this.replaceExistingMotorResults = this.replaceExistingService.getResults(this.replaceExistingMotor.replaceExistingData);
     this.percentSavings = (this.replaceExistingMotorResults.costSavings / this.treasureHunt.currentEnergyUsage.electricityCosts) * 100;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.displayCalculatorType || changes.displayEnergyType) {
+      this.checkHideCard();
+    }
+  }
+
+  checkHideCard() {
+    if (this.displayEnergyType == 'Electricity' || this.displayEnergyType == 'All') {
+      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Replace Existing') {
+        this.hideCard = false;
+      } else {
+        this.hideCard = true;
+      }
+    } else {
+      this.hideCard = true;
+    }
   }
 
   editOpportunitySheet() {

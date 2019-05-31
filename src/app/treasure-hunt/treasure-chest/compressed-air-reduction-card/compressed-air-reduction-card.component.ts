@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { CompressedAirReductionTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirReductionResults } from '../../../shared/models/standalone';
@@ -26,14 +26,42 @@ export class CompressedAirReductionCardComponent implements OnInit {
   emitDeleteItem = new EventEmitter<string>();
   @Output('emitSaveTreasureHunt')
   emitSaveTreasureHunt = new EventEmitter<boolean>();
+  @Input()
+  displayCalculatorType: string;
+  @Input()
+  displayEnergyType: string;
 
   compressedAirReductionResults: CompressedAirReductionResults;
   percentSavings: number;
+  hideCard: boolean = false;
+  energyType: string = 'Compressed Air';
   constructor(private compressedAirReductionService: CompressedAirReductionService) { }
 
   ngOnInit() {
     this.compressedAirReductionResults = this.compressedAirReductionService.getResults(this.settings, this.compressedAirReduction.baseline, this.compressedAirReduction.modification);
     this.percentSavings = (this.compressedAirReductionResults.annualCostSavings / this.treasureHunt.currentEnergyUsage.compressedAirCosts) * 100;
+    //electricity utility
+    if (this.compressedAirReduction.baseline[0].utilityType == 1) {
+      this.energyType = 'Electricity';
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.displayCalculatorType || changes.displayEnergyType) {
+      this.checkHideCard();
+    }
+  }
+
+  checkHideCard() {
+    if (this.displayEnergyType == this.energyType || this.displayEnergyType == 'All') {
+      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Compressed Air Reduction') {
+        this.hideCard = false;
+      } else {
+        this.hideCard = true;
+      }
+    } else {
+      this.hideCard = true;
+    }
   }
 
   editOpportunitySheet() {

@@ -52,6 +52,9 @@ export class TreasureChestMenuComponent implements OnInit {
     }
     this.energyTypeOptions.unshift({ value: 'All', numCalcs: numElectricity + numOppSheets + numGas });
     this.calculatorTypeOptions.unshift({ value: 'All', numCalcs: numElectricity + numOppSheets + numGas });
+  
+    let numCompAir: number = this.checkCompressedAir();
+
   }
 
   setCalculatorOptions() {
@@ -107,4 +110,11 @@ export class TreasureChestMenuComponent implements OnInit {
     }
     return numGas;
   }
+
+  checkCompressedAir(): number{
+    let numCompressedAir
+    return 0;
+  }
+
+
 }

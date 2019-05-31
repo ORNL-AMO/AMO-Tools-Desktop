@@ -1,4 +1,5 @@
-<div class="card treasure-hunt-card" [ngClass]="{'not-selected': !motorDrive.selected}">
+<div class="col-12" [hidden]="hideCard">
+  <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !motorDrive.selected}">
     <div class="card-body d-flex w-100 p-0">
       <div class="col-1 col-item-br">
         <div class="row align-items-center h-100">
@@ -52,3 +53,4 @@
       </div>
     </div>
   </div>
+</div>
