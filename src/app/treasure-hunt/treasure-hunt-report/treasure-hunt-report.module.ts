@@ -13,6 +13,7 @@ import { OpportunityPaybackService } from './opportunity-payback.service';
 import { CostPieChartComponent } from './report-graphs/cost-pie-chart/cost-pie-chart.component';
 import { UtilityDonutChartComponent } from './report-graphs/utility-donut-chart/utility-donut-chart.component';
 import { CostSummaryChartComponent } from './report-graphs/cost-summary-chart/cost-summary-chart.component';
+import { CostSummaryChartService } from './report-graphs/cost-summary-chart/cost-summary-chart.service';
 
 @NgModule({
   imports: [
@@ -33,6 +34,9 @@ import { CostSummaryChartComponent } from './report-graphs/cost-summary-chart/co
     CostSummaryChartComponent
   ],
   exports: [TreasureHuntReportComponent],
-  providers: [OpportunityPaybackService]
+  providers: [
+    OpportunityPaybackService,
+    CostSummaryChartService
+  ]
 })
 export class TreasureHuntReportModule { }

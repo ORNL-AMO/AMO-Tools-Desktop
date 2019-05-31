@@ -76,15 +76,15 @@ export class TreasureChestMenuComponent implements OnInit {
       numElectricity = this.treasureHunt.lightingReplacements.length;
     }
     if (this.treasureHunt.motorDrives && this.treasureHunt.motorDrives.length != 0) {
-      this.calculatorTypeOptions.push({ value: 'Motor Drive', numCalcs: this.treasureHunt.motorDrives.length });
+      this.calculatorTypeOptions.push({ value: 'Upgrade Motor Drive', numCalcs: this.treasureHunt.motorDrives.length });
       numElectricity = numElectricity + this.treasureHunt.motorDrives.length;
     }
     if (this.treasureHunt.replaceExistingMotors && this.treasureHunt.replaceExistingMotors.length != 0) {
       this.calculatorTypeOptions.push({ value: 'Replace Existing Motor', numCalcs: this.treasureHunt.replaceExistingMotors.length });
       numElectricity = numElectricity + this.treasureHunt.replaceExistingMotors.length;
     }
-    if(this.treasureHunt.electricityReductions && this.treasureHunt.electricityReductions.length != 0){
-      this.calculatorTypeOptions.push({value: 'Electricity Reduction', numCalcs: this.treasureHunt.electricityReductions.length});
+    if (this.treasureHunt.electricityReductions && this.treasureHunt.electricityReductions.length != 0) {
+      this.calculatorTypeOptions.push({ value: 'Electricity Reduction', numCalcs: this.treasureHunt.electricityReductions.length });
       numElectricity = numElectricity + this.treasureHunt.electricityReductions.length;
     }
     return numElectricity;
