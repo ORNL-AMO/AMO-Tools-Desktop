@@ -1,8 +1,6 @@
 .card.treasure-hunt-card{
   padding: .25rem;
   font-size: small;
-  border-right: #2E4053 solid 5px;
-  border-left: #2E4053 solid 5px;
 }
 
 .col-item-br{
@@ -42,4 +40,13 @@ a:not([href]):not([tabindex]):hover {
 } */
   .calc-icon{
     width: 35px;
+  }
+
+  .treasure-hunt-item{
+    padding-left: .25rem;
+    padding-right: .25rem;
+  }
+
+  .gauge-title{
+    width: 150px;
   }

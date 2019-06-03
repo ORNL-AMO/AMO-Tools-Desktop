@@ -1,5 +1,5 @@
 <div class="d-flex modify-conditions panel-container skyline" *ngIf="selectedCalc == 'none'">
-  <div class="scroll-item chest-column" [ngStyle]="{'height.px': containerHeight}">
+  <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-12">
       <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
         (emitChangeCalculatorType)="setCaclulatorType($event)"></app-treasure-chest-menu>
@@ -67,9 +67,9 @@
       [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
     </app-opportunity-sheet-card>
   </div>
-  <div class="d-flex scroll-item result-column justify-content-center mr-3 ml-3"
+  <div class="scroll-item result-column justify-content-center mr-3 ml-3"
     [ngStyle]="{'height.px': containerHeight}">
-    <app-summary-card class="w-100" [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
+    <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
   </div>
 </div>
 

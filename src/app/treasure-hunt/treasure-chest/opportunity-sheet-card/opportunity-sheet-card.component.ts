@@ -121,7 +121,7 @@ export class OpportunitySheetCardComponent implements OnInit {
   checkHideCard() {
     let isEnergyType: boolean = this.checkEnergyTypes();
     if (isEnergyType || this.displayEnergyType == 'All') {
-      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Other') {
+      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Opportunity Sheet') {
         this.hideCard = false;
       } else {
         this.hideCard = true;

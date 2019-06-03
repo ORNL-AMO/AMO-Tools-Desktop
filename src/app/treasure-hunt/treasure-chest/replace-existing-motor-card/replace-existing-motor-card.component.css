@@ -1,8 +1,6 @@
 .card.treasure-hunt-card{
     padding: .25rem;
     font-size: small;
-    border-right: #2E4053 solid 5px;
-    border-left: #2E4053 solid 5px;
   }
   
   .col-item-br{

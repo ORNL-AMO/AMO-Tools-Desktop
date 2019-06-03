@@ -35,7 +35,7 @@
 
   <div *ngIf="mainTab == 'treasure-chest'" class="d-flex tab-content h-100">
     <app-treasure-chest class="w-100" [treasureHunt]="assessment.treasureHunt" [settings]="settings"
-      (emitUpdateTreasureHunt)="saveTreasureHunt($event)"></app-treasure-chest>
+      (emitUpdateTreasureHunt)="saveTreasureHunt($event)" [containerHeight]="containerHeight"></app-treasure-chest>
   </div>
 
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
