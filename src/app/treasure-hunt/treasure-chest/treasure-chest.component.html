@@ -4,121 +4,72 @@
       <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
         (emitChangeCalculatorType)="setCaclulatorType($event)"></app-treasure-chest-menu>
     </div>
-    <!-- <div class="d-flex flex-wrap tabs primary mr-2 ml-2 mb-2">
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'all'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('all')">
-          <div>All Items ({{numItems}})</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'lighting-replacement'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('lighting-replacement')">
-          <div>Lighting Replacements ({{numLightingReplacements}})</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'opportunity-sheet'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('opportunity-sheet')">
-          <div>Opportunity Sheets ({{numOppSheets}})</div>
-        </a>
-      </div>
-    </div> -->
+
     <!--lighting replacement-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Lighting Replacement') && (displayEnergyType == 'All' || displayEnergyType == 'Electricity')">
-      <div class="col-12" *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;">
-        <app-lighting-replacement-card [replacement]="replacement" [settings]="settings" [index]="index"
-          (emitEditLighting)="editLighting($event, index)"
-          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'lightingReplacement')"
-          (emitDeleteItem)="showDeleteItem($event, index, 'lightingReplacement')" [treasureHunt]="treasureHunt"
-          (emitSaveTreasureHunt)="save()">
-        </app-lighting-replacement-card>
-      </div>
-    </div>
+    <app-lighting-replacement-card *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;"
+      [replacement]="replacement" [settings]="settings" [index]="index" (emitEditLighting)="editLighting($event, index)"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'lightingReplacement')"
+      (emitDeleteItem)="showDeleteItem($event, index, 'lightingReplacement')" [treasureHunt]="treasureHunt"
+      (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+      [displayEnergyType]="displayEnergyType">
+    </app-lighting-replacement-card>
     <!--replace existing motor-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Replace Existing Motor') && (displayEnergyType == 'All' || displayEnergyType == 'Electricity')">
-      <div class="col-12" *ngFor="let replaceExistingMotor of treasureHunt.replaceExistingMotors; let index = index;">
-        <app-replace-existing-motor-card [replaceExistingMotor]="replaceExistingMotor" [index]="index"
-          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'replaceExistingMotor')"
-          [settings]="settings" [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
-          (emitDeleteReplaceExistingMotor)="showDeleteItem($event, index, 'replaceExistingMotor')"
-          (emitEditReplaceExistingMotor)="editReplaceExistingMotor($event, index)">
-        </app-replace-existing-motor-card>
-      </div>
-    </div>
+    <app-replace-existing-motor-card
+      *ngFor="let replaceExistingMotor of treasureHunt.replaceExistingMotors; let index = index;"
+      [replaceExistingMotor]="replaceExistingMotor" [index]="index"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'replaceExistingMotor')" [settings]="settings"
+      [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+      (emitDeleteReplaceExistingMotor)="showDeleteItem($event, index, 'replaceExistingMotor')"
+      (emitEditReplaceExistingMotor)="editReplaceExistingMotor($event, index)"
+      [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
+    </app-replace-existing-motor-card>
     <!--motor drive-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Motor Drive') && (displayEnergyType == 'All' || displayEnergyType == 'Electricity')">
-      <div class="col-12" *ngFor="let motorDrive of treasureHunt.motorDrives; let index = index;">
-        <app-motor-drive-card [motorDrive]="motorDrive" [index]="index"
-          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'motorDrive')" [settings]="settings"
-          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
-          (emitDeleteItem)="showDeleteItem($event, index, 'motorDrive')" (emitEditItem)="editMotorDrive($event, index)">
-        </app-motor-drive-card>
-      </div>
-    </div>
+    <app-motor-drive-card *ngFor="let motorDrive of treasureHunt.motorDrives; let index = index;"
+      [motorDrive]="motorDrive" [index]="index"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'motorDrive')" [settings]="settings"
+      [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+      (emitDeleteItem)="showDeleteItem($event, index, 'motorDrive')" (emitEditItem)="editMotorDrive($event, index)"
+      [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
+    </app-motor-drive-card>
     <!--natural gas reduction-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Natural Gas Reduction') && (displayEnergyType == 'All' || displayEnergyType == 'Natural Gas')">
-      <div class="col-12" *ngFor="let naturalGasReduction of treasureHunt.naturalGasReductions; let index = index;">
-        <app-natural-gas-reduction-card [naturalGasReduction]="naturalGasReduction" [settings]="settings"
-          [index]="index" (emitEditNaturalGasReduction)="editNaturalGasReduction($event, index)"
-          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'naturalGasReduction')"
-          (emitDeleteItem)="showDeleteItem($event, index, 'naturalGasReduction')" [treasureHunt]="treasureHunt"
-          (emitSaveTreasureHunt)="save()"></app-natural-gas-reduction-card>
-      </div>
-    </div>
+    <app-natural-gas-reduction-card
+      *ngFor="let naturalGasReduction of treasureHunt.naturalGasReductions; let index = index;"
+      [naturalGasReduction]="naturalGasReduction" [settings]="settings" [index]="index"
+      (emitEditNaturalGasReduction)="editNaturalGasReduction($event, index)"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'naturalGasReduction')"
+      (emitDeleteItem)="showDeleteItem($event, index, 'naturalGasReduction')" [treasureHunt]="treasureHunt"
+      (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+      [displayEnergyType]="displayEnergyType"></app-natural-gas-reduction-card>
     <!--electricity reduction-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity Reduction') && (displayEnergyType == 'All' || displayEnergyType == 'Electricity')">
-      <div class="col-12" *ngFor="let electricityReduction of treasureHunt.electricityReductions; let index = index;">
-        <app-electricity-reduction-card [electricityReduction]="electricityReduction" [settings]="settings"
-          [index]="index" (emitEditElectricityReduction)="editElectricityReduction($event, index)"
-          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'electricityReduction')"
-          (emitDeleteItem)="showDeleteItem($event, index, 'electricityReduction')" [treasureHunt]="treasureHunt"
-          (emitSaveTreasureHunt)="save()"></app-electricity-reduction-card>
-      </div>
-    </div>
+    <app-electricity-reduction-card
+      *ngFor="let electricityReduction of treasureHunt.electricityReductions; let index = index;"
+      [electricityReduction]="electricityReduction" [settings]="settings" [index]="index"
+      (emitEditElectricityReduction)="editElectricityReduction($event, index)"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'electricityReduction')"
+      (emitDeleteItem)="showDeleteItem($event, index, 'electricityReduction')" [treasureHunt]="treasureHunt"
+      (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+      [displayEnergyType]="displayEnergyType"></app-electricity-reduction-card>
     <!--compressed air reduction-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Compressed Air Reduction') && (displayEnergyType == 'All' || displayEnergyType == 'Compressed Air')">
-      <div class="col-12"
-        *ngFor="let compressedAirReduction of treasureHunt.compressedAirReductions; let index = index;">
-        <app-compressed-air-reduction-card [compressedAirReduction]="compressedAirReduction" [settings]="settings"
-          [index]="index" (emitEditCompressedAirReduction)="editCompressedAirReduction($event, index)"
-          (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'compressedAirReduction')"
-          (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirReduction')" [treasureHunt]="treasureHunt"
-          (emitSaveTreasureHunt)="save()"></app-compressed-air-reduction-card>
-      </div>
-    </div>
+    <app-compressed-air-reduction-card
+      *ngFor="let compressedAirReduction of treasureHunt.compressedAirReductions; let index = index;"
+      [compressedAirReduction]="compressedAirReduction" [settings]="settings" [index]="index"
+      (emitEditCompressedAirReduction)="editCompressedAirReduction($event, index)"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'compressedAirReduction')"
+      (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirReduction')" [treasureHunt]="treasureHunt"
+      (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+      [displayEnergyType]="displayEnergyType"></app-compressed-air-reduction-card>
     <!--standalone opportunity sheet-->
-    <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Opportunity Sheet') && (displayEnergyType == 'All' || displayEnergyType == 'Other')">
-      <div class="col-12" *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;">
-        <app-opportunity-sheet-card [opportunitySheet]="opportunitySheet" [index]="index"
-          (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"
-          [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
-          (emitDeleteOpportunity)="showDeleteItem($event, index, 'opportunitySheet')">
-        </app-opportunity-sheet-card>
-      </div>
-    </div>
+    <app-opportunity-sheet-card *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;"
+      [opportunitySheet]="opportunitySheet" [index]="index"
+      (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"
+      [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+      (emitDeleteOpportunity)="showDeleteItem($event, index, 'opportunitySheet')"
+      [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
+    </app-opportunity-sheet-card>
   </div>
   <div class="d-flex scroll-item result-column justify-content-center mr-3 ml-3"
     [ngStyle]="{'height.px': containerHeight}">
-    <!-- <div class="d-flex flex-wrap tabs primary mr-2 ml-2"> -->
-    <!-- <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': helpTabSelect == 'results'}">
-        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setHelpTab('results')">
-          <div>Results</div>
-        </a>
-      </div>
-      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': helpTabSelect == 'help'}">
-        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setHelpTab('help')">
-          <div>Help</div>
-        </a>
-      </div>
-    </div> -->
-    <!-- <div class="d-flex"> -->
     <app-summary-card class="w-100" [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
-    <!--   </div> -->
   </div>
 </div>
 

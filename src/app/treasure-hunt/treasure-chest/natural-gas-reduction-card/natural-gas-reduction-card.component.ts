@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { NaturalGasReductionTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { NaturalGasReductionResults } from '../../../shared/models/standalone';
@@ -26,15 +26,37 @@ export class NaturalGasReductionCardComponent implements OnInit {
   emitDeleteItem = new EventEmitter<string>();
   @Output('emitSaveTreasureHunt')
   emitSaveTreasureHunt = new EventEmitter<boolean>();
-
+  @Input()
+  displayCalculatorType: string;
+  @Input()
+  displayEnergyType: string;
 
   naturalGasReductionResults: NaturalGasReductionResults;
   percentSavings: number;
+  hideCard: boolean = false;
   constructor(private naturalGasReductionService: NaturalGasReductionService) { }
 
   ngOnInit() {
     this.naturalGasReductionResults = this.naturalGasReductionService.getResults(this.settings, this.naturalGasReduction.baseline, this.naturalGasReduction.modification);
     this.percentSavings = (this.naturalGasReductionResults.annualCostSavings / this.treasureHunt.currentEnergyUsage.naturalGasCosts) * 100;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.displayCalculatorType || changes.displayEnergyType) {
+      this.checkHideCard();
+    }
+  }
+
+  checkHideCard() {
+    if (this.displayEnergyType == 'Natural Gas' || this.displayEnergyType == 'All') {
+      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Natural Gas Reduction') {
+        this.hideCard = false;
+      } else {
+        this.hideCard = true;
+      }
+    } else {
+      this.hideCard = true;
+    }
   }
 
   editOpportunitySheet() {
