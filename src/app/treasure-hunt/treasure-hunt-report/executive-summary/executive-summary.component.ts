@@ -40,47 +40,45 @@ export class ExecutiveSummaryComponent implements OnInit {
   prepChartData(): void {
     let dataTitles = new Array<string>();
     let data = new Array<Array<number>>();
-    if (this.treasureHuntResults.opportunitySummaries !== undefined && this.treasureHuntResults.opportunitySummaries !== null) {
-      for (let i = 0; i < this.treasureHuntResults.opportunitySummaries.length; i++) {
-        if (!dataTitles.includes(this.treasureHuntResults.opportunitySummaries[i].utilityType)) {
-          dataTitles.push(this.treasureHuntResults.opportunitySummaries[i].utilityType);
-          data.push(this.getUtilityCost(this.treasureHuntResults.opportunitySummaries[i].utilityType));
-        }
-      }
+    /*
+      Electricity
+      Natural Gas
+      Other Fuel
+      Water
+      Wastewater
+      Steam
+      Compressed Air
+    */
+    if (this.treasureHuntResults.electricity.costSavings > 0) {
+      dataTitles.push('Electricity');
+      data.push([this.treasureHuntResults.electricity.modifiedEnergyCost, this.treasureHuntResults.electricity.costSavings]);
+    }
+    if (this.treasureHuntResults.naturalGas.costSavings > 0) {
+      dataTitles.push('Natural Gas');
+      data.push([this.treasureHuntResults.naturalGas.modifiedEnergyCost, this.treasureHuntResults.naturalGas.costSavings]);
+    }
+    if (this.treasureHuntResults.otherFuel.costSavings > 0) {
+      dataTitles.push('Other Fuel');
+      data.push([this.treasureHuntResults.otherFuel.modifiedEnergyCost, this.treasureHuntResults.otherFuel.costSavings]);
+    }
+    if (this.treasureHuntResults.water.costSavings > 0) {
+      dataTitles.push('Water');
+      data.push([this.treasureHuntResults.water.modifiedEnergyCost, this.treasureHuntResults.water.costSavings]);
+    }
+    if (this.treasureHuntResults.wasteWater.costSavings > 0) {
+      dataTitles.push('Wastewater');
+      data.push([this.treasureHuntResults.wasteWater.modifiedEnergyCost, this.treasureHuntResults.wasteWater.costSavings]);
+    }
+    if (this.treasureHuntResults.steam.costSavings > 0) {
+      dataTitles.push('Steam');
+      data.push([this.treasureHuntResults.steam.modifiedEnergyCost, this.treasureHuntResults.steam.costSavings]);
+    }
+    if (this.treasureHuntResults.compressedAir.costSavings > 0) {
+      dataTitles.push('Compressed Air');
+      data.push([this.treasureHuntResults.compressedAir.modifiedEnergyCost, this.treasureHuntResults.compressedAir.costSavings > 0 ? this.treasureHuntResults.compressedAir.costSavings : 0]);
     }
     this.data = data;
     this.dataTitles = dataTitles;
-  }
-
-  getUtilityCost(utilityType: string): Array<number> {
-    /*
-    Electricity
-    Natural Gas
-    Other Fuel
-    Water
-    Wastewater
-    Steam
-    Compressed Air
-    */
-    switch (utilityType) {
-      case "Electricity":
-        return [this.treasureHuntResults.electricity.modifiedEnergyCost, this.treasureHuntResults.electricity.costSavings > 0 ? this.treasureHuntResults.electricity.costSavings : 0];
-      case "Natural Gas":
-        return [this.treasureHuntResults.naturalGas.modifiedEnergyCost, this.treasureHuntResults.naturalGas.costSavings > 0 ? this.treasureHuntResults.naturalGas.costSavings : 0];
-      case "Other Fuel":
-        return [this.treasureHuntResults.otherFuel.modifiedEnergyCost, this.treasureHuntResults.otherFuel.costSavings > 0 ? this.treasureHuntResults.otherFuel.costSavings : 0];
-      case "Water":
-        return [this.treasureHuntResults.water.modifiedEnergyCost, this.treasureHuntResults.water.costSavings > 0 ? this.treasureHuntResults.water.costSavings : 0];
-      case "Wastewater":
-        return [this.treasureHuntResults.wasteWater.modifiedEnergyCost, this.treasureHuntResults.wasteWater.costSavings > 0 ? this.treasureHuntResults.wasteWater.costSavings : 0];
-      case "Steam":
-        return [this.treasureHuntResults.steam.modifiedEnergyCost, this.treasureHuntResults.steam.costSavings > 0 ? this.treasureHuntResults.steam.costSavings : 0];
-      case "Compressed Air":
-        return [this.treasureHuntResults.compressedAir.modifiedEnergyCost, this.treasureHuntResults.compressedAir.costSavings > 0 ? this.treasureHuntResults.compressedAir.costSavings : 0];
-      default:
-        throw "in file 'executive-summary-component.ts': Received invalid utilityType: " + utilityType;
-    }
-
   }
 
   getChartHeight(): number {

@@ -1,4 +1,4 @@
-<div class="d-flex flex-row">
+<div class="d-flex" [ngClass]="{'flex-row' : title == 'Cost Summary', 'flex-column' : title != 'Cost Summary'}">
 
   <div class="d-flex flex-column output-summary" #costSummaryChartContainer>
 
