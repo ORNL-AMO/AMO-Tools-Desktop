@@ -44,15 +44,15 @@ export class ElectricityReductionService {
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
-    let fuelCost: number = .12;
-    if (settings && settings.fuelCost) {
-      fuelCost = settings.fuelCost;
+    let electricityCost: number = .12;
+    if (settings && settings.electricityCost) {
+      electricityCost = settings.electricityCost;
     }
 
     let obj: ElectricityReductionData = {
       name: 'Equipment #' + (index + 1),
       operatingHours: hoursPerYear,
-      electricityCost: fuelCost,
+      electricityCost: electricityCost,
       measurementMethod: 0,
       multimeterData: defaultMultimeterObj,
       nameplateData: defaultNameplateObj,
