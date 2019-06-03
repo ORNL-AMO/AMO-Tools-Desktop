@@ -12,6 +12,8 @@ import { OpportunityPaybackBarChartComponent } from './opportunity-payback/oppor
 import { OpportunityPaybackService } from './opportunity-payback.service';
 import { CostPieChartComponent } from './report-graphs/cost-pie-chart/cost-pie-chart.component';
 import { UtilityDonutChartComponent } from './report-graphs/utility-donut-chart/utility-donut-chart.component';
+import { CostSummaryChartComponent } from './report-graphs/cost-summary-chart/cost-summary-chart.component';
+import { CostSummaryChartService } from './report-graphs/cost-summary-chart/cost-summary-chart.service';
 import { OpportunitySummaryService } from './opportunity-summary.service';
 import { FormsModule } from '@angular/forms';
 
@@ -22,18 +24,19 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   declarations: [
-    TreasureHuntReportComponent, 
-    ExecutiveSummaryComponent, 
-    OpportunitySummaryComponent, 
-    ReportGraphsComponent, 
-    OpportunityPaybackTableComponent, 
-    OpportunityPaybackComponent, 
-    OpportunityPaybackDonutComponent, 
+    TreasureHuntReportComponent,
+    ExecutiveSummaryComponent,
+    OpportunitySummaryComponent,
+    ReportGraphsComponent,
+    OpportunityPaybackTableComponent,
+    OpportunityPaybackComponent,
+    OpportunityPaybackDonutComponent,
     OpportunityPaybackBarChartComponent,
     CostPieChartComponent,
-    UtilityDonutChartComponent
+    UtilityDonutChartComponent,
+    CostSummaryChartComponent
   ],
   exports: [TreasureHuntReportComponent],
-  providers: [OpportunityPaybackService, OpportunitySummaryService]
+  providers: [OpportunityPaybackService, OpportunitySummaryService, CostSummaryChartService]
 })
 export class TreasureHuntReportModule { }
