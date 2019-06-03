@@ -109,14 +109,14 @@ export class OpportunitySheetCardComponent implements OnInit {
   }
 
   checkEnergyTypes(): boolean {
+    let isType: boolean = false
     this.energyTypes.forEach(type => {
-      if (type == this.displayEnergyType) {
-        return true;
+      if (type == this.displayEnergyType && isType == false) {
+        isType = true;
       }
     })
-    return false;
+    return isType;
   }
-
 
   checkHideCard() {
     let isEnergyType: boolean = this.checkEnergyTypes();

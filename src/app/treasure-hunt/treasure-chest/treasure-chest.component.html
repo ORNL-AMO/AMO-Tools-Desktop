@@ -2,7 +2,7 @@
   <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-12">
       <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
-        (emitChangeCalculatorType)="setCaclulatorType($event)"></app-treasure-chest-menu>
+        (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"></app-treasure-chest-menu>
     </div>
 
     <!--lighting replacement-->
