@@ -23,8 +23,10 @@
               </span>
             </a><br>
             <span>Annual Cost Savings: {{compressedAirReductionResults.annualCostSavings | currency:'USD'}}</span><br>
-            <span>Annual Compressed Air Savings: {{compressedAirReductionResults.annualEnergySavings | number:'1.0-0'}}
-              kWh
+            <span>Annual {{energyType}} Savings: {{compressedAirReductionResults.annualEnergySavings | number:'1.0-0'}}
+              <span *ngIf="energyType == 'Electricity'">kWh</span>
+              <span *ngIf="energyType == 'Compressed Air' && settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+              <span *ngIf="energyType == 'Compressed Air' && settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
             </span>
           </div>
         </div>
