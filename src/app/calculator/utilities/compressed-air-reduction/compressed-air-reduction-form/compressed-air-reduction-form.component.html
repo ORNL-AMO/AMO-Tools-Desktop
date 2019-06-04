@@ -184,6 +184,8 @@
           <input class="form-control" name="supplyPressure" id="{{'supplyPressure_'+idString}}"
             formControlName="supplyPressure" type="number" (input)="calculate()" (focus)="focusField('supplyPressure')"
             (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.supplyPressure.invalid && !form.controls.supplyPressure.pristine">
