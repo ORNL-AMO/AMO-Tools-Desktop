@@ -5,7 +5,8 @@
       <div class="d-flex pl-2 align-items-center">
         <img src="assets/images/calculator-icons/motor-icons/motor-drive.png" class="ico-size4">
         <div class="pl-2">
-          <h3>Motor Drive Comparison</h3>
+          <h3 *ngIf="!inTreasureHunt">Motor Drive Comparison</h3>
+          <h3 *ngIf="inTreasureHunt">Upgrade Motor Drive</h3>
         </div>
       </div>
       <div class="d-flex pr-2" *ngIf="inTreasureHunt">

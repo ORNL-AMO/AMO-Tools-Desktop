@@ -7,7 +7,10 @@
     <div class="input-group">
       <input type="number" class="form-control" formControlName="compressedAirCost" id="compressedAirCost"
         (input)="save()">
-      <span class="input-group-addon units">$/kWh</span>
+      <span class="input-group-addon units"
+        *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Imperial'">$/SCF</span>
+      <span class="input-group-addon units"
+        *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/m<sup>3</sup></span>
     </div>
   </div>
   <div class="form-group">
@@ -33,8 +36,7 @@
   <div class="form-group">
     <label for="waterWasteCost">Waste Water</label>
     <div class="input-group">
-      <input type="number" class="form-control" formControlName="waterWasteCost" id="waterWasteCost"
-        (input)="save()">
+      <input type="number" class="form-control" formControlName="waterWasteCost" id="waterWasteCost" (input)="save()">
       <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value != 'Metric'">$/gal</span>
       <span class="units input-group-addon" *ngIf="settingsForm.controls.unitsOfMeasure.value == 'Metric'">$/L</span>
     </div>

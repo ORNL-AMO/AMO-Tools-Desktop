@@ -32,19 +32,27 @@ export class EnergyUseFormComponent implements OnInit {
   }
 
   getEnergyUnit(str: string): string {
-    if (str == 'Electricity' || str == 'Compressed Air') {
+    if (str == 'Electricity') {
       return 'kWh';
     } else if (this.settings.unitsOfMeasure == 'Metric') {
-      if (str == 'Gas' || str == 'Other Fuel' || str == 'Steam') {
+      if (str == 'Gas' || str == 'Other Fuel') {
         return 'MJ';
       } else if (str == 'Water' || str == 'WWT') {
         return 'L';
+      } else if (str == 'Compressed Air') {
+        return 'm<sup>3</sup>';
+      } else if (str == 'Steam') {
+        return 'tonne';
       }
     } else {
-      if (str == 'Gas' || str == 'Other Fuel' || str == 'Steam') {
+      if (str == 'Gas' || str == 'Other Fuel') {
         return 'MMBtu';
       } else if (str == 'Water' || str == 'WWT') {
         return 'gal';
+      } else if (str == 'Compressed Air') {
+        return 'SCF';
+      } else if (str == 'Steam') {
+        return 'klb';
       }
     }
   }
