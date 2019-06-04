@@ -3,58 +3,64 @@
   <!--header-->
   <div #header class="w-100 hide-print sticky-top" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
-    <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators' || mainTab == 'system-setup'">
+    <div class="hide-print" id="psatTabs"
+      *ngIf="mainTab == 'assessment' || mainTab == 'calculators' || mainTab == 'system-setup'">
       <app-psat-tabs [settings]="settings" [psat]="_psat"></app-psat-tabs>
     </div>
   </div>
   <!--end header-->
 
   <!--system setup-->
-  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item"
+    [ngStyle]="{'height.px': containerHeight}">
     <div class="w-50 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
-      <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment" [(psat)]="_psat"
-        (updateSettings)="getSettings($event)" (updateAssessment)="save()" (openModal)="modalOpen()" (closeModal)="modalClose()"></app-system-basics>
-      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
-        [baseline]="true" [inSetup]="true"></app-pump-fluid>
+      <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"
+        [(psat)]="_psat" (updateSettings)="getSettings($event)" (updateAssessment)="save()" (openModal)="modalOpen()"
+        (closeModal)="modalClose()"></app-system-basics>
+      <app-pump-fluid *ngIf="stepTab == 'pump-fluid'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+        [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
       <app-motor *ngIf="stepTab == 'motor'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
         [baseline]="true" [inSetup]="true"></app-motor>
-      <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
-        [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
+      <app-field-data *ngIf="stepTab == 'field-data'" [(psat)]="_psat" (saved)="save()" [selected]="true"
+        [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
     </div>
     <div class="w-50" [ngClass]="{'pl-0': stepTab == 'field-data'}">
-      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
-        [showResults]="stepTab == 'field-data'"></app-help-panel>
+      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="stepTab" [inSetup]="true"
+        [containerHeight]="containerHeight" [showResults]="stepTab == 'field-data'"></app-help-panel>
     </div>
   </div>
   <!--End system-setup-->
 
   <!--assessment tab-->
-  <div class="tab-content" *ngIf="mainTab == 'assessment' && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')"
+  <div class="tab-content"
+    *ngIf="mainTab == 'assessment' && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')"
     [ngStyle]="{'height.px': containerHeight}">
     <!--Explore opportunities-->
-    <app-explore-opportunities *ngIf="currentTab == 'explore-opportunities'" [assessment]="assessment" [settings]="settings"
-      [(psat)]="_psat" (saved)="save()" [containerHeight]="containerHeight" [modificationIndex]="modificationIndex"
-      [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"></app-explore-opportunities>
+    <app-explore-opportunities *ngIf="currentTab == 'explore-opportunities'" [assessment]="assessment"
+      [settings]="settings" [(psat)]="_psat" (saved)="save()" [containerHeight]="containerHeight"
+      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()"
+      (exploreOppsToast)="hideToast($event)"></app-explore-opportunities>
     <!--Modify conditions-->
     <app-modify-conditions *ngIf="currentTab == 'modify-conditions'" [assessment]="assessment" [settings]="settings"
-      [(psat)]="_psat" (saved)="save()" [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"
-      [containerHeight]="containerHeight"></app-modify-conditions>
+      [(psat)]="_psat" (saved)="save()" [modificationIndex]="modificationIndex"
+      [modificationExists]="modificationExists" [containerHeight]="containerHeight"></app-modify-conditions>
   </div>
   <!--end assessment-->
-  
+
   <!--calculators tab-->
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-pump-curve *ngIf="calcTab == 'system-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"
       [inAssessment]="true" [assessment]="assessment" [pumpCurvePrimary]="false"></app-pump-curve>
-    <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
+    <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings"
+      [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inAssessment]="true" [assessment]="assessment"
       [psat]="_psat" [settings]="settings"></app-motor-performance>
-    <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inAssessment]="true" [assessment]="assessment"
-      [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
-    <app-specific-speed *ngIf="calcTab == 'specific-speed'" [settings]="settings" [inAssessment]="true" [assessment]="assessment"
-      [psat]="_psat"></app-specific-speed>
-    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat" [inAssessment]="true"
-      [assessment]="assessment" [pumpCurvePrimary]="true"></app-pump-curve>
+    <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inAssessment]="true"
+      [assessment]="assessment" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
+    <app-specific-speed *ngIf="calcTab == 'specific-speed'" [settings]="settings" [inAssessment]="true"
+      [assessment]="assessment" [psat]="_psat"></app-specific-speed>
+    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"
+      [inAssessment]="true" [assessment]="assessment" [pumpCurvePrimary]="true"></app-pump-curve>
     <app-unit-converter *ngIf="calcTab == 'convert-units'" [inAssessment]="true"></app-unit-converter>
   </div>
   <!--end calculators-->
@@ -67,7 +73,8 @@
 
   <!-- sankey -->
   <!--TODO: Move sankey selecting logic to sankey component-->
-  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item w-100" [ngStyle]="{'height.px': containerHeight}">
+  <div *ngIf="mainTab == 'sankey'" class="mx-auto d-flex flex-column scroll-item w-100"
+    [ngStyle]="{'height.px': containerHeight}">
     <div class="p-1 mx-auto">
       <div class="form-group" *ngIf="psatOptionsLength > 1">
         <select name="psatSelect" class="form-control mx-auto" id="psatSelect" [(ngModel)]="psat1">
@@ -76,7 +83,8 @@
       </div>
     </div>
     <div class="sankey-padding w-100">
-      <app-psat-sankey [psat]="psat1.psat" [location]="'sankey-diagram'" [settings]="settings" [isBaseline]="psat1.psat.name == 'Baseline'"></app-psat-sankey>
+      <app-psat-sankey [psat]="psat1.psat" [location]="'sankey-diagram'" [settings]="settings"
+        [isBaseline]="psat1.psat.name == 'Baseline'"></app-psat-sankey>
     </div>
   </div>
   <!--end sankey-->
@@ -84,8 +92,8 @@
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-11 report-column">
-      <app-psat-report [psat]="_psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
-        (exportData)="exportData()" [containerHeight]="containerHeight"></app-psat-report>
+      <app-psat-report [psat]="_psat" [settings]="settings" [assessment]="assessment" [inPsat]="true"
+        (closeReport)="closeReport()" (exportData)="exportData()" [containerHeight]="containerHeight"></app-psat-report>
     </div>
   </div>
   <!--end report-->
@@ -108,8 +116,9 @@
 
 <!--modals-->
 <!--change/manage modify conditions modals-->
-<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="changeModificationModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}" *ngIf="_psat && _psat.modifications">
+<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"
+  *ngIf="_psat && _psat.modifications">
   <div class="modal-dialog modal-lg list-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -119,7 +128,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-modification-list [psat]="_psat" (save)="save()" [settings]="settings" [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
+        <app-modification-list [psat]="_psat" (save)="save()" [settings]="settings"
+          [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
       </div>
     </div>
   </div>
@@ -138,9 +148,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-add-modification *ngIf="showAdd" [psat]="_psat" [modifications]="_psat.modifications" (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
+        <app-add-modification *ngIf="showAdd" [psat]="_psat" [modifications]="_psat.modifications"
+          (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
       </div>
     </div>
   </div>
 </div>
 <!--end create modified condition modal-->
+
+<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'"></app-toast>

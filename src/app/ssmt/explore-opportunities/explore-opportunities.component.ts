@@ -38,7 +38,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   baselineSankey: SSMT;
   modificationSankey: SSMT;
-
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
   constructor(private ssmtService: SsmtService) {
     // this.toastyConfig.theme = 'bootstrap';
     // this.toastyConfig.position = 'bottom-right';
@@ -53,6 +54,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     if (changes.containerHeight) {
       if (!changes.containerHeight.firstChange) {
         this.getContainerHeight();
+        this.checkExploreOpps();
       }
     }
     if (changes.modificationIndex) {
@@ -61,13 +63,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    //this.exploreOppsToast.emit(false);
-  }
-
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
+      this.checkExploreOpps();
     }, 100);
   }
 
@@ -106,21 +105,31 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
-  // checkToasty() {
-  //   if (this.modificationExists) {
-  //     if (!this.ssmt.modifications[this.modificationIndex].exploreOpportunities) {
-  //       this.exploreOppsToast.emit(true);
-  //       let toastOptions: ToastOptions = {
-  //         title: 'Explore Opportunities',
-  //         msg: 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.',
-  //         showClose: true,
-  //         timeout: 10000000,
-  //         theme: 'default'
-  //       }
-  //       this.toastyService.warning(toastOptions);
-  //     } else {
-  //       this.exploreOppsToast.emit(false);
-  //     }
-  //   }
-  // }
+  checkExploreOpps() {
+    if (this.modificationExists) {
+      if (!this.ssmt.modifications[this.modificationIndex].exploreOpportunities) {
+        let title: string = 'Explore Opportunities';
+        let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
+        this.openToast(title, body);
+        this.exploreOppsToast.emit(false);
+      }else if(this.showToast){
+        this.hideToast();
+      }
+    }
+  }
+
+  openToast(title: string, body: string) {
+    this.toastData.title = title;
+    this.toastData.body = body;
+    this.showToast = true;
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
+  }
 }
