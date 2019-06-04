@@ -39,6 +39,7 @@ export class CompressedAirReductionCardComponent implements OnInit {
 
   ngOnInit() {
     this.compressedAirReductionResults = this.compressedAirReductionService.getResults(this.settings, this.compressedAirReduction.baseline, this.compressedAirReduction.modification);
+    console.log(this.compressedAirReductionResults)
     this.percentSavings = (this.compressedAirReductionResults.annualCostSavings / this.treasureHunt.currentEnergyUsage.compressedAirCosts) * 100;
     //electricity utility
     if (this.compressedAirReduction.baseline[0].utilityType == 1) {
