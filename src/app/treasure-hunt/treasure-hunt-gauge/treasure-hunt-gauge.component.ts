@@ -53,7 +53,7 @@ export class TreasureHuntGaugeComponent implements OnInit {
       bindto: this.tHuntChart.nativeElement,
       data: {
         columns: [
-          ['data', 0]
+          ['data', this.value]
         ],
         type: 'gauge',
         min: 0,
@@ -87,8 +87,8 @@ export class TreasureHuntGaugeComponent implements OnInit {
       }
     });
 
-    if (this.value && this.chart) {
-      this.updateChart();
-    }
+    // if (this.value && this.chart) {
+    //   this.updateChart();
+    // }
   }
 }

@@ -49,7 +49,7 @@ export class MotorDriveCardComponent implements OnInit {
 
   checkHideCard() {
     if (this.displayEnergyType == 'Electricity' || this.displayEnergyType == 'All') {
-      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Motor Drive') {
+      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Upgrade Motor Drive') {
         this.hideCard = false;
       } else {
         this.hideCard = true;

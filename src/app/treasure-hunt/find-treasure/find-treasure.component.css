@@ -1,28 +1,12 @@
-.fa.fa-lightbulb-o, .fa.fa-edit{
-    font-size: -webkit-xxx-large;
-}
-
-
 .calc-card-item:hover{
     cursor: pointer;
-    /* background: #CCD1D1; */
-    /* border-radius: 25px; */
     box-shadow: 0px 0px 5px 3px #2E4053
 }
-
-/* .hunt-item{
-    width: 225px;
-    padding-top: .75rem;
-    padding-right: .75rem;
-    padding-left: .75rem;
-} */
-
 
 .modal-dialog{
     top: 0px;
     min-width: 750px;
 }
-
 
 .modal-footer .btn.btn-sm{
     padding: 6px;
@@ -83,4 +67,16 @@ a:not([href]):not([tabindex]){
 
 .save-opportunity{
     width: 75px;
+}
+
+.calc-icon{
+    height: 90px;
+    width: 90px;
+    border-radius: 15px;
+}
+
+
+.calc-icon-div{
+    box-shadow: none;
+    border: none;
 }

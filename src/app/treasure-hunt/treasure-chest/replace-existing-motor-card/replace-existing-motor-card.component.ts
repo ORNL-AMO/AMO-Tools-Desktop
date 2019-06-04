@@ -50,7 +50,7 @@ export class ReplaceExistingMotorCardComponent implements OnInit {
 
   checkHideCard() {
     if (this.displayEnergyType == 'Electricity' || this.displayEnergyType == 'All') {
-      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Replace Existing') {
+      if (this.displayCalculatorType == 'All' || this.displayCalculatorType == 'Replace Existing Motor') {
         this.hideCard = false;
       } else {
         this.hideCard = true;

@@ -1,6 +1,6 @@
 <div class="mt-2 card">
   <div class="card-body justify-content-center">
-    <div class="row justify-content-center">
+    <div class="row m-0 justify-content-center">
       <div class="col-12 text-center treasure-hunt-item">
         <h5 class="mb-0 text-center">Total Cost Savings</h5>
         <app-treasure-hunt-gauge [value]="treasureHuntResults.percentSavings" [chartHeight]="125">
@@ -12,9 +12,9 @@
         <div class="text-center">Modified Costs: {{treasureHuntResults.totalModificationCost | currency:'USD'}}</div>
       </div>
     </div>
-    <div class="row justify-content-center treasure-hunt-item">
+    <div class="row m-0 justify-content-center">
       <!--electricity-->
-      <div class="col-4 text-center" *ngIf="treasureHuntResults.electricity.baselineEnergyCost">
+      <div class="col-4 text-center treasure-hunt-item" *ngIf="treasureHuntResults.electricity.baselineEnergyCost">
         <h6 class="mb-0 text-center pt-2">Electricity Savings</h6>
         <app-treasure-hunt-gauge [value]="treasureHuntResults.electricity.percentSavings" [chartHeight]="75">
         </app-treasure-hunt-gauge>
@@ -24,7 +24,7 @@
           {{treasureHuntResults.electricity.modifiedEnergyCost | currency:'USD'}}</span>
       </div>
       <!--natural gas-->
-      <div class="col-4 middle-border-item text-center treasure-hunt-item"
+      <div class="col-4 text-center treasure-hunt-item"
         *ngIf="treasureHuntResults.naturalGas.baselineEnergyCost">
         <h6 class="mb-0 text-center pt-2">Natural Gas Savings</h6>
         <app-treasure-hunt-gauge [value]="treasureHuntResults.naturalGas.percentSavings" [chartHeight]="75">

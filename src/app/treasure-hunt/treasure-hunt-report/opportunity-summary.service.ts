@@ -210,10 +210,10 @@ export class OpportunitySummaryService {
 
 
   //stand alone opp sheets
-  getOpportunitySheetSummaries(opportunitySheets: Array<OpportunitySheet>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+  getOpportunitySheetSummaries(opportunitySheets: Array<OpportunitySheet>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings, getAllResults?: boolean): Array<OpportunitySummary> {
     if (opportunitySheets) {
       opportunitySheets.forEach(oppSheet => {
-        if (oppSheet.selected) {
+        if (oppSheet.selected || getAllResults) {
           let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
           let oppSheetResults: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, settings);
           let numEnergyTypes: number = 0;

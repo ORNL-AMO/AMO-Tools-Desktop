@@ -22,6 +22,8 @@ export class TreasureChestComponent implements OnInit {
   settings: Settings;
   @Output('emitUpdateTreasureHunt')
   emitUpdateTreasureHunt = new EventEmitter<TreasureHunt>();
+  @Input()
+  containerHeight: number;
 
   @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
   @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
