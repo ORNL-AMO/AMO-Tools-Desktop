@@ -84,8 +84,12 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
           </span>
 
-          <span
-            *ngIf="opportunity.utilityType == 'Natural Gas' || opportunity.utilityType == 'Steam' || opportunity.utilityType == 'Other Fuel'">
+          <span *ngIf="opportunity.utilityType == 'Steam'">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+          </span>
+
+          <span *ngIf="opportunity.utilityType == 'Natural Gas' || opportunity.utilityType == 'Other Fuel'">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
           </span>
@@ -99,13 +103,17 @@
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
               </span>
 
+              <span *ngIf="result.utilityType == 'Steam'">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+              </span>
+
               <span *ngIf="result.utilityType == 'Water' || result.utilityType == 'Waste Water'">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
               </span>
 
-              <span
-                *ngIf="result.utilityType == 'Natural Gas' || result.utilityType == 'Steam' || result.utilityType == 'Other Fuel'">
+              <span *ngIf="result.utilityType == 'Natural Gas' || result.utilityType == 'Other Fuel'">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
               </span>

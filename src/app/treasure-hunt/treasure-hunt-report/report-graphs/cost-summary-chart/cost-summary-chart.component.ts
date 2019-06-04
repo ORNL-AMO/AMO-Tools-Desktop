@@ -42,7 +42,12 @@ export class CostSummaryChartComponent implements OnInit {
   yAxis: d3.Selection<any>;
   width: number;
   height: number;
-  margin: { top: number, right: number, bottom: number, left: number };
+  margin: { top: number, right: number, bottom: number, left: number } = {
+    top: 24,
+    right: 93,
+    bottom: 105,
+    left: 100
+  };
 
   canvasWidth: number;
   canvasHeight: number;
@@ -72,7 +77,6 @@ export class CostSummaryChartComponent implements OnInit {
   }
 
   resizeGraph() {
-    this.margin = { top: 24, right: 90, bottom: 80, left: 100 };
     this.width = this.chartContainerWidth - this.margin.left - this.margin.right;
     this.height = this.chartContainerHeight - this.margin.top - this.margin.bottom;
     this.makeGraph();

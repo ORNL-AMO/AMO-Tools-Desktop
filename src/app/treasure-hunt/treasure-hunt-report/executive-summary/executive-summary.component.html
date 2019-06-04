@@ -1,6 +1,6 @@
 <div class="d-flex" [ngClass]="{'flex-row' : title == 'Cost Summary', 'flex-column' : title != 'Cost Summary'}">
 
-  <div class="d-flex flex-column output-summary" #costSummaryChartContainer>
+  <div class="d-flex flex-column output-summary pb-5" #costSummaryChartContainer>
 
     <!-- <h4 class="show-print">Executive Summary</h4> -->
     <label class="group-label">{{title}}</label>
@@ -268,8 +268,8 @@
             Steam
           </td>
           <td *ngIf="showFullSummary">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
           </td>
           <td *ngIf="showFullSummary">
             {{treasureHuntResults.steam.baselineEnergyUsage | number:'1.0-1'}}
