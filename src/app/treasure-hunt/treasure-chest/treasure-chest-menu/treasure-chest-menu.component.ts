@@ -26,7 +26,7 @@ export class TreasureChestMenuComponent implements OnInit {
 
   energyTypeOptions: Array<{ value: string, numCalcs: number }> = [];
   calculatorTypeOptions: Array<{ value: string, numCalcs: number }> = [];
-  constructor(private opportunitySheetService: OpportunitySheetService) { }
+  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService) { }
 
   ngOnInit() {
     this.setEnergyTypeOptions();
@@ -37,6 +37,91 @@ export class TreasureChestMenuComponent implements OnInit {
     this.setCalculatorType();
     this.emitChangeEnergyType.emit(this.displayEnergyType);
     this.setCalculatorOptions();
+  }
+
+  getNumberOfCalcs() {
+    let numCalcs: number = 0;
+    if (this.treasureHunt.opportunitySheets) {
+      numCalcs = numCalcs + this.getNumberOfOppSheetCalcs();
+    }
+    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Electricity') {
+      numCalcs = numCalcs + this.getNumberOfElectricityCalcs();
+    }
+    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Natural Gas') {
+      numCalcs = numCalcs + this.getNumberOfNaturalGasCalcs();
+    }
+    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Compressed Air') {
+      numCalcs = numCalcs + this.getNumberOfCompressedAirCalcs();
+    }
+    return numCalcs;
+  }
+
+  getNumberOfElectricityCalcs(): number {
+    let numElectricity: number = 0;
+    if (this.treasureHunt.lightingReplacements && this.treasureHunt.lightingReplacements.length != 0) {
+      numElectricity = this.treasureHunt.lightingReplacements.length;
+    }
+    if (this.treasureHunt.motorDrives && this.treasureHunt.motorDrives.length != 0) {
+      numElectricity = numElectricity + this.treasureHunt.motorDrives.length;
+    }
+    if (this.treasureHunt.replaceExistingMotors && this.treasureHunt.replaceExistingMotors.length != 0) {
+      numElectricity = numElectricity + this.treasureHunt.replaceExistingMotors.length;
+    }
+    if (this.treasureHunt.electricityReductions && this.treasureHunt.electricityReductions.length != 0) {
+      numElectricity = numElectricity + this.treasureHunt.electricityReductions.length;
+    }
+
+    if (this.treasureHunt.compressedAirReductions && this.treasureHunt.compressedAirReductions.length != 0) {
+      this.treasureHunt.compressedAirReductions.forEach(reduction => {
+        if (reduction.baseline[0].utilityType == 1) {
+          numElectricity++;
+        }
+      })
+    }
+    return numElectricity;
+  }
+
+  getNumberOfNaturalGasCalcs(): number {
+    let numGas: number = 0;
+    if (this.treasureHunt.naturalGasReductions && this.treasureHunt.naturalGasReductions.length != 0) {
+      numGas = numGas + this.treasureHunt.naturalGasReductions.length;
+    }
+    return numGas;
+  }
+
+  getNumberOfCompressedAirCalcs(): number {
+    let numCompressedAir: number = 0;
+    if (this.treasureHunt.compressedAirReductions && this.treasureHunt.compressedAirReductions.length != 0) {
+      this.treasureHunt.compressedAirReductions.forEach(reduction => {
+        if (reduction.baseline[0].utilityType == 0) {
+          numCompressedAir++;
+        }
+      })
+    }
+    return numCompressedAir;
+  }
+
+  getNumberOfOppSheetCalcs(): number {
+    if (this.treasureHunt.opportunitySheets) {
+      let numCalcs: number = this.treasureHunt.opportunitySheets.length;
+      if (this.displayEnergyType != 'All') {
+        let summaries = this.opportunitySummaryService.getOpportunitySheetSummaries(this.treasureHunt.opportunitySheets, new Array(), this.settings, true);
+        let filteredItems = _.filter(summaries, (summary) => {
+          if (summary.utilityType == this.displayEnergyType) {
+            return summary
+          } else if (summary.utilityType == 'Mixed' && summary.mixedIndividualResults) {
+            let filteredMixedItems = _.filter(summary.mixedIndividualResults, (mixedSummary) => { return mixedSummary.utilityType == this.displayEnergyType });
+            if (filteredMixedItems.length != 0) {
+              return summary;
+            }
+          }
+        })
+        numCalcs = filteredItems.length;
+      }
+      return numCalcs;
+    } else {
+      return 0;
+    }
   }
 
   setCalculatorType() {
@@ -82,7 +167,7 @@ export class TreasureChestMenuComponent implements OnInit {
     }
     //set opp sheet option
     this.setOppSheetOption();
-    let numCalcs = _.sumBy(this.energyTypeOptions, (option) => { return option.numCalcs });
+    let numCalcs = this.getNumberOfCalcs();
 
     this.energyTypeOptions.unshift({ value: 'All', numCalcs: numCalcs });
     this.calculatorTypeOptions.unshift({ value: 'All', numCalcs: numCalcs });
@@ -90,54 +175,48 @@ export class TreasureChestMenuComponent implements OnInit {
 
   setCalculatorOptions() {
     this.calculatorTypeOptions = new Array();
-    let numCalcs: number = 0;
     //electricity
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Electricity') {
-      numCalcs = numCalcs + this.setElectricityCalcs();
+      this.setElectricityCalcs();
     }
     //natural gas
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Natural Gas') {
-      numCalcs = numCalcs + this.setNaturalGas();
+      this.setNaturalGas();
     }
     // water
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Water') {
-      numCalcs = numCalcs + this.setWater();
+      this.setWater();
     }
     // wasteWater
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Waste Water') {
-      numCalcs = numCalcs + this.setWasteWater();
+      this.setWasteWater();
     }
     // otherFuel
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Other Fuel') {
-      numCalcs = numCalcs + this.setOtherFuel();
+      this.setOtherFuel();
     }
     // compressedAir
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Compressed Air') {
-      numCalcs = numCalcs + this.setCompressedAir();
+      this.setCompressedAir();
     }
     // steam
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Steam') {
-      numCalcs = numCalcs + this.setSteam();
+      this.setSteam();
     }
 
     //set opp sheet option
     this.setOppSheetOption();
 
-
+    let numCalcs: number = this.getNumberOfCalcs();
     this.calculatorTypeOptions.unshift({ value: 'All', numCalcs: numCalcs });
   }
 
   setOppSheetOption() {
     if (this.treasureHunt.opportunitySheets.length && this.treasureHunt.opportunitySheets.length != 0) {
-      // let numCalcs: number = this.treasureHunt.opportunitySheets.length;
-      // if (this.displayEnergyType != 'All') {
-      //   let summaries = this.opportunitySummaryService.getOpportunitySheetSummaries(this.treasureHunt.opportunitySheets, new Array(), this.settings, true);
-      //   let filteredItems = _.filter(summaries, (summary) => {
-      //     return summary.utilityType == this.displayEnergyType;
-      //   })
-      //   numCalcs = filteredItems.length;
-      // }
-      this.calculatorTypeOptions.push({ value: 'Opportunity Sheet', numCalcs: undefined });
+      let numCalcs: number = this.getNumberOfOppSheetCalcs();
+      if (numCalcs != 0) {
+        this.calculatorTypeOptions.push({ value: 'Opportunity Sheet', numCalcs: numCalcs });
+      }
     }
   }
 
