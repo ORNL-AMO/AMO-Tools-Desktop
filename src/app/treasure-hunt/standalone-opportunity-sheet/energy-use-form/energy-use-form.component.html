@@ -17,7 +17,7 @@
     <div class="input-group pl-2">
       <input type="number" class="form-control" [(ngModel)]="energyItem.amount" name="{{'amount_'+index}}"
         (input)="save()" (focus)="focusField('energyUseAmount')">
-      <span class="input-group-addon units">{{getEnergyUnit(energyItem.type)}}/yr</span>
+      <span class="input-group-addon units" [innerHTML]="getEnergyUnit(energyItem.type) + '/yr'"></span>
       <span class="input-group-addon units remove-item" (click)="removeEnergyItem(index)">
         <span class="fa fa-times"></span>
       </span>

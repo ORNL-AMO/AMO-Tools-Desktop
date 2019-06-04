@@ -189,11 +189,19 @@ export class CompressedAirReductionService {
       annualConsumptionReduction: annualConsumptionReduction
     }
     if (modificationResults) {
+      if (baselineInpCpy[0].utilityType == 0) {
+        //use consumption reduction to energy use..
+        compressedAirReductionResults.baselineResults.energyUse = compressedAirReductionResults.baselineResults.consumption;
+        compressedAirReductionResults.modificationResults.energyUse = compressedAirReductionResults.modificationResults.consumption;
+      }
+
       compressedAirReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
       compressedAirReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
       compressedAirReductionResults.annualFlowRateReduction = baselineResults.flowRate - modificationResults.flowRate;
       compressedAirReductionResults.annualConsumptionReduction = baselineResults.consumption - modificationResults.consumption;
     }
+
+
     return compressedAirReductionResults;
   }
 
