@@ -24,7 +24,7 @@ export class TreasureHuntReportService {
     let electricityUtilityUsage: UtilityUsageData = this.getUtilityUsageData(electricitySummaries, 'Electricity', currentEnergyUsage.electricityUsage, currentEnergyUsage.electricityCosts, mixedSummaries);
     //Compresssed Air
     let compressedAirSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Compressed Air' && summary.selected == true });
-    let compressedAirUtilityUsage: UtilityUsageData = this.getUtilityUsageData(compressedAirSummaries, 'Compresssed Air', currentEnergyUsage.compressedAirUsage, currentEnergyUsage.compressedAirCosts, mixedSummaries)
+    let compressedAirUtilityUsage: UtilityUsageData = this.getUtilityUsageData(compressedAirSummaries, 'Compressed Air', currentEnergyUsage.compressedAirUsage, currentEnergyUsage.compressedAirCosts, mixedSummaries)
     //Natural Gas
     let naturalGasSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Natural Gas' && summary.selected == true });
     let naturalGasUtilityUsage: UtilityUsageData = this.getUtilityUsageData(naturalGasSummaries, 'Natural Gas', currentEnergyUsage.naturalGasUsage, currentEnergyUsage.naturalGasCosts, mixedSummaries)
