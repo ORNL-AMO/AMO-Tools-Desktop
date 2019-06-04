@@ -48,6 +48,23 @@ export class SystemCurveService {
     return (head * flow * specificGravity) / 3960;
   }
 
+  initDefaultPoints(point: number) {
+    if (point === 1) {
+      return this.formBuilder.group({
+        flowRate: [0, [Validators.required, Validators.min(0)]],
+        head: [0, [Validators.required, Validators.min(0)]],
+        pointAdjustment: ['']
+      });
+    }
+    else {
+      return this.formBuilder.group({
+        flowRate: [600, [Validators.required, Validators.min(0)]],
+        head: [1000, [Validators.required, Validators.min(0)]],
+        pointAdjustment: ['']
+      });
+    }
+  }
+
   initPumpPointForm(psat?: PSAT): FormGroup {
     if (psat) {
       return this.formBuilder.group({
@@ -68,12 +85,12 @@ export class SystemCurveService {
     if (psat) {
       return this.formBuilder.group({
         specificGravity: [psat.inputs.specific_gravity, [Validators.required, Validators.min(0)]],
-        systemLossExponent: [1.420, [Validators.required, Validators.min(0)]]
+        systemLossExponent: [1.9, [Validators.required, Validators.min(0)]]
       });
     } else {
       return this.formBuilder.group({
         specificGravity: [1.0, [Validators.required, Validators.min(0)]],
-        systemLossExponent: [1.000, [Validators.required, Validators.min(0)]]
+        systemLossExponent: [1.9, [Validators.required, Validators.min(0)]]
       });
     }
   }

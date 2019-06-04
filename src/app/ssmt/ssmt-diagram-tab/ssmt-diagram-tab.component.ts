@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { SSMT, SSMTInputs } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
@@ -18,6 +18,14 @@ export class SsmtDiagramTabComponent implements OnInit {
   @Input()
   containerHeight: number;
 
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setScaleValue();
+  }
+
+  @ViewChild('diagramContainer') diagramContainer: ElementRef;
+
   outputData: SSMTOutput;
   inputData: SSMTInputs;
   tabSelect: string = 'results';
@@ -27,7 +35,10 @@ export class SsmtDiagramTabComponent implements OnInit {
   selectedSSMT: SSMT;
   dataCalculated: boolean = false;
   displayCalculators: boolean = false;
-  constructor(private calculateModelService: CalculateModelService, private ssmtService: SsmtService) { }
+  scaleValue: number = 100;
+
+  setDiagramPixelWidth: number = 900;
+  constructor(private calculateModelService: CalculateModelService, private ssmtService: SsmtService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.ssmt.name = 'Baseline';
@@ -43,6 +54,22 @@ export class SsmtDiagramTabComponent implements OnInit {
     } else {
       this.selectedSSMT = this.ssmt;
       this.calculateResults();
+    }
+  }
+
+  ngAfterViewInit() {
+    this.setScaleValue();
+  }
+
+  setScaleValue() {
+    if (this.diagramContainer) {
+      let containerWidth: number = this.diagramContainer.nativeElement.clientWidth;
+      let scaleDecimal: number = containerWidth / this.setDiagramPixelWidth - .025;
+      this.scaleValue = scaleDecimal * 100;
+      this.cd.detectChanges();
+    } else {
+      this.scaleValue = 100;
+      this.cd.detectChanges();
     }
   }
 
@@ -64,6 +91,7 @@ export class SsmtDiagramTabComponent implements OnInit {
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;
     this.dataCalculated = true;
+    this.selectedTable = 'default';
   }
 
   calculateResultsWithMarginalCosts() {
@@ -87,5 +115,13 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   selectTable(str: string) {
     this.selectedTable = str;
+  }
+
+  scaleUp() {
+    this.scaleValue = this.scaleValue + 5;
+  }
+
+  scaleDown() {
+    this.scaleValue = this.scaleValue - 5;
   }
 }

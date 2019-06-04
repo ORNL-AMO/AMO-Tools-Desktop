@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { HeaderOutputObj, ProcessSteamUsage, SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
-import { HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-header-diagram',
@@ -24,9 +22,39 @@ export class HeaderDiagramComponent implements OnInit {
   settings: Settings;
   @Input()
   ventedLowPressureSteam: SteamPropertiesOutput;
+  @Output('emitSelectEquipment')
+  emitSelectEquipment = new EventEmitter<string>();
+
+  steamClasses: Array<string>;
+  condensateClasses: Array<string>;
+  pressureClasses: Array<string>;
+  condensingWarning: boolean;
   constructor() { }
 
   ngOnInit() {
+
+  }
+
+  ngOnChanges() {
+    this.setClasses();
+    this.checkWarnings();
+  }
+
+  setClasses() {
+    this.steamClasses = [this.pressureLevel];
+    this.pressureClasses = [this.pressureLevel];
+    if (this.steamUsage.massFlow < 1e-3) {
+      this.steamClasses = ['no-steam-flow'];
+    }
+    this.condensateClasses = ['condensate'];
+    if (this.condensate.massFlow < 1e-3) {
+      this.condensateClasses = ['no-steam-flow'];
+    }
+
+    if (this.header.massFlow < 1e-3) {
+      this.pressureClasses.push('noSteamFlow');
+    }
+
   }
 
   hoverEquipment(str: string) {
@@ -47,5 +75,29 @@ export class HeaderDiagramComponent implements OnInit {
 
   hoverProcessUsageInlet() {
     this.emitSetHover.emit(this.pressureLevel + 'ProcessSteamInletHovered');
+  }
+
+  checkWarnings() {
+    if (this.header.quality < 1) {
+      this.condensingWarning = true;
+    } else {
+      this.condensingWarning = false;
+    }
+  }
+
+  selectProcessUsage(){
+    this.emitSelectEquipment.emit(this.pressureLevel + 'ProcessSteamHovered');
+  }
+
+  selectCondensate(){
+    this.emitSelectEquipment.emit(this.pressureLevel + 'CondensateHovered');
+  }
+
+  selectHeader() {
+    this.emitSelectEquipment.emit(this.pressureLevel + 'Hovered');
+  }
+
+  selectProcessUsageInlet(){
+    this.emitSelectEquipment.emit(this.pressureLevel + 'ProcessSteamInletHovered');
   }
 }

@@ -490,7 +490,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
   }
 
   hoverHeatExchangerColdOutlet() {
-    this.label = 'Makeup Water';
+    this.label = 'Make-up Water';
     let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
     this.steam = {
       pressure: heatExchangerOutput.coldOutletPressure,

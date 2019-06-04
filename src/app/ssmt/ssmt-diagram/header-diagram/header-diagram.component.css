@@ -9,11 +9,24 @@
     color: white;
 }
 
+.highPressure.noSteamFlow .header-tube,
+.mediumPressure.noSteamFlow .header-tube,
+.lowPressure.noSteamFlow .header-tube{
+    background-color: #D5D8DC;
+    color: black;
+}
+
+.noSteamFlow .fa{
+    color: #D5D8DC;
+}
 
 .highPressure .process-usage-holder .process-usage{
     border: #C0392B solid 3px;
 }
 
+.highPressure .hidden-chevron{
+    color: #C0392B;
+}
 
 .mediumPressure .header-tube{
     background-color: #FFA726;
@@ -21,6 +34,10 @@
 
 .mediumPressure .process-usage-holder .process-usage{
     border: #FFA726 solid 3px;
+}
+
+.mediumPressure .hidden-chevron{
+    color: #FFA726;
 }
 
 .lowPressure .header-tube{
@@ -32,12 +49,16 @@
      border: #FFEB3B solid 3px; 
 }
 
+.lowPressure .hidden-chevron{
+    color: #FFEB3B;
+}
+
 .condensate{
     background-color: #283593;
     color: white;
 }
 
-.highPressure .condensate {
+.highPressure .condensate, .highPressure .no-steam-flow:not(.process-usage) {
     border-top-right-radius: 25px;
 }
 
@@ -46,7 +67,15 @@
 }
 
 
-.header-data-holder, .process-usage-holder, .condensate-holder, .vented-steam-holder{
+.condensing-warning-holder .condensing-warning{
+    position: absolute;
+    font-size: 40px;
+    color: red;
+    left: 10px;
+    top: 5px;
+}
+
+.header-data-holder, .process-usage-holder, .condensate-holder, .vented-steam-holder, .condensing-warning-holder{
     position: relative;
 }
 
@@ -135,4 +164,12 @@
     height: 40px;
     left: 110px;
     bottom: 19px;
+}
+
+.highPressure .process-usage-holder .process-usage.no-steam-flow,
+.mediumPressure .process-usage-holder .process-usage.no-steam-flow,
+.lowPressure .process-usage-holder .process-usage.no-steam-flow{
+    background-color: #D5D8DC;
+    /* color: #D5D8DC; */
+    border: #808B96 solid 3px; 
 }

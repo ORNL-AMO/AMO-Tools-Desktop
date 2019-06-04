@@ -5,10 +5,10 @@
     border: none;
     padding: 0px 10px;
     padding: 0;
+    text-align: left;
 }
 .output-summary .table td {
-    padding: 0px 8px;
-    vertical-align: middle;
+    text-align: left;
 }
 
 
@@ -23,7 +23,7 @@
 
 tr > td:not(:first-child),
 tr > th:not(:first-child){
-    text-align: center;
+   /* text-align: center;*/
 }
 
 .tr-underline {

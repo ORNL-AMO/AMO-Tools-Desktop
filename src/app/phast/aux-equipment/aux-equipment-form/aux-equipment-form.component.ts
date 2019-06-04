@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuxEquipment } from '../../../shared/models/phast/auxEquipment';
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-aux-equipment-form',
   templateUrl: './aux-equipment-form.component.html',
@@ -14,6 +15,9 @@ export class AuxEquipmentFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  settings: Settings;
+
   voltageError: string = null;
   constructor() { }
 
@@ -44,5 +48,17 @@ export class AuxEquipmentFormComponent implements OnInit {
 
   save() {
     this.emitSave.emit(true);
+  }
+
+  setMotorPower(str: string){
+    this.equipment.motorPower = str;
+    this.focusField('motorPower');
+    this.calculate();
+  }
+
+  setMotorPhase(str: string){
+    this.equipment.motorPhase = str;
+    this.focusField('motorPhase');
+    this.calculate();
   }
 }

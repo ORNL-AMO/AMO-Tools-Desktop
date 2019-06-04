@@ -48,7 +48,7 @@
                 <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts"
                     [numFsats]="numFsats" [numPsats]="numPsats" [numSsmt]="numSsmt" (showPhastModal)="showPhastModal()"
                     (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"
-                    (showFsatModal)="showFsatModal()"></app-report-summary>
+                    (showFsatModal)="showFsatModal()" (showSsmtModal)="showSsmtModal()"></app-report-summary>
             </div>
         </div>
     </div>
@@ -202,6 +202,7 @@
             </div>
 
             <!-- app layout -->
+            <div>
             <div *ngIf="!printView">
                 <div *ngFor="let item of _psatAssessments" id="{{'assessment_'+item.assessment.id}}"
                     class="assessment-item">
@@ -235,7 +236,7 @@
     <!-- End .report-container -->
 </div>
 
-<div *ngIf="!assessmentsGathered" class="gathering-assessments d-flex justify-content-center align-items-center">
+<div *ngIf="!assessmentsGathered" class="gathering-assessments d-flex justify-content-center align-items-center skyline">
     <div class="main-content">
         <div class="spinner text-center">
             <div class="bounce1"></div>
@@ -317,6 +318,26 @@
         </div>
     </div>
 </div>
+
+<!--ssmt rollup modal -->
+<div bsModal #ssmtRollupModal="bs-modal" class="ssmt-modal modal fade ssmt" tabindex="-1" role="dialog"
+    aria-labelledby="ssmtRollupModal" aria-hidden="true" [config]="{backdrop: 'fixed'}" *ngIf="assessmentsGathered">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>SSMT Rollup</h5>
+                <button class="close" aria-label="Close" (click)="hideSsmtModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body panel-container ssmt scroll-item">
+                <app-ssmt-rollup [settings]="settings"></app-ssmt-rollup>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!--units modal-->
 <div bsModal #unitModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unitModal"

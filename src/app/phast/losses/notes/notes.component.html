@@ -69,3 +69,15 @@
 <div class="note-form" *ngIf="currentTab.componentStr == 'operations'">
   <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.operationsNotes" placeholder="Add note for operations changes"></textarea>
 </div>
+
+<div *ngIf="currentTab.componentStr === '' || currentTab.componentStr === null || currentTab.componentStr === undefined" class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Explore Opportunities Notes
+    <br>
+    <small class="text-muted">
+      Select a loss type to edit notes.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+</div>
+

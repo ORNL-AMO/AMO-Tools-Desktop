@@ -75,6 +75,7 @@ export class SsmtReportComponent implements OnInit {
     if (this.assessment.ssmt.setupDone) {
       setTimeout(() => {
         let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, true);
+        this.assessment.ssmt.outputData = resultData.outputData;
         this.baselineOutput = resultData.outputData;
         this.baselineInputData = resultData.inputData;
         this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputData, this.settings, this.assessment.ssmt);

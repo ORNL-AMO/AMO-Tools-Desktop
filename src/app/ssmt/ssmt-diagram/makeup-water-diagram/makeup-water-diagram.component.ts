@@ -21,17 +21,28 @@ export class MakeupWaterDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
   
+
+  makeupWaterClasses: Array<string>;
   constructor() { }
 
   ngOnInit() {
   }
 
+  ngOnChanges(){
+    this.setClasses();
+  }
+  setClasses(){
+    this.makeupWaterClasses = [];
+    if(this.makeupWater.massFlow < 1e-3){
+      this.makeupWaterClasses = ['no-steam-flow'];
+    }
+  }
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }
 
-  selectHeatExchanger() {
-    this.emitSelectEquipment.emit('heat-exchanger');
+  selectEquipment(str:string) {
+    this.emitSelectEquipment.emit(str);
   }
 }

@@ -1,40 +1,44 @@
 <div class="d-flex flex-column h-100 w-100 prv-diagram">
   <div class="d-flex chevron-one flex-fill">
-    <div class="d-flex" [ngClass]="inletSteam">
+    <div class="d-flex" [ngClass]="inletSteamClasses">
       <div class="inlet-mass-flow-holder">
-        <span class="inlet-mass-flow">
+        <span class="inlet-mass-flow" *ngIf="prv.inletMassFlow != 0">
           {{prv.inletMassFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
       </div>
-      <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')"></span>
+      <span class="fa fa-chevron-down mb-auto" (mouseenter)="hoverInlet()" (mouseleave)="hoverEquipment('default')"
+        (click)="selectInlet()"></span>
     </div>
   </div>
 
   <div class="d-flex align-items-center flex-fill w-100">
-    <div class="d-flex justify-content-center" (click)="selectEquipment()" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
+    <div class="d-flex justify-content-center" (mouseenter)="hoverPRV()" (mouseleave)="hoverEquipment('default')">
       <div class="prv-img-holder">
-        <div class="feedwater" *ngIf="prv.feedwaterMassFlow != undefined">
-          <span class="fa fa-chevron-right" (mouseenter)="hoverFeedwater()" (mouseleave)="hoverPRV()"></span>
+        <div class="feedwater" [ngClass]="feedwaterClasses" *ngIf="prv.feedwaterMassFlow != undefined">
+          <span class="fa fa-chevron-right" (mouseenter)="hoverFeedwater()" (mouseleave)="hoverPRV()"
+            (click)="selectFeedwater()"></span>
         </div>
-        <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined">
+        <span class="feedwater-mass-flow" *ngIf="prv.feedwaterMassFlow != undefined && prv.feedwaterMassFlow != 0">
           {{prv.feedwaterMassFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
-        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img">
-        <span class="prv-label">PRV</span>
+        <img src="assets/images/calculator-icons/steam-icons/modeler/modeler-prv.png" class="prv-img"
+          (click)="selectEquipment()">
+        <span class="prv-label" (click)="selectEquipment()">PRV</span>
       </div>
     </div>
   </div>
 
   <div class="d-flex chevron-one">
-    <div class="d-flex align-items-end" [ngClass]="outletSteam">
+    <div class="d-flex align-items-end" [ngClass]="outletSteamClasses">
       <div class="d-flex flex-fill outlet-temp-holder">
-        <span class="outlet-temp">
+        <span class="outlet-temp" *ngIf="prv.inletMassFlow != 0">
           {{prv.outletTemperature | number:'1.0-1'}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </span>
-        <span class="fa fa-chevron-down" (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')"></span>
+        <span class="fa fa-chevron-down" (mouseenter)="hoverOutlet()" (mouseleave)="hoverEquipment('default')"
+          (click)="selectOutlet()"></span>
       </div>
     </div>
   </div>

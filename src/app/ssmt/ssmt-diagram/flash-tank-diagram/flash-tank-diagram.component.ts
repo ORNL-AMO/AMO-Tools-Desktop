@@ -21,11 +21,34 @@ export class FlashTankDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  steamPressureClasses: Array<string>;
+  outletCondensateClasses: Array<string>;
+  inletCondensateClasses: Array<string>;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  ngOnChanges() {
+    this.setClasses();
+  }
+
+  setClasses() {
+    this.steamPressureClasses = [this.steamPressure];
+    this.outletCondensateClasses = ['condensate'];
+    this.inletCondensateClasses = ['condensate'];
+    if (this.flashTank.outletGasMassFlow < 1e-3) {
+      this.steamPressureClasses = ['no-steam-flow']
+    }
+
+    if (this.flashTank.outletLiquidMassFlow < 1e-3) {
+      this.outletCondensateClasses = ['no-steam-flow'];
+    }
+    if (this.flashTank.inletWaterMassFlow < 1e-3) {
+      this.inletCondensateClasses = ['no-steam-flow'];
+    }
+  }
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);
   }
@@ -34,11 +57,23 @@ export class FlashTankDiagramComponent implements OnInit {
     this.emitSetHover.emit('condensateHovered');
   }
 
+  selectCondensate() {
+    this.emitSelectEquipment.emit('condensateHovered');
+  }
+
   hoverHeader() {
     if (this.steamPressure === 'medium-pressure') {
       this.emitSetHover.emit('mediumPressureHovered');
     } else if (this.steamPressure === 'low-pressure') {
       this.emitSetHover.emit('lowPressureHovered');
+    }
+  }
+
+  selectHeader() {
+    if (this.steamPressure === 'medium-pressure') {
+      this.emitSelectEquipment.emit('mediumPressureHovered');
+    } else if (this.steamPressure === 'low-pressure') {
+      this.emitSelectEquipment.emit('lowPressureHovered');
     }
   }
 
@@ -66,9 +101,23 @@ export class FlashTankDiagramComponent implements OnInit {
     }
   }
 
+  selectOutletGas(){
+    if (this.flashTankType === 'highPressure') {
+      this.emitSelectEquipment.emit('highPressureFlashTankOutletSteamHovered');
+    } else if (this.flashTankType === 'mediumPressure') {
+      this.emitSelectEquipment.emit('mediumPressureFlashTankOutletSteamHovered');
+    }
+  }
+
   hoverInlet() {
     if (this.flashTankType === 'mediumPressure') {
       this.emitSetHover.emit('mediumPressureFlashTankInletCondensateHovered');
+    }
+  }
+
+  selectInlet(){
+    if (this.flashTankType === 'mediumPressure') {
+      this.emitSelectEquipment.emit('mediumPressureFlashTankInletCondensateHovered');
     }
   }
 
@@ -77,6 +126,14 @@ export class FlashTankDiagramComponent implements OnInit {
       this.emitSetHover.emit('highPressureFlashTankOutletCondensateHovered');
     } else if (this.flashTankType === 'mediumPressure') {
       this.emitSetHover.emit('mediumPressureFlashTankOutletCondensateHovered');
+    }
+  }
+
+  selectOutlet() {
+    if (this.flashTankType === 'highPressure') {
+      this.emitSelectEquipment.emit('highPressureFlashTankOutletCondensateHovered');
+    } else if (this.flashTankType === 'mediumPressure') {
+      this.emitSelectEquipment.emit('mediumPressureFlashTankOutletCondensateHovered');
     }
   }
 }

@@ -81,7 +81,7 @@
                     </dl>
                 </li>
                 <li *ngIf="numSsmt != 0" [hidden]="showSummary == 'closed'" class="ssmt-summary"
-                    (click)="showSsmtModal()" [ngClass]="{'disabled': numSsmt == 0}">
+                    (click)="showSteamModal()" [ngClass]="{'disabled': numSsmt == 0}">
                     <app-ssmt-summary [numSsmt]="numSsmt" [settings]="settings"></app-ssmt-summary>
                 </li>
                 <li *ngIf="numSsmt == 0" [hidden]="showSummary == 'closed'" class="coming-soon hide-print">

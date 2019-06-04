@@ -330,7 +330,7 @@ export class PumpCurveGraphComponent implements OnInit {
   }
 
   getYScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Head: number, systemPoint2Head: number) {
-    return this.pumpCurveService.getYScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, this.pumpCurve, dataBaseline, dataModification, systemPoint1Head, systemPoint2Head);
+    return this.pumpCurveService.getYScaleMax(this.graphPumpCurve, dataModification.length > 0 ? this.graphModificationCurve : false, this.graphSystemCurve, this.pumpCurve, dataBaseline, dataModification, systemPoint1Head, systemPoint2Head);
   }
 
 
@@ -338,6 +338,8 @@ export class PumpCurveGraphComponent implements OnInit {
     //init arrays for baseline, mod, and system data
     let data = new Array<{ x: number, y: number }>();
     let dataModification = new Array<{ x: number, y: number }>();
+    let tmpMaxData;
+    let tmpMaxDataModification;
     let dataSystem = new Array<{ x: number, y: number, fluidPower: number }>();
     //this array will be dummy data used to avoid visual bug with the scale-setting array
     let dataScale = new Array<{ x: number, y: number }>();
@@ -349,18 +351,19 @@ export class PumpCurveGraphComponent implements OnInit {
     //check if difference for mod and populate mod array
     if (this.graphPumpCurve) {
       data = this.getData();
+      tmpMaxData = this.pumpCurveService.getMaxYValue(data);
       if (this.graphModificationCurve) {
         dataModification = this.getModifiedData(this.pumpCurve.baselineMeasurement, this.pumpCurve.modifiedMeasurement);
+        tmpMaxDataModification = this.pumpCurveService.getMaxYValue(dataModification);
       }
     }
+
     this.initColumnTitles();
     //x and y scales are required for system curve data, need to check max x/y values from all lines
     this.maxX = this.getXScaleMax(data, dataModification, this.pointOne.form.controls.flowRate.value, this.pointTwo.form.controls.flowRate.value);
     this.maxY = this.getYScaleMax(data, dataModification, this.pointOne.form.controls.head.value, this.pointTwo.form.controls.head.value);
     let paddingX = this.maxX.x * 0.1;
     let paddingY = this.maxY.y * 0.1;
-    this.maxX.x = this.maxX.x + paddingX;
-    this.maxY.y = this.maxY.y + paddingY;
     //reset and init chart area
     this.ngChart = this.lineChartHelperService.clearSvg(this.ngChart);
     this.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
@@ -368,9 +371,9 @@ export class PumpCurveGraphComponent implements OnInit {
     this.svg = this.lineChartHelperService.appendRect(this.svg, this.width, this.height);
     //create x and y graph scales
     let xRange: { min: number, max: number } = { min: 0, max: this.width };
-    let xDomain: { min: number, max: number } = { min: 0, max: this.maxX.x };
+    let xDomain: { min: number, max: number } = { min: 0, max: this.maxX.x + paddingX };
     let yRange: { min: number, max: number } = { min: this.height, max: 0 };
-    let yDomain: { min: number, max: number } = { min: 0, max: this.maxY.y };
+    let yDomain: { min: number, max: number } = { min: 0, max: this.maxY.y + paddingY };
     this.x = this.lineChartHelperService.setScale("linear", xRange, xDomain);
     this.y = this.lineChartHelperService.setScale("linear", yRange, yDomain);
     let tickFormat = d3.format("d");
@@ -395,6 +398,12 @@ export class PumpCurveGraphComponent implements OnInit {
       else {
         let tmpMaxX = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.flow; });
         let tmpMaxY = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.head; });
+        if (data[0].y > tmpMaxY.head) {
+          data[0] = {
+            x: data[0].x,
+            y: tmpMaxY.head
+          };
+        }
         for (let i = 0; i < data.length; i++) {
           if (data[i].x > tmpMaxX.flow) {
             data[i] = {
@@ -402,10 +411,10 @@ export class PumpCurveGraphComponent implements OnInit {
               y: data[i].y
             };
           }
-          if (data[i].y > tmpMaxY.head) {
+          if (data[i].y > tmpMaxData) {
             data[i] = {
               x: data[i].x,
-              y: tmpMaxY.head
+              y: tmpMaxData
             };
           }
         }

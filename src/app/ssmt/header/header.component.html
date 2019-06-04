@@ -7,7 +7,7 @@
       <div class="form-group">
         <label for="{{idString+'numberOfHeaders'}}">Number Of Headers</label>
         <select [disabled]="!inSetup || !selected || modificationExists" name="numberOfHeaders" class="form-control" id="numberOfHeaders"
-          (change)="save()" (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerInput.numberOfHeaders">
+          (change)="changeNumberOfHeaders()" (focus)="focusField('numberOfHeaders')" (blur)="focusOut()" [(ngModel)]="headerInput.numberOfHeaders">
           <option [ngValue]="1">1</option>
           <option [ngValue]="2">2</option>
           <option [ngValue]="3">3</option>

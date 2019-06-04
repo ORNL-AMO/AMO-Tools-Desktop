@@ -2,7 +2,7 @@
     background-color: #5D4037;
     color: white;
 }
-.ssmt-diagram.blowdownHovered .blowdown{
+.ssmt-diagram.blowdownHovered .blowdown:not(.noSteamFlow){
     box-shadow: 0px 0px 10px 0px #5D4037;
 }
 .blowdown .hidden-chevron{
@@ -12,7 +12,7 @@
     background-color: #8E44AD;
     color: white;
 }
-.ssmt-diagram.feedwaterHovered .feedwater{
+.ssmt-diagram.feedwaterHovered .feedwater:not(.no-steam-flow):not(.noSteamFlow){
     box-shadow: 0px 0px 10px 0px #8E44AD;
 }
 
@@ -42,7 +42,7 @@
     border: #43A047 solid 3px;
 }
 
-.ssmt-diagram.makeupWaterCondensateHovered .makeup-water,
+.ssmt-diagram.makeupWaterCondensateHovered .makeup-water:not(.no-steam-flow):not(.noSteamFlow),
 .ssmt-diagram.makeupWaterHovered .makeup-water-box
 {
     box-shadow: 0px 0px 10px 0px #43A047;
@@ -56,8 +56,8 @@
     background-color: #C0392B;
     color: white;
 }
-.ssmt-diagram.highPressureHovered .high-pressure, 
-.ssmt-diagram.highPressureHovered .highPressure .header-tube,
+.ssmt-diagram.highPressureHovered .high-pressure:not(.noSteamFlow), 
+.ssmt-diagram.highPressureHovered .highPressure:not(.noSteamFlow) .header-tube,
 .ssmt-diagram.highPressureProcessSteamHovered .highPressure .process-usage {
     box-shadow: 0px 0px 10px 0px #C0392B;
 }
@@ -70,7 +70,7 @@
     background-color: #FFA726;
 }
 .ssmt-diagram.mediumPressureHovered .medium-pressure,
-.ssmt-diagram.mediumPressureHovered .mediumPressure .header-tube, 
+.ssmt-diagram.mediumPressureHovered .mediumPressure:not(.noSteamFlow) .header-tube, 
 .ssmt-diagram.mediumPressureProcessSteamHovered .mediumPressure .process-usage{
     box-shadow: 0px 0px 10px 0px #FFA726;
 }
@@ -83,7 +83,7 @@
     background-color: #FFEB3B;
 }
 .ssmt-diagram.lowPressureHovered .low-pressure,
-.ssmt-diagram.lowPressureHovered .lowPressure .header-tube, 
+.ssmt-diagram.lowPressureHovered .lowPressure:not(.noSteamFlow) .header-tube, 
 .ssmt-diagram.lowPressureProcessSteamHovered .lowPressure .process-usage {
     box-shadow: 0px 0px 10px 0px #FFEB3B;
 }
@@ -152,4 +152,14 @@
 
 .result-tables .group-label{
     font-size: 14px;
+}
+
+
+.ssmt-diagram .no-steam-flow{
+    background-color: #D5D8DC;
+    color: #D5D8DC;
+}
+
+.ssmt-diagram .no-steam-flow .hidden-chevron{
+    color: #D5D8DC;
 }

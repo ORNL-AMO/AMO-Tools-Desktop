@@ -1,22 +1,22 @@
 <div class="d-flex w-100 justify-content-end pb-4">
   <div class="d-flex makeup-water up-pipe" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
-    (mouseleave)="hoverEquipment('default')">
+    (mouseleave)="hoverEquipment('default')" [ngClass]="makeupWaterClasses" (click)="selectEquipment('makeupWaterCondensateHovered')">
     <span class="fa fa-chevron-up hidden-chevron"></span>
   </div>
   <div class="d-flex pt-2 w-50 h-100 align-self-end" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
     (mouseleave)="hoverEquipment('default')">
-    <div class="d-flex w-100 makeup-water justify-content-end">
+    <div class="d-flex w-100 makeup-water justify-content-end" [ngClass]="makeupWaterClasses">
       <div class="cold-outlet-holder" *ngIf="heatExchangerOutput">
         <span class="cold-outlet">{{heatExchangerOutput.coldOutletTemperature | number:'1.0-2'}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </span>
         <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('heatExchangerColdOutlet')"
-          (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')"></span>
+          (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')" (click)="selectEquipment('heatExchangerColdOutlet')"></span>
       </div>
       <div class="heat-exchanger-holder" *ngIf="heatExchangerOutput"
         (mouseenter)="hoverEquipment('heatExchangerHovered')"
         (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')">
-        <div class="heat-exchanger" (click)="selectHeatExchanger()">
+        <div class="heat-exchanger" (click)="selectEquipment('heat-exchanger')">
           <div class="blowdown inlet-blowdown">
             <span class="fa fa-chevron-down hidden-chevron"></span>
           </div>
@@ -31,7 +31,7 @@
           <span [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>
         </span>
         <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('makeupWaterPropertiesHovered')"
-          (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')"></span>
+          (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')" (click)="selectEquipment('makeupWaterPropertiesHovered')"></span>
         <span class="makeup-water-mass-flow">{{makeupWater.massFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
         </span>
@@ -39,7 +39,7 @@
     </div>
   </div>
   <div class="d-flex pt-2 w-25" (mouseenter)="hoverEquipment('makeupWaterHovered')"
-    (mouseleave)="hoverEquipment('default')">
+    (mouseleave)="hoverEquipment('default')" (click)="selectEquipment('makeupWaterHovered')">
     <div class="d-flex justify-content-center p-1">
       <div class="makeup-water-holder">
         <span class="makeup-water-label">Make-Up Water</span>

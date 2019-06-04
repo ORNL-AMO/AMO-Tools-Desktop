@@ -42,6 +42,8 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('phastRollupModal') public phastRollupModal: ModalDirective;
   @ViewChild('fsatRollupModal') public fsatRollupModal: ModalDirective;
+  @ViewChild('ssmtRollupModal') public ssmtRollupModal: ModalDirective;
+
   @ViewChild('reportHeader') reportHeader: ElementRef;
   // @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
 
@@ -477,13 +479,13 @@ export class ReportRollupComponent implements OnInit {
     this.fsatRollupModal.hide();
   }
 
-  // showSsmtModal() {
-  //   this.ssmtRollupModal.show();
-  // }
+  showSsmtModal() {
+    this.ssmtRollupModal.show();
+  }
 
-  // hideSsmtModal() {
-  //   this.ssmtRollupModal.hide();
-  // }
+  hideSsmtModal() {
+    this.ssmtRollupModal.hide();
+  }
 
   showPrintModal(): void {
     this.showPrintMenu = true;
@@ -496,7 +498,7 @@ export class ReportRollupComponent implements OnInit {
     this.showPrintMenu = false;
   }
 
-  collapseSidebar(){
+  collapseSidebar() {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 }

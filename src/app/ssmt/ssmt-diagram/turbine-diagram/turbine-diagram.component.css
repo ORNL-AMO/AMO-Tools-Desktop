@@ -52,3 +52,13 @@
     width: 100px;
     left: 25px;
 }
+
+
+.turbine-warning{
+    position: absolute;
+    font-size: 40px;
+    color: red;
+    top: 60px;
+    left: 45px;
+
+}

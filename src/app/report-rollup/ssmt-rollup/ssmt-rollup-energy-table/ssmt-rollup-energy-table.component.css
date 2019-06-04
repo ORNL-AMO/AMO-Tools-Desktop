@@ -1,0 +1,33 @@
+tr > td,
+tr > th{
+    text-align: center;
+}
+
+tr > td {
+    vertical-align: middle;
+}
+
+
+.name{
+    border-left: solid 10px;
+    padding-left: 4px;
+}
+
+th{
+    width:9%;
+}
+
+.btn-toggle{
+    padding-bottom: 10px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+@media print {
+    tr > td,
+    tr > th {
+        font-size: 18px !important;
+    }
+}
