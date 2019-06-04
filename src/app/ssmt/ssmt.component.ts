@@ -305,6 +305,11 @@ export class SsmtComponent implements OnInit {
     this.save();
   }
 
+  saveSetup(newSSMT: SSMT) {
+    newSSMT.resultsCalculated = false;
+    this.saveSsmt(newSSMT);
+  }
+
   saveSsmt(newSSMT: SSMT) {
     this._ssmt = newSSMT;
     this.save();
