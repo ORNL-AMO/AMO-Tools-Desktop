@@ -53,6 +53,7 @@ export class TreasureChestMenuComponent implements OnInit {
     if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Compressed Air') {
       numCalcs = numCalcs + this.getNumberOfCompressedAirCalcs();
     }
+    //add getNumberUtilities once additional calcs are added for other utilities.
     return numCalcs;
   }
 
@@ -212,7 +213,7 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setOppSheetOption() {
-    if (this.treasureHunt.opportunitySheets.length && this.treasureHunt.opportunitySheets.length != 0) {
+    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
       let numCalcs: number = this.getNumberOfOppSheetCalcs();
       if (numCalcs != 0) {
         this.calculatorTypeOptions.push({ value: 'Opportunity Sheet', numCalcs: numCalcs });

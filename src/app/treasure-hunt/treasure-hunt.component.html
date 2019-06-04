@@ -28,7 +28,8 @@
     </div>
   </div>
 
-  <div *ngIf="mainTab == 'find-treasure'" class="w-100 d-flex tab-content justify-content-center h-100">
+  <div *ngIf="mainTab == 'find-treasure'" class="w-100 d-flex tab-content justify-content-center scroll-item"
+    [ngStyle]="{'height.px': containerHeight}">
     <app-find-treasure class="w-100" [treasureHunt]="assessment.treasureHunt" (emitSave)="saveTreasureHunt($event)"
       [settings]="settings"></app-find-treasure>
   </div>
