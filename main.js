@@ -1,6 +1,3 @@
-// ./main.js
-//require('electron-reload')(__dirname);
-
 const { app, BrowserWindow, ipcMain, crashReporter } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -16,15 +13,19 @@ autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
 
-require('dotenv').config();
 let win = null;
-let available = null;
-
 
 app.on('ready', function () {
 
   // Initialize the window to our specified dimensions
-  win = new BrowserWindow({ width: 1000, height: 600 });
+  win = new BrowserWindow({
+    width: 1000,
+    height: 600,
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true
+    }
+  });
   win.maximize();
 
   // Specify entry point

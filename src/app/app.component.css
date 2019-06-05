@@ -194,6 +194,7 @@ label {
   padding: 2px;
   line-height: 1;
   font-size: 14px;
+  height: inherit;
 }
 .form-text {
   margin-top: 0;
