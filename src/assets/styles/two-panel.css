@@ -126,34 +126,34 @@
   
 
 .general .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #145A32;
+    background: #145A32;
     transition: all .5s ease-in-out;
 }
 
 .phast .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #BF3D00;
+    background: #BF3D00;
     transition: all .5s ease-in-out;
 }
 
 .psat .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #2980b9;
+    background: #2980b9;
     transition: all .5s ease-in-out;
 }
 
 .fsat .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #FFE400;
+    background: #FFE400;
     transition: all .5s ease-in-out;
     color: black;
 }
 
 .ssmt .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #F39C12;
+    background: #F39C12;
     transition: all .5s ease-in-out;
     color: black;
 }
 
 .treasure-hunt .btn-secondary:not([disabled]):not(.disabled).active{
-    background-color: #2E4053;
+    background-origin: #2E4053;
     transition: all .5s ease-in-out;
     color: white;
 }
