@@ -28,9 +28,9 @@
       <td class="bold">
         Energy Cost
       </td>
-      <td>{{results.existingEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
-      <td *ngIf="!inTreasureHunt">{{results.rewoundEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
-      <td>{{results.newEnergyCost | currency:'USD':'1.0-0'}} /yr</td>
+      <td>{{results.existingEnergyCost | currency:'USD'}} /yr</td>
+      <td *ngIf="!inTreasureHunt">{{results.rewoundEnergyCost | currency:'USD'}} /yr</td>
+      <td>{{results.newEnergyCost | currency:'USD'}} /yr</td>
     </tr>
     <tr>
       <td colspan="2" class="bold">
@@ -47,10 +47,10 @@
         Cost Savings
       </td>
       <td *ngIf="!inTreasureHunt">
-        {{results.existingEnergyCost - results.rewoundEnergyCost | currency:'USD':'1.0-0'}} /yr
+        {{results.existingEnergyCost - results.rewoundEnergyCost | currency:'USD'}} /yr
       </td>
-      <td colspan="2" *ngIf="inTreasureHunt">{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
-      <td *ngIf="!inTreasureHunt">{{results.costSavings | currency:'USD':'1.0-0'}} /yr</td>
+      <td colspan="2" *ngIf="inTreasureHunt">{{results.costSavings | currency:'USD'}} /yr</td>
+      <td *ngIf="!inTreasureHunt">{{results.costSavings | currency:'USD'}} /yr</td>
 
     </tr>
     <tr>
