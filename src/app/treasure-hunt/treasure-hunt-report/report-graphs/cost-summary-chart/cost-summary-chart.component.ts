@@ -49,6 +49,8 @@ export class CostSummaryChartComponent implements OnInit {
     left: 100
   };
 
+  minHeight: number = 310;
+
   canvasWidth: number;
   canvasHeight: number;
   fontSize: string;
@@ -78,6 +80,9 @@ export class CostSummaryChartComponent implements OnInit {
 
   resizeGraph() {
     this.width = this.chartContainerWidth - this.margin.left - this.margin.right;
+    if (this.chartContainerHeight < this.minHeight) {
+      this.chartContainerHeight = this.minHeight;
+    }
     this.height = this.chartContainerHeight - this.margin.top - this.margin.bottom;
     this.makeGraph();
   }
