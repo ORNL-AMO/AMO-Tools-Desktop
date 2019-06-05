@@ -29,7 +29,9 @@ export class ReplaceExistingComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   containerHeight: number;
   headerHeight: number;
