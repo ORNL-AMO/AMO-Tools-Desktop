@@ -27,6 +27,7 @@ export class ReportRollupComponent implements OnInit {
   _psatAssessments: Array<ReportItem>;
   _fsatAssessments: Array<ReportItem>;
   _ssmtAssessments: Array<ReportItem>;
+  _treasureHuntAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
   //debug
   selectedPhastCalcs: Array<Calculator>;
@@ -51,6 +52,7 @@ export class ReportRollupComponent implements OnInit {
   numPsats: number = 0;
   numFsats: number = 0;
   numSsmt: number = 0;
+  numTreasureHunt: number = 0;
   sidebarHeight: number = 0;
   printView: boolean = false;
   reportAssessmentsSub: Subscription;
@@ -61,6 +63,7 @@ export class ReportRollupComponent implements OnInit {
   psatAssessmentSub: Subscription;
   selectedCalcsSub: Subscription;
   ssmtAssessmentsSub: Subscription;
+  treasureHuntAssesmentsSub: Subscription;
 
   showPrint: boolean = false;
   showPrintMenu: boolean = false;
@@ -92,6 +95,8 @@ export class ReportRollupComponent implements OnInit {
     this._psatAssessments = new Array<ReportItem>();
     this._fsatAssessments = new Array<ReportItem>();
     this._ssmtAssessments = new Array<ReportItem>();
+    this._treasureHuntAssessments = new Array<ReportItem>();
+
     this.selectedPhastCalcs = new Array<Calculator>();
     this.selectedPsatCalcs = new Array<Calculator>();
     this.selectedFsatCalcs = new Array<Calculator>();
@@ -183,6 +188,19 @@ export class ReportRollupComponent implements OnInit {
       }
     });
 
+    this.treasureHuntAssesmentsSub = this.reportRollupService.treasureHuntAssessments.subscribe(items => {
+      if (items) {
+        if (items.length !== 0) {
+          this._treasureHuntAssessments = items;
+          this.numTreasureHunt = this._treasureHuntAssessments.length;
+          this.reportRollupService.initTreasureHuntResultsArray(this._treasureHuntAssessments);
+          if (!this.focusedAssessment) {
+            this.focusedAssessment = this._treasureHuntAssessments[0].assessment;
+          }
+        }
+      }
+    });
+
     //gets calculators for pre assessment rollup
     this.selectedCalcsSub = this.reportRollupService.selectedCalcs.subscribe(items => {
       if (items) {
@@ -217,6 +235,7 @@ export class ReportRollupComponent implements OnInit {
     if (this.selectedCalcsSub) this.selectedCalcsSub.unsubscribe();
     if (this.fsatAssessmentsSub) this.fsatAssessmentsSub.unsubscribe();
     if (this.ssmtAssessmentsSub) this.ssmtAssessmentsSub.unsubscribe();
+    if (this.treasureHuntAssesmentsSub) this.treasureHuntAssesmentsSub.unsubscribe();
   }
 
   checkSettings() {

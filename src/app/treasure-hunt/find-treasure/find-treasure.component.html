@@ -1,0 +1,199 @@
+<div class="skyline" *ngIf="selectedCalc == 'none'">
+  <div class="d-flex flex-wrap justify-content-center">
+    <div class="card m-2">
+      <div class="card-body d-flex p-2 justify-content-center align-items-center">
+        <div class="p-2 pr-4">
+          <img src="assets/images/treasure-map.png" class="map-img-container">
+        </div>
+        <div class="d-flex flex-column calculator-list">
+          <h1 class="p-2 lead text-center mb-0">
+            Find ways to save your hard earned treasure!
+          </h1>
+          <ul class="help-text text-center mb-0">
+            <li>
+              Use one of the following calculators to determine savings opportunities within your manufacturing
+              facility.
+            </li>
+            <li>
+              Once an opportunity has been found, save the opportunity to your "Treasure Chest".
+            </li>
+            <li>
+              Add more details to each opportunity by clicking the <img
+                src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="opp-sheet-icon-sm">
+              icon and filling out an opportunity sheet. </li>
+            <li>
+              Click the "Treasure Chest" tab to view a summary of your found treasure. </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-wrap justify-content-center">
+    <div class="card calc-card-item m-2" (click)="selectCalc('lighting-replacement')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png" class="calc-img">
+        </div>
+        <a class="pt-2">Lighting Replacement</a>
+        <p class="mb-0 text-center help-text">
+          The calculator is designed to quantify the energy savings associated with lighting opportunities.
+        </p>
+      </div>
+    </div>
+    <div class="card calc-card-item motors m-2" (click)="selectCalc('replace-existing')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+          <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace.png">
+        </div>
+        <a class="pt-2"> Replace Existing Motor</a>
+        <p class="mb-0 text-center help-text">
+          This calculator calculates the energy savings, cost savings, and payback period for replacing an
+          existing motor with a higher efficiency motor.
+        </p>
+      </div>
+    </div>
+
+    <div class="card calc-card-item motors m-2" (click)="selectCalc('motor-drive')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+          <img class="calc-img" src="assets/images/calculator-icons/motor-icons/motor-drive.png">
+        </div>
+        <a class="pt-2">Upgrade Motor Drive</a>
+        <p class="mb-0 text-center help-text">
+          The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched
+          V-Belt drive, and Synchronous Belt Drive.
+        </p>
+      </div>
+    </div>
+
+    <div class="card calc-card-item m-2" (click)="selectCalc('natural-gas-reduction')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png" class="calc-img">
+        </div>
+        <a class="pt-2">Natural Gas Reduction</a>
+        <p class="mb-0 text-center help-text">
+          This calculator is used to quantify the energy savings associated with reducing natural gas usage.
+        </p>
+      </div>
+    </div>
+
+    <div class="card calc-card-item m-2" (click)="selectCalc('electricity-reduction')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png" class="calc-img">
+        </div>
+        <a class="pt-2">Electricity Reduction</a>
+        <p class="mb-0 text-center help-text">
+          This calculator is used to quantify the energy savings associated with reducing electricity usage.
+        </p>
+      </div>
+    </div>
+
+    <div class="card calc-card-item m-2" (click)="selectCalc('compressed-air-reduction')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png" class="calc-img">
+        </div>
+        <a class="pt-2">Compressed Air Reduction</a>
+        <p class="mb-0 text-center help-text">
+          This calculator reduces the compressed air use. Real description needed.
+        </p>
+      </div>
+    </div>
+
+    <div class="card calc-card-item m-2" (click)="selectCalc('opportunity-sheet')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-img">
+        </div>
+        <a class="pt-2">Custom Savings Opportunity</a>
+        <p class="mb-0 text-center help-text">
+          This calculator provides a space to add a Treasure Hunt Opportunity without using a calculator (such as
+          after having done off-sheet calculations). Enter Baseline and Modification Utility use to calculate savings.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
+  (emitSave)="saveNewLighting($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-lighting-replacement>
+
+<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveNewOpportunitySheet($event)" [settings]="settings">
+</app-standalone-opportunity-sheet>
+
+<app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveNewReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+</app-replace-existing>
+
+<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="selectCalc('none')"
+  (emitSave)="saveNewMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()"></app-motor-drive>
+
+<app-natural-gas-reduction *ngIf="selectedCalc == 'natural-gas-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveNewNaturalGasReduction($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-natural-gas-reduction>
+
+<app-electricity-reduction *ngIf="selectedCalc == 'electricity-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveNewElectricityReduction($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-electricity-reduction>
+
+<app-compressed-air-reduction *ngIf="selectedCalc == 'compressed-air-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveNewCompressedAirReduction($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-reduction>
+
+
+<div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header p-1">
+        <h5 class="mb-0">Save Opportunity</h5>
+        <!-- <button class="close" (click)="closeSaveCalcModal()">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body text-center">
+        <p class="help-text" *ngIf="showOpportunitySheetOnSave">There is no opportunity sheet filled out for this
+          opportunity. Would you like to add one
+          before saving?</p>
+        <p class="help-text" *ngIf="!showOpportunitySheetOnSave">Would you like to edit your opportunity sheet
+          before
+          saving?</p>
+        <a class="click-link" (click)="showOpportunitySheetModal()">
+          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="save-opportunity">
+        </a> <br>
+        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="showOpportunitySheetOnSave">+Add
+          Opportunity Sheet</a>
+        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="!showOpportunitySheetOnSave">Edit
+          Opportunity Sheet</a>
+      </div>
+      <div class="modal-footer p-1">
+        <button class="btn btn-danger btn-sm pull-right" (click)="closeSaveCalcModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm pull-right" (click)="saveNewCalc()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #opportunitySheetModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="opportunitySheetModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
+        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveOpportunitySheet($event)"
+          [opportunitySheet]="newOpportunitySheet">
+        </app-opportunity-sheet>
+      </div>
+    </div>
+  </div>
+</div>

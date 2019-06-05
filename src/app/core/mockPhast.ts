@@ -1,6 +1,5 @@
 import { Assessment } from "../shared/models/assessment";
 import { Settings } from "../shared/models/settings";
-declare const packageJson;
 export const MockPhast: Assessment = {
     isExample: true,
     type: "PHAST",
@@ -1173,7 +1172,6 @@ export const MockPhastSettings: Settings = {
     phastRollupSteamUnit: 'MMBtu',
     energyResultUnit: "MMBtu",
     phastRollupUnit: 'MMBtu',
-    appVersion: packageJson.version,
     facilityInfo: {
         companyName: 'ORNL',
         facilityName: 'ORNL Test Facility',

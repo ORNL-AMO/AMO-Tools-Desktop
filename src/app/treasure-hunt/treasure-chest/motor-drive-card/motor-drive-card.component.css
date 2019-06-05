@@ -1,0 +1,59 @@
+.card.treasure-hunt-card{
+    padding: .25rem;
+    font-size: small;
+  }
+  
+  .col-item-br{
+    border-right: solid 2px #2E4053;
+  }
+  
+  .opp-sheet-col .fa.fa-edit{
+    text-align: center;
+    font-size: 35px;
+  }
+  
+  .opportunity-name a, .opportunity-name .fa{
+    font-size: large;
+  }
+  
+  a:not([href]):not([tabindex]):hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .card.not-selected{
+    background-color: #efefef;
+  }
+  
+  .no-opp-sheet, .click-link.danger{
+    color: red !important;
+  }
+  
+  .opp-sheet-exists{
+    color: green;
+  }
+  
+  .opp-sheet-col .no-opp-sheet:hover, .opp-sheet-col .opp-sheet-exists:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+
+  .no-opp-sheet .calc-icon{
+    opacity: .5;
+  }
+
+  .calc-icon{
+    width: 35px;
+  }
+
+  .motor-drive-icon{
+    background-color: #2E4053;
+    padding-right: 3px;
+    border-radius: 19px;
+    width: 40px;
+    padding-left: 3px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }

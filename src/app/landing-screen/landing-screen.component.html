@@ -11,7 +11,8 @@
 			</p>
 		</div>
 		<hr class="my-2">
-		<p class="text-center text-help no-margin-bottom">Create an assessment to model your system and find opportunities
+		<p class="text-center text-help no-margin-bottom">Create an assessment to model your system and find
+			opportunities
 			for efficiency or run calculations from one of our many
 			property and equipment calculators.
 			<br>Get started with one of the following options.</p>
@@ -30,11 +31,14 @@
 						<div class="row">
 							<div class="col-6 text-center">
 								<a class="click-link" (click)="createAssessment()">Create Assessment</a>
-								<p class="text-help small">Model a system and explore multiple optimization scenarios.</p>
+								<p class="text-help small">Model a system and explore multiple optimization scenarios.
+								</p>
 							</div>
 							<div class="col-6 text-center">
-								<a class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment Calculators</a>
-								<p class="text-help small">Generate detailed properties and test a variety of adjustments.</p>
+								<a class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment
+									Calculators</a>
+								<p class="text-help small">Generate detailed properties and test a variety of
+									adjustments.</p>
 							</div>
 						</div>
 
@@ -50,8 +54,10 @@
 									</div>
 									<div class="p-2 d-flex">
 										<div class="d-flex flex-column">
-											<a (click)="createAssessment('Pump')" class="p-0 click-link">Create Pump Assessment</a>
-											<span class="former-name">formerly DOE Pumping System Assessment Tool (PSAT)</span>
+											<a (click)="createAssessment('Pump')" class="p-0 click-link">Create Pump
+												Assessment</a>
+											<span class="former-name">formerly DOE Pumping System Assessment Tool
+												(PSAT)</span>
 										</div>
 									</div>
 								</div>
@@ -63,39 +69,63 @@
 									</div>
 									<div class="p-2 d-flex">
 										<div class="d-flex flex-column">
-											<a (click)="createAssessment('Furnace')" class="click-link p-0">Create Process Heating Assessment</a>
-											<span class="former-name">formerly DOE Process Heating Assessment and Survey Tool (PHAST)</span>
+											<a (click)="createAssessment('Furnace')" class="click-link p-0">Create
+												Process Heating Assessment</a>
+											<span class="former-name">formerly DOE Process Heating Assessment and Survey
+												Tool (PHAST)</span>
 										</div>
 									</div>
 								</div>
 
 								<div class="d-flex">
 									<div class="p-2 align-items-center fan">
-										<div class="d-flex flex-column fan-icon align-items-center justify-content-center">
+										<div
+											class="d-flex flex-column fan-icon align-items-center justify-content-center">
 											<img class="fan-image" src="assets/images/ico-fsat-diagram.png">
 										</div>
 									</div>
 									<div class="p-2 d-flex">
 										<div class="d-flex flex-column">
-											<a (click)="createAssessment('Fan')" class="click-link p-0 fan">Create Fan Assessment</a>
-											<span class="former-name">formerly DOE Fan System Assessment Tool (FSAT)</span>
+											<a (click)="createAssessment('Fan')" class="click-link p-0 fan">Create Fan
+												Assessment</a>
+											<span class="former-name">formerly DOE Fan System Assessment Tool
+												(FSAT)</span>
 										</div>
 									</div>
 								</div>
 								<!--Steam Assessment-->
 								<div class="d-flex">
-										<div class="p-2 align-items-center steam">
-											<div class="d-flex flex-column steam-icon align-items-center justify-content-center">
-												<img class="steam-image" src="assets/images/ico-ssmt-diagram.png">
-											</div>
-										</div>
-										<div class="p-2 d-flex">
-											<div class="d-flex flex-column">
-												<a (click)="createAssessment('Steam')" class="click-link p-0 steam">Create Steam Assessment</a>
-												<span class="former-name steam">formerly DOE Steam System Modeler Tool (SSMT)</span>
-											</div>
+									<div class="p-2 align-items-center steam">
+										<div
+											class="d-flex flex-column steam-icon align-items-center justify-content-center">
+											<img class="steam-image" src="assets/images/ico-ssmt-diagram.png">
 										</div>
 									</div>
+									<div class="p-2 d-flex">
+										<div class="d-flex flex-column">
+											<a (click)="createAssessment('Steam')" class="click-link p-0 steam">Create
+												Steam Assessment</a>
+											<span class="former-name steam">formerly DOE Steam System Modeler Tool
+												(SSMT)</span>
+										</div>
+									</div>
+								</div>
+								<div class="d-flex pt-3">
+									<div class="p-2 align-items-center treasure-hunt">
+										<div
+											class="d-flex flex-column treasure-hunt-icon align-items-center justify-content-center">
+											<img class="treasure-hunt-image" src="assets/images/treasure-hunt.png">
+										</div>
+									</div>
+									<div class="p-2 d-flex">
+										<div class="d-flex flex-column">
+											<a (click)="createAssessment('TreasureHunt')"
+												class="click-link p-0 steam">Create
+												Treasure Hunt</a>
+											<span class="former-name steam">Energy efficiency calculators for facilitating a Treasure Hunt</span>
+										</div>
+									</div>
+								</div>
 								<hr>
 								<div class="d-flex flex-column">
 									<a (click)="hideScreen()" class="click-link align-self-center">
@@ -151,4 +181,5 @@
 </div>
 <!-- </div> -->
 
-<app-assessment-create *ngIf="showCreateAssessment" [directory]="directory" (hideModal)="hideCreateAssessment()" [type]="createAssessmentType"></app-assessment-create>
+<app-assessment-create *ngIf="showCreateAssessment" [directory]="directory" (hideModal)="hideCreateAssessment()"
+	[type]="createAssessmentType"></app-assessment-create>

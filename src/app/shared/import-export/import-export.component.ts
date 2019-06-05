@@ -39,7 +39,7 @@ export class ImportExportComponent implements OnInit {
   showDirs: boolean = false;
   canExport: boolean = false;
   name: string = null;
-  importJson: JSON = null;
+  importJson = null;
   constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -98,7 +98,7 @@ export class ImportExportComponent implements OnInit {
           fr.readAsText($event.target.files[0]);
           fr.onloadend = (e) => {
             try {
-              this.importJson = JSON.parse(fr.result);
+              this.importJson = JSON.parse(JSON.stringify(fr.result));
               this.validFile = true;
             } catch (err) {
               this.validFile = false;
@@ -114,7 +114,7 @@ importFile() {
     let fr: FileReader = new FileReader();
     fr.readAsText(this.fileReference.target.files[0]);
     fr.onloadend = (e) => {
-      this.importJson = JSON.parse(fr.result);
+      this.importJson = JSON.parse(JSON.stringify(fr.result));
       this.importData.emit(this.importJson);
     };
   }

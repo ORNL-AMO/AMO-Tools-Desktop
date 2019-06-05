@@ -1,0 +1,89 @@
+<div class="mt-2 card">
+  <div class="card-body justify-content-center">
+    <div class="row m-0 justify-content-center">
+      <div class="col-12 text-center treasure-hunt-item">
+        <h5 class="mb-0 text-center">Total Cost Savings</h5>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.percentSavings" [chartHeight]="125">
+        </app-treasure-hunt-gauge>
+
+      </div>
+      <div class="col-12 justify-content-center total-savings-border">
+        <div class="text-center">Baseline Costs: {{treasureHuntResults.totalBaselineCost | currency:'USD'}}</div>
+        <div class="text-center">Modified Costs: {{treasureHuntResults.totalModificationCost | currency:'USD'}}</div>
+      </div>
+    </div>
+    <div class="row m-0 justify-content-center">
+      <!--electricity-->
+      <div class="col-4 text-center treasure-hunt-item" *ngIf="treasureHuntResults.electricity.baselineEnergyCost">
+        <h6 class="mb-0 text-center pt-2">Electricity Savings</h6>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.electricity.percentSavings" [chartHeight]="75">
+        </app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHuntResults.electricity.baselineEnergyCost | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHuntResults.electricity.modifiedEnergyCost | currency:'USD'}}</span>
+      </div>
+      <!--natural gas-->
+      <div class="col-4 text-center treasure-hunt-item"
+        *ngIf="treasureHuntResults.naturalGas.baselineEnergyCost">
+        <h6 class="mb-0 text-center pt-2">Natural Gas Savings</h6>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.naturalGas.percentSavings" [chartHeight]="75">
+        </app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHuntResults.naturalGas.baselineEnergyCost | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHuntResults.naturalGas.modifiedEnergyCost | currency:'USD'}}</span>
+      </div>
+      <!--water-->
+      <div class="col-4 text-center treasure-hunt-item" *ngIf="treasureHuntResults.water.baselineEnergyCost">
+        <h6 class="mb-0 text-center pt-2">Water Utility Savings</h6>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.water.percentSavings" [chartHeight]="75">
+        </app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHuntResults.water.baselineEnergyCost | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHuntResults.water.modifiedEnergyCost | currency:'USD'}}</span>
+      </div>
+      <!--compressed air-->
+      <div class="col-4 text-center treasure-hunt-item" *ngIf="treasureHuntResults.compressedAir.baselineEnergyCost">
+        <h6 class="mb-0 text-center pt-2">Compressed Air Utility Savings</h6>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.compressedAir.percentSavings" [chartHeight]="75">
+        </app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHuntResults.compressedAir.baselineEnergyCost | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHuntResults.compressedAir.modifiedEnergyCost | currency:'USD'}}</span>
+      </div>
+      <!--steam-->
+      <div class="col-4 text-center treasure-hunt-item" *ngIf="treasureHuntResults.steam.baselineEnergyCost">
+        <h6 class="mb-0 text-center pt-2">Steam Utility Savings</h6>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.steam.percentSavings" [chartHeight]="75">
+        </app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHuntResults.steam.baselineEnergyCost | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHuntResults.steam.modifiedEnergyCost | currency:'USD'}}</span>
+      </div>
+      <!--waste water-->
+      <div class="col-4 text-center treasure-hunt-item" *ngIf="treasureHuntResults.wasteWater.baselineEnergyCost">
+        <h6 class="mb-0 text-center pt-2">Waste Water Utility Savings</h6>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.wasteWater.percentSavings" [chartHeight]="75">
+        </app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHuntResults.wasteWater.baselineEnergyCost | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHuntResults.wasteWater.modifiedEnergyCost | currency:'USD'}}</span>
+      </div>
+      <!--waste water-->
+      <div class="col-4 text-center treasure-hunt-item" *ngIf="treasureHuntResults.otherFuel.baselineEnergyCost">
+        <h6 class="mb-0 text-center pt-2">Other Fuel Utility Savings</h6>
+        <app-treasure-hunt-gauge [value]="treasureHuntResults.otherFuel.percentSavings" [chartHeight]="75">
+        </app-treasure-hunt-gauge>
+        <span class="small">Baseline Costs: <br>
+          {{treasureHuntResults.otherFuel.baselineEnergyCost | currency:'USD'}}</span><br>
+        <span class="small">Modified Costs: <br>
+          {{treasureHuntResults.otherFuel.modifiedEnergyCost | currency:'USD'}}</span>
+      </div>
+    </div>
+  </div>
+</div>

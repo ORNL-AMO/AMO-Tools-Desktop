@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -69,6 +69,8 @@ export class PsatComponent implements OnInit {
   stepTabSubscription: Subscription;
   stepTab: string;
   modalOpenSub: Subscription;
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -84,7 +86,8 @@ export class PsatComponent implements OnInit {
     private psatTabService: PsatTabService,
     private pumpFluidService: PumpFluidService,
     private motorService: MotorService,
-    private fieldDataService: FieldDataService) {
+    private fieldDataService: FieldDataService,
+    private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -187,6 +190,7 @@ export class PsatComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
+      this.disclaimerToast();
     }, 100);
   }
 
@@ -387,11 +391,31 @@ export class PsatComponent implements OnInit {
         pumpFluidNotes: '',
         systemBasicsNotes: ''
       },
+      exploreOpportunities: this.currentTab == 'explore-opportunities'
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
     tmpModification.psat.inputs.pump_style = 11;
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this._psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     this.saveNewMod(tmpModification)
+  }
+
+  
+
+  disclaimerToast() {
+    this.toastData.title = 'Disclaimer';
+    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+    this.showToast = true;
+    this.cd.detectChanges();
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    };
+    this.cd.detectChanges();
   }
 }

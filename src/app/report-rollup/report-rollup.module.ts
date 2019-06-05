@@ -10,7 +10,7 @@ import { PsatModule } from '../psat/psat.module';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PhastSummaryComponent } from './report-summary/phast-summary/phast-summary.component';
 import { PhastRollupComponent } from './phast-rollup/phast-rollup.component';
-import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
+import { ModalModule } from 'ngx-bootstrap';
 import { PhastRollupGraphsComponent } from './phast-rollup/phast-rollup-graphs/phast-rollup-graphs.component';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
 
@@ -48,6 +48,8 @@ import { SsmtRollupGraphsComponent } from './ssmt-rollup/ssmt-rollup-graphs/ssmt
 import { SsmtRollupSteamSummaryComponent } from './ssmt-rollup/ssmt-rollup-steam-summary/ssmt-rollup-steam-summary.component';
 import { SsmtRollupEnergyTableComponent } from './ssmt-rollup/ssmt-rollup-energy-table/ssmt-rollup-energy-table.component';
 import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-steam-summary-table/ssmt-rollup-steam-summary-table.component';
+import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
+import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-summary/treasure-hunt-summary.component';
 
 @NgModule({
   imports: [
@@ -60,7 +62,8 @@ import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-
     ReactiveFormsModule,
     PreAssessmentModule,
     FsatReportModule,
-    SsmtReportModule
+    SsmtReportModule,
+    TreasureHuntReportModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -100,6 +103,7 @@ import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-
     SsmtRollupSteamSummaryComponent,
     SsmtRollupEnergyTableComponent,
     SsmtRollupSteamSummaryTableComponent,
+    TreasureHuntSummaryComponent,
 
   ],
   providers: [ReportRollupService],
