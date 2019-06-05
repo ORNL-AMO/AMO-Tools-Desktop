@@ -25,7 +25,7 @@ export class OperationsSummaryComponent implements OnInit {
   electricityCostDiff: Array<boolean>;
   makeUpWaterCostDiff: Array<boolean>;
   makeUpWaterTempDiff: Array<boolean>;
-
+  sitePowerImportDiff: Array<boolean>;
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -34,7 +34,7 @@ export class OperationsSummaryComponent implements OnInit {
     this.electricityCostDiff = new Array<boolean>();
     this.makeUpWaterCostDiff = new Array<boolean>();
     this.makeUpWaterTempDiff = new Array<boolean>();
-
+    this.sitePowerImportDiff = new Array<boolean>();
     if (this.modificationInputData) {
       this.numMods = this.modificationInputData.length;
       this.modificationInputData.forEach(mod => {
@@ -43,6 +43,7 @@ export class OperationsSummaryComponent implements OnInit {
         this.electricityCostDiff.push(false);
         this.makeUpWaterCostDiff.push(false);
         this.makeUpWaterTempDiff.push(false);
+        this.sitePowerImportDiff.push(false);
       });
     }
   }
