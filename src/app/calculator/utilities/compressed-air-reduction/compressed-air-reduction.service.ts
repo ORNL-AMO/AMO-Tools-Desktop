@@ -241,6 +241,10 @@ export class CompressedAirReductionService {
           inputArray[i].utilityCost = inputArray[i].utilityCost / conversionHelper;
         }
       }
+    } else {
+      for (let i = 0; i < inputArray.length; i++) {
+        inputArray[i].otherMethodData.consumption = inputArray[i].otherMethodData.consumption * 1000;
+      }
     }
     return inputArray;
   }

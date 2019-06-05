@@ -218,7 +218,7 @@
           <input class="form-control" name="consumption" id="{{'consumption_'+idString}}" formControlName="consumption"
             type="number" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()"
             onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">SCF/yr</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF/yr</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
         </div>
         <span class="alert-danger pull-right small"
