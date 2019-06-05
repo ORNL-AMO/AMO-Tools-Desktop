@@ -29,7 +29,9 @@ export class MotorDriveComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
 
   motorDriveData: MotorDriveInputs;

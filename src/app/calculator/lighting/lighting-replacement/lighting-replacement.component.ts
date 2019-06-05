@@ -30,7 +30,9 @@ export class LightingReplacementComponent implements OnInit {
   @ViewChild('contentContainer') contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   headerHeight: number;
   currentField: string;
