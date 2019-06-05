@@ -38,7 +38,7 @@ export class TurbineInputTableComponent implements OnInit {
     }else if (this.turbineType === 'highToLow') {
       this.tableLabel = 'High To Low Pressure Turbine';
     }else if (this.turbineType === 'highToMedium') {
-      this.tableLabel = 'Medium To Medium Pressure Turbine';
+      this.tableLabel = 'High To Medium Pressure Turbine';
     }else if (this.turbineType === 'mediumToLow') {
       this.tableLabel = 'Medium To Low Pressure Turbine';
     }

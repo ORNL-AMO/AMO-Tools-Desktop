@@ -1,7 +1,8 @@
 <div class="card summary-card">
   <div class="card-header" (click)="toggleCollapse()">
     <h5>General Operations Data
-      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+      <span class="pull-right fa hide-print"
+        [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
     </h5>
   </div>
 
@@ -29,7 +30,8 @@
               <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
                 {{baselineInputData.operationsInput.operatingHoursPerYear}}
               </td>
-              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.operatingHoursPerYear, mod.inputData.operationsInput.operatingHoursPerYear, 'operatingHoursDiff', 0)}">
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.operatingHoursPerYear, mod.inputData.operationsInput.operatingHoursPerYear, 'operatingHoursDiff', 0)}">
                 {{mod.inputData.operationsInput.operatingHoursPerYear}}
               </td>
             </tr>
@@ -41,7 +43,8 @@
               <td [ngClass]="{'indicate-report-field-different':fuelCostDiff[0] == true}">
                 {{baselineInputData.operationsInput.fuelCosts}}
               </td>
-              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.fuelCosts, mod.inputData.operationsInput.fuelCosts, 'fuelCostDiff', 0)}">
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.fuelCosts, mod.inputData.operationsInput.fuelCosts, 'fuelCostDiff', 0)}">
                 {{mod.inputData.operationsInput.fuelCosts}}
               </td>
             </tr>
@@ -53,7 +56,8 @@
               <td [ngClass]="{'indicate-report-field-different':electricityCostDiff[0] == true}">
                 {{baselineInputData.operationsInput.electricityCosts}}
               </td>
-              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.electricityCosts, mod.inputData.operationsInput.electricityCosts, 'electricityCostDiff', 0)}">
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.electricityCosts, mod.inputData.operationsInput.electricityCosts, 'electricityCostDiff', 0)}">
                 {{mod.inputData.operationsInput.electricityCosts}}
               </td>
             </tr>
@@ -65,11 +69,23 @@
               <td [ngClass]="{'indicate-report-field-different':makeUpWaterCostDiff[0] == true}">
                 {{baselineInputData.operationsInput.makeUpWaterCosts}}
               </td>
-              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.makeUpWaterCosts, mod.inputData.operationsInput.makeUpWaterCosts, 'makeUpWaterCostDiff', 0)}">
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.makeUpWaterCosts, mod.inputData.operationsInput.makeUpWaterCosts, 'makeUpWaterCostDiff', 0)}">
                 {{mod.inputData.operationsInput.makeUpWaterCosts}}
               </td>
             </tr>
-
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':sitePowerImportDiff[0] == true}">
+                Site Power Import (<span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>)
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':sitePowerImportDiff[0] == true}">
+                {{baselineInputData.operationsInput.sitePowerImport}}
+              </td>
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.sitePowerImport, mod.inputData.operationsInput.sitePowerImport, 'sitePowerImport', 0)}">
+                {{mod.inputData.operationsInput.sitePowerImport}}
+              </td>
+            </tr>
             <tr>
               <td [ngClass]="{'indicate-report-field-different':makeUpWaterTempDiff[0] == true}">
                 Make-up Water Temp (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
@@ -77,7 +93,8 @@
               <td [ngClass]="{'indicate-report-field-different':makeUpWaterTempDiff[0] == true}">
                 {{baselineInputData.operationsInput.makeUpWaterTemperature}}
               </td>
-              <td *ngFor="let mod of modificationInputData" [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.makeUpWaterTemperature, mod.inputData.operationsInput.makeUpWaterTemperature, 'makeUpWaterTempDiff', 0)}">
+              <td *ngFor="let mod of modificationInputData"
+                [ngClass]="{'indicate-report-field-different': checkDiff(baselineInputData.operationsInput.makeUpWaterTemperature, mod.inputData.operationsInput.makeUpWaterTemperature, 'makeUpWaterTempDiff', 0)}">
                 {{mod.inputData.operationsInput.makeUpWaterTemperature}}
               </td>
             </tr>
