@@ -17,6 +17,9 @@ import { PreAssessmentModule } from './pre-assessment/pre-assessment.module';
 import { PowerFactorCorrectionModule } from './power-factor-correction/power-factor-correction.module';
 import { UnitConverterService } from './unit-converter/unit-converter.service';
 import { Co2SavingsModule } from './co2-savings/co2-savings.module';
+import { ElectricityReductionModule } from './electricity-reduction/electricity-reduction.module';
+import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-reduction.module';
+import { CompressedAirReductionModule } from './compressed-air-reduction/compressed-air-reduction.module';
 
 @NgModule({
     declarations: [
@@ -26,7 +29,7 @@ import { Co2SavingsModule } from './co2-savings/co2-savings.module';
         CashFlowComponent,
         CashFlowHelpComponent,
         CashFlowFormComponent,
-        CashFlowDiagramComponent
+        CashFlowDiagramComponent,
     ],
     exports: [
         UnitConverterComponent,
@@ -41,7 +44,10 @@ import { Co2SavingsModule } from './co2-savings/co2-savings.module';
         CombinedHeatPowerModule,
         PreAssessmentModule,
         PowerFactorCorrectionModule,
-        Co2SavingsModule
+        Co2SavingsModule,
+        ElectricityReductionModule,
+        NaturalGasReductionModule,
+        CompressedAirReductionModule
     ],
     providers: [
         CashFlowService,

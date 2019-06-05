@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
+import { TreasureHunt } from '../shared/models/treasure-hunt';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -63,7 +64,11 @@ export class AssessmentService {
         this.tab = 'assessment';
       }
       this.router.navigateByUrl('/ssmt/' + assessment.id);
-
+    } else if (assessment.type == 'TreasureHunt') {
+      if (assessment.treasureHunt.setupDone && !str && !assessment.isExample) {
+        this.tab = 'treasure-chest';
+      }
+      this.router.navigateByUrl('/treasure-hunt/' + assessment.id);
     }
   }
 

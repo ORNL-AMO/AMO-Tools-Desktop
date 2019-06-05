@@ -1,17 +1,19 @@
 import { Assessment } from './assessment';
 import { Calculator } from './calculators';
+import { TreasureHunt } from './treasure-hunt';
 export interface Directory {
   name: string;
   assessments?: Assessment[];
-  subDirectory?: Directory[];
-  calculators?:  Calculator[];
-  collapsed?: boolean;
-  createdDate?: Date;
-  modifiedDate?: Date;
-  id?: number;
-  parentDirectoryId?: number;
-  selected?: boolean;
-  isExample?: boolean;
+  subDirectory?: Directory[],
+  calculators?:  Calculator[],
+  collapsed?: boolean,
+  createdDate?: Date,
+  modifiedDate?: Date,
+  id?: number,
+  parentDirectoryId?: number,
+  selected?: boolean,
+  isExample?: boolean,
+  treasureHunt?: TreasureHunt
 }
 
 

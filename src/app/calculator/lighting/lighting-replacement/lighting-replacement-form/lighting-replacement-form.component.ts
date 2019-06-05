@@ -1,5 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { LightingReplacementData } from '../lighting-replacement.service';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { LightingReplacementData } from '../../../../shared/models/lighting';
+import { FormGroup } from '@angular/forms';
+import { LightingReplacementService } from '../lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement-form',
@@ -10,105 +12,68 @@ export class LightingReplacementFormComponent implements OnInit {
   @Input()
   data: LightingReplacementData;
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<boolean>();
+  emitCalculate = new EventEmitter<LightingReplacementData>();
+  @Output('emitRemoveFixture')
+  emitRemoveFixture = new EventEmitter<number>();
   @Input()
   index: number;
   @Output('emitFocusField')
   emitFocusField = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  selected: boolean;
 
+  idString: string;
+  isEditingName: boolean = false;
+  form: FormGroup;
 
-  monthsPerYearError: string = null;
-  daysPerMonthError: string = null;
-  hoursPerDayError: string = null;
-  wattsPerLampError: string = null;
-  lumensPerLampError: string = null;
-  lampsPerFixtureError: string = null;
-  numberOfFixturesError: string = null;
-  constructor() { }
+  constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
-    this.checkWarnings();
+    if (this.isBaseline) {
+      this.idString = 'baseline_' + this.index;
+    }
+    else {
+      this.idString = 'modification_' + this.index;
+    }
+    this.form = this.lightingReplacementService.getFormFromObj(this.data);
+    if (this.selected == false) {
+      this.form.disable();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.firstChange) {
+      if (this.selected == false) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    }
   }
 
   calculate() {
-    this.checkWarnings();
-    this.emitCalculate.emit(true);
+    let tmpObj: LightingReplacementData = this.lightingReplacementService.getObjFromForm(this.form);
+    this.emitCalculate.emit(tmpObj);
   }
 
-  addHourPerDay() {
-    this.data.hoursPerDay++;
-    this.calculate();
-  }
-  subtractHourPerDay() {
-    this.data.hoursPerDay--;
-    this.calculate();
-  }
-  subtractDayPerMonth() {
-    this.data.daysPerMonth--;
-    this.calculate();
-  }
-  addDayPerMonth() {
-    this.data.daysPerMonth++;
-    this.calculate();
-  }
-  subtractMonthPerYear() {
-    this.data.monthsPerYear--;
-    this.calculate();
-  }
-  addMonthPerYear() {
-    this.data.monthsPerYear++;
-    this.calculate();
-  }
-
-  focusField(str: string){
+  focusField(str: string) {
     this.emitFocusField.emit(str);
   }
 
-  checkWarnings(){
-    if(this.data.hoursPerDay > 24){
-      this.hoursPerDayError = "Hours per day can't exceed 24";
-    }else if(this.data.hoursPerDay < 0){
-      this.hoursPerDayError = "Hours per day must be positive";
-    }else{
-      this.hoursPerDayError = null;
-    }
+  removeFixture() {
+    this.emitRemoveFixture.emit(this.index);
+  }
 
-    if(this.data.daysPerMonth > 31){
-      this.daysPerMonthError = "Days per month can't exceed 31";
-    }else if(this.data.daysPerMonth < 0){
-      this.daysPerMonthError = "Days per month must be positive";
-    }else{
-      this.daysPerMonthError = null;
-    }
+  editFixtureName() {
+    this.isEditingName = true;
+  }
 
-    if(this.data.monthsPerYear > 12){
-      this.monthsPerYearError = "Months per year can't exceed 12";
-    }else if(this.data.monthsPerYear < 0){
-      this.monthsPerYearError = "Months per year must be positive";
-    }else{
-      this.monthsPerYearError = null;
-    }
+  doneEditingName() {
+    this.isEditingName = false;
+  }
 
-    if(this.data.wattsPerLamp < 0){
-      this.wattsPerLampError = "Watts per lamp must be positive";
-    }else{
-      this.wattsPerLampError = null;
-    }
-
-    if(this.data.lumensPerLamp < 0){
-      this.lumensPerLampError = "Lumens per lamp must be positive";
-    }else{
-      this.lumensPerLampError = null;
-    }
-    if(this.data.lampsPerFixture < 0){
-      this.lampsPerFixtureError = "Lamps per fixture must be positive";
-    }else{
-      this.lampsPerFixtureError = null;
-    }
-    if(this.data.numberOfFixtures < 0){
-      this.numberOfFixturesError = "Number of fixtures must be positive";
-    }else{
-      this.numberOfFixturesError = null;
-    }
+  focusOut() {
   }
 }

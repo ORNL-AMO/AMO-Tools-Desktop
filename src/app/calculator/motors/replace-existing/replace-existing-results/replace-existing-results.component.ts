@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { ReplaceExistingResults } from '../replace-existing.component';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { ReplaceExistingResults } from '../../../../shared/models/calculators';
 
 @Component({
   selector: 'app-replace-existing-results',
@@ -9,13 +9,19 @@ import { ReplaceExistingResults } from '../replace-existing.component';
 export class ReplaceExistingResultsComponent implements OnInit {
   @Input()
   results: ReplaceExistingResults;
+  @Input()
+  inTreasureHunt: boolean;
 
   @ViewChild('copyTable') copyTable: ElementRef;
   tableString: any;
 
+  numCols: number = 2;
   constructor() { }
 
   ngOnInit() {
+    if(this.inTreasureHunt){
+      this.numCols = 1;
+    }
   }
 
   updateTableString() {

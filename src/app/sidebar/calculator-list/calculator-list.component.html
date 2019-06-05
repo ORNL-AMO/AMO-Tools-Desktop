@@ -3,7 +3,8 @@
     <span class="sidebar-item" (click)="chooseCalculator('all')">All Calculators</span>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'motors'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'motors'}" class="sidebar-item" (click)="chooseCalculator('motors')">Motors</span>
+    <span [ngClass]="{'selected': selectedCalculatorType == 'motors'}" class="sidebar-item"
+      (click)="chooseCalculator('motors')">Motors</span>
     <ul *ngIf="selectedCalculatorType == 'motors'">
       <li [ngClass]="{'selected': selectedCalculator == 'nema-energy-efficiency'}">
         <span class="sidebar-item" (click)="selectCalculator('nema-energy-efficiency')">NEMA Energy Efficiency</span>
@@ -18,15 +19,16 @@
         <span class="sidebar-item" (click)="selectCalculator('motor-drive')">Motor Drive</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'replace-existing'}">
-        <span class="sidebar-item" (click)="selectCalculator('replace-existing')">Replace Existing Motor</span>
+        <span class="sidebar-item" (click)="selectCalculator('replace-existing')">Replace vs Rewind</span>
       </li>
-      <li [ngClass]="{'selected': selectedCalculator == 'replace-rewind'}">
+      <!-- <li [ngClass]="{'selected': selectedCalculator == 'replace-rewind'}">
         <span class="sidebar-item" (click)="selectCalculator('replace-rewind')">Replace vs Rewind</span>
-      </li>
+      </li> -->
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'pumps'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'pumps'}" class="sidebar-item" (click)="chooseCalculator('pumps')">Pumps</span>
+    <span [ngClass]="{'selected': selectedCalculatorType == 'pumps'}" class="sidebar-item"
+      (click)="chooseCalculator('pumps')">Pumps</span>
     <ul *ngIf="selectedCalculatorType == 'pumps'">
       <li [ngClass]="{'selected': selectedCalculator == 'head-tool'}">
         <span class="sidebar-item" (click)="selectCalculator('head-tool')">Head Tool</span>
@@ -46,7 +48,8 @@
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'fans'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'fans'}" class="sidebar-item" (click)="chooseCalculator('fans')">Fans</span>
+    <span [ngClass]="{'selected': selectedCalculatorType == 'fans'}" class="sidebar-item"
+      (click)="chooseCalculator('fans')">Fans</span>
     <ul *ngIf="selectedCalculatorType == 'fans'">
       <li [ngClass]="{'selected': selectedCalculator == 'fsat-203'}">
         <span class="sidebar-item" (click)="selectCalculator('fsat-203')">Fan Analysis</span>
@@ -63,7 +66,8 @@
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'furnaces'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'furnaces'}" class="sidebar-item" (click)="chooseCalculator('furnaces')">Process
+    <span [ngClass]="{'selected': selectedCalculatorType == 'furnaces'}" class="sidebar-item"
+      (click)="chooseCalculator('furnaces')">Process
       Heating</span>
     <ul *ngIf="selectedCalculatorType == 'furnaces'">
       <li [ngClass]="{'selected': selectedCalculator == 'o2-enrichment'}">
@@ -82,7 +86,8 @@
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'steam'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'steam'}" class="sidebar-item" (click)="chooseCalculator('steam')">Steam</span>
+    <span [ngClass]="{'selected': selectedCalculatorType == 'steam'}" class="sidebar-item"
+      (click)="chooseCalculator('steam')">Steam</span>
     <ul *ngIf="selectedCalculatorType == 'steam'">
       <li [ngClass]="{'selected': selectedCalculator == 'steam-properties'}">
         <span class="sidebar-item" (click)="selectCalculator('steam-properties')">Steam Properties</span>
@@ -117,7 +122,8 @@
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'compressed-air'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'compressed-air'}" class="sidebar-item" (click)="chooseCalculator('compressed-air')">Compressed
+    <span [ngClass]="{'selected': selectedCalculatorType == 'compressed-air'}" class="sidebar-item"
+      (click)="chooseCalculator('compressed-air')">Compressed
       Air</span>
     <ul *ngIf="selectedCalculatorType == 'compressed-air'">
       <li [ngClass]="{'selected': selectedCalculator == 'bag-method'}">
@@ -152,7 +158,8 @@
   </li>
 
   <li [ngClass]="{'show-border': selectedCalculatorType == 'lighting'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'lighting'}" class="sidebar-item" (click)="chooseCalculator('lighting')">Lighting</span>
+    <span [ngClass]="{'selected': selectedCalculatorType == 'lighting'}" class="sidebar-item"
+      (click)="chooseCalculator('lighting')">Lighting</span>
     <ul *ngIf="selectedCalculatorType == 'lighting'">
       <li [ngClass]="{'selected': selectedCalculator == 'lighting-replacement'}">
         <span class="sidebar-item" (click)="selectCalculator('lighting-replacement')">Lighting Replacement</span>
@@ -162,10 +169,12 @@
 
 
   <li [ngClass]="{'show-border': selectedCalculatorType == 'utilities'}">
-    <span [ngClass]="{'selected': selectedCalculatorType == 'utilities'}" class="sidebar-item" (click)="chooseCalculator('utilities')">General</span>
+    <span [ngClass]="{'selected': selectedCalculatorType == 'utilities'}" class="sidebar-item"
+      (click)="chooseCalculator('utilities')">General</span>
     <ul *ngIf="selectedCalculatorType == 'utilities'">
       <li [ngClass]="{'selected': selectedCalculator == 'pre-assessment', 'general': mixed}">
-        <span class="sidebar-item" (click)="selectCalculator('pre-assessment')">Pre-assessment / Screening Calculator</span>
+        <span class="sidebar-item" (click)="selectCalculator('pre-assessment')">Pre-assessment / Screening
+          Calculator</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'convert-units'}">
         <span class="sidebar-item" (click)="selectCalculator('convert-units')">Unit Converter</span>
@@ -182,6 +191,15 @@
       <li [ngClass]="{'selected': selectedCalculator == 'co2-savings'}">
         <span class="sidebar-item" (click)="selectCalculator('co2-savings')">CO<sub>2</sub> Savings</span>
       </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'electricity-reduction'}">
+        <span class="sidebar-item" (click)="selectCalculator('electricity-reduction')">Electricity Reduction</span>
+      </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'natural-gas-reduction'}">
+        <span class="sidebar-item" (click)="selectCalculator('natural-gas-reduction')">Natural Gas Reduction</span>
+      </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'compressed-air-reduction'}">
+          <span class="sidebar-item" (click)="selectCalculator('compressed-air-reduction')">Compressed Air Reduction</span>
+        </li>
     </ul>
   </li>
 </ul>

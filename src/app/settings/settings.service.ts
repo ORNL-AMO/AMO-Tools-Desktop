@@ -12,41 +12,41 @@ export class SettingsService {
     this.setDontShow = new BehaviorSubject<boolean>(false);
   }
 
-  getSettingsForm(): FormGroup {
-    return this.formBuilder.group({
-      'language': ['', Validators.required],
-      'currency': ['', Validators.required],
-      'unitsOfMeasure': ['', Validators.required],
-      'distanceMeasurement': [''],
-      'flowMeasurement': [''],
-      'powerMeasurement': [''],
-      'pressureMeasurement': [''],
-      'steamPressureMeasurement': [''],
-      'steamTemperatureMeasurement': [''],
-      'steamSpecificEnthalpyMeasurement': [''],
-      'steamSpecificEntropyMeasurement': [''],
-      'steamSpecificVolumeMeasurement': [''],
-      'steamPowerMeasurement': [''],
-      'steamMassFlowMeasurement': [''],
-      'steamVolumeMeasurement': [''],
-      'steamVolumeFlowMeasurement': [''],
-      'steamVacuumPressure': [''],
-      'currentMeasurement': [''],
-      'viscosityMeasurement': [''],
-      'voltageMeasurement': [''],
-      'energySourceType': [''],
-      'furnaceType': [''],
-      'energyResultUnit': [''],
-      'customFurnaceName': [''],
-      'temperatureMeasurement': [''],
-      'phastRollupUnit': [''],
-      'defaultPanelTab': [''],
-      'fuelCost': [3.99],
-      'steamCost': [4.69],
-      'electricityCost': [.066],
-      'densityMeasurement': ['']
-    });
-  }
+  // getSettingsForm(): FormGroup {
+  //   return this.formBuilder.group({
+  //     'language': ['', Validators.required],
+  //     'currency': ['', Validators.required],
+  //     'unitsOfMeasure': ['', Validators.required],
+  //     'distanceMeasurement': [''],
+  //     'flowMeasurement': [''],
+  //     'powerMeasurement': [''],
+  //     'pressureMeasurement': [''],
+  //     'steamPressureMeasurement': [''],
+  //     'steamTemperatureMeasurement': [''],
+  //     'steamSpecificEnthalpyMeasurement': [''],
+  //     'steamSpecificEntropyMeasurement': [''],
+  //     'steamSpecificVolumeMeasurement': [''],
+  //     'steamPowerMeasurement': [''],
+  //     'steamMassFlowMeasurement': [''],
+  //     'steamVolumeMeasurement': [''],
+  //     'steamVolumeFlowMeasurement': [''],
+  //     'steamVacuumPressure': [''],
+  //     'currentMeasurement': [''],
+  //     'viscosityMeasurement': [''],
+  //     'voltageMeasurement': [''],
+  //     'energySourceType': [''],
+  //     'furnaceType': [''],
+  //     'energyResultUnit': [''],
+  //     'customFurnaceName': [''],
+  //     'temperatureMeasurement': [''],
+  //     'phastRollupUnit': [''],
+  //     'defaultPanelTab': [''],
+  //     'fuelCost': [3.99],
+  //     'steamCost': [4.69],
+  //     'electricityCost': [.066],
+  //     'densityMeasurement': ['']
+  //   });
+  // }
 
   getFormFromSettings(settings: Settings): FormGroup {
     if (settings.steamPressureMeasurement === 'psi') {
@@ -106,10 +106,14 @@ export class SettingsService {
       'disablePsatReportTutorial': settings.disablePsatReportTutorial || false,
       'disablePhastSetupTutorial': settings.disablePhastSetupTutorial || false,
       'disablePhastAssessmentTutorial': settings.disablePhastAssessmentTutorial || false,
-      'disablePhastReportTutorial': settings.disablePhastReportTutorial || false,    
+      'disablePhastReportTutorial': settings.disablePhastReportTutorial || false,
       'disableFsatSetupTutorial': settings.disableFsatSetupTutorial || false,
       'disableFsatAssessmentTutorial': settings.disableFsatAssessmentTutorial || false,
-      'disableFsatReportTutorial': settings.disableFsatReportTutorial || false
+      'disableFsatReportTutorial': settings.disableFsatReportTutorial || false,
+      'compressedAirCost': settings.compressedAirCost || 0,
+      'otherFuelCost': settings.otherFuelCost || 0,
+      'waterCost': settings.waterCost || 0,
+      'waterWasteCost': settings.waterWasteCost || 0
     });
   }
 
@@ -170,6 +174,10 @@ export class SettingsService {
       disableFsatSetupTutorial: form.controls.disableFsatSetupTutorial.value,
       disableFsatAssessmentTutorial: form.controls.disableFsatAssessmentTutorial.value,
       disableFsatReportTutorial: form.controls.disableFsatReportTutorial.value,
+      compressedAirCost: form.controls.compressedAirCost.value || 0,
+      otherFuelCost: form.controls.otherFuelCost.value || 0,
+      waterCost: form.controls.waterCost.value || 0,
+      waterWasteCost: form.controls.waterWasteCost.value || 0
     };
     return tmpSettings;
   }
@@ -225,11 +233,15 @@ export class SettingsService {
       disablePsatReportTutorial: settings.disablePsatReportTutorial,
       disablePhastSetupTutorial: settings.disablePhastSetupTutorial,
       disablePhastAssessmentTutorial: settings.disablePhastAssessmentTutorial,
-      disablePhastReportTutorial: settings.disablePhastReportTutorial,    
+      disablePhastReportTutorial: settings.disablePhastReportTutorial,
       disableFsatSetupTutorial: settings.disableFsatSetupTutorial,
       disableFsatAssessmentTutorial: settings.disableFsatAssessmentTutorial,
-      disableFsatReportTutorial: settings.disableFsatReportTutorial
-    };
+      disableFsatReportTutorial: settings.disableFsatReportTutorial,
+      compressedAirCost: settings.compressedAirCost || 0,
+      otherFuelCost: settings.otherFuelCost || 0,
+      waterCost: settings.waterCost || 0,
+      waterWasteCost: settings.waterWasteCost || 0
+    }
     return newSettings;
   }
 

@@ -4,21 +4,36 @@ a:not([href]):not([tabindex]):hover {
     cursor: pointer;
 }
 
-a:not([href]):not([tabindex]){
+a:not([href]):not([tabindex]) {
     color: blue;
 }
+
 img {
     cursor: pointer;
 }
 
-.content-container{
+.content-container {
     padding: 1rem;
 }
 
-h3{
+h3 {
     padding-top: .5rem;
 }
 
 .btn-margin-10 {
     margin: 10px 0px;
 }
+
+/* .panel-column.baseline {
+    background: #ddd;
+    box-shadow: none;
+    transition: ease-in-out 0.2s all;
+} */
+
+/* .panel-column.baseline:hover {
+    background: #fff;
+} */
+/* 
+.panel-column.modification {
+    box-shadow: 0px 0px 69px -1px rgba(0, 0, 0, 0.2);
+} */

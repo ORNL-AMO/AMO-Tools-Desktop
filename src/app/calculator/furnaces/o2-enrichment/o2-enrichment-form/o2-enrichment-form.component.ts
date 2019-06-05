@@ -21,11 +21,19 @@ export class O2EnrichmentFormComponent implements OnInit {
   settings: Settings;
   @Input()
   o2Form: FormGroup;
+
+  annualCostSavings: number;
   constructor(private o2EnrichmentService: O2EnrichmentService) { }
 
   ngOnInit() {
     this.o2Form.controls.o2CombAir.disable();
     this.setRanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.o2EnrichmentOutput) {
+      this.annualCostSavings = this.o2EnrichmentOutput.annualFuelCost - this.o2EnrichmentOutput.annualFuelCostEnriched;
+    }
   }
 
   calc() {
@@ -68,7 +76,7 @@ export class O2EnrichmentFormComponent implements OnInit {
   }
 
   plot() {
-    
+
   }
 }
 

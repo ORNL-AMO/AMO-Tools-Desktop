@@ -1,0 +1,56 @@
+<div class="col-12" [hidden]="hideCard">
+  <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !replacement.selected}">
+    <div class="card-body d-flex w-100 p-0">
+      <div class="col-1 col-item-br">
+        <div class="row align-items-center h-100">
+          <div class="col text-center">
+            <app-animated-checkmark [active]="replacement.selected" (click)="toggleSelected()">
+            </app-animated-checkmark>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 col-item-br opportunity-name">
+        <div class="row align-items-center h-100">
+          <div class="col text-center">
+            <img src="assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png" class="calc-icon">
+            <a (click)="editLighting()">
+              <span *ngIf="!replacement.opportunitySheet || !replacement.opportunitySheet.name">
+                Lighting Replacement #{{index+1}}
+              </span>
+              <span *ngIf="replacement.opportunitySheet && replacement.opportunitySheet.name">
+                {{replacement.opportunitySheet.name}}
+              </span>
+            </a><br>
+            <span>Annual Cost Savings: {{lightingReplacementResults.totalCostSavings | currency:'USD'}}</span><br>
+            <span>Annual Electricity Savings: {{lightingReplacementResults.totalEnergySavings | number:'1.0-0'}}
+              kWh</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 col-item-br text-center graph-col treasure-hunt-item">
+        <div class="large pt-2">Electricity Cost Savings</div>
+        <app-treasure-hunt-gauge [value]="percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
+      </div>
+      <div class="col-2 col-item-br opp-sheet-col">
+        <div class="row align-items-center h-100">
+          <div class="col text-center"
+            [ngClass]="{'no-opp-sheet': !replacement.opportunitySheet, 'opp-sheet-exists': replacement.opportunitySheet}"
+            (click)="editOpportunitySheet()">
+            <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
+            <span class="large pt-2" *ngIf="!replacement.opportunitySheet">Add Opportunity Sheet</span>
+            <span class="large pt-2" *ngIf="replacement.opportunitySheet">Edit Opportunity Sheet</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="row align-items-center h-100">
+          <div class="col text-center">
+            <a class="click-link" (click)="editLighting()">Edit Opportunity</a><br>
+            <a class="click-link danger" (click)="deleteItem()">Delete</a><br>
+            <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,23 +1,62 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import { LightingReplacementResults, LightingReplacementData, LightingReplacementResult } from '../../../shared/models/lighting';
+import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { OperatingHours } from '../../../shared/models/operations';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable()
 export class LightingReplacementService {
 
   baselineData: Array<LightingReplacementData>;
   modificationData: Array<LightingReplacementData>;
-  constructor() { }
+  baselineElectricityCost: number;
+  modificationElectricityCost: number;
+  constructor(private fb: FormBuilder) { }
 
-  calculate(data: LightingReplacementData): LightingReplacementData {
-    data = this.calculateOperatingHours(data);
-    data = this.calculateElectricityUse(data);
-    data = this.calculateTotalLighting(data);
-    return data;
+  initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
+    let hoursPerYear: number = 8736;
+    if (opperatingHoursPerYear) {
+      hoursPerYear = opperatingHoursPerYear.hoursPerYear;
+    }
+    return {
+      name: 'Fixture #' + (index + 1),
+      hoursPerYear: hoursPerYear,
+      wattsPerLamp: 0,
+      lampsPerFixture: 0,
+      numberOfFixtures: 0,
+      lumensPerLamp: 0,
+      totalLighting: 0,
+      electricityUse: 0
+    }
   }
 
-  calculateOperatingHours(data: LightingReplacementData): LightingReplacementData {
-    data.hoursPerYear = data.hoursPerDay * data.daysPerMonth * data.monthsPerYear;
-    return data;
+  getFormFromObj(obj: LightingReplacementData): FormGroup {
+    let form: FormGroup = this.fb.group({
+      name: [obj.name, Validators.required],
+      hoursPerYear: [obj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      wattsPerLamp: [obj.wattsPerLamp, [Validators.required, Validators.min(0)]],
+      lampsPerFixture: [obj.lampsPerFixture, [Validators.required, Validators.min(0)]],
+      numberOfFixtures: [obj.numberOfFixtures, [Validators.required, Validators.min(0)]],
+      lumensPerLamp: [obj.lumensPerLamp, [Validators.required, Validators.min(0)]],
+    });
+    return form;
+  }
+
+  getObjFromForm(form: FormGroup): LightingReplacementData {
+    let tmpData: LightingReplacementData = {
+      name: form.controls.name.value,
+      hoursPerYear: form.controls.hoursPerYear.value,
+      wattsPerLamp: form.controls.wattsPerLamp.value,
+      lampsPerFixture: form.controls.lampsPerFixture.value,
+      numberOfFixtures: form.controls.numberOfFixtures.value,
+      lumensPerLamp: form.controls.lumensPerLamp.value,
+      totalLighting: 0,
+      electricityUse: 0
+    };
+    tmpData = this.calculateElectricityUse(tmpData);
+    tmpData = this.calculateTotalLighting(tmpData);
+    return tmpData;
   }
 
   calculateElectricityUse(data: LightingReplacementData): LightingReplacementData {
@@ -30,32 +69,40 @@ export class LightingReplacementService {
     return data;
   }
 
-  getTotals(data: Array<LightingReplacementData>): LightingReplacementResults {
-    let tmpResults: LightingReplacementResults = {
-      totalElectricityUse: _.sumBy(data, 'electricityUse'),
-      totalLighting: _.sumBy(data, 'totalLighting'),
-      totalOperatingHours: _.sumBy(data, 'hoursPerYear')
-    };
+  getTotals(data: Array<LightingReplacementData>, cost: number): LightingReplacementResult {
+    let totalElectricityUse: number = _.sumBy(data, 'electricityUse');
+    let totalLighting: number = _.sumBy(data, 'totalLighting');
+    let totalOperatingHours: number = _.sumBy(data, 'hoursPerYear');
+    let totalOperatingCosts: number = totalElectricityUse * cost;
+
+    let tmpResults: LightingReplacementResult = {
+      totalElectricityUse: totalElectricityUse,
+      totalLighting: totalLighting,
+      totalOperatingHours: totalOperatingHours,
+      totalOperatingCosts: totalOperatingCosts
+    }
     return tmpResults;
+  }
+
+  getResults(lightingData: LightingReplacementTreasureHunt): LightingReplacementResults {
+    let baselineResults: LightingReplacementResult = this.getTotals(lightingData.baseline, lightingData.baselineElectricityCost);
+    let modificationResults: LightingReplacementResult = {
+      totalElectricityUse: 0,
+      totalLighting: 0,
+      totalOperatingHours: 0,
+      totalOperatingCosts: 0
+    }
+    if (lightingData.modifications) {
+      modificationResults = this.getTotals(lightingData.modifications, lightingData.modificationElectricityCost);
+    }
+    let totalEnergySavings: number = baselineResults.totalElectricityUse - modificationResults.totalElectricityUse;
+    let totalCostSavings: number = baselineResults.totalOperatingCosts - modificationResults.totalOperatingCosts;
+    return {
+      baselineResults: baselineResults,
+      modificationResults: modificationResults,
+      totalEnergySavings: totalEnergySavings,
+      totalCostSavings: totalCostSavings
+    }
   }
 }
 
-export interface LightingReplacementData {
-  hoursPerDay?: number;
-  daysPerMonth?: number;
-  monthsPerYear?: number;
-  hoursPerYear?: number;
-  wattsPerLamp?: number;
-  lampsPerFixture?: number;
-  numberOfFixtures?: number;
-  lumensPerLamp?: number;
-  totalLighting?: number;
-  electricityUse?: number;
-}
-
-
-export interface LightingReplacementResults {
-  totalElectricityUse: number;
-  totalLighting: number;
-  totalOperatingHours: number;
-}

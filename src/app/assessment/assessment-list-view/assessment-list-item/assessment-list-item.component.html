@@ -1,5 +1,5 @@
 <div class="list-row d-flex w-100"
-  [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT'}">
+  [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt'}">
   <div class="d-flex">
     <div class="p-1">
       <input type="checkbox" [(ngModel)]="assessment.selected" (change)="setDelete()" />
@@ -10,6 +10,7 @@
         <img *ngIf="assessment.type == 'PHAST'" class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram.png">
         <img *ngIf="assessment.type == 'FSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-fsat-diagram.png">
         <img *ngIf="assessment.type == 'SSMT'" class="icon-image pl-1 pr-1" src="assets/images/ico-ssmt-diagram.png">
+        <img *ngIf="assessment.type == 'TreasureHunt'" class="icon-image pl-1 pr-1" src="assets/images/treasure-hunt.png">
         <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
         <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
       </div>
@@ -78,7 +79,7 @@
   <div class="modal-dialog">
     <div class="modal-content"
       [ngClass]="{'phast':assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat':assessment.type == 'FSAT'}">
-      <div class="modal-header">
+      <div class="modal-header p-2">
         <button class="close pull-right" (click)="hideReportModal()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -92,6 +93,9 @@
           [fsat]="assessment.fsat" [inRollup]="false" [inFsat]="true" [quickReport]="true"></app-fsat-report>
         <app-ssmt-report *ngIf="assessment.type == 'SSMT'" [assessment]="assessment" [settings]="settingsCopy">
         </app-ssmt-report>
+        <app-treasure-hunt-report *ngIf="assessment.type == 'TreasureHunt'" [assessment]="assessment"
+          [settings]="settingsCopy">
+        </app-treasure-hunt-report>
       </div>
     </div>
   </div>
