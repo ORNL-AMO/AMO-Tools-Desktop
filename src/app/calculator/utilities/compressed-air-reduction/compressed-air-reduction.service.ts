@@ -47,7 +47,7 @@ export class CompressedAirReductionService {
       name: 'Equipment #' + (index + 1),
       hoursPerYear: hoursPerYear,
       utilityType: 0,
-      utilityCost: settings && settings.electricityCost ? settings.electricityCost : 0.12,
+      utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
       measurementMethod: 0,
       flowMeterMethodData: defaultFlowMeterObj,
       bagMethodData: defaultBagMethodObj,
@@ -240,6 +240,10 @@ export class CompressedAirReductionService {
         if (inputArray[i].utilityType == 0) {
           inputArray[i].utilityCost = inputArray[i].utilityCost / conversionHelper;
         }
+      }
+    } else {
+      for (let i = 0; i < inputArray.length; i++) {
+        inputArray[i].otherMethodData.consumption = inputArray[i].otherMethodData.consumption * 1000;
       }
     }
     return inputArray;

@@ -108,7 +108,8 @@
         <div class="input-group">
           <input class="form-control" name="annualCompressedAirUsage" type="number"
             [(ngModel)]="treasureHunt.currentEnergyUsage.compressedAirUsage" (input)="save()">
-          <span class="units input-group-addon">kWh</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">kSCF/yr</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">m3/yr</span>
         </div>
       </div>
       <div class="form-group">
