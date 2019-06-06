@@ -11,6 +11,7 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { BehaviorSubject } from 'rxjs';
+import { SSMT } from '../models/steam/ssmt';
 
 @Injectable()
 export class ExportService {
@@ -22,7 +23,7 @@ export class ExportService {
   workingDirId: number;
   constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService) {
     this.exportAllClick = new BehaviorSubject<boolean>(false);
-   }
+  }
 
 
   getSelected(dir: Directory, workingDirId: number) {
@@ -38,6 +39,7 @@ export class ExportService {
     if (assessments) {
       assessments.forEach(assessment => {
         let obj = this.getAssessmentObj(assessment);
+        console.log(obj);
         this.exportAssessments.push(obj);
       });
     }
@@ -57,6 +59,9 @@ export class ExportService {
   }
 
   getAssessmentObj(assessment: Assessment): ImportExportAssessment {
+    if (assessment.ssmt) {
+      assessment = this.removeSsmtResults(assessment);
+    }
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
     let model: ImportExportAssessment = {
@@ -65,6 +70,27 @@ export class ExportService {
       calculator: calculator
     };
     return model;
+  }
+
+  removeSsmtResults(assessment: Assessment): Assessment {
+    assessment.ssmt = this.deleteSsmtResults(assessment.ssmt);
+    if (assessment.ssmt.modifications) {
+      assessment.ssmt.modifications.forEach(mod => {
+        mod.ssmt = this.deleteSsmtResults(mod.ssmt);
+        if(mod.ssmt.modifications){
+          delete mod.ssmt.modifications;
+        }
+      })
+    }
+    return assessment;
+  }
+
+  deleteSsmtResults(ssmt: SSMT): SSMT {
+    if (ssmt.resultsCalculated == true && ssmt.outputData) {
+      delete ssmt.outputData;
+      ssmt.resultsCalculated = false;
+    }
+    return ssmt;
   }
 
   addDirectoryObj(directory: Directory) {
