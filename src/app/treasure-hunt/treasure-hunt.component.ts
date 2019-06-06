@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { Location } from '@angular/common';
@@ -37,6 +37,8 @@ export class TreasureHuntComponent implements OnInit {
   mainTab: string;
   subTab: string;
   subTabSub: Subscription;
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -46,7 +48,8 @@ export class TreasureHuntComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
-    private treasureHuntService: TreasureHuntService
+    private treasureHuntService: TreasureHuntService,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -86,6 +89,15 @@ export class TreasureHuntComponent implements OnInit {
     this.treasureHuntService.mainTab.next('system-setup');
     this.treasureHuntService.subTab.next('settings');
   }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.disclaimerToast();
+      this.getContainerHeight();
+    }, 100);
+  }
+
+
   getSettings() {
     //get assessment settings
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -118,12 +130,6 @@ export class TreasureHuntComponent implements OnInit {
       let tmpDir: Directory = this.directoryDbService.getById(parentId);
       this.getParentDirectorySettings(tmpDir.parentDirectoryId);
     }
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.getContainerHeight();
-    }, 100);
   }
 
   getContainerHeight() {
@@ -192,5 +198,22 @@ export class TreasureHuntComponent implements OnInit {
     } else if (this.subTab == 'operation-costs') {
       this.treasureHuntService.mainTab.next('find-treasure');
     }
+  }
+
+  disclaimerToast() {
+    this.toastData.title = 'Disclaimer';
+    this.toastData.body = 'Please keep in mind that this application is still in beta. Let us know if you have any suggestions for improving our app.';
+    this.showToast = true;
+    this.cd.detectChanges();
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    };
+    this.cd.detectChanges();
   }
 }

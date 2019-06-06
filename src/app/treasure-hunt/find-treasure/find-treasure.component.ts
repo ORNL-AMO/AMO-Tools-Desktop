@@ -33,6 +33,7 @@ export class FindTreasureComponent implements OnInit {
 
   showOpportunitySheetOnSave: boolean;
   opperatingHoursPerYear: number;
+  displayCalculatorType: string = 'All';
   constructor() { }
 
   ngOnInit() {
