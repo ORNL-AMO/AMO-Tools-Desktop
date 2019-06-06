@@ -33,13 +33,11 @@ export class ExportService {
     let assessments: Array<Assessment> = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
     let subDirs: Array<Directory> = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
     let calculators: Array<Calculator> = _.filter(dir.calculators, (calc) => { return calc.selected === true; });
-    console.log(calculators);
     //ToDo: make sure these calcs are exported
     //  need to add multiple calcs functionality
     if (assessments) {
       assessments.forEach(assessment => {
         let obj = this.getAssessmentObj(assessment);
-        console.log(obj);
         this.exportAssessments.push(obj);
       });
     }
