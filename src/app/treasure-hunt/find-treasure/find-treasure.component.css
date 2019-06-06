@@ -80,3 +80,8 @@ a:not([href]):not([tabindex]){
     box-shadow: none;
     border: none;
 }
+
+.form-group .form-control,
+.form-group label{
+    font-size: 18px;
+}
