@@ -478,6 +478,10 @@ export class PumpCurveGraphComponent implements OnInit {
       };
     }
 
+    console.log('dIntersectBaseline = ');
+    console.log(this.dIntersectBaseline);
+    console.log('dIntersectMod = ');
+    console.log(this.dIntersectMod);
 
     this.detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
     this.detailBoxPointer = this.lineChartHelperService.appendDetailBoxPointer(this.ngChart);
@@ -634,7 +638,7 @@ export class PumpCurveGraphComponent implements OnInit {
         this.keyColors.unshift(colors);
         this.rowData.unshift(data);
         this.tableData.unshift(dataPiece);
-        this.focusModIntersect = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectMod.x), this.y(this.dIntersectMod.y));
+        this.focusModIntersect = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectMod.x), this.y(this.dIntersectMod.y), 'OP2');
       }
     }
     if (this.dIntersectBaseline !== undefined) {
@@ -665,7 +669,7 @@ export class PumpCurveGraphComponent implements OnInit {
         this.keyColors.unshift(colors);
         this.rowData.unshift(data);
         this.tableData.unshift(dataPiece);
-        this.focusBaselineIntersect = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectBaseline.x), this.y(this.dIntersectBaseline.y));
+        this.focusBaselineIntersect = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectBaseline.x), this.y(this.dIntersectBaseline.y), 'OP1');
       }
     }
   }
@@ -676,11 +680,11 @@ export class PumpCurveGraphComponent implements OnInit {
 
     let iteratorShift: number = 0;
     if (this.baselineIntersect) {
-      let tableFocusIntersectBaseline: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectBaseline.x), this.y(this.dIntersectBaseline.y));
+      let tableFocusIntersectBaseline: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectBaseline.x), this.y(this.dIntersectBaseline.y), 'OP1');
       iteratorShift++;
     }
     if (this.modIntersect) {
-      let tableFocusIntersectMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectMod", "#000", "#000", this.x(this.dIntersectMod.x), this.y(this.dIntersectMod.y));
+      let tableFocusIntersectMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectMod", "#000", "#000", this.x(this.dIntersectMod.x), this.y(this.dIntersectMod.y), 'OP2');
       iteratorShift++;
     }
 
