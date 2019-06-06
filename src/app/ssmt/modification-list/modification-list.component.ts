@@ -132,6 +132,7 @@ export class ModificationListComponent implements OnInit {
       ssmt = this.ssmt;
     }
     let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(ssmt)));
+    delete ssmtCopy.modifications;
     let tmpModification: Modification = {
       ssmt: ssmtCopy,
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
