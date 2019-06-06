@@ -404,10 +404,11 @@ export class DashboardComponent implements OnInit {
     this.assessmentService.dashboardView.next('assessment-dashboard');
   }
 
-  checkImportData(data: ImportExportData) {
-    if (data.origin === "AMO-TOOLS-DESKTOP") {
+  checkImportData(data: string) {
+    let importData: ImportExportData = JSON.parse(data);
+    if (importData.origin === "AMO-TOOLS-DESKTOP") {
       this.importInProgress = true;
-      this.importService.importData(data, this.workingDirectory.id);
+      this.importService.importData(importData, this.workingDirectory.id);
       setTimeout(() => {
         this.hideImportModal();
         this.importInProgress = false;
