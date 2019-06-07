@@ -11,56 +11,76 @@
       <div class="modal-body scroll-item">
         <label>Application</label>
         <ul>
-          <li>Added: Popup to home page to ask for tool feedback</li>
-          <li>Added: Tutorial Setting for "All Hide/Show"</li>
-          <li>Enhanced: Changed name of "Contact" page to "Feedback" and added link for tool feedback survey</li>
-          <li>Enhanced: Style updates for consistency throughout the tool</li>
-          <li>Enhanced: Added button for "Copy Table" to most tables throughout tool</li>
-          <li>Enhanced: Esc button now closes popup graphs</li>
-          <li>Fixed: Several grammar/spelling issues in tool</li>
+          <li>Updated - Acknowledgments page</li>
+          <li>Updated - Electron version</li>
+          <li>Updated - Bootstrap version</li>
+          <li>Updated - Removed ng-toasty dependency</li>
+          <li>Enhanced - Formatting cleanup for the results displays</li>
 
         </ul>
         <label>Pumps</label>
         <ul>
-          <li>Fixed: Bug relating to using the backspace to clear the name of a new scenario in Explore Opportunities
+          <li>Added: Beta Disclaimer
           </li>
-          <li>Fixed: Clarified that "Cost" field in Field Data is "Electricity Cost"</li>
+          <li>Added: Warning popup when a scenario was created in Expert view but viewed in Novice view</li>
         </ul>
         <label>Process Heating</label>
         <ul>
-          <li>Enhanced: Help text for "Number of Phases" in Aux Equipment
+          <li>Fixed: Help text for Explore Opportunities was missing
           </li>
-          <li>Fixed: Updated field title for "Motor Phase" field in Aux Equipment to "Number of Phases"</li>
-        </ul>
-        <label>Fans</label>
-        <ul>
-          <li>Fixed: Updated field title for "Cost" field in Field Data to "Electricity Cost"</li>
+          <li>Fixed: Notes in Explore Opportunities was missing</li>
+          <li>Enhanced: Various HTML CSS enhancements to match PSAT and FSAT</li>
+          <li>Enhanced: Added help text diagram to several fields in flue gas calculator to better explain how to obtain
+            data</li>
         </ul>
         <label>Steam</label>
         <ul>
-          <li>New Feature - Steam System Modeling Tool - allows users to compare current steam systems to modified
-            scenarios to analyze potential energy savings
+          <li>Fixed: Import Power and Makeup Water Costs were missing from Results "Input Summary"
           </li>
-          <li>Added - Steam Reports and dynamic diagram</li>
+          <li>Fixed: Name of "High to Medium Pressure Turbine" in Results "Input Summary"</li>
+          <li>Fixed: Issue with steam unit conversions</li>
+          <li>Fixed: Steam results were not updating properly in Assessment</li>
+          <li>Fixed: Issue where scenarios where changes were made to turbines were not displaying properly in Explore
+            Opportunities</li>
+          <li>Fixed: Bug regarding copying modifications not carrying over changes to baseline</li>
+          <li>Fixed: Issue where marginal steam cost button was not calculating marginal steam costs</li>
+          <li>Fixed: Inclusion of $ before "Electricity Imported" result in steam diagram results</li>
+          <li>Fixed: Issue where HP header warning icon was not sticking to HP header in diagram</li>
+          <li>Fixed: Issue regarding extra data generation when making new scenarios resulting in not being able to
+            export assessments with several scenarios</li>
+          <li>Added: Steam to rollup report functionality</li>
+          <li>Added: Indicators for zero flow to diagram</li>
+          <li>Added: Clicking on a pipe or arrow within pipe will put the summary data in the results tab on the right
+          </li>
+          <li>Added: Beta Disclaimer</li>
+          <li>Added: Warning popup when a scenario was created in Expert view but viewed in Novice view</li>
+          <li>Added: Message in report graphs if there are no turbines to generate a turbine pie chart</li>
+          <li>Enhanced: Minor adjustments to system diagram to improve visibility of displayed values</li>
+          <li>Enhanced: Changed wording of two fields names "Desuperheat into ... pressure header" to "Desuperheat out
+            of ... pressure header"</li>
+          <li>Enhanced: Additional warnings to diagram if steam in header/equipment is saturated, cannot flash water,
+            etc.</li>
+          <li>Enhanced: User input validation warnings for various potential input errors</li>
+          <li>Enhanced: Ability to zoom in and out on the diagram</li>
         </ul>
+        <label>Treasure Hunt</label>
+        <ul>
+          <li>New Feature - Treasure Hunt Calculators - allows users to estimate the energy savings for various
+            opportunities and compare current energy use throughout facility to that after opportunity implementation
+          </li>
+        </ul>
+
+
+
         <label>Calculators</label>
         <ul>
-          <li>Added: Lighting Calculator to home screen</li>
-          <li>Enhanced: Styling of Motor - Replace/Rewind to fit into the Treasure Hunt Styling</li>
-          <li>Enhanced: Help text for Compressed Air - Bag Method calculator and Compressed Air - System Capacity
-            calculator</li>
-          <li>Enhanced: Reduced the maximum width of the unit converter calculator</li>
-          <li>Enhanced: Set the right side of the unit converter to a result instead of an updating input field</li>
-          <li>Enhanced: Styling of Motor - Replace Existing motor to fit into the Treasure Hunt Styling</li>
-          <li>Enhanced: Calculator help text for Process Heating - O2 Enrichment & Efficiency Improvement</li>
-          <li>Fixed: Bug where field help text was not always showing up in pre-assessment calculator</li>
-          <li>Fixed: Bug in pump & fan curves and system curves where tool was not converting from non-standard imperial
-            units before sending it to the suite for calculations</li>
-          <li>Fixed: Suite bug where the Steam - Flash Tank calculator would not properly identify if incoming steam was
-            superheated or saturated, leading to errors</li>
-          <li>Fixed: Several small bugs relating to calculator icons</li>
-          <li>Fixed: Bug relating to the Fan - Fan Analysis calculator not allowing progression when using "Use Custom
-            Density"</li>
+          <li>Fixed: Several bugs relating Pump/Fan and System curves</li>
+          <li>Fixed: Bug where the decimal point was not recognized in replace/rewind motor calculator</li>
+          <li>Added: Cost of electricity/fuel and cost savings to various calculator (lighting, replace motors, etc.)</li>
+          <li>Added: Electricity, natural gas, and compressed air reduction calculators</li>
+          <li>Enhanced: Combined replace/rewind motor calculator and replace motor calculators</li>
+          <li>Enhanced: Several calculators to fit into the Treasure Hunt (lighting, replace motors, etc.)</li>
+          <li>Enhanced: Description of Combined Heat and Power Calculator</li>
         </ul>
         <label>Known Issues</label>
         <ul>
