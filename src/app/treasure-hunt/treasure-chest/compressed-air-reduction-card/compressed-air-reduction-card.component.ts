@@ -38,12 +38,16 @@ export class CompressedAirReductionCardComponent implements OnInit {
   constructor(private compressedAirReductionService: CompressedAirReductionService) { }
 
   ngOnInit() {
+
     this.compressedAirReductionResults = this.compressedAirReductionService.getResults(this.settings, this.compressedAirReduction.baseline, this.compressedAirReduction.modification);
-    this.percentSavings = (this.compressedAirReductionResults.annualCostSavings / this.treasureHunt.currentEnergyUsage.compressedAirCosts) * 100;
+    let utilityCost: number = this.treasureHunt.currentEnergyUsage.compressedAirCosts;
     //electricity utility
     if (this.compressedAirReduction.baseline[0].utilityType == 1) {
       this.energyType = 'Electricity';
+      utilityCost = this.treasureHunt.currentEnergyUsage.electricityCosts;
     }
+    this.percentSavings = (this.compressedAirReductionResults.annualCostSavings / utilityCost) * 100;
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
