@@ -28,6 +28,7 @@ export class TreasureChestComponent implements OnInit {
   @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
   @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
   @ViewChild('deletedItemModal') public deletedItemModal: ModalDirective;
+  @ViewChild('importExportModal') public importExportModal: ModalDirective;
 
   selectedCalc: string = 'none';
   selectedEditIndex: number;
@@ -363,5 +364,13 @@ export class TreasureChestComponent implements OnInit {
     this.selectedEditOpportunitySheet = undefined;
     this.hideSaveCalcModal();
     this.selectCalc('none');
+  }
+
+  showImportExportModal(){
+    this.importExportModal.show();
+  }
+
+  hideImpotExportModal(){
+    this.importExportModal.hide();
   }
 }

@@ -15,7 +15,8 @@ export class TreasureChestMenuComponent implements OnInit {
   treasureHunt: TreasureHunt;
   @Input()
   settings: Settings;
-
+  @Output('emitImportExport')
+  emitImportExport = new EventEmitter<boolean>();
   @Output('emitChangeEnergyType')
   emitChangeEnergyType = new EventEmitter<string>();
   @Output('emitChangeCalculatorType')
@@ -30,6 +31,10 @@ export class TreasureChestMenuComponent implements OnInit {
 
   ngOnInit() {
     this.setEnergyTypeOptions();
+  }
+
+  showImportExport(){
+    this.emitImportExport.emit(true);
   }
 
   setEnergyType() {

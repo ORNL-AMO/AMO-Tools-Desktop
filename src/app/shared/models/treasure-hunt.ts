@@ -189,3 +189,12 @@ export interface OpportunitiesPaybackDetails {
     totals: { numOpportunities: number, totalSavings: number };
 }
 
+export interface ImportExportOpportunities {
+    lightingReplacements?: Array<LightingReplacementTreasureHunt>;
+    opportunitySheets?: Array<OpportunitySheet>;
+    replaceExistingMotors?: Array<ReplaceExistingMotorTreasureHunt>;
+    motorDrives?: Array<MotorDriveInputsTreasureHunt>;
+    naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
+    electricityReductions?: Array<ElectricityReductionTreasureHunt>;
+    compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
+}
