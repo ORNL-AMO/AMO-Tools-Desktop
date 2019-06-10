@@ -190,7 +190,7 @@
         </button>
       </div>
       <div class="modal-body pl-0 pr-0" *ngIf="importExportModal.isShown">
-        <app-import-export-opportunities [treasureHunt]="treasureHunt"></app-import-export-opportunities>
+        <app-import-export-opportunities [treasureHunt]="treasureHunt" (emitImportData)="importData($event)"></app-import-export-opportunities>
       </div>
     </div>
   </div>

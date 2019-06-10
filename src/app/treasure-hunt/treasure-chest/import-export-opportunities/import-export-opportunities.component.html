@@ -8,8 +8,14 @@
         <div class="form-group">
           <label class="w-100">Select File to Import</label>
           <input type="file" class="form-control-file w-100" (change)="setImportFile($event)">
-          <span class="help-text small">Must be an exported opportunity file from MEASUR.</span>
+          <span class="help-text small">Must be an exported opportunity file from MEASUR.</span><br>
+          <span class="alert-danger" *ngIf="validFile == false">Invalid File. Make sure opportunity file is exported
+            from this window within MEASUR.</span>
         </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-secondary pull-right" (click)="importFile()"
+          [disabled]="validFile != true">Import</button>
       </div>
     </div>
   </div>
@@ -110,6 +116,9 @@
             </li>
           </ul>
         </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-secondary pull-right" (click)="exportData()">Export</button>
       </div>
     </div>
   </div>
