@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
-import { PsatService } from '../../psat/psat.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment/assessment.service';
+import { PsatTabService } from '../psat-tab.service';
 
 @Component({
   selector: 'app-psat-banner',
@@ -16,10 +16,10 @@ export class PsatBannerComponent implements OnInit {
 
   mainTab: string;
   mainTabSub: Subscription;
-  constructor(private psatService: PsatService, private router: Router, private assessmentService: AssessmentService) { }
+  constructor(private router: Router, private assessmentService: AssessmentService, private psatTabService: PsatTabService) { }
 
   ngOnInit() {
-    this.mainTabSub = this.psatService.mainTab.subscribe(val => {
+    this.mainTabSub = this.psatTabService.mainTab.subscribe(val => {
       this.mainTab = val;
     })
   }
@@ -30,9 +30,9 @@ export class PsatBannerComponent implements OnInit {
 
   changeTab(str: string) {
     if (str == 'system-setup' || str == 'calculators') {
-      this.psatService.mainTab.next(str);
+      this.psatTabService.mainTab.next(str);
     } else if (this.assessment.psat.setupDone) {
-      this.psatService.mainTab.next(str);
+      this.psatTabService.mainTab.next(str);
     }
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-exhaust-gas-help',
@@ -6,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./exhaust-gas-help.component.css']
 })
 export class ExhaustGasHelpComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Input()
   currentField: string;
   constructor() { }

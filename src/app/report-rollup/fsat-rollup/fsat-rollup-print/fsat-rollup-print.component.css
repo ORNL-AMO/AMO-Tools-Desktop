@@ -1,0 +1,22 @@
+@media print {
+    .print-break-before {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+
+    .print-avoid-break {
+        page-break-inside: avoid;
+    }
+    
+    .header {
+        padding-top: 24px;
+    }
+
+    .row-bottom-divider {
+        border-bottom: solid 1px #999;
+    }
+
+    .print-rollup-pie-container {
+        padding-bottom: 35px;
+    }
+}

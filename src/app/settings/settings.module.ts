@@ -8,14 +8,20 @@ import { SteamSettingsComponent } from './steam-settings/steam-settings.componen
 import { PhastSettingsComponent } from './phast-settings/phast-settings.component';
 import { SettingsService } from './settings.service';
 import { FacilityInfoComponent } from './facility-info/facility-info.component';
+import { FsatSettingsComponent } from './fsat-settings/fsat-settings.component';
+import { TutorialSettingsComponent } from './tutorial-settings/tutorial-settings.component';
+import { TreasureHuntSettingsComponent } from './treasure-hunt-settings/treasure-hunt-settings.component';
 
 @NgModule({
     declarations: [
         ApplicationSettingsComponent,
         PsatSettingsComponent,
         PhastSettingsComponent,
+        FsatSettingsComponent,
         SteamSettingsComponent,
-        FacilityInfoComponent
+        FacilityInfoComponent,
+        TutorialSettingsComponent,
+        TreasureHuntSettingsComponent
     ],
     imports: [
         CommonModule,
@@ -29,8 +35,11 @@ import { FacilityInfoComponent } from './facility-info/facility-info.component';
         PsatSettingsComponent,
         ApplicationSettingsComponent,
         PhastSettingsComponent,
+        FacilityInfoComponent,
+        FsatSettingsComponent,
         SteamSettingsComponent,
-        FacilityInfoComponent
+        TutorialSettingsComponent,
+        TreasureHuntSettingsComponent
     ]
 })
 

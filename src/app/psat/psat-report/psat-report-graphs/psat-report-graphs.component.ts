@@ -2,13 +2,9 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PSAT, PsatOutputs, PsatInputs } from '../../../shared/models/psat';
 import { Assessment } from '../../../shared/models/assessment';
-// import { PsatResultsData } from '../../../report-rollup/report-rollup.service';
-import { PsatReportService } from '../psat-report.service';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../psat.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-psat-report-graphs',
@@ -69,7 +65,7 @@ export class PsatReportGraphsComponent implements OnInit {
   modExists: boolean = false;
   graphColors: Array<string>;
 
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private psatReportService: PsatReportService, private windowRefService: WindowRefService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -91,9 +87,9 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   prepPsatOptions(): void {
+    //push baseline first
     this.psatOptions.push({ name: 'Baseline', psat: this.psat, index: 0 });
     this.selectedPsat1 = this.psatOptions[0];
-
     if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
       this.modExists = true;
       let i = 1;
@@ -115,24 +111,33 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   // sets loss data and percentages for selected psats
-  getPsatData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>) {
+  getPsatModificationData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>) {
     let selectedResults: PsatOutputs;
-    let selectedInputs: PsatInputs;
-    let tmpForm: FormGroup;
-    selectedInputs = JSON.parse(JSON.stringify(psat.inputs));
-    tmpForm = this.psatService.getFormFromPsat(selectedInputs);
-    if (tmpForm.status == 'VALID') {
-      if (selectedInputs.optimize_calculation) {
-        selectedResults = this.psatService.resultsOptimal(selectedInputs, this.settings);
-      } else {
-        selectedResults = this.psatService.resultsExisting(selectedInputs, this.settings);
-      }
+    let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
+    if (isPsatValid) {
+      selectedResults = this.psatService.resultsModified(selectedInputs, this.settings);
       this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
     }
     else {
       selectedResults = this.psatService.emptyResults();
     }
   }
+
+  getPsatBaselineData(psat: PSAT, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>): PsatOutputs {
+    let selectedResults: PsatOutputs;
+    let selectedInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
+    let isPsatValid: boolean = this.psatService.isPsatValid(selectedInputs, false);
+    if (isPsatValid) {
+      selectedResults = this.psatService.resultsExisting(selectedInputs, this.settings);
+      this.setGraphData(selectedResults, selectedPieLabels, selectedPieValues, selectedBarValues);
+    }
+    else {
+      selectedResults = this.psatService.emptyResults();
+    }
+    return selectedResults;
+  }
+
 
   setGraphData(results: PsatOutputs, selectedPieLabels: Array<string>, selectedPieValues: Array<number>, selectedBarValues: Array<number>) {
     let energyInput, motorLoss, driveLoss, pumpLoss, usefulOutput;
@@ -150,22 +155,16 @@ export class PsatReportGraphsComponent implements OnInit {
     driveLoss = motorShaftPower - pumpShaftPower;
     pumpLoss = (results.motor_power - motorLoss - driveLoss) * (1 - (results.pump_efficiency / 100));
     usefulOutput = results.motor_power - (motorLoss + driveLoss + pumpLoss);
-    if (motorLoss > 0) {
-      selectedPieLabels.push('Motor Loss: ' + (100 * motorLoss / results.motor_power).toFixed(2).toString() + "%");
-      selectedPieValues.push(motorLoss);
-    }
-    if (driveLoss > 0) {
-      selectedPieLabels.push('Drive Loss: ' + (100 * driveLoss / results.motor_power).toFixed(2).toString() + "%");
-      selectedPieValues.push(driveLoss);
-    }
-    if (pumpLoss > 0) {
-      selectedPieLabels.push('Pump Loss: ' + (100 * pumpLoss / results.motor_power).toFixed(2).toString() + "%");
-      selectedPieValues.push(pumpLoss);
-    }
-    if (usefulOutput > 0) {
-      selectedPieLabels.push('Useful Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
-      selectedPieValues.push(usefulOutput);
-    }
+
+    selectedPieLabels.push('Motor Loss: ' + (100 * motorLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieValues.push(motorLoss);
+    selectedPieLabels.push('Drive Loss: ' + (100 * driveLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieValues.push(driveLoss);
+    selectedPieLabels.push('Pump Loss: ' + (100 * pumpLoss / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieValues.push(pumpLoss);
+    selectedPieLabels.push('Useful Output: ' + (100 * usefulOutput / results.motor_power).toFixed(2).toString() + "%");
+    selectedPieValues.push(usefulOutput);
+
     selectedBarValues.push(energyInput);
     selectedBarValues.push(motorLoss);
     selectedBarValues.push(driveLoss);
@@ -186,34 +185,6 @@ export class PsatReportGraphsComponent implements OnInit {
       this.selectedPsat2BarValues = this.allChartData.barValues[this.selectedPsat2.index];
       this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
     }
-
-    // if (dropDownIndex === 1) {
-    //   this.selectedPsat1PieLabels = this.allChartData.pieLabels[selectedIndex];
-    //   this.selectedPsat1PieValues = this.allChartData.pieValues[selectedIndex];
-    //   this.selectedPsat1BarValues = this.allChartData.barValues[selectedIndex];
-    //   this.selectedPsat1ExportName = this.assessment.name + "-" + this.selectedPsat1.name;
-    // }
-    // else if (dropDownIndex === 2) {
-    //   this.selectedPsat2PieLabels = this.allChartData.pieLabels[selectedIndex];
-    //   this.selectedPsat2PieValues = this.allChartData.pieValues[selectedIndex];
-    //   this.selectedPsat2BarValues = this.allChartData.barValues[selectedIndex];
-    //   this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
-    // }
-
-    // if (index === 1) {
-    //   this.selectedPsat1PieLabels = new Array<string>();
-    //   this.selectedPsat1PieValues = new Array<number>();
-    //   this.selectedPsat1BarValues = new Array<number>();
-    //   this.selectedPsat1ExportName = this.assessment.name + "-" + this.selectedPsat1.name;
-    //   this.getPsatData(this.selectedPsat1.psat, this.selectedPsat1PieLabels, this.selectedPsat1PieValues, this.selectedPsat1BarValues);
-    // }
-    // else if (index === 2) {
-    //   this.selectedPsat2PieLabels = new Array<string>();
-    //   this.selectedPsat2PieValues = new Array<number>();
-    //   this.selectedPsat2BarValues = new Array<number>();
-    //   this.selectedPsat2ExportName = this.assessment.name + "-" + this.selectedPsat2.name;
-    //   this.getPsatData(this.selectedPsat2.psat, this.selectedPsat2PieLabels, this.selectedPsat2PieValues, this.selectedPsat2BarValues);
-    // }
   }
 
   getPieWidth(): number {
@@ -243,12 +214,22 @@ export class PsatReportGraphsComponent implements OnInit {
     let allBarValues = new Array<Array<number>>();
     let allPieData;
 
-    for (let i = 0; i < this.psatOptions.length; i++) {
-      let tmpPieLabels = new Array<string>();
-      let tmpPieValues = new Array<number>();
-      let tmpBarValues = new Array<number>();
-      let tmpPsat = this.psatOptions[i].psat;
-      this.getPsatData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
+    //baseline
+    let tmpPieLabels = new Array<string>();
+    let tmpPieValues = new Array<number>();
+    let tmpBarValues = new Array<number>();
+    let tmpPsat = this.psatOptions[0].psat;
+    this.getPsatBaselineData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
+    allPieLabels.push(tmpPieLabels);
+    allPieValues.push(tmpPieValues);
+    allBarValues.push(tmpBarValues);
+    //modifications
+    for (let i = 1; i < this.psatOptions.length; i++) {
+      tmpPieLabels = new Array<string>();
+      tmpPieValues = new Array<number>();
+      tmpBarValues = new Array<number>();
+      tmpPsat = this.psatOptions[i].psat;
+      this.getPsatModificationData(tmpPsat, tmpPieLabels, tmpPieValues, tmpBarValues);
       allPieLabels.push(tmpPieLabels);
       allPieValues.push(tmpPieValues);
       allBarValues.push(tmpBarValues);

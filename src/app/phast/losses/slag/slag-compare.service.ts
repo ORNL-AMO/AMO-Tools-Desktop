@@ -8,9 +8,7 @@ export class SlagCompareService {
 
   baselineSlag: Slag[];
   modifiedSlag: Slag[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {
@@ -19,7 +17,7 @@ export class SlagCompareService {
     let isDiff: boolean = false;
     if (this.modifiedSlag) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -33,7 +31,7 @@ export class SlagCompareService {
       this.compareOutletTemperature(index) ||
       this.compareSpecificHeat(index) ||
       this.compareCorrectionFactor(index)
-    )
+    );
   }
   compareWeight(index: number): boolean {
     return this.compare(this.baselineSlag[index].weight, this.modifiedSlag[index].weight);
@@ -57,11 +55,11 @@ export class SlagCompareService {
       if (baseline.losses.slagLosses) {
         let index = 0;
         baseline.losses.slagLosses.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.slagLosses[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.slagLosses[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -74,18 +72,18 @@ export class SlagCompareService {
       this.compare(baseline.outletTemperature, modification.outletTemperature) ||
       this.compare(baseline.specificHeat, modification.specificHeat) ||
       this.compare(baseline.correctionFactor, modification.correctionFactor)
-    )
+    );
   }
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

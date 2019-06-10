@@ -1,34 +1,48 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ReceiverTankDedicatedStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { CompressedAirService } from '../../compressed-air.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-dedicated-storage-form',
   templateUrl: './dedicated-storage-form.component.html',
   styleUrls: ['./dedicated-storage-form.component.css']
 })
+
 export class DedicatedStorageFormComponent implements OnInit {
+  @Input()
+  toggleResetData: boolean;
+  @Input()
+  settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  inputs: ReceiverTankDedicatedStorage = {
-    method: 1,
-    atmosphericPressure: 14.7,
-    lengthOfDemand: 0,
-    airFlowRequirement: 0,
-    initialTankPressure: 0,
-    finalTankPressure: 0
-  };;
+  inputs: ReceiverTankDedicatedStorage;
   receiverVolume: number;
 
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.dedicatedStorageInputs;
+    this.getReceiverVolume();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.compressedAirService.initReceiverTankInputs();
+    this.inputs = this.compressedAirService.dedicatedStorageInputs;
+    this.getReceiverVolume();
   }
 
   getReceiverVolume() {
-    this.receiverVolume = StandaloneService.receiverTankSizeDedicatedStorage(this.inputs);
+    this.receiverVolume = this.standaloneService.receiverTankSizeDedicatedStorage(this.inputs, this.settings);
   }
   changeField(str: string) {
     this.emitChangeField.emit(str);

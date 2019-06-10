@@ -1,7 +1,4 @@
-
-.results-box{
-    border: solid;
-    border-radius: 10px;
-    border-color: #BF3D00;
-    padding: 5px;
+.energy-use-form-section{
+    padding-bottom: .25rem;
+    border-bottom: dashed 1px;
 }

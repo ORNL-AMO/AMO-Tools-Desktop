@@ -9,6 +9,7 @@ import { PipeSizingModule } from './pipe-sizing/pipe-sizing.module';
 import { PneumaticAirModule } from './pneumatic-air/pneumatic-air.module';
 import { ReceiverTankModule } from './receiver-tank/receiver-tank.module';
 import { SystemCapacityModule } from './system-capacity/system-capacity.module';
+import { CompressedAirService } from './compressed-air.service';
 
 @NgModule({
   imports: [
@@ -28,5 +29,8 @@ import { SystemCapacityModule } from './system-capacity/system-capacity.module';
   exports: [
     CompressedAirComponent
   ],
+  providers: [
+    CompressedAirService
+  ]
 })
 export class CompressedAirModule { }

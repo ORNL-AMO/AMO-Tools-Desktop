@@ -19,6 +19,8 @@ export class MeteredEnergyComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
 
   results: MeteredEnergyResults = {
@@ -38,7 +40,7 @@ export class MeteredEnergyComponent implements OnInit {
   ngOnInit() {
     if (!this.phast.meteredEnergy) {
       console.log('new');
-      this.initializeNew()
+      this.initializeNew();
     }
   }
 
@@ -46,13 +48,13 @@ export class MeteredEnergyComponent implements OnInit {
     let steam: boolean = false;
     let electricity: boolean = false;
     let fuel: boolean = false;
-    if (this.settings.energySourceType == 'Steam') {
+    if (this.settings.energySourceType === 'Steam') {
       steam = true;
     }
-    if (this.settings.energySourceType == 'Fuel') {
+    if (this.settings.energySourceType === 'Fuel') {
       fuel = true;
     }
-    if (this.settings.energySourceType == 'Electricity') {
+    if (this.settings.energySourceType === 'Electricity') {
       electricity = true;
     }
     this.phast.meteredEnergy = {
@@ -61,8 +63,8 @@ export class MeteredEnergyComponent implements OnInit {
       meteredEnergySteam: this.getEmptySteamInput(),
       fuel: fuel,
       steam: steam,
-      electricity: electricity
-    }
+      electricity: electricity,
+    };
   }
 
   // initializeExisting() {
@@ -119,9 +121,12 @@ export class MeteredEnergyComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  setField(currentField: string, energySource: string) {
-    this.currentField = currentField;
+  setField(energySource: string) {
     this.energySource = energySource;
+  }
+  
+  changeField(str: string) {
+    this.currentField = str;
   }
 
   getEmptySteamInput(): MeteredEnergySteam {
@@ -131,7 +136,7 @@ export class MeteredEnergyComponent implements OnInit {
       collectionTime: 0,
       electricityUsed: 0,
       electricityCollectionTime: 0
-    }
+    };
   }
 
   getEmptyFuelInput(): MeteredEnergyFuel {
@@ -143,7 +148,7 @@ export class MeteredEnergyComponent implements OnInit {
       electricityUsed: 0,
       electricityCollectionTime: 0,
       fuelEnergy: 0
-    }
+    };
   }
 
   getEmptyElectricityInput(): MeteredEnergyElectricity {
@@ -152,6 +157,6 @@ export class MeteredEnergyComponent implements OnInit {
       electricityUsed: 0,
       auxElectricityUsed: 0,
       auxElectricityCollectionTime: 0
-    }
+    };
   }
 }

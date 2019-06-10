@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from "../../../../indexedDb/window-ref.service";
 import { AtmosphereLossesCompareService } from '../atmosphere-losses-compare.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
@@ -8,6 +7,8 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { AtmosphereLossWarnings, AtmosphereLossesService } from '../atmosphere-losses.service';
+import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 
 @Component({
   selector: 'app-atmosphere-losses-form',
@@ -33,48 +34,54 @@ export class AtmosphereLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
   firstChange: boolean = true;
-  specificHeatError: string = null;
-  flowRateError: string = null;
-  temperatureError: string = null;
+  warnings: AtmosphereLossWarnings;
+
   materialTypes: Array<AtmosphereSpecificHeat>;
   showModal: boolean = false;
-  constructor(private windowRefService: WindowRefService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  idString: string;
+  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereLossesService: AtmosphereLossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
+    if (changes.baselineSelected) {
+      if (!changes.baselineSelected.firstChange) {
+        if (!this.baselineSelected) {
+          this.disableForm();
+        } else {
+          this.enableForm();
+        }
       }
-    } else {
-      this.firstChange = false;
     }
   }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
-    this.checkTempError(true);
-    this.checkCorrectionError(true);
-    this.checkInputErrors();
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.checkWarnings();
   }
 
   setProperties() {
     let selectedMaterial: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
     }
 
     this.atmosphereLossForm.patchValue({
       specificHeat: this.roundVal(selectedMaterial.specificHeat, 4)
     });
-    this.startSavePolling();
+    this.save();
   }
 
   checkSpecificHeat() {
@@ -82,11 +89,11 @@ export class AtmosphereLossesFormComponent implements OnInit {
       let material: AtmosphereSpecificHeat = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
       if (material) {
         let val = material.specificHeat;
-        if (this.settings.unitsOfMeasure == 'Metric') {
-          val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C')
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C');
         }
         material.specificHeat = this.roundVal(val, 4);
-        if (material.specificHeat != this.atmosphereLossForm.controls.specificHeat.value) {
+        if (material.specificHeat !== this.atmosphereLossForm.controls.specificHeat.value) {
           return true;
         } else {
           return false;
@@ -99,7 +106,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   disableForm() {
     this.atmosphereLossForm.controls.atmosphereGas.disable();
-    // this.atmosphereLossForm.disable();
   }
 
   roundVal(val: number, digits: number) {
@@ -109,44 +115,13 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   enableForm() {
     this.atmosphereLossForm.controls.atmosphereGas.enable();
-
-    // this.atmosphereLossForm.enable();
   }
 
-  checkTempError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.atmosphereLossForm.controls.inletTemp.value > this.atmosphereLossForm.controls.outletTemp.value) {
-      this.temperatureError = 'Inlet temperature is greater than outlet temperature'
-    } else {
-      this.temperatureError = null;
-    }
-  }
-  checkCorrectionError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.atmosphereLossForm.controls.specificHeat.value < 0) {
-      this.specificHeatError = 'Specific Heat must be greater than 0';
-    } else {
-      this.specificHeatError = null;
-    }
-    if (this.atmosphereLossForm.controls.flowRate.value < 0) {
-      this.flowRateError = 'Flow Rate must be greater than 0';
-    } else {
-      this.flowRateError = null;
-    }
-  }
-
-  checkInputErrors() {
-    if (this.temperatureError || this.specificHeatError || this.flowRateError) {
-      this.inputError.emit(true);
-      this.atmosphereLossesCompareService.inputError.next(true);
-    } else {
-      this.inputError.emit(false);
-      this.atmosphereLossesCompareService.inputError.next(false);
-    }
+  checkWarnings() {
+    let tmpLoss: AtmosphereLoss = this.atmosphereLossesService.getLossFromForm(this.atmosphereLossForm);
+    this.warnings = this.atmosphereLossesService.checkWarnings(tmpLoss);
+    let hasWarning: boolean = this.atmosphereLossesService.checkWarningsExist(this.warnings);
+    this.inputError.emit(hasWarning);
   }
 
   focusField(str: string) {
@@ -155,15 +130,13 @@ export class AtmosphereLossesFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
-  emitSave() {
-    this.saveEmit.emit(true);
-  }
 
-  startSavePolling() {
-    this.checkInputErrors();
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
+
   canCompare() {
     if (this.atmosphereLossesCompareService.baselineAtmosphereLosses && this.atmosphereLossesCompareService.modifiedAtmosphereLosses && !this.inSetup) {
       return true;
@@ -225,11 +198,11 @@ export class AtmosphereLossesFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
-      if (newMaterial.length != 0) {
+      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
         this.atmosphereLossForm.patchValue({
           atmosphereGas: newMaterial[0].id
-        })
+        });
         this.setProperties();
       }
     }

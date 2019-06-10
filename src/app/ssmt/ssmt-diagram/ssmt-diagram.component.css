@@ -1,0 +1,28 @@
+
+.boiler{
+    width: 55%;
+}
+.hover-equipment-table{
+    width: 45%;
+}
+
+.deaerator-margin{
+    margin-left: -1.5rem;
+}
+
+.deaerator-condensate-padding{
+    padding-left: 5rem;
+}
+
+.inner-system-padding{
+    padding-left: 3rem;
+}
+ 
+.ssmt-diagram{
+    transform-origin: center top;
+    /* min-width: 875px; */
+    width: 900px;
+}
+
+
+

@@ -1,0 +1,21 @@
+@media print {
+    .hide-print{
+        display: none !important;
+    }
+
+    .print-div{
+        display: none;
+    }
+}
+
+.modal-dialog{
+    top: inherit;
+}
+
+.btn{
+    padding: 6px;
+}
+
+.modal-header, .modal-body, .modal-footer{
+    padding: 10px;
+}

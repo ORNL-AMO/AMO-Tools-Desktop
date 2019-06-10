@@ -1,15 +1,14 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PsatService } from '../../../../psat/psat.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-
-import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
-//declare const d3: any;
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { PumpCurve } from '../../../../shared/models/calculators';
 import * as d3 from 'd3';
-import * as regression from 'regression';
 import * as _ from 'lodash';
+import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { PumpCurveService } from '../pump-curve.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SystemCurveService } from '../../system-curve/system-curve.service';
+import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
 
 @Component({
   selector: 'app-pump-curve-graph',
@@ -17,41 +16,89 @@ import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.servic
   styleUrls: ['./pump-curve-graph.component.css']
 })
 export class PumpCurveGraphComponent implements OnInit {
+  @Input()
+  pumpCurvePrimary: boolean;
+  @Input()
+  graphPumpCurve: boolean;
   // PumpCurveForm object holding data from form
   @Input()
-  pumpCurveForm: PumpCurveForm;
+  pumpCurve: PumpCurve;
   @Input()
   selectedFormView: string;
   @Input()
   settings: Settings;
+  @Input()
+  isFan: boolean;
 
+  //SystemCurve 
+  @Input()
+  curveConstants: any;
+  @Input()
+  pointOne: any;
+  @Input()
+  pointTwo: any;
+  @Input()
+  staticHead: number;
+  @Input()
+  lossCoefficient: number;
+  @Input()
+  graphSystemCurve: boolean;
+  graphModificationCurve: boolean = false;
+
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeGraph();
+  }
   exportName: string;
 
-  svg: any;
-  xAxis: any;
-  yAxis: any;
+  svg: d3.Selection<any>;
+  xAxis: d3.Selection<any>;
+  yAxis: d3.Selection<any>;
+  linePump: d3.Selection<any>;
+  linePumpMod: d3.Selection<any>;
+  lineSystem: d3.Selection<any>;
+  dPump: { x: number, y: number };
+  dPumpMod: { x: number, y: number };
+  dSystem: { x: number, y: number, fluidPower: number };
+  focusPump: d3.Selection<any>;
+  focusPumpMod: d3.Selection<any>;
+  focusSystem: d3.Selection<any>;
+  focusDPump: Array<{ x: number, y: number }>;
+  focusDPumpMod: Array<{ x: number, y: number }>;
+  focusDSystem: Array<{ x: number, y: number, fluidPower: number }>;
   x: any;
   y: any;
-  width: any;
-  height: any;
-  margin: any;
-  line: any;
-  filter: any;
-  detailBox: any;
+  maxX: any;
+  maxY: any;
+  width: number;
+  height: number;
+  margin: { top: number, right: number, bottom: number, left: number };
+
+  detailBox: d3.Selection<any>;
+  detailBoxPointer: d3.Selection<any>;
   tooltipPointer: any;
-  // pointer: any;
-  calcPoint: any;
-  focus: any;
-  focusMod: any;
-  isGridToggled: boolean;
+  tooltipData: Array<{ label: string, value: number, unit: string, formatX: boolean }>;
+
+  graphColors: Array<string>;
+  tableData: Array<{ borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string }>;
+  tablePointsPump: Array<d3.Selection<any>>;
+  tablePointsPumpMod: Array<d3.Selection<any>>;
+  tablePointsSystem: Array<d3.Selection<any>>;
+  deleteCount: number = 0;
+
+  dIntersectBaseline: { x: number, y: number };
+  dIntersectMod: { x: number, y: number };
+  focusBaselineIntersect: d3.Selection<any>;
+  focusModIntersect: d3.Selection<any>;
+  baselineIntersect: boolean = false;
+  modIntersect: boolean = false;
 
   firstChange: boolean = true;
 
   canvasWidth: number;
   canvasHeight: number;
-  doc: any;
-  window: any;
 
   //booleans for tooltip
   hoverBtnExport: boolean = false;
@@ -63,39 +110,74 @@ export class PumpCurveGraphComponent implements OnInit {
   hoverBtnCollapse: boolean = false;
   displayCollapseTooltip: boolean = false;
 
+  isGridToggled: boolean;
+  curveChanged: boolean = false;
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
+  //exportable table variables
+  columnTitles: Array<string>;
+  rowData: Array<Array<string>>;
+  keyColors: Array<{ borderColor: string, fillColor: string }>;
+
   @Input()
   toggleCalculate: boolean;
-  // flow: number = 0;
-  // efficiencyCorrection: number = 0;
   tmpHeadFlow: any;
-  constructor(private psatService: PsatService, private windowRefService: WindowRefService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
+  constructor(private systemCurveService: SystemCurveService, private lineChartHelperService: LineChartHelperService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.isGridToggled = false;
-    d3.select('app-pump-curve').selectAll('#gridToggleBtn')
-      .on("click", () => {
-        this.toggleGrid();
-      });
+    this.graphColors = graphColors;
+    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string }>();
+    this.tablePointsPump = new Array<d3.Selection<any>>();
+    this.tablePointsPumpMod = new Array<d3.Selection<any>>();
+    this.tablePointsSystem = new Array<d3.Selection<any>>();
+    this.focusDPump = new Array<{ x: number, y: number }>();
+    this.focusDPumpMod = new Array<{ x: number, y: number }>();
+    this.focusDSystem = new Array<{ x: number, y: number, fluidPower: number }>();
+    this.checkGraphModificationCurve();
+    this.initTooltipData();
+    //init for exportable table
+    this.columnTitles = new Array<string>();
+    this.rowData = new Array<Array<string>>();
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 100);
+  }
+
+  ngOnDestroy() {
+    this.pumpCurveService.regEquation.next(null);
+  }
+
+  initColumnTitles() {
+    this.columnTitles = new Array<string>();
+    this.columnTitles = this.pumpCurveService.initColumnTitles(this.settings, this.isFan, this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve);
+  }
+
+  initTooltipData() {
+    this.tooltipData = new Array<{ label: string, value: number, unit: string, formatX: boolean }>();
+    this.tooltipData = this.pumpCurveService.initTooltipData(this.settings, this.isFan, this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve);
   }
 
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
-
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = true;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
@@ -105,26 +187,26 @@ export class PumpCurveGraphComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -132,7 +214,7 @@ export class PumpCurveGraphComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -140,7 +222,7 @@ export class PumpCurveGraphComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       if (this.hoverBtnExpand) {
         this.displayExpandTooltip = true;
       }
@@ -148,7 +230,7 @@ export class PumpCurveGraphComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
       }
@@ -159,24 +241,20 @@ export class PumpCurveGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.resizeGraph() };
-    this.resizeGraph();
-  }
 
-  ngOnDestroy() {
-    this.window.onresize = null;
-  }
-
+  //merge system curve
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       //pump-curve.component toggles the toggleCalculate value when calculating
       //check for changes to toggleCalculate
-      if (changes.toggleCalculate) {
+      if (changes.toggleCalculate || changes.lossCoefficient || changes.staticHead || changes.graphSystemCurve || changes.graphPumpCurve || changes.selectedFormView) {
+        this.curveChanged = true;
         //if changes draw new graph
-        if (this.checkForm()) {
+        if (this.checkForm() && this.margin) {
+          this.baselineIntersect = false;
+          this.modIntersect = false;
+          this.checkGraphModificationCurve();
+          this.initTooltipData();
           this.makeGraph();
           this.svg.style("display", null);
         }
@@ -186,18 +264,30 @@ export class PumpCurveGraphComponent implements OnInit {
     }
   }
 
-  resizeGraph() {
+  checkGraphModificationCurve() {
+    if (this.pumpCurve.baselineMeasurement !== this.pumpCurve.modifiedMeasurement) {
+      this.graphModificationCurve = true;
+    }
+    else {
+      this.graphModificationCurve = false;
+    }
+  }
 
+  checkForm() {
+    if (this.pumpCurve.maxFlow > 0) {
+      return true;
+    } else { return false; }
+  }
+
+  resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
-    let curveGraph = this.doc.getElementById('panelChartContainer');
-
+    let curveGraph = this.ngChartContainer.nativeElement;
     //conditional sizing if graph is expanded/compressed
     if (!this.expanded) {
       this.canvasWidth = curveGraph.clientWidth;
       this.canvasHeight = this.canvasWidth * (3 / 5);
-    }
-    else {
+    } else {
       this.canvasWidth = curveGraph.clientWidth;
       this.canvasHeight = curveGraph.clientHeight * 0.9;
     }
@@ -205,595 +295,636 @@ export class PumpCurveGraphComponent implements OnInit {
     if (this.canvasWidth < 400) {
       this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
-      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+      if (!this.expanded) {
+        this.margin = { top: 10, right: 50, bottom: 75, left: 120 };
+      }
+      else {
+        this.margin = { top: 10, right: 120, bottom: 75, left: 120 };
+      }
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-
-    d3.select("app-pump-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
     if (this.checkForm()) {
       this.makeGraph();
     }
   }
 
-  checkForm() {
-    if (this.pumpCurveForm.maxFlow > 0) {
-      return true;
-    } else { return false }
-  }
 
 
-  calculateY(formData: PumpCurveForm, flow: number) {
+  calculateY(data: PumpCurve, flow: number): number {
     let result = 0;
-    result = formData.headConstant + formData.headFlow * flow + formData.headFlow2 * Math.pow(flow, 2) + formData.headFlow3 * Math.pow(flow, 3) + formData.headFlow4 * Math.pow(flow, 4) + formData.headFlow5 * Math.pow(flow, 5) + formData.headFlow6 * Math.pow(flow, 6);
+    result = data.headConstant + data.headFlow * flow + data.headFlow2 * Math.pow(flow, 2) + data.headFlow3 * Math.pow(flow, 3) + data.headFlow4 * Math.pow(flow, 4) + data.headFlow5 * Math.pow(flow, 5) + data.headFlow6 * Math.pow(flow, 6);
     return result;
   }
 
-  getData(): Array<any> {
-    let data = new Array<any>();
-    if (this.selectedFormView == 'Data') {
-      let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
-      let tmpArr = new Array<any>();
-      this.pumpCurveForm.dataRows.forEach(val => {
-        tmpArr.push([val.flow, val.head]);
-      })
-      let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.dataOrder, precision: 10 });
-      this.pumpCurveService.regEquation.next(results.string);
-      for (let i = 10; i <= maxDataFlow.flow; i = i + 10) {
-        let yVal = results.predict(i);
-        if (yVal[1] > 0) {
-          data.push({
-            x: i,
-            y: yVal[1]
-          })
-        }
-      }
-    } else if (this.selectedFormView == 'Equation') {
-      this.pumpCurveService.regEquation.next(null);
-      for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
-        let yVal = this.calculateY(this.pumpCurveForm, i);
-        if (yVal > 0) {
-          data.push({
-            x: i,
-            y: yVal
-          })
-        }
-      }
-    }
-    return data;
+  getData(): Array<{ x: number, y: number }> {
+    return this.pumpCurveService.getData(this.pumpCurve, this.selectedFormView);
   }
 
-  getModifiedData(baseline: number, modified: number): Array<any> {
-    let data = new Array<any>();
-    let ratio = baseline / modified;
-    if (this.selectedFormView == 'Data') {
-      let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
-      let tmpArr = new Array<any>();
-      this.pumpCurveForm.dataRows.forEach(val => {
-        tmpArr.push([val.flow, val.head]);
-      })
-      let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.dataOrder, precision: 10 });
-      for (let i = 10; i <= maxDataFlow.flow; i = i + 10) {
-        let yVal = results.predict(i);
-        if (yVal[1] > 0) {
-          data.push({
-            x: i * ratio,
-            y: yVal[1] * Math.pow(ratio, 2)
-          })
-        }
-      }
-    } else if (this.selectedFormView == 'Equation') {
-      for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
-        let yVal = this.calculateY(this.pumpCurveForm, i);
-        if (yVal > 0) {
-          data.push({
-            x: i * ratio,
-            y: yVal * Math.pow(ratio, 2)
-          })
-        }
-      }
-    }
-    return data;
+  getModifiedData(baseline: number, modified: number): Array<{ x: number, y: number }> {
+    return this.pumpCurveService.getModifiedData(this.pumpCurve, this.selectedFormView, baseline, modified);
+  }
+
+  getXScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Flow: number, systemPoint2Flow: number) {
+    return this.pumpCurveService.getXScaleMax(this.graphPumpCurve, this.graphModificationCurve, this.graphSystemCurve, this.pumpCurve, dataBaseline, dataModification, systemPoint1Flow, systemPoint2Flow);
+  }
+
+  getYScaleMax(dataBaseline: Array<{ x: number, y: number }>, dataModification: Array<{ x: number, y: number }>, systemPoint1Head: number, systemPoint2Head: number) {
+    return this.pumpCurveService.getYScaleMax(this.graphPumpCurve, dataModification.length > 0 ? this.graphModificationCurve : false, this.graphSystemCurve, this.pumpCurve, dataBaseline, dataModification, systemPoint1Head, systemPoint2Head);
   }
 
 
   makeGraph() {
-    // Data for graph
-    let data = new Array<any>();
-    data = this.getData();
-
-    let modifiedData = new Array<any>();
-    let maxX = _.maxBy(data, (val) => { return val.x });
-    let maxY = _.maxBy(data, (val) => { return val.y });
-    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-      modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
-      let modMaxX = _.maxBy(modifiedData, (val) => { return val.x });
-      let modMaxY = _.maxBy(modifiedData, (val) => { return val.y });
-      if (maxX.x < modMaxX.x) {
-        maxX = modMaxX;
-      }
-      if (maxY.y < modMaxY.y) {
-        maxY = modMaxY;
+    //init arrays for baseline, mod, and system data
+    let data = new Array<{ x: number, y: number }>();
+    let dataModification = new Array<{ x: number, y: number }>();
+    let tmpMaxData;
+    let tmpMaxDataModification;
+    let dataSystem = new Array<{ x: number, y: number, fluidPower: number }>();
+    //this array will be dummy data used to avoid visual bug with the scale-setting array
+    let dataScale = new Array<{ x: number, y: number }>();
+    //init arrays for mouseOverDriver
+    let allData: Array<Array<any>> = new Array<Array<any>>();
+    let allD: Array<any> = new Array<any>();
+    let allFocus: Array<d3.Selection<any>> = new Array<d3.Selection<any>>();
+    //populate baseline data array
+    //check if difference for mod and populate mod array
+    if (this.graphPumpCurve) {
+      data = this.getData();
+      tmpMaxData = this.pumpCurveService.getMaxYValue(data);
+      if (this.graphModificationCurve) {
+        dataModification = this.getModifiedData(this.pumpCurve.baselineMeasurement, this.pumpCurve.modifiedMeasurement);
+        tmpMaxDataModification = this.pumpCurveService.getMaxYValue(dataModification);
       }
     }
 
-    //Remove  all previous graphs
-    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
+    this.initColumnTitles();
+    //x and y scales are required for system curve data, need to check max x/y values from all lines
+    this.maxX = this.getXScaleMax(data, dataModification, this.pointOne.form.controls.flowRate.value, this.pointTwo.form.controls.flowRate.value);
+    this.maxY = this.getYScaleMax(data, dataModification, this.pointOne.form.controls.head.value, this.pointTwo.form.controls.head.value);
+    let paddingX = this.maxX.x * 0.1;
+    let paddingY = this.maxY.y * 0.1;
+    //reset and init chart area
+    this.ngChart = this.lineChartHelperService.clearSvg(this.ngChart);
+    this.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
+    this.svg = this.lineChartHelperService.applyFilter(this.svg);
+    this.svg = this.lineChartHelperService.appendRect(this.svg, this.width, this.height);
+    //create x and y graph scales
+    let xRange: { min: number, max: number } = { min: 0, max: this.width };
+    let xDomain: { min: number, max: number } = { min: 0, max: this.maxX.x + paddingX };
+    let yRange: { min: number, max: number } = { min: this.height, max: 0 };
+    let yDomain: { min: number, max: number } = { min: 0, max: this.maxY.y + paddingY };
+    this.x = this.lineChartHelperService.setScale("linear", xRange, xDomain);
+    this.y = this.lineChartHelperService.setScale("linear", yRange, yDomain);
+    let tickFormat = d3.format("d");
+    //append axis labels
+    this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, (this.isFan ? "Flow (" + this.pumpCurveService.getDisplayUnit(this.settings.fanFlowRate) + ")" : "Flow (" + this.pumpCurveService.getDisplayUnit(this.settings.flowMeasurement) + ")"));
+    this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, (this.isFan ? "Pressure (" + this.pumpCurveService.getDisplayUnit(this.settings.fanPressureMeasurement) : "Head (" + this.pumpCurveService.getDisplayUnit(this.settings.distanceMeasurement) + ")"));
+    //if system curve is active, populate data array
+    if (this.graphSystemCurve) {
+      dataSystem = this.systemCurveService.getCurvePointData(this.settings, this.x, this.y, 10, this.isFan, this.staticHead, this.lossCoefficient, this.curveConstants);
+      dataSystem.shift();
+    }
+    //create axis
+    this.xAxis = this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 5, null, null, null, tickFormat);
+    this.yAxis = this.lineChartHelperService.setYAxis(this.svg, this.y, this.width, this.isGridToggled, 6, 0, 0, 15, null);
+    //append dummy curve
+    if (this.graphPumpCurve) {
+      //repair maxY bug
+      if (this.selectedFormView === 'Equation') {
+        data[0].y = this.pumpCurve.headConstant;
+        data.pop();
+      }
+      else {
+        let tmpMaxX = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.flow; });
+        let tmpMaxY = _.maxBy(this.pumpCurve.dataRows, (val) => { return val.head; });
+        if (data[0].y > tmpMaxY.head) {
+          data[0] = {
+            x: data[0].x,
+            y: tmpMaxY.head
+          };
+        }
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].x > tmpMaxX.flow) {
+            data[i] = {
+              x: tmpMaxX.flow,
+              y: data[i].y
+            };
+          }
+          if (data[i].y > tmpMaxData) {
+            data[i] = {
+              x: data[i].x,
+              y: tmpMaxData
+            };
+          }
+        }
+      }
+      //append and draw baseline curve
+      this.linePump = this.lineChartHelperService.appendLine(this.svg, "#145A32", "2px");
+      this.linePump = this.lineChartHelperService.drawLine(this.linePump, this.x, this.y, data);
+      this.focusPump = this.lineChartHelperService.appendFocus(this.svg, "focusPump");
+      allData.push(data);
+      allD.push(this.dPump);
+      allFocus.push(this.focusPump);
+      if (this.graphModificationCurve) {
+        dataModification.pop();
+        //if graphing modification, append and draw modification curve
+        this.linePumpMod = this.lineChartHelperService.appendLine(this.svg, "#3498DB", "2px");
+        this.linePumpMod = this.lineChartHelperService.drawLine(this.linePumpMod, this.x, this.y, dataModification);
+        this.focusPumpMod = this.lineChartHelperService.appendFocus(this.svg, "focusPumpMod");
+        allData.push(dataModification);
+        allD.push(this.dPumpMod);
+        allFocus.push(this.focusPumpMod);
+      }
+    }
+    //if graphing system curve, append and draw system curve
+    if (this.graphSystemCurve) {
+      this.lineSystem = this.lineChartHelperService.appendLine(this.svg, "red", "2px", "stroke-dasharray", "3, 3");
+      this.lineSystem = this.lineChartHelperService.drawLine(this.lineSystem, this.x, this.y, dataSystem);
+      this.focusSystem = this.lineChartHelperService.appendFocus(this.svg, "focusSystem");
+      allData.push(dataSystem);
+      allD.push(this.dSystem);
+      allFocus.push(this.focusSystem);
+    }
 
-    this.svg = d3.select(this.ngChart.nativeElement).append('svg')
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-
-    // filters go in defs element
-    var defs = this.svg.append("defs");
-
-    // create filter with id #drop-shadow
-    // height=130% so that the shadow is not clipped
-    this.filter = defs.append("filter")
-      .attr("id", "drop-shadow")
-      .attr("height", "130%");
-
-    // SourceAlpha refers to opacity of graphic that this filter will be applied to
-    // convolve that with a Gaussian with standard deviation 3 and store result
-    // in blur
-    this.filter.append("feGaussianBlur")
-      .attr("in", "SourceAlpha")
-      .attr("stdDeviation", 3)
-      .attr("result", "blur");
-
-    // translate output of Gaussian blur to the right and downwards with 2px
-    // store result in offsetBlur
-    this.filter.append("feOffset")
-      .attr("in", "blur")
-      .attr("dx", 0)
-      .attr("dy", 0)
-      .attr("result", "offsetBlur");
-
-    // overlay original SourceGraphic over translated blurred opacity by using
-    // feMerge filter. Order of specifying inputs is important!
-    var feMerge = this.filter.append("feMerge");
-
-    feMerge.append("feMergeNode")
-      .attr("in", "offsetBlur");
-    feMerge.append("feMergeNode")
-      .attr("in", "SourceGraphic");
-
-    this.svg.append('rect')
-      .attr("id", "graph")
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .style("fill", "#F8F9F9")
-      .style("filter", "url(#drop-shadow)");
-
-    this.x = d3.scaleLinear()
-      .range([0, this.width])
-      .domain([0, maxX.x + 200]);
-
-    this.y = d3.scaleLinear()
-      .range([this.height, 0])
-      .domain([0, maxY.y + 100]);
-
-    if (this.isGridToggled) {
-      this.xAxis = d3.axisBottom()
-        .scale(this.x)
-        .ticks(3)
-        .tickFormat(d3.format("d"))
-        .tickSize(-this.height);
-
-      this.yAxis = d3.axisLeft()
-        .scale(this.y)
-        .tickSizeInner(0)
-        .tickSizeOuter(0)
-        .tickPadding(15)
-        .ticks(6)
-        .tickSize(-this.width);
+    if (this.graphSystemCurve && this.graphPumpCurve) {
+      let maxFlow = this.pumpCurve.maxFlow;
+      if (this.selectedFormView === 'Data') {
+        maxFlow = _.maxBy(this.pumpCurve.dataRows, (row) => {
+          return row.flow;
+        }).flow;
+      }
+      this.dIntersectBaseline = this.findIntersection(data, dataSystem, maxFlow, 1);
+      if (this.graphModificationCurve) {
+        let ratio = (this.pumpCurve.modifiedMeasurement / this.pumpCurve.baselineMeasurement);
+        this.dIntersectMod = this.findIntersection(dataModification, dataSystem, maxFlow * ratio, ratio);
+      }
+      else {
+        this.dIntersectMod = {
+          x: null,
+          y: null
+        };
+      }
+      this.addIntersectionsToTable();
     }
     else {
-      this.xAxis = d3.axisBottom()
-        .scale(this.x)
-        .ticks(3)
-        .tickFormat(d3.format("d"))
-        .tickSize(0);
-
-      this.yAxis = d3.axisLeft()
-        .scale(this.y)
-        .tickSizeInner(0)
-        .tickSizeOuter(0)
-        .tickPadding(15)
-        .ticks(6)
-        .tickSize(0);
+      this.dIntersectBaseline = {
+        x: null,
+        y: null
+      };
+      this.dIntersectMod = {
+        x: null,
+        y: null
+      };
     }
 
-    this.xAxis = this.svg.append('g')
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + this.height + ")")
-      .call(this.xAxis)
-      .style("stroke-width", ".5px")
-      .selectAll('text')
-      .style("text-anchor", "end")
-      .style("font-size", "13px")
-      .attr("transform", "rotate(-65) translate(-15, 0)")
-      .attr("dy", "12px");
+    console.log('dIntersectBaseline = ');
+    console.log(this.dIntersectBaseline);
+    console.log('dIntersectMod = ');
+    console.log(this.dIntersectMod);
 
-    this.yAxis = this.svg.append('g')
-      .attr("class", "y axis")
-      .call(this.yAxis)
-      .style("stroke-width", ".5px")
-      .selectAll('text')
-      .style("font-size", "13px");
-
-    this.makeBaselineCurve(data);
-    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-      this.makeModifiedCurve(modifiedData);
+    this.detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
+    this.detailBoxPointer = this.lineChartHelperService.appendDetailBoxPointer(this.ngChart);
+    let format = d3.format(",.2f");
+    this.lineChartHelperService.mouseOverDriver(
+      this.svg,
+      this.detailBox,
+      this.detailBoxPointer,
+      this.margin,
+      allD,
+      allFocus,
+      allData,
+      this.x,
+      this.y,
+      format,
+      format,
+      this.tooltipData,
+      this.canvasWidth,
+      ["fluidPower"]
+    );
+    //dynamic table
+    if (!this.curveChanged) {
+      this.replaceFocusPoints();
     }
-    this.svg.append("text")
-      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-      .text("Head (" + this.settings.distanceMeasurement + ")");
-
-    this.svg.append("text")
-      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .text("Flow (" + this.settings.flowMeasurement + ")");
-
-    this.calcPoint = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.calcPoint.append("circle")
-      .attr("r", 6)
-      .style("fill", "none")
-      .style("stroke", "#000000")
-      .style("stroke-width", "3px");
-
-    // Define the div for the tooltip
-    this.detailBox = d3.select(this.ngChart.nativeElement).append("div")
-      .attr("id", "detailBox")
-      .attr("class", "d3-tip")
-      .style("opacity", 0)
-      .style('pointer-events', 'none');
-
-    //debug
-    this.tooltipPointer = d3.select(this.ngChart.nativeElement).append("div")
-      .attr("id", "tooltipPointer")
-      .attr("class", "tooltip-pointer")
-      .style("opacity", 0)
-      .style('pointer-events', 'none');
-
-
-    let detailBoxWidth = 160;
-    let detailBoxHeight = 90;
-
-    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-      detailBoxWidth = 160;
-      detailBoxHeight = 160;
-
+    else {
+      this.resetTableData();
     }
-    // this.pointer = this.svg.append("polygon")
-    //   .attr("id", "pointer")
-    //   //.attr("points", "0,13, 14,13, 7,-2");
-    //   .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-    //   .style("display", "none")
-    //   .style('pointer-events', 'none');
+    this.curveChanged = false;
+    this.addLegend();
 
-    this.focus = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none")
-      .style('pointer-events', 'none');
+  }
 
-    this.focus.append("circle")
-      .attr("r", 8)
-      .style("fill", "none")
-      .style("stroke", "#145A32")
-      .style("stroke-width", "3px");
 
-    this.focus.append("text")
-      .attr("x", 9)
-      .attr("dy", ".35em");
-    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-      this.focusMod = this.svg.append("g")
-        .attr("class", "focus")
-        .style("display", "none")
-        .style('pointer-events', 'none');
+  //dynamic table
+  buildTable() {
+    let i = this.rowData.length + this.deleteCount;
+    let borderColorIndex = Math.floor(i / this.graphColors.length);
+    let format: any = d3.format(",.2f");
+    let dArray: Array<any> = this.lineChartHelperService.getDArray();
+    let dSystemIndex: number = 0;
+    let dIndex: number = 0;
+    if (this.graphPumpCurve) {
+      this.dPump = dArray[dIndex];
+      let tableFocusPump: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPump-" + this.tablePointsPump.length, this.graphColors[i % this.graphColors.length], this.graphColors[borderColorIndex % this.graphColors.length], this.x(this.dPump.x), this.y(this.dPump.y));
+      this.focusDPump.push(this.dPump);
+      this.tablePointsPump.push(tableFocusPump);
+      dSystemIndex++;
+      if (this.graphModificationCurve) {
+        this.dPumpMod = dArray[dIndex + 1];
+        let tableFocusPumpMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPumpMod-" + this.tablePointsPumpMod.length, this.graphColors[i % this.graphColors.length], this.graphColors[borderColorIndex % this.graphColors.length], this.x(this.dPumpMod.x), this.y(this.dPumpMod.y));
+        this.focusDPumpMod.push(this.dPumpMod);
+        this.tablePointsPumpMod.push(tableFocusPumpMod);
+        dSystemIndex++;
+      }
+    }
+    if (this.graphSystemCurve) {
+      this.dSystem = dArray[dSystemIndex];
+      let tableFocusSystem: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointSystem-" + this.tablePointsSystem.length, this.graphColors[i % this.graphColors.length], this.graphColors[borderColorIndex % this.graphColors.length], this.x(this.dSystem.x), this.y(this.dSystem.y));
+      this.focusDSystem.push(this.dSystem);
+      this.tablePointsSystem.push(tableFocusSystem);
+    }
+    let maxX: number = dArray[0].x;
+    for (let i = 0; i < dArray.length; i++) {
+      maxX = Math.max(maxX, dArray[i].x);
+    }
+    let dataPiece: { borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string };
+    let borderColor = this.graphColors[borderColorIndex % this.graphColors.length];
+    let fillColor = this.graphColors[i % this.graphColors.length];
+    let flowRate = maxX.toString();
+    let baseHeadOrPressure = "&mdash;";
+    let modHeadOrPressure = "&mdash;";
+    let systemHeadOrPressure = "&mdash;";
+    let fluidPower = "&mdash;";
+    let data: Array<string> = new Array<string>();
+    data.push(flowRate);
+    if (this.graphPumpCurve) {
+      if (this.dPump.x > maxX - 10) {
+        baseHeadOrPressure = format(this.dPump.y).toString();
+      }
+      data.push(baseHeadOrPressure);
+      if (this.graphModificationCurve) {
+        if (this.dPumpMod.x > maxX - 10) {
+          modHeadOrPressure = format(this.dPumpMod.y).toString();
+        }
+        data.push(modHeadOrPressure);
+      }
+    }
+    if (this.graphSystemCurve) {
+      if (this.dSystem.x > maxX - 10) {
+        systemHeadOrPressure = format(this.dSystem.y).toString();
+        fluidPower = format(this.dSystem.fluidPower).toString();
+      }
+      data.push(systemHeadOrPressure);
+      data.push(fluidPower);
+    }
+    dataPiece = {
+      borderColor: borderColor,
+      fillColor: fillColor,
+      flowRate: flowRate,
+      baseHeadOrPressure: baseHeadOrPressure,
+      modHeadOrPressure: modHeadOrPressure,
+      systemHeadOrPressure: systemHeadOrPressure,
+      fluidPower: fluidPower
+    };
+    this.tableData.push(dataPiece);
+    let colors = {
+      borderColor: this.graphColors[borderColorIndex % this.graphColors.length],
+      fillColor: this.graphColors[i % this.graphColors.length]
+    };
+    this.keyColors.push(colors);
+    this.rowData.push(data);
+  }
 
-      this.focusMod.append("circle")
-        .attr("r", 8)
+  //dynamic table
+  resetTableData() {
+    this.tableData = new Array<{ borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string }>();
+    this.tablePointsPump = new Array<d3.Selection<any>>();
+    this.tablePointsPumpMod = new Array<d3.Selection<any>>();
+    this.tablePointsSystem = new Array<d3.Selection<any>>();
+    this.focusDPump = new Array<{ x: number, y: number }>();
+    this.focusDPumpMod = new Array<{ x: number, y: number }>();
+    this.focusDSystem = new Array<{ x: number, y: number, fluidPower: number }>();
+    this.rowData = new Array<Array<string>>();
+    this.deleteCount = 0;
+    this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.addIntersectionsToTable();
+  }
+
+  addIntersectionsToTable() {
+    let format: any = d3.format(",.2f");
+    if (this.dIntersectMod !== undefined) {
+      if (this.dIntersectMod.x !== null && this.dIntersectMod.y !== null) {
+        this.modIntersect = true;
+        let dataPiece: { borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string };
+        let data: Array<string> = new Array<string>();
+        data.push(format(this.dIntersectMod.x).toString());
+        data.push("&mdash;");
+        data.push(format(this.dIntersectMod.y).toString());
+        data.push(format(this.dIntersectMod.y).toString());
+        data.push("0");
+        dataPiece = {
+          borderColor: "#000",
+          fillColor: "#000",
+          flowRate: format(this.dIntersectMod.x).toString(),
+          baseHeadOrPressure: "&mdash;",
+          modHeadOrPressure: format(this.dIntersectMod.y).toString(),
+          systemHeadOrPressure: format(this.dIntersectMod.y).toString(),
+          fluidPower: "0"
+        };
+        let colors = {
+          borderColor: "#000",
+          fillColor: "#000"
+        };
+        this.keyColors.unshift(colors);
+        this.rowData.unshift(data);
+        this.tableData.unshift(dataPiece);
+        this.focusModIntersect = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectMod.x), this.y(this.dIntersectMod.y), 'OP2');
+      }
+    }
+    if (this.dIntersectBaseline !== undefined) {
+      if (this.dIntersectBaseline.x !== null && this.dIntersectBaseline.y !== null) {
+        this.baselineIntersect = true;
+        let dataPiece: { borderColor: string, fillColor: string, flowRate: string, baseHeadOrPressure: string, modHeadOrPressure: string, systemHeadOrPressure: string, fluidPower: string };
+        let data: Array<string> = new Array<string>();
+        data.push(format(this.dIntersectBaseline.x).toString());
+        data.push(format(this.dIntersectBaseline.y).toString());
+        if (this.graphModificationCurve) {
+          data.push("&mdash;");
+        }
+        data.push(format(this.dIntersectBaseline.y).toString());
+        data.push("0");
+        dataPiece = {
+          borderColor: "#000",
+          fillColor: "#000",
+          flowRate: format(this.dIntersectBaseline.x).toString(),
+          baseHeadOrPressure: format(this.dIntersectBaseline.y).toString(),
+          modHeadOrPressure: "&mdash;",
+          systemHeadOrPressure: format(this.dIntersectBaseline.y).toString(),
+          fluidPower: "0"
+        };
+        let colors = {
+          borderColor: "#000",
+          fillColor: "#000"
+        };
+        this.keyColors.unshift(colors);
+        this.rowData.unshift(data);
+        this.tableData.unshift(dataPiece);
+        this.focusBaselineIntersect = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectBaseline.x), this.y(this.dIntersectBaseline.y), 'OP1');
+      }
+    }
+  }
+
+  //dynamic table
+  replaceFocusPoints() {
+    this.svg.selectAll('.tablePoint').remove();
+
+    let iteratorShift: number = 0;
+    if (this.baselineIntersect) {
+      let tableFocusIntersectBaseline: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(this.dIntersectBaseline.x), this.y(this.dIntersectBaseline.y), 'OP1');
+      iteratorShift++;
+    }
+    if (this.modIntersect) {
+      let tableFocusIntersectMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "intersectMod", "#000", "#000", this.x(this.dIntersectMod.x), this.y(this.dIntersectMod.y), 'OP2');
+      iteratorShift++;
+    }
+
+    if (this.graphPumpCurve) {
+      for (let i = 0; i < this.rowData.length - iteratorShift; i++) {
+        let tableFocusPump: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPump-" + i, this.tableData[i + iteratorShift].fillColor, this.tableData[i + iteratorShift].borderColor, this.x(this.focusDPump[i].x), this.y(this.focusDPump[i].y));
+      }
+      if (this.graphModificationCurve) {
+        for (let i = 0; i < this.rowData.length - iteratorShift; i++) {
+          let tableFocusPumpMod: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointPumpMod-" + i, this.tableData[i + iteratorShift].fillColor, this.tableData[i + iteratorShift].borderColor, this.x(this.focusDPumpMod[i].x), this.y(this.focusDPumpMod[i].y));
+        }
+      }
+    }
+    if (this.graphSystemCurve) {
+      for (let i = 0; i < this.rowData.length - iteratorShift; i++) {
+        let tableFocusSystem: d3.Selection<any> = this.lineChartHelperService.tableFocusHelper(this.svg, "tablePointSystem-" + i, this.tableData[i + iteratorShift].fillColor, this.tableData[i + iteratorShift].borderColor, this.x(this.focusDSystem[i].x), this.y(this.focusDSystem[i].y));
+      }
+    }
+  }
+
+  deleteFromTable(i: number) {
+    let iteratorShift: number = 0;
+    if (this.modIntersect) {
+      iteratorShift++;
+      if (this.baselineIntersect) {
+        if (i === 1) {
+          this.modIntersect = false;
+        }
+      }
+      else {
+        if (i === 0) {
+          this.modIntersect = false;
+        }
+      }
+    }
+    if (this.baselineIntersect) {
+      iteratorShift++;
+      if (i === 0) {
+        this.baselineIntersect = false;
+      }
+    }
+    for (let j = i; j < this.tableData.length - 1; j++) {
+      this.tableData[j] = this.tableData[j + 1];
+      if (this.graphPumpCurve) {
+        if (i >= iteratorShift) {
+          this.tablePointsPump[j - iteratorShift] = this.tablePointsPump[j + 1 - iteratorShift];
+          this.focusDPump[j - iteratorShift] = this.focusDPump[j + 1 - iteratorShift];
+          if (this.graphModificationCurve) {
+            this.tablePointsPumpMod[j - iteratorShift] = this.tablePointsPumpMod[j + 1 - iteratorShift];
+            this.focusDPumpMod[j - iteratorShift] = this.focusDPumpMod[j + 1 - iteratorShift];
+          }
+        }
+      }
+      if (this.graphSystemCurve) {
+        if (i >= iteratorShift) {
+          this.tablePointsSystem[j - iteratorShift] = this.tablePointsSystem[j + 1 - iteratorShift];
+          this.focusDSystem[j - iteratorShift] = this.focusDSystem[j + 1 - iteratorShift];
+        }
+      }
+      this.rowData[j] = this.rowData[j + 1];
+      this.keyColors[j] = this.keyColors[j + 1];
+    }
+    if (i !== this.tableData.length - 1) {
+      this.deleteCount += 1;
+    }
+    this.tableData.pop();
+    if (this.graphPumpCurve) {
+      if (i >= iteratorShift) {
+        this.tablePointsPump.pop();
+        this.focusDPump.pop();
+        if (this.graphModificationCurve) {
+          this.tablePointsPumpMod.pop();
+          this.focusDPumpMod.pop();
+        }
+      }
+    }
+    if (this.graphSystemCurve) {
+      if (i >= iteratorShift) {
+        this.tablePointsSystem.pop();
+        this.focusDSystem.pop();
+      }
+    }
+    this.rowData.pop();
+    this.keyColors.pop();
+    this.replaceFocusPoints();
+  }
+
+  highlightPoint(i: number) {
+    let ids: Array<string> = new Array<string>();
+    let iteratorShift: number = 0;
+    if (this.baselineIntersect) {
+      iteratorShift++;
+    }
+    if (this.modIntersect) {
+      iteratorShift++;
+    }
+    if (this.baselineIntersect && i === 0) {
+      ids.push("#intersectBaseline");
+    }
+    else if (this.modIntersect) {
+      if (i === 0 && !this.baselineIntersect) {
+        ids.push("#intersectMod");
+      }
+      else if (i === 1) {
+        ids.push("#intersectMod");
+      }
+      else {
+        if (this.graphPumpCurve) {
+          ids.push("#tablePointPump-" + (i - iteratorShift));
+          if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + (i - iteratorShift)); }
+        }
+        if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + (i - iteratorShift)); }
+      }
+    }
+    else {
+      if (this.graphPumpCurve) {
+        ids.push("#tablePointPump-" + (i - iteratorShift));
+        if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + (i - iteratorShift)); }
+      }
+      if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + (i - iteratorShift)); }
+    }
+    this.lineChartHelperService.tableHighlightPointHelper(this.svg, ids);
+  }
+
+  unhighlightPoint(i: number) {
+    let ids: Array<string> = new Array<string>();
+    let iteratorShift: number = 0;
+    if (this.baselineIntersect) {
+      iteratorShift++;
+    }
+    if (this.modIntersect) {
+      iteratorShift++;
+    }
+    if (this.baselineIntersect && i === 0) {
+      ids.push("#intersectBaseline");
+    }
+    else if (this.modIntersect) {
+      if (i === 0 && !this.baselineIntersect) {
+        ids.push("#intersectMod");
+      }
+      else if (i === 1) {
+        ids.push("#intersectMod");
+      }
+      else {
+        if (this.graphPumpCurve) {
+          ids.push("#tablePointPump-" + (i - iteratorShift));
+          if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + (i - iteratorShift)); }
+        }
+        if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + (i - iteratorShift)); }
+      }
+    }
+    else {
+      if (this.graphPumpCurve) {
+        ids.push("#tablePointPump-" + (i - iteratorShift));
+        if (this.graphModificationCurve) { ids.push("#tablePointPumpMod-" + (i - iteratorShift)); }
+      }
+      if (this.graphSystemCurve) { ids.push("#tablePointSystem-" + (i - iteratorShift)); }
+    }
+    this.lineChartHelperService.tableUnhighlightPointHelper(this.svg, ids);
+    this.replaceFocusPoints();
+  }
+
+  addLegend() {
+    // define legend box size and space
+    let legendRectHeight = 1;
+    let legendRectWidth = 30;
+    let legendSpacing = 5;
+
+    // width of lines
+    let pathStrokeWidth = "2px";
+    if (this.graphPumpCurve) {
+      this.svg.append("text")
+        .attr("class", "legend")
+        .attr("id", "legend-text-0")
+        .attr("x", this.width - legendSpacing - this.margin.right - 20)
+        .attr("y", ((legendSpacing * 0) * 2) + (this.margin.top))
+        .style("fill", "#145A32")
+        .style("font-family", "sans-serif")
+        .style("font-size", "10px")
+        .text("Baseline");
+      let item0 = d3.select("#legend-text-" + 0).node();
+      let bb0 = item0.getBBox();
+      this.svg.append("path")
+        .attr("class", "legend")
+        .attr("data-legend-key", 0)
+        .attr("data-color", "#145A32")
+        .attr("d", "M" + (bb0.x - legendSpacing - legendRectWidth) + "," + (bb0.y + bb0.height / 2) + " L" + (bb0.x - legendSpacing) + "," + (bb0.y + bb0.height / 2))
+        .style("stroke", "#145A32")
+        .style("stroke-width", "2px")
         .style("fill", "none")
-        .style("stroke", "#3498DB")
-        .style("stroke-width", "3px");
-
-      this.focusMod.append("text")
-        .attr("x", 9)
-        .attr("dy", ".35em");
+        .attr("height", legendRectHeight)
+        .attr("width", legendRectWidth);
+      if (this.graphModificationCurve) {
+        this.svg.append("text")
+          .attr("class", "legend")
+          .attr("id", "legend-text-1")
+          .attr("x", this.width - legendSpacing - this.margin.right - 20)
+          .attr("y", ((legendSpacing * 1) * 2) + (this.margin.top))
+          .style("fill", "#3498DB")
+          .style("font-family", "sans-serif")
+          .style("font-size", "10px")
+          .text("Modification");
+        let item1 = d3.select("#legend-text-" + 1).node();
+        let bb1 = item1.getBBox();
+        this.svg.append("path")
+          .attr("class", "legend")
+          .attr("data-legend-key", 1)
+          .attr("data-color", "#3498DB")
+          .attr("d", "M" + (bb1.x - legendSpacing - legendRectWidth) + "," + (bb1.y + bb1.height / 2) + " L" + (bb1.x - legendSpacing) + "," + (bb1.y + bb1.height / 2))
+          .style("stroke", "#3498DB")
+          .style("stroke-width", "2px")
+          .style("fill", "none")
+          .attr("height", legendRectHeight)
+          .attr("width", legendRectWidth);
+      }
     }
-    var format = d3.format(",.2f");
-    var bisectDate = d3.bisector(function (d) { return d.x; }).left;
-
-    this.svg.select('#graph')
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .attr("class", "overlay")
-      .attr("fill", "#ffffff")
-      .style("filter", "url(#drop-shadow)")
-      .on("mouseover", () => {
-
-        this.focus
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-          this.focusMod
-            .style("display", null)
-            .style("opacity", 1)
-            .style('pointer-events', 'none');
-        }
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
-        this.detailBox
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-        //debug
-        this.tooltipPointer
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-      })
-      .on("mousemove", () => {
-
-        this.focus
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-          this.focusMod
-            .style("display", null)
-            .style("opacity", 1)
-            .style('pointer-events', 'none');
-        }
-        // this.pointer
-        //   .style("display", null)
-        //   .style('pointer-events', 'none');
-        this.detailBox
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-        this.tooltipPointer
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-        let x0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
-        let i = bisectDate(data, x0, 1);
-        if (i >= data.length) {
-          i = data.length - 1
-        }
-        let d0 = data[i - 1];
-        let d1 = data[i];
-        let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-        let xVal = this.x(d.x);
-
-
-        if (isNaN(xVal) == false) {
-          if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-            i = bisectDate(modifiedData, x0, 1);
-            let modD0 = modifiedData[i - 1];
-            let modD1 = modifiedData[i];
-            if (modD0 && modD1) {
-
-              //debug
-              console.log("modD0 && modD1");
-
-              let modD = x0 - modD0.x > modD1.x - x0 ? modD1 : modD0;
-              xVal = this.x(modD.x);
-              if (isNaN(xVal) == false) {
-                let minBaseline = _.minBy(data, (val) => { return val.y });
-                let minMod = _.minBy(modifiedData, (val) => { return val.y });
-                this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
-                this.focusMod.attr("transform", "translate(" + this.x(d.x) + "," + this.y(modD.y) + ")");
-
-                if (minMod.y < minBaseline.y) {
-                  // this.pointer
-                  //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(modD.y) + 27) + ')')
-                  //   .style("fill", "#ffffff");
-                  // .style("filter", "url(#drop-shadow)");
-
-                  this.detailBox
-                    .style("padding-right", "10px")
-                    .style("padding-left", "10px")
-                    .html(
-                      "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
-
-                      "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>" +
-                      "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
-
-                      "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
-
-                    // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
-
-                    //real version
-                    // .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
-                    // .style("top", (this.margin.top + this.y(modD.y) + 26) + "px")
-
-                    //debug
-                    .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
-                    .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
-                    .style("position", "absolute")
-                    .style("width", detailBoxWidth + "px")
-                    .style("height", detailBoxHeight + "px")
-                    .style("padding-left", "10px")
-                    .style("padding-right", "10px")
-                    .style("font", "12px sans-serif")
-                    .style("background", "#ffffff")
-                    .style("border", "0px")
-                    .style("pointer-events", "none");
-
-                  this.tooltipPointer
-                    .attr("class", "tooltip-pointer")
-                    .html("<div></div>")
-                    .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
-                    .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
-                    .style("position", "absolute")
-                    .style("width", "0px")
-                    .style("height", "0px")
-                    .style("border-left", "10px solid transparent")
-                    .style("border-right", "10px solid transparent")
-                    .style("border-bottom", "10px solid white")
-                    .style('pointer-events', 'none');
-                }
-              } else {
-                // this.pointer
-                //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-                //   .style("fill", "#ffffff")
-                // .style("filter", "url(#drop-shadow)");
-
-                this.detailBox
-                  .style("padding-right", "10px")
-                  .style("padding-left", "10px")
-                  .html(
-                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
-
-                    "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "/div></p>" +
-                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
-
-                    "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
-
-                  // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
-
-                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
-                  .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
-                  .style("position", "absolute")
-                  .style("width", detailBoxWidth + "px")
-                  .style("height", detailBoxHeight + "px")
-                  .style("padding-left", "10px")
-                  .style("padding-right", "10px")
-                  .style("font", "12px sans-serif")
-                  .style("background", "#ffffff")
-                  .style("border", "0px")
-                  .style("box-shadow", "0px 0px 10px 2px grey")
-                  .style("pointer-events", "none");
-
-                this.tooltipPointer
-                  .attr("class", "tooltip-pointer")
-                  .html("<div></div>")
-                  .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
-                  .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
-                  .style("position", "absolute")
-                  .style("width", "0px")
-                  .style("height", "0px")
-                  .style("border-left", "10px solid transparent")
-                  .style("border-right", "10px solid transparent")
-                  .style("border-bottom", "10px solid white")
-                  .style('pointer-events', 'none');
-              }
-
-              // this.pointer.transition()
-              //   .style("opacity", 1);
-
-              this.detailBox.transition()
-                .style("opacity", 1);
-
-              this.tooltipPointer.transition()
-                .style("opacity", 1);
-            }
-          }
-          else {
-
-            //debug
-            console.log("NOT modD0 && modD1");
-
-            this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
-
-            // this.pointer.transition()
-            //   .style("opacity", 1);
-
-            this.detailBox.transition()
-              .style("opacity", 1);
-
-            this.tooltipPointer.transition()
-              .style("opacity", 1);
-
-            // this.pointer
-            //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-            //   .style("fill", "#ffffff");
-            // .style("filter", "url(#drop-shadow)");
-
-
-            this.detailBox
-              .style("padding-right", "10px")
-              .style("padding-left", "10px")
-              .html(
-                "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " " + this.settings.flowMeasurement + "</div>" +
-
-                "<strong><div>Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>")
-
-              // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
-
-
-              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
-              .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
-              .style("position", "absolute")
-              .style("width", detailBoxWidth + "px")
-              .style("height", detailBoxHeight + "px")
-              .style("padding-left", "10px")
-              .style("padding-right", "10px")
-              .style("font", "12px sans-serif")
-              .style("background", "#ffffff")
-              .style("border", "0px")
-              .style("box-shadow", "0px 0px 10px 2px grey")
-              .style("pointer-events", "none");
-
-
-            this.tooltipPointer
-              .attr("class", "tooltip-pointer")
-              .html("<div></div>")
-              .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
-              .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
-              .style("position", "absolute")
-              .style("width", "0px")
-              .style("height", "0px")
-              .style("border-left", "10px solid transparent")
-              .style("border-right", "10px solid transparent")
-              .style("border-bottom", "10px solid white")
-              .style('pointer-events', 'none');
-          }
-        }
-      })
-      .on("mouseout", () => {
-        // this.pointer
-        //   .transition()
-        //   .delay(100)
-        //   .duration(600)
-        //   .style("opacity", 0);
-
-        this.detailBox
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-
-        this.tooltipPointer
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-
-        this.focus
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
-          this.focusMod
-            .transition()
-            .delay(100)
-            .duration(600)
-            .style("opacity", 0);
-        }
-      });
+    if (this.graphSystemCurve) {
+      this.svg.append("text")
+        .attr("class", "legend")
+        .attr("id", "legend-text-2")
+        .attr("x", this.width - legendSpacing - this.margin.right - 20)
+        .attr("y", ((legendSpacing * 2) * 2) + (this.margin.top))
+        .style("fill", "red")
+        .style("font-family", "sans-serif")
+        .style("font-size", "10px")
+        .text("System Curve");
+      let item2 = d3.select("#legend-text-" + 2).node();
+      let bb2 = item2.getBBox();
+      this.svg.append("path")
+        .attr("class", "legend")
+        .attr("data-legend-key", 2)
+        .attr("data-color", "red")
+        .attr("d", "M" + (bb2.x - legendSpacing - legendRectWidth) + "," + (bb2.y + bb2.height / 2) + " L" + (bb2.x - legendSpacing) + "," + (bb2.y + bb2.height / 2))
+        .style("stroke", "red")
+        .style("stroke-width", "2px")
+        .style("stroke-dasharray", ("3, 3"))
+        .style("fill", "none")
+        .attr("height", legendRectHeight)
+        .attr("width", legendRectWidth);
+    }
   }
 
   toggleGrid() {
@@ -807,65 +938,115 @@ export class PumpCurveGraphComponent implements OnInit {
     }
   }
 
-  makeBaselineCurve(data) {
-    var guideLine = d3.line()
-      .x((d) => { return this.x(d.x); })
-      .y((d) => { return this.y(d.y); })
-      .curve(d3.curveNatural);
-
-    let line = this.svg.append("path")
-      .attr("class", "line")
-      .attr("id", "avgLine")
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#145A32")
-      .style('pointer-events', 'none');
-
-    line.data([data]).attr("d", guideLine);
-  }
-  makeModifiedCurve(data) {
-    var guideLine = d3.line()
-      .x((d) => { return this.x(d.x); })
-      .y((d) => { return this.y(d.y); })
-      .curve(d3.curveNatural);
-
-    let line = this.svg.append("path")
-      .attr("class", "line")
-      .attr("id", "avgLine")
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#3498DB")
-      .style('pointer-events', 'none');
-
-    line.data([data]).attr("d", guideLine);
-  }
-
   downloadChart() {
     if (!this.exportName) {
-      this.exportName = "pump-curve-graph";
+      this.exportName = "";
+      if (this.isFan) {
+        if (this.graphPumpCurve) {
+          this.exportName = "fan-curve-";
+        }
+        if (this.graphSystemCurve) {
+          this.exportName = this.exportName + "fan-system-curve-";
+        }
+        this.exportName = this.exportName + "graph";
+      } else {
+        if (this.graphPumpCurve) {
+          this.exportName = "pump-curve-";
+        }
+        if (this.graphSystemCurve) {
+          this.exportName = this.exportName + "pump-system-curve-";
+        }
+        this.exportName = this.exportName + "graph";
+      }
     }
     this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 
-    //========= chart resize functions ==========
-    expandChart() {
-      this.expanded = true;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
+  //========= chart resize functions ==========
+  expandChart() {
+    this.expanded = true;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+
+  contractChart() {
+    this.expanded = false;
+    this.hideTooltip('btnExpandChart');
+    this.hideTooltip('btnCollapseChart');
+    setTimeout(() => {
+      this.resizeGraph();
+    }, 200);
+  }
+  //========== end chart resize functions ==========
+
+  findIntersection(pumpData: Array<{ x: number, y: number }>, systemData: Array<{ x: number, y: number, fluidPower: number }>, maxFlow: number, ratio: number): { x: number, y: number } {
+    let intersected: boolean = false;
+    let pumpStartGreater: boolean = false;
+    let intersectPoint: number = 0;
+    let intersect: { x: number, y: number } = {
+      x: null,
+      y: null
+    };
+    if (pumpData[0].y > systemData[0].y) {
+      pumpStartGreater = true;
     }
-  
-    contractChart() {
-      this.expanded = false;
-      this.hideTooltip('btnExpandChart');
-      this.hideTooltip('btnCollapseChart');
-      setTimeout(() => {
-        this.resizeGraph();
-      }, 200);
+    if (pumpStartGreater) {
+      for (let i = 1; i < pumpData.length; i++) {
+        if (pumpData[i].y < systemData[i].y) {
+          intersectPoint = i;
+          intersected = true;
+          break;
+        }
+      }
     }
-    //========== end chart resize functions ==========
+    else {
+      for (let i = 1; i < pumpData.length; i++) {
+        if (pumpData[i].y > systemData[i].y) {
+          intersectPoint = i;
+          intersected = true;
+          break;
+        }
+      }
+    }
+
+    if (intersected) {
+      let pumpHead1 = pumpData[intersectPoint - 1].y;
+      let pumpHead2 = pumpData[intersectPoint].y;
+      let systemHead1 = systemData[intersectPoint - 1].y;
+      let systemHead2 = systemData[intersectPoint].y;
+      let avgHead = this.calculateAverage([pumpHead1, pumpHead2, systemHead1, systemHead2]);
+      let avgFlow = this.calculateFlowFromHead(avgHead);
+      intersect = {
+        x: avgFlow,
+        y: avgHead
+      };
+    }
+    return intersect;
+  }
+
+  calculateAverage(d: Array<number>) {
+    let avg: number = 0;
+    for (let i = 0; i < d.length; i++) {
+      avg += d[i];
+    }
+    avg = avg / d.length;
+    return avg;
+  }
+
+  calculateFlowFromHead(head: number): number {
+    let flow: number;
+    flow = Math.pow((head - this.staticHead) / this.lossCoefficient, 1 / this.curveConstants.form.controls.systemLossExponent.value);
+    return flow;
+  }
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code === 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
 }

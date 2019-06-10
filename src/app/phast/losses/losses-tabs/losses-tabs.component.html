@@ -5,7 +5,7 @@
     <app-atmosphere-tab *ngIf="tab.componentStr == 'atmosphere-losses'" [phast]="phast" [inSetup]="inSetup"></app-atmosphere-tab>
     <app-auxiliary-power-tab *ngIf="tab.componentStr == 'auxiliary-power'" [phast]="phast" [inSetup]="inSetup"></app-auxiliary-power-tab>
     <app-cooling-tab *ngIf="tab.componentStr == 'cooling-losses'" [phast]="phast" [inSetup]="inSetup"></app-cooling-tab>
-    <app-energy-input-exhaust-gas-tab *ngIf="tab.componentStr == 'energy-input-exhaust-gas'" [phast]="phast" [inSetup]="inSetup"></app-energy-input-exhaust-gas-tab>
+    <app-energy-input-exhaust-gas-tab *ngIf="tab.componentStr == 'energy-input-exhaust-gas'" [phast]="phast" [inSetup]="inSetup" [settings]="settings"></app-energy-input-exhaust-gas-tab>
     <app-energy-input-tab *ngIf="tab.componentStr == 'energy-input'" [phast]="phast" [inSetup]="inSetup"></app-energy-input-tab>
     <app-extended-surface-tab *ngIf="tab.componentStr == 'extended-surface-losses'" [phast]="phast" [inSetup]="inSetup"></app-extended-surface-tab>
     <app-fixture-tab *ngIf="tab.componentStr == 'fixture-losses'" [phast]="phast" [inSetup]="inSetup"></app-fixture-tab>

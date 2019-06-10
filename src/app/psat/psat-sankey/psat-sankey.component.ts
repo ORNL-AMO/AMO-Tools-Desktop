@@ -42,6 +42,8 @@ export class PsatSankeyComponent implements OnInit {
   @ViewChild("ngChart") ngChart: ElementRef;
   @Input()
   isBaseline: boolean;
+  @Input()
+  baseline: PSAT;
 
   annualSavings: number;
   percentSavings: number;
@@ -69,27 +71,26 @@ export class PsatSankeyComponent implements OnInit {
   motor: number;
   drive: number;
   pump: number;
-  baseline: PSAT;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private compareService: CompareService) { }
 
   ngOnInit() {
-    this.baseline = this.compareService.baselinePSAT;
-    if (this.location != "sankey-diagram") {
-      // this.location = this.location + this.modIndex.toString();
+    if (!this.baseline && !this.isBaseline) {
+      this.baseline = this.compareService.baselinePSAT;
+    }
+
+    if (this.printView) {
+    }
+    else if (this.location != "sankey-diagram") {
       if (this.location == 'baseline') {
         this.location = this.assessmentName + '-baseline';
       }
       else {
         this.location = this.assessmentName + '-modification';
       }
-
-      if (this.printView) {
-        this.location = this.location + '-' + this.modIndex;
-      }
-      this.location = this.location.replace(/ /g, "");
-      this.location = this.location.replace(/[\])}[{(]/g, '');
-      this.location = this.location.replace(/#/g, "");
     }
+    this.location = this.location.replace(/ /g, "");
+    this.location = this.location.replace(/[\])}[{(]/g, '');
+    this.location = this.location.replace(/#/g, "");
   }
 
   ngAfterViewInit() {
@@ -101,7 +102,7 @@ export class PsatSankeyComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
-        if (this.location != "sankey-diagram") {
+        if (this.location != "sankey-diagram" && !this.printView) {
           if (this.isBaseline) {
             this.location = this.assessmentName + '-baseline';
           }
@@ -122,18 +123,13 @@ export class PsatSankeyComponent implements OnInit {
   getResults() {
     //create copies of inputs to use for calcs
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let tmpForm = this.psatService.getFormFromPsat(this.selectedInputs);
-    if (tmpForm.status == 'VALID') {
-      if (this.selectedInputs.optimize_calculation) {
-        this.selectedResults = this.psatService.resultsOptimal(this.selectedInputs, this.settings);
-      } else {
-      if(this.isBaseline){
+    let isPsatValid: boolean = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
+    if (isPsatValid) {
+      if (this.isBaseline) {
         this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
-      }else {
-        let existingResults: PsatOutputs = this.psatService.resultsExisting(this.baseline.inputs, this.settings);
-        this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings, existingResults.pump_efficiency);
+      } else {
+        this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings);
       }
-    }
     } else {
       this.selectedResults = this.psatService.emptyResults();
     }
@@ -346,7 +342,7 @@ export class PsatSankeyComponent implements OnInit {
         return this.makeLinks(d, nodes);
       })
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#psat-" + location + "-linear-gradient-" + i + ")";
+        return "url(#psat-" + location + "-linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
@@ -612,7 +608,7 @@ export class PsatSankeyComponent implements OnInit {
   getEndMarker(d, nodes) {
     let location = this.location;
     if (!nodes[d.target].inter || nodes[d.target].output) {
-      return "url(" + window.location + "#psat-end-" + location + "-" + d.target + ")";
+      return "url(#psat-end-" + location + "-" + d.target + ")";
     }
     else {
       return "";
@@ -757,7 +753,7 @@ export class PsatSankeyComponent implements OnInit {
       });
     link
       .style("stroke", (d, i) => {
-        return "url(" + window.location + "#psat-linear-gradient-" + i + ")"
+        return "url(#psat-linear-gradient-" + i + ")"
       });
     nodes_text
       .attr("dx", function (d) {

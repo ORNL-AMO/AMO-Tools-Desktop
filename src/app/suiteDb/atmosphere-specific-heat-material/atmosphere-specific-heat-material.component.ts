@@ -49,8 +49,8 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       this.allMaterials = this.suiteDbService.selectAtmosphereSpecificHeat();
       this.indexedDbService.getAtmosphereSpecificHeat().then(idbResults => {
         this.allCustomMaterials = idbResults;
-        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
-        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
         this.setExisting();
       });
     }
@@ -64,25 +64,25 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
       }
       let suiteDbResult = this.suiteDbService.insertAtmosphereSpecificHeat(this.newMaterial);
-      if (suiteDbResult == true) {
+      if (suiteDbResult === true) {
         this.indexedDbService.addAtmosphereSpecificHeat(this.newMaterial).then(idbResults => {
           this.closeModal.emit(this.newMaterial);
-        })
+        });
       }
     }
   }
 
   updateMaterial() {
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
     }
     this.newMaterial.id = this.sdbEditMaterialId;
     let suiteDbResult = this.suiteDbService.updateAtmosphereSpecificHeat(this.newMaterial);
-    if (suiteDbResult == true) {
+    if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       this.indexedDbService.putAtmosphereSpecificHeat(this.newMaterial).then(val => {
@@ -94,7 +94,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteAtmosphereSpecificHeat(this.sdbEditMaterialId);
-      if (suiteDbResult == true) {
+      if (suiteDbResult === true) {
         this.indexedDbService.deleteAtmosphereSpecificHeat(this.idbEditMaterialId).then(val => {
           this.closeModal.emit(this.newMaterial);
         });
@@ -104,34 +104,34 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
 
   setExisting() {
     if (this.editExistingMaterial && this.existingMaterial) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial = {
           id: this.existingMaterial.id,
           substance: this.existingMaterial.substance,
           specificHeat: this.convertUnitsService.value(this.existingMaterial.specificHeat).from('btulbF').to('kJkgC')
-        }
+        };
       }
       else {
         this.newMaterial = {
           id: this.existingMaterial.id,
           substance: this.existingMaterial.substance,
           specificHeat: this.existingMaterial.specificHeat
-        }
+        };
       }
     }
     else if (this.selectedMaterial) {
 
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial = {
           substance: this.selectedMaterial.substance + ' (mod)',
           specificHeat: this.convertUnitsService.value(this.selectedMaterial.specificHeat).from('btulbF').to('kJkgC')
-        }
+        };
       }
       else {
         this.newMaterial = {
           substance: this.selectedMaterial.substance + ' (mod)',
           specificHeat: this.selectedMaterial.specificHeat
-        }
+        };
       }
       this.checkMaterialName();
     }
@@ -140,8 +140,8 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.sdbEditMaterialId) {
-        return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
+      if (material.id !== this.sdbEditMaterialId) {
+        return material.substance.toLowerCase().trim() === this.newMaterial.substance.toLowerCase().trim();
       }
     });
 
@@ -149,7 +149,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       this.nameError = 'This name is in use by another material';
       this.isValidMaterialName = false;
     }
-    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+    else if (this.newMaterial.substance.toLowerCase().trim() === '') {
       this.nameError = 'The material must have a name';
       this.isValidMaterialName = false;
     }
@@ -162,12 +162,12 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
 
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
+    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() === this.newMaterial.substance.toLowerCase().trim(); });
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isValidMaterialName = false;
     }
-    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+    else if (this.newMaterial.substance.toLowerCase().trim() === '') {
       this.nameError = 'The material must have a name';
       this.isValidMaterialName = false;
     }

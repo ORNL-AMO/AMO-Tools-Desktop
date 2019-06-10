@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FieldMeasurementOutputs } from '../percent-load-estimation.component';
+import { FieldMeasurementOutputs } from '../percent-load-estimation.service';
 
 @Component({
   selector: 'app-field-measurement-table',

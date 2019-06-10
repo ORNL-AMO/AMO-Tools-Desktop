@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { FormBuilder, Validators } from "@angular/forms";
-import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { FieldMeasurementService } from './field-measurement.service';
+import { FieldMeasurementInputs, SlipMethod, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -24,36 +23,14 @@ export class PercentLoadEstimationComponent implements OnInit {
   headerHeight: number;
   tabSelect: string = 'results';
   toggleCalculate = false;
-  loadEstimationMethod: number = 0;
+  loadEstimationMethod: number;
   percentLoadEstimation: number;
 
-  slipMethodData: SlipMethod = {
-    synchronousSpeed: 0,
-    measuredSpeed: 0,
-    nameplateFullLoadSpeed: 0
-  }
+  slipMethodData: SlipMethod;
 
-  fieldMeasurementData: FieldMeasurementInputs = {
-    phase1Voltage: 0,
-    phase1Amps: 0,
-    phase2Voltage: 0,
-    phase2Amps: 0,
-    phase3Voltage: 0,
-    phase3Amps: 0,
-    ratedVoltage: 0,
-    ratedCurrent: 0,
-    powerFactor: 0
-  }
-
-  fieldMeasurementResults: FieldMeasurementOutputs = {
-    averageVoltage: 0,
-    averageCurrent: 0,
-    inputPower: 0,
-    percentLoad: 0,
-    maxVoltageDeviation: 0,
-    voltageUnbalance: 0
-  }
-  constructor(private formBuilder: FormBuilder, private settingsDbService: SettingsDbService, private fieldMeasurementService: FieldMeasurementService) { }
+  fieldMeasurementData: FieldMeasurementInputs;
+  fieldMeasurementResults: FieldMeasurementOutputs;
+  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -62,12 +39,29 @@ export class PercentLoadEstimationComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    this.fieldMeasurementData = this.percentLoadEstimationService.fieldMeasurementInputs;
+    this.slipMethodData = this.percentLoadEstimationService.slipMethodInputs;
+    this.loadEstimationMethod = this.percentLoadEstimationService.loadEstimationMethod;
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    this.calculateSlipMethod(this.slipMethodData);
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy() {
+    this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
+  }
+
+
+  btnResetData() {
+    this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
+    this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    this.calculateSlipMethod(this.slipMethodData);
   }
 
   resizeTabs() {
@@ -82,14 +76,16 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   calculateSlipMethod(data: SlipMethod) {
     this.slipMethodData = data;
-    this.percentLoadEstimation = ((data.synchronousSpeed - data.measuredSpeed)
-      / (data.synchronousSpeed - data.nameplateFullLoadSpeed)) * 100;
+    this.percentLoadEstimationService.slipMethodInputs = this.slipMethodData;
+    this.percentLoadEstimation = ((this.slipMethodData.synchronousSpeed - this.slipMethodData.measuredSpeed)
+      / (this.slipMethodData.synchronousSpeed - this.slipMethodData.nameplateFullLoadSpeed)) * 100;
   }
 
   calculateFieldMeasurementMethod(data: FieldMeasurementInputs) {
     this.fieldMeasurementData = data;
-    this.fieldMeasurementResults = this.fieldMeasurementService.getResults(data);
-    if (isNaN(this.fieldMeasurementResults.percentLoad) == false && this.fieldMeasurementResults.percentLoad != Infinity) {
+    this.percentLoadEstimationService.fieldMeasurementInputs = this.fieldMeasurementData;
+    this.fieldMeasurementResults = this.percentLoadEstimationService.getResults(data);
+    if (isNaN(this.fieldMeasurementResults.percentLoad) === false && this.fieldMeasurementResults.percentLoad !== Infinity) {
       this.percentLoadEstimation = this.fieldMeasurementResults.percentLoad;
     } else {
       this.percentLoadEstimation = 0;
@@ -98,31 +94,3 @@ export class PercentLoadEstimationComponent implements OnInit {
 
 }
 
-
-export interface SlipMethod {
-  synchronousSpeed: number,
-  measuredSpeed: number,
-  nameplateFullLoadSpeed: number
-}
-
-
-export interface FieldMeasurementInputs {
-  phase1Voltage: number,
-  phase1Amps: number,
-  phase2Voltage: number,
-  phase2Amps: number,
-  phase3Voltage: number,
-  phase3Amps: number,
-  ratedVoltage: number,
-  ratedCurrent: number,
-  powerFactor: number
-}
-
-export interface FieldMeasurementOutputs {
-  averageVoltage: number,
-  averageCurrent: number,
-  inputPower: number,
-  percentLoad: number,
-  maxVoltageDeviation: number,
-  voltageUnbalance: number
-}

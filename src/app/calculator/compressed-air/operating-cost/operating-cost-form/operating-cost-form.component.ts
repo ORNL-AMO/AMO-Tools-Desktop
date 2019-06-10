@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OperatingCostInput, OperatingCostOutput } from "../../../../shared/models/standalone";
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-operating-cost-form',
@@ -7,6 +8,8 @@ import { OperatingCostInput, OperatingCostOutput } from "../../../../shared/mode
   styleUrls: ['./operating-cost-form.component.css']
 })
 export class OperatingCostFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Input()
   inputs: OperatingCostInput;
   @Input()

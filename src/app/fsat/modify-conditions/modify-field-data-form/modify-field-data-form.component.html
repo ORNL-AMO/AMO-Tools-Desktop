@@ -1,0 +1,13 @@
+<form [formGroup]="modifyFieldDataForm">
+  <div class="setup-form-group">
+    <div class="form-group">
+      <label for="implementationCosts">Implementation Costs</label>
+      <div class="input-group">
+        <input name="implementationCosts" type="number" min="0" step="any" class="form-control" formControlName="implementationCosts"
+          id="implementationCosts" (input)="save()" (focus)="focusField('implementationCosts')" onfocus="this.select();"
+          [readOnly]="!selected">
+        <span class="units">$</span>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,278 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Stack Loss Help
+    <br>
+    <small class="text-muted">Determines the amount of heat lost in the boiler stack gas based on fuel type, stack gas characteristics, and combustion
+      specifications.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-1" *ngIf="currentField == 'default'">
+    <h6>
+      <small class="text-muted">
+        Input fuel type and stack gas and combustion characteristics to determine the amount of heat lost in the boiler stack gas.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'measurementType'">
+    <h6>
+      Type of Fuel
+      <br>
+      <small class="text-muted">
+        Gas or Solid/liquid fuel.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'gasTypeId'">
+    <h6>
+      Fuel
+      <br>
+      <small class="text-muted">
+        Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels are intended
+        to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate fuel
+        compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and edit
+        the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'flueGasTemperature'">
+    <h6>
+      Stack Gas Temperature
+      <br>
+      <small class="text-muted">
+        Measure stack gas temperature by using "proper" temperature probe. Type of temperature probe depends on stack gas temperature
+        and composition at the point of measurement. In most cases a commercially available thermocouple probe is used.
+        <hr>
+      </small>
+    </h6>
+    <div class="justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Ambient Temperature</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'oxygenCalculationMethod'">
+    <h6>
+      O
+      <sub>2</sub> in Flue Gas / Excess Air Dropdown
+      <br>
+      <small class="text-muted">
+        Choose which value is known for the calculation of Available heat. Using Excess Air is recommended (for higher accuracy)
+        if known. Choose
+        <u>Excess Air</u> or
+        <u>Oxygen in Flue Gas</u>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'excessAirPercentage'">
+    <h6>
+      Excess Air
+      <br>
+      <small class="text-muted">
+        The excess air value represents excess air used in burners plus all air entering the furnace and leaving as stack gases from
+        the furnace. The value is expressed in terms of percentage of stoichiometric air required for the fuel used.
+        <hr>
+      </small>
+    </h6>
+
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-1" *ngIf="currentField == 'o2InFlueGas'">
+    <h6>
+      O
+      <sub>2</sub> in Flue Gas
+      <br>
+      <small class="text-muted">
+        The volumetric percentage of oxygen present in the stack gas. Flue gas O
+        <sub>2</sub> (dry basis) reading should be taken at the same location where stack gas temperature is measured to maintain accuracy
+        of the calculations.
+        <hr>
+      </small>
+    </h6>
+
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">21 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'combustionAirTemperature'">
+    <h6>
+      Ambient Air Temperature
+      <br>
+      <small class="text-muted">
+        Ambient air temperature (&#8457; or &#8451;) entering the burners. Use temperature recorder/indicator reading or actual measurement
+        using a temperature gauge, thermocouple or estimate based on the furnace supplier's specifications.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">Stack Gas Temperature</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-1" *ngIf="currentField == 'fuelTemperature'">
+    <h6>
+      Fuel temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the incoming fuel. In most cases, fuel is supplied at near ambient temperature, however, in some cases it can
+        be at a higher temperature when it is preheated.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'moistureInAirComposition'">
+    <h6>
+      Moisture in Air
+      <br>
+      <small class="text-muted">
+        The moisture of the air (mass water / mass dry air). Can be determined with a psychometric chart.
+        <hr> The default value is based on 50% Relative Humidity, 70 &#8457;
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">100 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-1" *ngIf="currentField == 'ashDischargeTemperature'">
+    <h6>
+      Ash Discharge Temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the ash in the stack gas outlet.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'fuelTemperature'">
+    <h6>
+      Fuel temperature
+      <br>
+      <small class="text-muted">
+        Temperature of the incoming fuel. In most cases, fuel is supplied at near ambient temperature, however, in some cases it can
+        be at a higher temperature when it is preheated.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-1" *ngIf="currentField == 'unburnedCarbonInAsh'">
+    <h6>
+      Unburned Carbon in Ash
+      <br>
+      <small class="text-muted">
+        Percent of unburned carbon in Ash.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="w-50 text-center">Minimum</th>
+            <th class="w-50 text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="w-50 text-center">0 %</td>
+            <td class="w-50 text-center">100%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="my-1" *ngIf="currentField == 'default'">
+    <h6>
+      Savings Suggestions
+      <br>
+      <ul>
+      <small class="text-muted">
+        <br>
+        <li>
+        Maintain appropriate level of oxygen in stack gases by controlling air-fuel ratio for the burners.
+        </li>
+        <br>
+        <li>
+          Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon monoxide.
+          and hydrogen in stack gases.
+        </li>
+        <br>
+        <li>
+          Consider use of heat recovery from stack gases. Consider use of various methods of heat recovery to reduce stack
+          gas temperature leaving the heating system.
+        </li>
+        <br> 
+        <li>
+          Use preheated combustion air through use of recuperators or regenerators.
+        </li>
+        <br> 
+        <li>
+          Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of stack gases.
+        </li>
+        <br> 
+        <li>
+          Review process temperature settings and lower it where possible during part-load operations. This can reduce flustacke
+          gas temperature leaving the heating system.
+        </li>
+        <br>
+      <div class="alert alert-info">
+        Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
+        There may additional measures when considering specific situations and the user is encouraged to review and apply
+        the appropriate measures.
+  </div>

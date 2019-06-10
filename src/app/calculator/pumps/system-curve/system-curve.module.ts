@@ -5,7 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemCurveComponent } from './system-curve.component';
 import { SystemCurveFormComponent } from './system-curve-form/system-curve-form.component';
 import { SystemCurveGraphComponent } from './system-curve-graph/system-curve-graph.component';
+import { SystemCurveService } from './system-curve.service';
 import { SharedModule } from '../../../shared/shared.module';
+import { SystemCurveHelpComponent } from './system-curve-help/system-curve-help.component';
 
 @NgModule({
   imports: [
@@ -17,10 +19,16 @@ import { SharedModule } from '../../../shared/shared.module';
   declarations: [
     SystemCurveComponent,
     SystemCurveFormComponent,
-    SystemCurveGraphComponent
+    SystemCurveGraphComponent,
+    SystemCurveHelpComponent,
   ],
-   exports: [
-     SystemCurveComponent
-   ]
+  exports: [
+    SystemCurveComponent,
+    SystemCurveFormComponent,
+    SystemCurveHelpComponent
+  ],
+  providers: [
+    SystemCurveService
+  ]
 })
 export class SystemCurveModule { }

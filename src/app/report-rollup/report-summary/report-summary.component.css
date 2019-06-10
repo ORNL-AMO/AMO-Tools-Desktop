@@ -1,3 +1,9 @@
+.report-banner .btn {
+    font-size: 12px;
+    line-height: 14px;
+    padding: 6px 10px;
+}
+
 
 .report-summary {
     padding: 5px;
@@ -12,14 +18,14 @@
 }
 
 .report-summary ul li {
-    padding: 0;
-    margin: 0;
+    /* padding: 0;
+    margin: 0; */
     list-style: none;
-    border-radius: 2px;
+    /* border-radius: 2px;
     background: #fff;
     -webkit-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
     -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
-    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4); */
     width: 24.5%;
 }
     .report-summary ul li.coming-soon {
@@ -37,7 +43,19 @@
     box-shadow: 0px 0px 6px 0px #2980b9 !important;
 }
 
+.fan-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #FFE400 !important;
+}
 
+.ssmt-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #F39C12 !important;
+}
+.treasure-hunt-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #2E4053 !important;
+}
 
 .coming-soon .summary-header {
     border-bottom: #ddd solid 1px;
@@ -55,7 +73,7 @@
     padding-left: 23px;
     float: left;
 }
-    .coming-soon .summary-header.fans h3,
+    /* .coming-soon .summary-header.fans h3,
     .coming-soon .summary-header.motors h3 {
         background-image: url('../../../assets/images/ico-comingSoon-diagram.png');
         background-repeat: no-repeat;
@@ -63,7 +81,7 @@
         background-size: 20px;
         padding: 7px 0 3px 31px;
         font-weight: bold;
-    }
+    } */
 .coming-soon .summary-header > span {
     float: right;
     border-radius: 50%;
@@ -138,6 +156,9 @@ dd{
         padding: 2px 10px;
     }
 
+
+
+
 dl.summary-list {
     margin-bottom: 0px;    
 
@@ -150,7 +171,7 @@ dl.summary-list {
     color: #7b7b7b;
 }
 .summary-list dd {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .summary-content:after {
@@ -198,6 +219,23 @@ dl.summary-list {
 
 .card.pumps .card-header > span {
     background: #2980b9;
+}
+
+.card.fans .card-header > span {
+    background: #FFE400;
+}
+
+.card.steam .card-header > span {
+    background: #F39C12;
+}
+
+.card.treasure-hunt .card-header > span {
+    background: #2E4053;
+    color: white;
+}
+
+.card.fans .card-header > span span {
+    color: black !important;
 }
 
 .card-header > span span {

@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { OtherLossesCompareService } from '../other-losses-compare.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -26,43 +25,31 @@ export class OtherLossesFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   firstChange: boolean = true;
   resultsUnit: string;
-  constructor(private windowRefService: WindowRefService, private otherLossesCompareService: OtherLossesCompareService) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
+  idString: string;
+  constructor(private otherLossesCompareService: OtherLossesCompareService) { }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
     }
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
-  }
-  disableForm() {
-    this.lossesForm.disable();
-  }
-  enableForm() {
-    this.lossesForm.enable();
   }
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  startSavePolling() {
+  save() {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

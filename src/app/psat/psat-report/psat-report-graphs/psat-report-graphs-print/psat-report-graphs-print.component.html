@@ -1,11 +1,11 @@
-<div *ngFor="let psat of psatOptions; let i = index">
+<div *ngFor="let psatOption of psatOptions; let i = index">
 
   <div *ngIf="!modExists || i > 0">
     <div class="row justify-content-center align-items-center print-graphs-container show-print">
 
       <!-- page title -->
       <div *ngIf="modExists" align="center" class="print-page-title print-center-title">
-        Scenario: {{psat.name}}
+        Scenario: {{psatOption.name}}
       </div>
       <div *ngIf="!modExists" align="center" class="print-page-title print-center-title">
         Baseline
@@ -29,19 +29,19 @@
             Baseline
           </div>
           <div class="col-6 print-graph-sub-title text-center" *ngIf="modExists">
-            {{psat.name}}
+            {{psatOption.name}}
           </div>
         </div>
 
         <!-- pie charts -->
         <div class="row" *ngIf="printGraphs">
           <div class="col-6 print-pie-chart">
-            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [labels]="allChartData.pieLabels[0]"
-              [values]="allChartData.pieValues[0]"></app-pie-chart>
+            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth"
+              [labels]="allChartData.pieLabels[0]" [values]="allChartData.pieValues[0]"></app-pie-chart>
           </div>
           <div class="col-6 print-pie-chart" *ngIf="modExists">
-            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth" [labels]="allChartData.pieLabels[i]"
-              [values]="allChartData.pieValues[i]"></app-pie-chart>
+            <app-pie-chart [sideBySide]="modExists" [graphColors]="graphColors" [printView]="true" [chartContainerWidth]="pieChartWidth"
+              [labels]="allChartData.pieLabels[i]" [values]="allChartData.pieValues[i]"></app-pie-chart>
           </div>
         </div>
 
@@ -55,8 +55,7 @@
         <div class="row show-print justify-content-center align-items-center" *ngIf="modExists && printGraphs">
           <div class="col-12">
             <app-psat-bar-chart [settings]="settings" [printView]="true" [graphColors]="graphColors" [labels]="allChartData.barLabels"
-              [psat1Name]="psatOptions[0].name" [psat2Name]="psat.name" [psat1Values]="allChartData.barValues[0]" [psat2Values]="allChartData.barValues[i]"
-              [chartContainerWidth]="barChartWidth"></app-psat-bar-chart>
+              [psat1Name]="baselinePsat.name" [psat2Name]="psatOption.name" [psat1Values]="allChartData.barValues[0]" [psat2Values]="allChartData.barValues[i]"></app-psat-bar-chart>
           </div>
         </div>
 
@@ -70,19 +69,19 @@
             </div>
             <div class="row show-print">
               <div class="col-12">
-                <app-psat-sankey [settings]="settings" [psat]="psatOptions[0].psat" [location]="assessmentName + '-print-sankey-'" [printView]="true"
-                  [modIndex]="i" [isBaseline]="true"></app-psat-sankey>
+                <app-psat-sankey [settings]="settings" [psat]="baselinePsat.psat" [location]="assessmentName + '-psat-baseline-print-sankey-' + i"
+                  [printView]="true" [modIndex]="i" [isBaseline]="true"></app-psat-sankey>
               </div>
             </div>
             <div class="row show-print print-pad-graph-title" *ngIf="modExists">
               <div align="center" class="print-graph-title print-center-title">
-                Scenario: {{psatOptions[i].name}}
+                Scenario: {{psatOption.name}}
               </div>
             </div>
             <div class="row show-print" *ngIf="modExists">
               <div class="col-12">
-                <app-psat-sankey [settings]="settings" [psat]="psatOptions[i].psat" [location]="assessmentName + '-print-sankey-'" [printView]="true"
-                  [modIndex]="i" [isBaseline]="false"></app-psat-sankey>
+                <app-psat-sankey [settings]="settings" [psat]="psatOption.psat" [location]="assessmentName + '-psat-modification-print-sankey-' + i"
+                  [printView]="true" [modIndex]="i" [isBaseline]="false" [baseline]="baselinePsat.psat"></app-psat-sankey>
               </div>
             </div>
           </div>

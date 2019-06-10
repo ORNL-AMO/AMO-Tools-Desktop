@@ -1,0 +1,22 @@
+.group-label{
+    letter-spacing: 0px;
+    padding-bottom: 0px;
+}
+
+a:not([href]):not([tabindex]).click-link.disabled{ 
+    color: gray;
+}
+a:not([href]):not([tabindex]).click-link.disabled:hover{
+    cursor: default;
+    text-decoration: none;
+}
+
+.add-data-dialog{
+    padding-top: 10%;
+}
+
+.data-form{
+    padding-top: 15px;
+    padding-left: 5px;
+    padding-right: 5px
+}

@@ -23,10 +23,13 @@ export class ImportService {
     this.addedDirIds = new Array<number>();
     this.assessmentsAdded = new Array<ImportExportAssessment>();
     this.assessmentItems = data.assessments;
+    for (let i = 0; i < this.assessmentItems.length; i++) {
+      this.assessmentItems[i].assessment.selected = false;
+    }
     this.directoryItems = data.directories;
     let tmpAssessmentArr: Array<ImportExportAssessment> = data.assessments;
     //tmpDir to hold new data
-    if (data.directories.length != 0) {
+    if (data.directories.length !== 0) {
       let tmpDirectory: ImportDirectory = {
         //set tmpDir id as parentDirDirectoryId of first directory
         id: data.directories[0].directory.parentDirectoryId,
@@ -36,24 +39,25 @@ export class ImportService {
       };
       tmpDirectory = this.buildDir(tmpDirectory, data.directories, true, workingDirectoryId);
       this.addDirectory(tmpDirectory);
-      //add assessments no in directories
+      //Add Assessments no in directories
       let tmpAssessments: Array<ImportExportAssessment> = _.xorBy(this.assessmentsAdded, data.assessments, 'assessment.assessment.id');
       this.addAssessments(tmpAssessments, workingDirectoryId);
-    } else if (data.assessments.length != 0) {
+    } else if (data.assessments.length !== 0) {
       this.addAssessments(data.assessments, workingDirectoryId);
     }
 
     if (data.calculators) {
       data.calculators.forEach(calc => {
+        calc.selected = false;
         delete calc.id;
         calc.directoryId = workingDirectoryId;
-        this.indexedDbService.addCalculator(calc).then(() => { this.calculatorDbService.setAll() });
-      })
+        this.indexedDbService.addCalculator(calc).then(() => { this.calculatorDbService.setAll(); });
+      });
     }
   }
 
   buildDir(_directory: ImportDirectory, directoryItems: Array<ImportExportDirectory>, first?: boolean, workingDirectoryId?: number): ImportDirectory {
-    let hasBeenAdded = _.find(this.addedDirIds, (id) => { return id == _directory.id });
+    let hasBeenAdded = _.find(this.addedDirIds, (id) => { return id === _directory.id; });
     if (hasBeenAdded) {
       //this directory has been built already
       return _directory;
@@ -61,7 +65,7 @@ export class ImportService {
       this.addedDirIds.push(_directory.id);
     }
     //get siblingDirs
-    let tmpDirs: Array<ImportExportDirectory> = _.filter(directoryItems, (dir) => { return dir.directory.parentDirectoryId == _directory.id });
+    let tmpDirs: Array<ImportExportDirectory> = _.filter(directoryItems, (dir) => { return dir.directory.parentDirectoryId === _directory.id; });
 
     let subDirs: Array<ImportDirectory> = new Array<ImportDirectory>();
     tmpDirs.forEach(dir => {
@@ -73,15 +77,15 @@ export class ImportService {
         directoryItem: dir,
         subDirectories: new Array(),
         assessments: new Array()
-      }
+      };
       tmpSubDir = this.buildDir(tmpSubDir, directoryItems);
       subDirs.push(tmpSubDir);
-    })
-    let dirAssessments = _.filter(this.assessmentItems, (assessmentItem) => { return assessmentItem.assessment.directoryId == _directory.id });
+    });
+    let dirAssessments = _.filter(this.assessmentItems, (assessmentItem) => { return assessmentItem.assessment.directoryId === _directory.id; });
     this.assessmentsAdded = this.assessmentsAdded.concat(dirAssessments);
     _directory.subDirectories = subDirs;
     _directory.assessments = dirAssessments;
-    return _directory
+    return _directory;
   }
 
   addDirectory(importDir: ImportDirectory) {
@@ -96,7 +100,7 @@ export class ImportService {
         });
 
         if (importDir.directoryItem.calculator) {
-          if (importDir.directoryItem.calculator.length != 0) {
+          if (importDir.directoryItem.calculator.length !== 0) {
             importDir.directoryItem.calculator[0].directoryId = newId;
             delete importDir.directoryItem.calculator[0].id;
             this.indexedDbService.addCalculator(importDir.directoryItem.calculator[0]).then(() => {
@@ -124,19 +128,19 @@ export class ImportService {
               });
 
             }
-          })
-        })
+          });
+        });
 
         importDir.subDirectories.forEach(subDir => {
           if (subDir.directoryItem.directory) {
             subDir.directoryItem.directory.parentDirectoryId = newId;
           }
           this.addDirectory(subDir);
-        })
+        });
 
-      })
+      });
     } else {
-      importDir.subDirectories.forEach(subDir => { this.addDirectory(subDir) })
+      importDir.subDirectories.forEach(subDir => { this.addDirectory(subDir); });
     }
   }
 
@@ -153,18 +157,18 @@ export class ImportService {
           if (assessment.calculator) {
             assessment.calculator.assessmentId = newId;
             delete assessment.calculator.id;
-            this.indexedDbService.addCalculator(assessment.calculator).then(() => { this.calculatorDbService.setAll(); })
+            this.indexedDbService.addCalculator(assessment.calculator).then(() => { this.calculatorDbService.setAll(); });
           }
-        })
-      })
-    })
+        });
+      });
+    });
   }
 }
 
 
 export interface ImportDirectory {
-  id: number,
-  directoryItem: ImportExportDirectory,
-  subDirectories: Array<ImportDirectory>,
-  assessments: Array<ImportExportAssessment>
+  id: number;
+  directoryItem: ImportExportDirectory;
+  subDirectories: Array<ImportDirectory>;
+  assessments: Array<ImportExportAssessment>;
 }

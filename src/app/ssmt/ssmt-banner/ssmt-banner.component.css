@@ -1,0 +1,26 @@
+/* .pill-row{
+    height: 100%;
+} */
+
+
+
+.img-icon{
+    width: 50px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.h2-name{
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.home-nav-item{
+    color: black;
+    border-color: black !important; 
+}
+
+.banner {
+    color: black;
+}

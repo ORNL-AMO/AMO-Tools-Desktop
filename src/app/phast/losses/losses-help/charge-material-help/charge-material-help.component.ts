@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-charge-material-help',
@@ -6,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./charge-material-help.component.css']
 })
 export class ChargeMaterialHelpComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Input()
   currentField: string;
   constructor() { }

@@ -46,9 +46,9 @@ export class PsatSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.flowMeasurements.push(tmpPossibility);
-    })
+    });
     tmpList = [
       'm',
       'ft'
@@ -57,9 +57,9 @@ export class PsatSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.distanceMeasurements.push(tmpPossibility);
-    })
+    });
     tmpList = [
       'kW',
       'hp'
@@ -68,9 +68,9 @@ export class PsatSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.powerMeasurements.push(tmpPossibility);
-    })
+    });
     tmpList = [
       'kPa',
       'psi',
@@ -80,22 +80,23 @@ export class PsatSettingsComponent implements OnInit {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.pressureMeasurements.push(tmpPossibility);
-    })
+    });
 
     tmpList = [
       'C',
-      'F'
-      // 'K'
+      'F',
+      'K',
+      'R'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
-      }
+      };
       this.temperatureMeasurements.push(tmpPossibility);
-    })
+    });
     // tmpList = this.convertUnitsService.possibilities('current');
     // tmpList.forEach(unit => {
     //   let tmpPossibility = {
@@ -130,8 +131,8 @@ export class PsatSettingsComponent implements OnInit {
     }
   }
 
-  getUnitDisplay(unit: any){
-    if(unit){
+  getUnitDisplay(unit: any) {
+    if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
   }
@@ -139,7 +140,7 @@ export class PsatSettingsComponent implements OnInit {
   setCustom() {
     this.settingsForm.patchValue({
       unitsOfMeasure: 'Custom'
-    })
+    });
 
     this.startSavePolling.emit(true);
   }

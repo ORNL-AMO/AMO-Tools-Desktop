@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
+import { WallLossWarnings, WallLossesService } from '../../../losses/wall-losses/wall-losses.service';
 
 @Component({
   selector: 'app-explore-wall-form',
@@ -24,9 +25,9 @@ export class ExploreWallFormComponent implements OnInit {
 
   showSurfaceTemp: Array<boolean>;
   showWall: boolean = false;
-  surfaceTempError1: Array<string>;
-  surfaceTempError2: Array<string>;
-  constructor() { }
+  baselineWarnings: Array<WallLossWarnings>;
+  modificationWarnings: Array<WallLossWarnings>;
+  constructor(private wallLossesService: WallLossesService) { }
 
   ngOnInit() {
     this.initData();
@@ -42,8 +43,8 @@ export class ExploreWallFormComponent implements OnInit {
 
   initData() {
     this.showSurfaceTemp = new Array();
-    this.surfaceTempError1 = new Array<string>();
-    this.surfaceTempError2 = new Array<string>();
+    this.baselineWarnings = new Array<WallLossWarnings>();
+    this.modificationWarnings = new Array<WallLossWarnings>();
     let index: number = 0;
     this.phast.losses.wallLosses.forEach(loss => {
       let check: boolean = this.initSurfaceTemp(loss.surfaceTemperature, this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature);
@@ -51,15 +52,17 @@ export class ExploreWallFormComponent implements OnInit {
         this.showWall = check;
       }
       this.showSurfaceTemp.push(check);
-      this.surfaceTempError1.push(null);
-      this.surfaceTempError2.push(null);
+      let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(loss);
+      this.baselineWarnings.push(tmpWarnings);
+      tmpWarnings = this.wallLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index]);
+      this.modificationWarnings.push(tmpWarnings);
       index++;
-    })
+    });
   }
 
 
   initSurfaceTemp(temp1: number, temp2: number) {
-    if (temp1 != temp2) {
+    if (temp1 !== temp2) {
       return true;
     } else {
       return false;
@@ -67,11 +70,12 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   toggleWall() {
-    if (this.showWall == false) {
+    if (this.showWall === false) {
       let index: number = 0;
       this.phast.losses.wallLosses.forEach(loss => {
         let baselineTemp: number = loss.surfaceTemperature;
         this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature = baselineTemp;
+        this.checkModificationWarnings(index);
         index++;
       });
       this.initData();
@@ -80,8 +84,9 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   toggleSurfaceTemp(index: number, baselineArea: number) {
-    if (this.showSurfaceTemp[index] == false) {
+    if (this.showSurfaceTemp[index] === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature = baselineArea;
+      this.checkModificationWarnings(index);
       this.calculate();
     }
   }
@@ -92,33 +97,27 @@ export class ExploreWallFormComponent implements OnInit {
       tabName: 'Wall',
       step: 3,
       componentStr: 'wall-losses',
-    })
+    });
   }
 
-  checkSurfaceTemp(num: number, surfaceTemp: number, index: number) {
-    if (num === 1) {
-      if (surfaceTemp < this.phast.losses.wallLosses[index].ambientTemperature) {
-        this.surfaceTempError1[index] = 'Surface temperature lower is than ambient temperature (' + this.phast.losses.wallLosses[index].ambientTemperature + ')';
-      } else {
-        this.surfaceTempError1[index] = null;
-        this.calculate();
-      }
-    } else if (num === 2) {
-      if (surfaceTemp < this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].ambientTemperature) {
-        this.surfaceTempError2[index] = 'Surface temperature lower is than ambient temperature (' + this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].ambientTemperature + ')';
-      } else {
-        this.surfaceTempError2[index] = null;
-        this.calculate();
-      }
-    }
+  checkModificationWarnings(index: number) {
+    let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index]);
+    this.modificationWarnings[index] = tmpWarnings;
+    this.calculate();
+  }
+
+  checkBaselineWarnings(index: number) {
+    let tmpWarnings: WallLossWarnings = this.wallLossesService.checkWarnings(this.phast.losses.wallLosses[index]);
+    this.baselineWarnings[index] = tmpWarnings;
+    this.calculate();
   }
 
   focusOut() {
-
+    this.changeField.emit('default');
   }
 
   calculate() {
-    this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true);
   }
 
 }

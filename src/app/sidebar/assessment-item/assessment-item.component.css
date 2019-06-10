@@ -16,10 +16,10 @@
   background-color: #eee;
 }
 
-.phast .icon-image{
-  width: 1.5rem;
+.icon-image{
+  width: 30px;
 }
 
-.psat .icon-image{
-  width: 1rem;
+.icon{
+  width: 100%;
 }

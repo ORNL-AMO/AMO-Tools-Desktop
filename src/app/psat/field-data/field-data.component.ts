@@ -1,14 +1,15 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
-import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
+import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
+import { FieldDataService } from './field-data.service';
+import { PsatService } from '../psat.service';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -17,12 +18,6 @@ import { Assessment } from '../../shared/models/assessment';
 export class FieldDataComponent implements OnInit {
   @Input()
   psat: PSAT;
-  // @Output('changeField')
-  // changeField = new EventEmitter<string>();
-  @Output('isValid')
-  isValid = new EventEmitter<boolean>();
-  @Output('isInvalid')
-  isInvalid = new EventEmitter<boolean>();
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Input()
@@ -41,8 +36,7 @@ export class FieldDataComponent implements OnInit {
   assessment: Assessment;
   @Input()
   modificationIndex: number;
-
-  counter: any;
+  @ViewChild('headToolModal') public headToolModal: ModalDirective;
 
   formValid: boolean;
   headToolResults: any = {
@@ -54,78 +48,63 @@ export class FieldDataComponent implements OnInit {
     pumpHead: 0.0
   };
 
-  //Create your array of options
-  //first item in array will be default selected, can modify that functionality later if desired
-  loadEstimateMethods: Array<string> = [
-    'Power',
-    'Current'
+  loadEstimateMethods: Array<{ display: string, value: number }> = [
+    {
+      display: 'Power',
+      value: 0
+    },
+    {
+      display: 'Current',
+      value: 1
+    }
   ];
   psatForm: FormGroup;
-  isFirstChange: boolean = true;
-  flowError: string = null;
-  voltageError: string = null;
-  costError: string = null;
-  opFractionError: string = null;
-  ratedPowerError: string = null;
-  marginError: string = null;
-  headError: string = null;
-  constructor(private psatService: PsatService, private compareService: CompareService, private cd: ChangeDetectorRef, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
+  fieldDataWarnings: FieldDataWarnings;
+  idString: string;
+  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
+    if (!this.baseline) {
+      this.idString = 'psat_modification_' + this.modificationIndex;
+    }
+    else {
+      this.idString = 'psat_baseline';
+    }
     this.init();
     if (!this.selected) {
       this.disableForm();
     }
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (changes.selected) {
-        if (!this.selected) {
-          this.disableForm();
-        } else {
-          this.enableForm();
-        }
-        if (!this.baseline) {
-          this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-        }
-      }
-
-      if (changes.modificationIndex) {
-        this.init();
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
       }
     }
-    else {
-      this.isFirstChange = false;
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.init();
     }
   }
 
   init() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
-    this.helpPanelService.currentField.next('operatingFraction');
-    //init warning messages;
-    this.checkCost(true);
-    this.checkFlowRate(true);
-    this.checkOpFraction(true);
-    this.checkRatedPower(true);
-    this.checkVoltage(true);
-    if (this.psatForm.controls.optimizeCalculation.value == true) {
-      this.checkMargin(true);
+    if (!this.psat.inputs.cost_kw_hour) {
+      this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
     }
-    this.checkHead(true);
-    if (!this.baseline) {
-      this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
-    }
-    //this.cd.detectChanges();
+    this.psatForm = this.fieldDataService.getFormFromObj(this.psat.inputs, this.baseline);
+    this.helpPanelService.currentField.next('operatingHours');
+    this.checkWarnings();
   }
 
   disableForm() {
-    this.psatForm.disable();
+    this.psatForm.controls.loadEstimatedMethod.disable();
   }
 
   enableForm() {
-    this.psatForm.enable();
+    this.psatForm.controls.loadEstimatedMethod.enable();
   }
 
   focusField(str: string) {
@@ -141,193 +120,55 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  checkForm(form: any) {
-    this.formValid = this.psatService.isFieldDataFormValid(form);
-    if (this.formValid) {
-      this.isValid.emit(true)
-    } else {
-      this.isInvalid.emit(true)
-    }
-  }
-
-  savePsat(form: any) {
-    this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+  save() {
+    this.psat.inputs = this.fieldDataService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
+    this.checkWarnings();
     this.saved.emit(true);
   }
 
-  @ViewChild('headToolModal') public headToolModal: ModalDirective;
+  checkWarnings() {
+    this.fieldDataWarnings = this.psatWarningService.checkFieldData(this.psat, this.settings, this.baseline);
+  }
+
+  changeLoadMethod() {
+    let motorAmpsValidators: Array<ValidatorFn> = new Array();
+    let motorKWValidators: Array<ValidatorFn> = new Array();
+
+    if (this.psatForm.controls.loadEstimatedMethod.value == 0) {
+      motorKWValidators = [Validators.required];
+    } else {
+      motorAmpsValidators = [Validators.required];
+    }
+    this.psatForm.controls.motorAmps.setValidators(motorAmpsValidators);
+    this.psatForm.controls.motorAmps.reset(this.psatForm.controls.motorAmps.value);
+    if (this.psatForm.controls.motorAmps.value) {
+      this.psatForm.controls.motorAmps.markAsDirty();
+    }
+
+    this.psatForm.controls.motorKW.setValidators(motorKWValidators);
+    this.psatForm.controls.motorKW.reset(this.psatForm.controls.motorKW.value);
+    if (this.psatForm.controls.motorKW.value) {
+      this.psatForm.controls.motorKW.markAsDirty();
+    }
+    this.save();
+  }
+
+
   showHeadToolModal() {
     if (this.selected) {
-      this.openHeadTool.emit(true);
+      this.psatService.modalOpen.next(true);
       this.headToolModal.show();
     }
   }
 
   hideHeadToolModal() {
-    this.closeHeadTool.emit(true);
+    this.psatService.modalOpen.next(true);
     if (this.psatForm.controls.head.value != this.psat.inputs.head) {
       this.psatForm.patchValue({
         head: this.psat.inputs.head
       })
     }
     this.headToolModal.hide();
-  }
-
-  startSavePolling() {
-    this.checkForm(this.psatForm);
-    this.savePsat(this.psatForm)
-  }
-
-  checkFlowRate(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.flowRate.pristine == false && this.psatForm.controls.flowRate.value != '') {
-      let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.controls.flowRate.value, this.settings);
-      if (tmp.message) {
-        this.flowError = tmp.message;
-      } else {
-        this.flowError = null;
-      }
-      return tmp.valid;
-    }
-    else {
-      return null;
-    }
-  }
-
-  checkVoltage(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.measuredVoltage.value < 1 || this.psatForm.controls.measuredVoltage.value == 0) {
-      this.voltageError = 'Outside estimated voltage range';
-      return false;
-    } else if (this.psatForm.controls.measuredVoltage.value > 13800) {
-      this.voltageError = 'Outside estimated voltage range';
-      return false;
-    }
-    else if (this.psatForm.controls.measuredVoltage.value <= 13800 && this.psatForm.controls.measuredVoltage.value >= 1) {
-      this.voltageError = null;
-      return true;
-    }
-    else {
-      this.voltageError = null;
-      return null;
-    }
-  }
-
-
-  checkCost(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.costKwHr.value < 0) {
-      this.costError = 'Cannot have negative cost';
-      return false;
-    } else if (this.psatForm.controls.costKwHr.value > 1) {
-      this.costError = "Shouldn't be greater then 1";
-      return false;
-    } else if (this.psatForm.controls.costKwHr.value >= 0 && this.psatForm.controls.costKwHr.value <= 1) {
-      this.costError = null;
-      return true;
-    } else {
-      this.costError = null;
-      return null;
-    }
-  }
-
-  checkOpFraction(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.operatingFraction.value > 1) {
-      this.opFractionError = 'Operating fraction needs to be between 0 - 1';
-      return false;
-    }
-    else if (this.psatForm.controls.operatingFraction.value < 0) {
-      this.opFractionError = "Cannot have negative operating fraction";
-      return false;
-    }
-    else {
-      this.opFractionError = null;
-      return true;
-    }
-  }
-  checkRatedPower(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    let tmpVal;
-    if (this.psatForm.controls.loadEstimatedMethod.value == 'Power') {
-      tmpVal = this.psatForm.controls.motorKW.value;
-    } else {
-      tmpVal = this.psatForm.controls.motorAmps.value;
-    }
-
-    if (this.psatForm.controls.horsePower.value && tmpVal) {
-      let val, compare;
-      if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(tmpVal).from(this.settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(this.psatForm.controls.horsePower.value).from(this.settings.powerMeasurement).to('kW');
-      } else {
-        val = tmpVal;
-        compare = this.psatForm.controls.horsePower.value;
-      }
-      compare = compare * 1.5;
-      if (val > compare) {
-        this.ratedPowerError = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
-        return false
-      } else {
-        this.ratedPowerError = null;
-        return true
-      }
-    } else {
-      return true;
-    }
-  }
-
-  checkMargin(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.sizeMargin.value > 100) {
-      this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
-      return false;
-    }
-    else if (this.psatForm.controls.sizeMargin.value < 0) {
-      this.marginError = "Shouldn't have negative size margin";
-      return false;
-    }
-    else {
-      this.marginError = null;
-      return true;
-    }
-  }
-
-  checkHead(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.controls.head.value < 0) {
-      this.headError = 'Head cannot be negative';
-    } else {
-      this.headError = null;
-    }
-  }
-
-  optimizeCalc(bool: boolean) {
-    if (!bool || !this.selected) {
-      this.psatForm.controls.sizeMargin.disable();
-      this.psatForm.controls.fixedSpeed.disable();
-    } else {
-      this.psatForm.controls.sizeMargin.enable();
-      this.psatForm.controls.fixedSpeed.enable();
-    }
-    this.psatForm.patchValue({
-      optimizeCalculation: bool
-    });
-    this.startSavePolling();
   }
 
   canCompare() {
@@ -338,9 +179,9 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  isOperatingFractionDifferent() {
+  isOperatingHoursDifferent() {
     if (this.canCompare()) {
-      return this.compareService.isOperatingFractionDifferent();
+      return this.compareService.isOperatingHoursDifferent();
     } else {
       return false;
     }

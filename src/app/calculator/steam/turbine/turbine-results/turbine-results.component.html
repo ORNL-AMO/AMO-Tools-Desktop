@@ -1,0 +1,116 @@
+<table #copyTable0 class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td colspan="2" class="bold">Isentropic Efficiency</td>
+      <td colspan="2" class="text-center">{{results.isentropicEfficiency |number:'1.0-1'}} %
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="bold">Energy Out</td>
+      <td colspan="2" class="text-center">{{results.energyOut |number:'1.0-1'}}
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2" class="bold">Generator Efficiency</td>
+      <td colspan="2" class="text-center">{{results.generatorEfficiency |number:'1.0-1'}} %
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="bold">Power Out</td>
+      <td colspan="2" class="text-center">{{results.powerOut |number:'1.0-1'}}
+        <span [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" class="spacer-row-col"></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td class="text-center bold">Inlet</td>
+      <td class="text-center bold">Outlet Ideal</td>
+      <td class="text-center bold">Outlet</td>
+      <!-- <td class="text-center">Units</td> -->
+    </tr>
+    <tr>
+      <td class="bold">Pressure (<span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletPressure |number:'1.0-2'}} </td>
+      <td class="text-center">{{results.outletIdealPressure |number:'1.0-2'}} </td>
+      <td class="text-center">{{results.outletPressure |number:'1.0-2'}} </td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletTemperature |number:'1.0-1'}} </td>
+      <td class="text-center">{{results.outletIdealTemperature |number:'1.0-1'}} </td>
+      <td class="text-center">{{results.outletTemperature |number:'1.0-1'}} </td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Phase</td>
+      <td class="text-center">
+        <span *ngIf="results.inletQuality == 0">Liquid</span>
+        <span *ngIf="results.inletQuality == 1">Gas</span>
+        <span *ngIf="results.inletQuality != 1 && results.inletQuality != 0">{{results.inletQuality
+                |number:'1.0-2'}}</span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="results.outletIdealQuality == 0">Liquid</span>
+        <span *ngIf="results.outletIdealQuality == 1">Gas</span>
+        <span *ngIf="results.outletIdealQuality != 1 && results.outletIdealQuality != 0">{{results.outletIdealQuality
+                |number:'1.0-2'}}</span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="results.outletQuality == 0">Liquid</span>
+        <span *ngIf="results.outletQuality == 1">Gas</span>
+        <span *ngIf="results.outletQuality != 1 && results.outletQuality != 0">{{results.outletQuality
+                |number:'1.0-2'}}</span>
+      </td>
+      <!-- <td></td> -->
+    </tr>
+
+    <tr>
+      <td class="bold">Sp. Enthalpy (<span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletSpecificEnthalpy |number:'1.0-1'}} </td>
+      <td class="text-center">{{results.outletIdealSpecificEnthalpy |number:'1.0-1'}} </td>
+      <td class="text-center">{{results.outletSpecificEnthalpy |number:'1.0-1'}} </td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Sp. Entropy (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletSpecificEntropy |number:'1.0-3'}} </td>
+      <td class="text-center">{{results.outletIdealSpecificEntropy |number:'1.0-3'}} </td>
+      <td class="text-center">{{results.outletSpecificEntropy |number:'1.0-3'}} </td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
+      <td class="text-center">{{results.massFlow |number:'1.0-2'}} </td>
+      <td class="text-center">&mdash; &mdash;</td>
+      <td class="text-center">{{results.massFlow |number:'1.0-2'}} </td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
+      <td class="text-center">{{results.inletEnergyFlow |number:'1.0-1'}}</td>
+      <td class="text-center">&mdash; &mdash;</td>
+      <td class="text-center">{{results.outletEnergyFlow |number:'1.0-1'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
+      </td> -->
+    </tr>
+  </tbody>
+</table>
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>

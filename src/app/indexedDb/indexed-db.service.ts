@@ -3,7 +3,7 @@ import { WindowRefService } from '../indexedDb/window-ref.service';
 import { DirectoryDbRef } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
-import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials'
+import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { UpdateDataService } from '../shared/update-data.service';
 import { Calculator } from '../shared/models/calculators';
 import { BehaviorSubject } from 'rxjs';
@@ -64,7 +64,7 @@ export class IndexedDbService {
           let assessmentObjStore = newVersion.createObjectStore(myDb.storeNames.assessments, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           assessmentObjStore.createIndex('directoryId', 'directoryId', { unique: false });
         }
         //directories
@@ -73,7 +73,7 @@ export class IndexedDbService {
           let directoryObjectStore = newVersion.createObjectStore(myDb.storeNames.directories, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           directoryObjectStore.createIndex('parentDirectoryId', 'parentDirectoryId', { unique: false });
         }
         //settings
@@ -82,7 +82,7 @@ export class IndexedDbService {
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.settings, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           settingsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
           settingsObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
         }
@@ -92,7 +92,7 @@ export class IndexedDbService {
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.gasLoadChargeMaterial, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           settingsObjStore.createIndex('id', 'id', { unique: false });
         }
 
@@ -102,7 +102,7 @@ export class IndexedDbService {
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.liquidLoadChargeMaterial, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           settingsObjStore.createIndex('id', 'id', { unique: false });
         }
 
@@ -112,7 +112,7 @@ export class IndexedDbService {
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLoadChargeMaterial, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           settingsObjStore.createIndex('id', 'id', { unique: false });
         }
         //atmosphereSpecificHeat
@@ -121,7 +121,7 @@ export class IndexedDbService {
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.atmosphereSpecificHeat, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           settingsObjStore.createIndex('id', 'id', { unique: false });
         }
         //wallLossesSurface
@@ -130,7 +130,7 @@ export class IndexedDbService {
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.wallLossesSurface, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           settingsObjStore.createIndex('id', 'id', { unique: false });
         }
         //flueGasMaterial
@@ -139,7 +139,7 @@ export class IndexedDbService {
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.flueGasMaterial, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           settingsObjStore.createIndex('id', 'id', { unique: false });
         }
         //solidLiquidFlueGasMaterial
@@ -148,7 +148,7 @@ export class IndexedDbService {
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLiquidFlueGasMaterial, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           settingsObjStore.createIndex('id', 'id', { unique: false });
         }
         //calculator
@@ -157,22 +157,22 @@ export class IndexedDbService {
           let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.calculator, {
             autoIncrement: true,
             keyPath: 'id'
-          })
+          });
           calculatorObjStore.createIndex('id', 'id', { unique: false });
           calculatorObjStore.createIndex('directoryId', 'directoryId', { unique: false });
           calculatorObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
         }
-      }
+      };
       myDb.setDefaultErrorHandler(this.request, myDb);
 
       this.request.onsuccess = function (e) {
         myDb.instance = e.target.result;
         resolve('db init success');
-      }
+      };
 
       this.request.onerror = (error) => {
         reject(error.target.result);
-      }
+      };
     });
   }
 
@@ -183,11 +183,11 @@ export class IndexedDbService {
       let deleteRequest = this._window.indexedDB.deleteDatabase(myDb.name);
       deleteRequest.onsuccess = (e) => {
         resolve(e);
-      }
+      };
       deleteRequest.onerror = (e) => {
         reject(e);
-      }
-    })
+      };
+    });
   }
 
   //ASSESSMENTS
@@ -199,10 +199,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = function (e) {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
+        reject(error.target.result);
+      };
     });
   }
 
@@ -214,11 +214,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   getAssessment(id: number): Promise<any> {
@@ -231,11 +231,11 @@ export class IndexedDbService {
         //e.target.result = Assessment
         let assessment = this.updateDataService.checkAssessment(e.target.result);
         resolve(assessment);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   // getDirectoryAssessments(directoryId: number): Promise<any> {
@@ -274,15 +274,15 @@ export class IndexedDbService {
         let updateRequest = store.put(tmpAssessment);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
-    })
+      };
+    });
   }
 
   deleteAssessment(id: number): Promise<any> {
@@ -292,11 +292,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
   //DIRECTORIES
@@ -308,10 +308,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = function (e) {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
+        reject(error.target.result);
+      };
     });
   }
 
@@ -338,11 +338,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   // getChildrenDirectories(parentDirectoryId): Promise<any> {
@@ -373,15 +373,15 @@ export class IndexedDbService {
         let updateRequest = store.put(tmpDirectory);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
-    })
+      };
+    });
   }
 
   deleteDirectory(id: number): Promise<any> {
@@ -391,11 +391,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
 
@@ -408,10 +408,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
 
@@ -484,11 +484,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   putSettings(settings: Settings): Promise<any> {
@@ -503,15 +503,15 @@ export class IndexedDbService {
         let updateRequest = store.put(tmpSettings);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
-    })
+      };
+    });
   }
 
   deleteSettings(id: number): Promise<any> {
@@ -521,11 +521,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
   //gasLoadChargeMaterial
@@ -537,10 +537,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
 
@@ -555,14 +555,14 @@ export class IndexedDbService {
         let updateRequest = store.put(material);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
+      };
     });
   }
 
@@ -573,11 +573,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
 
@@ -589,11 +589,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   getAllGasLoadChargeMaterial(): Promise<Array<GasLoadChargeMaterial>> {
@@ -604,11 +604,26 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
+  }
+
+  clearGasLoadChargeMaterial(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      clearRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
   }
   
   //liquidLoadChargeMaterial
@@ -620,10 +635,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
 
@@ -638,14 +653,14 @@ export class IndexedDbService {
         let updateRequest = store.put(material);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
+      };
     });
   }
 
@@ -656,11 +671,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
   getLiquidLoadChargeMaterial(id: number): Promise<LiquidLoadChargeMaterial> {
@@ -671,11 +686,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   getAllLiquidLoadChargeMaterial(): Promise<Array<LiquidLoadChargeMaterial>> {
@@ -686,11 +701,26 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
+  }
+
+  clearLiquidLoadChargeMaterial(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      clearRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
   }
 
   //solidLoadChargeMaterial
@@ -702,10 +732,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
 
@@ -716,11 +746,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
   putSolidLoadChargeMaterial(material: SolidLoadChargeMaterial): Promise<any> {
@@ -734,14 +764,14 @@ export class IndexedDbService {
         let updateRequest = store.put(material);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
+      };
     });
   }
 
@@ -753,11 +783,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   getAllSolidLoadChargeMaterial(): Promise<Array<SolidLoadChargeMaterial>> {
@@ -768,11 +798,26 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
+  }
+
+  clearSolidLoadChargeMaterial(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      clearRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
   }
 
   //atmosphereSpecificHeat
@@ -784,10 +829,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
 
@@ -798,11 +843,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
   putAtmosphereSpecificHeat(material: AtmosphereSpecificHeat): Promise<any> {
@@ -816,14 +861,14 @@ export class IndexedDbService {
         let updateRequest = store.put(material);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
+      };
     });
   }
 
@@ -835,11 +880,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   getAtmosphereSpecificHeat(): Promise<Array<AtmosphereSpecificHeat>> {
@@ -850,11 +895,26 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
+  }
+
+  clearAtmosphereSpecificHeat(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      clearRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
   }
 
   //wallLossesSurface
@@ -866,10 +926,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
 
@@ -880,11 +940,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
   putWallLossesSurface(material: WallLossesSurface): Promise<any> {
@@ -898,14 +958,14 @@ export class IndexedDbService {
         let updateRequest = store.put(material);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
+      };
     });
   }
 
@@ -917,11 +977,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   getWallLossesSurface(): Promise<Array<WallLossesSurface>> {
@@ -932,11 +992,26 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
+  }
+
+  clearWallLossesSurface(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.wallLossesSurface], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.wallLossesSurface);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      clearRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
   }
 
   //flueGasMaterial
@@ -948,10 +1023,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
   
@@ -966,14 +1041,14 @@ export class IndexedDbService {
         let updateRequest = store.put(material);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
+      };
     });
   }
 
@@ -984,11 +1059,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
   getFlueGasMaterialById(id: number): Promise<FlueGasMaterial> {
@@ -999,11 +1074,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   getFlueGasMaterials(): Promise<Array<FlueGasMaterial>> {
@@ -1014,12 +1089,27 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
+  clearFlueGasMaterials(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.flueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.flueGasMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      clearRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
+  }
+
   //solidLiquidFlueGasMaterial
   addSolidLiquidFlueGasMaterial(_material: SolidLiquidFlueGasMaterial): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -1029,10 +1119,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
 
@@ -1043,11 +1133,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
   putSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial): Promise<any> {
@@ -1061,14 +1151,14 @@ export class IndexedDbService {
         let updateRequest = store.put(material);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
+      };
     });
   }
 
@@ -1080,11 +1170,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   getSolidLiquidFlueGasMaterials(): Promise<Array<SolidLiquidFlueGasMaterial>> {
@@ -1095,13 +1185,27 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
+  clearSolidLiquidFlueGasMaterials(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLiquidFlueGasMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLiquidFlueGasMaterial);
+      let clearRequest = store.clear();
+      myDb.setDefaultErrorHandler(clearRequest, myDb);
+      clearRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      };
+      clearRequest.onerror = (error) => {
+        reject(error.target.result);
+      };
+    });
+  }
 
   //calculator
   addCalculator(_calculator: Calculator): Promise<any> {
@@ -1112,10 +1216,10 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       addRequest.onerror = (e) => {
-        reject(e.target.result)
-      }
+        reject(e.target.result);
+      };
     });
   }
   // getDirectoryCalculator(directoryId: number): Promise<any> {
@@ -1174,11 +1278,11 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
         resolve(e.target.result);
-      }
+      };
       getRequest.onerror = (error) => {
-        reject(error.target.result)
-      }
-    })
+        reject(error.target.result);
+      };
+    });
   }
 
   putCalculator(calculator: Calculator): Promise<any> {
@@ -1192,15 +1296,15 @@ export class IndexedDbService {
         let updateRequest = store.put(tmpCalc);
         updateRequest.onsuccess = (event) => {
           resolve(event);
-        }
+        };
         updateRequest.onerror = (event) => {
-          reject(event)
-        }
-      }
+          reject(event);
+        };
+      };
       getRequest.onerror = (event) => {
         reject(event);
-      }
-    })
+      };
+    });
   }
 
   deleteCalculator(id: number): Promise<any> {
@@ -1210,11 +1314,11 @@ export class IndexedDbService {
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
         resolve(event.target.result);
-      }
+      };
       deleteRequest.onerror = (event) => {
         reject(event.target.result);
-      }
-    })
+      };
+    });
   }
 
 }

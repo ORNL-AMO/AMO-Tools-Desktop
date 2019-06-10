@@ -26,34 +26,20 @@ export class SlagFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  isBaseline: boolean;
+
   firstChange: boolean = true;
+  idString: string;
   constructor(private slagCompareService: SlagCompareService) { }
 
   ngOnInit() {
-    if (!this.baselineSelected) {
-      this.disableForm();
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
     }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
     }
-  }
-
-  disableForm() {
-    // this.slagLossForm.disable();
-  }
-
-  enableForm() {
-    // this.slagLossForm.enable();
   }
 
   focusField(str: string) {
@@ -63,7 +49,7 @@ export class SlagFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  startSavePolling() {
+  save() {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

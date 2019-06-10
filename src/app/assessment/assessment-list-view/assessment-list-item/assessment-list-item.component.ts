@@ -29,7 +29,7 @@ export class AssessmentListItemComponent implements OnInit {
   @ViewChild('editModal') public editModal: ModalDirective;
   @ViewChild('copyModal') public copyModal: ModalDirective;
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
-  
+
   directories: Array<Directory>;
 
   editForm: FormGroup;
@@ -50,6 +50,12 @@ export class AssessmentListItemComponent implements OnInit {
       this.isSetup = this.assessment.phast.setupDone;
     } else if (this.assessment.psat) {
       this.isSetup = this.assessment.psat.setupDone;
+    } else if (this.assessment.fsat) {
+      this.isSetup = this.assessment.fsat.setupDone;
+    } else if (this.assessment.ssmt) {
+      this.isSetup = this.assessment.ssmt.setupDone;
+    } else if (this.assessment.treasureHunt) {
+      this.isSetup = this.assessment.treasureHunt.setupDone;
     }
     if (this.isChecked) {
       this.assessment.selected = this.isChecked;
@@ -57,7 +63,7 @@ export class AssessmentListItemComponent implements OnInit {
 
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;
-    })
+    });
 
     this.assessmentCopy = JSON.parse(JSON.stringify(this.assessment));
     delete this.assessmentCopy.id;
@@ -76,13 +82,7 @@ export class AssessmentListItemComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {
-    this.assessmentService.tab = str;
-    this.assessmentService.subTab = str2;
-    if (assessment.type == 'PSAT') {
-      this.router.navigateByUrl('/psat/' + this.assessment.id);
-    } else if (assessment.type == 'PHAST') {
-      this.router.navigateByUrl('/phast/' + this.assessment.id);
-    }
+    this.assessmentService.goToAssessment(assessment, str, str2);
   }
 
   setDelete() {
@@ -92,7 +92,7 @@ export class AssessmentListItemComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       'name': [this.assessment.name],
       'directoryId': [this.assessment.directoryId]
-    })
+    });
     this.editModal.show();
   }
 
@@ -101,10 +101,10 @@ export class AssessmentListItemComponent implements OnInit {
   }
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
     let str = parentDir.name + '/';
     while (parentDir.parentDirectoryId) {
-      parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+      parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
       str = parentDir.name + '/' + str;
     }
     return str;
@@ -116,9 +116,10 @@ export class AssessmentListItemComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(val => {
       this.assessmentDbService.setAll().then(() => {
         this.changeDirectory.emit(true);
+        this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
-      })
-    })
+      });
+    });
   }
 
   showReportModal() {
@@ -141,9 +142,9 @@ export class AssessmentListItemComponent implements OnInit {
       this.copyForm = this.formBuilder.group({
         'name': [this.assessment.name + ' (copy)', Validators.required],
         'directoryId': [this.assessment.directoryId, Validators.required]
-      })
+      });
       this.copyModal.show();
-    })
+    });
   }
 
   hideCopyModal() {
@@ -162,10 +163,10 @@ export class AssessmentListItemComponent implements OnInit {
           this.assessmentDbService.setAll().then(() => {
             this.changeDirectory.emit(true);
             this.hideCopyModal();
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
   showDeleteModal() {
@@ -184,9 +185,9 @@ export class AssessmentListItemComponent implements OnInit {
           this.settingsDbService.setAll().then(() => {
             this.hideDeleteModal();
             this.changeDirectory.emit(true);
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 }

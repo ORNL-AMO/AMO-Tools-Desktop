@@ -1,19 +1,2 @@
-<div *ngIf="!printView && assessmentType == 'phast'">
-  <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
-    [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>
-</div>
-
-<div *ngIf="printView && assessmentType == 'phast'">
-  <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
-    [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>
-</div>
-
-<div *ngIf="!printView && assessmentType == 'psat'">
-  <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
-    [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>
-</div>
-
-<div *ngIf="printView && assessmentType == 'psat'">
-  <app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
-    [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>
-</div>
+<app-pie-chart [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="chartContainerWidth"
+  [chartContainerHeight]="chartContainerHeight" [printView]="printView" [exportName]="exportName"></app-pie-chart>

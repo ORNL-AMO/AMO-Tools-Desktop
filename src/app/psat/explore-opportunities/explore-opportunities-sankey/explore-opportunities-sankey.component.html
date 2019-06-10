@@ -1,6 +1,6 @@
-<div class="row justify-content-center sankey-toggle-switch">
-    <div class="btn-group align-self-center">
-      <button type="button" class="btn btn-secondary" (click)="createSankey('Baseline')" [ngClass]="{'active': selectedView == 'Baseline'}">Baseline</button>
-      <button type="button" class="btn btn-secondary" (click)="createSankey('Modified')" [ngClass]="{'active': selectedView == 'Modified'}">Modification</button>
-    </div>
+<div class="d-flex flex-column w-100">
+  <div class="btn-group mt-2 justify-content-center">
+    <button type="button" class="btn btn-secondary" (click)="createSankey('Baseline')" [ngClass]="{'active': selectedView == 'Baseline'}">Baseline</button>
+    <button type="button" class="btn btn-secondary" (click)="createSankey('Modified')" [ngClass]="{'active': selectedView == 'Modified'}">Modification</button>
   </div>
+</div>

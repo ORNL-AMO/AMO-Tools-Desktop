@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { LiquidCoolingWarnings, CoolingLossesService } from '../cooling-losses.service';
+import { LiquidCoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 
 @Component({
   selector: 'app-liquid-cooling-losses-form',
@@ -27,74 +29,28 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
-  
-  specificHeatError: string = null;
-  firstChange: boolean = true;
-  temperatureError: string = null;
-  densityLiquidError: string = null;
-  liquidFlowError: string = null;
-  constructor(private coolingLossesCompareService: CoolingLossesCompareService) { }
+  @Input()
+  isBaseline: boolean;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
+  warnings: LiquidCoolingWarnings;
+  idString: string;
+  constructor(private coolingLossesCompareService: CoolingLossesCompareService, private coolingLossesService: CoolingLossesService) { }
 
   ngOnInit() {
-    this.checkInputError(true);
-    if (!this.baselineSelected) {
-      this.disableForm();
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
     }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
+    this.checkWarnings();
   }
 
-  disableForm() {
-    // this.lossesForm.disable();
-  }
-
-  enableForm() {
-    // this.lossesForm.enable();
-  }
-
-  checkInputError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.lossesForm.controls.avgSpecificHeat.value < 0) {
-      this.specificHeatError = 'Specific Heat must be equal or greater than 0';
-    } else {
-      this.specificHeatError = null;
-    }
-    if (this.lossesForm.controls.density.value < 0) {
-      this.densityLiquidError = 'Density must be equal or greater than 0';
-    } else {
-      this.densityLiquidError = null;
-    }
-    if (this.lossesForm.controls.liquidFlow.value < 0) {
-      this.liquidFlowError = 'Liquid Flow must be equal or greater than 0';
-    } else {
-      this.liquidFlowError = null;
-    }
-
-    if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
-      this.temperatureError = 'Inlet temperature is greater than outlet temperature';
-    } else {
-      this.temperatureError = null;
-    }
-
-    if (this.specificHeatError || this.densityLiquidError || this.liquidFlowError || this.temperatureError) {
-      this.inputError.emit(true);
-      this.coolingLossesCompareService.inputError.next(true);
-    } else {
-      this.inputError.emit(false);
-      this.coolingLossesCompareService.inputError.next(false);
-    }
+  checkWarnings() {
+    let tmpLoss: LiquidCoolingLoss = this.coolingLossesService.initLiquidLossFromForm(this.lossesForm).liquidCoolingLoss;
+    this.warnings = this.coolingLossesService.checkLiquidWarnings(tmpLoss);
+    let hasWarning: boolean = this.coolingLossesService.checkWarningsExist(this.warnings);
+    this.inputError.emit(hasWarning);
   }
 
   focusField(str: string) {
@@ -104,14 +60,15 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
-    this.calculate.emit(true)
+    this.calculate.emit(true);
   }
   canCompare() {
     if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && !this.inSetup) {
-      if (this.coolingLossesCompareService.compareLossType(this.lossIndex) == false) {
-        return true
+      if (this.coolingLossesCompareService.compareLossType(this.lossIndex) === false) {
+        return true;
       } else {
         return false;
       }

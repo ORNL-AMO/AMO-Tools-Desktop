@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { PsatResultsData, ReportRollupService } from '../../report-rollup.service';
+import { PsatResultsData } from '../../report-rollup-models';
 
 @Component({
   selector: 'app-psat-rollup-pump-summary-table',
@@ -15,8 +15,6 @@ export class PsatRollupPumpSummaryTableComponent implements OnInit {
   @Input()
   resultData: Array<PsatResultsData>;
 
-
-  // constructor(private reportRollupService: ReportRollupService) { }
   constructor() { }
   ngOnInit() { }
 
@@ -25,7 +23,7 @@ export class PsatRollupPumpSummaryTableComponent implements OnInit {
   getPayback(modCost: number, baselineCost: number, implementationCost: number) {
     if (implementationCost) {
       let val = (implementationCost / (baselineCost - modCost)) * 12;
-      if (isNaN(val) == false) {
+      if (isNaN(val) === false) {
         return val;
       } else {
         return 0;

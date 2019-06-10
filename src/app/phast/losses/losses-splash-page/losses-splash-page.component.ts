@@ -14,7 +14,7 @@ export class LossesSplashPageComponent implements OnInit {
   ngOnInit() {
   }
 
-  hideSetupDialog(){
+  hideSetupDialog() {
     this.hidePage.emit(true);
   }
 }

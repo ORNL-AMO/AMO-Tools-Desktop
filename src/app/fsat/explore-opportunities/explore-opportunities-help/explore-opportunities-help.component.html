@@ -1,0 +1,7 @@
+      <app-system-basics-help *ngIf="stepTab == 'system-basics'"></app-system-basics-help>
+      <!-- <app-fan-curve-data-help *ngIf="stepTab == 'fan-curve-data'"></app-fan-curve-data-help>
+      <app-operating-points-help *ngIf="stepTab == 'operating-points' || stepTab == 'rated-operating-points'"></app-operating-points-help> -->
+      <app-fan-field-data-help *ngIf="stepTab == 'fan-field-data'" [currentField]="currentField"></app-fan-field-data-help>
+      <app-fan-motor-help *ngIf="stepTab == 'fan-motor'" [currentField]="currentField"></app-fan-motor-help>
+      <app-fan-setup-help *ngIf="stepTab == 'fan-setup'" [currentField]="currentField"></app-fan-setup-help>
+      <app-fsat-fluid-help *ngIf="stepTab == 'fsat-fluid'" [currentField]="currentField"></app-fsat-fluid-help>

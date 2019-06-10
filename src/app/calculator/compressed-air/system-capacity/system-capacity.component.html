@@ -1,46 +1,80 @@
-<div class="panel-container row compressed-air">
-  <div class="col-12">
-    <div class="row align-items-top calculator-panel">
-      <div class="panel-column col-6 align-top">
-        <div class="header">
-          <h3>Compressed Air - System Capacity</h3>
-        </div>
-        <div class="row">
-          <div class="col-12 tab-content">
-            <app-system-capacity-form [inputs]="inputs" [outputs]="outputs" (calculate)="getTotalPipeVolume()"></app-system-capacity-form>
-          </div>
-        </div>
+<div class="d-flex h-100 modify-conditions compressed-air">
+  <div class="d-flex flex-column modification w-50 mh-100 scroll-item">
+    <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+      <div class="col-md-auto">
+        <img src="assets/images/calculator-icons/compressed-air-icons/air-system-capacity.png" class="ico-size5">
       </div>
-      <div class="col-6 align-top">
-        <div class="help-panel">
-          <div class="header">
-            <h3>Help</h3>
-          </div>
-          <div class="tab-content">
-            <p>Find the total air quantity that the compressed air system can contain at any instant of time,
-              including the air in the pipes and receivers. The total capacity of the compressed air system can be obtained
-              by adding the volumes of pipes and receivers.</p>
-            <div class="help-content">
-              <div class="card">
-                <div class="card-header">
-                  Pipe Size
-                </div>
-                <div class="card-block">
-                  <p>Pipe that is sized too small can create big pressure losses and reduce operating efficiency. Enter the
-                    length for different Nominal Pipe sizes total. </p>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-header">
-                  Enter Number of Recievers
-                </div>
-                <div class="card-block">
-                  <p>Input capacity values of different receivers.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div class="pl-2">
+        <h3>System Capacity</h3>
+      </div>
+    </div>
+    <div class="d-flex flex-column m-4">
+      <app-system-capacity-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculate()" (emitChangeField)="changeField($event)"></app-system-capacity-form>
+      <div class="w-100 justify-content-center btn-group btn-group-sm">
+        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+          Reset Data
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-50 mh-100 scroll-item">
+    <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
+      <div class="flex-fill panel-tab-item h-100 active">
+        <a class="h-100 d-flex justify-content-center align-items-center">
+          <div>Help</div>
+        </a>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="p-4 pt-2 d-flex flex-column help-info">
+        <h5>
+          System Capacity Help
+          <br>
+          <small class="text-muted"> Input the length of each standard pipe size, the size and length of any custom pipes,
+             and the capacity of receiver tanks found in the compressed air system.  
+             The total capacity of the compressed air system will be calculated by adding the volumes of the pipes and receivers. 
+             In a well-designed system, the total capacity of the compressed air system is always greater than the mean air 
+             consumption found over a reasonable amount of time. 
+          </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+
+        <div class="my-2" *ngIf="currentField == 'pipeSize'">
+          <h6>
+            Pipe Length
+            <br>
+            <small class="text-muted">
+                Enter the length for different nominal pipe sizes. 
+                Pipe sizes used are nominal schedule 40 pipe measured from the pipe’s inner diameter. 
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'receiverTanks'">
+          <h6>
+            Receiver Tanks
+            <br>
+            <small class="text-muted">
+              Enter the nameplate capacity for each receiver tank in the system. 
+              <hr>
+            </small>
+          </h6>
+        </div>
+
+        <div class="my-2" *ngIf="currentField == 'customPipes'">
+          <h6>
+            Custom Pipes
+            <br>
+            <small class="text-muted">
+              Enter the length and size of any custom pipe in the compressed air system.
+              The size of the pipe should be taken as the pipe’s inner diameter. 
+              This feature can be used to consider any non-nominal schedule 40 pipe.
+              <hr>
+            </small>
+          </h6>
         </div>
       </div>
     </div>
   </div>
+</div>

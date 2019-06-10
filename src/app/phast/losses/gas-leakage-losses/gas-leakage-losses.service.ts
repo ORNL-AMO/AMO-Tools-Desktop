@@ -7,7 +7,7 @@ export class GasLeakageLossesService {
 
   constructor(private formBuilder: FormBuilder) {
   }
-  initForm(lossNum:number): FormGroup {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       draftPressure: ['', Validators.required],
       openingArea: ['', Validators.required],
@@ -16,8 +16,8 @@ export class GasLeakageLossesService {
       coefficient: [.8052, Validators.required],
       specificGravity: [1.0, Validators.required],
       correctionFactor: [1.0, Validators.required],
-      name: ['Loss #'+lossNum]
-    })
+      name: ['Loss #' + lossNum]
+    });
   }
 
   initFormFromLoss(loss: LeakageLoss): FormGroup {
@@ -30,7 +30,7 @@ export class GasLeakageLossesService {
       specificGravity: [loss.specificGravity, Validators.required],
       correctionFactor: [loss.correctionFactor, Validators.required],
       name: [loss.name]
-    })
+    });
   }
 
   initLossFromForm(form: FormGroup): LeakageLoss {
@@ -43,9 +43,66 @@ export class GasLeakageLossesService {
       specificGravity: form.controls.specificGravity.value,
       correctionFactor: form.controls.correctionFactor.value,
       name: form.controls.name.value
-    }
+    };
     return tmpLoss;
   }
 
+  checkLeakageWarnings(loss: LeakageLoss): LeakageWarnings {
+    return {
+      openingAreaWarning: this.checkOpeningArea(loss),
+      specificGravityWarning: this.checkSpecificGravity(loss),
+      draftPressureWarning: this.checkDraftPressure(loss),
+      temperatureWarning: this.checkTemperature(loss)
+    };
+  }
 
+  checkOpeningArea(loss: LeakageLoss): string {
+    if (loss.openingArea < 0) {
+      return 'Opening Area must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+  checkSpecificGravity(loss: LeakageLoss): string {
+    if (loss.specificGravity < 0) {
+      return 'Specific Density of Flue Gases must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+  checkDraftPressure(loss: LeakageLoss): string {
+    if (loss.draftPressure < 0) {
+      return 'Draft Pressure must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+  checkTemperature(loss: LeakageLoss): string {
+    if (loss.ambientTemperature > loss.leakageGasTemperature) {
+      return "Ambient Temperature shouldn't be greater than Temperature of Gases Leaking";
+    } else {
+      return null;
+    }
+  }
+
+  checkWarningsExist(warnings: LeakageWarnings): boolean {
+    let hasWarning: boolean = false;
+    for (var key in warnings) {
+      if (warnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    return hasWarning;
+  }
+}
+
+
+export interface LeakageWarnings {
+  openingAreaWarning: string;
+  specificGravityWarning: string;
+  draftPressureWarning: string;
+  temperatureWarning: string;
 }

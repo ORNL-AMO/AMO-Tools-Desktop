@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { FlueGas } from "../../../shared/models/phast/losses/flueGas";
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -7,9 +6,7 @@ import { PHAST } from '../../../shared/models/phast/phast';
 export class FlueGasCompareService {
   baselineFlueGasLoss: FlueGas[];
   modifiedFlueGasLoss: FlueGas[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses() {
@@ -19,13 +16,13 @@ export class FlueGasCompareService {
     if (this.modifiedFlueGasLoss) {
       for (index; index < numLoss; index++) {
         let typeCheck = this.compareLossType(index);
-        if (typeCheck == false) {
-          if (this.baselineFlueGasLoss[index].flueGasType == 'By Volume') {
-            if (this.compareByVolumeLoss(index) == true) {
+        if (typeCheck === false) {
+          if (this.baselineFlueGasLoss[index].flueGasType === 'By Volume') {
+            if (this.compareByVolumeLoss(index) === true) {
               isDiff = true;
             }
-          } else if (this.baselineFlueGasLoss[index].flueGasType == 'By Mass') {
-            if (this.compareByMassLoss(index) == true) {
+          } else if (this.baselineFlueGasLoss[index].flueGasType === 'By Mass') {
+            if (this.compareByMassLoss(index) === true) {
               isDiff = true;
             }
           }
@@ -49,7 +46,7 @@ export class FlueGasCompareService {
       this.compareMassFuelTemperature(index) ||
       this.compareMassAshDischargeTemperature(index) ||
       this.compareMassMoistureInAirComposition(index) ||
-      this.compareMassUnburnedCarbonInAsh(index))
+      this.compareMassUnburnedCarbonInAsh(index));
   }
   compareMassGasTypeId(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByMass.gasTypeId, this.modifiedFlueGasLoss[index].flueGasByMass.gasTypeId);
@@ -85,7 +82,7 @@ export class FlueGasCompareService {
       this.compareVolumeExcessAirPercentage(index) ||
       this.compareVolumeCombustionAirTemperature(index) ||
       this.compareVolumeFuelTemperature(index) ||
-      this.compareVolumeOxygenCalculationMethod(index))
+      this.compareVolumeOxygenCalculationMethod(index));
   }
   compareVolumeGasTypeId(index: number) {
     return this.compare(this.baselineFlueGasLoss[index].flueGasByVolume.gasTypeId, this.modifiedFlueGasLoss[index].flueGasByVolume.gasTypeId);
@@ -112,11 +109,11 @@ export class FlueGasCompareService {
       if (baseline.losses.flueGasLosses) {
         let index = 0;
         baseline.losses.flueGasLosses.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.flueGasLosses[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.flueGasLosses[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -127,7 +124,7 @@ export class FlueGasCompareService {
     if (this.compare(baseline.flueGasType, modification.flueGasType)) {
       isDiff = true;
     } else {
-      if (baseline.flueGasType == 'By Volume') {
+      if (baseline.flueGasType === 'By Volume') {
         if (this.compare(baseline.flueGasByVolume.gasTypeId, modification.flueGasByVolume.gasTypeId) ||
           this.compare(baseline.flueGasByVolume.flueGasTemperature, modification.flueGasByVolume.flueGasTemperature) ||
           this.compare(baseline.flueGasByVolume.excessAirPercentage, modification.flueGasByVolume.excessAirPercentage) ||
@@ -136,7 +133,7 @@ export class FlueGasCompareService {
           this.compare(baseline.flueGasByVolume.oxygenCalculationMethod, modification.flueGasByVolume.oxygenCalculationMethod)) {
           isDiff = true;
         }
-      } else if (baseline.flueGasType == 'By Mass') {
+      } else if (baseline.flueGasType === 'By Mass') {
         if (this.compare(baseline.flueGasByMass.gasTypeId, modification.flueGasByMass.gasTypeId) ||
           this.compare(baseline.flueGasByMass.flueGasTemperature, modification.flueGasByMass.flueGasTemperature) ||
           this.compare(baseline.flueGasByMass.excessAirPercentage, modification.flueGasByMass.excessAirPercentage) ||
@@ -150,20 +147,20 @@ export class FlueGasCompareService {
         }
       }
     }
-    return isDiff
+    return isDiff;
   }
 
 
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

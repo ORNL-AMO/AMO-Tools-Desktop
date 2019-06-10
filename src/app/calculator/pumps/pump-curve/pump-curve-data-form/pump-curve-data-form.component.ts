@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
+import { PumpCurve, PumpCurveDataRow } from '../../../../shared/models/calculators';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-pump-curve-data-form',
   templateUrl: './pump-curve-data-form.component.html',
@@ -8,42 +10,58 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class PumpCurveDataFormComponent implements OnInit {
   @Input()
-  pumpCurveForm: PumpCurveForm;
+  pumpCurveForm: FormGroup;
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Output('calculate')
-  calculate = new EventEmitter<boolean>();
+  calculate = new EventEmitter<FormGroup>();
   @Input()
   settings: Settings;
   @Input()
   inPsat: boolean;
   @Output('emitAddRow')
-  emitAddRow = new EventEmitter<boolean>();
+  emitAddRow = new EventEmitter<FormGroup>();
+  @Output('emitRemoveRow')
+  emitRemoveRow = new EventEmitter<number>();
+  @Input()
+  isFan: boolean;
 
   dataForm: any;
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
-  ]
+  ];
   //regEquation: string = null;
   //rSq: string = null;
-  constructor() { }
+  maxFlowWarnings: Array<string> = [];
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  removeRow(num: number) {
-    this.pumpCurveForm.dataRows.splice(num, 1);
-    this.emitCalculateChanges();
+
+  removeRow(index: number) {
+    this.emitRemoveRow.emit(index);
   }
 
   emitCalculateChanges() {
-    this.calculate.emit(true);
+    this.calculate.emit(this.pumpCurveForm);
   }
 
-  addRow(){
-    this.emitAddRow.emit(true);
+  addRow() {
+    this.emitAddRow.emit(this.pumpCurveForm);
+  }
+
+
+  getDisplayUnit(unit: string) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
   }
 }

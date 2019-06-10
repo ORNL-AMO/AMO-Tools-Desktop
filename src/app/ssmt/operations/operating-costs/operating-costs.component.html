@@ -1,0 +1,52 @@
+<div class="d-flex flex-column ml-2 mr-2">
+  <label class="group-label">Energy Costs for Operation</label>
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label for="{{idString+'fuelCost'}}">Fuel</label>
+      <div class="input-group">
+        <input name="fuelCost" min="0" type="number" step="any" class="form-control" id="{{idString+'fuelCost'}}"
+          (input)="save()" formControlName="fuelCost" [ngClass]="{'indicate-different': isFuelCostDifferent()}"
+          (focus)="focusField('fuelCost')" (blur)="focusOut()">
+        <span class="units input-group-addon">$/{{settings.steamEnergyMeasurement}}</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">
+        <span *ngIf="form.controls.fuelCost.errors.required">Value Required</span>
+        <span *ngIf="form.controls.fuelCost.errors.min">Value must be greater than 0
+          $/{{settings.steamEnergyMeasurement}}.</span>
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="electricityCost">Electricity</label>
+      <div class="input-group">
+        <input name="electricityCost" min="0" type="number" step="any" class="form-control" id="electricityCost"
+          (input)="save()" formControlName="electricityCost"
+          [ngClass]="{'indicate-different': isElectricityCostDifferent()}" (focus)="focusField('electricityCost')"
+          (blur)="focusOut()">
+        <span class="units input-group-addon">$/kWh</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
+        <span *ngIf="form.controls.electricityCost.errors.required">Value Required</span>
+        <span *ngIf="form.controls.electricityCost.errors.min">Value must be greater than 0 $/kWh.</span>
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="{{idString+'makeUpWaterCost'}}">Make-Up Water Cost
+      </label>
+      <div class="input-group">
+        <input name="makeUpWaterCost" min="0" type="number" step="any" class="form-control"
+          id="{{idString+'makeUpWaterCost'}}" (input)="save()" formControlName="makeUpWaterCost"
+          [ngClass]="{'indicate-different': isMakeUpWaterCostsDifferent()}" (focus)="focusField('makeUpWaterCost')"
+          (blur)="focusOut()">
+        <span class="units input-group-addon">$/{{settings.steamVolumeMeasurement}}</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.makeUpWaterCost.invalid && !form.controls.makeUpWaterCost.pristine">
+        <span *ngIf="form.controls.makeUpWaterCost.errors.required">Value Required</span>
+        <span *ngIf="form.controls.makeUpWaterCost.errors.min">Value must be greater than 0
+          $/{{settings.steamVolumeMeasurement}}.</span>
+      </span>
+    </div>
+  </form>
+</div>

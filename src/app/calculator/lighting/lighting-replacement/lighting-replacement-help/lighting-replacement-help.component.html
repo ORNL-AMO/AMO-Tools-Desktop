@@ -1,0 +1,74 @@
+<div class="pr-2 pl-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Lighting Replacement
+    <br>
+    <small class="text-muted">This calculator can be used to calculate the energy savings of typical energy saving
+      opportunities such as:
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <ul small class="text-muted">
+        <li>Reducing the operation time of lighting equipment.</li>
+        <br>
+        <li>Converting to a lower power usage fixture.</li>
+        <br>
+        <li>Reducing the number of lighting fixtures.</li>
+        <br>
+        <li>Turning off the lights when people are not present.</li>
+        <br>
+      </ul>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'hoursPerYear'">
+    <h6>
+      Hours per Year
+      <small class="text-muted">
+        <br>
+        Number of hours per year the lighting is on. This is not necessarily how many hours the facility is operating.
+        Be sure to include normally scheduled overtime.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'wattsPerLamp'">
+    <h6>
+      Watts per Lamp
+      <small class="text-muted">
+        <br>
+        Power used by each lamp or bulb in the fixture. Be sure to include the ballast’s power use, if applicable.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'lumensPerLamp'">
+    <h6>
+      Lumens per Lamp
+      <small class="text-muted">
+        <br>
+        Light output for each lamp. (Optional)
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'lampsPerFixture'">
+    <h6>
+      Lamps per Fixture
+      <small class="text-muted">
+        <br>
+        Number of lamps or bulbs in the fixture.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'numberOfFixtures'">
+    <h6>
+      Number of Fixtures
+      <small class="text-muted">
+        <br>
+        Total number of fixtures.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>

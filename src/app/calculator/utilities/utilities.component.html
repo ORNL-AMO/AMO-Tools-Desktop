@@ -1,69 +1,141 @@
 <div *ngIf="selectedTool == 'none'">
-  <div class="row">
-    <div class="col-10  mx-auto">
+  <div class="d-flex utilities">
+    <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2 class="mb-1">General Calculators</h2>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/assessment.png" class="ico-size3">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/assessment.png" class="calc-img"
+                (click)="showTool('pre-assessment')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('pre-assessment')">Pre-assessment / Screening Calculator</a>
             <p>
-              This calculator allows the user to enter either energy use information gathered from meters or design specifications (for
-              fuel, electrotechnology or steam furnaces) to calculate energy use for multiple furnaces. This allows users
-              to compare the relative energy use of furnaces within a facility to prioritize energy evaluations and efficiency
-              improvements.
+              This calculator allows the user to enter either energy use information gathered from meters or design
+              specifications (for fuel, electrotechnology or steam furnaces) to calculate energy use for multiple
+              furnaces.
+              This allows users to compare the relative energy use of furnaces within a facility to prioritize energy
+              evaluations and
+              efficiency improvements.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/unit-converter.png" class="ico-size3">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/unit-converter.png" class="calc-img"
+                (click)="showTool('convert-units')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('convert-units')">Unit Converter</a>
             <p>
-              Use unit converter for quick unit conversion calculations.
+              Use the unit converter for quick unit conversion calculations.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/chp.png" class="ico-size3">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/chp.png" class="calc-img"
+                (click)="showTool('combined-heat-power')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('combined-heat-power')">Combined Heat and Power</a>
             <p>
-              The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended parties to conduct a very
-              preliminary initial screening of the potential CHP cost savings at the facility based on - Annual Electricity
-              Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual Operating hours. This calculator
-              is not intended to estimate the economic performance of a specific CHP project, rather it is intended to only
-              give the user an initial understanding of whether CHP has the potential to provide economic savings at their
-              facility.
+              Use this calculator to conduct a preliminary screening of the potential cost savings from CHP based on
+              annual electricity consumption,
+              annual thermal loads, average electricity and fuel prices, and annual operating hours.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-            <img src="assets/images/cash-flow.png" class="ico-size3">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/cash-flow.png" class="calc-img"
+                (click)="showTool('cash-flow')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('cash-flow')">Cash Flow Diagram</a>
             <p>
-              Cash flow diagram displays the revenues (savings) and costs associated with an investment.
+              The Cash flow diagram displays the revenues (savings) and costs associated with an investment.
             </p>
           </div>
         </div>
-        <div class="row calc-item-row">
-          <div class="col-1">
-             <img src="assets/images/power-factor-correction-icon.png" class="ico-size3">
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/power-factor-correction-icon.png"
+                class="calc-img" (click)="showTool('power-factor-correction')">
+            </div>
           </div>
-          <div class="col-11">
+          <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('power-factor-correction')">Power Factor Correction</a>
             <p>
-              This calculator is used to identify the capacitance (in kVAR) required for improving the power
-              factor to the proposed level.            </p>
+              This calculator is used to identify the capacitance (in kVAR) required for improving the power factor to
+              the proposed level.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/co2-savings.png" class="calc-img"
+                (click)="showTool('co2-savings')">
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a (click)="showTool('co2-savings')">CO<sub>2</sub> Savings Calculator</a>
+            <p>
+              This calculator lets the user determine carbon dioxide (CO<sub>2</sub>) emissions for given electricity
+              and fuel uses.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png" class="calc-img"
+                (click)="showTool('electricity-reduction')">
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a (click)="showTool('electricity-reduction')">Electricity Reduction</a>
+            <p>
+              This calculator is used to quantify the energy savings associated with reducing electricity usage.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png" class="calc-img"
+                (click)="showTool('natural-gas-reduction')">
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a (click)="showTool('natural-gas-reduction')">Natural Gas Reduction</a>
+            <p>
+              This calculator is used to quantify the energy savings associated with reducing natural gas usage.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png" class="calc-img"
+                (click)="showTool('compressed-air-reduction')">
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a (click)="showTool('compressed-air-reduction')">Compressed Air Reduction</a>
+            <p>
+              This calculator reduces the compressed air use. Real description needed.
+            </p>
           </div>
         </div>
       </div>
@@ -90,4 +162,20 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'power-factor-correction'">
   <app-power-factor-correction></app-power-factor-correction>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'co2-savings'">
+  <app-co2-savings></app-co2-savings>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'electricity-reduction'">
+  <app-electricity-reduction></app-electricity-reduction>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'natural-gas-reduction'">
+  <app-natural-gas-reduction></app-natural-gas-reduction>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'compressed-air-reduction'">
+  <app-compressed-air-reduction></app-compressed-air-reduction>
 </div>

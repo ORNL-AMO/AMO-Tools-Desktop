@@ -22,10 +22,9 @@ export class EnergyInputTabComponent implements OnInit {
   displayTooltip: boolean;
 
   numLosses: number = 0;
-  inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   enInput1Done: boolean;
   compareSubscription: Subscription;
   lossSubscription: Subscription;
@@ -39,18 +38,11 @@ export class EnergyInputTabComponent implements OnInit {
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
-    })
-
-    this.compareSubscription = this.energyInputCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
+    });
     this.badgeHover = false;
   }
 
   ngOnDestroy() {
-    this.compareSubscription.unsubscribe();
     this.lossSubscription.unsubscribe();
   }
 
@@ -58,8 +50,6 @@ export class EnergyInputTabComponent implements OnInit {
     let badgeStr: Array<string> = ['success'];
     if (this.missingData || !this.enInput1Done) {
       badgeStr = ['missing-data'];
-    } else if (this.inputError) {
-      badgeStr = ['input-error'];
     } else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
@@ -78,17 +68,17 @@ export class EnergyInputTabComponent implements OnInit {
     let testVal = false;
     if (this.energyInputCompareService.baselineEnergyInput) {
       this.energyInputCompareService.baselineEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     if (this.energyInputCompareService.modifiedEnergyInput && !this.inSetup) {
       this.energyInputCompareService.modifiedEnergyInput.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     return testVal;
   }
@@ -96,7 +86,7 @@ export class EnergyInputTabComponent implements OnInit {
 
   checkLossValid(loss: EnergyInputEAF) {
     let tmpForm: FormGroup = this.energyInputService.getFormFromLoss(loss);
-    if (tmpForm.status == 'VALID') {
+    if (tmpForm.status === 'VALID') {
       return true;
     } else {
       return false;

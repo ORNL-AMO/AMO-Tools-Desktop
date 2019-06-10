@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
-import { PhastResultsData } from '../report-rollup.service';
+import { PhastResultsData } from '../report-rollup-models';
 
 @Component({
   selector: 'app-report-summary',
@@ -11,16 +11,26 @@ import { PhastResultsData } from '../report-rollup.service';
 export class ReportSummaryComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Output('showModal')
-  showModal = new EventEmitter<boolean>();
+  @Output('showPhastModal')
+  showPhastModal = new EventEmitter<boolean>();
   @Output('showPsatModal')
   showPsatModal = new EventEmitter<boolean>();
+  @Output('showFsatModal')
+  showFsatModal = new EventEmitter<boolean>();
+  @Output('showSsmtModal')
+  showSsmtModal = new EventEmitter<boolean>();
   @Input()
   phastResults: Array<PhastResultsData>;
   @Input()
   numPhasts: number;
   @Input()
   numPsats: number;
+  @Input()
+  numFsats: number;
+  @Input()
+  numSsmt: number;
+  @Input()
+  numTreasureHunt: number;
 
   @Output('hideSummary')
   hideSummary = new EventEmitter<boolean>();
@@ -33,7 +43,7 @@ export class ReportSummaryComponent implements OnInit {
 
 
   showFurnaceRollup() {
-    this.showModal.emit(true);
+    this.showPhastModal.emit(true);
   }
   // showModal() {
   //     this.rollupModal.show();
@@ -47,10 +57,18 @@ export class ReportSummaryComponent implements OnInit {
     this.showPsatModal.emit(true);
   }
 
+  showFanModal() {
+    this.showFsatModal.emit(true);
+  }
+
+  showSteamModal(){
+    this.showSsmtModal.emit(true);
+  }
+
   collapseSummary(str: string) {
     this.showSummary = str;
     setTimeout(() => {
       this.hideSummary.emit(true);
-    },250)
+    }, 250);
   }
 }

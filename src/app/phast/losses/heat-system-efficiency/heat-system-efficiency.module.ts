@@ -13,7 +13,7 @@ import {SharedModule} from "../../../shared/shared.module";
     SharedModule
   ],
   declarations: [HeatSystemEfficiencyComponent],
-  providers:[HeatSystemEfficiencyCompareService],
+  providers: [HeatSystemEfficiencyCompareService],
   exports: [HeatSystemEfficiencyComponent]
 })
 export class HeatSystemEfficiencyModule { }

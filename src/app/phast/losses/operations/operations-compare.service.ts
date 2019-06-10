@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { OperatingHours, OperatingCosts, PHAST } from '../../../shared/models/phast/phast';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class OperationsCompareService {
@@ -8,9 +7,7 @@ export class OperationsCompareService {
   baseline: PHAST;
   modification: PHAST;
 
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {
@@ -27,7 +24,7 @@ export class OperationsCompareService {
       this.compareFuelCost() ||
       this.compareSteamCost() ||
       this.compareElectricityCost()
-    )
+    );
   }
 
   compareWeeksPerYear(): boolean {
@@ -65,14 +62,14 @@ export class OperationsCompareService {
       this.compare(baseline.operatingHours.hoursPerYear, modification.operatingHours.hoursPerYear) ||
       this.compare(baseline.operatingCosts.fuelCost, modification.operatingCosts.fuelCost) ||
       this.compare(baseline.operatingCosts.steamCost, modification.operatingCosts.steamCost) ||
-      this.compare(baseline.operatingCosts.electricityCost, modification.operatingCosts.electricityCost))
+      this.compare(baseline.operatingCosts.electricityCost, modification.operatingCosts.electricityCost));
   }
 
   compare(a: any, b: any) {
     //if both exist
     if (a && b) {
       //compare
-      if (a != b) {
+      if (a !== b) {
         //not equal
         return true;
       } else {
@@ -83,7 +80,7 @@ export class OperationsCompareService {
     //check one exists
     else if ((a && !b) || (!a && b)) {
       //not equal
-      return true
+      return true;
     } else {
       //equal
       return false;

@@ -47,7 +47,7 @@ export class AnimatedCheckmarkComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.active && !changes.active.firstChange) {
+    if (changes.active) {
       if (this.svg === undefined) {
         this.setupSvg();
         this.initCircles();
@@ -128,13 +128,13 @@ export class AnimatedCheckmarkComponent implements OnInit {
       .attr('y1', r * 1.5)
       .attr('x2', r * 0.767)
       .attr('y2', r * 1.5);
+    this.updateCheckMark();
   }
 
   updateCheckMark(): void {
     if (this.svg === undefined || this.circle === undefined) {
       return;
     }
-
     if (this.active) {
       this.addCheckMark();
     }

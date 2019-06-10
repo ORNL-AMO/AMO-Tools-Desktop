@@ -1,0 +1,2 @@
+<app-stack-loss-by-volume *ngIf="method == 'volume'" [stackLossForm]="stackLossForm" [settings]="settings" (changeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-stack-loss-by-volume>
+<app-stack-loss-by-mass *ngIf="method == 'mass'" [stackLossForm]="stackLossForm" [settings]="settings" (changeField)="changeField($event)" (emitCalculate)="calculate($event)"></app-stack-loss-by-mass>

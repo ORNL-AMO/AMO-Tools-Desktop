@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -7,10 +6,7 @@ import { PHAST } from '../../../shared/models/phast/phast';
 export class EnergyInputExhaustGasCompareService {
   baselineEnergyInputExhaustGasLosses: EnergyInputExhaustGasLoss[];
   modifiedEnergyInputExhaustGasLosses: EnergyInputExhaustGasLoss[];
-
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
   compareAllLosses(): boolean {
     let index = 0;
@@ -18,7 +14,7 @@ export class EnergyInputExhaustGasCompareService {
     let isDiff: boolean = false;
     if (this.modifiedEnergyInputExhaustGasLosses) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -33,7 +29,7 @@ export class EnergyInputExhaustGasCompareService {
       this.compareExhaustGasTemp(index) ||
       this.compareTotalHeatInput(index) ||
       this.compareElectricalPowerInput(index)
-    )
+    );
   }
   compareExcessAir(index: number): boolean {
     return this.compare(this.baselineEnergyInputExhaustGasLosses[index].excessAir, this.modifiedEnergyInputExhaustGasLosses[index].excessAir);
@@ -57,11 +53,11 @@ export class EnergyInputExhaustGasCompareService {
       if (baseline.losses.energyInputExhaustGasLoss) {
         let index = 0;
         baseline.losses.energyInputExhaustGasLoss.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.energyInputExhaustGasLoss[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.energyInputExhaustGasLoss[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -74,19 +70,19 @@ export class EnergyInputExhaustGasCompareService {
       this.compare(baseline.exhaustGasTemp, modification.exhaustGasTemp) ||
       this.compare(baseline.totalHeatInput, modification.totalHeatInput) ||
       this.compare(baseline.electricalPowerInput, modification.electricalPowerInput)
-    )
+    );
   }
 
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

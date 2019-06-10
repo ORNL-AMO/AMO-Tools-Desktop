@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PSAT } from '../../../shared/models/psat';
-import { PsatService } from '../../psat.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PsatWarningService } from '../../psat-warning.service';
 @Component({
   selector: 'app-explore-opportunities-help',
   templateUrl: './explore-opportunities-help.component.html',
@@ -18,7 +18,7 @@ export class ExploreOpportunitiesHelpComponent implements OnInit {
 
   maxFlowRate: number;
   minFlowRate: number;
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private psatWarningService: PsatWarningService) { }
 
   ngOnInit() {
     this.minFlowRate = this.getMinFlowRate();
@@ -33,7 +33,7 @@ export class ExploreOpportunitiesHelpComponent implements OnInit {
   }
 
   getMinFlowRate() {
-    let flowRateRange = this.psatService.getFlowRateMinMax(this.psat.inputs.pump_style);
+    let flowRateRange = this.psatWarningService.getFlowRateMinMax(this.psat.inputs.pump_style);
     if (this.settings.flowMeasurement != 'gpm') {
       flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from('gpm').to(this.settings.flowMeasurement);
     }
@@ -42,7 +42,7 @@ export class ExploreOpportunitiesHelpComponent implements OnInit {
 
 
   getMaxFlowRate() {
-    let flowRateRange = this.psatService.getFlowRateMinMax(this.psat.inputs.pump_style);
+    let flowRateRange = this.psatWarningService.getFlowRateMinMax(this.psat.inputs.pump_style);
     if (this.settings.flowMeasurement != 'gpm') {
       flowRateRange.max = this.convertUnitsService.value(flowRateRange.max).from('gpm').to(this.settings.flowMeasurement);
     }

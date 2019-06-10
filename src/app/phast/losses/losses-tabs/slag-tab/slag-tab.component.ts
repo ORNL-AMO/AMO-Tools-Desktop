@@ -24,8 +24,7 @@ export class SlagTabComponent implements OnInit {
   inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
-  compareSubscription: Subscription;
+  badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private slagService: SlagService, private slagCompareService: SlagCompareService, private cd: ChangeDetectorRef) { }
 
@@ -36,28 +35,21 @@ export class SlagTabComponent implements OnInit {
       this.missingData = this.checkMissingData();
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
-    })
-
-    this.compareSubscription = this.slagCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
-
+    });
     this.badgeHover = false;
   }
 
-  ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
+  ngOnDestroy() {
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    }else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent && !this.inSetup){
+    }else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -75,17 +67,17 @@ export class SlagTabComponent implements OnInit {
     let testVal = false;
     if (this.slagCompareService.baselineSlag) {
       this.slagCompareService.baselineSlag.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     if (this.slagCompareService.modifiedSlag && !this.inSetup) {
       this.slagCompareService.modifiedSlag.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
+        if (this.checkLossValid(loss) === false) {
           testVal = true;
         }
-      })
+      });
     }
     return testVal;
   }
@@ -93,7 +85,7 @@ export class SlagTabComponent implements OnInit {
 
   checkLossValid(loss: Slag) {
       let tmpForm: FormGroup = this.slagService.getFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;

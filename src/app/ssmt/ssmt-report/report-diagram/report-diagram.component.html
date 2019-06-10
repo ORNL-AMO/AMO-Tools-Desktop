@@ -1,0 +1,22 @@
+<div class="d-flex flex-column report-diagram-container align-items-center">
+  <div class="d-flex">
+    <h5>Baseline</h5>
+  </div>
+  <app-ssmt-diagram *ngIf="baselineOutput.boilerOutput" [settings]="settings" [inputData]="inputData"
+    [outputData]="baselineOutput"></app-ssmt-diagram>
+  <div *ngIf="!baselineOutput.boilerOutput" class="p-2 w-100 alert-danger text-center">
+    <span class="p-2">Invalid Baseline</span>
+  </div>
+</div>
+
+<div class="d-flex flex-column report-diagram-container align-items-center" *ngFor="let mod of modificationOutputs; let index = index;">
+  <hr class="my-4">
+  <div class="d-flex">
+    <h5>{{mod.name}}</h5>
+  </div>
+  <app-ssmt-diagram *ngIf="mod.outputData.boilerOutput" [settings]="settings"
+    [inputData]="modificationInputData[index].inputData" [outputData]="mod.outputData"></app-ssmt-diagram>
+  <div *ngIf="!mod.outputData.boilerOutput" class="p-2 w-100 alert-danger text-center">
+    <span class="p-2">Invalid Modification</span>
+  </div>
+</div>

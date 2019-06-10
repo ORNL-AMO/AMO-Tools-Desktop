@@ -1,0 +1,13 @@
+.btn-delete-leak-container {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.btn-delete-leak {
+    color: #dc3545;
+}
+
+.btn-delete-leak:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}

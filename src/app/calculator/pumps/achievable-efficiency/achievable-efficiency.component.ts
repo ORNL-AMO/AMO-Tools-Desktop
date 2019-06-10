@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { AchievableEfficiencyService } from './achievable-efficiency.service';
 @Component({
   selector: 'app-achievable-efficiency',
   templateUrl: './achievable-efficiency.component.html',
@@ -30,41 +30,58 @@ export class AchievableEfficiencyComponent implements OnInit {
 
   efficiencyForm: FormGroup;
   toggleCalculate: boolean = true;
+  toggleResetData: boolean = true;
   tabSelect: string = 'results';
 
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private achievableEfficiencyService: AchievableEfficiencyService, private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
-    if (!this.psat) {
-      this.efficiencyForm = this.psatService.initForm();
-      //patch default/starter values for stand alone calculator
-      this.efficiencyForm.patchValue({
-        pumpType: this.psatService.getPumpStyleFromEnum(6),
-        flowRate: 2000
-      })
-    } else {
-      this.efficiencyForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    }
-
-
     //if stand alone calculator use system settings
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
-      if (this.settings.flowMeasurement != 'gpm') {
-        let tmpVal = this.convertUnitsService.value(this.efficiencyForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
-        this.efficiencyForm.patchValue({
-          flowRate: this.psatService.roundVal(tmpVal, 2)
-        })
-      }
     }
+    this.initForm();
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    this.calculate();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy() {
+    if (!this.psat) {
+      this.achievableEfficiencyService.flowRate = this.efficiencyForm.controls.flowRate.value;
+      this.achievableEfficiencyService.pumpType = this.efficiencyForm.controls.pumpType.value;
+    }
+  }
+
+  initForm() {
+    if (!this.psat) {
+      //patch default/starter values for stand alone calculator
+      if (this.achievableEfficiencyService.flowRate && this.achievableEfficiencyService.pumpType) {
+        this.efficiencyForm = this.achievableEfficiencyService.getForm(this.achievableEfficiencyService.pumpType, this.achievableEfficiencyService.flowRate);
+      }
+      else {
+        let tmpFlowRate: number = 2000;
+        if (this.settings.flowMeasurement !== 'gpm') {
+          tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement);
+          tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2);
+        }
+        this.efficiencyForm = this.achievableEfficiencyService.getForm(6, tmpFlowRate);
+      }
+    } else {
+      this.efficiencyForm = this.achievableEfficiencyService.getForm(this.psat.inputs.pump_style, this.psat.inputs.flow_rate);
+    }
+  }
+
+  btnResetData() {
+    this.initForm();
+    this.toggleResetData = !this.toggleResetData;
+    this.calculate();
   }
 
   resizeTabs() {

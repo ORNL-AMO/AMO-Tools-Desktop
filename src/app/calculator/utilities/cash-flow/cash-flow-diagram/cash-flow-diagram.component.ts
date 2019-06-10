@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CashFlowResults } from '../cash-flow';
 import { CashFlowForm } from '../cash-flow';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 import { CashFlowService } from '../cash-flow.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { Subscription } from '../../../../../../node_modules/rxjs';
 
 
 @Component({
@@ -15,12 +15,21 @@ import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.servic
 })
 export class CashFlowDiagramComponent implements OnInit {
   @Input()
+  toggleCalculate: boolean;
+  @Input()
   cashFlowResults: CashFlowResults;
-
   @Input()
   cashFlowForm: CashFlowForm;
 
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
+
+  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
   @ViewChild("ngChart") ngChart: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.resizeGraph();
+  }
   exportName: string;
 
   svg: any;
@@ -61,7 +70,6 @@ export class CashFlowDiagramComponent implements OnInit {
   chartContainerWidth: number;
   chartContainerHeight: number;
 
-
   chart: any;
   annualSavings: Array<any>;
   salvageSavings: Array<any>;
@@ -83,8 +91,8 @@ export class CashFlowDiagramComponent implements OnInit {
 
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
-
-  constructor(private cashFlowService: CashFlowService, private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) {
+  calcSub: Subscription;
+  constructor(private cashFlowService: CashFlowService, private svgToPngService: SvgToPngService) {
 
   }
 
@@ -92,16 +100,29 @@ export class CashFlowDiagramComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+    this.chartContainerWidth = this.ngChartContainer.nativeElement.clientWidth;
+    this.chartContainerHeight = 500;
+    this.graphData = new Array<any>();
+    this.compileGraphData();
+    this.resizeGraph();
+    }, 50);
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
-        this.makeGraph();
-        this.svg.style("display", null);
+        this.compileGraphData();
+        this.updateGraph();
       }
     } else {
       this.firstChange = false;
     }
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -109,16 +130,16 @@ export class CashFlowDiagramComponent implements OnInit {
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = true;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
@@ -128,26 +149,26 @@ export class CashFlowDiagramComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -155,7 +176,7 @@ export class CashFlowDiagramComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -163,7 +184,7 @@ export class CashFlowDiagramComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       if (this.hoverBtnExpand) {
         this.displayExpandTooltip = true;
       }
@@ -171,7 +192,7 @@ export class CashFlowDiagramComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
       }
@@ -182,29 +203,12 @@ export class CashFlowDiagramComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-
-    this.chartContainerWidth = this.window.innerWidth * 0.38;
-    this.chartContainerHeight = 500;
-
-    this.graphData = new Array<any>();
-    this.compileGraphData();
-    this.resizeGraph();
-
-    this.cashFlowService.calculate.subscribe(val => {
-      this.compileGraphData();
-      this.updateGraph();
-    });
-  }
 
 
   resizeGraph() {
     //need to update curveGraph to grab a new containing element 'panelChartContainer'
     //make sure to update html container in the graph component as well
-    let curveGraph = this.doc.getElementById('panelChartContainer');
-
+    let curveGraph = this.ngChartContainer.nativeElement;
     if (curveGraph) {
       if (!this.expanded) {
         this.canvasWidth = curveGraph.clientWidth;
@@ -214,8 +218,6 @@ export class CashFlowDiagramComponent implements OnInit {
         this.canvasWidth = curveGraph.clientWidth * 0.9;
         this.canvasHeight = curveGraph.clientHeight * 0.8;
       }
-
-
       if (this.canvasWidth < 400) {
         this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
       } else {
@@ -265,7 +267,6 @@ export class CashFlowDiagramComponent implements OnInit {
         this.junkCost.push(0);
       }
     }
-
     this.graphData.push(this.salvageSavings);
     this.graphData.push(this.fuelCost);
     this.graphData.push(this.annualSavings);
@@ -275,7 +276,6 @@ export class CashFlowDiagramComponent implements OnInit {
   }
 
   updateGraph() {
-
     if (this.chart) {
       this.chart.load({
         columns: this.graphData,
@@ -294,9 +294,7 @@ export class CashFlowDiagramComponent implements OnInit {
     let installationCost = this.cashFlowForm.installationCost;
     let junkCost = this.cashFlowForm.junkCost;
 
-
     d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
-
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
@@ -356,7 +354,6 @@ export class CashFlowDiagramComponent implements OnInit {
     d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
     d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
     d3.selectAll(".c3-axis-x-label").style("fill", "#000").style("stroke", "#000");
-
   }
 
   downloadChart() {
@@ -385,4 +382,12 @@ export class CashFlowDiagramComponent implements OnInit {
     }, 200);
   }
   //========== end chart resize functions ==========
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code === 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
 }

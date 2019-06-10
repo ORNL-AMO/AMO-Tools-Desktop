@@ -24,10 +24,10 @@ export class HeadToolSuctionFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.distanceMeasurement == 'ft') {
-      this.smallUnit = 'in'
+    if (this.settings.distanceMeasurement === 'ft') {
+      this.smallUnit = 'in';
     } else {
-      this.smallUnit = 'mm'
+      this.smallUnit = 'mm';
     }
     this.calc();
   }
@@ -43,7 +43,7 @@ export class HeadToolSuctionFormComponent implements OnInit {
     this.changeField.emit(str);
   }
   checkPipeDiameterIn() {
-    if (this.headToolSuctionForm.controls.suctionPipeDiameter.value == 0) {
+    if (this.headToolSuctionForm.controls.suctionPipeDiameter.value === 0) {
       this.diameterSuctionError = "Cannot have 0 diameter";
       return false;
     }
@@ -57,7 +57,7 @@ export class HeadToolSuctionFormComponent implements OnInit {
     }
   }
   checkPipeDiameterOut() {
-    if (this.headToolSuctionForm.controls.dischargePipeDiameter.value == 0) {
+    if (this.headToolSuctionForm.controls.dischargePipeDiameter.value === 0) {
       this.diameterSuctionErrorOut = "Cannot have 0 diameter";
       return false;
     }
@@ -74,7 +74,7 @@ export class HeadToolSuctionFormComponent implements OnInit {
 
   checkPressure() {
     if (this.headToolSuctionForm.controls.suctionTankGasOverPressure.value > this.headToolSuctionForm.controls.dischargeGaugePressure.value) {
-      this.pressureError = 'Suction Pressure cannot be greater than Discharge Pressure'
+      this.pressureError = 'Suction Pressure cannot be greater than Discharge Pressure';
       return false;
     } else {
       this.pressureError = null;

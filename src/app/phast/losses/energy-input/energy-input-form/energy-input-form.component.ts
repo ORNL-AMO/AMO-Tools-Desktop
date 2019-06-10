@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EnergyInputCompareService } from '../energy-input-compare.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -26,30 +25,23 @@ export class EnergyInputFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   flowInput: boolean;
-  firstChange: boolean = true;
-  constructor(private energyInputCompareService: EnergyInputCompareService, private windowRefService: WindowRefService) { }
+  idString: string;
+  constructor(private energyInputCompareService: EnergyInputCompareService) { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
 
   ngOnInit() {
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
+    }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
     if (this.energyInputForm.controls.flowRateInput.value) {
       this.flowInput = false;
-    }
-
-    if (!this.baselineSelected) {
-      this.disableForm();
     }
   }
 
@@ -57,23 +49,15 @@ export class EnergyInputFormComponent implements OnInit {
     let heatVal = this.energyInputForm.controls.flowRateInput.value * (1020 / (Math.pow(10, 6)));
     this.energyInputForm.patchValue({
       'naturalGasHeatInput': heatVal
-    })
-    this.startSavePolling();
-  }
-
-  disableForm() {
-    // this.energyInputForm.disable();
-  }
-
-  enableForm() {
-    // this.energyInputForm.enable();
+    });
+    this.save();
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  startSavePolling() {
+  save() {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

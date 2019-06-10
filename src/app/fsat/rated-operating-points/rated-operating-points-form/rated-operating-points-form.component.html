@@ -1,0 +1,76 @@
+<div class="form-group">
+  <label for="fullSpeed">Less than Full Speed?</label>
+  <select class="form-control" name="fullSpeed" [(ngModel)]="point.fullSpeed" id="fullSpeed" (change)="save()" (focus)="focusField('fullSpeed')">
+    <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="correspondingTo">Corresponds To</label>
+  <select class="form-control" name="correspondingTo" [(ngModel)]="point.correspondingTo" id="correspondingTo" (change)="save()"
+    (focus)="focusField('correspondingTo')">
+    <option [ngValue]="'Base Case'">Base Case</option>
+  </select>
+</div>
+
+<div class="form-group ">
+  <label for="gasFlowRate">Gas Flow Rate (Q)</label>
+  <div class="input-group">
+    <input name="gasFlowRate" [(ngModel)]="point.gasFlowRate" type="number" step="any" class="form-control" id="gasFlowRate"
+      onfocus="this.select();" (focus)="focusField('gasFlowRate')" (input)="save()">
+    <span class="input-group-addon units">cfm</span>
+  </div>
+</div>
+
+<div class="form-group">
+  <label *ngIf="settings.fanCurveType == 'Fan Total Pressure'" for="pressure">Fan Static Pressure (P
+    <sub>s</sub>)
+  </label>
+  <div class="input-group">
+    <input name="pressure" [(ngModel)]="point.pressure" type="number" step="any" class="form-control" id="pressure" onfocus="this.select();"
+      (focus)="focusField('pressure')" (input)="save()">
+    <span class="input-group-addon units">in.wg</span>
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="fanPower">Fan Power (H)
+  </label>
+  <div class="input-group">
+    <input name="fanPower" [(ngModel)]="point.fanPower" type="number" step="any" class="form-control" id="fanPower" onfocus="this.select();"
+      (focus)="focusField('fanPower')" (input)="save()">
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="density">Density (P)</label>
+  <div class="input-group">
+    <input name="density" type="number" step="any" class="form-control" [(ngModel)]="point.density" id="density" (input)="save()"
+      (focus)="focusField('density')" onfocus="this.select();">
+    <span class="input-group-addon units">lb/ft
+      <sup>3</sup>
+    </span>
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="fanSpeed">Fan Speed (N)</label>
+  <div class="input-group">
+    <input name="fanSpeed" type="number" step="any" class="form-control" [(ngModel)]="point.fanSpeed" id="fanSpeed" (input)="save()"
+      (focus)="focusField('fanSpeed')" onfocus="this.select();">
+    <span class="input-group-addon units">rpm</span>
+  </div>
+</div>
+
+
+<div class="form-group">
+  <label for="staticHead">Static Head</label>
+  <div class="input-group">
+    <input name="staticHead" type="number" step="any" class="form-control" [(ngModel)]="point.staticHead" id="staticHead" (input)="save()"
+      (focus)="focusField('staticHead')" onfocus="this.select();">
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">in. wg</span>
+    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">Pa</span>
+  </div>
+</div>

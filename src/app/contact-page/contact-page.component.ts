@@ -13,15 +13,15 @@ export class ContactPageComponent implements OnInit {
   ngOnInit() {
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.exportService.exportAllClick.next(null);
   }
 
-  sendMail(){
+  sendMail() {
     this.importExportService.openMailTo();
   }
 
-  downloadData(){
+  downloadData() {
     this.exportService.exportAllClick.next(true);
   }
 

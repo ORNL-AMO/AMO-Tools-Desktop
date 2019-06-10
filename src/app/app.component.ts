@@ -8,7 +8,7 @@ import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core';
 export class AppComponent {
   title = 'app works!';
   private viewContainerRef: ViewContainerRef;
-  constructor(viewContainerRef: ViewContainerRef){
+  constructor(viewContainerRef: ViewContainerRef) {
     this.viewContainerRef = viewContainerRef;
   }
 }

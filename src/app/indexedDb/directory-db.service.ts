@@ -18,13 +18,13 @@ export class DirectoryDbService {
       if (this.indexedDbService.db) {
         this.indexedDbService.getAllDirectories().then(directories => {
           this.allDirectories = directories;
-          resolve(true)
-        })
+          resolve(true);
+        });
       } else {
         this.allDirectories = [];
         resolve(false);
       }
-    })
+    });
   }
 
   getAll() {
@@ -32,12 +32,19 @@ export class DirectoryDbService {
   }
 
   getById(id: number): Directory {
-    let selecteDirectory: Directory = _.find(this.allDirectories, (directory) => { return directory.id == id })
+    let selecteDirectory: Directory = _.find(this.allDirectories, (directory) => { return directory.id === id; });
     return selecteDirectory;
   }
 
   getSubDirectoriesById(id: number): Array<Directory> {
-    let subDirectories: Array<Directory> = _.filter(this.allDirectories, (subDir) => { return subDir.parentDirectoryId == id });
+    let subDirectories: Array<Directory> = _.filter(this.allDirectories, (subDir) => { return subDir.parentDirectoryId === id; });
     return subDirectories;
+  }
+
+  getExample(): Directory {
+    let example: Directory = _.find(JSON.parse(JSON.stringify(this.allDirectories)), (directory: Directory) => {
+      return (directory.isExample === true);
+    });
+    return example;
   }
 }

@@ -1,13 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
-import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { ReportRollupService } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import { SigFigsPipe } from '../../../shared/sig-figs.pipe';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
 import { Calculator } from '../../../shared/models/calculators';
 import { Subscription } from 'rxjs';
+import { PhastResultsData } from '../../report-rollup-models';
 @Component({
   selector: 'app-phast-rollup-graphs',
   templateUrl: './phast-rollup-graphs.component.html',
@@ -15,7 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class PhastRollupGraphsComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   printView: boolean;
   @Input()
@@ -58,7 +56,7 @@ export class PhastRollupGraphsComponent implements OnInit {
   ngOnInit() {
     this.graphColors = graphColors;
     this.resultsSub = this.reportRollupService.phastResults.subscribe(val => {
-      if (val.length != 0) {
+      if (val.length !== 0) {
         this.initTotals();
         this.calcPhastSums(val);
         this.getResults(val);
@@ -72,7 +70,7 @@ export class PhastRollupGraphsComponent implements OnInit {
     }
   }
 
-  ngOnDestory(){
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 
@@ -93,16 +91,16 @@ export class PhastRollupGraphsComponent implements OnInit {
     let sumEnergySavings = 0;
     if (resultsData) {
       resultsData.forEach(result => {
-        let tmpAnnualEnergyUsed = this.getConvertedValue(result.baselineResults.annualEnergyUsed, result.settings)
-        let diffEnergy = this.getConvertedValue(result.baselineResults.annualEnergySavings, result.settings)
+        let tmpAnnualEnergyUsed = this.getConvertedValue(result.baselineResults.annualEnergyUsed, result.settings);
+        let diffEnergy = this.getConvertedValue(result.baselineResults.annualEnergySavings, result.settings);
         let diffCost = result.baselineResults.annualCost;
-        if (result.settings.energySourceType == 'Fuel') {
+        if (result.settings.energySourceType === 'Fuel') {
           this.totalFuelCost += result.baselineResults.annualCost;
           this.totalFuelEnergyUsed += tmpAnnualEnergyUsed;
-        } else if (result.settings.energySourceType == 'Steam') {
+        } else if (result.settings.energySourceType === 'Steam') {
           this.totalSteamCost += result.baselineResults.annualCost;
           this.totalSteamEnergyUsed += tmpAnnualEnergyUsed;
-        } else if (result.settings.energySourceType == 'Electricity') {
+        } else if (result.settings.energySourceType === 'Electricity') {
           this.totalElectricalCost += result.baselineResults.annualCost;
           this.totalElectricalEnergyUsed += tmpAnnualEnergyUsed;
         }
@@ -142,8 +140,8 @@ export class PhastRollupGraphsComponent implements OnInit {
     if (resultsData) {
       resultsData.forEach(val => {
         let percent;
-        if (this.dataOption == 'cost') {
-          percent = this.getResultPercent(val.baselineResults.annualCost, this.totalCost)
+        if (this.dataOption === 'cost') {
+          percent = this.getResultPercent(val.baselineResults.annualCost, this.totalCost);
         } else {
           let energyUsed = this.getConvertedValue(val.baselineResults.annualEnergyUsed, val.settings);
           percent = this.getResultPercent(energyUsed, this.totalEnergy);
@@ -153,7 +151,7 @@ export class PhastRollupGraphsComponent implements OnInit {
           percent: percent,
           color: graphColors[i],
           settings: val.settings
-        })
+        });
         i++;
       });
     }
@@ -166,14 +164,14 @@ export class PhastRollupGraphsComponent implements OnInit {
 
   getResultPercent(value: number, sum: number): number {
     let percent = (value / sum) * 100;
-    let val = this.reportRollupService.transform(percent, 4)
+    let val = this.reportRollupService.transform(percent, 4);
     return val;
   }
 
   getConvertedPercent(value: number, sum: number, settings: Settings) {
     let convertVal = this.getConvertedValue(value, settings);
     let percent = (convertVal / sum) * 100;
-    let val = this.reportRollupService.transform(percent, 4)
+    let val = this.reportRollupService.transform(percent, 4);
     return val;
   }
 
@@ -185,7 +183,7 @@ export class PhastRollupGraphsComponent implements OnInit {
       this.pieChartLabels.push(val.name + ' (%)');
       this.pieChartData.push(val.percent);
       this.backgroundColors.push(val.color);
-    })
+    });
     this.getColors();
   }
 
@@ -194,7 +192,7 @@ export class PhastRollupGraphsComponent implements OnInit {
       {
         backgroundColor: this.backgroundColors
       }
-    ]
+    ];
   }
 
   getPieWidth(): number {

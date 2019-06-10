@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ExtendedSurfaceCompareService } from '../extended-surface-compare.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
+import { ExtendedSurfaceWarnings, ExtendedSurfaceLossesService } from '../extended-surface-losses.service';
+import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
 @Component({
   selector: 'app-extended-surface-losses-form',
   templateUrl: './extended-surface-losses-form.component.html',
@@ -27,66 +28,29 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
-  surfaceAreaError: string = null;
-  firstChange: boolean = true;
-  temperatureError: string = null;
-  emissivityError: string = null;
-  constructor(private extendedSurfaceCompareService: ExtendedSurfaceCompareService) { }
+  warnings: ExtendedSurfaceWarnings;
+  idString: string;
+  constructor(private extendedSurfaceCompareService: ExtendedSurfaceCompareService, private extendedLossesSurfaceService: ExtendedSurfaceLossesService) { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
 
   ngOnInit() {
-    this.checkInputError(true);
-    if (!this.baselineSelected) {
-      this.disableForm();
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
     }
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
+    this.checkWarnings();
   }
 
-  disableForm() {
-    // this.lossesForm.disable();
-  }
-
-  enableForm() {
-    // this.lossesForm.enable();
-  }
-
-  checkInputError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.lossesForm.controls.ambientTemp.value > this.lossesForm.controls.avgSurfaceTemp.value) {
-      this.temperatureError = 'Ambient Temperature is greater than Surface Temperature';
-    } else {
-      this.temperatureError = null;
-    }
-    if (this.lossesForm.controls.surfaceArea.value < 0) {
-      this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0 ';
-    } else {
-      this.surfaceAreaError = null;
-    }
-    if (this.lossesForm.controls.surfaceEmissivity.value > 1 || this.lossesForm.controls.surfaceEmissivity.value < 0) {
-      this.emissivityError = 'Surface emissivity must be between 0 and 1';
-    } else {
-      this.emissivityError = null;
-    }
-    if(this.temperatureError || this.surfaceAreaError || this.emissivityError){
-      this.inputError.emit(true);
-      this.extendedSurfaceCompareService.inputError.next(true);
-    }else{
-      this.inputError.emit(false);
-      this.extendedSurfaceCompareService.inputError.next(false);
-    }
+  checkWarnings() {
+    let tmpLoss: ExtendedSurface = this.extendedLossesSurfaceService.getSurfaceLossFromForm(this.lossesForm);
+    this.warnings = this.extendedLossesSurfaceService.checkWarnings(tmpLoss);
+    let hasWarning: boolean = this.extendedLossesSurfaceService.checkWarningsExist(this.warnings);
+    this.inputError.emit(hasWarning);
   }
 
   focusField(str: string) {
@@ -96,7 +60,9 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   focusOut() {
     this.changeField.emit('default');
   }
-  startSavePolling() {
+
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

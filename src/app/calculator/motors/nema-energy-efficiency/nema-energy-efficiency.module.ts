@@ -8,6 +8,7 @@ import { NemaEnergyEfficiencyGraphComponent } from './nema-energy-efficiency-gra
 import { NemaEnergyEfficiencyComponent } from './nema-energy-efficiency.component';
 import { NemaEnergyEfficiencyFormComponent } from './nema-energy-efficiency-form/nema-energy-efficiency-form.component';
 import { NemaEnergyEfficiencyHelpComponent } from './nema-energy-efficiency-help/nema-energy-efficiency-help.component';
+import { NemaEnergyEfficiencyService } from './nema-energy-efficiency.service';
 
 @NgModule({
   imports: [
@@ -24,6 +25,9 @@ import { NemaEnergyEfficiencyHelpComponent } from './nema-energy-efficiency-help
   ],
   exports: [
     NemaEnergyEfficiencyComponent
+  ],
+  providers: [
+    NemaEnergyEfficiencyService
   ]
 })
 export class NemaEnergyEfficiencyModule { }

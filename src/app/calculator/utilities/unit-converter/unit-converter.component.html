@@ -1,11 +1,14 @@
-<div class="col-12 converter-col">
-  <div class="row general converter-col">
-    <div class="modification col-12">
-      <div class="col-md-12 converter-content">
-        <div class="header">
-          <h3>
-            Unit Converter
-          </h3>
+<div class="col-12 h-100">
+  <div class="row h-100" [ngClass]="{'general': !inAssessment}">
+    <div class="col-12">
+      <div class="modification col-auto reset-size p-3 mx-auto" [ngClass]="{'converter-content': !inAssessment}">
+        <div class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+          <div class="col-md-auto ico-col">
+            <img src="assets/images/calculator-icons/utilities-icons/unit-converter.png" class="ico-size3">
+          </div>
+          <div class="pl-2">
+            <h3>Unit Converter</h3>
+          </div>
         </div>
         <div class="row measure-row">
           <div class="col-12">
@@ -16,7 +19,8 @@
         </div>
         <div class="row value-row">
           <div class="col-6">
-            <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1" (input)="getValue2()">
+            <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1"
+              (input)="getValue2()">
             <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
               <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}}
                 <span [innerHTML]="possibility.displayUnit"></span>
@@ -24,17 +28,23 @@
             </select>
           </div>
 
-          <div class="col-6">
-            <input type="number" step="any" class="form-control text-center input-field" id="value2" [(ngModel)]="value2" (input)="getValue1()">
-            <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue1()">
+          <div class="col-6 text-center">
+            <small>
+              <strong>{{value2 | number:'.0-6'}}</strong>
+            </small>
+            <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue2()">
               <option *ngFor="let possibility of possibilities | sortBy : 'display'" [value]="possibility.unit">{{possibility.display}}
                 <span [innerHTML]="possibility.displayUnit"></span>
               </option>
             </select>
           </div>
         </div>
+        <!-- <div class="d-block w-100 text-right p-2 btn-group btn-group-sm">
+          <button type="button" class="btn btn-danger btn-sm" (click)="btnResetData()">
+            Reset Data
+          </button>
+        </div> -->
       </div>
     </div>
   </div>
 </div>
-<!--</div>-->

@@ -1,0 +1,21 @@
+.form-section {
+    border-bottom: dashed 1px;
+}
+
+label {
+    font-size: small;
+}
+
+.small {
+    font-size: small;
+}
+
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}
+
+.btn-edit-name:hover {
+    cursor: pointer;
+}

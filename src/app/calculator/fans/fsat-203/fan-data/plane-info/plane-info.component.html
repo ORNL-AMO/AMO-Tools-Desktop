@@ -1,0 +1,58 @@
+<form [formGroup]="planeInfoForm" *ngIf="planeInfoForm">
+  <label class="group-label group-label-2">Plane Pressure Information</label>
+  <div class="form-group">
+    <label for="totalPressureLossBtwnPlanes1and4">Total Pressure Loss Between Planes 1 and 4</label>
+    <div class="input-group">
+      <input name="totalPressureLossBtwnPlanes1and4" type="number" step="any" class="form-control" formControlName="totalPressureLossBtwnPlanes1and4"
+        id="totalPressureLossBtwnPlanes1and4" (input)="save()" (focus)="focusField('totalPressureLossBtwnPlanes1and4')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.pristine">
+      <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.required">Value Required</span>
+      <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.min">Value can't be less than {{planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.min.min}}.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="totalPressureLossBtwnPlanes2and5">Total Pressure Loss Between Planes 2 and 5</label>
+    <div class="input-group">
+      <input name="totalPressureLossBtwnPlanes2and5" type="number" step="any" class="form-control" formControlName="totalPressureLossBtwnPlanes2and5"
+        id="totalPressureLossBtwnPlanes2and5" (input)="save()" (focus)="focusField('totalPressureLossBtwnPlanes2and5')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.pristine">
+      <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.required">Value Required</span>
+      <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min">Value can't be less than {{planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min.min}}.</span>
+    </span>
+  </div>
+  <label class="group-label group-label-2">System Effect Data</label>
+  <div class="form-group">
+    <label for="inletSEF">Inlet System Effect Factor</label>
+    <div class="input-group">
+      <input name="inletSEF" type="number" step="any" class="form-control" formControlName="inletSEF" id="inletSEF" (input)="save()"
+        (focus)="focusField('inletSEF')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="planeInfoForm.controls.inletSEF.invalid && !planeInfoForm.controls.inletSEF.pristine">
+      <span *ngIf="planeInfoForm.controls.inletSEF.errors.required">Value Required</span>
+    </span>
+  </div>
+  <div class="form-group">
+    <label for="outletSEF">Outlet System Effect Factor</label>
+    <div class="input-group">
+      <input name="outletSEF" type="number" step="any" class="form-control" formControlName="outletSEF" id="outletSEF" (input)="save()"
+        (focus)="focusField('outletSEF')" onfocus="this.select();">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="planeInfoForm.controls.outletSEF.invalid && !planeInfoForm.controls.outletSEF.pristine">
+      <span *ngIf="planeInfoForm.controls.outletSEF.errors.required">Value Required</span>
+    </span>
+  </div>
+  <div class="form-group">
+    <label for="sumSEF">&Sigma; System Effect Factor</label>
+    <div class="sef-results">
+      {{sumSEF}}
+      <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+    </div>
+  </div>
+</form>

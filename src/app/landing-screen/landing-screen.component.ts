@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Directory } from '../shared/models/directory';
+import { CalculatorService } from '../calculator/calculator.service';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-landing-screen',
@@ -7,17 +9,13 @@ import { Directory } from '../shared/models/directory';
   styleUrls: ['./landing-screen.component.css']
 })
 export class LandingScreenComponent implements OnInit {
-  @Output('hideLandingScreen')
-  hideLandingScreen = new EventEmitter<boolean>();
-  @Output('selectCalculator')
-  selectCalculator = new EventEmitter<string>();
   @Input()
   directory: Directory;
 
   displayVideo: boolean = false;
   showCreateAssessment: boolean = false;
   createAssessmentType: string;
-  constructor() { }
+  constructor(private calculatorService: CalculatorService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
   }
@@ -27,21 +25,22 @@ export class LandingScreenComponent implements OnInit {
   }
 
   hideScreen() {
-    this.hideLandingScreen.emit(true);
+    this.assessmentService.dashboardView.next('assessment-dashboard');
   }
 
   chooseCalculator(str: string) {
-    this.selectCalculator.emit(str);
+    this.assessmentService.dashboardView.next('calculator');
+    this.calculatorService.selectedToolType.next(str);
   }
 
-  createAssessment(str?: string){
-    if(str){
+  createAssessment(str?: string) {
+    if (str) {
       this.createAssessmentType = str;
     }
     this.showCreateAssessment = true;
   }
 
-  hideCreateAssessment(){
+  hideCreateAssessment() {
     this.showCreateAssessment = false;
   }
 }

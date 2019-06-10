@@ -37,11 +37,11 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
       if (val) {
         this.getSelected();
       }
-    })
+    });
 
     this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
       this.selectAll(val);
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -51,12 +51,12 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showModal && !changes.showModal.firstChange) {
-      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+      if (changes.showModal.currentValue !== changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
     if (changes.importing) {
-      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
+      if (changes.importing.currentValue === false && changes.importing.previousValue === true) {
         this.getCustomMaterials();
       }
     }
@@ -99,12 +99,12 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   }
 
   getSelected() {
-    let selected: Array<SolidLiquidFlueGasMaterial> = _.filter(this.solidLiquidFlueGasMaterials, (material) => { return material.selected == true });
-    this.customMaterialService.selectedSolidLiquidFlueGas = selected
+    let selected: Array<SolidLiquidFlueGasMaterial> = _.filter(this.solidLiquidFlueGasMaterials, (material) => { return material.selected === true; });
+    this.customMaterialService.selectedSolidLiquidFlueGas = selected;
   }
   selectAll(val: boolean) {
     this.solidLiquidFlueGasMaterials.forEach(material => {
       material.selected = val;
-    })
+    });
   }
 }

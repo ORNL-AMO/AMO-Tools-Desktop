@@ -1,0 +1,367 @@
+<div class="d-flex" [ngClass]="{'flex-row' : title == 'Cost Summary', 'flex-column' : title != 'Cost Summary'}">
+
+  <div class="d-flex flex-column output-summary pb-5" #costSummaryChartContainer>
+
+    <!-- <h4 class="show-print">Executive Summary</h4> -->
+    <label class="group-label">{{title}}</label>
+    <table class="table table-striped table-hover">
+      <tbody>
+        <tr class="bold">
+          <td colspan="2" *ngIf="showFullSummary">
+            Utility
+          </td>
+          <td *ngIf="!showFullSummary">
+            Utility
+          </td>
+          <td *ngIf="showFullSummary">
+            Current Use
+          </td>
+          <td *ngIf="showFullSummary">
+            Projected Use
+          </td>
+          <td *ngIf="showFullSummary">
+            Utility Savings
+          </td>
+          <td *ngIf="showFullSummary">
+            Current Cost
+          </td>
+          <td *ngIf="showFullSummary">
+            Projected Cost
+          </td>
+          <td>
+            Cost Savings
+          </td>
+          <td>
+            Implementation Cost
+          </td>
+          <td>
+            Payback
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+
+          </td>
+        </tr>
+        <!--Electricity-->
+        <tr *ngIf="treasureHuntResults.electricity.baselineEnergyUsage != 0">
+          <td class="bold">
+            Electricity
+          </td>
+          <td *ngIf="showFullSummary">
+            kWh
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.electricity.baselineEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.electricity.modifiedEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.electricity.energySavings | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.electricity.baselineEnergyCost | currency:'USD'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.electricity.modifiedEnergyCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.electricity.costSavings | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.electricity.implementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.electricity.paybackPeriod | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+            <span *ngIf="treasureHuntResults.electricity.hasMixed == true" class="fa fa-asterisk"></span>
+          </td>
+        </tr>
+        <!--Natural Gas-->
+        <tr *ngIf="treasureHuntResults.naturalGas.baselineEnergyUsage != 0">
+          <td class="bold">
+            Natural Gas
+          </td>
+          <td *ngIf="showFullSummary">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.naturalGas.baselineEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.naturalGas.modifiedEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.naturalGas.energySavings | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.naturalGas.baselineEnergyCost | currency:'USD'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.naturalGas.modifiedEnergyCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.naturalGas.costSavings | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.naturalGas.implementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.naturalGas.paybackPeriod | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+            <span *ngIf="treasureHuntResults.naturalGas.hasMixed == true" class="fa fa-asterisk"></span>
+          </td>
+        </tr>
+        <!--Water-->
+        <tr *ngIf="treasureHuntResults.water.baselineEnergyUsage != 0">
+          <td class="bold">
+            Water
+          </td>
+          <td *ngIf="showFullSummary">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.water.baselineEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.water.modifiedEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.water.energySavings | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.water.baselineEnergyCost | currency:'USD'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.water.modifiedEnergyCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.water.costSavings | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.water.implementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.water.paybackPeriod | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.water.hasMixed == true">
+            <span *ngIf="treasureHuntResults.hasMixed == true" class="fa fa-asterisk"></span>
+          </td>
+        </tr>
+        <!--Waste Water-->
+        <tr *ngIf="treasureHuntResults.wasteWater.baselineEnergyUsage != 0">
+          <td class="bold">
+            Waste Water
+          </td>
+          <td *ngIf="showFullSummary">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.wasteWater.baselineEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.wasteWater.modifiedEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.wasteWater.energySavings | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.wasteWater.baselineEnergyCost | currency:'USD'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.wasteWater.modifiedEnergyCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.wasteWater.costSavings | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.wasteWater.implementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.wasteWater.paybackPeriod | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+            <span *ngIf="treasureHuntResults.wasteWater.hasMixed == true" class="fa fa-asterisk"></span>
+          </td>
+        </tr>
+        <!--Other Fuel-->
+        <tr *ngIf="treasureHuntResults.otherFuel.baselineEnergyUsage != 0">
+          <td class="bold">
+            Other Fuel
+          </td>
+          <td *ngIf="showFullSummary">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">MJ</span>
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.otherFuel.baselineEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.otherFuel.modifiedEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.otherFuel.energySavings | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.otherFuel.baselineEnergyCost | currency:'USD'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.otherFuel.modifiedEnergyCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.otherFuel.costSavings | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.otherFuel.implementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.otherFuel.paybackPeriod | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+            <span *ngIf="treasureHuntResults.otherFuel.hasMixed == true" class="fa fa-asterisk"></span>
+          </td>
+        </tr>
+        <!--Compressed Air-->
+        <tr *ngIf="treasureHuntResults.compressedAir.baselineEnergyUsage != 0">
+          <td class="bold">
+            Compressed Air
+          </td>
+          <td *ngIf="showFullSummary">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.compressedAir.baselineEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.compressedAir.modifiedEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.compressedAir.energySavings | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.compressedAir.baselineEnergyCost | currency:'USD'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.compressedAir.modifiedEnergyCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.compressedAir.costSavings | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.compressedAir.implementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.compressedAir.paybackPeriod | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+            <span *ngIf="treasureHuntResults.compressedAir.hasMixed == true" class="fa fa-asterisk"></span>
+          </td>
+        </tr>
+        <!--Steam-->
+        <tr *ngIf="treasureHuntResults.steam.baselineEnergyUsage != 0">
+          <td class="bold">
+            Steam
+          </td>
+          <td *ngIf="showFullSummary">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne</span>
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.steam.baselineEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.steam.modifiedEnergyUsage | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.steam.energySavings | number:'1.0-1'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.steam.baselineEnergyCost | currency:'USD'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.steam.modifiedEnergyCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.steam.costSavings | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.steam.implementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.steam.paybackPeriod | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+            <span *ngIf="treasureHuntResults.steam.hasMixed == true" class="fa fa-asterisk"></span>
+          </td>
+        </tr>
+        <!--Other -->
+        <tr *ngIf="treasureHuntResults.other.implementationCost != 0">
+          <td colspan="7" class="bold" *ngIf="showFullSummary">
+            Mixed
+          </td>
+          <td class="bold" *ngIf="!showFullSummary">
+            Mixed
+          </td>
+          <td>
+            <!-- {{treasureHuntResults.other.costSavings | currency:'USD'}} -->
+          </td>
+          <td>
+            {{treasureHuntResults.other.implementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.other.paybackPeriod | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+            <span class="fa fa-asterisk"></span>
+          </td>
+        </tr>
+        <!--Total-->
+        <tr>
+          <td colspan="5" class="bold" *ngIf="showFullSummary">
+            Total
+          </td>
+          <td class="bold" *ngIf="!showFullSummary">
+            Total
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.totalBaselineCost | currency:'USD'}}
+          </td>
+          <td *ngIf="showFullSummary">
+            {{treasureHuntResults.totalModificationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.totalSavings | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.totalImplementationCost | currency:'USD'}}
+          </td>
+          <td>
+            {{treasureHuntResults.paybackPeriod  | number:'1.0-2'}}
+          </td>
+          <td *ngIf="treasureHuntResults.hasMixed == true">
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert-warning small" *ngIf="treasureHuntResults.hasMixed == true && showFullSummary">
+    <span class="fa fa-asterisk"></span>
+    Savings for opportunities with mixed utilities are under their respective utilities; implementation costs and
+    payback
+    are under "Mixed."
+  </div>
+
+  <div class="d-flex flex-column" *ngIf="title == 'Cost Summary'">
+    <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles"
+      [data]="data" [chartContainerWidth]="getChartWidth()" [chartContainerHeight]="getChartHeight()">
+    </app-cost-summary-chart>
+  </div>
+
+</div>

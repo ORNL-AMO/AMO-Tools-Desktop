@@ -14,13 +14,13 @@ export class CalculatorDbService {
       if (this.indexedDbService.db) {
         this.indexedDbService.getAllCalculator().then(calculators => {
           this.allCalculators = calculators;
-          resolve(true)
-        })
+          resolve(true);
+        });
       } else {
         this.allCalculators = [];
         resolve(false);
       }
-    })
+    });
   }
 
   getAll() {
@@ -28,17 +28,17 @@ export class CalculatorDbService {
   }
 
   getById(id: number): Calculator {
-    let selectedCalculator: Calculator = _.find(this.allCalculators, (calculator) => { return id == calculator.id })
+    let selectedCalculator: Calculator = _.find(this.allCalculators, (calculator) => { return id === calculator.id; });
     return selectedCalculator;
   }
 
   getByDirectoryId(id: number): Array<Calculator> {
-    let selectedCalculator: Array<Calculator> = _.filter(this.allCalculators, (calculator) => { return calculator.directoryId == id });
+    let selectedCalculator: Array<Calculator> = _.filter(this.allCalculators, (calculator) => { return calculator.directoryId === id; });
     return selectedCalculator;
   }
 
   getByAssessmentId(id: number): Calculator {
-    let selectedCalculator: Calculator = _.find(this.allCalculators, (calculator) => { return calculator.assessmentId == id });
+    let selectedCalculator: Calculator = _.find(this.allCalculators, (calculator) => { return calculator.assessmentId === id; });
     return selectedCalculator;
   }
 }

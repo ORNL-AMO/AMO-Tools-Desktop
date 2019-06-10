@@ -1,13 +1,11 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
+import { ReportRollupService } from '../../report-rollup.service';
 import { PsatService } from '../../../psat/psat.service';
-// import { BaseChartDirective } from 'ng2-charts';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
-import * as d3 from 'd3';
-import * as c3 from 'c3';
 import { Subscription } from 'rxjs';
+import { PsatResultsData } from '../../report-rollup-models';
 @Component({
   selector: 'app-psat-rollup-graphs',
   templateUrl: './psat-rollup-graphs.component.html',
@@ -45,9 +43,9 @@ export class PsatRollupGraphsComponent implements OnInit {
   ngOnInit() {
     this.graphColors = graphColors;
     this.resultsSub = this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
-      if (psats.length != 0) {
-        this.totalEnergyUse = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_energy });
-        this.totalCost = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_cost });
+      if (psats.length !== 0) {
+        this.totalEnergyUse = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_energy; });
+        this.totalCost = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_cost; });
         this.resultData = psats;
         this.getResults(this.resultData);
         this.getData();
@@ -59,7 +57,7 @@ export class PsatRollupGraphsComponent implements OnInit {
     }
   }
 
-  ngOnDestory() {
+  ngOnDestroy() {
     this.resultsSub.unsubscribe();
   }
 
@@ -75,7 +73,7 @@ export class PsatRollupGraphsComponent implements OnInit {
     if (resultsData) {
       resultsData.forEach(val => {
         let percent;
-        if (this.dataOption == 'cost') {
+        if (this.dataOption === 'cost') {
           percent = this.getTotalCostPercent(val.baselineResults.annual_cost);
         } else {
           percent = this.getTotalEnergyPercent(val.baselineResults.annual_energy);
@@ -84,9 +82,9 @@ export class PsatRollupGraphsComponent implements OnInit {
           name: val.name,
           percent: percent,
           color: graphColors[i]
-        })
+        });
         i++;
-      })
+      });
     }
   }
 
@@ -121,7 +119,7 @@ export class PsatRollupGraphsComponent implements OnInit {
       {
         backgroundColor: this.backgroundColors
       }
-    ]
+    ];
   }
 
   initPrintChartData() {

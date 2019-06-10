@@ -18,7 +18,7 @@ export class OpeningLossesCompareService {
     let numLoss = this.baselineOpeningLosses.length;
     let isDiff: boolean = false;
     for (index; index < numLoss; index++) {
-      if (this.compareLoss(index) == true) {
+      if (this.compareLoss(index) === true) {
         isDiff = true;
       }
     }
@@ -37,7 +37,7 @@ export class OpeningLossesCompareService {
       this.compareOpeningType(index) ||
       this.compareLengthOfOpening(index) ||
       this.compareHeightOfOpening(index)
-    )
+    );
   }
 
   compareNumberOfOpenings(index: number): boolean {
@@ -77,11 +77,11 @@ export class OpeningLossesCompareService {
       if (baseline.losses.openingLosses) {
         let index = 0;
         baseline.losses.openingLosses.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.openingLosses[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.openingLosses[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -99,18 +99,18 @@ export class OpeningLossesCompareService {
       this.compare(baseline.openingType, modification.openingType) ||
       this.compare(baseline.lengthOfOpening, modification.lengthOfOpening) ||
       this.compare(baseline.heightOfOpening, modification.heightOfOpening)
-    )
+    );
   }
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

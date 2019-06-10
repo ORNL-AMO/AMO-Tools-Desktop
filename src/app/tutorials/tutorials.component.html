@@ -1,6 +1,6 @@
 <div class="row">
-  <div class="col-10  mx-auto">
-    <div class="tab-content content-container p-0 border-0">
+  <div class="col-10  mx-auto general">
+    <div class="tab-content content-container p-0 border-0 mt-2 mb-2">
       <div class="card">
         <div class="card-header bold">
           Opening Tutorial
@@ -11,3 +11,91 @@
       </div>
     </div>
   </div>
+  <div class="col-10  mx-auto general">
+    <div class="tab-content content-container p-0 border-0 mt-2 mb-2">
+      <div class="card">
+        <div class="card-header bold">
+          Assessment Dashboard Tutorial
+        </div>
+        <div class="card-body text-center">
+          <button class="btn btn-primary mx-auto" (click)="viewDashboardTutorial()">View Dashboard Tutorial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-10  mx-auto psat">
+    <div class="tab-content content-container p-0 border-0 mt-2 mb-2">
+      <div class="card">
+        <div class="card-header bold">
+          Pump Tutorials
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <a class="click-link" (click)="viewTutorial('psat-tutorial')">Full Pump Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('psat-system-setup')">System Setup Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('psat-assessment-tutorial')">Assessment Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('psat-report-tutorial')">Report Tutorial</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-10 mx-auto phast">
+    <div class="tab-content content-container p-0 border-0 mt-2 mb-2">
+      <div class="card">
+        <div class="card-header bold">
+          Process Heating Tutorial
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <a class="click-link" (click)="viewTutorial('phast-tutorial')">Full Process Heating Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('phast-setup-tutorial')">System Setup Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('phast-assessment-tutorial')">Assessment Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('phast-report-tutorial')">Report Tutorial</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-10  mx-auto psat">
+    <div class="tab-content content-container p-0 border-0 mt-2 mb-2">
+      <div class="card">
+        <div class="card-header bold">
+          Fan Tutorials
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>
+              <a class="click-link" (click)="viewTutorial('fsat-tutorial')">Full Fan Tutorial</a>
+            </li>
+             <li>
+              <a class="click-link" (click)="viewTutorial('fsat-system-setup')">System Setup Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('fsat-assessment-tutorial')">Assessment Tutorial</a>
+            </li>
+            <li>
+              <a class="click-link" (click)="viewTutorial('fsat-report-tutorial')">Report Tutorial</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

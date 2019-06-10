@@ -1,0 +1,8 @@
+<div class="d-flex flex-column">
+  <label class="group-label">Boiler Properties</label>
+  <app-boiler-results [inputData]="inputData.boilerInput" [results]="boiler" [settings]="settings"></app-boiler-results>
+  <div class="w-100 text-center">
+    <a class="click-link small" (click)="goToCalculator()"><span class="fa fa-calculator click-item pr-2"></span>Copy to
+      Boiler Calculator</a>
+  </div>
+</div>

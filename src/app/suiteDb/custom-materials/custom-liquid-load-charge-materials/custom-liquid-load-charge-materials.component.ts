@@ -15,7 +15,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 })
 export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   @Input()
-  settings: Settings
+  settings: Settings;
   @Input()
   showModal: boolean;
   @Input()
@@ -39,11 +39,11 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
       if (val) {
         this.getSelected();
       }
-    })
+    });
 
     this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
       this.selectAll(val);
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -53,12 +53,12 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.showModal && !changes.showModal.firstChange) {
-      if (changes.showModal.currentValue != changes.showModal.previousValue) {
+      if (changes.showModal.currentValue !== changes.showModal.previousValue) {
         this.showMaterialModal();
       }
     }
     if (changes.importing) {
-      if (changes.importing.currentValue == false && changes.importing.previousValue == true) {
+      if (changes.importing.currentValue === false && changes.importing.previousValue === true) {
         this.getCustomMaterials();
       }
     }
@@ -76,7 +76,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   getCustomMaterials() {
     this.indexedDbService.getAllLiquidLoadChargeMaterial().then(idbResults => {
       this.liquidChargeMaterials = idbResults;
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.convertAllMaterials();
       }
     });
@@ -112,12 +112,12 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
     this.getCustomMaterials();
   }
   getSelected() {
-    let selected: Array<LiquidLoadChargeMaterial> = _.filter(this.liquidChargeMaterials, (material) => { return material.selected == true });
+    let selected: Array<LiquidLoadChargeMaterial> = _.filter(this.liquidChargeMaterials, (material) => { return material.selected === true; });
     this.customMaterialService.selectedLiquidLoadCharge = selected;
   }
   selectAll(val: boolean) {
     this.liquidChargeMaterials.forEach(material => {
       material.selected = val;
-    })
+    });
   }
 }

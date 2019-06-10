@@ -10,7 +10,7 @@ import { PsatModule } from '../psat/psat.module';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PhastSummaryComponent } from './report-summary/phast-summary/phast-summary.component';
 import { PhastRollupComponent } from './phast-rollup/phast-rollup.component';
-import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
+import { ModalModule } from 'ngx-bootstrap';
 import { PhastRollupGraphsComponent } from './phast-rollup/phast-rollup-graphs/phast-rollup-graphs.component';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
 
@@ -32,6 +32,24 @@ import { PsatRollupPumpSummaryTableComponent } from './psat-rollup/psat-rollup-p
 import { PhastRollupFurnaceSummaryTableComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary-table/phast-rollup-furnace-summary-table.component';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessment-table.component';
+import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
+import { FsatSummaryComponent } from './report-summary/fsat-summary/fsat-summary.component';
+import { FsatRollupComponent } from './fsat-rollup/fsat-rollup.component';
+import { FsatPrintComponent } from './fsat-rollup/fsat-print/fsat-print.component';
+import { FsatRollupEnergyTableComponent } from './fsat-rollup/fsat-rollup-energy-table/fsat-rollup-energy-table.component';
+import { FsatRollupFanSummaryComponent } from './fsat-rollup/fsat-rollup-fan-summary/fsat-rollup-fan-summary.component';
+import { FsatRollupFanSummaryTableComponent } from './fsat-rollup/fsat-rollup-fan-summary-table/fsat-rollup-fan-summary-table.component';
+import { FsatRollupGraphsComponent } from './fsat-rollup/fsat-rollup-graphs/fsat-rollup-graphs.component';
+import { FsatRollupPrintComponent } from './fsat-rollup/fsat-rollup-print/fsat-rollup-print.component';
+import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
+import { SsmtSummaryComponent } from './report-summary/ssmt-summary/ssmt-summary.component';
+import { SsmtRollupComponent } from './ssmt-rollup/ssmt-rollup.component';
+import { SsmtRollupGraphsComponent } from './ssmt-rollup/ssmt-rollup-graphs/ssmt-rollup-graphs.component';
+import { SsmtRollupSteamSummaryComponent } from './ssmt-rollup/ssmt-rollup-steam-summary/ssmt-rollup-steam-summary.component';
+import { SsmtRollupEnergyTableComponent } from './ssmt-rollup/ssmt-rollup-energy-table/ssmt-rollup-energy-table.component';
+import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-steam-summary-table/ssmt-rollup-steam-summary-table.component';
+import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
+import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-summary/treasure-hunt-summary.component';
 
 @NgModule({
   imports: [
@@ -42,7 +60,10 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    PreAssessmentModule
+    PreAssessmentModule,
+    FsatReportModule,
+    SsmtReportModule,
+    TreasureHuntReportModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -68,6 +89,22 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
     PsatRollupPumpSummaryTableComponent,
     PhastRollupFurnaceSummaryTableComponent,
     PreAssessmentTableComponent,
+    FsatSummaryComponent,
+    FsatRollupComponent,
+    FsatPrintComponent,
+    FsatRollupEnergyTableComponent,
+    FsatRollupFanSummaryComponent,
+    FsatRollupFanSummaryTableComponent,
+    FsatRollupGraphsComponent,
+    FsatRollupPrintComponent,
+    SsmtSummaryComponent,
+    SsmtRollupComponent,
+    SsmtRollupGraphsComponent,
+    SsmtRollupSteamSummaryComponent,
+    SsmtRollupEnergyTableComponent,
+    SsmtRollupSteamSummaryTableComponent,
+    TreasureHuntSummaryComponent,
+
   ],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
 import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
 import { PHAST } from '../../../shared/models/phast/phast';
 @Injectable()
@@ -7,9 +6,7 @@ export class ExtendedSurfaceCompareService {
 
   baselineSurface: ExtendedSurface[];
   modifiedSurface: ExtendedSurface[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {
@@ -18,7 +15,7 @@ export class ExtendedSurfaceCompareService {
     let isDiff: boolean = false;
     if (this.modifiedSurface) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -32,7 +29,7 @@ export class ExtendedSurfaceCompareService {
       this.compareAmbientTemperature(index) ||
       this.compareSurfaceTemperature(index) ||
       this.compareSurfaceEmissivity(index)
-    )
+    );
   }
 
   compareSurfaceArea(index: number): boolean {
@@ -54,11 +51,11 @@ export class ExtendedSurfaceCompareService {
       if (baseline.losses.extendedSurfaces) {
         let index = 0;
         baseline.losses.extendedSurfaces.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.extendedSurfaces[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.extendedSurfaces[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -70,18 +67,18 @@ export class ExtendedSurfaceCompareService {
       this.compare(baseline.ambientTemperature, modification.ambientTemperature) ||
       this.compare(baseline.surfaceTemperature, modification.surfaceTemperature) ||
       this.compare(baseline.surfaceEmissivity, modification.surfaceEmissivity)
-    )
+    );
   }
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

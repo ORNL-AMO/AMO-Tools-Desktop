@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { MotorDriveOutputs } from '../motor-drive.component';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, HostListener } from '@angular/core';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { MotorDriveOutputs } from '../../../../shared/models/calculators';
 
 @Component({
   selector: 'app-motor-drive-graph',
@@ -17,7 +16,6 @@ export class MotorDriveGraphComponent implements OnInit {
 
   @ViewChild("ngChart") ngChart: ElementRef;
 
-  doc: any;
   barChart: any;
   graphColors: Array<string>;
   selectedGraphType: string = 'energyCost';
@@ -36,14 +34,16 @@ export class MotorDriveGraphComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
   }
 
   ngAfterViewInit() {
-    this.buildChart();
+    setTimeout(() => {
+      this.buildChart();
+    }, 100);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -57,16 +57,16 @@ export class MotorDriveGraphComponent implements OnInit {
   // for example, check motor-performance-graph.module.ts
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = true;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = true;
     }
     setTimeout(() => {
@@ -76,26 +76,26 @@ export class MotorDriveGraphComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       this.hoverBtnExpand = false;
       this.displayExpandTooltip = false;
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       this.hoverBtnCollapse = false;
       this.displayCollapseTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -103,7 +103,7 @@ export class MotorDriveGraphComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -111,7 +111,7 @@ export class MotorDriveGraphComponent implements OnInit {
         this.displayGridLinesTooltip = false;
       }
     }
-    else if (btnType == 'btnExpandChart') {
+    else if (btnType === 'btnExpandChart') {
       if (this.hoverBtnExpand) {
         this.displayExpandTooltip = true;
       }
@@ -119,7 +119,7 @@ export class MotorDriveGraphComponent implements OnInit {
         this.displayExpandTooltip = false;
       }
     }
-    else if (btnType == 'btnCollapseChart') {
+    else if (btnType === 'btnCollapseChart') {
       if (this.hoverBtnCollapse) {
         this.displayCollapseTooltip = true;
       }
@@ -131,7 +131,7 @@ export class MotorDriveGraphComponent implements OnInit {
   // ========== end tooltip functions ==========
 
   setType(str: string) {
-    if (str != this.selectedGraphType) {
+    if (str !== this.selectedGraphType) {
       this.selectedGraphType = str;
       this.buildChart();
     }
@@ -141,19 +141,19 @@ export class MotorDriveGraphComponent implements OnInit {
     let unit: string;
     let columnData: Array<Array<any>>;
 
-    if (this.selectedGraphType == 'energyCost') {
+    if (this.selectedGraphType === 'energyCost') {
       columnData = [
         ['V Belt Drive', this.results.vBeltResults.energyCost],
         ['Notched V Belt Drive', this.results.notchedResults.energyCost],
         ['Synchronous Belt Drive', this.results.synchronousBeltDrive.energyCost]
-      ]
+      ];
       unit = '$k/yr';
-    } else if (this.selectedGraphType == 'energyUse') {
+    } else if (this.selectedGraphType === 'energyUse') {
       columnData = [
         ['V Belt Drive', this.results.vBeltResults.annualEnergyUse],
         ['Notched V Belt Drive', this.results.notchedResults.annualEnergyUse],
         ['Synchronous Belt Drive', this.results.synchronousBeltDrive.annualEnergyUse]
-      ]
+      ];
       unit = 'MWh/yr';
     }
     this.barChart = c3.generate({
@@ -215,7 +215,7 @@ export class MotorDriveGraphComponent implements OnInit {
               + "<td style='text-align: right; font-weight: bold'>"
               + Math.round(d[1].value) + " " + unit
               + "</td>"
-              + "</tr>"
+              + "</tr>";
           }
           if (d[2]) {
             html = html
@@ -225,7 +225,7 @@ export class MotorDriveGraphComponent implements OnInit {
               + "<td style='text-align: right; font-weight: bold'>"
               + Math.round(d[2].value) + " " + unit
               + "</td>"
-              + "</tr>"
+              + "</tr>";
           }
           html = html + "</table></div>";
           return html;
@@ -264,5 +264,14 @@ export class MotorDriveGraphComponent implements OnInit {
     }, 200);
   }
   //========== end chart resize functions ==========
+
+  @HostListener('document:keyup', ['$event'])
+  closeExpandedGraph(event) {
+    if (this.expanded) {
+      if (event.code === 'Escape') {
+        this.contractChart();
+      }
+    }
+  }
 
 }

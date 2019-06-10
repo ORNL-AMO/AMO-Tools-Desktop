@@ -18,32 +18,30 @@ export class CashFlowComponent implements OnInit {
     results: 0,
     payback: 0
   };
-
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
   }
-
   headerHeight: number;
-
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
-
   constructor(private cashFlowService: CashFlowService, private settingsDbService: SettingsDbService) {
-
   }
 
   ngOnInit() {
-    this.cashFlowForm = {
-      lifeYears: 10,
-      energySavings: 1000,
-      salvageInput: 3000,
-      installationCost: 10000,
-      operationCost: 500,
-      fuelCost: 500,
-      junkCost: 500
+    if (!this.cashFlowService.inputData) {
+      this.cashFlowForm = {
+        lifeYears: 10,
+        energySavings: 1000,
+        salvageInput: 3000,
+        installationCost: 10000,
+        operationCost: 500,
+        fuelCost: 500,
+        junkCost: 500
+      };
+    } else {
+      this.cashFlowForm = this.cashFlowService.inputData;
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
@@ -54,6 +52,24 @@ export class CashFlowComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy() {
+    this.cashFlowService.inputData = this.cashFlowForm;
+  }
+
+  btnResetData() {
+    this.cashFlowForm = {
+      lifeYears: 10,
+      energySavings: 1000,
+      salvageInput: 3000,
+      installationCost: 10000,
+      operationCost: 500,
+      fuelCost: 500,
+      junkCost: 500
+    };
+    this.cashFlowService.inputData = this.cashFlowForm;
+    this.calculate();
   }
 
   resizeTabs() {
@@ -70,14 +86,13 @@ export class CashFlowComponent implements OnInit {
     this.currentField = str;
   }
 
-
   calculate() {
     // Benefits/Cost Ratio
     this.cashFlowResults.results = ((this.cashFlowForm.energySavings * this.cashFlowForm.lifeYears) + this.cashFlowForm.salvageInput) /
       (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) * this.cashFlowForm.lifeYears);
     // Payback
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
-    this.cashFlowService.calculate.next(true);
+    this.toggleCalculate = !this.toggleCalculate;
   }
 
 

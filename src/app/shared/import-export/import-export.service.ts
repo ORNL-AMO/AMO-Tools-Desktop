@@ -27,23 +27,26 @@ export class ImportExportService {
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");
     let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
-    if(dataStr.length > 2090000){
+    if (dataStr.length > 2090000) {
       return false;
-    }else{
+    }else {
       return true;
     }
   }
 
-  downloadData(data: any) {
+  downloadData(data: any, name: string) {
     data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");
     let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
     dlLink.setAttribute("href", dataStr);
-    const date = new Date();
-    const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
-    dlLink.setAttribute('download', 'ExportedData_' + dateStr + '.json');
+    if (!name) {
+      const date = new Date();
+      const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+      name = 'ExportedData_' + dateStr;
+    }
+    dlLink.setAttribute('download', name + '.json');
     dlLink.click();
   }
 
@@ -65,30 +68,30 @@ export class ImportExportService {
   downloadImage(data: any) {
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");
-    let newDataStr = data.replace(/^data:image\/[^;]/, 'data:application/octet-stream')
+    let newDataStr = data.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
     dlLink.setAttribute("href", newDataStr);
     dlLink.setAttribute("download", "exportData.png");
-    dlLink.click()
+    dlLink.click();
   }
 
   openMailTo() {
     let subject = "AMO Tools Feedback";
     let bodyMsg = "We appreciate your feedback. Please attach any screen shots or your current data set that you would like us to review.";
-    let mailToString: string = 'mailto:accawigk@ornl.gov?subject='+subject+'&body='+bodyMsg;
+    let mailToString: string = 'mailto:accawigk@ornl.gov?subject=' + subject + '&body=' + bodyMsg;
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");
     dlLink.setAttribute("href", mailToString);
-    dlLink.click()
+    dlLink.click();
   }
 
   takeScreenShot() {
     this.electronService.desktopCapturer.getSources({ types: ['window', 'screen'], thumbnailSize: { width: 1400, height: 1000 } }, (error, sources) => {
       sources.forEach(source => {
-        if (source.name == "AMOToolsDesktop") {
+        if (source.name === "AMOToolsDesktop") {
           let dataUrl = source.thumbnail.toDataURL();
           this.downloadImage(dataUrl);
         }
-      })
+      });
     });
   }
 

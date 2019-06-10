@@ -1,0 +1,170 @@
+<form [formGroup]="replaceExistingForm">
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label for="efficiency">Operating Hours</label>
+        <div class="input-group calc-addon-group">
+          <input name="operatingHours" type="number" min="0" step="1" class="form-control" id="operatingHours"
+            formControlName="operatingHours" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('operatingHours')">
+          <span class="units">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.operatingHours.invalid && !replaceExistingForm.controls.operatingHours.pristine">
+          <span *ngIf="replaceExistingForm.controls.operatingHours.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.operatingHours.errors.min">Value cannot not be lower than
+            {{replaceExistingForm.controls.operatingHours.errors.min.min}} hrs/yr.
+          </span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="efficiency">Motor Size</label>
+        <div class="input-group calc-addon-group">
+          <input name="motorSize" type="number" min="0" step="1" class="form-control" id="motorSize"
+            formControlName="motorSize" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('motorSize')">
+          <span class="units">hp</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.motorSize.invalid && !replaceExistingForm.controls.motorSize.pristine">
+          <span *ngIf="replaceExistingForm.controls.motorSize.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.motorSize.errors.min">Value cannot not be lower than
+            {{replaceExistingForm.controls.motorSize.errors.min.min}} hp.
+          </span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="efficiency">Load</label>
+        <div class="input-group calc-addon-group">
+          <input name="load" type="number" min="0" step="1" class="form-control" id="load" formControlName="load"
+            (input)="calculate()" onfocus="this.select();" (focus)="focusField('load')">
+          <span class="units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.load.invalid && !replaceExistingForm.controls.load.pristine">
+          <span *ngIf="replaceExistingForm.controls.load.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.load.errors.min">Value cannot not be lower than
+            {{replaceExistingForm.controls.load.errors.min.min}}%.
+          </span>
+          <span *ngIf="replaceExistingForm.controls.load.errors.max">Value cannot not be greater than
+            {{replaceExistingForm.controls.load.errors.max.max}}%.
+          </span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="efficiency">Electricity Cost</label>
+        <div class="input-group calc-addon-group">
+          <input name="electricityCost" type="number" min="0" step="1" class="form-control" id="electricityCost"
+            formControlName="electricityCost" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('electricityCost')">
+          <span class="units">$/kWh</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.electricityCost.invalid && !replaceExistingForm.controls.electricityCost.pristine">
+          <span *ngIf="replaceExistingForm.controls.electricityCost.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.electricityCost.errors.min">Value cannot not be lower than
+            {{replaceExistingForm.controls.electricityCost.errors.min.min}} $/kWh.
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <label class="group-label">Existing Motor</label>
+      <div class="form-group">
+        <label for="efficiency">Efficiency</label>
+        <div class="input-group calc-addon-group">
+          <input name="existingEfficiency" type="number" min="0" step="1" class="form-control" id="existingEfficiency"
+            formControlName="existingEfficiency" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('existingEfficiency')">
+          <span class="units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.existingEfficiency.invalid && !replaceExistingForm.controls.existingEfficiency.pristine">
+          <span *ngIf="replaceExistingForm.controls.existingEfficiency.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.existingEfficiency.errors.min">Value cannot not be lower than
+            {{replaceExistingForm.controls.existingEfficiency.errors.min.min}}%.
+          </span>
+          <span *ngIf="replaceExistingForm.controls.existingEfficiency.errors.max">Value cannot not be greater than
+            {{replaceExistingForm.controls.existingEfficiency.errors.max.max}}%.
+          </span>
+        </span>
+      </div>
+    </div>
+
+
+    <div class="col-6 pl-0">
+      <label class="group-label">Replacement Motor</label>
+      <div class="form-group">
+        <label for="efficiency">Efficiency</label>
+        <div class="input-group calc-addon-group">
+          <input name="newEfficiency" type="number" min="0" step="1" class="form-control" id="newEfficiency"
+            formControlName="newEfficiency" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('newEfficiency')">
+          <span class="units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.newEfficiency.invalid && !replaceExistingForm.controls.newEfficiency.pristine">
+          <span *ngIf="replaceExistingForm.controls.newEfficiency.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.newEfficiency.errors.min">Value cannot not be lower than
+            {{replaceExistingForm.controls.newEfficiency.errors.min.min}}%.
+          </span>
+          <span *ngIf="replaceExistingForm.controls.newEfficiency.errors.max">Value cannot not be greater than
+            {{replaceExistingForm.controls.newEfficiency.errors.max.max}}%.
+          </span>
+        </span>
+        <div class="form-group">
+          <label for="efficiency">Purchase Cost</label>
+          <div class="input-group calc-addon-group">
+            <input name="purchaseCost" type="number" min="0" step="1" class="form-control" id="purchaseCost"
+              formControlName="purchaseCost" (input)="calculate()" onfocus="this.select();"
+              (focus)="focusField('purchaseCost')">
+            <span class="units">$</span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="replaceExistingForm.controls.purchaseCost.invalid && !replaceExistingForm.controls.purchaseCost.pristine">
+            <span *ngIf="replaceExistingForm.controls.purchaseCost.errors.required">Value required.</span>
+            <span *ngIf="replaceExistingForm.controls.purchaseCost.errors.min">Value cannot not be lower than
+              ${{replaceExistingForm.controls.purchaseCost.errors.min.min}}.
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <label class="group-label" *ngIf="!inTreasureHunt">Rewound Motor</label>
+      <div class="form-group" *ngIf="!inTreasureHunt">
+        <label for="rewindEfficiencyLoss">Rewind Efficiency Loss</label>
+        <div class="input-group calc-addon-group">
+          <input name="rewindEfficiencyLoss" type="number" min="0" step="1" class="form-control"
+            id="rewindEfficiencyLoss" formControlName="rewindEfficiencyLoss" (input)="calculate()"
+            onfocus="this.select();" (focus)="focusField('rewindEfficiencyLoss')">
+          <span class="units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.rewindEfficiencyLoss.invalid && !replaceExistingForm.controls.rewindEfficiencyLoss.pristine">
+          <span *ngIf="replaceExistingForm.controls.rewindEfficiencyLoss.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.rewindEfficiencyLoss.errors.min">Value cannot not be lower than
+            {{replaceExistingForm.controls.rewindEfficiencyLoss.errors.min.min}}%.</span>
+          <span *ngIf="replaceExistingForm.controls.rewindEfficiencyLoss.errors.max">Value cannot not be greater than
+            {{replaceExistingForm.controls.rewindEfficiencyLoss.errors.max.max}}%.</span>
+        </span>
+      </div>
+      <div class="form-group" *ngIf="!inTreasureHunt">
+        <label for="rewindCost">Cost of Rewind</label>
+        <div class="input-group calc-addon-group">
+          <input name="rewindCost" type="number" min="0" step="1" class="form-control" id="rewindCost"
+            formControlName="rewindCost" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('rewindCost')">
+          <span class="units">$</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="replaceExistingForm.controls.rewindCost.invalid && !replaceExistingForm.controls.rewindCost.pristine">
+          <span *ngIf="replaceExistingForm.controls.rewindCost.errors.required">Value required.</span>
+          <span *ngIf="replaceExistingForm.controls.rewindCost.errors.min">Value cannot not be lower than
+            ${{replaceExistingForm.controls.rewindCost.errors.min.min}}.</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</form>

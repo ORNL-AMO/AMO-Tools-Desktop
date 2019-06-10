@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
-import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory } from '../../../shared/models/directory';
@@ -10,6 +9,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { Calculator } from '../../../shared/models/calculators';
 
 @Component({
   selector: 'app-assessment-card',
@@ -37,10 +38,12 @@ export class AssessmentCardComponent implements OnInit {
   dropdownOpen: boolean = false;
   assessmentCopy: Assessment;
   settingsCopy: Settings;
-  copyModifications: boolean = false;
-  constructor(private assessmentService: AssessmentService, private router: Router,
+  assessmentCalculatorCopy: Calculator;
+  calculatorId: number;
+  constructor(private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService, private formBuilder: FormBuilder,
-    private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
+    private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService) { }
 
 
   ngOnInit() {
@@ -49,6 +52,14 @@ export class AssessmentCardComponent implements OnInit {
     }
     this.assessmentCopy = JSON.parse(JSON.stringify(this.assessment));
     delete this.assessmentCopy.id;
+
+    let tmpCalculator: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+  
+    if (tmpCalculator) {
+      this.assessmentCalculatorCopy = JSON.parse(JSON.stringify(tmpCalculator));
+      this.calculatorId = this.assessmentCalculatorCopy.id;
+      delete this.assessmentCalculatorCopy.id;
+    }
     let tmpSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
     this.settingsCopy = JSON.parse(JSON.stringify(tmpSettings));
     delete this.settingsCopy.id;
@@ -64,18 +75,7 @@ export class AssessmentCardComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment) {
-    this.assessmentService.tab = 'system-setup';
-    if (assessment.type == 'PSAT') {
-      if (assessment.psat.setupDone) {
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/psat/' + assessment.id);
-    } else if (assessment.type == 'PHAST') {
-      if (assessment.phast.setupDone) {
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/phast/' + assessment.id);
-    }
+    this.assessmentService.goToAssessment(assessment);
   }
 
   setDelete() {
@@ -88,9 +88,9 @@ export class AssessmentCardComponent implements OnInit {
       this.editForm = this.formBuilder.group({
         'name': [this.assessment.name, Validators.required],
         'directoryId': [this.assessment.directoryId, Validators.required]
-      })
+      });
       this.editModal.show();
-    })
+    });
   }
 
 
@@ -104,10 +104,11 @@ export class AssessmentCardComponent implements OnInit {
       this.copyForm = this.formBuilder.group({
         'name': [this.assessment.name + ' (copy)', Validators.required],
         'directoryId': [this.assessment.directoryId, Validators.required],
-        'copyModifications': [false]
-      })
+        'copyModifications': [false],
+        'copyCalculators': [false]
+      });
       this.copyModal.show();
-    })
+    });
   }
 
   hideCopyModal() {
@@ -120,10 +121,10 @@ export class AssessmentCardComponent implements OnInit {
     this.assessmentCopy.createdDate = new Date();
     this.assessmentCopy.modifiedDate = new Date();
 
-    if(this.copyForm.controls.copyModifications.value == false){
-      if(this.assessmentCopy.type == 'PHAST'){
+    if (this.copyForm.controls.copyModifications.value === false) {
+      if (this.assessmentCopy.type === 'PHAST') {
         this.assessmentCopy.phast.modifications = new Array();
-      }else if(this.assessmentCopy.type == 'PSAT'){
+      } else if (this.assessmentCopy.type === 'PSAT') {
         this.assessmentCopy.psat.modifications = new Array();
       }
     }
@@ -133,21 +134,31 @@ export class AssessmentCardComponent implements OnInit {
       this.indexedDbService.addSettings(this.settingsCopy).then(() => {
         this.settingsDbService.setAll().then(() => {
           this.assessmentDbService.setAll().then(() => {
-            this.changeDirectory.emit(true);
-            this.hideCopyModal();
-          })
-        })
-      })
-    })
+            if (this.copyForm.controls.copyCalculators.value === true) {
+              this.assessmentCalculatorCopy.assessmentId = newAssessmentId;
+              this.indexedDbService.addCalculator(this.assessmentCalculatorCopy).then(() => {
+                this.calculatorDbService.setAll().then(() => {
+                  this.changeDirectory.emit(true);
+                  this.hideCopyModal();
+                });
+              });
+            } else {
+              this.changeDirectory.emit(true);
+              this.hideCopyModal();
+            }
+          });
+        });
+      });
+    });
   }
 
 
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
     let str = parentDir.name + '/';
     while (parentDir.parentDirectoryId) {
-      parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+      parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
       str = parentDir.name + '/' + str;
     }
     return str;
@@ -159,9 +170,10 @@ export class AssessmentCardComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(val => {
       this.assessmentDbService.setAll().then(() => {
         this.changeDirectory.emit(true);
+        this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
-      })
-    })
+      });
+    });
   }
 
   showDropdown() {
@@ -182,12 +194,22 @@ export class AssessmentCardComponent implements OnInit {
       this.indexedDbService.deleteSettings(deleteSettings.id).then(() => {
         this.assessmentDbService.setAll().then(() => {
           this.settingsDbService.setAll().then(() => {
-            this.hideDeleteModal();
-            this.changeDirectory.emit(true);
-          })
-        })
-      })
-    })
+            if (this.assessmentCalculatorCopy) {
+              this.indexedDbService.deleteCalculator(this.calculatorId).then(() => {
+                this.calculatorDbService.setAll().then(() => {
+                  this.hideDeleteModal();
+                  this.assessmentService.updateSidebarData.next(true);
+                });
+              });
+            } else {
+              console.log('delete');
+              this.hideDeleteModal();
+              this.assessmentService.updateSidebarData.next(true);
+            }
+          });
+        });
+      });
+    });
   }
 
 

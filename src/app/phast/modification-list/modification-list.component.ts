@@ -35,7 +35,7 @@ export class ModificationListComponent implements OnInit {
     this.initDropdown();
     this.assessmentTabSubscription = this.phastService.assessmentTab.subscribe(val => {
       this.asssessmentTab = val;
-    })
+    });
   }
 
   initDropdown() {
@@ -47,8 +47,8 @@ export class ModificationListComponent implements OnInit {
   selectModification(index: number, close?: boolean) {
     this.phastCompareService.setCompareVals(this.phast, index, false);
     this.lossesService.updateTabs.next(true);
-    this.initDropdown()
-    if(close){
+    this.initDropdown();
+    if (close) {
       this.close.emit(true);
     }
   }
@@ -56,18 +56,18 @@ export class ModificationListComponent implements OnInit {
   goToModification(index: number, componentStr: string) {
     let tabs = this.lossesService.lossesTabs;
     let selectedTab = _.find(tabs, (tab) => {
-      return tab.componentStr == componentStr;
-    })
+      return tab.componentStr === componentStr;
+    });
     this.lossesService.lossesTab.next(selectedTab.step);
     this.selectModification(index, true);
   }
 
   selectModificationBadge(modifiction: PHAST, index: number) {
     let testBadges = this.getBadges(modifiction);
-    if (testBadges.length == 1) {
+    if (testBadges.length === 1) {
       this.goToModification(index, testBadges[0].componentStr);
     } else {
-      this.goToModification(index, 'operations')
+      this.goToModification(index, 'operations');
     }
   }
 
@@ -75,7 +75,7 @@ export class ModificationListComponent implements OnInit {
     if (modification) {
       return this.phastCompareService.getBadges(this.phast, modification);
     } else {
-      return []
+      return [];
     }
   }
 
@@ -110,10 +110,10 @@ export class ModificationListComponent implements OnInit {
     this.rename.splice(index, 1);
     this.dropdown.splice(index, 1);
     this.deleteArr.splice(index, 1);
-    if (this.phast.modifications.length == 0) {
-      this.phastCompareService.setCompareVals(this.phast, 0, true);
+    if (this.phast.modifications.length === 0) {
+      this.phastCompareService.setCompareVals(this.phast, 0, false);
       this.close.emit(true);
-    } else if (index == this.modificationIndex) {
+    } else if (index === this.modificationIndex) {
       this.selectModification(0, false);
     } else if (index < this.modificationIndex) {
       this.selectModification(this.modificationIndex - 1, false);
@@ -129,7 +129,7 @@ export class ModificationListComponent implements OnInit {
   addNewModification(phast?: PHAST) {
     if (phast) {
       this.newModificationName = phast.name;
-      let testName = _.filter(this.phast.modifications, (mod) => { return mod.phast.name.includes(this.newModificationName) });
+      let testName = _.filter(this.phast.modifications, (mod) => { return mod.phast.name.includes(this.newModificationName); });
       if (testName) {
         this.newModificationName = this.newModificationName + '(' + testName.length + ')';
       }
@@ -160,8 +160,8 @@ export class ModificationListComponent implements OnInit {
         energyInputExhaustGasNotes: '',
         operationsNotes: ''
       },
-    }
-    if (this.asssessmentTab == 'explore-opportunities') {
+    };
+    if (this.asssessmentTab === 'explore-opportunities') {
       tmpModification.exploreOpportunities = true;
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(phast.losses)));

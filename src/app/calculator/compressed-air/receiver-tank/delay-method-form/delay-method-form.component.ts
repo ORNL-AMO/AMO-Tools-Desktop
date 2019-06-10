@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ReceiverTankBridgingCompressor } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { CompressedAirService } from '../../compressed-air.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-delay-method-form',
@@ -8,26 +10,37 @@ import { StandaloneService } from '../../../standalone.service';
   styleUrls: ['./delay-method-form.component.css']
 })
 export class DelayMethodFormComponent implements OnInit {
+  @Input()
+  toggleResetData: boolean;
+  @Input()
+  settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  inputs: ReceiverTankBridgingCompressor = {
-    method: 3,
-    distanceToCompressorRoom: 0,
-    speedOfAir: 0,
-    airDemand: 0,
-    allowablePressureDrop: 0,
-    atmosphericPressure: 14.7
-  };;
+  inputs: ReceiverTankBridgingCompressor;
   totalReceiverVolume: number;
 
-  constructor() {
+  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) {
   }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.bridgeCompressorInputs;
+    this.getTotalReceiverVolume();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.compressedAirService.initReceiverTankInputs();
+    this.inputs = this.compressedAirService.bridgeCompressorInputs;
+    this.getTotalReceiverVolume();
   }
 
   getTotalReceiverVolume() {
-    this.totalReceiverVolume = StandaloneService.receiverTankSizeBridgingCompressor(this.inputs);
+    this.totalReceiverVolume = this.standaloneService.receiverTankSizeBridgingCompressor(this.inputs, this.settings);
   }
   changeField(str: string) {
     this.emitChangeField.emit(str);

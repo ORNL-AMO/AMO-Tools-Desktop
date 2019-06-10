@@ -12,7 +12,7 @@ export class PhonePipe implements PipeTransform {
       return;
     }
     val = val.toString().trim();
-    val = val.replace(/\D/g,'');
+    val = val.replace(/\D/g, '');
     let length = val.length;
     let tmpVal;
     if (length > 10) {
@@ -20,14 +20,14 @@ export class PhonePipe implements PipeTransform {
       val = val.slice(Math.min(length - 10, 3));
     }
     for (let i = 0; i < length; i++) {
-      if (internationalCode == '' || internationalCode == '1') {
-        if (i == 0) {
+      if (internationalCode === '' || internationalCode === '1') {
+        if (i === 0) {
           phoneNumber = phoneNumber + "(" + val.charAt(i);
         }
-        else if (i == 3) {
+        else if (i === 3) {
           phoneNumber = phoneNumber + ') ' + val.charAt(i);
         }
-        else if (i == 6) {
+        else if (i === 6) {
           phoneNumber = phoneNumber + '-' + val.charAt(i);
         }
         else {
@@ -35,7 +35,7 @@ export class PhonePipe implements PipeTransform {
         }
       }
       else {
-        if (i % 2 == 0 && i != 0) {
+        if (i % 2 === 0 && i !== 0) {
           phoneNumber = phoneNumber + " " + val.charAt(i);
         }
         else {
@@ -43,7 +43,7 @@ export class PhonePipe implements PipeTransform {
         }
       }
     }
-    if (internationalCode != '') {
+    if (internationalCode !== '') {
       internationalCode = "+" + internationalCode + " ";
     }
     phoneNumber = internationalCode + phoneNumber;

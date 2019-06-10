@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { length } from '../../../shared/convert-units/definitions/length';
+import { UnitConverterService } from './unit-converter.service';
 
 @Component({
   selector: 'app-unit-converter',
@@ -8,8 +9,11 @@ import { length } from '../../../shared/convert-units/definitions/length';
   styleUrls: ['./unit-converter.component.css']
 })
 export class UnitConverterComponent implements OnInit {
+  @Input()
+  inAssessment: boolean;
+
   possibilities: Array<any> = [];
-  measure: any = 'existingApparentPower';
+  measure: any = 'length';
   from: string;
   to: string;
   value1: number;
@@ -68,7 +72,7 @@ export class UnitConverterComponent implements OnInit {
       display: 'Voltage'
     },
     {
-      measure: 'existingApparentPower',
+      measure: 'apparentPower',
       display: 'Apparent Power'
     },
     {
@@ -130,18 +134,63 @@ export class UnitConverterComponent implements OnInit {
       measure: 'specificVolume',
       display: 'Specific Volume'
     }
-  ]
+  ];
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private unitConverterService: UnitConverterService) { }
 
   ngOnInit() {
-    this.getMeasures();
+    this.initMeasures();
   }
 
+  ngOnDestroy() {
+    this.unitConverterService.value1 = this.value1;
+    this.unitConverterService.from = this.from;
+    this.unitConverterService.to = this.to;
+    this.unitConverterService.measure = this.measure;
+  }
+
+  initMeasures() {
+    if (this.unitConverterService.value1) {
+      this.value1 = this.unitConverterService.value1;
+    } else {
+      this.value1 = 1;
+    }
+    if (this.unitConverterService.from) {
+      this.from = this.unitConverterService.from;
+    } else {
+      this.from = null;
+    }
+    if (this.unitConverterService.to) {
+      this.to = this.unitConverterService.to;
+    } else {
+      this.to = null;
+    }
+    if (this.unitConverterService.measure) {
+      this.measure = this.unitConverterService.measure;
+    }
+    this.possibilities = new Array();
+    let tmpList = this.convertUnitsService.possibilities(this.measure);
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit),
+        displayUnit: this.getUnitDisplay(unit)
+      };
+      this.possibilities.push(tmpPossibility);
+    });
+    if (!this.to) {
+      this.to = this.possibilities[1].unit;
+    }
+    if (!this.from) {
+      this.from = this.possibilities[0].unit;
+    }
+    if (!this.value1) {
+      this.value1 = 1;
+    }
+    this.getValue2();
+  }
 
   getMeasures() {
-    this.from = null;
-    this.to = null;
     if (this.measure) {
       this.possibilities = new Array();
       let tmpList = this.convertUnitsService.possibilities(this.measure);
@@ -150,9 +199,9 @@ export class UnitConverterComponent implements OnInit {
           unit: unit,
           display: this.getUnitName(unit),
           displayUnit: this.getUnitDisplay(unit)
-        }
+        };
         this.possibilities.push(tmpPossibility);
-      })
+      });
       this.from = this.possibilities[0].unit;
       this.to = this.possibilities[1].unit;
       this.value1 = 1;
@@ -161,7 +210,7 @@ export class UnitConverterComponent implements OnInit {
   }
 
   getValue1() {
-    if (this.from && this.to && (this.value2 || this.value2 == 0)) {
+    if (this.from && this.to && (this.value2 || this.value2 === 0)) {
       this.value1 = this.convertUnitsService.value(this.value2).from(this.to).to(this.from);
     } else {
       this.value1 = 0;
@@ -169,7 +218,7 @@ export class UnitConverterComponent implements OnInit {
   }
 
   getValue2() {
-    if (this.from && this.to && (this.value1 || this.value1 == 0)) {
+    if (this.from && this.to && (this.value1 || this.value1 === 0)) {
       this.value2 = this.convertUnitsService.value(this.value1).from(this.from).to(this.to);
     } else {
       this.value2 = 0;

@@ -1,0 +1,92 @@
+<table #copyTable0 class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td></td>
+      <td class="bold text-center">Steam In</td>
+      <td class="bold text-center">Steam Out</td>
+      <td class="bold text-center" *ngIf="results.feedwaterMassFlow">Feedwater</td>
+      <!-- <td class="text-center">Units</td> -->
+    </tr>
+    <tr>
+      <td class="bold">Pressure (<span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletPressure | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.outletPressure | number:'1.0-2'}}</td>
+      <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterPressure |number:'1.0-2'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletTemperature | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.outletTemperature | number:'1.0-1'}}</td>
+      <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterTemperature |number:'1.0-1'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+
+    <tr>
+      <td class="bold">Sp. Enthalpy (<span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletSpecificEnthalpy | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.outletSpecificEnthalpy | number:'1.0-1'}}</td>
+      <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterSpecificEnthalpy |number:'1.0-1'}}
+      </td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Sp. Entropy (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center">{{results.outletSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterSpecificEntropy |number:'1.0-3'}}
+      </td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Quality</td>
+      <td class="text-center">
+        <span *ngIf="results.inletQuality == 0">Liquid</span>
+        <span *ngIf="results.inletQuality == 1">Gas</span>
+        <span
+          *ngIf="results.inletQuality != 0 && results.inletQuality != 1">{{results.inletQuality |number:'1.0-2'}}</span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="results.outletQuality == 0">Liquid</span>
+        <span *ngIf="results.outletQuality == 1">Gas</span>
+        <span
+          *ngIf="results.outletQuality != 0 && results.outletQuality != 1">{{results.outletQuality |number:'1.0-2'}}</span>
+      </td>
+      <td class="text-center" *ngIf="results.feedwaterMassFlow">
+        <span *ngIf="results.feedwaterQuality == 0">Liquid</span>
+        <span *ngIf="results.feedwaterQuality == 1">Gas</span>
+        <span *ngIf="results.feedwaterQuality != 0 && results.feedwaterQuality != 1">{{results.feedwaterQuality
+                |number:'1.0-2'}}</span>
+      </td>
+      <!-- <td></td> -->
+    </tr>
+    <tr>
+      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
+      <td class="text-center">{{results.inletMassFlow | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.outletMassFlow | number:'1.0-2'}}</td>
+      <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterMassFlow |number:'1.0-2'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
+      <td class="text-center">{{results.inletEnergyFlow | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.outletEnergyFlow | number:'1.0-1'}}</td>
+      <td class="text-center" *ngIf="results.feedwaterMassFlow">{{results.feedwaterEnergyFlow |number:'1.0-1'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
+      </td> -->
+    </tr>
+  </tbody>
+</table>
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>

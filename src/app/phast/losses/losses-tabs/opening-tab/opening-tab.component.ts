@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FormGroup } from '@angular/forms';
-import { OpeningLossesService } from '../../opening-losses/opening-losses.service';
+import { OpeningLossesService, OpeningLossWarnings } from '../../opening-losses/opening-losses.service';
 import { OpeningLossesCompareService } from '../../opening-losses/opening-losses-compare.service';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { Subscription } from 'rxjs';
@@ -25,8 +25,7 @@ export class OpeningTabComponent implements OnInit {
   inputError: boolean;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
-  compareSubscription: Subscription;
+  badgeClass: Array<string> = [];
   lossSubscription: Subscription;
   constructor(private lossesService: LossesService, private openingLossesService: OpeningLossesService, private openingLossesCompareService: OpeningLossesCompareService, private cd: ChangeDetectorRef) { }
 
@@ -34,30 +33,26 @@ export class OpeningTabComponent implements OnInit {
     this.setNumLosses();
     this.lossSubscription = this.lossesService.updateTabs.subscribe(val => {
       this.setNumLosses();
-      this.missingData = this.checkMissingData();
+      let dataCheck: { missingData: boolean, hasWarning: boolean } = this.checkLossData();
+      this.missingData = dataCheck.missingData;
       this.isDifferent = this.checkDifferent();
+      this.inputError = dataCheck.hasWarning;
       this.setBadgeClass();
-    })
-
-    this.compareSubscription = this.openingLossesCompareService.inputError.subscribe(val => {
-      this.inputError = val;
-      this.setBadgeClass();
-    })
+    });
 
     this.badgeHover = false;
   }
-  ngOnDestroy(){
-    this.compareSubscription.unsubscribe();
+  ngOnDestroy() {
     this.lossSubscription.unsubscribe();
   }
 
-  setBadgeClass(){
+  setBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    if(this.missingData){
+    if (this.missingData) {
       badgeStr = ['missing-data'];
-    }else if(this.inputError){
+    }else if (this.inputError) {
       badgeStr = ['input-error'];
-    }else if(this.isDifferent && !this.inSetup){
+    }else if (this.isDifferent && !this.inSetup) {
       badgeStr = ['loss-different'];
     }
     this.badgeClass = badgeStr;
@@ -71,29 +66,40 @@ export class OpeningTabComponent implements OnInit {
       }
     }
   }
-  checkMissingData(): boolean {
-    let testVal = false;
+  checkLossData(): { missingData: boolean, hasWarning: boolean } {
+    let missingData = false;
+    let hasWarning: boolean = false;
     if (this.openingLossesCompareService.baselineOpeningLosses) {
       this.openingLossesCompareService.baselineOpeningLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
-          testVal = true;
+        if (this.checkLossValid(loss) === false) {
+          missingData = true;
         }
-      })
+        let warnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.openingLossesService.checkWarningsExist(warnings);
+        if (tmpHasWarning === true) {
+          hasWarning = tmpHasWarning;
+        }
+      });
     }
     if (this.openingLossesCompareService.modifiedOpeningLosses && !this.inSetup) {
       this.openingLossesCompareService.modifiedOpeningLosses.forEach(loss => {
-        if (this.checkLossValid(loss) == false) {
-          testVal = true;
+        if (this.checkLossValid(loss) === false) {
+          missingData = true;
         }
-      })
+        let warnings: OpeningLossWarnings = this.openingLossesService.checkWarnings(loss);
+        let tmpHasWarning: boolean = this.openingLossesService.checkWarningsExist(warnings);
+        if (tmpHasWarning === true) {
+          hasWarning = tmpHasWarning;
+        }
+      });
     }
-    return testVal;
+    return { missingData: missingData, hasWarning: hasWarning };
   }
 
 
   checkLossValid(loss: OpeningLoss) {
       let tmpForm: FormGroup = this.openingLossesService.getFormFromLoss(loss);
-      if (tmpForm.status == 'VALID') {
+      if (tmpForm.status === 'VALID') {
         return true;
       } else {
         return false;

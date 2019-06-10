@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { CalculatorService } from '../calculator.service';
+import { Settings } from '../../shared/models/settings';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-compressed-air',
@@ -7,40 +10,21 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 })
 export class CompressedAirComponent implements OnInit {
   @Input()
-  selectedTool: string;
+  settings: Settings;
   @Input()
-  goCalcHome: boolean;
+  selectedTool: string;
 
-  firstChange: boolean = true;
-  constructor() { }
+  constructor(private calculatorService: CalculatorService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    if (!this.selectedTool) {
-      this.selectedTool = 'none';
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      this.selectedTool = 'none';
-    } else {
-      this.firstChange = false;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
     }
   }
 
   showTool(str: string) {
-    this.selectedTool = str;
-  }
-
-  hideTool() {
-    this.selectedTool = 'none'
-  }
-
-
-  getSelectedTool() {
-    if (this.selectedTool != undefined) {
-      return this.selectedTool;
-    }
+    this.calculatorService.selectedTool.next(str);
+    this.calculatorService.selectedToolType.next('compressed-air');
   }
 
 }

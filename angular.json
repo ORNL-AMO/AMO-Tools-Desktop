@@ -3,6 +3,29 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "amo-tools-desktop-e2e": {
+      "root": "",
+      "sourceRoot": "e2e",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "amo-tools-desktop:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    },
     "amo-tools-desktop": {
       "root": "",
       "sourceRoot": "src",
@@ -25,18 +48,19 @@
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/ng2-toasty/style-bootstrap.css",
-              "node_modules/ng2-toasty/style-default.css",
-              "node_modules/ng2-toasty/style-material.css",
               "src/assets/styles/two-panel.css",
               "src/assets/styles/tabs.css",
               "src/assets/styles/utilities.css",
               "src/assets/styles/graphs.css",
-              "src/assets/styles/forms.css"
+              "src/assets/styles/forms.css",
+              "src/assets/styles/help.css",
+              "src/assets/styles/ssmt-diagram.css",
+              "src/assets/styles/toggle-switch.css",
+              "src/assets/styles/assessment-banner.css",
+              "src/assets/styles/c3-charts.css"
             ],
             "scripts": [
-              "node_modules/chart.js/dist/Chart.bundle.min.js",
-              "src/jsRequireScript.js"
+
             ]
           },
           "configurations": {
@@ -84,21 +108,18 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
-              "node_modules/chart.js/dist/Chart.bundle.min.js",
-              "src/jsRequireScript.js"
+
             ],
             "styles": [
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/ng2-toasty/style-bootstrap.css",
-              "node_modules/ng2-toasty/style-default.css",
-              "node_modules/ng2-toasty/style-material.css",
               "src/assets/styles/two-panel.css",
               "src/assets/styles/tabs.css",
               "src/assets/styles/utilities.css",
               "src/assets/styles/graphs.css",
-              "src/assets/styles/forms.css"
+              "src/assets/styles/forms.css",
+              "src/assets/styles/assessment-banner.css"
             ],
             "assets": [
               "src/assets",
@@ -113,29 +134,6 @@
             "tsConfig": [
               "src/tsconfig.app.json",
               "src/tsconfig.spec.json"
-            ],
-            "exclude": []
-          }
-        }
-      }
-    },
-    "amo-tools-desktop-e2e": {
-      "root": "",
-      "sourceRoot": "e2e",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "amo-tools-desktop:serve"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
             ],
             "exclude": []
           }

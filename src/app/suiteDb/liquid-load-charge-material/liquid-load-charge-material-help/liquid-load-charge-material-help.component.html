@@ -7,67 +7,83 @@
 </div>
 <div class="row justify-content-center data-row align-items-center">
   <div class="col-11">
-    <div class="card-help">
-      <div class="help-panel">
-        <div class="help-content">
 
-          <div class="card" *ngIf="currentField == 'selectedMaterial'">
-            <div class="card-header">
-              <p>
-                Material Name
-              </p>
-            </div>
-            <div class="card-content">
-              Enter the name of the charge material used (make sure that a unique name is entered to prevent overlap with the existing materials).
-            </div>
-          </div>
+    <div class="p-2 pt-3 d-flex flex-column help-info">
+      <h5>
+        Custom Liquid Load Charge Materials Help
+        <br>
+        <small class="text-muted">
+        </small>
+      </h5>
+      <hr class="my-1 hr-spacer">
 
-          <div class="card" *ngIf="currentField == 'specificHeatLiquid'">
-            <div class="card-header">
-              <p>
-                Specific heat of liquid
-              </p>
-            </div>
-            <div class="card-content">
-              Specific heat is the amount of heat that is required to raise the temperature of unit mas of the liquid by unit temperature.
-            </div>
-          </div>
 
-          <div class="card" *ngIf="currentField == 'vaporizationTemperature'">
-            <div class="card-header">
-              <p>
-                Vaporizing Temperature
-              </p>
-            </div>
-            <div class="card-content">
-              Temperature at which liquid is converted into vapor without any change in temperature.
-            </div>
-          </div>
-
-          <div class="card" *ngIf="currentField == 'latentHeat'">
-            <div class="card-header">
-              <p>
-                Latent heat of vaporization
-              </p>
-            </div>
-            <div class="card-content">
-              The amount of thermal energy required to convert a unit mass of the liquid into gas without change in temperature.
-            </div>
-          </div>
-
-          <div class="card" *ngIf="currentField == 'specificHeatVapor'">
-            <div class="card-header">
-              <p>
-                Specific heat of Vapor
-              </p>
-            </div>
-            <div class="card-content">
-              Amount of heat that is required to raise the temperature of unit mas of the substance by unit temperature.
-            </div>
-          </div>
-
-        </div>
+      <div class="my-2" *ngIf="currentField == 'selectedMaterial'">
+        <h6>
+          Start With Existing
+          <br>
+          <small class="text-muted">
+            Use an existing material's properties to get started.
+          </small>
+        </h6>
       </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'substance'">
+        <h6>
+          Material Name
+          <br>
+          <small class="text-muted">
+            Use a unique name for your new material. Duplicates will not be saved.
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'specificHeatLiquid'">
+        <h6>
+          Specific Heat of Liquid
+          <br>
+          <small class="text-muted">
+            Specific heat is the amount of heat that is required to raise the temperature of unit mas of the liquid by unit temperature.
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'vaporizationTemperature'">
+        <h6>
+          Vaporizing Temperature
+          <br>
+          <small class="text-muted">
+            Temperature at which liquid is converted into vapor without any change in temperature.
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'latentHeat'">
+        <h6>
+          Latent Heat of Vaporization
+          <br>
+          <small class="text-muted">
+            The amount of thermal energy required to convert a unit mass of the liquid into gas without change in temperature.
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'specificHeatVapor'">
+        <h6>
+          Specific Heat of Vapor
+          <br>
+          <small class="text-muted">
+            Amount of heat that is required to raise the temperature of unit mas of the substance by unit temperature.
+          </small>
+        </h6>
+      </div>
+
+
     </div>
   </div>
 </div>

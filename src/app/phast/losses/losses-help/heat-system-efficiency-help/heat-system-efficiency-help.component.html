@@ -1,33 +1,45 @@
-<div class="help-header">
-  <h3>Heat System Efficiency Help</h3>
-  <div *ngIf="settings.furnaceType == 'Custom Electrotechnology'">
-    <p>Electric process heaters heat loss can be estimated knowing the overall efficiency of the electric system.</p>
-  </div>
-  <div  *ngIf="settings.energySourceType == 'Steam'">
-    <p>Steam process heaters heat loss can be estimated knowing the overall efficiency of the heater.</p>
+<div class="p-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Heat System Efficiency Help
+    <br>
+    <small *ngIf="settings.furnaceType == 'Custom Electrotechnology'" class="text-muted">
+      Electric process heaters heat loss can be estimated knowing the overall efficiency of the electric system.
+    </small>
+    <small *ngIf="settings.furnaceType == 'Steam'" class="text-muted">
+      Steam process heaters heat loss can be estimated knowing the overall efficiency of the heater.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+
+  <div class="my-2" *ngIf="currentField == 'efficiency'">
+    <h6>
+      Heat System Efficiency
+      <br>
+      <small class="text-muted">
+        Estimated overall efficiency of heating system.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0%</td>
+            <td class="text-center">100%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
+
+</div>
 
   <!--<p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering other loss data.
   </p>-->
-</div>
-
-
-<div class="help-content">
-  <div class="card" *ngIf="currentField == 'efficiency'">
-    <div class="card-header">
-      Heat System Efficiency
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Estimated overall efficiency of heating system.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>%</strong><br> Minimum Value: <strong>0</strong><br> Maximum Value: <strong>100</strong><br>
-      </p>
-    </div>
-  </div>
-</div>

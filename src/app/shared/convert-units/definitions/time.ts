@@ -88,4 +88,4 @@ export const time = {
             , ratio: 1
         }
     }
-}
+};

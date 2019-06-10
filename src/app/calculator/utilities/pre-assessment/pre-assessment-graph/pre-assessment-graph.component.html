@@ -1,27 +1,9 @@
-<!-- <div class="d-flex justify-content-center align-items-center" *ngIf="!printView">
-  <div class="btn-group">
-    <button type="button" class="btn btn-secondary" (click)="setGraphType('value')" [ngClass]="{'active': resultType == 'value'}">Energy Use</button>
-    <button type="button" class="btn btn-secondary" (click)="setGraphType('energyCost')" [ngClass]="{'active': resultType == 'energyCost'}">Energy Cost</button>
-  </div>
-</div>
-<div class="row">
-  <div #pieChartContainer [ngClass]="{'col-md-12 mx-auto' : !inRollup, 'col-12' : inRollup, 'pad-top' : !printView}">
-    <app-pie-chart [sideBySide]="!inRollup && !printView" [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
-      [printView]="printView" [exportName]="exportName"></app-pie-chart>
-  </div>
-</div>
-<p class="mx-auto no-column-data" *ngIf="values.length == 0 || !destroy && !inRollup">Enter metered or design energy data for multiple systems to compare their energy consumption.</p>-->
- <!-- <p class="mx-auto pre-assessment-note" *ngIf="!inRollup"> 
-  Note: the words furnace, process heating equipment, process heating system, PH System, may be used interchangeably throughout
-  this tool.
-</p> -->
-
 <div class="d-flex flex-column w-100">
   <div class="btn-group justify-content-center">
     <button type="button" class="btn btn-secondary" (click)="setGraphType('value')" [ngClass]="{'active': resultType == 'value'}">Energy Use</button>
     <button type="button" class="btn btn-secondary" (click)="setGraphType('energyCost')" [ngClass]="{'active': resultType == 'energyCost'}">Energy Cost</button>
   </div>
-  <div #pieChartContainer class="w-100" *ngIf="values.length != 0" [ngClass]="{'pt-1': inRollup}">
+  <div #pieChartContainer class="w-100 pt-3" *ngIf="values.length != 0" [ngClass]="{'pt-1': inRollup}">
     <app-pie-chart [sideBySide]="!inRollup && !printView" [graphColors]="graphColors" [values]="values" [labels]="labels" [chartContainerWidth]="getWidth()" [chartContainerHeight]="chartContainerHeight"
       [printView]="printView" [exportName]="exportName"></app-pie-chart>
   </div>

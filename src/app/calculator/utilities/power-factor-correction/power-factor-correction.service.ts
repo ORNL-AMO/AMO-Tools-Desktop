@@ -3,11 +3,8 @@ import { PowerFactorCorrectionInputs } from './power-factor-correction.component
 
 @Injectable()
 export class PowerFactorCorrectionService {
-
+  inputData: PowerFactorCorrectionInputs;
   constructor() { }
-
-
-
 
   existingApparentPower(data: PowerFactorCorrectionInputs): number {
     return data.existingDemand / data.currentPowerFactor;

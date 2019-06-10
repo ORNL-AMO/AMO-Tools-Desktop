@@ -16,8 +16,8 @@ export class FixtureLossesService {
       'finalTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
       'specificHeat': ['', Validators.required],
-      'name': ['Loss #'+lossNum]
-    })
+      'name': ['Loss #' + lossNum]
+    });
   }
 
   getFormFromLoss(loss: FixtureLoss): FormGroup {
@@ -29,7 +29,7 @@ export class FixtureLossesService {
       'correctionFactor': [loss.correctionFactor, Validators.required],
       'specificHeat': [loss.specificHeat, Validators.required],
       'name': [loss.name]
-    })
+    });
   }
 
   getLossFromForm(form: FormGroup): FixtureLoss {
@@ -41,7 +41,30 @@ export class FixtureLossesService {
       correctionFactor: form.controls.correctionFactor.value,
       materialName: form.controls.materialName.value,
       name: form.controls.name.value
-    }
+    };
     return tmpLoss;
+  }
+
+  checkWarnings(loss: FixtureLoss): { specificHeatWarning: string, feedRateWarning: string } {
+    return {
+      specificHeatWarning: this.checkSpecificHeat(loss),
+      feedRateWarning: this.checkFeedRate(loss)
+    };
+  }
+
+  checkSpecificHeat(loss: FixtureLoss): string {
+    if (loss.specificHeat < 0) {
+      return 'Specific Heat must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+
+  checkFeedRate(loss: FixtureLoss): string {
+    if (loss.feedRate < 0) {
+      return 'Fixture Weight feed rate must be greater than 0';
+    } else {
+      return null;
+    }
   }
 }

@@ -31,9 +31,15 @@ export class ExecutiveSummaryComponent implements OnInit {
   timeUnit: string;
   energyUnit: string;
   numMods: number = 0;
+
+  //percent graph variables
+  unit: string;
+  titlePlacement: string;
   constructor(private executiveSummaryService: ExecutiveSummaryService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.unit = '%';
+    this.titlePlacement = 'top';
     this.notes = new Array();
     this.baseline = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
     this.modifications = new Array<ExecutiveSummary>();
@@ -42,19 +48,19 @@ export class ExecutiveSummaryComponent implements OnInit {
       this.phast.modifications.forEach(mod => {
         let tmpSummary = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.phast, this.baseline);
         this.modifications.push(tmpSummary);
-      })
+      });
       // this.initMaxAnnualSavings();
       this.notes = this.executiveSummaryService.buildSummaryNotes(this.phast.modifications);
     }
 
     this.timeUnit = this.settings.energyResultUnit + '/yr';
-    if(this.settings.energyResultUnit == 'MMBtu'){
+    if (this.settings.energyResultUnit === 'MMBtu') {
       this.energyUnit = 'Btu/lb';
-    }else if(this.settings.energyResultUnit == 'GJ'){
+    }else if (this.settings.energyResultUnit === 'GJ') {
       this.energyUnit = 'kJ/kg';
-    }else if (this.settings.unitsOfMeasure == 'Metric') {
+    }else if (this.settings.unitsOfMeasure === 'Metric') {
       this.energyUnit = this.settings.energyResultUnit + '/kg';
-    } else if (this.settings.unitsOfMeasure == 'Imperial') {
+    } else if (this.settings.unitsOfMeasure === 'Imperial') {
       this.energyUnit = this.settings.energyResultUnit + '/lb';
     }
 
@@ -62,10 +68,10 @@ export class ExecutiveSummaryComponent implements OnInit {
       this.reportRollupService.selectedPhasts.subscribe(val => {
         if (val) {
           val.forEach(assessment => {
-            if (assessment.assessmentId == this.assessment.id) {
+            if (assessment.assessmentId === this.assessment.id) {
               this.selectedModificationIndex = assessment.selectedIndex;
             }
-          })
+          });
         }
       });
     }

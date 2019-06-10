@@ -10,14 +10,6 @@
 	max-width: 350px;
 }
 
-.psat-image{
-	width: 4rem;
-}
-
-.phast-image{
-	width: 4rem;
-}
-
 .fa-folder-o{
 	color: #343434;
 }
@@ -89,4 +81,86 @@
 	font-style: italic;
 	font-size: smaller;
 	padding-left: 15px;
+}
+
+
+img.fan-image{
+	width: 50px !important;
+}
+
+.psat-image{
+	width: 90px;
+	height:81px;
+}
+.ssmt-icon{
+	width: 90px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.steam-image{
+	width: 75px;
+}
+.phast-image{
+	width: 90px;
+	height:81px;
+}
+.steam-image{
+	width:90px;
+	height:81px;
+}
+
+
+.skyline{
+	position: relative;
+	bottom: 0;
+	opacity: .75;
+}
+
+.landing-menu{
+	z-index: +1;
+}
+
+a.click-link.p-0.steam {
+	margin-left: 15px;
+}
+
+.p-2.align-items-center.steam {
+	width: 90px;
+	height: 81px;
+	background: linear-gradient(rgba(228, 219, 219, 0.34), #F39C12);
+	border-radius: 15px;
+	border: 0.1px solid rgba(123, 120, 120, 0.25);
+	margin-left: 10px;
+	box-shadow: #7b7878 2px 2px 5px 1px;
+}
+img.steam-image {
+	width: 65px;
+	height: 90px;
+	padding-bottom: 25px;
+}
+.p-2.align-items-center.fan {
+	padding-bottom: 30px !important;
+}
+a.click-link.p-0.fan {
+	margin-left: 8px;
+}
+span.former-name.steam {
+	margin-left: 5px;
+}
+
+.p-2.align-items-center.treasure-hunt {
+	width: 90px;
+	height: 81px;
+	background: linear-gradient(rgba(228, 219, 219, 0.34), #2E4053);
+	border-radius: 15px;
+	border: 0.1px solid rgba(123, 120, 120, 0.25);
+	margin-left: 10px;
+	box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+img.treasure-hunt-image {
+    width: 75px;
+    height: 85px;
+    padding-bottom: 25px;
 }

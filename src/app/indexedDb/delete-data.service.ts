@@ -19,12 +19,12 @@ export class DeleteDataService {
     if (!isWorkingDir) {
       assessments = this.assessmentDbService.getByDirectoryId(directory.id);
     } else if (directory.assessments) {
-      assessments = _.filter(directory.assessments, (assessment) => { return assessment.selected == true });
+      assessments = _.filter(directory.assessments, (assessment) => { return assessment.selected === true; });
     }
     if (assessments) {
       assessments.forEach(assessment => {
         this.deleteAssessment(assessment);
-      })
+      });
     }
     if (!isWorkingDir) {
       let dirSettings: Settings = this.settingsDbService.getByDirectoryId(directory.id);
@@ -39,40 +39,40 @@ export class DeleteDataService {
           this.indexedDbService.deleteCalculator(calculator.id).then(() => {
             this.calculatorDbService.setAll();
           });
-        })
+        });
       }
       this.indexedDbService.deleteDirectory(directory.id).then(() => {
         this.directoryDbService.setAll();
-      })
+      });
     } else if (directory.calculators) {
-      if (directory.calculators.length != 0) {
+      if (directory.calculators.length !== 0) {
         directory.calculators.forEach(calculator => {
           if (calculator.id && calculator.selected) {
             this.indexedDbService.deleteCalculator(calculator.id).then(() => {
               this.calculatorDbService.setAll();
-            })
+            });
           }
-        })
+        });
 
       }
     }
 
-    let subDirectories: Array<Directory>
+    let subDirectories: Array<Directory>;
     if (!isWorkingDir) {
       subDirectories = this.directoryDbService.getSubDirectoriesById(directory.id);
     } else {
-      subDirectories = _.filter(directory.subDirectory, (dir) => { return dir.selected == true });
+      subDirectories = _.filter(directory.subDirectory, (dir) => { return dir.selected === true; });
     }
     if (subDirectories) {
       subDirectories.forEach(dir => {
         this.deleteDirectory(dir);
-      })
+      });
     }
   }
 
   deleteAssessment(assessment: Assessment) {
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-    if (settings && settings.assessmentId == assessment.id) {
+    if (settings && settings.assessmentId === assessment.id) {
       this.indexedDbService.deleteSettings(settings.id).then(() => {
         this.settingsDbService.setAll();
       });
@@ -85,7 +85,7 @@ export class DeleteDataService {
     }
     this.indexedDbService.deleteAssessment(assessment.id).then(() => {
       this.assessmentDbService.setAll();
-    })
+    });
   }
 
 }

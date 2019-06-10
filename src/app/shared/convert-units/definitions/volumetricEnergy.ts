@@ -29,4 +29,4 @@ export const volumetricEnergy = {
             , ratio: 1
         }
     }
-}
+};

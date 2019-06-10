@@ -30,7 +30,7 @@ export class FlueGasLossesService {
       'SO2': ['', Validators.required],
       'O2': ['', Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   initFormMass(lossNum: number): FormGroup {
@@ -53,7 +53,7 @@ export class FlueGasLossesService {
       'moisture': ['', Validators.required],
       'nitrogen': ['', Validators.required],
       'name': ['Loss #' + lossNum]
-    })
+    });
   }
 
   initByVolumeFormFromLoss(loss: FlueGas): FormGroup {
@@ -77,7 +77,7 @@ export class FlueGasLossesService {
       'SO2': [loss.flueGasByVolume.SO2, Validators.required],
       'O2': [loss.flueGasByVolume.O2, Validators.required],
       'name': [loss.name]
-    })
+    });
   }
 
   initByMassFormFromLoss(loss: FlueGas): FormGroup {
@@ -100,7 +100,7 @@ export class FlueGasLossesService {
       'moisture': [loss.flueGasByMass.moisture, Validators.required],
       'nitrogen': [loss.flueGasByMass.nitrogen, Validators.required],
       'name': [loss.name]
-    })
+    });
   }
 
   buildByMassLossFromForm(form: FormGroup): FlueGas {
@@ -125,7 +125,7 @@ export class FlueGasLossesService {
         moisture: form.controls.moisture.value,
         nitrogen: form.controls.nitrogen.value
       }
-    }
+    };
     return tmpFlueGas;
   }
 
@@ -152,7 +152,83 @@ export class FlueGasLossesService {
         SO2: form.controls.SO2.value,
         O2: form.controls.O2.value
       }
-    }
+    };
     return tmpFlueGas;
   }
+
+  checkFlueGasByVolumeWarnings(flueGas: FlueGasByVolume): FlueGasWarnings {
+    return {
+      combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
+      excessAirWarning: this.checkExcessAirWarning(flueGas),
+      o2Warning: this.checkO2Warning(flueGas)
+    };
+  }
+
+  checkFlueGasByMassWarnings(flueGas: FlueGasByMass): FlueGasWarnings {
+    return {
+      moistureInAirCompositionWarning: this.checkMoistureInAir(flueGas),
+      unburnedCarbonInAshWarning: this.checkUnburnedCarbon(flueGas),
+      combustionAirTempWarning: this.checkCombustionAirTemp(flueGas),
+      excessAirWarning: this.checkExcessAirWarning(flueGas),
+      o2Warning: this.checkO2Warning(flueGas)
+    };
+  }
+  checkMoistureInAir(flueGas: FlueGasByMass): string {
+    if (flueGas.moistureInAirComposition < 0) {
+      return 'Moisture in Combustion Air must be equal or greater than 0%';
+    } else if (flueGas.moistureInAirComposition > 100) {
+      return 'Moisture in Combustion Air must be less than or equal to 100%';
+    } else {
+      return null;
+    }
+  }
+  checkUnburnedCarbon(flueGas: FlueGasByMass): string {
+    if (flueGas.unburnedCarbonInAsh < 0) {
+      return 'Unburned Carbon in Ash must be equal or greater than 0%';
+    } else if (flueGas.unburnedCarbonInAsh > 100) {
+      return 'Unburned Carbon in Ash must be less than or equal to 100%';
+    } else {
+      return null;
+    }
+  }
+  checkCombustionAirTemp(flueGas: FlueGasByMass | FlueGasByVolume): string {
+    if (flueGas.combustionAirTemperature > flueGas.flueGasTemperature) {
+      return "Combustion air temperature must be less than flue gas temperature";
+    } else {
+      return null;
+    }
+  }
+  checkO2Warning(flueGas: FlueGasByMass | FlueGasByVolume): string {
+    if (flueGas.o2InFlueGas < 0 || flueGas.o2InFlueGas > 20.99999) {
+      return 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
+    } else {
+      return null;
+    }
+  }
+
+  checkExcessAirWarning(flueGas: FlueGasByMass | FlueGasByVolume): string {
+    if (flueGas.excessAirPercentage < 0) {
+      return 'Excess Air must be greater than 0 percent';
+    } else {
+      return null;
+    }
+  }
+
+  checkWarningsExist(warnings: FlueGasWarnings): boolean {
+    let hasWarning: boolean = false;
+    for (var key in warnings) {
+      if (warnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    return hasWarning;
+  }
+}
+
+export interface FlueGasWarnings {
+  moistureInAirCompositionWarning?: string;
+  unburnedCarbonInAshWarning?: string;
+  combustionAirTempWarning: string;
+  excessAirWarning: string;
+  o2Warning: string;
 }

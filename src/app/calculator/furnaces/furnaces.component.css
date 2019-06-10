@@ -14,3 +14,6 @@ a:not([href]):not([tabindex]){
 .content-container{
     padding: 1rem;
 }
+img {
+    cursor: pointer;
+}

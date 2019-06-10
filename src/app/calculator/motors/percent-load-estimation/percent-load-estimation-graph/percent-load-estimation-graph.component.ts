@@ -1,5 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Settings} from "../../../../shared/models/settings";
+import { Component, Input, OnInit } from '@angular/core';
 import { SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({

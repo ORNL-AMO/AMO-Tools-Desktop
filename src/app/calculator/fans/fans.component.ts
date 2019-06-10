@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { CalculatorService } from '../calculator.service';
 
 @Component({
   selector: 'app-fans',
@@ -6,10 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fans.component.css']
 })
 export class FansComponent implements OnInit {
+  @Input()
+  selectedTool: string;
 
-  constructor() { }
+  constructor(private calculatorService: CalculatorService) { }
 
   ngOnInit() {
+
+  }
+  
+  showTool(str: string) {
+    this.calculatorService.selectedTool.next(str);
+    this.calculatorService.selectedToolType.next('fans');
   }
 
 }

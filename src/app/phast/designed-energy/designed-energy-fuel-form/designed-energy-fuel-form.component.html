@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="totalBurnerCapacity">Total Burner Rated Capacity</label>
     <div class="input-group">
-      <input name="totalBurnerCapacity" type="number" step="any" id="totalBurnerCapacity" class="form-control" (focus)="focusField('totalBurnerCapacity')"
+      <input name="totalBurnerCapacity" type="number" step="any" id="totalBurnerCapacity" class="form-control" (focus)="changeField('fuelTotalBurnerCapacity')"
         [(ngModel)]="inputs.totalBurnerCapacity" (input)="calculate()" onfocus="this.select();" />
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
@@ -11,7 +11,7 @@
   <div class="form-group">
     <label for="percentCapacityUsed">% of Rated Capacity Used</label>
     <div class="input-group">
-      <input name="percentCapacityUsed" type="number" step="any" id="percentCapacityUsed" class="form-control" (focus)="focusField('percentCapacityUsed')"
+      <input name="percentCapacityUsed" type="number" step="any" id="percentCapacityUsed" class="form-control" (focus)="changeField('fuelPercentCapacityUsed')"
         [(ngModel)]="inputs.percentCapacityUsed" (input)="calculate()" onfocus="this.select();" />
       <span class="input-group-addon units">%</span>
     </div>
@@ -19,7 +19,7 @@
   <div class="form-group">
     <label for="percentOperatingHours">% of Operating Hours</label>
     <div class="input-group">
-      <input name="percentOperatingHours" type="number" step="any" id="percentOperatingHours" class="form-control" (focus)="focusField('percentOperatingHours')"
+      <input name="percentOperatingHours" type="number" step="any" id="percentOperatingHours" class="form-control" (focus)="changeField('fuelPercentOperatingHours')"
         [(ngModel)]="inputs.percentOperatingHours" (input)="calculate()" onfocus="this.select();" />
       <span class="input-group-addon units">%</span>
     </div>

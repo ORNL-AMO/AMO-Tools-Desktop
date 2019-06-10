@@ -29,6 +29,7 @@ export class PsatBarChartComponent implements OnInit {
   psat2Values: Array<number>;
   @Input()
   chartContainerWidth: number;
+
   chartContainerHeight: number;
 
   @ViewChild("ngChart") ngChart: ElementRef;
@@ -70,15 +71,17 @@ export class PsatBarChartComponent implements OnInit {
       this.chartContainerWidth = 950;
       this.chartContainerHeight = 370;
     }
-    this.setBarLabels();
-    this.prepBarData();
-    this.initChart();
+    setTimeout(() => {
+      this.setBarLabels();
+      this.prepBarData();
+      this.initChart();
+    }, 50)
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // if (!changes.psat1Values.firstChange || !changes.psat2Values.firstChange || !changes.psat1Name.firstChange || !changes.psat2Name.firstChange) {
     if (!this.printView) {
       if (changes.psat1Values || changes.psat2Values || changes.psat1Name || changes.psat2Name) {
+        this.setBarLabels();
         this.prepBarData();
         this.updateChart();
       }
@@ -161,7 +164,8 @@ export class PsatBarChartComponent implements OnInit {
 
 
   initChart() {
-    let unit = this.settings.powerMeasurement;
+    // let unit = this.settings.powerMeasurement;
+    let unit = 'kW';
     let yAxisLabel: string;
     if (this.printView) {
       yAxisLabel = "";
@@ -170,12 +174,9 @@ export class PsatBarChartComponent implements OnInit {
     else {
       yAxisLabel = "Power (" + unit + ")";
     }
-
-
     this.chart = c3.generate({
       bindto: this.ngChart.nativeElement,
       data: {
-        // columns: [this.barData1, this.barData2],
         columns: this.chartData,
         type: 'bar',
       },
@@ -247,7 +248,7 @@ export class PsatBarChartComponent implements OnInit {
       d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
       d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
-      // d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
+      d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "0.9rem").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
       d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "0.9rem");
     }
     else {
@@ -255,6 +256,7 @@ export class PsatBarChartComponent implements OnInit {
       d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
       d3.selectAll(".c3-texts").style("font-size", "20px");
       d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+      d3.selectAll(".tick text").style("display", "initial");
     }
   }
 
@@ -264,7 +266,7 @@ export class PsatBarChartComponent implements OnInit {
         unload: true,
         columns: [this.barData1, this.barData2]
       });
-
+      d3.selectAll(".tick text").style("display", "initial");
     }
   }
 

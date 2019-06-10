@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { FixtureLoss } from "../../../shared/models/phast/losses/fixtureLoss";
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -8,9 +7,7 @@ export class FixtureLossesCompareService {
 
   baselineFixtureLosses: FixtureLoss[];
   modifiedFixtureLosses: FixtureLoss[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {
@@ -19,7 +16,7 @@ export class FixtureLossesCompareService {
     let isDiff: boolean = false;
     if (this.modifiedFixtureLosses) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -35,7 +32,7 @@ export class FixtureLossesCompareService {
       this.compareFinalTemperature(index) ||
       this.compareCorrectionFactor(index) ||
       this.compareMaterialName(index)
-    )
+    );
   }
   compareSpecificHeat(index: number): boolean {
     return this.compare(this.baselineFixtureLosses[index].specificHeat, this.modifiedFixtureLosses[index].specificHeat);
@@ -67,11 +64,11 @@ export class FixtureLossesCompareService {
       if (baseline.losses.fixtureLosses) {
         let index = 0;
         baseline.losses.fixtureLosses.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.fixtureLosses[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.fixtureLosses[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -85,19 +82,19 @@ export class FixtureLossesCompareService {
       this.compare(baseline.finalTemperature, modification.finalTemperature) ||
       this.compare(baseline.correctionFactor, modification.correctionFactor) || 
       this.compare(baseline.materialName, modification.materialName) 
-    )
+    );
   }
 
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

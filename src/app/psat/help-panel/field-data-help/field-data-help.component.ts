@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
-import { PsatService } from '../../psat.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { HelpPanelService } from '../help-panel.service';
 import { Subscription } from 'rxjs';
+import { PsatWarningService } from '../../psat-warning.service';
 @Component({
   selector: 'app-field-data-help',
   templateUrl: './field-data-help.component.html',
@@ -20,7 +20,7 @@ export class FieldDataHelpComponent implements OnInit {
   maxFlowRate: number;
   minFlowRate: number;
   currentFieldSub: Subscription;
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService) { }
+  constructor( private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private psatWarningService: PsatWarningService) { }
 
 
   ngOnInit() {
@@ -36,7 +36,7 @@ export class FieldDataHelpComponent implements OnInit {
   }
 
   getMinFlowRate() {
-    let flowRateRange = this.psatService.getFlowRateMinMax(this.psat.inputs.pump_style);
+    let flowRateRange = this.psatWarningService.getFlowRateMinMax(this.psat.inputs.pump_style);
     if (this.settings.flowMeasurement != 'gpm') {
       flowRateRange.min = this.convertUnitsService.value(flowRateRange.min).from('gpm').to(this.settings.flowMeasurement);
     }
@@ -45,7 +45,7 @@ export class FieldDataHelpComponent implements OnInit {
 
 
   getMaxFlowRate() {
-    let flowRateRange = this.psatService.getFlowRateMinMax(this.psat.inputs.pump_style);
+    let flowRateRange = this.psatWarningService.getFlowRateMinMax(this.psat.inputs.pump_style);
     if (this.settings.flowMeasurement != 'gpm') {
       flowRateRange.max = this.convertUnitsService.value(flowRateRange.max).from('gpm').to(this.settings.flowMeasurement);
     }

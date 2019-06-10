@@ -1,0 +1,113 @@
+<table #copyTable0 class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td></td>
+      <td class="bold text-center">Inlet Water</td>
+      <td class="bold text-center">Steam</td>
+      <td class="bold text-center">Vent Steam</td>
+      <td class="bold text-center">Feedwater</td>
+      <!-- <td class="text-center">Units</td> -->
+    </tr>
+    <tr>
+      <td class="bold">Pressure (<span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletWaterPressure | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.inletSteamPressure | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.ventedSteamPressure | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.feedwaterPressure | number:'1.0-2'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Temperature (<span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletWaterTemperature | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.inletSteamTemperature | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.ventedSteamTemperature | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.feedwaterTemperature | number:'1.0-1'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Sp. Enthalpy (<span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletWaterSpecificEnthalpy | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.inletSteamSpecificEnthalpy | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.ventedSteamSpecificEnthalpy | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.feedwaterSpecificEnthalpy | number:'1.0-1'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamSpecificEnthalpyMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Sp. Entropy (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)</td>
+      <td class="text-center">{{results.inletWaterSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center">{{results.inletSteamSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center">{{results.ventedSteamSpecificEntropy | number:'1.0-3'}}</td>
+      <td class="text-center">{{results.feedwaterSpecificEntropy | number:'1.0-3'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>
+      </td> -->
+    </tr>
+    <tr>
+      <td class="bold">Quality</td>
+      <td class="text-center">
+        <span *ngIf="results.inletWaterQuality == 0">Liquid</span>
+        <span *ngIf="results.inletWaterQuality == 1">Gas</span>
+        <span *ngIf="results.inletWaterQuality != 1 && results.inletWaterQuality != 0">
+          {{results.inletWaterQuality | number:'1.0-2'}} </span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="results.inletSteamQuality == 0">Liquid</span>
+        <span *ngIf="results.inletSteamQuality == 1">Gas</span>
+        <span *ngIf="results.inletSteamQuality != 1 && results.inletSteamQuality != 0">
+          {{results.inletSteamQuality | number:'1.0-2'}} </span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="results.ventedSteamQuality == 0">Liquid</span>
+        <span *ngIf="results.ventedSteamQuality == 1">Gas</span>
+        <span *ngIf="results.ventedSteamQuality != 1 && results.ventedSteamQuality != 0">
+          {{results.ventedSteamQuality | number:'1.0-2'}} </span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="results.feedwaterQuality == 0">Liquid</span>
+        <span *ngIf="results.feedwaterQuality == 1">Gas</span>
+        <span *ngIf="results.feedwaterQuality != 1 && results.feedwaterQuality != 0">
+          {{results.feedwaterQuality | number:'1.0-2'}} </span>
+      </td>
+      <!-- <td></td> -->
+    </tr>
+    <!-- <tr>
+          <td class="bold">Sp. Volume</td>
+          <td class="text-center">{{results.inletWaterVolume | number:'1.0-1'}}</td>
+          <td class="text-center">{{results.inletSteamVolume | number:'1.0-1'}}</td>
+          <td class="text-center">{{results.ventedSteamVolume | number:'1.0-1'}}</td>
+          <td class="text-center">{{results.feedwaterVolume | number:'1.0-1'}}</td>
+          <td class="text-center">
+            <span [innerHTML]="settings.steamSpecificVolumeMeasurement | settingsLabel"></span>
+          </td>
+        </tr> -->
+    <tr>
+      <td class="bold">Mass Flow (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
+      <td class="text-center">{{results.inletWaterMassFlow | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.inletSteamMassFlow | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.ventedSteamMassFlow | number:'1.0-2'}}</td>
+      <td class="text-center">{{results.feedwaterMassFlow | number:'1.0-2'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+      </td> -->
+    </tr>
+
+    <tr>
+      <td class="bold">Energy Flow (<span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>)</td>
+      <td class="text-center">{{results.inletWaterEnergyFlow | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.inletSteamEnergyFlow | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.ventedSteamEnergyFlow | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.feedwaterEnergyFlow | number:'1.0-1'}}</td>
+      <!-- <td class="text-center">
+        <span [innerHTML]="settings.steamEnergyMeasurement | settingsLabel:'/hr'"></span>
+      </td> -->
+    </tr>
+  </tbody>
+</table>
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>

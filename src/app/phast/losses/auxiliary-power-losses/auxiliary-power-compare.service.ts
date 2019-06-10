@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
 import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliaryPowerLoss';
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -8,9 +7,7 @@ export class AuxiliaryPowerCompareService {
 
   baselineAuxLosses: AuxiliaryPowerLoss[];
   modifiedAuxLosses: AuxiliaryPowerLoss[];
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
   compareAllLosses(): boolean {
     let index = 0;
@@ -18,7 +15,7 @@ export class AuxiliaryPowerCompareService {
     let isDiff: boolean = false;
     if (this.modifiedAuxLosses) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -33,7 +30,7 @@ export class AuxiliaryPowerCompareService {
       this.compareAvgCurrent(index) ||
       this.comparePowerFactor(index) ||
       this.compareOperatingTime(index)
-    )
+    );
   }
 
   compareMotorPhase(index: number): boolean {
@@ -58,11 +55,11 @@ export class AuxiliaryPowerCompareService {
       if (baseline.losses.auxiliaryPowerLosses) {
         let index = 0;
         baseline.losses.auxiliaryPowerLosses.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.auxiliaryPowerLosses[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.auxiliaryPowerLosses[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -75,19 +72,19 @@ export class AuxiliaryPowerCompareService {
       this.compare(baseline.avgCurrent, modification.avgCurrent) ||
       this.compare(baseline.powerFactor, modification.powerFactor) ||
       this.compare(baseline.operatingTime, modification.operatingTime)
-    )
+    );
   }
 
   compare(a: any, b: any) {
     if (a && b) {
-      if (a != b) {
+      if (a !== b) {
         return true;
       } else {
         return false;
       }
     }
     else if ((a && !b) || (!a && b)) {
-      return true
+      return true;
     } else {
       return false;
     }

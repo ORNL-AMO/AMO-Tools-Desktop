@@ -7,7 +7,8 @@
       <tr>
         <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}"></th>
         <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" class="psat-name">Baseline</th>
-        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" *ngFor="let modification of psat.modifications" class="psat-name">{{modification.psat.name}}</th>
+        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" *ngFor="let modification of psat.modifications"
+          class="psat-name">{{modification.psat.name}}</th>
       </tr>
     </thead>
     <tbody>
@@ -66,11 +67,12 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': freqDiff == true}">Line Frequency (Hz)</td>
-        <td [ngClass]="{'indicate-report-field-different': freqDiff == true}">{{getLineFreq(psat.inputs.line_frequency)}}</td>
-        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.line_frequency != psat.inputs.line_frequency}">{{getLineFreq(modification.psat.inputs.line_frequency)}}</td>
+        <td [ngClass]="{'indicate-report-field-different': freqDiff == true}">{{psat.inputs.line_frequency}}</td>
+        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.line_frequency != psat.inputs.line_frequency}">{{modification.psat.inputs.line_frequency}}</td>
       </tr>
       <tr>
-        <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">Motor Rated Power ({{settings.powerMeasurement}})</td>
+        <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">Motor Rated Power
+          ({{settings.powerMeasurement}})</td>
         <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">{{psat.inputs.motor_rated_power}}</td>
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_rated_power != psat.inputs.motor_rated_power}">{{modification.psat.inputs.motor_rated_power}}</td>
       </tr>
@@ -85,6 +87,17 @@
         <td [ngClass]="{'indicate-report-field-different': effClassDiff == true}">Efficiency Class</td>
         <td [ngClass]="{'indicate-report-field-different': effClassDiff == true}">{{getEfficiencyClass(psat.inputs.efficiency_class)}}</td>
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.efficiency_class != psat.inputs.efficiency_class}">{{getEfficiencyClass(modification.psat.inputs.efficiency_class)}}</td>
+      </tr>
+
+      <tr *ngIf="effClassSpecified">
+        <td [ngClass]="{'indicate-report-field-different': effClassDiff == true || specEffDiff == true}">Specified
+          Efficiency</td>
+        <td [ngClass]="{'indicate-report-field-different': effClassDiff == true || specEffDiff == true}">
+          <span *ngIf="getEfficiencyClass(psat.inputs.efficiency_class) === 'Specified'">{{psat.inputs.efficiency}}</span>
+          <span *ngIf="getEfficiencyClass(psat.inputs.efficiency_class) !== 'Specified'">&mdash;</span></td>
+        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.efficiency != psat.inputs.efficiency}">
+          <span *ngIf="getEfficiencyClass(modification.psat.inputs.efficiency_class) === 'Specified'">{{modification.psat.inputs.efficiency}}</span>
+          <span *ngIf="getEfficiencyClass(modification.psat.inputs.efficiency_class) !== 'Specified'">&mdash;</span></td>
       </tr>
 
       <tr>
@@ -107,9 +120,9 @@
         <th *ngFor="let modification of psat.modifications"></th>
       </tr>
       <tr>
-        <td [ngClass]="{'indicate-report-field-different': opFracDiff == true}">Operating Fraction</td>
-        <td [ngClass]="{'indicate-report-field-different': opFracDiff == true}">{{psat.inputs.operating_fraction}}</td>
-        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.operating_fraction != psat.inputs.operating_fraction}">{{modification.psat.inputs.operating_fraction}}</td>
+        <td [ngClass]="{'indicate-report-field-different': opFracDiff == true}">Operating Hours</td>
+        <td [ngClass]="{'indicate-report-field-different': opFracDiff == true}">{{psat.inputs.operating_hours}}</td>
+        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.operating_hours != psat.inputs.operating_hours}">{{modification.psat.inputs.operating_hours}}</td>
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': costDiff == true}">Cost (kW/hr)</td>
@@ -152,58 +165,10 @@
         <td [ngClass]="{'indicate-report-field-different': fieldVoltageDiff == true}">{{psat.inputs.motor_field_voltage}}</td>
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_voltage != psat.inputs.motor_field_voltage}">{{modification.psat.inputs.motor_field_voltage}}</td>
       </tr>
-
-      <!--<tr *ngIf="anyOptimized">-->
-        <!--<td>Kinematic Viscosity (cST)</td>-->
-        <!--<td>&mdash;</td>-->
-        <!--<td *ngFor="let modification of psat.modifications">-->
-          <!--<span *ngIf="modification.psat.inputs.optimize_calculation == true">-->
-          <!--{{modification.psat.inputs.kinematic_viscosity}}-->
-          <!--</span>-->
-          <!--<span *ngIf="modification.psat.inputs.optimize_calculation != true">-->
-            <!--&mdash;-->
-          <!--</span>-->
-        <!--</td>-->
-      <!--</tr>-->
-
       <tr>
         <td [ngClass]="{'indicate-report-field-different': viscosityDiff == true}">Kinematic Viscosity (cST)</td>
         <td [ngClass]="{'indicate-report-field-different': viscosityDiff == true}">{{psat.inputs.kinematic_viscosity}}</td>
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.kinematic_viscosity != psat.inputs.kinematic_viscosity}">{{modification.psat.inputs.kinematic_viscosity}}</td>
-      </tr>
-
-      <!--<tr>-->
-        <!--<td>Kinematic Viscosity (cST)</td>-->
-        <!--<td>{{psat.inputs.kinematic_viscosity}}</td>-->
-        <!--<td *ngFor="let modification of psat.modifications">-->
-          <!--<span>{{modification.psat.inputs.kinematic_viscosity}}</span>-->
-        <!--</td>-->
-      <!--</tr>-->
-
-      <tr *ngIf="anyOptimized">
-        <td>Fixed specifc speed?</td>
-        <td>&mdash;</td>
-        <td *ngFor="let modification of psat.modifications">
-          <span *ngIf="modification.psat.inputs.optimize_calculation == true">
-          {{getFixedSpeed(modification.psat.inputs.fixed_speed)}}
-          </span>
-          <span *ngIf="modification.psat.inputs.optimize_calculation != true">
-            &mdash;
-          </span>
-        </td>
-      </tr>
-
-      <tr *ngIf="anyOptimized">
-        <td>Size Margin</td>
-        <td>&mdash;</td>
-        <td *ngFor="let modification of psat.modifications">
-          <span *ngIf="modification.psat.inputs.optimize_calculation == true">
-          {{modification.psat.inputs.margin | number:'1.2-2'}}
-          </span>
-          <span *ngIf="modification.psat.inputs.optimize_calculation != true">
-            &mdash;
-          </span>
-        </td>
       </tr>
     </tbody>
   </table>

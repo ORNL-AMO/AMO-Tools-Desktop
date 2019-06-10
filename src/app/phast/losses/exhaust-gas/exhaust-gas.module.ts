@@ -19,7 +19,7 @@ import { ExhaustGasFormComponent} from './exhaust-gas-form/exhaust-gas-form.comp
     ExhaustGasComponent,
     ExhaustGasFormComponent
   ],
-  providers:[
+  providers: [
     ExhaustGasService,
     ExhaustGasCompareService
   ],

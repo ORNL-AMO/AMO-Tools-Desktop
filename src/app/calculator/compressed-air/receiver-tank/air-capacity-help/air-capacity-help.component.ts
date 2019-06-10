@@ -6,6 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./air-capacity-help.component.css']
 })
 export class AirCapacityHelpComponent implements OnInit {
+  @Input()
+  currentField: string;
   constructor() { }
 
   ngOnInit() {

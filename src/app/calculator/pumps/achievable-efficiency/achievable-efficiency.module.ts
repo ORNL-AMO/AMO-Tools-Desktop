@@ -5,6 +5,7 @@ import { AchievableEfficiencyFormComponent } from './achievable-efficiency-form/
 import { AchievableEfficiencyGraphComponent } from './achievable-efficiency-graph/achievable-efficiency-graph.component';
 import { AchievableEfficiencyComponent } from './achievable-efficiency.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { AchievableEfficiencyService } from './achievable-efficiency.service';
 
 @NgModule({
   imports: [
@@ -20,6 +21,9 @@ import { SharedModule } from '../../../shared/shared.module';
   ],
   exports: [
     AchievableEfficiencyComponent
+  ],
+  providers: [
+    AchievableEfficiencyService
   ]
 })
 export class AchievableEfficiencyModule { }

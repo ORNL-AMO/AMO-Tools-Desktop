@@ -3,60 +3,53 @@
   <h4>Add some now.</h4>
 </div>
 
-<div class="no-data no-data-phast no-data-no-add" *ngIf="(_fixtureLosses.length == 0 && lossesLocked) || (_fixtureLosses.length == 0 && !inSetup)">
+<div class="no-data no-data-phast no-data-no-add"
+  *ngIf="(_fixtureLosses.length == 0 && lossesLocked) || (_fixtureLosses.length == 0 && !inSetup)">
   <h3>You have no Fixture Losses</h3>
   <h4>To add Fixture Losses you will need to delete your current modifications and return to system setup.</h4>
 </div>
 
 
-<div class="card-form" *ngFor="let loss of _fixtureLosses; let lossIndex = index;">
-  <div class="row">
-    <div class="col-12">
-      <form class="name-input-form" [formGroup]="loss.form">
-        <div class="input-group">
-          <span class="input-group-addon units left" (click)="collapseLoss(loss)">
-            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
-            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
-          </span>
-          <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" formControlName="name">
-          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
-            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
-          </span>
-        </div>
-      </form>
+<div class="card-form d-flex flex-column" *ngFor="let loss of _fixtureLosses; let lossIndex = index;">
+  <form class="name-input-form" [formGroup]="loss.form">
+    <div class="input-group">
+      <span class="input-group-addon units left" (click)="collapseLoss(loss)">
+        <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+        <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+      </span>
+      <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input"
+        formControlName="name">
+      <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked"
+        (click)="removeLoss(lossIndex)">
+        <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+      </span>
     </div>
+  </form>
+  <div *ngIf="!loss.collapse">
+    <app-fixture-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form"
+      (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
+      [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"
+      [isBaseline]="isBaseline"></app-fixture-losses-form>
   </div>
-  <div class="row" *ngIf="!loss.collapse">
-    <div class="col-12">
-      <app-fixture-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings" (inputError)="setError($event)" [inSetup]="inSetup"></app-fixture-losses-form>
-    </div>
-  </div>
-  <div class="row loss-results" [ngClass]="{'input-error': showError == true}">
-    <div class="col-12">
-      <div class="form-group">
-        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
-        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
-          {{loss.heatLoss | sigFigs:'6'}}
-          <span>{{resultsUnit}}</span>
-          <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
-            &mdash; &mdash;
-          </div>
+  <div class="loss-results" [ngClass]="{'input-error': showError == true}">
+    <div class="form-group">
+      <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
+      <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+        {{loss.heatLoss | sigFigs:'6'}}
+        <span>{{resultsUnit}}</span>
+        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+          &mdash; &mdash;
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="row" *ngIf="total">
-  <div class="col-12 loss-total">
-    <div class="d-flex">
-      <div class="w-50 bold">
-        Fixtures Total
-      </div>
-      <div class="text-center w-50 bold">
-        {{total | sigFigs:'6'}}
-        <span>{{resultsUnit}}</span>
-      </div>
-    </div>
+<div class="d-flex loss-total" *ngIf="total">
+  <div class="w-50 bold">
+    Fixtures Total
+  </div>
+  <div class="text-center w-50 bold">
+    {{total | sigFigs:'6'}}
+    <span>{{resultsUnit}}</span>
   </div>
 </div>

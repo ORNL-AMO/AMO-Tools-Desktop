@@ -33,7 +33,7 @@ import { viscosity } from './definitions/viscosity';
 import { frequency } from './definitions/frequency';
 import { force } from './definitions/force';
 //import {kineViscosity} from './definitions/kineViscosity'
-import { specificHeat } from './definitions/specificHeat'
+import { specificHeat } from './definitions/specificHeat';
 import { volumetricHeat } from './definitions/volumetricHeat';
 import { specificEnergy } from './definitions/specificEnergy';
 import { density } from './definitions/density';
@@ -76,7 +76,7 @@ export class ConvertUnitsService {
     density: density,
     volumetricEnergy: volumetricEnergy,
     specificVolume: specificVolume
-  }
+  };
   origin: any;
   destination: any;
   val: any;
@@ -104,7 +104,7 @@ export class ConvertUnitsService {
     if (!this.val) {
       if (this.val !== 0) {
         // throw new Error('need to set value before call to .from');
-        console.log('You need to set a value (make sure its not undefined) before you call .from');
+        //console.log('You need to set a value (make sure its not undefined) before you call .from');
       }
     }
     if (this.destination)
@@ -135,46 +135,50 @@ export class ConvertUnitsService {
     }
 
     // You can't go from liquid to mass, for example
-    if (this.destination.measure != this.origin.measure) {
+    if (this.destination.measure !== this.origin.measure) {
       throw new Error('Cannot convert incompatible measures of '
         + this.destination.measure + ' and ' + this.origin.measure);
     }
 
     /**
-    * Convert from the source value to its anchor inside the system
-    */
+     * Convert from the source value to its anchor inside the system
+     */
     result = this.val * this.origin.unit.to_anchor;
 
     /**
-    * For some changes it's a simple shift (C to K)
-    * So we'll add it when convering into the unit
-    * and substract it when converting from the unit
-    */
+     * For some changes it's a simple shift (C to K)
+     * So we'll add it when converting into the unit (later)
+     * and subtract it when converting from the unit
+     */
+    if (this.origin.unit.anchor_shift) {
+      result -= this.origin.unit.anchor_shift;
+    }
+
+    /**
+     * Convert from one system to another through the anchor ratio. Some conversions
+     * aren't ratio based or require more than a simple shift. We can provide a custom
+     * transform here to provide the direct result
+     */
+    if (this.origin.system !== this.destination.system) {
+      transform = this._measures[this.origin.measure]._anchors[this.origin.system].transform;
+      if (typeof transform === 'function') {
+        result = transform(result);
+      }
+      else {
+        result *= this._measures[this.origin.measure]._anchors[this.origin.system].ratio;
+      }
+    }
+
+    /**
+     * This shift has to be done after the system conversion business
+     */
     if (this.destination.unit.anchor_shift) {
       result += this.destination.unit.anchor_shift;
     }
 
-    if (this.origin.unit.anchor_shift) {
-      result -= this.origin.unit.anchor_shift
-    }
-
-
     /**
-    * Convert from one system to another through the anchor ratio. Some conversions
-    * aren't ratio based or require more than a simple shift. We can provide a custom
-    * transform here to provide the direct result
-    */
-    if (this.origin.system != this.destination.system) {
-      transform = this._measures[this.origin.measure]._anchors[this.origin.system].transform;
-      if (typeof transform === 'function') {
-        return result = transform(result)
-      }
-      result *= this._measures[this.origin.measure]._anchors[this.origin.system].ratio;
-    }
-
-    /**
-    * Convert to another unit inside the destination system
-    */
+     * Convert to another unit inside the destination system
+     */
     return result / this.destination.unit.to_anchor;
   }
 
@@ -183,11 +187,11 @@ export class ConvertUnitsService {
 
     each(this._measures, function (systems, measure) {
       each(systems, function (units, system) {
-        if (system == '_anchors')
+        if (system === '_anchors')
           return false;
 
         each(units, function (unit, testAbbr) {
-          if (testAbbr == abbr) {
+          if (testAbbr === abbr) {
             found = {
               abbr: abbr
               , measure: measure
@@ -213,7 +217,7 @@ export class ConvertUnitsService {
     var validUnits = [];
     each(this._measures, function (systems, measure) {
       each(systems, function (units, system) {
-        if (system == '_anchors')
+        if (system === '_anchors')
           return false;
 
         validUnits = validUnits.concat(keys(units));
@@ -228,7 +232,7 @@ export class ConvertUnitsService {
     if (!this.origin && !measure) {
       each(keys(this._measures), function (measure) {
         each(this._measures[measure], function (units, system) {
-          if (system == '_anchors')
+          if (system === '_anchors')
             return false;
 
           possibilities = possibilities.concat(keys(units));
@@ -237,7 +241,7 @@ export class ConvertUnitsService {
     } else {
       measure = measure || this.origin.measure;
       each(this._measures[measure], function (units, system) {
-        if (system == '_anchors')
+        if (system === '_anchors')
           return false;
 
         possibilities = possibilities.concat(keys(units));
@@ -248,7 +252,7 @@ export class ConvertUnitsService {
   }
 
   roundVal(val: number, digits: number) {
-    return Number((Math.round(val * 100) / 100).toFixed(digits))
+    return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 
   // list(measure?) {

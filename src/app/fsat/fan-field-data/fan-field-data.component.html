@@ -1,0 +1,190 @@
+<form [formGroup]="fieldDataForm">
+  <div *ngIf="inSetup" class="d-flex flex-column">
+    <div class="header mr-2 ml-2">
+      <h3>Field Data</h3>
+    </div>
+  </div>
+
+  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
+    <!--min/max-->
+    <div class="form-group" [ngClass]="{'indicate-different': isOperatingHoursDifferent(), 'invalid': fieldDataForm.controls.operatingHours.invalid}">
+      <label for="{{'operatingHours_'+idString}}">Operating Hours</label>
+      <div class="input-group">
+        <input name="operatingHours" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingHours"
+          id="{{'operatingHours_'+idString}}" (input)="save()" (focus)="focusField('operatingHours')" onfocus="this.select();"
+          [readonly]="!selected">
+        <span class="input-group-addon units">hrs/yr</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.operatingHours.invalid && !fieldDataForm.controls.operatingHours.pristine">
+        <span *ngIf="fieldDataForm.controls.operatingHours.errors.required">Value Required</span>
+        <span *ngIf="fieldDataForm.controls.operatingHours.errors.max">Value can't be greater than
+          {{fieldDataForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
+        <span *ngIf="fieldDataForm.controls.operatingHours.errors.min">Value can't be less than
+          {{fieldDataForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
+      </span>
+    </div>
+    <!--min-->
+    <div class="form-group" [ngClass]="{'indicate-different': isCostDifferent(),'error': warnings.costError !== null, 'invalid':fieldDataForm.controls.cost.invalid}">
+      <label for="{{'cost_'+idString}}">Electricity Cost</label>
+      <div class="input-group">
+        <input name="cost" type="number" min="0" max="1" step="any" class="form-control" formControlName="cost" id="{{'cost_'+idString}}"
+          (input)="save()" (focus)="focusField('cost')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units">$/kWh</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.cost.invalid && !fieldDataForm.controls.cost.pristine">
+        <span *ngIf="fieldDataForm.controls.cost.errors.required">Value Required</span>
+        <span *ngIf="fieldDataForm.controls.cost.errors.min">Value can't be less than
+          {{fieldDataForm.controls.cost.errors.min.min}} $/kWh.</span>
+      </span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.costError !== null && !fieldDataForm.controls.cost.pristine && !fieldDataForm.controls.cost.invalid">{{warnings.costError}}
+        $/kWh.</span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'indicate-different': isInletPressureDifferent(), 'invalid': fieldDataForm.controls.inletPressure.invalid}">
+      <label for="{{'inletPressure_'+idString}}">
+        Inlet Pressure
+        <a class="form-text small click-link" (click)="showInletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate
+          Inlet Pressure</a>
+      </label>
+      <div class="input-group">
+        <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure" id="{{'inletPressure_'+idString}}"
+          (input)="save()" (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.inletPressure.invalid && !fieldDataForm.controls.inletPressure.pristine">
+        <span *ngIf="fieldDataForm.controls.inletPressure.errors.required">Value Required</span>
+      </span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'indicate-different': isOutletPressureDifferent(),'error': warnings.outletPressureError !== null, 'invalid': fieldDataForm.controls.outletPressure.invalid}">
+      <label for="{{'outletPressure_'+idString}}">
+        Outlet Pressure
+        <a class="form-text small click-link" (click)="showOutletPressureModal()" [ngClass]="{'disabled-link':!selected}">Estimate
+          Outlet Pressure</a>
+      </label>
+      <div class="input-group">
+        <input name="outletPressure" type="number" min="0.1" step="any" class="form-control" formControlName="outletPressure"
+          id="{{'outletPressure_'+idString}}" (input)="save()" (focus)="focusField('outletPressure')" onfocus="this.select();"
+          [readonly]="!selected">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.outletPressure.invalid && !fieldDataForm.controls.outletPressure.pristine">
+        <span *ngIf="fieldDataForm.controls.outletPressure.errors.required">Value Required</span>
+      </span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine && !fieldDataForm.controls.outletPressure.invalid">{{warnings.outletPressureError}}
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'indicate-different': isFlowRateDifferent(), 'invalid': fieldDataForm.controls.flowRate.invalid}">
+      <label for="{{'flowRate_'+idString}}">Flow Rate
+        <a class="form-text small click-link" (click)="showAmcaModal()" [ngClass]="{'disabled-link':!selected}">Calculate
+          Flow Rate and Pressures</a>
+      </label>
+      <div class="input-group">
+        <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="{{'flowRate_'+idString}}"
+          (input)="save()" (focus)="focusField('flowRate')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
+        <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.flowRate.invalid && !fieldDataForm.controls.flowRate.pristine">
+        <span *ngIf="fieldDataForm.controls.flowRate.errors.required">Value Required</span>
+        <span *ngIf="fieldDataForm.controls.flowRate.errors.min">Value can't be less than
+          {{fieldDataForm.controls.cost.errors.min.min}} <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
+      </span>
+    </div>
+
+    <div class="form-group" *ngIf="baseline">
+      <label for="{{'loadEstimatedMethod_'+idString}}">Load Estimation Method</label>
+      <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="{{'loadEstimatedMethod_'+idString}}"
+        (change)="save()" (focus)="focusField('loadEstimatedMethod')">
+        <option *ngFor="let method of loadEstimateMethods" [ngValue]="method.value">{{method.display}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="baseline" [ngClass]="{'error': warnings.ratedPowerError !== null, 'invalid':fieldDataForm.controls.motorPower.invalid}">
+      <label for="{{'motorPower_'+idString}}" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">Motor Power</label>
+      <label for="{{'motorPower_'+idString}}" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">Motor
+        Current</label>
+      <div class="input-group">
+        <input name="motorPower" type="number" min="0" step="any" class="form-control" formControlName="motorPower" id="{{'motorPower_'+idString}}"
+          (input)="save()" (focus)="focusField('motorPower')" onfocus="this.select();" [readonly]="!selected">
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 0">kW</span>
+        <span class="input-group-addon units" *ngIf="fieldDataForm.controls.loadEstimatedMethod.value == 1">A</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.motorPower.invalid && !fieldDataForm.controls.motorPower.pristine">
+        <span *ngIf="fieldDataForm.controls.motorPower.errors.required">Value Required</span>
+      </span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.ratedPowerError !== null && !fieldDataForm.controls.motorPower.pristine && !fieldDataForm.controls.motorPower.invalid">{{warnings.ratedPowerError}}</span>
+    </div>
+    <div class="form-group" *ngIf="baseline" [ngClass]="{'error': warnings.voltageError !== null, 'invalid':fieldDataForm.controls.measuredVoltage.invalid}">
+      <label for="{{'measuredVoltage_'+idString}}">Measured Voltage</label>
+      <div class="input-group">
+        <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage"
+          id="{{'measuredVoltage_'+idString}}" (input)="save()" (focus)="focusField('measuredVoltage')" onfocus="this.select();"
+          [readonly]="!selected">
+        <span class="units">V</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.measuredVoltage.invalid && !fieldDataForm.controls.measuredVoltage.pristine">
+        <span *ngIf="fieldDataForm.controls.measuredVoltage.errors.required">Value Required</span>
+      </span>
+      <span class="alert-warning pull-right small" *ngIf="warnings.voltageError !== null && !fieldDataForm.controls.measuredVoltage.pristine && !fieldDataForm.controls.measuredVoltage.invalid">{{warnings.voltageError}}</span>
+    </div>
+
+    <!--min-->
+    <div class="form-group" [ngClass]="{'indicate-different': isSpecificHeatRatioDifferent(), 'invalid':fieldDataForm.controls.specificHeatRatio.invalid}">
+      <label for="{{'specificHeatRatio_'+idString}}">Specific Heat Ratio (&gamma;)</label>
+      <input name="specificHeatRatio" type="number" min="0" step="any" class="form-control" formControlName="specificHeatRatio"
+        id="{{'specificHeatRatio_'+idString}}" (input)="save()" (focus)="focusField('specificHeatRatio')" onfocus="this.select();"
+        [readonly]="!selected">
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.specificHeatRatio.invalid && !fieldDataForm.controls.specificHeatRatio.pristine">
+        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.required">Value Required</span>
+        <span *ngIf="fieldDataForm.controls.specificHeatRatio.errors.min">Value can't be less than
+          {{fieldDataForm.controls.specificHeatRatio.errors.min.min}}.</span>
+      </span>
+    </div>
+
+    <!--min-->
+    <div class="form-group" [ngClass]="{'indicate-different': isCompressibilityFactorDifferent(), 'invalid': fieldDataForm.controls.compressibilityFactor.invalid}">
+      <label for="{{'compressibilityFactor_'+idString}}">Compressibility Factor
+        <a class="form-text small click-link" *ngIf="baseline" (click)="calculateCompressibility()" [ngClass]="{'disabled-link':!selected}">Calculate
+          Compressibility Factor</a>
+      </label>
+      <input name="compressibilityFactor" type="number" min="0" step="any" class="form-control" formControlName="compressibilityFactor"
+        id="{{'compressibilityFactor_'+idString}}" (input)="save()" (focus)="focusField('compressibilityFactor')"
+        onfocus="this.select();" [readonly]="!selected">
+      <span class="alert-danger pull-right small" *ngIf="fieldDataForm.controls.compressibilityFactor.invalid && !fieldDataForm.controls.compressibilityFactor.pristine">
+        <span *ngIf="fieldDataForm.controls.compressibilityFactor.errors.required">Value Required</span>
+        <span *ngIf="fieldDataForm.controls.compressibilityFactor.errors.min">Value can't be less than
+          {{fieldDataForm.controls.compressibilityFactor.errors.min.min}}.</span>
+      </span>
+    </div>
+  </div>
+</form>
+
+
+
+
+<div bsModal #pressureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pressureModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hidePressureModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div #modalBody class="modal-body p-0">
+        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet' && bodyHeight" [settings]="settings"
+          [inletPressureData]="inletPressureCopy" (emitSave)="saveInletPressureCopy($event)" [bodyHeight]="bodyHeight"></app-calculate-inlet-pressure>
+        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet' && bodyHeight" [settings]="settings"
+          [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressureCopy($event)" [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
+        <app-calculate-flow-pressures *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings" [fsat]="fsatCopy"
+          (saveFlowAndPressure)="saveFsatCopy($event)" [bodyHeight]="bodyHeight"></app-calculate-flow-pressures>
+      </div>
+      <div class="modal-footer fsat justify-content-between">
+        <button class="btn btn-default pull-left" (click)="hidePressureModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="saveAndClose()">Apply Data</button>
+      </div>
+    </div>
+  </div>
+</div>

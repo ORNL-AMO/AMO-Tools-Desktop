@@ -1,0 +1,11 @@
+.modify-conditions{
+    height: 100%;
+}
+
+.modal-open {
+    z-index: initial !important;
+}
+
+.row-min-height{
+    min-height: 100%;
+  }

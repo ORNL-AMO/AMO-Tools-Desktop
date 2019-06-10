@@ -1,9 +1,12 @@
-<div class="card card-item" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+<div class="card card-item" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT', 'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt'}">
   <div class="card-header summary-card-header d-flex justify-content-between align-items-center">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <div class="d-flex align-items-center">
-      <img *ngIf="assessment.type == 'PSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-psat-diagram-small.png">
-      <img *ngIf="assessment.type == 'PHAST'" class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram-small.png">
+      <img *ngIf="assessment.type == 'PSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-psat-diagram.png">
+      <img *ngIf="assessment.type == 'PHAST'" class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram.png">
+      <img *ngIf="assessment.type == 'FSAT'" class="icon-image pl-1 pr-1" src="assets/images/ico-fsat-diagram.png">
+      <img *ngIf="assessment.type == 'SSMT'" class="icon-image pl-1 pr-1" src="assets/images/ico-ssmt-diagram.png">
+      <img *ngIf="assessment.type == 'TreasureHunt'" class="icon-image pl-1 pr-1" src="assets/images/treasure-hunt.png">
       <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
     </div>
     <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
@@ -20,6 +23,9 @@
   <div class="card-body scroll-item summary-card-body">
     <app-psat-summary-card *ngIf="assessment.type == 'PSAT'" [assessment]="assessment"></app-psat-summary-card>
     <app-phast-summary-card *ngIf="assessment.type == 'PHAST'" [assessment]="assessment"></app-phast-summary-card>
+    <app-fsat-summary-card *ngIf="assessment.type == 'FSAT'" [assessment]="assessment"></app-fsat-summary-card>
+    <app-ssmt-summary-card *ngIf="assessment.type == 'SSMT'" [assessment]="assessment"></app-ssmt-summary-card>
+    <app-treasure-hunt-summary-card *ngIf="assessment.type == 'TreasureHunt'" [assessment]="assessment"></app-treasure-hunt-summary-card>
   </div>
   <div class="card-footer summary-card-footer">
     <div class="last-updated pull-right">Last updated {{assessment.modifiedDate | date }}</div>
@@ -28,8 +34,8 @@
 
 
 
-<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}">
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content" *ngIf="editForm">
       <div class="modal-header">
@@ -63,8 +69,8 @@
 </div>
 
 
-<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content" *ngIf="copyForm">
       <div class="modal-header">
@@ -89,7 +95,12 @@
             </select>
           </div>
           <div class="form-group">
-            <label><input type="checkbox" class="pr-2" formControlName="copyModifications">Include modifications?</label>
+            <label>
+              <input type="checkbox" class="pr-2" formControlName="copyModifications">Include modifications?</label>
+          </div>
+          <div class="form-group" *ngIf="assessmentCalculatorCopy">
+            <label>
+              <input type="checkbox" class="pr-2" formControlName="copyCalculators">Include calculators?</label>
           </div>
         </form>
       </div>
@@ -100,8 +111,8 @@
   </div>
 </div>
 
-<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
@@ -111,7 +122,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <p class="text-center small">Are you sure you want to delete this assessment? This <span class="danger">cannot</span> be undone.</p>
+        <p class="text-center small">Are you sure you want to delete this assessment? This
+          <span class="danger">cannot</span> be undone.</p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-danger" (click)="deleteAssessment()">Delete Assessment</button>

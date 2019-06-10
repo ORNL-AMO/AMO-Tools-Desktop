@@ -1,9 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ExhaustGasCompareService } from '../exhaust-gas-compare.service';
-import * as _ from 'lodash';
-//used for other loss monitoring
-import { ExhaustGasService } from '../exhaust-gas.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
@@ -29,34 +25,19 @@ export class ExhaustGasFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
-  firstChange: boolean = true;
-  constructor(private windowRefService: WindowRefService, private exhaustGasCompareService: ExhaustGasCompareService, private exhaustGasService: ExhaustGasService) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
+  idString: string;
+  constructor(private exhaustGasCompareService: ExhaustGasCompareService) { }
 
   ngOnInit() {
-    if (!this.baselineSelected) {
-      this.disableForm();
+    if (!this.isBaseline) {
+      this.idString = '_modification_' + this.lossIndex;
     }
-  }
-
-  disableForm() {
-    // this.exhaustGasForm.disable();
-  }
-
-  enableForm() {
-    // this.exhaustGasForm.enable();
+    else {
+      this.idString = '_baseline_' + this.lossIndex;
+    }
   }
 
   focusField(str: string) {
@@ -66,7 +47,7 @@ export class ExhaustGasFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  startSavePolling() {
+  save() {
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }

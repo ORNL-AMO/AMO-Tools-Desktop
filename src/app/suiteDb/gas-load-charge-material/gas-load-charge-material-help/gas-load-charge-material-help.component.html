@@ -7,36 +7,51 @@
 </div>
 <div class="row justify-content-center data-row align-items-center">
   <div class="col-11">
-    <div class="card-help">
-      <div class="help-panel">
-        <div class="help-content">
 
 
-          <!-- copy this for help texts -->
-          <div class="card" *ngIf="currentField == 'selectedMaterial'">
-            <div class="card-header">
-              <p>
-                Material Name
-              </p>
-            </div>
-            <div class="card-content">
-              Enter the name of the charge material used (make sure that a unique name is entered to prevent overlap with the existing materials).
-            </div>
-          </div>
+    <div class="p-2 pt-3 d-flex flex-column help-info">
+      <h5>
+        Custom Gas Load Charge Materials Help
+        <br>
+        <small class="text-muted">
+        </small>
+      </h5>
+      <hr class="my-1 hr-spacer">
 
-          <div class="card" *ngIf="currentField == 'specificHeatVapor'">
-            <div class="card-header">
-              <p>
-                Specific heat of Vapor
-              </p>
-            </div>
-            <div class="card-content">
-              Specific heat of Vapor:  Heat needed to change the liquid at its boiling point into vapor at the same temperature.
-            </div>
-          </div>
 
-        </div>
+      <div class="my-2" *ngIf="currentField == 'selectedMaterial'">
+        <h6>
+          Start With Existing
+          <br>
+          <small class="text-muted">
+            Use an existing material's properties to get started.
+          </small>
+        </h6>
       </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'substance'">
+        <h6>
+          Material Name
+          <br>
+          <small class="text-muted">
+            Use a unique name for your new material. Duplicates will not be saved.
+          </small>
+        </h6>
+      </div>
+
+
+      <div class="my-2" *ngIf="currentField == 'specificHeatVapor'">
+        <h6>
+          Specific Heat of Vapor
+          <br>
+          <small class="text-muted">
+            Heat needed to change the liquid at its boiling point into vapor at the same temperature.
+          </small>
+        </h6>
+      </div>
+
+
     </div>
   </div>
 </div>

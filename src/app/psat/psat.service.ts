@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { PSAT, PsatInputs, PsatOutputs, PsatCalcResults, PsatOutputsExistingOptimal } from '../shared/models/psat';
-//import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { PsatInputs, PsatOutputs, PsatCalcResults, PsatOutputsExistingOptimal } from '../shared/models/psat';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { ValidationService } from '../shared/validation.service';
 declare var psatAddon: any;
 import { BehaviorSubject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { MotorService } from './motor/motor.service';
+import { FieldDataService } from './field-data/field-data.service';
+import { PumpFluidService } from './pump-fluid/pump-fluid.service';
+import * as _ from 'lodash';
+import { pumpTypesConstant, motorEfficiencyConstants, driveConstants } from './psatConstants';
+
 @Injectable()
 export class PsatService {
   flaRange: any = {
@@ -15,18 +18,13 @@ export class PsatService {
     flaMax: 0
   };
 
-  mainTab: BehaviorSubject<string>;
-  secondaryTab: BehaviorSubject<string>;
-  calcTab: BehaviorSubject<string>;
-  baseline: PSAT;
   getResults: BehaviorSubject<boolean>;
-  modifyConditionsTab: BehaviorSubject<string>;
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
-    this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calcTab = new BehaviorSubject<string>('system-curve');
+  modalOpen: BehaviorSubject<boolean>;
+  constructor(private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService,
+    private motorService: MotorService, private fieldDataService: FieldDataService) {
     this.getResults = new BehaviorSubject<boolean>(true);
-    this.modifyConditionsTab = new BehaviorSubject<string>('field-data');
+    this.modalOpen = new BehaviorSubject<boolean>(true);
+
   }
 
   test() {
@@ -38,19 +36,27 @@ export class PsatService {
   }
 
   convertInputs(psatInputs: PsatInputs, settings: Settings) {
-    if (settings.distanceMeasurement != 'ft' && psatInputs.head) {
-      psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
+    let inputsCpy: PsatInputs = JSON.parse(JSON.stringify(psatInputs));
+    if (settings.distanceMeasurement != 'ft' && inputsCpy.head) {
+      inputsCpy.head = this.convertUnitsService.value(inputsCpy.head).from(settings.distanceMeasurement).to('ft');
     }
-    if (settings.flowMeasurement != 'gpm' && psatInputs.flow_rate) {
-      psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
+    if (settings.flowMeasurement != 'gpm' && inputsCpy.flow_rate) {
+      inputsCpy.flow_rate = this.convertUnitsService.value(inputsCpy.flow_rate).from(settings.flowMeasurement).to('gpm');
     }
-    if (settings.powerMeasurement != 'hp' && psatInputs.motor_rated_power) {
-      psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
+    if (settings.powerMeasurement != 'hp' && inputsCpy.motor_rated_power) {
+      inputsCpy.motor_rated_power = this.convertUnitsService.value(inputsCpy.motor_rated_power).from(settings.powerMeasurement).to('hp');
     }
-    if(settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature){
-      psatInputs.fluidTemperature = this.convertUnitsService.value(psatInputs.fluidTemperature).from(settings.temperatureMeasurement).to('F');
+    if (settings.temperatureMeasurement != 'F' && inputsCpy.fluidTemperature) {
+      inputsCpy.fluidTemperature = this.convertUnitsService.value(inputsCpy.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
-    return psatInputs;
+    //TODO: remove eventually. this is here for support in removing operating_fraction from suite v0.3.2
+    if (inputsCpy.operating_fraction && !inputsCpy.operating_hours) {
+      inputsCpy.operating_hours = inputsCpy.operating_fraction * 8760;
+    }
+    //TODO: Remove after demo 11/8/18
+    inputsCpy.operating_fraction = 1;
+
+    return inputsCpy;
   }
 
   convertOutputs(psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
@@ -64,9 +70,11 @@ export class PsatService {
 
   //results
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    psatInputs = this.convertInputs(psatInputs, settings);
+    let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
     //call results existing
-    let tmpResults: PsatOutputs = psatAddon.resultsExisting(psatInputs);
+    let tmpResults: PsatOutputs = psatAddon.resultsExisting(tmpInputs);
+
+
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
@@ -74,24 +82,9 @@ export class PsatService {
     return tmpResults;
   }
 
-  resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    psatInputs = this.convertInputs(psatInputs, settings);
-
-    //call addon resultsOptimal
-    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
-    if (settings.powerMeasurement != 'hp') {
-      tmpResults = this.convertOutputs(tmpResults, settings);
-    }
-    tmpResults = this.roundResults(tmpResults);
-    return tmpResults
-  }
-
-  resultsModified(psatInputs: PsatInputs, settings: Settings, baseline_pump_efficiency: number): PsatOutputs {
-    psatInputs = this.convertInputs(psatInputs, settings);
-
-    let tmpInputs: any;
-    tmpInputs = psatInputs;
-    tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
+  resultsModified(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+    let tmpInputs: any = this.convertInputs(psatInputs, settings);
+    tmpInputs.margin = 1;
     let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
@@ -110,6 +103,8 @@ export class PsatService {
       motor_power_factor: 0,
       motor_current: 0,
       motor_power: 0,
+      load_factor: 0,
+      drive_efficiency: 0,
       annual_energy: 0,
       annual_cost: 0,
       annual_savings_potential: 0,
@@ -128,6 +123,8 @@ export class PsatService {
       motor_power_factor: this.roundVal(psatResults.motor_power_factor, 2),
       motor_current: this.roundVal(psatResults.motor_current, 2),
       motor_power: this.roundVal(psatResults.motor_power, 2),
+      load_factor: this.roundVal(psatResults.load_factor, 2),
+      drive_efficiency: this.roundVal(psatResults.drive_efficiency, 2),
       annual_energy: this.roundVal(psatResults.annual_energy, 2),
       annual_cost: this.roundVal(psatResults.annual_cost, 2),
       annual_savings_potential: this.roundVal(psatResults.annual_savings_potential, 0),
@@ -136,59 +133,6 @@ export class PsatService {
     return roundResults;
   }
 
-  resultsExistingAndOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputsExistingOptimal {
-    psatInputs = this.convertInputs(psatInputs, settings);
-
-    let tmpResults = psatAddon.resultsExistingAndOptimal(psatInputs);
-
-    if (settings.powerMeasurement != 'hp') {
-      tmpResults.motor_rated_power[0] = this.convertUnitsService.value(tmpResults.motor_rated_power[0]).from('hp').to(settings.powerMeasurement);
-      tmpResults.motor_rated_power[1] = this.convertUnitsService.value(tmpResults.motor_rated_power[1]).from('hp').to(settings.powerMeasurement);
-
-      tmpResults.motor_shaft_power[0] = this.convertUnitsService.value(tmpResults.motor_shaft_power[0]).from('hp').to(settings.powerMeasurement);
-      tmpResults.motor_shaft_power[1] = this.convertUnitsService.value(tmpResults.motor_shaft_power[1]).from('hp').to(settings.powerMeasurement);
-
-      tmpResults.pump_shaft_power[0] = this.convertUnitsService.value(tmpResults.pump_shaft_power[0]).from('hp').to(settings.powerMeasurement);
-      tmpResults.pump_shaft_power[1] = this.convertUnitsService.value(tmpResults.pump_shaft_power[1]).from('hp').to(settings.powerMeasurement);
-
-    }
-    let tmpOutputs: PsatOutputsExistingOptimal = this.parseResultsExistingOptimal(tmpResults);
-    return tmpOutputs;
-  }
-
-  parseResultsExistingOptimal(results: PsatCalcResults): PsatOutputsExistingOptimal {
-    let tmpOutputs: PsatOutputsExistingOptimal = {
-      existing: {
-        pump_efficiency: this.roundVal(results.pump_efficiency[0], 2),
-        motor_rated_power: this.roundVal(results.motor_rated_power[0], 2),
-        motor_shaft_power: this.roundVal(results.motor_shaft_power[0], 2),
-        pump_shaft_power: this.roundVal(results.pump_shaft_power[0], 2),
-        motor_efficiency: this.roundVal(results.motor_efficiency[0], 2),
-        motor_power_factor: this.roundVal(results.motor_power_factor[0], 2),
-        motor_current: this.roundVal(results.motor_current[0], 2),
-        motor_power: this.roundVal(results.motor_power[0], 2),
-        annual_energy: this.roundVal(results.annual_energy[0], 2),
-        annual_cost: this.roundVal(results.annual_cost[0], 2),
-        annual_savings_potential: this.roundVal(results.annual_savings_potential[0], 0),
-        optimization_rating: this.roundVal(results.optimization_rating[0], 2)
-      },
-      optimal: {
-        pump_efficiency: this.roundVal(results.pump_efficiency[1], 2),
-        motor_rated_power: this.roundVal(results.motor_rated_power[1], 2),
-        motor_shaft_power: this.roundVal(results.motor_shaft_power[1], 2),
-        pump_shaft_power: this.roundVal(results.pump_shaft_power[1], 2),
-        motor_efficiency: this.roundVal(results.motor_efficiency[1], 2),
-        motor_power_factor: this.roundVal(results.motor_power_factor[1], 2),
-        motor_current: this.roundVal(results.motor_current[1], 2),
-        motor_power: this.roundVal(results.motor_power[1], 2),
-        annual_energy: this.roundVal(results.annual_energy[1], 2),
-        annual_cost: this.roundVal(results.annual_cost[1], 2),
-        annual_savings_potential: this.roundVal(results.annual_savings_potential[1], 0),
-        optimization_rating: this.roundVal(results.optimization_rating[1], 2)
-      }
-    }
-    return tmpOutputs;
-  }
   //CALCULATORS
   headToolSuctionTank(
     specificGravity: number,
@@ -332,24 +276,23 @@ export class PsatService {
   }
 
   estFLA(
-    horsePower,
-    motorRPM,
-    frequency,
-    efficiencyClass,
-    efficiency,
-    motorVoltage,
+    horsePower: number,
+    motorRPM: number,
+    frequency: number,
+    efficiencyClass: number,
+    efficiency: number,
+    motorVoltage: number,
     settings: Settings
   ) {
     if (settings.powerMeasurement != 'hp') {
+      // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
-    let lineFreqEnum = this.getLineFreqEnum(frequency);
-    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
     let inputs: any = {
       motor_rated_power: horsePower,
       motor_rated_speed: motorRPM,
-      line_frequency: lineFreqEnum,
-      efficiency_class: effClassEnum,
+      line_frequency: frequency,
+      efficiency_class: efficiencyClass,
       efficiency: efficiency,
       motor_rated_voltage: motorVoltage
     }
@@ -363,13 +306,11 @@ export class PsatService {
 
   //specific speed
   achievableEfficiency(
-    pumpStyle: string,
+    pumpStyle: number,
     specificSpeed: number
   ) {
-    let inputs: any;
-    let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
-    inputs = {
-      pump_style: enumPumpStyle,
+    let inputs: any = {
+      pump_style: pumpStyle,
       specific_speed: specificSpeed
     }
     return this.roundVal(psatAddon.achievableEfficiency(inputs), 2);
@@ -377,7 +318,7 @@ export class PsatService {
 
   ///achievable pump efficiency
   pumpEfficiency(
-    pumpStyle: string,
+    pumpStyle: number,
     flowRate: number,
     settings: Settings
   ) {
@@ -385,10 +326,8 @@ export class PsatService {
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
-    let inputs: any;
-    let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
-    inputs = {
-      pump_style: enumPumpStyle,
+    let inputs: any = {
+      pump_style: pumpStyle,
       flow_rate: flowRate
     }
     let tmpResults = psatAddon.pumpEfficiency(inputs);
@@ -400,29 +339,26 @@ export class PsatService {
   }
 
   motorPerformance(
-    lineFreq,
-    efficiencyClass,
-    horsePower,
-    motorRPM,
-    efficiency,
-    motorVoltage,
-    fullLoadAmps,
-    loadFactor,
-    settings
+    lineFreq: number,
+    efficiencyClass: number,
+    horsePower: number,
+    motorRPM: number,
+    efficiency: number,
+    motorVoltage: number,
+    fullLoadAmps: number,
+    loadFactor: number,
+    settings: Settings
   ) {
 
     if (settings.powerMeasurement != 'hp') {
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
-    let tmpInputs: any;
-    let lineFreqEnum = this.getLineFreqEnum(lineFreq);
-    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
-    tmpInputs = {
-      line_frequency: lineFreqEnum,
-      efficiency_class: effClassEnum,
+    let tmpInputs: any = {
+      line_frequency: lineFreq,
+      efficiency_class: efficiencyClass,
       motor_rated_power: horsePower,
       motor_rated_speed: motorRPM,
-      efficiency: efficiency,
+      efficiency: efficiency || 90,
       load_factor: loadFactor,
       motor_rated_voltage: motorVoltage,
       motor_rated_fla: fullLoadAmps
@@ -438,242 +374,69 @@ export class PsatService {
 
   //loadFactor hard coded to 1
   nema(
-    lineFreq,
-    motorRPM,
-    efficiencyClass,
-    efficiency,
-    horsePower,
+    lineFreq: number,
+    motorRPM: number,
+    efficiencyClass: number,
+    efficiency: number,
+    horsePower: number,
     settings: Settings
   ) {
     if (settings.powerMeasurement != 'hp') {
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
-    let tmpInputs: any;
-    let lineFreqEnum = this.getLineFreqEnum(lineFreq);
-    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
-    tmpInputs = {
-      line_frequency: lineFreqEnum,
+    let tmpInputs = {
+      line_frequency: lineFreq,
       motor_rated_speed: motorRPM,
-      efficiency_class: effClassEnum,
-      efficiency: efficiency,
+      efficiency_class: efficiencyClass,
+      efficiency: efficiency || 90,
       motor_rated_power: horsePower,
       load_factor: 1
     };
     return this.roundVal(psatAddon.nema(tmpInputs), 2);
   }
-
-  //ENUM HELPERS
-  getPumpStyleEnum(pumpStyle: string): number {
-    // enum class Style {
-    // END_SUCTION_SLURRY,
-    // END_SUCTION_SEWAGE,
-    // END_SUCTION_STOCK,
-    // END_SUCTION_SUBMERSIBLE_SEWAGE,
-    // API_DOUBLE_SUCTION,
-    // MULTISTAGE_BOILER_FEED,
-    // END_SUCTION_ANSI_API,
-    // AXIAL_FLOW,
-    // DOUBLE_SUCTION,
-    // VERTICAL_TURBINE,
-    // LARGE_END_SUCTION,
-    // SPECIFIED_OPTIMAL_EFFICIENCY
-    // }
-    let enumPumpStyle;
-    if (pumpStyle == 'End Suction Slurry') {
-      enumPumpStyle = 0;
-    }
-    else if (pumpStyle == 'End Suction Sewage') {
-      enumPumpStyle = 1;
-    }
-    else if (pumpStyle == 'End Suction Stock') {
-      enumPumpStyle = 2;
-    }
-    else if (pumpStyle == 'End Suction Submersible Sewage') {
-      enumPumpStyle = 3;
-    }
-    else if (pumpStyle == 'API Double Suction') {
-      enumPumpStyle = 4;
-    }
-    else if (pumpStyle == 'Multistage Boiler Feed') {
-      enumPumpStyle = 5;
-    }
-    else if (pumpStyle == 'End Suction ANSI/API') {
-      enumPumpStyle = 6;
-    }
-    else if (pumpStyle == 'Axial Flow') {
-      enumPumpStyle = 7;
-    }
-    else if (pumpStyle == 'Double Suction') {
-      enumPumpStyle = 8;
-    }
-    else if (pumpStyle == 'Vertical Turbine') {
-      enumPumpStyle = 9;
-    }
-    else if (pumpStyle == 'Large End Suction') {
-      enumPumpStyle = 10;
-    } else if (pumpStyle == 'Specified Optimal Efficiency') {
-      enumPumpStyle = 11;
-    }
-    return enumPumpStyle;
-  }
+  //ENUM Helpers
   getPumpStyleFromEnum(num: number): string {
-    let pumpStyle;
-    if (num == 0) {
-      pumpStyle = 'End Suction Slurry';
-    }
-    else if (num == 1) {
-      pumpStyle = 'End Suction Sewage';
-    }
-    else if (num == 2) {
-      pumpStyle = 'End Suction Stock';
-    }
-    else if (num == 3) {
-      pumpStyle = 'End Suction Submersible Sewage';
-    }
-    else if (num == 4) {
-      pumpStyle = 'API Double Suction';
-    }
-    else if (num == 5) {
-      pumpStyle = 'Multistage Boiler Feed';
-    }
-    else if (num == 6) {
-      pumpStyle = 'End Suction ANSI/API';
-    }
-    else if (num == 7) {
-      pumpStyle = 'Axial Flow';
-    }
-    else if (num == 8) {
-      pumpStyle = 'Double Suction';
-    }
-    else if (num == 9) {
-      pumpStyle = 'Vertical Turbine';
-    }
-    else if (num == 10) {
-      pumpStyle = 'Large End Suction';
-    }
-    else if (num == 11) {
-      pumpStyle = 'Specified Optimal Efficiency';
-    }
-    return pumpStyle;
-  }
-  getLineFreqEnum(lineFreq: string): number {
-    let lineFreqEnum: number;
-    if (lineFreq == '60 Hz') {
-      lineFreqEnum = 0;
-    } else if (lineFreq == '50 Hz') {
-      lineFreqEnum = 1;
-    }
-
-    return lineFreqEnum;
-  }
-  getLineFreqFromEnum(num: number): string {
-    let lineFreq;
-    if (num == 0) {
-      lineFreq = '60 Hz';
-    } else if (num == 1) {
-      lineFreq = '50 Hz';
-    }
-    return lineFreq;
-  }
-
-  getLineFreqNumValueFromEnum(num: number): number {
-    let lineFreq;
-    if (num == 0) {
-      lineFreq = 60;
-    } else if (num == 1) {
-      lineFreq = 50;
-    }
-    return lineFreq;
-  }
-
-
-  getEfficienyClassEnum(effClass: string): number {
-    let effEnum: number;
-    if (effClass === 'Standard Efficiency') {
-      effEnum = 0;
-    } else if (effClass === 'Energy Efficient') {
-      effEnum = 1;
-    } else if (effClass === 'Premium Efficient' || effClass === 'Premium') {
-      effEnum = 2;
-    } else if (effClass === 'Specified') {
-      effEnum = 3;
-    }
-    return effEnum;
-  }
-  getEfficiencyClassFromEnum(num: number): string {
-    let effClass;
-    if (num === 0) {
-      effClass = 'Standard Efficiency';
-    } else if (num === 1) {
-      effClass = 'Energy Efficient';
-    } else if (num === 2) {
-      effClass = 'Premium Efficient';
-    } else if (num === 3) {
-      effClass = 'Specified';
-    }
-    return effClass;
-  }
-
-  getDriveEnum(drive: string): number {
-    let driveEnum;
-    if (drive == 'Direct Drive') {
-      driveEnum = 0;
-    } else if (drive == 'V-Belt Drive') {
-      driveEnum = 1;
-    } else if (drive == 'Notched V-Belt Drive') {
-      driveEnum = 2;
-    } else if (drive == 'Synchronous Belt Drive') {
-      driveEnum = 3;
-    }
-    return driveEnum;
-  }
-  getDriveFromEnum(num: number): string {
-    let drive;
-    if (num == 0) {
-      drive = 'Direct Drive';
-    } else if (num == 1) {
-      drive = 'V-Belt Drive';
-    } else if (num == 2) {
-      drive = 'Notched V-Belt Drive';
-    } else if (num == 3) {
-      drive = 'Synchronous Belt Drive';
-    }
-    return drive;
-  }
-  getFixedSpeedEmum(fixedSpeed: string): number {
-    let fixedSpeedEnum;
-    if (fixedSpeed == 'Yes') {
-      fixedSpeedEnum = 0;
-    } else if (fixedSpeed == 'No') {
-      fixedSpeedEnum = 1;
+    let pumpStyle: { display: string, value: number } = _.find(pumpTypesConstant, (pumpStyle) => { return pumpStyle.value == num });
+    if (pumpStyle) {
+      return pumpStyle.display;
     } else {
-      fixedSpeedEnum = 0;
+      return undefined;
     }
-    return fixedSpeedEnum;
   }
+
+  getEfficiencyClassFromEnum(num: number): string {
+    let effClass: { display: string, value: number } = _.find(motorEfficiencyConstants, (motorStyle) => { return motorStyle.value == num });
+    if (effClass) {
+      return effClass.display;
+    } else {
+      return undefined;
+    }
+  }
+
+  getDriveFromEnum(num: number): string {
+    let drive: { display: string, value: number } = _.find(driveConstants, (driveType) => { return driveType.value == num });
+    if (drive) {
+      return drive.display;
+    } else {
+      return undefined;
+    }
+  }
+
   getFixedSpeedFromEnum(num: number): string {
-    let fixedSpeed;
+    let fixedSpeed: string;
     if (num == 0) {
       fixedSpeed = 'Yes';
     }
     else if (num == 1) {
       fixedSpeed = 'No';
-    }else{
+    } else {
       fixedSpeed = 'Yes';
     }
     return fixedSpeed;
   }
-  getLoadEstimationEnum(method: string): number {
-    let methodEnum;
-    if (method == 'Power') {
-      methodEnum = 0;
-    } else if (method == 'Current') {
-      methodEnum = 1;
-    }
-    return methodEnum;
-  }
+
   getLoadEstimationFromEnum(num: number): string {
-    let method;
+    let method: string;
     if (num == 0) {
       method = 'Power';
     } else if (num == 1) {
@@ -681,342 +444,57 @@ export class PsatService {
     }
     return method;
   }
-  getEfficiencyFromForm(form: FormGroup) {
-    let efficiency;
-    if (form.controls.efficiencyClass.value == 'Standard Efficiency') {
-      efficiency = 0;
-    } else if (form.controls.efficiencyClass.value == 'Energy Efficient') {
-      efficiency = 1;
-    } else if (form.controls.efficiencyClass.value === 'Premium Efficient' || form.controls.efficiencyClass.value === 'Premium') {
-      efficiency = 2;
-    } else if (form.controls.efficiencyClass.value == 'Specified') {
-      efficiency = form.controls.efficiency.value;
+
+  getPsatResults(baselinePsatInputs: PsatInputs, settings: Settings, modificationPsatInputs?: PsatInputs): { baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number } {
+    let baselineResults: PsatOutputs = this.emptyResults();
+    let modificationResults: PsatOutputs = this.emptyResults();
+    let annualSavings: number;
+    let percentSavings: number;
+
+    //create copies of inputs to use for calcs
+    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(baselinePsatInputs));
+    let isPsatValid: boolean = this.isPsatValid(psatInputs, true);
+    if (isPsatValid) {
+      baselineResults = this.resultsExisting(psatInputs, settings);
     }
-    return efficiency;
-  }
-
-  //PSAT FORM UTILITIES
-  initForm() {
-    return this.formBuilder.group({
-      'pumpType': ['', Validators.required],
-      'specifiedPumpEfficiency': [''],
-      'pumpRPM': ['', Validators.required],
-      'drive': ['', Validators.required],
-      'viscosity': ['', Validators.required],
-      'gravity': ['', Validators.required],
-      'stages': ['', Validators.required],
-      'fixedSpeed': ['Yes', Validators.required],
-      'frequency': ['', Validators.required],
-      'horsePower': ['', Validators.required],
-      'motorRPM': ['', Validators.required],
-      'efficiencyClass': ['', Validators.required],
-      'efficiency': [''],
-      'motorVoltage': ['', Validators.required],
-      'fullLoadAmps': ['', Validators.required],
-      'sizeMargin': [0, Validators.required],
-      'operatingFraction': ['', Validators.required],
-      'costKwHr': ['', Validators.required],
-      'flowRate': ['', Validators.required],
-      'head': ['', Validators.required],
-      'loadEstimatedMethod': ['', Validators.required],
-      'motorKW': [''],
-      'motorAmps': [''],
-      'measuredVoltage': ['', Validators.required],
-      'optimizeCalculation': [''],
-      'implementationCosts': ['']
-    })}
-
-  getFormFromPsat(psatInputs: PsatInputs): FormGroup {
-    if (!psatInputs.fixed_speed) {
-      psatInputs.fixed_speed = 0;
-    }
-    if (!psatInputs.margin) {
-      psatInputs.margin = 0;
-    }
-    let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
-    let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
-    let effClass = this.getEfficiencyClassFromEnum(psatInputs.efficiency_class);
-    let drive = this.getDriveFromEnum(psatInputs.drive);
-    let fixedSpeed = this.getFixedSpeedFromEnum(psatInputs.fixed_speed);
-    let loadEstMethod = this.getLoadEstimationFromEnum(psatInputs.load_estimation_method);
-    return this.formBuilder.group({
-      'pumpType': [pumpStyle, Validators.required],
-      'specifiedPumpEfficiency': [psatInputs.pump_specified],
-      'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
-      'drive': [drive, Validators.required],
-      'viscosity': [psatInputs.kinematic_viscosity, Validators.required],
-      'gravity': [psatInputs.specific_gravity, Validators.required],
-      'stages': [psatInputs.stages, Validators.required],
-      'fixedSpeed': [fixedSpeed, Validators.required],
-      'frequency': [lineFreq, Validators.required],
-      'horsePower': [psatInputs.motor_rated_power, Validators.required],
-      'motorRPM': [psatInputs.motor_rated_speed, (Validators.required, Validators.min(1))],
-      'efficiencyClass': [effClass, Validators.required],
-      'efficiency': [psatInputs.efficiency],
-      'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
-      'fullLoadAmps': [psatInputs.motor_rated_fla, Validators.required],
-      'sizeMargin': [psatInputs.margin, Validators.required],
-      'operatingFraction': [psatInputs.operating_fraction, Validators.required],
-      'costKwHr': [psatInputs.cost_kw_hour, Validators.required],
-      'flowRate': [psatInputs.flow_rate, Validators.required],
-      'head': [psatInputs.head, Validators.required],
-      'loadEstimatedMethod': [loadEstMethod, Validators.required],
-      'motorKW': [psatInputs.motor_field_power],
-      'motorAmps': [psatInputs.motor_field_current],
-      'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
-      'optimizeCalculation': [psatInputs.optimize_calculation],
-      'implementationCosts': [psatInputs.implementationCosts],
-      'fluidType': [psatInputs.fluidType],
-      'fluidTemperature': [psatInputs.fluidTemperature]
-    })
-  }
-
-  getPsatInputsFromForm(form: FormGroup): PsatInputs {
-
-    let efficiency = this.getEfficiencyFromForm(form);
-    let lineFreqEnum = this.getLineFreqEnum(form.controls.frequency.value);
-    let pumpStyleEnum = this.getPumpStyleEnum(form.controls.pumpType.value);
-    let efficiencyClassEnum = this.getEfficienyClassEnum(form.controls.efficiencyClass.value);
-    let driveEnum = this.getDriveEnum(form.controls.drive.value);
-    let fixedSpeedEnum = this.getFixedSpeedEmum(form.controls.fixedSpeed.value);
-    let loadEstMethodEnum = this.getLoadEstimationEnum(form.controls.loadEstimatedMethod.value);
-    let tmpPsatInputs: PsatInputs = {
-      pump_style: pumpStyleEnum,
-      pump_specified: form.controls.specifiedPumpEfficiency.value,
-      pump_rated_speed: form.controls.pumpRPM.value,
-      drive: driveEnum,
-      kinematic_viscosity: form.controls.viscosity.value,
-      specific_gravity: form.controls.gravity.value,
-      stages: form.controls.stages.value,
-      fixed_speed: fixedSpeedEnum,
-      line_frequency: lineFreqEnum,
-      motor_rated_power: form.controls.horsePower.value,
-      motor_rated_speed: form.controls.motorRPM.value,
-      efficiency_class: efficiencyClassEnum,
-      efficiency: efficiency,
-      motor_rated_voltage: form.controls.motorVoltage.value,
-      load_estimation_method: loadEstMethodEnum,
-      motor_rated_fla: form.controls.fullLoadAmps.value,
-      margin: form.controls.sizeMargin.value,
-      operating_fraction: form.controls.operatingFraction.value,
-      flow_rate: form.controls.flowRate.value,
-      head: form.controls.head.value,
-      motor_field_power: form.controls.motorKW.value,
-      motor_field_current: form.controls.motorAmps.value,
-      motor_field_voltage: form.controls.measuredVoltage.value,
-      cost_kw_hour: form.controls.costKwHr.value,
-      cost: form.controls.costKwHr.value,
-      optimize_calculation: form.controls.optimizeCalculation.value,
-      implementationCosts: form.controls.implementationCosts.value,
-      fluidType: form.controls.fluidType.value,
-      fluidTemperature: form.controls.fluidTemperature.value
-    };
-    return tmpPsatInputs;
-  }
-
-  isPumpFluidFormValid(form: FormGroup) {
-    if (
-      form.controls.pumpType.status == 'VALID' &&
-      form.controls.pumpRPM.status == 'VALID' &&
-      form.controls.drive.status == 'VALID' &&
-      form.controls.gravity.status == 'VALID' &&
-      form.controls.stages.status == 'VALID'
-    ) {
-      //TODO: Check pumpType for custom
-      if (form.controls.pumpType.value != "Specified Optimal Efficiency") {
-        return true;
-      } else {
-        if (form.controls.specifiedPumpEfficiency.status == 'VALID') {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-  }
-
-  isMotorFormValid(form: FormGroup) {
-    if (
-      form.controls.frequency.status == 'VALID' &&
-      form.controls.horsePower.status == 'VALID' &&
-      form.controls.motorRPM.status == 'VALID' &&
-      form.controls.efficiencyClass.status == 'VALID' &&
-      form.controls.motorVoltage.status == 'VALID' &&
-      form.controls.fullLoadAmps.status == 'VALID'
-    ) {
-      if (form.controls.efficiencyClass.value != 'Specified') {
-        return true;
-      } else {
-        if (form.controls.efficiency.value > 0 && form.controls.efficiency.value <= 100) {
-          return true;
-        } else {
-          return false;
-        }
+    if (modificationPsatInputs) {
+      let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
+      isPsatValid = this.isPsatValid(modInputs, false);
+      if (isPsatValid) {
+        modificationResults = this.resultsModified(modInputs, settings);
       }
     }
-    else {
-      return false;
+    annualSavings = baselineResults.annual_cost - modificationResults.annual_cost;
+    percentSavings = Number(Math.round((((annualSavings * 100) / baselineResults.annual_cost) * 100) / 100).toFixed(0));
+    return {
+      baselineResults: baselineResults,
+      modificationResults: modificationResults,
+      annualSavings: annualSavings,
+      percentSavings: percentSavings
     }
   }
 
-  isFieldDataFormValid(form: FormGroup) {
-    if (
-      form.controls.operatingFraction.status == 'VALID' &&
-      form.controls.flowRate.status == 'VALID' &&
-      form.controls.head.status == 'VALID' &&
-      form.controls.loadEstimatedMethod.status == 'VALID' &&
-      form.controls.measuredVoltage.status == 'VALID' &&
-      form.controls.costKwHr.status == 'VALID'
-    ) {
-      //TODO check motorAMPS or motorKW
-      return true
-    }
-    else {
-      return false;
-    }
-  }
-
-  checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings) {
-    let tmpFlowRate;
-    let response = {
-      valid: null,
-      message: null
-    };
-    //convert
-    if (settings.flowMeasurement != 'gpm') {
-      tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
-    } else {
-      tmpFlowRate = flowRate;
-    }
-    //get min max
-    let flowRateRange = this.getFlowRateMinMax(pumpStyle);
-    //check in range
-    if (tmpFlowRate >= flowRateRange.min && tmpFlowRate <= flowRateRange.max) {
-      response.valid = true;
-      return response;
-    } else if (tmpFlowRate < flowRateRange.min) {
-      response.valid = false;
-      response.message = 'Flow Rate too Small for Selected Pump Style';
-      return response;
-    } else if (tmpFlowRate > flowRateRange.max) {
-      response.valid = false;
-      response.message = 'Flow Rate too Large for Selected Pump Style';
-      return response;
-    } else {
-      return response;
-    }
-  }
-
-  getFlowRateMinMax(pumpStyle: number) {
-    //min/max values from Daryl
-    let flowRate = {
-      min: 1,
-      max: 10000000000000000000
-    }
-    if (pumpStyle == 0) {
-      flowRate.min = 100;
-      flowRate.max = 20000;
-      return flowRate;
-    }
-    else if (pumpStyle == 1 || pumpStyle == 3) {
-      flowRate.min = 100;
-      flowRate.max = 22500;
-      return flowRate;
-    } else if (pumpStyle == 2 || pumpStyle == 4) {
-      flowRate.min = 400;
-      flowRate.max = 22000;
-      return flowRate;
-    } else if (pumpStyle == 5) {
-      flowRate.min = 100;
-      flowRate.max = 4000;
-      return flowRate;
-    } else if (pumpStyle == 6) {
-      flowRate.min = 100;
-      flowRate.max = 5000;
-      return flowRate;
-    } else if (pumpStyle == 10) {
-      flowRate.min = 5000;
-      flowRate.max = 100000;
-      return flowRate;
-    } else if (pumpStyle == 8) {
-      flowRate.min = 200;
-      flowRate.max = 100000;
-      return flowRate;
-    } else if (pumpStyle == 7 || pumpStyle == 9) {
-      flowRate.min = 200;
-      flowRate.max = 40000;
-      return flowRate;
-    } else {
-      return flowRate;
-    }
-  }
-
-  checkMotorRpm(lineFreqEnum: number, motorRPM: number, effClass: number) {
-    let response = {
-      valid: null,
-      message: null
-    };
-    let range = this.getMotorRpmMinMax(lineFreqEnum, effClass);
-    if (motorRPM >= range.min && motorRPM <= range.max) {
-      response.valid = true;
-      return response
-    } else if (motorRPM < range.min) {
-      response.valid = false;
-      response.message = 'Motor RPM too small for selected efficiency class';
-      return response;
-    } else if (motorRPM > range.max) {
-      response.valid = false;
-      response.message = 'Motor RPM too large for selected efficiency class';
-      return response;
-    } else {
-      return response;
-    }
-  }
-
-  getMotorRpmMinMax(lineFreqEnum: number, effClass: number) {
-    let rpmRange = {
-      min: 1,
-      max: 3600
-    }
-    if (lineFreqEnum == 0 && (effClass == 0 || effClass == 1 )) { // if 60Hz and Standard or Energy Efficiency
-      rpmRange.min = 540;
-      rpmRange.max = 3600;
-    } else if (lineFreqEnum == 1 && (effClass == 0 ||  effClass == 1)) { // if 50Hz and Standard or Energy Efficiency
-      rpmRange.min = 450;
-      rpmRange.max = 3300;
-    } else if (lineFreqEnum == 0 && effClass == 2) { // if 60Hz and Premium Efficiency
-      rpmRange.min = 1080;
-      rpmRange.max = 3600;
-    } else if (lineFreqEnum == 1 && effClass == 2) { // if 50Hz and Premium Efficiency
-      rpmRange.min = 900;
-      rpmRange.max = 3000;
-    }
-    return rpmRange;
-  }
-
-  checkMotorVoltage(voltage: number) {
-    let response = {
-      valid: null,
-      message: null
-    };
-
-    if (voltage >= 208 && voltage <= 15180) {
-      response.valid = true;
-      return response;
-    } else if (voltage < 208) {
-      response.valid = false;
-      response.message = "Voltage value is too small."
-      return response;
-    } else if (voltage > 15180) {
-      response.valid = false;
-      response.message = "Voltage value is too large";
-    } else {
-      return response;
-    }
+  setFormFullLoadAmps(form: FormGroup, settings: Settings): FormGroup {
+    let estEfficiency: number = this.estFLA(
+      form.controls.horsePower.value,
+      form.controls.motorRPM.value,
+      form.controls.frequency.value,
+      form.controls.efficiencyClass.value,
+      form.controls.efficiency.value,
+      form.controls.motorVoltage.value,
+      settings
+    );
+    form.patchValue({
+      fullLoadAmps: estEfficiency
+    });
+    return form;
   }
 
 
-
+  isPsatValid(psatInputs: PsatInputs, isBaseline: boolean): boolean {
+    let tmpPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(psatInputs);
+    let tmpMotorForm: FormGroup = this.motorService.getFormFromObj(psatInputs);
+    let tmpFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(psatInputs, isBaseline);
+    return tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid
+  }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { PHAST } from '../../../shared/models/phast/phast';
 
@@ -10,9 +9,7 @@ export class WallLossCompareService {
   //selected modification wall losses
   modifiedWallLosses: WallLoss[];
 
-  inputError: BehaviorSubject<boolean>;
   constructor() {
-    this.inputError = new BehaviorSubject<boolean>(false);
   }
 
   compareAllLosses(): boolean {
@@ -21,7 +18,7 @@ export class WallLossCompareService {
     let isDiff: boolean = false;
     if (this.modifiedWallLosses) {
       for (index; index < numLoss; index++) {
-        if (this.compareLoss(index) == true) {
+        if (this.compareLoss(index) === true) {
           isDiff = true;
         }
       }
@@ -39,7 +36,7 @@ export class WallLossCompareService {
       this.compareSurfaceShape(index) ||
       this.compareConditionFactor(index) ||
       this.compareCorrectionFactor(index)
-    )
+    );
   }
 
   compareSurfaceArea(index: number): boolean {
@@ -73,11 +70,11 @@ export class WallLossCompareService {
       if (baseline.losses.wallLosses) {
         let index = 0;
         baseline.losses.wallLosses.forEach(loss => {
-          if (this.compareBaseModLoss(loss, modification.losses.wallLosses[index]) == true) {
+          if (this.compareBaseModLoss(loss, modification.losses.wallLosses[index]) === true) {
             isDiff = true;
           }
           index++;
-        })
+        });
       }
     }
     return isDiff;
@@ -93,7 +90,7 @@ export class WallLossCompareService {
       this.compare(baseline.surfaceShape, modification.surfaceShape) ||
       this.compare(baseline.conditionFactor, modification.conditionFactor) ||
       this.compare(baseline.correctionFactor, modification.correctionFactor)
-    )
+    );
   }
 
 
@@ -103,7 +100,7 @@ export class WallLossCompareService {
     //if both exist
     if (a && b) {
       //compare
-      if (a != b) {
+      if (a !== b) {
         //not equal
         return true;
       } else {
@@ -114,7 +111,7 @@ export class WallLossCompareService {
     //check one exists
     else if ((a && !b) || (!a && b)) {
       //not equal
-      return true
+      return true;
     } else {
       //equal
       return false;

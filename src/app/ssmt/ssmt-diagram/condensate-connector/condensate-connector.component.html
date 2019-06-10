@@ -1,0 +1,14 @@
+<div class="d-flex h-100 w-100 justify-content-end"
+  [ngClass]="{'set-height': !isConnector, 'one-header': isOneHeaderSystem}">
+  <div class="d-flex align-items-center" (mouseenter)="hoverEquipment('condensateHovered')"
+    (mouseleave)="hoverEquipment('default')" [ngClass]="condensateClasses"
+    (click)="selectEquipment('condensateHovered')">
+    <div class="condensate-holder">
+      <span class="condensate-temp" *ngIf="!isConnector">{{returnCondensate.temperature | number:'1.0-1'}}
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </span>
+      <span class="fa fa-chevron-down" [ngClass]="{'hidden-chevron': !isConnector}" (mouseenter)="hoverChevron()"
+        (mouseleave)="hoverEquipment('condensateHovered')"></span>
+    </div>
+  </div>
+</div>

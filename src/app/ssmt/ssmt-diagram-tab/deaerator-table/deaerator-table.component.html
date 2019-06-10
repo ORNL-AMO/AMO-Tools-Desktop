@@ -1,0 +1,25 @@
+<div class="d-flex flex-column">
+  <label class="group-label">Deaerator</label>
+  <div class="w-100 error pb-2 pt-2 text-center"
+    *ngIf="notEnoughEnergyWarning || massFlowWarnings || inletEnthalpyWarning || enthalpyFeedwaterWarning">
+    <span class="warning-label">Warning:<br></span>
+    <span *ngIf="notEnoughEnergyWarning">
+      <span class="fa fa-exclamation-triangle"></span> {{notEnoughEnergyWarning}}
+      <br>
+    </span>
+    <span *ngIf="massFlowWarnings">
+      <span class="fa fa-exclamation-triangle"></span> {{massFlowWarnings}}
+    </span>
+    <span *ngIf="inletEnthalpyWarning">
+      <span class="fa fa-exclamation-triangle"></span> {{inletEnthalpyWarning}}
+    </span>
+    <span *ngIf="enthalpyFeedwaterWarning">
+      <span class="fa fa-exclamation-triangle"></span> {{enthalpyFeedwaterWarning}}
+    </span>
+  </div>
+  <app-deaerator-results [results]="deaerator" [settings]="settings"></app-deaerator-results>
+  <div class="w-100 text-center">
+    <a class="click-link small" (click)="goToCalculator()"><span class="fa fa-calculator click-item pr-2"></span>Copy to
+      Deaerator Calculator</a>
+  </div>
+</div>

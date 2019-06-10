@@ -60,7 +60,7 @@ export class EnergyInputComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.resultsUnit = 'kW';
@@ -82,20 +82,21 @@ export class EnergyInputComponent implements OnInit {
         let tmpLoss = {
           form: this.energyInputService.getFormFromLoss(loss),
           results: {
-            heatDelivered: 0,
-            totalChemicalEnergyInput: 0
+            energyInputHeatDelivered: 0,
+            energyInputTotalChemEnergy: 0,
+            grossHeatInput: 0
           },
           collapse: false
         };
         if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
-          })
+          });
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._energyInputs.push(tmpLoss);
-      })
+      });
     }
   }
 
@@ -103,8 +104,9 @@ export class EnergyInputComponent implements OnInit {
     this._energyInputs.push({
       form: this.energyInputService.initForm(this._energyInputs.length + 1),
       results: {
-        heatDelivered: 0,
-        totalChemicalEnergyInput: 0
+        energyInputHeatDelivered: 0,
+        energyInputTotalChemEnergy: 0,
+        grossHeatInput: 0
       },
       collapse: false
     });
@@ -120,21 +122,23 @@ export class EnergyInputComponent implements OnInit {
     loss.collapse = !loss.collapse;
   }
   calculate(loss: EnInputObj) {
-    if (loss.form.status == 'VALID') {
-      let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
-      let calculation = this.phastService.energyInputEAF(tmpLoss, this.settings);
-      loss.results = {
-        heatDelivered: calculation.heatDelivered,
-        totalChemicalEnergyInput: calculation.totalChemicalEnergyInput
-      }
+    if (loss.form.status === 'VALID') {
+      // let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
       let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
-      this.energyInputTotal = tmpResults.grossHeatInput;
-      this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
+      loss.results = {
+        energyInputHeatDelivered: tmpResults.energyInputHeatDelivered,
+        energyInputTotalChemEnergy: tmpResults.energyInputTotalChemEnergy,
+        grossHeatInput: tmpResults.grossHeatInput
+      };
+      // let tmpResults: PhastResults = this.phastResultsService.getResults(this.phast, this.settings);
+      // this.energyInputTotal = tmpResults.grossHeatInput;
+      // this.electricalHeatDelivered = this.energyInputTotal - loss.results.heatDelivered;
     } else {
       loss.results = {
-        heatDelivered: null,
-        totalChemicalEnergyInput: null
-      }
+        energyInputHeatDelivered: null,
+        energyInputTotalChemEnergy: null,
+        grossHeatInput: null
+      };
       this.energyInputTotal = 0;
       this.electricalHeatDelivered = 0;
     }
@@ -147,12 +151,12 @@ export class EnergyInputComponent implements OnInit {
       if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
-        })
+        });
       }
       lossIndex++;
       let tmpEnergyInput = this.energyInputService.getLossFromForm(loss.form);
       tmpEnergyInputs.push(tmpEnergyInput);
-    })
+    });
     this.losses.energyInputEAF = tmpEnergyInputs;
     this.savedLoss.emit(true);
   }
@@ -164,12 +168,13 @@ export class EnergyInputComponent implements OnInit {
 }
 
 export interface EnInputObj {
-  form: FormGroup,
-  results: EnInputResultsObj
-  collapse: boolean
+  form: FormGroup;
+  results: EnInputResultsObj;
+  collapse: boolean;
 }
 
 export interface EnInputResultsObj {
-  heatDelivered: number,
-  totalChemicalEnergyInput: number
+  energyInputHeatDelivered: number;
+  energyInputTotalChemEnergy: number;
+  grossHeatInput: number;
 }

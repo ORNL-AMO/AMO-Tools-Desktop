@@ -29,7 +29,9 @@ export class ResultsDataComponent implements OnInit {
   modification: Modification;
   @Input()
   inReport: boolean;
-
+  @Input()
+  modificationIndex: number;
+  
   baseLineResults: PhastResults;
   modificationResults: Array<PhastResults>;
   phastMods: Array<Modification>;
@@ -44,7 +46,7 @@ export class ResultsDataComponent implements OnInit {
 
   ngOnInit() {
     this.getResults();
-    if (this.settings.energyResultUnit != 'kWh') {
+    if (this.settings.energyResultUnit !== 'kWh') {
       this.lossUnit = this.settings.energyResultUnit + '/hr';
     } else {
       this.lossUnit = 'kW';
@@ -54,10 +56,10 @@ export class ResultsDataComponent implements OnInit {
       this.selectedPhastsSub = this.reportRollupService.selectedPhasts.subscribe(val => {
         if (val) {
           val.forEach(assessment => {
-            if (assessment.assessmentId == this.assessment.id) {
+            if (assessment.assessmentId === this.assessment.id) {
               this.selectedModificationIndex = assessment.selectedIndex;
             }
-          })
+          });
         }
       });
     }
@@ -79,8 +81,8 @@ export class ResultsDataComponent implements OnInit {
     }
   }
 
-  ngOnDestory(){
-    if(this.selectedPhastsSub){this.selectedPhastsSub.unsubscribe;}
+  ngOnDestroy() {
+    if (this.selectedPhastsSub) {this.selectedPhastsSub.unsubscribe; }
   }
 
   useModification() {
@@ -94,11 +96,11 @@ export class ResultsDataComponent implements OnInit {
       this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
       if (this.phast.modifications && this.inReport) {
         this.phastMods = this.phast.modifications;
-        if (this.phast.modifications.length != 0) {
+        if (this.phast.modifications.length !== 0) {
           this.phast.modifications.forEach(mod => {
             let tmpResults = this.phastResultsService.getResults(mod.phast, this.settings);
             this.modificationResults.push(tmpResults);
-          })
+          });
         }
       } else if (this.modification && !this.inSetup && !this.inReport) {
         let tmpResults = this.phastResultsService.getResults(this.modification.phast, this.settings);
@@ -111,7 +113,7 @@ export class ResultsDataComponent implements OnInit {
 
   setSigFigsCount() {
     if (this.settings.energyResultUnit !== undefined) {
-      if (this.settings.energyResultUnit.trim() == 'MMBtu' || this.settings.energyResultUnit.trim() == 'GJ' || this.settings.energyResultUnit.trim() == 'kWh') {
+      if (this.settings.energyResultUnit.trim() === 'MMBtu' || this.settings.energyResultUnit.trim() === 'GJ' || this.settings.energyResultUnit.trim() === 'kWh') {
         this.decimalCount = '1.2-2';
       }
       else {

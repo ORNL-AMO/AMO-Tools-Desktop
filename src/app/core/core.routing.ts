@@ -2,7 +2,9 @@ import { Routes } from '@angular/router';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { PhastComponent } from '../phast/phast.component';
 import { PsatComponent } from '../psat/psat.component';
-import { CalculatorComponent } from '../calculator/calculator.component';
+import { FsatComponent } from '../fsat/fsat.component';
+import { SsmtComponent } from '../ssmt/ssmt.component';
+import { TreasureHuntComponent } from '../treasure-hunt/treasure-hunt.component';
 
 export const coreRoutes: Routes = [
   {
@@ -11,7 +13,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    pathMatch: 'full',
+    redirectTo: ''
   },
   {
     path: 'phast/:id',
@@ -20,5 +23,17 @@ export const coreRoutes: Routes = [
   {
     path: 'psat/:id',
     component: PsatComponent
+  }, 
+  {
+    path: 'fsat/:id',
+    component: FsatComponent
+  },
+  {
+    path: 'ssmt/:id',
+    component: SsmtComponent
+  },
+  {
+    path: 'treasure-hunt/:id',
+    component: TreasureHuntComponent
   }
-]
+];

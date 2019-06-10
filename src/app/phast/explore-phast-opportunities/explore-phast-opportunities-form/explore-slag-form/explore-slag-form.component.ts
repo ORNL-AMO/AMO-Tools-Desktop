@@ -36,12 +36,12 @@ export class ExploreSlagFormComponent implements OnInit {
   }
 
   initData() {
-    let check = (this.phast.losses.slagLosses[0].weight != this.phast.modifications[this.exploreModIndex].phast.losses.slagLosses[0].weight);
+    let check = (this.phast.losses.slagLosses[0].weight !== this.phast.modifications[this.exploreModIndex].phast.losses.slagLosses[0].weight);
     this.showSlag = check;
   }
 
   toggleSlag() {
-    if (this.showSlag == false) {
+    if (this.showSlag === false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.slagLosses[0].weight = this.phast.losses.slagLosses[0].weight;
     }
   }
@@ -51,7 +51,7 @@ export class ExploreSlagFormComponent implements OnInit {
   }
 
   focusOut() {
-
+    this.changeField.emit('default');
   }
 
   calculate() {

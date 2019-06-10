@@ -17,7 +17,6 @@ import { CreateFolderComponent } from './assessment-menu/create-folder/create-fo
 import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
 import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 import { SettingsModule } from '../settings/settings.module';
-import { ToastyModule } from 'ng2-toasty';
 
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { PhastSummaryCardComponent } from './assessment-grid-view/assessment-card/phast-summary-card/phast-summary-card.component';
@@ -29,6 +28,13 @@ import { FolderContactInfoComponent } from './folder-contact-info/folder-contact
 import { PreAssessmentCardComponent } from './assessment-grid-view/pre-assessment-card/pre-assessment-card.component';
 import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-dashboard.component';
 import { PreAssessmentListItemComponent } from './assessment-list-view/pre-assessment-list-item/pre-assessment-list-item.component';
+import { FsatSummaryCardComponent } from './assessment-grid-view/assessment-card/fsat-summary-card/fsat-summary-card.component';
+import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
+import { ResetDataModalComponent } from './reset-data-modal/reset-data-modal.component';
+import { SsmtSummaryCardComponent } from './assessment-grid-view/assessment-card/ssmt-summary-card/ssmt-summary-card.component';
+import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
+import { TreasureHuntSummaryCardComponent } from './assessment-grid-view/assessment-card/treasure-hunt-summary-card/treasure-hunt-summary-card.component';
+import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +55,11 @@ import { PreAssessmentListItemComponent } from './assessment-list-view/pre-asses
     FolderContactInfoComponent,
     PreAssessmentCardComponent,
     AssessmentDashboardComponent,
-    PreAssessmentListItemComponent
+    PreAssessmentListItemComponent,
+    FsatSummaryCardComponent,
+    ResetDataModalComponent,
+    SsmtSummaryCardComponent,
+    TreasureHuntSummaryCardComponent
   ],
   exports: [
     AssessmentCreateComponent,
@@ -64,10 +74,12 @@ import { PreAssessmentListItemComponent } from './assessment-list-view/pre-asses
     ReactiveFormsModule,
     ModalModule,
     SettingsModule,
-    ToastyModule,
     ImportExportModule,
     PhastReportModule,
-    PsatModule
+    PsatModule,
+    FsatReportModule,
+    SsmtReportModule,
+    TreasureHuntReportModule
   ],
   providers: []
 })

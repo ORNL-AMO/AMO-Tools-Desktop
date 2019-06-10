@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-slag-help',
@@ -6,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./slag-help.component.css']
 })
 export class SlagHelpComponent implements OnInit {
+  @Input()
+  settings: Settings;
   @Input()
   currentField: string;
   constructor() { }

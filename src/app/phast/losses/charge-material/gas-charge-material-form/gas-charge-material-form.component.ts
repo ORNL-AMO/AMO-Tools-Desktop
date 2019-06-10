@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
-import { PhastService } from "../../../phast.service";
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+import { GasMaterialWarnings, ChargeMaterialService } from '../charge-material.service';
+import { GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 @Component({
   selector: 'app-gas-charge-material-form',
   templateUrl: './gas-charge-material-form.component.html',
@@ -34,40 +34,40 @@ export class GasChargeMaterialFormComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
   @Input()
   inSetup: boolean;
+  @Input()
+  isBaseline: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  firstChange: boolean = true;
+
   materialTypes: any;
   selectedMaterial: any;
   showModal: boolean = false;
-
-  initialTempError: string = null;
-  dischargeTempError: string = null;
-  specificHeatGasError: string = null;
-  feedGasRateError: string = null;
-  gasMixVaporError: string = null;
-  specificHeatGasVaporError: string = null;
-  feedGasReactedError: string = null;
-  heatOfReactionError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService) { }
+  warnings: GasMaterialWarnings;
+  idString: string;
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
+    if (!this.isBaseline) {
+      this.idString = 'phast_modification_solid_' + this.lossIndex;
+    }
+    else {
+      this.idString = 'phast_baseline_solid_' + this.lossIndex;
+    }
+    if (changes.baselineSelected) {
+      if (!changes.baselineSelected.firstChange) {
+        if (!this.baselineSelected) {
+          this.disableForm();
+        } else {
+          this.enableForm();
+        }
       }
-    } else {
-      this.firstChange = false;
     }
   }
-
   ngOnInit() {
     this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
     if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value != '') {
-        if (this.chargeMaterialForm.controls.materialSpecificHeat.value == '') {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
+        if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
           this.setProperties();
         }
       }
@@ -75,7 +75,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    this.checkInputError(true);
+    this.checkWarnings();
   }
 
   ngOnDestroy() {
@@ -85,11 +85,11 @@ export class GasChargeMaterialFormComponent implements OnInit {
   checkMaterialValues() {
     let material: GasLoadChargeMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (material) {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC')
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
         material.specificHeatVapor = this.roundVal(val, 4);
       }
-      if (material.specificHeatVapor != this.chargeMaterialForm.controls.materialSpecificHeat.value) {
+      if (material.specificHeatVapor !== this.chargeMaterialForm.controls.materialSpecificHeat.value) {
         return true;
       } else {
         return false;
@@ -117,13 +117,13 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
     }
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
     });
-    this.startSavePolling();
+    this.save();
   }
 
   roundVal(val: number, digits: number) {
@@ -131,64 +131,22 @@ export class GasChargeMaterialFormComponent implements OnInit {
     return test;
   }
 
-  checkInputError(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.chargeMaterialForm.controls.materialSpecificHeat.value < 0) {
-      this.specificHeatGasError = 'Specific Heat of Gas must be equal or greater than 0';
-    } else {
-      this.specificHeatGasError = null;
-    }
-    if (this.chargeMaterialForm.controls.feedRate.value < 0) {
-      this.feedGasRateError = 'Feed Rate for Gas Mixture must be greater than 0';
-    } else {
-      this.feedGasRateError = null;
-    }
-    if (this.chargeMaterialForm.controls.vaporInGas.value < 0 || this.chargeMaterialForm.controls.vaporInGas.value > 100) {
-      this.gasMixVaporError = 'Vapor in Gas Mixture must be equal or greater  than 0 and less than or equal to 100%';
-    } else {
-      this.gasMixVaporError = null;
-    }
-    if (this.chargeMaterialForm.controls.specificHeatOfVapor.value < 0) {
-      this.specificHeatGasVaporError = 'Specific Heat of Vapor must be equal or greater than 0';
-    } else {
-      this.specificHeatGasVaporError = null;
-    }
-    if (this.chargeMaterialForm.controls.gasReacted.value < 0 || this.chargeMaterialForm.controls.gasReacted.value > 100) {
-      this.feedGasReactedError = 'Feed Gas Reacted must be equal or greater than 0 and less than or equal to 100%';
-    } else {
-      this.feedGasReactedError = null;
-    }
-    if (this.chargeMaterialForm.controls.heatOfReaction.value < 0) {
-      this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
-    } else {
-      this.heatOfReactionError = null;
-    }
-
-    if (this.chargeMaterialForm.controls.initialTemperature.value > this.chargeMaterialForm.controls.dischargeTemperature.value) {
-      this.initialTempError = "Initial Temperature cannot be greater than Outlet Temperature";
-    }
-    else {
-      this.initialTempError = null;
-    }
-
-    if (this.initialTempError || this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasReactedError || this.heatOfReactionError) {
-      this.inputError.emit(true);
-      this.chargeMaterialCompareService.inputError.next(true);
-    } else {
-      this.inputError.emit(false);
-      this.chargeMaterialCompareService.inputError.next(false);
-    }
+  checkWarnings() {
+    let tmpMaterial: GasChargeMaterial = this.chargeMaterialService.buildGasChargeMaterial(this.chargeMaterialForm).gasChargeMaterial;
+    this.warnings = this.chargeMaterialService.checkGasWarnings(tmpMaterial);
+    let hasWarning: boolean = this.chargeMaterialService.checkWarningsExist(this.warnings);
+    this.inputError.emit(hasWarning);
   }
 
-  startSavePolling() {
+  save() {
+    this.checkWarnings();
     this.saveEmit.emit(true);
     this.calculate.emit(true);
   }
+
   canCompare() {
     if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && !this.inSetup) {
-      if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) == false) {
+      if (this.chargeMaterialCompareService.compareMaterialType(this.lossIndex) === false) {
         return true;
       } else {
         return false;
@@ -284,11 +242,11 @@ export class GasChargeMaterialFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
-      if (newMaterial.length != 0) {
+      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
+      if (newMaterial.length !== 0) {
         this.chargeMaterialForm.patchValue({
           materialId: newMaterial[0].id
-        })
+        });
         this.setProperties();
       }
     }

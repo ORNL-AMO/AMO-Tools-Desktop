@@ -39,4 +39,4 @@ export const viscosity = {
             ration: 1
         }
     }
-}
+};

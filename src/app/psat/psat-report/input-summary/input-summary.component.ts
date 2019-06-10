@@ -27,6 +27,8 @@ export class InputSummaryComponent implements OnInit {
   hpDiff: boolean = false;
   motorRpmDiff: boolean = false;
   effClassDiff: boolean = false;
+  effClassSpecified: boolean = false;
+  specEffDiff: boolean = false;
   motorVoltageDiff: boolean = false;
   flaDiff: boolean = false;
   //marginDiff: boolean = false;
@@ -38,7 +40,6 @@ export class InputSummaryComponent implements OnInit {
   ampsDiff: boolean = false;
   kwDiff: boolean = false;
   fieldVoltageDiff: boolean = false;
-  anyOptimized: boolean = false;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -54,9 +55,9 @@ export class InputSummaryComponent implements OnInit {
   }
 
 
-  getLineFreq(num: number) {
-    return this.psatService.getLineFreqFromEnum(num);
-  }
+  // getLineFreq(num: number) {
+  //   return this.psatService.getLineFreqFromEnum(num);
+  // }
 
   getEfficiencyClass(num: number) {
     return this.psatService.getEfficiencyClassFromEnum(num);
@@ -76,6 +77,10 @@ export class InputSummaryComponent implements OnInit {
     return tmpUnit.unit.name.display;
   }
   checkInputs() {
+    //specified
+    if (this.psat.inputs.efficiency_class === 3) {
+      this.effClassSpecified = true;
+    }
     if (this.psat.modifications) {
       this.psat.modifications.forEach(mod => {
         if (mod.psat.inputs.pump_style != this.psat.inputs.pump_style) {
@@ -117,16 +122,19 @@ export class InputSummaryComponent implements OnInit {
         if (mod.psat.inputs.efficiency_class != this.psat.inputs.efficiency_class) {
           this.effClassDiff = true;
         }
+        if (mod.psat.inputs.efficiency_class === 3) {
+          this.effClassSpecified = true;
+          if (mod.psat.inputs.efficiency != this.psat.inputs.efficiency) {
+            this.specEffDiff = true;
+          }
+        }
         if (mod.psat.inputs.motor_rated_voltage != this.psat.inputs.motor_rated_voltage) {
           this.motorVoltageDiff = true;
         }
         if (mod.psat.inputs.motor_rated_fla != this.psat.inputs.motor_rated_fla) {
           this.flaDiff = true;
         }
-        // if (mod.psat.inputs.margin != this.psat.inputs.margin) {
-        //   this.marginDiff = true;
-        // }
-        if (mod.psat.inputs.operating_fraction != this.psat.inputs.operating_fraction) {
+        if (mod.psat.inputs.operating_hours != this.psat.inputs.operating_hours) {
           this.opFracDiff = true;
         }
         if (mod.psat.inputs.cost_kw_hour != this.psat.inputs.cost_kw_hour) {
@@ -151,9 +159,6 @@ export class InputSummaryComponent implements OnInit {
         // fieldVoltageDiff
         if (mod.psat.inputs.motor_field_voltage != this.psat.inputs.motor_field_voltage) {
           this.fieldVoltageDiff = true;
-        }
-        if(mod.psat.inputs.optimize_calculation){
-          this.anyOptimized = true;
         }
       })
     }

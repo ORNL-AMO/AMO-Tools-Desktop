@@ -1,0 +1,25 @@
+.negative-savings {
+    color: #D62728;
+}
+
+.positive-savings {
+    color: #2CA02C;
+}
+
+.savings-panel {
+    font-size: 16px;
+    padding-top: 5%;
+}
+
+.table-savings {
+    margin-top: 10%;
+    width: 100%;
+}
+
+.td-title {
+    width: 40%;
+}
+
+.td-value {
+    width: 70%;
+}

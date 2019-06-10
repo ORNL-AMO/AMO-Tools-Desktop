@@ -1,4 +1,4 @@
 export interface OtherLoss {
-    description?: string,
-    heatLoss?: number
+    description?: string;
+    heatLoss?: number;
 }

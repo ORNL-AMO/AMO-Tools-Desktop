@@ -37,7 +37,7 @@ export class ValidationService {
     if (control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
       return null;
     }
-    else if(control.value.match(/^$/)){
+    else if (control.value.match(/^$/)) {
       return null; //this will prevent emails that are optional from being invalid
     }
     else {
@@ -55,19 +55,19 @@ export class ValidationService {
     }
   }
 
-  static zipValidator(control){
-    if(control.value.match(/^([0-9]{5})$/)){
+  static zipValidator(control) {
+    if (control.value.match(/^([0-9]{5})$/)) {
       return null;
     }else {
       return { 'invalidZip' : true};
     }
   }
 
-  static phoneValidator(control){
-    if(control.value.match(/^([0-9]{10})$/)){
+  static phoneValidator(control) {
+    if (control.value.match(/^([0-9]{10})$/)) {
       return null;
     }
-    else if(control.value.match(/^$/)){
+    else if (control.value.match(/^$/)) {
       return null; //this will prevent phones that are optional from being invalid
     }
     else {
@@ -75,11 +75,11 @@ export class ValidationService {
     }
   }
 
-  static integerValidator(control){
-    if(control.value.match(/^\d+$/)){
+  static integerValidator(control) {
+    if (control.value.match(/^\d+$/)) {
       return null;
     }
-    else if(control.value.match(/^$/)){
+    else if (control.value.match(/^$/)) {
       return null;
     }
     else {
@@ -87,11 +87,11 @@ export class ValidationService {
     }
   }
 
-  static decimalValidator(control){
-    if(control.value.match(/^[+]?([.]\d+|\d+([.]\d+)?)$/)){
+  static decimalValidator(control) {
+    if (control.value.match(/^[+]?([.]\d+|\d+([.]\d+)?)$/)) {
       return null;
     }
-    else if(control.value.match(/^$/)){
+    else if (control.value.match(/^$/)) {
       return null;
     }
     else {
@@ -99,15 +99,15 @@ export class ValidationService {
     }
   }
 
-  static pastDateValidator(control){
+  static pastDateValidator(control) {
     let today = new Date();
     let testDate = moment(control.value);
     let diff = testDate.diff(today, 'days');
-    if(diff <= 0){
+    if (diff <= 0) {
       return null;
     }
-    else if(diff >> 0){
-      return {'invalidDate': true}
+    else if (diff >> 0) {
+      return {'invalidDate': true};
     }
   }
 

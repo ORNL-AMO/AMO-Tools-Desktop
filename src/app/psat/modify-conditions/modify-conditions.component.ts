@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { PSAT, PsatInputs, Modification, PsatOutputs } from '../../shared/models/psat';
-import * as _ from 'lodash';
-import { PsatService } from '../psat.service';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../assessment/assessment.service';
 import { Assessment } from '../../shared/models/assessment';
 import { CompareService } from '../compare.service';
+import { Subscription } from 'rxjs';
+import { PsatTabService } from '../psat-tab.service';
+import { PsatService } from '../psat.service';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -37,30 +38,33 @@ export class ModifyConditionsComponent implements OnInit {
   isFirstChange: boolean = true;
   showNotes: boolean = false;
   isModalOpen: boolean = false;
-  constructor(private psatService: PsatService, private assessmentService: AssessmentService, private compareService: CompareService) { }
+  modifyConditionsSub: Subscription;
+  modalOpenSub: Subscription;
+  constructor(private assessmentService: AssessmentService, private compareService: CompareService, private psatTabService: PsatTabService, private psatService: PsatService) { }
 
   ngOnInit() {
     let tmpTab = this.assessmentService.getSubTab();
     if (tmpTab) {
-      this.psatService.modifyConditionsTab.next(tmpTab);
+      this.psatTabService.modifyConditionsTab.next(tmpTab);
     }
 
-    this.psatService.modifyConditionsTab.subscribe(val => {
+    this.modifyConditionsSub = this.psatTabService.modifyConditionsTab.subscribe(val => {
       this.modifyTab = val;
     })
+
+    this.modalOpenSub = this.psatService.modalOpen.subscribe(isOpen => {
+      this.isModalOpen = isOpen;
+    })
+  }
+
+  ngOnDestroy(){
+    this.modifyConditionsSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();
   }
 
   save() {
     // this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     this.saved.emit(true);
-  }
-
-
-  toggleDropdown() {
-    this.showNotes = false;
-  }
-  toggleNotes() {
-    this.showNotes = !this.showNotes;
   }
 
   togglePanel(bool: boolean) {
@@ -72,13 +76,6 @@ export class ModifyConditionsComponent implements OnInit {
       this.modifiedSelected = true;
       this.baselineSelected = false;
     }
-  }
-
-  modalOpen() {
-    this.isModalOpen = true;
-  }
-  modalClose() {
-    this.isModalOpen = false;
   }
 
   addModification() {

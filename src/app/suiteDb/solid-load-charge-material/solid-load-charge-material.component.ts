@@ -54,8 +54,8 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
       this.indexedDbService.getAllSolidLoadChargeMaterial().then(idbResults => {
         this.allCustomMaterials = idbResults;
-        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
-        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+        this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
+        this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance === material.substance; }).id;
         this.setExisting();
       });
     }
@@ -69,23 +69,23 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
-      if (this.settings.unitsOfMeasure == 'Metric') {
+      if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.meltingPoint = this.convertUnitsService.value(this.newMaterial.meltingPoint).from('C').to('F');
         this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
         this.newMaterial.specificHeatSolid = this.convertUnitsService.value(this.newMaterial.specificHeatSolid).from('kJkgC').to('btulbF');
         this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
       }
       let suiteDbResult = this.suiteDbService.insertSolidLoadChargeMaterial(this.newMaterial);
-      if (suiteDbResult == true) {
+      if (suiteDbResult === true) {
         this.indexedDbService.addSolidLoadChargeMaterial(this.newMaterial).then(idbResults => {
           this.closeModal.emit(this.newMaterial);
-        })
+        });
       }
     }
   }
 
   updateMaterial() {
-    if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       this.newMaterial.meltingPoint = this.convertUnitsService.value(this.newMaterial.meltingPoint).from('C').to('F');
       this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
       this.newMaterial.specificHeatSolid = this.convertUnitsService.value(this.newMaterial.specificHeatSolid).from('kJkgC').to('btulbF');
@@ -93,7 +93,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     }
     this.newMaterial.id = this.sdbEditMaterialId;
     let suiteDbResult = this.suiteDbService.updateSolidLoadChargeMaterial(this.newMaterial);
-    if (suiteDbResult == true) {
+    if (suiteDbResult === true) {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       this.indexedDbService.putSolidLoadChargeMaterial(this.newMaterial).then(val => {
@@ -105,7 +105,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       let suiteDbResult = this.suiteDbService.deleteSolidLoadChargeMaterial(this.sdbEditMaterialId);
-      if (suiteDbResult == true) {
+      if (suiteDbResult === true) {
         this.indexedDbService.deleteSolidLoadChargeMaterial(this.idbEditMaterialId).then(val => {
           this.closeModal.emit(this.newMaterial);
         });
@@ -115,7 +115,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
 
   setExisting() {
     if (this.editExistingMaterial && this.existingMaterial) {
-      if (this.settings.unitsOfMeasure == "Metric") {
+      if (this.settings.unitsOfMeasure === "Metric") {
         this.newMaterial = {
           id: this.existingMaterial.id,
           substance: this.existingMaterial.substance,
@@ -123,7 +123,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
           meltingPoint: this.convertUnitsService.value(this.existingMaterial.meltingPoint).from('F').to('C'),
           specificHeatLiquid: this.convertUnitsService.value(this.existingMaterial.specificHeatLiquid).from('btulbF').to('kJkgC'),
           specificHeatSolid: this.convertUnitsService.value(this.existingMaterial.specificHeatSolid).from('btulbF').to('kJkgC'),
-        }
+        };
       }
       else {
         this.newMaterial = {
@@ -133,18 +133,18 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
           meltingPoint: this.existingMaterial.meltingPoint,
           specificHeatLiquid: this.existingMaterial.specificHeatLiquid,
           specificHeatSolid: this.existingMaterial.specificHeatSolid,
-        }
+        };
       }
     }
     else if (this.selectedMaterial) {
-      if (this.settings.unitsOfMeasure == "Metric") {
+      if (this.settings.unitsOfMeasure === "Metric") {
         this.newMaterial = {
           substance: this.selectedMaterial.substance + ' (mod)',
           latentHeat: this.convertUnitsService.value(this.selectedMaterial.latentHeat).from('btuLb').to('kJkg'),
           meltingPoint: this.convertUnitsService.value(this.selectedMaterial.meltingPoint).from('F').to('C'),
           specificHeatLiquid: this.convertUnitsService.value(this.selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC'),
           specificHeatSolid: this.convertUnitsService.value(this.selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC'),
-        }
+        };
       }
       else {
         this.newMaterial = {
@@ -153,7 +153,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
           meltingPoint: this.selectedMaterial.meltingPoint,
           specificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
           specificHeatSolid: this.selectedMaterial.specificHeatSolid,
-        }
+        };
       }
       this.checkMaterialName();
     }
@@ -161,8 +161,8 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.sdbEditMaterialId) {
-        return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
+      if (material.id !== this.sdbEditMaterialId) {
+        return material.substance.toLowerCase().trim() === this.newMaterial.substance.toLowerCase().trim();
       }
     });
 
@@ -170,7 +170,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       this.nameError = 'This name is in use by another material';
       this.isValidMaterialName = false;
     }
-    else if (this.newMaterial.substance.toLowerCase().trim() == '') {
+    else if (this.newMaterial.substance.toLowerCase().trim() === '') {
       this.nameError = 'The material must have a name';
       this.isValidMaterialName = false;
     }
@@ -181,7 +181,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   }
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
+    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() === this.newMaterial.substance.toLowerCase().trim(); });
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isValidMaterialName = false;

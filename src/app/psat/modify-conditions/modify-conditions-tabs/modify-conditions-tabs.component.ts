@@ -3,6 +3,12 @@ import { CompareService } from '../../compare.service';
 import { PsatService } from '../../psat.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { PsatWarningService, FieldDataWarnings, MotorWarnings } from '../../psat-warning.service';
+import { Settings } from '../../../shared/models/settings';
+import { PsatTabService } from '../../psat-tab.service';
+import { PumpFluidService } from '../../pump-fluid/pump-fluid.service';
+import { MotorService } from '../../motor/motor.service';
+import { FieldDataService } from '../../field-data/field-data.service';
 
 @Component({
   selector: 'app-modify-conditions-tabs',
@@ -10,6 +16,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./modify-conditions-tabs.component.css']
 })
 export class ModifyConditionsTabsComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   displayPumpFluidTooltip: boolean;
   pumpFluidBadgeHover: boolean;
@@ -18,20 +26,21 @@ export class ModifyConditionsTabsComponent implements OnInit {
   displayFieldDataTooltip: boolean;
   fieldDataBadgeHover: boolean;
 
-  pumpFluidBadgeClass: Array<string>;
-  motorBadgeClass: Array<string>;
-  fieldDataBadgeClass: Array<string>;
+  pumpFluidBadgeClass: Array<string> = [];
+  motorBadgeClass: Array<string> = [];
+  fieldDataBadgeClass: Array<string> = [];
   resultsSub: Subscription;
   modTabSub: Subscription;
   modifyTab: string;
-  constructor(private compareService: CompareService, private psatService: PsatService) { }
+  constructor(private compareService: CompareService, private psatService: PsatService, private psatWarningService: PsatWarningService, private psatTabService: PsatTabService,
+    private pumpFluidService: PumpFluidService, private motorService: MotorService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
     this.resultsSub = this.psatService.getResults.subscribe(val => {
       this.setBadgeClass();
     })
 
-    this.modTabSub = this.psatService.modifyConditionsTab.subscribe(val => {
+    this.modTabSub = this.psatTabService.modifyConditionsTab.subscribe(val => {
       this.modifyTab = val;
     })
 
@@ -49,26 +58,23 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   setBadgeClass() {
-    let tmpBaslineForm = this.psatService.getFormFromPsat(this.compareService.baselinePSAT.inputs);
-    let tmpModForm;
-    if (this.compareService.modifiedPSAT) {
-      tmpModForm = this.psatService.getFormFromPsat(this.compareService.modifiedPSAT.inputs);
-    }
-    this.fieldDataBadgeClass = this.setFieldDataBadgeClass(tmpBaslineForm, tmpModForm);
-    this.pumpFluidBadgeClass = this.setPumpFluidBadgeClass(tmpBaslineForm, tmpModForm);
-    this.motorBadgeClass = this.setMotorBadgeClass(tmpBaslineForm, tmpModForm);
+    this.fieldDataBadgeClass = this.setFieldDataBadgeClass();
+    this.pumpFluidBadgeClass = this.setPumpFluidBadgeClass();
+    this.motorBadgeClass = this.setMotorBadgeClass();
   }
 
-  setFieldDataBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
+  setFieldDataBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.psatService.isFieldDataFormValid(baselineForm);
+    let tmpBaselineFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this.compareService.baselinePSAT.inputs, true);
+    let validBaselineTest = tmpBaselineFieldDataForm.valid;
     let validModTest = true;
     let isDifferent = false;
-    if (modifiedForm) {
-      validModTest = this.psatService.isFieldDataFormValid(modifiedForm)
+    if (this.compareService.modifiedPSAT) {
+      let tmpModificationFieldDataForm: FormGroup = this.fieldDataService.getFormFromObj(this.compareService.modifiedPSAT.inputs, false);
+      validModTest = tmpModificationFieldDataForm.valid;
       isDifferent = this.compareService.checkFieldDataDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkFieldDataInputError();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -79,16 +85,37 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  setPumpFluidBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
+  checkFieldDataInputError() {
+    let hasWarning: boolean = false;
+    let baselineFieldDataWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.compareService.baselinePSAT, this.settings, true);
+    for (var key in baselineFieldDataWarnings) {
+      if (baselineFieldDataWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedPSAT && !hasWarning) {
+      let modifiedFieldDataWarnings: FieldDataWarnings = this.psatWarningService.checkFieldData(this.compareService.modifiedPSAT, this.settings);
+      for (var key in modifiedFieldDataWarnings) {
+        if (modifiedFieldDataWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
+  setPumpFluidBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.psatService.isPumpFluidFormValid(baselineForm);
+    let tmpBaselinePumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this.compareService.baselinePSAT.inputs);
+    let validBaselineTest = tmpBaselinePumpFluidForm.valid;
     let validModTest = true;
     let isDifferent = false;
-    if (modifiedForm) {
-      validModTest = this.psatService.isPumpFluidFormValid(modifiedForm)
+    if (this.compareService.modifiedPSAT) {
+      let tmpModificationPumpFluidForm: FormGroup = this.pumpFluidService.getFormFromObj(this.compareService.modifiedPSAT.inputs);
+      validModTest = tmpModificationPumpFluidForm.valid;
       isDifferent = this.compareService.checkPumpDifferent();
     }
-    let inputError = false;
+    let inputError = this.checkPumpFluidWarnings();
     if (!validBaselineTest || !validModTest) {
       badgeStr = ['missing-data'];
     } else if (inputError) {
@@ -99,14 +126,35 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  setMotorBadgeClass(baselineForm: FormGroup, modifiedForm?: FormGroup) {
+  checkPumpFluidWarnings() {
+    let hasWarning: boolean = false;
+    let baselinePumpFluidWarnings: { rpmError: string, temperatureError: string } = this.psatWarningService.checkPumpFluidWarnings(this.compareService.baselinePSAT, this.settings);
+    for (var key in baselinePumpFluidWarnings) {
+      if (baselinePumpFluidWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedPSAT && !hasWarning) {
+      let modifiedPumpFluidWarnings: { rpmError: string, temperatureError: string } = this.psatWarningService.checkPumpFluidWarnings(this.compareService.modifiedPSAT, this.settings);
+      for (var key in modifiedPumpFluidWarnings) {
+        if (modifiedPumpFluidWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
+  }
+
+  setMotorBadgeClass() {
     let badgeStr: Array<string> = ['success'];
-    let validBaselineTest = this.psatService.isMotorFormValid(baselineForm);
-    let inputError = false;
+    let tmpBaselineMotorForm: FormGroup = this.motorService.getFormFromObj(this.compareService.baselinePSAT.inputs);
+    let validBaselineTest = tmpBaselineMotorForm.valid;
+    let inputError = this.checkMotorInputError();
     let validModTest = true;
     let isDifferent = false;
-    if (modifiedForm) {
-      validModTest = this.psatService.isMotorFormValid(modifiedForm)
+    if (this.compareService.modifiedPSAT) {
+      let tmpModificationMotorForm: FormGroup = this.motorService.getFormFromObj(this.compareService.modifiedPSAT.inputs);
+      validModTest = tmpModificationMotorForm.valid;
       isDifferent = this.compareService.checkMotorDifferent();
     }
     if (!validBaselineTest || !validModTest) {
@@ -119,10 +167,28 @@ export class ModifyConditionsTabsComponent implements OnInit {
     return badgeStr;
   }
 
-  tabChange(str: string) {
-    this.psatService.modifyConditionsTab.next(str);
+  checkMotorInputError() {
+    let hasWarning: boolean = false;
+    let baselineMotorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.compareService.baselinePSAT, this.settings, false);
+    for (var key in baselineMotorWarnings) {
+      if (baselineMotorWarnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    if (this.compareService.modifiedPSAT && !hasWarning) {
+      let modifiedMotorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.compareService.modifiedPSAT, this.settings, true);
+      for (var key in modifiedMotorWarnings) {
+        if (modifiedMotorWarnings[key] !== null) {
+          hasWarning = true;
+        }
+      }
+    }
+    return hasWarning;
   }
 
+  tabChange(str: string) {
+    this.psatTabService.modifyConditionsTab.next(str);
+  }
 
   showTooltip(badge: string) {
     if (badge === 'pumpFluid') {

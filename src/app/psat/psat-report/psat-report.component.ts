@@ -11,6 +11,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { PsatReportService } from './psat-report.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-psat-report',
@@ -39,19 +40,23 @@ export class PsatReportComponent implements OnInit {
   @Input()
   printView: boolean;
   @Input()
+  printInputData: boolean;
+  @Input()
+  printResults: boolean;
+  @Input()
+  printReportGraphs: boolean;
+  @Input()
+  printReportSankey: boolean;
+  @Input()
   containerHeight: number;
 
-  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
   @ViewChild('reportBtns') reportBtns: ElementRef;
   @ViewChild('reportHeader') reportHeader: ElementRef;
 
   showPrint: boolean = false;
+  showPrintMenu: boolean = false;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
-  printReportGraphs: boolean;
-  printReportSankey: boolean;
-  printResults: boolean;
-  printInputData: boolean;
 
 
   assessmentDirectories: Directory[];
@@ -60,7 +65,7 @@ export class PsatReportComponent implements OnInit {
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private windowRefService: WindowRefService, private settingsService: SettingsService, private psatReportService: PsatReportService) { }
+  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private windowRefService: WindowRefService, private settingsService: SettingsService, private psatReportService: PsatReportService) { }
 
   ngOnInit() {
     this.initPrintLogic();
@@ -104,27 +109,33 @@ export class PsatReportComponent implements OnInit {
       }
     }
   }
-  
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.containerHeight && !changes.containerHeight.firstChange){
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
+    }
+    if (changes.printViewSelection && !changes.printViewSelection.firstChange) {
+      this.initPrintLogic();
     }
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-    },100)
+    }, 100)
   }
 
-  getContainerHeight(){
+  getContainerHeight() {
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
-    this.reportContainerHeight = this.containerHeight-btnHeight-headerHeight-25;
+    this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 25;
   }
 
   setTab(str: string) {
     this.currentTab = str;
+    setTimeout(() => {
+      d3.selectAll('.tick text').style('display', 'initial');
+    }, 50);
   }
 
   getSettings() {
@@ -161,23 +172,23 @@ export class PsatReportComponent implements OnInit {
 
 
   initPrintLogic() {
-    if (this.inRollup) {
-      this.printReportGraphs = true;
-      this.printReportSankey = true;
-      this.printResults = true;
-      this.printInputData = true;
+    if (!this.inRollup) {
+      this.printReportGraphs = false;
+      this.printReportSankey = false;
+      this.printResults = false;
+      this.printInputData = false;
     }
   }
 
   showModal(): void {
-    this.printMenuModal.show();
+    this.showPrintMenu = true;
   }
 
   closeModal(reset: boolean): void {
     if (reset) {
       this.resetPrintSelection();
     }
-    this.printMenuModal.hide();
+    this.showPrintMenu = false;
   }
 
   resetPrintSelection() {
@@ -190,7 +201,7 @@ export class PsatReportComponent implements OnInit {
 
   togglePrint(section: string): void {
     switch (section) {
-      case "select-all": {
+      case "selectAll": {
         this.selectAll = !this.selectAll;
         if (this.selectAll) {
           this.printReportGraphs = true;

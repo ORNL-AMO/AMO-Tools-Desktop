@@ -22,7 +22,7 @@ export class SystemEfficiencyTabComponent implements OnInit {
   numLosses: number = 0;
   missingData: boolean;
   isDifferent: boolean;
-  badgeClass: Array<string>;
+  badgeClass: Array<string> = [];
   efficiencyDone: boolean;
   lossSubscription: Subscription;
 
@@ -36,7 +36,7 @@ export class SystemEfficiencyTabComponent implements OnInit {
       this.efficiencyDone = this.lossesService.efficiencyDone;
       this.isDifferent = this.checkDifferent();
       this.setBadgeClass();
-    })
+    });
 
     this.badgeHover = false;
   }
@@ -69,12 +69,12 @@ export class SystemEfficiencyTabComponent implements OnInit {
     let testVal = false;
     if (this.heatSystemEfficiencyCompareService.baseline) {
       if (!this.heatSystemEfficiencyCompareService.baseline.systemEfficiency) {
-        testVal = true
+        testVal = true;
       }
     }
     if (this.heatSystemEfficiencyCompareService.modification && !this.inSetup) {
       if (!this.heatSystemEfficiencyCompareService.modification.systemEfficiency) {
-        testVal = true
+        testVal = true;
       }
     }
     return testVal;

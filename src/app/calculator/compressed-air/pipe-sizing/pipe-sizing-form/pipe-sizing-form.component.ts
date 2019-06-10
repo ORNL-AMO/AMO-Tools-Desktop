@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {PipeSizingInput, PipeSizingOutput } from "../../../../shared/models/standalone";
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-pipe-sizing-form',
@@ -7,7 +8,8 @@ import {PipeSizingInput, PipeSizingOutput } from "../../../../shared/models/stan
   styleUrls: ['./pipe-sizing-form.component.css']
 })
 export class PipeSizingFormComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   @Input()
   inputs: PipeSizingInput;
   @Input()
@@ -25,7 +27,7 @@ export class PipeSizingFormComponent implements OnInit {
     this.calculate.emit(this.inputs);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 }

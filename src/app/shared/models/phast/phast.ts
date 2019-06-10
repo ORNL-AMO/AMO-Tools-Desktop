@@ -16,28 +16,24 @@ import { AuxEquipment } from './auxEquipment';
 import { MeteredEnergy } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
 import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
+import { OperatingHours, OperatingCosts } from '../operations';
 export interface PHAST {
-  name?: string,
+  name?: string;
   //phastInputs?: PhastInputs,
-  losses?: Losses
-  modifications?: Modification[],
-  setupDone?: boolean,
-  auxEquipment?: AuxEquipment[],
-  meteredEnergy?: MeteredEnergy,
-  designedEnergy?: DesignedEnergy,
-  operatingHours?: OperatingHours,
-  systemEfficiency?: number,
-  operatingCosts?: OperatingCosts,
-  implementationCost?: number,
-  disableSetupDialog?: boolean,
-  equipmentNotes?: string
+  losses?: Losses;
+  modifications?: Modification[];
+  setupDone?: boolean;
+  auxEquipment?: AuxEquipment[];
+  meteredEnergy?: MeteredEnergy;
+  designedEnergy?: DesignedEnergy;
+  operatingHours?: OperatingHours;
+  systemEfficiency?: number;
+  operatingCosts?: OperatingCosts;
+  implementationCost?: number;
+  disableSetupDialog?: boolean;
+  equipmentNotes?: string;
 }
 
-export interface OperatingCosts {
-  fuelCost?: number,
-  steamCost?: number,
-  electricityCost?: number
-}
 
 // export interface PhastInputs {
 //   heatSource?: any,
@@ -46,87 +42,77 @@ export interface OperatingCosts {
 // }
 
 export interface Losses {
-  chargeMaterials?: ChargeMaterial[],
-  wallLosses?: WallLoss[],
-  atmosphereLosses?: AtmosphereLoss[],
-  fixtureLosses?: FixtureLoss[],
-  openingLosses?: OpeningLoss[],
-  coolingLosses?: CoolingLoss[],
-  flueGasLosses?: FlueGas[],
-  otherLosses?: OtherLoss[],
-  leakageLosses?: LeakageLoss[],
-  extendedSurfaces?: ExtendedSurface[],
-  slagLosses?: Slag[],
-  auxiliaryPowerLosses?: AuxiliaryPowerLoss[],
-  energyInputEAF?: EnergyInputEAF[],
-  exhaustGasEAF?: ExhaustGasEAF[],
-  energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[]
+  chargeMaterials?: ChargeMaterial[];
+  wallLosses?: WallLoss[];
+  atmosphereLosses?: AtmosphereLoss[];
+  fixtureLosses?: FixtureLoss[];
+  openingLosses?: OpeningLoss[];
+  coolingLosses?: CoolingLoss[];
+  flueGasLosses?: FlueGas[];
+  otherLosses?: OtherLoss[];
+  leakageLosses?: LeakageLoss[];
+  extendedSurfaces?: ExtendedSurface[];
+  slagLosses?: Slag[];
+  auxiliaryPowerLosses?: AuxiliaryPowerLoss[];
+  energyInputEAF?: EnergyInputEAF[];
+  exhaustGasEAF?: ExhaustGasEAF[];
+  energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[];
 }
 
 export interface Modification {
-  phast?: PHAST,
-  notes?: Notes,
+  phast?: PHAST;
+  notes?: Notes;
   exploreOpportunities?: boolean;
 }
 
 export interface Notes {
-  chargeNotes?: string,
-  wallNotes?: string,
-  atmosphereNotes?: string,
-  fixtureNotes?: string,
-  openingNotes?: string,
-  coolingNotes?: string,
-  flueGasNotes?: string,
-  otherNotes?: string,
-  leakageNotes?: string,
-  extendedNotes?: string,
-  slagNotes?: string,
-  auxiliaryPowerNotes?: string,
-  exhaustGasNotes?: string,
-  energyInputExhaustGasNotes?: string,
-  heatSystemEfficiencyNotes?: string,
-  operationsNotes?: string
-}
-
-export interface OperatingHours {
-  weeksPerYear?: number,
-  daysPerWeek?: number,
-  shiftsPerDay?: number,
-  hoursPerShift?: number,
-  hoursPerYear?: number,
-  isCalculated?: boolean,
-  operatingConditions?: string
+  chargeNotes?: string;
+  wallNotes?: string;
+  atmosphereNotes?: string;
+  fixtureNotes?: string;
+  openingNotes?: string;
+  coolingNotes?: string;
+  flueGasNotes?: string;
+  otherNotes?: string;
+  leakageNotes?: string;
+  extendedNotes?: string;
+  slagNotes?: string;
+  auxiliaryPowerNotes?: string;
+  exhaustGasNotes?: string;
+  energyInputExhaustGasNotes?: string;
+  heatSystemEfficiencyNotes?: string;
+  operationsNotes?: string;
 }
 
 export interface PhastResults {
-  totalInput: number,
-  totalChargeMaterialLoss: number,
-  totalWallLoss: number,
-  totalOtherLoss: number,
-  totalOpeningLoss: number,
-  totalLeakageLoss: number,
-  totalFixtureLoss: number,
-  totalExtSurfaceLoss: number,
-  totalCoolingLoss: number,
-  totalAtmosphereLoss: number,
-  totalFlueGas: number,
-  totalSlag: number,
-  totalAuxPower: number,
-  totalEnergyInputEAF: number,
-  totalEnergyInput: number,
-  totalExhaustGas: number,
-  totalExhaustGasEAF: number,
-  totalSystemLosses: number,
-  exothermicHeat: number,
-  energyInputTotalChemEnergy: number,
-  energyInputHeatDelivered: number,
-  flueGasSystemLosses: number,
-  flueGasGrossHeat: number,
-  flueGasAvailableHeat: number,
-  grossHeatInput: number,
-  heatingSystemEfficiency: number,
-  availableHeatPercent: number,
-  electricalHeatDelivered?: number
+  totalInput: number;
+  totalChargeMaterialLoss: number;
+  totalWallLoss: number;
+  totalOtherLoss: number;
+  totalOpeningLoss: number;
+  totalLeakageLoss: number;
+  totalFixtureLoss: number;
+  totalExtSurfaceLoss: number;
+  totalCoolingLoss: number;
+  totalAtmosphereLoss: number;
+  totalFlueGas: number;
+  totalSlag: number;
+  totalAuxPower: number;
+  totalEnergyInputEAF: number;
+  totalEnergyInput: number;
+  totalExhaustGas: number;
+  totalExhaustGasEAF: number;
+  totalSystemLosses: number;
+  exothermicHeat: number;
+  energyInputTotalChemEnergy: number;
+  energyInputHeatDelivered: number;
+  flueGasSystemLosses: number;
+  flueGasGrossHeat: number;
+  flueGasAvailableHeat: number;
+  grossHeatInput: number;
+  heatingSystemEfficiency: number;
+  availableHeatPercent: number;
+  electricalHeatDelivered?: number;
 }
 
 export interface ShowResultsCategories {
@@ -140,19 +126,19 @@ export interface ShowResultsCategories {
 }
 
 export interface ExecutiveSummary {
-  percentSavings?: number,
-  annualEnergyUsed?: number,
-  energyPerMass?: number,
-  annualEnergySavings?: number,
-  annualCost?: number,
-  annualCostSavings?: number,
-  implementationCosts?: number,
-  paybackPeriod?: number
+  percentSavings?: number;
+  annualEnergyUsed?: number;
+  energyPerMass?: number;
+  annualEnergySavings?: number;
+  annualCost?: number;
+  annualCostSavings?: number;
+  implementationCosts?: number;
+  paybackPeriod?: number;
 }
 
 
 export interface CalculatedByPhast {
-  fuelEnergyUsed: number,
-  energyIntensity: number,
-  electricityUsed: number
+  fuelEnergyUsed: number;
+  energyIntensity: number;
+  electricityUsed: number;
 }

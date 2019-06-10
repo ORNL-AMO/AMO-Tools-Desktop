@@ -1,0 +1,102 @@
+<nav class="hide-print w-100" *ngIf="mainTab == 'system-setup'">
+  <div class="d-flex tabs subtabs progress-tabs ssmt flex-wrap">
+    <div class="fixed-tab-size" [ngClass]="settingsStatus">
+      <a (click)="changeStepTab('system-basics')">
+        <span (mouseenter)="showTooltip(settingsBadge)" (mouseleave)="hideTooltip(settingsBadge)" class="step-number">1</span> Assessment Settings</a>
+        <app-tabs-tooltip [badgeClass]="settingsStatus[0]" [reveal]="settingsBadge.display" [display]="settingsBadge.hover"></app-tabs-tooltip>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="operationsTabStatus">
+      <a (click)="changeStepTab('operations')">
+        <span (mouseenter)="showTooltip(operationsBadge)" (mouseleave)="hideTooltip(operationsBadge)" class="step-number">2</span>Operations</a>
+      <app-tabs-tooltip [badgeClass]="operationsTabStatus[0]" [reveal]="operationsBadge.display" [display]="operationsBadge.hover"></app-tabs-tooltip>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="boilerTabStatus">
+      <a (click)="changeStepTab('boiler')">
+        <span (mouseenter)="showTooltip(boilerBadge)" (mouseleave)="hideTooltip(boilerBadge)" class="step-number">3</span>Boiler</a>
+      <app-tabs-tooltip [badgeClass]="boilerTabStatus[0]" [reveal]="boilerBadge.display" [display]="boilerBadge.hover"></app-tabs-tooltip>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="headerTabStatus">
+      <a (click)="changeStepTab('header')">
+        <span (mouseenter)="showTooltip(headerBadge)" (mouseleave)="hideTooltip(headerBadge)" class="step-number">4</span>Header</a>
+      <app-tabs-tooltip [badgeClass]="headerTabStatus[0]" [reveal]="headerBadge.display" [display]="headerBadge.hover"></app-tabs-tooltip>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="turbineTabStatus">
+      <a (click)="changeStepTab('turbine')">
+        <span (mouseenter)="showTooltip(turbineBadge)" (mouseleave)="hideTooltip(turbineBadge)" class="step-number">5</span>Turbine</a>
+      <app-tabs-tooltip [badgeClass]="turbineTabStatus[0]" [reveal]="turbineBadge.display" [display]="turbineBadge.hover"></app-tabs-tooltip>
+    </div>
+  </div>
+</nav>
+
+<div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
+  <div class="d-flex tabs subtabs ssmt mr-auto">
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+      <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+        <br>
+        <span class="help-text ssmt-view">Novice View</span>
+      </a>
+    </div>
+    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+      <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
+        <br>
+        <span class="help-text ssmt-view">Expert View</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center tabs subtabs ssmt ml-auto" [ngClass]="{'br-color-white': selectedModification}">
+    <div class="mod-name active border-right" *ngIf="selectedModification">
+      <a>{{selectedModification.name}}
+        <br>
+        <span class="help-text ssmt-view">Selected Scenario</span>
+      </a>
+    </div>
+    <div class="mod-name border-right" *ngIf="!selectedModification">
+      <a>&mdash; &mdash;
+        <br>
+        <span class="help-text fsat-view">Selected Scenario</span>
+      </a>
+    </div>
+    <div class="pl-2 pr-2">
+      <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
+        Scenarios</button>
+    </div>
+  </div>
+</div>
+
+<nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions' && mainTab =='assessment' || stepTab == 'steam-model' && mainTab == 'system-setup'">
+  <app-modify-conditions-tabs [settings]="settings"></app-modify-conditions-tabs>
+</nav>
+
+<ul class="tabs subtabs ssmt" *ngIf="mainTab == 'calculators'">
+  <li [ngClass]="{'active': calcTab == 'boiler'}">
+    <a (click)="changeCalcTab('boiler')">Boiler</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'deaerator'}">
+    <a (click)="changeCalcTab('deaerator')">Deaerator</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'flash-tank'}">
+    <a (click)="changeCalcTab('flash-tank')">Flash Tank</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'header'}">
+    <a (click)="changeCalcTab('header')">Header</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'heat-loss'}">
+    <a (click)="changeCalcTab('heat-loss')">Heat Loss</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'prv'}">
+    <a (click)="changeCalcTab('prv')">Pressure Release Valve</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'saturated-properties'}">
+    <a (click)="changeCalcTab('saturated-properties')">Saturated Properties</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'stack-loss'}">
+    <a (click)="changeCalcTab('stack-loss')">Stack Loss</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'steam-properties'}">
+    <a (click)="changeCalcTab('steam-properties')">Steam Properties</a>
+  </li>
+  <li [ngClass]="{'active': calcTab == 'turbine'}">
+    <a (click)="changeCalcTab('turbine')">Turbine</a>
+  </li>
+</ul>

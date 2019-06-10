@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
 import * as _ from 'lodash';
 import * as d3 from 'd3';
@@ -42,7 +41,7 @@ export class PieChartComponent implements OnInit {
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService, private cd: ChangeDetectorRef) { }
+  constructor(private svgToPngService: SvgToPngService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
@@ -71,15 +70,13 @@ export class PieChartComponent implements OnInit {
     }
   }
 
-  
-
   // ========== export/gridline tooltip functions ==========
   initTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = true;
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = true;
     }
     setTimeout(() => {
@@ -89,18 +86,18 @@ export class PieChartComponent implements OnInit {
 
   hideTooltip(btnType: string) {
 
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       this.hoverBtnExport = false;
       this.displayExportTooltip = false;
     }
-    else if (btnType == 'btnGridLines') { 
+    else if (btnType === 'btnGridLines') {
       this.hoverBtnGridLines = false;
       this.displayGridLinesTooltip = false;
     }
   }
 
   checkHover(btnType: string) {
-    if (btnType == 'btnExportChart') {
+    if (btnType === 'btnExportChart') {
       if (this.hoverBtnExport) {
         this.displayExportTooltip = true;
       }
@@ -108,7 +105,7 @@ export class PieChartComponent implements OnInit {
         this.displayExportTooltip = false;
       }
     }
-    else if (btnType == 'btnGridLines') {
+    else if (btnType === 'btnGridLines') {
       if (this.hoverBtnGridLines) {
         this.displayGridLinesTooltip = true;
       }
@@ -164,7 +161,6 @@ export class PieChartComponent implements OnInit {
     let xBound;
     let fontSize;
 
-
     if (printView) {
       if (this.sideBySide) {
         xBound = radius * (15 / 14);
@@ -179,7 +175,7 @@ export class PieChartComponent implements OnInit {
       xBound = radius * (3 / 2);
       fontSize = "12px";
     }
-    
+
     let yBound = height * (5 / 6);
     let leftLabelSpace, rightLabelSpace;
     let arc = d3.arc().innerRadius(0).outerRadius(radius);
@@ -314,7 +310,7 @@ export class PieChartComponent implements OnInit {
       });
 
 
-      this.svg.append("defs").append("marker")
+    this.svg.append("defs").append("marker")
       .attr("id", "circ")
       .attr("markerWidth", 4)
       .attr("markerHeight", 4)
@@ -368,8 +364,10 @@ export class PieChartComponent implements OnInit {
     let sideBySide = this.sideBySide;
     let svgWidth = this.chartContainerWidth;
     let svgHeight = this.chartContainerHeight;
-    let colors = this.graphColors;
-    let color = d3.scaleOrdinal(colors);
+    // let colors = this.graphColors;
+    let color = d3.scaleOrdinal(this.graphColors);
+
+    // let color = d3.scaleOrdinal(colors);
     let pie = d3.pie().sort(null);
     let pieValues = this.values;
     let pieLabels = this.labels;
@@ -403,12 +401,15 @@ export class PieChartComponent implements OnInit {
     let arc = d3.arc().innerRadius(0).outerRadius(radius);
     let outerArc = d3.arc().innerRadius(radius * 0.9).outerRadius(radius * 0.9);
 
+
+    //real version
     let path = this.svg.selectAll("path.slice")
       .data(pieValuesData);
     path.enter()
       .append("path")
       .attr("class", "slice")
-      .attr("fill", function (d, i) { return color(i); })
+      .attr("fill", color);
+      // .attr("fill", function (d, i) { return color(i); })
     path.transition().duration(500)
       .attrTween("d", function (d) {
         this._current = this._current || d;
@@ -417,7 +418,7 @@ export class PieChartComponent implements OnInit {
         return function (t) {
           return arc(interpolate(t));
         };
-      })
+      });
     path.exit().remove();
 
     let text = this.svg.selectAll("text").remove();
@@ -538,7 +539,7 @@ export class PieChartComponent implements OnInit {
     let pointer = this.svg.selectAll("path.pointer")
       .data(pieValuesData)
       .enter()
-      .append("path")
+      .append("path");
     pointer.style('opacity', 0).transition().duration(750).ease(d3.easeLinear).style('opacity', 1);
     pointer.attr("class", "pointer")
       .style("fill", "none")

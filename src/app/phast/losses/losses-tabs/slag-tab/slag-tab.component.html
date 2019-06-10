@@ -5,6 +5,4 @@
     </span>
 </a>
 
-<div *ngIf="numLosses">
-    <app-losses-tabs-tooltip [display]="badgeHover" [reveal]="displayTooltip" [numLosses]="numLosses" [badgeClass]="badgeClass"></app-losses-tabs-tooltip>
-</div>
+<app-tabs-tooltip [display]="badgeHover" [reveal]="displayTooltip" [badgeClass]="badgeClass[0]"></app-tabs-tooltip>

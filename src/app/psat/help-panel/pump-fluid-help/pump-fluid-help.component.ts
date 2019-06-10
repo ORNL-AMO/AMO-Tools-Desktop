@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HelpPanelService } from '../help-panel.service';
 import { PSAT } from '../../../shared/models/psat';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-pump-fluid-help',
@@ -9,7 +10,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./pump-fluid-help.component.css']
 })
 export class PumpFluidHelpComponent implements OnInit {
-
+  @Input()
+  settings: Settings;
   @Input()
   psat: PSAT;
   currentField: string;

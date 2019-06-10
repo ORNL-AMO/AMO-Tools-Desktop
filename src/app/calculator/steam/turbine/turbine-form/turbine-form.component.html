@@ -1,0 +1,151 @@
+<form [formGroup]="turbineForm">
+  <label class="group-label">Solve For</label>
+  <div class="form-group">
+    <select name="solveFor" class="form-control w-100" formControlName="solveFor" id="solveFor" (change)="setValidators()" (focus)="focusField('solveFor')"
+      (blur)="focusOut()">
+      <option *ngFor="let option of methodOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+  </div>
+
+  <label class="group-label">Inlet Steam</label>
+  <div class="form-group">
+    <label class="small" for="inletPressure">Pressure</label>
+    <div class="input-group">
+      <input class="form-control" name="inletPressure" id="inletPressure" formControlName="inletPressure" type="number" (input)="calculate()"
+        (focus)="focusField('inletPressure')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.inletPressure.invalid && !turbineForm.controls.inletPressure.pristine">
+      <span *ngIf="turbineForm.controls.inletPressure.errors.required">Value Required</span>
+      <span *ngIf="turbineForm.controls.inletPressure.errors.max">Value can't be greater than {{turbineForm.controls.inletPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="turbineForm.controls.inletPressure.errors.min">Value can't be less than {{turbineForm.controls.inletPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="inletQuantity">Calculation Method</label>
+    <select name="inletQuantity" class="form-control" formControlName="inletQuantity" id="inletQuantity" (change)="setValidators()"
+      (focus)="focusField('inletQuantity')" (blur)="focusOut()">
+      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="inletQuantityValue">{{getOptionDisplay(turbineForm.controls.inletQuantity.value)}} Value</label>
+    <div class="input-group">
+      <input class="form-control" name="inletQuantityValue" id="inletQuantityValue" formControlName="inletQuantityValue" type="number"
+        (input)="calculate()" (focus)="focusField('inletQuantityValue')" (blur)="focusOut()" onfocus="this.select();">
+      <span *ngIf="turbineForm.controls.inletQuantity.value != 3" class="input-group-addon units" [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value)"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.inletQuantityValue.invalid && !turbineForm.controls.inletQuantityValue.pristine">
+      <span *ngIf="turbineForm.controls.inletQuantityValue.errors.required">Value Required</span>
+      <span *ngIf="turbineForm.controls.inletQuantityValue.errors.max">Value can't be greater than {{turbineForm.controls.inletQuantityValue.errors.max.max}}
+        <span *ngIf="turbineForm.controls.inletQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value)"></span>
+        .</span>
+      <span *ngIf="turbineForm.controls.inletQuantityValue.errors.min">Value can't be less than {{turbineForm.controls.inletQuantityValue.errors.min.min}}
+        <span *ngIf="turbineForm.controls.inletQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(turbineForm.controls.inletQuantity.value)"></span>.
+      </span>
+    </span>
+  </div>
+
+  <label class="group-label">Turbine Properties</label>
+  <div class="form-group">
+    <label class="small" for="turbineProperty">Selected Turbine Property</label>
+    <select name="turbineProperty" class="form-control" formControlName="turbineProperty" id="turbineProperty" (change)="calculate()"
+      (focus)="focusField('turbineProperty')" (blur)="focusOut()">
+      <option *ngFor="let option of turbineOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="massFlowOrPowerOut" *ngIf="turbineForm.controls.turbineProperty.value == 0">Mass Flow</label>
+    <label class="small" for="massFlowOrPowerOut" *ngIf="turbineForm.controls.turbineProperty.value == 1">Power Out</label>
+    <div class="input-group">
+      <input class="form-control" name="massFlowOrPowerOut" id="massFlowOrPowerOut" formControlName="massFlowOrPowerOut" type="number"
+        (input)="calculate()" (focus)="focusField('massFlowOrPowerOut')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units" *ngIf="turbineForm.controls.turbineProperty.value == 0">{{settings.steamMassFlowMeasurement}}/hr</span>
+      <span class="input-group-addon units" *ngIf="turbineForm.controls.turbineProperty.value == 1">kW</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.massFlowOrPowerOut.invalid && !turbineForm.controls.massFlowOrPowerOut.pristine">
+      <span *ngIf="turbineForm.controls.massFlowOrPowerOut.errors.required">Value Required</span>
+      <span *ngIf="turbineForm.controls.massFlowOrPowerOut.errors.max">Value can't be greater than {{turbineForm.controls.massFlowOrPowerOut.errors.max.max}}
+        <span *ngIf="turbineForm.controls.turbineProperty.value == 0">{{settings.steamMassFlowMeasurement}}/hr</span>
+        <span *ngIf="turbineForm.controls.turbineProperty.value == 1">kW</span>
+        .</span>
+      <span *ngIf="turbineForm.controls.massFlowOrPowerOut.errors.min">Value can't be less than {{turbineForm.controls.massFlowOrPowerOut.errors.min.min}}
+        <span *ngIf="turbineForm.controls.turbineProperty.value == 0">{{settings.steamMassFlowMeasurement}}/hr</span>
+        <span *ngIf="turbineForm.controls.turbineProperty.value == 1">kW</span>
+        .</span>
+    </span>
+  </div>
+
+  <div class="form-group" *ngIf="turbineForm.controls.solveFor.value == 0">
+    <label class="small" for="isentropicEfficiency">Isentropic Efficiency</label>
+    <div class="input-group">
+      <input class="form-control" name="isentropicEfficiency" id="isentropicEfficiency" formControlName="isentropicEfficiency"
+        type="number" (input)="calculate()" (focus)="focusField('isentropicEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.isentropicEfficiency.invalid && !turbineForm.controls.isentropicEfficiency.pristine">
+      <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.required">Value Required</span>
+      <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.max">Value can't be greater than {{turbineForm.controls.isentropicEfficiency.errors.max.max}} %.</span>
+      <span *ngIf="turbineForm.controls.isentropicEfficiency.errors.min">Value can't be less than {{turbineForm.controls.isentropicEfficiency.errors.min.min}} %.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label class="small" for="generatorEfficiency">Generator Efficiency</label>
+    <div class="input-group">
+      <input class="form-control" name="generatorEfficiency" id="generatorEfficiency" formControlName="generatorEfficiency" type="number"
+        (input)="calculate()" (focus)="focusField('generatorEfficiency')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.generatorEfficiency.invalid && !turbineForm.controls.generatorEfficiency.pristine">
+      <span *ngIf="turbineForm.controls.generatorEfficiency.errors.required">Value Required</span>
+      <span *ngIf="turbineForm.controls.generatorEfficiency.errors.max">Value can't be greater than {{turbineForm.controls.generatorEfficiency.errors.max.max}} %.</span>
+      <span *ngIf="turbineForm.controls.generatorEfficiency.errors.min">Value can't be less than {{turbineForm.controls.generatorEfficiency.errors.min.min}} %.</span>
+    </span>
+  </div>
+
+  <label class="group-label">Outlet Steam</label>
+  <div class="form-group">
+    <label class="small" for="outletSteamPressure">Pressure</label>
+    <div class="input-group">
+      <input class="form-control" name="outletSteamPressure" id="outletSteamPressure" formControlName="outletSteamPressure" type="number"
+        (input)="calculate()" (focus)="focusField('outletSteamPressure')" (blur)="focusOut()" onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.steamPressureMeasurement}}</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.outletSteamPressure.invalid && !turbineForm.controls.outletSteamPressure.pristine">
+      <span *ngIf="turbineForm.controls.outletSteamPressure.errors.required">Value Required</span>
+      <span *ngIf="turbineForm.controls.outletSteamPressure.errors.max">Value can't be greater than {{turbineForm.controls.outletSteamPressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+      <span *ngIf="turbineForm.controls.outletSteamPressure.errors.min">Value can't be less than {{turbineForm.controls.outletSteamPressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
+    </span>
+  </div>
+
+  <div class="form-group" *ngIf="turbineForm.controls.solveFor.value == 1">
+    <label class="small" for="outletQuantity">Calculation Method</label>
+    <select name="outletQuantity" class="form-control" formControlName="outletQuantity" id="outletQuantity" (change)="setValidators()"
+      (focus)="focusField('outletQuantity')" (blur)="focusOut()">
+      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+  </div>
+
+  <div class="form-group" *ngIf="turbineForm.controls.solveFor.value == 1">
+    <label class="small" for="outletQuantityValue">{{getOptionDisplay(turbineForm.controls.outletQuantity.value)}} Value</label>
+    <div class="input-group">
+      <input class="form-control" name="outletQuantityValue" id="outletQuantityValue" formControlName="outletQuantityValue" type="number"
+        (input)="calculate()" (focus)="focusField('outletQuantityValue')" (blur)="focusOut()" onfocus="this.select();">
+      <span *ngIf="turbineForm.controls.outletQuantity.value != 3" class="input-group-addon units" [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value)"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.outletQuantityValue.invalid && !turbineForm.controls.outletQuantityValue.pristine">
+      <span *ngIf="turbineForm.controls.outletQuantityValue.errors.required">Value Required</span>
+      <span *ngIf="turbineForm.controls.outletQuantityValue.errors.max">Value can't be greater than {{turbineForm.controls.outletQuantityValue.errors.max.max}}
+        <span *ngIf="turbineForm.controls.outletQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value)"></span>
+        .</span>
+      <span *ngIf="turbineForm.controls.outletQuantityValue.errors.min">Value can't be less than {{turbineForm.controls.outletQuantityValue.errors.min.min}}
+        <span *ngIf="turbineForm.controls.outletQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(turbineForm.controls.outletQuantity.value)"></span>.
+      </span>
+    </span>
+  </div>
+
+</form>

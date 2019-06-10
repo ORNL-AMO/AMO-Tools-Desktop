@@ -1,7 +1,7 @@
 import { Assessment } from "../shared/models/assessment";
 import { Settings } from "../shared/models/settings";
-declare const packageJson;
 export const MockPhast: Assessment = {
+    isExample: true,
     type: "PHAST",
     name: "Reheat Furnace Case Study",
     phast: {
@@ -1141,7 +1141,7 @@ export const MockPhast: Assessment = {
         ]
     },
     directoryId: 2
-}
+};
 
 export const MockPhastSettings: Settings = {
     language: "English",
@@ -1158,11 +1158,11 @@ export const MockPhastSettings: Settings = {
     customFurnaceName: null,
     temperatureMeasurement: "F",
     steamTemperatureMeasurement: "F",
-    steamPressureMeasurement: "psi",
+    steamPressureMeasurement: "psig",
     steamSpecificEnthalpyMeasurement: "btuLb",
     steamSpecificEntropyMeasurement: "btulbF",
     steamSpecificVolumeMeasurement: "ft3lb",
-    steamMassFlowMeasurement: "lbhr",
+    steamMassFlowMeasurement: "klb",
     fuelCost: 3.99,
     steamCost: 4.69,
     electricityCost: 0.066,
@@ -1172,7 +1172,6 @@ export const MockPhastSettings: Settings = {
     phastRollupSteamUnit: 'MMBtu',
     energyResultUnit: "MMBtu",
     phastRollupUnit: 'MMBtu',
-    appVersion: packageJson.version,
     facilityInfo: {
         companyName: 'ORNL',
         facilityName: 'ORNL Test Facility',
@@ -1194,4 +1193,4 @@ export const MockPhastSettings: Settings = {
             email: 'AMO_ToolHelpDesk@ee.doe.gov'
         }
     }
-}
+};

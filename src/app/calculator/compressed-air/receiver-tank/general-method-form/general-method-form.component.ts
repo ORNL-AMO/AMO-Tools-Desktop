@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { ReceiverTankGeneral } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
+import { CompressedAirService } from '../../compressed-air.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-general-method-form',
@@ -8,21 +10,40 @@ import { StandaloneService } from '../../../standalone.service';
   styleUrls: ['./general-method-form.component.css']
 })
 export class GeneralMethodFormComponent implements OnInit {
-  inputs: ReceiverTankGeneral = {
-    airDemand: 0,
-    allowablePressureDrop: 0,
-    method: 0,
-    atmosphericPressure: 14.7,
-  };;
+  @Input()
+  toggleResetData: boolean;
+  @Input()
+  settings: Settings;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
+  inputs: ReceiverTankGeneral;
   finalTankPressure: number;
 
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService, private standAloneService: StandaloneService) { }
 
   ngOnInit() {
+    this.inputs = this.compressedAirService.generalMethodInputs;
+    this.getStorage();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.resetData();
+    }
+  }
+
+  resetData() {
+    this.compressedAirService.initReceiverTankInputs();
+    this.inputs = this.compressedAirService.generalMethodInputs;
+    this.getStorage();
   }
 
   getStorage() {
-    this.finalTankPressure = StandaloneService.receiverTankSizeGeneral(this.inputs);
+    this.finalTankPressure = this.standAloneService.receiverTankSizeGeneral(this.inputs, this.settings);
   }
 
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
+  }
 }

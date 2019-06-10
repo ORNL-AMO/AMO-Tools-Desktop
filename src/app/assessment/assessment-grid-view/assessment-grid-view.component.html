@@ -3,6 +3,9 @@
     <app-pre-assessment-card [settings]="directorySettings" [isChecked]="isChecked" [directory]="directory" [calculator]="calculator"
       (viewPreAssessment)="viewPreAssessment($event)" (updateDirectory)="changeDirectory()" [index]="index"></app-pre-assessment-card>
   </div>
+  <!-- <div class="col-4 summary-card">
+    <app-treasure-hunt-card [directory]="directory" [settings]="settings"></app-treasure-hunt-card>
+  </div> -->
   <div class="col-4 summary-card" *ngFor="let assessment of directory.assessments">
     <app-assessment-card [assessment]="assessment" [isChecked]="isChecked" (changeDirectory)="changeDirectory()"></app-assessment-card>
   </div>

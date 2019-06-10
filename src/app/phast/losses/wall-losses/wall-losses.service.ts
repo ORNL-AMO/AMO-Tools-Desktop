@@ -17,8 +17,8 @@ export class WallLossesService {
       'surfaceShape': ['Vertical Plates', Validators.required],
       'conditionFactor': [1.394, Validators.required],
       'surfaceEmissivity': [0.9, Validators.required],
-      'name': ['Loss #'+lossNum]
-    })
+      'name': ['Loss #' + lossNum]
+    });
   }
 
   //get form from WallLoss
@@ -33,7 +33,7 @@ export class WallLossesService {
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
       'surfaceShape': [wallLoss.surfaceShape],
       'name': [wallLoss.name]
-    })
+    });
   }
   //get WallLoss from form
   getWallLossFromForm(wallLossForm: FormGroup): WallLoss {
@@ -47,7 +47,62 @@ export class WallLossesService {
       conditionFactor: wallLossForm.controls.conditionFactor.value,
       correctionFactor: wallLossForm.controls.correctionFactor.value,
       name: wallLossForm.controls.name.value
-    }
+    };
     return tmpWallLoss;
   }
+
+  checkWarnings(loss: WallLoss): WallLossWarnings {
+    return {
+      windVelocityWarning: this.checkWindVelocity(loss),
+      surfaceAreaWarning: this.checkSurfaceArea(loss),
+      surfaceTempWarning: this.checkTemperature(loss),
+      emissivityWarning: this.checkSurfaceEmissivity(loss)
+    };
+  }
+
+  checkWindVelocity(loss: WallLoss): string {
+    if (loss.windVelocity < 0) {
+      return 'Wind Velocity must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+  checkSurfaceArea(loss: WallLoss): string {
+    if (loss.surfaceArea < 0) {
+      return 'Total Outside Surface Area must be equal or greater than 0';
+    } else {
+      return null;
+    }
+  }
+  checkTemperature(loss: WallLoss): string {
+    if (loss.surfaceTemperature < loss.ambientTemperature) {
+      return 'Surface temperature is lower than ambient temperature';
+    } else {
+      return null;
+    }
+
+  }
+  checkSurfaceEmissivity(loss: WallLoss): string {
+    if (loss.surfaceEmissivity > 1 || loss.surfaceEmissivity < 0) {
+      return 'Surface emissivity must be between 0 and 1';
+    } else {
+      return null;
+    }
+  }
+  checkWarningsExist(warnings: WallLossWarnings): boolean {
+    let hasWarning: boolean = false;
+    for (var key in warnings) {
+      if (warnings[key] !== null) {
+        hasWarning = true;
+      }
+    }
+    return hasWarning;
+  }
+}
+
+export interface WallLossWarnings {
+  windVelocityWarning: string;
+  surfaceAreaWarning: string;
+  surfaceTempWarning: string;
+  emissivityWarning: string;
 }

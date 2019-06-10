@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
-import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { SpecificSpeedService } from './specific-speed.service';
+import { Assessment } from '../../../shared/models/assessment';
+import { Calculator, SpecificSpeedInputs } from '../../../shared/models/calculators';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 @Component({
   selector: 'app-specific-speed',
   templateUrl: './specific-speed.component.html',
@@ -17,7 +19,9 @@ export class SpecificSpeedComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  inPsat: boolean;
+  assessment: Assessment;
+  @Input()
+  inAssessment: boolean;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
@@ -33,42 +37,28 @@ export class SpecificSpeedComponent implements OnInit {
   specificSpeed: number;
   efficiencyCorrection: number;
   toggleCalculate: boolean = true;
+  toggleResetData: boolean = true;
   tabSelect: string = 'results';
-  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  calcExists: boolean;
+  saving: boolean;
+  calculator: Calculator;
+  constructor(private specificSpeedService: SpecificSpeedService, private settingsDbService: SettingsDbService,
+    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    if (!this.psat) {
-      this.speedForm = this.psatService.initForm();
-      this.speedForm.patchValue({
-        pumpType: this.psatService.getPumpStyleFromEnum(0),
-        pumpRPM: 1780,
-        flowRate: 2000,
-        head: 277
-      })
-    } else {
-      this.speedForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
     }
 
     //get settings if standalone
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-      //convert defaults if standalone without default system settings
-      if (this.settings.flowMeasurement != 'gpm') {
-        let tmpVal = this.convertUnitsService.value(this.speedForm.controls.flowRate.value).from('gpm').to(this.settings.flowMeasurement);
-        this.speedForm.patchValue({
-          flowRate: this.psatService.roundVal(tmpVal, 2)
-        })
-      }
-      if (this.settings.distanceMeasurement != 'ft') {
-        let tmpVal = this.convertUnitsService.value(this.speedForm.controls.head.value).from('ft').to(this.settings.distanceMeasurement);
-
-        this.speedForm.patchValue({
-          head: this.psatService.roundVal(tmpVal, 2)
-        })
-      }
-    }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
+
+    if (this.inAssessment) {
+      this.getCalculator();
+    } else {
+      this.initForm();
     }
   }
 
@@ -76,6 +66,12 @@ export class SpecificSpeedComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  btnResetData() {
+    this.toggleResetData = !this.toggleResetData;
+    this.speedForm = this.specificSpeedService.initForm(this.settings);
+    this.calculate();
   }
 
   resizeTabs() {
@@ -86,11 +82,79 @@ export class SpecificSpeedComponent implements OnInit {
 
   calculate() {
     this.toggleCalculate = !this.toggleCalculate;
+    if (!this.psat) {
+      this.specificSpeedService.specificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
+    } else if (this.inAssessment && this.calcExists) {
+      this.calculator.specificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
+      this.saveCalculator();
+    }
   }
+
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string) {
     this.currentField = str;
+  }
+
+  getCalculator() {
+    this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.calculator) {
+      this.calcExists = true;
+      if (this.calculator.specificSpeedInputs) {
+        this.speedForm = this.specificSpeedService.initFormFromObj(this.calculator.specificSpeedInputs);
+      } else {
+        this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
+        let tmpSpecificSpeedInputs: SpecificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
+        this.calculator.specificSpeedInputs = tmpSpecificSpeedInputs;
+        this.saveCalculator();
+      }
+    } else {
+      this.calculator = this.initCalculator();
+      this.saveCalculator();
+    }
+  }
+
+  initCalculator(): Calculator {
+    this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
+    let tmpSpecificSpeedInputs: SpecificSpeedInputs = this.specificSpeedService.getObjFromForm(this.speedForm);
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      specificSpeedInputs: tmpSpecificSpeedInputs
+    };
+    return tmpCalculator;
+  }
+
+  initForm() {
+    if (!this.psat) {
+      if (!this.specificSpeedService.specificSpeedInputs) {
+        this.speedForm = this.specificSpeedService.initForm(this.settings);
+      } else {
+        this.speedForm = this.specificSpeedService.initFormFromObj(this.specificSpeedService.specificSpeedInputs);
+      }
+    } else {
+      this.speedForm = this.specificSpeedService.initFormFromPsat(this.psat.inputs);
+    }
+  }
+
+  saveCalculator() {
+    if (!this.saving || this.calcExists) {
+      if (this.calcExists) {
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.calculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.calculator.id = result;
+            this.calcExists = true;
+            this.saving = false;
+          });
+        });
+      }
+    }
   }
 }

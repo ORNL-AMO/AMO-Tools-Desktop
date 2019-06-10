@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { ToastyModule } from 'ng2-toasty';
 import { MeteredEnergyModule } from './metered-energy/metered-energy.module';
 import { LossesModule } from './losses/losses.module';
 import { DesignedEnergyModule } from './designed-energy/designed-energy.module';
@@ -37,7 +36,7 @@ import { PhastCompareService } from './phast-compare.service';
 import { ModificationNavbarComponent } from './modification-navbar/modification-navbar.component';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
-import { PhastTabsTooltipComponent } from './phast-tabs/phast-tabs-tooltip/phast-tabs-tooltip.component';
+import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 
 @NgModule({
   declarations: [
@@ -52,8 +51,7 @@ import { PhastTabsTooltipComponent } from './phast-tabs/phast-tabs-tooltip/phast
     PhastCalculatorTabsComponent,
     ModificationNavbarComponent,
     ModificationListComponent,
-    AddModificationComponent,
-    PhastTabsTooltipComponent,
+    AddModificationComponent
   ],
   exports: [
   ],
@@ -65,7 +63,6 @@ import { PhastTabsTooltipComponent } from './phast-tabs/phast-tabs-tooltip/phast
     SharedModule,
     ModalModule,
     LossesModule,
-    ToastyModule,
     SettingsModule,
     AuxEquipmentModule,
     DesignedEnergyModule,
@@ -78,7 +75,8 @@ import { PhastTabsTooltipComponent } from './phast-tabs/phast-tabs-tooltip/phast
     EnergyEquivalencyModule,
     EnergyUseModule,
     ExplorePhastOpportunitiesModule,
-    LossesTabsModule
+    LossesTabsModule,
+    UtilitiesModule
   ],
   providers: [
     PhastService,

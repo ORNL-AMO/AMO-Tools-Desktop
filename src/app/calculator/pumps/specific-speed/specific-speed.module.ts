@@ -6,6 +6,7 @@ import { SpecificSpeedFormComponent } from './specific-speed-form/specific-speed
 import { SpecificSpeedComponent } from './specific-speed.component';
 import { SpecificSpeedHelpComponent } from './specific-speed-help/specific-speed-help.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { SpecificSpeedService } from './specific-speed.service';
 
 @NgModule({
   imports: [
@@ -22,6 +23,9 @@ import { SharedModule } from '../../../shared/shared.module';
   ],
   exports: [
     SpecificSpeedComponent
+  ],
+  providers: [
+    SpecificSpeedService
   ]
 })
 export class SpecificSpeedModule { }

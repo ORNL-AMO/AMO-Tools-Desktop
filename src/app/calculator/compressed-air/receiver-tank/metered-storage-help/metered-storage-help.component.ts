@@ -6,6 +6,9 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./metered-storage-help.component.css']
 })
 export class MeteredStorageHelpComponent implements OnInit {
+  @Input()
+  currentField: string;
+  
   constructor() { }
 
   ngOnInit() {

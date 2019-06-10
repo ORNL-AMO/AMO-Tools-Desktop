@@ -1,0 +1,36 @@
+.continue-btn-row{
+    padding-top: 10px;
+}
+
+.continue-btn{
+    padding: 6px;
+}
+
+.group-label:hover{
+    cursor: pointer;
+    background-color: #D5D8DC;
+}
+
+
+.group-label.disabled {
+    color: #efefef;
+}
+
+.group-label.disabled .step-number{
+    background: #efefef;
+}
+
+.group-label .fa{
+    color: #1E8449;
+    font-size: large;
+}
+
+
+.group-label .fa-exclamation-circle{
+    color: #B03A2E;
+}
+
+.group-label .fa.fa-calculator{
+    color: black;
+    padding: 5px;
+}

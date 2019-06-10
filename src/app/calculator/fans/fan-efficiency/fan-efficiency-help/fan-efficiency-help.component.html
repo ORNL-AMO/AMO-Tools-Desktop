@@ -1,0 +1,117 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Optimal Fan Efficiency Help
+    <br>
+    <small class="text-muted">
+      Use this calculator to calculate the optimal fan efficiency that is achievable by your fan setup.
+      <br>
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+  <div class="my-2" *ngIf="currentField == 'fanType'">
+    <h6>
+      Fan Type
+      <br>
+      <small class="text-muted">
+        Fan Type represents what style of fan is being used based off the listings in the AMCA 201 Standard. This value will be used
+        to estimate achievable fan efficiencies based on fan style and operating conditions when automatically optimizing.
+        The Specified Efficiency option allows the user to input a fan efficiency to use when optimizing, this does not affect
+        the efficiency calculated for the baseline.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100">
+      <label class="group-label w-100">Fan Type Options</label>
+      <div class="d-flex justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">SISW</th>
+              <td class="text-center">Airfoil</td>
+              <td class="text-center">Backward Curved</td>
+              <td class="text-center">Radial</td>
+              <td class="text-center">Radial Tip</td>
+              <td class="text-center">Backward Inclined</td>
+            </tr>
+            <tr>
+              <th class="text-center">DIDW</th>
+              <td class="text-center">Airfoil</td>
+              <td class="text-center">Backward Inclined</td>
+              <td></td>
+              <td></td>
+              <td></td>
+
+            </tr>
+            <tr>
+              <th class="text-center">ICF</th>
+              <td class="text-center">Air Handling</td>
+              <td class="text-center">Material Handling</td>
+              <td class="text-center">Long Shavings</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'fanSpeed'">
+    <h6>
+      Fan Speed
+      <br>
+      <small class="text-muted">
+        The operating or nameplate speed at which the fan is running at. Used along with the measure/required flow rate, head, and
+        number of stages, to calculate the fan specific speed. The specific speed is used to determine efficiency penalty
+        associated with the fan application, when using the optimization capability.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'inletPressure'">
+    <h6>
+      Inlet Pressure
+      <br>
+      <small class="text-muted">
+        The Static or Total Pressure at the inlet of the Fan, this must be negative.
+        <hr> Most fans are rated in terms of static pressure; however, some fans are rated in terms of total pressure. Be certain
+        which was used for the fan's selection.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'outletPressure'">
+    <h6>
+      Outlet Pressure
+      <br>
+      <small class="text-muted">
+        The Static or Total Pressure at the outlet of the Fan.
+        <hr> Most fans are rated in terms of static pressure; however, some fans are rated in terms of total pressure. Be certain
+        which was used for the fan's selection.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'flowRate'">
+    <h6>
+      Flow Rate
+      <br>
+      <small class="text-muted">
+        The volumetric flow rate of air at the outlet of the fan.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'compressibilityFactor'">
+    <h6>
+      Compressibility Factor
+      <br>
+      <small class="text-muted">
+        The compressibility factor is the measure of how non-ideal the gas is.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>

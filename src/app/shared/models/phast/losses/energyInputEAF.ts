@@ -1,13 +1,13 @@
 export interface EnergyInputEAF {
-    naturalGasHeatInput?: number,
+    naturalGasHeatInput?: number;
     // naturalGasFlow?: number,
     // measuredOxygenFlow?: number,
-    coalCarbonInjection?: number,
-    coalHeatingValue?: number,
-    electrodeUse?: number,
-    electrodeHeatingValue?: number,
-    otherFuels?: number,
-    electricityInput?: number,
-    flowRateInput?: number,
-    name?: string
+    coalCarbonInjection?: number;
+    coalHeatingValue?: number;
+    electrodeUse?: number;
+    electrodeHeatingValue?: number;
+    otherFuels?: number;
+    electricityInput?: number;
+    flowRateInput?: number;
+    name?: string;
 }

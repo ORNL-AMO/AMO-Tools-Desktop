@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { PsatOutputs, PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 
@@ -24,9 +24,20 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   annualSavings: number;
   @Input()
   modificationName: string;
+  @Input()
+  inSetup: boolean;
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.hideResults();
+  }
+  showResults: boolean = true;
+  timeOut: any;
   constructor() { }
 
   ngOnInit() {
+
   }
 
 
@@ -37,5 +48,15 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     } else {
       return diff;
     }
+  }
+
+  hideResults() {
+    this.showResults = false;
+    if (this.timeOut) {
+      clearTimeout(this.timeOut);
+    }
+    this.timeOut = setTimeout(() => {
+      this.showResults = true;
+    }, 100)
   }
 }

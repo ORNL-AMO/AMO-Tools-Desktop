@@ -1,0 +1,119 @@
+<label class="group-label">Baseline Summary</label>
+<table #copyTable0 class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td>&nbsp;</td>
+      <td class="bold text-center">Operating Hours
+        (hrs/yr)
+      </td>
+      <td class="bold text-center">Electricity Use
+        (kWh/yr)
+      </td>
+      <td class="bold text-center">Total Lighting
+        (lumens)
+      </td>
+    </tr>
+    <tr *ngFor="let data of baselineData; let index = index;">
+      <td class="bold">{{data.name}}</td>
+      <td class="text-center">{{data.hoursPerYear | number:'1.0-0'}}
+      </td>
+      <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
+      <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
+    </tr>
+  </tbody>
+</table>
+<!-- <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table> -->
+
+<div *ngIf="modificationExists">
+  <label class="group-label">Modification Summary</label>
+  <table #copyTable1 class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td>&nbsp;</td>
+        <td class="bold text-center">Operating Hours
+          (hrs/yr)
+        </td>
+        <td class="bold text-center">Electricity Use
+          (kWh/yr)
+        </td>
+        <td class="bold text-center">Total Lighting
+          (lumens)
+        </td>
+      </tr>
+      <tr *ngFor="let data of modificationData; let index = index;">
+        <td class="bold">{{data.name}}</td>
+        <td class="text-center">{{data.hoursPerYear | number:'1.0-0'}}
+        </td>
+        <td class="text-center">{{data.electricityUse | number:'1.0-0'}}</td>
+        <td class="text-center">{{data.totalLighting | number:'1.0-0'}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <app-exportable-results-table [tableString]="table1String"
+    (updateTableString)="updateTable1String()"></app-exportable-results-table> -->
+</div>
+
+<label class="group-label">Totals</label>
+<table #copyTable2 class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td>&nbsp;</td>
+      <td class="bold text-center">Operating Hours
+        (hrs/yr)
+      </td>
+      <td class="bold text-center">Electricity Use
+        (kWh/yr)
+      </td>
+      <td class="bold text-center">Total Lighting
+        (lumens)
+      </td>
+      <td class="bold text-center">
+        Total Annual Cost
+        ($/yr)
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Baseline</td>
+      <td class="text-center">{{lightingReplacementResults.baselineResults.totalOperatingHours | number:'1.0-0'}}
+      </td>
+      <td class="text-center">{{lightingReplacementResults.baselineResults.totalElectricityUse | number:'1.0-0'}}</td>
+      <td class="text-center">{{lightingReplacementResults.baselineResults.totalLighting | number:'1.0-0'}}</td>
+      <td class="text-center">{{lightingReplacementResults.baselineResults.totalOperatingCosts | currency:'USD'}}</td>
+    </tr>
+    <tr>
+      <td class="bold">Modification</td>
+      <td class="text-center">{{lightingReplacementResults.modificationResults.totalOperatingHours | number:'1.0-0'}}
+      </td>
+      <td class="text-center">{{lightingReplacementResults.modificationResults.totalElectricityUse | number:'1.0-0'}}
+      </td>
+      <td class="text-center">{{lightingReplacementResults.modificationResults.totalLighting | number:'1.0-0'}}</td>
+      <td class="text-center">{{lightingReplacementResults.modificationResults.totalOperatingCosts | currency:'USD'}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- <app-exportable-results-table [tableString]="table2String" (updateTableString)="updateTable2String()">
+</app-exportable-results-table> -->
+
+<table #copyTable3 class="table table-hover table-striped pt-2">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Electricity Savings</td>
+      <td class="text-center w-50">{{lightingReplacementResults.totalEnergySavings |
+        number:'1.0-0'}} kWh/yr</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Electricity Cost Savings</td>
+      <td class="text-center w-50">{{lightingReplacementResults.totalCostSavings |
+          currency:'USD'}} /yr</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Change In Lighting Level</td>
+      <td class="text-center w-50">{{lightingReplacementResults.modificationResults.totalLighting - lightingReplacementResults.baselineResults.totalLighting |
+        number:'1.0-0'}} lumens</td>
+    </tr>
+  </tbody>
+</table>
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>

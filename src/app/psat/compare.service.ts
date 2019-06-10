@@ -45,6 +45,7 @@ export class CompareService {
         this.isPumpStyleDifferent(baseline, modification) ||
         this.isPumpRpmDifferent(baseline, modification) ||
         this.isDriveDifferent(baseline, modification) ||
+        this.isSpecifiedDriveEfficiencyDifferent(baseline, modification) ||
         this.isKinematicViscosityDifferent(baseline, modification) ||
         this.isSpecificGravityDifferent(baseline, modification) ||
         this.isFluidTempDifferent(baseline, modification) ||
@@ -87,7 +88,7 @@ export class CompareService {
     }
     if (baseline && modification) {
       return (
-        this.isOperatingFractionDifferent(baseline, modification) ||
+        this.isOperatingHoursDifferent(baseline, modification) ||
         this.isCostKwhrDifferent(baseline, modification) ||
         this.isFlowRateDifferent(baseline, modification) ||
         this.isHeadDifferent(baseline, modification)
@@ -125,7 +126,8 @@ export class CompareService {
       modification = this.modifiedPSAT;
     }
     if (baseline && modification) {
-      if (baseline.inputs.pump_specified != modification.inputs.pump_specified) {
+      if (baseline.inputs.pump_specified != modification.inputs.pump_specified &&
+        baseline.inputs.pump_style == 11 && modification.inputs.pump_style == 11) {
         return true;
       } else {
         return false;
@@ -170,6 +172,35 @@ export class CompareService {
       return false;
     }
   }
+  isSpecifiedDriveEfficiencyDifferent(baseline?: PSAT, modification?: PSAT) {
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.drive == 4) {
+        if (modification.inputs.drive == 4) {
+          if (baseline.inputs.specifiedDriveEfficiency != modification.inputs.specifiedDriveEfficiency) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      } else {
+        if (modification.inputs.drive == 4) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } else {
+      return false;
+    }
+  }
   //kinematic viscosity
   isKinematicViscosityDifferent(baseline?: PSAT, modification?: PSAT) {
     if (!baseline) {
@@ -198,6 +229,23 @@ export class CompareService {
     }
     if (baseline && modification) {
       if (baseline.inputs.specific_gravity != modification.inputs.specific_gravity) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  isSpecifiedEfficiencyDifferent(baseline?: PSAT, modification?: PSAT){
+    if (!baseline) {
+      baseline = this.baselinePSAT;
+    }
+    if (!modification) {
+      modification = this.modifiedPSAT;
+    }
+    if (baseline && modification) {
+      if (baseline.inputs.pump_specified != modification.inputs.pump_specified) {
         return true;
       } else {
         return false;
@@ -323,7 +371,8 @@ export class CompareService {
       modification = this.modifiedPSAT;
     }
     if (baseline && modification) {
-      if (baseline.inputs.efficiency != modification.inputs.efficiency) {
+      if (baseline.inputs.efficiency != modification.inputs.efficiency && 
+        baseline.inputs.efficiency_class == 3 && modification.inputs.efficiency_class == 3) {
         return true;
       } else {
         return false;
@@ -386,8 +435,8 @@ export class CompareService {
       return false;
     }
   }
-  //margin
-  isMarginDifferent(baseline?: PSAT, modification?: PSAT) {
+  //operating hours
+  isOperatingHoursDifferent(baseline?: PSAT, modification?: PSAT) {
     if (!baseline) {
       baseline = this.baselinePSAT;
     }
@@ -395,25 +444,7 @@ export class CompareService {
       modification = this.modifiedPSAT;
     }
     if (baseline && modification) {
-      if (baseline.inputs.margin != modification.inputs.margin) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-  //operating fraction
-  isOperatingFractionDifferent(baseline?: PSAT, modification?: PSAT) {
-    if (!baseline) {
-      baseline = this.baselinePSAT;
-    }
-    if (!modification) {
-      modification = this.modifiedPSAT;
-    }
-    if (baseline && modification) {
-      if (baseline.inputs.operating_fraction != modification.inputs.operating_fraction) {
+      if (baseline.inputs.operating_hours != modification.inputs.operating_hours) {
         return true;
       } else {
         return false;

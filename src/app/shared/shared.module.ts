@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClipboardModule } from 'ngx-clipboard';
+import { ModalModule } from 'ngx-bootstrap';
 
 import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
@@ -8,7 +10,7 @@ import { ModelService } from './model.service';
 
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { PercentGraphComponent } from './percent-graph/percent-graph.component';
-import { SigFigsPipe } from './sig-figs.pipe';
+import { SigFigsPipe } from './pipes/sig-figs.pipe';
 import { UpdateDataService } from './update-data.service';
 import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
 import { SvgToPngService } from './svg-to-png/svg-to-png.service';
@@ -16,12 +18,23 @@ import { AnimatedCheckmarkComponent } from './animated-checkmark/animated-checkm
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
+import { LineChartHelperService } from './line-chart-helper/line-chart-helper.service';
+import { ExportableTableComponent } from './exportable-table/exportable-table.component';
+import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
+import { PrintOptionsMenuComponent } from './print-options-menu/print-options-menu.component';
+import { ExportableResultsTableComponent } from './exportable-results-table/exportable-results-table.component';
+import { SettingsLabelPipe } from './pipes/settings-label.pipe';
+import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
+import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    ClipboardModule,
+    ModalModule
     // ChartsModule
   ],
   declarations: [
@@ -32,7 +45,14 @@ import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.componen
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
-    SimpleTooltipComponent
+    SimpleTooltipComponent,
+    ExportableTableComponent,
+    TabsTooltipComponent,
+    PrintOptionsMenuComponent,
+    ExportableResultsTableComponent,
+    SettingsLabelPipe,
+    WaterfallGraphComponent,
+    ToastComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -42,14 +62,23 @@ import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.componen
     AnimatedCheckmarkComponent,
     PieChartComponent,
     PhonePipe,
-    SimpleTooltipComponent
+    SimpleTooltipComponent,
+    ExportableTableComponent,
+    ExportableResultsTableComponent,
+    TabsTooltipComponent,
+    PrintOptionsMenuComponent,
+    SettingsLabelPipe,
+    WaterfallGraphComponent,
+    ToastComponent
   ],
   providers: [
     ValidationService,
     ModelService,
     ConvertUnitsService,
     UpdateDataService,
-    SvgToPngService
+    SvgToPngService,
+    LineChartHelperService,
+    WaterfallGraphService
   ]
 })
 

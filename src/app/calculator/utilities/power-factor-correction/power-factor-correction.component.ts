@@ -31,12 +31,29 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   ngOnInit() {
     this.calculate(this.inputData);
+    if (this.powerFactorCorrectionService.inputData) {
+      this.inputData = this.powerFactorCorrectionService.inputData;
+    }
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
+  }
+
+  ngOnDestroy() {
+    this.powerFactorCorrectionService.inputData = this.inputData;
+  }
+
+  btnResetData() {
+    this.inputData = {
+      existingDemand: 100,
+      currentPowerFactor: 0.5,
+      proposedPowerFactor: 0.95
+    };
+    this.powerFactorCorrectionService.inputData = this.inputData;
+    this.calculate(this.inputData);
   }
 
   resizeTabs() {
@@ -66,16 +83,16 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
 
 export interface PowerFactorCorrectionInputs {
-  existingDemand: number,
-  currentPowerFactor: number,
-  proposedPowerFactor: number
+  existingDemand: number;
+  currentPowerFactor: number;
+  proposedPowerFactor: number;
 }
 
 
 export interface PowerFactorCorrectionOutputs {
-  existingApparentPower: number,
-  existingReactivePower: number,
-  proposedApparentPower: number,
-  proposedReactivePower: number,
-  capacitancePowerRequired: number
+  existingApparentPower: number;
+  existingReactivePower: number;
+  proposedApparentPower: number;
+  proposedReactivePower: number;
+  capacitancePowerRequired: number;
 }

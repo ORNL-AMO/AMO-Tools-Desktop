@@ -20,3 +20,17 @@
 .danger{
     color: red;
 }
+
+#name-export{
+    position: absolute;
+    right: 150px;
+    font-weight: bold;
+}
+
+.icon-image{
+    width: 26px;
+  }
+  
+  .icon{
+    width: 100%;
+  }

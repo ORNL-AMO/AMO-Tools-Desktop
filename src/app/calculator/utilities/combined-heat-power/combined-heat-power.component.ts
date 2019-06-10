@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular
 import { StandaloneService } from '../../standalone.service';
 import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { CombinedHeatPowerService } from './combined-heat-power.service';
 
 @Component({
   selector: 'app-combined-heat-power',
@@ -32,7 +33,7 @@ export class CombinedHeatPowerComponent implements OnInit {
     displacedThermalEfficiency: 0,
     chpAvailability: 0,
     thermalUtilization: 0
-  }
+  };
 
   results: CombinedHeatPowerOutput = {
     annualOperationSavings: 0,
@@ -42,14 +43,17 @@ export class CombinedHeatPowerComponent implements OnInit {
     thermalCredit: 0,
     incrementalOandM: 0,
     totalOperatingCosts: 0
-  }
+  };
   currentField: string = 'annualOperatingHours';
   tabSelect: string = 'results';
-  constructor(private settingsDbService: SettingsDbService) { }
+  constructor(private settingsDbService: SettingsDbService, private combinedHeatPowerService: CombinedHeatPowerService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
+    if (this.combinedHeatPowerService.inputData) {
+      this.inputs = this.combinedHeatPowerService.inputData;
     }
   }
 
@@ -59,12 +63,35 @@ export class CombinedHeatPowerComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy() {
+    this.combinedHeatPowerService.inputData = this.inputs;
+  }
+
+  btnResetData() {
+    this.inputs = {
+      annualOperatingHours: 0,
+      annualElectricityConsumption: 0,
+      annualThermalDemand: 0,
+      boilerThermalFuelCosts: 0,
+      avgElectricityCosts: 0,
+      option: 0,
+      boilerThermalFuelCostsCHPcase: 0,
+      CHPfuelCosts: 0,
+      percentAvgkWhElectricCostAvoidedOrStandbyRate: 75,
+      displacedThermalEfficiency: 0,
+      chpAvailability: 0,
+      thermalUtilization: 0
+    };
+    this.combinedHeatPowerService.inputData = this.inputs;
+    this.calculate();
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
-  
+
   setCurrentField(str: string) {
     this.currentField = str;
   }
@@ -74,7 +101,7 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
 
   calculate() {
-    this.results = StandaloneService.CHPcalculator(this.inputs);
+    this.results = this.standaloneService.CHPcalculator(this.inputs);
   }
 
 }

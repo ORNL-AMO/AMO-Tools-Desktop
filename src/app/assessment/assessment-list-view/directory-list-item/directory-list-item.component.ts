@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { AssessmentService } from '../../assessment.service';
 
 @Component({
   selector: 'app-directory-list-item',
@@ -25,7 +26,7 @@ export class DirectoryListItemComponent implements OnInit {
   editForm: FormGroup;
   directories: Array<Directory>;
   @ViewChild('editModal') public editModal: ModalDirective;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private directoryDbService: DirectoryDbService) { }
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     if (this.isChecked) {
@@ -34,8 +35,8 @@ export class DirectoryListItemComponent implements OnInit {
 
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;
-      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
-    })
+      _.remove(this.directories, (dir) => { return dir.id === this.directory.id; });
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -48,7 +49,7 @@ export class DirectoryListItemComponent implements OnInit {
   }
 
   goToDirectory(dir) {
-    this.directoryChange.emit(dir)
+    this.directoryChange.emit(dir);
   }
 
   setDelete() {
@@ -59,7 +60,7 @@ export class DirectoryListItemComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       'name': [this.directory.name],
       'directoryId': [this.directory.parentDirectoryId]
-    })
+    });
     this.editModal.show();
   }
 
@@ -68,11 +69,11 @@ export class DirectoryListItemComponent implements OnInit {
   }
 
   getParentDirStr(id: number) {
-    let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
+    let parentDir = _.find(this.directories, (dir) => { return dir.id === id; });
     if (parentDir) {
       let str = parentDir.name + '/';
       while (parentDir.parentDirectoryId) {
-        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        parentDir = _.find(this.directories, (dir) => { return dir.id === parentDir.parentDirectoryId; });
         str = parentDir.name + '/' + str;
       }
       return str;
@@ -87,8 +88,9 @@ export class DirectoryListItemComponent implements OnInit {
     this.indexedDbService.putDirectory(this.directory).then(val => {
       this.directoryDbService.setAll().then(() => {
         this.updateDirectory.emit(true);
+        this.assessmentService.updateSidebarData.next(true);
         this.hideEditModal();
       });
-    })
+    });
   }
 }

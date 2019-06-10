@@ -1,0 +1,85 @@
+  
+   .diagram-container{
+       /* width: 70% !important; */
+       font-size: small;
+       /* min-width: 875px; */
+       /* overflow-x: auto; */
+   }
+   
+   
+   /* .diagram-help-panel{
+       width: 30%;
+   } */
+   
+   .boiler-table-height{
+       height: 160px;
+   }
+   
+   .deaerator-margin{
+       margin-left: -1.5rem;
+   }
+   
+   .deaerator-condensate-padding{
+       padding-left: 5rem;
+   }
+   
+   .inner-system-padding{
+       padding-left: 3rem;
+   }
+
+
+
+.form-control{
+    font-size: large;
+}
+
+
+/* .ssmt-diagram{
+    min-width: 1120px;
+} */
+
+
+.btn.scale-btn{
+  padding: 6px;
+  font-size: small;
+}
+
+  /* The slider itself */
+.diagram-slider {
+    width: 100%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+  }
+  
+  /* Mouse-over effects */
+  .diagram-slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+  }
+  
+  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+  .diagram-slider::-webkit-slider-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #F39C12; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }
+  
+  .diagram-slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #F39C12; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }
+
+  .scale-helper{
+    transform-origin: left top;
+    min-width: 875px; 
+  }
+
+  .fa .fa-serch-plus, .fa .fa-search-minus{
+      font-size: x-large;
+  }

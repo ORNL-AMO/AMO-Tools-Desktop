@@ -1,13 +1,15 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../psat.service';
-import { FluidProperties, PSAT, PsatInputs } from '../../shared/models/psat';
+import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { debug } from 'util';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ValidatorFn } from '@angular/forms';
+import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '../psatConstants';
+import { PsatWarningService } from '../psat-warning.service';
+import { PumpFluidService } from './pump-fluid.service';
+
 @Component({
   selector: 'app-pump-fluid',
   templateUrl: './pump-fluid.component.html',
@@ -18,10 +20,6 @@ export class PumpFluidComponent implements OnInit {
   psat: PSAT;
   @Output('saved')
   saved = new EventEmitter<boolean>();
-  @Output('isValid')
-  isValid = new EventEmitter<boolean>();
-  @Output('isInvalid')
-  isInvalid = new EventEmitter<boolean>();
   @Input()
   selected: boolean;
   @Input()
@@ -33,115 +31,80 @@ export class PumpFluidComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  counter: any;
+  //Arrays holding <select> form data
+  pumpTypes: Array<{ display: string, value: number }>;
+  drives: Array<{ display: string, value: number }>;
+  //TODO: create Fluid Property interface
+  fluidProperties;
+  fluidTypes: Array<string>;
 
-  formValid: boolean;
-  pumpTypes: Array<string> = [
-    'End Suction Slurry',
-    'End Suction Sewage',
-    'End Suction Stock',
-    'End Suction Submersible Sewage',
-    'API Double Suction',
-    'Multistage Boiler Feed',
-    'End Suction ANSI/API',
-    'Axial Flow',
-    'Double Suction',
-    'Vertical Turbine',
-    'Large End Suction',
-    // When user selects below they need a way to provide the optimal efficiency
-    // 'Specified Optimal Efficiency'
-  ];
-
-  drives: Array<string> = [
-    'Direct Drive',
-    'V-Belt Drive',
-    'Notched V-Belt Drive',
-    'Synchronous Belt Drive'
-  ];
-
-  fluidProperties = {
-    'Acetone': { beta: 0.00079, tref: 77, density: 49, kinViscosity: 0.41, boiling: 132.89, melting: -138.5 },
-    'Ammonia': { beta: 0.00136, tref: 77, density: 51.4, kinViscosity: 0.3, boiling: -28.01, melting: -107.91 },
-    'Dichlorodifluoromethane refrigerant R-12': { beta: 0.00144, tref: 77, density: 81.8, kinViscosity: 0.198, boiling: -21.6, melting: -251.9 },
-    'Ethanol': { beta: 0.00061, tref: 77, density: 49, kinViscosity: 1.52, boiling: 172.99, melting: -173.5 },
-    'Ethylene glycol': { beta: 0.00032, tref: 77, density: 68.5, kinViscosity: 17.8, boiling: 387.1, melting: 8.8 },
-    'Gasoline': { beta: 0.00053, tref: 60, density: 46, kinViscosity: 0.88, boiling: 258.9, melting: -70.9 },
-    'Glycerine (glycerol)': { beta: 0.00028, tref: 77, density: 78.66, kinViscosity: 648, boiling: 554.0, melting: 64.0 },
-    'Kerosene - jet fuel': { beta: 0.00055, tref: 60, density: 51.2, kinViscosity: 2.71, boiling: 572.0, melting: -10 },
-    'Methanol': { beta: 0.00083, tref: 77, density: 49.1, kinViscosity: 0.75, boiling: 148.5, melting: -143.7 },
-    'n-Octane': { beta: 0.00063, tref: 59, density: 43.6, kinViscosity: 1.266, boiling: 258.9, melting: -70.9 },
-    'Petroleum': { beta: 0.00056, tref: 60, density: 44.4, kinViscosity: 0.198, boiling: 258.9, melting: -70.9 }
-  };
-
-  fluidTypes: Array<string> = [
-    'Acetone',
-    'Ammonia',
-    'Dichlorodifluoromethane refrigerant R-12',
-    'Ethanol',
-    'Ethylene glycol',
-    'Gasoline',
-    'Glycerine (glycerol)',
-    'Kerosene - jet fuel',
-    'Methanol',
-    'n-Octane',
-    'Other',
-    'Petroleum',
-    'Water'
-  ];
   psatForm: FormGroup;
-  isFirstChange: boolean = true;
-  rpmError: string = null;
-  temperatureError: string = null;
-  different: any = {
-    pumpRPM: null
-  };
-
   tempUnit: string;
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if (!this.selected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-      if (changes.modificationIndex) {
-        this.init();
-      }
-    }
-    else {
-      this.isFirstChange = false;
-    }
-  }
+  idString: string;
+  pumpFluidWarnings: { rpmError: string, temperatureError: string };
+  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private pumpFluidService: PumpFluidService) { }
 
   ngOnInit() {
-    this.init();
-    if (this.settings.temperatureMeasurement == 'C') {
-      this.tempUnit = '&#8451;';
-    } else if (this.settings.temperatureMeasurement == 'F') {
-      this.tempUnit = '&#8457;';
+    if (!this.baseline) {
+      this.idString = 'psat_modification_' + this.modificationIndex;
     }
-    // } else if (this.settings.temperatureMeasurement == 'K') {
-    //   this.tempUnit = '&#8490';
-    // }
+    else {
+      this.idString = 'psat_baseline';
+    }
+    this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
+    this.pumpTypes.pop();
+    //initialize constants
+    this.drives = JSON.parse(JSON.stringify(driveConstants));
+    this.fluidProperties = JSON.parse(JSON.stringify(fluidProperties));
+    this.fluidTypes = JSON.parse(JSON.stringify(fluidTypes));
+
+    this.initForm();
+    this.getTemperatureUnit();
     if (!this.selected) {
       this.disableForm();
     }
   }
 
-  init() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    this.checkForm(this.psatForm);
-    this.checkPumpRpm(true);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selected && !changes.selected.isFirstChange()) {
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
+    }
+    if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
+      this.initForm();
+    }
+  }
+
+  initForm() {
+    this.psatForm = this.pumpFluidService.getFormFromObj(this.psat.inputs);
+    this.checkWarnings();
   }
 
   disableForm() {
-    this.psatForm.disable();
+    this.psatForm.controls.pumpType.disable();
+    this.psatForm.controls.drive.disable();
+    this.psatForm.controls.fluidType.disable();
   }
 
   enableForm() {
-    this.psatForm.enable();
+    this.psatForm.controls.pumpType.enable();
+    this.psatForm.controls.drive.enable();
+    this.psatForm.controls.fluidType.enable();
+  }
+
+  getTemperatureUnit() {
+    if (this.settings.temperatureMeasurement == 'C') {
+      this.tempUnit = '&#8451;';
+    } else if (this.settings.temperatureMeasurement == 'F') {
+      this.tempUnit = '&#8457;';
+    } else if (this.settings.temperatureMeasurement == 'K') {
+      this.tempUnit = '&#8490;';
+    } else if (this.settings.temperatureMeasurement == 'R') {
+      this.tempUnit = '&#176;R';
+    }
   }
 
   addNum(str: string) {
@@ -150,8 +113,7 @@ export class PumpFluidComponent implements OnInit {
         stages: this.psatForm.controls.stages.value + 1
       })
     }
-    this.checkForm(this.psatForm);
-    this.startSavePolling();
+    this.save();
   }
 
   subtractNum(str: string) {
@@ -162,69 +124,33 @@ export class PumpFluidComponent implements OnInit {
         })
       }
     }
-    this.checkForm(this.psatForm);
-    this.startSavePolling();
+    this.save();
   }
 
   focusField(str: string) {
-    // if (str == 'fixedSpecificSpeed') {
-    //   this.startSavePolling();
-    // }
     this.helpPanelService.currentField.next(str);
-    this.checkForm(this.psatForm);
   }
 
-  checkForm(form: FormGroup) {
-    this.formValid = this.psatService.isPumpFluidFormValid(form);
-    if (this.formValid) {
-      this.isValid.emit(true)
-    } else {
-      this.isInvalid.emit(true)
-    }
+  enablePumpType() {
+    this.psatForm.controls.pumpType.patchValue(this.compareService.baselinePSAT.inputs.pump_style);
+    // this.psatForm.controls.pumpType.enable();
+    this.getPumpEfficiency();
   }
 
-  savePsat(form: FormGroup) {
-    this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-    this.saved.emit(this.selected);
+  disablePumpType() {
+    let baselinePumpEfficiency: number = this.psatService.resultsExisting(this.compareService.baselinePSAT.inputs, this.settings).pump_efficiency;
+    this.psatForm.controls.specifiedPumpEfficiency.patchValue(baselinePumpEfficiency);
+    this.psatForm.controls.pumpType.patchValue(11);
+    this.save();
   }
 
-  checkPumpRpm(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    let min = 1;
-    let max = 0;
-    if (this.psatForm.controls.drive.value === 'Direct Drive') {
-      min = 540;
-      max = 3960;
-    } else {
-      // TODO UPDATE WITH BELT DRIVE VALS
-      max = Infinity;
-    }
-    this.rpmError = null;
-    if (this.psatForm.controls.pumpRPM.value < min) {
-      this.rpmError = 'Pump Speed is less than the minimum (' + min + ' rpm)';
-    } else if (this.psatForm.controls.pumpRPM.value > max) {
-      this.rpmError = 'Pump Speed is greater than the maximum (' + max + ' rpm)';
-    }
+
+  getPumpEfficiency() {
+    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.psatForm.controls.pumpType.value, this.psat.inputs.flow_rate, this.settings).max;
+    this.psatForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency);
+    this.save();
   }
 
-  checkTemperatureError(t: number, fluidType: string, boilingPoint?: number, meltingPoint?: number){
-    this.temperatureError = null;
-    if(fluidType == 'Water'){
-      if (t > 212.0) {
-        this.temperatureError = "Warning: Fluid Temperature is greater than the boiling point (212 deg F) at atmospheric pressure";
-      } else if (t < 32.0) {
-        this.temperatureError = "Warning: Fluid Temperature is less than the freezing point (32.0 deg F) at atmospheric pressure";
-      }
-    }else{
-      if (t > boilingPoint) {
-        this.temperatureError = "Warning: Fluid Temperature is greater than the boiling point (" + boilingPoint + " deg F) at atmospheric pressure";
-      } else if (t < meltingPoint) {
-        this.temperatureError = "Warning: Fluid Temperature is less than the freezing point (" + meltingPoint + " deg F) at atmospheric pressure";
-      }
-    }
-  }
 
   calculateSpecificGravity() {
     let fluidType = this.psatForm.controls.fluidType.value;
@@ -235,9 +161,7 @@ export class PumpFluidComponent implements OnInit {
       if (fluidType === 'Other') {
         return;
       }
-
       if (fluidType === 'Water') {
-        this.checkTemperatureError(t, fluidType);
         let tTemp = (t - 32) * (5.0 / 9) + 273.15;
         let density = 0.14395 / Math.pow(0.0112, (1 + Math.pow(1 - tTemp / 649.727, 0.05107)));
         let kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) + 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;
@@ -247,7 +171,6 @@ export class PumpFluidComponent implements OnInit {
         });
       } else {
         let property = this.fluidProperties[fluidType];
-        this.checkTemperatureError(t, fluidType, property.boiling, property.melting);
         let density = property.density / (1 + property.beta * (t - property.tref));
         this.psatForm.patchValue({
           gravity: this.psatService.roundVal((density / 62.428), 3),
@@ -255,13 +178,40 @@ export class PumpFluidComponent implements OnInit {
         });
       }
     }
-    this.startSavePolling();
+    this.save();
+  }
+
+  changePumpType() {
+    let specifiedPumpEfficiencyValidators: Array<ValidatorFn> = this.pumpFluidService.getSpecifiedPumpEfficiencyValidators(this.psatForm.controls.pumpType.value);
+    this.psatForm.controls.specifiedPumpEfficiency.setValidators(specifiedPumpEfficiencyValidators);
+    this.psatForm.controls.specifiedPumpEfficiency.reset(this.psatForm.controls.specifiedPumpEfficiency.value);
+    this.psatForm.controls.specifiedPumpEfficiency.markAsDirty();
+    if (!this.baseline) {
+      this.getPumpEfficiency();
+    }
+    this.save();
+  }
+
+  changeDriveType() {
+    let specifiedDriveEfficiencyValidators: Array<ValidatorFn> = this.pumpFluidService.getSpecifiedDriveEfficiency(this.psatForm.controls.drive.value);
+    this.psatForm.controls.specifiedDriveEfficiency.setValidators(specifiedDriveEfficiencyValidators);
+    this.psatForm.controls.specifiedDriveEfficiency.reset(this.psatForm.controls.specifiedDriveEfficiency.value);
+    this.psatForm.controls.specifiedDriveEfficiency.markAsDirty();
+    this.save();
   }
 
 
-  startSavePolling() {
-    this.checkForm(this.psatForm);
-    this.savePsat(this.psatForm)
+  save() {
+    //update object values from form values
+    this.psat.inputs = this.pumpFluidService.getPsatInputsFromForm(this.psatForm, this.psat.inputs);
+    //check warnings
+    this.checkWarnings();
+    //save
+    this.saved.emit(this.selected);
+  }
+
+  checkWarnings() {
+    this.pumpFluidWarnings = this.psatWarningService.checkPumpFluidWarnings(this.psat, this.settings);
   }
 
   canCompare() {
@@ -300,6 +250,13 @@ export class PumpFluidComponent implements OnInit {
       return false;
     }
   }
+  isSpecifiedDriveEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecifiedDriveEfficiencyDifferent();
+    } else {
+      return false;
+    }
+  }
   isKinematicViscosityDifferent() {
     if (this.canCompare()) {
       return this.compareService.isKinematicViscosityDifferent();
@@ -332,6 +289,14 @@ export class PumpFluidComponent implements OnInit {
   isStagesDifferent() {
     if (this.canCompare()) {
       return this.compareService.isStagesDifferent();
+    } else {
+      return false;
+    }
+  }
+
+  isSpecifiedEfficiencyDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSpecifiedEfficiencyDifferent();
     } else {
       return false;
     }

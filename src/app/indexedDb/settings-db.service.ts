@@ -18,13 +18,13 @@ export class SettingsDbService {
           this.allSettings = settings;
           this.globalSettings = this.getByDirectoryId(1);
           this.globalSettings = this.checkSettings(this.globalSettings);
-          resolve(true)
-        })
+          resolve(true);
+        });
       } else {
         this.allSettings = [];
         resolve(false);
       }
-    })
+    });
   }
 
   getAll(): Array<Settings> {
@@ -32,13 +32,13 @@ export class SettingsDbService {
   }
 
   getById(id: number): Settings {
-    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.id == id })
+    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.id === id; });
     selectedSettings = this.checkSettings(selectedSettings);
     return selectedSettings;
   }
 
   getByDirectoryId(id: number): Settings {
-    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.directoryId == id });
+    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.directoryId === id; });
     if (!selectedSettings) {
       selectedSettings = this.globalSettings;
     }
@@ -47,13 +47,15 @@ export class SettingsDbService {
   }
 
   getByAssessmentId(assessment: Assessment, neededFromAssessment?: boolean): Settings {
-    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.assessmentId == assessment.id });
+    let selectedSettings: Settings = _.find(this.allSettings, (settings) => { return settings.assessmentId === assessment.id; });
     if (!selectedSettings && !neededFromAssessment) {
       selectedSettings = this.getByDirectoryId(assessment.directoryId);
-      selectedSettings = this.checkSettings(selectedSettings);
     }
     if (!selectedSettings && !neededFromAssessment) {
       selectedSettings = this.globalSettings;
+    }
+    if (selectedSettings) {
+      selectedSettings = this.checkSettings(selectedSettings);
     }
     return selectedSettings;
   }
@@ -67,8 +69,30 @@ export class SettingsDbService {
     if (!settings.temperatureMeasurement) {
       settings = this.settingService.setTemperatureUnit(settings);
     }
+    if (!settings.steamTemperatureMeasurement) {
+      settings = this.settingService.setSteamUnits(settings);
+    }
 
-    settings = this.settingService.setSteamUnits(settings);
+    if (!settings.steamMassFlowMeasurement || settings.steamMassFlowMeasurement === 'kghr' || settings.steamMassFlowMeasurement === 'lbhr') {
+      settings.steamMassFlowMeasurement = 'klb';
+    }
+
+    if (!settings.steamPowerMeasurement || settings.steamPowerMeasurement === 'MMBtu') {
+      settings.steamPowerMeasurement = 'kW';
+    }
+
+    if (!settings.steamEnergyMeasurement) {
+      settings.steamEnergyMeasurement = 'MMBtu';
+    }
+
+    if (!settings.densityMeasurement ||
+      !settings.fanFlowRate ||
+      !settings.fanPressureMeasurement ||
+      !settings.fanBarometricPressure ||
+      !settings.fanSpecificHeatGas ||
+      !settings.fanPowerMeasurement) {
+      settings = this.settingService.setFanUnits(settings);
+    }
 
     if (!settings.fuelCost) {
       settings.fuelCost = 3.99;

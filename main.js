@@ -1,6 +1,3 @@
-// ./main.js
-//require('electron-reload')(__dirname);
-
 const { app, BrowserWindow, ipcMain, crashReporter } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -16,15 +13,19 @@ autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
 
-require('dotenv').config();
 let win = null;
-let available = null;
-
 
 app.on('ready', function () {
 
   // Initialize the window to our specified dimensions
-  win = new BrowserWindow({ width: 1000, height: 600 });
+  win = new BrowserWindow({
+    width: 1000,
+    height: 600,
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true
+    }
+  });
   win.maximize();
 
   // Specify entry point
@@ -36,7 +37,7 @@ app.on('ready', function () {
 
   if (isDev()) {
     win.toggleDevTools();
-  };
+  }
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
@@ -53,15 +54,20 @@ app.on('ready', function () {
       autoUpdater.on('update-not-available', (event, info) => {
         log.info('no update available..');
       });
+      autoUpdater.on('download-progress', (progressObj) => {
+        win.webContents.send('progress', progressObj.percent)
+      });
+      autoUpdater.on('error', (event, error) => {
+        coreCompEvent.sender.send('error', error);
+      });
     }
   })
 
-  autoUpdater.on('error', (event, error) => {
-  });
 
-  autoUpdater.on('download-progress', (event, progressObj) => {
-    log.info(progressObj);
-  });
+
+  // autoUpdater.on('download-progress', (progressObj) => {
+  //   log.info(progressObj);
+  // });
 
   autoUpdater.on('update-downloaded', (event, info) => {
     autoUpdater.quitAndInstall();

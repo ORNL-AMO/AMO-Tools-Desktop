@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
-import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedEnergyResults, DesignedZone } from '../../shared/models/phast/designedEnergy'
+import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, DesignedEnergyResults, DesignedZone } from '../../shared/models/phast/designedEnergy';
 import { DesignedEnergyService } from './designed-energy.service';
 @Component({
   selector: 'app-designed-energy',
@@ -17,6 +17,8 @@ export class DesignedEnergyComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Input()
   containerHeight: number;
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
 
   results: DesignedEnergyResults = {
     designedEnergyUsed: 0,
@@ -34,7 +36,7 @@ export class DesignedEnergyComponent implements OnInit {
 
   ngOnInit() {
     if (!this.phast.designedEnergy) {
-      this.initializeNew()
+      this.initializeNew();
     }
     this.calculate();
   }
@@ -43,13 +45,13 @@ export class DesignedEnergyComponent implements OnInit {
     let steam: boolean = false;
     let electricity: boolean = false;
     let fuel: boolean = false;
-    if (this.settings.energySourceType == 'Steam') {
+    if (this.settings.energySourceType === 'Steam') {
       steam = true;
     }
-    if (this.settings.energySourceType == 'Fuel') {
+    if (this.settings.energySourceType === 'Fuel') {
       fuel = true;
     }
-    if (this.settings.energySourceType == 'Electricity') {
+    if (this.settings.energySourceType === 'Electricity') {
       electricity = true;
     }
     this.phast.designedEnergy = {
@@ -57,7 +59,7 @@ export class DesignedEnergyComponent implements OnInit {
       fuel: fuel,
       steam: steam,
       electricity: electricity
-    }
+    };
     this.addZone();
   }
 
@@ -70,7 +72,7 @@ export class DesignedEnergyComponent implements OnInit {
     if (!this.phast.designedEnergy.electricity) {
       this.phast.designedEnergy.zones.forEach(zone => {
         zone.designedEnergyElectricity = this.getEmptyElectricityInput();
-      })
+      });
     }
     this.calculate();
   }
@@ -80,7 +82,7 @@ export class DesignedEnergyComponent implements OnInit {
     if (!this.phast.designedEnergy.fuel) {
       this.phast.designedEnergy.zones.forEach(zone => {
         zone.designedEnergyFuel = this.getEmptyFuelInput();
-      })
+      });
     }
     this.calculate();
   }
@@ -90,7 +92,7 @@ export class DesignedEnergyComponent implements OnInit {
     if (!this.phast.designedEnergy.steam) {
       this.phast.designedEnergy.zones.forEach(zone => {
         zone.designedEnergySteam = this.getEmptySteamInput();
-      })
+      });
     }
     this.calculate();
   }
@@ -115,7 +117,7 @@ export class DesignedEnergyComponent implements OnInit {
       designedEnergyElectricity: this.getEmptyElectricityInput(),
       designedEnergyFuel: this.getEmptyFuelInput(),
       designedEnergySteam: this.getEmptySteamInput()
-    })
+    });
     this.calculate();
   }
 
@@ -130,7 +132,7 @@ export class DesignedEnergyComponent implements OnInit {
       steamFlow: 0,
       percentCapacityUsed: 0,
       percentOperatingHours: 0
-    }
+    };
   }
 
   getEmptyFuelInput(): DesignedEnergyFuel {
@@ -139,7 +141,7 @@ export class DesignedEnergyComponent implements OnInit {
       percentCapacityUsed: 0,
       totalBurnerCapacity: 0,
       percentOperatingHours: 0
-    }
+    };
   }
 
   getEmptyElectricityInput(): DesignedEnergyElectricity {
@@ -147,7 +149,7 @@ export class DesignedEnergyComponent implements OnInit {
       kwRating: 0,
       percentCapacityUsed: 0,
       percentOperatingHours: 0
-    }
+    };
   }
 
 }
