@@ -2,15 +2,19 @@ ul{
     font-size: small;
 }
 
-.form-control-file{
-    font-size: small;
+.modal-card{
+    position: fixed;
+    z-index: 8000;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, .8);
+    padding: 2rem;
+  }
+
+.tabs .panel-tab-item a{
+    font-size: 22px;
 }
 
-.btn{
-    font-size: small;
-    padding: 6px;
-}
-
-.card-header, .card-footer, .card-body{
-    padding: .5rem;
+label{
+    font-size: 20px;
 }

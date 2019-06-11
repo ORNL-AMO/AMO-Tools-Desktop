@@ -3,7 +3,7 @@
     <div class="col-12">
       <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
         (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"
-        (emitImportExport)="showImportExportModal()"></app-treasure-chest-menu>
+        (emitImportExport)="openImportExportModal()"></app-treasure-chest-menu>
     </div>
 
     <!--lighting replacement-->
@@ -179,19 +179,5 @@
   </div>
 </div>
 
-
-<div bsModal #importExportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="importExportModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button class="close" (click)="hideImpotExportModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body pl-0 pr-0" *ngIf="importExportModal.isShown">
-        <app-import-export-opportunities [treasureHunt]="treasureHunt" (emitImportData)="importData($event)"></app-import-export-opportunities>
-      </div>
-    </div>
-  </div>
-</div>
+<app-import-export-opportunities *ngIf="showImportExportModal" [treasureHunt]="treasureHunt"
+  (emitImportData)="importData($event)" (emitCloseModal)="closeImportExportModal()"></app-import-export-opportunities>

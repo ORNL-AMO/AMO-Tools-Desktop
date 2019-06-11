@@ -9,6 +9,7 @@ import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-dri
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
+import { TreasureHuntService } from '../treasure-hunt.service';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -28,7 +29,7 @@ export class TreasureChestComponent implements OnInit {
   @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
   @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
   @ViewChild('deletedItemModal') public deletedItemModal: ModalDirective;
-  @ViewChild('importExportModal') public importExportModal: ModalDirective;
+  // @ViewChild('importExportModal') public importExportModal: ModalDirective;
 
   selectedCalc: string = 'none';
   selectedEditIndex: number;
@@ -48,13 +49,15 @@ export class TreasureChestComponent implements OnInit {
   deleteItemIndex: number;
   itemType: string;
   opperatingHoursPerYear: number;
+  showImportExportModal: boolean = false;
   constructor(
     private lightingReplacementService: LightingReplacementService,
     private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService,
     private naturalGasReductionService: NaturalGasReductionService,
     private electricityReductionService: ElectricityReductionService,
-    private compressedAirReductionService: CompressedAirReductionService) { }
+    private compressedAirReductionService: CompressedAirReductionService,
+    private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
   }
@@ -366,12 +369,12 @@ export class TreasureChestComponent implements OnInit {
     this.selectCalc('none');
   }
 
-  showImportExportModal() {
-    this.importExportModal.show();
+  openImportExportModal() {
+    this.showImportExportModal = true;
   }
 
-  hideImportExportModal() {
-    this.importExportModal.hide();
+  closeImportExportModal() {
+    this.showImportExportModal = false;
   }
 
   importData(data: ImportExportOpportunities) {
@@ -418,6 +421,6 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.lightingReplacements = this.treasureHunt.lightingReplacements.concat(data.lightingReplacements);
     }
     this.save();
-    this.hideImportExportModal()
+    this.treasureHuntService.updateMenuOptions.next(true);
   }
 }

@@ -1,31 +1,37 @@
-<div class="row m-0">
-  <div class="col-6">
-    <div class="card">
-      <div class="card-header">
-        Import Opportunities
+<div class="modal-card" [@modal]="showModal" *ngIf="!destroyModal">
+  <div class="d-flex flex-column h-100">
+    <div class="d-flex flex-wrap tabs primary">
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'import'}">
+        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('import')">
+          <div>Import Opportunities</div>
+        </a>
       </div>
-      <div class="card-body">
-        <div class="form-group">
-          <label class="w-100">Select File to Import</label>
-          <input type="file" class="form-control-file w-100" (change)="setImportFile($event)">
-          <span class="help-text small">Must be an exported opportunity file from MEASUR.</span><br>
-          <span class="alert-danger" *ngIf="validFile == false">Invalid File. Make sure opportunity file is exported
-            from this window within MEASUR.</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-secondary pull-right" (click)="importFile()"
-          [disabled]="validFile != true">Import</button>
+      <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'export'}">
+        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('export')">
+          <div>Export Opportunities</div>
+        </a>
       </div>
     </div>
-  </div>
-  <div class="col-6">
-    <div class="card">
-      <div class="card-header">
-        Export Selected Opportunities
+    <div class="d-flex flex-column flex-fill align-items-center bg-white" *ngIf="tabSelect == 'import'">
+      <div class="d-flex flex-column pt-3">
+        <label>Select File to Import</label>
+        <input type="file" (change)="setImportFile($event)">
+        <span class="help-text small">Must be an exported opportunity file from MEASUR.</span>
       </div>
-      <div class="card-body">
-        <div *ngIf="exportOpportunities.lightingReplacements">
+      <div class="d-flex">
+        <span class="alert-danger small" *ngIf="validFile == false">Invalid File. Make sure opportunity file is exported
+          from this window within MEASUR.</span>
+      </div>
+      <div class="d-flex">
+        <button class="btn btn-secondary" (click)="importFile()" [disabled]="validFile != true">Import</button>
+      </div>
+    </div>
+    <div class="d-flex flex-column flex-fill align-items-center bg-white" *ngIf="tabSelect == 'export'">
+      <!-- <div class="card-header">
+            Export Selected Opportunities
+          </div> -->
+      <div class="d-flex flex-wrap">
+        <div class="p-2" *ngIf="exportOpportunities.lightingReplacements">
           <label>Lighting Replacements</label>
           <ul>
             <li *ngFor="let replacement of exportOpportunities.lightingReplacements; let index = index;">
@@ -38,7 +44,7 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="exportOpportunities.replaceExistingMotors">
+        <div class="p-2" *ngIf="exportOpportunities.replaceExistingMotors">
           <label>Motor Replacements</label>
           <ul>
             <li *ngFor="let replaceExistingMotor of exportOpportunities.replaceExistingMotors; let index = index;">
@@ -51,7 +57,7 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="exportOpportunities.motorDrives">
+        <div class="p-2" *ngIf="exportOpportunities.motorDrives">
           <label>Upgrade Motor Drives</label>
           <ul>
             <li *ngFor="let motorDrive of exportOpportunities.motorDrives; let index = index;">
@@ -64,7 +70,7 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="exportOpportunities.naturalGasReductions">
+        <div class="p-2" *ngIf="exportOpportunities.naturalGasReductions">
           <label>Natural Gas Reductions</label>
           <ul>
             <li *ngFor="let naturalGasReduction of exportOpportunities.naturalGasReductions; let index = index;">
@@ -77,7 +83,7 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="exportOpportunities.electricityReductions">
+        <div class="p-2" *ngIf="exportOpportunities.electricityReductions">
           <label>Electricity Reductions</label>
           <ul>
             <li *ngFor="let electricityReduction of exportOpportunities.electricityReductions; let index = index;">
@@ -90,7 +96,7 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="exportOpportunities.compressedAirReductions">
+        <div class="p-2" *ngIf="exportOpportunities.compressedAirReductions">
           <label>Compressed Air Reductions</label>
           <ul>
             <li *ngFor="let compressedAirReduction of exportOpportunities.compressedAirReductions; let index = index;">
@@ -103,7 +109,7 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="exportOpportunities.opportunitySheets">
+        <div class="p-2" *ngIf="exportOpportunities.opportunitySheets">
           <label>Opportunity Sheets</label>
           <ul>
             <li *ngFor="let opportunitySheet of exportOpportunities.opportunitySheets; let index = index;">
@@ -117,9 +123,11 @@
           </ul>
         </div>
       </div>
-      <div class="card-footer">
+      <div class="p-2">
         <button class="btn btn-secondary pull-right" (click)="exportData()">Export</button>
       </div>
     </div>
+    <div class="d-flex w-100 justify-content-end bg-white p-2">
+      <button class="btn btn-danger" (click)="closeModal()">Cancel</button>
+    </div>
   </div>
-</div>
