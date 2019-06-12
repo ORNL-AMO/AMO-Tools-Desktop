@@ -50,6 +50,7 @@ export class CoreComponent implements OnInit {
 
   showSurvey: string = 'hide';
   destroySurvey: boolean = false;
+  releaseNotes: any;
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
@@ -69,6 +70,7 @@ export class CoreComponent implements OnInit {
         this.updateError = true;
       }
     });
+
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
 

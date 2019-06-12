@@ -14,6 +14,7 @@
                 </button>
             </div>
             <div class="modal-body card-body">
+                <span [innerHTML]="releaseNotes"></span>
                 <div *ngIf="!updateSelected">
                     <p class="card-text">When the download is complete, the program will automatically exit and install
                         the updates.</p>
@@ -32,7 +33,8 @@
                 </div>
                 <div *ngIf="updateSelected && updateError">
                     <p class="card-text">An error with the update has occurred. Please check your internet connection
-                        and try again. If the error persists, please contact <a (click)="sendMail()">accawigk@ornl.gov</a>.</p>
+                        and try again. If the error persists, please contact <a
+                            (click)="sendMail()">accawigk@ornl.gov</a>.</p>
                 </div>
             </div>
         </div>

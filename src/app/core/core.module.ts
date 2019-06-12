@@ -59,6 +59,7 @@ import { FsatAssessmentTutorialComponent } from '../tutorials/fsat-assessment-tu
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
 import { SharedModule } from '../shared/shared.module';
+import { UpdateToastComponent } from '../update-toast/update-toast.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { SharedModule } from '../shared/shared.module';
     FsatTutorialComponent,
     FsatSystemSetupComponent,
     FsatReportTutorialComponent,
-    FsatAssessmentTutorialComponent
+    FsatAssessmentTutorialComponent,
+    UpdateToastComponent
   ],
   imports: [
     CommonModule,

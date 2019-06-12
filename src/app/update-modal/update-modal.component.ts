@@ -16,10 +16,14 @@ export class UpdateModalComponent implements OnInit {
   @ViewChild('updateModal') public updateModal: ModalDirective;
   updateAvailable: boolean;
   updateSelected: boolean = false;
+  releaseNotes: string;
   constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private importExportService: ImportExportService) { }
 
   ngOnInit() {
-
+    this.electronService.ipcRenderer.once('release-notes', (event, arg) => {
+      console.log(arg);
+      this.releaseNotes = arg;
+    })
   }
   ngAfterViewInit() {
     this.showUpdateModal();

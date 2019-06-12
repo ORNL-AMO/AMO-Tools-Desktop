@@ -1,5 +1,6 @@
 <!-- <div #coreContainer> -->
 <div *ngIf="idbStarted">
+    <app-update-toast></app-update-toast>
     <div *ngIf="!hideTutorial" class="opening-tutorial">
         <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
         </app-opening-tutorial>
@@ -57,27 +58,6 @@
 
 
 
-    <app-update-modal *ngIf="showUpdateModal" (closeModal)="closeModal()" [updateError]="updateError">
-    </app-update-modal>
+    <!-- <app-update-modal (closeModal)="closeModal()" [updateError]="updateError">
+    </app-update-modal> -->
 </div>
-<!-- </div> -->
-<!-- <div bsModal #tutorialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tutorialModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog">
-        <div class="modal-content card">
-            <div class="modal-header card-title">
-                Welcome to MEASUR
-                <button class="close pull-right" (click)="cancel()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body card-body">
-                <p>View tutorial to get started?</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default" (click)="cancel()">Skip</button>
-                <button class="btn btn-primary" (click)="tutorial()">View Tutorial</button>
-            </div>
-        </div>
-    </div>
-</div> -->
