@@ -16,7 +16,7 @@ import { PhastReportService } from './phast-report.service';
 import { ExecutiveSummaryService } from './executive-summary.service';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
 import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
-import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [

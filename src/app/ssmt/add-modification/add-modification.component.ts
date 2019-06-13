@@ -44,6 +44,7 @@ export class AddModificationComponent implements OnInit {
 
   addModification() {
     let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(this.ssmt)));
+    delete ssmtCopy.modifications;
     let tmpModification: Modification = {
       ssmt: ssmtCopy,
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')

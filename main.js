@@ -1,6 +1,3 @@
-// ./main.js
-//require('electron-reload')(__dirname);
-
 const { app, BrowserWindow, ipcMain, crashReporter } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -16,15 +13,19 @@ autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
 
-require('dotenv').config();
 let win = null;
-let available = null;
-
 
 app.on('ready', function () {
 
   // Initialize the window to our specified dimensions
-  win = new BrowserWindow({ width: 1000, height: 600 });
+  win = new BrowserWindow({
+    width: 1000,
+    height: 600,
+    webPreferences: {
+      contextIsolation: false,
+      nodeIntegration: true
+    }
+  });
   win.maximize();
 
   // Specify entry point
@@ -45,20 +46,21 @@ app.on('ready', function () {
   //signal from core.component to check for update
   ipcMain.on('ready', (coreCompEvent, arg) => {
     if (!isDev()) {
-      autoUpdater.checkForUpdates();
-      log.info('checking for update..');
-      autoUpdater.on('update-available', (event, info) => {
-        coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
-      });
-      autoUpdater.on('update-not-available', (event, info) => {
-        log.info('no update available..');
-      });
-      autoUpdater.on('download-progress', (progressObj) => {
-        win.webContents.send('progress', progressObj.percent)
-      });
-      autoUpdater.on('error', (event, error) => {
-        coreCompEvent.sender.send('error', error);
-      });
+      //No auto update for international version...
+      // autoUpdater.checkForUpdates();
+      // log.info('checking for update..');
+      // autoUpdater.on('update-available', (event, info) => {
+      //   coreCompEvent.sender.send('available', true);
+      // });
+      // autoUpdater.on('update-not-available', (event, info) => {
+      //   log.info('no update available..');
+      // });
+      // autoUpdater.on('download-progress', (progressObj) => {
+      //   win.webContents.send('progress', progressObj.percent)
+      // });
+      // autoUpdater.on('error', (event, error) => {
+      //   coreCompEvent.sender.send('error', error);
+      // });
     }
   })
 

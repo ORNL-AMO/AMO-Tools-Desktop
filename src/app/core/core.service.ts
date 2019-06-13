@@ -7,6 +7,7 @@ import { MockPhast, MockPhastSettings } from './mockPhast';
 import { MockPsat, MockPsatCalculator, MockPsatSettings } from './mockPsat';
 import { MockFsat, MockFsatSettings, MockFsatCalculator } from './mockFsat';
 import { MockSsmt, MockSsmtSettings } from './mockSsmt';
+import { MockTreasureHunt, MockTreasureHuntSettings } from './mockTreasureHunt';
 @Injectable()
 export class CoreService {
 
@@ -15,35 +16,40 @@ export class CoreService {
   examplePsatId: number;
   exampleFsatId: number;
   exampleSsmtId: number;
+  exampleTreasureHuntId: number;
   constructor(private indexedDbService: IndexedDbService) { }
 
   createExamples(): Promise<any> {
     return new Promise((resolve, reject) => {
       MockPhast.directoryId = this.exampleDirectoryId;
       this.indexedDbService.addAssessment(MockPhast).then(phastId => {
-        
+
         this.examplePhastId = phastId;
         MockPsat.directoryId = this.exampleDirectoryId;
         this.indexedDbService.addAssessment(MockPsat).then(psatId => {
-          
+
           this.examplePsatId = psatId;
           MockPsatCalculator.assessmentId = this.examplePsatId;
 
           this.indexedDbService.addCalculator(MockPsatCalculator).then(() => {
-          
+
             MockFsat.directoryId = this.exampleDirectoryId;
             this.indexedDbService.addAssessment(MockFsat).then(fsatId => {
               this.exampleFsatId = fsatId;
               MockFsatCalculator.assessmentId = fsatId;
-    
+
               this.indexedDbService.addCalculator(MockFsatCalculator).then(() => {
-          
+
                 MockSsmt.directoryId = this.exampleDirectoryId;
                 this.indexedDbService.addAssessment(MockSsmt).then(ssmtId => {
-                  console.log('mock ssmt added');
-        
                   this.exampleSsmtId = ssmtId;
-                  resolve(true);
+
+                  MockTreasureHunt.directoryId = this.exampleDirectoryId;
+                  this.indexedDbService.addAssessment(MockTreasureHunt).then(tHuntId => {
+                    console.log('added treasure hunt')
+                    this.exampleTreasureHuntId = tHuntId;
+                    resolve(true);
+                  })
                 });
               });
             });
@@ -70,19 +76,23 @@ export class CoreService {
           this.indexedDbService.addSettings(MockPhastSettings).then(() => {
 
             MockPsatSettings.assessmentId = this.examplePsatId;
-  
+
             MockPsatSettings.facilityInfo.date = new Date().toDateString();
             this.indexedDbService.addSettings(MockPsatSettings).then(() => {
-            
+
               MockFsatSettings.assessmentId = this.exampleFsatId;
-    
+
               MockFsatSettings.facilityInfo.date = new Date().toDateString();
               this.indexedDbService.addSettings(MockFsatSettings).then(() => {
 
                 MockSsmtSettings.assessmentId = this.exampleSsmtId;
-      
-                this.indexedDbService.addSettings(MockSsmtSettings).then(() =>{
-                  resolve(true);
+
+                this.indexedDbService.addSettings(MockSsmtSettings).then(() => {
+                  
+                  MockTreasureHuntSettings.assessmentId = this.exampleTreasureHuntId;
+                  this.indexedDbService.addSettings(MockTreasureHuntSettings).then(() => {
+                    resolve(true);
+                  })
                 });
               });
             });

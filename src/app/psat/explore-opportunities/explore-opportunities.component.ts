@@ -32,7 +32,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationExists: boolean;
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
-
+  @Output('exploreOppsToast')
+  exploreOppsToast = new EventEmitter<boolean>();
 
   @ViewChild('resultTabs') resultTabs: ElementRef;
 
@@ -47,6 +48,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   helpHeight: number;
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
   constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService) { }
 
   ngOnInit() {
@@ -65,6 +68,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
+      this.checkExploreOpps();
     }, 100);
   }
 
@@ -76,6 +80,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
     if(changes.modificationIndex && !changes.modificationIndex.isFirstChange()){
       this.getResults();
+      this.checkExploreOpps();
     }
   }
 
@@ -115,5 +120,33 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   addNewMod() {
     this.emitAddNewMod.emit(true);
+  }
+
+  checkExploreOpps() {
+    if (this.modificationExists) {
+      if (!this.psat.modifications[this.modificationIndex].exploreOpportunities) {
+        let title: string = 'Explore Opportunities';
+        let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
+        this.openToast(title, body);
+        this.exploreOppsToast.emit(false);
+      }else if(this.showToast){
+        this.hideToast();
+      }
+    }
+  }
+
+  openToast(title: string, body: string) {
+    this.toastData.title = title;
+    this.toastData.body = body;
+    this.showToast = true;
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
   }
 }

@@ -1,12 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { Assessment } from '../models/assessment';
-import { PSAT } from '../models/psat';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
-import { PsatService } from '../../psat/psat.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { Settings } from '../models/settings';
 import { ImportExportService } from './import-export.service';
-import { ImportDataObjects } from '../../dashboard/dashboard.component';
 import { ImportExportData, ImportExportAssessment } from './importExportModel';
 
 @Component({
@@ -33,14 +27,13 @@ export class ImportExportComponent implements OnInit {
   gatheringData: any;
   fileReference: any;
   validFile: boolean;
-  gatheringSettings: any;
   noDirAssessmentItems: Array<ImportExportAssessment>;
   showCalcs: boolean = false;
   showDirs: boolean = false;
   canExport: boolean = false;
   name: string = null;
-  importJson: JSON = null;
-  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private cd: ChangeDetectorRef) { }
+  importJson = null;
+  constructor(private importExportService: ImportExportService) { }
 
   ngOnInit() {
     this.noDirAssessmentItems = new Array();
@@ -98,7 +91,7 @@ export class ImportExportComponent implements OnInit {
           fr.readAsText($event.target.files[0]);
           fr.onloadend = (e) => {
             try {
-              this.importJson = JSON.parse(fr.result);
+              this.importJson = JSON.parse(JSON.stringify(fr.result));
               this.validFile = true;
             } catch (err) {
               this.validFile = false;
@@ -114,7 +107,7 @@ importFile() {
     let fr: FileReader = new FileReader();
     fr.readAsText(this.fileReference.target.files[0]);
     fr.onloadend = (e) => {
-      this.importJson = JSON.parse(fr.result);
+      this.importJson = JSON.parse(JSON.stringify(fr.result));
       this.importData.emit(this.importJson);
     };
   }

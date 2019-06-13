@@ -59,6 +59,11 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     color: black;
 }
 
+.treasure-hunt .btn-primary{
+    background-color: #2E4053;
+    border-color: #2E4053;
+}
+
 .fan-block i{
     color:#FFE400
   }
@@ -269,6 +274,12 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .lighting .calc-icon-div {
     background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(0, 123, 255, 0.34));
 }
+
+
+.treasure-hunt-calc .calc-icon-div{
+    background: linear-gradient(rgba(228, 219, 219, 0.34),#2E4053);
+}
+
 
 .calc-img{
     width: 90%;

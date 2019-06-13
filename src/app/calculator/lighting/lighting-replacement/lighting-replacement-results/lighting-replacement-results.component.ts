@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { LightingReplacementData, LightingReplacementResults } from '../lighting-replacement.service';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { LightingReplacementData, LightingReplacementResults } from '../../../../shared/models/lighting';
+import { LightingReplacementService } from '../lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement-results',
@@ -8,13 +9,18 @@ import { LightingReplacementData, LightingReplacementResults } from '../lighting
 })
 export class LightingReplacementResultsComponent implements OnInit {
   @Input()
-  baselineData: Array<LightingReplacementData>;
+  lightingReplacementResults: LightingReplacementResults;
   @Input()
-  modificationData: Array<LightingReplacementData>;
+  modificationExists: boolean;
   @Input()
-  baselineResults: LightingReplacementResults;
+  baselineElectricityCost: number;
   @Input()
-  modificationResults: LightingReplacementResults;
+  modificationElectricityCost: number;
+  @Input()
+  baselineData: LightingReplacementData;
+  @Input()
+  modificationData: LightingReplacementData;
+
 
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;
@@ -24,25 +30,24 @@ export class LightingReplacementResultsComponent implements OnInit {
   table2String: any;
   @ViewChild('copyTable3') copyTable3: ElementRef;
   table3String: any;
-  
+
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   updateTable0String() {
-    this.table0String = this.copyTable0.nativeElement.innerText;
+    this.table0String = this.copyTable0.nativeElement.innerText + this.copyTable1.nativeElement.innerText + this.copyTable2.nativeElement.innerText + this.copyTable3.nativeElement.innerText;
   }
 
-  updateTable1String() {
-    this.table1String = this.copyTable1.nativeElement.innerText;
-  }
+  // updateTable1String() {
+  //   this.table1String = this.copyTable1.nativeElement.innerText;
+  // }
 
-  updateTable2String() {
-    this.table2String = this.copyTable2.nativeElement.innerText;
-  }
-  
-  updateTable3String() {
-    this.table3String = this.copyTable3.nativeElement.innerText;
-  }
+  // updateTable2String() {
+  //   this.table2String = this.copyTable2.nativeElement.innerText;
+  // }
+
+  // updateTable3String() {
+  //   this.table3String = this.copyTable3.nativeElement.innerText;
+  // }
 }

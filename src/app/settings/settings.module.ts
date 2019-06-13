@@ -10,6 +10,7 @@ import { SettingsService } from './settings.service';
 import { FacilityInfoComponent } from './facility-info/facility-info.component';
 import { FsatSettingsComponent } from './fsat-settings/fsat-settings.component';
 import { TutorialSettingsComponent } from './tutorial-settings/tutorial-settings.component';
+import { TreasureHuntSettingsComponent } from './treasure-hunt-settings/treasure-hunt-settings.component';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { TutorialSettingsComponent } from './tutorial-settings/tutorial-settings
         FsatSettingsComponent,
         SteamSettingsComponent,
         FacilityInfoComponent,
-        TutorialSettingsComponent
+        TutorialSettingsComponent,
+        TreasureHuntSettingsComponent
     ],
     imports: [
         CommonModule,
@@ -36,7 +38,8 @@ import { TutorialSettingsComponent } from './tutorial-settings/tutorial-settings
         FacilityInfoComponent,
         FsatSettingsComponent,
         SteamSettingsComponent,
-        TutorialSettingsComponent
+        TutorialSettingsComponent,
+        TreasureHuntSettingsComponent
     ]
 })
 

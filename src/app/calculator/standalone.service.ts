@@ -1,14 +1,16 @@
+// @ts-ignore
 import { Injectable } from '@angular/core';
 declare var standaloneAddon: any;
+declare var calculatorAddon: any;
 import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
-  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity
+  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, 
+  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-
 
 @Injectable()
 export class StandaloneService {
@@ -24,7 +26,7 @@ export class StandaloneService {
   }
 
   pneumaticAirRequirement(input: PneumaticAirRequirementInput, settings: Settings): PneumaticAirRequirementOutput {
-    let inputCpy: PneumaticAirRequirementInput = JSON.parse(JSON.stringify(input));
+    const inputCpy: PneumaticAirRequirementInput = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
       //metric: cm imperial: in
       inputCpy.cylinderDiameter = this.convertUnitsService.value(inputCpy.cylinderDiameter).from('cm').to('in');
@@ -95,7 +97,7 @@ export class StandaloneService {
   receiverTankSizeBridgingCompressor(input: ReceiverTankBridgingCompressor, settings: Settings): number {
     let inputCpy: ReceiverTankBridgingCompressor = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
-      //metric: m imperial: ft 
+      //metric: m imperial: ft
       inputCpy.distanceToCompressorRoom = this.convertUnitsService.value(inputCpy.distanceToCompressorRoom).from('m').to('ft');
       inputCpy.speedOfAir = this.convertUnitsService.value(inputCpy.speedOfAir).from('m').to('ft');
       // metric: m3 imperial:scfm (ft3)
@@ -116,7 +118,7 @@ export class StandaloneService {
   receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage, settings: Settings): number {
     let inputCpy: ReceiverTankMeteredStorage = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
-      //metric: m imperial: ft 
+      //metric: m imperial: ft
       inputCpy.airFlowRequirement = this.convertUnitsService.value(inputCpy.airFlowRequirement).from('m3').to('ft3');
       inputCpy.meteredControl = this.convertUnitsService.value(inputCpy.meteredControl).from('m3').to('ft3');
       //metric:kPaa imperial: psia
@@ -299,5 +301,17 @@ export class StandaloneService {
     } else {
       return standaloneAddon.usableAirCapacity(inputCpy);
     }
+  }
+
+  electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {
+    return calculatorAddon.electricityReduction(inputObj);
+  }
+
+  naturalGasReduction(inputObj: NaturalGasReductionInput): NaturalGasReductionResult {
+    return calculatorAddon.naturalGasReduction(inputObj);
+  }
+
+  compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
+    return calculatorAddon.compressedAirReduction(inputObj);
   }
 }

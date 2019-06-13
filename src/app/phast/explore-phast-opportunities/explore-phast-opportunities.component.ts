@@ -110,7 +110,8 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
         let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
         this.openToast(title, body);
         this.exploreOppsToast.emit(false);
-
+      } else if (this.showToast) {
+        this.hideToast();
       }
     }
   }

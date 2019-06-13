@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { ReplaceExistingService } from './replace-existing.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-replace-existing',
@@ -9,42 +11,54 @@ import { Settings } from '../../../shared/models/settings';
   styleUrls: ['./replace-existing.component.css']
 })
 export class ReplaceExistingComponent implements OnInit {
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<ReplaceExistingData>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
+  @Output('emitAddOpportunitySheet')
+  emitAddOpportunitySheet = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
+  @Input()
+  opperatingHours: number
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.resizeTabs();
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
   }
   containerHeight: number;
   headerHeight: number;
   currentField: string;
   tabSelect: string = 'results';
-  settings: Settings;
-  results: ReplaceExistingResults = {
-    existingEnergyUse: 0,
-    newEnergyUse: 0,
-    existingEnergyCost: 0,
-    newEnergyCost: 0,
-    annualEnergySavings: 0,
-    costSavings: 0,
-    simplePayback: 0
-  };
+  results: ReplaceExistingResults;
   inputs: ReplaceExistingData;
 
-  replacementMotorInputs: ReplaceExistingData;
-  existingMotorInputs: ReplaceExistingData;
-
+  replaceExistingForm: FormGroup;
 
   constructor(private replaceExistingService: ReplaceExistingService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.initMotorInputs();
-    this.calculate(this.inputs);
-    this.settings = this.settingsDbService.globalSettings;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+
+    if (this.replaceExistingService.replaceExistingData) {
+      this.inputs = this.replaceExistingService.replaceExistingData;
+    } else {
+      this.initMotorInputs();
+    }
+    this.initForm();
+    this.calculate();
   }
 
   ngAfterViewInit() {
@@ -53,32 +67,30 @@ export class ReplaceExistingComponent implements OnInit {
     }, 100);
   }
 
-  initMotorInputs() {
-    this.inputs = this.replaceExistingService.initReplaceExistingData();
-    this.existingMotorInputs = {
-      operatingHours: this.inputs.operatingHours,
-      motorSize: this.inputs.motorSize,
-      load: this.inputs.load,
-      electricityCost: this.inputs.electricityCost,
-      existingEfficiency: this.inputs.existingEfficiency,
-      newEfficiency: null,
-      purchaseCost: null
-    };
-    this.replacementMotorInputs = {
-      operatingHours: this.existingMotorInputs.operatingHours,
-      motorSize: this.existingMotorInputs.motorSize,
-      load: this.existingMotorInputs.load,
-      electricityCost: this.existingMotorInputs.electricityCost,
-      existingEfficiency: null,
-      newEfficiency: this.inputs.newEfficiency,
-      purchaseCost: this.inputs.purchaseCost
-    };
+  ngOnDestroy() {
+    if (!this.inTreasureHunt) {
+      this.replaceExistingService.replaceExistingData = this.inputs;
+    } else {
+      this.replaceExistingService.replaceExistingData = undefined;
+    }
   }
 
+  initMotorInputs() {
+    let oppHours: number = 5200;
+    if (this.opperatingHours) {
+      oppHours = this.opperatingHours;
+    }
+    this.inputs = this.replaceExistingService.initReplaceExistingData(this.settings, oppHours);
+  }
 
-  btnResetData() {
+  initForm() {
+    this.replaceExistingForm = this.replaceExistingService.getFormFromObj(this.inputs);
+  }
+
+  resetData() {
     this.initMotorInputs();
-    this.calculate(this.inputs);
+    this.initForm();
+    this.calculate();
   }
 
   resizeTabs() {
@@ -96,60 +108,22 @@ export class ReplaceExistingComponent implements OnInit {
     this.currentField = str;
   }
 
-  calculate(_inputs: ReplaceExistingData) {
-    //case of calculate replacement motor
-    if (_inputs.newEfficiency === null) {
-      this.existingMotorInputs = _inputs;
-      this.replacementMotorInputs = {
-        operatingHours: this.existingMotorInputs.operatingHours,
-        motorSize: this.existingMotorInputs.motorSize,
-        load: this.existingMotorInputs.load,
-        electricityCost: this.existingMotorInputs.electricityCost,
-        existingEfficiency: null,
-        newEfficiency: this.replacementMotorInputs.newEfficiency,
-        purchaseCost: this.replacementMotorInputs.purchaseCost
-      };
-    }
-    else {
-      this.replacementMotorInputs = {
-        operatingHours: this.existingMotorInputs.operatingHours,
-        motorSize: this.existingMotorInputs.motorSize,
-        load: this.existingMotorInputs.load,
-        electricityCost: this.existingMotorInputs.electricityCost,
-        existingEfficiency: null,
-        newEfficiency: _inputs.newEfficiency,
-        purchaseCost: _inputs.purchaseCost
-      };
-    }
-    this.inputs = {
-      operatingHours: this.existingMotorInputs.operatingHours,
-      motorSize: this.existingMotorInputs.motorSize,
-      load: this.existingMotorInputs.load,
-      electricityCost: this.existingMotorInputs.electricityCost,
-      existingEfficiency: this.existingMotorInputs.existingEfficiency,
-      newEfficiency: this.replacementMotorInputs.newEfficiency,
-      purchaseCost: this.replacementMotorInputs.purchaseCost
-    };
+  calculate() {
+    this.inputs = this.replaceExistingService.getObjFromForm(this.replaceExistingForm);
     this.results = this.replaceExistingService.getResults(this.inputs);
+  }
+
+  save() {
+    this.emitSave.emit(this.inputs);
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
+  }
+
+  addOpportunitySheet() {
+    this.emitAddOpportunitySheet.emit(true);
   }
 }
 
 
-export interface ReplaceExistingData {
-  operatingHours: number;
-  motorSize: number;
-  existingEfficiency: number;
-  load: number;
-  electricityCost: number;
-  newEfficiency: number;
-  purchaseCost: number;
-}
-export interface ReplaceExistingResults {
-  existingEnergyUse: number;
-  newEnergyUse: number;
-  existingEnergyCost: number;
-  newEnergyCost: number;
-  annualEnergySavings: number;
-  costSavings: number;
-  simplePayback: number;
-}

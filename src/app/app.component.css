@@ -194,6 +194,7 @@ label {
   padding: 2px;
   line-height: 1;
   font-size: 14px;
+  height: inherit;
 }
 .form-text {
   margin-top: 0;
@@ -647,6 +648,15 @@ Reports
     background-position: left center;
     background-size: 33px;
     padding: 0px 0 0px 30px;
+}
+
+.assessment-report.report-in-treasure-hunt .assessment-name,
+.assessment-report.report-in-rollup.report-in-treasure-hunt .assessment-name {
+    background-image: url('../assets/images/treasure-hunt.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 60px;
+    padding: 0px 0 0px 55px;
 }
 
 
@@ -1360,6 +1370,11 @@ Banner
   .banner.ssmt{
     background:#F39C12;
     color: black;
+  }
+
+  .banner.treasure-hunt{
+    background: #2E4053;
+    color: white;
   }
 
   .banner.fsat .btn-dashboard, .banner.fsat .title, 

@@ -25,6 +25,11 @@
     border-bottom: #F39C12 groove 2px;
     border-image: linear-gradient(to right, #F0F3F4, #F39C12) 50 / 2;
   }
+
+  .treasure-hunt .summary-card-header{
+    border-bottom: #2E4053 groove 2px;
+    border-image: linear-gradient(to right, #F0F3F4, #2E4053) 50 / 2;
+  }
 /* 
   .card-header:hover{
     cursor: inherit;
@@ -79,6 +84,11 @@
 .ssmt .dropdown-toggle,
 .ssmt .btn-primary{
   background-color: #F39C12;
+}
+
+.treasure-hunt .dropdown-toggle,
+.treasure-hunt .btn-primary{
+  background-color: #2E4053;
 }
 
 .dropdown-menu.shown{

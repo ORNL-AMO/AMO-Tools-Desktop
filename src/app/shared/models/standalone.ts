@@ -152,3 +152,193 @@ export interface CalculateUsableCapacity {
   airPressureIn: number;
   airPressureOut: number;
 }
+
+
+//======= electricity reduction objects =======
+export interface ElectricityReductionInput {
+  electricityReductionInputVec: Array<ElectricityReductionData>
+};
+
+export interface ElectricityReductionData {
+  name: string,
+  operatingHours: number,
+  electricityCost: number,
+  measurementMethod: number, // 0 = multimeter reading, 1 = name plate data, 2 = power meter method, 3 = offsheet / other method
+  multimeterData: MultimeterReadingData,
+  nameplateData: NameplateData,
+  powerMeterData: PowerMeterData,
+  otherMethodData: OtherMethodData,
+  units: number
+};
+
+export interface MultimeterReadingData {
+  numberOfPhases: number,
+  supplyVoltage: number,
+  averageCurrent: number,
+  powerFactor: number
+};
+
+export interface NameplateData {
+  ratedMotorPower: number,
+  variableSpeedMotor: boolean,
+  operationalFrequency: number,
+  lineFrequency: number,
+  motorAndDriveEfficiency: number,
+  loadFactor: number
+};
+
+export interface PowerMeterData {
+  power: number,
+};
+
+export interface OtherMethodData {
+  energy: number;
+};
+
+export interface ElectricityReductionResults {
+  baselineResults: ElectricityReductionResult,
+  modificationResults: ElectricityReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number,
+};
+
+export interface ElectricityReductionResult {
+  energyUse: number,
+  energyCost: number,
+  power: number;
+};
+
+//====== end electricity reduction objects ====
+
+//======= natural gas reduction objects ========
+export interface NaturalGasReductionInput {
+  naturalGasReductionInputVec: Array<NaturalGasReductionData>
+};
+
+export interface NaturalGasReductionData {
+  name: string,
+  operatingHours: number,
+  fuelCost: number,
+  measurementMethod: number,
+  flowMeterMethodData: FlowMeterMethodData,
+  otherMethodData: NaturalGasOtherMethodData,
+  airMassFlowData: AirMassFlowData,
+  waterMassFlowData: WaterMassFlowData,
+  units: number
+};
+
+export interface FlowMeterMethodData {
+  flowRate: number
+};
+
+export interface NaturalGasOtherMethodData {
+  consumption: number
+};
+
+export interface AirMassFlowData {
+  isNameplate: boolean,
+  airMassFlowMeasuredData: AirMassFlowMeasuredData,
+  airMassFlowNameplateData: AirMassFlowNameplateData,
+  inletTemperature: number,
+  outletTemperature: number,
+  systemEfficiency: number
+};
+
+export interface AirMassFlowMeasuredData {
+  areaOfDuct: number,
+  airVelocity: number
+};
+
+export interface AirMassFlowNameplateData {
+  airFlow: number
+};
+
+export interface WaterMassFlowData {
+  waterFlow: number,
+  inletTemperature: number,
+  outletTemperature: number,
+  systemEfficiency: number
+};
+
+export interface NaturalGasReductionResults {
+  baselineResults: NaturalGasReductionResult,
+  modificationResults: NaturalGasReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number,
+};
+
+export interface NaturalGasReductionResult {
+  energyUse: number,
+  energyCost: number,
+  heatFlow: number,
+  totalFlow: number
+};
+//====== end natural gas reduction objects =======
+
+
+//====== compressed air reduction objects ======
+export interface CompressedAirReductionInput {
+  compressedAirReductionInputVec: Array<CompressedAirReductionData>
+};
+
+export interface CompressedAirReductionData {
+  name: string,
+  hoursPerYear: number,
+  utilityType: number,
+  utilityCost: number,
+  measurementMethod: number,
+  flowMeterMethodData: CompressedAirFlowMeterMethodData,
+  bagMethodData: BagMethodData,
+  pressureMethodData: PressureMethodData,
+  otherMethodData: CompressedAirOtherMethodData,
+  compressorElectricityData: CompressorElectricityData,
+  units: number
+};
+
+export interface CompressedAirFlowMeterMethodData {
+  meterReading: number
+};
+
+export interface BagMethodData {
+  height: number,
+  diameter: number,
+  fillTime: number
+};
+
+export interface PressureMethodData {
+  nozzleType: number,
+  numberOfNozzles: number,
+  supplyPressure: number
+};
+
+export interface CompressedAirOtherMethodData {
+  consumption: number
+};
+
+export interface CompressorElectricityData {
+  compressorControl: number,
+  compressorControlAdjustment: number,
+  compressorSpecificPowerControl: number,
+  compressorSpecificPower: number
+};
+
+export interface CompressedAirReductionResults {
+  baselineResults: CompressedAirReductionResult,
+  modificationResults: CompressedAirReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number,
+  annualFlowRateReduction: number,
+  annualConsumptionReduction: number
+};
+
+export interface CompressedAirReductionResult {
+  energyUse: number,
+  energyCost: number,
+  flowRate: number,
+  singleNozzeFlowRate: number,
+  consumption: number
+};
+
+
+
+//===== END compressed air reduction objects =====

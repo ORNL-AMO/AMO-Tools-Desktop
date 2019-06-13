@@ -52,6 +52,10 @@
     cursor: pointer;
     box-shadow: 0px 0px 6px 0px #F39C12 !important;
 }
+.treasure-hunt-summary:hover{
+    cursor: pointer;
+    box-shadow: 0px 0px 6px 0px #2E4053 !important;
+}
 
 .coming-soon .summary-header {
     border-bottom: #ddd solid 1px;
@@ -223,6 +227,11 @@ dl.summary-list {
 
 .card.steam .card-header > span {
     background: #F39C12;
+}
+
+.card.treasure-hunt .card-header > span {
+    background: #2E4053;
+    color: white;
 }
 
 .card.fans .card-header > span span {
