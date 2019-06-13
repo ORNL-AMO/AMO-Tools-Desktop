@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ElectronService } from 'ngx-electron';
 
@@ -24,20 +24,31 @@ export class UpdateToastComponent implements OnInit {
   destroyReleaseNotesCard: boolean = false;
   releaseNotes: string;
   releaseName: string;
-  constructor(private electronService: ElectronService) { }
+  downloadingUpdate: boolean = false;
+  updateDownloaded: boolean = false;
+  version: string;
+  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.electronService.ipcRenderer.once('release-info', (event, info) => {
+      console.log(info);
       this.releaseName = info.releaseName;
       this.releaseNotes = info.releaseNotes.substring(info.releaseNotes.indexOf('</h1>') + 5);
+      this.version = info.version;
       setTimeout(() => {
         this.showToast = 'show';
       }, 500);
+    })
+
+    this.electronService.ipcRenderer.once('update-downloaded', (event, args) => {
+      this.updateDownloaded = true;
+      this.cd.detectChanges();
     })
   }
 
   closeToast() {
     this.showToast = 'hide';
+    this.cd.detectChanges();
     setTimeout(() => {
       this.destroyToast = true;
       // this.emitCloseToast.emit(true);
@@ -47,10 +58,12 @@ export class UpdateToastComponent implements OnInit {
   viewReleaseNotes() {
     this.destroyReleaseNotesCard = false;
     this.showReleaseNotesCard = 'show';
+    this.cd.detectChanges();
   }
 
   closeReleaseNotes() {
     this.showReleaseNotesCard = 'hide';
+    this.cd.detectChanges();
     setTimeout(() => {
       this.destroyReleaseNotesCard = true;
       // this.emitCloseToast.emit(true);
@@ -58,6 +71,12 @@ export class UpdateToastComponent implements OnInit {
   }
 
   updateNow() {
+    this.downloadingUpdate = true;
+    this.cd.detectChanges();
     this.electronService.ipcRenderer.send('update', null);
+  }
+
+  quitAndInstall(){
+    this.electronService.ipcRenderer.send('quit-and-install');
   }
 }

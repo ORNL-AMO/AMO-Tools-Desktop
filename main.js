@@ -48,34 +48,28 @@ app.on('ready', function () {
     //if (!isDev()) {
       autoUpdater.checkForUpdates().then(() => {
         log.info('done checking');
-        log.info(autoUpdater.updateInfoAndProvider);
         coreCompEvent.sender.send('release-info', autoUpdater.updateInfoAndProvider.info);
       });
       autoUpdater.on('update-available', (event, info) => {
-        log.info('update available 12345');
         coreCompEvent.sender.send('available', true);
       });
       autoUpdater.on('update-not-available', (event, info) => {
         log.info('no update available..');
       });
-      autoUpdater.on('download-progress', (progressObj) => {
-        win.webContents.send('progress', progressObj.percent)
-      });
       autoUpdater.on('error', (event, error) => {
         coreCompEvent.sender.send('error', error);
+      });
+
+      autoUpdater.on('update-downloaded', (event, info) => {
+        // autoUpdater.quitAndInstall();
+        coreCompEvent.sender.send('update-downloaded');
       });
     //}
   })
 
-
-
-  // autoUpdater.on('download-progress', (progressObj) => {
-  //   log.info(progressObj);
-  // });
-
-  autoUpdater.on('update-downloaded', (event, info) => {
+  ipcMain.once('quit-and-install', (event, arg) => {
     autoUpdater.quitAndInstall();
-  });
+  })
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
@@ -90,6 +84,7 @@ app.on('ready', function () {
 
 // Listen for message from core.component to either download updates or not
 ipcMain.once('update', (event, arg) => {
+  log.info('update')
   autoUpdater.downloadUpdate();
 });
 
