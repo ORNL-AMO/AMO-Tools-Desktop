@@ -53,7 +53,7 @@ app.on('ready', function () {
       });
       autoUpdater.on('update-available', (event, info) => {
         log.info('update available 12345');
-        coreCompEvent.sender.send('available', autoUpdater);
+        coreCompEvent.sender.send('available', true);
       });
       autoUpdater.on('update-not-available', (event, info) => {
         log.info('no update available..');
