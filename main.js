@@ -35,9 +35,9 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  if (isDev()) {
+  // if (isDev()) {
     win.toggleDevTools();
-  }
+  // }
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
@@ -47,12 +47,13 @@ app.on('ready', function () {
   ipcMain.on('ready', (coreCompEvent, arg) => {
     //if (!isDev()) {
       autoUpdater.checkForUpdates().then(() => {
-        log.info('done checking')
+        log.info('done checking');
+        log.info(autoUpdater.updateInfoAndProvider);
         coreCompEvent.sender.send('release-info', autoUpdater.updateInfoAndProvider.info);
       });
       autoUpdater.on('update-available', (event, info) => {
-        
-        coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
+        log.info('update available 12345');
+        coreCompEvent.sender.send('available', autoUpdater);
       });
       autoUpdater.on('update-not-available', (event, info) => {
         log.info('no update available..');

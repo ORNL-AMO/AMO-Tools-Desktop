@@ -11,6 +11,11 @@
     top: -100px;
   }
 
+  .release-notes-card{
+      left: 15px;
+      top: -100%;
+  }
+
   .close{
       padding-left: 1rem;
       color: white;

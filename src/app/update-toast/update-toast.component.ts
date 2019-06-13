@@ -19,7 +19,7 @@ import { ElectronService } from 'ngx-electron';
 export class UpdateToastComponent implements OnInit {
 
   showToast: string = 'hide';
-  showReleaseNotesCard: string = 'show';
+  showReleaseNotesCard: string = 'hide';
   destroyToast: boolean = false;
   destroyReleaseNotesCard: boolean = false;
   releaseNotes: string;
@@ -29,8 +29,7 @@ export class UpdateToastComponent implements OnInit {
   ngOnInit() {
     this.electronService.ipcRenderer.once('release-info', (event, info) => {
       this.releaseName = info.releaseName;
-      this.releaseNotes = info.releaseNotes;
-      console.log(info);
+      this.releaseNotes = info.releaseNotes.substring(info.releaseNotes.indexOf('</h1>') + 5);
       setTimeout(() => {
         this.showToast = 'show';
       }, 500);
@@ -46,6 +45,7 @@ export class UpdateToastComponent implements OnInit {
   }
 
   viewReleaseNotes() {
+    this.destroyReleaseNotesCard = false;
     this.showReleaseNotesCard = 'show';
   }
 
@@ -58,6 +58,6 @@ export class UpdateToastComponent implements OnInit {
   }
 
   updateNow() {
-
+    this.electronService.ipcRenderer.send('update', null);
   }
 }

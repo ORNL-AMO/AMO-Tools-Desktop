@@ -1,6 +1,6 @@
 <!-- <div #coreContainer> -->
+<app-update-toast *ngIf="showUpdateModal"></app-update-toast>
 <div *ngIf="idbStarted">
-    <app-update-toast></app-update-toast>
     <div *ngIf="!hideTutorial" class="opening-tutorial">
         <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
         </app-opening-tutorial>

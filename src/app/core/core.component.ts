@@ -58,8 +58,11 @@ export class CoreComponent implements OnInit {
 
   ngOnInit() {
     this.electronService.ipcRenderer.once('available', (event, arg) => {
+      console.log('update available!!!')
+      console.log(arg);
       if (arg === true) {
         this.showUpdateModal = true;
+        console.log('update available')
         this.assessmentService.updateAvailable.next(true);
         this.changeDetectorRef.detectChanges();
       }
