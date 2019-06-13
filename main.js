@@ -49,7 +49,7 @@ app.on('ready', function () {
       autoUpdater.checkForUpdates();
       log.info('checking for update..');
       autoUpdater.on('update-available', (event, info) => {
-        coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
+        coreCompEvent.sender.send('available', true);
       });
       autoUpdater.on('update-not-available', (event, info) => {
         log.info('no update available..');
