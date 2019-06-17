@@ -70,7 +70,7 @@ app.on('ready', function () {
   })
 
   ipcMain.once('quit-and-install', (event, arg) => {
-    autoUpdater.quitAndInstall();s
+    autoUpdater.quitAndInstall();
   })
 
   //Check for updates and install
