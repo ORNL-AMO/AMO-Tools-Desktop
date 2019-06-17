@@ -35,9 +35,9 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  // if (isDev()) {
+  if (isDev()) {
     win.toggleDevTools();
-  // }
+  }
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
@@ -45,7 +45,7 @@ app.on('ready', function () {
 
   //signal from core.component to check for update
   ipcMain.on('ready', (coreCompEvent, arg) => {
-    //if (!isDev()) {
+    if (!isDev()) {
       autoUpdater.checkForUpdates().then(() => {
         log.info('done checking for updates');
         coreCompEvent.sender.send('release-info', autoUpdater.updateInfoAndProvider.info);
@@ -66,11 +66,11 @@ app.on('ready', function () {
         // autoUpdater.quitAndInstall();
         coreCompEvent.sender.send('update-downloaded');
       });
-    //}
+    }
   })
 
   ipcMain.once('quit-and-install', (event, arg) => {
-    autoUpdater.quitAndInstall();
+    autoUpdater.quitAndInstall();s
   })
 
   //Check for updates and install

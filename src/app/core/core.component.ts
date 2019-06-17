@@ -103,7 +103,6 @@ export class CoreComponent implements OnInit {
     }, 3500);
 
     this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
-      console.log('val! ' + val);
       if (val == true) {
         this.showUpdateModal = true;
         this.changeDetectorRef.detectChanges();
@@ -159,13 +158,10 @@ export class CoreComponent implements OnInit {
     }, 500);
   }
 
-
   hideUpdateToast() {
     this.showUpdateModal = false;
     this.changeDetectorRef.detectChanges();
-    console.log('hide update modal');
   }
-
 
   closeTutorial() {
     this.assessmentService.tutorialShown = true;

@@ -28,7 +28,6 @@ import { ContactPageComponent } from '../contact-page/contact-page.component';
 import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 
 import { VersionModalComponent } from '../version-modal/version-modal.component';
-import { UpdateModalComponent } from '../update-modal/update-modal.component';
 import { FsatModule } from '../fsat/fsat.module';
 import { AcknowledgmentsPageComponent } from "../acknowledgments-page/acknowledgments-page.component";
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
@@ -73,7 +72,6 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
     TutorialsComponent,
     ContactPageComponent,
     AcknowledgmentsPageComponent,
-    UpdateModalComponent,
     VersionModalComponent,
     MeasurComponent,
     OpeningTutorialComponent,
