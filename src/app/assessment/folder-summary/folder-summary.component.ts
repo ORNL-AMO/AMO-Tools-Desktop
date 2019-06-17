@@ -127,9 +127,9 @@ export class FolderSummaryComponent implements OnInit {
               console.log('calculate');
               results = this.calculateModelService.initDataAndRun(assessment.ssmt, settings, true, false);
             }
-            results.outputData.boilerFuelUsage = this.convertUnitsService.value(results.outputData.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
-            this.ssmtEnergyUsed = results.outputData.boilerFuelUsage + this.ssmtEnergyUsed;
-            this.ssmtEnergyCost = results.outputData.totalOperatingCost + this.ssmtEnergyCost;
+            results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
+            this.ssmtEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + this.ssmtEnergyUsed;
+            this.ssmtEnergyCost = results.outputData.operationsOutput.totalOperatingCost + this.ssmtEnergyCost;
           }
         }
       });

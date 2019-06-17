@@ -24,7 +24,7 @@ export class HoverProcessUsageComponent implements OnInit {
       this.processSteamUsage = this.outputData.mediumPressureProcessUsage;
 
     } else if (this.pressureLevel === 'High') {
-      this.processSteamUsage = this.outputData.highPressureProcessUsage;
+      this.processSteamUsage = this.outputData.highPressureProcessSteamUsage;
 
     }
   }

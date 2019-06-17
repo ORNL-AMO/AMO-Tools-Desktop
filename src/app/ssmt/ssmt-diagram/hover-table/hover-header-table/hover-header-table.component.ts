@@ -26,15 +26,15 @@ export class HoverHeaderTableComponent implements OnInit {
 
   ngOnInit() {
     if (this.headerPressure === 'highPressure') {
-      this.header = this.outputData.highPressureHeader;
+      this.header = this.outputData.highPressureHeaderSteam;
       this.heatLoss = this.outputData.highPressureSteamHeatLoss;
       this.headerInput = this.inputData.headerInput.highPressure;
     } else if (this.headerPressure === 'mediumPressure') {
-      this.header = this.outputData.mediumPressureHeader;
+      this.header = this.outputData.mediumPressureHeaderSteam;
       this.heatLoss = this.outputData.mediumPressureSteamHeatLoss;
       this.headerInput = this.inputData.headerInput.mediumPressure;
     } else if (this.headerPressure === 'lowPressure') {
-      this.header = this.outputData.lowPressureHeader;
+      this.header = this.outputData.lowPressureHeaderSteam;
       this.heatLoss = this.outputData.lowPressureSteamHeatLoss;
       this.headerInput = this.inputData.headerInput.lowPressure;
     }

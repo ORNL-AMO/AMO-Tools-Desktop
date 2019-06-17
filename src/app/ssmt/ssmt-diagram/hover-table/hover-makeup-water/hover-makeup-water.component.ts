@@ -22,7 +22,7 @@ export class HoverMakeupWaterComponent implements OnInit {
   constructor(private convertUnitsService: ConvertUnitsService) { }
   ngOnInit() {
     if (this.combined) {
-      this.makeupWater = this.outputData.makeupWaterAndCondensateHeader;
+      this.makeupWater = this.outputData.makeupWaterAndCondensate;
       this.makeupWaterLabel = 'Make-up Water and Condensate';
     } else {
       this.makeupWater = this.outputData.makeupWater;

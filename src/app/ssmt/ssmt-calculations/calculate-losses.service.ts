@@ -30,8 +30,8 @@ export class CalculateLossesService {
       ssmtLosses.stack = this.calculateStack(resultsCpy);
       ssmtLosses.blowdown = this.calculateBlowdown(resultsCpy.boilerOutput, settings);
       ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
-      ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessUsage, resultsCpy.highPressureCondensate, settings);
-      ssmtLosses.highPressureProcessUsage = resultsCpy.highPressureProcessUsage.processUsage;
+      ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessSteamUsage, resultsCpy.highPressureCondensate, settings);
+      ssmtLosses.highPressureProcessUsage = resultsCpy.highPressureProcessSteamUsage.processUsage;
       //
       ssmtLosses.highPressureHeader = resultsCpy.highPressureSteamHeatLoss.heatLoss;
       if (inputCpy.turbineInput.condensingTurbine.useTurbine === true) {
@@ -45,7 +45,7 @@ export class CalculateLossesService {
       }
       if (inputCpy.headerInput.numberOfHeaders > 1) {
         //low pressure vent
-        ssmtLosses.lowPressureVentLoss = this.calculateLowPressureVentLoss(resultsCpy.ventedLowPressureSteam, settings);
+        ssmtLosses.lowPressureVentLoss = this.calculateLowPressureVentLoss(resultsCpy.lowPressureVentedSteam, settings);
         //header
         ssmtLosses.lowPressureHeader = resultsCpy.lowPressureSteamHeatLoss.heatLoss;
         //process
@@ -53,8 +53,8 @@ export class CalculateLossesService {
         ssmtLosses.lowPressureProcessLoss = this.calculateProcessLoss(resultsCpy.lowPressureProcessUsage, resultsCpy.lowPressureCondensate, settings);
         //turbine
         if (inputCpy.turbineInput.highToLowTurbine.useTurbine === true) {
-          ssmtLosses.highToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highToLowPressureTurbine);
-          ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highToLowPressureTurbine);
+          ssmtLosses.highToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToLowPressureTurbine);
+          ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highPressureToLowPressureTurbine);
         }
 
         if (inputCpy.headerInput.numberOfHeaders === 3) {
@@ -65,8 +65,8 @@ export class CalculateLossesService {
             ssmtLosses.highToMediumTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highPressureToMediumPressureTurbine);
           }
           if (inputCpy.turbineInput.mediumToLowTurbine.useTurbine === true) {
-            ssmtLosses.mediumToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.mediumToLowPressureTurbine);
-            ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.mediumToLowPressureTurbine);
+            ssmtLosses.mediumToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.mediumPressureToLowPressureTurbine);
+            ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.mediumPressureToLowPressureTurbine);
           }
           ssmtLosses.mediumPressureProcessLoss = this.calculateProcessLoss(resultsCpy.mediumPressureProcessUsage, resultsCpy.mediumPressureCondensate, settings);
         }
@@ -176,7 +176,7 @@ export class CalculateLossesService {
   }
 
   calculateUsefulProcessUsage(outputData: SSMTOutput, numberOfHeaders: number): number {
-    let usefulProcessUsage: number = outputData.highPressureProcessUsage.processUsage;
+    let usefulProcessUsage: number = outputData.highPressureProcessSteamUsage.processUsage;
     if (numberOfHeaders > 1) {
       usefulProcessUsage = usefulProcessUsage + outputData.lowPressureProcessUsage.processUsage;
 

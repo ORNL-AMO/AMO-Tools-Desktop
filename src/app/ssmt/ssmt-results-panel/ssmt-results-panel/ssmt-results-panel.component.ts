@@ -70,11 +70,11 @@ export class SsmtResultsPanelComponent implements OnInit {
           this.ssmt.outputData = resultData.outputData;
         }
         if (calculateModification || calculateBaseline) {
-          resultData = this.calculateModelService.initDataAndRun(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, false, this.ssmt.outputData.sitePowerDemand);
+          resultData = this.calculateModelService.initDataAndRun(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, false, this.ssmt.outputData.operationsOutput.sitePowerDemand);
           this.ssmt.modifications[this.modificationIndex].ssmt.outputData = resultData.outputData;
         }
         this.getInputs();
-        this.getSavings(this.ssmt.outputData.totalOperatingCost, this.ssmt.modifications[this.modificationIndex].ssmt.outputData.totalOperatingCost);
+        this.getSavings(this.ssmt.outputData.operationsOutput.totalOperatingCost, this.ssmt.modifications[this.modificationIndex].ssmt.outputData.operationsOutput.totalOperatingCost);
         this.getLosses();
         this.showResults = true;
         this.ssmt.resultsCalculated = true;
@@ -85,7 +85,7 @@ export class SsmtResultsPanelComponent implements OnInit {
     } else {
       this.getInputs();
       this.getLosses();
-      this.getSavings(this.ssmt.outputData.totalOperatingCost, this.ssmt.modifications[this.modificationIndex].ssmt.outputData.totalOperatingCost);
+      this.getSavings(this.ssmt.outputData.operationsOutput.totalOperatingCost, this.ssmt.modifications[this.modificationIndex].ssmt.outputData.operationsOutput.totalOperatingCost);
       this.showResults = true;
       this.checkValid();
     }

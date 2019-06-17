@@ -22,11 +22,11 @@ export class HoverTurbineTableComponent implements OnInit {
     if (this.turbineType === 'condensing') {
       this.turbine = this.outputData.condensingTurbine;
     } else if (this.turbineType === 'highToLow') {
-      this.turbine = this.outputData.highToLowPressureTurbine;
+      this.turbine = this.outputData.highPressureToLowPressureTurbine;
     } else if (this.turbineType === 'highToMedium') {
       this.turbine = this.outputData.highPressureToMediumPressureTurbine;
     } else if (this.turbineType === 'mediumToLow') {
-      this.turbine = this.outputData.mediumToLowPressureTurbine;
+      this.turbine = this.outputData.mediumPressureToLowPressureTurbine;
     }
   }
 

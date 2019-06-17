@@ -418,10 +418,10 @@ export class ReportRollupService {
   initSsmtCompare(resultsArr: Array<AllSsmtResultsData>) {
     let tmpResults: Array<SsmtCompare> = new Array<SsmtCompare>();
     resultsArr.forEach(result => {
-      let minCost = _.minBy(result.modificationResults, (result) => { return result.totalOperatingCost; });
+      let minCost = _.minBy(result.modificationResults, (result) => { return result.operationsOutput.totalOperatingCost; });
       let modIndex;
       if (minCost != undefined) {
-        modIndex = _.findIndex(result.modificationResults, { totalOperatingCost: minCost.totalOperatingCost });
+        modIndex = _.findIndex(result.modificationResults, { totalOperatingCost: minCost.operationsOutput.totalOperatingCost });
       }
       let ssmtAssessments = this.ssmtAssessments.value;
       let assessmentIndex = _.findIndex(ssmtAssessments, (val) => { return val.assessment.id === result.assessmentId; });
@@ -462,7 +462,7 @@ export class ReportRollupService {
             let modResultsArr = new Array<SSMTOutput>();
             val.assessment.ssmt.modifications.forEach(mod => {
               if (!mod.ssmt.resultsCalculated) {
-                mod.ssmt.outputData = this.calculateModelService.initDataAndRun(mod.ssmt, val.settings, false, false, baselineResults.sitePowerDemand).outputData;
+                mod.ssmt.outputData = this.calculateModelService.initDataAndRun(mod.ssmt, val.settings, false, false, baselineResults.operationsOutput.sitePowerDemand).outputData;
                 mod.ssmt.resultsCalculated = true;
               }
               let tmpResults: SSMTOutput = mod.ssmt.outputData;

@@ -57,13 +57,13 @@ export class ReportGraphsService {
         generationData.push(ssmt.outputData.condensingTurbine.powerOut);
       }
       if (ssmt.turbineInput.highToLowTurbine.useTurbine) {
-        generationData.push(ssmt.outputData.highToLowPressureTurbine.powerOut);
+        generationData.push(ssmt.outputData.highPressureToLowPressureTurbine.powerOut);
       }
       if (ssmt.turbineInput.highToMediumTurbine.useTurbine) {
         generationData.push(ssmt.outputData.highPressureToMediumPressureTurbine.powerOut);
       }
       if (ssmt.turbineInput.mediumToLowTurbine.useTurbine) {
-        generationData.push(ssmt.outputData.mediumToLowPressureTurbine.powerOut);
+        generationData.push(ssmt.outputData.mediumPressureToLowPressureTurbine.powerOut);
       }
     }
     else {

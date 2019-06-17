@@ -2045,64 +2045,65 @@ export class CalculateModelService {
   }
 
   getResultsObject(): SSMTOutput {
-    let output: SSMTOutput = {
-      boilerOutput: this.boilerOutput,
+    // // let output: SSMTOutput = {
+    // //   boilerOutput: this.boilerOutput,
 
-      highPressureHeader: this.highPressureHeader,
-      highPressureSteamHeatLoss: this.highPressureSteamHeatLoss,
-      lowPressurePRV: this.lowPressurePRV,
-      highToMediumPressurePRV: this.highToMediumPressurePRV,
+    // //   highPressureHeader: this.highPressureHeader,
+    // //   highPressureSteamHeatLoss: this.highPressureSteamHeatLoss,
+    // //   lowPressurePRV: this.lowPressurePRV,
+    // //   highToMediumPressurePRV: this.highToMediumPressurePRV,
 
-      highToLowPressureTurbine: this.highToLowPressureTurbine,
-      highPressureToMediumPressureTurbine: this.highPressureToMediumPressureTurbine,
-      highPressureCondensateFlashTank: this.highPressureCondensateFlashTank,
+    // //   highToLowPressureTurbine: this.highToLowPressureTurbine,
+    // //   highPressureToMediumPressureTurbine: this.highPressureToMediumPressureTurbine,
+    // //   highPressureCondensateFlashTank: this.highPressureCondensateFlashTank,
 
-      lowPressureHeader: this.lowPressureHeader,
-      lowPressureSteamHeatLoss: this.lowPressureSteamHeatLoss,
+    // //   lowPressureHeader: this.lowPressureHeader,
+    // //   lowPressureSteamHeatLoss: this.lowPressureSteamHeatLoss,
 
-      mediumToLowPressureTurbine: this.mediumToLowPressureTurbine,
-      mediumPressureCondensateFlashTank: this.mediumPressureCondensateFlashTank,
+    // //   mediumToLowPressureTurbine: this.mediumToLowPressureTurbine,
+    // //   mediumPressureCondensateFlashTank: this.mediumPressureCondensateFlashTank,
 
-      mediumPressureHeader: this.mediumPressureHeader,
-      mediumPressureSteamHeatLoss: this.mediumPressureSteamHeatLoss,
+    // //   mediumPressureHeader: this.mediumPressureHeader,
+    // //   mediumPressureSteamHeatLoss: this.mediumPressureSteamHeatLoss,
 
-      blowdownFlashTank: this.blowdownFlashTank,
+    // //   blowdownFlashTank: this.blowdownFlashTank,
 
-      highPressureCondensate: this.highPressureCondensate,
-      lowPressureCondensate: this.lowPressureCondensate,
-      mediumPressureCondensate: this.mediumPressureCondensate,
-      combinedCondensate: this.combinedCondensate,
-      returnCondensate: this.returnCondensate,
-      condensateFlashTank: this.condensateFlashTank,
+    // //   highPressureCondensate: this.highPressureCondensate,
+    // //   lowPressureCondensate: this.lowPressureCondensate,
+    // //   mediumPressureCondensate: this.mediumPressureCondensate,
+    // //   combinedCondensate: this.combinedCondensate,
+    // //   returnCondensate: this.returnCondensate,
+    // //   condensateFlashTank: this.condensateFlashTank,
 
-      makeupWater: this.makeupWater,
-      makeupWaterAndCondensateHeader: this.makeupWaterAndCondensateHeader,
+    // //   makeupWater: this.makeupWater,
+    // //   makeupWaterAndCondensateHeader: this.makeupWaterAndCondensateHeader,
 
-      condensingTurbine: this.condensingTurbine,
-      deaeratorOutput: this.deaeratorOutput,
+    // //   condensingTurbine: this.condensingTurbine,
+    // //   deaeratorOutput: this.deaeratorOutput,
 
-      highPressureProcessUsage: this.highPressureProcessUsage,
-      mediumPressureProcessUsage: this.mediumPressureProcessUsage,
-      lowPressureProcessUsage: this.lowPressureProcessUsage,
+    // //   highPressureProcessUsage: this.highPressureProcessUsage,
+    // //   mediumPressureProcessUsage: this.mediumPressureProcessUsage,
+    // //   lowPressureProcessUsage: this.lowPressureProcessUsage,
 
-      operationsOutput: {
-        powerGenerated: this.powerGenerated,
-        boilerFuelCost: this.boilerFuelCost,
-        makeupWaterCost: this.makeupWaterCost,
-        totalOperatingCost: this.totalOperatingCost,
-        powerGenerationCost: this.powerGenerationCost,
-        boilerFuelUsage: this.boilerFuelUsage,
-        makeupWaterVolumeFlow: this.makeupWaterVolumeFlow,
-        makeupWaterVolumeFlowAnnual: this.annualMakeupWaterFlow,
-        sitePowerImport: this.sitePowerImport,
-        sitePowerDemand: this.sitePowerDemand
-      },
-      ventedLowPressureSteam: this.ventedLowPressureSteam,
-      heatExchangerOutput: this.heatExchangerOutput,
-      marginalHPCost: 0,
-      marginalMPCost: 0,
-      marginalLPCost: 0,
-    };
-    return output;
+    // //   operationsOutput: {
+    // //     powerGenerated: this.powerGenerated,
+    // //     boilerFuelCost: this.boilerFuelCost,
+    // //     makeupWaterCost: this.makeupWaterCost,
+    // //     totalOperatingCost: this.totalOperatingCost,
+    // //     powerGenerationCost: this.powerGenerationCost,
+    // //     boilerFuelUsage: this.boilerFuelUsage,
+    // //     makeupWaterVolumeFlow: this.makeupWaterVolumeFlow,
+    // //     makeupWaterVolumeFlowAnnual: this.annualMakeupWaterFlow,
+    // //     sitePowerImport: this.sitePowerImport,
+    // //     sitePowerDemand: this.sitePowerDemand
+    // //   },
+    // //   ventedLowPressureSteam: this.ventedLowPressureSteam,
+    // //   heatExchangerOutput: this.heatExchangerOutput,
+    // //   marginalHPCost: 0,
+    // //   marginalMPCost: 0,
+    // //   marginalLPCost: 0,
+    // // };
+    // return output;
+    return;
   }
 }

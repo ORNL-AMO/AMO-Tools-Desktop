@@ -45,8 +45,8 @@ export class SsmtRollupGraphsComponent implements OnInit {
     this.graphColors = graphColors;
     this.resultsSub = this.reportRollupService.ssmtResults.subscribe((ssmt: Array<SsmtResultsData>) => {
       if (ssmt.length !== 0) {
-        this.totalEnergyUse = _.sumBy(ssmt, (ssmt) => { return ssmt.baselineResults.boilerFuelUsage; });
-        this.totalCost = _.sumBy(ssmt, (ssmt) => { return ssmt.baselineResults.totalOperatingCost; });
+        this.totalEnergyUse = _.sumBy(ssmt, (ssmt) => { return ssmt.baselineResults.operationsOutput.boilerFuelUsage; });
+        this.totalCost = _.sumBy(ssmt, (ssmt) => { return ssmt.baselineResults.operationsOutput.totalOperatingCost; });
         this.resultData = ssmt;
         this.getResults(this.resultData);
         this.getData();
@@ -75,9 +75,9 @@ export class SsmtRollupGraphsComponent implements OnInit {
       resultsData.forEach(val => {
         let percent;
         if (this.dataOption === 'cost') {
-          percent = this.getTotalCostPercent(val.baselineResults.totalOperatingCost);
+          percent = this.getTotalCostPercent(val.baselineResults.operationsOutput.totalOperatingCost);
         } else {
-          percent = this.getTotalEnergyPercent(val.baselineResults.boilerFuelUsage);
+          percent = this.getTotalEnergyPercent(val.baselineResults.operationsOutput.boilerFuelUsage);
         }
         this.results.push({
           name: val.name,

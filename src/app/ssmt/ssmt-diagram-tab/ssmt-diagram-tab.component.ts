@@ -85,7 +85,7 @@ export class SsmtDiagramTabComponent implements OnInit {
       if (this.selectedSSMT.name == 'Baseline') {
         resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, false);
       } else {
-        resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, false, this.ssmt.outputData.powerGenerationCost);
+        resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, false, this.ssmt.outputData.operationsOutput.powerGenerationCost);
       }
     }
     this.inputData = resultsData.inputData;
@@ -99,7 +99,7 @@ export class SsmtDiagramTabComponent implements OnInit {
     if (this.selectedSSMT.name == 'Baseline') {
       resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, true);
     } else {
-      resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, true, this.ssmt.outputData.powerGenerationCost);
+      resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, true, this.ssmt.outputData.operationsOutput.powerGenerationCost);
     }
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;

@@ -20,18 +20,18 @@
         <td class="percent-graph" *ngFor="let modResults of modificationOutputs; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div class="hide-print"
-            *ngIf="modResults.outputData.boilerOutput && getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)">
+            *ngIf="modResults.outputData.boilerOutput && getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost)">
             <app-percent-graph
-              [value]="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)"
+              [value]="getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost)"
               [valueDescription]="'Percent Savings'" [unit]="'%'" [title]="'ssmt-opportunities-savings'">
             </app-percent-graph>
           </div>
           <div class="show-print text-center"
-            *ngIf="getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)">
+            *ngIf="getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost)">
             {{getSavingsPercentage(baselineResults, modification) | number:'1.0'}} %
           </div>
           <div
-            *ngIf="!modResults.outputData.boilerOutput || !getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost)"
+            *ngIf="!modResults.outputData.boilerOutput || !getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost)"
             class="mx-auto">&mdash; &mdash;</div>
         </td>
       </tr>
@@ -65,16 +65,16 @@
       <tr>
         <td class="bold" [ngStyle]="{'width.%': 15}">Fuel Cost</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          <span *ngIf="baselineOutput.boilerFuelCost">
-            {{baselineOutput.boilerFuelCost / 1000|currency:'USD'}}
+          <span *ngIf="baselineOutput.operationsOutput.boilerFuelCost">
+            {{baselineOutput.operationsOutput.boilerFuelCost / 1000|currency:'USD'}}
           </span>
-          <span *ngIf="!baselineOutput.boilerFuelCost">&mdash;</span>
+          <span *ngIf="!baselineOutput.operationsOutput.boilerFuelCost">&mdash;</span>
 
         </td>
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.outputData.boilerOutput">
-            {{modResults.outputData.boilerFuelCost / 1000 | currency:'USD'}}
+            {{modResults.outputData.operationsOutput.boilerFuelCost / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
@@ -85,7 +85,7 @@
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.outputData.boilerOutput">
-            {{(baselineOutput.boilerFuelCost - modResults.outputData.boilerFuelCost) / 1000 | currency:'USD'}}
+            {{(baselineOutput.operationsOutput.boilerFuelCost - modResults.outputData.operationsOutput.boilerFuelCost) / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
@@ -93,15 +93,15 @@
       <tr>
         <td class="bold" [ngStyle]="{'width.%': 15}">Make-up Water Cost</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          <span *ngIf="baselineOutput.makeupWaterCost">
-            {{baselineOutput.makeupWaterCost / 1000 | currency:'USD'}}
+          <span *ngIf="baselineOutput.operationsOutput.makeupWaterCost">
+            {{baselineOutput.operationsOutput.makeupWaterCost / 1000 | currency:'USD'}}
           </span>
-          <span *ngIf="!baselineOutput.makeupWaterCost">&mdash;</span>
+          <span *ngIf="!baselineOutput.operationsOutput.makeupWaterCost">&mdash;</span>
         </td>
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.outputData.boilerOutput">
-            {{modResults.outputData.makeupWaterCost / 1000 | currency:'USD'}}
+            {{modResults.outputData.operationsOutput.makeupWaterCost / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
@@ -112,7 +112,7 @@
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.outputData.boilerOutput">
-            {{(baselineOutput.makeupWaterCost - modResults.outputData.makeupWaterCost) / 1000 | currency:'USD'}}
+            {{(baselineOutput.operationsOutput.makeupWaterCost - modResults.outputData.operationsOutput.makeupWaterCost) / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
@@ -120,15 +120,15 @@
       <tr class="bold">
         <td>Annual Cost</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          <span *ngIf="baselineOutput.totalOperatingCost">
-            {{baselineOutput.totalOperatingCost / 1000 | currency:'USD'}}
+          <span *ngIf="baselineOutput.operationsOutput.totalOperatingCost">
+            {{baselineOutput.operationsOutput.totalOperatingCost / 1000 | currency:'USD'}}
           </span>
-          <span *ngIf="!baselineOutput.totalOperatingCost">&mdash;</span>
+          <span *ngIf="!baselineOutput.operationsOutput.totalOperatingCost">&mdash;</span>
         </td>
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex, 'positive-savings': getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost) > 10}">
+          [ngClass]="{'selected-modification': index == selectedModificationIndex, 'positive-savings': getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost) > 10}">
           <span *ngIf="modResults.outputData.boilerOutput">
-            {{modResults.outputData.totalOperatingCost / 1000 | currency:'USD'}}
+            {{modResults.outputData.operationsOutput.totalOperatingCost / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
@@ -137,9 +137,9 @@
         <td>Annual Savings</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex, 'positive-savings': getSavingsPercentage(baselineOutput.totalOperatingCost, modResults.outputData.totalOperatingCost) > 10}">
+          [ngClass]="{'selected-modification': index == selectedModificationIndex, 'positive-savings': getSavingsPercentage(baselineOutput.operationsOutput.totalOperatingCost, modResults.outputData.operationsOutput.totalOperatingCost) > 10}">
           <span *ngIf="modResults.outputData.boilerOutput">
-            {{(baselineOutput.totalOperatingCost - modResults.outputData.totalOperatingCost) / 1000 | currency:'USD'}}
+            {{(baselineOutput.operationsOutput.totalOperatingCost - modResults.outputData.operationsOutput.totalOperatingCost) / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
