@@ -51,8 +51,8 @@ export class SsmtSummaryCardComponent implements OnInit {
     this.assessmentCpy.ssmt.modifications.forEach(mod => {
       let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.getData(mod.ssmt, false);
       if (results.outputData.boilerOutput) {
-        let tmpSavingCalc = this.baselineData.outputData.totalOperatingCost - results.outputData.totalOperatingCost;
-        let tmpSavingEnergy = this.baselineData.outputData.boilerFuelUsage - results.outputData.boilerFuelUsage;
+        let tmpSavingCalc = this.baselineData.outputData.operationsOutput.totalOperatingCost - results.outputData.operationsOutput.totalOperatingCost;
+        let tmpSavingEnergy = this.baselineData.outputData.operationsOutput.boilerFuelUsage - results.outputData.operationsOutput.boilerFuelUsage;
         if (tmpSavingCalc > this.maxCostSavings) {
           this.maxCostSavings = tmpSavingCalc;
           this.maxEnergySavings = tmpSavingEnergy;
@@ -71,7 +71,7 @@ export class SsmtSummaryCardComponent implements OnInit {
     } else if (isBaseline) {
       return this.calculateModelService.initDataAndRun(ssmt, this.settings, true, false);
     } else {
-      return this.calculateModelService.initDataAndRun(ssmt, this.settings, false, false, this.baselineData.outputData.sitePowerDemand);
+      return this.calculateModelService.initDataAndRun(ssmt, this.settings, false, false, this.baselineData.outputData.operationsOutput.sitePowerDemand);
     }
   }
 

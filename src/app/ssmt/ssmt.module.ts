@@ -44,6 +44,7 @@ import { HeaderModule } from '../calculator/steam/header/header.module';
 import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module';
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { HeatExchangerService } from './ssmt-calculations/heat-exchanger.service';
+import { SuiteTestService } from './ssmt-calculations/suite-test.service';
 
 @NgModule({
   imports: [
@@ -97,7 +98,8 @@ import { HeatExchangerService } from './ssmt-calculations/heat-exchanger.service
     CalculateModelService,
     CalculateLossesService,
     ConvertSsmtService,
-    HeatExchangerService
+    HeatExchangerService,
+    SuiteTestService
   ]
 })
 export class SsmtModule { }

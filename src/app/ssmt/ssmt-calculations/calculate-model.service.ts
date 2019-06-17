@@ -118,7 +118,10 @@ export class CalculateModelService {
       },
       boilerInput: ssmt.boilerInput,
       headerInput: ssmt.headerInput,
-      turbineInput: ssmt.turbineInput
+      turbineInput: ssmt.turbineInput,
+      //added to match suite call (not used in this calculation)
+      baselinePowerDemand: this.baselinePowerDemand,
+      isBaselineCalc: this.isBaselineCalculation
     };
     return inputData;
   }
@@ -177,10 +180,10 @@ export class CalculateModelService {
   }
 
   getCostDifference(balancedResults: SSMTOutput, adjustedResults: SSMTOutput): number {
-    let powerGenOC: number = balancedResults.powerGenerated * this.inputData.operationsInput.electricityCosts;
-    let adjustedPowerGenOC: number = adjustedResults.powerGenerated * this.inputData.operationsInput.electricityCosts;
-    let totalOC: number = balancedResults.totalOperatingCost / this.inputData.operationsInput.operatingHoursPerYear;
-    let adjustedTotalOC: number = adjustedResults.totalOperatingCost / this.inputData.operationsInput.operatingHoursPerYear;
+    let powerGenOC: number = balancedResults.operationsOutput.powerGenerated * this.inputData.operationsInput.electricityCosts;
+    let adjustedPowerGenOC: number = adjustedResults.operationsOutput.powerGenerated * this.inputData.operationsInput.electricityCosts;
+    let totalOC: number = balancedResults.operationsOutput.totalOperatingCost / this.inputData.operationsInput.operatingHoursPerYear;
+    let adjustedTotalOC: number = adjustedResults.operationsOutput.totalOperatingCost / this.inputData.operationsInput.operatingHoursPerYear;
 
     return ((adjustedTotalOC - totalOC) + (powerGenOC - adjustedPowerGenOC)) / 100;
   }
@@ -2082,23 +2085,23 @@ export class CalculateModelService {
       mediumPressureProcessUsage: this.mediumPressureProcessUsage,
       lowPressureProcessUsage: this.lowPressureProcessUsage,
 
-      powerGenerated: this.powerGenerated,
-      boilerFuelCost: this.boilerFuelCost,
-      makeupWaterCost: this.makeupWaterCost,
-      totalOperatingCost: this.totalOperatingCost,
-      powerGenerationCost: this.powerGenerationCost,
-      boilerFuelUsage: this.boilerFuelUsage,
-
-      makeupWaterVolumeFlow: this.makeupWaterVolumeFlow,
-      annualMakeupWaterFlow: this.annualMakeupWaterFlow,
-
+      operationsOutput: {
+        powerGenerated: this.powerGenerated,
+        boilerFuelCost: this.boilerFuelCost,
+        makeupWaterCost: this.makeupWaterCost,
+        totalOperatingCost: this.totalOperatingCost,
+        powerGenerationCost: this.powerGenerationCost,
+        boilerFuelUsage: this.boilerFuelUsage,
+        makeupWaterVolumeFlow: this.makeupWaterVolumeFlow,
+        makeupWaterVolumeFlowAnnual: this.annualMakeupWaterFlow,
+        sitePowerImport: this.sitePowerImport,
+        sitePowerDemand: this.sitePowerDemand
+      },
       ventedLowPressureSteam: this.ventedLowPressureSteam,
       heatExchangerOutput: this.heatExchangerOutput,
       marginalHPCost: 0,
       marginalMPCost: 0,
       marginalLPCost: 0,
-      sitePowerImport: this.sitePowerImport,
-      sitePowerDemand: this.sitePowerDemand
     };
     return output;
   }

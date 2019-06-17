@@ -3,6 +3,7 @@ import { SaturatedPropertiesInput, SteamPropertiesInput, BoilerInput, DeaeratorI
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, TurbineOutput, PrvOutput, HeatExchangerOutput } from '../../shared/models/steam/steam-outputs';
+import { SSMTInputs } from '../../shared/models/steam/ssmt';
 
 declare var steamAddon: any;
 
@@ -17,7 +18,9 @@ export class SteamService {
   steamPropertiesInput: SteamPropertiesInput;
   saturatedPropertiesData: Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>;
   steamPropertiesData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>;
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService) { 
+    this.test();
+  }
 
   test() {
     console.log(steamAddon);
@@ -625,5 +628,9 @@ export class SteamService {
     results.coldOutletSpecificEntropy = this.convertSteamSpecificEntropyOutput(results.coldOutletSpecificEntropy, settings);
     return results;
 
+  }
+
+  steamModeler(inputData){
+    return steamAddon.steamModeler(inputData);
   }
 }
