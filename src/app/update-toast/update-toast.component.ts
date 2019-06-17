@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ElectronService } from 'ngx-electron';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-update-toast',
@@ -22,6 +23,9 @@ export class UpdateToastComponent implements OnInit {
   @Input()
   info: any;
 
+
+  error: any;
+
   showToast: string = 'hide';
   showReleaseNotesCard: string = 'hide';
   destroyToast: boolean = false;
@@ -31,8 +35,7 @@ export class UpdateToastComponent implements OnInit {
   downloadingUpdate: boolean = false;
   updateDownloaded: boolean = false;
   version: string;
-  downloadError: boolean = false;
-  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef) { }
+  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this.releaseName = this.info.releaseName;
@@ -40,13 +43,13 @@ export class UpdateToastComponent implements OnInit {
     this.version = this.info.version;
 
     this.electronService.ipcRenderer.once('update-downloaded', (event, args) => {
-      console.log('downloaded');
       this.updateDownloaded = true;
       this.cd.detectChanges();
     })
 
     this.electronService.ipcRenderer.once('error', (event, args) => {
-      this.downloadError = true;
+      this.error = true;
+      this.cd.detectChanges();
     })
   }
 
@@ -82,6 +85,9 @@ export class UpdateToastComponent implements OnInit {
     this.downloadingUpdate = true;
     this.cd.detectChanges();
     this.electronService.ipcRenderer.send('update', null);
+    setTimeout(() => {
+      this.error = true;
+    }, 120000)
   }
 
   quitAndInstall() {
