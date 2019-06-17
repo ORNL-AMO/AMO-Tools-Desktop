@@ -1,5 +1,5 @@
 <!-- <div #coreContainer> -->
-<app-update-toast *ngIf="showUpdateModal"></app-update-toast>
+<app-update-toast *ngIf="showUpdateModal && info" (emitCloseToast)="hideUpdateToast()" [info]="info"></app-update-toast>
 <div *ngIf="idbStarted">
     <div *ngIf="!hideTutorial" class="opening-tutorial">
         <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
@@ -55,9 +55,4 @@
             </p>
         </div>
     </div>
-
-
-
-    <!-- <app-update-modal (closeModal)="closeModal()" [updateError]="updateError">
-    </app-update-modal> -->
 </div>

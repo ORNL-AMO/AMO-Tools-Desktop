@@ -1,7 +1,7 @@
 <div class="card toasty-card update-toast" [@toast]="showToast" *ngIf="!destroyToast">
   <div class="card-header">
     {{releaseName}} is now available!!
-    <button class="close pull-right" (click)="closeToast()">
+    <button class="close pull-right" (click)="closeToast()" *ngIf="!downloadingUpdate">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>

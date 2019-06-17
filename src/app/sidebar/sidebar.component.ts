@@ -102,14 +102,9 @@ export class SidebarComponent implements OnInit {
     this.assessmentService.createAssessment.next(true);
   }
 
-  closeUpdateModal() {
-    this.openModal.emit(false);
-    this.showModal = false;
-  }
-
   openUpdateModal() {
-    this.openModal.emit(true);
-    this.showModal = true;
+    this.assessmentService.updateAvailable.next(true);
+    console.log('set true');
   }
 
   openVersionModal() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ElectronService } from 'ngx-electron';
 
@@ -17,6 +17,10 @@ import { ElectronService } from 'ngx-electron';
   ]
 })
 export class UpdateToastComponent implements OnInit {
+  @Output('emitCloseToast')
+  emitCloseToast = new EventEmitter<boolean>();
+  @Input()
+  info: any;
 
   showToast: string = 'hide';
   showReleaseNotesCard: string = 'hide';
@@ -27,23 +31,28 @@ export class UpdateToastComponent implements OnInit {
   downloadingUpdate: boolean = false;
   updateDownloaded: boolean = false;
   version: string;
+  downloadError: boolean = false;
   constructor(private electronService: ElectronService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.electronService.ipcRenderer.once('release-info', (event, info) => {
-      console.log(info);
-      this.releaseName = info.releaseName;
-      this.releaseNotes = info.releaseNotes.substring(info.releaseNotes.indexOf('</h1>') + 5);
-      this.version = info.version;
-      setTimeout(() => {
-        this.showToast = 'show';
-      }, 500);
-    })
+    this.releaseName = this.info.releaseName;
+    this.releaseNotes = this.info.releaseNotes.substring(this.info.releaseNotes.indexOf('</h1>') + 5);
+    this.version = this.info.version;
 
     this.electronService.ipcRenderer.once('update-downloaded', (event, args) => {
+      console.log('downloaded');
       this.updateDownloaded = true;
       this.cd.detectChanges();
     })
+
+    this.electronService.ipcRenderer.once('error', (event, args) => {
+      this.downloadError = true;
+    })
+  }
+
+  ngAfterViewInit(){
+    this.showToast = 'show';
+    this.cd.detectChanges();
   }
 
   closeToast() {
@@ -51,7 +60,7 @@ export class UpdateToastComponent implements OnInit {
     this.cd.detectChanges();
     setTimeout(() => {
       this.destroyToast = true;
-      // this.emitCloseToast.emit(true);
+      this.emitCloseToast.emit(true);
     }, 500);
   }
 
@@ -66,7 +75,6 @@ export class UpdateToastComponent implements OnInit {
     this.cd.detectChanges();
     setTimeout(() => {
       this.destroyReleaseNotesCard = true;
-      // this.emitCloseToast.emit(true);
     }, 500);
   }
 
@@ -76,7 +84,7 @@ export class UpdateToastComponent implements OnInit {
     this.electronService.ipcRenderer.send('update', null);
   }
 
-  quitAndInstall(){
+  quitAndInstall() {
     this.electronService.ipcRenderer.send('quit-and-install');
   }
 }

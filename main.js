@@ -47,16 +47,18 @@ app.on('ready', function () {
   ipcMain.on('ready', (coreCompEvent, arg) => {
     //if (!isDev()) {
       autoUpdater.checkForUpdates().then(() => {
-        log.info('done checking');
+        log.info('done checking for updates');
         coreCompEvent.sender.send('release-info', autoUpdater.updateInfoAndProvider.info);
       });
       autoUpdater.on('update-available', (event, info) => {
+        log.info('update available');
         coreCompEvent.sender.send('available', true);
       });
       autoUpdater.on('update-not-available', (event, info) => {
         log.info('no update available..');
       });
       autoUpdater.on('error', (event, error) => {
+        log.info('error');
         coreCompEvent.sender.send('error', error);
       });
 

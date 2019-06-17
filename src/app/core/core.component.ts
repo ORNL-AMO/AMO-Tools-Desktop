@@ -50,7 +50,8 @@ export class CoreComponent implements OnInit {
 
   showSurvey: string = 'hide';
   destroySurvey: boolean = false;
-  releaseNotes: any;
+  info: any;
+  updateAvailableSubscription: Subscription;
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
@@ -66,6 +67,8 @@ export class CoreComponent implements OnInit {
     });
 
     this.electronService.ipcRenderer.once('error', (event, arg) => {
+      console.log('error');
+      console.log(arg);
       if (arg === true) {
         this.updateError = true;
       }
@@ -80,6 +83,11 @@ export class CoreComponent implements OnInit {
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(val => {
       this.dashboardTab = val;
     });
+
+
+    this.electronService.ipcRenderer.once('release-info', (event, info) => {
+      this.info = info;
+    })
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/') && this.dashboardTab === 'tutorials';
@@ -101,6 +109,14 @@ export class CoreComponent implements OnInit {
     setTimeout(() => {
       this.showSurvey = 'show';
     }, 3500);
+
+    this.updateAvailableSubscription = this.assessmentService.updateAvailable.subscribe(val => {
+      console.log('val! ' + val);
+      if (val == true) {
+        this.showUpdateModal = true;
+        this.changeDetectorRef.detectChanges();
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -110,6 +126,7 @@ export class CoreComponent implements OnInit {
     if (this.assessmentSub) this.assessmentSub.unsubscribe();
     if (this.settingsSub) this.settingsSub.unsubscribe();
     this.exportService.exportAllClick.next(false);
+    this.updateAvailableSubscription.unsubscribe();
   }
 
   initData() {
@@ -151,8 +168,10 @@ export class CoreComponent implements OnInit {
   }
 
 
-  closeModal() {
+  hideUpdateToast() {
     this.showUpdateModal = false;
+    this.changeDetectorRef.detectChanges();
+    console.log('hide update modal');
   }
 
 
