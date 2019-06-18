@@ -4,6 +4,8 @@ import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from '../../standalone-opportunity-sheet/opportunity-sheet.service';
 import * as _ from 'lodash';
 import { OpportunitySummaryService } from '../../treasure-hunt-report/opportunity-summary.service';
+import { TreasureHuntService } from '../../treasure-hunt.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-treasure-chest-menu',
@@ -15,7 +17,8 @@ export class TreasureChestMenuComponent implements OnInit {
   treasureHunt: TreasureHunt;
   @Input()
   settings: Settings;
-
+  @Output('emitImportExport')
+  emitImportExport = new EventEmitter<boolean>();
   @Output('emitChangeEnergyType')
   emitChangeEnergyType = new EventEmitter<string>();
   @Output('emitChangeCalculatorType')
@@ -26,10 +29,23 @@ export class TreasureChestMenuComponent implements OnInit {
 
   energyTypeOptions: Array<{ value: string, numCalcs: number }> = [];
   calculatorTypeOptions: Array<{ value: string, numCalcs: number }> = [];
-  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService) { }
+  updateMenuSubscription: Subscription;
+  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
-    this.setEnergyTypeOptions();
+    this.updateMenuSubscription = this.treasureHuntService.updateMenuOptions.subscribe(() => {
+      this.energyTypeOptions = new Array();
+      this.calculatorTypeOptions = new Array();
+      this.setEnergyTypeOptions();
+    })
+  }
+
+  ngOnDestroy() {
+    this.updateMenuSubscription.unsubscribe();
+  }
+
+  showImportExport() {
+    this.emitImportExport.emit(true);
   }
 
   setEnergyType() {

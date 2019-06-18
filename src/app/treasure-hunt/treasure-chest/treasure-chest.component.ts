@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, ImportExportOpportunities } from '../../shared/models/treasure-hunt';
 import { Settings } from 'http2';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -9,6 +9,7 @@ import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-dri
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
+import { TreasureHuntService } from '../treasure-hunt.service';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -28,6 +29,7 @@ export class TreasureChestComponent implements OnInit {
   @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
   @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
   @ViewChild('deletedItemModal') public deletedItemModal: ModalDirective;
+  // @ViewChild('importExportModal') public importExportModal: ModalDirective;
 
   selectedCalc: string = 'none';
   selectedEditIndex: number;
@@ -47,13 +49,15 @@ export class TreasureChestComponent implements OnInit {
   deleteItemIndex: number;
   itemType: string;
   opperatingHoursPerYear: number;
+  showImportExportModal: boolean = false;
   constructor(
     private lightingReplacementService: LightingReplacementService,
     private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService,
     private naturalGasReductionService: NaturalGasReductionService,
     private electricityReductionService: ElectricityReductionService,
-    private compressedAirReductionService: CompressedAirReductionService) { }
+    private compressedAirReductionService: CompressedAirReductionService,
+    private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
   }
@@ -363,5 +367,60 @@ export class TreasureChestComponent implements OnInit {
     this.selectedEditOpportunitySheet = undefined;
     this.hideSaveCalcModal();
     this.selectCalc('none');
+  }
+
+  openImportExportModal() {
+    this.showImportExportModal = true;
+  }
+
+  closeImportExportModal() {
+    this.showImportExportModal = false;
+  }
+
+  importData(data: ImportExportOpportunities) {
+    if (data.compressedAirReductions) {
+      if (this.treasureHunt.compressedAirReductions == undefined) {
+        this.treasureHunt.compressedAirReductions = new Array();
+      }
+      this.treasureHunt.compressedAirReductions = this.treasureHunt.compressedAirReductions.concat(data.compressedAirReductions);
+    }
+    if (data.opportunitySheets) {
+      if (this.treasureHunt.opportunitySheets == undefined) {
+        this.treasureHunt.opportunitySheets = new Array();
+      }
+      this.treasureHunt.opportunitySheets = this.treasureHunt.opportunitySheets.concat(data.opportunitySheets);
+    }
+    if (data.replaceExistingMotors) {
+      if (this.treasureHunt.replaceExistingMotors == undefined) {
+        this.treasureHunt.replaceExistingMotors = new Array();
+      }
+      this.treasureHunt.replaceExistingMotors = this.treasureHunt.replaceExistingMotors.concat(data.replaceExistingMotors);
+    }
+    if (data.motorDrives) {
+      if (this.treasureHunt.motorDrives == undefined) {
+        this.treasureHunt.motorDrives = new Array();
+      }
+      this.treasureHunt.motorDrives = this.treasureHunt.motorDrives.concat(data.motorDrives);
+    }
+    if (data.naturalGasReductions) {
+      if (this.treasureHunt.naturalGasReductions == undefined) {
+        this.treasureHunt.naturalGasReductions = new Array();
+      }
+      this.treasureHunt.naturalGasReductions = this.treasureHunt.naturalGasReductions.concat(data.naturalGasReductions);
+    }
+    if (data.electricityReductions) {
+      if (this.treasureHunt.electricityReductions == undefined) {
+        this.treasureHunt.electricityReductions = new Array();
+      }
+      this.treasureHunt.electricityReductions = this.treasureHunt.electricityReductions.concat(data.electricityReductions);
+    }
+    if (data.lightingReplacements) {
+      if (this.treasureHunt.lightingReplacements == undefined) {
+        this.treasureHunt.lightingReplacements = new Array();
+      }
+      this.treasureHunt.lightingReplacements = this.treasureHunt.lightingReplacements.concat(data.lightingReplacements);
+    }
+    this.save();
+    this.treasureHuntService.updateMenuOptions.next(true);
   }
 }
