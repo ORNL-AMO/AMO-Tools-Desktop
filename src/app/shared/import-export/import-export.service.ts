@@ -63,7 +63,21 @@ export class ImportExportService {
     dlLink.click();
   }
 
-
+  downloadOpportunities(data: any, name: string) {
+    data.origin = 'AMO-TOOLS-DESKTOP-OPPORTUNITIES';
+    let stringifyData = JSON.stringify(data);
+    let doc = this.windowRefService.getDoc();
+    let dlLink = doc.createElement("a");
+    let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
+    dlLink.setAttribute("href", dataStr);
+    if (!name) {
+      const date = new Date();
+      const dateStr = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+      name = 'ExportedOpportunityData_' + dateStr;
+    }
+    dlLink.setAttribute('download', name + '.json');
+    dlLink.click();
+  }
 
   downloadImage(data: any) {
     let doc = this.windowRefService.getDoc();
