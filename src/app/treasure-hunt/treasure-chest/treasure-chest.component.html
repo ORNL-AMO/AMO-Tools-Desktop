@@ -2,7 +2,8 @@
   <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-12">
       <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
-        (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"></app-treasure-chest-menu>
+        (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"
+        (emitImportExport)="openImportExportModal()"></app-treasure-chest-menu>
     </div>
 
     <!--lighting replacement-->
@@ -67,8 +68,7 @@
       [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
     </app-opportunity-sheet-card>
   </div>
-  <div class="scroll-item result-column justify-content-center mr-3 ml-3"
-    [ngStyle]="{'height.px': containerHeight}">
+  <div class="scroll-item result-column justify-content-center mr-3 ml-3" [ngStyle]="{'height.px': containerHeight}">
     <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
   </div>
 </div>
@@ -178,3 +178,6 @@
     </div>
   </div>
 </div>
+
+<app-import-export-opportunities *ngIf="showImportExportModal" [treasureHunt]="treasureHunt"
+  (emitImportData)="importData($event)" (emitCloseModal)="closeImportExportModal()"></app-import-export-opportunities>

@@ -8,11 +8,12 @@ export class TreasureHuntService {
   mainTab: BehaviorSubject<string>;
   subTab: BehaviorSubject<string>;
   getResults: BehaviorSubject<boolean>;
+  updateMenuOptions: BehaviorSubject<boolean>;
   constructor() {
     this.mainTab = new BehaviorSubject<string>('system-basics');
     this.subTab = new BehaviorSubject<string>('settings');
     this.getResults = new BehaviorSubject<boolean>(true);
-
+    this.updateMenuOptions = new BehaviorSubject<boolean>(true);
   }
 
   initOpportunitySheet(): OpportunitySheet {
