@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { SSMTOutput, HeatExchangerOutput } from '../../../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
@@ -16,6 +16,11 @@ export class HoverHeatExchangerComponent implements OnInit {
   inputData: SSMTInputs;
   @Input()
   settings: Settings;
+  @Input()
+  inResultsPanel: boolean;
+
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
 
   heatExchangerInput: HeatExchangerInput;
   constructor() { }
@@ -68,6 +73,10 @@ export class HoverHeatExchangerComponent implements OnInit {
       }
     }
 
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 
 }

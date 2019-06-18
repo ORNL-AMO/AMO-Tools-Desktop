@@ -1,6 +1,6 @@
 <label class="group-label">{{pressureLevel}} Pressure Process Steam Usage</label>
 
-<table class="table table-hover table-striped">
+<table #copyTable class="table table-hover table-striped">
   <tbody>
     <tr>
       <td class="bold">Pressure</td>
@@ -31,3 +31,6 @@
     </tr>
   </tbody>
 </table>
+
+<app-exportable-results-table *ngIf="inResultsPanel" [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>
