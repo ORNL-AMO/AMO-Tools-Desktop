@@ -16,14 +16,14 @@ export class ReportGraphsService {
   getProcessUsageData(ssmt: SSMT): Array<number> {
     let processUsageData = new Array<number>();
     if (ssmt.headerInput) {
-      if (ssmt.headerInput.highPressure) {
-        processUsageData.push(ssmt.headerInput.highPressure.processSteamUsage);
+      if (ssmt.headerInput.highPressureHeader) {
+        processUsageData.push(ssmt.headerInput.highPressureHeader.processSteamUsage);
       }
-      if (ssmt.headerInput.mediumPressure) {
-        processUsageData.push(ssmt.headerInput.mediumPressure.processSteamUsage);
+      if (ssmt.headerInput.mediumPressureHeader) {
+        processUsageData.push(ssmt.headerInput.mediumPressureHeader.processSteamUsage);
       }
-      if (ssmt.headerInput.lowPressure) {
-        processUsageData.push(ssmt.headerInput.lowPressure.processSteamUsage);
+      if (ssmt.headerInput.lowPressureHeader) {
+        processUsageData.push(ssmt.headerInput.lowPressureHeader.processSteamUsage);
       }
     }
     else {

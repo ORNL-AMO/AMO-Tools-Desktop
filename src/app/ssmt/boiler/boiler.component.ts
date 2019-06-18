@@ -112,14 +112,14 @@ export class BoilerComponent implements OnInit {
 
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
-      if (this.headerInput.highPressure) {
-        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, boilerInput);
+      if (this.headerInput.highPressureHeader) {
+        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, boilerInput);
       }
 
-      if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressure) {
-        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressure, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
-      } else if (this.headerInput.lowPressure && this.headerInput.numberOfHeaders > 1) {
-        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressure, this.settings, boilerInput.deaeratorPressure, undefined);
+      if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressureHeader) {
+        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
+      } else if (this.headerInput.lowPressureHeader && this.headerInput.numberOfHeaders > 1) {
+        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, boilerInput.deaeratorPressure, undefined);
       }
     }
   }

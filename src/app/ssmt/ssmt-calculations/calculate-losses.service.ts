@@ -40,7 +40,7 @@ export class CalculateLossesService {
 
       }
 
-      if (inputCpy.headerInput.highPressure.flashCondensateReturn === true) {
+      if (inputCpy.headerInput.highPressureHeader.flashCondensateReturn === true) {
         ssmtLosses.condensateFlashTankLoss = this.calculateCondensateFlashTankLoss(resultsCpy.condensateFlashTank);
       }
       if (inputCpy.headerInput.numberOfHeaders > 1) {

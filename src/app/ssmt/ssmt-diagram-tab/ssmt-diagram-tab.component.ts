@@ -75,19 +75,19 @@ export class SsmtDiagramTabComponent implements OnInit {
 
   calculateResults() {
     let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput };
-    if (this.selectedSSMT.resultsCalculated) {
-      let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(this.selectedSSMT);
-      resultsData = {
-        inputData: inputData,
-        outputData: this.selectedSSMT.outputData
-      };
+    // if (this.selectedSSMT.resultsCalculated) {
+    //   let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(this.selectedSSMT);
+    //   resultsData = {
+    //     inputData: inputData,
+    //     outputData: this.selectedSSMT.outputData
+    //   };
+    // } else {
+    if (this.selectedSSMT.name == 'Baseline') {
+      resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, false);
     } else {
-      if (this.selectedSSMT.name == 'Baseline') {
-        resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, true, false);
-      } else {
-        resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, false, this.ssmt.outputData.operationsOutput.powerGenerationCost);
-      }
+      resultsData = this.calculateModelService.initDataAndRun(this.selectedSSMT, this.settings, false, false, this.ssmt.outputData.operationsOutput.powerGenerationCost);
     }
+    //  }
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;
     this.dataCalculated = true;

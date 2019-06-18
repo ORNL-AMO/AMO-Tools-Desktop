@@ -15,7 +15,7 @@ export class HeaderService {
   initHeaderDataObj(): HeaderInput {
     return {
       numberOfHeaders: 1,
-      highPressure: undefined
+      highPressureHeader: undefined
     };
   }
 
@@ -165,12 +165,12 @@ export class HeaderService {
       let isHighPressureHeaderValid: boolean = true;
       let isMediumPressureHeaderValid: boolean = true;
       let isLowPressureHeaderValid: boolean = true;
-      if (obj.highPressure) {
+      if (obj.highPressureHeader) {
         let minPressure: number;
         if (obj.numberOfHeaders == 1) {
           minPressure = boilerInput.deaeratorPressure;
         }
-        let tmpHighPressureFrom: FormGroup = this.getHighestPressureHeaderFormFromObj(obj.highPressure, settings, boilerInput, minPressure);
+        let tmpHighPressureFrom: FormGroup = this.getHighestPressureHeaderFormFromObj(obj.highPressureHeader, settings, boilerInput, minPressure);
         if (tmpHighPressureFrom.status === 'INVALID') {
           isHighPressureHeaderValid = false;
         }
@@ -179,15 +179,15 @@ export class HeaderService {
       }
 
       if (obj.numberOfHeaders > 1) {
-        if (obj.lowPressure) {
+        if (obj.lowPressureHeader) {
           let pressureMax: number;
-          if (obj.numberOfHeaders == 3 && obj.mediumPressure) {
-            pressureMax = obj.mediumPressure.pressure;
-          } else if (obj.highPressure) {
-            pressureMax = obj.highPressure.pressure;
+          if (obj.numberOfHeaders == 3 && obj.mediumPressureHeader) {
+            pressureMax = obj.mediumPressureHeader.pressure;
+          } else if (obj.highPressureHeader) {
+            pressureMax = obj.highPressureHeader.pressure;
           }
           if (pressureMax) {
-            let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressure, settings, boilerInput.deaeratorPressure, pressureMax);
+            let tmpLowPressureHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.lowPressureHeader, settings, boilerInput.deaeratorPressure, pressureMax);
             if (tmpLowPressureHeaderForm.status === 'INVALID') {
               isLowPressureHeaderValid = false;
             }
@@ -201,11 +201,11 @@ export class HeaderService {
       }
 
       if (obj.numberOfHeaders === 3) {
-        if (obj.mediumPressure && obj.highPressure && obj.lowPressure) {
-          let pressureMax: number = obj.highPressure.pressure;
-          let pressureMin: number = obj.lowPressure.pressure;
+        if (obj.mediumPressureHeader && obj.highPressureHeader && obj.lowPressureHeader) {
+          let pressureMax: number = obj.highPressureHeader.pressure;
+          let pressureMin: number = obj.lowPressureHeader.pressure;
 
-          let tmpMediumHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.mediumPressure, settings, pressureMin, pressureMax);
+          let tmpMediumHeaderForm: FormGroup = this.getHeaderFormFromObj(obj.mediumPressureHeader, settings, pressureMin, pressureMax);
           if (tmpMediumHeaderForm.status === 'INVALID') {
             isMediumPressureHeaderValid = false;
           }

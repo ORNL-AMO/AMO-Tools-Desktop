@@ -28,15 +28,15 @@ export class HoverHeaderTableComponent implements OnInit {
     if (this.headerPressure === 'highPressure') {
       this.header = this.outputData.highPressureHeaderSteam;
       this.heatLoss = this.outputData.highPressureSteamHeatLoss;
-      this.headerInput = this.inputData.headerInput.highPressure;
+      this.headerInput = this.inputData.headerInput.highPressureHeader;
     } else if (this.headerPressure === 'mediumPressure') {
       this.header = this.outputData.mediumPressureHeaderSteam;
       this.heatLoss = this.outputData.mediumPressureSteamHeatLoss;
-      this.headerInput = this.inputData.headerInput.mediumPressure;
+      this.headerInput = this.inputData.headerInput.mediumPressureHeader;
     } else if (this.headerPressure === 'lowPressure') {
       this.header = this.outputData.lowPressureHeaderSteam;
       this.heatLoss = this.outputData.lowPressureSteamHeatLoss;
-      this.headerInput = this.inputData.headerInput.lowPressure;
+      this.headerInput = this.inputData.headerInput.lowPressureHeader;
     }
 
     if(this.header.quality < 1){

@@ -19,14 +19,14 @@ export class ConvertSsmtService {
       ssmt.turbineInput.mediumToLowTurbine = this.convertPressureTurbine(ssmt.turbineInput.mediumToLowTurbine, oldSettings, newSettings);
     }
     if (ssmt.headerInput) {
-      if (ssmt.headerInput.highPressure) {
-        ssmt.headerInput.highPressure = this.convertHighPressureHeader(ssmt.headerInput.highPressure, oldSettings, newSettings);
+      if (ssmt.headerInput.highPressureHeader) {
+        ssmt.headerInput.highPressureHeader = this.convertHighPressureHeader(ssmt.headerInput.highPressureHeader, oldSettings, newSettings);
       }
-      if (ssmt.headerInput.lowPressure) {
-        ssmt.headerInput.lowPressure = this.convertNotHighPressureHeader(ssmt.headerInput.lowPressure, oldSettings, newSettings);
+      if (ssmt.headerInput.lowPressureHeader) {
+        ssmt.headerInput.lowPressureHeader = this.convertNotHighPressureHeader(ssmt.headerInput.lowPressureHeader, oldSettings, newSettings);
       }
-      if (ssmt.headerInput.mediumPressure) {
-        ssmt.headerInput.mediumPressure = this.convertNotHighPressureHeader(ssmt.headerInput.mediumPressure, oldSettings, newSettings);
+      if (ssmt.headerInput.mediumPressureHeader) {
+        ssmt.headerInput.mediumPressureHeader = this.convertNotHighPressureHeader(ssmt.headerInput.mediumPressureHeader, oldSettings, newSettings);
       }
     }
     ssmt = this.convertOperations(ssmt, oldSettings, newSettings);
