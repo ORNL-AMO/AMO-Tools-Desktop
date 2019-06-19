@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { TreasureHunt, EnergyUsage } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, EnergyUsage, TreasureHuntResults } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
+import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
 
 @Component({
   selector: 'app-operation-costs',
@@ -15,9 +16,11 @@ export class OperationCostsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  constructor() { }
+  treasureHuntResults: TreasureHuntResults;
+  constructor(private treasureHuntReportService: TreasureHuntReportService) { }
 
   ngOnInit() {
+
     if (!this.treasureHunt.currentEnergyUsage) {
       let defaultUsage: EnergyUsage = {
         electricityUsage: 0,
@@ -45,6 +48,29 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage = defaultUsage;
       this.save();
     }
+
+    this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
+    if(this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed){
+      this.treasureHunt.currentEnergyUsage.electricityUsed = true;
+    }
+    if(this.treasureHuntResults.naturalGas.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.naturalGasUsed){
+      this.treasureHunt.currentEnergyUsage.naturalGasUsed = true;
+    }
+    if(this.treasureHuntResults.otherFuel.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.otherFuelUsed){
+      this.treasureHunt.currentEnergyUsage.otherFuelUsed = true;
+    }
+    if(this.treasureHuntResults.water.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.waterUsed){
+      this.treasureHunt.currentEnergyUsage.waterUsed = true;
+    }
+    if(this.treasureHuntResults.wasteWater.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.wasteWaterUsed){
+      this.treasureHunt.currentEnergyUsage.wasteWaterUsed = true;
+    }
+    if(this.treasureHuntResults.compressedAir.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.compressedAirUsed){
+      this.treasureHunt.currentEnergyUsage.compressedAirUsed = true;
+    }
+    if(this.treasureHuntResults.steam.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.steamUsed){
+      this.treasureHunt.currentEnergyUsage.steamUsed = true;
+    }
   }
 
   save() {
@@ -54,7 +80,7 @@ export class OperationCostsComponent implements OnInit {
   toggleElectricityUsed() {
     if (this.treasureHunt.currentEnergyUsage.electricityUsed != true) {
       this.treasureHunt.currentEnergyUsage.electricityUsed = true;
-    } else {
+    } else if (this.treasureHuntResults.electricity.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.electricityUsed = false;
       this.treasureHunt.currentEnergyUsage.electricityUsage = 0;
       this.treasureHunt.currentEnergyUsage.electricityCosts = 0;
@@ -65,7 +91,7 @@ export class OperationCostsComponent implements OnInit {
   toggleNaturalGasUsed() {
     if (this.treasureHunt.currentEnergyUsage.naturalGasUsed != true) {
       this.treasureHunt.currentEnergyUsage.naturalGasUsed = true;
-    } else {
+    } else if (this.treasureHuntResults.naturalGas.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.naturalGasUsed = false;
       this.treasureHunt.currentEnergyUsage.naturalGasUsage = 0;
       this.treasureHunt.currentEnergyUsage.naturalGasCosts = 0;
@@ -76,7 +102,7 @@ export class OperationCostsComponent implements OnInit {
   toggleOtherFuelUsed() {
     if (this.treasureHunt.currentEnergyUsage.otherFuelUsed != true) {
       this.treasureHunt.currentEnergyUsage.otherFuelUsed = true;
-    } else {
+    } else if (this.treasureHuntResults.otherFuel.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.otherFuelUsed = false;
       this.treasureHunt.currentEnergyUsage.otherFuelUsage = 0;
       this.treasureHunt.currentEnergyUsage.otherFuelCosts = 0;
@@ -87,7 +113,7 @@ export class OperationCostsComponent implements OnInit {
   toggleWaterUsed() {
     if (this.treasureHunt.currentEnergyUsage.waterUsed != true) {
       this.treasureHunt.currentEnergyUsage.waterUsed = true;
-    } else {
+    } else if (this.treasureHuntResults.water.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.waterUsed = false;
       this.treasureHunt.currentEnergyUsage.waterUsage = 0;
       this.treasureHunt.currentEnergyUsage.waterCosts = 0;
@@ -98,7 +124,7 @@ export class OperationCostsComponent implements OnInit {
   toggleWasteWaterUsed() {
     if (this.treasureHunt.currentEnergyUsage.wasteWaterUsed != true) {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsed = true;
-    } else {
+    } else if (this.treasureHuntResults.wasteWater.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsed = false;
       this.treasureHunt.currentEnergyUsage.wasteWaterUsage = 0;
       this.treasureHunt.currentEnergyUsage.wasteWaterCosts = 0;
@@ -109,7 +135,7 @@ export class OperationCostsComponent implements OnInit {
   toggleCompressedAirUsed() {
     if (this.treasureHunt.currentEnergyUsage.compressedAirUsed != true) {
       this.treasureHunt.currentEnergyUsage.compressedAirUsed = true;
-    } else {
+    } else if (this.treasureHuntResults.compressedAir.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.compressedAirUsed = false;
       this.treasureHunt.currentEnergyUsage.compressedAirUsage = 0;
       this.treasureHunt.currentEnergyUsage.compressedAirCosts = 0;
@@ -120,7 +146,7 @@ export class OperationCostsComponent implements OnInit {
   toggleSteamUsed() {
     if (this.treasureHunt.currentEnergyUsage.steamUsed != true) {
       this.treasureHunt.currentEnergyUsage.steamUsed = true;
-    } else {
+    } else if (this.treasureHuntResults.steam.energySavings == 0) {
       this.treasureHunt.currentEnergyUsage.steamUsed = false;
       this.treasureHunt.currentEnergyUsage.steamUsage = 0;
       this.treasureHunt.currentEnergyUsage.steamCosts = 0;
