@@ -93,6 +93,7 @@ export class PumpCurveComponent implements OnInit {
   constructor(private systemCurveService: SystemCurveService, private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsDbService: SettingsDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
+    this.focusedForm = this.pumpCurvePrimary ? 'pump-curve' : 'system-curve';
     this.systemCurveCollapsed = this.pumpCurvePrimary ? "closed" : "open";
     this.pumpCurveCollapsed = this.pumpCurvePrimary ? "open" : "closed";
     this.graphPumpCurve = this.pumpCurvePrimary;
