@@ -86,14 +86,12 @@ export class CalculateModelService {
     private operationsService: OperationsService, private heatExchangerService: HeatExchangerService, private suiteTestService: SuiteTestService) { }
 
   calculateSuiteModel(ssmt: SSMT, settings: Settings) {
-    debugger
     let inputData: SSMTInputs = this.getInputDataFromSSMT(ssmt);
     this.suiteTestService.calculateModel(inputData, settings);
   }
 
 
   initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
-    debugger
     this.calculateSuiteModel(_ssmt, _settings);
 
 
