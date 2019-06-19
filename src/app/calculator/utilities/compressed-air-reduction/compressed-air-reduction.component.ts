@@ -152,7 +152,9 @@ export class CompressedAirReductionComponent implements OnInit {
     dataArray[index].name = data.name;
     dataArray[index].hoursPerYear = data.hoursPerYear;
     dataArray[index].utilityType = data.utilityType;
-    dataArray[index].utilityCost = data.utilityCost;
+    dataArray[index].utilityCost = data.utilityType == 0 ? data.compressedAirCost : data.electricityCost,
+    dataArray[index].compressedAirCost = data.compressedAirCost;
+    dataArray[index].electricityCost = data.electricityCost;
     dataArray[index].measurementMethod = data.measurementMethod;
     dataArray[index].flowMeterMethodData = data.flowMeterMethodData;
     dataArray[index].bagMethodData = data.bagMethodData;

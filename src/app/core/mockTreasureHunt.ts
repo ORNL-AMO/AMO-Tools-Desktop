@@ -540,6 +540,8 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "utilityType": 1,
                 "utilityCost": 0.05,
+                "compressedAirCost": 0.02,
+                "electricityCost": 0.05,
                 "measurementMethod": 1,
                 "flowMeterMethodData": { "meterReading": 0.2 },
                 "bagMethodData": {
@@ -566,6 +568,8 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "utilityType": 1,
                 "utilityCost": 0.05,
+                "compressedAirCost": 0.02,
+                "electricityCost": 0.05,
                 "measurementMethod": 3,
                 "flowMeterMethodData": { "meterReading": 0.2 },
                 "bagMethodData": {
@@ -615,6 +619,8 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "utilityType": 1,
                 "utilityCost": 0.05,
+                "compressedAirCost": 0.02,
+                "electricityCost": 0.05,
                 "measurementMethod": 0,
                 "flowMeterMethodData": { "meterReading": 6000 },
                 "bagMethodData": {
@@ -641,6 +647,8 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "utilityType": 1,
                 "utilityCost": 0.05,
+                "compressedAirCost": 0.02,
+                "electricityCost": 0.05,
                 "measurementMethod": 0,
                 "flowMeterMethodData": { "meterReading": 5600 },
                 "bagMethodData": {

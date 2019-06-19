@@ -286,6 +286,8 @@ export interface CompressedAirReductionData {
   hoursPerYear: number,
   utilityType: number,
   utilityCost: number,
+  compressedAirCost: number,
+  electricityCost: number,
   measurementMethod: number,
   flowMeterMethodData: CompressedAirFlowMeterMethodData,
   bagMethodData: BagMethodData,
