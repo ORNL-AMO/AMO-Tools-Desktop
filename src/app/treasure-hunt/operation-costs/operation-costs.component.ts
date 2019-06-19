@@ -56,6 +56,8 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.electricityUsed = true;
     } else {
       this.treasureHunt.currentEnergyUsage.electricityUsed = false;
+      this.treasureHunt.currentEnergyUsage.electricityUsage = 0;
+      this.treasureHunt.currentEnergyUsage.electricityCosts = 0;
     }
     this.save();
   }
@@ -65,6 +67,8 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.naturalGasUsed = true;
     } else {
       this.treasureHunt.currentEnergyUsage.naturalGasUsed = false;
+      this.treasureHunt.currentEnergyUsage.naturalGasUsage = 0;
+      this.treasureHunt.currentEnergyUsage.naturalGasCosts = 0;
     }
     this.save();
   }
@@ -74,6 +78,8 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.otherFuelUsed = true;
     } else {
       this.treasureHunt.currentEnergyUsage.otherFuelUsed = false;
+      this.treasureHunt.currentEnergyUsage.otherFuelUsage = 0;
+      this.treasureHunt.currentEnergyUsage.otherFuelCosts = 0;
     }
     this.save();
   }
@@ -83,6 +89,8 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.waterUsed = true;
     } else {
       this.treasureHunt.currentEnergyUsage.waterUsed = false;
+      this.treasureHunt.currentEnergyUsage.waterUsage = 0;
+      this.treasureHunt.currentEnergyUsage.waterCosts = 0;
     }
     this.save();
   }
@@ -92,6 +100,8 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsed = true;
     } else {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsed = false;
+      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = 0;
+      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = 0;
     }
     this.save();
   }
@@ -101,6 +111,8 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.compressedAirUsed = true;
     } else {
       this.treasureHunt.currentEnergyUsage.compressedAirUsed = false;
+      this.treasureHunt.currentEnergyUsage.compressedAirUsage = 0;
+      this.treasureHunt.currentEnergyUsage.compressedAirCosts = 0;
     }
     this.save();
   }
@@ -110,6 +122,8 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.steamUsed = true;
     } else {
       this.treasureHunt.currentEnergyUsage.steamUsed = false;
+      this.treasureHunt.currentEnergyUsage.steamUsage = 0;
+      this.treasureHunt.currentEnergyUsage.steamCosts = 0;
     }
     this.save();
   }
