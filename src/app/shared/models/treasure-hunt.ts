@@ -20,18 +20,25 @@ export interface TreasureHunt {
 export interface EnergyUsage {
     electricityUsage: number,
     electricityCosts: number,
+    electricityUsed: boolean,
     naturalGasUsage: number,
     naturalGasCosts: number,
+    naturalGasUsed: boolean,
     otherFuelUsage: number,
     otherFuelCosts: number,
+    otherFuelUsed: boolean,
     waterUsage: number,
     waterCosts: number,
+    waterUsed: boolean,
     wasteWaterUsage: number,
     wasteWaterCosts: number,
+    wasteWaterUsed: boolean,
     compressedAirUsage: number,
     compressedAirCosts: number,
+    compressedAirUsed: boolean,
     steamUsage: number,
     steamCosts: number
+    steamUsed: boolean,
 }
 
 export interface OpportunitySheet {
