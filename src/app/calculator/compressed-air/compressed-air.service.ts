@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AirVelocityInput, BagMethodInput, PneumaticValve, OperatingCostInput, PipeSizingInput, PneumaticAirRequirementInput, CalculateUsableCapacity, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage, AirSystemCapacityInput } from '../../shared/models/standalone';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { Settings } from '../../shared/models/settings';
 
 @Injectable()
 export class CompressedAirService {
@@ -106,8 +108,19 @@ export class CompressedAirService {
     five: 0,
     six: 0,
   };
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
+  convertAirVelocityExample(inputs: AirVelocityInput, settings: Settings) {
+    let tmpInputs: AirVelocityInput = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs = {
+        airFlow: Math.round(this.convertUnitsService.value(inputs.airFlow).from('ft3').to('m3') * 100) / 100,
+        pipePressure: Math.round(this.convertUnitsService.value(inputs.pipePressure).from('psi').to('bar')) / 100,
+        atmosphericPressure: Math.round(this.convertUnitsService.value(inputs.atmosphericPressure).from('psia').to('bara')) / 100
+      };
+      return tmpInputs;
+    }
+  }
 
   initReceiverTankInputs() {
     this.airCapacityInputs = {
