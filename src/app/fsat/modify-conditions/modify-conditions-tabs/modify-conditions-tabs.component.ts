@@ -25,19 +25,19 @@ export class ModifyConditionsTabsComponent implements OnInit {
 
   displayFanMotorTooltip: boolean;
   fanMotorBadgeHover: boolean;
-  fanMotorBadgeClass: Array<string>;
+  fanMotorBadgeClass: string;
 
   displayFluidTooltip: boolean;
   fluidBadgeHover: boolean;
-  fluidBadgeClass: Array<string>;
+  fluidBadgeClass: string;
 
   displayFieldDataTooltip: boolean;
   fieldDataBadgeHover: boolean;
-  fieldDataBadgeClass: Array<string>;
+  fieldDataBadgeClass: string;
 
   displayFanSetupTooltip: boolean;
   fanSetupBadgeHover: boolean;
-  fanSetupBadgeClass: Array<string>;
+  fanSetupBadgeClass: string;
 
   updateDataSub: Subscription;
   constructor(private modifyConditionsService: ModifyConditionsService, private compareService: CompareService,
@@ -86,7 +86,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   setFanFieldDataBadgeClass(baseline: FSAT, modification?: FSAT) {
-    let badgeStr: Array<string> = ['success'];
+    let badgeStr: string = 'success';
     let validBaselineTest = this.fanFieldDataService.isFanFieldDataValid(baseline.fieldData);
     let validModTest = true;
     let isDifferent = false;
@@ -96,11 +96,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     let inputError = this.checkFieldDataWarnings();
     if (!validBaselineTest || !validModTest) {
-      badgeStr = ['missing-data'];
+      badgeStr = 'missing-data';
     } else if (inputError) {
-      badgeStr = ['input-error'];
+      badgeStr = 'input-error';
     } else if (isDifferent) {
-      badgeStr = ['loss-different'];
+      badgeStr = 'loss-different';
     }
     return badgeStr;
   }
@@ -125,7 +125,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   setFluidBadgeClass(baseline: FSAT, modification?: FSAT) {
-    let badgeStr: Array<string> = ['success'];
+    let badgeStr: string = 'success';
     let validBaselineTest = this.fsatFluidService.isFanFluidValid(baseline.baseGasDensity);
     let validModTest = true;
     let isDifferent = false;
@@ -135,9 +135,9 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     //let inputError = this.checkFanFluidWarnings();
     if (!validBaselineTest || !validModTest) {
-      badgeStr = ['missing-data'];
+      badgeStr = 'missing-data';
     } else if (isDifferent) {
-      badgeStr = ['loss-different'];
+      badgeStr = 'loss-different';
     }
     return badgeStr;
   }
@@ -162,7 +162,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   // }
 
   setFanSetupBadgeClass(baseline: FSAT, modification?: FSAT) {
-    let badgeStr: Array<string> = ['success'];
+    let badgeStr: string = 'success';
     let validBaselineTest = this.fanSetupService.isFanSetupValid(baseline.fanSetup, false);
     let validModTest = true;
     let isDifferent = false;
@@ -172,11 +172,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     let inputError = this.checkFanSetupWarnings();
     if (!validBaselineTest || !validModTest) {
-      badgeStr = ['missing-data'];
+      badgeStr = 'missing-data';
     } else if (inputError) {
-      badgeStr = ['input-error'];
+      badgeStr = 'input-error';
     } else if (isDifferent) {
-      badgeStr = ['loss-different'];
+      badgeStr = 'loss-different';
     }
     return badgeStr;
   }
@@ -201,7 +201,7 @@ export class ModifyConditionsTabsComponent implements OnInit {
   }
 
   setFanMotorBadgeClass(baseline: FSAT, modification?: FSAT) {
-    let badgeStr: Array<string> = ['success'];
+    let badgeStr: string = 'success';
     let validBaselineTest = this.fanMotorService.isFanMotorValid(baseline.fanMotor);
     let validModTest = true;
     let isDifferent = false;
@@ -211,11 +211,11 @@ export class ModifyConditionsTabsComponent implements OnInit {
     }
     let inputError = this.checkMotorWarnings();
     if (!validBaselineTest || !validModTest) {
-      badgeStr = ['missing-data'];
+      badgeStr = 'missing-data';
     } else if (inputError) {
-      badgeStr = ['input-error'];
+      badgeStr = 'input-error';
     } else if (isDifferent) {
-      badgeStr = ['loss-different'];
+      badgeStr = 'loss-different';
     }
     return badgeStr;
   }
