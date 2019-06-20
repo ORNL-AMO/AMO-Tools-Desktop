@@ -92,7 +92,7 @@ export class CalculateModelService {
 
 
   initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
-    this.calculateSuiteModel(_ssmt, _settings);
+    //this.calculateSuiteModel(_ssmt, _settings);
 
 
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(_ssmt));

@@ -12,13 +12,13 @@ export class SuiteTestService {
 
 
   calculateModel(inputData: SSMTInputs, settings: Settings) {
-    let inputCpy: SSMTInputs = JSON.parse(JSON.stringify(inputData));
-    let convertedInputData: SSMTInputs = this.convertInputData(inputCpy, settings);
-    console.log(convertedInputData);
+    // let inputCpy: SSMTInputs = JSON.parse(JSON.stringify(inputData));
+    // let convertedInputData: SSMTInputs = this.convertInputData(inputCpy, settings);
+    // console.log(convertedInputData);
     debugger
-    let input = this.getModelerInputs();
+    // let input = this.getModelerInputs();
     let results = this.steamService.steamModeler(AT1);
-    // console.log(results);
+    console.log(results);
   }
 
   convertInputData(inputData: SSMTInputs, settings: Settings): SSMTInputs {
@@ -1194,5 +1194,93 @@ export const Data = {
 
 
 
-export const AT1 = { "isBaselineCalc": "TRUE", "baselinePowerDemand": "1", "boilerInput": { "fuelType": null, "fuel": null, "combustionEfficiency": 85, "blowdownRate": 2, "blowdownFlashed": "No", "preheatMakeupWater": "No", "steamTemperature": 514.2, "deaeratorVentRate": 0.1, "deaeratorPressure": 0.204747, "approachTemperature": 10 }, "headerInput": { "highPressureHeader": { "pressure": 1.136, "processSteamUsage": 22680, "condensationRecoveryRate": 50, "heatLoss": 0.1, "desuperheatSteamIntoNextHighest": "", "desuperheatSteamTemperature": null, "condensateReturnTemperature": 338.7, "flashCondensateReturn": "FALSE" }, "mediumPressureHeader": { "pressure": null, "processSteamUsage": null, "condensationRecoveryRate": null, "heatLoss": null, "flashCondensateIntoHeader": "", "desuperheatSteamIntoNextHighest": "", "desuperheatSteamTemperature": null, "flashCondensateReturn": null }, "lowPressureHeader": { "pressure": null, "processSteamUsage": null, "condensationRecoveryRate": null, "heatLoss": null, "flashCondensateIntoHeader": "", "desuperheatSteamTemperature": null, "flashCondensateReturn": null } }, "operationsInput": { "sitePowerImport": 18000000, "makeUpWaterTemperature": 283.15, "operatingHoursPerYear": 8000, "fuelCosts": 0.000005478, "electricityCosts": 0.0000139, "makeUpWaterCosts": 0.66 }, "turbineInput": { "highToLowTurbine": { "isentropicEfficiency": null, "generationEfficiency": null, "operationType": null, "operationValue1": null, "operationValue2": null, "useTurbine": "" }, "highToMediumTurbine": { "isentropicEfficiency": null, "generationEfficiency": null, "operationType": null, "operationValue1": null, "operationValue2": null, "useTurbine": "" }, "mediumToLowTurbine": { "isentropicEfficiency": null, "generationEfficiency": null, "operationType": null, "operationValue1": null, "operationValue2": null, "useTurbine": "" }, "condensingTurbine": { "isentropicEfficiency": null, "generationEfficiency": null, "condenserPressure": null, "operationType": null, "operationValue": null, "useTurbine": "" } } }
+export const AT1 = {
+  "isBaselineCalc": "TRUE",
+  "baselinePowerDemand": "1",
+  "boilerInput": {
+    "fuelType": null,
+    "fuel": null,
+    "combustionEfficiency": 85,
+    "blowdownRate": 2,
+    "blowdownFlashed": "No",
+    "preheatMakeupWater": "No",
+    "steamTemperature": 514.2,
+    "deaeratorVentRate": 0.1,
+    "deaeratorPressure": 0.204747,
+    "approachTemperature": 10
+  },
+  "headerInput": {
+    "highPressureHeader": {
+      "pressure": 1.136,
+      "processSteamUsage": 22680,
+      "condensationRecoveryRate": 50,
+      "heatLoss": 0.1,
+      "desuperheatSteamIntoNextHighest": "",
+      "desuperheatSteamTemperature": null,
+      "condensateReturnTemperature": 338.7,
+      "flashCondensateReturn": "FALSE"
+    },
+    "mediumPressureHeader": {
+      "pressure": null,
+      "processSteamUsage": null,
+      "condensationRecoveryRate": null,
+      "heatLoss": null,
+      "flashCondensateIntoHeader": "",
+      "desuperheatSteamIntoNextHighest": "",
+      "desuperheatSteamTemperature": null,
+      "flashCondensateReturn": null
+    },
+    "lowPressureHeader": {
+      "pressure": null,
+      "processSteamUsage": null,
+      "condensationRecoveryRate": null,
+      "heatLoss": null,
+      "flashCondensateIntoHeader": "",
+      "desuperheatSteamTemperature": null,
+      "flashCondensateReturn": null
+    }
+  },
+  "operationsInput": {
+    "sitePowerImport": 18000000,
+    "makeUpWaterTemperature": 283.15,
+    "operatingHoursPerYear": 8000,
+    "fuelCosts": 0.000005478,
+    "electricityCosts": 0.0000139,
+    "makeUpWaterCosts": 0.66
+  },
+  "turbineInput": {
+    "highToLowTurbine": {
+      "isentropicEfficiency": null,
+      "generationEfficiency": null,
+      "operationType": null,
+      "operationValue1": null,
+      "operationValue2": null,
+      "useTurbine": ""
+    },
+    "highToMediumTurbine": {
+      "isentropicEfficiency": null,
+      "generationEfficiency": null,
+      "operationType": null,
+      "operationValue1": null,
+      "operationValue2": null,
+      "useTurbine": ""
+    },
+    "mediumToLowTurbine": {
+      "isentropicEfficiency": null,
+      "generationEfficiency": null,
+      "operationType": null,
+      "operationValue1": null,
+      "operationValue2": null,
+      "useTurbine": ""
+    },
+    "condensingTurbine": {
+      "isentropicEfficiency": null,
+      "generationEfficiency": null,
+      "condenserPressure": null,
+      "operationType": null,
+      "operationValue": null,
+      "useTurbine": ""
+    }
+  }
+}
 
