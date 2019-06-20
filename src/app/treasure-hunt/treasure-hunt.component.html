@@ -8,9 +8,8 @@
     </div> -->
   </div>
   <!--end header-->
-  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content scroll-item"
-    [ngStyle]="{'height.px': containerHeight}">
-    <div class="w-50 panel-column modification">
+  <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
+    <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="subTab == 'settings'" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
       </app-system-basics>
@@ -62,4 +61,4 @@
 
 
 <app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-	[setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'"></app-toast>
+  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'disclaimer'"></app-toast>
