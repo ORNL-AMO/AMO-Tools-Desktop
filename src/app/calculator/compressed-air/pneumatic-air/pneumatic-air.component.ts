@@ -62,4 +62,16 @@ export class PneumaticAirComponent implements OnInit {
   setField(str: string) {
     this.currentField = str;
   }
+
+  btnGenerateExample() {
+    this.inputs = {
+      pistonType: 0,
+      cylinderDiameter: 2.25,
+      cylinderStroke: 8,
+      pistonRodDiameter: 1,
+      airPressure: 90,
+      cyclesPerMinute: 16
+    };
+    this.calculatePneumaticAirRequirement(this.inputs);
+  }
 }

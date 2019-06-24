@@ -1,6 +1,12 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@angular/core';
-import { CompressedAirService } from '../compressed-air.service';
-import { Settings } from '../../../shared/models/settings';
+import {Component, OnInit, HostListener, ViewChild, ElementRef, Input} from '@angular/core';
+import {CompressedAirService} from '../compressed-air.service';
+import {Settings} from '../../../shared/models/settings';
+import {ReceiverTankGeneral} from "../../../shared/models/standalone";
+import {GeneralMethodFormComponent} from "./general-method-form/general-method-form.component";
+import {DedicatedStorageFormComponent} from "./dedicated-storage-form/dedicated-storage-form.component";
+import {MeteredStorageFormComponent} from "./metered-storage-form/metered-storage-form.component";
+import {DelayMethodFormComponent} from "./delay-method-form/delay-method-form.component";
+import {AirCapacityFormComponent} from "./air-capacity-form/air-capacity-form.component";
 
 @Component({
   selector: 'app-receiver-tank',
@@ -12,8 +18,13 @@ export class ReceiverTankComponent implements OnInit {
   settings: Settings;
   @Input()
   calcType: string;
-  
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild(GeneralMethodFormComponent) generalMethodForm: GeneralMethodFormComponent;
+  @ViewChild(DedicatedStorageFormComponent) dedicatedStorageForm: DedicatedStorageFormComponent;
+  @ViewChild(MeteredStorageFormComponent) meteredStorageForm: MeteredStorageFormComponent;
+  @ViewChild(DelayMethodFormComponent) delayMethodForm: DelayMethodFormComponent;
+  @ViewChild(AirCapacityFormComponent) airCapacityForm: AirCapacityFormComponent;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -21,8 +32,8 @@ export class ReceiverTankComponent implements OnInit {
   }
 
   headerHeight: number;
-  
-  methods: Array<{name: string, value: number}> = [
+
+  methods: Array<{ name: string, value: number }> = [
     {
       name: 'General',
       value: 0
@@ -45,15 +56,18 @@ export class ReceiverTankComponent implements OnInit {
   currentField: string = 'default';
   currentForm: string;
   toggleResetData: boolean = false;
+
   constructor(private compressedAirService: CompressedAirService) {
   }
 
   ngOnInit() {
     this.method = this.compressedAirService.recieverTankMethod;
   }
+
   ngOnDestroy() {
     this.compressedAirService.recieverTankMethod = this.method;
   }
+
   changeField(str: string, formStr: string) {
     this.currentField = str;
     this.currentForm = formStr;
@@ -80,14 +94,79 @@ export class ReceiverTankComponent implements OnInit {
   setCurrentForm() {
     if (this.method === 0) {
       this.currentForm = 'general-method';
-    }else if (this.method === 1) {
+    } else if (this.method === 1) {
       this.currentForm = 'dedicated-storage';
-    }else if (this.method === 2) {
+    } else if (this.method === 2) {
       this.currentForm = 'metered-storage';
-    }else if (this.method === 3) {
+    } else if (this.method === 3) {
       this.currentForm = 'delay-method';
-    }else {
+    } else {
       this.currentForm = 'air-capacity';
+    }
+  }
+
+  btnGenerateExample() {
+    if (this.method === 0) {
+      this.currentForm = 'general-method';
+      let tempInputs = {
+        airDemand: 150,
+        allowablePressureDrop: 3,
+        method: 0,
+        atmosphericPressure: 14.7,
+      };
+      // tempInputs // Put Conversion code here
+      this.generalMethodForm.inputs = tempInputs;
+      this.generalMethodForm.getStorage();
+
+    } else if (this.method === 1) {
+      this.currentForm = 'dedicated-storage';
+      let tempInputs = {
+        method: 1,
+        atmosphericPressure: 14.7,
+        lengthOfDemand: 0.8333333,
+        airFlowRequirement: 1000,
+        initialTankPressure: 110,
+        finalTankPressure: 100
+      };
+      //Conversion Code
+      this.dedicatedStorageForm.inputs = tempInputs;
+      this.dedicatedStorageForm.getReceiverVolume();
+
+    } else if (this.method === 2) {
+      this.currentForm = 'metered-storage';
+      let tempInputs = {
+        method: 2,
+        lengthOfDemand: 1.5,
+        airFlowRequirement: 900,
+        atmosphericPressure: 14.7,
+        initialTankPressure: 100,
+        finalTankPressure: 70,
+        meteredControl: 45,
+      };
+      this.meteredStorageForm.inputs = tempInputs;
+      this.meteredStorageForm.getTotalReceiverVolume();
+    } else if (this.method === 3) {
+      this.currentForm = 'delay-method';
+      let tempInputs = {
+        method: 3,
+        distanceToCompressorRoom: 1000,
+        speedOfAir: 250,
+        airDemand: 600,
+        allowablePressureDrop: 2,
+        atmosphericPressure: 14.7
+      };
+      this.delayMethodForm.inputs = tempInputs;
+      this.delayMethodForm.getTotalReceiverVolume();
+    } else {
+      this.currentForm = 'air-capacity';
+      let tempInputs = {
+        tankSize: 1000,
+        airPressureIn: 110,
+        airPressureOut: 100,
+      };
+      this.airCapacityForm.inputs = tempInputs;
+      this.airCapacityForm.getAirCapacity();
+      this.airCapacityForm.getTankSize();
     }
   }
 }
