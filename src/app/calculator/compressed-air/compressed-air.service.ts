@@ -120,6 +120,7 @@ export class CompressedAirService {
       };
       return tmpInputs;
     }
+    return tmpInputs;
   }
 
   initReceiverTankInputs() {

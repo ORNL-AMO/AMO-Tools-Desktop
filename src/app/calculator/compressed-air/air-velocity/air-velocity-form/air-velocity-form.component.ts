@@ -23,6 +23,7 @@ export class AirVelocityFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.inputs);
   }
   
   emitChange() {
