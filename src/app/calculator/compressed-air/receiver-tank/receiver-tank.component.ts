@@ -1,7 +1,6 @@
 import {Component, OnInit, HostListener, ViewChild, ElementRef, Input} from '@angular/core';
 import {CompressedAirService} from '../compressed-air.service';
 import {Settings} from '../../../shared/models/settings';
-import {ReceiverTankGeneral} from "../../../shared/models/standalone";
 import {GeneralMethodFormComponent} from "./general-method-form/general-method-form.component";
 import {DedicatedStorageFormComponent} from "./dedicated-storage-form/dedicated-storage-form.component";
 import {MeteredStorageFormComponent} from "./metered-storage-form/metered-storage-form.component";
@@ -106,6 +105,7 @@ export class ReceiverTankComponent implements OnInit {
   }
 
   btnGenerateExample() {
+    console.log(this.method);
     if (this.method === 0) {
       this.currentForm = 'general-method';
       let tempInputs = {
@@ -157,16 +157,17 @@ export class ReceiverTankComponent implements OnInit {
       };
       this.delayMethodForm.inputs = tempInputs;
       this.delayMethodForm.getTotalReceiverVolume();
-    } else {
-      this.currentForm = 'air-capacity';
-      let tempInputs = {
-        tankSize: 1000,
-        airPressureIn: 110,
-        airPressureOut: 100,
-      };
-      this.airCapacityForm.inputs = tempInputs;
-      this.airCapacityForm.getAirCapacity();
-      this.airCapacityForm.getTankSize();
     }
+  }
+
+  btnGenerateExample2() {
+    let tempInputs = {
+      tankSize: 1000,
+      airPressureIn: 110,
+      airPressureOut: 100,
+    };
+    this.airCapacityForm.inputs = tempInputs;
+    this.airCapacityForm.getAirCapacity();
+    this.airCapacityForm.getTankSize();
   }
 }
