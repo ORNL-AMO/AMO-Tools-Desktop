@@ -381,5 +381,19 @@ export interface WaterOtherMethodData {
   consumption: number
 };
 
+export interface WaterReductionResults {
+  baselineResults: WaterReductionResult,
+  modificationResult: WaterReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number
+};
+
+export interface WaterReductionResult {
+  waterUse: number,
+  waterCost: number,
+  annualWaterSavings: number,
+  costSavings: number
+};
+
 //===== END water/wastewater reduction objects =====
 
