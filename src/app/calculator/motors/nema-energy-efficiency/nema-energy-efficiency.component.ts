@@ -87,18 +87,6 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     }
   }
 
-  btnResetData() {
-    this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
-    if (this.settings.powerMeasurement !== 'hp') {
-      if (this.nemaForm.controls.horsePower.value === '200') {
-        this.nemaForm.patchValue({
-          horsePower: '150'
-        });
-      }
-    }
-    this.calculate();
-  }
-
   initCalculator(): Calculator {
     if (this.psat) {
       this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
@@ -184,5 +172,28 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.calculator.nemaInputs = this.nemaEnergyEfficiencyService.getObjFromForm(this.nemaForm);
       this.saveCalculator();
     }
+  }
+
+  btnResetData() {
+    this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+    if (this.settings.powerMeasurement !== 'hp') {
+      if (this.nemaForm.controls.horsePower.value === '200') {
+        this.nemaForm.patchValue({
+          horsePower: '150'
+        });
+      }
+    }
+    this.calculate();
+  }
+  btnGenerateExample() {
+    this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+    if (this.settings.powerMeasurement !== 'hp') {
+      if (this.nemaForm.controls.horsePower.value === '200') {
+        this.nemaForm.patchValue({
+          horsePower: '150'
+        });
+      }
+    }
+    this.calculate();
   }
 }
