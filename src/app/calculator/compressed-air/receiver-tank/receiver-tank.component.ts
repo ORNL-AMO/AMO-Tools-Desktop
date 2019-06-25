@@ -55,6 +55,7 @@ export class ReceiverTankComponent implements OnInit {
   currentField: string = 'default';
   currentForm: string;
   toggleResetData: boolean = false;
+  toggleGenerateExample: boolean = false;
 
   constructor(private compressedAirService: CompressedAirService) {
   }
@@ -84,6 +85,10 @@ export class ReceiverTankComponent implements OnInit {
     this.setCurrentForm();
   }
 
+  btnGenerateExample() {
+    this.toggleGenerateExample = !this.toggleGenerateExample;
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -102,71 +107,5 @@ export class ReceiverTankComponent implements OnInit {
     } else {
       this.currentForm = 'air-capacity';
     }
-  }
-
-  btnGenerateExample() {
-    if (this.method === 0) {
-      this.currentForm = 'general-method';
-      let tempInputs = {
-        airDemand: 150,
-        allowablePressureDrop: 3,
-        method: 0,
-        atmosphericPressure: 14.7,
-      };
-      // tempInputs // Put Conversion code here
-      this.generalMethodForm.inputs = tempInputs;
-      this.generalMethodForm.getStorage();
-
-    } else if (this.method === 1) {
-      this.currentForm = 'dedicated-storage';
-      let tempInputs = {
-        method: 1,
-        atmosphericPressure: 14.7,
-        lengthOfDemand: 0.8333333,
-        airFlowRequirement: 1000,
-        initialTankPressure: 110,
-        finalTankPressure: 100
-      };
-      //Conversion Code
-      this.dedicatedStorageForm.inputs = tempInputs;
-      this.dedicatedStorageForm.getReceiverVolume();
-
-    } else if (this.method === 2) {
-      this.currentForm = 'metered-storage';
-      let tempInputs = {
-        method: 2,
-        lengthOfDemand: 1.5,
-        airFlowRequirement: 900,
-        atmosphericPressure: 14.7,
-        initialTankPressure: 100,
-        finalTankPressure: 70,
-        meteredControl: 45,
-      };
-      this.meteredStorageForm.inputs = tempInputs;
-      this.meteredStorageForm.getTotalReceiverVolume();
-    } else if (this.method === 3) {
-      this.currentForm = 'delay-method';
-      let tempInputs = {
-        method: 3,
-        distanceToCompressorRoom: 1000,
-        speedOfAir: 250,
-        airDemand: 600,
-        allowablePressureDrop: 2,
-        atmosphericPressure: 14.7
-      };
-      this.delayMethodForm.inputs = tempInputs;
-      this.delayMethodForm.getTotalReceiverVolume();
-    }
-  }
-
-  btnGenerateExample2() {
-    let tempInputs = {
-      tankSize: 1000,
-      airPressureIn: 110,
-      airPressureOut: 100,
-    };
-    this.airCapacityForm.inputs = tempInputs;
-    this.airCapacityForm.getAirCapacity();
-    this.airCapacityForm.getTankSize();
   }
 }
