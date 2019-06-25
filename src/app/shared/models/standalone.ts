@@ -383,8 +383,8 @@ export interface WaterOtherMethodData {
 
 export interface WaterReductionResults {
   baselineResults: WaterReductionResult,
-  modificationResult: WaterReductionResult,
-  annualEnergySavings: number,
+  modificationResults: WaterReductionResult,
+  annualWaterSavings: number,
   annualCostSavings: number
 };
 

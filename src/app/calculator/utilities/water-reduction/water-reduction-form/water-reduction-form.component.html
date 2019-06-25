@@ -1,3 +1,77 @@
-<p>
-  water-reduction-form works!
-</p>
+<div class="mb-4 p-2 form-card">
+
+  <form [formGroup]="form">
+    <label *ngIf="!isEditingName" class="group-label w-100 bold">
+      <span (click)="editEquipmentName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+      <span>{{form.controls.name.value}}</span>
+      <span class="fa fa-times-circle-o pull-right large" (click)="removeEquipment(index)"></span>
+    </label>
+    <label *ngIf="isEditingName" class="group-label w-100">
+      <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <span class="alert-danger small ml-2" *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
+        <span *ngIf="form.controls.name.errors.required">Please enter a name.</span>
+      </span>
+    </label>
+
+    <div class="form-section">
+
+      <div class="form-group">
+        <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+          <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
+            formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
+            (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine">
+          <span *ngIf="form.controls.hoursPerYear.errors.required">Value required.</span>
+          <span *ngIf="form.controls.hoursPerYear.errors.max">Value can't be greater than
+            {{form.controls.hoursPerYear.errors.max.max}}.</span>
+          <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
+            {{form.controls.hoursPerYear.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'waterCost_'+idString}}">Water Cost</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="waterCost" id="{{'waterCost_'+idString}}"
+            formControlName="waterCost" (input)="calculate()" (focus)="focusField('waterCost')" (blur)="focusOut()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/gal</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/L</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.waterCost.invalid && !form.controls.waterCost.pristine">
+          <span *ngIf="form.controls.waterCost.errors.required">Value required.</span>
+          <span *ngIf="form.controls.waterCost.errors.min">Value can't be less than
+            {{form.controls.waterCost.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'measurementMethod_'+idString}}">Measurement Method</label>
+        <div class="input-group">
+          <select class="form-control" name="measurementMethod" id="{{'measurementMethod_'+idString}}"
+            formControlName="measurementMethod" (change)="changeMeasurementMethod()"
+            (focus)="focusField('measurementMethod')" (blur)="focusOut()">
+            <option *ngFor="let option of measurementOptions" [ngValue]="option.value">{{option.name}}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- volume meter method -->
+      <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
+        <div class="form-group">
+          
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </form>
+
+</div>
