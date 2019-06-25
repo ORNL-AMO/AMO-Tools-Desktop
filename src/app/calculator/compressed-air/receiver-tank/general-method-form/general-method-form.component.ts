@@ -14,6 +14,8 @@ export class GeneralMethodFormComponent implements OnInit {
   toggleResetData: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  toggleGenerateExample: boolean;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
@@ -31,6 +33,20 @@ export class GeneralMethodFormComponent implements OnInit {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetData();
     }
+    if (changes.toggleGenerateExample && !changes.toggleGenerateExample.firstChange) {
+      this.generateExample();
+    }
+  }
+
+  generateExample() {
+    let tempInputs = {
+      airDemand: 150,
+      allowablePressureDrop: 3,
+      method: 0,
+      atmosphericPressure: 14.7,
+    };
+    this.inputs = this.compressedAirService.convertGeneralMethodExample(tempInputs, this.settings);
+    this.getStorage();
   }
 
   resetData() {

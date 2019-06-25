@@ -97,8 +97,7 @@ export class SystemCapacityComponent implements OnInit {
       five: 0,
       six: 0,
     };
-    this.compressedAirService.systeCapacityInputs = tempInputs;
-    this.inputs = this.compressedAirService.systeCapacityInputs;
+    this.inputs = this.compressedAirService.convertAirSystemCapacityExample(tempInputs, this.settings);
     this.calculate();
   }
 }

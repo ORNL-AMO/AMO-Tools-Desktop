@@ -70,8 +70,7 @@ export class PipeSizingComponent implements OnInit {
       designVelocity: 25,
       atmosphericPressure: 14.7
     };
-    this.compressedAirService.pipeSizingInput = tempInputs;
-    this.inputs = this.compressedAirService.pipeSizingInput;
+    this.inputs = this.compressedAirService.convertPipeSizingExample(tempInputs, this.settings);
     this.calculatePipeSize(this.inputs);
   }
 }

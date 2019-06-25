@@ -64,7 +64,7 @@ export class PneumaticAirComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.inputs = {
+    let tempInputs = {
       pistonType: 0,
       cylinderDiameter: 2.25,
       cylinderStroke: 8,
@@ -72,6 +72,7 @@ export class PneumaticAirComponent implements OnInit {
       airPressure: 90,
       cyclesPerMinute: 16
     };
+    this.inputs = this.compressedAirService.convertPneumaticCylinderAirExample(tempInputs, this.settings);
     this.calculatePneumaticAirRequirement(this.inputs);
   }
 }

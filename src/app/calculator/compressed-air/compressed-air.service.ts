@@ -152,6 +152,110 @@ export class CompressedAirService {
     return tmpInputs;
   }
 
+  convertPneumaticCylinderAirExample(inputs: PneumaticAirRequirementInput, settings: Settings) {
+    let tmpInputs: PneumaticAirRequirementInput = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.cylinderDiameter = Math.round(this.convertUnitsService.value(tmpInputs.cylinderDiameter).from('in').to('cm') * 100) / 100;
+      tmpInputs.cylinderStroke = Math.round(this.convertUnitsService.value(tmpInputs.cylinderStroke).from('in').to('cm') * 100) / 100;
+      tmpInputs.airPressure = Math.round(this.convertUnitsService.value(tmpInputs.airPressure).from('psi').to('bar') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
+  convertGeneralMethodExample(inputs: ReceiverTankGeneral, settings: Settings) {
+    let tmpInputs: ReceiverTankGeneral = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.airDemand = Math.round(this.convertUnitsService.value(tmpInputs.airDemand).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.allowablePressureDrop = Math.round(this.convertUnitsService.value(tmpInputs.allowablePressureDrop).from('psi').to('bar') * 100) / 100;
+      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('bara') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
+  convertDedicatedStorageExample(inputs: ReceiverTankDedicatedStorage, settings: Settings) {
+    let tmpInputs: ReceiverTankDedicatedStorage = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.airFlowRequirement = Math.round(this.convertUnitsService.value(tmpInputs.airFlowRequirement).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.initialTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.initialTankPressure).from('psi').to('bar') * 100) / 100;
+      tmpInputs.finalTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.finalTankPressure).from('psi').to('bar') * 100) / 100;
+      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('bara') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
+  convertTankMeteredStorageExample(inputs: ReceiverTankMeteredStorage, settings: Settings) {
+    let tmpInputs: ReceiverTankMeteredStorage = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.airFlowRequirement = Math.round(this.convertUnitsService.value(tmpInputs.airFlowRequirement).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.meteredControl = Math.round(this.convertUnitsService.value(tmpInputs.meteredControl).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.initialTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.initialTankPressure).from('psi').to('bar') * 100) / 100;
+      tmpInputs.finalTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.finalTankPressure).from('psi').to('bar') * 100) / 100;
+      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('bara') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
+  convertTankBridgingCompressorExample(inputs: ReceiverTankBridgingCompressor, settings: Settings) {
+    let tmpInputs: ReceiverTankBridgingCompressor = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.distanceToCompressorRoom = Math.round(this.convertUnitsService.value(tmpInputs.distanceToCompressorRoom).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.speedOfAir = Math.round(this.convertUnitsService.value(tmpInputs.speedOfAir).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.allowablePressureDrop = Math.round(this.convertUnitsService.value(tmpInputs.allowablePressureDrop).from('psi').to('bar') * 100) / 100;
+      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('bara') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
+  convertCalculateUsableCapacityExample(inputs: CalculateUsableCapacity, settings: Settings) {
+    let tmpInputs: CalculateUsableCapacity = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.tankSize = Math.round(this.convertUnitsService.value(tmpInputs.tankSize).from('gal').to('cm3') * 100) / 100;
+      tmpInputs.airPressureIn = Math.round(this.convertUnitsService.value(tmpInputs.airPressureIn).from('psi').to('bar') * 100) / 100;
+      tmpInputs.airPressureOut = Math.round(this.convertUnitsService.value(tmpInputs.airPressureOut).from('psi').to('bar') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
+  convertPipeSizingExample(inputs: PipeSizingInput, settings: Settings) {
+    let tmpInputs: PipeSizingInput = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.airlinePressure = Math.round(this.convertUnitsService.value(tmpInputs.airlinePressure).from('psi').to('bar') * 100) / 100;
+      tmpInputs.designVelocity = Math.round(this.convertUnitsService.value(tmpInputs.designVelocity).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('bara') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
+  convertAirSystemCapacityExample(inputs: AirSystemCapacityInput, settings: Settings) {
+    let tmpInputs: AirSystemCapacityInput = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpInputs.oneHalf = Math.round(this.convertUnitsService.value(tmpInputs.oneHalf).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.threeFourths = Math.round(this.convertUnitsService.value(tmpInputs.threeFourths).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.one = Math.round(this.convertUnitsService.value(tmpInputs.one).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.oneAndOneFourth = Math.round(this.convertUnitsService.value(tmpInputs.oneAndOneFourth).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.oneAndOneHalf = Math.round(this.convertUnitsService.value(tmpInputs.oneAndOneHalf).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.two = Math.round(this.convertUnitsService.value(tmpInputs.two).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.twoAndOneHalf = Math.round(this.convertUnitsService.value(tmpInputs.twoAndOneHalf).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.three = Math.round(this.convertUnitsService.value(tmpInputs.three).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.threeAndOneHalf = Math.round(this.convertUnitsService.value(tmpInputs.threeAndOneHalf).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.four = Math.round(this.convertUnitsService.value(tmpInputs.four).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.five = Math.round(this.convertUnitsService.value(tmpInputs.five).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.six = Math.round(this.convertUnitsService.value(tmpInputs.six).from('ft3').to('m3') * 100) / 100;
+      for (let i = 0; i < tmpInputs.receiverCapacities.length; i++) {
+        tmpInputs.receiverCapacities[i] = Math.round(this.convertUnitsService.value(tmpInputs.receiverCapacities[i]).from('gal').to('cm3') * 100) / 100;
+      }
+    }
+    return tmpInputs;
+  }
+
+  convertOperatingCostExample(inputs: OperatingCostInput, settings: Settings) {
+    let tmpInputs: OperatingCostInput = inputs;
+    if (settings.unitsOfMeasure == 'Metric') {
+      //tmpInputs.motorBhp = Math.round(this.convertUnitsService.value(tmpInputs.motorBhp).from('hp').to('hp') * 100) / 100;
+    }
+    return tmpInputs;
+  }
+
   initReceiverTankInputs() {
     this.airCapacityInputs = {
       tankSize: 0,
