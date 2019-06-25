@@ -105,7 +105,6 @@ export class ReceiverTankComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    console.log(this.method);
     if (this.method === 0) {
       this.currentForm = 'general-method';
       let tempInputs = {
