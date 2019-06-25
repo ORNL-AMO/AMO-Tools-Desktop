@@ -331,6 +331,7 @@ export class Fsat203Component implements OnInit {
   }
 
   saveShaftPower(shaftPower: FanShaftPower) {
+    console.log(shaftPower);
     this.inputs.FanShaftPower = shaftPower;
     this.checkShaftPower();
     this.calculate();
