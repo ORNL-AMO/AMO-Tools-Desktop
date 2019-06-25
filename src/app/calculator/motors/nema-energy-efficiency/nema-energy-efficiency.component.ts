@@ -105,7 +105,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     if (this.nemaEnergyEfficiencyService.nemaInputs) {
       this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromObj(this.nemaEnergyEfficiencyService.nemaInputs);
     } else {
-      this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+      this.nemaForm = this.nemaEnergyEfficiencyService.resetForm();
       if (this.settings.powerMeasurement !== 'hp') {
         if (this.nemaForm.controls.horsePower.value === 200) {
           this.nemaForm.patchValue({
@@ -175,7 +175,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   }
 
   btnResetData() {
-    this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
+    this.nemaForm = this.nemaEnergyEfficiencyService.resetForm();
     if (this.settings.powerMeasurement !== 'hp') {
       if (this.nemaForm.controls.horsePower.value === '200') {
         this.nemaForm.patchValue({
@@ -185,6 +185,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
     }
     this.calculate();
   }
+
   btnGenerateExample() {
     this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
     if (this.settings.powerMeasurement !== 'hp') {

@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { PSAT } from '../../../shared/models/psat';
-import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { MotorPerformanceService, MotorPerformanceInputs } from './motor-performance.service';
-import { Calculator } from '../../../shared/models/calculators';
-import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { Assessment } from '../../../shared/models/assessment';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {PSAT} from '../../../shared/models/psat';
+import {Settings} from '../../../shared/models/settings';
+import {FormGroup} from '@angular/forms';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {MotorPerformanceService, MotorPerformanceInputs} from './motor-performance.service';
+import {Calculator} from '../../../shared/models/calculators';
+import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
+import {Assessment} from '../../../shared/models/assessment';
+import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-motor-performance',
@@ -40,7 +40,9 @@ export class MotorPerformanceComponent implements OnInit {
   tabSelect: string = 'results';
   calcExists: boolean;
   saving: boolean;
-  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+
+  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
+  }
 
   ngOnInit() {
     if (this.inAssessment) {
@@ -67,11 +69,6 @@ export class MotorPerformanceComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
-  }
-
-  btnResetData() {
-    this.performanceForm = this.motorPerformanceService.initForm();
-    this.calculate();
   }
 
   resizeTabs() {
@@ -138,7 +135,7 @@ export class MotorPerformanceComponent implements OnInit {
     if (this.motorPerformanceService.motorPerformanceInputs) {
       this.performanceForm = this.motorPerformanceService.initFormFromObj(this.motorPerformanceService.motorPerformanceInputs);
     } else {
-      this.performanceForm = this.motorPerformanceService.initForm();
+      this.performanceForm = this.motorPerformanceService.resetForm();
     }
   }
 
@@ -160,5 +157,15 @@ export class MotorPerformanceComponent implements OnInit {
         });
       }
     }
+  }
+
+  btnResetData() {
+    this.performanceForm = this.motorPerformanceService.resetForm();
+    this.calculate();
+  }
+
+  btnGenerateExample() {
+    this.performanceForm = this.motorPerformanceService.initForm();
+    this.calculate();
   }
 }

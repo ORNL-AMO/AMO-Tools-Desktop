@@ -16,6 +16,15 @@ export class NemaEnergyEfficiencyService {
       efficiency: ['', [Validators.min(1), Validators.max(100)]]
     });
   }
+  resetForm(): FormGroup {
+    return this.formBuilder.group({
+      frequency: [60, [Validators.required]],
+      horsePower: [0, [Validators.required]],
+      efficiencyClass: [0, [Validators.required]],
+      motorRPM: [0, [Validators.required]],
+      efficiency: ['', [Validators.min(1), Validators.max(100)]]
+    });
+  }
 
   initFormFromPsat(psat: PSAT): FormGroup {
     // let lineFreq: string = this.psatService.getLineFreqFromEnum(psat.inputs.line_frequency);

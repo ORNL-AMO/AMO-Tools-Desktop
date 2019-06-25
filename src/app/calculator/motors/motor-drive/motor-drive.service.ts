@@ -15,6 +15,16 @@ export class MotorDriveService {
       averageMotorLoad: 50,
       electricityCost: settings.electricityCost,
       baselineDriveType: 0,
+      modificationDriveType: 2
+    }
+  }
+  getResetData(settings: Settings): MotorDriveInputs{
+    return {
+      motorPower: 5,
+      annualOperatingHours: 0,
+      averageMotorLoad: 0,
+      electricityCost: settings.electricityCost,
+      baselineDriveType: 0,
       modificationDriveType: 0
     }
   }
