@@ -9,21 +9,31 @@ import { Subscription } from 'rxjs';
 })
 export class FanAnalysisBannerComponent implements OnInit {
 
-  mainTab: string = 'fan-info';
+  mainTab: string;
   mainTabSubscription: Subscription;
+  stepTab: string;
+  stepTabSubscription: Subscription;
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.mainTabSubscription = this.fanAnalysisService.mainTab.subscribe(val => {
       this.mainTab = val;
+    });
+    this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
+      this.stepTab = val;
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.mainTabSubscription.unsubscribe();
+    this.stepTabSubscription.unsubscribe();
   }
 
   changeTab(str: string) {
     this.fanAnalysisService.mainTab.next(str);
+  }
+
+  changeStepTab(str: string) {
+    this.fanAnalysisService.stepTab.next(str);
   }
 }

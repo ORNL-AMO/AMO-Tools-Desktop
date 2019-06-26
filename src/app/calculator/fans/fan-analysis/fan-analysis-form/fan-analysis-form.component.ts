@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FanAnalysisService } from '../fan-analysis.service';
 import { Subscription } from 'rxjs';
+import { Settings } from '../../../../shared/models/settings';
+import { Fan203Inputs } from '../../../../shared/models/fans';
 
 @Component({
   selector: 'app-fan-analysis-form',
@@ -8,19 +10,24 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./fan-analysis-form.component.css']
 })
 export class FanAnalysisFormComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  @Input()
+  inputs: Fan203Inputs;
 
-  mainTab: string;
-  mainTabSubscription: Subscription;
+  stepTab: string;
+  stepTabSubscription: Subscription;
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
-    this.mainTabSubscription = this.fanAnalysisService.mainTab.subscribe(val => {
-      this.mainTab = val;
+    this.inputs.BaseGasDensity
+    this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
+      this.stepTab = val;
     })
   }
 
   ngOnDestroy(){
-    this.mainTabSubscription.unsubscribe();
+    this.stepTabSubscription.unsubscribe();
   }
 
 }

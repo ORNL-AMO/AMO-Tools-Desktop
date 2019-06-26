@@ -9,22 +9,29 @@ import { PlaneDataFormComponent } from './fan-analysis-form/plane-data-form/plan
 import { FanShaftPowerFormComponent } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.component';
 import { GasDensityFormComponent } from './fan-analysis-form/gas-density-form/gas-density-form.component';
 import { FanAnalysisService } from './fan-analysis.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../../shared/shared.module';
+import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
+import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
 
 @NgModule({
   declarations: [
-    FanAnalysisComponent, 
-    FanAnalysisBannerComponent, 
-    FanAnalysisFormComponent, 
-    FanAnalysisResultsComponent, 
-    FanInfoFormComponent, 
-    PlaneDataFormComponent, 
+    FanAnalysisComponent,
+    FanAnalysisBannerComponent,
+    FanAnalysisFormComponent,
+    FanAnalysisResultsComponent,
+    FanInfoFormComponent,
+    PlaneDataFormComponent,
     FanShaftPowerFormComponent,
     GasDensityFormComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule
   ],
   exports: [FanAnalysisComponent],
-  providers: [FanAnalysisService]
+  providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService]
 })
 export class FanAnalysisModule { }

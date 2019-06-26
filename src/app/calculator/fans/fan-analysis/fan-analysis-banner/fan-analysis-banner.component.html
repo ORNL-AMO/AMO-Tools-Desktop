@@ -11,16 +11,7 @@
   </div>
   <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
     <div class="nav-item">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'fan-info'}" (click)="changeTab('fan-info')">Fan Info</a>
-    </div>
-    <div class="nav-item">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'gas-density'}" (click)="changeTab('gas-density')">Gas Density</a>
-    </div>
-    <div class="nav-item">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'plane-data'}" (click)="changeTab('plane-data')">Plane Data</a>
-    </div>
-    <div class="nav-item">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'fan-shaft-power'}" (click)="changeTab('fan-shaft-power')">Fan Shaft Power</a>
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'fan-setup'}" (click)="changeTab('fan-setup')">Fan Setup</a>
     </div>
     <div class="nav-item">
       <a class="nav-link" [ngClass]="{'active': mainTab == 'results'}" (click)="changeTab('results')">Results</a>
@@ -34,4 +25,32 @@
       <span class="fa fa-home"></span>
     </div>
   </div> -->
+</nav>
+
+
+<nav class="hide-print w-100">
+  <div class="d-flex tabs subtabs progress-tabs fsat flex-wrap">
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-info'}">
+      <a (click)="changeStepTab('fan-info')">
+        <span class="step-number">1</span> Fan Basics</a>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'gas-density'}">
+      <a (click)="changeStepTab('gas-density')">
+        <span class="step-number">2</span>Gas Density</a>
+      <!-- <app-tabs-tooltip [badgeClass]="fluidClassStatus[0]" [reveal]="fluidBadge.display" [display]="fluidBadge.hover">
+      </app-tabs-tooltip> -->
+    </div>
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'plane-data'}">
+      <a (click)="changeStepTab('plane-data')">
+        <span class="step-number">3</span>Plane Data</a>
+      <!-- <app-tabs-tooltip [badgeClass]="motorClassStatus[0]" [reveal]="motorBadge.display" [display]="motorBadge.hover">
+      </app-tabs-tooltip> -->
+    </div>
+    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-shaft-power'}">
+      <a (click)="changeStepTab('fan-shaft-power')">
+        <span class="step-number">4</span>Field Data</a>
+      <!-- <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display"
+        [display]="fieldDataBadge.hover"></app-tabs-tooltip> -->
+    </div>
+  </div>
 </nav>
