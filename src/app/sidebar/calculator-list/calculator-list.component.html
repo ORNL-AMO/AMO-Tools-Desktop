@@ -52,7 +52,10 @@
       (click)="chooseCalculator('fans')">Fans</span>
     <ul *ngIf="selectedCalculatorType == 'fans'">
       <li [ngClass]="{'selected': selectedCalculator == 'fsat-203'}">
-        <span class="sidebar-item" (click)="selectCalculator('fsat-203')">Fan Analysis</span>
+        <span class="sidebar-item" (click)="selectCalculator('fsat-203')">FSAT 203</span>
+      </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'fan-analysis'}">
+        <span class="sidebar-item" (click)="selectCalculator('fan-analysis')">Fan Analysis</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'system-curve'}">
         <span class="sidebar-item" (click)="selectCalculator('system-curve')">System Curve</span>
@@ -198,8 +201,9 @@
         <span class="sidebar-item" (click)="selectCalculator('natural-gas-reduction')">Natural Gas Reduction</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'compressed-air-reduction'}">
-          <span class="sidebar-item" (click)="selectCalculator('compressed-air-reduction')">Compressed Air Reduction</span>
-        </li>
+        <span class="sidebar-item" (click)="selectCalculator('compressed-air-reduction')">Compressed Air
+          Reduction</span>
+      </li>
     </ul>
   </li>
 </ul>
