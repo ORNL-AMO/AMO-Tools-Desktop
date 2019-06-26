@@ -20,7 +20,7 @@ export class FanAnalysisFormComponent implements OnInit {
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
-    this.inputs.BaseGasDensity
+    this.inputs.FanShaftPower
     this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
       this.stepTab = val;
     })

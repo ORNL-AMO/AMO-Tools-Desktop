@@ -1,0 +1,10 @@
+.group-label{
+    width: 100%;
+    padding-top: .25rem;
+    font-size: medium;
+}
+
+.gas-density-err{
+    color: red;
+    font-weight: bold;
+}

@@ -169,7 +169,7 @@
     <div class="form-group">
       <label for="gasDensity">Gas Density (&rho;
         <sub>0</sub>)</label>
-      <div class="density-val" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
+      <div class="text-center" *ngIf="gasDensityForm.controls.inputType.value != 'custom'">
         <span *ngIf="fanGasDensity.gasDensity">
           {{fanGasDensity.gasDensity | sigFigs: '4'}} lb/ft
           <sup>3</sup>

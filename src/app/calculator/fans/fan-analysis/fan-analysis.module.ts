@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
 import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
+import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,6 @@ import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-
     SharedModule
   ],
   exports: [FanAnalysisComponent],
-  providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService]
+  providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService]
 })
 export class FanAnalysisModule { }
