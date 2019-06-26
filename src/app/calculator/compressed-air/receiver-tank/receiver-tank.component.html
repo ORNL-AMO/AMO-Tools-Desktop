@@ -23,13 +23,13 @@
             </div>
           </div>
           <div class="form-section pt-1">
-            <app-general-method-form *ngIf="method == 0" [toggleResetData]="toggleResetData" [settings]="settings"
+            <app-general-method-form *ngIf="method == 0" [toggleResetData]="toggleResetData" [toggleGenerateExample]="toggleGenerateExample" [settings]="settings"
               (emitChangeField)="changeField($event, 'general-method')"></app-general-method-form>
-            <app-dedicated-storage-form *ngIf="method == 1" [toggleResetData]="toggleResetData" [settings]="settings"
+            <app-dedicated-storage-form *ngIf="method == 1" [toggleResetData]="toggleResetData" [toggleGenerateExample]="toggleGenerateExample" [settings]="settings"
               (emitChangeField)="changeField($event, 'dedicated-storage')"></app-dedicated-storage-form>
-            <app-metered-storage-form *ngIf="method == 2" [toggleResetData]="toggleResetData" [settings]="settings"
+            <app-metered-storage-form *ngIf="method == 2" [toggleResetData]="toggleResetData" [toggleGenerateExample]="toggleGenerateExample" [settings]="settings"
               (emitChangeField)="changeField($event, 'metered-storage')"></app-metered-storage-form>
-            <app-delay-method-form *ngIf="method == 3" [toggleResetData]="toggleResetData" [settings]="settings"
+            <app-delay-method-form *ngIf="method == 3" [toggleResetData]="toggleResetData" [toggleGenerateExample]="toggleGenerateExample" [settings]="settings"
               (emitChangeField)="changeField($event, 'delay-method')"></app-delay-method-form>
           </div>
         </form>

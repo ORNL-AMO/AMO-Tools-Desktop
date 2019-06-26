@@ -1,11 +1,6 @@
 import {Component, OnInit, HostListener, ViewChild, ElementRef, Input} from '@angular/core';
 import {CompressedAirService} from '../compressed-air.service';
 import {Settings} from '../../../shared/models/settings';
-import {GeneralMethodFormComponent} from "./general-method-form/general-method-form.component";
-import {DedicatedStorageFormComponent} from "./dedicated-storage-form/dedicated-storage-form.component";
-import {MeteredStorageFormComponent} from "./metered-storage-form/metered-storage-form.component";
-import {DelayMethodFormComponent} from "./delay-method-form/delay-method-form.component";
-import {AirCapacityFormComponent} from "./air-capacity-form/air-capacity-form.component";
 
 @Component({
   selector: 'app-receiver-tank',
@@ -19,11 +14,6 @@ export class ReceiverTankComponent implements OnInit {
   calcType: string;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild(GeneralMethodFormComponent) generalMethodForm: GeneralMethodFormComponent;
-  @ViewChild(DedicatedStorageFormComponent) dedicatedStorageForm: DedicatedStorageFormComponent;
-  @ViewChild(MeteredStorageFormComponent) meteredStorageForm: MeteredStorageFormComponent;
-  @ViewChild(DelayMethodFormComponent) delayMethodForm: DelayMethodFormComponent;
-  @ViewChild(AirCapacityFormComponent) airCapacityForm: AirCapacityFormComponent;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

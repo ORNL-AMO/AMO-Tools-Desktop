@@ -14,6 +14,8 @@ export class MeteredStorageFormComponent implements OnInit {
   toggleResetData: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  toggleGenerateExample: boolean;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
@@ -32,6 +34,23 @@ export class MeteredStorageFormComponent implements OnInit {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetData();
     }
+    if (changes.toggleGenerateExample && !changes.toggleGenerateExample.firstChange) {
+      this.generateExample();
+    }
+  }
+
+  generateExample() {
+    let tempInputs = {
+      method: 2,
+      lengthOfDemand: 1.5,
+      airFlowRequirement: 900,
+      atmosphericPressure: 14.7,
+      initialTankPressure: 100,
+      finalTankPressure: 70,
+      meteredControl: 45,
+    };
+    this.inputs = this.compressedAirService.convertTankMeteredStorageExample(tempInputs, this.settings);
+    this.getTotalReceiverVolume();
   }
 
   resetData() {

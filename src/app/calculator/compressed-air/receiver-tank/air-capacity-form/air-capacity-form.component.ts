@@ -41,19 +41,19 @@ export class AirCapacityFormComponent implements OnInit {
     }
   }
 
-  resetData() {
-    this.compressedAirService.initReceiverTankInputs();
-    this.inputs = this.compressedAirService.airCapacityInputs;
-    this.getAirCapacity();
-  }
-
   generateExample() {
-    this.inputs = {
+    let tempInputs = {
       tankSize: 1000,
       airPressureIn: 110,
       airPressureOut: 100
     };
-    this.compressedAirService.airCapacityInputs = this.inputs;
+    this.inputs = this.compressedAirService.convertCalculateUsableCapacityExample(tempInputs, this.settings);
+    this.getAirCapacity();
+  }
+
+  resetData() {
+    this.compressedAirService.initReceiverTankInputs();
+    this.inputs = this.compressedAirService.airCapacityInputs;
     this.getAirCapacity();
   }
 
