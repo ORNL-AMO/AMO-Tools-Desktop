@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, HostListener } from '@angular/core';
-import { PhastService } from '../../../phast/phast.service';
-import { FlueGasLossesService } from '../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '../../../../../node_modules/@angular/forms';
-import { FlueGasByVolume, FlueGasByMass } from '../../../shared/models/phast/losses/flueGas';
-import { StackLossService } from './stack-loss.service';
+import {Component, OnInit, ViewChild, Input, ElementRef, HostListener} from '@angular/core';
+import {PhastService} from '../../../phast/phast.service';
+import {FlueGasLossesService} from '../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {Settings} from '../../../shared/models/settings';
+import {FormGroup} from '../../../../../node_modules/@angular/forms';
+import {FlueGasByVolume, FlueGasByMass} from '../../../shared/models/phast/losses/flueGas';
+import {StackLossService} from './stack-loss.service';
 
 @Component({
   selector: 'app-stack-loss-calculator',
@@ -34,7 +34,9 @@ export class StackLossComponent implements OnInit {
 
   stackLossPercent: number = 0;
   boilerEfficiency: number = 0;
-  constructor(private settingsDbService: SettingsDbService, private flueGasLossesService: FlueGasLossesService, private stackLossService: StackLossService, private phastService: PhastService) { }
+
+  constructor(private settingsDbService: SettingsDbService, private flueGasLossesService: FlueGasLossesService, private stackLossService: StackLossService, private phastService: PhastService) {
+  }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -52,15 +54,6 @@ export class StackLossComponent implements OnInit {
     }, 100);
   }
 
-  btnResetData() {
-    this.stackLossService.stackLossInput = {
-      flueGasType: undefined,
-      flueGasByVolume: undefined,
-      flueGasByMass: undefined
-    };
-    this.initForm();
-    this.calculate(this.stackLossForm);
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -71,6 +64,7 @@ export class StackLossComponent implements OnInit {
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string) {
     this.currentField = str;
   }
@@ -146,4 +140,15 @@ export class StackLossComponent implements OnInit {
       }
     }
   }
+
+  btnResetData() {
+    this.stackLossService.stackLossInput = {
+      flueGasType: undefined,
+      flueGasByVolume: undefined,
+      flueGasByMass: undefined
+    };
+    this.initForm();
+    this.calculate(this.stackLossForm);
+  }
+
 }

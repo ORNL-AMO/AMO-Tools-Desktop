@@ -54,11 +54,7 @@ export class PrvComponent implements OnInit {
     }, 50);
   }
 
-  btnResetData() {
-    this.isSuperHeating = false;
-    this.setInletForm(this.prvService.initInletForm(this.settings));
-    this.setFeedwaterForm(this.prvService.initFeedwaterForm(this.settings));
-  }
+
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -79,8 +75,8 @@ export class PrvComponent implements OnInit {
       this.feedwaterForm = this.prvService.getFeedwaterFormFromObj(this.prvService.prvInput, this.settings);
       this.isSuperHeating = this.prvService.isSuperHeating;
     } else {
-      this.inletForm = this.prvService.initInletForm(this.settings);
-      this.feedwaterForm = this.prvService.initFeedwaterForm(this.settings);
+      this.inletForm = this.prvService.resetInletForm(this.settings);
+      this.feedwaterForm = this.prvService.resetFeedwaterForm(this.settings);
     }
   }
 
@@ -164,5 +160,17 @@ export class PrvComponent implements OnInit {
     };
 
     return emptyResults;
+  }
+
+  btnResetData() {
+    this.isSuperHeating = false;
+    this.setInletForm(this.prvService.resetInletForm(this.settings));
+    this.setFeedwaterForm(this.prvService.resetFeedwaterForm(this.settings));
+  }
+
+  btnGenerateExample() {
+    this.isSuperHeating = true;
+    this.setInletForm(this.prvService.initInletForm(this.settings));
+    this.setFeedwaterForm(this.prvService.initFeedwaterForm(this.settings));
   }
 }
