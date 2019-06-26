@@ -1,6 +1,6 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@angular/core';
-import { CompressedAirService } from '../compressed-air.service';
-import { Settings } from '../../../shared/models/settings';
+import {Component, OnInit, HostListener, ViewChild, ElementRef, Input} from '@angular/core';
+import {CompressedAirService} from '../compressed-air.service';
+import {Settings} from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-receiver-tank',
@@ -12,7 +12,7 @@ export class ReceiverTankComponent implements OnInit {
   settings: Settings;
   @Input()
   calcType: string;
-  
+
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
@@ -21,8 +21,8 @@ export class ReceiverTankComponent implements OnInit {
   }
 
   headerHeight: number;
-  
-  methods: Array<{name: string, value: number}> = [
+
+  methods: Array<{ name: string, value: number }> = [
     {
       name: 'General',
       value: 0
@@ -45,15 +45,19 @@ export class ReceiverTankComponent implements OnInit {
   currentField: string = 'default';
   currentForm: string;
   toggleResetData: boolean = false;
+  toggleGenerateExample: boolean = false;
+
   constructor(private compressedAirService: CompressedAirService) {
   }
 
   ngOnInit() {
     this.method = this.compressedAirService.recieverTankMethod;
   }
+
   ngOnDestroy() {
     this.compressedAirService.recieverTankMethod = this.method;
   }
+
   changeField(str: string, formStr: string) {
     this.currentField = str;
     this.currentForm = formStr;
@@ -71,6 +75,10 @@ export class ReceiverTankComponent implements OnInit {
     this.setCurrentForm();
   }
 
+  btnGenerateExample() {
+    this.toggleGenerateExample = !this.toggleGenerateExample;
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -80,13 +88,13 @@ export class ReceiverTankComponent implements OnInit {
   setCurrentForm() {
     if (this.method === 0) {
       this.currentForm = 'general-method';
-    }else if (this.method === 1) {
+    } else if (this.method === 1) {
       this.currentForm = 'dedicated-storage';
-    }else if (this.method === 2) {
+    } else if (this.method === 2) {
       this.currentForm = 'metered-storage';
-    }else if (this.method === 3) {
+    } else if (this.method === 3) {
       this.currentForm = 'delay-method';
-    }else {
+    } else {
       this.currentForm = 'air-capacity';
     }
   }

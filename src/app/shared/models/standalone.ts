@@ -151,7 +151,7 @@ export interface CalculateUsableCapacity {
   tankSize: number;
   airPressureIn: number;
   airPressureOut: number;
-}
+};
 
 
 //======= electricity reduction objects =======

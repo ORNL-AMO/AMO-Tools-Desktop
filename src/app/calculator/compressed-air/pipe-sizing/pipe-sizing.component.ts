@@ -62,4 +62,15 @@ export class PipeSizingComponent implements OnInit {
   setField(str: string) {
     this.currentField = str;
   }
+
+  btnGenerateExample() {
+    let tempInputs = {
+      airFlow: 1000,
+      airlinePressure: 90,
+      designVelocity: 25,
+      atmosphericPressure: 14.7
+    };
+    this.inputs = this.compressedAirService.convertPipeSizingExample(tempInputs, this.settings);
+    this.calculatePipeSize(this.inputs);
+  }
 }
