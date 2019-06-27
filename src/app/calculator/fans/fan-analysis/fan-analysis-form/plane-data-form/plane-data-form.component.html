@@ -70,23 +70,23 @@
       <app-fan-data-form *ngIf="planeStep == '3a'" [planeNum]="'3a'" [planeDescription]="'Additional Traverse Plane 1'"
         [planeData]="planeData.FlowTraverse" (emitSave)="savePlane($event, '3a')" [settings]="settings"
         (emitChangeField)="changeField($event)"></app-fan-data-form>
-      <!--  <app-plane-3-form *ngIf="planeStep == '3a'" [toggleResetData]="toggleResetData" [planeData]="planeData.FlowTraverse"
-        (emitSave)="savePlane($event, '3a')" (showReadingsForm)="toggleReadings()"
-        (emitChangeField)="changeField($event)"></app-plane-3-form> -->
+      <app-plane-three-form *ngIf="planeStep == '3a'" [planeData]="planeData.FlowTraverse"
+        (emitSave)="savePlane($event, '3a')" (emitChangeField)="changeField($event)"></app-plane-three-form>
+      <app-pressure-readings-form *ngIf="planeStep == '3a'" [planeData]="planeData.FlowTraverse"
+        (emitSave)="savePlane($event, '3a')">
+      </app-pressure-readings-form>
       <!--3b-->
       <app-fan-data-form *ngIf="planeStep == '3b'" [planeNum]="'3b'" [planeDescription]="'Additional Traverse Plane 2'"
         [planeData]="planeData.AddlTraversePlanes[0]" (emitSave)="savePlane($event, '3b')" [settings]="settings"
         (emitChangeField)="changeField($event)"></app-fan-data-form>
-      <!-- <app-plane-3-form *ngIf="planeStep == '3b'" [toggleResetData]="toggleResetData"
-        [planeData]="planeData.AddlTraversePlanes[0]" (emitSave)="saveTraversePlane($event, '3b')"
-        (showReadingsForm)="toggleReadings()" (emitChangeField)="changeField($event)"></app-plane-3-form> -->
+      <app-plane-three-form *ngIf="planeStep == '3b'" [planeData]="planeData.AddlTraversePlanes[0]"
+        (emitSave)="saveTraversePlane($event, '3b')" (emitChangeField)="changeField($event)"></app-plane-three-form>
       <!--3c-->
       <app-fan-data-form *ngIf="planeStep == '3c'" [planeNum]="'3c'" [planeDescription]="'Additional Traverse Plane 3'"
         [planeData]="planeData.AddlTraversePlanes[1]" (emitSave)="saveTraversePlane($event, '3c')" [settings]="settings"
         (emitChangeField)="changeField($event)"></app-fan-data-form>
-      <!--   <app-plane-3-form *ngIf="planeStep == '3c'" [toggleResetData]="toggleResetData"
-        [planeData]="planeData.AddlTraversePlanes[1]" (emitSave)="savePlane($event, '3b')"
-        (showReadingsForm)="toggleReadings()" (emitChangeField)="changeField($event)"></app-plane-3-form> -->
+      <app-plane-three-form *ngIf="planeStep == '3c'" [planeData]="planeData.AddlTraversePlanes[1]"
+        (emitSave)="savePlane($event, '3b')" (emitChangeField)="changeField($event)"></app-plane-three-form>
       <!--4-->
       <app-fan-data-form *ngIf="planeStep == '4'" [planeNum]="'4'" [planeDescription]="'Inlet Measurement Plane'"
         [planeData]="planeData.InletMstPlane" (emitSave)="savePlane($event, '4')" [settings]="settings"

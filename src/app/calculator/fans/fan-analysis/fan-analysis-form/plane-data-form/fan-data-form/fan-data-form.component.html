@@ -46,7 +46,7 @@
       </div>
       <div class="form-group">
         <label for="area">Area</label>
-        <div class="area-val">
+        <div class="text-center">
           {{planeData.area | sigFigs: '6'}}
           <span *ngIf="settings.fanFlowRate == 'ft3/min'">ft
             <sup>2</sup>
@@ -109,14 +109,14 @@
     <!--3 velocity data-->
     <div class="form-group" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
       <label for="pv3">Pv3</label>
-      <div class="area-val">
+      <div class="text-center">
         {{velocityData.pv3 | sigFigs: '6'}}
         <span [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
       </div>
     </div>
     <div class="form-group" *ngIf="planeNum == '3a' || planeNum == '3b' || planeNum == '3c'">
       <label for="percent75Rule">Points Satisfying 75% Rule</label>
-      <div class="area-val">
+      <div class="text-center">
         {{velocityData.percent75Rule | number: '1.1-1'}} %
       </div>
     </div>

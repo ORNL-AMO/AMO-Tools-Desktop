@@ -74,13 +74,14 @@ export class FanDataFormComponent implements OnInit {
     this.save();
   }
 
-  calcVelocityData(){
-    let formObj: FormGroup = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
-    if (formObj.status === 'VALID') {
-      debugger
-      this.velocityData = this.fsatService.getVelocityPressureData(this.planeData, this.settings);
-    } else {
-      this.velocityData = { pv3: 0, percent75Rule: 0 };
+  calcVelocityData() {
+    if (this.planeNum == '3a' || this.planeNum == '3b' || this.planeNum == '3c') {
+      // let formObj: FormGroup = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
+      if (this.dataForm.status === 'VALID') {
+        this.velocityData = this.fsatService.getVelocityPressureData(this.planeData, this.settings);
+      } else {
+        this.velocityData = { pv3: 0, percent75Rule: 0 };
+      }
     }
   }
 

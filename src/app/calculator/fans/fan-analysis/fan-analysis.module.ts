@@ -17,6 +17,8 @@ import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-fo
 import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-data-form.service';
 import { PlaneInfoFormComponent } from './fan-analysis-form/plane-data-form/plane-info-form/plane-info-form.component';
 import { FanDataFormComponent } from './fan-analysis-form/plane-data-form/fan-data-form/fan-data-form.component';
+import { PlaneThreeFormComponent } from './fan-analysis-form/plane-data-form/plane-three-form/plane-three-form.component';
+import { PressureReadingsFormComponent } from './fan-analysis-form/plane-data-form/pressure-readings-form/pressure-readings-form.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { FanDataFormComponent } from './fan-analysis-form/plane-data-form/fan-da
     FanShaftPowerFormComponent,
     GasDensityFormComponent,
     PlaneInfoFormComponent,
-    FanDataFormComponent
+    FanDataFormComponent,
+    PlaneThreeFormComponent,
+    PressureReadingsFormComponent
   ],
   imports: [
     CommonModule,
