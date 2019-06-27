@@ -1,4 +1,4 @@
 <app-fan-info-form *ngIf="stepTab == 'fan-info'" [settings]="settings" [fanRatedInfo]="inputs.FanRatedInfo"></app-fan-info-form>
 <app-gas-density-form *ngIf="stepTab == 'gas-density'" [settings]="settings" [fanGasDensity]="inputs.BaseGasDensity"></app-gas-density-form>
-<app-plane-data-form *ngIf="stepTab == 'plane-data'"></app-plane-data-form>
+<app-plane-data-form *ngIf="stepTab == 'plane-data'" [settings]="settings" [fanRatedInfo]="inputs.FanRatedInfo" [planeData]="inputs.PlaneData"></app-plane-data-form>
 <app-fan-shaft-power-form *ngIf="stepTab == 'fan-shaft-power'" [settings]="settings" [fanShaftPower]="inputs.FanShaftPower"></app-fan-shaft-power-form>

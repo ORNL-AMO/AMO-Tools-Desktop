@@ -14,6 +14,9 @@ import { SharedModule } from '../../../shared/shared.module';
 import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
 import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
+import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-data-form.service';
+import { PlaneInfoFormComponent } from './fan-analysis-form/plane-data-form/plane-info-form/plane-info-form.component';
+import { FanDataFormComponent } from './fan-analysis-form/plane-data-form/fan-data-form/fan-data-form.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-fo
     FanInfoFormComponent,
     PlaneDataFormComponent,
     FanShaftPowerFormComponent,
-    GasDensityFormComponent
+    GasDensityFormComponent,
+    PlaneInfoFormComponent,
+    FanDataFormComponent
   ],
   imports: [
     CommonModule,
@@ -33,6 +38,6 @@ import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-fo
     SharedModule
   ],
   exports: [FanAnalysisComponent],
-  providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService]
+  providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService, PlaneDataFormService]
 })
 export class FanAnalysisModule { }
