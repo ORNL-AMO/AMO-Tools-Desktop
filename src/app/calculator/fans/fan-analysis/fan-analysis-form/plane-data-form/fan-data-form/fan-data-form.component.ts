@@ -4,6 +4,7 @@ import { Plane } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
 import { PlaneDataFormService } from '../plane-data-form.service';
 import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
+import { FsatService } from '../../../../../../fsat/fsat.service';
 
 @Component({
   selector: 'app-fan-data-form',
@@ -22,19 +23,19 @@ export class FanDataFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<Plane>();
   @Input()
-  velocityData: { pv3: number, percent75Rule: number };
-  @Input()
   settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
 
   dataForm: FormGroup;
-  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService) { }
+  velocityData: { pv3: number, percent75Rule: number };
+  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService) { }
 
   ngOnInit() {
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
+    this.calcVelocityData();
   }
 
   // ngOnChanges(changes: SimpleChanges) {
@@ -73,6 +74,15 @@ export class FanDataFormComponent implements OnInit {
     this.save();
   }
 
+  calcVelocityData(){
+    let formObj: FormGroup = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
+    if (formObj.status === 'VALID') {
+      debugger
+      this.velocityData = this.fsatService.getVelocityPressureData(this.planeData, this.settings);
+    } else {
+      this.velocityData = { pv3: 0, percent75Rule: 0 };
+    }
+  }
 
   convertArea(area: number): number {
     if (this.settings.fanFlowRate === 'ft3/min') {
@@ -81,8 +91,10 @@ export class FanDataFormComponent implements OnInit {
       return this.convertUnitsService.value(area).from('mm2').to('m2');
     }
   }
+
   save() {
     this.planeData = this.planeDataFormService.getPlaneObjFromForm(this.dataForm, this.planeData);
+    this.calcVelocityData();
     this.emitSave.emit(this.planeData);
   }
 

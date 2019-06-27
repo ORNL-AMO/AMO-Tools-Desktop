@@ -29,5 +29,4 @@ export class FanAnalysisFormComponent implements OnInit {
   ngOnDestroy(){
     this.stepTabSubscription.unsubscribe();
   }
-
 }

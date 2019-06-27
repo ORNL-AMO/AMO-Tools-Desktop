@@ -43,4 +43,8 @@ export class PlaneDataFormComponent implements OnInit {
   changePlaneStepTab(str: string) {
     this.planeDataFormService.planeStep.next(str);
   }
+
+  savePlane(){
+    
+  }
 }
