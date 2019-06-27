@@ -31,6 +31,7 @@ export class PlaneDataFormComponent implements OnInit {
   constructor(private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
+    console.log(this.fanRatedInfo);
     this.planeStepSubscription = this.planeDataFormService.planeStep.subscribe(val => {
       this.planeStep = val;
     })

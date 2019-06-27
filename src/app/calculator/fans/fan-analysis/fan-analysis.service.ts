@@ -6,12 +6,13 @@ import { Fan203Inputs } from '../../../shared/models/fans';
 export class FanAnalysisService {
 
   inputData: Fan203Inputs;
-
+  getResults: BehaviorSubject<boolean>;
   mainTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<string>;
   constructor() {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
+    this.getResults = new BehaviorSubject<boolean>(true);
   }
 
   getMockData(): Fan203Inputs {
