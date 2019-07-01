@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs } from '../../../shared/models/fans';
+import { Fan203Inputs, Plane } from '../../../shared/models/fans';
 
 @Injectable()
 export class FanAnalysisService {
@@ -9,10 +9,12 @@ export class FanAnalysisService {
   getResults: BehaviorSubject<boolean>;
   mainTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<string>;
+  currentField: BehaviorSubject<string>;
   constructor() {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
     this.getResults = new BehaviorSubject<boolean>(true);
+    this.currentField = new BehaviorSubject<string>('default');
   }
 
   getMockData(): Fan203Inputs {
@@ -133,11 +135,11 @@ export class FanAnalysisService {
         amps: 105,
         driveType: "Direct Drive",
         efficiencyBelt: 100,
-        efficiencyClass: 1,
+        efficiencyClass: 'Energy Efficient',
         efficiencyMotor: 100,
         efficiencyVFD: 100,
         fla: 210,
-        frequency: 60,
+        frequency: '60 Hz',
         isMethodOne: false,
         isVFD: "Yes",
         mainsDataAvailable: "Yes",
@@ -165,5 +167,41 @@ export class FanAnalysisService {
     };
 
     return inputs;
+  }
+
+  getPlane(planeNum: string): Plane {
+    if (planeNum == '1') {
+      return this.inputData.PlaneData.FanInletFlange;
+    } else if (planeNum == '2') {
+      return this.inputData.PlaneData.FanEvaseOrOutletFlange;
+    } else if (planeNum == '3a') {
+      return this.inputData.PlaneData.FlowTraverse;
+    } else if (planeNum == '3b') {
+      return this.inputData.PlaneData.AddlTraversePlanes[0];
+    } else if (planeNum == '3c') {
+      return this.inputData.PlaneData.AddlTraversePlanes[1];
+    } else if (planeNum == '4') {
+      return this.inputData.PlaneData.InletMstPlane;
+    } else if (planeNum == '5') {
+      return this.inputData.PlaneData.OutletMstPlane;
+    }
+  }
+
+  setPlane(planeNum: string, planeData: Plane) {
+    if (planeNum == '1') {
+      this.inputData.PlaneData.FanInletFlange = planeData;
+    } else if (planeNum == '2') {
+      this.inputData.PlaneData.FanEvaseOrOutletFlange = planeData;
+    } else if (planeNum == '3a') {
+      this.inputData.PlaneData.FlowTraverse = planeData;
+    } else if (planeNum == '3b') {
+      this.inputData.PlaneData.AddlTraversePlanes[0] = planeData;
+    } else if (planeNum == '3c') {
+      this.inputData.PlaneData.AddlTraversePlanes[1] = planeData;
+    } else if (planeNum == '4') {
+      this.inputData.PlaneData.InletMstPlane = planeData;
+    } else if (planeNum == '5') {
+      this.inputData.PlaneData.OutletMstPlane = planeData;
+    }
   }
 }

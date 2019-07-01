@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FanAnalysisService } from '../fan-analysis.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
-import { Fan203Inputs } from '../../../../shared/models/fans';
 
 @Component({
   selector: 'app-fan-analysis-form',
@@ -12,15 +11,12 @@ import { Fan203Inputs } from '../../../../shared/models/fans';
 export class FanAnalysisFormComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  inputs: Fan203Inputs;
 
   stepTab: string;
   stepTabSubscription: Subscription;
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
-    this.inputs.PlaneData
     this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
       this.stepTab = val;
     })

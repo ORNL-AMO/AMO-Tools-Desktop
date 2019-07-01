@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Plane } from '../../../../../../shared/models/fans';
+import { FanAnalysisService } from '../../../fan-analysis.service';
 
 @Component({
   selector: 'app-pressure-readings-form',
@@ -7,21 +8,25 @@ import { Plane } from '../../../../../../shared/models/fans';
   styleUrls: ['./pressure-readings-form.component.css']
 })
 export class PressureReadingsFormComponent implements OnInit {
-  // @Input()
-  // toggleResetData: boolean;
   @Input()
-  planeData: Plane;
-  @Output('emitSave')
-  emitSave = new EventEmitter<Plane>();
-  // @Output('emitBack')
-  // emitBack = new EventEmitter<boolean>();
+  planeNum: string;
 
   traverseHoles: Array<Array<number>>;
   numLabels: Array<number>;
-  constructor() { }
+  planeData: Plane;
+  constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.numLabels = new Array();
+    this.setPlaneData();
+    this.initializeData();
+  }
+
+  setPlaneData() {
+    this.planeData = this.fanAnalysisService.getPlane(this.planeNum);
+  }
+
+  initializeData() {
     if (this.planeData.traverseData.length !== this.planeData.numInsertionPoints || this.planeData.traverseData[0].length !== this.planeData.numTraverseHoles) {
       let cols = new Array();
       for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
@@ -42,43 +47,11 @@ export class PressureReadingsFormComponent implements OnInit {
     }
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-  //     this.resetData();
-  //   }
-  // }
-
-  // resetData() {
-  //   this.numLabels = new Array();
-  //   if (this.planeData.traverseData.length !== this.planeData.numInsertionPoints || this.planeData.traverseData[0].length !== this.planeData.numTraverseHoles) {
-  //     let cols = new Array();
-  //     for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
-  //       cols.push(0);
-  //       this.numLabels.push(i + 1);
-  //     }
-
-  //     let rows = new Array();
-  //     for (let i = 0; i < this.planeData.numInsertionPoints; i++) {
-  //       rows.push(JSON.parse(JSON.stringify(cols)));
-  //     }
-  //     this.traverseHoles = rows;
-  //   } else {
-  //     this.traverseHoles = this.planeData.traverseData;
-  //     for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
-  //       this.numLabels.push(i + 1);
-  //     }
-  //   }
-  //   this.save();
-  // }
-
   save() {
     this.planeData.traverseData = this.traverseHoles;
-    this.emitSave.emit(this.planeData);
+    this.fanAnalysisService.setPlane(this.planeNum, this.planeData);
+    this.fanAnalysisService.getResults.next(true);
   }
-
-  // goBack() {
-  //   this.emitBack.emit(true);
-  // }
 
   trackByFn(index: any, item: any) {
     return index;

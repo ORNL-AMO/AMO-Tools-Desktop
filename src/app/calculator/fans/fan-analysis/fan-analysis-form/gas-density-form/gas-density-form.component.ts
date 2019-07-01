@@ -5,6 +5,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { GasDensityFormService, GasDensityRanges } from './gas-density-form.service';
 import { FsatService } from '../../../../../fsat/fsat.service';
+import { FanAnalysisService } from '../../fan-analysis.service';
 
 @Component({
   selector: 'app-gas-density-form',
@@ -12,18 +13,8 @@ import { FsatService } from '../../../../../fsat/fsat.service';
   styleUrls: ['./gas-density-form.component.css']
 })
 export class GasDensityFormComponent implements OnInit {
-  // @Input()
-  // toggleResetData: boolean;
-  @Input()
-  fanGasDensity: BaseGasDensity;
-  @Input()
-  gasDone: boolean;
-  @Output('emitSave')
-  emitSave = new EventEmitter<BaseGasDensity>();
   @Input()
   settings: Settings;
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
 
   gasDensityForm: FormGroup;
 
@@ -38,30 +29,29 @@ export class GasDensityFormComponent implements OnInit {
     { display: 'Air', value: 'AIR' },
     { display: 'Other Gas', value: 'OTHER' }
   ];
-  constructor(private convertUnitsService: ConvertUnitsService, private gasDensityFormService: GasDensityFormService, private fsatService: FsatService) { }
+
+  gasDensity: number;
+  constructor(private convertUnitsService: ConvertUnitsService, private gasDensityFormService: GasDensityFormService, private fsatService: FsatService,
+    private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
-    this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(this.fanGasDensity, this.settings);
+    this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings);
+    this.gasDensity = this.fanAnalysisService.inputData.BaseGasDensity.gasDensity;
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-  //     this.resetData();
-  //   }
-  // }
-
   resetData() {
-    this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(this.fanGasDensity, this.settings);
+    this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings);
     this.save();
   }
 
   save() {
-    this.fanGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.emitSave.emit(this.fanGasDensity);
+    this.fanAnalysisService.inputData.BaseGasDensity = this.gasDensityFormService.getGasDensityObjFromForm(this.gasDensityForm);
+    this.gasDensity = this.fanAnalysisService.inputData.BaseGasDensity.gasDensity;
+    this.fanAnalysisService.getResults.next(true);
   }
 
   focusField(str: string) {
-    this.emitChangeField.emit(str);
+    this.fanAnalysisService.currentField.next(str);
   }
 
   getDensity() {

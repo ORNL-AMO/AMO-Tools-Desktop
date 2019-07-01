@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { PlaneData } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
 import { PlaneDataFormService } from '../plane-data-form.service';
+import { FanAnalysisService } from '../../../fan-analysis.service';
 
 @Component({
   selector: 'app-plane-info-form',
@@ -12,46 +13,28 @@ import { PlaneDataFormService } from '../plane-data-form.service';
 })
 export class PlaneInfoFormComponent implements OnInit {
   @Input()
-  planeData: PlaneData;
-  @Output('emitSave')
-  emitSave = new EventEmitter<PlaneData>();
-  @Input()
   settings: Settings;
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
 
   planeInfoForm: FormGroup;
   sumSEF: number;
-  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
-    this.getSum(this.planeData);
-    this.planeInfoForm = this.planeDataFormService.getPlaneInfoFormFromObj(this.planeData);
+    this.getSum(this.fanAnalysisService.inputData.PlaneData);
+    this.planeInfoForm = this.planeDataFormService.getPlaneInfoFormFromObj(this.fanAnalysisService.inputData.PlaneData);
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-  //     this.resetData();
-  //   }
-  // }
-
-  // resetData() {
-  //   this.getSum(this.planeData);
-  //   this.planeInfoForm = this.fsat203Service.getPlaneInfoFormFromObj(this.planeData);
-  //   this.save();
-  // }
-
   focusField(str: string) {
-    this.emitChangeField.emit(str);
+    this.fanAnalysisService.currentField.next(str);
   }
 
   getSum(planeData: PlaneData) {
     this.sumSEF = planeData.inletSEF + planeData.outletSEF;
   }
   save() {
-    this.planeData = this.planeDataFormService.getPlaneInfoObjFromForm(this.planeInfoForm, this.planeData);
-    this.getSum(this.planeData);
-    this.emitSave.emit(this.planeData);
+    this.fanAnalysisService.inputData.PlaneData = this.planeDataFormService.getPlaneInfoObjFromForm(this.planeInfoForm, this.fanAnalysisService.inputData.PlaneData);
+    this.getSum(this.fanAnalysisService.inputData.PlaneData);
+    this.fanAnalysisService.getResults.next(true);
   }
 
   getDisplayUnit(unit: any) {

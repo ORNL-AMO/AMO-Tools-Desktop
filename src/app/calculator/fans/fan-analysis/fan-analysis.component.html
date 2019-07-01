@@ -5,10 +5,10 @@
 
   <div class="d-flex tab-content">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}">
-      <app-fan-analysis-form [settings]="settings" [inputs]="inputs"></app-fan-analysis-form>
+      <app-fan-analysis-form [settings]="settings"></app-fan-analysis-form>
     </div>
     <div class="w-50" [ngStyle]="{'height.px': containerHeight}">
-      <app-help-and-results-panel [settings]="settings" [inputs]="inputs"></app-help-and-results-panel>
+      <app-help-and-results-panel [settings]="settings"></app-help-and-results-panel>
     </div>
   </div>
   <div #footer class="calc-footer d-flex justify-content-between flex-fill" [ngStyle]="{'width.px': footerWidth}">

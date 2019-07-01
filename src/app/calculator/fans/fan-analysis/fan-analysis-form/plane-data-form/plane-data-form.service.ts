@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { PlaneData, Plane } from '../../../../../shared/models/fans';
+import { PlaneData, Plane, FanRatedInfo } from '../../../../../shared/models/fans';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 // import { PlaneRanges } from '../../../fsat-203/fsat-203.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
@@ -160,6 +160,60 @@ export class PlaneDataFormService {
     obj.barometricPressure = form.controls.barometricPressure.value;
     obj.numInletBoxes = form.controls.numInletBoxes.value;
     return obj;
+  }
+
+
+  checkPlaneDataValid(planeData: PlaneData, fanRatedInfo: FanRatedInfo, settings: Settings): boolean {
+    let isValid: boolean = true;
+    if (planeData !== undefined) {
+      //i
+      let form: FormGroup = this.getPlaneInfoFormFromObj(planeData);
+      if (form.valid == false) {
+        isValid = false;
+      }
+      //1
+      form = this.getPlaneFormFromObj(planeData.FanInletFlange, settings, '1');
+      if (form.valid == false) {
+        isValid = false;
+      }
+      //2
+      form = this.getPlaneFormFromObj(planeData.FanEvaseOrOutletFlange, settings, '2');
+      if (form.valid == false) {
+        isValid = false;
+      }
+      //3a
+      form = this.getPlaneFormFromObj(planeData.FlowTraverse, settings, '3a');
+      if (form.valid == false) {
+        isValid = false;
+      }
+      //3b
+      if (fanRatedInfo.traversePlanes > 1) {
+        form = this.getPlaneFormFromObj(planeData.AddlTraversePlanes[0], settings, '3b');
+        if (form.valid == false) {
+          isValid = false;
+        }
+      }
+      //3c
+      if (fanRatedInfo.traversePlanes == 3) {
+        form = this.getPlaneFormFromObj(planeData.AddlTraversePlanes[1], settings, '3b');
+        if (form.valid == false) {
+          isValid = false;
+        }
+      }
+      //4
+      form = this.getPlaneFormFromObj(planeData.InletMstPlane, settings, '4');
+      if (form.valid == false) {
+        isValid = false;
+      }
+      //5
+      form = this.getPlaneFormFromObj(planeData.OutletMstPlane, settings, '5');
+      if (form.valid == false) {
+        isValid = false;
+      }
+    }else{
+      isValid = false;
+    }
+    return isValid;
   }
 }
 

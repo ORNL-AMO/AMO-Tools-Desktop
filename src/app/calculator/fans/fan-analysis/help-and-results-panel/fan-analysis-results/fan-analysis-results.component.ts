@@ -4,6 +4,10 @@ import { FanAnalysisService } from '../../fan-analysis.service';
 import { FsatService } from '../../../../../fsat/fsat.service';
 import { Settings } from '../../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
+import { GasDensityFormService } from '../../fan-analysis-form/gas-density-form/gas-density-form.service';
+import { PlaneDataFormService } from '../../fan-analysis-form/plane-data-form/plane-data-form.service';
+import { FanShaftPowerFormService } from '../../fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
+import { FanInfoFormService } from '../../fan-analysis-form/fan-info-form/fan-info-form.service';
 
 @Component({
   selector: 'app-fan-analysis-results',
@@ -13,15 +17,16 @@ import { Subscription } from 'rxjs';
 export class FanAnalysisResultsComponent implements OnInit {
   @Input()
   settings: Settings
-  @Input()
-  inputs: Fan203Inputs;
+  // @Input()
+  // inputs: Fan203Inputs;
 
   tabSelect: string = 'results';
   results: Fan203Results;
 
   getResultsSub: Subscription;
 
-  constructor(private fanAnalysisService: FanAnalysisService, private fsatService: FsatService) { }
+  constructor(private fanAnalysisService: FanAnalysisService, private fsatService: FsatService, private gasDensityFormService: GasDensityFormService,
+    private planeDataFormService: PlaneDataFormService, private fanShaftPowerFormService: FanShaftPowerFormService, private fanInfoFormService: FanInfoFormService) { }
 
   ngOnInit() {
     this.getResultsSub = this.fanAnalysisService.getResults.subscribe(val => {
@@ -29,20 +34,19 @@ export class FanAnalysisResultsComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.getResultsSub.unsubscribe();
   }
 
   calculateResults() {
-    let planeDataDone: boolean;
-    let basicsDone: boolean;
-    let gasDone: boolean;
-    let shaftPowerDone: boolean;
-
+    let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
+    let basicsDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings).valid;
+    let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
+    let shaftPowerDone: boolean = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower).valid;
 
     if (planeDataDone && basicsDone && gasDone && shaftPowerDone) {
-      // this.planeResults = this.fsatService.getPlaneResults(this.inputs, this.settings);
-      this.results = this.fsatService.fan203(this.inputs, this.settings);
+      // this.planeResults = this.fsatService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
+      this.results = this.fsatService.fan203(this.fanAnalysisService.inputData, this.settings);
     } else {
       this.results = {
         fanEfficiencyTotalPressure: 0,

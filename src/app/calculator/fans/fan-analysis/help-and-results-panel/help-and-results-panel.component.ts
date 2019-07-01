@@ -10,11 +10,10 @@ import { Fan203Inputs } from '../../../../shared/models/fans';
 export class HelpAndResultsPanelComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  inputs: Fan203Inputs;
+  // @Input()
+  // inputs: Fan203Inputs;
 
   tabSelect: string = 'results';
-
   constructor() { }
 
   ngOnInit() {

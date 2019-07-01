@@ -5,6 +5,7 @@ import { Settings } from '../../../../../../shared/models/settings';
 import { PlaneDataFormService } from '../plane-data-form.service';
 import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
 import { FsatService } from '../../../../../../fsat/fsat.service';
+import { FanAnalysisService } from '../../../fan-analysis.service';
 
 @Component({
   selector: 'app-fan-data-form',
@@ -12,42 +13,30 @@ import { FsatService } from '../../../../../../fsat/fsat.service';
   styleUrls: ['./fan-data-form.component.css']
 })
 export class FanDataFormComponent implements OnInit {
-  // @Input()
-  // toggleResetData: boolean;
-  @Input()
-  planeData: Plane;
   @Input()
   planeNum: string;
   @Input()
   planeDescription: string;
-  @Output('emitSave')
-  emitSave = new EventEmitter<Plane>();
   @Input()
   settings: Settings;
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
 
 
   dataForm: FormGroup;
   velocityData: { pv3: number, percent75Rule: number };
-  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService) { }
+  planeData: Plane;
+  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
+    this.setPlaneData();
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
     this.calcVelocityData();
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-  //     this.resetData();
-  //   }
-  // }
+  setPlaneData() {
+    this.planeData = this.fanAnalysisService.getPlane(this.planeNum);
+  }
 
-  // resetData() {
-  //   this.dataForm = this.fsat203Service.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
-  //   this.calcArea();
-  // }
 
   calcArea() {
     let tmpData = this.planeDataFormService.getPlaneObjFromForm(this.dataForm, this.planeData);
@@ -76,7 +65,6 @@ export class FanDataFormComponent implements OnInit {
 
   calcVelocityData() {
     if (this.planeNum == '3a' || this.planeNum == '3b' || this.planeNum == '3c') {
-      // let formObj: FormGroup = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
       if (this.dataForm.status === 'VALID') {
         this.velocityData = this.fsatService.getVelocityPressureData(this.planeData, this.settings);
       } else {
@@ -96,11 +84,12 @@ export class FanDataFormComponent implements OnInit {
   save() {
     this.planeData = this.planeDataFormService.getPlaneObjFromForm(this.dataForm, this.planeData);
     this.calcVelocityData();
-    this.emitSave.emit(this.planeData);
+    this.fanAnalysisService.setPlane(this.planeNum, this.planeData);
+    this.fanAnalysisService.getResults.next(true);
   }
 
   focusField(str: string) {
-    this.emitChangeField.emit(str);
+    this.fanAnalysisService.currentField.next(str);
   }
 
   getDisplayUnit(unit: any) {

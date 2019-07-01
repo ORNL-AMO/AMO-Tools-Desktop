@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FanRatedInfo } from '../../../../../shared/models/fans';
+import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { HelpPanelService } from '../../../../../fsat/help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { FanInfoFormService } from './fan-info-form.service';
+import { FanAnalysisService } from '../../fan-analysis.service';
 
 @Component({
   selector: 'app-fan-info-form',
@@ -12,20 +11,8 @@ import { FanInfoFormService } from './fan-info-form.service';
   styleUrls: ['./fan-info-form.component.css']
 })
 export class FanInfoFormComponent implements OnInit {
-  // @Input()
-  // toggleResetData: boolean;
-  @Input()
-  fanRatedInfo: FanRatedInfo;
-  @Input()
-  basicsDone: boolean;
-  @Output('emitSave')
-  emitSave = new EventEmitter<FanRatedInfo>();
-  @Output('updateBarometricPressure')
-  updateBarometricPressure = new EventEmitter<FanRatedInfo>();
   @Input()
   settings: Settings;
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
 
   ratedInfoForm: FormGroup;
 
@@ -33,34 +20,38 @@ export class FanInfoFormComponent implements OnInit {
     1, 2, 3
   ];
 
-  constructor(private helpPanelService: HelpPanelService, private fanInfoFormService: FanInfoFormService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private fanInfoFormService: FanInfoFormService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
-    this.ratedInfoForm = this.fanInfoFormService.getBasicsFormFromObject(this.fanRatedInfo, this.settings);
+    this.ratedInfoForm = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
-  //     this.resetData();
-  //   }
-  // }
-
   resetData() {
-    this.ratedInfoForm = this.fanInfoFormService.getBasicsFormFromObject(this.fanRatedInfo, this.settings);
+    this.ratedInfoForm = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
     this.save();
   }
 
   focusField(str: string) {
-    this.emitChangeField.emit(str);
+    this.fanAnalysisService.currentField.next(str);
   }
 
   updatePressure() {
-    this.fanRatedInfo = this.fanInfoFormService.getBasicsObjectFromForm(this.ratedInfoForm);
-    this.updateBarometricPressure.emit(this.fanRatedInfo);
+    this.fanAnalysisService.inputData.FanRatedInfo = this.fanInfoFormService.getBasicsObjectFromForm(this.ratedInfoForm);
+    this.fanAnalysisService.inputData
+    this.fanAnalysisService.inputData.PlaneData.FanInletFlange.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
+    this.fanAnalysisService.inputData.PlaneData.FanEvaseOrOutletFlange.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
+    this.fanAnalysisService.inputData.PlaneData.FlowTraverse.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
+    let i: number = 1;
+    this.fanAnalysisService.inputData.PlaneData.AddlTraversePlanes.forEach(plane => {
+      plane.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
+    });
+    this.fanAnalysisService.inputData.PlaneData.InletMstPlane.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
+    this.fanAnalysisService.inputData.PlaneData.OutletMstPlane.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
+    this.fanAnalysisService.getResults.next(true);
   }
   save() {
-    this.fanRatedInfo = this.fanInfoFormService.getBasicsObjectFromForm(this.ratedInfoForm);
-    this.emitSave.emit(this.fanRatedInfo);
+    this.fanAnalysisService.inputData.FanRatedInfo = this.fanInfoFormService.getBasicsObjectFromForm(this.ratedInfoForm);
+    this.fanAnalysisService.getResults.next(true);
   }
 
   getDisplayUnit(unit: any) {

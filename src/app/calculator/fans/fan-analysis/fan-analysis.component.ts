@@ -25,7 +25,7 @@ export class FanAnalysisComponent implements OnInit {
     this.getContainerHeight();
   }
 
-  inputs: Fan203Inputs;
+  // inputs: Fan203Inputs;
   containerHeight: number;
   footerWidth: number;
   stepTabs: Array<string> = ['fan-info', 'gas-density', 'plane-data', 'fan-shaft-power'];
@@ -42,10 +42,10 @@ export class FanAnalysisComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    this.inputs = this.fanAnalysisService.inputData;
-    if (this.inputs === undefined) {
-      this.inputs = this.fanAnalysisService.getMockData();
-      this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+    // this.inputs = this.fanAnalysisService.inputData;
+    if (this.fanAnalysisService.inputData === undefined) {
+      this.fanAnalysisService.inputData = this.fanAnalysisService.getMockData();
+      this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
     }
     this.setPlaneStepTabs();
     this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
@@ -82,11 +82,11 @@ export class FanAnalysisComponent implements OnInit {
   }
 
   setPlaneStepTabs() {
-    if (this.inputs.FanRatedInfo.traversePlanes == 1) {
+    if (this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes == 1) {
       this.planeStepTabs = ['plane-info', '1', '2', '3a', '4', '5'];
-    } else if (this.inputs.FanRatedInfo.traversePlanes == 2) {
+    } else if (this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes == 2) {
       this.planeStepTabs = ['plane-info', '1', '2', '3a', '3b', '4', '5'];
-    } else if (this.inputs.FanRatedInfo.traversePlanes == 3) {
+    } else if (this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes == 3) {
       this.planeStepTabs = ['plane-info', '1', '2', '3a', '3b', '3c', '4', '5'];
     }
   }
