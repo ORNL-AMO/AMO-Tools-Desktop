@@ -23,26 +23,38 @@ export class PlanarResultsComponent implements OnInit {
   getResultsSubscription: Subscription;
   planeResults: PlaneResults;
   inputs: Fan203Inputs;
+  stepTabSubscription: Subscription;
+  stepTab: string;
+  planeStepSubscription: Subscription;
+  planeStep: string;
   constructor(private fsatService: FsatService, private fanAnalysisService: FanAnalysisService, private gasDensityFormService: GasDensityFormService, private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
       this.getResults();
     })
+    this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
+      this.stepTab = val;
+    })
+    this.planeStepSubscription = this.planeDataFormService.planeStep.subscribe(val => {
+      this.planeStep = val;
+    })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.getResultsSubscription.unsubscribe();
+    this.stepTabSubscription.unsubscribe();
+    this.planeStepSubscription.unsubscribe();
   }
 
-  getResults(){
+  getResults() {
     this.inputs = this.fanAnalysisService.inputData;
     let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
     let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
-    if(gasDone && planeDataDone){
+    if (gasDone && planeDataDone) {
       this.planeResults = this.fsatService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
-    }else{
-      this.planeResults ;
+    } else {
+      this.planeResults;
     }
   }
 

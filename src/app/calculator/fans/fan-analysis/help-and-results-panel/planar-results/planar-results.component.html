@@ -47,7 +47,7 @@
           <span [innerHTML]="settings.fanBarometricPressure | settingsLabel"></span>
         </td>
       </tr>
-      <tr>
+      <tr [ngClass]="{'active': stepTab == 'plane-data' && planeStep == '1'}">
         <td>1</td>
         <td *ngIf="showFull">Fan Inlet Flange</td>
         <td>{{planeResults.FanInletFlange.gasDensity | sigFigs: '6'}}</td>
@@ -63,7 +63,7 @@
           {{planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.barometricPressure | sigFigs: '6'}}</td>
       </tr>
-      <tr>
+      <tr [ngClass]="{'active': stepTab == 'plane-data' && planeStep == '2'}">
         <td>2</td>
         <td *ngIf="showFull">Fan or Evase Outlet Flange</td>
         <td>{{planeResults.FanOrEvaseOutletFlange.gasDensity | sigFigs: '6'}}</td>
@@ -78,7 +78,7 @@
           {{planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.barometricPressure | sigFigs: '6'}}</td>
       </tr>
-      <tr>
+      <tr [ngClass]="{'active': stepTab == 'plane-data' && planeStep == '3a'}">
         <td>3a</td>
         <td *ngIf="showFull">Flow Traverse</td>
         <td>{{planeResults.FlowTraverse.gasDensity | sigFigs: '6'}}</td>
@@ -91,7 +91,7 @@
         <td>{{planeResults.FlowTraverse.gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FlowTraverse.barometricPressure | sigFigs: '6'}}</td>
       </tr>
-      <tr *ngIf="inputs.PlaneData.AddlTraversePlanes.length > 0">
+      <tr [ngClass]="{'active': stepTab == 'plane-data' && planeStep == '3b'}" *ngIf="inputs.PlaneData.AddlTraversePlanes.length > 0">
         <td>3b</td>
         <td *ngIf="showFull">Add'l Traverse Plane 1</td>
         <td>{{planeResults.AddlTraversePlanes[0].gasDensity | sigFigs: '6'}}</td>
@@ -104,7 +104,7 @@
         <td>{{planeResults.AddlTraversePlanes[0].gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[0].barometricPressure | sigFigs: '6'}}</td>
       </tr>
-      <tr *ngIf="inputs.PlaneData.AddlTraversePlanes.length > 1">
+      <tr [ngClass]="{'active': stepTab == 'plane-data' && planeStep == '3c'}" *ngIf="inputs.PlaneData.AddlTraversePlanes.length > 1">
         <td>3c</td>
         <td *ngIf="showFull">Add'l Traverse Plane 2</td>
         <td>{{planeResults.AddlTraversePlanes[1].gasDensity | sigFigs: '6'}}</td>
@@ -117,7 +117,7 @@
         <td>{{planeResults.AddlTraversePlanes[1].gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.AddlTraversePlanes[1].barometricPressure | sigFigs: '6'}}</td>
       </tr>
-      <tr>
+      <tr [ngClass]="{'active': stepTab == 'plane-data' && planeStep == '4'}">
         <td>4</td>
         <td *ngIf="showFull">Inlet Measurement Plane</td>
         <td>{{planeResults.InletMstPlane.gasDensity | sigFigs: '6'}}</td>
@@ -130,7 +130,7 @@
         <td>{{planeResults.InletMstPlane.gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.InletMstPlane.barometricPressure | sigFigs: '6'}}</td>
       </tr>
-      <tr>
+      <tr [ngClass]="{'active': stepTab == 'plane-data' && planeStep == '5'}">
         <td>5</td>
         <td *ngIf="showFull">Outlet Measurement Plane</td>
         <td>{{planeResults.OutletMstPlane.gasDensity | sigFigs: '6'}}</td>

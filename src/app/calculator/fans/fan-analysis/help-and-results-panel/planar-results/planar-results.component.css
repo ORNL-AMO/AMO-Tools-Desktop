@@ -18,3 +18,7 @@ tbody{
 .group-label{
     font-weight: bold;
 }
+
+tr.active{
+    background-color: #FFE400 !important;
+}
