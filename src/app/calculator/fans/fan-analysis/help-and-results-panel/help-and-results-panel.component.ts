@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { Fan203Inputs } from '../../../../shared/models/fans';
+import { Fan203Inputs, FanRatedInfo } from '../../../../shared/models/fans';
+import { FanAnalysisService } from '../fan-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-help-and-results-panel',
@@ -14,9 +16,18 @@ export class HelpAndResultsPanelComponent implements OnInit {
   // inputs: Fan203Inputs;
 
   tabSelect: string = 'results';
-  constructor() { }
+  fanRatedInfo: FanRatedInfo;
+  getResultsSubscription: Subscription;
+  constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
+    this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
+      this.fanRatedInfo = this.fanAnalysisService.inputData.FanRatedInfo;
+    })
+  }
+
+  ngOnDestroy(){
+    this.getResultsSubscription.unsubscribe();
   }
 
   setTab(str: string) {

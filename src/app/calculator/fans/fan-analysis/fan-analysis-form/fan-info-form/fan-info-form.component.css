@@ -5,5 +5,13 @@
 }
 
 form{
-    font-size: 15px;
+    font-size: 13px;
+}
+
+label{
+    font-size: small;
+}
+
+.form-control{
+    font-size: small;
 }

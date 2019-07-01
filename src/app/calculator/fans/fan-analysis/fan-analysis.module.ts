@@ -20,6 +20,7 @@ import { FanDataFormComponent } from './fan-analysis-form/plane-data-form/fan-da
 import { PlaneThreeFormComponent } from './fan-analysis-form/plane-data-form/plane-three-form/plane-three-form.component';
 import { PressureReadingsFormComponent } from './fan-analysis-form/plane-data-form/pressure-readings-form/pressure-readings-form.component';
 import { HelpAndResultsPanelComponent } from './help-and-results-panel/help-and-results-panel.component';
+import { PlanarResultsComponent } from './help-and-results-panel/planar-results/planar-results.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { HelpAndResultsPanelComponent } from './help-and-results-panel/help-and-
     FanDataFormComponent,
     PlaneThreeFormComponent,
     PressureReadingsFormComponent,
-    HelpAndResultsPanelComponent
+    HelpAndResultsPanelComponent,
+    PlanarResultsComponent
   ],
   imports: [
     CommonModule,
