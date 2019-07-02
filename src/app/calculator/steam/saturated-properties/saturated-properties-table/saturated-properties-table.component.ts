@@ -11,6 +11,8 @@ export class SaturatedPropertiesTableComponent implements OnInit {
   @Input()
   toggleResetData: boolean;
   @Input()
+  toggleExampleData: boolean;
+  @Input()
   settings: Settings;
   @Input()
   data: { pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number };
@@ -30,6 +32,8 @@ export class SaturatedPropertiesTableComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetTable();
+    } if (changes.toggleExampleData && !changes.toggleExampleData.firstChange) {
+      //this.addRow();
     }
     if (changes.data && !changes.data.firstChange) {
       this.addRow();

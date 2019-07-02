@@ -27,6 +27,22 @@ export class DeaeratorService {
     return tmpForm;
   }
 
+  resetForm(settings: Settings): FormGroup {
+    let ranges: DeaeratorRanges = this.getRangeValues(settings, 2, 1);
+    let tmpForm: FormGroup = this.formBuilder.group({
+      deaeratorPressure: ['', [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
+      ventRate: ['', [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
+      feedwaterMassFlow: ['', [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
+      waterPressure: ['', [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
+      waterThermodynamicQuantity: [1, [Validators.required]],
+      waterQuantityValue: ['', [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
+      steamPressure: ['', [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
+      steamThermodynamicQuantity: [2, [Validators.required]],
+      steamQuantityValue: ['', [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
+    });
+    return tmpForm;
+  }
+
   getFormFromObj(inputObj: DeaeratorInput, settings: Settings): FormGroup {
     let ranges: DeaeratorRanges = this.getRangeValues(settings, inputObj.steamThermodynamicQuantity, inputObj.waterThermodynamicQuantity);
     let tmpForm: FormGroup = this.formBuilder.group({

@@ -14,6 +14,17 @@ export class HeatLossService {
   initForm(settings: Settings): FormGroup {
     let ranges: HeatLossRanges = this.getRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
+      inletPressure: ['653', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
+      thermodynamicQuantity: [0, [Validators.required]], //0 is TEMPERATURE
+      quantityValue: ['1121.9', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      inletMassFlow: ['13.6', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
+      percentHeatLoss: ['8.47', [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
+    });
+    return tmpForm;
+  }
+  resetForm(settings: Settings): FormGroup {
+    let ranges: HeatLossRanges = this.getRangeValues(settings, 0);
+    let tmpForm: FormGroup = this.formBuilder.group({
       inletPressure: ['', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]], //0 is TEMPERATURE
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],

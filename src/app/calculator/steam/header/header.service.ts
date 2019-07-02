@@ -13,13 +13,22 @@ export class HeaderService {
   initHeaderForm(settings: Settings): FormGroup {
     let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
     let tmpForm: FormGroup = this.formBuilder.group({
-      headerPressure: ['', [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
+      headerPressure: ['357.2', [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
       numInlets: [3, [Validators.required]]
     });
     return tmpForm;
   }
 
-  initInletForm(settings: Settings): FormGroup {
+  resetHeaderForm(settings: Settings): FormGroup {
+    let ranges: { min: number, max: number } = this.getPressureRangeValues(settings);
+    let tmpForm: FormGroup = this.formBuilder.group({
+      headerPressure: ['', [Validators.required, Validators.min(ranges.min), Validators.max(ranges.max)]],
+      numInlets: [0, [Validators.required]]
+    });
+    return tmpForm;
+  }
+
+  resetInletForm(settings: Settings): FormGroup {
     let ranges: InletRanges = this.getInletRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
       pressure: ['', [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
@@ -28,6 +37,33 @@ export class HeaderService {
       massFlow: ['', [Validators.required, Validators.min(ranges.massFlowMin)]]
     });
     return tmpForm;
+  }
+
+  initInletForm(settings: Settings): Array<FormGroup> {
+    let inletForms = new Array<FormGroup>();
+    let ranges: InletRanges = this.getInletRangeValues(settings, 0);
+    let tmpForm: FormGroup = this.formBuilder.group({
+      pressure: ['586.9', [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
+      thermodynamicQuantity: [0, [Validators.required]],
+      quantityValue: ['108.2', [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
+      massFlow: ['83.9', [Validators.required, Validators.min(ranges.massFlowMin)]]
+    });
+    inletForms.push(tmpForm);
+    tmpForm = this.formBuilder.group({
+      pressure: ['529.3', [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
+      thermodynamicQuantity: [0, [Validators.required]],
+      quantityValue: ['351.4', [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
+      massFlow: ['73.9', [Validators.required, Validators.min(ranges.massFlowMin)]]
+    });
+    inletForms.push(tmpForm);
+    tmpForm = this.formBuilder.group({
+      pressure: ['583.7', [Validators.required, Validators.min(ranges.pressureMin), Validators.max(ranges.pressureMax)]],
+      thermodynamicQuantity: [0, [Validators.required]],
+      quantityValue: ['468', [Validators.required, Validators.min(ranges.quantityMin), Validators.max(ranges.quantityMax)]],
+      massFlow: ['39.2', [Validators.required, Validators.min(ranges.massFlowMin)]]
+    });
+    inletForms.push(tmpForm);
+    return inletForms;
   }
 
   getHeaderFormFromObj(inputObj: HeaderInput, settings: Settings): FormGroup {

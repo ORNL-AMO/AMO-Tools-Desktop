@@ -14,6 +14,10 @@
         <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
           Reset Data
         </button>
+        <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+        <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          Generate Example
+        </button>
       </div>
     </div>
   </div>
@@ -34,7 +38,7 @@
       <app-turbine-help class="w-100" *ngIf="tabSelect == 'help'" [currentField]="currentField" [settings]="settings"
         [outletQuantity]="input.outletQuantity" [inletQuantity]="input.inletQuantity" [turbineProperty]="input.turbineProperty"></app-turbine-help>
       <div class="d-flex flex-column w-100 align-items-center p-4" *ngIf="tabSelect == 'results'">
-        <app-turbine-results class="w-100" [results]="results" [settings]="settings"></app-turbine-results>
+        <app-turbine-results class="w-100" [results]="results" [toggleGenerateExample]="toggleGenerateExample"  [settings]="settings"></app-turbine-results>
       </div>
     </div>
   </div>

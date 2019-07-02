@@ -14,8 +14,20 @@ export class FlashTankService {
   initForm(settings: Settings): FormGroup {
     let ranges: FlashTankRanges = this.getRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
+      inletWaterPressure: ['711', [Validators.required, Validators.min(ranges.inletWaterPressureMin), Validators.max(ranges.inletWaterPressureMax)]],
+      thermodynamicQuantity: [3, [Validators.required]],
+      quantityValue: ['0', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      inletWaterMassFlow: ['83', [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
+      tankPressure: ['197', [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
+    });
+    return tmpForm;
+  }
+
+  resetForm(settings: Settings): FormGroup {
+    let ranges: FlashTankRanges = this.getRangeValues(settings, 0);
+    let tmpForm: FormGroup = this.formBuilder.group({
       inletWaterPressure: ['', [Validators.required, Validators.min(ranges.inletWaterPressureMin), Validators.max(ranges.inletWaterPressureMax)]],
-      thermodynamicQuantity: [1, [Validators.required]],
+      thermodynamicQuantity: [3, [Validators.required]],
       quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       inletWaterMassFlow: ['', [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
       tankPressure: ['', [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
