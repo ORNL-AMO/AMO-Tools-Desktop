@@ -3,6 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { Fan203Inputs, FanRatedInfo } from '../../../../shared/models/fans';
 import { FanAnalysisService } from '../fan-analysis.service';
 import { Subscription } from 'rxjs';
+import { PlaneDataFormService } from '../fan-analysis-form/plane-data-form/plane-data-form.service';
 
 @Component({
   selector: 'app-help-and-results-panel',
@@ -18,16 +19,22 @@ export class HelpAndResultsPanelComponent implements OnInit {
   tabSelect: string = 'results';
   fanRatedInfo: FanRatedInfo;
   getResultsSubscription: Subscription;
-  constructor(private fanAnalysisService: FanAnalysisService) { }
+  planeStepSubscription: Subscription;
+  planeStep: string;
+  constructor(private fanAnalysisService: FanAnalysisService, private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
       this.fanRatedInfo = this.fanAnalysisService.inputData.FanRatedInfo;
+    });
+    this.planeStepSubscription = this.planeDataFormService.planeStep.subscribe(val => {
+      this.planeStep = val;
     })
   }
 
   ngOnDestroy(){
     this.getResultsSubscription.unsubscribe();
+    this.planeStepSubscription.unsubscribe();
   }
 
   setTab(str: string) {

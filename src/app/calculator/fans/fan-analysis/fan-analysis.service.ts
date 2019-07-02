@@ -95,6 +95,25 @@ export class FanAnalysisService {
               [.639, .542, .53, .57, .603, .75, .965, 1.014, 1.246, 1.596],
               [.554, .452, .453, .581, .551, .724, .844, 1.077, 1.323, 1.62]
             ]
+          },
+          {
+            area: 32.54615902777778,
+            barometricPressure: 26.57,
+            dryBulbTemp: 123,
+            length: 143.63,
+            numInletBoxes: 0,
+            numInsertionPoints: 3,
+            numTraverseHoles: 10,
+            pitotTubeCoefficient: 0.86,
+            pitotTubeType: "S-Type",
+            planeType: "Rectangular",
+            staticPressure: -17,
+            width: 32.63,
+            traverseData: [
+              [.662, .568, .546, .564, .463, .507, .865, 1.17, 1.247, 1.63],
+              [.639, .542, .53, .57, .603, .75, .965, 1.014, 1.246, 1.596],
+              [.554, .452, .453, .581, .551, .724, .844, 1.077, 1.323, 1.62]
+            ]
           }
         ],
         InletMstPlane: {

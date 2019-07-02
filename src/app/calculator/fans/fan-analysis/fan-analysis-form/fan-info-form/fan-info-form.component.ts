@@ -37,11 +37,9 @@ export class FanInfoFormComponent implements OnInit {
 
   updatePressure() {
     this.fanAnalysisService.inputData.FanRatedInfo = this.fanInfoFormService.getBasicsObjectFromForm(this.ratedInfoForm);
-    this.fanAnalysisService.inputData
     this.fanAnalysisService.inputData.PlaneData.FanInletFlange.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
     this.fanAnalysisService.inputData.PlaneData.FanEvaseOrOutletFlange.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
     this.fanAnalysisService.inputData.PlaneData.FlowTraverse.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
-    let i: number = 1;
     this.fanAnalysisService.inputData.PlaneData.AddlTraversePlanes.forEach(plane => {
       plane.barometricPressure = this.fanAnalysisService.inputData.FanRatedInfo.globalBarometricPressure;
     });

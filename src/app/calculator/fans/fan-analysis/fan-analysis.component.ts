@@ -34,6 +34,8 @@ export class FanAnalysisComponent implements OnInit {
   stepIndex: number = 0;
   stepTabSubscription: Subscription;
   planeTabSubscription: Subscription;
+  getResultsSubscription: Subscription;
+
   constructor(private settingsDbService: SettingsDbService, private fanAnalysisService: FanAnalysisService, private convertFsatService: ConvertFsatService,
     private planeDataFormService: PlaneDataFormService) { }
 
@@ -55,11 +57,22 @@ export class FanAnalysisComponent implements OnInit {
       this.setPlaneTabIndex(val);
     });
 
+    this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
+      this.setPlaneStepTabs();
+      if (this.planeStepTabs[this.planeStepIndex] == '3b' && this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes == 1) {
+        this.setPlaneTabIndex('3a');
+      }
+      if (this.planeStepTabs[this.planeStepIndex] == '3c' && this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes != 3) {
+        this.setPlaneTabIndex('3a');
+      }
+    });
+
   }
 
   ngOnDestroy() {
     this.stepTabSubscription.unsubscribe();
     this.planeTabSubscription.unsubscribe();
+    this.getResultsSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {

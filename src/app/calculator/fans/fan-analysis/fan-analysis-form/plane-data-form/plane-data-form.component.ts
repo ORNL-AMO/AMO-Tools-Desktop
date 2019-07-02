@@ -23,7 +23,6 @@ export class PlaneDataFormComponent implements OnInit {
     this.planeStepSubscription = this.planeDataFormService.planeStep.subscribe(val => {
       this.planeStep = val;
     })
-
     this.numTraversePlanes = this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes;
   }
 
