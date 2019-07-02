@@ -185,6 +185,7 @@ export class PsatComponent implements OnInit {
     this.psatTabService.secondaryTab.next('explore-opportunities');
     this.psatTabService.mainTab.next('system-setup');
     this.psatTabService.stepTab.next('system-basics');
+    this.psatTabService.modifyConditionsTab.next('pump-fluid');
   }
 
   ngAfterViewInit() {
