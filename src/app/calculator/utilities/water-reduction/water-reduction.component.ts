@@ -5,6 +5,7 @@ import { WaterReductionTreasureHunt } from '../../../shared/models/treasure-hunt
 import { WaterReductionData, WaterReductionResults } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { WaterReductionService } from './water-reduction.service';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-water-reduction',
@@ -24,6 +25,8 @@ export class WaterReductionComponent implements OnInit {
   settings: Settings;
   @Input()
   operatingHours: OperatingHours;
+  @Input()
+  isWastewater: boolean = false;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
@@ -42,13 +45,15 @@ export class WaterReductionComponent implements OnInit {
   modifiedSelected: boolean = false;
 
   modificationExists = false;
-  isWastewater: boolean = false;
 
   waterReductionResults: WaterReductionResults;
   baselineData: Array<WaterReductionData>;
   modificationData: Array<WaterReductionData>;
 
-  constructor(private settingsDbService: SettingsDbService, private waterReductionService: WaterReductionService) { }
+  calculatorTypeForm: FormGroup;
+
+
+  constructor(private settingsDbService: SettingsDbService, private waterReductionService: WaterReductionService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -57,7 +62,7 @@ export class WaterReductionComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-
+    this.initCalculatorTypeForm();
     this.initData();
     this.getResults();
   }
@@ -83,7 +88,7 @@ export class WaterReductionComponent implements OnInit {
       this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
-  
+
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -106,7 +111,7 @@ export class WaterReductionComponent implements OnInit {
       }
     }
   }
-  
+
   addBaselineEquipment() {
     let tmpObj: WaterReductionData = this.waterReductionService.initObject(this.baselineData.length, this.settings, this.isWastewater, this.operatingHours);
     this.baselineData.push(tmpObj);
@@ -194,5 +199,15 @@ export class WaterReductionComponent implements OnInit {
     if (this.baselineSelected == true) {
       this.baselineSelected = false;
     }
+  }
+
+  initCalculatorTypeForm() {
+    this.calculatorTypeForm = this.formBuilder.group({
+      calculatorType: [this.isWastewater]
+    });
+  }
+
+  changeCalculatorType() {
+    this.isWastewater = this.calculatorTypeForm.controls.calculatorType.value;
   }
 }

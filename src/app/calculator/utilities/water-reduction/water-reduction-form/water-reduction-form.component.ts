@@ -67,7 +67,7 @@ export class WaterReductionFormComponent implements OnInit {
     }
   }
 
-  changeMeasurementMthod() {
+  changeMeasurementMethod() {
     this.waterReductionService.setValidators(this.form);
     this.calculate();
   }

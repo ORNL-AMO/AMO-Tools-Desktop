@@ -1,6 +1,6 @@
 <div class="mb-4 p-2 form-card">
-
   <form [formGroup]="form">
+
     <label *ngIf="!isEditingName" class="group-label w-100 bold">
       <span (click)="editEquipmentName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
       <span>{{form.controls.name.value}}</span>
@@ -60,149 +60,161 @@
           </select>
         </div>
       </div>
+    </div>
 
-      <!-- volume meter method -->
-      <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
+    <!-- volume meter method -->
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
 
-        <div class="form-group">
-          <label class="small" for="{{'initialMeterReading_'+idString}}">Initial Meter Reading</label>
-          <div class="input-group">
-            <input class="form-control" type="number" name="initialMeterReading"
-              id="{{'initialMeterReading_'+idString}}" formControlName="initialMeterReading" (input)="calculate()"
-              (focus)="focusField('initialMeterReading')" (blur)="focusOut()">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="form.controls.initialMeterReading.invalid && !form.controls.initialMeterReading.pristine">
-            <span *ngIf="form.controls.initialMeterReading.errors.required">Value required.</span>
-            <span *ngIf="form.controls.initialMeterReading.errors.min">Value can't be less than
-              {{form.controls.initialMeterReading.errors.min.min}}.</span>
-          </span>
+      <div class="form-group">
+        <label class="small" for="{{'initialMeterReading_'+idString}}">Initial Meter Reading</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="initialMeterReading" id="{{'initialMeterReading_'+idString}}"
+            formControlName="initialMeterReading" (input)="calculate()" (focus)="focusField('initialMeterReading')"
+            (blur)="focusOut()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
         </div>
-
-        <div class="form-group">
-          <label class="small" for="{{'finalMeterReading_'+idString}}">Final Meter Reading</label>
-          <div class="input-group">
-            <input class="form-control" type="number" name="finalMeterReading" id="{{'finalMeterReading_'+idString}}"
-              formControlName="finalMeterReading" (input)="calculate()" (focus)="focusField('finalMeterReading')"
-              (blur)="focusOut()">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="form.controls.finalMeterReading.invalid && !form.controls.finalMeterReading.pristine">
-            <span *ngIf="form.controls.finalMeterReading.errors.required">Value required.</span>
-            <span *ngIf="form.controls.finalMeterReading.errors.min">Value can't be less than
-              {{form.controls.finalMeterReading.errors.min.min}}.</span>
-          </span>
-        </div>
-
-        <div class="form-group">
-          <label class="small" for="{{'elapsedTime_'+idString}}">Elapsed Time</label>
-          <div class="input-group">
-            <input class="form-control" type="number" name="elapsedTime" id="{{'elapsedTime_'+idString}}"
-              formControlName="elapsedTime" (input)="calculate()" (focus)="focusField('elapsedTime')"
-              (blur)="focusOut()">
-            <span class="units input-group-addon">min</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="form.controls.elapsedTime.invalid && !form.controls.elapsedTime.pristine">
-            <span *ngIf="form.controls.elapsedTime.errors.required">Value required.</span>
-            <span *ngIf="form.controls.elapsedTime.errors.min">Value can't be less than
-              {{form.controls.elapsedTime.errors.min.min}}.</span>
-          </span>
-        </div>
-
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.initialMeterReading.invalid && !form.controls.initialMeterReading.pristine">
+          <span *ngIf="form.controls.initialMeterReading.errors.required">Value required.</span>
+          <span *ngIf="form.controls.initialMeterReading.errors.min">Value can't be less than
+            {{form.controls.initialMeterReading.errors.min.min}}.</span>
+        </span>
       </div>
 
-
-      <!-- metered flow method -->
-      <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
-
-        <div class="form-group">
-          <label class="small" for="{{'meterReading_'+idString}}">Meter Reading</label>
-          <div class="input-group">
-            <input class="form-control" type="number" name="meterReading" id="{{'meterReading_'+idString}}"
-              formControlName="meterReading" (input)="calculate()" (focus)="focusField('meterReading')"
-              (blur)="focusOut()">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L/min</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="form.controls.meterReading.invalid && !form.controls.meterReading.pristine">
-            <span *ngIf="form.controls.meterReading.errors.required">Value required.</span>
-            <span *ngIf="form.controls.meterReading.errors.min">Value can't be less than
-              {{form.controls.meterReading.errors.min.min}}.</span>
-          </span>
+      <div class="form-group">
+        <label class="small" for="{{'finalMeterReading_'+idString}}">Final Meter Reading</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="finalMeterReading" id="{{'finalMeterReading_'+idString}}"
+            formControlName="finalMeterReading" (input)="calculate()" (focus)="focusField('finalMeterReading')"
+            (blur)="focusOut()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
         </div>
-
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.finalMeterReading.invalid && !form.controls.finalMeterReading.pristine">
+          <span *ngIf="form.controls.finalMeterReading.errors.required">Value required.</span>
+          <span *ngIf="form.controls.finalMeterReading.errors.min">Value can't be less than
+            {{form.controls.finalMeterReading.errors.min.min}}.</span>
+        </span>
       </div>
 
-
-      <!-- bucket method -->
-      <div class="form-section" *ngIf="form.controls.measurementMethod.value == 2">
-
-        <div class="form-group">
-          <label class="small" for="{{'bucketVolume_'+idString}}">Bucket Volume</label>
-          <div class="input-group">
-            <input class="form-control" type="number" name="bucketVolume" id="{{'bucketVolume_'+idString}}"
-              formControlName="bucketVolume" (input)="calculate()" (focus)="focusField('bucketVolume')"
-              (blur)="focusOut()">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="form.controls.bucketVolume.invalid && !form.controls.bucketVolume.pristine">
-            <span *ngIf="form.controls.bucketVolume.errors.required">Value required.</span>
-            <span *ngIf="form.controls.bucketVolume.errors.min">Value can't be less than
-              {{form.controls.bucketVolume.errors.min.min}}.</span>
-          </span>
+      <div class="form-group">
+        <label class="small" for="{{'elapsedTime_'+idString}}">Elapsed Time</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="elapsedTime" id="{{'elapsedTime_'+idString}}"
+            formControlName="elapsedTime" (input)="calculate()" (focus)="focusField('elapsedTime')" (blur)="focusOut()">
+          <span class="units input-group-addon">min</span>
         </div>
-
-        <div class="form-group">
-          <label class="small" for="{{'bucketFillTime_'+idString}}">Bucket Volume</label>
-          <div class="input-group">
-            <input class="form-control" type="number" name="bucketFillTime" id="{{'bucketFillTime_'+idString}}"
-              formControlName="bucketFillTime" (input)="calculate()" (focus)="focusField('bucketFillTime')"
-              (blur)="focusOut()">
-            <span class="units input-group-addon">sec</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="form.controls.bucketFillTime.invalid && !form.controls.bucketFillTime.pristine">
-            <span *ngIf="form.controls.bucketFillTime.errors.required">Value required.</span>
-            <span *ngIf="form.controls.bucketFillTime.errors.min">Value can't be less than
-              {{form.controls.bucketFillTime.errors.min.min}}.</span>
-          </span>
-        </div>
-
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.elapsedTime.invalid && !form.controls.elapsedTime.pristine">
+          <span *ngIf="form.controls.elapsedTime.errors.required">Value required.</span>
+          <span *ngIf="form.controls.elapsedTime.errors.min">Value can't be less than
+            {{form.controls.elapsedTime.errors.min.min}}.</span>
+        </span>
       </div>
-
-
-      <!-- metered flow method -->
-      <div class="form-section" *ngIf="form.controls.measurementMethod.value == 3">
-
-        <div class="form-group">
-          <label class="small" for="{{'waterConsumption_'+idString}}">Water Consumption</label>
-          <div class="input-group">
-            <input class="form-control" type="number" name="waterConsumption" id="{{'waterConsumption_'+idString}}"
-              formControlName="waterConsumption" (input)="calculate()" (focus)="focusField('waterConsumption')"
-              (blur)="focusOut()">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="form.controls.waterConsumption.invalid && !form.controls.waterConsumption.pristine">
-            <span *ngIf="form.controls.waterConsumption.errors.required">Value required.</span>
-            <span *ngIf="form.controls.waterConsumption.errors.min">Value can't be less than
-              {{form.controls.waterConsumption.errors.min.min}}.</span>
-          </span>
-        </div>
-
-      </div>
-
 
     </div>
+
+
+    <!-- metered flow method -->
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
+
+      <div class="form-group">
+        <label class="small" for="{{'meterReading_'+idString}}">Meter Reading</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="meterReading" id="{{'meterReading_'+idString}}"
+            formControlName="meterReading" (input)="calculate()" (focus)="focusField('meterReading')"
+            (blur)="focusOut()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L/min</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.meterReading.invalid && !form.controls.meterReading.pristine">
+          <span *ngIf="form.controls.meterReading.errors.required">Value required.</span>
+          <span *ngIf="form.controls.meterReading.errors.min">Value can't be less than
+            {{form.controls.meterReading.errors.min.min}}.</span>
+        </span>
+      </div>
+
+    </div>
+
+
+    <!-- bucket method -->
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 2">
+
+      <div class="form-group">
+        <label class="small" for="{{'bucketVolume_'+idString}}">Bucket Volume</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="bucketVolume" id="{{'bucketVolume_'+idString}}"
+            formControlName="bucketVolume" (input)="calculate()" (focus)="focusField('bucketVolume')"
+            (blur)="focusOut()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.bucketVolume.invalid && !form.controls.bucketVolume.pristine">
+          <span *ngIf="form.controls.bucketVolume.errors.required">Value required.</span>
+          <span *ngIf="form.controls.bucketVolume.errors.min">Value can't be less than
+            {{form.controls.bucketVolume.errors.min.min}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="{{'bucketFillTime_'+idString}}">Bucket Volume</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="bucketFillTime" id="{{'bucketFillTime_'+idString}}"
+            formControlName="bucketFillTime" (input)="calculate()" (focus)="focusField('bucketFillTime')"
+            (blur)="focusOut()">
+          <span class="units input-group-addon">sec</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.bucketFillTime.invalid && !form.controls.bucketFillTime.pristine">
+          <span *ngIf="form.controls.bucketFillTime.errors.required">Value required.</span>
+          <span *ngIf="form.controls.bucketFillTime.errors.min">Value can't be less than
+            {{form.controls.bucketFillTime.errors.min.min}}.</span>
+        </span>
+      </div>
+
+    </div>
+
+
+    <!-- offsheet/other method -->
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 3">
+
+      <div class="form-group">
+        <label *ngIf="!isWastewater" class="small" for="{{'consumption_'+idString}}">Water Consumption</label>
+        <label *ngIf="isWastewater" class="small" for="{{'consumption_'+idString}}">Wastewater Disposal</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="consumption" id="{{'consumption_'+idString}}"
+            formControlName="consumption" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.consumption.invalid && !form.controls.consumption.pristine">
+          <span *ngIf="form.controls.consumption.errors.required">Value required.</span>
+          <span *ngIf="form.controls.consumption.errors.min">Value can't be less than
+            {{form.controls.consumption.errors.min.min}}.</span>
+        </span>
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-6">
+        <label class="small bold" *ngIf="!isWastewater">Water Consumption</label>
+        <label class="small bold" *ngIf="isWastewater">Wastewater Disposal</label>
+      </div>
+      <div class="col-6 text-center">
+        <span class="small bold">{{individualResults.consumption | number:'.0-1'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
+        </span>
+      </div>
+    </div>
+
 
   </form>
 

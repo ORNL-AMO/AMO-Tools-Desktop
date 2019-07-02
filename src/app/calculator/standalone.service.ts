@@ -6,7 +6,7 @@ import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
-  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, 
+  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
   ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
@@ -316,7 +316,12 @@ export class StandaloneService {
   }
 
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
-    let result: WaterReductionResult = null;
+    let result: WaterReductionResult = {
+      waterUse: 300,
+      waterCost: 0.006,
+      annualWaterSavings: 250,
+      costSavings: 200
+    }
     return result;
   }
 }

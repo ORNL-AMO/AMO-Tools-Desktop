@@ -127,14 +127,28 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png" class="calc-img"
-                (click)="showTool('compressed-air-reduction')">
+              <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png"
+                class="calc-img" (click)="showTool('compressed-air-reduction')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a (click)="showTool('compressed-air-reduction')">Compressed Air Reduction</a>
             <p>
               This calculator reduces the compressed air use. Real description needed.
+            </p>
+          </div>
+        </div>
+        <div class="d-flex calc-item-row w-100">
+          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
+            <div class="calc-icon-div d-flex justify-content-center align-items-center">
+              <img src="assets/images/calculator-icons/utilities-icons/water-reduction-icon.png"
+                class="calc-img" (click)="showTool('water-reduction')">
+            </div>
+          </div>
+          <div class="d-flex flex-fill flex-column justify-content-center">
+            <a (click)="showTool('water-reduction')">Water/Wastewater Reduction</a>
+            <p>
+              This calculator reduces the water use/wastewater disposal. Real description needed.
             </p>
           </div>
         </div>
@@ -178,4 +192,8 @@
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'compressed-air-reduction'">
   <app-compressed-air-reduction></app-compressed-air-reduction>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'water-reduction'">
+  <app-water-reduction></app-water-reduction>
 </div>

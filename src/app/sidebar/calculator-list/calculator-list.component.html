@@ -198,8 +198,13 @@
         <span class="sidebar-item" (click)="selectCalculator('natural-gas-reduction')">Natural Gas Reduction</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'compressed-air-reduction'}">
-          <span class="sidebar-item" (click)="selectCalculator('compressed-air-reduction')">Compressed Air Reduction</span>
-        </li>
+        <span class="sidebar-item" (click)="selectCalculator('compressed-air-reduction')">Compressed Air
+          Reduction</span>
+      </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'water-reduction'}">
+        <span class="sidebar-item" (click)="selectCalculator('water-reduction')">Water 
+          Reduction</span>
+      </li>
     </ul>
   </li>
 </ul>
