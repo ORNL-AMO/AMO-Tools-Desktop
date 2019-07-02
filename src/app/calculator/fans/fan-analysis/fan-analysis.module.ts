@@ -21,6 +21,7 @@ import { PlaneThreeFormComponent } from './fan-analysis-form/plane-data-form/pla
 import { PressureReadingsFormComponent } from './fan-analysis-form/plane-data-form/pressure-readings-form/pressure-readings-form.component';
 import { HelpAndResultsPanelComponent } from './help-and-results-panel/help-and-results-panel.component';
 import { PlanarResultsComponent } from './help-and-results-panel/planar-results/planar-results.component';
+import { FanDiagramImageComponent } from './help-and-results-panel/fan-diagram-image/fan-diagram-image.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { PlanarResultsComponent } from './help-and-results-panel/planar-results/
     PlaneThreeFormComponent,
     PressureReadingsFormComponent,
     HelpAndResultsPanelComponent,
-    PlanarResultsComponent
+    PlanarResultsComponent,
+    FanDiagramImageComponent
   ],
   imports: [
     CommonModule,
