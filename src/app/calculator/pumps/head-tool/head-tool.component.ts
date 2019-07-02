@@ -1,14 +1,15 @@
-import { Component, OnInit, Output, EventEmitter, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { PsatService } from '../../../psat/psat.service';
-import { PSAT } from '../../../shared/models/psat';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { Settings } from '../../../shared/models/settings';
-import { SettingsService } from '../../../settings/settings.service';
-import { FormGroup } from '@angular/forms';
-import { Calculator } from '../../../shared/models/calculators';
-import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { HeadToolService } from './head-tool.service';
+import {Component, OnInit, Output, EventEmitter, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {PsatService} from '../../../psat/psat.service';
+import {PSAT} from '../../../shared/models/psat';
+import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
+import {Settings} from '../../../shared/models/settings';
+import {SettingsService} from '../../../settings/settings.service';
+import {FormGroup} from '@angular/forms';
+import {Calculator} from '../../../shared/models/calculators';
+import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {HeadToolService} from './head-tool.service';
+
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -56,7 +57,9 @@ export class HeadToolComponent implements OnInit {
   canSave: boolean = false;
   isSavedCalc: boolean = false;
   calculator: Calculator;
-  constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, private settingsService: SettingsService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+
+  constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, private settingsService: SettingsService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) {
+  }
 
   ngOnInit() {
     if (!this.settings) {
@@ -101,13 +104,6 @@ export class HeadToolComponent implements OnInit {
     }
   }
 
-  btnResetData() {
-    this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
-    this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
-    this.calculateHeadTool();
-    this.calculateHeadToolSuctionTank();
-    // this.save();
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -177,13 +173,13 @@ export class HeadToolComponent implements OnInit {
           this.calculatorDbService.setAll().then(() => {
             this.closeTool();
           });
-        }); ;
+        });
+        ;
       }
     } else {
       this.closeTool();
     }
   }
-
 
 
   calculateHeadTool() {
@@ -240,5 +236,20 @@ export class HeadToolComponent implements OnInit {
 
   setFormView(str: string) {
     this.headToolType = str;
+  }
+
+  btnResetData() {
+    this.headToolForm = this.headToolService.resetHeadToolForm(this.settings);
+    this.headToolSuctionForm = this.headToolService.resetHeadToolSuctionForm(this.settings);
+    this.calculateHeadTool();
+    this.calculateHeadToolSuctionTank();
+    // this.save();
+  }
+
+  btnGenerateExample() {
+    this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
+    this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
+    this.calculateHeadTool();
+    this.calculateHeadToolSuctionTank();
   }
 }

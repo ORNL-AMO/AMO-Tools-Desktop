@@ -162,6 +162,45 @@ export class PumpCurveService {
     }
   }
 
+  resetPumpCurve(): PumpCurve {
+    return {
+      dataRows: new Array<PumpCurveDataRow>(
+        { flow: 0, head: 0 },
+        { flow: 0, head: 0 },
+        // { flow: 200, head: 343.6188 },
+        // { flow: 300, head: 335.9542 },
+        // { flow: 400, head: 324.9089 },
+        // { flow: 480, head: 314.7216 },
+        // { flow: 560, head: 304.5332 },
+        { flow: 0, head: 0 },
+        // { flow: 690, head: 284.1775 },
+        // { flow: 800, head: 264.6842 },
+        // { flow: 900, head: 241.8114 },
+        // { flow: 970, head: 222.3425 },
+        { flow: 0, head: 0 }
+      ),
+      maxFlow: 0,
+      dataOrder: 0,
+      baselineMeasurement: 0,
+      modifiedMeasurement: 0,
+      exploreLine: 0,
+      exploreFlow: 0,
+      exploreHead: 0,
+      explorePumpEfficiency: 0,
+      headOrder: 0,
+      headConstant: 0,
+      headFlow: 0,
+      headFlow2: 0,
+      headFlow3: 0,
+      headFlow4: 0,
+      headFlow5: 0,
+      headFlow6: 0,
+      pumpEfficiencyOrder: 0,
+      pumpEfficiencyConstant: 0,
+      measurementOption: 'Speed'
+    }
+  }
+
   initColumnTitles(settings: Settings, isFan: boolean, graphPumpCurve: boolean, graphModificationCurve: boolean, graphSystemCurve: boolean): Array<string> {
     let columnTitles: Array<string> = new Array<string>();
     let flowMeasurement: string;

@@ -31,6 +31,25 @@ export class SpecificSpeedService {
     });
   }
 
+  resetForm(settings: Settings): FormGroup {
+    let tmpFlowRate: number = 0;
+    let tmpHead: number = 0;
+    if (settings.flowMeasurement !== 'gpm') {
+      tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(settings.flowMeasurement);
+      tmpFlowRate = this.convertUnitsService.roundVal(tmpFlowRate, 2);
+    }
+    if (settings.distanceMeasurement !== 'ft') {
+      tmpHead = this.convertUnitsService.value(tmpHead).from('ft').to(settings.distanceMeasurement);
+      tmpHead = this.convertUnitsService.roundVal(tmpHead, 2);
+    }
+    return this.formBuilder.group({
+      pumpType: [0, Validators.required],
+      pumpRPM: [0, [Validators.required, Validators.min(0)]],
+      flowRate: [tmpFlowRate, [Validators.required, Validators.min(0)]],
+      head: [tmpHead, [Validators.required, Validators.min(0)]],
+    });
+  }
+
   initFormFromPsat(psatInputs: PsatInputs): FormGroup {
     return this.formBuilder.group({
       pumpType: [psatInputs.pump_style, Validators.required],
