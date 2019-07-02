@@ -13,8 +13,6 @@ export class ReceiverTankComponent implements OnInit {
   @Input()
   calcType: string;
 
-  toggleGenerateExample: boolean = false;
-
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
@@ -47,6 +45,7 @@ export class ReceiverTankComponent implements OnInit {
   currentField: string = 'default';
   currentForm: string;
   toggleResetData: boolean = false;
+  toggleGenerateExample: boolean = false;
 
   constructor(private compressedAirService: CompressedAirService) {
   }
@@ -76,6 +75,10 @@ export class ReceiverTankComponent implements OnInit {
     this.setCurrentForm();
   }
 
+  btnGenerateExample() {
+    this.toggleGenerateExample = !this.toggleGenerateExample;
+  }
+
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -94,9 +97,5 @@ export class ReceiverTankComponent implements OnInit {
     } else {
       this.currentForm = 'air-capacity';
     }
-  }
-
-  btnGenerateExample() {
-    this.toggleGenerateExample = !this.toggleGenerateExample;
   }
 }
