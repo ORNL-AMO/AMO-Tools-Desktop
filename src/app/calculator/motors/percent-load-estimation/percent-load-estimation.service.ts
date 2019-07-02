@@ -22,7 +22,7 @@ export class PercentLoadEstimationService {
     ratedCurrent: 0,
     powerFactor: 0
   };
-  loadEstimationMethod: number = 0;
+  loadEstimationMethod: number = 1;
   constructor(private formBuilder: FormBuilder) { }
 
   initSlipMethodInputs(): SlipMethod {

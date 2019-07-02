@@ -82,12 +82,24 @@ export class ReplaceExistingComponent implements OnInit {
     }
     this.inputs = this.replaceExistingService.initReplaceExistingData(this.settings, oppHours);
   }
+  resetMotorInputs() {
+    let oppHours: number = 0;
+    if (this.opperatingHours) {
+      oppHours = this.opperatingHours;
+    }
+    this.inputs = this.replaceExistingService.resetReplaceExistingData(this.settings, oppHours);
+  }
 
   initForm() {
     this.replaceExistingForm = this.replaceExistingService.getFormFromObj(this.inputs);
   }
 
   resetData() {
+    this.resetMotorInputs();
+    this.initForm();
+    this.calculate();
+  }
+  btnGenerateExample() {
     this.initMotorInputs();
     this.initForm();
     this.calculate();
