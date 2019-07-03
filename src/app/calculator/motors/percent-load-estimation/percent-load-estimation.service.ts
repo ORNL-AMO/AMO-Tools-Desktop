@@ -34,6 +34,15 @@ export class PercentLoadEstimationService {
     return this.slipMethodInputs;
   }
 
+  generateSlipMethodInputsExample(): SlipMethod {
+    this.slipMethodInputs = {
+      synchronousSpeed: 0,
+      measuredSpeed: 1780,
+      nameplateFullLoadSpeed: 1770
+    };
+    return this.slipMethodInputs;
+  }
+
   initSlipMethodForm(): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
       lineFrequency: [60],

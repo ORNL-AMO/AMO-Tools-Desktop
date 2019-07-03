@@ -9,9 +9,10 @@
       </div>
     </div>
     <div class="d-flex flex-column m-4">
-      <app-system-capacity-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculate()" (emitChangeField)="changeField($event)"></app-system-capacity-form>
+      <app-system-capacity-form [settings]="settings" [inputs]="inputs" [outputs]="outputs" (calculate)="calculate()"
+        (emitChangeField)="changeField($event)"></app-system-capacity-form>
       <div class="w-100 justify-content-center btn-group btn-group-sm">
-        <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+        <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
           Reset Data
         </button>
         <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
@@ -34,11 +35,14 @@
         <h5>
           System Capacity Help
           <br>
-          <small class="text-muted"> Input the length of each standard pipe size, the size and length of any custom pipes,
-             and the capacity of receiver tanks found in the compressed air system.  
-             The total capacity of the compressed air system will be calculated by adding the volumes of the pipes and receivers. 
-             In a well-designed system, the total capacity of the compressed air system is always greater than the mean air 
-             consumption found over a reasonable amount of time. 
+          <small class="text-muted"> Input the length of each standard pipe size, the size and length of any custom
+            pipes,
+            and the capacity of receiver tanks found in the compressed air system.
+            The total capacity of the compressed air system will be calculated by adding the volumes of the pipes and
+            receivers.
+            In a well-designed system, the total capacity of the compressed air system is always greater than the mean
+            air
+            consumption found over a reasonable amount of time.
           </small>
         </h5>
         <hr class="my-1 hr-spacer">
@@ -48,8 +52,8 @@
             Pipe Length
             <br>
             <small class="text-muted">
-                Enter the length for different nominal pipe sizes. 
-                Pipe sizes used are nominal schedule 40 pipe measured from the pipe’s inner diameter. 
+              Enter the length for different nominal pipe sizes.
+              Pipe sizes used are nominal schedule 40 pipe measured from the pipe’s inner diameter.
               <hr>
             </small>
           </h6>
@@ -60,7 +64,7 @@
             Receiver Tanks
             <br>
             <small class="text-muted">
-              Enter the nameplate capacity for each receiver tank in the system. 
+              Enter the nameplate capacity for each receiver tank in the system.
               <hr>
             </small>
           </h6>
@@ -72,7 +76,7 @@
             <br>
             <small class="text-muted">
               Enter the length and size of any custom pipe in the compressed air system.
-              The size of the pipe should be taken as the pipe’s inner diameter. 
+              The size of the pipe should be taken as the pipe’s inner diameter.
               This feature can be used to consider any non-nominal schedule 40 pipe.
               <hr>
             </small>
