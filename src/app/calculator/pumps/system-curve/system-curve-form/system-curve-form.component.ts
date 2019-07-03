@@ -5,6 +5,7 @@ import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SystemCurveService } from '../system-curve.service';
 
 @Component({
   selector: 'app-system-curve-form',
@@ -38,8 +39,6 @@ export class SystemCurveFormComponent implements OnInit {
   fsat: FSAT;
   @Input()
   isFan: boolean;
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
 
   exponentInputError: string = null;
   pumpForm: any;
@@ -54,7 +53,7 @@ export class SystemCurveFormComponent implements OnInit {
   tmpSpecificGravity: number;
   tmpSystemLossExponent: any;
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private systemCurveService: SystemCurveService) { }
 
   ngOnInit() {
     this.options = new Array<PSAT | FSAT>();
@@ -115,7 +114,7 @@ export class SystemCurveFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.changeField.emit(str);
+    this.systemCurveService.currentField.next(str);
   }
 
 }

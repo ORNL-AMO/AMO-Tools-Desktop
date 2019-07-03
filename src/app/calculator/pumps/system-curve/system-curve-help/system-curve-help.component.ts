@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { SystemCurveService } from '../system-curve.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-system-curve-help',
@@ -8,9 +10,19 @@ import { Component, OnInit, Input } from '@angular/core';
 export class SystemCurveHelpComponent implements OnInit {
   @Input()
   isFan: boolean;
-  constructor() { }
+
+  currentField: string;
+  currentFieldSubscription: Subscription;
+  constructor(private systemCurveService: SystemCurveService) { }
 
   ngOnInit() {
+    this.currentFieldSubscription = this.systemCurveService.currentField.subscribe(val => {
+      this.currentField = val;
+      console.log(this.currentField);
+    })
   }
 
+  ngOnDestroy(){
+    this.currentFieldSubscription.unsubscribe();
+  }
 }
