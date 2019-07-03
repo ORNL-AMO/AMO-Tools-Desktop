@@ -2,7 +2,8 @@
   <h5>
     Heat Loss Calculator
     <br>
-    <small class="text-muted">Calculates the energy (heat) loss and outlet steam properties given inlet steam conditions and a % heat loss.
+    <small class="text-muted">Calculates the energy (heat) loss and outlet steam properties given inlet steam conditions
+      and a % heat loss.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
@@ -31,8 +32,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.inletPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.inletPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{rangeValues.inletPressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.inletPressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -44,7 +47,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+        characterize
         the inlet steam.
         <hr>
       </small>
@@ -67,7 +71,8 @@
         Value
         <br>
         <small class="text-muted">
-          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for
+          the material,
           compared to the standard state, in terms of mass.
           <hr>
         </small>
@@ -77,7 +82,8 @@
         Value
         <br>
         <small class="text-muted">
-          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard state,
+          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the
+          standard state,
           in terms of mass.
           <hr>
         </small>
@@ -87,7 +93,8 @@
         Value
         <br>
         <small class="text-muted">
-          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam; a value
+          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for
+          steam; a value
           between 0 and 1 indicates mixed flow (both liquid and vapor).
           <hr>
         </small>
@@ -102,10 +109,10 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{rangeValues.quantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{rangeValues.quantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit()"></span>
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
@@ -130,8 +137,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.inletMassFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
-            <td class="w-50 text-center">{{rangeValues.inletMassFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{rangeValues.inletMassFlowMin}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
+            <td class="w-50 text-center">{{rangeValues.inletMassFlowMax}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
           </tr>
         </tbody>
       </table>

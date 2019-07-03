@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef } fro
 import { FormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SaturatedPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
-import { SteamService } from "../../steam.service";
 
 @Component({
   selector: 'app-saturated-properties-form',
@@ -24,7 +23,7 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
 
 
-  constructor(private steamService: SteamService, private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.setValidators();
@@ -64,9 +63,5 @@ export class SaturatedPropertiesFormComponent implements OnInit {
 
   changeField(str: string) {
     this.emitChangeField.emit(str);
-  }
-
-  getDisplayUnit(unit: string) {
-    return this.steamService.getDisplayUnit(unit);
   }
 }
