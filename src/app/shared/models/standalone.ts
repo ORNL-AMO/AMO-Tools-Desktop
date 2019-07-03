@@ -70,7 +70,6 @@ export interface OperatingCostInput {
   bhpUnloaded: number;
   annualOperatingHours: number;
   runTimeLoaded: number;
-  runTimeUnloaded: number;
   efficiencyLoaded: number;
   efficiencyUnloaded: number;
   costOfElectricity: number;

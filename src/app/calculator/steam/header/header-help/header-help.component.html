@@ -34,8 +34,8 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{pressureRanges.min}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{pressureRanges.max}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{pressureRanges.min}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{pressureRanges.max}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -116,10 +116,10 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{inletRanges.quantityMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{inletRanges.quantityMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
@@ -143,8 +143,8 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{inletRanges.pressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{inletRanges.pressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{inletRanges.pressureMin}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{inletRanges.pressureMax}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -169,8 +169,8 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{inletRanges.massFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
-            <td class="w-50 text-center">{{inletRanges.massFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{inletRanges.massFlowMin}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
+            <td class="w-50 text-center">{{inletRanges.massFlowMax}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
           </tr>
         </tbody>
       </table>

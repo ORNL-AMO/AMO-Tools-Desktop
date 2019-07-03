@@ -2,7 +2,8 @@
   <h5>
     Flash Tank Calculator
     <br>
-    <small class="text-muted">Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties of steam
+    <small class="text-muted">Input inlet conditions, outlet pressure, and optional desuperheating characteristics to
+      determine the properties of steam
       after a pressure drop.
     </small>
   </h5>
@@ -10,7 +11,8 @@
   <div class="my-2" *ngIf="currentField == 'default'">
     <h6>
       <small class="text-muted">
-        Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties of steam
+        Input inlet conditions, outlet pressure, and optional desuperheating characteristics to determine the properties
+        of steam
         after a pressure drop.
         <hr>
       </small>
@@ -33,8 +35,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.inletPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.inletPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{rangeValues.inletPressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.inletPressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -46,7 +50,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+        characterize
         the inlet steam.
         <hr>
       </small>
@@ -69,7 +74,8 @@
         Value
         <br>
         <small class="text-muted">
-          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for
+          the material,
           compared to the standard state, in terms of mass.
           <hr>
         </small>
@@ -79,7 +85,8 @@
         Value
         <br>
         <small class="text-muted">
-          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard state,
+          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the
+          standard state,
           in terms of mass.
           <hr>
         </small>
@@ -89,7 +96,8 @@
         Value
         <br>
         <small class="text-muted">
-          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam; a value
+          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for
+          steam; a value
           between 0 and 1 indicates mixed flow (both liquid and vapor).
           <hr>
         </small>
@@ -104,10 +112,12 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{rangeValues.quantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{rangeValues.quantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
@@ -120,7 +130,8 @@
       Inlet Mass Flow
       <br>
       <small class="text-muted">
-        Mass flow of steam (or liquid) at the inlet. Inlet and outlet mass and energy flows are equal. No mass or energy is lost
+        Mass flow of steam (or liquid) at the inlet. Inlet and outlet mass and energy flows are equal. No mass or energy
+        is lost
         or gained.
         <hr>
       </small>
@@ -133,8 +144,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.inletMassFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
-            <td class="w-50 text-center">{{rangeValues.inletMassFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{rangeValues.inletMassFlowMin}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
+            <td class="w-50 text-center">{{rangeValues.inletMassFlowMax}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
           </tr>
         </tbody>
       </table>
@@ -158,8 +171,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.outletPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.outletPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{rangeValues.outletPressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.outletPressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -194,8 +209,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMin}}
+              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterPressureMax}}
+              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -208,7 +225,8 @@
       Measurement Method
       <br>
       <small class="text-muted">
-        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+        characterize
         the generated steam.
         <hr>
       </small>
@@ -231,7 +249,8 @@
         Value
         <br>
         <small class="text-muted">
-          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for
+          the material,
           compared to the standard state, in terms of mass.
           <hr>
         </small>
@@ -241,7 +260,8 @@
         Value
         <br>
         <small class="text-muted">
-          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard state,
+          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the
+          standard state,
           in terms of mass.
           <hr>
         </small>
@@ -251,7 +271,8 @@
         Value
         <br>
         <small class="text-muted">
-          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam; a value
+          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for
+          steam; a value
           between 0 and 1 indicates mixed flow (both liquid and vapor).
           <hr>
         </small>
@@ -266,10 +287,12 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterQuantityValueMin}}
-              <span *ngIf="feedwaterThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity)"></span>
+              <span *ngIf="feedwaterThermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity) | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{feedwaterRangesValues.feedwaterQuantityValueMax}}
-              <span *ngIf="feedwaterThermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity)"></span>
+              <span *ngIf="feedwaterThermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(feedwaterThermodynamicQuantity) | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
@@ -282,7 +305,8 @@
       Desuperheating Temperature
       <br>
       <small class="text-muted">
-        The target temperature for desuperheating the outlet steam. Must be below outlet temperature without desuperheating to have
+        The target temperature for desuperheating the outlet steam. Must be below outlet temperature without
+        desuperheating to have
         an effect.
         <hr>
       </small>
@@ -296,10 +320,10 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMin}}
-              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement) | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{feedwaterRangesValues.desuperheatingTempMax}}
-              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement) | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
