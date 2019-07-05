@@ -44,7 +44,6 @@ export class CompressedAirService {
     bhpUnloaded: 0,
     annualOperatingHours: 0,
     runTimeLoaded: 0,
-    runTimeUnloaded: 0,
     efficiencyLoaded: 0,
     efficiencyUnloaded: 0,
     costOfElectricity: 0,

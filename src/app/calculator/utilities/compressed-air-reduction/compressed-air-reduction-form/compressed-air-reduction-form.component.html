@@ -45,19 +45,19 @@
       </div>
 
       <div class="form-group" *ngIf="form.controls.utilityType.value == 0">
-        <label class="small" for="{{'utilityCost_'+idString}}">Compressed Air Cost</label>
+        <label class="small" for="{{'compressedAirCost_'+idString}}">Compressed Air Cost</label>
         <div class="input-group">
-          <input class="form-control" type="number" name="utilityCost" id="{{'utilityCost_'+idString}}"
-            formControlName="utilityCost" (input)="calculate()" (focus)="focusField('compressedAirCost')"
+          <input class="form-control" type="number" name="compressedAirCost" id="{{'compressedAirCost_'+idString}}"
+            formControlName="compressedAirCost" (input)="calculate()" (focus)="focusField('compressedAirCost')"
             (blur)="focusOut()">
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
           <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/m<sup>3</sup></span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.utilityCost.invalid && !form.controls.utilityCost.pristine">
-          <span *ngIf="form.controls.utilityCost.errors.required">Value required.</span>
-          <span *ngIf="form.controls.utilityCost.errors.min">Value can't be less than
-            {{form.controls.utilityCost.errors.min.min}}.</span>
+          *ngIf="form.controls.compressedAirCost.invalid && !form.controls.compressedAirCost.pristine">
+          <span *ngIf="form.controls.compressedAirCost.errors.required">Value required.</span>
+          <span *ngIf="form.controls.compressedAirCost.errors.min">Value can't be less than
+            {{form.controls.compressedAirCost.errors.min.min}}.</span>
         </span>
       </div>
 
@@ -263,18 +263,18 @@
     <div class="form-section" *ngIf="form.controls.utilityType.value == 1">
 
       <div class="form-group">
-        <label class="small" for="{{'utilityCost_'+idString}}">Electricity Cost</label>
+        <label class="small" for="{{'electricityCost_'+idString}}">Electricity Cost</label>
         <div class="input-group">
-          <input class="form-control" name="utilityCost" id="{{'utilityCost_'+idString}}" formControlName="utilityCost"
-            type="number" (input)="calculate()" (focus)="focusField('utilityCost')" (blur)="focusOut()"
-            onfocus="this.select();">
+          <input class="form-control" name="electricityCost" id="{{'electricityCost_'+idString}}"
+            formControlName="electricityCost" type="number" (input)="calculate()"
+            (focus)="focusField('electricityCost')" (blur)="focusOut()" onfocus="this.select();">
           <span class="units input-group-addon">$/kWh</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.utilityCost.invalid && !form.controls.utilityCost.pristine">
-          <span *ngIf="form.controls.utilityCost.errors.required">Value required.</span>
-          <span *ngIf="form.controls.utilityCost.errors.min">Value can't be less than
-            {{form.controls.utilityCost.errors.min.min}}.</span>
+          *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
+          <span *ngIf="form.controls.electricityCost.errors.required">Value required.</span>
+          <span *ngIf="form.controls.electricityCost.errors.min">Value can't be less than
+            {{form.controls.electricityCost.errors.min.min}}.</span>
         </span>
       </div>
 

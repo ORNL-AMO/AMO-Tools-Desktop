@@ -95,6 +95,7 @@ export class PumpCurveComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.focusedForm = this.pumpCurvePrimary ? 'pump-curve' : 'system-curve';
     this.systemCurveCollapsed = this.pumpCurvePrimary ? "closed" : "open";
     this.pumpCurveCollapsed = this.pumpCurvePrimary ? "open" : "closed";
     this.graphPumpCurve = this.pumpCurvePrimary;

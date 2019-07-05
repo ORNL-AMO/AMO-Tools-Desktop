@@ -70,7 +70,6 @@ export interface OperatingCostInput {
   bhpUnloaded: number;
   annualOperatingHours: number;
   runTimeLoaded: number;
-  runTimeUnloaded: number;
   efficiencyLoaded: number;
   efficiencyUnloaded: number;
   costOfElectricity: number;
@@ -286,6 +285,8 @@ export interface CompressedAirReductionData {
   hoursPerYear: number,
   utilityType: number,
   utilityCost: number,
+  compressedAirCost: number,
+  electricityCost: number,
   measurementMethod: number,
   flowMeterMethodData: CompressedAirFlowMeterMethodData,
   bagMethodData: BagMethodData,

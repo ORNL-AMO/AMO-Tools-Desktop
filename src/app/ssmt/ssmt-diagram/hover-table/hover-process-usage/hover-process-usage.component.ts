@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ProcessSteamUsage, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -14,6 +14,12 @@ export class HoverProcessUsageComponent implements OnInit {
   settings: Settings;
   @Input()
   outputData: SSMTOutput;
+  @Input()
+  inResultsPanel: boolean;
+
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
+
   processSteamUsage: ProcessSteamUsage;
   constructor() { }
 
@@ -29,4 +35,7 @@ export class HoverProcessUsageComponent implements OnInit {
     }
   }
 
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
+  }
 }

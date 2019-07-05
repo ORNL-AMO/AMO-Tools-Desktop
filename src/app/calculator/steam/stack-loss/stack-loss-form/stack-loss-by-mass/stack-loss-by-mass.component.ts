@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
 import { PhastService } from '../../../../../phast/phast.service';
+import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-stack-loss-by-mass',
@@ -27,13 +28,14 @@ export class StackLossByMassComponent implements OnInit {
     'Oxygen in Flue Gas'
   ];
 
-  calculationExcessAir = 0.0;
-  calculationFlueGasO2 = 0.0;
+  calculationExcessAir:number = 0.0;
+  calculationFlueGasO2:number = 0.0;
   calcMethodExcessAir: boolean;
-
+  stackTemperatureWarning: boolean = false;
+  tempMin: number;
 
   constructor(private suiteDbService: SuiteDbService,
-    private phastService: PhastService, private cd: ChangeDetectorRef) { }
+    private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
 
   ngOnInit() {
@@ -48,6 +50,12 @@ export class StackLossByMassComponent implements OnInit {
     this.setCalcMethod();
     this.setCombustionValidation();
     this.setFuelTempValidation();
+    this.tempMin = 212;
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to('C');
+      this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
+    }
+    this.checkStackLossTemp();
   }
   focusOut() {
     this.changeField.emit('default');
@@ -131,6 +139,7 @@ export class StackLossByMassComponent implements OnInit {
     });
   }
   calculate() {
+    this.checkStackLossTemp();
     this.emitCalculate.emit(this.stackLossForm);
   }
 
@@ -154,5 +163,13 @@ export class StackLossByMassComponent implements OnInit {
       this.calcMethodExcessAir = false;
     }
     this.calcExcessAir();
+  }
+
+  checkStackLossTemp() {
+    if (this.stackLossForm.controls.flueGasTemperature.value && this.stackLossForm.controls.flueGasTemperature.value < this.tempMin) {
+      this.stackTemperatureWarning = true;
+    } else {
+      this.stackTemperatureWarning = false;
+    }
   }
 }

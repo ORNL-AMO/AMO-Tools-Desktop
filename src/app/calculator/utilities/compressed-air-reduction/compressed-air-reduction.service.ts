@@ -48,6 +48,8 @@ export class CompressedAirReductionService {
       hoursPerYear: hoursPerYear,
       utilityType: 0,
       utilityCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      compressedAirCost: settings && settings.compressedAirCost ? settings.compressedAirCost : 0.12,
+      electricityCost: settings && settings.electricityCost ? settings.electricityCost : 0.066,
       measurementMethod: 0,
       flowMeterMethodData: defaultFlowMeterObj,
       bagMethodData: defaultBagMethodObj,
@@ -83,7 +85,8 @@ export class CompressedAirReductionService {
       consumption: [inputObj.otherMethodData.consumption],
 
       // compressor electricity data
-      utilityCost: [inputObj.utilityCost],
+      compressedAirCost: [inputObj.compressedAirCost],
+      electricityCost: [inputObj.electricityCost],
       compressorControl: [inputObj.compressorElectricityData.compressorControl],
       compressorControlAdjustment: [inputObj.compressorElectricityData.compressorControlAdjustment],
       compressorSpecificPowerControl: [inputObj.compressorElectricityData.compressorSpecificPowerControl],
@@ -116,8 +119,11 @@ export class CompressedAirReductionService {
         form.controls.units.clearValidators();
         break;
     }
-    if (form.controls.utilityType.value == 1) {
-      form.controls.utilityCost.setValidators([Validators.required, Validators.min(0)]);
+    if (form.controls.utilityType.value == 0) {
+      form.controls.compressedAirCost.setValidators([Validators.required, Validators.min(0)]);
+    }
+    else if (form.controls.utilityType.value == 1) {
+      form.controls.electricityCost.setValidators([Validators.required, Validators.min(0)]);
       form.controls.compressorControl.setValidators([Validators.required]);
       if (form.controls.compressorControl.value == 8) {
         form.controls.compressorControlAdjustment.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
@@ -156,7 +162,9 @@ export class CompressedAirReductionService {
       name: form.controls.name.value,
       hoursPerYear: form.controls.hoursPerYear.value,
       utilityType: form.controls.utilityType.value,
-      utilityCost: form.controls.utilityCost.value,
+      utilityCost: form.controls.utilityType.value === 0 ? form.controls.compressedAirCost.value : form.controls.electricityCost.value,
+      compressedAirCost: form.controls.compressedAirCost.value,
+      electricityCost: form.controls.electricityCost.value,
       measurementMethod: form.controls.measurementMethod.value,
       flowMeterMethodData: flowMeterObj,
       bagMethodData: bagMethodObj,
@@ -238,7 +246,11 @@ export class CompressedAirReductionService {
         let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
         inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
         if (inputArray[i].utilityType == 0) {
-          inputArray[i].utilityCost = inputArray[i].utilityCost / conversionHelper;
+          inputArray[i].compressedAirCost = inputArray[i].compressedAirCost / conversionHelper;
+          inputArray[i].utilityCost = inputArray[i].compressedAirCost;
+        }
+        else {
+          inputArray[i].utilityCost = inputArray[i].electricityCost;
         }
       }
     } else {

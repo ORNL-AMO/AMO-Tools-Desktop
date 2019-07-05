@@ -563,14 +563,14 @@ export class SteamService {
     return results;
   }
 
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
+  // getDisplayUnit(unit: string) {
+  //   if (unit) {
+  //     let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+  //     dispUnit = dispUnit.replace('(', '');
+  //     dispUnit = dispUnit.replace(')', '');
+  //     return dispUnit;
+  //   }
+  // }
 
 
 

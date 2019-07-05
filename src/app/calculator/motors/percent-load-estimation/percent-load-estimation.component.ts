@@ -23,6 +23,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   headerHeight: number;
   tabSelect: string = 'results';
   toggleCalculate = false;
+  toggleResetData = false;
   loadEstimationMethod: number;
   percentLoadEstimation: number;
 
@@ -93,6 +94,7 @@ export class PercentLoadEstimationComponent implements OnInit {
     this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
     this.calculateSlipMethod(this.slipMethodData);
+    this.toggleResetData = !this.toggleResetData;
   }
 
   btnGenerateExample() {

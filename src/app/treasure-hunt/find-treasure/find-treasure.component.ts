@@ -37,6 +37,7 @@ export class FindTreasureComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.treasureHunt.currentEnergyUsage.electricityUsed
     this.opperatingHoursPerYear = this.treasureHunt.operatingHours.hoursPerYear;
   }
 

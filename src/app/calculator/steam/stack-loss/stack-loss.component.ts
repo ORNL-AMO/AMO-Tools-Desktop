@@ -34,9 +34,7 @@ export class StackLossComponent implements OnInit {
 
   stackLossPercent: number = 0;
   boilerEfficiency: number = 0;
-
-  constructor(private settingsDbService: SettingsDbService, private flueGasLossesService: FlueGasLossesService, private stackLossService: StackLossService, private phastService: PhastService) {
-  }
+  constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -119,7 +117,7 @@ export class StackLossComponent implements OnInit {
       this.stackLossService.stackLossInput.flueGasType = this.method;
       this.stackLossService.stackLossInput.flueGasByVolume = this.flueGasByVolume;
       if (form.status === 'VALID') {
-        const availableHeat = this.phastService.flueGasByVolume(this.flueGasByVolume, this.settings);
+        const availableHeat = this.stackLossService.flueGasByVolume(this.flueGasByVolume, this.settings);
         this.boilerEfficiency = availableHeat * 100;
         this.stackLossPercent = (1 - availableHeat) * 100;
       } else {
@@ -131,7 +129,7 @@ export class StackLossComponent implements OnInit {
       this.stackLossService.stackLossInput.flueGasType = this.method;
       this.stackLossService.stackLossInput.flueGasByMass = this.flueGasByMass;
       if (form.status === 'VALID') {
-        const availableHeat = this.phastService.flueGasByMass(this.flueGasByMass, this.settings);
+        const availableHeat = this.stackLossService.flueGasByMass(this.flueGasByMass, this.settings);
         this.boilerEfficiency = availableHeat * 100;
         this.stackLossPercent = (1 - availableHeat) * 100;
       } else {

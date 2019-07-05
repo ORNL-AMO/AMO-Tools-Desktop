@@ -55,9 +55,4 @@ export class SteamPropertiesTableComponent implements OnInit {
   deleteRow(index: number) {
     this.rowData.splice(index, 1);
   }
-
-  getDisplayUnit(unit: string) {
-    return this.steamService.getDisplayUnit(unit);
-  }
-
 }

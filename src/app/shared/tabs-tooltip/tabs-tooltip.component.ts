@@ -18,6 +18,7 @@ export class TabsTooltipComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.setMessage();
   }
 
   ngOnChanges(changes: SimpleChanges) {

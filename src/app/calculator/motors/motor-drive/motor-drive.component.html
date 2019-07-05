@@ -34,7 +34,7 @@
           </div>
           <div class="pb-2">
             <app-motor-drive-form [form]="motorDriveForm" (emitCalculate)="calculate($event)"
-              (changeField)="changeField($event)"></app-motor-drive-form>
+              (changeField)="changeField($event)" [settings]="settings"></app-motor-drive-form>
             <div class="w-100 justify-content-center btn-group btn-group-sm">
               <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
                 Reset Data

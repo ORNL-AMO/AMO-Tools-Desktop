@@ -1,0 +1,20 @@
+ul{
+    font-size: small;
+}
+
+.modal-card{
+    position: fixed;
+    z-index: 8000;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, .8);
+    padding: 2rem;
+  }
+
+.tabs .panel-tab-item a{
+    font-size: 22px;
+}
+
+label{
+    font-size: 20px;
+}
