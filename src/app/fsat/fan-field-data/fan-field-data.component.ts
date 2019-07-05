@@ -162,7 +162,7 @@ export class FanFieldDataComponent implements OnInit {
     let tmpResults: FsatOutput = this.fsatService.getResults(this.fsat, true, this.settings);
     //todo
     let inputs: CompressibilityFactor = {
-      moverShaftPower: tmpResults.motorShaftPower,
+      motorShaftPower: tmpResults.motorShaftPower,
       inletPressure: this.fieldDataForm.controls.inletPressure.value,
       outletPressure: this.fieldDataForm.controls.outletPressure.value,
       barometricPressure: this.fsat.baseGasDensity.barometricPressure,
