@@ -289,7 +289,11 @@ export class FsatService {
 
 
   getNewMod(fsat: FSAT, settings: Settings): Modification {
-    let modName: string = 'Scenario ' + (fsat.modifications.length + 1);
+    let modNum: number = 1;
+    if(fsat.modifications){
+      modNum = fsat.modifications.length + 1;
+    }
+    let modName: string = 'Scenario ' + modNum;
     let tmpModification: Modification = {
       fsat: {
         name: modName,

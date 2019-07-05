@@ -14,6 +14,9 @@ export class ConvertFsatService {
     inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
     inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from(settings.fanFlowRate).to('ft3/min');
+
+    inputCpy.motorRatedPower = this.convertUnitsService.value(inputCpy.motorRatedPower).from(settings.fanPowerMeasurement).to('hp');
+
     return inputCpy;
   }
 
