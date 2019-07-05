@@ -18,7 +18,6 @@ export class SystemCurveHelpComponent implements OnInit {
   ngOnInit() {
     this.currentFieldSubscription = this.systemCurveService.currentField.subscribe(val => {
       this.currentField = val;
-      console.log(this.currentField);
     })
   }
 
