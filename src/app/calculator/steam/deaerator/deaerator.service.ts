@@ -14,15 +14,15 @@ export class DeaeratorService {
   initForm(settings: Settings): FormGroup {
     let ranges: DeaeratorRanges = this.getRangeValues(settings, 2, 1);
     let tmpForm: FormGroup = this.formBuilder.group({
-      deaeratorPressure: ['', [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
-      ventRate: ['', [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
-      feedwaterMassFlow: ['', [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
-      waterPressure: ['', [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
-      waterThermodynamicQuantity: [1, [Validators.required]],
-      waterQuantityValue: ['', [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
-      steamPressure: ['', [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
-      steamThermodynamicQuantity: [2, [Validators.required]],
-      steamQuantityValue: ['', [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
+      deaeratorPressure: ['20', [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
+      ventRate: ['0.1', [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
+      feedwaterMassFlow: ['395', [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
+      waterPressure: ['14', [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
+      waterThermodynamicQuantity: [0, [Validators.required]],
+      waterQuantityValue: ['150', [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
+      steamPressure: ['25', [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
+      steamThermodynamicQuantity: [0, [Validators.required]],
+      steamQuantityValue: ['480', [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
     });
     return tmpForm;
   }

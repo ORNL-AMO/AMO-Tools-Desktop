@@ -28,6 +28,7 @@ export class DeaeratorComponent implements OnInit {
   deaeratorForm: FormGroup;
   input: DeaeratorInput;
   results: DeaeratorOutput;
+  toggleGenerateBtn: boolean = false;
 
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private deaeratorService: DeaeratorService) {
   }
@@ -76,8 +77,13 @@ export class DeaeratorComponent implements OnInit {
   calculate(form: FormGroup) {
     this.input = this.deaeratorService.getObjFromForm(form);
     this.deaeratorService.deaeratorInput = this.input;
+    console.log(this.deaeratorService.deaeratorInput);
+    console.log(form.status);
     if (form.status === 'VALID') {
       this.results = this.steamService.deaerator(this.input, this.settings);
+    } else if (this.toggleGenerateBtn){
+      this.results = this.steamService.deaerator(this.deaeratorService.deaeratorInput, this.settings);
+      this.toggleGenerateBtn = !this.toggleGenerateBtn;
     } else {
       this.results = this.getEmptyResults();
     }
@@ -127,6 +133,7 @@ export class DeaeratorComponent implements OnInit {
   }
 
   btnGenerateExample() {
+    this.toggleGenerateBtn = !this.toggleGenerateBtn;
     this.deaeratorForm = this.deaeratorService.initForm(this.settings);
     this.calculate(this.deaeratorForm);
   }
