@@ -1,20 +1,20 @@
-import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {PSAT} from '../../../shared/models/psat';
-import {Settings} from '../../../shared/models/settings';
-import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
-import {ConvertUnitsService} from '../../../shared/convert-units/convert-units.service';
-import {PsatService} from '../../../psat/psat.service';
-import {PumpCurveService} from './pump-curve.service';
-import {PumpCurve, PumpCurveDataRow, Calculator, CurveData, SystemCurve} from '../../../shared/models/calculators';
-import {Assessment} from '../../../shared/models/assessment';
-import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
-import {SettingsDbService} from '../../../indexedDb/settings-db.service';
-import {FSAT} from '../../../shared/models/fans';
-import {SystemCurveService} from '../system-curve/system-curve.service';
-import {FormGroup} from '@angular/forms';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { PSAT } from '../../../shared/models/psat';
+import { Settings } from '../../../shared/models/settings';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PsatService } from '../../../psat/psat.service';
+import { PumpCurveService } from './pump-curve.service';
+import { PumpCurve, PumpCurveDataRow, Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
+import { Assessment } from '../../../shared/models/assessment';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { FSAT } from '../../../shared/models/fans';
+import { SystemCurveService } from '../system-curve/system-curve.service';
+import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
-import {trigger, state, style, animate, transition} from '@angular/animations';
-import {Subscription} from 'rxjs';
+import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pump-curve',
@@ -214,7 +214,7 @@ export class PumpCurveComponent implements OnInit {
       this.pointOne = this.pumpCurveService.fanPointOne;
       this.pointTwo = this.pumpCurveService.fanPointTwo;
     } else {
-      this.pumpCurve = this.pumpCurveService.initPumpCurve();
+      this.pumpCurve = this.pumpCurveService.initPumpCurve(this.settings);
       this.initDefault();
       if (!this.isFan) {
         this.convertPumpDefaults(this.settings);
@@ -622,8 +622,12 @@ export class PumpCurveComponent implements OnInit {
   convertPumpDefaults(settings: Settings) {
     if (settings.flowMeasurement !== 'gpm') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('gpm').to(settings.flowMeasurement);
+      let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.flowRate.value).from('gpm').to(settings.flowMeasurement);
       this.pointOne.form.patchValue({
         flowRate: this.psatService.roundVal(tmpVal, 2)
+      });
+      this.pointTwo.form.patchValue({
+        flowRate: this.psatService.roundVal(tmpVal2, 2)
       });
     }
     if (settings.distanceMeasurement !== 'ft') {
@@ -706,7 +710,7 @@ export class PumpCurveComponent implements OnInit {
   }
 
   btnGeneratePumpCurveExample() {
-    this.pumpCurve = this.pumpCurveService.initPumpCurve();
+    this.pumpCurve = this.pumpCurveService.initPumpCurve(this.settings);
     this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
     this.calculate(this.pumpCurveForm);
   }

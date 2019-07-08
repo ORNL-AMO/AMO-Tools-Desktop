@@ -12,11 +12,17 @@ export class FlashTankService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initForm(settings: Settings): FormGroup {
+    let tmpInletWaterPressure = 711;
+    let tmpInletWaterMassFlow = 83;
+    let tmpTankPressure = 197;
+    if (settings.steamPressureMeasurement !== 'psig') {
+      tmpInletWaterPressure = Math.round(this.convertUnitsService.value(tmpInletWaterPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+    }
     let ranges: FlashTankRanges = this.getRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
       inletWaterPressure: ['711', [Validators.required, Validators.min(ranges.inletWaterPressureMin), Validators.max(ranges.inletWaterPressureMax)]],
       thermodynamicQuantity: [3, [Validators.required]],
-      quantityValue: ['0', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      quantityValue: [0, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
       inletWaterMassFlow: ['83', [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
       tankPressure: ['197', [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
     });
@@ -26,11 +32,11 @@ export class FlashTankService {
   resetForm(settings: Settings): FormGroup {
     let ranges: FlashTankRanges = this.getRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
-      inletWaterPressure: ['', [Validators.required, Validators.min(ranges.inletWaterPressureMin), Validators.max(ranges.inletWaterPressureMax)]],
+      inletWaterPressure: [0, [Validators.required, Validators.min(ranges.inletWaterPressureMin), Validators.max(ranges.inletWaterPressureMax)]],
       thermodynamicQuantity: [3, [Validators.required]],
-      quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletWaterMassFlow: ['', [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
-      tankPressure: ['', [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
+      quantityValue: [0, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      inletWaterMassFlow: [0, [Validators.required, Validators.min(ranges.inletWaterMassFlowMin)]],
+      tankPressure: [0, [Validators.required, Validators.min(ranges.tankPressureMin), Validators.max(ranges.tankPressureMax)]]
     });
     return tmpForm;
   }

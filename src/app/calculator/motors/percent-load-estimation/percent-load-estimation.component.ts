@@ -24,6 +24,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   tabSelect: string = 'results';
   toggleCalculate = false;
   toggleResetData = false;
+  toggleExampleData = false;
   loadEstimationMethod: number;
   percentLoadEstimation: number;
 
@@ -104,6 +105,7 @@ export class PercentLoadEstimationComponent implements OnInit {
     this.slipMethodData = this.percentLoadEstimationService.generateSlipMethodInputsExample();
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
     this.calculateSlipMethod(this.slipMethodData);
+    this.toggleExampleData = !this.toggleExampleData;
   }
 }
 

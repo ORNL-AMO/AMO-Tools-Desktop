@@ -20,7 +20,7 @@ export class MotorDriveService {
   }
   getResetData(settings: Settings): MotorDriveInputs{
     return {
-      motorPower: 5,
+      motorPower: 0,
       annualOperatingHours: 0,
       averageMotorLoad: 0,
       electricityCost: settings.electricityCost,

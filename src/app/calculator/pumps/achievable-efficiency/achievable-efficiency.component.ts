@@ -118,11 +118,19 @@ export class AchievableEfficiencyComponent implements OnInit {
     this.calculate();
   }
 
+  generateExample() {
+    let tmpFlowRate = 2000;
+    if (this.settings.flowMeasurement !== 'gpm') {
+      tmpFlowRate = Math.round(this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement) * 100) / 100;
+    }
+    this.efficiencyForm = this.achievableEfficiencyService.getForm(0, tmpFlowRate);
+  }
+
   btnGenerateExample() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.initForm();
+    this.generateExample();
     this.toggleExampleData = !this.toggleExampleData;
     this.calculate();
   }
