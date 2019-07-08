@@ -233,7 +233,7 @@ export class FsatService {
 
   optimalFanEfficiency(inputs: FanEfficiencyInputs, settings: Settings): number {
     if (settings.fanFlowRate !== 'ft3/min') {
-      inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m2').to('ft2');
+      inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3').to('ft3');
 
     }
 
@@ -271,7 +271,7 @@ export class FsatService {
   compressibilityFactor(inputs: CompressibilityFactor, settings: Settings) {
     let inputCpy: CompressibilityFactor = JSON.parse(JSON.stringify(inputs));
     if (settings.fanFlowRate !== 'ft3/min') {
-      inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m2').to('ft2');
+      inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m3').to('ft3');
 
     }
     if (settings.fanPressureMeasurement !== 'inH2o') {
@@ -282,7 +282,7 @@ export class FsatService {
       inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
     }
     if (settings.fanPowerMeasurement !== 'hp') {
-      inputCpy.moverShaftPower = this.convertUnitsService.value(inputCpy.moverShaftPower).from('hp').to(settings.fanPowerMeasurement);
+      inputCpy.motorShaftPower = this.convertUnitsService.value(inputCpy.motorShaftPower).from(settings.fanPowerMeasurement).to('hp');
     }
     return fanAddon.compressibilityFactor(inputCpy);
   }

@@ -322,7 +322,7 @@ export interface OutletPressureData {
 
 
 export interface CompressibilityFactor {
-  moverShaftPower: number;
+  motorShaftPower: number;
   inletPressure: number;
   outletPressure: number;
   barometricPressure: number;
