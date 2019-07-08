@@ -2,9 +2,9 @@ export const density = {
     metric: {
         kgNm3: {
             name: {
-                singular: 'Kilogram per Normal Cubic Meter'
-                , plural: 'Kilogram per Normal Cubic Meters',
-                display: '(kg/Nm&#x00B3)'
+                singular: 'Kilogram per Cubic Meter'
+                , plural: 'Kilograms per Cubic Meter',
+                display: '(kg/m&#x00B3)'
             }
             , to_anchor: 1
         }
@@ -20,9 +20,9 @@ export const density = {
     imperial: {
         lbscf: {
             name: {
-                singular: 'Pound per standard cubic foot'
-                , plural: 'Pounds per standard cubic feet',
-                display: '(lb/scf)'
+                singular: 'Pound per Cubic Foot'
+                , plural: 'Pounds per Cubic Foot',
+                display: '(lb/ft&#x00B3)'
             }
             , to_anchor: 1
         }
