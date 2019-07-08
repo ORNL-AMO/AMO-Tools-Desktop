@@ -77,8 +77,6 @@ export class DeaeratorComponent implements OnInit {
   calculate(form: FormGroup) {
     this.input = this.deaeratorService.getObjFromForm(form);
     this.deaeratorService.deaeratorInput = this.input;
-    console.log(this.deaeratorService.deaeratorInput);
-    console.log(form.status);
     if (form.status === 'VALID') {
       this.results = this.steamService.deaerator(this.input, this.settings);
     } else if (this.toggleGenerateBtn){
