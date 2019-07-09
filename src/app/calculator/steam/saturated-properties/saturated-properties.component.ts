@@ -1,11 +1,11 @@
-import {Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Settings} from "../../../shared/models/settings";
-import {SettingsDbService} from '../../../indexedDb/settings-db.service';
-import {SaturatedPropertiesInput} from '../../../shared/models/steam/steam-inputs';
-import {SteamService} from '../steam.service';
-import {SaturatedPropertiesOutput} from '../../../shared/models/steam/steam-outputs';
-import {ConvertUnitsService} from '../../../shared/convert-units/convert-units.service';
+import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Settings } from "../../../shared/models/settings";
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { SaturatedPropertiesInput } from '../../../shared/models/steam/steam-inputs';
+import { SteamService } from '../steam.service';
+import { SaturatedPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-saturated-properties-calculator',
@@ -196,7 +196,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     }
     let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     let maxPressure: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    return {minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure};
+    return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure };
   }
 
   btnResetData() {
@@ -208,24 +208,32 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    let tempPressureOrTemperature = 0;
+    let tmpPressureOrTemperature = 0;
     if (this.saturatedPropertiesForm.status === 'INVALID') {
-      tempPressureOrTemperature = 0;
+      tmpPressureOrTemperature = 0;
     }
     else {
-      tempPressureOrTemperature = this.saturatedPropertiesForm.value.pressureOrTemperature;
+      tmpPressureOrTemperature = this.saturatedPropertiesForm.value.pressureOrTemperature;
     }
-      this.saturatedPropertiesOutput = this.getEmptyResults();
-      this.steamService.saturatedPropertiesInputs = {
-        inputs: {
-          saturatedPressure: 2700,
-          saturatedTemperature: 580
-        },
-        pressureOrTemperature: tempPressureOrTemperature
-      };
-      this.initForm();
-      this.calculate(this.saturatedPropertiesForm);
-      this.toggleExampleData = !this.toggleExampleData;
+    let tmpSaturatedPressure = 2700;
+    let tmpSaturatedTemperature = 580;
+    if (this.settings.steamPressureMeasurement !== 'psig') {
+      tmpSaturatedPressure = Math.round(this.convertUnitsService.value(2700).from('psig').to(this.settings.steamPressureMeasurement) * 100) / 100;
     }
+    if (this.settings.steamTemperatureMeasurement !== 'F') {
+      tmpSaturatedTemperature = Math.round(this.convertUnitsService.value(tmpSaturatedTemperature).from('F').to(this.settings.steamTemperatureMeasurement) * 100) / 100;
+    }
+    this.saturatedPropertiesOutput = this.getEmptyResults();
+    this.steamService.saturatedPropertiesInputs = {
+      inputs: {
+        saturatedPressure: tmpSaturatedPressure,
+        saturatedTemperature: tmpSaturatedTemperature
+      },
+      pressureOrTemperature: tmpPressureOrTemperature
+    };
+    this.initForm();
+    this.calculate(this.saturatedPropertiesForm);
+    this.toggleExampleData = !this.toggleExampleData;
+  }
 
 }

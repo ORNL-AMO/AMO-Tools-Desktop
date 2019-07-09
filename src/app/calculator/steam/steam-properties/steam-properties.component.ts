@@ -1,11 +1,11 @@
-import {Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Settings} from "../../../shared/models/settings";
-import {SettingsDbService} from '../../../indexedDb/settings-db.service';
-import {SteamPropertiesInput} from '../../../shared/models/steam/steam-inputs';
-import {SteamService} from '../steam.service';
-import {SteamPropertiesOutput} from '../../../shared/models/steam/steam-outputs';
-import {ConvertUnitsService} from '../../../shared/convert-units/convert-units.service';
+import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Settings } from "../../../shared/models/settings";
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { SteamPropertiesInput } from '../../../shared/models/steam/steam-inputs';
+import { SteamService } from '../steam.service';
+import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 
 @Component({
@@ -176,7 +176,7 @@ export class SteamPropertiesComponent implements OnInit {
     let quantityRanges: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, quantityValue);
     let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     let maxPressure: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    return {minQuantityValue: quantityRanges.min, maxQuantityValue: quantityRanges.max, minPressure: minPressure, maxPressure: maxPressure};
+    return { minQuantityValue: quantityRanges.min, maxQuantityValue: quantityRanges.max, minPressure: minPressure, maxPressure: maxPressure };
   }
 
   btnResetData() {
@@ -188,10 +188,18 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
   btnGenerateExample() {
+    let tmpPressure = 1678;
+    let tmpQuantityValue = 158.5;
+    if (this.settings.steamPressureMeasurement !== 'psig') {
+      tmpPressure = Math.round(this.convertUnitsService.value(tmpPressure).from('F').to(this.settings.steamPressureMeasurement) * 100) / 100;
+    }
+    if (this.settings.steamTemperatureMeasurement !== 'F') {
+      tmpQuantityValue = Math.round(this.convertUnitsService.value(tmpQuantityValue).from('F').to(this.settings.steamTemperatureMeasurement) * 100) / 100;
+    }
     this.steamService.steamPropertiesInput = {
-      thermodynamicQuantity:0,
-      pressure: 1678,
-      quantityValue: 158.5,
+      thermodynamicQuantity: 0,
+      pressure: tmpPressure,
+      quantityValue: tmpQuantityValue,
     };
     this.steamPropertiesOutput = this.getEmptyResults();
     this.getForm(0);

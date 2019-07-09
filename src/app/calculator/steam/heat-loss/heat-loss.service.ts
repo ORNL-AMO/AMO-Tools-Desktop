@@ -12,24 +12,37 @@ export class HeatLossService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initForm(settings: Settings): FormGroup {
+    let tmpInletPressure = 653;
+    let tmpQuantityValue = 1121.9;
+    let tmpInletMassFlow = 13.6;
+    let tmpPercentHeatLoss = 8.47;
+    if (settings.steamPressureMeasurement !== 'psig') {
+      tmpInletPressure = Math.round(this.convertUnitsService.value(tmpInletPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+    }
+    if (settings.steamTemperatureMeasurement !== 'F') {
+      tmpQuantityValue = Math.round(this.convertUnitsService.value(tmpQuantityValue).from('F').to(settings.steamTemperatureMeasurement) * 100) / 100;
+    }
+    if (settings.steamMassFlowMeasurement !== 'klb') {
+      tmpInletMassFlow = Math.round(this.convertUnitsService.value(tmpInletMassFlow).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
+    }
     let ranges: HeatLossRanges = this.getRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
-      inletPressure: ['653', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
+      inletPressure: [tmpInletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]], //0 is TEMPERATURE
-      quantityValue: ['1121.9', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletMassFlow: ['13.6', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
-      percentHeatLoss: ['8.47', [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
+      quantityValue: [tmpQuantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      inletMassFlow: [tmpInletMassFlow, [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
+      percentHeatLoss: [tmpPercentHeatLoss, [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
     });
     return tmpForm;
   }
   resetForm(settings: Settings): FormGroup {
     let ranges: HeatLossRanges = this.getRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
-      inletPressure: ['', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
+      inletPressure: [0, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]], //0 is TEMPERATURE
-      quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletMassFlow: ['', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
-      percentHeatLoss: ['', [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
+      quantityValue: [0, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      inletMassFlow: [0, [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
+      percentHeatLoss: [0, [Validators.required, Validators.min(ranges.percentHeatLossMin), Validators.max(ranges.percentHeatLossMax)]]
     });
     return tmpForm;
   }

@@ -12,25 +12,39 @@ export class PrvService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initInletForm(settings: Settings): FormGroup {
-    let ranges: PrvRanges = this.getRangeValues(settings, 2);
+    let tmpInletPressure = 143;
+    let tmpQuantityValue = 1038.1;
+    let tmpInletMassFlow = 33.9;
+    let tmpOutletPressure = 57.6;
+    if (settings.steamPressureMeasurement !== 'psig') {
+      tmpInletPressure = Math.round(this.convertUnitsService.value(tmpInletPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+      tmpOutletPressure = Math.round(this.convertUnitsService.value(tmpOutletPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+    }
+    if (settings.steamTemperatureMeasurement !== 'F') {
+      tmpQuantityValue = Math.round(this.convertUnitsService.value(tmpQuantityValue).from('F').to(settings.steamTemperatureMeasurement) * 100) / 100;
+    }
+    if (settings.steamMassFlowMeasurement !== 'klb') {
+      tmpInletMassFlow = Math.round(this.convertUnitsService.value(tmpInletMassFlow).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
+    }
+    let ranges: PrvRanges = this.getRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
-      inletPressure: ['143', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
+      inletPressure: [tmpInletPressure, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]],
-      quantityValue: ['1038.1', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletMassFlow: ['33.9', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
-      outletPressure: ['57.6', [Validators.required, Validators.min(ranges.outletPressureMin), Validators.max(ranges.outletPressureMax)]],
+      quantityValue: [tmpQuantityValue, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      inletMassFlow: [tmpInletMassFlow, [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
+      outletPressure: [tmpOutletPressure, [Validators.required, Validators.min(ranges.outletPressureMin), Validators.max(ranges.outletPressureMax)]],
     });
     return tmpForm;
   }
 
   resetInletForm(settings: Settings): FormGroup {
-    let ranges: PrvRanges = this.getRangeValues(settings, 2);
+    let ranges: PrvRanges = this.getRangeValues(settings, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
-      inletPressure: ['', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
+      inletPressure: [0, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       thermodynamicQuantity: [0, [Validators.required]],
-      quantityValue: ['', [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
-      inletMassFlow: ['', [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
-      outletPressure: ['', [Validators.required, Validators.min(ranges.outletPressureMin), Validators.max(ranges.outletPressureMax)]],
+      quantityValue: [0, [Validators.required, Validators.min(ranges.quantityValueMin), Validators.max(ranges.quantityValueMax)]],
+      inletMassFlow: [0, [Validators.required, Validators.min(ranges.inletMassFlowMin)]],
+      outletPressure: [0, [Validators.required, Validators.min(ranges.outletPressureMin), Validators.max(ranges.outletPressureMax)]],
     });
     return tmpForm;
   }
@@ -48,12 +62,21 @@ export class PrvService {
   }
 
   initFeedwaterForm(settings: Settings): FormGroup {
-    let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, 2);
+    let tmpFeedwaterPressure = 14.2;
+    let tmpFeedwaterQuantityValue = 0;
+    let tmpDesuperheatingTemp = 785.3;
+    if (settings.steamPressureMeasurement !== 'psig') {
+      tmpFeedwaterPressure = Math.round(this.convertUnitsService.value(tmpFeedwaterPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+    }
+    if (settings.steamTemperatureMeasurement !== 'F') {
+      tmpDesuperheatingTemp = Math.round(this.convertUnitsService.value(tmpDesuperheatingTemp).from('F').to(settings.steamTemperatureMeasurement) * 100) / 100;
+    }
+    let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, 3);
     let tmpForm: FormGroup = this.formBuilder.group({
-      feedwaterPressure: ['14.2', [Validators.required, Validators.min(ranges.feedwaterPressureMin), Validators.max(ranges.feedwaterPressureMax)]],
+      feedwaterPressure: [tmpFeedwaterPressure, [Validators.required, Validators.min(ranges.feedwaterPressureMin), Validators.max(ranges.feedwaterPressureMax)]],
       feedwaterThermodynamicQuantity: [3, Validators.required],
-      feedwaterQuantityValue: ['0', [Validators.required, Validators.min(ranges.feedwaterQuantityValueMin), Validators.max(ranges.feedwaterQuantityValueMax)]],
-      desuperheatingTemp: ['785.3', [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
+      feedwaterQuantityValue: [tmpFeedwaterQuantityValue, [Validators.required, Validators.min(ranges.feedwaterQuantityValueMin), Validators.max(ranges.feedwaterQuantityValueMax)]],
+      desuperheatingTemp: [tmpDesuperheatingTemp, [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
     });
     return tmpForm;
   }
@@ -61,10 +84,10 @@ export class PrvService {
   resetFeedwaterForm(settings: Settings): FormGroup {
     let ranges: FeedwaterRanges = this.getFeedwaterRangeValues(settings, 2);
     let tmpForm: FormGroup = this.formBuilder.group({
-      feedwaterPressure: ['', [Validators.required, Validators.min(ranges.feedwaterPressureMin), Validators.max(ranges.feedwaterPressureMax)]],
+      feedwaterPressure: [0, [Validators.required, Validators.min(ranges.feedwaterPressureMin), Validators.max(ranges.feedwaterPressureMax)]],
       feedwaterThermodynamicQuantity: [2, Validators.required],
-      feedwaterQuantityValue: ['', [Validators.required, Validators.min(ranges.feedwaterQuantityValueMin), Validators.max(ranges.feedwaterQuantityValueMax)]],
-      desuperheatingTemp: ['', [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
+      feedwaterQuantityValue: [0, [Validators.required, Validators.min(ranges.feedwaterQuantityValueMin), Validators.max(ranges.feedwaterQuantityValueMax)]],
+      desuperheatingTemp: [0, [Validators.required, Validators.min(ranges.desuperheatingTempMin), Validators.max(ranges.desuperheatingTempMax)]],
     });
     return tmpForm;
   }
