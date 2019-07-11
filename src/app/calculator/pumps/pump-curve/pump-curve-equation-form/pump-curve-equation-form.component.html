@@ -56,7 +56,7 @@
         *ngIf="!isFan">
       <input name="headConstant" formControlName="headConstant" type="number" step="any" class="form-control"
         (input)="emitCalculateChanges()" id="headConstant" onfocus="this.select();"
-        (focus)="focusField('pressureConstant')">
+        (focus)="focusField('pressureConstant')" *ngIf="isFan">
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="pumpCurveForm.controls.headConstant.invalid && !pumpCurveForm.controls.headConstant.pristine">

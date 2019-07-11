@@ -11,8 +11,8 @@ export class TurbineService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initOutletForm(settings: Settings): FormGroup {
-    let tmpInletPressure = 66.4;
-    let tmpInletQuantityValue = 897.5;
+    let tmpInletPressure = 847.5;
+    let tmpInletQuantityValue = 1221.4;
     let tmpMassFlowOrPowerOut = 38.2;
     let tmpOutletSteamPressure = 619.4;
     let tmpOutletQuantityValue = 1135.3;
@@ -35,10 +35,10 @@ export class TurbineService {
       inletQuantityValue: [tmpInletQuantityValue, [Validators.required, Validators.min(ranges.inletQuantityValueMin), Validators.max(ranges.inletQuantityValueMax)]],
       turbineProperty: [0, Validators.required], // massFlow = 0, powerOut = 1
       isentropicEfficiency: [68.6, [Validators.min(ranges.isentropicEfficiencyMin), Validators.max(ranges.isentropicEfficiencyMax)]],
-      generatorEfficiency: [97.2, [Validators.required, Validators.min(ranges.generatorEfficiencyMin), Validators.max(ranges.generatorEfficiencyMax)]],
+      generatorEfficiency: [81.4, [Validators.required, Validators.min(ranges.generatorEfficiencyMin), Validators.max(ranges.generatorEfficiencyMax)]],
       massFlowOrPowerOut: [tmpMassFlowOrPowerOut, [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin)]],
       outletSteamPressure: [tmpOutletSteamPressure, [Validators.required, Validators.min(ranges.outletSteamPressureMin), Validators.max(ranges.outletSteamPressureMax)]],
-      outletQuantity: [0],
+      outletQuantity: [0, Validators.required],
       outletQuantityValue: [tmpOutletQuantityValue, [Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
     });
     return tmpForm;
@@ -68,7 +68,7 @@ export class TurbineService {
       inletQuantity: [0, Validators.required],
       inletQuantityValue: [tmpInletQuantityValue, [Validators.required, Validators.min(ranges.inletQuantityValueMin), Validators.max(ranges.inletQuantityValueMax)]],
       turbineProperty: [0, Validators.required], // massFlow = 0, powerOut = 1
-      isentropicEfficiency: [0, [Validators.min(ranges.isentropicEfficiencyMin), Validators.max(ranges.isentropicEfficiencyMax)]],
+      isentropicEfficiency: [68.6, [Validators.min(ranges.isentropicEfficiencyMin), Validators.max(ranges.isentropicEfficiencyMax)]],
       generatorEfficiency: [81.4, [Validators.required, Validators.min(ranges.generatorEfficiencyMin), Validators.max(ranges.generatorEfficiencyMax)]],
       massFlowOrPowerOut: [tmpMassFlowOrPowerOut, [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin)]],
       outletSteamPressure: [tmpOutletSteamPressure, [Validators.required, Validators.min(ranges.outletSteamPressureMin), Validators.max(ranges.outletSteamPressureMax)]],
@@ -82,16 +82,16 @@ export class TurbineService {
     let ranges: TurbineRanges = this.getRangeValues(settings, 0, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
       solveFor: [0, Validators.required], // (outlet properties = 0, isentropicEfficiency = 1) - unknown to solve for
-      inletPressure: ['', [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
+      inletPressure: [0, [Validators.required, Validators.min(ranges.inletPressureMin), Validators.max(ranges.inletPressureMax)]],
       inletQuantity: [0, Validators.required],
-      inletQuantityValue: ['', [Validators.required, Validators.min(ranges.inletQuantityValueMin), Validators.max(ranges.inletQuantityValueMax)]],
+      inletQuantityValue: [0, [Validators.required, Validators.min(ranges.inletQuantityValueMin), Validators.max(ranges.inletQuantityValueMax)]],
       turbineProperty: [0, Validators.required], // massFlow = 0, powerOut = 1
-      isentropicEfficiency: ['', [Validators.min(ranges.isentropicEfficiencyMin), Validators.max(ranges.isentropicEfficiencyMax)]],
-      generatorEfficiency: ['', [Validators.required, Validators.min(ranges.generatorEfficiencyMin), Validators.max(ranges.generatorEfficiencyMax)]],
-      massFlowOrPowerOut: ['', [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin)]],
-      outletSteamPressure: ['', [Validators.required, Validators.min(ranges.outletSteamPressureMin), Validators.max(ranges.outletSteamPressureMax)]],
+      isentropicEfficiency: [0, [Validators.min(ranges.isentropicEfficiencyMin), Validators.max(ranges.isentropicEfficiencyMax)]],
+      generatorEfficiency: [0, [Validators.required, Validators.min(ranges.generatorEfficiencyMin), Validators.max(ranges.generatorEfficiencyMax)]],
+      massFlowOrPowerOut: [0, [Validators.required, Validators.min(ranges.massFlowOrPowerOutMin)]],
+      outletSteamPressure: [0, [Validators.required, Validators.min(ranges.outletSteamPressureMin), Validators.max(ranges.outletSteamPressureMax)]],
       outletQuantity: [0],
-      outletQuantityValue: ['', [Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
+      outletQuantityValue: [0, [Validators.min(ranges.outletQuantityValueMin), Validators.max(ranges.outletQuantityValueMax)]],
     });
     return tmpForm;
   }

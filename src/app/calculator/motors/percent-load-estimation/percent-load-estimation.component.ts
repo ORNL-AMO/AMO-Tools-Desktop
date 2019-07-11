@@ -89,8 +89,6 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   btnResetData() {
-    this.percentLoadEstimationService.loadEstimationMethod = 0;
-    this.loadEstimationMethod = 0;
     this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
     this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
@@ -99,9 +97,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.percentLoadEstimationService.loadEstimationMethod = 0;
-    this.loadEstimationMethod = 0;
-    this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
+    this.fieldMeasurementData = this.percentLoadEstimationService.generateFieldMeasurementInputs();
     this.slipMethodData = this.percentLoadEstimationService.generateSlipMethodInputsExample();
     this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
     this.calculateSlipMethod(this.slipMethodData);

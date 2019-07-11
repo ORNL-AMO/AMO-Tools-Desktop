@@ -180,7 +180,11 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
   btnResetData() {
-    this.steamService.steamPropertiesInput = null;
+    this.steamService.steamPropertiesInput = {
+      thermodynamicQuantity: 0,
+      pressure: 0,
+      quantityValue: 0
+    };
     this.steamPropertiesOutput = this.getEmptyResults();
     this.getForm(0);
     this.calculate(this.steamPropertiesForm);
@@ -191,7 +195,7 @@ export class SteamPropertiesComponent implements OnInit {
     let tmpPressure = 1678;
     let tmpQuantityValue = 158.5;
     if (this.settings.steamPressureMeasurement !== 'psig') {
-      tmpPressure = Math.round(this.convertUnitsService.value(tmpPressure).from('F').to(this.settings.steamPressureMeasurement) * 100) / 100;
+      tmpPressure = Math.round(this.convertUnitsService.value(tmpPressure).from('psig').to(this.settings.steamPressureMeasurement) * 100) / 100;
     }
     if (this.settings.steamTemperatureMeasurement !== 'F') {
       tmpQuantityValue = Math.round(this.convertUnitsService.value(tmpQuantityValue).from('F').to(this.settings.steamTemperatureMeasurement) * 100) / 100;

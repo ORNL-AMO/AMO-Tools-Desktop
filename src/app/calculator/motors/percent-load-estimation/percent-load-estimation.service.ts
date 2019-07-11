@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 
 import { ValueNotInListValidator } from '../../../shared/validators/value-not-in-list';
 import { LessThanValidator } from '../../../shared/validators/less-than';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class PercentLoadEstimationService {
@@ -32,6 +33,21 @@ export class PercentLoadEstimationService {
       nameplateFullLoadSpeed: 0
     };
     return this.slipMethodInputs;
+  }
+
+  generateFieldMeasurementInputs(): FieldMeasurementInputs {
+    this.fieldMeasurementInputs = {
+      phase1Voltage: 467,
+      phase1Amps: 36,
+      phase2Voltage: 473,
+      phase2Amps: 38,
+      phase3Voltage: 469,
+      phase3Amps: 37,
+      ratedVoltage: 460,
+      ratedCurrent: 72.1,
+      powerFactor: 0.77
+    }
+    return this.fieldMeasurementInputs;
   }
 
   generateSlipMethodInputsExample(): SlipMethod {

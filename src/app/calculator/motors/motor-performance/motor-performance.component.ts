@@ -1,13 +1,13 @@
-import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {PSAT} from '../../../shared/models/psat';
-import {Settings} from '../../../shared/models/settings';
-import {FormGroup} from '@angular/forms';
-import {SettingsDbService} from '../../../indexedDb/settings-db.service';
-import {MotorPerformanceService, MotorPerformanceInputs} from './motor-performance.service';
-import {Calculator} from '../../../shared/models/calculators';
-import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
-import {Assessment} from '../../../shared/models/assessment';
-import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { PSAT } from '../../../shared/models/psat';
+import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { MotorPerformanceService, MotorPerformanceInputs } from './motor-performance.service';
+import { Calculator } from '../../../shared/models/calculators';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { Assessment } from '../../../shared/models/assessment';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-motor-performance',
