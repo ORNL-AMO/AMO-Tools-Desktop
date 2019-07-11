@@ -6,6 +6,7 @@ import { SteamPropertiesInput } from '../../../shared/models/steam/steam-inputs'
 import { SteamService } from '../steam.service';
 import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { LessThanValidator } from '../../../shared/validators/less-than';
 
 
 @Component({
@@ -84,13 +85,13 @@ export class SteamPropertiesComponent implements OnInit {
     this.ranges = this.getRanges(quantityValue);
     if (this.steamService.steamPropertiesInput) {
       this.steamPropertiesForm = this.formBuilder.group({
-        'pressure': [this.steamService.steamPropertiesInput.pressure, [Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
+        'pressure': [this.steamService.steamPropertiesInput.pressure, [Validators.required, Validators.min(this.ranges.minPressure), LessThanValidator.lessThan(this.ranges.maxPressure)]],
         'thermodynamicQuantity': [this.steamService.steamPropertiesInput.thermodynamicQuantity, Validators.required],
         'quantityValue': [this.steamService.steamPropertiesInput.quantityValue, [Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]]
       });
     } else {
       this.steamPropertiesForm = this.formBuilder.group({
-        'pressure': ['', [Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
+        'pressure': ['', [Validators.required, Validators.min(this.ranges.minPressure), LessThanValidator.lessThan(this.ranges.maxPressure)]],
         'thermodynamicQuantity': [quantityValue, Validators.required],
         'quantityValue': ['', [Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]]
       });
@@ -180,7 +181,7 @@ export class SteamPropertiesComponent implements OnInit {
   getRanges(quantityValue: number): { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number } {
     let quantityRanges: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, quantityValue);
     let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    let maxPressure: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
+    let maxPressure: number = Number(this.convertUnitsService.value(100).from('MPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     return { minQuantityValue: quantityRanges.min, maxQuantityValue: quantityRanges.max, minPressure: minPressure, maxPressure: maxPressure };
   }
 }

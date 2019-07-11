@@ -28,8 +28,8 @@ export class SteamService {
     let _max: number = 1;
     //temp
     if (thermodynamicQuantity === 0) {
-      _min = Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(0));
+      _min = Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(3));
+      _max = Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(3));
     }
     //enthalpy
     else if (thermodynamicQuantity === 1) {
