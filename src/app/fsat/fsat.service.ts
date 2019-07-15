@@ -282,7 +282,7 @@ export class FsatService {
       inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
     }
     if (settings.fanPowerMeasurement !== 'hp') {
-      inputCpy.motorShaftPower = this.convertUnitsService.value(inputCpy.motorShaftPower).from(settings.fanPowerMeasurement).to('hp');
+      inputCpy.moverShaftPower = this.convertUnitsService.value(inputCpy.moverShaftPower).from(settings.fanPowerMeasurement).to('hp');
     }
     return fanAddon.compressibilityFactor(inputCpy);
   }
