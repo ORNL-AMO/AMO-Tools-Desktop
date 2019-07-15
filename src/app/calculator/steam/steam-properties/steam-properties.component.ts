@@ -182,6 +182,11 @@ export class SteamPropertiesComponent implements OnInit {
     let quantityRanges: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, quantityValue);
     let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     let maxPressure: number = Number(this.convertUnitsService.value(100).from('MPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    return { minQuantityValue: quantityRanges.min, maxQuantityValue: quantityRanges.max, minPressure: minPressure, maxPressure: maxPressure };
+    return {
+      minQuantityValue: quantityRanges.min,
+      maxQuantityValue: quantityRanges.max,
+      minPressure: minPressure,
+      maxPressure: maxPressure
+    };
   }
 }
