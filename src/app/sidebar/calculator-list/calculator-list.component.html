@@ -31,16 +31,16 @@
       (click)="chooseCalculator('pumps')">Pumps</span>
     <ul *ngIf="selectedCalculatorType == 'pumps'">
       <li [ngClass]="{'selected': selectedCalculator == 'head-tool'}">
-        <span class="sidebar-item" (click)="selectCalculator('head-tool')">Head Tool</span>
+        <span class="sidebar-item" (click)="selectCalculator('head-tool')">Pump Head Tool</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'system-curve'}">
-        <span class="sidebar-item" (click)="selectCalculator('system-curve')">System Curve</span>
+        <span class="sidebar-item" (click)="selectCalculator('system-curve')">Pump System Curve</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'specific-speed'}">
         <span class="sidebar-item" (click)="selectCalculator('specific-speed')">Specific Speed</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'achievable-efficiency'}">
-        <span class="sidebar-item" (click)="selectCalculator('achievable-efficiency')">Pump Efficiency Curves</span>
+        <span class="sidebar-item" (click)="selectCalculator('achievable-efficiency')">Pump Achievable Efficiency</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'pump-curve'}">
         <span class="sidebar-item" (click)="selectCalculator('pump-curve')">Pump Curve</span>
