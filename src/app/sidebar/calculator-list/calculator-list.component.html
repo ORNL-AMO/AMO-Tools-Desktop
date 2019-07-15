@@ -31,7 +31,7 @@
       (click)="chooseCalculator('pumps')">Pumps</span>
     <ul *ngIf="selectedCalculatorType == 'pumps'">
       <li [ngClass]="{'selected': selectedCalculator == 'head-tool'}">
-        <span class="sidebar-item" (click)="selectCalculator('head-tool')">Head Tool</span>
+        <span class="sidebar-item" (click)="selectCalculator('head-tool')">Pump Head Tool</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'system-curve'}">
         <span class="sidebar-item" (click)="selectCalculator('system-curve')">System Curve</span>
