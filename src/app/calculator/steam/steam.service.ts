@@ -28,8 +28,8 @@ export class SteamService {
     let _max: number = 1;
     //temp
     if (thermodynamicQuantity === 0) {
-      _min = Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(0));
+      _min = Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(3));
+      _max = Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(3));
     }
     //enthalpy
     else if (thermodynamicQuantity === 1) {
@@ -591,15 +591,7 @@ export class SteamService {
     inputCpy.coldInletSpecificEnthalpy = this.convertSteamSpecificEnthalpyInput(inputCpy.coldInletSpecificEnthalpy, settings);
     inputCpy.coldInletSpecificEntropy = this.convertSteamSpecificEntropyInput(inputCpy.coldInletSpecificEntropy, settings);
     inputCpy.approachTemp = this.convertSteamTemperatureInput(inputCpy.approachTemp, settings);
-
-    console.log('approach temp ' + inputCpy.approachTemp);
-    console.log('cold inlet temp ' + inputCpy.coldInletTemperature);
-    console.log('hot inlet temp' + inputCpy.hotInletTemperature);
-    // console.log('orig ' + inputCpy.hotInletDensity)
-    // inputCpy.hotInletDensity = 1 / inputCpy.hotInletSpecificVolume;
-    // inputCpy.coldInletDensity = 1 / inputCpy.coldInletSpecificVolume;
-    // console.log('convert ' + inputCpy.hotInletDensity)
-
+    
     let results: HeatExchangerOutput = steamAddon.heatExchanger(inputCpy);
 
     results.hotOutletMassFlow = this.convertSteamMassFlowOutput(results.hotOutletMassFlow, settings);

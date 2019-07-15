@@ -10,7 +10,7 @@
       </div>
       <span class="alert-danger pull-right small" *ngIf="steamPropertiesForm.controls.pressure.invalid && !steamPropertiesForm.controls.pressure.pristine">
         <span *ngIf="steamPropertiesForm.controls.pressure.errors.required">Value Required</span>
-        <span *ngIf="steamPropertiesForm.controls.pressure.errors.max">Value can't be greater than {{steamPropertiesForm.controls.pressure.errors.max.max}} {{settings.steamPressureMeasurement}}.</span>
+        <span *ngIf="steamPropertiesForm.controls.pressure.errors.lessThan">Value can't be greater than {{steamPropertiesForm.controls.pressure.errors.lessThan}} {{settings.steamPressureMeasurement}}.</span>
         <span *ngIf="steamPropertiesForm.controls.pressure.errors.min">Value can't be less than {{steamPropertiesForm.controls.pressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
       </span>
     </div>
