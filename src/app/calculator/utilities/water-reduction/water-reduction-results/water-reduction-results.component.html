@@ -14,7 +14,7 @@
       </td>
       <td class="text-center w-50">
         <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">{{waterReductionResults.modificationResult.waterUse | number:'.0-0'}}
+        <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.waterUse | number:'.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
         </span>
@@ -27,7 +27,7 @@
       </td>
       <td class="text-center w-50">
         <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">{{waterReductionResults.modificationResult.waterCost | currency: 'USD'}} /yr
+        <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.waterCost | currency: 'USD'}} /yr
         </span>
       </td>
     </tr>

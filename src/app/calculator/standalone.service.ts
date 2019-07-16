@@ -316,12 +316,6 @@ export class StandaloneService {
   }
 
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
-    let result: WaterReductionResult = {
-      waterUse: 300,
-      waterCost: 0.006,
-      annualWaterSavings: 250,
-      costSavings: 200
-    }
-    return result;
+    return calculatorAddon.waterReduction(inputObj);
   }
 }

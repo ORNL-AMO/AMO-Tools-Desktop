@@ -17,8 +17,8 @@ export class WaterReductionService {
 
   initObject(index: number, settings: Settings, isWastewater: boolean, operatingHours: OperatingHours): WaterReductionData {
     let defaultVolumeMeterMethodData: VolumeMeterMethodData = {
-      initialMeterReading: 4235,
       finalMeterReading: 5842,
+      initialMeterReading: 4235,
       elapsedTime: 15
     };
     let defaultMeteredFlowMethod: MeteredFlowMethodData = {
@@ -50,18 +50,20 @@ export class WaterReductionService {
       hoursPerYear: hoursPerYear,
       waterCost: waterCost,
       measurementMethod: 0,
-      volumeMeterMethodData: defaultVolumeMeterMethodData,
       meteredFlowMethodData: defaultMeteredFlowMethod,
+      volumeMeterMethodData: defaultVolumeMeterMethodData,
       bucketMethodData: defaultBucketMethodData,
-      otherMethodData: defaultOtherMethodData
+      otherMethodData: defaultOtherMethodData,
+      isWastewater: isWastewater
     };
     return obj;
   }
 
-  getFormFromObj(inputObj: WaterReductionData, index: number, isBaseline): FormGroup {
+  getFormFromObj(inputObj: WaterReductionData, index: number, isBaseline: boolean): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      isWastewater: [{ value: inputObj.isWastewater, disabled: (index != 0 || !isBaseline) }],
       waterCost: [inputObj.waterCost, [Validators.required, Validators.min(0)]],
       measurementMethod: [inputObj.measurementMethod],
 
@@ -78,7 +80,7 @@ export class WaterReductionService {
       bucketFillTime: [inputObj.bucketMethodData.bucketFillTime],
 
       //water other method data
-      consumption: [inputObj.otherMethodData.consumption]
+      consumption: [inputObj.otherMethodData.consumption],
     });
     form = this.setValidators(form);
 
@@ -130,7 +132,8 @@ export class WaterReductionService {
       volumeMeterMethodData: volumeMeterMethodData,
       meteredFlowMethodData: meteredFlowMethodData,
       bucketMethodData: bucketMethodData,
-      otherMethodData: otherMethodData
+      otherMethodData: otherMethodData,
+      isWastewater: form.controls.isWastewater.value
     };
     return obj;
   }
@@ -147,21 +150,23 @@ export class WaterReductionService {
       modificationResults = this.calculate(modificationInpCpy, settings);
     }
 
-    if (modificationResults) {
-      annualWaterSavings = baselineResults.waterUse - modificationResults.waterUse;
-      annualCostSavings = baselineResults.waterCost - modificationResults.waterCost;
-    }
     let waterReductionResults: WaterReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualWaterSavings: annualWaterSavings,
       annualCostSavings: annualCostSavings
     };
+
+    if (modificationResults) {
+      waterReductionResults.annualWaterSavings = baselineResults.waterUse - modificationResults.waterUse;
+      waterReductionResults.annualCostSavings = baselineResults.waterCost - modificationResults.waterCost;
+    }
+
     return waterReductionResults;
   }
 
   calculate(input: Array<WaterReductionData>, settings: Settings): WaterReductionResult {
-    let inputArray: Array<WaterReductionData>;
+    let inputArray = this.convertInputs(input, settings);
     let inputObj: WaterReductionInput = {
       waterReductionInputVec: inputArray
     };
@@ -186,9 +191,9 @@ export class WaterReductionService {
       let gallonConversionHelper = this.convertUnitsService.value(1).from('L').to('gal');
       for (let i = 0; i < inputArray.length; i++) {
         inputArray[i].waterCost = inputArray[i].waterCost / gallonConversionHelper;
-        inputArray[i].volumeMeterMethodData.initialMeterReading = this.convertUnitsService.value(inputArray[i].volumeMeterMethodData.initialMeterReading).from('L').to('gal');
-        inputArray[i].volumeMeterMethodData.finalMeterReading = this.convertUnitsService.value(inputArray[i].volumeMeterMethodData.finalMeterReading).from('L').to('gal');
         inputArray[i].meteredFlowMethodData.meterReading = this.convertUnitsService.value(inputArray[i].meteredFlowMethodData.meterReading).from('L').to('gal');
+        inputArray[i].volumeMeterMethodData.finalMeterReading = this.convertUnitsService.value(inputArray[i].volumeMeterMethodData.finalMeterReading).from('L').to('gal');
+        inputArray[i].volumeMeterMethodData.initialMeterReading = this.convertUnitsService.value(inputArray[i].volumeMeterMethodData.initialMeterReading).from('L').to('gal');
         inputArray[i].bucketMethodData.bucketVolume = this.convertUnitsService.value(inputArray[i].bucketMethodData.bucketVolume).from('L').to('gal');
         inputArray[i].otherMethodData.consumption = this.convertUnitsService.value(inputArray[i].otherMethodData.consumption).from('L').to('gal');
       }

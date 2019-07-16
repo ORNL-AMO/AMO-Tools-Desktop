@@ -50,9 +50,6 @@ export class WaterReductionComponent implements OnInit {
   baselineData: Array<WaterReductionData>;
   modificationData: Array<WaterReductionData>;
 
-  calculatorTypeForm: FormGroup;
-
-
   constructor(private settingsDbService: SettingsDbService, private waterReductionService: WaterReductionService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -62,7 +59,6 @@ export class WaterReductionComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.initCalculatorTypeForm();
     this.initData();
     this.getResults();
   }
@@ -157,6 +153,7 @@ export class WaterReductionComponent implements OnInit {
   updateDataArray(dataArray: Array<WaterReductionData>, data: WaterReductionData, index: number) {
     dataArray[index].name = data.name;
     dataArray[index].hoursPerYear = data.hoursPerYear;
+    dataArray[index].isWastewater = data.isWastewater;
     dataArray[index].waterCost = data.waterCost;
     dataArray[index].measurementMethod = data.measurementMethod;
     dataArray[index].volumeMeterMethodData = data.volumeMeterMethodData;
@@ -199,15 +196,5 @@ export class WaterReductionComponent implements OnInit {
     if (this.baselineSelected == true) {
       this.baselineSelected = false;
     }
-  }
-
-  initCalculatorTypeForm() {
-    this.calculatorTypeForm = this.formBuilder.group({
-      calculatorType: [this.isWastewater]
-    });
-  }
-
-  changeCalculatorType() {
-    this.isWastewater = this.calculatorTypeForm.controls.calculatorType.value;
   }
 }

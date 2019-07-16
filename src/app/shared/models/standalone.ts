@@ -356,15 +356,16 @@ export interface WaterReductionData {
   hoursPerYear: number,
   waterCost: number,
   measurementMethod: number,
-  volumeMeterMethodData: VolumeMeterMethodData,
   meteredFlowMethodData: MeteredFlowMethodData,
+  volumeMeterMethodData: VolumeMeterMethodData,
   bucketMethodData: BucketMethodData,
-  otherMethodData: WaterOtherMethodData
+  otherMethodData: WaterOtherMethodData,
+  isWastewater: boolean
 };
 
 export interface VolumeMeterMethodData {
-  initialMeterReading: number,
   finalMeterReading: number,
+  initialMeterReading: number,
   elapsedTime: number
 };
 

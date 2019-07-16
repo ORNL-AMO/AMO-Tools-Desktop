@@ -30,17 +30,21 @@ export class WaterReductionFormComponent implements OnInit {
   selected: boolean;
 
   measurementOptions: Array<{ value: number, name: string }> = [
-    {value: 0, name: 'Volume Meter'},
-    {value: 1, name: 'Metered Flow'},
-    {value: 2, name: 'Bucket Method'},
-    {value: 3, name: 'Offsheet / Other Method'}
+    { value: 0, name: 'Metered Flow' },
+    { value: 1, name: 'Volume Meter' },
+    { value: 2, name: 'Bucket Method' },
+    { value: 3, name: 'Offsheet / Other Method' }
+  ];
+  calculatorTypes: Array<{ value: boolean, name: string }> = [
+    { value: false, name: 'Water' },
+    { value: true, name: 'Wastewater' }
   ];
 
   form: FormGroup;
   idString: string;
   individualResults: WaterReductionResult;
   isEditingName: boolean = false;
-  
+
   constructor(private waterReductionService: WaterReductionService) { }
 
   ngOnInit() {
@@ -58,6 +62,9 @@ export class WaterReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.isWastewate && !changes.isWastewater.firstChange) {
+      this.form.patchValue({ isWastewater: this.isWastewater })
+    }
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
         this.form.disable();
@@ -68,6 +75,11 @@ export class WaterReductionFormComponent implements OnInit {
   }
 
   changeMeasurementMethod() {
+    this.waterReductionService.setValidators(this.form);
+    this.calculate();
+  }
+
+  changeCalculatorType() {
     this.waterReductionService.setValidators(this.form);
     this.calculate();
   }

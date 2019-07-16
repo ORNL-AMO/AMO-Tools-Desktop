@@ -35,6 +35,17 @@
       </div>
 
       <div class="form-group">
+        <label class="small" for="{{'isWastewater_'+idString}}">Calculator Type</label>
+        <div class="input-group">
+          <select class="form-control" name="isWastewater" id="{{'isWastewater_'+idString}}"
+            formControlName="isWastewater" (change)="changeCalculatorType()" (focus)="focusField('isWastewater')"
+            (blur)="focusOut()">
+            <option *ngFor="let type of calculatorTypes" [ngValue]="type.value">{{type.name}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label class="small" for="{{'waterCost_'+idString}}">Water Cost</label>
         <div class="input-group">
           <input class="form-control" type="number" name="waterCost" id="{{'waterCost_'+idString}}"
@@ -62,8 +73,32 @@
       </div>
     </div>
 
-    <!-- volume meter method -->
+
+    <!-- metered flow method -->
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
+
+      <div class="form-group">
+        <label class="small" for="{{'meterReading_'+idString}}">Meter Reading</label>
+        <div class="input-group">
+          <input class="form-control" type="number" name="meterReading" id="{{'meterReading_'+idString}}"
+            formControlName="meterReading" (input)="calculate()" (focus)="focusField('meterReading')"
+            (blur)="focusOut()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L/min</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.meterReading.invalid && !form.controls.meterReading.pristine">
+          <span *ngIf="form.controls.meterReading.errors.required">Value required.</span>
+          <span *ngIf="form.controls.meterReading.errors.min">Value can't be less than
+            {{form.controls.meterReading.errors.min.min}}.</span>
+        </span>
+      </div>
+
+    </div>
+
+
+    <!-- volume meter method -->
+    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
 
       <div class="form-group">
         <label class="small" for="{{'initialMeterReading_'+idString}}">Initial Meter Reading</label>
@@ -111,29 +146,6 @@
           <span *ngIf="form.controls.elapsedTime.errors.required">Value required.</span>
           <span *ngIf="form.controls.elapsedTime.errors.min">Value can't be less than
             {{form.controls.elapsedTime.errors.min.min}}.</span>
-        </span>
-      </div>
-
-    </div>
-
-
-    <!-- metered flow method -->
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
-
-      <div class="form-group">
-        <label class="small" for="{{'meterReading_'+idString}}">Meter Reading</label>
-        <div class="input-group">
-          <input class="form-control" type="number" name="meterReading" id="{{'meterReading_'+idString}}"
-            formControlName="meterReading" (input)="calculate()" (focus)="focusField('meterReading')"
-            (blur)="focusOut()">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gpm</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">L/min</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.meterReading.invalid && !form.controls.meterReading.pristine">
-          <span *ngIf="form.controls.meterReading.errors.required">Value required.</span>
-          <span *ngIf="form.controls.meterReading.errors.min">Value can't be less than
-            {{form.controls.meterReading.errors.min.min}}.</span>
         </span>
       </div>
 
@@ -208,7 +220,7 @@
         <label class="small bold" *ngIf="isWastewater">Wastewater Disposal</label>
       </div>
       <div class="col-6 text-center">
-        <span class="small bold">{{individualResults.consumption | number:'.0-1'}}
+        <span class="small bold">{{individualResults.waterUse | number:'.0-1'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
         </span>
