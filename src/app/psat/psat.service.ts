@@ -300,6 +300,30 @@ export class PsatService {
 
   }
 
+
+  estFanFLA(
+    horsePower: number,
+    motorRPM: number,
+    frequency: number,
+    efficiencyClass: number,
+    efficiency: number,
+    motorVoltage: number,
+    settings: Settings
+  ){
+    if (settings.fanPowerMeasurement != 'hp') {
+      // horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+    }
+    let inputs: any = {
+      motor_rated_power: horsePower,
+      motor_rated_speed: motorRPM,
+      line_frequency: frequency,
+      efficiency_class: efficiencyClass,
+      efficiency: efficiency,
+      motor_rated_voltage: motorVoltage
+    }
+    return this.roundVal(psatAddon.estFLA(inputs), 2);
+  }
   getFlaRange() {
     return this.flaRange;
   }

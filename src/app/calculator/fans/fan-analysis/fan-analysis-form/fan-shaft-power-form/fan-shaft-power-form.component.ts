@@ -23,16 +23,23 @@ export class FanShaftPowerFormComponent implements OnInit {
     { name: 'Synchronous Belt Drive', efficiency: 98 }
   ];
 
-  frequencies: Array<string> = [
-    '50 Hz',
-    '60 Hz'
+  frequencies: Array<number> = [
+    50,
+    60
   ];
 
-  efficiencyClasses: Array<string> = [
-    'Standard Efficiency',
-    'Energy Efficient',
-    'Premium'
-  ];
+  efficiencyClasses: Array<{ value: number, display: string }> = [{
+    value: 0,
+    display: 'Standard Efficiency'
+  },
+  {
+    value: 1,
+    display: 'Energy Efficient'
+  },
+  {
+    value: 2,
+    display: 'Premium Efficient'
+  }]
 
   horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
   //todo: implement logic for premium
@@ -81,7 +88,6 @@ export class FanShaftPowerFormComponent implements OnInit {
   save() {
     this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower);
     this.fanShaftPower = this.fanAnalysisService.inputData.FanShaftPower;
-    console.log(this.fanShaftPower);
     this.fanAnalysisService.getResults.next(true);
   }
 
@@ -90,7 +96,18 @@ export class FanShaftPowerFormComponent implements OnInit {
   }
 
   estimateFla() {
-    this.shaftPowerForm = this.psatService.setFormFullLoadAmps(this.shaftPowerForm, this.settings);
+    // this.psatService.estFLA()
+    let horsePower: number = this.fanShaftPower.ratedHP;
+    let motorRPM: number = this.fanShaftPower.synchronousSpeed;
+    let frequency: number = this.fanShaftPower.frequency;
+    let efficiencyClass: number = this.fanShaftPower.efficiencyClass;
+    let efficiency: number = this.fanShaftPower.efficiencyMotor;
+    let motorVoltage: number = this.fanShaftPower.voltage;
+
+    let fla: number = this.psatService.estFanFLA(horsePower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage, this.settings);
+    this.shaftPowerForm.patchValue({
+      fullLoadAmps: fla
+    });
     this.save();
   }
 
