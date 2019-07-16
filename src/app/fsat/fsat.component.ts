@@ -284,14 +284,6 @@ export class FsatComponent implements OnInit {
     }
   }
 
-  show203Modal() {
-    this.fsat203Modal.show();
-  }
-
-  hide203Modal() {
-    this.fsat203Modal.hide();
-  }
-
   showAddNewModal() {
     //this.isModalOpen = true;
     this.addNewModal.show();

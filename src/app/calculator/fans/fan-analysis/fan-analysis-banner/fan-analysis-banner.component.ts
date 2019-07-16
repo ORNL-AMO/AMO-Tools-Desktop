@@ -70,7 +70,7 @@ export class FanAnalysisBannerComponent implements OnInit {
     if (!planeDataDone) {
       this.planeDataClassStatus = ['missing-data'];
     } else {
-      this.planeDataClassStatus = ['success'];
+      this.planeDataClassStatus = [];
     }
     if (this.stepTab === 'plane-data') {
       this.planeDataClassStatus.push('active');
@@ -82,7 +82,7 @@ export class FanAnalysisBannerComponent implements OnInit {
     if (!basicsDone) {
       this.basicsClassStatus = ['missing-data'];
     } else {
-      this.basicsClassStatus = ['success'];
+      this.basicsClassStatus = [];
     }
     if (this.stepTab === 'fan-info') {
       this.basicsClassStatus.push('active');
@@ -94,7 +94,7 @@ export class FanAnalysisBannerComponent implements OnInit {
     if (!gasDone) {
       this.gasClassStatus = ['missing-data'];
     } else {
-      this.gasClassStatus = ['success'];
+      this.gasClassStatus = [];
     }
     if (this.stepTab === 'gas-density') {
       this.gasClassStatus.push('active');
@@ -106,7 +106,7 @@ export class FanAnalysisBannerComponent implements OnInit {
     if (!shaftPowerDone) {
       this.shaftPowerClassStatus = ['missing-data'];
     } else {
-      this.shaftPowerClassStatus = ['success'];
+      this.shaftPowerClassStatus = [];
     }
     if (this.stepTab === 'fan-shaft-power') {
       this.shaftPowerClassStatus.push('active');

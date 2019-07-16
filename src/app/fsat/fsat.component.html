@@ -44,7 +44,8 @@
   </div>
 
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings" [inAssessment]="true" [assessment]="assessment"></app-fsat-203>
+    <app-fan-analysis *ngIf="calcTab == 'fan-analysis'"></app-fan-analysis>
+    <!-- <app-fsat-203 *ngIf="calcTab == 'fsat-203'" [settings]="settings" [inAssessment]="true" [assessment]="assessment"></app-fsat-203> -->
     <app-pump-curve *ngIf="calcTab == 'system-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings"
       [assessment]="assessment" [fsat]="_fsat" [pumpCurvePrimary]="false"></app-pump-curve>
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment" [fsat]="_fsat"
@@ -82,29 +83,6 @@
     </div>
   </div>
 </div>
-
-
-
-<div bsModal #fsat203Modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fsat203Modal"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button class="close" aria-label="Close" (click)="hide203Modal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col tab-content">
-            <app-fsat-203></app-fsat-203>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <div bsModal #addNewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">

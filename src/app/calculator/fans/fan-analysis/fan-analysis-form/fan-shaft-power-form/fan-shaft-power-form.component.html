@@ -32,7 +32,7 @@
           id="synchronousSpeed" (input)="save()" (focus)="focusField('synchronousSpeed')" onfocus="this.select();">
         <span class="input-group-addon units">rpm</span>
       </div>
-      <span class="alert-danger pull-right small"
+      <span class="alert-danger pull-right"
         *ngIf="shaftPowerForm.controls.synchronousSpeed.invalid && !shaftPowerForm.controls.synchronousSpeed.pristine">
         <span *ngIf="shaftPowerForm.controls.synchronousSpeed.errors.required">Value Required</span>
       </span>
@@ -59,7 +59,7 @@
           (focus)="focusField('npv')" onfocus="this.select();">
         <span class="input-group-addon units">V</span>
       </div>
-      <span class="alert-danger pull-right small"
+      <span class="alert-danger pull-right"
         *ngIf="shaftPowerForm.controls.npv.invalid && !shaftPowerForm.controls.npv.pristine">
         <span *ngIf="shaftPowerForm.controls.npv.errors.required">Value Required</span>
         <span *ngIf="shaftPowerForm.controls.npv.errors.max">Value can't be greater than
@@ -77,7 +77,7 @@
           id="fullLoadAmps" (input)="save()" (focus)="focusField('fla')" onfocus="this.select();">
         <span class="input-group-addon units">A</span>
       </div>
-      <span class="alert-danger pull-right small"
+      <span class="alert-danger pull-right"
         *ngIf="shaftPowerForm.controls.fullLoadAmps.invalid && !shaftPowerForm.controls.fullLoadAmps.pristine">
         <span *ngIf="shaftPowerForm.controls.fullLoadAmps.errors.required">Value Required</span>
       </span>
@@ -87,7 +87,7 @@
       <input name="powerFactorAtLoad" type="number" step="any" class="form-control" formControlName="powerFactorAtLoad"
         id="powerFactorAtLoad" (input)="calcMotorShaftPower()" (focus)="focusField('powerFactorAtLoad')"
         onfocus="this.select();">
-      <span class="alert-danger pull-right small"
+      <span class="alert-danger pull-right"
         *ngIf="shaftPowerForm.controls.powerFactorAtLoad.invalid && !shaftPowerForm.controls.powerFactorAtLoad.pristine">
         <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.required">Value Required</span>
         <span *ngIf="shaftPowerForm.controls.powerFactorAtLoad.errors.max">Value can't be greater than
@@ -154,32 +154,32 @@
             </span>
           </div>
         </div>
-        <span class="alert-danger pull-right small"
+        <span class="alert-danger pull-right"
           *ngIf="shaftPowerForm.controls.phase1Voltage.invalid && !shaftPowerForm.controls.phase1Voltage.pristine">
           <span *ngIf="shaftPowerForm.controls.phase1Voltage.errors.min">Phase 1 voltage can't be less than
             {{shaftPowerForm.controls.phase1Voltage.errors.min.min}}.</span>
         </span>
-        <span class="alert-danger pull-right small"
+        <span class="alert-danger pull-right"
           *ngIf="shaftPowerForm.controls.phase1Amps.invalid && !shaftPowerForm.controls.phase1Amps.pristine">
           <span *ngIf="shaftPowerForm.controls.phase1Amps.errors.min">Phase 1 current can't be less than
             {{shaftPowerForm.controls.phase1Amps.errors.min.min}}.</span>
         </span>
-        <span class="alert-danger pull-right small"
+        <span class="alert-danger pull-right"
           *ngIf="shaftPowerForm.controls.phase2Voltage.invalid && !shaftPowerForm.controls.phase2Voltage.pristine">
           <span *ngIf="shaftPowerForm.controls.phase2Voltage.errors.min">Phase 2 voltage can't be less than
             {{shaftPowerForm.controls.phase2Voltage.errors.min.min}}.</span>
         </span>
-        <span class="alert-danger pull-right small"
+        <span class="alert-danger pull-right"
           *ngIf="shaftPowerForm.controls.phase2Amps.invalid && !shaftPowerForm.controls.phase2Amps.pristine">
           <span *ngIf="shaftPowerForm.controls.phase2Amps.errors.min">Phase 2 current can't be less than
             {{shaftPowerForm.controls.phase2Amps.errors.min.min}}.</span>
         </span>
-        <span class="alert-danger pull-right small"
+        <span class="alert-danger pull-right"
           *ngIf="shaftPowerForm.controls.phase3Voltage.invalid && !shaftPowerForm.controls.phase3Voltage.pristine">
           <span *ngIf="shaftPowerForm.controls.phase3Voltage.errors.min">Phase 3 voltage can't be less than
             {{shaftPowerForm.controls.phase3Voltage.errors.min.min}}.</span>
         </span>
-        <span class="alert-danger pull-right small"
+        <span class="alert-danger pull-right"
           *ngIf="shaftPowerForm.controls.phase3Amps.invalid && !shaftPowerForm.controls.phase3Amps.pristine">
           <span *ngIf="shaftPowerForm.controls.phase3Amps.errors.min">Phase 3 current can't be less than
             {{shaftPowerForm.controls.phase3Amps.errors.min.min}}.</span>
@@ -202,7 +202,7 @@
           &mdash; &mdash;
         </span>
       </div>
-      <span class="alert-danger pull-right small"
+      <span class="alert-danger pull-right"
         *ngIf="shaftPowerForm.controls.motorShaftPower.invalid && !shaftPowerForm.controls.motorShaftPower.pristine">
         <span *ngIf="shaftPowerForm.controls.motorShaftPower.errors.required">Value required.</span>
       </span>
@@ -216,7 +216,7 @@
           id="efficiencyMotor" (input)="save()" (focus)="focusField('efficiencyMotor')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small"
+      <span class="alert-danger pull-right"
         *ngIf="shaftPowerForm.controls.efficiencyMotor.invalid && !shaftPowerForm.controls.efficiencyMotor.pristine">
         <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.required">Value Required</span>
         <span *ngIf="shaftPowerForm.controls.efficiencyMotor.errors.max">Value can't be greater than
@@ -242,7 +242,7 @@
           id="efficiencyVFD" (input)="save()" (focus)="focusField('efficiencyVFD')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small"
+      <span class="alert-danger pull-right"
         *ngIf="shaftPowerForm.controls.efficiencyVFD.invalid && !shaftPowerForm.controls.efficiencyVFD.pristine">
         <span *ngIf="shaftPowerForm.controls.efficiencyVFD.errors.required">Value Required</span>
         <span *ngIf="shaftPowerForm.controls.efficiencyVFD.errors.max">Value can't be greater than
@@ -265,7 +265,7 @@
           id="efficiencyBelt" (input)="save()" (focus)="focusField('efficiencyBelt')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-danger pull-right small"
+      <span class="alert-danger pull-right"
         *ngIf="shaftPowerForm.controls.efficiencyBelt.invalid && !shaftPowerForm.controls.efficiencyBelt.pristine">
         <span *ngIf="shaftPowerForm.controls.efficiencyBelt.errors.required">Value Required</span>
         <span *ngIf="shaftPowerForm.controls.efficiencyBelt.errors.max">Value can't be greater than

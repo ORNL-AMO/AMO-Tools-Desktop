@@ -4,22 +4,6 @@
     <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2 class="mb-1">Fan Calculators</h2>
-        <div class="d-flex calc-item-row w-100">
-          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-            <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/fan-icons/operating-point-icon.png" class="calc-img"
-                (click)="showTool('fsat-203')">
-            </div>
-          </div>
-          <div class="d-flex flex-fill flex-column justify-content-center">
-            <a class="click-item" (click)="showTool('fsat-203')">FSAT 203</a>
-            <p>
-              This calculator lets the user determine the power, flow rate, pressure and fan efficiency at set
-              operating points. It also helps the user perform a pitot tube analysis for the determination of flow rate
-              and pressure.
-            </p>
-          </div>
-        </div>
         <!--new fan analysis-->
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
@@ -83,9 +67,9 @@
 </div>
 
 
-<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fsat-203'">
+<!-- <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fsat-203'">
   <app-fsat-203></app-fsat-203>
-</div>
+</div> -->
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fan-analysis'">
   <app-fan-analysis></app-fan-analysis>

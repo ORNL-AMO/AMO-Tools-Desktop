@@ -68,7 +68,7 @@ export class PlaneDataFormComponent implements OnInit {
     if (!planeInfoDone) {
       this.infoClassStatus = ['missing-data'];
     } else {
-      this.infoClassStatus = ['success'];
+      this.infoClassStatus = [];
     }
     if (this.planeStep === 'plane-info') {
       this.infoClassStatus.push('active');
@@ -80,7 +80,7 @@ export class PlaneDataFormComponent implements OnInit {
     if (!stepOneDone) {
       this.stepOneClassStatus = ['missing-data'];
     } else {
-      this.stepOneClassStatus = ['success'];
+      this.stepOneClassStatus = [];
     }
     if (this.planeStep === '1') {
       this.stepOneClassStatus.push('active');
@@ -92,7 +92,7 @@ export class PlaneDataFormComponent implements OnInit {
     if (!stepTwoDone) {
       this.stepTwoClassStatus = ['missing-data'];
     } else {
-      this.stepTwoClassStatus = ['success'];
+      this.stepTwoClassStatus = [];
     }
     if (this.planeStep === '2') {
       this.stepTwoClassStatus.push('active');
@@ -104,7 +104,7 @@ export class PlaneDataFormComponent implements OnInit {
     if (!stepThreeADone) {
       this.stepThreeAClassStatus = ['missing-data'];
     } else {
-      this.stepThreeAClassStatus = ['success'];
+      this.stepThreeAClassStatus = [];
     }
     if (this.planeStep === '3a') {
       this.stepThreeAClassStatus.push('active');
@@ -116,7 +116,7 @@ export class PlaneDataFormComponent implements OnInit {
     if (!stepThreeBDone) {
       this.stepThreeBClassStatus = ['missing-data'];
     } else {
-      this.stepThreeBClassStatus = ['success'];
+      this.stepThreeBClassStatus = [];
     }
     if (this.planeStep === '3b') {
       this.stepThreeBClassStatus.push('active');
@@ -128,7 +128,7 @@ export class PlaneDataFormComponent implements OnInit {
     if (!stepThreeCDone) {
       this.stepThreeCClassStatus = ['missing-data'];
     } else {
-      this.stepThreeCClassStatus = ['success'];
+      this.stepThreeCClassStatus = [];
     }
     if (this.planeStep === '3c') {
       this.stepThreeCClassStatus.push('active');
@@ -140,7 +140,7 @@ export class PlaneDataFormComponent implements OnInit {
     if (!stepFourDone) {
       this.stepFourClassStatus = ['missing-data'];
     } else {
-      this.stepFourClassStatus = ['success'];
+      this.stepFourClassStatus = [];
     }
     if (this.planeStep === '4') {
       this.stepFourClassStatus.push('active');
@@ -152,7 +152,7 @@ export class PlaneDataFormComponent implements OnInit {
     if (!stepOneDone) {
       this.stepFiveClassStatus = ['missing-data'];
     } else {
-      this.stepFiveClassStatus = ['success'];
+      this.stepFiveClassStatus = [];
     }
     if (this.planeStep === '5') {
       this.stepFiveClassStatus.push('active');

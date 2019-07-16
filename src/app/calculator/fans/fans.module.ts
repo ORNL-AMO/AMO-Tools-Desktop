@@ -13,7 +13,7 @@ import { FanAnalysisModule } from './fan-analysis/fan-analysis.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    Fsat203Module,
+    // Fsat203Module,
     SystemCurveModule,
     PumpCurveModule,
     FanEfficiencyModule,

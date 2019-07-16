@@ -8,7 +8,7 @@
         (focus)="focusField('totalPressureLossBtwnPlanes1and4')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
-    <span class="alert-danger pull-right small"
+    <span class="alert-danger pull-right"
       *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.pristine">
       <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.required">Value Required</span>
       <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes1and4.errors.min">Value can't be less than
@@ -24,7 +24,7 @@
         (focus)="focusField('totalPressureLossBtwnPlanes2and5')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
-    <span class="alert-danger pull-right small"
+    <span class="alert-danger pull-right"
       *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.invalid && !planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.pristine">
       <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.required">Value Required</span>
       <span *ngIf="planeInfoForm.controls.totalPressureLossBtwnPlanes2and5.errors.min">Value can't be less than
@@ -39,7 +39,7 @@
         (input)="save()" (focus)="focusField('inletSEF')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
-    <span class="alert-danger pull-right small"
+    <span class="alert-danger pull-right"
       *ngIf="planeInfoForm.controls.inletSEF.invalid && !planeInfoForm.controls.inletSEF.pristine">
       <span *ngIf="planeInfoForm.controls.inletSEF.errors.required">Value Required</span>
     </span>
@@ -51,7 +51,7 @@
         (input)="save()" (focus)="focusField('outletSEF')" onfocus="this.select();">
       <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
-    <span class="alert-danger pull-right small"
+    <span class="alert-danger pull-right"
       *ngIf="planeInfoForm.controls.outletSEF.invalid && !planeInfoForm.controls.outletSEF.pristine">
       <span *ngIf="planeInfoForm.controls.outletSEF.errors.required">Value Required</span>
     </span>
