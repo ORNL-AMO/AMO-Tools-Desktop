@@ -46,7 +46,7 @@
     "@angular/platform-server": "7.2.8",
     "@angular/router": "7.2.8",
     "ajv": "^5.2.2",
-    "amo-tools-suite": "0.5.0",
+    "amo-tools-suite": "../AMO-Tools-Suite",
     "bootstrap": "4.3.1",
     "electron-log": "3.0.1",
     "electron-updater": "4.0.6",

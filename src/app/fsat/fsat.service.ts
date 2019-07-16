@@ -55,6 +55,7 @@ export class FsatService {
     }
     input.FanShaftPower.sumSEF = input.PlaneData.inletSEF + input.PlaneData.outletSEF;
     let results: Fan203Results = fanAddon.fan203(input);
+    console.log(results);
     results = this.convertFsatService.convertFan203Results(results, settings);
     return results;
   }
