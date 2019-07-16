@@ -6,44 +6,44 @@
   <div class="pl-3 pr-3 pt-2 flex-column">
     <nav class="text-center data-steps">
       <ul class="tabs subtabs progress-tabs fsat">
-        <li [ngClass]="{'active': planeStep == 'plane-info'}">
+        <li [ngClass]="infoClassStatus">
           <a (click)="changePlaneStepTab('plane-info')">
             <span class="step-number">
               <i class="fa fa-info"></i>
             </span>
           </a>
         </li>
-        <li [ngClass]="{'active': planeStep == '1'}">
+        <li [ngClass]="stepOneClassStatus">
           <a (click)="changePlaneStepTab('1')">
             <span class="step-number">1</span>
           </a>
         </li>
-        <li [ngClass]="{'active': planeStep == '2'}">
+        <li [ngClass]="stepTwoClassStatus">
           <a (click)="changePlaneStepTab('2')">
             <span class="step-number">2</span>
           </a>
         </li>
-        <li [ngClass]="{'active': planeStep == '3a'}">
+        <li [ngClass]="stepThreeAClassStatus">
           <a (click)="changePlaneStepTab('3a')">
             <span class="step-number">3a</span>
           </a>
         </li>
-        <li *ngIf="numTraversePlanes > 1" [ngClass]="{'active': planeStep == '3b'}">
+        <li *ngIf="numTraversePlanes > 1" [ngClass]="stepThreeBClassStatus">
           <a (click)="changePlaneStepTab('3b')">
             <span class="step-number">3b</span>
           </a>
         </li>
-        <li *ngIf="numTraversePlanes > 2" [ngClass]="{'active': planeStep == '3c'}">
+        <li *ngIf="numTraversePlanes > 2" [ngClass]="stepThreeCClassStatus">
           <a (click)="changePlaneStepTab('3c')">
             <span class="step-number">3c</span>
           </a>
         </li>
-        <li [ngClass]="{'active': planeStep == '4'}">
+        <li [ngClass]="stepFourClassStatus">
           <a (click)="changePlaneStepTab('4')">
             <span class="step-number">4</span>
           </a>
         </li>
-        <li [ngClass]="{'active': planeStep == '5'}">
+        <li [ngClass]="stepFiveClassStatus">
           <a (click)="changePlaneStepTab('5')">
             <span class="step-number">5</span>
           </a>

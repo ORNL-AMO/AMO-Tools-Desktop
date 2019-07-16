@@ -195,7 +195,7 @@ export class PlaneDataFormService {
       }
       //3c
       if (fanRatedInfo.traversePlanes == 3) {
-        form = this.getPlaneFormFromObj(planeData.AddlTraversePlanes[1], settings, '3b');
+        form = this.getPlaneFormFromObj(planeData.AddlTraversePlanes[1], settings, '3c');
         if (form.valid == false) {
           isValid = false;
         }

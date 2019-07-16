@@ -30,23 +30,23 @@
 
 <nav class="hide-print w-100">
   <div class="d-flex tabs subtabs progress-tabs fsat flex-wrap">
-    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-info'}">
+    <div class="fixed-tab-size" [ngClass]="basicsClassStatus">
       <a (click)="changeStepTab('fan-info')">
         <span class="step-number">1</span> Fan Basics</a>
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'gas-density'}">
+    <div class="fixed-tab-size" [ngClass]="gasClassStatus">
       <a (click)="changeStepTab('gas-density')">
         <span class="step-number">2</span>Gas Density</a>
       <!-- <app-tabs-tooltip [badgeClass]="fluidClassStatus[0]" [reveal]="fluidBadge.display" [display]="fluidBadge.hover">
       </app-tabs-tooltip> -->
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'plane-data'}">
+    <div class="fixed-tab-size" [ngClass]="planeDataClassStatus">
       <a (click)="changeStepTab('plane-data')">
         <span class="step-number">3</span>Traverse Data</a>
       <!-- <app-tabs-tooltip [badgeClass]="motorClassStatus[0]" [reveal]="motorBadge.display" [display]="motorBadge.hover">
       </app-tabs-tooltip> -->
     </div>
-    <div class="fixed-tab-size" [ngClass]="{'active': stepTab == 'fan-shaft-power'}">
+    <div class="fixed-tab-size" [ngClass]="shaftPowerClassStatus">
       <a (click)="changeStepTab('fan-shaft-power')">
         <span class="step-number">4</span>Fan Shaft Power</a>
       <!-- <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display"

@@ -47,7 +47,6 @@ export class FsatService {
   }
 
   fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
-
     input.BaseGasDensity = this.convertFsatService.convertGasDensityForCalculations(input.BaseGasDensity, settings);
     input.FanRatedInfo = this.convertFsatService.convertFanRatedInfoForCalculations(input.FanRatedInfo, settings);
     if (input.PlaneData) {
@@ -55,7 +54,6 @@ export class FsatService {
     }
     input.FanShaftPower.sumSEF = input.PlaneData.inletSEF + input.PlaneData.outletSEF;
     let results: Fan203Results = fanAddon.fan203(input);
-    console.log(results);
     results = this.convertFsatService.convertFan203Results(results, settings);
     return results;
   }
