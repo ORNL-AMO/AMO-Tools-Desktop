@@ -155,7 +155,7 @@ export class FanAnalysisService {
         driveType: "Direct Drive",
         efficiencyBelt: 100,
         efficiencyClass: 1,
-        efficiencyMotor: 99,
+        efficiencyMotor: 95,
         efficiencyVFD: 100,
         fla: 210,
         frequency: 60,

@@ -48,17 +48,18 @@ export class FsatService {
 
   fan203(input: Fan203Inputs, settings: Settings): Fan203Results {
     //debugger
-    input = this.convertFsatService.convertFan203DataForCalculations(input, settings);
-
+    let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
+    inputCpy = this.convertFsatService.convertFan203DataForCalculations(inputCpy, settings);
+   // console.log(input);
 
     // input.BaseGasDensity = this.convertFsatService.convertGasDensityForCalculations(input.BaseGasDensity, settings);
     // input.FanRatedInfo = this.convertFsatService.convertFanRatedInfoForCalculations(input.FanRatedInfo, settings);
     // if (input.PlaneData) {
     //   input.PlaneData = this.convertFsatService.convertPlaneDataForCalculations(input.PlaneData, settings);
     // }
-    input.FanShaftPower.sumSEF = input.PlaneData.inletSEF + input.PlaneData.outletSEF;
+    inputCpy.FanShaftPower.sumSEF = inputCpy.PlaneData.inletSEF + inputCpy.PlaneData.outletSEF;
     //debugger
-    let results: Fan203Results = fanAddon.fan203(input);
+    let results: Fan203Results = fanAddon.fan203(inputCpy);
     results = this.convertFsatService.convertFan203Results(results, settings);
     return results;
   }

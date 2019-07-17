@@ -59,7 +59,6 @@ export class FanAnalysisComponent implements OnInit {
     } else if (this.fanAnalysisService.inputData === undefined) {
       this.fanAnalysisService.inputData = this.fanAnalysisService.getMockData();
       this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
-      console.log(this.fanAnalysisService.inputData);
     }
 
     this.setPlaneStepTabs();
