@@ -71,8 +71,7 @@
       Heating</span>
     <ul *ngIf="selectedCalculatorType == 'furnaces'">
       <li [ngClass]="{'selected': selectedCalculator == 'o2-enrichment'}">
-        <span class="sidebar-item" (click)="selectCalculator('o2-enrichment')">O
-          <sub>2</sub> Enrichment</span>
+        <span class="sidebar-item" (click)="selectCalculator('o2-enrichment')">O<sub>2</sub> Enrichment</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'efficiency-improvement'}">
         <span class="sidebar-item" (click)="selectCalculator('efficiency-improvement')">Efficiency Improvement</span>
