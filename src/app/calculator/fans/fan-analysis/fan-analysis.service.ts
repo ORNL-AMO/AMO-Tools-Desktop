@@ -91,7 +91,7 @@ export class FanAnalysisService {
             staticPressure: -17,
             width: 32.63,
             traverseData: [
-              [.662, .568, .546, .564, .463, .507, .865, 1.17, 1.247, 1.63],
+              [.662, .568, .546, .564, .463, .507, .865, 1.017, 1.247, 1.63],
               [.639, .542, .53, .57, .603, .75, .965, 1.014, 1.246, 1.596],
               [.554, .452, .453, .581, .551, .724, .844, 1.077, 1.323, 1.62]
             ]
@@ -151,7 +151,7 @@ export class FanAnalysisService {
         wetBulbTemp: 119
       },
       FanShaftPower: {
-        amps: 105,
+        amps: 205,
         driveType: "Direct Drive",
         efficiencyBelt: 100,
         efficiencyClass: 1,
