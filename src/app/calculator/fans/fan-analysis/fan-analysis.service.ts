@@ -71,9 +71,9 @@ export class FanAnalysisService {
           staticPressure: -18.1,
           width: 32.63,
           traverseData: [
-            [.662, .568, .546, .564, .463, .507, .865, 1.17, 1.247, 1.63],
-            [.639, .542, .53, .57, .603, .75, .965, 1.014, 1.246, 1.596],
-            [.554, .452, .453, .581, .551, .724, .844, 1.077, 1.323, 1.62]
+            [.701, .703, .668, .815, .979, 1.09, 1.155, 1.32, 1.578, 2.13],
+            [.69, .648, .555, .76, .988, 1.06, 1.1, 1.11, 1.458, 1.865],
+            [.691, .621, .61, .774, .747, .835, .883, 1.23, 1.21, 1.569]
           ]
         },
         AddlTraversePlanes: [
@@ -85,7 +85,7 @@ export class FanAnalysisService {
             numInletBoxes: 0,
             numInsertionPoints: 3,
             numTraverseHoles: 10,
-            pitotTubeCoefficient: 0.86,
+            pitotTubeCoefficient: 0.87,
             pitotTubeType: "S-Type",
             planeType: "Rectangular",
             staticPressure: -17,
@@ -128,7 +128,7 @@ export class FanAnalysisService {
         },
         OutletMstPlane: {
           area: 23.280248611111112,
-          barometricPressure: 16.57,
+          barometricPressure: 26.57,
           dryBulbTemp: 132.7,
           length: 55.42,
           numInletBoxes: null,
@@ -155,30 +155,30 @@ export class FanAnalysisService {
         driveType: "Direct Drive",
         efficiencyBelt: 100,
         efficiencyClass: 1,
-        efficiencyMotor: 100,
+        efficiencyMotor: 99,
         efficiencyVFD: 100,
         fla: 210,
         frequency: 60,
         isMethodOne: false,
-        isVFD: "Yes",
+        isVFD: "No",
         mainsDataAvailable: "Yes",
-        motorShaftPower: 176.53,
+        motorShaftPower: 1761.53,
         npv: 4160,
         phase1: {
-          amps: 105,
+          amps: 205,
           voltage: 4200
         },
         phase2: {
-          amps: 105,
+          amps: 210,
           voltage: 4200
         }
         ,
         phase3: {
-          amps: 105,
+          amps: 200,
           voltage: 4200
         },
-        powerFactorAtLoad: 0.99,
-        ratedHP: 200,
+        powerFactorAtLoad: 0.88,
+        ratedHP: 1750,
         sumSEF: 0,
         synchronousSpeed: 1200,
         voltage: 4200
