@@ -21,7 +21,8 @@
       </td>
     </tr>
     <tr>
-      <td class="bold w-50">Water Cost</td>
+      <td class="bold w-50" *ngIf="!isWastewater">Water Cost</td>
+      <td class="bold w-50" *ngIf="isWastewater">Wastewater Disposal Cost</td>
       <td class="text-center w-50">
         {{waterReductionResults.baselineResults.waterCost | currency: 'USD'}} /yr
       </td>
@@ -43,11 +44,12 @@
       </td>
     </tr>
     <tr>
-      <td class="bold w-50">Cost Savings</td>
+      <td class="bold w-50" *ngIf="!isWastewater">Cost Savings</td>
+      <td class="bold w-50" *ngIf="isWastewater">Disposal Cost Savings</td>
       <td class="text-center w-50" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{waterReductionResults.costSavings | currency: 'USD'}} /yr
+          {{waterReductionResults.annualCostSavings | currency: 'USD'}} /yr
         </span>
       </td>
     </tr>

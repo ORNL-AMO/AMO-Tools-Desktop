@@ -36,15 +36,16 @@ export class WaterReductionService {
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
-    let waterCost: number = 0.12;
+    let waterCost: number = 0.005;
     if (settings) {
-      if (isWastewater) {
+      if (isWastewater && settings.waterWasteCost) {
         waterCost = settings.waterWasteCost;
       }
-      else {
+      else if (!isWastewater && settings.waterCost) {
         waterCost = settings.waterCost;
       }
     }
+    console.log('waterCost = ' + waterCost);
     let obj: WaterReductionData = {
       name: 'Equipment #' + (index + 1),
       hoursPerYear: hoursPerYear,
@@ -161,7 +162,6 @@ export class WaterReductionService {
       waterReductionResults.annualWaterSavings = baselineResults.waterUse - modificationResults.waterUse;
       waterReductionResults.annualCostSavings = baselineResults.waterCost - modificationResults.waterCost;
     }
-
     return waterReductionResults;
   }
 
@@ -204,6 +204,8 @@ export class WaterReductionService {
   convertResults(results: WaterReductionResult, settings: Settings): WaterReductionResult {
     if (settings.unitsOfMeasure == 'Metric') {
       results.waterUse = this.convertUnitsService.value(results.waterUse).from('gal').to('L');
+    } else if (settings.unitsOfMeasure == 'Imperial') {
+      results.waterUse = results.waterUse / 1000;
     }
     return results;
   }

@@ -62,7 +62,7 @@ export class WaterReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.isWastewate && !changes.isWastewater.firstChange) {
+    if (changes.isWastewater && !changes.isWastewater.firstChange) {
       this.form.patchValue({ isWastewater: this.isWastewater })
     }
     if (changes.selected && !changes.selected.firstChange) {
@@ -70,6 +70,9 @@ export class WaterReductionFormComponent implements OnInit {
         this.form.disable();
       } else {
         this.form.enable();
+        if (this.index != 0 || !this.isBaseline) {
+          this.form.controls.isWastewater.disable();
+        }
       }
     }
   }
