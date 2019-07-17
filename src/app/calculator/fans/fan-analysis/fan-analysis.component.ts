@@ -7,6 +7,10 @@ import { ConvertFsatService } from '../../../fsat/convert-fsat.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-data-form.service';
+import { Calculator } from '../../../shared/models/calculators';
+import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import { Assessment } from '../../../shared/models/assessment';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 @Component({
   selector: 'app-fan-analysis',
   templateUrl: './fan-analysis.component.html',
@@ -15,6 +19,8 @@ import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-
 export class FanAnalysisComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  assessment: Assessment;
 
   @ViewChild('header') header: ElementRef;
   @ViewChild('footer') footer: ElementRef;
@@ -35,20 +41,26 @@ export class FanAnalysisComponent implements OnInit {
   stepTabSubscription: Subscription;
   planeTabSubscription: Subscription;
   getResultsSubscription: Subscription;
-
+  saving: boolean;
+  calcExists: boolean;
+  calculator: Calculator;
+  originalCalculator: Calculator;
   constructor(private settingsDbService: SettingsDbService, private fanAnalysisService: FanAnalysisService, private convertFsatService: ConvertFsatService,
-    private planeDataFormService: PlaneDataFormService) { }
+    private planeDataFormService: PlaneDataFormService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    // this.inputs = this.fanAnalysisService.inputData;
-    if (this.fanAnalysisService.inputData === undefined) {
+    if (this.assessment) {
+      this.getCalculator();
+      this.originalCalculator = this.calculator;
+    } else if (this.fanAnalysisService.inputData === undefined) {
       this.fanAnalysisService.inputData = this.fanAnalysisService.getMockData();
       this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
     }
+
     this.setPlaneStepTabs();
     this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
       this.setStepTabIndex(val);
@@ -73,12 +85,66 @@ export class FanAnalysisComponent implements OnInit {
     this.stepTabSubscription.unsubscribe();
     this.planeTabSubscription.unsubscribe();
     this.getResultsSubscription.unsubscribe();
+    if (this.assessment && this.calcExists) {
+      this.calculator.fan203Inputs = this.fanAnalysisService.inputData;
+      this.saveCalculator();
+    }
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
     }, 500)
+  }
+
+  getCalculator() {
+    this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (this.calculator) {
+      this.calcExists = true;
+      if (this.calculator.fan203Inputs) {
+        this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
+      } else {
+        let tmpFans203Inputs: Fan203Inputs = this.fanAnalysisService.getMockData();
+        tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
+        this.calculator.fan203Inputs = tmpFans203Inputs;
+        this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
+        this.saveCalculator();
+      }
+    } else {
+      this.calculator = this.initCalculator();
+      this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
+      this.saveCalculator();
+    }
+  }
+
+  initCalculator(): Calculator {
+    let tmpFans203Inputs: Fan203Inputs = this.fanAnalysisService.getMockData();
+    tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
+    let tmpCalculator: Calculator = {
+      assessmentId: this.assessment.id,
+      fan203Inputs: tmpFans203Inputs
+    };
+    return tmpCalculator;
+  }
+
+  saveCalculator() {
+    if (!this.saving || this.calcExists) {
+      if (this.calcExists) {
+        this.indexedDbService.putCalculator(this.calculator).then(() => {
+          this.calculatorDbService.setAll();
+        });
+      } else {
+        this.saving = true;
+        this.calculator.assessmentId = this.assessment.id;
+        this.indexedDbService.addCalculator(this.calculator).then((result) => {
+          this.calculatorDbService.setAll().then(() => {
+            this.calculator.id = result;
+            this.calcExists = true;
+            this.saving = false;
+          });
+        });
+      }
+    }
   }
 
   getContainerHeight() {

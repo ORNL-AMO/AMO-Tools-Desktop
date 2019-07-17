@@ -15,6 +15,8 @@ import { Settings } from '../../../../shared/models/settings';
 export class FanAnalysisBannerComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inAssessment: boolean;
 
   mainTab: string;
   mainTabSubscription: Subscription;
