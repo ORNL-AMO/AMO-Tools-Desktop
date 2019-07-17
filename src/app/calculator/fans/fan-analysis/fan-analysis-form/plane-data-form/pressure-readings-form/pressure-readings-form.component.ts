@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Plane } from '../../../../../../shared/models/fans';
 import { FanAnalysisService } from '../../../fan-analysis.service';
 
