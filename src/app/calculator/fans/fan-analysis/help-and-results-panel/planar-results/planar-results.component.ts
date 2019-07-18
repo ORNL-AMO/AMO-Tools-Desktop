@@ -28,7 +28,7 @@ export class PlanarResultsComponent implements OnInit {
   stepTab: string;
   planeStepSubscription: Subscription;
   planeStep: string;
-  showFull: boolean = true;
+  showFull: boolean = false;
   constructor(private convertFanAnalysisService: ConvertFanAnalysisService, private fanAnalysisService: FanAnalysisService, private gasDensityFormService: GasDensityFormService, private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
