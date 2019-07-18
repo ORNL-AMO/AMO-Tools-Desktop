@@ -22,6 +22,7 @@ import { PressureReadingsFormComponent } from './fan-analysis-form/plane-data-fo
 import { HelpAndResultsPanelComponent } from './help-and-results-panel/help-and-results-panel.component';
 import { PlanarResultsComponent } from './help-and-results-panel/planar-results/planar-results.component';
 import { FanDiagramImageComponent } from './help-and-results-panel/fan-diagram-image/fan-diagram-image.component';
+import { ConvertFanAnalysisService } from './convert-fan-analysis.service';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,6 @@ import { FanDiagramImageComponent } from './help-and-results-panel/fan-diagram-i
     SharedModule
   ],
   exports: [FanAnalysisComponent],
-  providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService, PlaneDataFormService]
+  providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService, PlaneDataFormService, ConvertFanAnalysisService]
 })
 export class FanAnalysisModule { }

@@ -101,8 +101,9 @@ export class FsatService {
   }
 
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
-    input = this.convertFsatService.convertFan203DataForCalculations(input, settings);
-    let results: PlaneResults = fanAddon.getPlaneResults(input);
+    let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
+    inputCpy = this.convertFsatService.convertFan203DataForCalculations(inputCpy, settings);
+    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
     results = this.convertFsatService.convertPlaneResults(results, settings);
     return results;
   }

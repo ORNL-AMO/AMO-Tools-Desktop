@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { PlaneResults, Fan203Inputs } from '../../../../../shared/models/fans';
 import { GasDensityFormService } from '../../fan-analysis-form/gas-density-form/gas-density-form.service';
 import { PlaneDataFormService } from '../../fan-analysis-form/plane-data-form/plane-data-form.service';
+import { ConvertFanAnalysisService } from '../../convert-fan-analysis.service';
 
 @Component({
   selector: 'app-planar-results',
@@ -27,7 +28,7 @@ export class PlanarResultsComponent implements OnInit {
   stepTab: string;
   planeStepSubscription: Subscription;
   planeStep: string;
-  constructor(private fsatService: FsatService, private fanAnalysisService: FanAnalysisService, private gasDensityFormService: GasDensityFormService, private planeDataFormService: PlaneDataFormService) { }
+  constructor(private convertFanAnalysisService: ConvertFanAnalysisService, private fanAnalysisService: FanAnalysisService, private gasDensityFormService: GasDensityFormService, private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
@@ -52,7 +53,7 @@ export class PlanarResultsComponent implements OnInit {
     let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
     let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
     if (gasDone && planeDataDone) {
-      this.planeResults = this.fsatService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
+      this.planeResults = this.convertFanAnalysisService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
     } else {
       this.planeResults;
     }

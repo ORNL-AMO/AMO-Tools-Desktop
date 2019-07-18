@@ -325,6 +325,8 @@ export class ConvertFsatService {
       input.barometricPressure = this.convertUnitsService.value(input.barometricPressure).from('inHg').to(settings.fanBarometricPressure);
     }
     if (settings.fanFlowRate !== 'ft3/min' && input.area) {
+      input.length = this.convertUnitsService.value(input.length).from('in').to('mm');
+      input.width = this.convertUnitsService.value(input.width).from('in').to('mm');
       input.area = this.convertUnitsService.value(input.area).from('ft2').to('m2');
     }
     if (settings.fanTemperatureMeasurement !== 'F' && input.dryBulbTemp) {
