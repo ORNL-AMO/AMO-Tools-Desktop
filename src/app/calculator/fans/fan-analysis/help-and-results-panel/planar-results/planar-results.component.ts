@@ -14,8 +14,8 @@ import { ConvertFanAnalysisService } from '../../convert-fan-analysis.service';
   styleUrls: ['./planar-results.component.css']
 })
 export class PlanarResultsComponent implements OnInit {
-  @Input()
-  showFull: boolean;
+  // @Input()
+  // showFull: boolean;
   @Input()
   pressureCalcType: string;
   @Input()
@@ -28,6 +28,7 @@ export class PlanarResultsComponent implements OnInit {
   stepTab: string;
   planeStepSubscription: Subscription;
   planeStep: string;
+  showFull: boolean = true;
   constructor(private convertFanAnalysisService: ConvertFanAnalysisService, private fanAnalysisService: FanAnalysisService, private gasDensityFormService: GasDensityFormService, private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
