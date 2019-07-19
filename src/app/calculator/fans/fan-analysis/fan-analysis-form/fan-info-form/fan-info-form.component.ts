@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 import { FanInfoFormService } from './fan-info-form.service';
 import { FanAnalysisService } from '../../fan-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fan-info-form',
@@ -19,16 +20,24 @@ export class FanInfoFormComponent implements OnInit {
   planes: Array<number> = [
     1, 2, 3
   ];
-
+  resetFormSubscription: Subscription;
   constructor(private fanInfoFormService: FanInfoFormService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.ratedInfoForm = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
+    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
+      if(val == true){
+        this.resetData();
+      }
+    })
+  }
+
+  ngOnDestroy(){
+    this.resetFormSubscription.unsubscribe();
   }
 
   resetData() {
     this.ratedInfoForm = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
-    this.save();
   }
 
   focusField(str: string) {

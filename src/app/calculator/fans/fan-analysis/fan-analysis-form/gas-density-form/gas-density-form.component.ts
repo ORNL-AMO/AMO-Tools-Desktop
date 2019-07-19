@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { GasDensityFormService, GasDensityRanges } from './gas-density-form.service';
 import { FsatService } from '../../../../../fsat/fsat.service';
 import { FanAnalysisService } from '../../fan-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-gas-density-form',
@@ -31,17 +32,26 @@ export class GasDensityFormComponent implements OnInit {
   ];
 
   gasDensity: number;
+  resetFormSubscription: Subscription;
   constructor(private convertUnitsService: ConvertUnitsService, private gasDensityFormService: GasDensityFormService, private fsatService: FsatService,
     private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings);
     this.gasDensity = this.fanAnalysisService.inputData.BaseGasDensity.gasDensity;
+    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetData();
+      }
+    })
+  }
+  
+  ngOnDestroy() {
+    this.resetFormSubscription.unsubscribe();
   }
 
   resetData() {
     this.gasDensityForm = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings);
-    this.save();
   }
 
   save() {

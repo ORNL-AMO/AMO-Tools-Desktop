@@ -5,6 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { FanShaftPower } from '../../../../../shared/models/fans';
 import { Settings } from '../../../../../shared/models/settings';
 import { FanAnalysisService } from '../../fan-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fan-shaft-power-form',
@@ -45,11 +46,25 @@ export class FanShaftPowerFormComponent implements OnInit {
   //todo: implement logic for premium
   horsePowersPremium: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500];
   fanShaftPower: FanShaftPower;
+  resetFormSubscription: Subscription;
   constructor(private fanShaftPowerFormService: FanShaftPowerFormService, private psatService: PsatService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.shaftPowerForm = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower);
     this.fanShaftPower = this.fanAnalysisService.inputData.FanShaftPower;
+    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetData();
+      }
+    })
+  }
+  
+  ngOnDestroy() {
+    this.resetFormSubscription.unsubscribe();
+  }
+
+  resetData() {
+    this.shaftPowerForm = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower);
   }
 
   calcAverageAmps() {

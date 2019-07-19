@@ -6,6 +6,7 @@ import { PlaneDataFormService } from '../plane-data-form.service';
 import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
 import { FsatService } from '../../../../../../fsat/fsat.service';
 import { FanAnalysisService } from '../../../fan-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fan-data-form',
@@ -24,6 +25,7 @@ export class FanDataFormComponent implements OnInit {
   dataForm: FormGroup;
   velocityData: { pv3: number, percent75Rule: number };
   planeData: Plane;
+  resetFormSubscription: Subscription;
   constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
@@ -31,6 +33,19 @@ export class FanDataFormComponent implements OnInit {
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
     this.calcVelocityData();
+    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetData();
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.resetFormSubscription.unsubscribe();
+  }
+
+  resetData(){
+    this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
   }
 
   setPlaneData() {

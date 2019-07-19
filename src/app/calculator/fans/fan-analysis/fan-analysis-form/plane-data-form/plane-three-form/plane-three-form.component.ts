@@ -3,6 +3,7 @@ import { Plane } from '../../../../../../shared/models/fans';
 import { FormGroup } from '@angular/forms';
 import { PlaneDataFormService } from '../plane-data-form.service';
 import { FanAnalysisService } from '../../../fan-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-plane-three-form',
@@ -12,14 +13,28 @@ import { FanAnalysisService } from '../../../fan-analysis.service';
 export class PlaneThreeFormComponent implements OnInit {
   @Input()
   planeNum: string;
- 
+
   planeData: Plane;
   pitotDataForm: FormGroup;
   pressureReadings: Array<Array<number>>;
+  resetFormSubscription: Subscription;
   constructor(private planeDataFormService: PlaneDataFormService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.setPlaneData();
+    this.pitotDataForm = this.planeDataFormService.getTraversePlaneFormFromObj(this.planeData);
+    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetData();
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.resetFormSubscription.unsubscribe();
+  }
+
+  resetData() {
     this.pitotDataForm = this.planeDataFormService.getTraversePlaneFormFromObj(this.planeData);
   }
 

@@ -62,7 +62,7 @@ export class FanAnalysisComponent implements OnInit {
       this.getCalculator();
       this.originalCalculator = this.calculator;
     } else if (this.fanAnalysisService.inputData === undefined) {
-      this.fanAnalysisService.inputData = this.fanAnalysisService.getMockData();
+      this.fanAnalysisService.inputData = this.fanAnalysisService.getDefaultData();
       this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
     }
 
@@ -82,6 +82,9 @@ export class FanAnalysisComponent implements OnInit {
       }
       if (this.planeStepTabs[this.planeStepIndex] == '3c' && this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes != 3) {
         this.setPlaneTabIndex('3a');
+      }
+      if(this.assessment){
+        this.saveCalculator();
       }
     });
 
@@ -103,6 +106,23 @@ export class FanAnalysisComponent implements OnInit {
     }, 500)
   }
 
+  setExample(){
+    this.fanAnalysisService.inputData = this.fanAnalysisService.getExampleData();
+    this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
+    this.fanAnalysisService.resetForms.next(true);
+    this.fanAnalysisService.resetForms.next(false);
+    this.fanAnalysisService.getResults.next(true);
+  }
+
+  resetDefaults(){
+    this.fanAnalysisService.inputData = this.fanAnalysisService.getDefaultData();
+    this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
+    this.fanAnalysisService.resetForms.next(true);
+    this.fanAnalysisService.resetForms.next(false);
+    this.fanAnalysisService.getResults.next(true);
+  }
+
+
   getCalculator() {
     this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
     if (this.calculator) {
@@ -110,7 +130,7 @@ export class FanAnalysisComponent implements OnInit {
       if (this.calculator.fan203Inputs) {
         this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
       } else {
-        let tmpFans203Inputs: Fan203Inputs = this.fanAnalysisService.getMockData();
+        let tmpFans203Inputs: Fan203Inputs = this.fanAnalysisService.getDefaultData();
         tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
         this.calculator.fan203Inputs = tmpFans203Inputs;
         this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
@@ -124,7 +144,7 @@ export class FanAnalysisComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    let tmpFans203Inputs: Fan203Inputs = this.fanAnalysisService.getMockData();
+    let tmpFans203Inputs: Fan203Inputs = this.fanAnalysisService.getDefaultData();
     tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,

@@ -5,6 +5,7 @@ import { FormGroup } from '@angular/forms';
 import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
 import { PlaneDataFormService } from '../plane-data-form.service';
 import { FanAnalysisService } from '../../../fan-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-plane-info-form',
@@ -17,13 +18,26 @@ export class PlaneInfoFormComponent implements OnInit {
 
   planeInfoForm: FormGroup;
   sumSEF: number;
+  resetFormSubscription: Subscription;
   constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.getSum(this.fanAnalysisService.inputData.PlaneData);
     this.planeInfoForm = this.planeDataFormService.getPlaneInfoFormFromObj(this.fanAnalysisService.inputData.PlaneData);
+    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetData();
+      }
+    })
   }
 
+  ngOnDestroy() {
+    this.resetFormSubscription.unsubscribe();
+  }
+
+  resetData() {
+    this.planeInfoForm = this.planeDataFormService.getPlaneInfoFormFromObj(this.fanAnalysisService.inputData.PlaneData);
+  }
   focusField(str: string) {
     this.fanAnalysisService.currentField.next(str);
   }

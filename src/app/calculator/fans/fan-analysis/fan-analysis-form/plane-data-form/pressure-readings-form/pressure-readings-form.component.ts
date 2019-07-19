@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Plane } from '../../../../../../shared/models/fans';
 import { FanAnalysisService } from '../../../fan-analysis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pressure-readings-form',
@@ -14,12 +15,22 @@ export class PressureReadingsFormComponent implements OnInit {
   traverseHoles: Array<Array<number>>;
   numLabels: Array<number>;
   planeData: Plane;
+  resetFormSubscription: Subscription;
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.numLabels = new Array();
     this.setPlaneData();
     this.initializeData();
+    this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.setPlaneData();
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.resetFormSubscription.unsubscribe();
   }
 
   setPlaneData() {
