@@ -23,6 +23,11 @@ import { HelpAndResultsPanelComponent } from './help-and-results-panel/help-and-
 import { PlanarResultsComponent } from './help-and-results-panel/planar-results/planar-results.component';
 import { FanDiagramImageComponent } from './help-and-results-panel/fan-diagram-image/fan-diagram-image.component';
 import { ConvertFanAnalysisService } from './convert-fan-analysis.service';
+import { OperatingPointsHelpComponent } from './help-and-results-panel/operating-points-help/operating-points-help.component';
+import { GasDensityHelpComponent } from './help-and-results-panel/operating-points-help/gas-density-help/gas-density-help.component';
+import { FsatBasicsHelpComponent } from './help-and-results-panel/operating-points-help/fsat-basics-help/fsat-basics-help.component';
+import { FanShaftPowerHelpComponent } from './help-and-results-panel/operating-points-help/fan-shaft-power-help/fan-shaft-power-help.component';
+import { FanDataHelpComponent } from './help-and-results-panel/operating-points-help/fan-data-help/fan-data-help.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +45,12 @@ import { ConvertFanAnalysisService } from './convert-fan-analysis.service';
     PressureReadingsFormComponent,
     HelpAndResultsPanelComponent,
     PlanarResultsComponent,
-    FanDiagramImageComponent
+    FanDiagramImageComponent,
+    OperatingPointsHelpComponent,
+    GasDensityHelpComponent,
+    FsatBasicsHelpComponent,
+    FanShaftPowerHelpComponent,
+    FanDataHelpComponent
   ],
   imports: [
     CommonModule,

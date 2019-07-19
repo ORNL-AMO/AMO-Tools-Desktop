@@ -1,9 +1,4 @@
 <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngStyle]="{'height.px': headerHeight}">
-  <!-- <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-    <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
-      <div>Results</div>
-    </a>
-  </div> -->
   <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
     <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
       <div>Help</div>
@@ -16,10 +11,11 @@
   </div>
 
 </div>
-<!-- <div class="d-flex flex-column w-100 pr-2 pl-2" *ngIf="tabSelect == 'results'">
-  <app-planar-results [settings]="settings"></app-planar-results>
-  <app-fan-analysis-results [settings]="settings"></app-fan-analysis-results>
-</div> -->
+
+<div class="d-flex flex-column w-100 pr-2 pl-2" *ngIf="tabSelect == 'help'">
+  <app-operating-points-help></app-operating-points-help>
+</div>
+
 
 <div class="d-flex flex-column w-100 pr-2 pl-2" *ngIf="tabSelect == 'diagram'">
   <app-fan-diagram-image></app-fan-diagram-image>
