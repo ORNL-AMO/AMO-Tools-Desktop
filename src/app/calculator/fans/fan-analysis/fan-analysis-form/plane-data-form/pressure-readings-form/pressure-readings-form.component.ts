@@ -24,7 +24,9 @@ export class PressureReadingsFormComponent implements OnInit {
     this.initializeData();
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
       if (val == true) {
+        this.numLabels = new Array();
         this.setPlaneData();
+        this.initializeData();
       }
     })
   }

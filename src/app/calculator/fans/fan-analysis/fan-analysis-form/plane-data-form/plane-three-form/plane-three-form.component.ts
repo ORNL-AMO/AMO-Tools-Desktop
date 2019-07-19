@@ -25,6 +25,7 @@ export class PlaneThreeFormComponent implements OnInit {
     this.pitotDataForm = this.planeDataFormService.getTraversePlaneFormFromObj(this.planeData);
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
       if (val == true) {
+        this.setPlaneData();
         this.resetData();
       }
     })

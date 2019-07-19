@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PlaneData } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -19,7 +19,8 @@ export class PlaneInfoFormComponent implements OnInit {
   planeInfoForm: FormGroup;
   sumSEF: number;
   resetFormSubscription: Subscription;
-  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService) { }
+  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fanAnalysisService: FanAnalysisService,
+    private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.getSum(this.fanAnalysisService.inputData.PlaneData);
@@ -36,7 +37,9 @@ export class PlaneInfoFormComponent implements OnInit {
   }
 
   resetData() {
+    console.log('reset data');
     this.planeInfoForm = this.planeDataFormService.getPlaneInfoFormFromObj(this.fanAnalysisService.inputData.PlaneData);
+    this.cd.detectChanges();
   }
   focusField(str: string) {
     this.fanAnalysisService.currentField.next(str);

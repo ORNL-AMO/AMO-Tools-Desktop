@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Plane } from '../../../../../../shared/models/fans';
 import { Settings } from '../../../../../../shared/models/settings';
@@ -26,7 +26,7 @@ export class FanDataFormComponent implements OnInit {
   velocityData: { pv3: number, percent75Rule: number };
   planeData: Plane;
   resetFormSubscription: Subscription;
-  constructor(private planeDataFormService: PlaneDataFormService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private fanAnalysisService: FanAnalysisService) { }
+  constructor(private planeDataFormService: PlaneDataFormService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.setPlaneData();
@@ -35,6 +35,7 @@ export class FanDataFormComponent implements OnInit {
     this.calcVelocityData();
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
       if (val == true) {
+        this.setPlaneData();
         this.resetData();
       }
     })
@@ -45,7 +46,9 @@ export class FanDataFormComponent implements OnInit {
   }
 
   resetData(){
+    console.log('reset data');
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
+    // this.cd.detectChanges();
   }
 
   setPlaneData() {

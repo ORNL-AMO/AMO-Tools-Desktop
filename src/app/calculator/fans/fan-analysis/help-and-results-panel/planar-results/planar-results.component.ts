@@ -50,7 +50,6 @@ export class PlanarResultsComponent implements OnInit {
   }
 
   getResults() {
-    console.log('get results');
     this.inputs = this.fanAnalysisService.inputData;
     let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
     let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);

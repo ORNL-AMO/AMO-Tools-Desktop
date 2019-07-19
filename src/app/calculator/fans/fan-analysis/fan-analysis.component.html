@@ -19,12 +19,8 @@
   <div #footer class="calc-footer d-flex justify-content-between flex-fill" [ngStyle]="{'width.px': footerWidth}">
     <button class="btn btn-secondary" [disabled]="stepIndex == 0" (click)="back()">Back</button>
     <div>
-      <div class="pr-1">
-        <button class="btn btn-warning" (click)="setExample()">Use Example</button>
-      </div>
-      <div class="pl-1">
-        <button class="btn btn-info" (click)="resetDefaults()">Reset Defaults</button>
-      </div>
+      <button class="btn btn-warning mr-1" (click)="setExample()">Use Example</button>
+      <button class="btn btn-info ml-1" (click)="resetDefaults()">Reset Defaults</button>
     </div>
     <button class="btn btn-primary" [disabled]="stepIndex == 4 || (stepIndex == 3 && setupDone == false)"
       (click)="next()">Next</button>
