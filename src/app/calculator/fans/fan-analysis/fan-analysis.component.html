@@ -3,7 +3,7 @@
     <app-fan-analysis-banner [settings]="settings" [inAssessment]="assessment != undefined"></app-fan-analysis-banner>
   </div>
 
-  <div class="d-flex tab-content">
+  <div class="d-flex tab-content" *ngIf="stepIndex != 4">
     <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}">
       <app-fan-analysis-form [settings]="settings"></app-fan-analysis-form>
     </div>
@@ -11,8 +11,13 @@
       <app-help-and-results-panel [settings]="settings"></app-help-and-results-panel>
     </div>
   </div>
+
+  <div class="d-flex tab-content" *ngIf="stepIndex == 4">
+    <app-fan-analysis-results [settings]="settings"></app-fan-analysis-results>
+  </div>
+
   <div #footer class="calc-footer d-flex justify-content-between flex-fill" [ngStyle]="{'width.px': footerWidth}">
     <button class="btn btn-secondary" [disabled]="stepIndex == 0" (click)="back()">Back</button>
-    <button class="btn btn-primary" [disabled]="stepIndex == 3" (click)="next()">Next</button>
+    <button class="btn btn-primary" [disabled]="stepIndex == 4" (click)="next()">Next</button>
   </div>
 </div>

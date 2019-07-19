@@ -10,7 +10,7 @@ export class HelpAndResultsPanelComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  tabSelect: string = 'results';
+  tabSelect: string = 'help';
 
   constructor() { }
 

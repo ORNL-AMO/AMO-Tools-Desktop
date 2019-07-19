@@ -34,7 +34,7 @@ export class FanAnalysisComponent implements OnInit {
   // inputs: Fan203Inputs;
   containerHeight: number;
   footerWidth: number;
-  stepTabs: Array<string> = ['fan-info', 'gas-density', 'plane-data', 'fan-shaft-power'];
+  stepTabs: Array<string> = ['fan-info', 'gas-density', 'plane-data', 'fan-shaft-power', 'fan-analysis-results'];
   planeStepTabs: Array<string>;
   planeStepIndex: number = 0;
   stepIndex: number = 0;

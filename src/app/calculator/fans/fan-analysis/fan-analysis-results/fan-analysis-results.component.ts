@@ -1,13 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Fan203Results, Fan203Inputs } from '../../../../../shared/models/fans';
-import { FanAnalysisService } from '../../fan-analysis.service';
-import { FsatService } from '../../../../../fsat/fsat.service';
-import { Settings } from '../../../../../shared/models/settings';
+import { Fan203Results, Fan203Inputs } from '../../../../shared/models/fans';
+import { FanAnalysisService } from '../fan-analysis.service';
+import { FsatService } from '../../../../fsat/fsat.service';
+import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
-import { GasDensityFormService } from '../../fan-analysis-form/gas-density-form/gas-density-form.service';
-import { PlaneDataFormService } from '../../fan-analysis-form/plane-data-form/plane-data-form.service';
-import { FanShaftPowerFormService } from '../../fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
-import { FanInfoFormService } from '../../fan-analysis-form/fan-info-form/fan-info-form.service';
+import { GasDensityFormService } from '../fan-analysis-form/gas-density-form/gas-density-form.service';
+import { PlaneDataFormService } from '../fan-analysis-form/plane-data-form/plane-data-form.service';
+import { FanShaftPowerFormService } from '../fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
+import { FanInfoFormService } from '../fan-analysis-form/fan-info-form/fan-info-form.service';
 
 @Component({
   selector: 'app-fan-analysis-results',
