@@ -124,17 +124,17 @@ export class Fsat203Component implements OnInit {
       this.planeResults = this.fsatService.getPlaneResults(this.inputs, this.settings);
       this.results = this.fsatService.fan203(this.inputs, this.settings);
     } else {
-      this.results = {
-        fanEfficiencyTotalPressure: 0,
-        fanEfficiencyStaticPressure: 0,
-        fanEfficiencyStaticPressureRise: 0,
-        flowCorrected: 0,
-        pressureTotalCorrected: 0,
-        pressureStaticCorrected: 0,
-        staticPressureRiseCorrected: 0,
-        powerCorrected: 0,
-        kpc: 0
-      };
+      // this.results = {
+      //   fanEfficiencyTotalPressure: 0,
+      //   fanEfficiencyStaticPressure: 0,
+      //   fanEfficiencyStaticPressureRise: 0,
+      //   flowCorrected: 0,
+      //   pressureTotalCorrected: 0,
+      //   pressureStaticCorrected: 0,
+      //   staticPressureRiseCorrected: 0,
+      //   powerCorrected: 0,
+      //   kpc: 0
+      // };
     }
 
     if (!this.inAssessment) {

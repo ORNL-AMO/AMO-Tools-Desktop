@@ -52,10 +52,8 @@
       <!-- <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display"
         [display]="fieldDataBadge.hover"></app-tabs-tooltip> -->
     </div>
-  </div>
 
-  <div class="d-flex tabs subtabs progress-tabs fsat">
-    <div class="fixed-tab-size">
+    <div class="fixed-tab-size" [ngClass]="resultsTabClassStatus">
       <a (click)="changeStepTab('fan-analysis-results')">
         <span class="step-number"><span class="fa fa-superpowers"></span></span>Results</a>
     </div>

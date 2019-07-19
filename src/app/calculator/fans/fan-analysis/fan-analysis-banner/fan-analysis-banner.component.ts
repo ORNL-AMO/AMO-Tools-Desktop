@@ -26,6 +26,7 @@ export class FanAnalysisBannerComponent implements OnInit {
   basicsClassStatus: Array<string> = [];
   gasClassStatus: Array<string> = [];
   shaftPowerClassStatus: Array<string> = [];
+  resultsTabClassStatus: Array<string> = [];
   getResultsSubscription: Subscription;
   constructor(private fanAnalysisService: FanAnalysisService, private planeDataFormService: PlaneDataFormService,
     private fanInfoFormService: FanInfoFormService, private gasDensityFormService: GasDensityFormService, private fanShaftPowerFormService: FanShaftPowerFormService) { }
@@ -33,23 +34,14 @@ export class FanAnalysisBannerComponent implements OnInit {
   ngOnInit() {
     this.mainTabSubscription = this.fanAnalysisService.mainTab.subscribe(val => {
       this.mainTab = val;
-      this.checkPlaneData();
-      this.checkBasics();
-      this.checkGasDone();
-      this.checkShaftPower();
+      this.updateClassArrays();
     });
     this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
       this.stepTab = val;
-      this.checkPlaneData();
-      this.checkBasics();
-      this.checkGasDone();
-      this.checkShaftPower();
+      this.updateClassArrays();
     });
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
-      this.checkPlaneData();
-      this.checkBasics();
-      this.checkGasDone();
-      this.checkShaftPower();
+      this.updateClassArrays();
     })
   }
 
@@ -65,6 +57,14 @@ export class FanAnalysisBannerComponent implements OnInit {
 
   changeStepTab(str: string) {
     this.fanAnalysisService.stepTab.next(str);
+  }
+
+  updateClassArrays() {
+    this.checkResultsStatus();
+    this.checkPlaneData();
+    this.checkBasics();
+    this.checkGasDone();
+    this.checkShaftPower();
   }
 
   checkPlaneData() {
@@ -115,4 +115,19 @@ export class FanAnalysisBannerComponent implements OnInit {
     }
   }
 
+  checkResultsStatus() {
+    let shaftPowerDone: boolean = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower).valid;
+    let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
+    let basicsDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings).valid;
+    let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
+
+    if (shaftPowerDone != true || gasDone != true || basicsDone != true || planeDataDone != true) {
+      this.resultsTabClassStatus = ['disabled']
+    } else {
+      this.resultsTabClassStatus = [];
+    }
+    if (this.stepTab == 'fan-analysis-results') {
+      this.resultsTabClassStatus.push('active');
+    }
+  }
 }

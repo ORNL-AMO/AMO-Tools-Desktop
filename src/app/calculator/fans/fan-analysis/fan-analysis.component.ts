@@ -11,6 +11,9 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
+import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
+import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
 @Component({
   selector: 'app-fan-analysis',
   templateUrl: './fan-analysis.component.html',
@@ -45,8 +48,10 @@ export class FanAnalysisComponent implements OnInit {
   calcExists: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
+  setupDone: boolean = false;
   constructor(private settingsDbService: SettingsDbService, private fanAnalysisService: FanAnalysisService, private convertFsatService: ConvertFsatService,
-    private planeDataFormService: PlaneDataFormService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+    private planeDataFormService: PlaneDataFormService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService,
+    private fanInfoFormService: FanInfoFormService, private gasDensityFormService: GasDensityFormService, private fanShaftPowerFormService: FanShaftPowerFormService ) { }
 
   ngOnInit() {
     if (!this.settings) {
@@ -70,6 +75,7 @@ export class FanAnalysisComponent implements OnInit {
     });
 
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
+      this.checkSetupDone();
       this.setPlaneStepTabs();
       if (this.planeStepTabs[this.planeStepIndex] == '3b' && this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes == 1) {
         this.setPlaneTabIndex('3a');
@@ -208,4 +214,12 @@ export class FanAnalysisComponent implements OnInit {
     }
   }
 
+
+  checkSetupDone(){
+    let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
+    let basicsDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings).valid;
+    let gasDone: boolean = this.gasDensityFormService.getGasDensityFormFromObj(this.fanAnalysisService.inputData.BaseGasDensity, this.settings).valid;
+    let shaftPowerDone: boolean = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower).valid;
+    this.setupDone = planeDataDone && basicsDone && gasDone && shaftPowerDone;
+  }
 }

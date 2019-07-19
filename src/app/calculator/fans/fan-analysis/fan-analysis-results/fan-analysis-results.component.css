@@ -2,10 +2,6 @@ td{
     font-size: small;
 }
 
-tr > td:first-of-type {
-    width: 75%;
-}
-
 td{
     font-size: small;
     border-right: solid 1px darkgray;
@@ -23,4 +19,21 @@ tbody{
 
 .group-label{
     font-weight: bold;
+}
+
+
+.card{
+    background-color: #efefef;
+    border: none;
+}
+
+label{
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+table{
+    width: 50%;
+    min-width: 400px;
 }

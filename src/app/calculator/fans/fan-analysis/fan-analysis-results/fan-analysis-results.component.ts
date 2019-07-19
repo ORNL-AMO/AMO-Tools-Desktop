@@ -45,20 +45,7 @@ export class FanAnalysisResultsComponent implements OnInit {
     let shaftPowerDone: boolean = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower).valid;
 
     if (planeDataDone && basicsDone && gasDone && shaftPowerDone) {
-      // this.planeResults = this.fsatService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
       this.results = this.fsatService.fan203(this.fanAnalysisService.inputData, this.settings);
-    } else {
-      this.results = {
-        fanEfficiencyTotalPressure: 0,
-        fanEfficiencyStaticPressure: 0,
-        fanEfficiencyStaticPressureRise: 0,
-        flowCorrected: 0,
-        pressureTotalCorrected: 0,
-        pressureStaticCorrected: 0,
-        staticPressureRiseCorrected: 0,
-        powerCorrected: 0,
-        kpc: 0
-      };
     }
   }
 }

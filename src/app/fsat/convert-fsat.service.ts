@@ -213,15 +213,19 @@ export class ConvertFsatService {
   convertFan203Results(results: Fan203Results, settings: Settings): Fan203Results {
     if (settings.fanPressureMeasurement !== 'inH2o') {
       results.pressureTotalCorrected = this.convertUnitsService.value(results.pressureTotalCorrected).from('inH2o').to(settings.fanPressureMeasurement);
+      results.pressureTotal = this.convertUnitsService.value(results.pressureTotal).from('inH2o').to(settings.fanPressureMeasurement);
       results.pressureStaticCorrected = this.convertUnitsService.value(results.pressureStaticCorrected).from('inH2o').to(settings.fanPressureMeasurement);
+      results.pressureStatic = this.convertUnitsService.value(results.pressureStatic).from('inH2o').to(settings.fanPressureMeasurement);
       results.staticPressureRiseCorrected = this.convertUnitsService.value(results.staticPressureRiseCorrected).from('inH2o').to(settings.fanPressureMeasurement);
+      results.staticPressureRise = this.convertUnitsService.value(results.staticPressureRise).from('inH2o').to(settings.fanPressureMeasurement);
     }
     if (settings.fanFlowRate !== 'ft3/min') {
       results.flowCorrected = this.convertUnitsService.value(results.flowCorrected).from('ft3/min').to(settings.fanFlowRate);
+      results.flow = this.convertUnitsService.value(results.flow).from('ft3/min').to(settings.fanFlowRate);
     }
-
     if (settings.fanPowerMeasurement !== 'hp') {
       results.powerCorrected = this.convertUnitsService.value(results.powerCorrected).from('hp').to(settings.fanPowerMeasurement);
+      results.power = this.convertUnitsService.value(results.power).from('hp').to(settings.fanPowerMeasurement);
     }
     return results;
   }
