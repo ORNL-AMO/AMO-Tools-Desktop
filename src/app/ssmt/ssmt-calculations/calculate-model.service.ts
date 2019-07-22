@@ -1838,7 +1838,7 @@ export class CalculateModelService {
           specificEnthalpy: this.lowPressureHeader.specificEnthalpy,
           specificEntropy: this.lowPressureHeader.specificEntropy,
           quality: this.lowPressureHeader.quality,
-          energyFlow: this.lowPressureHeader.energyFlow,
+          energyFlow: this.calculateEnergy(ventedSteamAmount, this.lowPressureHeader.energyFlow),
           specificVolume: this.lowPressureHeader.specificVolume,
           massFlow: ventedSteamAmount
         };

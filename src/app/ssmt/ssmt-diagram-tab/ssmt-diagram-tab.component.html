@@ -55,7 +55,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-center mr-2 ml-2">
-      <div class="pt-4 result-tables" *ngIf="tabSelect == 'results' && dataCalculated && outputData.boilerOutput">
+      <div class="pt-4 result-tables w-100" *ngIf="tabSelect == 'results' && dataCalculated && outputData.boilerOutput">
         <app-results-table [outputData]="outputData" [selectedTable]="selectedTable" [inputData]="inputData"
           [settings]="settings" (emitCalculateResultsWithMarginalCosts)="calculateResultsWithMarginalCosts()"></app-results-table>
         <div class="d-flex w-100 pt-2 justify-content-center">
