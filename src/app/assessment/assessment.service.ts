@@ -29,7 +29,7 @@ export class AssessmentService {
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
     this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.showTutorial = new BehaviorSubject<string>(null);
-    this.dashboardView = new BehaviorSubject<string>('calculator');
+    this.dashboardView = new BehaviorSubject<string>('landing-screen');
     this.workingDirectoryId = new BehaviorSubject<number>(null);
     this.updateSidebarData = new BehaviorSubject<boolean>(null);
   }

@@ -14,6 +14,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
 import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
+import { ConvertFanAnalysisService } from './convert-fan-analysis.service';
 @Component({
   selector: 'app-fan-analysis',
   templateUrl: './fan-analysis.component.html',
@@ -49,7 +50,7 @@ export class FanAnalysisComponent implements OnInit {
   calculator: Calculator;
   originalCalculator: Calculator;
   setupDone: boolean = false;
-  constructor(private settingsDbService: SettingsDbService, private fanAnalysisService: FanAnalysisService, private convertFsatService: ConvertFsatService,
+  constructor(private settingsDbService: SettingsDbService, private fanAnalysisService: FanAnalysisService, private convertFanAnalysisService: ConvertFanAnalysisService,
     private planeDataFormService: PlaneDataFormService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService,
     private fanInfoFormService: FanInfoFormService, private gasDensityFormService: GasDensityFormService, private fanShaftPowerFormService: FanShaftPowerFormService ) { }
 
@@ -63,7 +64,7 @@ export class FanAnalysisComponent implements OnInit {
       this.originalCalculator = this.calculator;
     } else if (this.fanAnalysisService.inputData === undefined) {
       this.fanAnalysisService.inputData = this.fanAnalysisService.getDefaultData();
-      this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
+      this.fanAnalysisService.inputData = this.convertFanAnalysisService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
     }
 
     this.setPlaneStepTabs();
@@ -108,17 +109,21 @@ export class FanAnalysisComponent implements OnInit {
 
   setExample(){
     this.fanAnalysisService.inputData = this.fanAnalysisService.getExampleData();
-    this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
+    this.fanAnalysisService.inputData = this.convertFanAnalysisService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
     this.fanAnalysisService.resetForms.next(true);
     this.fanAnalysisService.resetForms.next(false);
+    this.fanAnalysisService.mainTab.next('fan-setup');
+    this.fanAnalysisService.stepTab.next('fan-info');
     this.fanAnalysisService.getResults.next(true);
   }
 
   resetDefaults(){
     this.fanAnalysisService.inputData = this.fanAnalysisService.getDefaultData();
-    this.fanAnalysisService.inputData = this.convertFsatService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
+    this.fanAnalysisService.inputData = this.convertFanAnalysisService.convertFan203Inputs(this.fanAnalysisService.inputData, this.settings);
     this.fanAnalysisService.resetForms.next(true);
     this.fanAnalysisService.resetForms.next(false);
+    this.fanAnalysisService.mainTab.next('fan-setup');
+    this.fanAnalysisService.stepTab.next('fan-info');
     this.fanAnalysisService.getResults.next(true);
   }
 
@@ -131,7 +136,7 @@ export class FanAnalysisComponent implements OnInit {
         this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
       } else {
         let tmpFans203Inputs: Fan203Inputs = this.fanAnalysisService.getDefaultData();
-        tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
+        tmpFans203Inputs = this.convertFanAnalysisService.convertFan203Inputs(tmpFans203Inputs, this.settings);
         this.calculator.fan203Inputs = tmpFans203Inputs;
         this.fanAnalysisService.inputData = this.calculator.fan203Inputs;
         this.saveCalculator();
@@ -145,7 +150,7 @@ export class FanAnalysisComponent implements OnInit {
 
   initCalculator(): Calculator {
     let tmpFans203Inputs: Fan203Inputs = this.fanAnalysisService.getDefaultData();
-    tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
+    tmpFans203Inputs = this.convertFanAnalysisService.convertFan203Inputs(tmpFans203Inputs, this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       fan203Inputs: tmpFans203Inputs
