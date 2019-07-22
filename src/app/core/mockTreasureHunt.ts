@@ -4,6 +4,7 @@ import { Settings } from "../shared/models/settings";
 export const MockTreasureHunt: Assessment = {
     "name": "Treasure Hunt Example",
     "type": "TreasureHunt",
+    "isExample": true,
     "treasureHunt": {
         "name": "Treasure Hunt",
         "setupDone": true,
