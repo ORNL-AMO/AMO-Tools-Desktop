@@ -39,7 +39,7 @@ export class SteamPropertiesComponent implements OnInit {
   currentField: string = 'pressure';
   graphToggle: string = '0';
   graphToggleForm: FormGroup;
-  data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
+  data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number};
 
   plotReady: boolean = false;
   ranges: { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number };
@@ -170,7 +170,8 @@ export class SteamPropertiesComponent implements OnInit {
       temperature: this.steamPropertiesOutput.temperature,
       enthalpy: this.steamPropertiesOutput.specificEnthalpy,
       entropy: this.steamPropertiesOutput.specificEntropy,
-      volume: this.steamPropertiesOutput.specificVolume
+      volume: this.steamPropertiesOutput.specificVolume,
+      quality: this.steamPropertiesOutput.quality
     };
   }
 
