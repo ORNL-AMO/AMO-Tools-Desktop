@@ -303,6 +303,7 @@ export class PumpCurveComponent implements OnInit {
   setField(str: string, formStr: string) {
     this.currentField = str;
     this.focusedForm = formStr;
+    console.log(this.focusedForm);
   }
 
 

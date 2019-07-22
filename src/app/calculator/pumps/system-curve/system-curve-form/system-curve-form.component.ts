@@ -39,7 +39,9 @@ export class SystemCurveFormComponent implements OnInit {
   fsat: FSAT;
   @Input()
   isFan: boolean;
-
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
+  
   exponentInputError: string = null;
   pumpForm: any;
   options: Array<PSAT | FSAT>;
@@ -115,6 +117,7 @@ export class SystemCurveFormComponent implements OnInit {
 
   focusField(str: string) {
     this.systemCurveService.currentField.next(str);
+    this.changeField.emit(str);
   }
 
 }
