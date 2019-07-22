@@ -26,7 +26,7 @@
         <div class="input-group">
           <input name="annualOperatingHours" class="form-control" type="number" step="any" [(ngModel)]="inputs.annualOperatingHours"
             id="annualOperatingHours" (input)="emitChange()" onfocus="this.select();" (focus)="changeField('annualOperatingHours')">
-          <span class="input-group-addon units">h</span>
+          <span class="input-group-addon units">hrs</span>
         </div>
       </div>
       <div class="form-group">
@@ -54,11 +54,11 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="costOfElectricity">Cost of Electricity</label>
+        <label for="costOfElectricity">Electricity Cost</label>
         <div class="input-group">
           <input name="costOfElectricity" class="form-control" type="number" step="any" [(ngModel)]="inputs.costOfElectricity" id="costOfElectricity"
             (input)="emitChange()" onfocus="this.select();" (focus)="changeField('costOfElectricity')">
-          <span class="input-group-addon units">$</span>
+          <span class="input-group-addon units">$/kWh</span>
         </div>
       </div>
     </div>
