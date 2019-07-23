@@ -44,3 +44,7 @@
 form{
     font-size: 13px;
 }
+
+a.click-link.disabled{
+    color: gray !important;
+}

@@ -47,10 +47,12 @@ export class FanShaftPowerFormComponent implements OnInit {
   horsePowersPremium: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500];
   fanShaftPower: FanShaftPower;
   resetFormSubscription: Subscription;
+  flaDisabled: boolean = true;
   constructor(private fanShaftPowerFormService: FanShaftPowerFormService, private psatService: PsatService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.shaftPowerForm = this.fanShaftPowerFormService.getShaftPowerFormFromObj(this.fanAnalysisService.inputData.FanShaftPower);
+    this.checkFlaDisabled();
     this.fanShaftPower = this.fanAnalysisService.inputData.FanShaftPower;
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
       if (val == true) {
@@ -58,7 +60,7 @@ export class FanShaftPowerFormComponent implements OnInit {
       }
     })
   }
-  
+
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
   }
@@ -103,6 +105,7 @@ export class FanShaftPowerFormComponent implements OnInit {
   save() {
     this.fanAnalysisService.inputData.FanShaftPower = this.fanShaftPowerFormService.getShaftPowerObjFromForm(this.shaftPowerForm, this.fanAnalysisService.inputData.FanShaftPower);
     this.fanShaftPower = this.fanAnalysisService.inputData.FanShaftPower;
+    this.checkFlaDisabled();
     this.fanAnalysisService.getResults.next(true);
   }
 
@@ -111,19 +114,34 @@ export class FanShaftPowerFormComponent implements OnInit {
   }
 
   estimateFla() {
-    // this.psatService.estFLA()
-    let horsePower: number = this.fanShaftPower.ratedHP;
-    let motorRPM: number = this.fanShaftPower.synchronousSpeed;
-    let frequency: number = this.fanShaftPower.frequency;
-    let efficiencyClass: number = this.fanShaftPower.efficiencyClass;
-    let efficiency: number = this.fanShaftPower.efficiencyMotor;
-    let motorVoltage: number = this.fanShaftPower.voltage;
+    if (this.flaDisabled == false) {
+      let horsePower: number = this.fanShaftPower.ratedHP;
+      let motorRPM: number = this.fanShaftPower.synchronousSpeed;
+      let frequency: number = this.fanShaftPower.frequency;
+      let efficiencyClass: number = this.fanShaftPower.efficiencyClass;
+      let efficiency: number = this.fanShaftPower.efficiencyMotor;
+      let motorVoltage: number = this.fanShaftPower.npv;
+      let fla: number = this.psatService.estFanFLA(horsePower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage, this.settings);
+      this.shaftPowerForm.patchValue({
+        fullLoadAmps: fla
+      });
+      this.save();
+    }
+  }
 
-    let fla: number = this.psatService.estFanFLA(horsePower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage, this.settings);
-    this.shaftPowerForm.patchValue({
-      fullLoadAmps: fla
-    });
-    this.save();
+  checkFlaDisabled() {
+    if (
+      this.shaftPowerForm.controls.ratedHP.valid &&
+      this.shaftPowerForm.controls.synchronousSpeed.valid &&
+      this.shaftPowerForm.controls.frequency.valid &&
+      this.shaftPowerForm.controls.efficiencyClass.valid &&
+      this.shaftPowerForm.controls.efficiencyMotor.valid &&
+      this.shaftPowerForm.controls.npv.valid 
+    ) {
+      this.flaDisabled = false;
+    } else {
+      this.flaDisabled = true;
+    }
   }
 
   setIsVfd() {
