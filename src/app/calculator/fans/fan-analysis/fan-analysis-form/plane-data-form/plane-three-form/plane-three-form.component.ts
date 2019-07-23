@@ -66,4 +66,13 @@ export class PlaneThreeFormComponent implements OnInit {
   focusField(str: string) {
     this.fanAnalysisService.currentField.next(str);
   }
+
+  updateTraverseData() {
+    this.planeData = this.planeDataFormService.getTraversePlaneObjFromForm(this.pitotDataForm, this.planeData);
+    if (this.planeData.numInsertionPoints <= 10 && this.planeData.numTraverseHoles <= 10 && this.planeData.numTraverseHoles > 0 && this.planeData.numInsertionPoints > 0) {
+      this.fanAnalysisService.setPlane(this.planeNum, this.planeData);
+      this.fanAnalysisService.updateTraverseData.next(true);
+      this.fanAnalysisService.updateTraverseData.next(false);
+    }
+  }
 }

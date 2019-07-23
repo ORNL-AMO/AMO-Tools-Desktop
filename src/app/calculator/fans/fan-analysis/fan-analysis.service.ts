@@ -11,12 +11,14 @@ export class FanAnalysisService {
   stepTab: BehaviorSubject<string>;
   currentField: BehaviorSubject<string>;
   resetForms: BehaviorSubject<boolean>;
+  updateTraverseData: BehaviorSubject<boolean>;
   constructor() {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
     this.getResults = new BehaviorSubject<boolean>(true);
     this.currentField = new BehaviorSubject<string>('default');
     this.resetForms = new BehaviorSubject<boolean>(false);
+    this.updateTraverseData = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultData(): Fan203Inputs {
