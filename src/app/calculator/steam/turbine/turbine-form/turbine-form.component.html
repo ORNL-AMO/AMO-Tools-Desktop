@@ -29,7 +29,7 @@
   </div>
 
   <div class="form-group">
-    <label class="small" for="inletQuantity">Calculation Method</label>
+    <label class="small" for="inletQuantity">Known Variable</label>
     <select name="inletQuantity" class="form-control" formControlName="inletQuantity" id="inletQuantity"
       (change)="setValidators()" (focus)="focusField('inletQuantity')" (blur)="focusOut()">
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
@@ -156,7 +156,7 @@
   </div>
 
   <div class="form-group" *ngIf="turbineForm.controls.solveFor.value == 1">
-    <label class="small" for="outletQuantity">Calculation Method</label>
+    <label class="small" for="outletQuantity">Known Variable</label>
     <select name="outletQuantity" class="form-control" formControlName="outletQuantity" id="outletQuantity"
       (change)="setValidators()" (focus)="focusField('outletQuantity')" (blur)="focusOut()">
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>

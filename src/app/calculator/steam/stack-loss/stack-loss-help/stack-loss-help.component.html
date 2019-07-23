@@ -2,7 +2,8 @@
   <h5>
     Stack Loss Help
     <br>
-    <small class="text-muted">Determines the amount of heat lost in the boiler stack gas based on fuel type, stack gas characteristics, and combustion
+    <small class="text-muted">Determines the amount of heat lost in the boiler stack gas based on fuel type, stack gas
+      characteristics, and combustion
       specifications.
     </small>
   </h5>
@@ -10,7 +11,8 @@
   <div class="my-1" *ngIf="currentField == 'default'">
     <h6>
       <small class="text-muted">
-        Input fuel type and stack gas and combustion characteristics to determine the amount of heat lost in the boiler stack gas.
+        Input fuel type and stack gas and combustion characteristics to determine the amount of heat lost in the boiler
+        stack gas.
         <hr>
       </small>
     </h6>
@@ -30,9 +32,12 @@
       Fuel
       <br>
       <small class="text-muted">
-        Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels are intended
-        to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate fuel
-        compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and edit
+        Type of fuel used within the heating equipment or reaction chamber. The compositions and heating values of fuels
+        are intended
+        to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+        fuel
+        compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+        edit
         the composition or add a completely new material. You cannot use the name of a fuel already in the database.
         <hr>
       </small>
@@ -43,7 +48,8 @@
       Stack Gas Temperature
       <br>
       <small class="text-muted">
-        Measure stack gas temperature by using "proper" temperature probe. Type of temperature probe depends on stack gas temperature
+        Measure stack gas temperature by using "proper" temperature probe. Type of temperature probe depends on stack
+        gas temperature
         and composition at the point of measurement. In most cases a commercially available thermocouple probe is used.
         <hr>
       </small>
@@ -63,11 +69,11 @@
   </div>
   <div class="my-1" *ngIf="currentField == 'oxygenCalculationMethod'">
     <h6>
-      O
-      <sub>2</sub> in Flue Gas / Excess Air Dropdown
+      O<sub>2</sub> in Flue Gas / Excess Air Dropdown
       <br>
       <small class="text-muted">
-        Choose which value is known for the calculation of Available heat. Using Excess Air is recommended (for higher accuracy)
+        Choose which value is known for the calculation of Available heat. Using Excess Air is recommended (for higher
+        accuracy)
         if known. Choose
         <u>Excess Air</u> or
         <u>Oxygen in Flue Gas</u>
@@ -80,7 +86,8 @@
       Excess Air
       <br>
       <small class="text-muted">
-        The excess air value represents excess air used in burners plus all air entering the furnace and leaving as stack gases from
+        The excess air value represents excess air used in burners plus all air entering the furnace and leaving as
+        stack gases from
         the furnace. The value is expressed in terms of percentage of stoichiometric air required for the fuel used.
         <hr>
       </small>
@@ -104,12 +111,11 @@
 
   <div class="my-1" *ngIf="currentField == 'o2InFlueGas'">
     <h6>
-      O
-      <sub>2</sub> in Flue Gas
+      O<sub>2</sub> in Flue Gas
       <br>
       <small class="text-muted">
-        The volumetric percentage of oxygen present in the stack gas. Flue gas O
-        <sub>2</sub> (dry basis) reading should be taken at the same location where stack gas temperature is measured to maintain accuracy
+        The volumetric percentage of oxygen present in the stack gas. Flue gas O<sub>2</sub> (dry basis) reading should
+        be taken at the same location where stack gas temperature is measured to maintain accuracy
         of the calculations.
         <hr>
       </small>
@@ -135,7 +141,8 @@
       Ambient Air Temperature
       <br>
       <small class="text-muted">
-        Ambient air temperature (&#8457; or &#8451;) entering the burners. Use temperature recorder/indicator reading or actual measurement
+        Ambient air temperature (&#8457; or &#8451;) entering the burners. Use temperature recorder/indicator reading or
+        actual measurement
         using a temperature gauge, thermocouple or estimate based on the furnace supplier's specifications.
         <hr>
       </small>
@@ -159,7 +166,8 @@
       Fuel temperature
       <br>
       <small class="text-muted">
-        Temperature of the incoming fuel. In most cases, fuel is supplied at near ambient temperature, however, in some cases it can
+        Temperature of the incoming fuel. In most cases, fuel is supplied at near ambient temperature, however, in some
+        cases it can
         be at a higher temperature when it is preheated.
         <hr>
       </small>
@@ -206,7 +214,8 @@
       Fuel temperature
       <br>
       <small class="text-muted">
-        Temperature of the incoming fuel. In most cases, fuel is supplied at near ambient temperature, however, in some cases it can
+        Temperature of the incoming fuel. In most cases, fuel is supplied at near ambient temperature, however, in some
+        cases it can
         be at a higher temperature when it is preheated.
         <hr>
       </small>
@@ -217,7 +226,7 @@
       Unburned Carbon in Ash
       <br>
       <small class="text-muted">
-        Percent of unburned carbon in Ash.
+        Percent of unburned carbon in ash.
         <hr>
       </small>
     </h6>
@@ -242,37 +251,45 @@
       Savings Suggestions
       <br>
       <ul>
-      <small class="text-muted">
-        <br>
-        <li>
-        Maintain appropriate level of oxygen in stack gases by controlling air-fuel ratio for the burners.
-        </li>
-        <br>
-        <li>
-          Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon monoxide.
-          and hydrogen in stack gases.
-        </li>
-        <br>
-        <li>
-          Consider use of heat recovery from stack gases. Consider use of various methods of heat recovery to reduce stack
-          gas temperature leaving the heating system.
-        </li>
-        <br> 
-        <li>
-          Use preheated combustion air through use of recuperators or regenerators.
-        </li>
-        <br> 
-        <li>
-          Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of stack gases.
-        </li>
-        <br> 
-        <li>
-          Review process temperature settings and lower it where possible during part-load operations. This can reduce flustacke
-          gas temperature leaving the heating system.
-        </li>
-        <br>
-      <div class="alert alert-info">
-        Note: These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions.
-        There may additional measures when considering specific situations and the user is encouraged to review and apply
-        the appropriate measures.
+        <small class="text-muted">
+          <br>
+          <li>
+            Maintain appropriate level of oxygen in stack gases by controlling air-fuel ratio for the burners.
+          </li>
+          <br>
+          <li>
+            Maintain and control burner operations to eliminate formation of soot or combustible gases such as carbon
+            monoxide and hydrogen in stack gases.
+          </li>
+          <br>
+          <li>
+            Consider use of heat recovery from stack gases. Consider use of various methods of heat recovery to reduce
+            stack
+            gas temperature leaving the heating system.
+          </li>
+          <br>
+          <li>
+            Use recuperators or regenerators to preheat combustion air
+          </li>
+          <br>
+          <li>
+            Where appropriate, consider use of oxygen enrichment of combustion air to reduce mass of stack gases.
+          </li>
+          <br>
+          <li>
+            Review process temperature settings and lower it where possible during part-load operations. This can reduce
+            stack gas temperature leaving the heating system.
+          </li>
+          <br>
+          <div class="alert alert-info">
+            Note: These energy saving measures are for guidance only. Not all measures are applicable under all
+            operating conditions.
+            There may additional measures when considering specific situations and the user is encouraged to review and
+            apply
+            the appropriate measures.
+          </div>
+        </small>
+      </ul>
+    </h6>
   </div>
+</div>

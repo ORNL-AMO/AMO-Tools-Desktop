@@ -38,8 +38,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.deaeratorPressureMin}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-            <td class="w-50 text-center">{{rangeValues.deaeratorPressureMax}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.deaeratorPressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.deaeratorPressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -88,9 +90,11 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMin}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMin}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
             </td>
-            <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMax}} <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+            <td class="w-50 text-center">{{rangeValues.feedwaterMassFlowMax}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
             </td>
           </tr>
         </tbody>
@@ -114,8 +118,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.waterPressureMin}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-            <td class="w-50 text-center">{{rangeValues.waterPressureMax}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.waterPressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.waterPressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -125,10 +131,10 @@
 
   <div class="my-2" *ngIf="currentField == 'waterThermodynamicQuantity'">
     <h6>
-      Measurement Method
+      Known Variable
       <br>
       <small class="text-muted">
-        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+        Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
         characterize
         the inlet water.
         <hr>
@@ -137,10 +143,10 @@
   </div>
   <div class="my-2" *ngIf="currentField == 'steamThermodynamicQuantity'">
     <h6>
-      Measurement Method
+      Known Variable
       <br>
       <small class="text-muted">
-        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+        Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
         characterize
         the inlet steam.
         <hr>
@@ -231,8 +237,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.steamPressureMin}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
-            <td class="w-50 text-center">{{rangeValues.steamPressureMax}} <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.steamPressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.steamPressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
