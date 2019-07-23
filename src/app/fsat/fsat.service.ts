@@ -270,27 +270,18 @@ export class FsatService {
 
   compressibilityFactor(inputs: CompressibilityFactor, settings: Settings) {
     let inputCpy: CompressibilityFactor = JSON.parse(JSON.stringify(inputs));
-    if (settings.fanFlowRate !== 'ft3/min') {
-      inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m3').to('ft3');
-
-    }
-    if (settings.fanPressureMeasurement !== 'inH2o') {
-      inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
-      inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
-    }
-    if (settings.fanBarometricPressure !== 'inHg') {
-      inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
-    }
-    if (settings.fanPowerMeasurement !== 'hp') {
-      inputCpy.moverShaftPower = this.convertUnitsService.value(inputCpy.moverShaftPower).from(settings.fanPowerMeasurement).to('hp');
-    }
+    inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from(settings.fanFlowRate).to('ft3/min');
+    inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from(settings.fanPressureMeasurement).to('inH2o');
+    inputCpy.barometricPressure = this.convertUnitsService.value(inputCpy.barometricPressure).from(settings.fanBarometricPressure).to('inHg');
+    inputCpy.moverShaftPower = this.convertUnitsService.value(inputCpy.moverShaftPower).from(settings.fanPowerMeasurement).to('hp');
     return fanAddon.compressibilityFactor(inputCpy);
   }
 
 
   getNewMod(fsat: FSAT, settings: Settings): Modification {
     let modNum: number = 1;
-    if(fsat.modifications){
+    if (fsat.modifications) {
       modNum = fsat.modifications.length + 1;
     }
     let modName: string = 'Scenario ' + modNum;
