@@ -95,4 +95,19 @@ export class AssessmentDbService {
     return tmpExample;
   }
 
+  getTreasureHuntExample(): Assessment {
+    let examples: Array<Assessment> = _.filter(JSON.parse(JSON.stringify(this.allAssessments)), (assessment: Assessment) => {
+      return (assessment.isExample === true);
+    });
+    let tmpExample: Assessment;
+    if (examples) {
+      examples.forEach(example => {
+        if (example.type === 'TreasureHunt') {
+          tmpExample = example;
+        }
+      });
+    }
+    return tmpExample;
+  }
+
 }

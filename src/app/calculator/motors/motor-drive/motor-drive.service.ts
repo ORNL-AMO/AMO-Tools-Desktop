@@ -21,7 +21,7 @@ export class MotorDriveService {
 
   getFormFromObj(inputObj: MotorDriveInputs): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
-      motorPower: [inputObj.motorPower, [Validators.required]],
+      motorPower: [inputObj.motorPower, [Validators.required, Validators.min(0)]],
       annualOperatingHours: [inputObj.annualOperatingHours, [Validators.required, Validators.min(0)]],
       averageMotorLoad: [inputObj.averageMotorLoad, [Validators.required]],
       electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],

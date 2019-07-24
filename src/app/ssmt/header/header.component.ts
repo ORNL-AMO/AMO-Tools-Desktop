@@ -5,6 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { HeaderService, HeaderRanges } from './header.service';
 import { SsmtService } from '../ssmt.service';
 import { GreaterThanValidator } from '../../shared/validators/greater-than';
+import { LessThanValidator } from '../../shared/validators/less-than';
 
 @Component({
   selector: 'app-header',
@@ -142,7 +143,7 @@ export class HeaderComponent implements OnInit {
       pressureMax = this.headerInput.highPressure.pressure;
     }
     let ranges: HeaderRanges = this.headerService.getRanges(this.settings, undefined, this.boilerInput.deaeratorPressure, pressureMax);
-    this.lowPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), Validators.min(ranges.pressureMin)]);
+    this.lowPressureForm.controls.pressure.setValidators([Validators.required, LessThanValidator.lessThan(ranges.pressureMax), GreaterThanValidator.greaterThan(ranges.pressureMin)]);
     this.lowPressureForm.controls.pressure.updateValueAndValidity();
     let mediumPressureMin: number;
     let mediumPressureMax: number;
@@ -153,7 +154,7 @@ export class HeaderComponent implements OnInit {
       mediumPressureMax = this.headerInput.highPressure.pressure;
     }
     ranges = this.headerService.getRanges(this.settings, undefined, mediumPressureMin, mediumPressureMax);
-    this.mediumPressureForm.controls.pressure.setValidators([Validators.required, Validators.max(ranges.pressureMax), Validators.min(ranges.pressureMin)]);
+    this.mediumPressureForm.controls.pressure.setValidators([Validators.required, LessThanValidator.lessThan(ranges.pressureMax), GreaterThanValidator.greaterThan(ranges.pressureMin)]);
     this.mediumPressureForm.controls.pressure.updateValueAndValidity();
 
   }
