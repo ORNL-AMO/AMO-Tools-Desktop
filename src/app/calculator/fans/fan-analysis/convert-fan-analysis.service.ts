@@ -13,18 +13,7 @@ export class ConvertFanAnalysisService {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
     inputCpy.FanShaftPower.sumSEF = inputCpy.PlaneData.inletSEF + inputCpy.PlaneData.outletSEF;
-    //barometric
-    if (!inputCpy.BaseGasDensity.barometricPressure || inputCpy.BaseGasDensity.inputType == 'custom') {
-      inputCpy.BaseGasDensity.barometricPressure = inputCpy.PlaneData.FlowTraverse.barometricPressure;
-    }
-    //dry bulb
-    if (!inputCpy.BaseGasDensity.dryBulbTemp || inputCpy.BaseGasDensity.inputType == 'custom') {
-      inputCpy.BaseGasDensity.dryBulbTemp = inputCpy.PlaneData.FlowTraverse.dryBulbTemp;
-    }
-    //static pressure 
-    if (!inputCpy.BaseGasDensity.staticPressure || inputCpy.BaseGasDensity.inputType == 'custom') {
-      inputCpy.BaseGasDensity.staticPressure = inputCpy.PlaneData.FlowTraverse.staticPressure;
-    }
+    inputCpy = this.updateInputDataForCalcs(inputCpy);
     let results: Fan203Results = fanAddon.fan203(inputCpy);
     results = this.convertFan203Results(results, settings);
     return results;
@@ -33,7 +22,13 @@ export class ConvertFanAnalysisService {
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
-    //barometric
+    inputCpy = this.updateInputDataForCalcs(inputCpy);
+    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
+    results = this.convertPlaneResults(results, settings);
+    return results;
+  }
+
+  updateInputDataForCalcs(inputCpy: Fan203Inputs): Fan203Inputs {
     if (!inputCpy.BaseGasDensity.barometricPressure || inputCpy.BaseGasDensity.inputType == 'custom') {
       inputCpy.BaseGasDensity.barometricPressure = inputCpy.PlaneData.FlowTraverse.barometricPressure;
     }
@@ -45,9 +40,12 @@ export class ConvertFanAnalysisService {
     if (!inputCpy.BaseGasDensity.staticPressure || inputCpy.BaseGasDensity.inputType == 'custom') {
       inputCpy.BaseGasDensity.staticPressure = inputCpy.PlaneData.FlowTraverse.staticPressure;
     }
-    let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
-    results = this.convertPlaneResults(results, settings);
-    return results;
+    if (inputCpy.FanRatedInfo.traversePlanes == 1) {
+      inputCpy.PlaneData.AddlTraversePlanes = [];
+    } else if (inputCpy.FanRatedInfo.traversePlanes == 2) {
+      inputCpy.PlaneData.AddlTraversePlanes = [inputCpy.PlaneData.AddlTraversePlanes[0]];
+    }
+    return inputCpy;
   }
 
   convertFan203DataForCalculations(input: Fan203Inputs, settings: Settings): Fan203Inputs {

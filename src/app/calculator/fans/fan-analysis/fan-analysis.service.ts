@@ -100,6 +100,25 @@ export class FanAnalysisService {
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
+          },
+          {
+            planeType: 'Rectangular',
+            width: undefined,
+            length: undefined,
+            area: undefined,
+            dryBulbTemp: undefined,
+            barometricPressure: 29.92,
+            numInletBoxes: 0,
+            staticPressure: undefined,
+            pitotTubeCoefficient: 1,
+            pitotTubeType: 'Standard',
+            numTraverseHoles: 10,
+            numInsertionPoints: 3,
+            traverseData: [
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
           }
         ],
         InletMstPlane: {
@@ -232,6 +251,40 @@ export class FanAnalysisService {
           width: 80
         },
         AddlTraversePlanes: [
+          {
+            planeType: 'Rectangular',
+            width: undefined,
+            length: undefined,
+            area: undefined,
+            dryBulbTemp: undefined,
+            barometricPressure: 29.92,
+            numInletBoxes: 0,
+            staticPressure: undefined,
+            pitotTubeCoefficient: 1,
+            pitotTubeType: 'Standard',
+            numTraverseHoles: 1,
+            numInsertionPoints: 1,
+            traverseData: [
+              [1],
+            ]
+          },
+          {
+            planeType: 'Rectangular',
+            width: undefined,
+            length: undefined,
+            area: undefined,
+            dryBulbTemp: undefined,
+            barometricPressure: 29.92,
+            numInletBoxes: 0,
+            staticPressure: undefined,
+            pitotTubeCoefficient: 1,
+            pitotTubeType: 'Standard',
+            numTraverseHoles: 1,
+            numInsertionPoints: 1,
+            traverseData: [
+              [0],
+            ]
+          }
         ],
         InletMstPlane: {
           area: 55,
