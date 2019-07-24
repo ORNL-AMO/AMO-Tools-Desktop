@@ -119,7 +119,7 @@ export class FanShaftPowerFormComponent implements OnInit {
       let motorRPM: number = this.fanShaftPower.synchronousSpeed;
       let frequency: number = this.fanShaftPower.frequency;
       let efficiencyClass: number = this.fanShaftPower.efficiencyClass;
-      let efficiency: number = this.fanShaftPower.efficiencyMotor;
+      let efficiency: number = 100;
       let motorVoltage: number = this.fanShaftPower.npv;
       let fla: number = this.psatService.estFanFLA(horsePower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage, this.settings);
       this.shaftPowerForm.patchValue({
@@ -135,7 +135,6 @@ export class FanShaftPowerFormComponent implements OnInit {
       this.shaftPowerForm.controls.synchronousSpeed.valid &&
       this.shaftPowerForm.controls.frequency.valid &&
       this.shaftPowerForm.controls.efficiencyClass.valid &&
-      this.shaftPowerForm.controls.efficiencyMotor.valid &&
       this.shaftPowerForm.controls.npv.valid 
     ) {
       this.flaDisabled = false;
