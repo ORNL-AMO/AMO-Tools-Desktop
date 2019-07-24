@@ -12,6 +12,7 @@ export interface TreasureHunt {
     naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
     electricityReductions?: Array<ElectricityReductionTreasureHunt>;
     compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
+    waterReductions?: Array<WaterReductionTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     setupDone: boolean;

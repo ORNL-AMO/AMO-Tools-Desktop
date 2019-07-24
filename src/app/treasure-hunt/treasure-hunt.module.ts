@@ -40,6 +40,7 @@ import { ElectricityReductionCardComponent } from './treasure-chest/electricity-
 import { CompressedAirReductionModule } from '../calculator/utilities/compressed-air-reduction/compressed-air-reduction.module';
 import { CompressedAirReductionCardComponent } from './treasure-chest/compressed-air-reduction-card/compressed-air-reduction-card.component';
 import { ImportExportOpportunitiesComponent } from './treasure-chest/import-export-opportunities/import-export-opportunities.component';
+import { WaterReductionModule } from '../calculator/utilities/water-reduction/water-reduction.module';
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import { ImportExportOpportunitiesComponent } from './treasure-chest/import-expo
     TreasureHuntReportModule,
     NaturalGasReductionModule,
     ElectricityReductionModule,
-    CompressedAirReductionModule
+    CompressedAirReductionModule,
+    WaterReductionModule
   ],
   declarations: [
     TreasureHuntComponent, 
