@@ -1,0 +1,93 @@
+.header .fa.fa-lightbulb-o {
+    font-size: -webkit-xxx-large;
+    padding-left: 12px;
+}
+
+.fa.fa-times-circle-o:hover {
+    cursor: pointer;
+}
+
+.no-data {
+    background: none;
+}
+
+.btn-group {
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
+
+.form-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 20px 0 grey;
+}
+
+.panel-column.disabled {
+    background-color: #ececec;
+    transition: all 0.2s ease-in-out;
+}
+
+.panel-column.disabled:hover {
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.fa-save, .fa-times, .fa-edit {
+    font-size: xx-large;
+}
+
+.action-item:hover {
+    cursor: pointer;
+    background: #efefef;
+}
+
+.help-holder {
+    max-width: 500px;
+}
+
+.treasure-hunt-help {
+    margin-right: .5rem;
+    margin-bottom: 0px;
+}
+
+.add-fixture{
+    margin-top: 10px;
+}
+
+.compressed-air-icon{
+    height: 55px;
+}
+
+.opp-sheet-icon{
+    width: 35px;
+}
+
+.calc-form-type {
+    height: 50px;
+}
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.form-row-pad-fix {
+    margin-left: -15px !important;
+}
+
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}
+
+.btn-edit-name:hover {
+    cursor: pointer;
+}

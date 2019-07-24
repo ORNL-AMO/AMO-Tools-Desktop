@@ -340,6 +340,59 @@ export interface CompressedAirReductionResult {
   consumption: number
 };
 
-
-
 //===== END compressed air reduction objects =====
+
+
+
+//====== water/wastewater reduction objects ======
+// wastewater shares the same objects as water
+export interface WaterReductionInput {
+  waterReductionInputVec: Array<WaterReductionData>
+};
+
+export interface WaterReductionData {
+  name: string,
+  hoursPerYear: number,
+  waterCost: number,
+  measurementMethod: number,
+  meteredFlowMethodData: MeteredFlowMethodData,
+  volumeMeterMethodData: VolumeMeterMethodData,
+  bucketMethodData: BucketMethodData,
+  otherMethodData: WaterOtherMethodData,
+  isWastewater: boolean
+};
+
+export interface VolumeMeterMethodData {
+  finalMeterReading: number,
+  initialMeterReading: number,
+  elapsedTime: number
+};
+
+export interface MeteredFlowMethodData {
+  meterReading: number
+};
+
+export interface BucketMethodData {
+  bucketVolume: number,
+  bucketFillTime: number
+};
+
+export interface WaterOtherMethodData {
+  consumption: number
+};
+
+export interface WaterReductionResults {
+  baselineResults: WaterReductionResult,
+  modificationResults: WaterReductionResult,
+  annualWaterSavings: number,
+  annualCostSavings: number
+};
+
+export interface WaterReductionResult {
+  waterUse: number,
+  waterCost: number,
+  annualWaterSavings: number,
+  costSavings: number
+};
+
+//===== END water/wastewater reduction objects =====
