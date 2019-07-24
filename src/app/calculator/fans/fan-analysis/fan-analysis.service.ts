@@ -179,117 +179,99 @@ export class FanAnalysisService {
       FanRatedInfo: {
         fanSpeed: 1191,
         motorSpeed: 1191,
-        fanSpeedCorrected: 1170,
+        fanSpeedCorrected: 1191,
         densityCorrected: 0.05,
-        pressureBarometricCorrected: 26.28,
-        globalBarometricPressure: 26.57,
+        pressureBarometricCorrected: 26,
+        globalBarometricPressure: 26,
         includesEvase: "Yes",
-        traversePlanes: 2,
+        traversePlanes: 1,
         upDownStream: "Upstream"
       },
       PlaneData: {
         plane5upstreamOfPlane2: true,
         totalPressureLossBtwnPlanes1and4: 0,
-        totalPressureLossBtwnPlanes2and5: 0.627,
+        totalPressureLossBtwnPlanes2and5: 0,
         inletSEF: 0,
         outletSEF: 0,
         estimate2and5TempFrom1: false,
         FanInletFlange: {
-          area: area * 2,
-          length: 143.63,
+          area: 55,
+          length: 100,
           dryBulbTemp: 123,
-          barometricPressure: 26.57,
-          numInletBoxes: 2,
+          barometricPressure: 26,
+          numInletBoxes: 1,
           planeType: "Rectangular",
           staticPressure: null,
-          width: 32.63
+          width: 80
         },
         FanEvaseOrOutletFlange: {
-          area: 70 * 78 / 144.0,
-          dryBulbTemp: 132.7,
-          barometricPressure: 26.57,
-          length: 70,
+          area: 55,
+          dryBulbTemp: 123,
+          barometricPressure: 26,
+          length: 100,
           numInletBoxes: 0,
           planeType: "Rectangular",
           staticPressure: null,
-          width: 78
+          width: 80
         },
         FlowTraverse: {
-          area: area,
+          area: 55,
           dryBulbTemp: 123,
-          barometricPressure: 26.57,
-          staticPressure: -18.1,
-          pitotTubeCoefficient: 0.87292611371180784,
+          barometricPressure: 26,
+          staticPressure: -18,
+          pitotTubeCoefficient: 1,
           traverseData: [
-            [0.701, 0.703, 0.6675, 0.815, 0.979, 1.09, 1.155, 1.320, 1.578, 2.130],
-            [0.690, 0.648, 0.555, 0.760, 0.988, 1.060, 1.100, 1.110, 1.458, 1.865],
-            [0.691, 0.621, 0.610, 0.774, 0.747, 0.835, 0.8825, 1.23, 1.210, 1.569]
+            [.9853],
           ],
           length: 143.63,
           numInletBoxes: 0,
-          numInsertionPoints: 3,
-          numTraverseHoles: 10,
-          pitotTubeType: "S-Type",
+          numInsertionPoints: 1,
+          numTraverseHoles: 1,
+          pitotTubeType: "Standard",
           planeType: "Rectangular",
-          width: 32.63
+          width: 80
         },
         AddlTraversePlanes: [
-          {
-            area: area,
-            dryBulbTemp: 123,
-            barometricPressure: 26.57,
-            staticPressure: -17.0,
-            pitotTubeCoefficient: 0.87,
-            traverseData: [
-              [0.662, 0.568, 0.546, 0.564, 0.463, 0.507, 0.865, 1.017, 1.247, 1.630],
-              [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
-              [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
-            ],
-
-            length: 143.63,
-            numInletBoxes: 0,
-            numInsertionPoints: 3,
-            numTraverseHoles: 10,
-            pitotTubeType: "S-Type",
-            planeType: "Rectangular",
-            width: 32.63
-          }
         ],
         InletMstPlane: {
-          area: area * 2,
+          area: 55,
           dryBulbTemp: 123,
-          barometricPressure: 26.57,
-          staticPressure: -17.55,
-          length: 143.63,
-          numInletBoxes: 2,
+          barometricPressure: 26,
+          staticPressure: -18,
+          length: 100,
+          numInletBoxes: 1,
           planeType: "Rectangular",
-          width: 32.63
+          width: 80
         },
         OutletMstPlane: {
-          area: (55.42 * 60.49) / 144.0,
-          dryBulbTemp: 132.7,
-          barometricPressure: 26.57,
+          area: 55,
+          dryBulbTemp: 123,
+          barometricPressure: 26,
           staticPressure: 1.8,
-          length: 55.42,
+          length: 100,
           numInletBoxes: null,
           planeType: "Rectangular",
-          width: 60.49,
+          width: 26,
         }
       },
       BaseGasDensity: {
-        dryBulbTemp: 123,
-        staticPressure: -17.6,
-        barometricPressure: 26.57,
-        gasDensity: 0.0547,
+        // dryBulbTemp: undefined,
+        staticPressure: undefined,
+        //barometricPressure: undefined,
+        gasDensity: 0.07,
         gasType: 'AIR',
-        inputType: "wetBulb",
+        inputType: "custom",
         relativeHumidity: null,
-        specificGravity: 1,
-        specificHeatGas: 0.24,
-        wetBulbTemp: 119
+
+        dryBulbTemp: undefined,
+        // staticPressure: -17.6,
+        barometricPressure: undefined,
+        specificGravity: undefined,
+        specificHeatGas: undefined,
+        wetBulbTemp: undefined
       },
       FanShaftPower: {
-        motorShaftPower: 1759.17,
+        motorShaftPower: 1760,
         efficiencyMotor: 95,
         efficiencyVFD: 100,
         efficiencyBelt: 100,
@@ -300,22 +282,22 @@ export class FanAnalysisService {
         efficiencyClass: 1,
         fla: 210,
         frequency: 60,
-        isMethodOne: false,
+        isMethodOne: true,
         isVFD: "No",
         mainsDataAvailable: "Yes",
         npv: 4160,
         phase1: {
-          amps: 205,
-          voltage: 4200
+          amps: undefined,
+          voltage: undefined
         },
         phase2: {
-          amps: 210,
-          voltage: 4200
+          amps: undefined,
+          voltage: undefined
         }
         ,
         phase3: {
-          amps: 200,
-          voltage: 4200
+          amps: undefined,
+          voltage: undefined
         },
         powerFactorAtLoad: 0.88,
         ratedHP: 1750,

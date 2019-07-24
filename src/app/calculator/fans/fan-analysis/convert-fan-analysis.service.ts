@@ -21,6 +21,18 @@ export class ConvertFanAnalysisService {
   getPlaneResults(input: Fan203Inputs, settings: Settings): PlaneResults {
     let inputCpy: Fan203Inputs = JSON.parse(JSON.stringify(input));
     inputCpy = this.convertFan203DataForCalculations(inputCpy, settings);
+    //barometric
+    if(!inputCpy.BaseGasDensity.barometricPressure || inputCpy.BaseGasDensity.inputType == 'custom'){
+      inputCpy.BaseGasDensity.barometricPressure = inputCpy.PlaneData.FlowTraverse.barometricPressure;
+    }
+    //dry bulb
+    if(!inputCpy.BaseGasDensity.dryBulbTemp || inputCpy.BaseGasDensity.inputType == 'custom'){
+      inputCpy.BaseGasDensity.dryBulbTemp = inputCpy.PlaneData.FlowTraverse.dryBulbTemp;
+    }
+    //static pressure 
+    if(!inputCpy.BaseGasDensity.staticPressure || inputCpy.BaseGasDensity.inputType == 'custom'){
+      inputCpy.BaseGasDensity.staticPressure = inputCpy.PlaneData.FlowTraverse.staticPressure;
+    }
     let results: PlaneResults = fanAddon.getPlaneResults(inputCpy);
     results = this.convertPlaneResults(results, settings);
     return results;
