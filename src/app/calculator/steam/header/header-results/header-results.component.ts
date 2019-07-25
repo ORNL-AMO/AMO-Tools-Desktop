@@ -32,7 +32,9 @@ export class HeaderResultsComponent implements OnInit {
     this.resultsArray = new Array<HeaderOutputObj>();
     let index: number = 0;
     for (let key in this.results) {
-      if (index <= this.numberOfInlets) {
+      if(key == 'header'){
+        this.resultsArray.unshift(this.results[key]);
+      }else if (index <= this.numberOfInlets) {
         this.resultsArray.push(this.results[key]);
       }
       index++;

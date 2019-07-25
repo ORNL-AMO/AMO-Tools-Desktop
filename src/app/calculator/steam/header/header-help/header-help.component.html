@@ -21,7 +21,8 @@
       Header Pressure
       <br>
       <small class="text-muted">
-        The final pressure of the combined steam inlets. The combined inlet pressures are adjusted to match the header pressure without
+        The final pressure of the combined steam inlets. The combined inlet pressures are adjusted to match the header
+        pressure without
         energy loss or gain.
         <hr>
       </small>
@@ -34,8 +35,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{pressureRanges.min}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{pressureRanges.max}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{pressureRanges.min}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{pressureRanges.max}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -55,10 +58,11 @@
 
   <div class="my-2" *ngIf="currentField == 'thermodynamicQuantity'">
     <h6>
-      Measurement Method
+      Known Variable
       <br>
       <small class="text-muted">
-        Choose a secondary steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further characterize
+        Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+        characterize
         the inlet steam.
         <hr>
       </small>
@@ -81,7 +85,8 @@
         Value
         <br>
         <small class="text-muted">
-          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the material,
+          Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for
+          the material,
           compared to the standard state, in terms of mass.
           <hr>
         </small>
@@ -91,7 +96,8 @@
         Value
         <br>
         <small class="text-muted">
-          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard state,
+          Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the
+          standard state,
           in terms of mass.
           <hr>
         </small>
@@ -101,7 +107,8 @@
         Value
         <br>
         <small class="text-muted">
-          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam; a value
+          Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for
+          steam; a value
           between 0 and 1 indicates mixed flow (both liquid and vapor).
           <hr>
         </small>
@@ -116,10 +123,12 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{inletRanges.quantityMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{inletRanges.quantityMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
@@ -131,7 +140,7 @@
       Steam Pressure
       <br>
       <small class="text-muted">
-        The pressure at the inlet. Commonly between 0 and 300 and occasionally much greater.  (Absolute)
+        The pressure at the inlet. Commonly between 0 and 300 and occasionally much greater. (Absolute)
         <hr>
       </small>
     </h6>
@@ -143,8 +152,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{inletRanges.pressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{inletRanges.pressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{inletRanges.pressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{inletRanges.pressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -156,7 +167,8 @@
       Inlet Mass Flow
       <br>
       <small class="text-muted">
-        Mass flow of steam (or liquid) at the inlet. Inlet and outlet mass and energy flows are equal. No mass or energy is lost
+        Mass flow of steam (or liquid) at the inlet. Inlet and outlet mass and energy flows are equal. No mass or energy
+        is lost
         or gained.
         <hr>
       </small>
@@ -169,8 +181,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{inletRanges.massFlowMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
-            <td class="w-50 text-center">{{inletRanges.massFlowMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{inletRanges.massFlowMin}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
+            <td class="w-50 text-center">{{inletRanges.massFlowMax}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
           </tr>
         </tbody>
       </table>

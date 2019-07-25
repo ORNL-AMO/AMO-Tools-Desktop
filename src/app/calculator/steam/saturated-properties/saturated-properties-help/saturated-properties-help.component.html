@@ -9,10 +9,11 @@
 
   <div class="my-2" *ngIf="currentField == 'saturatedPressure'">
     <h6>
-      Header Pressure
+      Saturated Pressure
       <br>
       <small class="text-muted">
-        Absolute Pressure of the steam. Pressure cannot be above the critical point, as there is no longer a phase change.
+        Pressure of the steam. Pressure cannot be above the critical point, as there is no longer a phase
+        change.
         <hr>
       </small>
     </h6>
@@ -25,10 +26,10 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{ranges.minPressure}}
-              <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{ranges.maxPressure}}
-              <span [innerHTML]="getDisplayUnit(settings.steamPressureMeasurement)"></span>
+              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
@@ -53,10 +54,10 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{ranges.minTemp}}
-              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{ranges.maxTemp}}
-              <span [innerHTML]="getDisplayUnit(settings.steamTemperatureMeasurement)"></span>
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
             </td>
           </tr>
         </tbody>

@@ -5,6 +5,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SystemCurveService {
@@ -23,7 +24,10 @@ export class SystemCurveService {
   fanLossCoefficient: number;
   // fanTableData: Array<Array<string>>;
   // fanKeyColors: Array<{ borderColor: string, fillColor: string }>;
-  constructor(private psatService: PsatService, private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  currentField: BehaviorSubject<string>;
+  constructor(private psatService: PsatService, private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+    this.currentField = new BehaviorSubject<string>('default');
+   }
 
   getLossCoefficient(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {
     //from PSAT/curve.html -> k = (h2-h1)/(Math.pow(f2,C)-Math.pow(f1,C))

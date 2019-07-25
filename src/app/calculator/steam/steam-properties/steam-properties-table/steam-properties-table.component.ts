@@ -13,9 +13,9 @@ export class SteamPropertiesTableComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number };
+  data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number };
 
-  rowData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>;
+  rowData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>;
 
   constructor(private steamService: SteamService) { }
 
@@ -23,7 +23,7 @@ export class SteamPropertiesTableComponent implements OnInit {
     if (this.steamService.steamPropertiesData) {
       this.rowData = this.steamService.steamPropertiesData;
     } else {
-      this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
+      this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>();
     }
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -44,16 +44,11 @@ export class SteamPropertiesTableComponent implements OnInit {
   }
 
   resetTable() {
-    this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number }>();
+    this.rowData = new Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>();
     this.steamService.steamPropertiesData = this.rowData;
   }
 
   deleteRow(index: number) {
     this.rowData.splice(index, 1);
   }
-
-  getDisplayUnit(unit: string) {
-    return this.steamService.getDisplayUnit(unit);
-  }
-
 }

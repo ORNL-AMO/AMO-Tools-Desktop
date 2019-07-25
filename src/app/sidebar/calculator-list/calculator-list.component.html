@@ -31,16 +31,16 @@
       (click)="chooseCalculator('pumps')">Pumps</span>
     <ul *ngIf="selectedCalculatorType == 'pumps'">
       <li [ngClass]="{'selected': selectedCalculator == 'head-tool'}">
-        <span class="sidebar-item" (click)="selectCalculator('head-tool')">Head Tool</span>
+        <span class="sidebar-item" (click)="selectCalculator('head-tool')">Pump Head Tool</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'system-curve'}">
-        <span class="sidebar-item" (click)="selectCalculator('system-curve')">System Curve</span>
+        <span class="sidebar-item" (click)="selectCalculator('system-curve')">Pump System Curve</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'specific-speed'}">
         <span class="sidebar-item" (click)="selectCalculator('specific-speed')">Specific Speed</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'achievable-efficiency'}">
-        <span class="sidebar-item" (click)="selectCalculator('achievable-efficiency')">Pump Efficiency Curves</span>
+        <span class="sidebar-item" (click)="selectCalculator('achievable-efficiency')">Pump Achievable Efficiency</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'pump-curve'}">
         <span class="sidebar-item" (click)="selectCalculator('pump-curve')">Pump Curve</span>
@@ -71,8 +71,7 @@
       Heating</span>
     <ul *ngIf="selectedCalculatorType == 'furnaces'">
       <li [ngClass]="{'selected': selectedCalculator == 'o2-enrichment'}">
-        <span class="sidebar-item" (click)="selectCalculator('o2-enrichment')">O
-          <sub>2</sub> Enrichment</span>
+        <span class="sidebar-item" (click)="selectCalculator('o2-enrichment')">O<sub>2</sub> Enrichment</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'efficiency-improvement'}">
         <span class="sidebar-item" (click)="selectCalculator('efficiency-improvement')">Efficiency Improvement</span>
@@ -149,10 +148,10 @@
         <span class="sidebar-item" (click)="selectCalculator('air-velocity')">Velocity in the Piping</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'system-capacity'}">
-        <span class="sidebar-item" (click)="selectCalculator('system-capacity')">System - Capacity</span>
+        <span class="sidebar-item" (click)="selectCalculator('system-capacity')">System Capacity</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'operation-cost'}">
-        <span class="sidebar-item" (click)="selectCalculator('operation-cost')">Operation Cost Calculations</span>
+        <span class="sidebar-item" (click)="selectCalculator('operation-cost')">Operating Costs</span>
       </li>
     </ul>
   </li>
@@ -199,6 +198,10 @@
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'compressed-air-reduction'}">
         <span class="sidebar-item" (click)="selectCalculator('compressed-air-reduction')">Compressed Air
+          Reduction</span>
+      </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'water-reduction'}">
+        <span class="sidebar-item" (click)="selectCalculator('water-reduction')">Water 
           Reduction</span>
       </li>
     </ul>
