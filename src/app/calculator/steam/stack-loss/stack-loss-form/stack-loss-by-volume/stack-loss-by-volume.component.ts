@@ -4,6 +4,7 @@ import { LossesService } from '../../../../../phast/losses/losses.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-stack-loss-by-volume',
@@ -25,10 +26,12 @@ export class StackLossByVolumeComponent implements OnInit {
     'Excess Air',
     'Oxygen in Flue Gas'
   ];
-  calculationExcessAir = 0.0;
-  calculationFlueGasO2 = 0.0;
+  calculationExcessAir: number = 0.0;
+  calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
-  constructor(private suiteDbService: SuiteDbService, private lossesService: LossesService, private phastService: PhastService) { }
+  stackTemperatureWarning: boolean = false;
+  tempMin: number;
+  constructor(private suiteDbService: SuiteDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.options = this.suiteDbService.selectGasFlueGasMaterials();
@@ -42,6 +45,10 @@ export class StackLossByVolumeComponent implements OnInit {
     this.setCalcMethod();
     this.setCombustionValidation();
     this.setFuelTempValidation();
+    this.tempMin = 212;
+    this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to(this.settings.steamTemperatureMeasurement);
+    this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
+    this.checkStackLossTemp();
   }
   focusOut() {
     this.changeField.emit('default');
@@ -138,6 +145,7 @@ export class StackLossByVolumeComponent implements OnInit {
   }
 
   calculate() {
+    this.checkStackLossTemp();
     this.emitCalculate.emit(this.stackLossForm);
   }
 
@@ -163,6 +171,14 @@ export class StackLossByVolumeComponent implements OnInit {
       this.calcMethodExcessAir = false;
     }
     this.calcExcessAir();
+  }
+
+  checkStackLossTemp() {
+    if (this.stackLossForm.controls.flueGasTemperature.value && this.stackLossForm.controls.flueGasTemperature.value < this.tempMin) {
+      this.stackTemperatureWarning = true;
+    } else {
+      this.stackTemperatureWarning = false;
+    }
   }
 
 }

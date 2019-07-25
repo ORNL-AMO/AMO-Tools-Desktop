@@ -110,9 +110,9 @@ export class PercentLoadEstimationService {
       phase3Amps: [inputObj.phase3Amps, [Validators.required]],
       ratedCurrent: [inputObj.ratedCurrent, [Validators.required, Validators.min(0)]],
       ratedVoltage: [inputObj.ratedVoltage, [Validators.required]],
-      powerFactor: [inputObj.powerFactor, [Validators.required]],
-      amps: ['Amps', {disabled: true}],
-      volts: ['Volts', {disabled: true}]
+      powerFactor: [inputObj.powerFactor, [Validators.required, Validators.min(0), Validators.max(100)]],
+      amps: ['Amps', { disabled: true }],
+      volts: ['Volts', { disabled: true }]
     });
 
     return tmpForm;
@@ -156,7 +156,9 @@ export class PercentLoadEstimationService {
   }
 
   inputPower(data: FieldMeasurementInputs): number {
-    let val: number = data.ratedVoltage * data.ratedCurrent * data.powerFactor * Math.sqrt(3);
+    let averageVoltage: number = this.averageVoltage(data);
+    let averageCurrent: number = this.averageCurrent(data);
+    let val: number = averageVoltage * averageCurrent * (data.powerFactor / 100) * Math.sqrt(3);
     return val / 1000;
   }
 

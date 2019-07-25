@@ -11,12 +11,14 @@ export class FanAnalysisService {
   stepTab: BehaviorSubject<string>;
   currentField: BehaviorSubject<string>;
   resetForms: BehaviorSubject<boolean>;
+  updateTraverseData: BehaviorSubject<boolean>;
   constructor() {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
     this.getResults = new BehaviorSubject<boolean>(true);
     this.currentField = new BehaviorSubject<string>('default');
     this.resetForms = new BehaviorSubject<boolean>(false);
+    this.updateTraverseData = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultData(): Fan203Inputs {
@@ -80,6 +82,25 @@ export class FanAnalysisService {
           ]
         },
         AddlTraversePlanes: [
+          {
+            planeType: 'Rectangular',
+            width: undefined,
+            length: undefined,
+            area: undefined,
+            dryBulbTemp: undefined,
+            barometricPressure: 29.92,
+            numInletBoxes: 0,
+            staticPressure: undefined,
+            pitotTubeCoefficient: 1,
+            pitotTubeType: 'Standard',
+            numTraverseHoles: 10,
+            numInsertionPoints: 3,
+            traverseData: [
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+          },
           {
             planeType: 'Rectangular',
             width: undefined,
@@ -243,7 +264,6 @@ export class FanAnalysisService {
               [0.639, 0.542, 0.530, 0.570, 0.603, 0.750, 0.965, 1.014, 1.246, 1.596],
               [0.554, 0.452, 0.453, 0.581, 0.551, 0.724, 0.844, 1.077, 1.323, 1.620]
             ],
-
             length: 143.63,
             numInletBoxes: 0,
             numInsertionPoints: 3,
@@ -292,7 +312,6 @@ export class FanAnalysisService {
         efficiencyVFD: 100,
         efficiencyBelt: 100,
         sumSEF: 0,
-
         amps: 205,
         driveType: "Direct Drive",
         efficiencyClass: 1,
@@ -321,7 +340,6 @@ export class FanAnalysisService {
         voltage: 4200
       }
     };
-
     return mockData;
   }
 

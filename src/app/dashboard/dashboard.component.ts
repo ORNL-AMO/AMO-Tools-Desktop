@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
   showLandingScreen: boolean;
 
   newDirEventToggle: boolean = false;
-  dashboardView: string = 'calculator';
+  dashboardView: string = 'landing-screen';
   goCalcHome: boolean = false;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
   @ViewChild('exportModal') public exportModal: ModalDirective;

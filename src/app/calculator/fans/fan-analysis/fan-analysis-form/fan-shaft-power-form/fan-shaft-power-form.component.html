@@ -48,7 +48,8 @@
       <label for="efficiencyClass">Efficiency Class</label>
       <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass"
         formControlName="efficiencyClass" (change)="save()" (focus)="focusField('efficiencyClass')">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}
+        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">
+          {{efficiencyClass.display}}
         </option>
       </select>
     </div>
@@ -70,7 +71,8 @@
     </div>
     <div class="form-group">
       <label for="fullLoadAmps">Full Load Amps
-        <a class="form-text small click-link" id="flaHelp" (click)="estimateFla()">Estimate Full-Load Amps</a>
+        <a class="form-text small click-link" id="flaHelp" (click)="estimateFla()"
+          [ngClass]="{'disabled': flaDisabled}">Estimate Full-Load Amps</a>
       </label>
       <div class="input-group">
         <input name="fullLoadAmps" type="number" step="any" class="form-control" formControlName="fullLoadAmps"

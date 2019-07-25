@@ -12,7 +12,7 @@
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
-            <a class="click-item" (click)="showTool('head-tool')">Head Tool</a>
+            <a class="click-item" (click)="showTool('head-tool')">Pump Head Tool</a>
             <p>
               Calculate pump head using inlet and out pressures, elevation and pipe diameter
             </p>
@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
-            <a class="click-item" (click)="showTool('system-curve')">System Curve</a>
+            <a class="click-item" (click)="showTool('system-curve')">Pump System Curve</a>
             <p>
               Plot the system curve using static head and an operating point; can also plot pump curve
             </p>
@@ -49,12 +49,11 @@
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img class="calc-img" src="assets/images/calculator-icons/pump-eff.png"
-                (click)="showTool('achievable-efficiency')">
+              <img class="calc-img" src="assets/images/calculator-icons/pump-icons/pump-efficiency.png" (click)="showTool('achievable-efficiency')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
-            <a class="click-item" (click)="showTool('achievable-efficiency')">Pump Efficiency Curves</a>
+            <a class="click-item" (click)="showTool('achievable-efficiency')">Pump Achievable Efficiency</a>
             <p>
               Estimate the achievable pump efficiency for various pump styles based on ANSI/HI 13-2000
             </p>

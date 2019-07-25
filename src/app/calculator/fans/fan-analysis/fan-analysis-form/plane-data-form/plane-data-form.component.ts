@@ -31,6 +31,8 @@ export class PlaneDataFormComponent implements OnInit {
   ngOnInit() {
     this.planeStepSubscription = this.planeDataFormService.planeStep.subscribe(val => {
       this.planeStep = val;
+      this.checkClasses();
+      this.cd.detectChanges();
     });
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
       this.numTraversePlanes = this.fanAnalysisService.inputData.FanRatedInfo.traversePlanes;

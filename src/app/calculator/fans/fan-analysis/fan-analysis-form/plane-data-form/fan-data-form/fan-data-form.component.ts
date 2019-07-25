@@ -26,35 +26,38 @@ export class FanDataFormComponent implements OnInit {
   velocityData: { pv3: number, percent75Rule: number };
   planeData: Plane;
   resetFormSubscription: Subscription;
+  getResultsSubscription: Subscription;
   constructor(private planeDataFormService: PlaneDataFormService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService, private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
     this.setPlaneData();
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
     this.calcArea();
-    this.calcVelocityData();
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
       if (val == true) {
         this.setPlaneData();
         this.resetData();
       }
-    })
+    });
+
+    this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
+      this.setPlaneData();
+      this.calcVelocityData();
+    });
   }
 
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
+    this.getResultsSubscription.unsubscribe();
   }
 
-  resetData(){
-    console.log('reset data');
+  resetData() {
     this.dataForm = this.planeDataFormService.getPlaneFormFromObj(this.planeData, this.settings, this.planeNum);
-    // this.cd.detectChanges();
   }
 
   setPlaneData() {
     this.planeData = this.fanAnalysisService.getPlane(this.planeNum);
   }
-
 
   calcArea() {
     let tmpData = this.planeDataFormService.getPlaneObjFromForm(this.dataForm, this.planeData);

@@ -52,7 +52,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="suctionTankGasOverPressure">Tank gas overpressure (Pg)</label>
+        <label class="small" for="suctionTankGasOverPressure">Tank gas overpressure (P<sub>g</sub>)</label>
         <div class="input-group calc-addon-group">
           <input type="number" min="0" class="form-control" formControlName="suctionTankGasOverPressure" id="suctionTankGasOverPressure"
             (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionTankGasOverPressure')">
@@ -70,7 +70,7 @@
 
 
       <div class="form-group">
-        <label class="small" for="suctionTankFluidSurfaceElevation">Tank fluid surface elevation (Zs)</label>
+        <label class="small" for="suctionTankFluidSurfaceElevation">Tank fluid surface elevation (Z<sub>s</sub>)</label>
         <div class="input-group calc-addon-group">
           <input type="number" min="0" class="form-control" formControlName="suctionTankFluidSurfaceElevation" id="suctionTankFluidSurfaceElevation"
             (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionTankFluidSurfaceElevation')">
@@ -85,7 +85,7 @@
 
 
       <div class="form-group">
-        <label class="small" for="suctionLineLossCoefficients">Line loss coefficients (Ks)</label>
+        <label class="small" for="suctionLineLossCoefficients">Line loss coefficients (K<sub>s</sub>)</label>
         <div class="input-group calc-addon-group">
           <input type="number" min="0" class="form-control" [ngClass]="{'w-100': inAssessment != true}" formControlName="suctionLineLossCoefficients"
             id="suctionLineLossCoefficients" (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionLineLossCoefficients')">
@@ -118,7 +118,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="dischargeGaugePressure">Gauge pressure (Pd)</label>
+        <label class="small" for="dischargeGaugePressure">Gauge pressure (P<sub>d</sub>)</label>
         <div class="input-group calc-addon-group">
           <input type="number" min="0" class="form-control" formControlName="dischargeGaugePressure" id="dischargeGaugePressure"
             (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeGaugePressure')">
@@ -135,7 +135,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="dischargeGaugeElevation">Gauge elevation (Zd)</label>
+        <label class="small" for="dischargeGaugeElevation">Gauge elevation (Z<sub>d</sub>)</label>
         <div class="input-group calc-addon-group">
           <input type="number" min="0" class="form-control" formControlName="dischargeGaugeElevation" id="dischargeGaugeElevation"
             (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeGaugeElevation')">
@@ -149,7 +149,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="dischargeLineLossCoefficients">Line loss coefficients (Kd)</label>
+        <label class="small" for="dischargeLineLossCoefficients">Line loss coefficients (K<sub>d</sub>)</label>
         <div class="input-group calc-addon-group">
           <input type="number" min="0" class="form-control" [ngClass]="{'w-100': inAssessment != true}" formControlName="dischargeLineLossCoefficients"
             id="dischargeLineLossCoefficients" (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeLineLossCoefficients')">

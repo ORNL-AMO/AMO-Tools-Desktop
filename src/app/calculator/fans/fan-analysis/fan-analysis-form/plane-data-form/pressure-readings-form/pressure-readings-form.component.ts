@@ -16,6 +16,7 @@ export class PressureReadingsFormComponent implements OnInit {
   numLabels: Array<number>;
   planeData: Plane;
   resetFormSubscription: Subscription;
+  updateTraverseDataSubscription: Subscription;
   constructor(private fanAnalysisService: FanAnalysisService) { }
 
   ngOnInit() {
@@ -28,11 +29,18 @@ export class PressureReadingsFormComponent implements OnInit {
         this.setPlaneData();
         this.initializeData();
       }
+    });
+    this.updateTraverseDataSubscription = this.fanAnalysisService.updateTraverseData.subscribe(val => {
+      if (val == true) {
+        this.setPlaneData();
+        this.updateData();
+      }
     })
   }
 
   ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
+    this.updateTraverseDataSubscription.unsubscribe();
   }
 
   setPlaneData() {
@@ -58,6 +66,29 @@ export class PressureReadingsFormComponent implements OnInit {
         this.numLabels.push(i + 1);
       }
     }
+  }
+
+  updateData() {
+    this.traverseHoles = this.traverseHoles.slice(0, this.planeData.numInsertionPoints);
+    if (this.traverseHoles.length < this.planeData.numInsertionPoints) {
+      for (let i = this.traverseHoles.length; i < this.planeData.numInsertionPoints; i++) {
+        this.traverseHoles.push(new Array<number>(this.planeData.numTraverseHoles).fill(0));
+      }
+    }
+
+    for (let i = 0; i < this.traverseHoles.length; i++) {
+      this.traverseHoles[i] = this.traverseHoles[i].slice(0, this.planeData.numTraverseHoles);
+      if (this.traverseHoles[i].length < this.planeData.numTraverseHoles) {
+        for (let n = this.traverseHoles[i].length; n < this.planeData.numTraverseHoles; n++) {
+          this.traverseHoles[i].push(0);
+        }
+      }
+    }
+    this.numLabels = new Array();
+    for (let i = 0; i < this.planeData.numTraverseHoles; i++) {
+      this.numLabels.push(i + 1);
+    }
+    this.save();
   }
 
   save() {

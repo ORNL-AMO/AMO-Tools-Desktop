@@ -208,8 +208,6 @@ export class CompressedAirReductionService {
       compressedAirReductionResults.annualFlowRateReduction = baselineResults.flowRate - modificationResults.flowRate;
       compressedAirReductionResults.annualConsumptionReduction = baselineResults.consumption - modificationResults.consumption;
     }
-
-
     return compressedAirReductionResults;
   }
 

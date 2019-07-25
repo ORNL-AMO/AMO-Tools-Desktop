@@ -19,7 +19,8 @@
       "Solve For" Option
       <br>
       <small class="text-muted">
-        User can generate a basic steam turbine model, solving for either Outlet Steam Conditions or Isentropic Efficiency.
+        User can generate a basic steam turbine model, solving for either Outlet Steam Conditions or Isentropic
+        Efficiency.
         <hr>
       </small>
     </h6>
@@ -42,8 +43,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.inletPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.inletPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{rangeValues.inletPressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.inletPressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -52,10 +55,11 @@
 
   <div class="my-2" *ngIf="currentField == 'inletQuantity' || currentField == 'outletQuantity'">
     <h6>
-      Measurement Method
+      Known Variable
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+        characterize the generated steam.
         <hr>
       </small>
     </h6>
@@ -69,12 +73,16 @@
       <span *ngIf="inletQuantity == 3">Saturated Quality</span>
       <br>
       <small class="text-muted">
-        <span *ngIf="inletQuantity == 0">The temperature at the inlet. If below boiling point, inlet will be a liquid.</span>
-        <span *ngIf="inletQuantity == 1">Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the
+        <span *ngIf="inletQuantity == 0">The temperature at the inlet. If below boiling point, inlet will be a
+          liquid.</span>
+        <span *ngIf="inletQuantity == 1">Specific Enthalpy (h) is the combination of the steam's internal energy and the
+          work needed to make room for the
           material, compared to the standard state, in terms of mass.</span>
-        <span *ngIf="inletQuantity == 2">Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard
+        <span *ngIf="inletQuantity == 2">Specific Entropy (s) is a measure of the amount of energy which is unavailable
+          to do work, compared to the standard
           state, in terms of mass.</span>
-        <span *ngIf="inletQuantity == 3">Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam;
+        <span *ngIf="inletQuantity == 3">Quality is the vapor mass percentage of the steam/water mixture. Quality is
+          zero for liquid water and 1 for steam;
           a value between 0 and 1 indicates mixed flow (both liquid and vapor).</span>
         <hr>
       </small>
@@ -88,10 +96,12 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{rangeValues.inletQuantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(inletQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(inletQuantity) | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{rangeValues.inletQuantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(inletQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(inletQuantity) | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
@@ -115,7 +125,8 @@
       Isentropic Efficiency
       <br>
       <small class="text-muted">
-        The energy removed as a percent (%) of the energy removed if turbine were an isentropic process (entropy in = entropy out).
+        The energy removed as a percent (%) of the energy removed if turbine were an isentropic process (entropy in =
+        entropy out).
         Commonly 55% to 80%.
         <hr>
       </small>
@@ -178,8 +189,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr>
-            <td class="w-50 text-center">{{rangeValues.outletSteamPressureMin}} {{settings.steamPressureMeasurement}}</td>
-            <td class="w-50 text-center">{{rangeValues.outletSteamPressureMax}} {{settings.steamPressureMeasurement}}</td>
+            <td class="w-50 text-center">{{rangeValues.outletSteamPressureMin}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
+            <td class="w-50 text-center">{{rangeValues.outletSteamPressureMax}} <span
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></td>
           </tr>
         </tbody>
       </table>
@@ -194,12 +207,16 @@
       <span *ngIf="outletQuantityValue == 3">Saturated Quality</span>
       <br>
       <small class="text-muted">
-        <span *ngIf="outletQuantityValue == 0">The temperature at the inlet. If below boiling point, inlet will be a liquid.</span>
-        <span *ngIf="outletQuantityValue == 1">Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the
+        <span *ngIf="outletQuantityValue == 0">The temperature at the inlet. If below boiling point, inlet will be a
+          liquid.</span>
+        <span *ngIf="outletQuantityValue == 1">Specific Enthalpy (h) is the combination of the steam's internal energy
+          and the work needed to make room for the
           material, compared to the standard state, in terms of mass.</span>
-        <span *ngIf="outletQuantityValue == 2">Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard
+        <span *ngIf="outletQuantityValue == 2">Specific Entropy (s) is a measure of the amount of energy which is
+          unavailable to do work, compared to the standard
           state, in terms of mass.</span>
-        <span *ngIf="outletQuantityValue == 3">Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam;
+        <span *ngIf="outletQuantityValue == 3">Quality is the vapor mass percentage of the steam/water mixture. Quality
+          is zero for liquid water and 1 for steam;
           a value between 0 and 1 indicates mixed flow (both liquid and vapor).</span>
         <hr>
       </small>
@@ -213,10 +230,12 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{rangeValues.outletQuantityValueMin}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(outletQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(outletQuantity) | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{rangeValues.outletQuantityValueMax}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(outletQuantity)"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(outletQuantity) | settingsLabel"></span>
             </td>
           </tr>
         </tbody>
@@ -251,8 +270,10 @@
             <th class="w-50 text-center">Maximum</th>
           </tr>
           <tr *ngIf="turbineProperty == 0">
-            <td class="w-50 text-center">{{rangeValues.massFlowOrPowerOutMin}} {{settings.steamMassFlowMeasurement}}/hr</td>
-            <td class="w-50 text-center">{{rangeValues.massFlowOrPowerOutMax}} {{settings.steamMassFlowMeasurement}}/hr</td>
+            <td class="w-50 text-center">{{rangeValues.massFlowOrPowerOutMin}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
+            <td class="w-50 text-center">{{rangeValues.massFlowOrPowerOutMax}} <span
+                [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></td>
           </tr>
           <tr *ngIf="turbineProperty == 1">
             <td class="w-50 text-center">0 kW</td>

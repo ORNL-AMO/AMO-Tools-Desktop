@@ -94,7 +94,7 @@ export class Fsat203Component implements OnInit {
     }
     else {
       this.inputs = this.fsat203Service.getDefaultData();
-      this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+      // this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
     }
     this.toggleResetData = !this.toggleResetData;
     this.checkBasics();
@@ -379,7 +379,7 @@ export class Fsat203Component implements OnInit {
         this.inputs = this.calculator.fan203Inputs;
       } else {
         let tmpFans203Inputs: Fan203Inputs = this.fsat203Service.getDefaultData();
-        tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
+        // tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
         this.calculator.fan203Inputs = tmpFans203Inputs;
         this.inputs = this.calculator.fan203Inputs;
         this.saveCalculator();
@@ -393,7 +393,7 @@ export class Fsat203Component implements OnInit {
 
   initCalculator(): Calculator {
     let tmpFans203Inputs: Fan203Inputs = this.fsat203Service.getDefaultData();
-    tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
+    // tmpFans203Inputs = this.convertFsatService.convertFan203Inputs(tmpFans203Inputs, this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       fan203Inputs: tmpFans203Inputs
@@ -405,7 +405,7 @@ export class Fsat203Component implements OnInit {
     this.inputs = this.fsat203Service.inputData;
     if (this.inputs === undefined) {
       this.inputs = this.fsat203Service.getDefaultData();
-      this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
+      // this.inputs = this.convertFsatService.convertFan203Inputs(this.inputs, this.settings);
     }
   }
 

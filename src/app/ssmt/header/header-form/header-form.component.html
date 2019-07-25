@@ -15,11 +15,11 @@
     <span class="alert-danger pull-right small"
       *ngIf="headerForm.controls.pressure.invalid && !headerForm.controls.pressure.pristine">
       <span *ngIf="headerForm.controls.pressure.errors.required">Value Required</span>
-      <span *ngIf="headerForm.controls.pressure.errors.max">{{maxPressureErrorMsg}}
-        {{headerForm.controls.pressure.errors.max.max}}
+      <span *ngIf="headerForm.controls.pressure.errors.greaterThan">{{maxPressureErrorMsg}}
+        {{headerForm.controls.pressure.errors.greaterThan}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span *ngIf="headerForm.controls.pressure.errors.min">{{minPressureErrorMsg}}
-        {{headerForm.controls.pressure.errors.min.min}}
+      <span *ngIf="headerForm.controls.pressure.errors.lessThan">{{minPressureErrorMsg}}
+        {{headerForm.controls.pressure.errors.lessThan}}
         <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
       <span *ngIf="headerForm.controls.pressure.errors.boilerTemp">Temperature of steam in boiler is too low for this
         pressure value.</span>

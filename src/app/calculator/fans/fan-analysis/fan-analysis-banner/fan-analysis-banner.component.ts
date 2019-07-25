@@ -56,7 +56,11 @@ export class FanAnalysisBannerComponent implements OnInit {
   }
 
   changeStepTab(str: string) {
-    this.fanAnalysisService.stepTab.next(str);
+    if (str != 'fan-analysis-results') {
+      this.fanAnalysisService.stepTab.next(str);
+    } else if (this.resultsTabClassStatus[0] != 'disabled') {
+      this.fanAnalysisService.stepTab.next(str);
+    }
   }
 
   updateClassArrays() {
