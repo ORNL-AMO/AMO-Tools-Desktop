@@ -340,6 +340,7 @@ export class FanAnalysisService {
         voltage: 4200
       }
     };
+    
     return mockData;
   }
 
