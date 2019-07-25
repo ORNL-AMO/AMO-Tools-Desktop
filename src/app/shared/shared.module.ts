@@ -27,6 +27,7 @@ import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
 import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
 import { ToastComponent } from './toast/toast.component';
+import { OperatingHoursModalComponent } from './operating-hours-modal/operating-hours-modal.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { ToastComponent } from './toast/toast.component';
     ExportableResultsTableComponent,
     SettingsLabelPipe,
     WaterfallGraphComponent,
-    ToastComponent
+    ToastComponent,
+    OperatingHoursModalComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -69,7 +71,8 @@ import { ToastComponent } from './toast/toast.component';
     PrintOptionsMenuComponent,
     SettingsLabelPipe,
     WaterfallGraphComponent,
-    ToastComponent
+    ToastComponent,
+    OperatingHoursModalComponent
   ],
   providers: [
     ValidationService,

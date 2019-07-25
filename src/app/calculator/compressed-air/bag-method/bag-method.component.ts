@@ -14,6 +14,7 @@ export class BagMethodComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('formElement') formElement: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -29,8 +30,9 @@ export class BagMethodComponent implements OnInit {
   outputsArray: Array<BagMethodOutput>;
 
   totalOperatingTime: number;
-
+  showOperatingHoursModal: boolean = false;
   currentField: string = 'default';
+  formWidth: number = 350;
   constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
@@ -84,6 +86,9 @@ export class BagMethodComponent implements OnInit {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 
   calculateAnnualConsumption(inputsObject?: { inputs: BagMethodInput, index: number }) {
@@ -105,7 +110,7 @@ export class BagMethodComponent implements OnInit {
 
   addLeakage() {
     let input: BagMethodInput = {
-      operatingTime:  JSON.parse(JSON.stringify(this.totalOperatingTime)),
+      operatingTime: JSON.parse(JSON.stringify(this.totalOperatingTime)),
       bagFillTime: 0,
       heightOfBag: 0,
       diameterOfBag: 0,
@@ -143,6 +148,21 @@ export class BagMethodComponent implements OnInit {
 
   changeField(str: string) {
     this.currentField = str;
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+    console.log('show');
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  updateOperatingHours(calculatedOpHrs: number) {
+    this.totalOperatingTime = calculatedOpHrs;
+    this.closeOperatingHoursModal();
+    this.calculateAnnualConsumption();
   }
 
 }
