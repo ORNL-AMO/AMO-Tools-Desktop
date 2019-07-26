@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, ImportExportOpportunities } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, ImportExportOpportunities, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from 'http2';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -10,6 +10,7 @@ import { NaturalGasReductionService } from '../../calculator/utilities/natural-g
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
+import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -40,6 +41,7 @@ export class TreasureChestComponent implements OnInit {
   selectedEditNaturalGasReduction: NaturalGasReductionTreasureHunt;
   selectedEditElectricityReduction: ElectricityReductionTreasureHunt;
   selectedEditCompressedAirReduction: CompressedAirReductionTreasureHunt;
+  selectedEditWaterReduction: WaterReductionTreasureHunt;
 
   displayEnergyType: string = 'All';
   displayCalculatorType: string = 'All';
@@ -57,7 +59,8 @@ export class TreasureChestComponent implements OnInit {
     private naturalGasReductionService: NaturalGasReductionService,
     private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService,
-    private treasureHuntService: TreasureHuntService) { }
+    private treasureHuntService: TreasureHuntService,
+    private waterReductionService: WaterReductionService) { }
 
   ngOnInit() {
   }
@@ -126,6 +129,8 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.electricityReductions.splice(this.deleteItemIndex, 1);
     } else if (this.itemType == 'compressedAirReduction') {
       this.treasureHunt.compressedAirReductions.splice(this.deleteItemIndex, 1);
+    } else if (this.itemType == 'waterReduction') {
+      this.treasureHunt.waterReductions.splice(this.deleteItemIndex, 1);
     }
     this.save();
     this.hideDeleteItemModal();
@@ -151,6 +156,8 @@ export class TreasureChestComponent implements OnInit {
       this.saveElectricityReduction();
     } else if (this.itemType == 'compressedAirReduction') {
       this.saveCompressedAirReduction();
+    } else if (this.itemType == 'waterReduction') {
+      this.saveWaterReduction();
     }
   }
 
@@ -369,6 +376,33 @@ export class TreasureChestComponent implements OnInit {
     this.selectCalc('none');
   }
 
+  //water reduction
+  editWaterReduction(waterReduction: WaterReductionTreasureHunt, index: number) {
+    this.selectedEditIndex = index;
+    this.selectedEditWaterReduction = waterReduction;
+    this.waterReductionService.baselineData = waterReduction.baseline;
+    this.waterReductionService.modificationData = waterReduction.modification;
+    this.selectedEditOpportunitySheet = waterReduction.opportunitySheet;
+    this.itemType = 'waterReduction';
+    this.selectCalc('water-reduction');
+  }
+
+  saveEditWaterReduction(updatedData: WaterReductionTreasureHunt) {
+    this.selectedEditWaterReduction.baseline = updatedData.baseline;
+    this.selectedEditWaterReduction.modification = updatedData.modification;
+    this.showSaveCalcModal();
+  }
+
+  saveWaterReduction() {
+    this.selectedEditWaterReduction.opportunitySheet = this.selectedEditOpportunitySheet;
+    this.treasureHunt.waterReductions[this.selectedEditIndex] = this.selectedEditWaterReduction;
+    this.save();
+    this.selectedEditWaterReduction = undefined;
+    this.selectedEditOpportunitySheet = undefined;
+    this.hideSaveCalcModal();
+    this.selectCalc('none');
+  }
+
   openImportExportModal() {
     this.showImportExportModal = true;
   }
@@ -419,6 +453,12 @@ export class TreasureChestComponent implements OnInit {
         this.treasureHunt.lightingReplacements = new Array();
       }
       this.treasureHunt.lightingReplacements = this.treasureHunt.lightingReplacements.concat(data.lightingReplacements);
+    }
+    if (data.waterReductions) {
+      if (this.treasureHunt.waterReductions == undefined) {
+        this.treasureHunt.waterReductions = new Array();
+      }
+      this.treasureHunt.waterReductions = this.treasureHunt.waterReductions.concat(data.waterReductions);
     }
     this.save();
     this.treasureHuntService.updateMenuOptions.next(true);
