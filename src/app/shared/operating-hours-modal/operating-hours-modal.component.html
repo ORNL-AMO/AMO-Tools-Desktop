@@ -74,10 +74,10 @@
             <i class="fa fa-minus"></i>
           </button>
           <button class="btn input-group-btn" (click)="addOne(operatingHoursForm.controls.weeksPerYear)"
-            [disabled]="operatingHoursForm.controls.weeksPerYear.value == 52">
+            [disabled]="operatingHoursForm.controls.weeksPerYear.value == 53">
             <i class="fa fa-plus"></i>
           </button>
-          <input name="weeksPerYear" type="number" step="1" min="0" max="52" class="form-control" id="weeksPerYear"
+          <input name="weeksPerYear" type="number" step="1" min="0" max="53" class="form-control" id="weeksPerYear"
             (input)="calculatHrsPerYear()" formControlName="weeksPerYear">
         </div>
       </div>

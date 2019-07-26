@@ -10,7 +10,7 @@ export class OperatingHoursModalService {
   getFormFromObj(obj: OperatingHours): FormGroup {
     return this.formBuilder.group(
       {
-        'weeksPerYear': [obj.weeksPerYear, [Validators.min(0), Validators.max(52), Validators.required]],
+        'weeksPerYear': [obj.weeksPerYear, [Validators.min(0), Validators.max(53), Validators.required]],
         'daysPerWeek': [obj.daysPerWeek, [Validators.min(0), Validators.max(7), Validators.required]],
         'hoursPerDay': [obj.hoursPerDay, [Validators.min(0), Validators.max(24), Validators.required]],
         'minutesPerHour': [obj.minutesPerHour, [Validators.min(0), Validators.max(60), Validators.required]],
@@ -32,6 +32,6 @@ export class OperatingHoursModalService {
   }
 
   calculateHoursPerYear(opHours: OperatingHours): number {
-    return opHours.daysPerWeek * opHours.hoursPerDay * opHours.minutesPerHour * opHours.weeksPerYear;
+    return opHours.daysPerWeek * opHours.hoursPerDay * (opHours.minutesPerHour / 60) * (opHours.secondsPerMinute / 60) * opHours.weeksPerYear;
   }
 }
