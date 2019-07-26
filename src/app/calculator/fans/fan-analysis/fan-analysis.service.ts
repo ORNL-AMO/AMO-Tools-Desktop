@@ -343,7 +343,6 @@ export class FanAnalysisService {
     
     return mockData;
   }
-
   getPlane(planeNum: string): Plane {
     if (planeNum == '1') {
       return this.inputData.PlaneData.FanInletFlange;
