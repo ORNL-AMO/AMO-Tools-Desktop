@@ -159,18 +159,21 @@ export class OperationsFormComponent implements OnInit {
     }
   }
   compareShiftsPerDay(): boolean {
-    if (this.canCompare()) {
-      return this.operationsCompareService.compareShiftsPerDay();
-    } else {
-      return false;
-    }
+    // if (this.canCompare()) {
+    //   return this.operationsCompareService.compareShiftsPerDay();
+    // } else {
+    //   return false;
+    // }
+    return false;
+
   }
   compareHoursPerShift(): boolean {
-    if (this.canCompare()) {
-      return this.operationsCompareService.compareHoursPerShift();
-    } else {
-      return false;
-    }
+    // if (this.canCompare()) {
+    //   return this.operationsCompareService.compareHoursPerShift();
+    // } else {
+    //   return false;
+    // }
+    return false;
   }
   compareHoursPerYear(): boolean {
     if (this.canCompare()) {

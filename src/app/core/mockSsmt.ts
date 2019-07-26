@@ -11,8 +11,8 @@ export const MockSsmt: Assessment = {
         "operatingHours": {
             "weeksPerYear": 52,
             "daysPerWeek": 7,
-            "shiftsPerDay": 3,
-            "hoursPerShift": 8,
+            // "shiftsPerDay": 3,
+            // "hoursPerShift": 8,
             "hoursPerYear": 8000
         },
         "operatingCosts": {
@@ -60,8 +60,8 @@ export const MockSsmt: Assessment = {
                     "operatingHours": {
                         "weeksPerYear": 52,
                         "daysPerWeek": 7,
-                        "shiftsPerDay": 3,
-                        "hoursPerShift": 8,
+                        // "shiftsPerDay": 3,
+                        // "hoursPerShift": 8,
                         "hoursPerYear": 8000
                     },
                     "operatingCosts": {
@@ -153,8 +153,8 @@ export const MockSsmt: Assessment = {
                     "operatingHours": {
                         "weeksPerYear": 52,
                         "daysPerWeek": 7,
-                        "shiftsPerDay": 3,
-                        "hoursPerShift": 8,
+                        // "shiftsPerDay": 3,
+                        // "hoursPerShift": 8,
                         "hoursPerYear": 8000
                     },
                     "operatingCosts": {
@@ -202,8 +202,8 @@ export const MockSsmt: Assessment = {
                                 "operatingHours": {
                                     "weeksPerYear": 52,
                                     "daysPerWeek": 7,
-                                    "shiftsPerDay": 3,
-                                    "hoursPerShift": 8,
+                                    // "shiftsPerDay": 3,
+                                    // "hoursPerShift": 8,
                                     "hoursPerYear": 8000
                                 },
                                 "operatingCosts": {
@@ -340,8 +340,8 @@ export const MockSsmt: Assessment = {
                     "operatingHours": {
                         "weeksPerYear": 52,
                         "daysPerWeek": 7,
-                        "shiftsPerDay": 3,
-                        "hoursPerShift": 8,
+                        // "shiftsPerDay": 3,
+                        // "hoursPerShift": 8,
                         "hoursPerYear": 8000
                     },
                     "operatingCosts": {
@@ -389,8 +389,8 @@ export const MockSsmt: Assessment = {
                                 "operatingHours": {
                                     "weeksPerYear": 52,
                                     "daysPerWeek": 7,
-                                    "shiftsPerDay": 3,
-                                    "hoursPerShift": 8,
+                                    // "shiftsPerDay": 3,
+                                    // "hoursPerShift": 8,
                                     "hoursPerYear": 8000
                                 },
                                 "operatingCosts": {
@@ -482,8 +482,8 @@ export const MockSsmt: Assessment = {
                                 "operatingHours": {
                                     "weeksPerYear": 52,
                                     "daysPerWeek": 7,
-                                    "shiftsPerDay": 3,
-                                    "hoursPerShift": 8,
+                                    // "shiftsPerDay": 3,
+                                    // "hoursPerShift": 8,
                                     "hoursPerYear": 8000
                                 },
                                 "operatingCosts": {
@@ -531,8 +531,8 @@ export const MockSsmt: Assessment = {
                                             "operatingHours": {
                                                 "weeksPerYear": 52,
                                                 "daysPerWeek": 7,
-                                                "shiftsPerDay": 3,
-                                                "hoursPerShift": 8,
+                                                // "shiftsPerDay": 3,
+                                                // "hoursPerShift": 8,
                                                 "hoursPerYear": 8000
                                             },
                                             "operatingCosts": {

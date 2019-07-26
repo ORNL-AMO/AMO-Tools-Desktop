@@ -45,12 +45,12 @@ export class OperationsComponent implements OnInit {
   }
   initForm() {
     this.operationsForm = this.operationsService.initForm(this.phast);
-    this.isCalculated = this.phast.operatingHours.isCalculated;
+    // this.isCalculated = this.phast.operatingHours.isCalculated;
   }
 
   saveLosses() {
     let tmpData: { costs: OperatingCosts, hours: OperatingHours } = this.operationsService.getOperatingDataFromForm(this.operationsForm);
-    tmpData.hours.isCalculated = this.isCalculated;
+    // tmpData.hours.isCalculated = this.isCalculated;
     this.phast.operatingCosts = tmpData.costs;
     this.phast.operatingHours = tmpData.hours;
     this.phast.implementationCost = this.operationsForm.controls.implementationCost.value;

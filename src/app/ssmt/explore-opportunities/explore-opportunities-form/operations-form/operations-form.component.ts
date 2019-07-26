@@ -102,12 +102,12 @@ export class OperationsFormComponent implements OnInit {
   }
 
   setBaselineOperatingHours() {
-    this.ssmt.operatingHours.isCalculated = false;
+    // this.ssmt.operatingHours.isCalculated = false;
     this.save();
   }
 
   setModificationOperatingHours() {
-    this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours.isCalculated = false;
+    // this.ssmt.modifications[this.exploreModIndex].ssmt.operatingHours.isCalculated = false;
     this.save();
   }
 

@@ -24,8 +24,8 @@ export class OperationsService {
       makeUpWaterCost: [ssmt.operatingCosts.makeUpWaterCost, [Validators.required, Validators.min(.0000001)]],
       weeksPerYear: [ssmt.operatingHours.weeksPerYear],
       daysPerWeek: [ssmt.operatingHours.daysPerWeek],
-      shiftsPerDay: [ssmt.operatingHours.shiftsPerDay],
-      hoursPerShift: [ssmt.operatingHours.hoursPerShift],
+      // shiftsPerDay: [ssmt.operatingHours.shiftsPerDay],
+      // hoursPerShift: [ssmt.operatingHours.hoursPerShift],
       hoursPerYear: [ssmt.operatingHours.hoursPerYear, [Validators.required, Validators.min(1), Validators.max(8760)]],
     })
     for (let key in form.controls) {
@@ -38,8 +38,8 @@ export class OperationsService {
     let operatingHours: OperatingHours = {
       weeksPerYear: form.controls.weeksPerYear.value,
       daysPerWeek: form.controls.daysPerWeek.value,
-      shiftsPerDay: form.controls.shiftsPerDay.value,
-      hoursPerShift: form.controls.hoursPerShift.value,
+      // shiftsPerDay: form.controls.shiftsPerDay.value,
+      // hoursPerShift: form.controls.hoursPerShift.value,
       hoursPerYear: form.controls.hoursPerYear.value
     }
 

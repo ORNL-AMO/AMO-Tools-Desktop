@@ -28,6 +28,7 @@ import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.compo
 import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
 import { ToastComponent } from './toast/toast.component';
 import { OperatingHoursModalComponent } from './operating-hours-modal/operating-hours-modal.component';
+import { OperatingHoursModalService } from './operating-hours-modal/operating-hours-modal.service';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import { OperatingHoursModalComponent } from './operating-hours-modal/operating-
     UpdateDataService,
     SvgToPngService,
     LineChartHelperService,
-    WaterfallGraphService
+    WaterfallGraphService,
+    OperatingHoursModalService
   ]
 })
 

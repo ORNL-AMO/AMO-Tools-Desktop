@@ -1,10 +1,10 @@
 export interface OperatingHours {
     weeksPerYear?: number;
     daysPerWeek?: number;
-    shiftsPerDay?: number;
-    hoursPerShift?: number;
+    hoursPerDay?: number;
     hoursPerYear?: number;
-    isCalculated?: boolean;
+    secondsPerMinute?: number;
+    minutesPerHour?: number;
     operatingConditions?: string;
   }
 
