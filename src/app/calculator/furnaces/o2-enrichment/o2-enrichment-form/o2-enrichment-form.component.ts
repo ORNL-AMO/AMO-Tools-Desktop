@@ -105,6 +105,7 @@ export class O2EnrichmentFormComponent implements OnInit {
 
   updateOperatingHours(oppHours: number){
     this.operatingHoursControl.patchValue(oppHours);
+    this.calc();
     this.closeOperatingHoursModal();
   }
 
