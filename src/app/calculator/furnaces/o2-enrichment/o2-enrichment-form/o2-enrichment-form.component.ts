@@ -3,6 +3,7 @@ import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phas
 import { Settings } from '../../../../shared/models/settings';
 import { O2EnrichmentService, O2EnrichmentMinMax } from '../o2-enrichment.service';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
   selector: 'app-o2-enrichment-form',
   templateUrl: './o2-enrichment-form.component.html',
@@ -103,8 +104,9 @@ export class O2EnrichmentFormComponent implements OnInit {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: number){
-    this.operatingHoursControl.patchValue(oppHours);
+  updateOperatingHours(oppHours: OperatingHours){
+    this.o2EnrichmentService.operatingHours = oppHours;
+    this.operatingHoursControl.patchValue(oppHours.hoursPerYear);
     this.calc();
     this.closeOperatingHoursModal();
   }

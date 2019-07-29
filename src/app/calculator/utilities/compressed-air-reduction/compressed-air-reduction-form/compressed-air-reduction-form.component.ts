@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirReductionService } from '../compressed-air-reduction.service';
 import { CompressedAirReductionResult, CompressedAirReductionData } from '../../../../shared/models/standalone';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-compressed-air-reduction-form',
@@ -220,8 +221,9 @@ export class CompressedAirReductionFormComponent implements OnInit {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: number){
-    this.form.controls.hoursPerYear.patchValue(oppHours);
+  updateOperatingHours(oppHours: OperatingHours){
+    this.compressedAirReductionService.operatingHours = oppHours;
+    this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }

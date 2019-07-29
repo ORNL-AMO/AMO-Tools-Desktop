@@ -12,7 +12,7 @@ export class CompressedAirReductionService {
 
   baselineData: Array<CompressedAirReductionData>;
   modificationData: Array<CompressedAirReductionData>;
-
+  operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
 

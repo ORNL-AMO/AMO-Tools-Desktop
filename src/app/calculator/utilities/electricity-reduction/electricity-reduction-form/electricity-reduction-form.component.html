@@ -305,5 +305,6 @@
 </div>
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false">
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="electricityReductionService.operatingHours">
 </app-operating-hours-modal>

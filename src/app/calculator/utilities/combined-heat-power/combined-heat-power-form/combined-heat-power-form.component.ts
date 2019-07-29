@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CombinedHeatPower } from '../../../../shared/models/standalone';
+import { CombinedHeatPowerService } from '../combined-heat-power.service';
+import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
   selector: 'app-combined-heat-power-form',
   templateUrl: './combined-heat-power-form.component.html',
@@ -36,7 +38,7 @@ export class CombinedHeatPowerFormComponent implements OnInit {
     'Cost Avoided',
     'Standby Rate'
   ];
-  constructor() { }
+  constructor(private combinedHeatPowerService: CombinedHeatPowerService) { }
 
   ngOnInit() {
   }
@@ -70,8 +72,9 @@ export class CombinedHeatPowerFormComponent implements OnInit {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: number){
-    this.inputs.annualOperatingHours = oppHours;
+  updateOperatingHours(oppHours: OperatingHours){
+    this.combinedHeatPowerService.operatingHours = oppHours;
+    this.inputs.annualOperatingHours = oppHours.hoursPerYear;
     this.calculate();
     this.closeOperatingHoursModal();
   }

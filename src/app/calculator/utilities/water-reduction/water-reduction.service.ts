@@ -12,7 +12,7 @@ export class WaterReductionService {
 
   baselineData: Array<WaterReductionData>;
   modificationData: Array<WaterReductionData>;
-
+  operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, isWastewater: boolean, operatingHours: OperatingHours): WaterReductionData {

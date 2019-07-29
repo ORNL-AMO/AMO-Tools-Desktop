@@ -3,6 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { WaterReductionData, WaterReductionResult } from '../../../../shared/models/standalone';
 import { WaterReductionService } from '../water-reduction.service';
 import { FormGroup } from '@angular/forms';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-water-reduction-form',
@@ -140,8 +141,9 @@ export class WaterReductionFormComponent implements OnInit {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: number){
-    this.form.controls.hoursPerYear.patchValue(oppHours);
+  updateOperatingHours(oppHours: OperatingHours){
+    this.waterReductionService.operatingHours = oppHours;
+    this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }

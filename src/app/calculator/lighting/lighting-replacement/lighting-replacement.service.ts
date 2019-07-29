@@ -12,6 +12,7 @@ export class LightingReplacementService {
   modificationData: Array<LightingReplacementData>;
   baselineElectricityCost: number;
   modificationElectricityCost: number;
+  operatingHours: OperatingHours;
   constructor(private fb: FormBuilder) { }
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {

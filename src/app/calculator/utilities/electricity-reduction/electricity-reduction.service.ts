@@ -12,7 +12,7 @@ export class ElectricityReductionService {
 
   baselineData: Array<ElectricityReductionData>;
   modificationData: Array<ElectricityReductionData>;
-
+  operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours): ElectricityReductionData {

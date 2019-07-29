@@ -15,7 +15,7 @@ export class NaturalGasReductionService {
 
   baselineData: Array<NaturalGasReductionData>;
   modificationData: Array<NaturalGasReductionData>;
-
+  operatingHours: OperatingHours;
   constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   // resetData(settings: Settings) {

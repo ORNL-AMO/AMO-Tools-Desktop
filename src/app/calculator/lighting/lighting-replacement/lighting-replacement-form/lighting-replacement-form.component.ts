@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, 
 import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { FormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-lighting-replacement-form',
@@ -101,8 +102,9 @@ export class LightingReplacementFormComponent implements OnInit {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: number) {
-    this.form.controls.hoursPerYear.patchValue(oppHours);
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.lightingReplacementService.operatingHours = oppHours;
+    this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }

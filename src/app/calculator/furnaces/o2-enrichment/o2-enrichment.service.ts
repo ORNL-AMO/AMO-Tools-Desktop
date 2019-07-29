@@ -4,11 +4,13 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PhastService } from '../../../phast/phast.service';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class O2EnrichmentService {
   o2Enrichment: O2Enrichment;
   lines: Array<any> = [];
+  operatingHours: OperatingHours;
   constructor(private phastService: PhastService, private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) { }
 
   initForm(settings: Settings): FormGroup {

@@ -3,6 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { NaturalGasReductionService } from '../natural-gas-reduction.service';
 import { NaturalGasReductionResult, NaturalGasReductionData } from '../../../../shared/models/standalone';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-natural-gas-reduction-form',
@@ -122,8 +123,9 @@ export class NaturalGasReductionFormComponent implements OnInit {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: number) {
-    this.form.controls.operatingHours.patchValue(oppHours);
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.naturalGasReductionService.operatingHours = oppHours;
+    this.form.controls.operatingHours.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }
