@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
 import { O2EnrichmentService, O2EnrichmentMinMax } from '../o2-enrichment.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 @Component({
   selector: 'app-o2-enrichment-form',
   templateUrl: './o2-enrichment-form.component.html',
@@ -22,7 +22,18 @@ export class O2EnrichmentFormComponent implements OnInit {
   @Input()
   o2Form: FormGroup;
 
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+
+
   annualCostSavings: number;
+  showOperatingHoursModal: boolean;
+  operatingHoursControl: FormControl;
   constructor(private o2EnrichmentService: O2EnrichmentService) { }
 
   ngOnInit() {
@@ -34,6 +45,10 @@ export class O2EnrichmentFormComponent implements OnInit {
     if (changes.o2EnrichmentOutput) {
       this.annualCostSavings = this.o2EnrichmentOutput.annualFuelCost - this.o2EnrichmentOutput.annualFuelCostEnriched;
     }
+  }
+
+  ngAfterViewInit(){
+    this.setOpHoursModalWidth();
   }
 
   calc() {
@@ -78,14 +93,24 @@ export class O2EnrichmentFormComponent implements OnInit {
   plot() {
 
   }
-}
 
-// if (this.o2Enrichment.combAirTemp > this.o2Enrichment.flueGasTemp) {
-//   this.error.combAirTemp = 'Combustion air temperature must be less than flue gas temperature';
-// }
-// if (this.o2Enrichment.combAirTempEnriched > this.o2Enrichment.flueGasTempEnriched) {
-//   this.error.combAirTempEnriched = 'Enriched combustion air temperature must be less than enriched flue gas temperature';
-// }
-// // if (this.o2Enrichment.combAirTemp < this.o2Enrichment.combAirTempEnriched) {
-// // //   this.error.combAirTemp = 'Combustion air preheat temperature must be greater than or equal to the oxygen enriched air mixture preheat temperature';
-// // }
+  closeOperatingHoursModal(){
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal(opHoursControl: FormControl){
+    this.operatingHoursControl = opHoursControl;
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: number){
+    this.operatingHoursControl.patchValue(oppHours);
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth(){
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
+  }
+}
