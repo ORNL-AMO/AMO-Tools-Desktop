@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { OperatingCostInput, OperatingCostOutput } from "../../../../shared/models/standalone";
 import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirService } from '../../compressed-air.service';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-operating-cost-form',
@@ -28,7 +30,7 @@ export class OperatingCostFormComponent implements OnInit {
   formWidth: number;
   showOperatingHoursModal: boolean;
 
-  constructor() { }
+  constructor(private compressedAirService: CompressedAirService) { }
 
   ngOnInit() {
   }
@@ -53,8 +55,9 @@ export class OperatingCostFormComponent implements OnInit {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: number){
-    this.inputs.annualOperatingHours = oppHours;
+  updateOperatingHours(oppHours: OperatingHours){
+    this.compressedAirService.operatingCostOperatingHours = oppHours;
+    this.inputs.annualOperatingHours = oppHours.hoursPerYear;
     this.emitChange();
     this.closeOperatingHoursModal();
   }

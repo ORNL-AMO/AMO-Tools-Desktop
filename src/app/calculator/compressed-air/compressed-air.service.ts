@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AirVelocityInput, BagMethodInput, PneumaticValve, OperatingCostInput, PipeSizingInput, PneumaticAirRequirementInput, CalculateUsableCapacity, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage, AirSystemCapacityInput } from '../../shared/models/standalone';
+import { OperatingHours } from '../../shared/models/operations';
 
 @Injectable()
 export class CompressedAirService {
@@ -18,6 +19,8 @@ export class CompressedAirService {
       operatingHours: 8760
     };
 
+  bagMethodOperatingHours: OperatingHours;
+
   pnuematicValveInputs: PneumaticValve = {
     inletPressure: 0,
     outletPressure: 0,
@@ -33,6 +36,8 @@ export class CompressedAirService {
     efficiencyUnloaded: 0,
     costOfElectricity: 0,
   };
+
+  operatingCostOperatingHours: OperatingHours;
 
   pipeSizingInput: PipeSizingInput = {
     airFlow: 0,

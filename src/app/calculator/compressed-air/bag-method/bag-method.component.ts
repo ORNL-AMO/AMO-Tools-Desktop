@@ -3,6 +3,7 @@ import { StandaloneService } from "../../standalone.service";
 import { BagMethodInput, BagMethodOutput } from "../../../shared/models/standalone";
 import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-bag-method',
@@ -158,8 +159,9 @@ export class BagMethodComponent implements OnInit {
     this.showOperatingHoursModal = false;
   }
 
-  updateOperatingHours(calculatedOpHrs: number) {
-    this.totalOperatingTime = calculatedOpHrs;
+  updateOperatingHours(calculatedOpHrs: OperatingHours) {
+    this.compressedAirService.bagMethodOperatingHours = calculatedOpHrs;
+    this.totalOperatingTime = calculatedOpHrs.hoursPerYear;
     this.closeOperatingHoursModal();
     this.calculateAnnualConsumption();
   }
