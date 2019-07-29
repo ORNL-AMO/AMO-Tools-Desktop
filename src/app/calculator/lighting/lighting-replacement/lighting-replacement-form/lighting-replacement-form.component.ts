@@ -63,8 +63,10 @@ export class LightingReplacementFormComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(){
-    this.setOpHoursModalWidth();
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
   }
 
   calculate() {
@@ -91,21 +93,21 @@ export class LightingReplacementFormComponent implements OnInit {
   focusOut() {
   }
 
-  closeOperatingHoursModal(){
+  closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
   }
 
-  openOperatingHoursModal(){
+  openOperatingHoursModal() {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: number){
+  updateOperatingHours(oppHours: number) {
     this.form.controls.hoursPerYear.patchValue(oppHours);
     this.calculate();
     this.closeOperatingHoursModal();
   }
 
-  setOpHoursModalWidth(){
+  setOpHoursModalWidth() {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }

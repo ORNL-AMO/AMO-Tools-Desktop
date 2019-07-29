@@ -40,7 +40,7 @@ export class ElectricityReductionService {
       energy: 400000
     };
 
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
