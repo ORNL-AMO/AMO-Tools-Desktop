@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ReplaceRewindData, ReplaceRewindResults } from './replace-rewind.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class ReplaceRewindService {
   replaceRewindData: ReplaceRewindData = {
-    operatingHours: 6000,
+    operatingHours: 3760,
     motorSize: 350,
     load: 75,
     electricityCost: 0.08,
@@ -15,40 +16,41 @@ export class ReplaceRewindService {
     newEfficiency: 95.7,
     purchaseCost: 33163,
   };
+  operatingHours: OperatingHours
   constructor(private formBuilder: FormBuilder) { }
 
 
-  initForm(isNewMotor: boolean): FormGroup {
-    if (isNewMotor) {
-      //new motor form
-      let tmpForm: FormGroup = this.formBuilder.group({
-        operatingHours: [6000, [Validators.required, Validators.min(0)]],
-        motorSize: [350, [Validators.required, Validators.min(0)]],
-        load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
-        electricityCost: [0.08, [Validators.required, Validators.min(0)]],
-        newEfficiency: [95.7, [Validators.required, Validators.min(0), Validators.max(100)]],
-        purchaseCost: [33163, [Validators.required, Validators.min(0)]]
-      });
-      tmpForm.controls.operatingHours.disable();
-      tmpForm.controls.motorSize.disable();
-      tmpForm.controls.load.disable();
-      tmpForm.controls.electricityCost.disable();
-      return tmpForm;
-    }
-    else {
-      //rewound motor form
-      let tmpForm: FormGroup = this.formBuilder.group({
-        operatingHours: [6000, [Validators.required, Validators.min(0)]],
-        motorSize: [350, [Validators.required, Validators.min(0)]],
-        load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
-        electricityCost: [0.08, [Validators.required, Validators.min(0)]],
-        currentEfficiency: [94.4, [Validators.required, Validators.min(0), Validators.max(100)]],
-        rewindEfficiencyLoss: [0.5, [Validators.required, Validators.min(0), Validators.max(100)]],
-        costOfRewind: [8384, [Validators.required, Validators.min(0)]],
-      });
-      return tmpForm;
-    }
-  }
+  // initForm(isNewMotor: boolean): FormGroup {
+  //   if (isNewMotor) {
+  //     //new motor form
+  //     let tmpForm: FormGroup = this.formBuilder.group({
+  //       operatingHours: [6000, [Validators.required, Validators.min(0)]],
+  //       motorSize: [350, [Validators.required, Validators.min(0)]],
+  //       load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
+  //       electricityCost: [0.08, [Validators.required, Validators.min(0)]],
+  //       newEfficiency: [95.7, [Validators.required, Validators.min(0), Validators.max(100)]],
+  //       purchaseCost: [33163, [Validators.required, Validators.min(0)]]
+  //     });
+  //     tmpForm.controls.operatingHours.disable();
+  //     tmpForm.controls.motorSize.disable();
+  //     tmpForm.controls.load.disable();
+  //     tmpForm.controls.electricityCost.disable();
+  //     return tmpForm;
+  //   }
+  //   else {
+  //     //rewound motor form
+  //     let tmpForm: FormGroup = this.formBuilder.group({
+  //       operatingHours: [6000, [Validators.required, Validators.min(0)]],
+  //       motorSize: [350, [Validators.required, Validators.min(0)]],
+  //       load: [75, [Validators.required, Validators.min(0), Validators.max(100)]],
+  //       electricityCost: [0.08, [Validators.required, Validators.min(0)]],
+  //       currentEfficiency: [94.4, [Validators.required, Validators.min(0), Validators.max(100)]],
+  //       rewindEfficiencyLoss: [0.5, [Validators.required, Validators.min(0), Validators.max(100)]],
+  //       costOfRewind: [8384, [Validators.required, Validators.min(0)]],
+  //     });
+  //     return tmpForm;
+  //   }
+  // }
 
   getFormFromObj(inputObj: ReplaceRewindData, isNewMotor: boolean): FormGroup {
     if (isNewMotor) {
@@ -97,7 +99,7 @@ export class ReplaceRewindService {
 
   initReplaceRewindData(): ReplaceRewindData {
     this.replaceRewindData = {
-      operatingHours: 6000,
+      operatingHours: 3760,
       motorSize: 350,
       load: 75,
       electricityCost: 0.08,

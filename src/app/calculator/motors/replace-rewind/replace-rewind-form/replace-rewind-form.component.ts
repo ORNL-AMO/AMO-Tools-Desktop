@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { ReplaceRewindData } from '../replace-rewind.component';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -21,6 +21,15 @@ export class ReplaceRewindFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean;
+
   form: FormGroup;
 
   constructor(private replaceRewindService: ReplaceRewindService) { }
@@ -35,6 +44,12 @@ export class ReplaceRewindFormComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
+  }
+
   focusField(str: string) {
     this.emitChangeField.emit(str);
   }
@@ -44,4 +59,23 @@ export class ReplaceRewindFormComponent implements OnInit {
     this.emitCalculate.emit(this.inputs);
   }
 
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: number) {
+    this.form.controls.operatingHours.patchValue(oppHours);
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
+  }
 }

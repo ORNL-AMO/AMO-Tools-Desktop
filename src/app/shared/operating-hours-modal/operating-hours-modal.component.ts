@@ -22,7 +22,7 @@ export class OperatingHoursModalComponent implements OnInit {
   @Output('emitClose')
   emitClose = new EventEmitter<boolean>();
   @Output('emitSave')
-  emitSave = new EventEmitter<number>();
+  emitSave = new EventEmitter<OperatingHours>();
   @Input()
   width: number;
   @Input()
@@ -75,7 +75,7 @@ export class OperatingHoursModalComponent implements OnInit {
   save() {
     this.showModal = 'hide';
     setTimeout(() => {
-      this.emitSave.emit(this.operatingHours.hoursPerYear);
+      this.emitSave.emit(this.operatingHours);
     }, 500)
   }
 }
