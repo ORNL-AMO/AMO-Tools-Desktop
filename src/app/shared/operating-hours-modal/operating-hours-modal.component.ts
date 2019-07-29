@@ -27,6 +27,8 @@ export class OperatingHoursModalComponent implements OnInit {
   width: number;
   @Input()
   operatingHours: OperatingHours;
+  @Input()
+  showMinutesSeconds: boolean;
 
   showModal: string = 'hide';
   operatingHoursForm: FormGroup;

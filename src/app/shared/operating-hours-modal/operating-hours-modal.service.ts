@@ -32,6 +32,7 @@ export class OperatingHoursModalService {
   }
 
   calculateHoursPerYear(opHours: OperatingHours): number {
-    return opHours.daysPerWeek * opHours.hoursPerDay * (opHours.minutesPerHour / 60) * (opHours.secondsPerMinute / 60) * opHours.weeksPerYear;
+    let hoursPerYear: number = opHours.daysPerWeek * opHours.hoursPerDay * (opHours.minutesPerHour / 60) * (opHours.secondsPerMinute / 60) * opHours.weeksPerYear;
+    return Number(hoursPerYear.toFixed(2))
   }
 }

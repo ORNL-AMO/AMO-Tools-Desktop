@@ -15,7 +15,7 @@ export class CompressedAirService {
     operatingHours: number
   } = {
       inputsArray: new Array<BagMethodInput>(),
-      operatingHours: 0
+      operatingHours: 8760
     };
 
   pnuematicValveInputs: PneumaticValve = {

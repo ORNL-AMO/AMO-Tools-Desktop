@@ -63,7 +63,7 @@ export class BagMethodComponent implements OnInit {
   btnResetData() {
     this.inputsArray = new Array<BagMethodInput>();
     this.initBagMethodArrays();
-    this.totalOperatingTime = 0;
+    this.totalOperatingTime = 8760;
     this.outputs = {
       flowRate: 0,
       annualConsumption: 0
@@ -152,7 +152,6 @@ export class BagMethodComponent implements OnInit {
 
   openOperatingHoursModal() {
     this.showOperatingHoursModal = true;
-    console.log('show');
   }
 
   closeOperatingHoursModal() {
