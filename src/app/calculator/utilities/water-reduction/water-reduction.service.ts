@@ -32,7 +32,7 @@ export class WaterReductionService {
       consumption: 15000
     };
 
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
