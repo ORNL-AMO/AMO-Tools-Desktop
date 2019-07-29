@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CombinedHeatPower } from '../../../../shared/models/standalone';
 @Component({
   selector: 'app-combined-heat-power-form',
@@ -12,6 +12,15 @@ export class CombinedHeatPowerFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean;
 
   calculationOptions: any = [
     {
@@ -32,6 +41,10 @@ export class CombinedHeatPowerFormComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngAfterViewInit(){
+    this.setOpHoursModalWidth();
+  }
+
   calculate() {
     this.emitCalculate.emit(true);
   }
@@ -49,4 +62,23 @@ export class CombinedHeatPowerFormComponent implements OnInit {
     this.calculate();
   }
 
+  closeOperatingHoursModal(){
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal(){
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: number){
+    this.inputs.annualOperatingHours = oppHours;
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth(){
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
+  }
 }
