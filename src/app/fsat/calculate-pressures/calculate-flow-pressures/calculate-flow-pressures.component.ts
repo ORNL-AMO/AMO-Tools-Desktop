@@ -86,15 +86,6 @@ export class CalculateFlowPressuresComponent implements OnInit {
     this.isDataMissing = true;
   }
 
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
-
   changePlane(str: string) {
     this.currentPlane = str;
   }

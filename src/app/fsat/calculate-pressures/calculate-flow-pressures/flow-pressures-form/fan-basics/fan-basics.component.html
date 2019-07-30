@@ -28,7 +28,7 @@
       <input name="globalBarometricPressure" type="number" step="any" class="form-control" [(ngModel)]="fanRatedInfo.globalBarometricPressure"
         id="globalBarometricPressure" (input)="save()" (focus)="focusField('globalBarometricPressure')" onfocus="this.select();"
         [disabled]="true">
-      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+      <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
     </div>
   </div>
 

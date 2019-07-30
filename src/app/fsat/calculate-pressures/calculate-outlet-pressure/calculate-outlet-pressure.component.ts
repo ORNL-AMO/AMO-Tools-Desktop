@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { OutletPressureData } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-calculate-outlet-pressure',
@@ -18,7 +17,7 @@ export class CalculateOutletPressureComponent implements OnInit {
   @Input()
   bodyHeight: number;
   currentField: string = 'inletLoss';
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor() { }
 
   ngOnInit() {
     if (!this.outletPressureData) {
@@ -46,14 +45,5 @@ export class CalculateOutletPressureComponent implements OnInit {
 
   changeField(str: string) {
     this.currentField = str;
-  }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
   }
 }

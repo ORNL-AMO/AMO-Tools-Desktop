@@ -61,7 +61,7 @@
         <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure"
           id="{{'inletPressure_'+idString}}" (input)="save()" (focus)="focusField('inletPressure')"
           onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.inletPressure.invalid && !fieldDataForm.controls.inletPressure.pristine">
@@ -81,7 +81,7 @@
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control"
           formControlName="outletPressure" id="{{'outletPressure_'+idString}}" (input)="save()"
           (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.outletPressure.invalid && !fieldDataForm.controls.outletPressure.pristine">
@@ -90,7 +90,7 @@
       <span class="alert-warning pull-right small"
         *ngIf="warnings.outletPressureError !== null && !fieldDataForm.controls.outletPressure.pristine && !fieldDataForm.controls.outletPressure.invalid">{{warnings.outletPressureError}}
         <span class="input-group-addon units"
-          [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span></span>
+          [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></span>
     </div>
 
     <div class="form-group"
@@ -104,15 +104,14 @@
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate"
           id="{{'flowRate_'+idString}}" (input)="save()" (focus)="focusField('flowRate')" onfocus="this.select();"
           [readonly]="!selected">
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
-        <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
+        <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.flowRate.invalid && !fieldDataForm.controls.flowRate.pristine">
         <span *ngIf="fieldDataForm.controls.flowRate.errors.required">Value Required</span>
         <span *ngIf="fieldDataForm.controls.flowRate.errors.min">Value can't be less than
           {{fieldDataForm.controls.cost.errors.min.min}} <span class="input-group-addon units"
-            [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span></span>
+            [innerHTML]="settings.fanFlowRate | settingsLabel"></span></span>
       </span>
     </div>
 

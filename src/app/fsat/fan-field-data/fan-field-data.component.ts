@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitte
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FieldData, InletPressureData, OutletPressureData, FSAT, PlaneData, FanRatedInfo, CompressibilityFactor, FsatOutput } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
@@ -66,7 +65,7 @@ export class FanFieldDataComponent implements OnInit {
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
   idString: string;
-  constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
+  constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -132,16 +131,6 @@ export class FanFieldDataComponent implements OnInit {
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
   }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
-
 
   showAmcaModal() {
     this.fsatCopy = JSON.parse(JSON.stringify(this.fsat));
