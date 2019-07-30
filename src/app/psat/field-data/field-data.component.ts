@@ -173,7 +173,6 @@ export class FieldDataComponent implements OnInit {
     this.headToolModal.hide();
   }
 
-
   closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
     this.psatService.modalOpen.next(false);
@@ -185,7 +184,6 @@ export class FieldDataComponent implements OnInit {
   }
 
   updateOperatingHours(oppHours: OperatingHours) {
-    // this.lightingReplacementService.operatingHours = oppHours;
     this.psat.operatingHours = oppHours;
     this.psatForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
     this.save();
@@ -197,8 +195,6 @@ export class FieldDataComponent implements OnInit {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }
-
-
 
   canCompare() {
     if (this.compareService.baselinePSAT && this.compareService.modifiedPSAT && !this.inSetup) {
