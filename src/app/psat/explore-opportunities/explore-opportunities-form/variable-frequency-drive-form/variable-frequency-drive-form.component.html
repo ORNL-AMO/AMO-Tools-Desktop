@@ -5,14 +5,14 @@
       <div class="input-group">
         <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control" (focus)="focusField('flowRate')"
           (input)="calculate()" formControlName="flowRate" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine">
         <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.required">Value Required</span>
         <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.max">Value can't be greater than
-          {{baselineFieldDataForm.controls.flowRate.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+          {{baselineFieldDataForm.controls.flowRate.errors.max.max}} <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
         <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.min">Value can't be less than
-          {{baselineFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+          {{baselineFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
       </span>
       <span class="alert-warning pull-right small" *ngIf="baselineFieldDataWarnings.flowError !== null && !baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine">{{baselineFieldDataWarnings.flowError}}</span>
     </div>
@@ -23,14 +23,14 @@
       <div class="input-group">
         <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control"
           (focus)="focusField('flowRate')" formControlName="flowRate" (input)="calculate()" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine">
         <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.required">Value Required</span>
         <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.max">Value can't be greater than
-          {{modificationFieldDataForm.controls.flowRate.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+          {{modificationFieldDataForm.controls.flowRate.errors.max.max}} <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
         <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.min">Value can't be less than
-          {{modificationFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>.</span>
+          {{modificationFieldDataForm.controls.flowRate.errors.min.min}} <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
       </span>
       <span class="alert-warning pull-right small" *ngIf="modificationFieldDataWarnings.flowError !== null && !modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine">{{modificationFieldDataWarnings.flowError}}</span>
     </div>
@@ -43,14 +43,14 @@
       <div class="input-group">
         <input name="baselineHead" type="number" step="any" id="baselineHead" class="form-control" (focus)="focusField('head')"
           (input)="calculate()" formControlName="head" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="baselineFieldDataForm.controls.head.invalid && !baselineFieldDataForm.controls.head.pristine">
         <span *ngIf="baselineFieldDataForm.controls.head.errors.required">Value Required</span>
         <span *ngIf="baselineFieldDataForm.controls.head.errors.max">Value can't be greater than
-          {{baselineFieldDataForm.controls.head.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
+          {{baselineFieldDataForm.controls.head.errors.max.max}} <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
         <span *ngIf="baselineFieldDataForm.controls.head.errors.min">Value can't be less than
-          {{baselineFieldDataForm.controls.head.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
+          {{baselineFieldDataForm.controls.head.errors.min.min}} <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
       </span>
     </div>
   </form>
@@ -63,14 +63,14 @@
       <div class="input-group">
         <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control" (focus)="focusField('head')"
           (input)="calculate()" formControlName="head" />
-        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
+        <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="modificationFieldDataForm.controls.head.invalid && !modificationFieldDataForm.controls.head.pristine">
         <span *ngIf="modificationFieldDataForm.controls.head.errors.required">Value Required</span>
         <span *ngIf="modificationFieldDataForm.controls.head.errors.max">Value can't be greater than
-          {{modificationFieldDataForm.controls.head.errors.max.max}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
+          {{modificationFieldDataForm.controls.head.errors.max.max}} <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
         <span *ngIf="modificationFieldDataForm.controls.head.errors.min">Value can't be less than
-          {{modificationFieldDataForm.controls.head.errors.min.min}} <span [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>.</span>
+          {{modificationFieldDataForm.controls.head.errors.min.min}} <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
       </span>
     </div>
   </form>

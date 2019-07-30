@@ -11,7 +11,7 @@ import { FormGroup, FormControl } from '@angular/forms';
   animations: [
     trigger('modal', [
       state('show', style({
-        top: '20px'
+        top: '50px'
       })),
       transition('hide => show', animate('.5s ease-in')),
       transition('show => hide', animate('.5s ease-out'))
