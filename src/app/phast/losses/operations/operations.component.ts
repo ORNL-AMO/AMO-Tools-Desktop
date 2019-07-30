@@ -26,7 +26,6 @@ export class OperationsComponent implements OnInit {
   modificationIndex: number;
 
   operationsForm: FormGroup;
-  isCalculated: boolean;
   isFirstChange: boolean = true;
   constructor(private operationsService: OperationsService) { }
 
@@ -45,14 +44,12 @@ export class OperationsComponent implements OnInit {
   }
   initForm() {
     this.operationsForm = this.operationsService.initForm(this.phast);
-    // this.isCalculated = this.phast.operatingHours.isCalculated;
   }
 
   saveLosses() {
     let tmpData: { costs: OperatingCosts, hours: OperatingHours } = this.operationsService.getOperatingDataFromForm(this.operationsForm);
-    // tmpData.hours.isCalculated = this.isCalculated;
     this.phast.operatingCosts = tmpData.costs;
-    this.phast.operatingHours = tmpData.hours;
+    this.phast.operatingHours.hoursPerYear = tmpData.hours.hoursPerYear;
     this.phast.implementationCost = this.operationsForm.controls.implementationCost.value;
     this.savedLoss.emit(true);
   }

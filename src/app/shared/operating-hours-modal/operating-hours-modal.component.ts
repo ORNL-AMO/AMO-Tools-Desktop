@@ -48,6 +48,22 @@ export class OperatingHoursModalComponent implements OnInit {
         hoursPerYear: 8736
       };
     }
+    if(!this.operatingHours.weeksPerYear){
+      this.operatingHours.weeksPerYear = 52;
+    }
+    if(!this.operatingHours.daysPerWeek){
+      this.operatingHours.daysPerWeek = 7;
+    }
+    if(!this.operatingHours.hoursPerDay){
+      this.operatingHours.hoursPerDay = 24;
+    }
+    if(!this.operatingHours.minutesPerHour){
+      this.operatingHours.minutesPerHour = 60;
+    }
+    if(!this.operatingHours.secondsPerMinute){
+      this.operatingHours.secondsPerMinute = 60;
+    }
+    
     this.operatingHoursForm = this.operatingHoursModalService.getFormFromObj(this.operatingHours);
     this.calculatHrsPerYear();
   }

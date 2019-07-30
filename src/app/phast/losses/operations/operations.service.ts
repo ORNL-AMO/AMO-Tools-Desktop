@@ -11,10 +11,6 @@ export class OperationsService {
 
   initForm(phast: PHAST): FormGroup {
     let form = this.formBuilder.group({
-      weeksPerYear: [phast.operatingHours.weeksPerYear],
-      daysPerWeek: [phast.operatingHours.daysPerWeek],
-      // shiftsPerDay: [phast.operatingHours.shiftsPerDay],
-      // hoursPerShift: [phast.operatingHours.hoursPerShift],
       hoursPerYear: [phast.operatingHours.hoursPerYear, Validators.required],
       fuelCost: [phast.operatingCosts.fuelCost, Validators.required],
       steamCost: [phast.operatingCosts.steamCost, Validators.required],
@@ -31,11 +27,7 @@ export class OperationsService {
       fuelCost: form.controls.fuelCost.value
     };
     let hours: OperatingHours = {
-      // hoursPerShift: form.controls.hoursPerShift.value,
       hoursPerYear: form.controls.hoursPerYear.value,
-      // shiftsPerDay: form.controls.shiftsPerDay.value,
-      daysPerWeek: form.controls.daysPerWeek.value,
-      weeksPerYear: form.controls.weeksPerYear.value,
     };
     return {
       costs: costs,
@@ -45,59 +37,10 @@ export class OperationsService {
 
   checkWarnings(hours: OperatingHours): OperationsWarnings {
     return {
-      timeWarning: this.checkTotalTime(hours),
-      weeksPerYearWarning: this.checkWeeksPerYear(hours),
-      daysPerWeekWarning: this.checkDaysPerWeek(hours),
-      shiftsPerDayWarning: this.checkShiftsPerDay(hours),
-      hoursPerShiftWarning: this.checkHoursPerShift(hours),
       hoursPerYearWarning: this.checkHoursPerYear(hours)
     };
   }
-  checkTotalTime(hours: OperatingHours): string {
-    // let timeCheck = hours.shiftsPerDay * hours.hoursPerShift;
-    // if (timeCheck > 24) {
-    //   return "You have exceeded 24 hours/day  " + " " + "(" + timeCheck.toFixed(2) + " " + "hours/day)" + " " + "Adjust your inputs for Shifts/Day and Hours/Shift.";
-    // } else {
-    //   return null;
-    // }
-    return null;
-  }
-  checkWeeksPerYear(hours: OperatingHours): string {
-    if (hours.weeksPerYear > 52) {
-      return "The number of weeks/year must be less than or equal to 52";
-    } else if (hours.weeksPerYear <= 0) {
-      return "The number of weeks/year must be greater than 0";
-    }
-    else {
-      return null;
-    }
-  }
-  checkDaysPerWeek(hours: OperatingHours): string {
-    if (hours.daysPerWeek > 7 || hours.daysPerWeek <= 0) {
-      return "The number of day/week must be less than or equal to 7";
-    } else if (hours.daysPerWeek <= 0) {
-      return "The number of day/week must be greater than 0";
-    } else {
-      return null;
-    }
-  }
-  checkShiftsPerDay(hours: OperatingHours): string {
-    // if (hours.shiftsPerDay <= 0) {
-    // return "Number of shifts/day must be greater than 0";
-    // } else {
-    return null;
-    // }
-  }
-  checkHoursPerShift(hours: OperatingHours): string {
-    // if (hours.hoursPerShift > 24 ) {
-    //   return "Number of hours/shift must be less than or equal to 24";
-    // }
-    // else if (hours.hoursPerShift <= 0) {
-    //   return "Number of hours/shift must be greater then 0";
-    // } else {
-    return null;
-    // }
-  }
+  
   checkHoursPerYear(hours: OperatingHours): string {
     if (hours.hoursPerYear > 8760) {
       return "Number of hours/year is greater than hours in a year.";
@@ -119,10 +62,5 @@ export class OperationsService {
 
 
 export interface OperationsWarnings {
-  timeWarning: string;
-  weeksPerYearWarning: string;
-  daysPerWeekWarning: string;
-  shiftsPerDayWarning: string;
-  hoursPerShiftWarning: string;
   hoursPerYearWarning: string;
 }

@@ -43,10 +43,15 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   selectModificationSubscription: Subscription;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  isModalOpen: boolean = false;
+  modalOpenSubscription: Subscription;
   constructor(private lossesService: LossesService) {
   }
 
   ngOnInit() {
+    this.modalOpenSubscription = this.lossesService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    }); 
     this.checkExists();
   }
 
@@ -63,6 +68,10 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     setTimeout(() => {
       this.checkExploreOpps();
     }, 100)
+  }
+
+  ngOnDestroy(){
+    this.modalOpenSubscription.unsubscribe();
   }
 
   checkExists() {
