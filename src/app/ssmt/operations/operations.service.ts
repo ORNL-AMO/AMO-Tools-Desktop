@@ -22,10 +22,6 @@ export class OperationsService {
       fuelCost: [ssmt.operatingCosts.fuelCost, [Validators.required, Validators.min(.00000001)]],
       electricityCost: [ssmt.operatingCosts.electricityCost, [Validators.required, Validators.min(.0000001)]],
       makeUpWaterCost: [ssmt.operatingCosts.makeUpWaterCost, [Validators.required, Validators.min(.0000001)]],
-      weeksPerYear: [ssmt.operatingHours.weeksPerYear],
-      daysPerWeek: [ssmt.operatingHours.daysPerWeek],
-      // shiftsPerDay: [ssmt.operatingHours.shiftsPerDay],
-      // hoursPerShift: [ssmt.operatingHours.hoursPerShift],
       hoursPerYear: [ssmt.operatingHours.hoursPerYear, [Validators.required, Validators.min(1), Validators.max(8760)]],
     })
     for (let key in form.controls) {
@@ -36,10 +32,6 @@ export class OperationsService {
 
   getOperationsDataFromForm(form: FormGroup): { operatingHours: OperatingHours, operatingCosts: OperatingCosts, generalSteamOperations: GeneralSteamOperations } {
     let operatingHours: OperatingHours = {
-      weeksPerYear: form.controls.weeksPerYear.value,
-      daysPerWeek: form.controls.daysPerWeek.value,
-      // shiftsPerDay: form.controls.shiftsPerDay.value,
-      // hoursPerShift: form.controls.hoursPerShift.value,
       hoursPerYear: form.controls.hoursPerYear.value
     }
 

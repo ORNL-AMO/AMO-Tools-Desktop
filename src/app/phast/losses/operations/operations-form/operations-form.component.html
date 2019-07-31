@@ -7,7 +7,7 @@
         <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
       </span>
       <input [readonly]="!baselineSelected" name="hoursPerYear" type="number" step="any" class="form-control"
-        id="{{'hoursPerYear_'+idString}}" (input)="setNotCalculated()" formControlName="hoursPerYear"
+        id="{{'hoursPerYear_'+idString}}" (input)="save()" formControlName="hoursPerYear"
         (focus)="focusField('operatingHours')" (blur)="focusOut()">
       <span class="units input-group-addon">hrs/yr</span>
     </div>
