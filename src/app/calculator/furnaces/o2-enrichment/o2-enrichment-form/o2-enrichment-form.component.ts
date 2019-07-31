@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, HostList
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
 import { O2EnrichmentService, O2EnrichmentMinMax } from '../o2-enrichment.service';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
   selector: 'app-o2-enrichment-form',
@@ -34,7 +34,7 @@ export class O2EnrichmentFormComponent implements OnInit {
 
   annualCostSavings: number;
   showOperatingHoursModal: boolean;
-  operatingHoursControl: FormControl;
+  operatingHoursControl: AbstractControl;
   constructor(private o2EnrichmentService: O2EnrichmentService) { }
 
   ngOnInit() {
@@ -99,7 +99,7 @@ export class O2EnrichmentFormComponent implements OnInit {
     this.showOperatingHoursModal = false;
   }
 
-  openOperatingHoursModal(opHoursControl: FormControl){
+  openOperatingHoursModal(opHoursControl: AbstractControl){
     this.operatingHoursControl = opHoursControl;
     this.showOperatingHoursModal = true;
   }

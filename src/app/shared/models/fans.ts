@@ -176,11 +176,17 @@ export interface Fan203Results {
   fanEfficiencyStaticPressure: number;
   fanEfficiencyStaticPressureRise: number;
   flowCorrected: number;
+  flow: number;
+  pressureTotal: number;
   pressureTotalCorrected: number;
+  pressureStatic: number;
   pressureStaticCorrected: number;
   staticPressureRiseCorrected: number;
+  staticPressureRise: number;
   powerCorrected: number;
+  power: number;
   kpc: number;
+  kpcCorrected: number;
 }
 
 

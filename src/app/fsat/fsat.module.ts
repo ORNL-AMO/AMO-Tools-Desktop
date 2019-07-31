@@ -8,7 +8,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
 import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
-import { Fsat203Module } from '../calculator/fans/fsat-203/fsat-203.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
@@ -41,6 +40,7 @@ import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-effic
 import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
 import { FsatWarningService } from './fsat-warning.service';
 import { CalculatePressuresModule } from './calculate-pressures/calculate-pressures.module';
+import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -49,7 +49,6 @@ import { CalculatePressuresModule } from './calculate-pressures/calculate-pressu
     ReactiveFormsModule,
     SettingsModule,
     SettingsModule,
-    Fsat203Module,
     ModalModule,
     SharedModule,
     ExploreOpportunitiesModule,
@@ -62,7 +61,8 @@ import { CalculatePressuresModule } from './calculate-pressures/calculate-pressu
     MotorPerformanceModule,
     PumpCurveModule,
     FanEfficiencyModule,
-    CalculatePressuresModule
+    CalculatePressuresModule,
+    FanAnalysisModule
   ],
   declarations: [
     FsatComponent,

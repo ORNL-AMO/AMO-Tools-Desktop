@@ -7,7 +7,7 @@ export class CalculatorService {
   selectedToolType: BehaviorSubject<string>;
   selectedTool: BehaviorSubject<string>;
   constructor() { 
-    this.selectedToolType = new BehaviorSubject<string>('none');
+    this.selectedToolType = new BehaviorSubject<string>('all');
     this.selectedTool = new BehaviorSubject<string>('none');
   }
 }
