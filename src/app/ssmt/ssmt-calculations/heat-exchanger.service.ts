@@ -3,12 +3,11 @@ import { SteamService } from '../../calculator/steam/steam.service';
 import { HeatExchangerOutput, SteamPropertiesOutput } from '../../shared/models/steam/steam-outputs';
 import { HeatExchangerInput } from '../../shared/models/steam/steam-inputs';
 import { Settings } from '../../shared/models/settings';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class HeatExchangerService {
 
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private steamService: SteamService) { }
 
   heatExchange(approachTemp: number, heatExchangerInput: HeatExchangerInput, settings: Settings): HeatExchangerOutput {
     let maxTempDiff: number = heatExchangerInput.hotInletTemperature - heatExchangerInput.coldInletTemperature;
@@ -44,7 +43,7 @@ export class HeatExchangerService {
       settings);
 
     hotOutletTest.massFlow = heatExchangerInput.hotInletMassFlow;
-    hotOutletTest.energyFlow = this.calculateEnergy(hotOutletTest.massFlow, hotOutletTest.specificEnthalpy, settings);
+    hotOutletTest.energyFlow = this.calculateEnergyFlow(hotOutletTest.massFlow, hotOutletTest.specificEnthalpy, settings);
     let heatExchanged: number = heatExchangerInput.hotInletEnergyFlow - hotOutletTest.energyFlow;
 
     let coldOutletTest: SteamPropertiesOutput = this.steamService.steamProperties(
@@ -56,7 +55,7 @@ export class HeatExchangerService {
       settings
     );
     coldOutletTest.massFlow = heatExchangerInput.coldInletMassFlow;
-    coldOutletTest.energyFlow = this.calculateEnergy(coldOutletTest.massFlow, coldOutletTest.specificEnthalpy, settings);
+    coldOutletTest.energyFlow = this.calculateEnergyFlow(coldOutletTest.massFlow, coldOutletTest.specificEnthalpy, settings);
 
     if ((hotOutletTest.temperature - heatExchangerInput.coldInletTemperature) > approachTemp) {
       coldOutletTest = this.steamService.steamProperties(
@@ -69,7 +68,7 @@ export class HeatExchangerService {
       );
 
       coldOutletTest.massFlow = heatExchangerInput.coldInletMassFlow;
-      coldOutletTest.energyFlow = this.calculateEnergy(coldOutletTest.massFlow, coldOutletTest.specificEnthalpy, settings);
+      coldOutletTest.energyFlow = this.calculateEnergyFlow(coldOutletTest.massFlow, coldOutletTest.specificEnthalpy, settings);
 
       heatExchanged = heatExchangerInput.hotInletEnergyFlow - hotOutletTest.energyFlow;
 
@@ -82,7 +81,7 @@ export class HeatExchangerService {
         settings);
 
       hotOutletTest.massFlow = heatExchangerInput.hotInletMassFlow;
-      hotOutletTest.energyFlow = this.calculateEnergy(hotOutletTest.massFlow, hotOutletTest.specificEnthalpy, settings);
+      hotOutletTest.energyFlow = this.calculateEnergyFlow(hotOutletTest.massFlow, hotOutletTest.specificEnthalpy, settings);
     }
 
     let results: HeatExchangerOutput = {
@@ -108,19 +107,19 @@ export class HeatExchangerService {
     return results;
   }
 
-  calculateEnergy(massFlow: number, specificEnthalpy: number, settings: Settings): number {
-    let convertedMassFlow: number = this.convertUnitsService.value(massFlow).from(settings.steamMassFlowMeasurement).to('tonne');
-    let convertedEnthalpy: number = this.convertUnitsService.value(specificEnthalpy).from(settings.steamSpecificEnthalpyMeasurement).to('kJkg');
-    let energy: number = convertedMassFlow * convertedEnthalpy;
-    energy = this.convertUnitsService.value(energy).from('MJ').to(settings.steamEnergyMeasurement);
-    return energy;
+  calculateEnergyFlow(massFlow: number, specificEnthalpy: number, settings: Settings): number {
+    let convertedMassFlow: number = this.steamService.convertSteamMassFlowInput(massFlow, settings);
+    let convertedEnthalpy: number = this.steamService.convertSteamSpecificEnthalpyInput(specificEnthalpy, settings);
+    let energyFlow: number = convertedMassFlow * convertedEnthalpy;
+    energyFlow = this.steamService.convertEnergyFlowOutput(energyFlow, settings);
+    return energyFlow;
   }
 
-  calculateSpecificEnthalpy(energy: number, massFlow: number, settings: Settings): number {
-    let convertedEnergy: number = this.convertUnitsService.value(energy).from(settings.steamEnergyMeasurement).to('MMBtu');
-    let convertedMassFlow: number = this.convertUnitsService.value(massFlow).from(settings.steamMassFlowMeasurement).to('klb');
-    let enthalpy: number = convertedEnergy / convertedMassFlow * 1000;
-    let convertedEnthalpy: number = this.convertUnitsService.value(enthalpy).from('btuLb').to(settings.steamSpecificEnthalpyMeasurement);
+  calculateSpecificEnthalpy(energyFlow: number, massFlow: number, settings: Settings): number {
+    let convertedEnergyFlow: number = this.steamService.convertEnergyFlowInput(energyFlow, settings);
+    let convertedMassFlow: number = this.steamService.convertSteamMassFlowInput(massFlow, settings);
+    let enthalpy: number = convertedEnergyFlow / convertedMassFlow;
+    let convertedEnthalpy: number = this.steamService.convertSteamSpecificEnthalpyOutput(enthalpy, settings);
     return convertedEnthalpy;
   }
 }
