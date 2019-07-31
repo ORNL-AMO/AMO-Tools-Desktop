@@ -12,6 +12,7 @@ import { CoreService } from './core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { WindowRefService } from '../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-core',
@@ -54,10 +55,19 @@ export class CoreComponent implements OnInit {
   updateAvailableSubscription: Subscription;
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router, private windowRefService: WindowRefService) {
   }
 
   ngOnInit() {
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    let test = this.windowRefService.nativeWindow.navigator.geolocation.getCurrentPosition(this.success, this.error, options);
+    console.log(test);
+
+
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg === true) {
         this.showUpdateModal = true;
@@ -168,4 +178,20 @@ export class CoreComponent implements OnInit {
     this.showTutorial = false;
     this.hideTutorial = true;
   }
+
+
+
+  
+  success(pos) {
+    console.log('SUCCESS');
+    var crd = pos.coords;
+  
+    console.log(pos);
+  }
+  
+  error(err) {
+    console.log('ERRR')
+    console.warn(err);
+  }
+  
 }

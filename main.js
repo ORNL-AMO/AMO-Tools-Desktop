@@ -27,7 +27,7 @@ app.on('ready', function () {
     }
   });
   win.maximize();
-
+ 
   // Specify entry point
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'dist/index.html'),
@@ -35,9 +35,9 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  if (isDev()) {
+  // if (isDev()) {
     win.toggleDevTools();
-  }
+  // }
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
