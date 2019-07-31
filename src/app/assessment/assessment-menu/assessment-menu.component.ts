@@ -1,10 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { AssessmentService } from '../assessment.service';
-import { Calculator } from '../../shared/models/calculators';
 import { Settings } from 'electron';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { ExportService } from '../../shared/import-export/export.service';
 
 @Component({
   selector: 'app-assessment-menu',
@@ -42,7 +41,7 @@ export class AssessmentMenuComponent implements OnInit {
   breadCrumbs: Array<Directory>;
   isAllSelected: boolean;
   createAssessment: boolean = false;
-  constructor(private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService) { }
+  constructor(private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService, private exportService: ExportService) { }
 
   ngOnInit() {
     this.breadCrumbs = new Array();
@@ -95,6 +94,7 @@ export class AssessmentMenuComponent implements OnInit {
   }
 
   emitExport() {
+    this.exportService.selectAllFolder = this.isAllSelected;
     this.exportEmit.emit(true);
   }
 
