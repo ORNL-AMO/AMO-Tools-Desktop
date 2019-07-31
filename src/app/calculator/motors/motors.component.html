@@ -73,34 +73,18 @@
             </p>
           </div>
         </div>
-        <!-- <div class="d-flex calc-item-row w-100">
-          <div class="p-2 col-2 d-flex justify-content-center align-items-center">
-            <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace-rewind.png" (click)="showTool('replace-rewind')">
-            </div>
-          </div>
-          <div class="d-flex flex-fill flex-column justify-content-center">
-            <a (click)="showTool('replace-rewind')"> Replace vs Rewind</a>
-            <p>
-                This calculator compares the cost and energy expenditure of rewinding a failed motor versus replacing it with a new energy-efficient model.
-            </p>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
 </div>
 
-
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'nema-energy-efficiency'">
   <app-nema-energy-efficiency></app-nema-energy-efficiency>
 </div>
 
-
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'motor-performance'">
   <app-motor-performance></app-motor-performance>
 </div>
-
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'percent-load-estimation'">
   <app-percent-load-estimation></app-percent-load-estimation>
@@ -110,24 +94,6 @@
   <app-motor-drive></app-motor-drive>
 </div>
 
-
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'replace-existing'">
   <app-replace-existing></app-replace-existing>
 </div>
-
-<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'replace-rewind'">
-  <app-replace-rewind></app-replace-rewind>
-</div>
-
-<!-- Original Version -->
-<!--
-<div class="calculator" *ngIf="selectedTool == 'percent-load-estimation'">
-  <div class="row">
-    <div class="col-lg-10  mx-auto">
-      <h2>Percent Load Estimation Calculator</h2>
-    </div>
-  </div>
-  <div class="calculator-container">
-    <app-percent-load-estimation></app-percent-load-estimation>
-  </div>
-</div> -->

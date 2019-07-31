@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { CompareService } from '../../compare.service';
 import { SsmtService } from '../../ssmt.service';
 import { FormGroup } from '@angular/forms';
+import { SSMT } from '../../../shared/models/steam/ssmt';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-general-operations',
@@ -22,10 +24,26 @@ export class GeneralOperationsComponent implements OnInit {
   inSetup: boolean;
   @Input()
   idString: string;
-  
+  @Input()
+  ssmt: SSMT;
+
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean = false;
   constructor(private ssmtService: SsmtService, private compareService: CompareService) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(){
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
   }
 
   save() {
@@ -55,10 +73,41 @@ export class GeneralOperationsComponent implements OnInit {
     }
   }
 
+  isHoursPerYearDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isHoursPerYearDifferent();
+    } else {
+      return false;
+    }
+  }
+
   focusField(str: string) {
     this.ssmtService.currentField.next(str);
-  }  
+  }
   focusOut() {
     this.ssmtService.currentField.next('default');
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+    this.ssmtService.modalOpen.next(false);
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+    this.ssmtService.modalOpen.next(true);
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.ssmt.operatingHours = oppHours;
+    this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
+    this.save();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { ElectricityReductionService } from '../electricity-reduction.service';
 import { ElectricityReductionResult, ElectricityReductionData } from '../../../../shared/models/standalone';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-electricity-reduction-form',
@@ -27,6 +28,14 @@ export class ElectricityReductionFormComponent implements OnInit {
   @Input()
   selected: boolean;
 
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean;
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Multimeter Reading' },
@@ -63,6 +72,12 @@ export class ElectricityReductionFormComponent implements OnInit {
         this.form.enable();
       }
     }
+  }
+
+  ngAfterViewInit(){
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
   }
 
   changeMeasurementMethod() {
@@ -103,5 +118,26 @@ export class ElectricityReductionFormComponent implements OnInit {
   }
 
   focusOut() {
+  }
+
+  closeOperatingHoursModal(){
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal(){
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: OperatingHours){
+    this.electricityReductionService.operatingHours = oppHours;
+    this.form.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth(){
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

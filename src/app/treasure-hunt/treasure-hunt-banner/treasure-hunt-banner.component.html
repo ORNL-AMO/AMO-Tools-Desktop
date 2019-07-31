@@ -49,10 +49,7 @@
 
 <ul class="tabs subtabs progress-tabs treasure-hunt" *ngIf="mainTab == 'system-setup'">
 	<li [ngClass]="{'active': subTab == 'settings'}">
-		<a (click)="changeSubTab('settings')">Settings</a>
-	</li>
-	<li [ngClass]="{'active': subTab == 'operating-hours'}">
-		<a (click)="changeSubTab('operating-hours')">Operating Hours</a>
+		<a (click)="changeSubTab('settings')">Assessment Basics</a>
 	</li>
 	<li [ngClass]="{'active': subTab == 'operation-costs'}">
 		<a (click)="changeSubTab('operation-costs')">Energy Usage and Cost</a>

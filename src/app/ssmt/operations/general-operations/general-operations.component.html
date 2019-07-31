@@ -1,6 +1,28 @@
 <div class="d-flex flex-column ml-2 mr-2">
   <label class="group-label">General Details</label>
-  <form [formGroup]="form">
+  <form [formGroup]="form" #formElement>
+    <div class="form-group">
+      <label for="{{'hoursPerYear_'+idString}}">Operating Hours</label>
+      <div class="input-group"
+        [ngClass]="{'indicate-different': isHoursPerYearDifferent()}">
+        <span class="input-group-addon op-hour-addon units">
+          <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+        </span>
+        <input name="hoursPerYear" type="number" step="any" class="form-control"
+          id="{{'hoursPerYear_'+idString}}" (input)="save()" formControlName="hoursPerYear"
+          (focus)="focusField('operatingHours')" (blur)="focusOut()">
+        <span class="units input-group-addon">hrs/yr</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine">
+        <span *ngIf="form.controls.hoursPerYear.errors.required">Value Required</span>
+        <span *ngIf="form.controls.hoursPerYear.errors.max">Value can't be greater than
+          {{form.controls.hoursPerYear.errors.max.max}} hrs/yr.</span>
+        <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
+          {{form.controls.hoursPerYear.errors.min.min}} hrs/yr.</span>
+      </span>
+    </div>
+
     <div class="form-group">
       <label for="{{idString+'sitePowerImport'}}">Site Power Import</label>
       <div class="input-group">
@@ -37,3 +59,9 @@
     </div>
   </form>
 </div>
+
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="ssmt.operatingHours">
+</app-operating-hours-modal>

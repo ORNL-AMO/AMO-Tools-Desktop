@@ -18,3 +18,8 @@ form{
 	padding-bottom: 6.5px;
 	width: 100%;
 }
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }

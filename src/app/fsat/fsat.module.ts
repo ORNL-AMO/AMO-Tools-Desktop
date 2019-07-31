@@ -8,9 +8,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
 import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
-
-import { RatedOperatingPointsComponent } from './rated-operating-points/rated-operating-points.component';
-import { RatedOperatingPointsFormComponent } from './rated-operating-points/rated-operating-points-form/rated-operating-points-form.component';
 import { Fsat203Module } from '../calculator/fans/fsat-203/fsat-203.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
@@ -74,8 +71,6 @@ import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.
     FsatBannerComponent,
     FsatTabsComponent,
     SystemBasicsComponent,
-    RatedOperatingPointsComponent,
-    RatedOperatingPointsFormComponent,
     FsatFluidComponent,
     FanSetupComponent,
     FanMotorComponent,
@@ -85,8 +80,7 @@ import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.
     AddModificationComponent,
     ModificationListComponent,
     ModifyFieldDataFormComponent,
-    FsatDiagramComponent,
-    // FsatReportSankeyComponent  
+    FsatDiagramComponent
   ],
   providers: [
     FsatService,

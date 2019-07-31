@@ -1,4 +1,4 @@
-<form [formGroup]="o2Form">
+<form [formGroup]="o2Form" #formElement>
   <div class="d-flex">
     <div class="d-flex flex-column w-50 pr-1">
       <label class="group-label">Combustion With Air</label>
@@ -6,6 +6,9 @@
       <div class="form-group">
         <label class="small" for="operatingHours">Annual Operating Hours</label>
         <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal(o2Form.controls.operatingHours)"><span class="fa fa-calculator"></span></a>
+          </span>
           <input name="operatingHours" type="number" class="form-control" id="operatingHours" (input)="calc()"
             (focus)="changeField('operatingHours')" formControlName="operatingHours" onfocus="this.select();"
             (blur)="focusOut()">
@@ -139,6 +142,9 @@
       <div class="form-group">
         <label class="small" for="operatingHoursEnriched">Annual Operating Hours</label>
         <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal(o2Form.controls.operatingHoursEnriched)"><span class="fa fa-calculator"></span></a>
+          </span>
           <input name="operatingHoursEnriched" type="number" class="form-control" id="operatingHoursEnriched"
             (input)="calc()" (focus)="changeField('operatingHours')" formControlName="operatingHoursEnriched"
             onfocus="this.select();" (blur)="focusOut()">
@@ -320,3 +326,8 @@
     <button type="button" class="btn btn-secondary pull-right" id="plotBtn" (click)="plot()">Plot</button>
   </div>
 </form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="o2EnrichmentService.operatingHours">
+</app-operating-hours-modal>

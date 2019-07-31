@@ -6,7 +6,6 @@ import { CalculateFlowPressuresComponent } from './calculate-flow-pressures/calc
 import { CalculateOutletPressureComponent } from './calculate-outlet-pressure/calculate-outlet-pressure.component';
 import { CalculateInletPressureComponent } from './calculate-inlet-pressure/calculate-inlet-pressure.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FlowPressuresHelpComponent } from './calculate-flow-pressures/flow-pressures-help/flow-pressures-help.component';
 import { CalculateInletPressureHelpComponent } from './calculate-inlet-pressure/calculate-inlet-pressure-help/calculate-inlet-pressure-help.component';
 import { CalculateOutletPressureHelpComponent } from './calculate-outlet-pressure/calculate-outlet-pressure-help/calculate-outlet-pressure-help.component';
 import { SharedModule } from '../../shared/shared.module';
@@ -26,7 +25,6 @@ import { Fsat203Module } from '../../calculator/fans/fsat-203/fsat-203.module';
     CalculateFlowPressuresComponent,
     FlowPressuresFormComponent,
     FanBasicsComponent,
-    FlowPressuresHelpComponent,
     CalculateInletPressureHelpComponent,
     CalculateOutletPressureHelpComponent
   ],

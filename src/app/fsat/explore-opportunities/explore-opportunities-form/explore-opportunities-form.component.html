@@ -5,25 +5,29 @@
   <div class="d-flex flex-column">
     <div class="form-group group-name">
       <label for="modificatonName">Modification Name</label>
-      <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.name"
-        (input)="save()" />
+      <input name="modificatonName" type="text" id="modificatonName" class="form-control"
+        [(ngModel)]="fsat.modifications[exploreModIndex].fsat.name" (input)="save()" />
     </div>
     <div class="checkbox">
       <label class="group-label" for="modifyCalculationMethod">
-        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')" (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.isVFD" />
+        <input type="checkbox" id="modifyCalculationMethod" (focus)="focusField('modifyCalculationMethod')"
+          (change)="setVFD()" [(ngModel)]="fsat.modifications[exploreModIndex].fsat.isVFD" />
         Install VFD
       </label>
     </div>
     <app-variable-frequency-drive-form *ngIf="fsat.modifications[exploreModIndex].fsat.isVFD"
-      [baselineMotorForm]="baselineMotorForm" [modificationMotorForm]="modificationMotorForm" [baselineFanSetupForm]="baselineFanSetupForm"
-      [modificationFanSetupForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"
-      [baselineFieldDataForm]="baselineFieldDataForm" [modificationFieldDataForm]="modificationFieldDataForm"
-      [baselineWarnings]="baselineFanFieldDataWarnings" [modificationWarnings]="modificationFanFieldDataWarnings"
-      (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex" (showPressureModal)="openPressureModal($event)"></app-variable-frequency-drive-form>
+      [baselineMotorForm]="baselineMotorForm" [modificationMotorForm]="modificationMotorForm"
+      [baselineFanSetupForm]="baselineFanSetupForm" [modificationFanSetupForm]="modificationFanSetupForm"
+      [baselineFanEfficiency]="baselineFanEfficiency" [baselineFieldDataForm]="baselineFieldDataForm"
+      [modificationFieldDataForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
+      [modificationWarnings]="modificationFanFieldDataWarnings" (emitCalculate)="save()" [settings]="settings"
+      [exploreModIndex]="exploreModIndex" (showPressureModal)="openPressureModal($event)">
+    </app-variable-frequency-drive-form>
 
-    <app-fan-data-form (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex" [(fsat)]="fsat"
-      [baselineForm]="baselineFanSetupForm" [modificationForm]="modificationFanSetupForm" [baselineFanEfficiency]="baselineFanEfficiency"
-      [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD"></app-fan-data-form>
+    <app-fan-data-form (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+      [(fsat)]="fsat" [baselineForm]="baselineFanSetupForm" [modificationForm]="modificationFanSetupForm"
+      [baselineFanEfficiency]="baselineFanEfficiency" [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD">
+    </app-fan-data-form>
 
     <app-rated-motor-form (emitCalculate)="save()" [settings]="settings" [exploreModIndex]="exploreModIndex"
       [baselineForm]="baselineMotorForm" [modificationForm]="modificationMotorForm"></app-rated-motor-form>
@@ -31,12 +35,13 @@
     <app-system-data-form [isVFD]="fsat.modifications[exploreModIndex].fsat.isVFD" (emitCalculate)="save()"
       [settings]="settings" [exploreModIndex]="exploreModIndex" [baselineForm]="baselineFieldDataForm"
       [modificationForm]="modificationFieldDataForm" [baselineWarnings]="baselineFanFieldDataWarnings"
-      [modificationWarnings]="modificationFanFieldDataWarnings" (showPressureModal)="openPressureModal($event)"></app-system-data-form>
+      [modificationWarnings]="modificationFanFieldDataWarnings" (showPressureModal)="openPressureModal($event)"
+      [fsat]="fsat"></app-system-data-form>
   </div>
 </div>
 
-<div bsModal #pressureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pressureModalLabel"
-  aria-hidden="true" [config]="{backdrop: 'fixed'}">
+<div bsModal #pressureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="pressureModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -45,10 +50,12 @@
         </button>
       </div>
       <div #modalBody class="modal-body p-0">
-        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet' && bodyHeight" [settings]="settings" [inletPressureData]="inletPressureCopy"
-          (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-inlet-pressure>
-        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet' && bodyHeight" [settings]="settings" [outletPressureData]="outletPressureCopy"
-          (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight"></app-calculate-outlet-pressure>
+        <app-calculate-inlet-pressure *ngIf="pressureCalcType == 'inlet' && bodyHeight" [settings]="settings"
+          [inletPressureData]="inletPressureCopy" (emitSave)="saveInletPressure($event)" [bodyHeight]="bodyHeight">
+        </app-calculate-inlet-pressure>
+        <app-calculate-outlet-pressure *ngIf="pressureCalcType == 'outlet' && bodyHeight" [settings]="settings"
+          [outletPressureData]="outletPressureCopy" (emitSave)="saveOutletPressure($event)" [bodyHeight]="bodyHeight">
+        </app-calculate-outlet-pressure>
         <!-- <app-calculate-flow-pressures *ngIf="pressureCalcType == 'flow' && bodyHeight" [settings]="settings" [fsat]="fsatCopy"
           (saveFlowAndPressure)="saveFsatCopy($event)" [bodyHeight]="bodyHeight"></app-calculate-flow-pressures> -->
       </div>
