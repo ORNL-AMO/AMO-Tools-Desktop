@@ -11,12 +11,10 @@ export class HelpAndResultsPanelComponent implements OnInit {
   settings: Settings;
 
   tabSelect: string = 'help';
-
   constructor() { }
 
   ngOnInit() {
   }
-
 
   setTab(str: string) {
     this.tabSelect = str;

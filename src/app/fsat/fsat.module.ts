@@ -8,7 +8,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
 import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
-import { Fsat203Module } from '../calculator/fans/fsat-203/fsat-203.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
@@ -50,7 +49,6 @@ import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.
     ReactiveFormsModule,
     SettingsModule,
     SettingsModule,
-    Fsat203Module,
     ModalModule,
     SharedModule,
     ExploreOpportunitiesModule,
