@@ -20,3 +20,8 @@
 .btn-margin-10 {
     margin: 10px 0px;
 }
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+}

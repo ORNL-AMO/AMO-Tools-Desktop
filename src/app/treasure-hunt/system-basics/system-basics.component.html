@@ -8,5 +8,23 @@
     </app-application-settings>
     <!-- <app-treasure-hunt-settings [(settingsForm)]="settingsForm" (emitSave)="save()">
     </app-treasure-hunt-settings> -->
+    <form #formElement>
+      <div class="form-group">
+        <label for="operatingHours">Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input name="operatingHours" type="number" step="1" min="0" max="8760" id="operatingHours"
+            class="form-control" (input)="saveTreasureHunt()" [(ngModel)]="assessment.treasureHunt.operatingHours.hoursPerYear" />
+          <span class="input-group-addon units">hrs/yr</span>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="assessment.treasureHunt.operatingHours">
+</app-operating-hours-modal>

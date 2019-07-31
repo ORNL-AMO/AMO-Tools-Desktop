@@ -12,3 +12,7 @@ p {
 .no-padding-left{
     padding-left: 0px;
 }
+
+.modal-open {
+    z-index: initial !important;
+}

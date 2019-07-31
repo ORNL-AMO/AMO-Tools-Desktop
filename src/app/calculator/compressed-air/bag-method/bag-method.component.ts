@@ -3,6 +3,7 @@ import { StandaloneService } from "../../standalone.service";
 import { BagMethodInput, BagMethodOutput } from "../../../shared/models/standalone";
 import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-bag-method',
@@ -14,6 +15,7 @@ export class BagMethodComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('formElement') formElement: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -29,8 +31,9 @@ export class BagMethodComponent implements OnInit {
   outputsArray: Array<BagMethodOutput>;
 
   totalOperatingTime: number;
-
+  showOperatingHoursModal: boolean = false;
   currentField: string = 'default';
+  formWidth: number = 350;
   constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
@@ -61,7 +64,7 @@ export class BagMethodComponent implements OnInit {
   btnResetData() {
     this.inputsArray = new Array<BagMethodInput>();
     this.initBagMethodArrays();
-    this.totalOperatingTime = 0;
+    this.totalOperatingTime = 8760;
     this.outputs = {
       flowRate: 0,
       annualConsumption: 0
@@ -84,6 +87,9 @@ export class BagMethodComponent implements OnInit {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 
   calculateAnnualConsumption(inputsObject?: { inputs: BagMethodInput, index: number }) {
@@ -105,7 +111,7 @@ export class BagMethodComponent implements OnInit {
 
   addLeakage() {
     let input: BagMethodInput = {
-      operatingTime:  JSON.parse(JSON.stringify(this.totalOperatingTime)),
+      operatingTime: JSON.parse(JSON.stringify(this.totalOperatingTime)),
       bagFillTime: 0,
       heightOfBag: 0,
       diameterOfBag: 0,
@@ -143,6 +149,21 @@ export class BagMethodComponent implements OnInit {
 
   changeField(str: string) {
     this.currentField = str;
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  updateOperatingHours(calculatedOpHrs: OperatingHours) {
+    this.compressedAirService.bagMethodOperatingHours = calculatedOpHrs;
+    this.totalOperatingTime = calculatedOpHrs.hoursPerYear;
+    this.closeOperatingHoursModal();
+    this.calculateAnnualConsumption();
   }
 
 }

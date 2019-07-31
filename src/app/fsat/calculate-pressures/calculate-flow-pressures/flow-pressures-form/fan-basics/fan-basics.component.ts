@@ -35,13 +35,4 @@ export class FanBasicsComponent implements OnInit {
   save() {
     this.emitSave.emit(this.fanRatedInfo);
   }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
-  }
 }

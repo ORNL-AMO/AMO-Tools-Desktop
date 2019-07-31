@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef, HostListener } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
@@ -10,6 +10,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
 import { FieldDataService } from './field-data.service';
 import { PsatService } from '../psat.service';
+import { OperatingHours } from '../../shared/models/operations';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -24,10 +25,6 @@ export class FieldDataComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
-  @Output('openHeadTool')
-  openHeadTool = new EventEmitter<boolean>();
-  @Output('closeHeadTool')
-  closeHeadTool = new EventEmitter<boolean>();
   @Input()
   baseline: boolean;
   @Input()
@@ -36,9 +33,17 @@ export class FieldDataComponent implements OnInit {
   assessment: Assessment;
   @Input()
   modificationIndex: number;
-  @ViewChild('headToolModal') public headToolModal: ModalDirective;
 
-  formValid: boolean;
+  @ViewChild('headToolModal') public headToolModal: ModalDirective;
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean = false;
+
   headToolResults: any = {
     differentialElevationHead: 0.0,
     differentialPressureHead: 0.0,
@@ -61,6 +66,7 @@ export class FieldDataComponent implements OnInit {
   psatForm: FormGroup;
   fieldDataWarnings: FieldDataWarnings;
   idString: string;
+
   constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
@@ -90,6 +96,12 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
+  }
+
   init() {
     if (!this.psat.inputs.cost_kw_hour) {
       this.psat.inputs.cost_kw_hour = this.settings.electricityCost;
@@ -109,15 +121,6 @@ export class FieldDataComponent implements OnInit {
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);
-  }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
   }
 
   save() {
@@ -153,7 +156,6 @@ export class FieldDataComponent implements OnInit {
     this.save();
   }
 
-
   showHeadToolModal() {
     if (this.selected) {
       this.psatService.modalOpen.next(true);
@@ -169,6 +171,29 @@ export class FieldDataComponent implements OnInit {
       })
     }
     this.headToolModal.hide();
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+    this.psatService.modalOpen.next(false);
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+    this.psatService.modalOpen.next(true);
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.psat.operatingHours = oppHours;
+    this.psatForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+    this.save();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 
   canCompare() {

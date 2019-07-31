@@ -12,10 +12,11 @@ export class LightingReplacementService {
   modificationData: Array<LightingReplacementData>;
   baselineElectricityCost: number;
   modificationElectricityCost: number;
+  operatingHours: OperatingHours;
   constructor(private fb: FormBuilder) { }
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (opperatingHoursPerYear) {
       hoursPerYear = opperatingHoursPerYear.hoursPerYear;
     }

@@ -12,7 +12,7 @@ export class CompressedAirReductionService {
 
   baselineData: Array<CompressedAirReductionData>;
   modificationData: Array<CompressedAirReductionData>;
-
+  operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
 
@@ -39,7 +39,7 @@ export class CompressedAirReductionService {
       compressorSpecificPowerControl: 0,
       compressorSpecificPower: 0.16
     };
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }

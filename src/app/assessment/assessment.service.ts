@@ -124,8 +124,8 @@ export class AssessmentService {
       operatingHours: {
         weeksPerYear: 52,
         daysPerWeek: 7,
-        shiftsPerDay: 3,
-        hoursPerShift: 8,
+        // shiftsPerDay: 3,
+        // hoursPerShift: 8,
         hoursPerYear: 8736
       },
       operatingCosts: {
@@ -223,8 +223,8 @@ export class AssessmentService {
       operatingHours: {
         weeksPerYear: 52,
         daysPerWeek: 7,
-        shiftsPerDay: 3,
-        hoursPerShift: 8,
+        // shiftsPerDay: 3,
+        // hoursPerShift: 8,
         hoursPerYear: 8736
       },
       operatingCosts: {

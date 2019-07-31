@@ -1,7 +1,7 @@
-<div class="checkbox">
+<div class="checkbox" #formElement>
   <label class="group-label" for="exploreOperatoins">
-    <input type="checkbox" id="exploreOperatoins" value="true" (focus)="focusField('operatingHours')" (change)="toggleOperations()"
-      [(ngModel)]="showOperations" /> Adjust Operational Data
+    <input type="checkbox" id="exploreOperatoins" value="true" (focus)="focusField('operatingHours')"
+      (change)="toggleOperations()" [(ngModel)]="showOperations" /> Adjust Operational Data
   </label>
 </div>
 <div *ngIf="showOperations">
@@ -9,24 +9,32 @@
     <li>
       <div class="checkbox">
         <label for="{{'modifyOpHours_'+index}}">
-          <input type="checkbox" id="{{'modifyOpHours_'+index}}" (focus)="focusField('operatingHours')" (change)="toggleOpHours()"
-            [(ngModel)]="showOpHours" /> Modify Operating Hours
+          <input type="checkbox" id="{{'modifyOpHours_'+index}}" (focus)="focusField('operatingHours')"
+            (change)="toggleOpHours()" [(ngModel)]="showOpHours" /> Modify Operating Hours
         </label>
       </div>
       <form *ngIf="showOpHours">
         <div class="form-group">
           <label for="baselineHours">Baseline Operating Hours</label>
           <div class="input-group">
-            <input name="baseOpHours" disabled="true" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.operatingHours.hoursPerYear"
-              id="baseOpHours" onfocus="this.select();" (input)="calculate()" (focus)="focusField('operatingHours')" (blur)="focusOut()">
+            <span class="input-group-addon op-hour-addon units">
+              <span class="fa fa-calculator"></span>
+            </span>
+            <input name="baseOpHours" disabled="true" type="number" step="any" min="0" class="form-control"
+              [(ngModel)]="phast.operatingHours.hoursPerYear" id="baseOpHours" onfocus="this.select();"
+              (input)="calculate()" (focus)="focusField('operatingHours')" (blur)="focusOut()">
             <span class="input-group-addon units">hrs/yr</span>
           </div>
         </div>
         <div class="form-group">
           <label for="modOpHours">Modification Operating Hours</label>
           <div class="input-group">
-            <input name="modOpHours" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingHours.hoursPerYear"
-              id="modOpHours" onfocus="this.select();" (input)="calculate()" (focus)="focusField('operatingHours')" (blur)="focusOut()">
+            <span class="input-group-addon op-hour-addon units">
+              <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input name="modOpHours" type="number" step="any" min="0" class="form-control"
+              [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingHours.hoursPerYear" id="modOpHours"
+              onfocus="this.select();" (input)="calculate()" (focus)="focusField('operatingHours')" (blur)="focusOut()">
             <span class="input-group-addon units">hrs/yr</span>
           </div>
         </div>
@@ -35,16 +43,17 @@
     <li>
       <div class="checkbox">
         <label for="{{'modifyFuelCosts_'+index}}">
-          <input type="checkbox" id="{{'modifyFuelCosts_'+index}}" (focus)="focusField('operatingCosts')" (change)="toggleFuelCosts()"
-            [(ngModel)]="showFuelCosts" /> Modify Fuel Costs
+          <input type="checkbox" id="{{'modifyFuelCosts_'+index}}" (focus)="focusField('operatingCosts')"
+            (change)="toggleFuelCosts()" [(ngModel)]="showFuelCosts" /> Modify Fuel Costs
         </label>
       </div>
       <form *ngIf="showFuelCosts">
         <div class="form-group">
           <label for="baselineFuelCosts">Baseline Fuel Costs</label>
           <div class="input-group">
-            <input name="baselineFuelCosts" disabled="true" type="number" step="any" class="form-control" id="baselineFuelCosts" (input)="calculate()"
-              [(ngModel)]="phast.operatingCosts.fuelCost" (focus)="focusField('operatingCosts')">
+            <input name="baselineFuelCosts" disabled="true" type="number" step="any" class="form-control"
+              id="baselineFuelCosts" (input)="calculate()" [(ngModel)]="phast.operatingCosts.fuelCost"
+              (focus)="focusField('operatingCosts')">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
           </div>
@@ -52,7 +61,8 @@
         <div class="form-group">
           <label for="modFuelCosts">Modification Fuel Costs</label>
           <div class="input-group">
-            <input name="modFuelCosts" type="number" step="any" class="form-control" id="modFuelCosts" (input)="calculate()" (focus)="focusField('operatingCosts')"
+            <input name="modFuelCosts" type="number" step="any" class="form-control" id="modFuelCosts"
+              (input)="calculate()" (focus)="focusField('operatingCosts')"
               [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingCosts.fuelCost">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
@@ -63,16 +73,17 @@
     <li>
       <div class="checkbox">
         <label for="{{'modifySteamCosts_'+index}}">
-          <input type="checkbox" id="{{'modifySteamCosts_'+index}}" (focus)="focusField('operatingCosts')" (change)="toggleSteamCosts()"
-            [(ngModel)]="showSteamCosts" /> Modify Steam Costs
+          <input type="checkbox" id="{{'modifySteamCosts_'+index}}" (focus)="focusField('operatingCosts')"
+            (change)="toggleSteamCosts()" [(ngModel)]="showSteamCosts" /> Modify Steam Costs
         </label>
       </div>
       <form *ngIf="showSteamCosts">
         <div class="form-group">
           <label for="baselineSteamCosts">Baseline Steam Costs</label>
           <div class="input-group">
-            <input name="baselineSteamCosts" disabled="true" type="number" step="any" class="form-control" id="baselineSteamCosts" (input)="calculate()"
-              [(ngModel)]="phast.operatingCosts.steamCost" (focus)="focusField('operatingCosts')">
+            <input name="baselineSteamCosts" disabled="true" type="number" step="any" class="form-control"
+              id="baselineSteamCosts" (input)="calculate()" [(ngModel)]="phast.operatingCosts.steamCost"
+              (focus)="focusField('operatingCosts')">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
           </div>
@@ -80,7 +91,9 @@
         <div class="form-group">
           <label for="modSteamCosts">Modification Fuel Costs</label>
           <div class="input-group">
-            <input name="modSteamCosts" type="number" step="any" class="form-control" id="modSteamCosts" (input)="calculate()" (focus)="focusField('operatingCosts')" [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingCosts.steamCost">
+            <input name="modSteamCosts" type="number" step="any" class="form-control" id="modSteamCosts"
+              (input)="calculate()" (focus)="focusField('operatingCosts')"
+              [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingCosts.steamCost">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
           </div>
@@ -90,24 +103,27 @@
     <li>
       <div class="checkbox">
         <label for="{{'modifyElectricityCosts_'+index}}">
-          <input type="checkbox" id="{{'modifyElectricityCosts_'+index}}"  (focus)="focusField('operatingCosts')" (change)="toggleElectricityCosts()"
-            [(ngModel)]="showElectricityCosts" /> Modify Electricity Costs
+          <input type="checkbox" id="{{'modifyElectricityCosts_'+index}}" (focus)="focusField('operatingCosts')"
+            (change)="toggleElectricityCosts()" [(ngModel)]="showElectricityCosts" /> Modify Electricity Costs
         </label>
       </div>
       <form *ngIf="showElectricityCosts">
         <div class="form-group">
           <label for="baselineElectricityCosts">Baseline Electricity Costs</label>
           <div class="input-group">
-            <input name="baselineElectricityCosts" disabled="true" type="number" step="any" class="form-control" id="baselineElectricityCosts" (input)="calculate()"
-              [(ngModel)]="phast.operatingCosts.electricityCost" (focus)="focusField('operatingCosts')">
+            <input name="baselineElectricityCosts" disabled="true" type="number" step="any" class="form-control"
+              id="baselineElectricityCosts" (input)="calculate()" [(ngModel)]="phast.operatingCosts.electricityCost"
+              (focus)="focusField('operatingCosts')">
             <span class="units input-group-addon">$/kWh</span>
           </div>
         </div>
         <div class="form-group">
           <label for="modElectricityCosts">Modification Fuel Costs</label>
           <div class="input-group">
-            <input name="modElectricityCosts" type="number" step="any" class="form-control" id="modElectricityCosts" (input)="calculate()"
-              [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingCosts.electricityCost" (focus)="focusField('operatingCosts')">
+            <input name="modElectricityCosts" type="number" step="any" class="form-control" id="modElectricityCosts"
+              (input)="calculate()"
+              [(ngModel)]="phast.modifications[exploreModIndex].phast.operatingCosts.electricityCost"
+              (focus)="focusField('operatingCosts')">
             <span class="units input-group-addon">$/kWh</span>
           </div>
         </div>
@@ -115,3 +131,8 @@
     </li>
   </ul>
 </div>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="phast.modifications[exploreModIndex].phast.operatingHours">
+</app-operating-hours-modal>

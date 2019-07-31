@@ -21,7 +21,7 @@ export class CombinedHeatPowerComponent implements OnInit {
   headerHeight: number;
 
   inputs: CombinedHeatPower = {
-    annualOperatingHours: 0,
+    annualOperatingHours: 8760,
     annualElectricityConsumption: 0,
     annualThermalDemand: 0,
     boilerThermalFuelCosts: 0,
@@ -69,7 +69,7 @@ export class CombinedHeatPowerComponent implements OnInit {
 
   btnResetData() {
     this.inputs = {
-      annualOperatingHours: 0,
+      annualOperatingHours: 8760,
       annualElectricityConsumption: 0,
       annualThermalDemand: 0,
       boilerThermalFuelCosts: 0,

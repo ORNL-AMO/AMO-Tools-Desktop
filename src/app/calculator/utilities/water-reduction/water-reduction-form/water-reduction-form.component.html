@@ -1,5 +1,5 @@
 <div class="mb-4 p-2 form-card">
-  <form [formGroup]="form">
+  <form [formGroup]="form" #formElement>
 
     <label *ngIf="!isEditingName" class="group-label w-100 bold">
       <span (click)="editEquipmentName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
@@ -15,10 +15,12 @@
     </label>
 
     <div class="form-section">
-
       <div class="form-group">
         <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
         <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
           <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
             formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
             (blur)="focusOut()" onfocus="this.select();">
@@ -73,10 +75,8 @@
       </div>
     </div>
 
-
     <!-- metered flow method -->
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
-
       <div class="form-group">
         <label class="small" for="{{'meterReading_'+idString}}">Meter Reading</label>
         <div class="input-group">
@@ -93,13 +93,10 @@
             {{form.controls.meterReading.errors.min.min}}.</span>
         </span>
       </div>
-
     </div>
-
 
     <!-- volume meter method -->
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
-
       <div class="form-group">
         <label class="small" for="{{'initialMeterReading_'+idString}}">Initial Meter Reading</label>
         <div class="input-group">
@@ -148,13 +145,10 @@
             {{form.controls.elapsedTime.errors.min.min}}.</span>
         </span>
       </div>
-
     </div>
-
 
     <!-- bucket method -->
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 2">
-
       <div class="form-group">
         <label class="small" for="{{'bucketVolume_'+idString}}">Bucket Volume</label>
         <div class="input-group">
@@ -187,13 +181,10 @@
             {{form.controls.bucketFillTime.errors.min.min}}.</span>
         </span>
       </div>
-
     </div>
-
 
     <!-- offsheet/other method -->
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 3">
-
       <div class="form-group">
         <label *ngIf="!isWastewater" class="small" for="{{'consumption_'+idString}}">Water Consumption</label>
         <label *ngIf="isWastewater" class="small" for="{{'consumption_'+idString}}">Wastewater Disposal</label>
@@ -210,9 +201,7 @@
             {{form.controls.consumption.errors.min.min}}.</span>
         </span>
       </div>
-
     </div>
-
 
     <div class="row">
       <div class="col-6">
@@ -226,8 +215,10 @@
         </span>
       </div>
     </div>
-
-
   </form>
-
 </div>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="waterReductionService.operatingHours">
+</app-operating-hours-modal>

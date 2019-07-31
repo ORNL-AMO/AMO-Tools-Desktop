@@ -72,7 +72,7 @@ export class OperationsComponent implements OnInit {
       operatingHours: OperatingHours, operatingCosts: OperatingCosts, generalSteamOperations: GeneralSteamOperations
     } = this.operationsService.getOperationsDataFromForm(this.operationsForm);
     this.ssmt.operatingCosts = newData.operatingCosts;
-    this.ssmt.operatingHours = newData.operatingHours;
+    this.ssmt.operatingHours.hoursPerYear = newData.operatingHours.hoursPerYear;
     this.ssmt.generalSteamOperations = newData.generalSteamOperations;
     this.emitSave.emit(this.ssmt);
   }

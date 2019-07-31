@@ -1,7 +1,9 @@
-import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
+import { OperatingHours } from '../../../../shared/models/operations';
+import { LossesService } from '../../../losses/losses.service';
 
 @Component({
   selector: 'app-explore-operations-form',
@@ -22,13 +24,21 @@ export class ExploreOperationsFormComponent implements OnInit {
   @Output('changeTab')
   changeTab = new EventEmitter<LossTab>();
 
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean = false;
 
   showOperations: boolean = false;
   showOpHours: boolean = false;
   showFuelCosts: boolean = false;
   showSteamCosts: boolean = false;
   showElectricityCosts: boolean = false;
-  constructor() { }
+  constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
     this.initElectricityCosts();
@@ -49,18 +59,23 @@ export class ExploreOperationsFormComponent implements OnInit {
         this.initOpHours();
         if (this.showElectricityCosts || this.showFuelCosts || this.showSteamCosts || this.showOpHours) {
           this.showOperations = true;
-        }else {
+        } else {
           this.showOperations = false;
         }
       }
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100);
+  }
 
   initElectricityCosts() {
     if (this.phast.operatingCosts.electricityCost !== this.phast.modifications[this.exploreModIndex].phast.operatingCosts.electricityCost) {
       this.showElectricityCosts = true;
-    }else {
+    } else {
       this.showElectricityCosts = false;
     }
   }
@@ -68,7 +83,7 @@ export class ExploreOperationsFormComponent implements OnInit {
   initSteamCosts() {
     if (this.phast.operatingCosts.steamCost !== this.phast.modifications[this.exploreModIndex].phast.operatingCosts.steamCost) {
       this.showSteamCosts = true;
-    }else {
+    } else {
       this.showSteamCosts = false;
     }
   }
@@ -76,7 +91,7 @@ export class ExploreOperationsFormComponent implements OnInit {
   initFuelCosts() {
     if (this.phast.operatingCosts.fuelCost !== this.phast.modifications[this.exploreModIndex].phast.operatingCosts.fuelCost) {
       this.showFuelCosts = true;
-    }else {
+    } else {
       this.showFuelCosts = false;
     }
   }
@@ -84,7 +99,7 @@ export class ExploreOperationsFormComponent implements OnInit {
   initOpHours() {
     if (this.phast.operatingHours.hoursPerYear !== this.phast.modifications[this.exploreModIndex].phast.operatingHours.hoursPerYear) {
       this.showOpHours = true;
-    }else {
+    } else {
       this.showOpHours = false;
     }
   }
@@ -135,7 +150,7 @@ export class ExploreOperationsFormComponent implements OnInit {
     this.changeTab.emit({
       tabName: 'Operations',
       step: 1,
-      componentStr: 'operations' 
+      componentStr: 'operations'
     });
   }
 
@@ -145,5 +160,27 @@ export class ExploreOperationsFormComponent implements OnInit {
 
   focusOut() {
 
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+    this.lossesService.modalOpen.next(false);
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+    this.lossesService.modalOpen.next(true);
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.phast.modifications[this.exploreModIndex].phast.operatingHours = oppHours;
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

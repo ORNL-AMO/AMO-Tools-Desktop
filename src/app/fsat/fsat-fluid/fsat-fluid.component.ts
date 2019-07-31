@@ -6,7 +6,6 @@ import { FsatFluidService } from './fsat-fluid.service';
 import { Settings } from '../../shared/models/settings';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { CompareService } from '../compare.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-fsat-fluid',
@@ -48,7 +47,7 @@ export class FsatFluidComponent implements OnInit {
   ];
 
   idString: string;
-  constructor(private convertUnitsService: ConvertUnitsService, private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
+  constructor(private compareService: CompareService, private fsatService: FsatService, private fsatFluidService: FsatFluidService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     if (!this.baseline) {
@@ -144,15 +143,6 @@ export class FsatFluidComponent implements OnInit {
   changeMethod() {
     this.gasDensityForm = this.fsatFluidService.updateGasDensityForm(this.gasDensityForm);
     this.getDensity();
-  }
-
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
   }
 
   canCompare() {
