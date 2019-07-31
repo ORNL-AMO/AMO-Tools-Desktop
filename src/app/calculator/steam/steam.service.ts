@@ -74,7 +74,7 @@ export class SteamService {
       }
     }
   }
-
+0
   steamProperties(input: SteamPropertiesInput, settings: Settings): SteamPropertiesOutput {
     let inputCpy: SteamPropertiesInput = JSON.parse(JSON.stringify(input));
     inputCpy.pressure = this.convertUnitsService.value(inputCpy.pressure).from(settings.steamPressureMeasurement).to('MPa');
