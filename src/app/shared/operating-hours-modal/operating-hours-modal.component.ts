@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { OperatingHours } from '../models/operations';
 import { OperatingHoursModalService } from './operating-hours-modal.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-operating-hours-modal',
@@ -72,13 +72,13 @@ export class OperatingHoursModalComponent implements OnInit {
     this.operatingHours = this.operatingHoursModalService.getObjectFromForm(this.operatingHoursForm);
   }
 
-  addOne(control: FormControl) {
+  addOne(control: AbstractControl) {
     let value: number = control.value + 1;
     control.patchValue(value);
     this.calculatHrsPerYear();
   }
 
-  subtractOne(control: FormControl) {
+  subtractOne(control: AbstractControl) {
     let value: number = control.value - 1;
     control.patchValue(value);
     this.calculatHrsPerYear();
