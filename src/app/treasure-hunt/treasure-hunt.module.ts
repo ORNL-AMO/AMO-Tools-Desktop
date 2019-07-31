@@ -22,7 +22,6 @@ import { OpportunitySheetHelpComponent } from './standalone-opportunity-sheet/op
 import { OpportunitySheetResultsComponent } from './standalone-opportunity-sheet/opportunity-sheet-results/opportunity-sheet-results.component';
 import { OpportunitySheetCardComponent } from './treasure-chest/opportunity-sheet-card/opportunity-sheet-card.component';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
-import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
 import { SharedModule } from '../shared/shared.module';
 import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
@@ -73,8 +72,15 @@ import { ImportExportOpportunitiesComponent } from './treasure-chest/import-expo
     OpportunitySheetHelpComponent, 
     OpportunitySheetResultsComponent, 
     OpportunitySheetCardComponent, 
-    OperatingHoursComponent, 
-    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent, TreasureChestMenuComponent, NaturalGasReductionCardComponent, ElectricityReductionCardComponent, CompressedAirReductionCardComponent, ImportExportOpportunitiesComponent
+    OperationCostsComponent, 
+    TreasureHuntGaugeComponent, 
+    ReplaceExistingMotorCardComponent, 
+    MotorDriveCardComponent, 
+    TreasureChestMenuComponent, 
+    NaturalGasReductionCardComponent, 
+    ElectricityReductionCardComponent, 
+    CompressedAirReductionCardComponent, 
+    ImportExportOpportunitiesComponent
   ],
   providers: [ TreasureHuntService, OpportunitySheetService, TreasureHuntReportService ]
 })
