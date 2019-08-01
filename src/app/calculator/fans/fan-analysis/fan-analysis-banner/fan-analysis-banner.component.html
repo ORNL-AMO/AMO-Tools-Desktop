@@ -1,0 +1,61 @@
+<nav class="fsat navbar banner d-flex mr-auto p-0 flex-nowrap" *ngIf="!inAssessment">
+  <div class="d-flex align-items-center p-1">
+    <div class="img-col col-sm-auto col-md-auto col-lg-auto">
+      <img class="img-icon" src="assets/images/calculator-icons/fan-icons/operating-point-icon.png">
+    </div>
+    <div class="d-flex flex-column pl-2">
+      <div class="h2-name">
+        Fan Analysis
+      </div>
+    </div>
+  </div>
+  <!-- <div class="d-flex nav-pills nav-fill flex-wrap mx-auto">
+    <div class="nav-item">
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'fan-setup'}" (click)="changeTab('fan-setup')">Fan Setup</a>
+    </div>
+    <div class="nav-item">
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'results'}" (click)="changeTab('results')">Results</a>
+    </div>
+  </div> -->
+  <!-- <div class="d-flex ml-auto pr-2 h-100">
+    <div class="pl-2 pr-2 border-right border-left home-nav-item" (click)="goToFolder()">
+      <span class="fa fa-folder-open"></span>
+    </div>
+    <div class="pl-2 pr-2 border-right home-nav-item" (click)="goHome()">
+      <span class="fa fa-home"></span>
+    </div>
+  </div> -->
+</nav>
+
+
+<nav class="hide-print w-100 justify-content-between">
+  <div class="d-flex tabs subtabs progress-tabs fsat flex-wrap">
+    <div class="fixed-tab-size" [ngClass]="basicsClassStatus">
+      <a (click)="changeStepTab('fan-info')">
+        <span class="step-number">1</span> Fan Basics</a>
+    </div>
+    <div class="fixed-tab-size" [ngClass]="gasClassStatus">
+      <a (click)="changeStepTab('gas-density')">
+        <span class="step-number">2</span>Gas Density</a>
+      <!-- <app-tabs-tooltip [badgeClass]="fluidClassStatus[0]" [reveal]="fluidBadge.display" [display]="fluidBadge.hover">
+      </app-tabs-tooltip> -->
+    </div>
+    <div class="fixed-tab-size" [ngClass]="planeDataClassStatus">
+      <a (click)="changeStepTab('plane-data')">
+        <span class="step-number">3</span>Traverse Data</a>
+      <!-- <app-tabs-tooltip [badgeClass]="motorClassStatus[0]" [reveal]="motorBadge.display" [display]="motorBadge.hover">
+      </app-tabs-tooltip> -->
+    </div>
+    <div class="fixed-tab-size" [ngClass]="shaftPowerClassStatus">
+      <a (click)="changeStepTab('fan-shaft-power')">
+        <span class="step-number">4</span>Fan Shaft Power</a>
+      <!-- <app-tabs-tooltip [badgeClass]="fieldDataClassStatus[0]" [reveal]="fieldDataBadge.display"
+        [display]="fieldDataBadge.hover"></app-tabs-tooltip> -->
+    </div>
+
+    <div class="fixed-tab-size" [ngClass]="resultsTabClassStatus">
+      <a (click)="changeStepTab('fan-analysis-results')">
+        <span class="step-number"><span class="fa fa-superpowers"></span></span>Results</a>
+    </div>
+  </div>
+</nav>

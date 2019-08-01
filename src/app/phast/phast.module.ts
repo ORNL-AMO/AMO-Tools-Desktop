@@ -11,7 +11,6 @@ import { PhastComponent } from './phast.component';
 import { PhastBannerComponent } from './phast-banner/phast-banner.component';
 
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
-import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 
@@ -22,7 +21,6 @@ import { SankeyModule } from './sankey/sankey.module';
 import { PhastReportModule } from './phast-report/phast-report.module';
 import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
 import { PhastResultsService } from './phast-results.service';
-import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
 import { ConvertPhastService } from './convert-phast.service';
 import { PhastCalculatorTabsComponent } from './phast-calculator-tabs/phast-calculator-tabs.component';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
@@ -44,10 +42,8 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     PhastBannerComponent,
     PhastTabsComponent,
     SystemBasicsComponent,
-    OperatingHoursComponent,
     HelpPanelComponent,
     PhastDiagramComponent,
-    EnergyCostsComponent,
     PhastCalculatorTabsComponent,
     ModificationNavbarComponent,
     ModificationListComponent,

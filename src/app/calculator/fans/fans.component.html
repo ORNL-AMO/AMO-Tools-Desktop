@@ -4,54 +4,62 @@
     <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2 class="mb-1">Fan Calculators</h2>
+        <!--new fan analysis-->
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/fan-icons/operating-point-icon.png" class="calc-img" (click)="showTool('fsat-203')">
+              <img src="assets/images/calculator-icons/fan-icons/operating-point-icon.png" class="calc-img"
+                (click)="showTool('fan-analysis')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
-            <a class="click-item" (click)="showTool('fsat-203')">Fan Analysis</a>
+            <a class="click-item" (click)="showTool('fan-analysis')">Fan Analysis</a>
             <p>
-              This calculator lets the user determine the power, flow rate, pressure and fan efficiency at set
-              operating points. It also helps the user perform a pitot tube analysis for the determination of flow rate and pressure.
+              Calculate the power, flow rate, pressure and fan efficiency via pitot tube analysis
             </p>
           </div>
         </div>
+
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/system-curve-tran.png" class="calc-img" (click)="showTool('system-curve')">
+              <img src="assets/images/calculator-icons/system-curve-tran.png" class="calc-img"
+                (click)="showTool('system-curve')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('system-curve')">Fan System Curve</a>
             <p>
-              Use the system curve calculator to graph your fan's flow.
+              Plot the system curve using static head and an operating point; can also plot fan curve
             </p>
           </div>
         </div>
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/pump-curve.png" class="calc-img" (click)="showTool('pump-curve')">
+              <img src="assets/images/calculator-icons/pump-curve.png" class="calc-img"
+                (click)="showTool('pump-curve')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('pump-curve')">Fan Curve</a>
-            <p>Use the fan curve calculator to develop a fan curve and explore the effects of changes in head, flow, fan
-              speed and impeller diameter.</p>
+            <p>
+              Develop a fan curve and explore the effects of changes in pressure, flow, fan speed and impeller diameter
+            </p>
           </div>
         </div>
         <div class="d-flex calc-item-row w-100">
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
-              <img src="assets/images/calculator-icons/pump-eff.png" class="calc-img" (click)="showTool('fan-efficiency')">
+              <img src="assets/images/calculator-icons/pump-eff.png" class="calc-img"
+                (click)="showTool('fan-efficiency')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
             <a class="click-item" (click)="showTool('fan-efficiency')">Achievable Efficiency</a>
-            <p>Use this calculator to calculate the optimal fan efficiency that is achievable by your fan setup.</p>
+            <p>
+              Estimate the achievable fan efficiency for various fan styles
+            </p>
           </div>
         </div>
       </div>
@@ -60,8 +68,12 @@
 </div>
 
 
-<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fsat-203'">
+<!-- <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fsat-203'">
   <app-fsat-203></app-fsat-203>
+</div> -->
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fan-analysis'">
+  <app-fan-analysis></app-fan-analysis>
 </div>
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'system-curve'">
