@@ -13,8 +13,8 @@ export class TurbineService {
   initOutletForm(settings: Settings): FormGroup {
     let tmpInletPressure = 66.4;
     let tmpInletQuantityValue = 897.5;
-    let tmpMassFlowOrPowerOut = 38.2;
-    let tmpOutletSteamPressure = 619.4;
+    let tmpMassFlowOrPowerOut = 98.8;
+    let tmpOutletSteamPressure = 32;
     let tmpOutletQuantityValue = 1135.3;
     if (settings.steamPressureMeasurement !== 'psig') {
       tmpInletPressure = Math.round(this.convertUnitsService.value(tmpInletPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;

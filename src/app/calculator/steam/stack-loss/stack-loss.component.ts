@@ -149,4 +149,13 @@ export class StackLossComponent implements OnInit {
     this.calculate(this.stackLossForm);
   }
 
+  btnGenerateData() {
+    this.stackLossService.stackLossInput = {
+      flueGasType: undefined,
+      flueGasByVolume: undefined,
+      flueGasByMass: undefined
+    };
+    this.initForm();
+    this.calculate(this.stackLossForm);
+  }
 }
