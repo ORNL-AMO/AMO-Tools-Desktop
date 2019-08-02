@@ -172,8 +172,7 @@
       (click)="chooseCalculator('utilities')">General</span>
     <ul *ngIf="selectedCalculatorType == 'utilities'">
       <li [ngClass]="{'selected': selectedCalculator == 'pre-assessment', 'general': mixed}">
-        <span class="sidebar-item" (click)="selectCalculator('pre-assessment')">Pre-assessment / Screening
-          Calculator</span>
+        <span class="sidebar-item" (click)="selectCalculator('pre-assessment')">Pre-Assessment Screening</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'convert-units'}">
         <span class="sidebar-item" (click)="selectCalculator('convert-units')">Unit Converter</span>
