@@ -6,13 +6,19 @@
         <form [formGroup]="form">
             <div class="form-group">
                 <label for="blowdownConductivity">Blowdown Conductivity</label>
-                <input name="blowdownConductivity" type="number" class="form-control" id="blowdownConductivity"
-                    (input)="calculate()" formControlName="blowdownConductivity">
+                <div class="input-group">
+                    <input name="blowdownConductivity" type="number" class="form-control" id="blowdownConductivity"
+                        (input)="calculate()" formControlName="blowdownConductivity">
+                    <span class="input-group-addon units">&#x3bc;S/cm</span>
+                </div>
             </div>
             <div class="form-group">
                 <label for="feedwaterConductivity">Feedwater Conductivity</label>
-                <input name="feedwaterConductivity" type="number" class="form-control" id="feedwaterConductivity"
-                    (input)="calculate()" formControlName="feedwaterConductivity">
+                <div class="input-group">
+                    <input name="feedwaterConductivity" type="number" class="form-control" id="feedwaterConductivity"
+                        (input)="calculate()" formControlName="feedwaterConductivity">
+                    <span class="input-group-addon units">&#x3bc;S/cm</span>
+                </div>
             </div>
             <div class="form-group">
                 <label for="blowdownRate">Blowdown Rate</label>
