@@ -4,7 +4,7 @@
   </div>
   <div class="p-3">
 
-    <form [formGroup]="boilerForm">
+    <form [formGroup]="boilerForm" #formElement>
       <div class="form-group">
         <label for="{{idString+'fuelType'}}">Fuel Type</label>
         <select name="fuelType" class="form-control" id="{{idString+'fuelType'}}" (change)="setFuelTypes()"
@@ -45,7 +45,9 @@
       </div>
 
       <div class="form-group">
-        <label for="{{idString+'blowdownRate'}}">Blowdown Rate</label>
+        <label for="{{idString+'blowdownRate'}}">Blowdown Rate
+          <a class="form-text small click-link" (click)="openBlowdownRateModal()">Calculate Blowdown Rate</a>
+        </label>
         <div class="input-group">
           <input name="blowdownRate" type="number" step="any" class="form-control" id="{{idString+'blowdownRate'}}"
             (input)="save()" [readonly]="!selected" formControlName="blowdownRate" (focus)="focusField('blowdownRate')"
@@ -60,7 +62,12 @@
           <span *ngIf="boilerForm.controls.blowdownRate.errors.min">Value can't be less than
             {{boilerForm.controls.blowdownRate.errors.min.min}} %.</span>
         </span>
+
+        <app-blowdown-rate-modal *ngIf="showBlowdownRateModal" (emitClose)="closeBlowdownRateModal()"
+          [width]="formWidth" [form]="boilerForm" (emitSave)="saveAndCloseBlowdownRateModal()">
+        </app-blowdown-rate-modal>
       </div>
+
 
       <div class="form-group">
         <label for="{{idString+'blowdownFlashed'}}">Is the blowdown flashed?</label>
