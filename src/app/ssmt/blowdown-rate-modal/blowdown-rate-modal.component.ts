@@ -38,7 +38,7 @@ export class BlowdownRateModalComponent implements OnInit {
   }
 
   calculate() {
-    if(this.form.controls.feedwaterConductivity.value != undefined && this.form.controls.blowdownConductivity.value != undefined){
+    if (this.form.controls.feedwaterConductivity.value != undefined && this.form.controls.blowdownConductivity.value != undefined) {
       this.blowdownRate = (this.form.controls.feedwaterConductivity.value / this.form.controls.blowdownConductivity.value) * 100;
     }
   }
@@ -48,7 +48,7 @@ export class BlowdownRateModalComponent implements OnInit {
   }
 
   save() {
-    this.form.controls.blowdownRate.patchValue(this.blowdownRate);
+    this.form.controls.blowdownRate.patchValue(Number(this.blowdownRate.toFixed(3)));
     this.emitSave.emit(true);
   }
 }
