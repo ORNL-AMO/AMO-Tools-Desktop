@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs, Plane } from '../../../shared/models/fans';
+import { Fan203Inputs, Plane, FSAT } from '../../../shared/models/fans';
 
 @Injectable()
 export class FanAnalysisService {
@@ -12,6 +12,7 @@ export class FanAnalysisService {
   currentField: BehaviorSubject<string>;
   resetForms: BehaviorSubject<boolean>;
   updateTraverseData: BehaviorSubject<boolean>;
+  inAssessmentModal: boolean;
   constructor() {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
@@ -339,8 +340,7 @@ export class FanAnalysisService {
         synchronousSpeed: 1200,
         voltage: 4200
       }
-    };
-    
+    };    
     return mockData;
   }
   getPlane(planeNum: string): Plane {
