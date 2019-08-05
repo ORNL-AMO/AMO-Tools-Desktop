@@ -1,0 +1,80 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Water Reduction
+    <br>
+    <small class="text-muted">
+      This calculator is used to quantify the energy savings associated with reducing water/wastewater usage.
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        This calculator can be used to quantify the electricity saved from reducing compressed air system pressure. The
+        benefits of lowering system pressure are twofold:
+        <hr class="my-1">Reducing the pressure lowers the work done by the compressor and hence lesser electricity is
+        drawn.
+        <hr class="my-1">Reducing the pressure also lowers the amount of air delivered to plant and thus cuts down on
+        the air lost in the form of artificial demand and air leaks.
+        <hr class="my-1">
+        This calculator only calculates the electricity saved at the compressors and hence its savings are not relevant
+        when compressed air is brought from outside.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'electricityCost'">
+    <h6>
+      Electricity Cost
+      <small class="text-muted">
+        <br>
+        Per unit cost of electricity in ($/kWh).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'hoursPerYear'">
+    <h6>
+      Operation Hours
+      <small class="text-muted">
+        <br>
+        Number of annual operating hours for the equipment.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'compressorPower'">
+    <h6>
+      Compressor Power
+      <small class="text-muted">
+        <br>
+        Enter the baseline kW demand.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'pressure'">
+    <h6>
+      Pressure
+      <small class="text-muted">
+        <br>
+        Enter the baseline pressure.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'proposedPressure'">
+    <h6>
+      Proposed Pressure
+      <small class="text-muted">
+        <br>
+        Enter the proposed pressure. Keep system requirements in mind before reducing system pressure.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+</div>
