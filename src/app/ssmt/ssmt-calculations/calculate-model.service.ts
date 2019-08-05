@@ -143,6 +143,14 @@ export class CalculateModelService {
       balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
     }
     //console.log(this.isBaselineCalculation + ' RETURNED ' + this.callCount)
+    console.log('high')
+    console.log(this.highPressureHeader.energyFlow)
+    console.log('medium')
+    console.log(this.mediumPressureHeader.energyFlow)
+    console.log('low')
+    console.log(this.lowPressureHeader.energyFlow)
+
+
     return { inputData: this.inputData, outputData: balancedResults };
   }
 

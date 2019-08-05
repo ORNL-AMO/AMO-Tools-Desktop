@@ -504,7 +504,7 @@ export class SteamService {
       inputCpy.massFlowOrPowerOut = this.convertSteamMassFlowInput(inputCpy.massFlowOrPowerOut, settings);
     } else {
       //power out
-      inputCpy.massFlowOrPowerOut = this.convertUnitsService.value(inputCpy.massFlowOrPowerOut).from('kW').to('kJh');
+      inputCpy.massFlowOrPowerOut = this.convertUnitsService.value(inputCpy.massFlowOrPowerOut).from(settings.steamPowerMeasurement).to('kJh');
     }
     if (inputCpy.inletQuantity === 0) {
       inputCpy.inletQuantityValue = this.convertSteamTemperatureInput(inputCpy.inletQuantityValue, settings);
@@ -536,8 +536,6 @@ export class SteamService {
     results.inletEnergyFlow = this.convertEnergyFlowOutput(results.inletEnergyFlow, settings);
     results.energyOut = this.convertEnergyFlowOutput(results.energyOut, settings);
     results.powerOut = this.convertUnitsService.value(results.powerOut).from('kJh').to(settings.steamPowerMeasurement);
-
-
 
     results.outletPressure = this.convertSteamPressureOutput(results.outletPressure, settings);
     results.inletPressure = this.convertSteamPressureOutput(results.inletPressure, settings);
