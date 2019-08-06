@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FanAnalysisService } from '../../../calculator/fans/fan-analysis/fan-analysis.service';
 import { ConvertFanAnalysisService } from '../../../calculator/fans/fan-analysis/convert-fan-analysis.service';
 import { Subscription } from 'rxjs';
-import { FSAT } from '../../../shared/models/fans';
+import { FSAT, PlaneResults } from '../../../shared/models/fans';
 import { FanInfoFormService } from '../../../calculator/fans/fan-analysis/fan-analysis-form/fan-info-form/fan-info-form.service';
 import { PlaneDataFormService } from '../../../calculator/fans/fan-analysis/fan-analysis-form/plane-data-form/plane-data-form.service';
 
@@ -19,6 +19,10 @@ export class CalculateFlowPressureComponent implements OnInit {
   bodyHeight: number;
   @Input()
   fsat: FSAT;
+  @Output('saveFlowAndPressure')
+  saveFlowAndPressure = new EventEmitter<FSAT>();
+  @Output('emitInvalid')
+  emitInvalid = new EventEmitter<boolean>();
 
   stepTab: string;
   stepTabSubscription: Subscription;
@@ -32,7 +36,7 @@ export class CalculateFlowPressureComponent implements OnInit {
 
     if (this.fsat.fieldData.fanRatedInfo) {
       this.fanAnalysisService.inputData.FanRatedInfo = this.fsat.fieldData.fanRatedInfo;
-    } 
+    }
     if (this.fsat.fieldData.planeData) {
       this.fanAnalysisService.inputData.PlaneData = this.fsat.fieldData.planeData;
     }
@@ -57,13 +61,25 @@ export class CalculateFlowPressureComponent implements OnInit {
     this.getResultsSubscription.unsubscribe();
   }
 
-  getResults(){
+  getResults() {
+    this.fsat.fieldData.fanRatedInfo = this.fanAnalysisService.inputData.FanRatedInfo;
+    this.fsat.fieldData.planeData = this.fanAnalysisService.inputData.PlaneData;
     let fanInfoDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings).valid;
     let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
     if (planeDataDone && fanInfoDone) {
-      // this.planeResults = this.convertFanAnalysisService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
+      let planeResults: PlaneResults = this.convertFanAnalysisService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
+      this.fsat.fieldData.flowRate = Number(planeResults.FanInletFlange.gasVolumeFlowRate.toFixed(3));
+      if (this.fanAnalysisService.pressureCalcResultType == 'static') {
+        this.fsat.fieldData.inletPressure = Number(planeResults.FanInletFlange.staticPressure.toFixed(3));
+        this.fsat.fieldData.outletPressure = Number(planeResults.FanOrEvaseOutletFlange.staticPressure.toFixed(3));
+      } else if (this.fanAnalysisService.pressureCalcResultType == 'total') {
+        this.fsat.fieldData.inletPressure = Number(planeResults.FanInletFlange.gasTotalPressure.toFixed(3));
+        this.fsat.fieldData.outletPressure = Number(planeResults.FanOrEvaseOutletFlange.gasTotalPressure.toFixed(3));
+      }
+      this.saveFlowAndPressure.emit(this.fsat);
     } else {
       // this.planeResults = undefined;
+      this.emitInvalid.emit(true);
     }
   }
 }
