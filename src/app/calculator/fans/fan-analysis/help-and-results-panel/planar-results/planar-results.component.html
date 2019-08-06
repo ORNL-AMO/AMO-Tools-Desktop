@@ -1,4 +1,4 @@
-<div class="d-flex flex-column w-100 align-items-center pt-2 pb-2" *ngIf="inAssessmentModal">
+<div class="d-flex flex-column w-100 align-items-center pt-2 pb-2" *ngIf="inAssessmentModal && planeResults">
   <div class="btn-group">
     <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('static')"
       [ngClass]="{'active': fanAnalysisService.pressureCalcResultType == 'static'}">Use Static Pressure</button>

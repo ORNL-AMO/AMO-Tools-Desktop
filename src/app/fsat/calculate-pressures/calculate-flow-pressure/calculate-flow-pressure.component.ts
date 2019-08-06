@@ -4,6 +4,8 @@ import { FanAnalysisService } from '../../../calculator/fans/fan-analysis/fan-an
 import { ConvertFanAnalysisService } from '../../../calculator/fans/fan-analysis/convert-fan-analysis.service';
 import { Subscription } from 'rxjs';
 import { FSAT } from '../../../shared/models/fans';
+import { FanInfoFormService } from '../../../calculator/fans/fan-analysis/fan-analysis-form/fan-info-form/fan-info-form.service';
+import { PlaneDataFormService } from '../../../calculator/fans/fan-analysis/fan-analysis-form/plane-data-form/plane-data-form.service';
 
 @Component({
   selector: 'app-calculate-flow-pressure',
@@ -20,7 +22,8 @@ export class CalculateFlowPressureComponent implements OnInit {
 
   stepTab: string;
   stepTabSubscription: Subscription;
-  constructor(private fanAnalysisService: FanAnalysisService, private convertFanAnalysisService: ConvertFanAnalysisService) { }
+  getResultsSubscription: Subscription;
+  constructor(private fanAnalysisService: FanAnalysisService, private convertFanAnalysisService: ConvertFanAnalysisService, private fanInfoFormService: FanInfoFormService, private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
     this.fanAnalysisService.inAssessmentModal = true;
@@ -43,11 +46,24 @@ export class CalculateFlowPressureComponent implements OnInit {
 
     this.stepTabSubscription = this.fanAnalysisService.stepTab.subscribe(val => {
       this.stepTab = val;
+    });
+    this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
+      this.getResults();
     })
   }
 
   ngOnDestroy() {
     this.stepTabSubscription.unsubscribe();
+    this.getResultsSubscription.unsubscribe();
   }
 
+  getResults(){
+    let fanInfoDone: boolean = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings).valid;
+    let planeDataDone: boolean = this.planeDataFormService.checkPlaneDataValid(this.fanAnalysisService.inputData.PlaneData, this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
+    if (planeDataDone && fanInfoDone) {
+      // this.planeResults = this.convertFanAnalysisService.getPlaneResults(this.fanAnalysisService.inputData, this.settings);
+    } else {
+      // this.planeResults = undefined;
+    }
+  }
 }
