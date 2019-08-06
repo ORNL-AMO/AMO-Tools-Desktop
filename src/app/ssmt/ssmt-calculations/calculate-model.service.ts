@@ -143,13 +143,6 @@ export class CalculateModelService {
       balancedResults.marginalMPCost = marginalCosts.marginalMPCost;
       balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
     }
-    //console.log(this.isBaselineCalculation + ' RETURNED ' + this.callCount)
-    // console.log('high')
-    // console.log(this.highPressureHeader.energyFlow);
-    // console.log('medium')
-    // console.log(this.mediumPressureHeader.energyFlow);
-    // console.log('low')
-    // console.log(this.lowPressureHeader.energyFlow);
     return { inputData: this.inputData, outputData: balancedResults };
   }
 
@@ -1846,7 +1839,7 @@ export class CalculateModelService {
           specificEnthalpy: this.lowPressureHeader.specificEnthalpy,
           specificEntropy: this.lowPressureHeader.specificEntropy,
           quality: this.lowPressureHeader.quality,
-          energyFlow: this.calculateEnergy(ventedSteamAmount, this.lowPressureHeader.energyFlow),
+          energyFlow: this.calculateEnergy(ventedSteamAmount, this.lowPressureHeader.specificEnthalpy),
           specificVolume: this.lowPressureHeader.specificVolume,
           massFlow: ventedSteamAmount
         };
