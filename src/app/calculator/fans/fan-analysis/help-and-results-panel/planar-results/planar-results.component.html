@@ -1,5 +1,48 @@
+<div class="d-flex flex-column w-100 align-items-center pt-2 pb-2" *ngIf="inAssessmentModal">
+  <div class="btn-group">
+    <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('static')"
+      [ngClass]="{'active': fanAnalysisService.pressureCalcResultType == 'static'}">Use Static Pressure</button>
+    <button type="button" class="btn btn-secondary btn-padding" (click)="setPressureCalcType('total')"
+      [ngClass]="{'active': fanAnalysisService.pressureCalcResultType == 'total'}">Use Total Pressure</button>
+  </div>
+  <label class="group-label">Assessment Data</label>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td>Inlet Pressure</td>
+        <td class="inlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'static'">
+          {{planeResults.FanInletFlange.staticPressure | sigFigs: '6'}} <span
+            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        </td>
+        <td class="inlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'total'">
+          {{planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}} <span
+            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Outlet Pressure</td>
+        <td class="outlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'static'">
+          {{planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}} <span
+            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        </td>
+        <td class="outlet-pressure" *ngIf="fanAnalysisService.pressureCalcResultType == 'total'">
+          {{planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}} <span
+            [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Flow Rate</td>
+        <td [ngClass]="{'flow-rate': inAssessmentModal == true}">
+          {{planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}} <span
+            [innerHTML]="settings.fanFlowRate|  settingsLabel"></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <div *ngIf="planeResults">
-  <label class="group-label" *ngIf="!inModal">Plane Data Table</label>
+  <label class="group-label" *ngIf="!inAssessmentModal">Plane Data Table</label>
   <table class="table table-hover table-striped">
     <tbody>
       <tr>
@@ -49,14 +92,15 @@
         <td *ngIf="showFull">Fan Inlet Flange</td>
         <td>{{planeResults.FanInletFlange.gasDensity | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.area | sigFigs: '6'}}</td>
-        <td [ngClass]="{'flow-rate': inModal == true}">{{planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}}
+        <td [ngClass]="{'flow-rate': inAssessmentModal == true}">
+          {{planeResults.FanInletFlange.gasVolumeFlowRate | sigFigs: '6'}}
         </td>
         <td>{{planeResults.FanInletFlange.gasVelocity | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.dryBulbTemp | sigFigs: '6'}}</td>
-        <td [ngClass]="{'inlet-pressure': pressureCalcType == 'static'}">
+        <td [ngClass]="{'inlet-pressure': fanAnalysisService.pressureCalcResultType == 'static'}">
           {{planeResults.FanInletFlange.staticPressure | sigFigs: '6'}}</td>
         <td>{{planeResults.FanInletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
-        <td [ngClass]="{'inlet-pressure': pressureCalcType == 'total'}">
+        <td [ngClass]="{'inlet-pressure': fanAnalysisService.pressureCalcResultType == 'total'}">
           {{planeResults.FanInletFlange.gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanInletFlange.barometricPressure | sigFigs: '6'}}</td>
       </tr>
@@ -68,10 +112,10 @@
         <td>{{planeResults.FanOrEvaseOutletFlange.gasVolumeFlowRate | sigFigs: '6'}}</td>
         <td>{{planeResults.FanOrEvaseOutletFlange.gasVelocity | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.dryBulbTemp | sigFigs: '6'}}</td>
-        <td [ngClass]="{'outlet-pressure': pressureCalcType == 'static'}">
+        <td [ngClass]="{'outlet-pressure': fanAnalysisService.pressureCalcResultType == 'static'}">
           {{planeResults.FanOrEvaseOutletFlange.staticPressure | sigFigs: '6'}}</td>
         <td>{{planeResults.FanOrEvaseOutletFlange.gasVelocityPressure | sigFigs: '6'}}</td>
-        <td [ngClass]="{'outlet-pressure': pressureCalcType == 'total'}">
+        <td [ngClass]="{'outlet-pressure': fanAnalysisService.pressureCalcResultType == 'total'}">
           {{planeResults.FanOrEvaseOutletFlange.gasTotalPressure | sigFigs: '6'}}</td>
         <td *ngIf="showFull">{{inputs.PlaneData.FanEvaseOrOutletFlange.barometricPressure | sigFigs: '6'}}</td>
       </tr>

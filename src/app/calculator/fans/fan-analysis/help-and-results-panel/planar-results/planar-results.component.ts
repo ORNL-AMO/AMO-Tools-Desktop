@@ -30,9 +30,12 @@ export class PlanarResultsComponent implements OnInit {
   planeStepSubscription: Subscription;
   planeStep: string;
   showFull: boolean = false;
+  inAssessmentModal: boolean;
+  pressureCalcResultType: string = 'static';
   constructor(private convertFanAnalysisService: ConvertFanAnalysisService, private fanAnalysisService: FanAnalysisService, private fanInfoFormService: FanInfoFormService, private planeDataFormService: PlaneDataFormService) { }
 
   ngOnInit() {
+    this.inAssessmentModal = this.fanAnalysisService.inAssessmentModal;
     this.getResultsSubscription = this.fanAnalysisService.getResults.subscribe(val => {
       this.getResults();
     })
@@ -62,4 +65,7 @@ export class PlanarResultsComponent implements OnInit {
     }
   }
 
+  setPressureCalcType(str: string){
+    this.fanAnalysisService.pressureCalcResultType = str;
+  }
 }

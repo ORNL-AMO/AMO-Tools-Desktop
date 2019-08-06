@@ -13,6 +13,7 @@ export class FanAnalysisService {
   resetForms: BehaviorSubject<boolean>;
   updateTraverseData: BehaviorSubject<boolean>;
   inAssessmentModal: boolean;
+  pressureCalcResultType: string = 'static';
   constructor() {
     this.mainTab = new BehaviorSubject<string>('fan-setup');
     this.stepTab = new BehaviorSubject<string>('fan-info');
