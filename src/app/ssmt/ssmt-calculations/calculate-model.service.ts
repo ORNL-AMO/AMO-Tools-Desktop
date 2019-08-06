@@ -102,6 +102,7 @@ export class CalculateModelService {
       return this.calculateModelRunner();
     } else {
       let outputData: SSMTOutput = this.getResultsObject();
+
       return { inputData: this.inputData, outputData: outputData };
     }
   }
@@ -143,6 +144,12 @@ export class CalculateModelService {
       balancedResults.marginalLPCost = marginalCosts.marginalLPCost;
     }
     //console.log(this.isBaselineCalculation + ' RETURNED ' + this.callCount)
+    // console.log('high')
+    // console.log(this.highPressureHeader.energyFlow);
+    // console.log('medium')
+    // console.log(this.mediumPressureHeader.energyFlow);
+    // console.log('low')
+    // console.log(this.lowPressureHeader.energyFlow);
     return { inputData: this.inputData, outputData: balancedResults };
   }
 
@@ -1387,6 +1394,7 @@ export class CalculateModelService {
       temperature: this.lowPressureSteamHeatLoss.outletTemperature,
       specificVolume: this.lowPressureHeader.specificVolume
     };
+
   }
 
   //4E. Calculate Low Pressure Condensate

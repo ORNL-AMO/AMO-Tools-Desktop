@@ -46,6 +46,7 @@ export class CashFlowComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
+    this.calculate();
   }
 
   ngAfterViewInit() {

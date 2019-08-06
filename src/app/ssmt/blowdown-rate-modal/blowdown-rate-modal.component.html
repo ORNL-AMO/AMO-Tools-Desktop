@@ -1,0 +1,33 @@
+<div class="card" [@modal]="showModal" [ngStyle]="{'width.px': width}">
+    <div class="card-header header">
+        <h3> Calculate Blowdown Rate</h3>
+    </div>
+    <div class="card-body tab-content">
+        <form [formGroup]="form">
+            <div class="form-group">
+                <label for="blowdownConductivity">Blowdown Conductivity</label>
+                <div class="input-group">
+                    <input name="blowdownConductivity" type="number" class="form-control" id="blowdownConductivity"
+                        (input)="calculate()" formControlName="blowdownConductivity">
+                    <span class="input-group-addon units">&#x3bc;S/cm</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="feedwaterConductivity">Feedwater Conductivity</label>
+                <div class="input-group">
+                    <input name="feedwaterConductivity" type="number" class="form-control" id="feedwaterConductivity"
+                        (input)="calculate()" formControlName="feedwaterConductivity">
+                    <span class="input-group-addon units">&#x3bc;S/cm</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="blowdownRate">Blowdown Rate</label>
+                <div class="small text-center">{{blowdownRate | number:'1.2-3'}} %</div>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <button class="btn btn-danger" (click)="close()">Cancel</button>
+        <button class="btn btn-success" (click)="save()">Save</button>
+    </div>
+</div>
