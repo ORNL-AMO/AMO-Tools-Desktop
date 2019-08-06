@@ -59,6 +59,9 @@ export class CalculateFlowPressureComponent implements OnInit {
   ngOnDestroy() {
     this.stepTabSubscription.unsubscribe();
     this.getResultsSubscription.unsubscribe();
+    this.fanAnalysisService.inputData = undefined;
+    this.fanAnalysisService.stepTab.next('fan-info');
+    this.fanAnalysisService.mainTab.next('fan-setup');
   }
 
   getResults() {
