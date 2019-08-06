@@ -1,3 +1,12 @@
+<div class="pl-2 pr-2 pt-2 d-flex flex-column help-info">
+  <h4 class="mb-0">Pre-Assessment Screening Help
+    <br>
+    <small class="text-muted"> Enter metered or designed energy data for multiple systems to compare their energy
+      consumption.
+    </small>
+  </h4>
+  <hr class="my-1">
+</div>
 <div *ngIf="currentAssessmentType == 'Metered'">
   <app-metered-energy-help [currentField]="currentField"></app-metered-energy-help>
 </div>

@@ -171,8 +171,7 @@
       (click)="chooseCalculator('utilities')">General</span>
     <ul *ngIf="selectedCalculatorType == 'utilities'">
       <li [ngClass]="{'selected': selectedCalculator == 'pre-assessment', 'general': mixed}">
-        <span class="sidebar-item" (click)="selectCalculator('pre-assessment')">Pre-assessment / Screening
-          Calculator</span>
+        <span class="sidebar-item" (click)="selectCalculator('pre-assessment')">Pre-Assessment Screening</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'convert-units'}">
         <span class="sidebar-item" (click)="selectCalculator('convert-units')">Unit Converter</span>
@@ -181,7 +180,7 @@
         <span class="sidebar-item" (click)="selectCalculator('combined-heat-power')">Combined Heat and Power</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'cash-flow'}">
-        <span class="sidebar-item" (click)="selectCalculator('cash-flow')">Cash Flow Diagram</span>
+        <span class="sidebar-item" (click)="selectCalculator('cash-flow')">Cash Flow</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'power-factor-correction'}">
         <span class="sidebar-item" (click)="selectCalculator('power-factor-correction')">Power Factor Correction</span>

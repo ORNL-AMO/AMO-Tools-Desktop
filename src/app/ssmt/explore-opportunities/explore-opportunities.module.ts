@@ -16,6 +16,7 @@ import { HelpPanelModule } from '../help-panel/help-panel.module';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 import { SsmtResultsPanelModule } from '../ssmt-results-panel/ssmt-results-panel.module';
 import { SharedModule } from '../../shared/shared.module';
+import { BlowdownRateModalModule } from '../blowdown-rate-modal/blowdown-rate-modal.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { SharedModule } from '../../shared/shared.module';
     ReactiveFormsModule,
     HelpPanelModule,
     SsmtResultsPanelModule,
-    SharedModule
+    SharedModule,
+    BlowdownRateModalModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
   exports: [ExploreOpportunitiesComponent],

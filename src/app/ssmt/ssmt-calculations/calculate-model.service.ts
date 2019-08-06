@@ -102,6 +102,7 @@ export class CalculateModelService {
       return this.calculateModelRunner();
     } else {
       let outputData: SSMTOutput = this.getResultsObject();
+
       return { inputData: this.inputData, outputData: outputData };
     }
   }
@@ -1386,6 +1387,7 @@ export class CalculateModelService {
       temperature: this.lowPressureSteamHeatLoss.outletTemperature,
       specificVolume: this.lowPressureHeader.specificVolume
     };
+
   }
 
   //4E. Calculate Low Pressure Condensate
