@@ -6,9 +6,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CompressedAirPressureReductionService {
 
   baselineData: Array<CompressedAirPressureReductionData>;
@@ -90,7 +88,7 @@ export class CompressedAirPressureReductionService {
       modificationResults = this.calculate(modificationInpCpy, settings);
     }
 
-    let waterReductionResults: CompressedAirPressureReductionResults = {
+    let compressedAirPressureReductionResults: CompressedAirPressureReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualEnergySavings: annualEnergySavings,
@@ -98,10 +96,10 @@ export class CompressedAirPressureReductionService {
     };
 
     if (modificationResults) {
-      waterReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
-      waterReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
+      compressedAirPressureReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
+      compressedAirPressureReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
     }
-    return waterReductionResults;
+    return compressedAirPressureReductionResults;
   }
 
   calculate(input: Array<CompressedAirPressureReductionData>, settings: Settings): CompressedAirPressureReductionResult {

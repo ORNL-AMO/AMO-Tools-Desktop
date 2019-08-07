@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData } from "./standalone";
 
 export interface TreasureHunt {
     name: string,
@@ -12,6 +12,7 @@ export interface TreasureHunt {
     naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
     electricityReductions?: Array<ElectricityReductionTreasureHunt>;
     compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
+    compressedAirPressureReductions?: Array<CompressedAirPressureReductionTreasureHunt>;
     waterReductions?: Array<WaterReductionTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
@@ -112,6 +113,14 @@ export interface CompressedAirReductionTreasureHunt {
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
+
+export interface CompressedAirPressureReductionTreasureHunt {
+    baseline: Array<CompressedAirPressureReductionData>;
+    modification: Array<CompressedAirPressureReductionData>;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 
 export interface WaterReductionTreasureHunt {
     baseline: Array<WaterReductionData>;

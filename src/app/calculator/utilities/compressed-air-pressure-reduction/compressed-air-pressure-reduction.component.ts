@@ -5,6 +5,7 @@ import { CompressedAirPressureReductionService } from './compressed-air-pressure
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FormBuilder } from '@angular/forms';
 import { CompressedAirPressureReductionResults, CompressedAirPressureReductionData } from '../../../shared/models/standalone';
+import { CompressedAirPressureReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-compressed-air-pressure-reduction',
@@ -14,8 +15,8 @@ import { CompressedAirPressureReductionResults, CompressedAirPressureReductionDa
 export class CompressedAirPressureReductionComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
-  // @Output('emitSave')
-  // emitSave = new EventEmitter<CompressedAirPressureReductionTreasureHunt>();
+  @Output('emitSave')
+  emitSave = new EventEmitter<CompressedAirPressureReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
   @Output('emitAddOpportunitySheet')
@@ -201,9 +202,9 @@ export class CompressedAirPressureReductionComponent implements OnInit {
 
   }
 
-  // save() {
-  //   this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
-  // }
+  save() {
+    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
+  }
 
   cancel() {
     this.emitCancel.emit(true);
