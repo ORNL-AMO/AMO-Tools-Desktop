@@ -6,23 +6,30 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalculateInletPressureHelpComponent } from './calculate-inlet-pressure/calculate-inlet-pressure-help/calculate-inlet-pressure-help.component';
 import { CalculateOutletPressureHelpComponent } from './calculate-outlet-pressure/calculate-outlet-pressure-help/calculate-outlet-pressure-help.component';
 import { SharedModule } from '../../shared/shared.module';
+import { CalculateFlowPressureComponent } from './calculate-flow-pressure/calculate-flow-pressure.component';
+import { FanAnalysisModule } from '../../calculator/fans/fan-analysis/fan-analysis.module';
+import { CalculateFlowPressureBannerComponent } from './calculate-flow-pressure/calculate-flow-pressure-banner/calculate-flow-pressure-banner.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    FanAnalysisModule
   ],
   declarations: [
     CalculateInletPressureComponent,
     CalculateOutletPressureComponent,
     CalculateInletPressureHelpComponent,
-    CalculateOutletPressureHelpComponent
+    CalculateOutletPressureHelpComponent,
+    CalculateFlowPressureComponent,
+    CalculateFlowPressureBannerComponent
   ],
   exports: [
     CalculateInletPressureComponent,
-    CalculateOutletPressureComponent
+    CalculateOutletPressureComponent,
+    CalculateFlowPressureComponent
   ]
 })
 export class CalculatePressuresModule { }
