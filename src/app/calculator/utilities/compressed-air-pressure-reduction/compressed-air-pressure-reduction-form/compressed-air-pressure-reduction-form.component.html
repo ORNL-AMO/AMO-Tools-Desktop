@@ -78,8 +78,8 @@
         <div class="input-group">
           <input class="form-control" type="number" name="pressure" id="{{'pressure_'+idString}}"
             formControlName="pressure" (input)="calculate()" (focus)="focusField('pressure')" (blur)="focusOut()">
-          <span class="input-group-addon units"><span
-              [innerHTML]="settings.pressureMeasurement | settingsLabel"></span></span>
+          <span class="input-group-addon units">
+            <span [innerHTML]="settings.pressureMeasurement | settingsLabel"></span></span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.pressure.invalid && !form.controls.pressure.pristine">
@@ -96,9 +96,9 @@
             formControlName="proposedPressure" (input)="calculate()" (focus)="focusField('proposedPressure')"
             (blur)="focusOut()">
           <span class="input-group-addon units">
-            <span [innerHTML]="settings.volumeMeasurement | settingsLabel"></span>/
             <span [innerHTML]="settings.pressureMeasurement | settingsLabel"></span>
           </span>
+
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.proposedPressure.invalid && !form.controls.proposedPressure.pristine">
