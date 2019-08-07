@@ -12,7 +12,6 @@ import { CoreService } from './core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { WindowRefService } from '../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-core',
@@ -31,10 +30,6 @@ import { WindowRefService } from '../indexedDb/window-ref.service';
 
 export class CoreComponent implements OnInit {
   showUpdateModal: boolean;
-
-  gettingData: boolean = false;
-
-  showScreenshot: boolean = true;
   showTutorial: boolean = false;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
@@ -55,19 +50,10 @@ export class CoreComponent implements OnInit {
   updateAvailableSubscription: Subscription;
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router, private windowRefService: WindowRefService) {
+    private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
   }
 
   ngOnInit() {
-    var options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    };
-    let test = this.windowRefService.nativeWindow.navigator.geolocation.getCurrentPosition(this.success, this.error, options);
-    console.log(test);
-
-
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg === true) {
         this.showUpdateModal = true;
@@ -78,10 +64,6 @@ export class CoreComponent implements OnInit {
 
     //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
-
-    if (this.electronService.process.platform === 'win32') {
-      this.showScreenshot = false;
-    }
     this.dashboardViewSub = this.assessmentService.dashboardView.subscribe(val => {
       this.dashboardTab = val;
     });

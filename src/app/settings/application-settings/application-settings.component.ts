@@ -86,6 +86,8 @@ export class ApplicationSettingsComponent implements OnInit {
   googleTranslateElementInit() {
     console.log(google.translate.TranslateElement);
     let test = new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-    console.log(test);
+    let test2 = test.getInstance();
+
+    console.log(test2);
   }
 }
