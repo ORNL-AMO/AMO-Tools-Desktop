@@ -30,6 +30,19 @@
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'compressedAirCost'">
+    <h6>
+      Compressed Air Cost
+      <small class="text-muted">
+        <br>
+        Per unit cost of compressed air in <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">$/m<sup>3</sup></span>
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
   <div class="my-2" *ngIf="currentField == 'utilityType'">
     <h6>
       Utility Type

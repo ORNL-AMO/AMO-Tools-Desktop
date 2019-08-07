@@ -25,7 +25,9 @@ export class BoilerService {
       'steamTemperature': ['', [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
       'deaeratorVentRate': ['', [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
-      'approachTemperature': ['', [Validators.min(0.000005)]]
+      'approachTemperature': ['', [Validators.min(0.000005)]],
+      'blowdownConductivity': [''],
+      'feedwaterConductivity': ['']
     });
   }
 
@@ -46,7 +48,9 @@ export class BoilerService {
       'steamTemperature': [obj.steamTemperature, [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
       'deaeratorVentRate': [obj.deaeratorVentRate, [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
-      'approachTemperature': [obj.approachTemperature, approachTempValidators]
+      'approachTemperature': [obj.approachTemperature, approachTempValidators],
+      'blowdownConductivity': [obj.blowdownConductivity],
+      'feedwaterConductivity': [obj.feedwaterConductivity]
     });
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
@@ -65,7 +69,9 @@ export class BoilerService {
       steamTemperature: form.controls.steamTemperature.value,
       deaeratorVentRate: form.controls.deaeratorVentRate.value,
       deaeratorPressure: form.controls.deaeratorPressure.value,
-      approachTemperature: form.controls.approachTemperature.value
+      approachTemperature: form.controls.approachTemperature.value,
+      blowdownConductivity: form.controls.blowdownConductivity.value,
+      feedwaterConductivity: form.controls.feedwaterConductivity.value
     };
   }
 

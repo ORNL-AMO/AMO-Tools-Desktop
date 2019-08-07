@@ -1,0 +1,39 @@
+td{
+    font-size: small;
+}
+
+td{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+}
+
+td > span {
+    font-weight: bold;
+}
+
+tbody{
+    box-shadow: 0 4px 8px 0 grey
+}
+
+.group-label{
+    font-weight: bold;
+}
+
+
+.card{
+    background-color: #efefef;
+    border: none;
+}
+
+label{
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+table{
+    width: 50%;
+    min-width: 400px;
+}

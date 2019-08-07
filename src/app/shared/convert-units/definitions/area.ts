@@ -37,7 +37,7 @@ export const area = {
             name: {
                 singular: 'Square Kilometer'
                 , plural: 'Square Kilometers' ,
-                 display:  '(km&#x00B2);'
+                 display:  '(km&#x00B2)'
             }
             , to_anchor: 1000000
         }
@@ -47,7 +47,7 @@ export const area = {
             name: {
                 singular: 'Square Inch'
                 , plural: 'Square Inches',
-                 display:  '(in&#x00B2);'
+                 display:  '(in&#x00B2)'
             }
             , to_anchor: 1 / 144
         }
@@ -55,7 +55,7 @@ export const area = {
             name: {
                 singular: 'Square Yard'
                 , plural: 'Square Yards',
-                 display:  '(yd&#x00B2);'
+                 display:  '(yd&#x00B2)'
             }
             , to_anchor: 9
         }
@@ -79,7 +79,7 @@ export const area = {
             name: {
                 singular: 'Square Mile'
                 , plural: 'Square Miles',
-                 display:  '(mi&#x00B2);'
+                 display:  '(mi&#x00B2)'
             }
             , to_anchor: 27878400
         }

@@ -1,0 +1,17 @@
+.group-label{
+    width: 100%;
+    padding-top: .25rem;
+    font-size: medium;
+}
+
+form{
+    font-size: 13px;
+}
+
+label{
+    font-size: small;
+}
+
+.form-control{
+    font-size: small;
+}

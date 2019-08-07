@@ -65,7 +65,7 @@
     <div class="input-group">
       <input name="{{'totalEmissionOutputRate'+modId+index}}" type="number" step="any" class="form-control" id="{{'totalEmissionOutputRate'+modId+index}}"
         (input)="calculate()" [(ngModel)]="data.totalEmissionOutputRate" onfocus="this.select();" [required]="true">
-      <span class="input-group-addon units">kg CO<sub>2</sub>/
+      <span class="input-group-addon units small">kg CO<sub>2</sub>/
         <span *ngIf="data.energyType == 'fuel'">MMBtu</span>
         <span *ngIf="data.energyType == 'electricity'">MWh</span>
       </span>

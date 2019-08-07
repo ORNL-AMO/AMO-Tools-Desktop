@@ -41,9 +41,13 @@
 
       <div class="form-group">
         <label for="{{'wattsPerLamp_'+idString}}">Watts Per Lamp</label>
-        <input name="wattsPerLamp" formControlName="wattsPerLamp" type="number" step="any" class="form-control"
-          id="{{'wattsPerLamp_'+idString}}" (input)="calculate()" onfocus="this.select();"
-          (focus)="focusField('wattsPerLamp')">
+        <div class="input-group">
+          <input name="wattsPerLamp" formControlName="wattsPerLamp" type="number" step="any" class="form-control"
+            id="{{'wattsPerLamp_'+idString}}" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('wattsPerLamp')">
+          <span class="input-group-addon units">W/lamp</span>
+        </div>
+
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.wattsPerLamp.invalid && !form.controls.wattsPerLamp.pristine">
           <span *ngIf="form.controls.wattsPerLamp.errors.required">Value required.</span>
@@ -54,9 +58,12 @@
 
       <div class="form-group">
         <label for="{{'lumensPerLamp_'+idString}}">Lumens Per Lamp</label>
-        <input name="lumensPerLamp" formControlName="lumensPerLamp" type="number" step="any" class="form-control"
-          id="{{'lumensPerLamp_'+idString}}" (input)="calculate()" onfocus="this.select();"
-          (focus)="focusField('lumensPerLamp')">
+        <div class="input-group">
+          <input name="lumensPerLamp" formControlName="lumensPerLamp" type="number" step="any" class="form-control"
+            id="{{'lumensPerLamp_'+idString}}" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('lumensPerLamp')">
+          <span class="input-group-addon units">lm/lamp</span>
+        </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.lumensPerLamp.invalid && !form.controls.lumensPerLamp.pristine">
           <span *ngIf="form.controls.lumensPerLamp.errors.required">Value required.</span>

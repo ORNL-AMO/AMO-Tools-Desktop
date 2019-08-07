@@ -17,7 +17,9 @@ export class PrvHelpComponent implements OnInit {
   thermodynamicQuantity: number;
   @Input()
   feedwaterThermodynamicQuantity: number;
-
+  @Input()
+  isSuperHeating: boolean;
+  
   rangeValues: PrvRanges;
   feedwaterRangesValues: FeedwaterRanges;
   constructor(private prvService: PrvService, private steamService: SteamService) { }

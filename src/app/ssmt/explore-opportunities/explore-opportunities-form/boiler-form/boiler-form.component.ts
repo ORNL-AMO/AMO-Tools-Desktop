@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { SsmtService } from '../../../ssmt.service';
 import { SSMT, BoilerInput } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
@@ -21,6 +21,15 @@ export class BoilerFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<SSMT>();
+
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setBlowdownRateModalWidth();
+  }
+  formWidth: number;
+  showBlowdownRateModal: boolean = false;
+
 
   baselineFuelOptions: any;
   modificationFuelOptions: any;
@@ -58,6 +67,12 @@ export class BoilerFormComponent implements OnInit {
         this.init();
       }
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setBlowdownRateModalWidth();
+    }, 100)
   }
 
   setFuelTypes(save?: boolean) {
@@ -225,5 +240,26 @@ export class BoilerFormComponent implements OnInit {
   focusOut() {
     // this.exploreOpportunitiesService.currentTab.next('boiler');
     // this.exploreOpportunitiesService.currentField.next('default');
+  }
+
+  closeBlowdownRateModal() {
+    this.showBlowdownRateModal = false;
+    // this.ssmtService.modalOpen.next(false);
+  }
+
+  openBlowdownRateModal() {
+    this.showBlowdownRateModal = true;
+    // this.ssmtService.modalOpen.next(true);
+  }
+
+  saveAndCloseBlowdownRateModal() {
+    this.save();
+    this.closeBlowdownRateModal();
+  }
+
+  setBlowdownRateModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

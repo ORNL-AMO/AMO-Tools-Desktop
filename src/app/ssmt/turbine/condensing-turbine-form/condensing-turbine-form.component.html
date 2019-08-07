@@ -78,7 +78,7 @@
           (blur)="focusOut()" [ngClass]="{'indicate-different': isOperationValueDifferent()}">
         <span class="units input-group-addon">
           <span *ngIf="turbineForm.controls.operationType.value == 0" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
-          <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>
+          <span *ngIf="turbineForm.controls.operationType.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
         </span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="turbineForm.controls.operationValue.invalid && !turbineForm.controls.operationValue.pristine">
@@ -86,12 +86,12 @@
         <span *ngIf="turbineForm.controls.operationValue.errors.max">Value can't be greater than
           {{turbineForm.controls.operationValue.errors.max.max}}
           <span *ngIf="turbineForm.controls.operationType.value == 0" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
-          <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>.
+          <span *ngIf="turbineForm.controls.operationType.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>.
         </span>
         <span *ngIf="turbineForm.controls.operationValue.errors.min">Value can't be less than
           {{turbineForm.controls.operationValue.errors.min.min}}
           <span *ngIf="turbineForm.controls.operationType.value == 0" [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
-          <span *ngIf="turbineForm.controls.operationType.value == 1">kW</span>.
+          <span *ngIf="turbineForm.controls.operationType.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>.
         </span>
       </span>
     </div>
