@@ -1,18 +1,18 @@
 <!-- <label class="group-label" *ngIf="modificationExists">Savings</label> -->
 <table #copyTable class="table table-hover table-striped">
-  <thead>
-    <th></th>
-    <th>Baseline</th>
-    <th>Modification</th>
-  </thead>
   <tbody>
     <tr>
-      <td class="bold w-50">Water Use</td>
-      <td class="text-center w-50">{{waterReductionResults.baselineResults.waterUse | number:'.0-0'}}
+      <td></td>
+      <td class="bold text-center">Baseline</td>
+      <td class="bold text-center">Modification</td>
+    </tr>
+    <tr>
+      <td class="bold">Water Use</td>
+      <td class="text-center">{{waterReductionResults.baselineResults.waterUse | number:'.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
       </td>
-      <td class="text-center w-50">
+      <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.waterUse | number:'.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
@@ -21,20 +21,20 @@
       </td>
     </tr>
     <tr>
-      <td class="bold w-50" *ngIf="!isWastewater">Water Cost</td>
-      <td class="bold w-50" *ngIf="isWastewater">Wastewater Disposal Cost</td>
-      <td class="text-center w-50">
+      <td class="bold" *ngIf="!isWastewater">Water Cost</td>
+      <td class="bold" *ngIf="isWastewater">Wastewater Disposal Cost</td>
+      <td class="text-center">
         {{waterReductionResults.baselineResults.waterCost | currency: 'USD'}} /yr
       </td>
-      <td class="text-center w-50">
+      <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.waterCost | currency: 'USD'}} /yr
         </span>
       </td>
     </tr>
     <tr>
-      <td class="bold w-50">Annual Water Savings</td>
-      <td class="text-center w-50" colspan="2">
+      <td class="bold">Annual Water Savings</td>
+      <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
           {{waterReductionResults.annualWaterSavings | number: '.0-0'}}
@@ -44,9 +44,9 @@
       </td>
     </tr>
     <tr>
-      <td class="bold w-50" *ngIf="!isWastewater">Cost Savings</td>
-      <td class="bold w-50" *ngIf="isWastewater">Disposal Cost Savings</td>
-      <td class="text-center w-50" colspan="2">
+      <td class="bold" *ngIf="!isWastewater">Cost Savings</td>
+      <td class="bold" *ngIf="isWastewater">Disposal Cost Savings</td>
+      <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
           {{waterReductionResults.annualCostSavings | currency: 'USD'}} /yr
