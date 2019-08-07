@@ -22,3 +22,7 @@ tbody{
 tr.active{
     background-color: #FFE400 !important;
 }
+
+.btn-padding{
+    padding: 6px !important;
+}
