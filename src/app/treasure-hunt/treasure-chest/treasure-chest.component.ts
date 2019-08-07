@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, EventEmitter, Output } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, ImportExportOpportunities, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, ImportExportOpportunities, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from 'http2';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -11,6 +11,7 @@ import { ElectricityReductionService } from '../../calculator/utilities/electric
 import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
+import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -41,6 +42,7 @@ export class TreasureChestComponent implements OnInit {
   selectedEditNaturalGasReduction: NaturalGasReductionTreasureHunt;
   selectedEditElectricityReduction: ElectricityReductionTreasureHunt;
   selectedEditCompressedAirReduction: CompressedAirReductionTreasureHunt;
+  selectedEditCompressedAirPressureReduction: CompressedAirPressureReductionTreasureHunt;
   selectedEditWaterReduction: WaterReductionTreasureHunt;
 
   displayEnergyType: string = 'All';
@@ -59,6 +61,7 @@ export class TreasureChestComponent implements OnInit {
     private naturalGasReductionService: NaturalGasReductionService,
     private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService,
+    private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private treasureHuntService: TreasureHuntService,
     private waterReductionService: WaterReductionService) { }
 
@@ -131,6 +134,8 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.compressedAirReductions.splice(this.deleteItemIndex, 1);
     } else if (this.itemType == 'waterReduction') {
       this.treasureHunt.waterReductions.splice(this.deleteItemIndex, 1);
+    } else if (this.itemType == 'compressedAirPressureReduction') {
+      this.treasureHunt.compressedAirPressureReductions.splice(this.deleteItemIndex, 1);
     }
     this.save();
     this.hideDeleteItemModal();
@@ -158,6 +163,8 @@ export class TreasureChestComponent implements OnInit {
       this.saveCompressedAirReduction();
     } else if (this.itemType == 'waterReduction') {
       this.saveWaterReduction();
+    } else if (this.itemType == 'compressedAirPressureReduction') {
+      this.saveCompressedAirPressureReduction();
     }
   }
 
@@ -283,6 +290,10 @@ export class TreasureChestComponent implements OnInit {
       this.treasureHunt.compressedAirReductions[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
     } else if (this.itemType == 'electricityReduction') {
       this.treasureHunt.electricityReductions[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
+    } else if (this.itemType == 'waterReduction') {
+      this.treasureHunt.waterReductions[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
+    } else if (this.itemType == 'compressedAirPressureReduction') {
+      this.treasureHunt.compressedAirPressureReductions[this.selectedEditIndex].opportunitySheet = this.selectedEditOpportunitySheet;
     }
     this.save();
     this.hideOpportunitySheetModal();
@@ -376,6 +387,34 @@ export class TreasureChestComponent implements OnInit {
     this.selectCalc('none');
   }
 
+
+  //compressed air pressure reduction 
+  editCompressedAirPressureReduction(compressedAirPressureReduction: CompressedAirPressureReductionTreasureHunt, index: number) {
+    this.selectedEditIndex = index;
+    this.selectedEditCompressedAirPressureReduction = compressedAirPressureReduction;
+    this.compressedAirPressureReductionService.baselineData = compressedAirPressureReduction.baseline;
+    this.compressedAirPressureReductionService.modificationData = compressedAirPressureReduction.modification;
+    this.selectedEditOpportunitySheet = compressedAirPressureReduction.opportunitySheet;
+    this.itemType = 'compressedAirPressureReduction';
+    this.selectCalc('compressed-air-pressure-reduction');
+  }
+
+  saveEditCompressedAirPressureReduction(updatedData: CompressedAirPressureReductionTreasureHunt) {
+    this.selectedEditCompressedAirPressureReduction.baseline = updatedData.baseline;
+    this.selectedEditCompressedAirPressureReduction.modification = updatedData.modification;
+    this.showSaveCalcModal();
+  }
+
+  saveCompressedAirPressureReduction() {
+    this.selectedEditCompressedAirPressureReduction.opportunitySheet = this.selectedEditOpportunitySheet;
+    this.treasureHunt.compressedAirPressureReductions[this.selectedEditIndex] = this.selectedEditCompressedAirPressureReduction;
+    this.save();
+    this.selectedEditCompressedAirPressureReduction = undefined;
+    this.selectedEditOpportunitySheet = undefined;
+    this.hideSaveCalcModal();
+    this.selectCalc('none');
+  }
+
   //water reduction
   editWaterReduction(waterReduction: WaterReductionTreasureHunt, index: number) {
     this.selectedEditIndex = index;
@@ -459,6 +498,12 @@ export class TreasureChestComponent implements OnInit {
         this.treasureHunt.waterReductions = new Array();
       }
       this.treasureHunt.waterReductions = this.treasureHunt.waterReductions.concat(data.waterReductions);
+    }
+    if (data.compressedAirPressureReductions) {
+      if (this.treasureHunt.compressedAirPressureReductions == undefined) {
+        this.treasureHunt.compressedAirPressureReductions = new Array();
+      }
+      this.treasureHunt.compressedAirPressureReductions = this.treasureHunt.compressedAirPressureReductions.concat(data.compressedAirPressureReductions);
     }
     this.save();
     this.treasureHuntService.updateMenuOptions.next(true);

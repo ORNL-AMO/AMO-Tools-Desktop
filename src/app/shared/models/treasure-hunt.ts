@@ -229,4 +229,5 @@ export interface ImportExportOpportunities {
     electricityReductions?: Array<ElectricityReductionTreasureHunt>;
     compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
     waterReductions?: Array<WaterReductionTreasureHunt>;
+    compressedAirPressureReductions?: Array<CompressedAirPressureReductionTreasureHunt>
 }
