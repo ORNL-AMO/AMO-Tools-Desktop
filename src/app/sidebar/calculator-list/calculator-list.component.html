@@ -21,9 +21,6 @@
       <li [ngClass]="{'selected': selectedCalculator == 'replace-existing'}">
         <span class="sidebar-item" (click)="selectCalculator('replace-existing')">Replace vs Rewind</span>
       </li>
-      <!-- <li [ngClass]="{'selected': selectedCalculator == 'replace-rewind'}">
-        <span class="sidebar-item" (click)="selectCalculator('replace-rewind')">Replace vs Rewind</span>
-      </li> -->
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'pumps'}">
@@ -52,7 +49,7 @@
       (click)="chooseCalculator('fans')">Fans</span>
     <ul *ngIf="selectedCalculatorType == 'fans'">
       <li [ngClass]="{'selected': selectedCalculator == 'fan-analysis'}">
-        <span class="sidebar-item" (click)="selectCalculator('fan-analysis')">Fan Analysis</span>
+        <span class="sidebar-item" (click)="selectCalculator('fan-analysis')">Fan Traverse Analysis</span>
       </li>
       <li [ngClass]="{'selected': selectedCalculator == 'system-curve'}">
         <span class="sidebar-item" (click)="selectCalculator('system-curve')">Fan System Curve</span>
@@ -128,9 +125,6 @@
       <li [ngClass]="{'selected': selectedCalculator == 'bag-method'}">
         <span class="sidebar-item" (click)="selectCalculator('bag-method')">Leak Loss Estimator - Bag Method</span>
       </li>
-      <!-- <li [ngClass]="{'selected': selectedCalculator == 'flow-factor'}">
-        <span class="sidebar-item" (click)="selectCalculator('flow-factor')">Pneumatic Valve Flow Factor</span>
-      </li> -->
       <li [ngClass]="{'selected': selectedCalculator == 'pneumatic-air'}">
         <span class="sidebar-item" (click)="selectCalculator('pneumatic-air')">Pneumatic Air Requirement</span>
       </li>
