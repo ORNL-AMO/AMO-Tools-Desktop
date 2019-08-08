@@ -134,7 +134,7 @@
     </div>
     <!--compressed air reduction-->
     <div
-      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Compressed Air') && (treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.compressedAirUsed == true)"
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && (treasureHunt.currentEnergyUsage.electricityUsed == true)"
       class="card calc-card-item m-2" (click)="selectCalc('compressed-air-pressure-reduction')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
