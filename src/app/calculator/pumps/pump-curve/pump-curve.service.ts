@@ -23,10 +23,15 @@ export class PumpCurveService {
 
   calcMethod: BehaviorSubject<string>;
   regEquation: BehaviorSubject<string>;
-  rSquared: BehaviorSubject<string>;
+  modificationRegEquation: BehaviorSubject<string>;
+  baselineR2: BehaviorSubject<string>;
+  modificationR2: BehaviorSubject<string>;
   constructor(private convertUnitsService: ConvertUnitsService, private formBuilder: FormBuilder) {
     this.calcMethod = new BehaviorSubject<string>('Equation');
     this.regEquation = new BehaviorSubject<string>(null);
+    this.modificationRegEquation = new BehaviorSubject<string>(null);
+    this.baselineR2 = new BehaviorSubject<string>(null);
+    this.modificationR2 = new BehaviorSubject<string>(null);
   }
 
 
@@ -284,6 +289,7 @@ export class PumpCurveService {
       });
       let results = regression.polynomial(tmpArr, { order: pumpCurve.dataOrder, precision: 10 });
       this.regEquation.next(results.string);
+      this.baselineR2.next(results.r2);
       for (let i = 0; i <= maxDataFlow; i = i + 10) {
         let yVal = results.predict(i);
         if (yVal[1] > 0) {
@@ -296,6 +302,7 @@ export class PumpCurveService {
     } else if (selectedFormView == 'Equation') {
       maxDataFlow = pumpCurve.maxFlow;
       this.regEquation.next(null);
+      this.baselineR2.next(null);
       for (let i = 0; i <= maxDataFlow + 10; i = i + 10) {
         let yVal = this.calculateY(pumpCurve, i);
         if (yVal > 0) {
@@ -319,8 +326,10 @@ export class PumpCurveService {
       let tmpArr = new Array<any>();
       pumpCurve.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);
-      })
+      });
       let results = regression.polynomial(tmpArr, { order: pumpCurve.dataOrder, precision: 10 });
+      this.modificationRegEquation.next(results.string);
+      this.modificationR2.next(results.r2);
       for (let i = 0; i <= maxDataFlow; i = i + 10) {
         let yVal = results.predict(i);
         if (yVal[1] > 0) {
@@ -332,6 +341,8 @@ export class PumpCurveService {
       }
     } else if (selectedFormView == 'Equation') {
       maxDataFlow = pumpCurve.maxFlow;
+      this.modificationRegEquation.next(null);
+      this.modificationR2.next(null);
       data.push({
         x: 0 * ratio,
         y: this.calculateY(pumpCurve, 0) * Math.pow(ratio, 2)
@@ -352,6 +363,11 @@ export class PumpCurveService {
     }
     let data3 = new Array<any>();
     let results = regression.polynomial(data2, { order: pumpCurve.dataOrder, precision: 10 });
+    this.modificationRegEquation.next(results.string);
+    this.modificationR2.next(results.r2);
+    if (selectedFormView == 'Equation') {
+      this.modificationR2.next(null);
+    }
     for (let i = 0; i <= maxDataFlow * ratio; i = i + 10) {
       let yVal = results.predict(i)
       if (yVal[1] > 0) {
@@ -460,7 +476,7 @@ export class PumpCurveService {
   // use this function to get max y value in a data array
   // this is to aid in repairing the max y value bug apparent
   // in baseline pump/fan curves
-  getMaxYValue(data: Array<{x: number, y: number}>): number {
+  getMaxYValue(data: Array<{ x: number, y: number }>): number {
     let max = 0;
     for (let i = 0; i < data.length; i++) {
       if (data[i].y > max) {
