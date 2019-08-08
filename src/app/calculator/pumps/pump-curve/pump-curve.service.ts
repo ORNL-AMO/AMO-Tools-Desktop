@@ -301,8 +301,8 @@ export class PumpCurveService {
       }
     } else if (selectedFormView == 'Equation') {
       maxDataFlow = pumpCurve.maxFlow;
-      this.regEquation.next(null);
-      this.baselineR2.next(null);
+      // this.regEquation.next(null);
+      // this.baselineR2.next(null);
       for (let i = 0; i <= maxDataFlow + 10; i = i + 10) {
         let yVal = this.calculateY(pumpCurve, i);
         if (yVal > 0) {
@@ -365,9 +365,6 @@ export class PumpCurveService {
     let results = regression.polynomial(data2, { order: pumpCurve.dataOrder, precision: 10 });
     this.modificationRegEquation.next(results.string);
     this.modificationR2.next(results.r2);
-    if (selectedFormView == 'Equation') {
-      this.modificationR2.next(null);
-    }
     for (let i = 0; i <= maxDataFlow * ratio; i = i + 10) {
       let yVal = results.predict(i)
       if (yVal[1] > 0) {
