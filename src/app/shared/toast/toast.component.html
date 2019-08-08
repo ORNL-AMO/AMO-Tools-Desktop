@@ -1,4 +1,4 @@
-<div class="card toasty-card" [@toast]="showToast" *ngIf="!destroyToast" [ngClass]="[toastClass]">
+<div class="card toasty-card hide-print" [@toast]="showToast" *ngIf="!destroyToast" [ngClass]="[toastClass]">
   <div class="card-header">
     {{title}}
     <button class="close pull-right" (click)="closeToast()">
