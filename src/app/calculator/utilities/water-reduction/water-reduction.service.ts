@@ -45,7 +45,6 @@ export class WaterReductionService {
         waterCost = settings.waterCost;
       }
     }
-    console.log('waterCost = ' + waterCost);
     let obj: WaterReductionData = {
       name: 'Equipment #' + (index + 1),
       hoursPerYear: hoursPerYear,

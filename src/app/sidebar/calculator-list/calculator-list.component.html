@@ -192,8 +192,12 @@
         <span class="sidebar-item" (click)="selectCalculator('compressed-air-reduction')">Compressed Air
           Reduction</span>
       </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'compressed-air-pressure-reduction'}">
+        <span class="sidebar-item" (click)="selectCalculator('compressed-air-pressure-reduction')">Compressed Air
+          Pressure Reduction</span>
+      </li>
       <li [ngClass]="{'selected': selectedCalculator == 'water-reduction'}">
-        <span class="sidebar-item" (click)="selectCalculator('water-reduction')">Water 
+        <span class="sidebar-item" (click)="selectCalculator('water-reduction')">Water
           Reduction</span>
       </li>
     </ul>
