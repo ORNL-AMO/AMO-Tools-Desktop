@@ -250,6 +250,7 @@ export class HeadToolComponent implements OnInit {
     this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
     this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
     this.calculateHeadTool();
+    this.setFormView('Suction gauge elevation');
     this.calculateHeadToolSuctionTank();
   }
 }

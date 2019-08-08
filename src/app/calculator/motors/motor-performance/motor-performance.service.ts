@@ -9,7 +9,7 @@ export class MotorPerformanceService {
 
   initFormFromPsat(psat: PSAT): FormGroup {
     return this.formBuilder.group({
-      frequency: [50, [Validators.required]],
+      frequency: [60, [Validators.required]],
       horsePower: [psat.inputs.motor_rated_power, [Validators.required]],
       motorRPM: [psat.inputs.motor_rated_speed, [Validators.required]],
       efficiencyClass: [psat.inputs.efficiency_class, [Validators.required]],
@@ -35,7 +35,7 @@ export class MotorPerformanceService {
 
   resetForm(): FormGroup {
     return this.formBuilder.group({
-      frequency: [50, [Validators.required]],
+      frequency: [60, [Validators.required]],
       horsePower: [0, [Validators.required, Validators.min(0)]],
       motorRPM: [0, [Validators.required]],
       efficiencyClass: [1, [Validators.required]],
