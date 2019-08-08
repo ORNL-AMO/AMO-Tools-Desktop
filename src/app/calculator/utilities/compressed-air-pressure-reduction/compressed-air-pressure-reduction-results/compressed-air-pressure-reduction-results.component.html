@@ -1,16 +1,16 @@
 <table #copyTable class="table table-hover table-striped">
-  <thead>
-    <th></th>
-    <th>Baseline</th>
-    <th>Modification</th>
-  </thead>
   <tbody>
     <tr>
-      <td class="bold w-50">Energy Use</td>
-      <td class="text-center w-50">{{compressedAirPressureReductionResults.baselineResults.energyUse | number:'.0-0'}}
+      <td></td>
+      <td class="bold text-center">Baseline</td>
+      <td class="bold text-center">Modification</td>
+    </tr>
+    <tr>
+      <td class="bold">Energy Use</td>
+      <td class="text-center">{{compressedAirPressureReductionResults.baselineResults.energyUse | number:'.0-0'}}
         <span> kWh/yr</span>
       </td>
-      <td class="text-center w-50">
+      <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span
           *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | number:'.0-0'}}
@@ -19,11 +19,11 @@
       </td>
     </tr>
     <tr>
-      <td class="bold w-50">Energy Cost</td>
-      <td class="text-center w-50">
+      <td class="bold">Energy Cost</td>
+      <td class="text-center">
         {{compressedAirPressureReductionResults.baselineResults.energyCost | currency: 'USD'}} /yr
       </td>
-      <td class="text-center w-50">
+      <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span
           *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | currency: 'USD'}}
@@ -32,8 +32,8 @@
       </td>
     </tr>
     <tr>
-      <td class="bold w-50">Annual Energy Savings</td>
-      <td class="text-center w-50" colspan="2">
+      <td class="bold">Annual Energy Savings</td>
+      <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
           {{compressedAirPressureReductionResults.annualEnergySavings | number: '.0-0'}}
@@ -42,15 +42,14 @@
       </td>
     </tr>
     <tr>
-      <td class="bold w-50">Annual Cost Savings</td>
-      <td class="text-center w-50" colspan="2">
+      <td class="bold">Annual Cost Savings</td>
+      <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
           {{compressedAirPressureReductionResults.annualCostSavings | currency: 'USD'}} /yr
         </span>
       </td>
     </tr>
-
   </tbody>
 </table>
 <app-exportable-results-table *ngIf="modificationExists" [tableString]="tableString"

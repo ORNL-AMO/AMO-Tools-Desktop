@@ -6,9 +6,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CompressedAirPressureReductionService {
 
   baselineData: Array<CompressedAirPressureReductionData>;
@@ -90,7 +88,7 @@ export class CompressedAirPressureReductionService {
       modificationResults = this.calculate(modificationInpCpy, settings);
     }
 
-    let waterReductionResults: CompressedAirPressureReductionResults = {
+    let compressedAirPressureReductionResults: CompressedAirPressureReductionResults = {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualEnergySavings: annualEnergySavings,
@@ -98,10 +96,10 @@ export class CompressedAirPressureReductionService {
     };
 
     if (modificationResults) {
-      waterReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
-      waterReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
+      compressedAirPressureReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
+      compressedAirPressureReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
     }
-    return waterReductionResults;
+    return compressedAirPressureReductionResults;
   }
 
   calculate(input: Array<CompressedAirPressureReductionData>, settings: Settings): CompressedAirPressureReductionResult {
@@ -110,7 +108,6 @@ export class CompressedAirPressureReductionService {
       compressedAirPressureReductionInputVec: inputArray
     };
     let results: CompressedAirPressureReductionResult = this.standaloneService.compressedAirPressureReduction(inputObj);
-    results = this.convertResults(results, settings);
     return results;
   }
 
@@ -121,26 +118,16 @@ export class CompressedAirPressureReductionService {
       compressedAirPressureReductionInputVec: inputArray
     };
     let results: CompressedAirPressureReductionResult = this.standaloneService.compressedAirPressureReduction(inputObj);
-    results = this.convertResults(results, settings);
     return results;
   }
 
   convertInputs(inputArray: Array<CompressedAirPressureReductionData>, settings: Settings): Array<CompressedAirPressureReductionData> {
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
-        inputArray[i].pressure = this.convertUnitsService.value(inputArray[i].pressure).from(settings.pressureMeasurement).to('psig');
-        inputArray[i].proposedPressure = this.convertUnitsService.value(inputArray[i].proposedPressure).from(settings.pressureMeasurement).to('psig');
+        inputArray[i].pressure = this.convertUnitsService.value(inputArray[i].pressure).from('barg').to('psig');
+        inputArray[i].proposedPressure = this.convertUnitsService.value(inputArray[i].proposedPressure).from('barg').to('psig');
       }
     }
     return inputArray;
-  }
-
-  convertResults(results: CompressedAirPressureReductionResult, settings: Settings): CompressedAirPressureReductionResult {
-    // if (settings.unitsOfMeasure == 'Metric') {
-    //   results.waterUse = this.convertUnitsService.value(results.waterUse).from('gal').to('L');
-    // } else if (settings.unitsOfMeasure == 'Imperial') {
-    //   results.waterUse = results.waterUse / 1000;
-    // }
-    return results;
   }
 }
