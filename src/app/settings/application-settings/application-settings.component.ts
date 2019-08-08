@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsService } from '../settings.service';
 import { FormGroup } from '@angular/forms';
-
+import { CoreService } from '../../core/core.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 declare var google: any;
+
 @Component({
   selector: 'app-application-settings',
   templateUrl: './application-settings.component.html',
@@ -23,7 +24,6 @@ export class ApplicationSettingsComponent implements OnInit {
   inPhast: boolean;
   @Input()
   inTreasureHunt: boolean;
-
 
   languages: Array<string> = [
     'English'
@@ -45,11 +45,10 @@ export class ApplicationSettingsComponent implements OnInit {
   ];
 
   energyResultOptions: Array<any>;
-  constructor(private convertUnitsService: ConvertUnitsService, private settingsService: SettingsService) { }
+  googleTranslateAvailable: boolean;
+  constructor(private convertUnitsService: ConvertUnitsService, private settingsService: SettingsService, private coreService: CoreService) { }
 
   ngOnInit() {
-    console.log(google);
-    this.googleTranslateElementInit();
     //this.setUnits();
     this.energyResultOptions = new Array<any>();
     //let possibilities = this.convertUnitsService.possibilities('energy');
@@ -61,6 +60,13 @@ export class ApplicationSettingsComponent implements OnInit {
       };
       this.energyResultOptions.push(tmpPossibility);
     });
+
+    try {
+      google;
+      this.googleTranslateAvailable = true;
+    } catch{
+      this.googleTranslateAvailable = false;
+    }
   }
 
   setUnits() {
@@ -83,11 +89,7 @@ export class ApplicationSettingsComponent implements OnInit {
     }
   }
 
-  googleTranslateElementInit() {
-    console.log(google.translate.TranslateElement);
-    let test = new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-    let test2 = test.getInstance();
-
-    console.log(test2);
+  emitTranslate() {
+    this.coreService.showTranslateModal.next(true);
   }
 }

@@ -12,7 +12,7 @@ import { CoreService } from './core.service';
 import { ExportService } from '../shared/import-export/export.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-
+declare var google: any;
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
@@ -21,6 +21,13 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     trigger('survey', [
       state('show', style({
         bottom: '20px'
+      })),
+      transition('hide => show', animate('.5s ease-in')),
+      transition('show => hide', animate('.5s ease-out'))
+    ]),
+    trigger('translate', [
+      state('show', style({
+        top: '40px'
       })),
       transition('hide => show', animate('.5s ease-in')),
       transition('show => hide', animate('.5s ease-out'))
@@ -48,6 +55,8 @@ export class CoreComponent implements OnInit {
   destroySurvey: boolean = false;
   info: any;
   updateAvailableSubscription: Subscription;
+  showTranslateModalSub: Subscription;
+  showTranslate: string = 'hide';
   constructor(private electronService: ElectronService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef,
     private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService, private coreService: CoreService, private exportService: ExportService, private router: Router) {
@@ -99,7 +108,22 @@ export class CoreComponent implements OnInit {
         this.showUpdateModal = true;
         this.changeDetectorRef.detectChanges();
       }
+    });
+
+    this.showTranslateModalSub = this.coreService.showTranslateModal.subscribe(val => {
+      if (val == true) {
+        try {
+          let instance = google.translate.TranslateElement.getInstance();
+          if (!instance) {
+            let element = new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+          }
+          this.showTranslate = 'show';
+        } catch (err) {
+
+        }
+      }
     })
+
   }
 
   ngOnDestroy() {
@@ -110,7 +134,12 @@ export class CoreComponent implements OnInit {
     if (this.settingsSub) this.settingsSub.unsubscribe();
     this.exportService.exportAllClick.next(false);
     this.updateAvailableSubscription.unsubscribe();
+    this.showTranslateModalSub.unsubscribe();
   }
+
+  ngAfterViewInit() {
+  }
+
 
   initData() {
     this.indexedDbService.db = this.indexedDbService.initDb().then(done => {
@@ -163,17 +192,21 @@ export class CoreComponent implements OnInit {
 
 
 
-  
+
   success(pos) {
     console.log('SUCCESS');
     var crd = pos.coords;
-  
+
     console.log(pos);
   }
-  
+
   error(err) {
     console.log('ERRR')
     console.warn(err);
   }
-  
+
+  closeTranslate() {
+    this.showTranslate = 'hide';
+  }
+
 }
