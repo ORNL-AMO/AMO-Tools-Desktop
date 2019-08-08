@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsService } from '../settings.service';
 import { FormGroup } from '@angular/forms';
+import { CoreService } from '../../core/core.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
+declare var google: any;
+
 @Component({
   selector: 'app-application-settings',
   templateUrl: './application-settings.component.html',
@@ -21,7 +24,6 @@ export class ApplicationSettingsComponent implements OnInit {
   inPhast: boolean;
   @Input()
   inTreasureHunt: boolean;
-
 
   languages: Array<string> = [
     'English'
@@ -43,7 +45,8 @@ export class ApplicationSettingsComponent implements OnInit {
   ];
 
   energyResultOptions: Array<any>;
-  constructor(private convertUnitsService: ConvertUnitsService, private settingsService: SettingsService) { }
+  googleTranslateAvailable: boolean;
+  constructor(private convertUnitsService: ConvertUnitsService, private settingsService: SettingsService, private coreService: CoreService) { }
 
   ngOnInit() {
     //this.setUnits();
@@ -57,6 +60,13 @@ export class ApplicationSettingsComponent implements OnInit {
       };
       this.energyResultOptions.push(tmpPossibility);
     });
+
+    try {
+      google;
+      this.googleTranslateAvailable = true;
+    } catch{
+      this.googleTranslateAvailable = false;
+    }
   }
 
   setUnits() {
@@ -77,5 +87,9 @@ export class ApplicationSettingsComponent implements OnInit {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
+  }
+
+  emitTranslate() {
+    this.coreService.showTranslateModal.next(true);
   }
 }

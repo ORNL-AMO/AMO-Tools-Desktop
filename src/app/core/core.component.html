@@ -55,4 +55,19 @@
             </p>
         </div>
     </div>
+
+    <div class="card translate-card hide-print" [@translate]="showTranslate">
+        <div class="card-header text-center">
+            Translate Application
+            <button class="close pull-right" (click)="closeTranslate()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body p-2 text-center">
+            <div id="google_translate_element"></div>
+            <p class="help-text small">
+                The content of this application will be sent to Google for translation using a secure connection.
+            </p>
+        </div>
+    </div>
 </div>
