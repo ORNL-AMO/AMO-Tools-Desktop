@@ -39,7 +39,7 @@
 
     <router-outlet></router-outlet>
 
-    <div class="card survey-card" [@survey]="showSurvey" *ngIf="!destroySurvey">
+    <div class="card survey-card hide-print" [@survey]="showSurvey" *ngIf="!destroySurvey">
         <div class="card-header text-center">
             We want your feedback!
             <button class="close pull-right" (click)="closeSurvey()">

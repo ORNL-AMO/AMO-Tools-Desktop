@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
 import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
@@ -30,6 +30,7 @@ export class FindTreasureComponent implements OnInit {
   newElectricityReductionTreasureHunt: ElectricityReductionTreasureHunt;
   newCompressedAirReductionTreasureHunt: CompressedAirReductionTreasureHunt;
   newWaterReductionTreasureHunt: WaterReductionTreasureHunt;
+  newCompressedAirPressureReductionTreasureHunt: CompressedAirPressureReductionTreasureHunt;
 
   showOpportunitySheetOnSave: boolean;
   opperatingHoursPerYear: number;
@@ -72,6 +73,8 @@ export class FindTreasureComponent implements OnInit {
       this.saveCompressedAirReduction();
     } else if (this.selectedCalc == 'water-reduction') {
       this.saveWaterReduction();
+    } else if (this.selectedCalc == 'compressed-air-pressure-reduction') {
+      this.saveCompressedAirPressureReduction();
     }
   }
 
@@ -222,7 +225,27 @@ export class FindTreasureComponent implements OnInit {
     this.closeSaveCalcModalAndSave();
   }
 
-  //compressed air reduction
+  //compressed air pressure reduction
+  saveNewCompressedAirPressureReduction(compressedAirPressureReductionTh: CompressedAirPressureReductionTreasureHunt) {
+    this.newCompressedAirPressureReductionTreasureHunt = compressedAirPressureReductionTh;
+    this.newCompressedAirPressureReductionTreasureHunt.selected = true;
+    if (!this.newOpportunitySheet) {
+      this.showOpportunitySheetOnSave = true;
+    }
+    this.newCompressedAirPressureReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
+    this.saveCalcModal.show();
+  }
+
+  saveCompressedAirPressureReduction() {
+    if (!this.treasureHunt.compressedAirPressureReductions) {
+      this.treasureHunt.compressedAirPressureReductions = new Array<CompressedAirPressureReductionTreasureHunt>();
+    }
+    this.newCompressedAirPressureReductionTreasureHunt.opportunitySheet = this.newOpportunitySheet;
+    this.treasureHunt.compressedAirPressureReductions.push(this.newCompressedAirPressureReductionTreasureHunt);
+    this.closeSaveCalcModalAndSave();
+  }
+
+  //water reduction
   saveNewWaterReduction(waterReductionTH: WaterReductionTreasureHunt) {
     this.newWaterReductionTreasureHunt = waterReductionTH;
     this.newWaterReductionTreasureHunt.selected = true;

@@ -134,6 +134,21 @@
     </div>
     <!--compressed air reduction-->
     <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Compressed Air') && (treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.compressedAirUsed == true)"
+      class="card calc-card-item m-2" (click)="selectCalc('compressed-air-pressure-reduction')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png"
+            class="calc-img">
+        </div>
+        <a class="pt-2 text-center">Compressed Air Pressure Reduction</a>
+        <p class="mb-0 text-center help-text">
+          This calculator reduces the compressed air use. Real description needed.
+        </p>
+      </div>
+    </div>
+    <!--water reduction-->
+    <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Waste Water' || displayCalculatorType == 'Water') && (treasureHunt.currentEnergyUsage.waterUsed == true || treasureHunt.currentEnergyUsage.wasteWaterUsed == true)"
       class="card calc-card-item m-2" (click)="selectCalc('water-reduction')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
@@ -195,6 +210,10 @@
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-reduction>
 
+<app-compressed-air-pressure-reduction *ngIf="selectedCalc == 'compressed-air-pressure-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveNewCompressedAirPressureReduction($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-pressure-reduction>
 
 <app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
   (emitSave)="saveNewWaterReduction($event)" (emitCancel)="selectCalc('none')"
