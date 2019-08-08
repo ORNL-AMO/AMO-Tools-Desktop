@@ -58,7 +58,7 @@ import { FanDataHelpComponent } from './help-and-results-panel/operating-points-
     ReactiveFormsModule,
     SharedModule
   ],
-  exports: [FanAnalysisComponent],
+  exports: [FanAnalysisComponent, HelpAndResultsPanelComponent, PlaneDataFormComponent, FanInfoFormComponent],
   providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService, PlaneDataFormService, ConvertFanAnalysisService]
 })
 export class FanAnalysisModule { }

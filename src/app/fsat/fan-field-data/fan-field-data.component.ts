@@ -65,6 +65,7 @@ export class FanFieldDataComponent implements OnInit {
   inletPressureCopy: InletPressureData;
   outletPressureCopy: OutletPressureData;
   idString: string;
+  disableApplyData: boolean = false;
   constructor(private compareService: CompareService, private fsatWarningService: FsatWarningService, private fanFieldDataService: FanFieldDataService, private helpPanelService: HelpPanelService, private fsatService: FsatService) { }
 
   ngOnInit() {
@@ -196,6 +197,7 @@ export class FanFieldDataComponent implements OnInit {
 
   hidePressureModal() {
     this.pressureCalcType = undefined;
+    this.disableApplyData = false;
     this.fsatService.modalOpen.next(false);
     this.pressureModal.hide();
   }
@@ -238,7 +240,12 @@ export class FanFieldDataComponent implements OnInit {
   }
 
   saveFsatCopy(fsat: FSAT) {
+    this.disableApplyData = false;
     this.fsatCopy = fsat;
+  }
+
+  setCalcInvalid(){
+    this.disableApplyData = true;
   }
 
   saveAndClose() {

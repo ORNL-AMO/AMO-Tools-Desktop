@@ -209,6 +209,8 @@ export interface ElectricityReductionResult {
 
 //====== end electricity reduction objects ====
 
+
+
 //======= natural gas reduction objects ========
 export interface NaturalGasReductionInput {
   naturalGasReductionInputVec: Array<NaturalGasReductionData>
@@ -275,6 +277,7 @@ export interface NaturalGasReductionResult {
 //====== end natural gas reduction objects =======
 
 
+
 //====== compressed air reduction objects ======
 export interface CompressedAirReductionInput {
   compressedAirReductionInputVec: Array<CompressedAirReductionData>
@@ -339,8 +342,37 @@ export interface CompressedAirReductionResult {
   singleNozzeFlowRate: number,
   consumption: number
 };
-
 //===== END compressed air reduction objects =====
+
+
+
+//====== compressed air pressure reduction objects =====
+export interface CompressedAirPressureReductionInput {
+  compressedAirPressureReductionInputVec: Array<CompressedAirPressureReductionData>;
+};
+
+export interface CompressedAirPressureReductionData {
+  name: string,
+  isBaseline: boolean,
+  hoursPerYear: number,
+  electricityCost: number,
+  compressorPower: number,
+  pressure: number,
+  proposedPressure: number
+};
+
+export interface CompressedAirPressureReductionResults {
+  baselineResults: CompressedAirPressureReductionResult,
+  modificationResults: CompressedAirPressureReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number
+};
+
+export interface CompressedAirPressureReductionResult {
+  energyUse: number,
+  energyCost: number
+};
+//==== END compressed air pressure reduction objects =====
 
 
 
@@ -394,5 +426,4 @@ export interface WaterReductionResult {
   annualWaterSavings: number,
   costSavings: number
 };
-
 //===== END water/wastewater reduction objects =====

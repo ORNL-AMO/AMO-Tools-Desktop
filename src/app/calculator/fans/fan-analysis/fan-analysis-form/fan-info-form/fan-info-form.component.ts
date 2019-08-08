@@ -26,13 +26,18 @@ export class FanInfoFormComponent implements OnInit {
   ngOnInit() {
     this.ratedInfoForm = this.fanInfoFormService.getBasicsFormFromObject(this.fanAnalysisService.inputData.FanRatedInfo, this.settings);
     this.resetFormSubscription = this.fanAnalysisService.resetForms.subscribe(val => {
-      if(val == true){
+      if (val == true) {
         this.resetData();
       }
-    })
+    });
+    if (this.fanAnalysisService.inAssessmentModal) {
+      this.ratedInfoForm.controls.fanSpeed.disable();
+      this.ratedInfoForm.controls.motorSpeed.disable();
+      this.ratedInfoForm.controls.globalBarometricPressure.disable();
+    }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.resetFormSubscription.unsubscribe();
   }
 

@@ -7,7 +7,7 @@ import {
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
   PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
-  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult
+  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -313,6 +313,10 @@ export class StandaloneService {
 
   compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
     return calculatorAddon.compressedAirReduction(inputObj);
+  }
+
+  compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {
+    return calculatorAddon.compressedAirPressureReduction(inputObj);
   }
 
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
