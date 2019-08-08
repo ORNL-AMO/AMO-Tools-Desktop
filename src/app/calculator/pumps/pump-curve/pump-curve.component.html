@@ -143,7 +143,27 @@
           [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"
           [lossCoefficient]="lossCoefficient" [graphSystemCurve]="graphSystemCurve"></app-pump-curve-graph>
         <div *ngIf="graphPumpCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
+          <p>Pump Curve Regression: &nbsp; &nbsp; </p>
           <p [innerHTML]="regEquation"></p>
+        </div>
+        <div *ngIf="graphPumpCurve && selectedFormView !== 'Equation'"
+          class="d-flex pt-1 w-100 justify-content-center align-items-center">
+          <p *ngIf="baselineR2 !== undefined && baselineR2 !== null">Baseline R<sup>2</sup>: &nbsp; &nbsp; </p>
+          <p *ngIf="baselineR2 !== undefined && baselineR2 !== null">{{baselineR2 | number: '.1-4'}}</p>
+        </div>
+        <div *ngIf="graphPumpCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
+          <p>Modified Regression: &nbsp; &nbsp; </p>
+          <p [innerHTML]="modificationRegEquation"></p>
+        </div>
+        <div *ngIf="graphPumpCurve && selectedFormView !== 'Equation'"
+          class="d-flex pt-1 w-100 justify-content-center align-items-center">
+          <p *ngIf="modificationR2 !== undefined && modificationR2 !== null">Modification R<sup>2</sup>: &nbsp; &nbsp;
+          </p>
+          <p *ngIf="modificationR2 !== undefined && modificationR2 !== null">{{modificationR2 | number: '.1-4'}}</p>
+        </div>
+        <div *ngIf="graphSystemCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
+          <p>System Curve Regression: &nbsp; &nbsp; </p>
+          <p [innerHTML]="systemRegEquation"></p>
         </div>
       </div>
     </div>
