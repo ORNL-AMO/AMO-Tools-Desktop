@@ -17,7 +17,9 @@ export class UpdateDataService {
                 return this.updatePsat(assessment);
             } else if (assessment.type === 'PHAST') {
                 return this.updatePhast(assessment);
-            }else {
+            } else if (assessment.type == 'SSMT') {
+                return this.updateSSMT(assessment);
+            } else {
                 return assessment;
             }
         }
@@ -90,5 +92,19 @@ export class UpdateDataService {
         }
         settings.appVersion = packageJson.version;
         return settings;
+    }
+
+    updateSSMT(assessment: Assessment): Assessment {
+        console.log(assessment.appVersion);
+        if (assessment.ssmt.headerInput.highPressureHeader == undefined && assessment.ssmt.headerInput.highPressure != undefined) {
+            assessment.ssmt.headerInput.highPressureHeader = assessment.ssmt.headerInput.highPressure;
+        }
+        if (assessment.ssmt.headerInput.mediumPressureHeader == undefined && assessment.ssmt.headerInput.mediumPressure != undefined) {
+            assessment.ssmt.headerInput.mediumPressureHeader = assessment.ssmt.headerInput.mediumPressure;
+        }
+        if (assessment.ssmt.headerInput.lowPressureHeader == undefined && assessment.ssmt.headerInput.lowPressure != undefined) {
+            assessment.ssmt.headerInput.lowPressureHeader = assessment.ssmt.headerInput.lowPressure;
+        }
+        return assessment;
     }
 }

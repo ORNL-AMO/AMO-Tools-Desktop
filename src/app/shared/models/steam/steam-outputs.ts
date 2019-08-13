@@ -59,8 +59,7 @@ export interface SSMTOutput {
 
   // sitePowerImport: number;
   // sitePowerDemand: number;
-  operationsOutput: SSMTOperationsOutput
-
+  operationsOutput: SSMTOperationsOutput;
 }
 
 export interface SSMTOperationsOutput {
@@ -73,7 +72,7 @@ export interface SSMTOperationsOutput {
   sitePowerImport: number,
   sitePowerDemand: number,
   makeupWaterVolumeFlow: number,
-  //makeupWaterVolumeFlowAnnual (stuite) = annualMakeupWaterFlow (desktop)
+  //makeupWaterVolumeFlowAnnual (suite) = annualMakeupWaterFlow (desktop)
   makeupWaterVolumeFlowAnnual: number
 }
 
