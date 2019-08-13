@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
 import { SlipMethod, PercentLoadEstimationService } from '../percent-load-estimation.service';
 import { FormGroup } from '@angular/forms';
 
@@ -13,6 +13,8 @@ export class SlipMethodFormComponent implements OnInit {
   emitCalculate = new EventEmitter<SlipMethod>();
   @Input()
   data: SlipMethod;
+  @Input()
+  toggleResetData: boolean;
 
   form: FormGroup;
 
@@ -28,6 +30,13 @@ export class SlipMethodFormComponent implements OnInit {
   ngOnInit() {
     this.form = this.percentLoadEstimationService.initSlipMethodForm();
     this.updateSynchronousSpeeds(false);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
+      this.lineFrequency = 60;
+      this.form = this.percentLoadEstimationService.getSlipMethodFormFromObj(this.data, this.lineFrequency, this.synchronousSpeeds);
+    }
   }
 
   updateSynchronousSpeeds(calculate: boolean) {
@@ -51,6 +60,7 @@ export class SlipMethodFormComponent implements OnInit {
         3600
       ];
     }
+    this.lineFrequency = this.form.controls.lineFrequency.value;
     //update form for validation with new synchronous speed list
     this.form = this.percentLoadEstimationService.getSlipMethodFormFromObj(this.data, this.lineFrequency, this.synchronousSpeeds);
     if (calculate) {

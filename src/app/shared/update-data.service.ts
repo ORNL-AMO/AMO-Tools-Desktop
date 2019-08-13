@@ -44,8 +44,8 @@ export class UpdateDataService {
             assessment.phast.operatingHours = {
                 weeksPerYear: 52,
                 daysPerWeek: 7,
-                shiftsPerDay: 3,
-                hoursPerShift: 8,
+                // shiftsPerDay: 3,
+                // hoursPerShift: 8,
                 hoursPerYear: 8736
             };
         }

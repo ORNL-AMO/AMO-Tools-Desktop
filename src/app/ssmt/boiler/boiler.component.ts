@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerRanges } from './boiler.service';
 import { BoilerInput, HeaderWithHighestPressure, HeaderInput } from '../../shared/models/steam/ssmt';
@@ -33,6 +33,14 @@ export class BoilerComponent implements OnInit {
   headerInput: HeaderInput;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setBlowdownRateModalWidth();
+  }
+
+  formWidth: number;
+  showBlowdownRateModal: boolean = false;
 
   boilerForm: FormGroup;
   options: any;
@@ -52,8 +60,6 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
-
-    //this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -67,6 +73,12 @@ export class BoilerComponent implements OnInit {
     if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
       this.initForm();
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setBlowdownRateModalWidth();
+    }, 100)
   }
 
   initForm() {
@@ -145,16 +157,6 @@ export class BoilerComponent implements OnInit {
   }
 
   hideMaterialModal(event?: any) {
-    // if (event) {
-    //   this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
-    //   let newMaterial = this.options.filter(material => { return material.substance == event.substance });
-    //   if (newMaterial.length != 0) {
-    //     this.flueGasLossForm.patchValue({
-    //       gasTypeId: newMaterial[0].id
-    //     })
-    //     this.setProperties();
-    //   }
-    // }
     this.materialModal.hide();
     this.setFuelTypes();
     this.showModal = false;
@@ -236,6 +238,27 @@ export class BoilerComponent implements OnInit {
       return this.compareService.isCombustionEfficiencyDifferent();
     } else {
       return false;
+    }
+  }
+
+  closeBlowdownRateModal() {
+    this.showBlowdownRateModal = false;
+    this.ssmtService.modalOpen.next(false);
+  }
+
+  openBlowdownRateModal() {
+    this.showBlowdownRateModal = true;
+    this.ssmtService.modalOpen.next(true);
+  }
+
+  saveAndCloseBlowdownRateModal() {
+    this.save();
+    this.closeBlowdownRateModal();
+  }
+
+  setBlowdownRateModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }
 }

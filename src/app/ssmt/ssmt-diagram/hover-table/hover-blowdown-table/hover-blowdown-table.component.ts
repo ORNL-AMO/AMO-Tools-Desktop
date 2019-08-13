@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { BoilerOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { BoilerInput, SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
@@ -15,6 +15,12 @@ export class HoverBlowdownTableComponent implements OnInit {
   outputData: SSMTOutput;
   @Input()
   inputData: SSMTInputs;
+  @Input()
+  inResultsPanel: boolean;
+
+
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
 
   boiler: BoilerOutput;
   boilerInput: BoilerInput;
@@ -23,5 +29,9 @@ export class HoverBlowdownTableComponent implements OnInit {
   ngOnInit() {
     this.boiler = this.outputData.boilerOutput;
     this.boilerInput = this.inputData.boilerInput;
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 }

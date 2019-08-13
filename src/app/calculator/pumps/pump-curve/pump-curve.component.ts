@@ -82,6 +82,10 @@ export class PumpCurveComponent implements OnInit {
   currentField: string = 'maxFlow';
   selectedFormView: string;
   regEquation: string;
+  modificationRegEquation: string;
+  systemRegEquation: string;
+  baselineR2: string;
+  modificationR2: string;
   calculator: Calculator;
   calcExists: boolean = false;
   saving: boolean = false;
@@ -90,9 +94,14 @@ export class PumpCurveComponent implements OnInit {
   focusedForm: string = 'pump-curve';
   calcMethodSubscription: Subscription;
   regEquationSubscription: Subscription;
+  modificationRegEquationSubscription: Subscription;
+  systemRegEquationSubscription: Subscription;
+  baselineR2Subscription: Subscription;
+  modificationR2Subscription: Subscription;
   constructor(private systemCurveService: SystemCurveService, private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService, private settingsDbService: SettingsDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
+    this.focusedForm = this.pumpCurvePrimary ? 'pump-curve' : 'system-curve';
     this.systemCurveCollapsed = this.pumpCurvePrimary ? "closed" : "open";
     this.pumpCurveCollapsed = this.pumpCurvePrimary ? "open" : "closed";
     this.graphPumpCurve = this.pumpCurvePrimary;
@@ -199,8 +208,15 @@ export class PumpCurveComponent implements OnInit {
       this.pumpCurveService.fanPointTwo = this.pointTwo;
     }
     this.pumpCurveService.regEquation.next(null);
+    this.pumpCurveService.baselineR2.next(null);
+    this.pumpCurveService.modificationR2.next(null);
+    this.systemCurveService.systemRegEquation.next(null);
+
     this.calcMethodSubscription.unsubscribe();
     this.regEquationSubscription.unsubscribe();
+    this.baselineR2Subscription.unsubscribe();
+    this.modificationR2Subscription.unsubscribe();
+    this.systemRegEquationSubscription.unsubscribe();
   }
 
   btnResetSystemCurveData() {
@@ -291,6 +307,87 @@ export class PumpCurveComponent implements OnInit {
         for (let i = 0; i < this.pumpCurve.headOrder; i++) {
           this.regEquation = this.regEquation.replace('+ -', '- ');
         }
+      }
+    });
+
+    this.modificationRegEquationSubscription = this.pumpCurveService.modificationRegEquation.subscribe(val => {
+      if (val) {
+        this.modificationRegEquation = val;
+        for (let i = 0; i < this.pumpCurve.dataOrder; i++) {
+          this.modificationRegEquation = this.modificationRegEquation.replace(/x/, '(flow)');
+          this.modificationRegEquation = this.modificationRegEquation.replace('+ -', '- ');
+        }
+        this.modificationRegEquation = this.modificationRegEquation.replace('y', headOrPressure);
+        this.modificationRegEquation = this.modificationRegEquation.replace('^2', '&#x00B2;');
+        this.modificationRegEquation = this.modificationRegEquation.replace('^3', '&#x00B3;');
+        this.modificationRegEquation = this.modificationRegEquation.replace('^4', '&#x2074;');
+        this.modificationRegEquation = this.modificationRegEquation.replace('^5', '&#x2075;');
+        this.modificationRegEquation = this.modificationRegEquation.replace('^6', '&#x2076;');
+      } else {
+        let tmpStr = this.pumpCurve.headFlow2 + '(flow)&#x00B2; + ' + this.pumpCurve.headFlow + ('(flow) +') + this.pumpCurve.headConstant;
+        if (this.pumpCurve.headOrder > 2 && this.pumpCurve.headFlow3) {
+          tmpStr = this.pumpCurve.headFlow3 + '(flow)&#x00B3; + ' + tmpStr;
+        }
+        if (this.pumpCurve.headOrder > 3 && this.pumpCurve.headFlow4) {
+          tmpStr = this.pumpCurve.headFlow4 + '(flow)&#x2074; + ' + tmpStr;
+        }
+        if (this.pumpCurve.headOrder > 4 && this.pumpCurve.headFlow5) {
+          tmpStr = this.pumpCurve.headFlow5 + '(flow)&#x2075; + ' + tmpStr;
+        }
+        if (this.pumpCurve.headOrder > 5 && this.pumpCurve.headFlow6) {
+          tmpStr = this.pumpCurve.headFlow6 + '(flow)&#x2076; + ' + tmpStr;
+        }
+        this.modificationRegEquation = headOrPressure + ' = ' + tmpStr;
+        for (let i = 0; i < this.pumpCurve.headOrder; i++) {
+          this.modificationRegEquation = this.modificationRegEquation.replace('+ -', '- ');
+        }
+      }
+    });
+
+    this.baselineR2Subscription = this.pumpCurveService.baselineR2.subscribe(val => {
+      if (val) {
+        this.baselineR2 = val;
+      }
+    });
+
+    this.modificationR2Subscription = this.pumpCurveService.modificationR2.subscribe(val => {
+      if (val) {
+        this.modificationR2 = val;
+      }
+    });
+
+    //system curve version
+    this.systemRegEquationSubscription = this.systemCurveService.systemRegEquation.subscribe(val => {
+      if (val) {
+        this.systemRegEquation = val;
+        for (let i = 0; i < this.pumpCurve.dataOrder; i++) {
+          this.systemRegEquation = this.systemRegEquation.replace(/x/, '(flow)');
+          this.systemRegEquation = this.systemRegEquation.replace('+ -', '- ');
+        }
+        this.systemRegEquation = this.systemRegEquation.replace('y', headOrPressure);
+        this.systemRegEquation = this.systemRegEquation.replace('^2', '&#x00B2;');
+        this.systemRegEquation = this.systemRegEquation.replace('^3', '&#x00B3;');
+        this.systemRegEquation = this.systemRegEquation.replace('^4', '&#x2074;');
+        this.systemRegEquation = this.systemRegEquation.replace('^5', '&#x2075;');
+        this.systemRegEquation = this.systemRegEquation.replace('^6', '&#x2076;');
+      } else {
+        let tmpStr = this.pumpCurve.headFlow2 + '(flow)&#x00B2; + ' + this.pumpCurve.headFlow + ('(flow) +') + this.pumpCurve.headConstant;
+        if (this.pumpCurve.headOrder > 2 && this.pumpCurve.headFlow3) {
+          tmpStr = this.pumpCurve.headFlow3 + '(flow)&#x00B3; + ' + tmpStr;
+        }
+        if (this.pumpCurve.headOrder > 3 && this.pumpCurve.headFlow4) {
+          tmpStr = this.pumpCurve.headFlow4 + '(flow)&#x2074; + ' + tmpStr;
+        }
+        if (this.pumpCurve.headOrder > 4 && this.pumpCurve.headFlow5) {
+          tmpStr = this.pumpCurve.headFlow5 + '(flow)&#x2075; + ' + tmpStr;
+        }
+        if (this.pumpCurve.headOrder > 5 && this.pumpCurve.headFlow6) {
+          tmpStr = this.pumpCurve.headFlow6 + '(flow)&#x2076; + ' + tmpStr;
+        }
+        this.systemRegEquation = headOrPressure + ' = ' + tmpStr;
+        // for (let i = 0; i < this.systemCurve.headOrder; i++) {
+        //   this.systemRegEquation = this.systemRegEquation.replace('+ -', '- ');
+        // }
       }
     });
   }

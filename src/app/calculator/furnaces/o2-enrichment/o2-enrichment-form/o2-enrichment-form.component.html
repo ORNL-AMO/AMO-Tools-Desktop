@@ -1,4 +1,4 @@
-<form [formGroup]="o2Form">
+<form [formGroup]="o2Form" #formElement>
   <div class="d-flex">
     <div class="d-flex flex-column w-50 pr-1">
       <label class="group-label">Combustion With Air</label>
@@ -6,6 +6,9 @@
       <div class="form-group">
         <label class="small" for="operatingHours">Annual Operating Hours</label>
         <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal(o2Form.controls.operatingHours)"><span class="fa fa-calculator"></span></a>
+          </span>
           <input name="operatingHours" type="number" class="form-control" id="operatingHours" (input)="calc()"
             (focus)="changeField('operatingHours')" formControlName="operatingHours" onfocus="this.select();"
             (blur)="focusOut()">
@@ -34,8 +37,7 @@
         </span>
       </div>
       <div class="form-group">
-        <label class="small" for="o2CombAir">O
-          <sub>2</sub> in combustion air</label>
+        <label class="small" for="o2CombAir">O<sub>2</sub> in combustion air</label>
         <div class="input-group">
           <input name="o2CombAir" autofocus type="number" min="1" step="any" max="100" class="form-control"
             id="o2CombAir" (input)="calc()" (focus)="changeField('o2CombAir')" formControlName="o2CombAir"
@@ -77,8 +79,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="o2FlueGas">O
-          <sub>2</sub> in flue gasses</label>
+        <label class="small" for="o2FlueGas">O<sub>2</sub> in flue gases</label>
         <div class="input-group">
           <input name="o2FlueGas" type="number" min="0" step="any" max="100" class="form-control" id="o2FlueGas"
             (input)="calc()" (focus)="changeField('o2FlueGas')" formControlName="o2FlueGas" onfocus="this.select();"
@@ -137,13 +138,13 @@
 
     </div>
     <div class="d-flex flex-column w-50 pl-1">
-      <label class="group-label">Combustion With O
-        <sub>2</sub> Enriched Air</label>
-
-
+      <label class="group-label">Combustion With O<sub>2</sub> Enriched Air</label>
       <div class="form-group">
         <label class="small" for="operatingHoursEnriched">Annual Operating Hours</label>
         <div class="input-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal(o2Form.controls.operatingHoursEnriched)"><span class="fa fa-calculator"></span></a>
+          </span>
           <input name="operatingHoursEnriched" type="number" class="form-control" id="operatingHoursEnriched"
             (input)="calc()" (focus)="changeField('operatingHours')" formControlName="operatingHoursEnriched"
             onfocus="this.select();" (blur)="focusOut()">
@@ -175,8 +176,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="o2CombAirEnriched">O
-          <sub>2</sub> in combustion air</label>
+        <label class="small" for="o2CombAirEnriched">O<sub>2</sub> in combustion air</label>
         <div class="input-group">
           <input name="o2CombAirEnriched" type="number" min="0" step="any" max="100" class="form-control"
             id="o2CombAirEnriched" (focus)="changeField('o2CombAir')" formControlName="o2CombAirEnriched"
@@ -218,8 +218,7 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="o2FlueGasEnriched">O
-          <sub>2</sub> in flue gasses</label>
+        <label class="small" for="o2FlueGasEnriched">O<sub>2</sub> in flue gases</label>
         <div class="input-group">
           <input name="o2FlueGasEnriched" type="number" min="0" step="any" max="100" class="form-control"
             id="o2FlueGasEnriched" (input)="calc()" (focus)="changeField('o2FlueGas')"
@@ -327,3 +326,8 @@
     <button type="button" class="btn btn-secondary pull-right" id="plotBtn" (click)="plot()">Plot</button>
   </div>
 </form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="o2EnrichmentService.operatingHours">
+</app-operating-hours-modal>

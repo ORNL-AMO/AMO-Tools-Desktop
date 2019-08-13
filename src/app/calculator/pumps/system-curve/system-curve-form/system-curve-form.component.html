@@ -37,7 +37,7 @@
     <label class="small" for="flowRate1">Flow Rate</label>
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="flowRate1" formControlName="flowRate"
-        (input)="saveChanges()" onfocus="this.select();" (focus)="focusField('flowRate')">
+        (input)="saveChanges()" onfocus="this.select();" (focus)="focusField('flowRate1')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
     </div>
@@ -52,7 +52,7 @@
     <label *ngIf="isFan" class="small" for="head2">Pressure</label>
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="head1" formControlName="head" (input)="saveChanges()"
-        onfocus="this.select();" (focus)="focusField('head')">
+        onfocus="this.select();" (focus)="focusField('head1')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>
@@ -89,7 +89,7 @@
     <label class="small" for="flowRate2">Flow Rate</label>
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="flowRate2" formControlName="flowRate"
-        (input)="saveChanges()" onfocus="this.select();" (focus)="focusField('flowRate')">
+        (input)="saveChanges()" onfocus="this.select();" (focus)="focusField('flowRate2')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanFlowRate)"></span>
     </div>
@@ -104,7 +104,7 @@
     <label *ngIf="isFan" class="small" for="head2">Pressure</label>
     <div class="input-group calc-addon-group">
       <input type="number" step="any" class="form-control addon-input" id="head2" formControlName="head" (input)="saveChanges()"
-        onfocus="this.select();" (focus)="focusField('head')">
+        onfocus="this.select();" (focus)="focusField('head2')">
       <span class="input-group-addon units" *ngIf="!isFan" [innerHTML]="getDisplayUnit(settings.distanceMeasurement)"></span>
       <span class="input-group-addon units" *ngIf="isFan" [innerHTML]="getDisplayUnit(settings.fanPressureMeasurement)"></span>
     </div>

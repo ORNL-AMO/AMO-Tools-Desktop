@@ -148,6 +148,7 @@ export class SystemCurveComponent implements OnInit {
       this.systemCurveService.fanStaticHead = this.staticHead;
       this.systemCurveService.fanLossCoefficient = this.lossCoefficient;
     }
+    this.systemCurveService.currentField.next('default');
   }
 
 

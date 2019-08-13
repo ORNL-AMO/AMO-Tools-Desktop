@@ -28,13 +28,17 @@
             <label for="utilityType">Filter Calculators by Utility Type</label>
             <select id="utilityType" class="form-control" [(ngModel)]="displayCalculatorType">
               <option [ngValue]="'All'">All</option>
-              <option [ngValue]="'Electricity'">Electricity</option>
-              <option [ngValue]="'Natural Gas'">Natural Gas</option>
-              <option [ngValue]="'Other Fuel'">Other Fuel</option>
-              <option [ngValue]="'Water'">Water</option>
-              <option [ngValue]="'Waste Water'">Waste Water</option>
-              <option [ngValue]="'Compressed Air'">Compressed Air</option>
-              <option [ngValue]="'Steam'">Steam</option>
+              <option [ngValue]="'Electricity'" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed">Electricity
+              </option>
+              <option [ngValue]="'Natural Gas'" *ngIf="treasureHunt.currentEnergyUsage.naturalGasUsed">Natural Gas
+              </option>
+              <option [ngValue]="'Other Fuel'" *ngIf="treasureHunt.currentEnergyUsage.otherFuelUsed">Other Fuel</option>
+              <option [ngValue]="'Water'" *ngIf="treasureHunt.currentEnergyUsage.waterUsed">Water</option>
+              <option [ngValue]="'Waste Water'" *ngIf="treasureHunt.currentEnergyUsage.wasteWaterUsed">Waste Water
+              </option>
+              <option [ngValue]="'Compressed Air'" *ngIf="treasureHunt.currentEnergyUsage.compressedAirUsed">Compressed
+                Air</option>
+              <option [ngValue]="'Steam'" *ngIf="treasureHunt.currentEnergyUsage.steamUsed">Steam</option>
             </select>
           </div>
         </div>
@@ -43,7 +47,8 @@
   </div>
   <div class="d-flex flex-wrap justify-content-center">
     <!--lighting replacement-->
-    <div *ngIf="displayCalculatorType == 'All' || displayCalculatorType == 'Electricity'"
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
       class="card calc-card-item m-2" (click)="selectCalc('lighting-replacement')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
@@ -56,7 +61,8 @@
       </div>
     </div>
     <!--replace existing motor-->
-    <div *ngIf="displayCalculatorType == 'All' || displayCalculatorType == 'Electricity'"
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
       class="card calc-card-item motors m-2" (click)="selectCalc('replace-existing')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon-div d-flex justify-content-center align-items-center">
@@ -70,7 +76,8 @@
       </div>
     </div>
     <!--upgrade motor drive-->
-    <div *ngIf="displayCalculatorType == 'All' || displayCalculatorType == 'Electricity'"
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
       class="card calc-card-item motors m-2" (click)="selectCalc('motor-drive')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon-div d-flex justify-content-center align-items-center">
@@ -84,7 +91,8 @@
       </div>
     </div>
     <!--natural gas reduction-->
-    <div *ngIf="displayCalculatorType == 'All' || displayCalculatorType == 'Natural Gas'"
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Natural Gas') && treasureHunt.currentEnergyUsage.naturalGasUsed == true"
       class="card calc-card-item m-2" (click)="selectCalc('natural-gas-reduction')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
@@ -97,7 +105,8 @@
       </div>
     </div>
     <!--electricity reduction-->
-    <div *ngIf="displayCalculatorType == 'All' || displayCalculatorType == 'Electricity'"
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
       class="card calc-card-item m-2" (click)="selectCalc('electricity-reduction')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
@@ -111,7 +120,7 @@
     </div>
     <!--compressed air reduction-->
     <div
-      *ngIf="displayCalculatorType == 'All' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Compressed Air'"
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Compressed Air') && (treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.compressedAirUsed == true)"
       class="card calc-card-item m-2" (click)="selectCalc('compressed-air-reduction')">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
@@ -119,7 +128,38 @@
         </div>
         <a class="pt-2">Compressed Air Reduction</a>
         <p class="mb-0 text-center help-text">
-          This calculator reduces the compressed air use. Real description needed.
+          This calculator is used to quantify the energy savings associated with reducing compressed air usage.
+        </p>
+      </div>
+    </div>
+    <!--compressed air reduction-->
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && (treasureHunt.currentEnergyUsage.electricityUsed == true)"
+      class="card calc-card-item m-2" (click)="selectCalc('compressed-air-pressure-reduction')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png"
+            class="calc-img">
+        </div>
+        <a class="pt-2 text-center">Compressed Air Pressure Reduction</a>
+        <p class="mb-0 text-center help-text">
+          This calculator is used to quantify the energy savings associated with reducing compressed air system
+          pressure.
+        </p>
+      </div>
+    </div>
+    <!--water reduction-->
+    <div
+      *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Waste Water' || displayCalculatorType == 'Water') && (treasureHunt.currentEnergyUsage.waterUsed == true || treasureHunt.currentEnergyUsage.wasteWaterUsed == true)"
+      class="card calc-card-item m-2" (click)="selectCalc('water-reduction')">
+      <div class="card-body d-flex flex-column p-2 align-items-center">
+        <div class="calc-icon d-flex justify-content-center align-items-center">
+          <img src="assets/images/calculator-icons/utilities-icons/water-reduction-icon.png" class="calc-img">
+        </div>
+        <a class="pt-2">Water Reduction</a>
+        <p class="mb-0 text-center help-text">
+          This calculator is used to quantify the energy savings associated with reducing water usage and wastewater
+          disposal.
         </p>
       </div>
     </div>
@@ -172,6 +212,15 @@
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-reduction>
 
+<app-compressed-air-pressure-reduction *ngIf="selectedCalc == 'compressed-air-pressure-reduction'"
+  [inTreasureHunt]="true" (emitSave)="saveNewCompressedAirPressureReduction($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-pressure-reduction>
+
+<app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveNewWaterReduction($event)" (emitCancel)="selectCalc('none')"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-water-reduction>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

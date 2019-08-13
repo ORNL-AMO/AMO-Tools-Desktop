@@ -2,10 +2,16 @@
   <label class="group-label">Motor Phases</label>
   <div class="form-group pt-1 pb-3">
     <label>Average Power Factor</label>
-    <input type="number" step="any" class="form-control" name="powerFactor" formControlName="powerFactor" (input)="calculate()"
-      onfocus="this.select();">
-    <span class="alert-danger pull-right small" *ngIf="form.controls.powerFactor.invalid && !form.controls.powerFactor.pristine">
+    <div class="input-group">
+    <input type="number" step="any" class="form-control" name="powerFactor" formControlName="powerFactor"
+      (input)="calculate()" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+      </div>
+    <span class="alert-danger pull-right small"
+      *ngIf="form.controls.powerFactor.invalid && !form.controls.powerFactor.pristine">
       <span *ngIf="form.controls.powerFactor.errors.required">Value required.</span>
+      <span *ngIf="form.controls.powerFactor.errors.max">Value cannot exceed {{form.controls.powerFactor.errors.max.max}}%</span>
+      <span *ngIf="form.controls.powerFactor.errors.min">Value cannot be less than {{form.controls.powerFactor.errors.min.min}}%</span>
     </span>
   </div>
 
@@ -15,7 +21,8 @@
       <div class="input-group-prepend">
         <span class="input-group-text hide-text pt-0 pb-0">A</span>
       </div>
-      <input type="number" step="any" name="amps" type="text" class="form-control auto-width disabled-input" [disabled]="true" value="Amps">
+      <input type="number" step="any" name="amps" type="text" class="form-control auto-width disabled-input"
+        [disabled]="true" value="Amps">
       <input type="number" step="any" name="volts" type="text" class="form-control auto-width disabled-input"
         [disabled]="true" value="Volts">
       <!-- <input type="number" step="any" name="amps" type="text" class="form-control auto-width disabled-input" [disabled]="true"
@@ -32,18 +39,18 @@
       </div>
       <input type="number" step="any" class="form-control auto-width" name="phase1Amps" formControlName="phase1Amps"
         (input)="calculate()" onfocus="this.select();">
-      <input type="number" step="any" class="form-control auto-width" name="phase1Voltage" formControlName="phase1Voltage"
-        (input)="calculate()" onfocus="this.select();">
+      <input type="number" step="any" class="form-control auto-width" name="phase1Voltage"
+        formControlName="phase1Voltage" (input)="calculate()" onfocus="this.select();">
     </div>
     <div class="input-group d-flex flex-nowrap">
       <div class="input-group-prepend">
         <span class="input-group-text pt-0 pb-0">B
         </span>
       </div>
-      <input type="number" step="any" class="form-control auto-width" name="phase2Voltage" formControlName="phase2Voltage"
-        (input)="calculate()" onfocus="this.select();">
       <input type="number" step="any" class="form-control auto-width" name="phase2Amps" formControlName="phase2Amps"
         (input)="calculate()" onfocus="this.select();">
+      <input type="number" step="any" class="form-control auto-width" name="phase2Voltage"
+        formControlName="phase2Voltage" (input)="calculate()" onfocus="this.select();">
     </div>
     <div class="input-group d-flex flex-nowrap">
       <div class="input-group-prepend">
@@ -51,30 +58,32 @@
       </div>
       <input type="number" step="any" class="form-control auto-width" name="phase3Amps" formControlName="phase3Amps"
         (input)="calculate()" onfocus="this.select();">
-      <input type="number" step="any" class="form-control auto-width" name="phase3Voltage" formControlName="phase3Voltage"
-        (input)="calculate()" onfocus="this.select();">
+      <input type="number" step="any" class="form-control auto-width" name="phase3Voltage"
+        formControlName="phase3Voltage" (input)="calculate()" onfocus="this.select();">
     </div>
   </div>
   <label class="group-label">Motor Rated Data</label>
   <div class="form-group">
     <label>Rated Current</label>
     <div class="input-group">
-      <input type="number" step="any" class="form-control" name="ratedCurrent" formControlName="ratedCurrent" (input)="calculate()"
-        onfocus="this.select();">
+      <input type="number" step="any" class="form-control" name="ratedCurrent" formControlName="ratedCurrent"
+        (input)="calculate()" onfocus="this.select();">
       <span class="input-group-addon units">A</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="form.controls.ratedCurrent.invalid && !form.controls.ratedCurrent.pristine">
+    <span class="alert-danger pull-right small"
+      *ngIf="form.controls.ratedCurrent.invalid && !form.controls.ratedCurrent.pristine">
       <span *ngIf="form.controls.ratedCurrent.errors.required">Value required.</span>
     </span>
   </div>
   <div class="form-group">
     <label>Rated Voltage</label>
     <div class="input-group">
-      <input type="number" step="any" class="form-control" name="ratedVoltage" formControlName="ratedVoltage" (input)="calculate()"
-        onfocus="this.select();">
+      <input type="number" step="any" class="form-control" name="ratedVoltage" formControlName="ratedVoltage"
+        (input)="calculate()" onfocus="this.select();">
       <span class="input-group-addon units">V</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="form.controls.ratedVoltage.invalid && !form.controls.ratedVoltage.pristine">
+    <span class="alert-danger pull-right small"
+      *ngIf="form.controls.ratedVoltage.invalid && !form.controls.ratedVoltage.pristine">
       <span *ngIf="form.controls.ratedVoltage.errors.required">Value required.</span>
     </span>
   </div>

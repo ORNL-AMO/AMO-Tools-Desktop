@@ -42,9 +42,8 @@ export class OperatingCostComponent implements OnInit {
     this.inputs = {
       motorBhp: 0,
       bhpUnloaded: 0,
-      annualOperatingHours: 0,
+      annualOperatingHours: 8760,
       runTimeLoaded: 0,
-      runTimeUnloaded: 0,
       efficiencyLoaded: 0,
       efficiencyUnloaded: 0,
       costOfElectricity: 0,

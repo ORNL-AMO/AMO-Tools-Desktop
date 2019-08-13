@@ -5,6 +5,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SystemCurveService {
@@ -23,7 +24,13 @@ export class SystemCurveService {
   fanLossCoefficient: number;
   // fanTableData: Array<Array<string>>;
   // fanKeyColors: Array<{ borderColor: string, fillColor: string }>;
-  constructor(private psatService: PsatService, private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  currentField: BehaviorSubject<string>;
+
+  systemRegEquation: BehaviorSubject<string>;
+  constructor(private psatService: PsatService, private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+    this.currentField = new BehaviorSubject<string>('default');
+    this.systemRegEquation = new BehaviorSubject<string>(null);
+  }
 
   getLossCoefficient(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {
     //from PSAT/curve.html -> k = (h2-h1)/(Math.pow(f2,C)-Math.pow(f1,C))
@@ -202,7 +209,7 @@ export class SystemCurveService {
       }
     }
     head = staticHead + lossCoefficient * Math.pow(x.domain()[1], curveConstants.form.controls.systemLossExponent.value);
-
+    this.systemRegEquation.next('Head = ' + staticHead + ' + (' + lossCoefficient + ' \xD7 flow' + '<sup>' + curveConstants.form.controls.systemLossExponent.value + '</sup>)');
     if (head >= 0) {
       let tmpFluidPower: number;
       if (isFan) {

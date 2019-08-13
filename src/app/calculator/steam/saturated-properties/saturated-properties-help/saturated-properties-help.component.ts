@@ -14,11 +14,8 @@ export class SaturatedPropertiesHelpComponent implements OnInit {
   settings: Settings;
   @Input()
   ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
-  constructor(private steamService: SteamService) { }
+  constructor() { }
 
   ngOnInit() {
-  }
-  getDisplayUnit(unit: string) {
-    return this.steamService.getDisplayUnit(unit);
   }
 }

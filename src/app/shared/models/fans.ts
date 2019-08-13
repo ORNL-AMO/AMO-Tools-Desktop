@@ -1,3 +1,5 @@
+import { OperatingHours } from "./operations";
+
 export interface FSAT {
   name?: string;
   modifications?: Modification[];
@@ -10,6 +12,7 @@ export interface FSAT {
   implementationCosts?: number;
   setupDone?: boolean;
   isVFD?: boolean;
+  operatingHours?: OperatingHours;
 }
 
 export interface Modification {
@@ -173,11 +176,17 @@ export interface Fan203Results {
   fanEfficiencyStaticPressure: number;
   fanEfficiencyStaticPressureRise: number;
   flowCorrected: number;
+  flow: number;
+  pressureTotal: number;
   pressureTotalCorrected: number;
+  pressureStatic: number;
   pressureStaticCorrected: number;
   staticPressureRiseCorrected: number;
+  staticPressureRise: number;
   powerCorrected: number;
+  power: number;
   kpc: number;
+  kpcCorrected: number;
 }
 
 

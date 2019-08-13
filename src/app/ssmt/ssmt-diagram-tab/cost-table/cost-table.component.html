@@ -69,8 +69,12 @@
         <tr>
           <td class="text-center w-50">Flow</td>
           <td class="text-center w-50">
-            {{outputData.operationsOutput.makeupWaterVolumeFlow | number:'1.0-2'}} gpm <br>
-            {{outputData.operationsOutput.makeupWaterVolumeFlowAnnual | number:'1.0-2'}} gal
+            {{outputData.makeupWaterVolumeFlow | number:'1.0-2'}} <span
+              [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>
+            <br>
+            {{outputData.annualMakeupWaterFlow | number:'1.0-2'}} <span
+              [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+
           </td>
         </tr>
         <tr>
@@ -124,7 +128,7 @@
         </tr>
       </tbody>
     </table>
-    <button *ngIf="!outputData.marginalHPCost" class="btn btn-primary"
-      (click)="calculateMarginalCosts()">Calculate Marginal Costs</button>
+    <button *ngIf="!outputData.marginalHPCost" class="btn btn-primary" (click)="calculateMarginalCosts()">Calculate
+      Marginal Costs</button>
   </div>
 </div>

@@ -2,7 +2,8 @@
   <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-12">
       <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
-        (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"></app-treasure-chest-menu>
+        (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"
+        (emitImportExport)="openImportExportModal()"></app-treasure-chest-menu>
     </div>
 
     <!--lighting replacement-->
@@ -58,6 +59,24 @@
       (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirReduction')" [treasureHunt]="treasureHunt"
       (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
       [displayEnergyType]="displayEnergyType"></app-compressed-air-reduction-card>
+    <!--compressed air pressure reduction-->
+    <app-compressed-air-pressure-reduction-card
+      *ngFor="let compressedAirPressureReduction of treasureHunt.compressedAirPressureReductions; let index = index;"
+      [compressedAirPressureReduction]="compressedAirPressureReduction" [settings]="settings" [index]="index"
+      (emitEditCompressedAirPressureReduction)="editCompressedAirPressureReduction($event, index)"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'compressedAirReduction')"
+      (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirPressureReduction')" [treasureHunt]="treasureHunt"
+      (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+      [displayEnergyType]="displayEnergyType"></app-compressed-air-pressure-reduction-card>
+    <!--water reduction-->
+    <app-water-reduction-card *ngFor="let waterReduction of treasureHunt.waterReductions; let index = index;"
+      [waterReduction]="waterReduction" [settings]="settings" [index]="index"
+      (emitEditWaterReduction)="editWaterReduction($event, index)"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'waterReduction')"
+      (emitDeleteItem)="showDeleteItem($event, index, 'waterReduction')" [treasureHunt]="treasureHunt"
+      (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+      [displayEnergyType]="displayEnergyType"></app-water-reduction-card>
+
     <!--standalone opportunity sheet-->
     <app-opportunity-sheet-card *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;"
       [opportunitySheet]="opportunitySheet" [index]="index"
@@ -67,8 +86,7 @@
       [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
     </app-opportunity-sheet-card>
   </div>
-  <div class="scroll-item result-column justify-content-center mr-3 ml-3"
-    [ngStyle]="{'height.px': containerHeight}">
+  <div class="scroll-item result-column justify-content-center mr-3 ml-3" [ngStyle]="{'height.px': containerHeight}">
     <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
   </div>
 </div>
@@ -108,6 +126,15 @@
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="opperatingHoursPerYear"></app-compressed-air-reduction>
 
+<app-compressed-air-pressure-reduction *ngIf="selectedCalc == 'compressed-air-pressure-reduction'"
+  [inTreasureHunt]="true" (emitSave)="saveEditCompressedAirPressureReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="opperatingHoursPerYear"></app-compressed-air-pressure-reduction>
+
+<app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveEditWaterReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="opperatingHoursPerYear"></app-water-reduction>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
@@ -178,3 +205,6 @@
     </div>
   </div>
 </div>
+
+<app-import-export-opportunities *ngIf="showImportExportModal" [treasureHunt]="treasureHunt"
+  (emitImportData)="importData($event)" (emitCloseModal)="closeImportExportModal()"></app-import-export-opportunities>

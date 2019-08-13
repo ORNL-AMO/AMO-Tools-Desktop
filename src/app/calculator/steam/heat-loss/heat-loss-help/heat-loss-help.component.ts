@@ -31,29 +31,20 @@ export class HeatLossHelpComponent implements OnInit {
     }
   }
 
-
   getRanges() {
     this.rangeValues = this.heatLossService.getRangeValues(this.settings, this.thermodynamicQuantity);
-  }
-
-  getDisplayUnit(unit: string) {
-    if (unit) {
-      return this.steamService.getDisplayUnit(unit);
-    } else {
-      return unit;
-    }
   }
 
   getOptionDisplayUnit() {
     let displayUnit: string;
     if (this.thermodynamicQuantity === 0) {
-      displayUnit = this.getDisplayUnit(this.settings.steamTemperatureMeasurement);
+      displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
     } else if (this.thermodynamicQuantity === 1) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEnthalpyMeasurement);
+      displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
     } else if (this.thermodynamicQuantity === 2) {
-      displayUnit = this.getDisplayUnit(this.settings.steamSpecificEntropyMeasurement);
+      displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
     } else if (this.thermodynamicQuantity === 3) {
       return displayUnit;

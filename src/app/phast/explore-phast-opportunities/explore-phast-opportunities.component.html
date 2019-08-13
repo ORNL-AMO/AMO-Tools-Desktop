@@ -1,7 +1,8 @@
 <div class="phast">
   <div class="d-flex modify-conditions">
     <!--modExists-->
-    <div class="d-flex w-50 flex-column scroll-item modification" [ngStyle]="{'height.px': containerHeight}">
+    <div class="d-flex w-50 flex-column scroll-item modification" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'modal-open': isModalOpen == true}">
       <div class="header ml-2 mr-2">
         <h3>Select Potential Adjustment Projects</h3>
       </div>

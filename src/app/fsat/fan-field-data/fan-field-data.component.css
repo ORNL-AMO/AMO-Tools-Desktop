@@ -10,7 +10,11 @@
     padding: 6px;
 }
 
-
 .modal-content{
     height: 85vh;
 }
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }

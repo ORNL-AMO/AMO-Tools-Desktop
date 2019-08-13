@@ -15,6 +15,7 @@ import { CoreService } from '../../core/core.service';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { AssessmentService } from '../assessment.service';
 import { MockSsmt, MockSsmtSettings } from '../../core/mockSsmt';
+import { MockTreasureHunt, MockTreasureHuntSettings } from '../../core/mockTreasureHunt';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -217,6 +218,20 @@ export class ResetDataModalComponent implements OnInit {
       this.createSsmtExample(id);
     }
 
+    //ssmt
+    let treasureHuntExample: Assessment = this.assessmentDbService.getTreasureHuntExample();
+    if (treasureHuntExample) {
+      //exists
+      //delete
+      this.indexedDbService.deleteAssessment(treasureHuntExample.id).then(() => {
+        //create
+        this.createTreasureHuntExample(id);
+      });
+    } else {
+      //create
+      this.createTreasureHuntExample(id);
+    }
+
   }
 
   createPhastExample(dirId: number): Promise<any> {
@@ -282,6 +297,19 @@ export class ResetDataModalComponent implements OnInit {
     });
   }
 
+  createTreasureHuntExample(dirId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      MockTreasureHunt.directoryId = dirId;
+      //add example
+      this.indexedDbService.addAssessment(MockTreasureHunt).then(assessmentId => {
+        MockTreasureHuntSettings.assessmentId = assessmentId;
+        //add settings
+        this.indexedDbService.addSettings(MockTreasureHuntSettings).then(() => {
+          resolve(true);
+        });
+      });
+    });
+  }
 
   resetFactoryUserAssessments() {
     //reset entire Db

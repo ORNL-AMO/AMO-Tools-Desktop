@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput, HeatExchangerOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
@@ -17,6 +17,11 @@ export class HoverSteamPropertiesComponent implements OnInit {
   outputData: SSMTOutput;
   @Input()
   inputData: SSMTInputs;
+  @Input()
+  inResultsPanel: boolean;
+
+  @ViewChild('copyTable') copyTable: ElementRef;
+  tableString: any;
 
   steam: SteamPropertiesOutput;
   label: string;
@@ -110,6 +115,10 @@ export class HoverSteamPropertiesComponent implements OnInit {
     }else if(this.hoveredProperty === 'heatExchangerColdOutlet'){
       this.hoverHeatExchangerColdOutlet();
     }
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 
   hoverVentedLowPressureSteam() {
@@ -429,14 +438,14 @@ export class HoverSteamPropertiesComponent implements OnInit {
     } else {
       this.label = 'High to Low PRV Outlet';
     }
-    let prv: PrvOutput = this.outputData.mediumPressureToLowPressurePrv;
-    this.setOutletSteam(prv, prv.inletMassFlow);
+    let prv: PrvOutput = this.outputData.lowPressurePRV;
+    this.setOutletSteam(prv, prv.outletMassFlow);
   }
 
   mediumPressurePRVOutletHovered() {
     this.label = 'High to Medium PRV Outlet';
-    let prv: PrvOutput = this.outputData.highPressureToMediumPressurePrv;
-    this.setOutletSteam(prv, prv.inletMassFlow);
+    let prv: PrvOutput = this.outputData.highToMediumPressurePRV;
+    this.setOutletSteam(prv, prv.outletMassFlow);
   }
 
   boilerSteamHovered() {

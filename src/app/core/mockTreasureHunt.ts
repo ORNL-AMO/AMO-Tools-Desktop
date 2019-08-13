@@ -4,32 +4,40 @@ import { Settings } from "../shared/models/settings";
 export const MockTreasureHunt: Assessment = {
     "name": "Treasure Hunt Example",
     "type": "TreasureHunt",
+    "isExample": true,
     "treasureHunt": {
         "name": "Treasure Hunt",
         "setupDone": true,
         "operatingHours": {
             "weeksPerYear": 52,
             "daysPerWeek": 7,
-            "shiftsPerDay": 3,
-            "hoursPerShift": 8,
+            // "shiftsPerDay": 3,
+            // "hoursPerShift": 8,
             "hoursPerYear": 8760,
-            "isCalculated": false
+            //"isCalculated": false
         },
         "currentEnergyUsage": {
             "electricityUsage": 32000000,
             "electricityCosts": 1600000,
+            "electricityUsed": true,
             "naturalGasUsage": 125000,
             "naturalGasCosts": 500000,
+            "naturalGasUsed": true,
             "otherFuelUsage": 0,
             "otherFuelCosts": 0,
+            "otherFuelUsed": false,
             "waterUsage": 40000000,
             "waterCosts": 100000,
+            "waterUsed": true,
             "wasteWaterUsage": 0,
             "wasteWaterCosts": 0,
+            "wasteWaterUsed": false,
             "compressedAirUsage": 0,
             "compressedAirCosts": 0,
+            "compressedAirUsed": false,
             "steamUsage": 0,
-            "steamCosts": 0
+            "steamCosts": 0,
+            "steamUsed": false
         },
         "naturalGasReductions": [
             {
@@ -540,6 +548,8 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "utilityType": 1,
                 "utilityCost": 0.05,
+                "compressedAirCost": 0.02,
+                "electricityCost": 0.05,
                 "measurementMethod": 1,
                 "flowMeterMethodData": { "meterReading": 0.2 },
                 "bagMethodData": {
@@ -566,6 +576,8 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "utilityType": 1,
                 "utilityCost": 0.05,
+                "compressedAirCost": 0.02,
+                "electricityCost": 0.05,
                 "measurementMethod": 3,
                 "flowMeterMethodData": { "meterReading": 0.2 },
                 "bagMethodData": {
@@ -615,6 +627,8 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "utilityType": 1,
                 "utilityCost": 0.05,
+                "compressedAirCost": 0.02,
+                "electricityCost": 0.05,
                 "measurementMethod": 0,
                 "flowMeterMethodData": { "meterReading": 6000 },
                 "bagMethodData": {
@@ -641,6 +655,8 @@ export const MockTreasureHunt: Assessment = {
                 "hoursPerYear": 8760,
                 "utilityType": 1,
                 "utilityCost": 0.05,
+                "compressedAirCost": 0.02,
+                "electricityCost": 0.05,
                 "measurementMethod": 0,
                 "flowMeterMethodData": { "meterReading": 5600 },
                 "bagMethodData": {

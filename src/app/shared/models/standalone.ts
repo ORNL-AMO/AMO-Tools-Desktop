@@ -70,7 +70,6 @@ export interface OperatingCostInput {
   bhpUnloaded: number;
   annualOperatingHours: number;
   runTimeLoaded: number;
-  runTimeUnloaded: number;
   efficiencyLoaded: number;
   efficiencyUnloaded: number;
   costOfElectricity: number;
@@ -210,6 +209,8 @@ export interface ElectricityReductionResult {
 
 //====== end electricity reduction objects ====
 
+
+
 //======= natural gas reduction objects ========
 export interface NaturalGasReductionInput {
   naturalGasReductionInputVec: Array<NaturalGasReductionData>
@@ -276,6 +277,7 @@ export interface NaturalGasReductionResult {
 //====== end natural gas reduction objects =======
 
 
+
 //====== compressed air reduction objects ======
 export interface CompressedAirReductionInput {
   compressedAirReductionInputVec: Array<CompressedAirReductionData>
@@ -286,6 +288,8 @@ export interface CompressedAirReductionData {
   hoursPerYear: number,
   utilityType: number,
   utilityCost: number,
+  compressedAirCost: number,
+  electricityCost: number,
   measurementMethod: number,
   flowMeterMethodData: CompressedAirFlowMeterMethodData,
   bagMethodData: BagMethodData,
@@ -338,7 +342,88 @@ export interface CompressedAirReductionResult {
   singleNozzeFlowRate: number,
   consumption: number
 };
-
-
-
 //===== END compressed air reduction objects =====
+
+
+
+//====== compressed air pressure reduction objects =====
+export interface CompressedAirPressureReductionInput {
+  compressedAirPressureReductionInputVec: Array<CompressedAirPressureReductionData>;
+};
+
+export interface CompressedAirPressureReductionData {
+  name: string,
+  isBaseline: boolean,
+  hoursPerYear: number,
+  electricityCost: number,
+  compressorPower: number,
+  pressure: number,
+  proposedPressure: number
+};
+
+export interface CompressedAirPressureReductionResults {
+  baselineResults: CompressedAirPressureReductionResult,
+  modificationResults: CompressedAirPressureReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number
+};
+
+export interface CompressedAirPressureReductionResult {
+  energyUse: number,
+  energyCost: number
+};
+//==== END compressed air pressure reduction objects =====
+
+
+
+//====== water/wastewater reduction objects ======
+// wastewater shares the same objects as water
+export interface WaterReductionInput {
+  waterReductionInputVec: Array<WaterReductionData>
+};
+
+export interface WaterReductionData {
+  name: string,
+  hoursPerYear: number,
+  waterCost: number,
+  measurementMethod: number,
+  meteredFlowMethodData: MeteredFlowMethodData,
+  volumeMeterMethodData: VolumeMeterMethodData,
+  bucketMethodData: BucketMethodData,
+  otherMethodData: WaterOtherMethodData,
+  isWastewater: boolean
+};
+
+export interface VolumeMeterMethodData {
+  finalMeterReading: number,
+  initialMeterReading: number,
+  elapsedTime: number
+};
+
+export interface MeteredFlowMethodData {
+  meterReading: number
+};
+
+export interface BucketMethodData {
+  bucketVolume: number,
+  bucketFillTime: number
+};
+
+export interface WaterOtherMethodData {
+  consumption: number
+};
+
+export interface WaterReductionResults {
+  baselineResults: WaterReductionResult,
+  modificationResults: WaterReductionResult,
+  annualWaterSavings: number,
+  annualCostSavings: number
+};
+
+export interface WaterReductionResult {
+  waterUse: number,
+  waterCost: number,
+  annualWaterSavings: number,
+  costSavings: number
+};
+//===== END water/wastewater reduction objects =====

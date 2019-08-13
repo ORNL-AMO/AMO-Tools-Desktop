@@ -14,11 +14,22 @@
   left: 35%;
 }
 
-.survey-card .card-header{
+.survey-card .card-header, .translate-card .card-header{
   background-color: #145A32;
   color: white;
 }
 
-.survey-card .close{
+.survey-card .close, .translate-card .close{
   color: white;
+}
+
+
+.translate-card{
+  position: fixed;
+  z-index: 800000;
+  box-shadow: 6px 8px 18px 1px;
+  border-color: #145A32;
+  top: -100%;
+  left: 35%;
+  width: 400px;
 }

@@ -127,6 +127,8 @@ export interface BoilerInput {
     deaeratorVentRate: number;
     deaeratorPressure: number;
     approachTemperature: number;
+    blowdownConductivity?: number;
+    feedwaterConductivity?: number
 }
 
 

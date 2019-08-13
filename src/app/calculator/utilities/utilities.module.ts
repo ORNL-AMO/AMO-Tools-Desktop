@@ -20,6 +20,8 @@ import { Co2SavingsModule } from './co2-savings/co2-savings.module';
 import { ElectricityReductionModule } from './electricity-reduction/electricity-reduction.module';
 import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-reduction.module';
 import { CompressedAirReductionModule } from './compressed-air-reduction/compressed-air-reduction.module';
+import { WaterReductionModule } from './water-reduction/water-reduction.module';
+import { CompressedAirPressureReductionModule } from './compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 
 @NgModule({
     declarations: [
@@ -47,7 +49,9 @@ import { CompressedAirReductionModule } from './compressed-air-reduction/compres
         Co2SavingsModule,
         ElectricityReductionModule,
         NaturalGasReductionModule,
-        CompressedAirReductionModule
+        CompressedAirReductionModule,
+        CompressedAirPressureReductionModule,
+        WaterReductionModule
     ],
     providers: [
         CashFlowService,
@@ -56,4 +60,4 @@ import { CompressedAirReductionModule } from './compressed-air-reduction/compres
 
 })
 
-export class UtilitiesModule {}
+export class UtilitiesModule { }

@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData } from "./standalone";
 
 export interface TreasureHunt {
     name: string,
@@ -12,6 +12,8 @@ export interface TreasureHunt {
     naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
     electricityReductions?: Array<ElectricityReductionTreasureHunt>;
     compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
+    compressedAirPressureReductions?: Array<CompressedAirPressureReductionTreasureHunt>;
+    waterReductions?: Array<WaterReductionTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     setupDone: boolean;
@@ -20,18 +22,25 @@ export interface TreasureHunt {
 export interface EnergyUsage {
     electricityUsage: number,
     electricityCosts: number,
+    electricityUsed: boolean,
     naturalGasUsage: number,
     naturalGasCosts: number,
+    naturalGasUsed: boolean,
     otherFuelUsage: number,
     otherFuelCosts: number,
+    otherFuelUsed: boolean,
     waterUsage: number,
     waterCosts: number,
+    waterUsed: boolean,
     wasteWaterUsage: number,
     wasteWaterCosts: number,
+    wasteWaterUsed: boolean,
     compressedAirUsage: number,
     compressedAirCosts: number,
+    compressedAirUsed: boolean,
     steamUsage: number,
     steamCosts: number
+    steamUsed: boolean,
 }
 
 export interface OpportunitySheet {
@@ -101,6 +110,28 @@ export interface ElectricityReductionTreasureHunt {
 export interface CompressedAirReductionTreasureHunt {
     baseline: Array<CompressedAirReductionData>;
     modification: Array<CompressedAirReductionData>;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface CompressedAirPressureReductionTreasureHunt {
+    baseline: Array<CompressedAirPressureReductionData>;
+    modification: Array<CompressedAirPressureReductionData>;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+
+export interface WaterReductionTreasureHunt {
+    baseline: Array<WaterReductionData>;
+    modification: Array<WaterReductionData>;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
+export interface WastewaterReductionTreasureHunt {
+    baseline: Array<WaterReductionData>;
+    modification: Array<WaterReductionData>;
     opportunitySheet?: OpportunitySheet;
     selected?: boolean;
 }
@@ -189,3 +220,14 @@ export interface OpportunitiesPaybackDetails {
     totals: { numOpportunities: number, totalSavings: number };
 }
 
+export interface ImportExportOpportunities {
+    lightingReplacements?: Array<LightingReplacementTreasureHunt>;
+    opportunitySheets?: Array<OpportunitySheet>;
+    replaceExistingMotors?: Array<ReplaceExistingMotorTreasureHunt>;
+    motorDrives?: Array<MotorDriveInputsTreasureHunt>;
+    naturalGasReductions?: Array<NaturalGasReductionTreasureHunt>;
+    electricityReductions?: Array<ElectricityReductionTreasureHunt>;
+    compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
+    waterReductions?: Array<WaterReductionTreasureHunt>;
+    compressedAirPressureReductions?: Array<CompressedAirPressureReductionTreasureHunt>
+}

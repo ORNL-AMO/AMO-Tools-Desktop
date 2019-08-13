@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MotorDriveInputs, MotorDriveOutputs, DriveResult } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class MotorDriveService {
   motorDriveData: MotorDriveInputs;
+  operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder) { }
 
   getDefaultData(settings: Settings): MotorDriveInputs{
@@ -21,7 +23,7 @@ export class MotorDriveService {
 
   getFormFromObj(inputObj: MotorDriveInputs): FormGroup {
     let tmpForm: FormGroup = this.formBuilder.group({
-      motorPower: [inputObj.motorPower, [Validators.required]],
+      motorPower: [inputObj.motorPower, [Validators.required, Validators.min(0)]],
       annualOperatingHours: [inputObj.annualOperatingHours, [Validators.required, Validators.min(0)]],
       averageMotorLoad: [inputObj.averageMotorLoad, [Validators.required]],
       electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],

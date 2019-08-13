@@ -22,7 +22,6 @@ import { OpportunitySheetHelpComponent } from './standalone-opportunity-sheet/op
 import { OpportunitySheetResultsComponent } from './standalone-opportunity-sheet/opportunity-sheet-results/opportunity-sheet-results.component';
 import { OpportunitySheetCardComponent } from './treasure-chest/opportunity-sheet-card/opportunity-sheet-card.component';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
-import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
 import { SharedModule } from '../shared/shared.module';
 import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
@@ -39,6 +38,11 @@ import { ElectricityReductionModule } from '../calculator/utilities/electricity-
 import { ElectricityReductionCardComponent } from './treasure-chest/electricity-reduction-card/electricity-reduction-card.component';
 import { CompressedAirReductionModule } from '../calculator/utilities/compressed-air-reduction/compressed-air-reduction.module';
 import { CompressedAirReductionCardComponent } from './treasure-chest/compressed-air-reduction-card/compressed-air-reduction-card.component';
+import { ImportExportOpportunitiesComponent } from './treasure-chest/import-export-opportunities/import-export-opportunities.component';
+import { WaterReductionModule } from '../calculator/utilities/water-reduction/water-reduction.module';
+import { WaterReductionCardComponent } from './treasure-chest/water-reduction-card/water-reduction-card.component';
+import { CompressedAirPressureReductionModule } from '../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
+import { CompressedAirPressureReductionCardComponent } from './treasure-chest/compressed-air-pressure-reduction-card/compressed-air-pressure-reduction-card.component';
 
 @NgModule({
   imports: [
@@ -53,7 +57,9 @@ import { CompressedAirReductionCardComponent } from './treasure-chest/compressed
     TreasureHuntReportModule,
     NaturalGasReductionModule,
     ElectricityReductionModule,
-    CompressedAirReductionModule
+    CompressedAirReductionModule,
+    WaterReductionModule,
+    CompressedAirPressureReductionModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -72,8 +78,17 @@ import { CompressedAirReductionCardComponent } from './treasure-chest/compressed
     OpportunitySheetHelpComponent, 
     OpportunitySheetResultsComponent, 
     OpportunitySheetCardComponent, 
-    OperatingHoursComponent, 
-    OperationCostsComponent, TreasureHuntGaugeComponent, ReplaceExistingMotorCardComponent, MotorDriveCardComponent, TreasureChestMenuComponent, NaturalGasReductionCardComponent, ElectricityReductionCardComponent, CompressedAirReductionCardComponent
+    OperationCostsComponent, 
+    TreasureHuntGaugeComponent, 
+    ReplaceExistingMotorCardComponent, 
+    MotorDriveCardComponent, 
+    TreasureChestMenuComponent, 
+    NaturalGasReductionCardComponent, 
+    ElectricityReductionCardComponent, 
+    CompressedAirReductionCardComponent, 
+    ImportExportOpportunitiesComponent,
+    WaterReductionCardComponent,
+    CompressedAirPressureReductionCardComponent
   ],
   providers: [ TreasureHuntService, OpportunitySheetService, TreasureHuntReportService ]
 })

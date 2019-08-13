@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { LightingReplacementResults } from '../../shared/models/lighting';
@@ -8,16 +8,19 @@ import { ReplaceExistingService } from '../../calculator/motors/replace-existing
 import { ReplaceExistingResults, MotorDriveOutputs } from '../../shared/models/calculators';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
-import { ElectricityReductionResults, NaturalGasReductionResults, CompressedAirReductionResult, CompressedAirReductionResults } from '../../shared/models/standalone';
+import { ElectricityReductionResults, NaturalGasReductionResults, CompressedAirReductionResults, WaterReductionResults, CompressedAirPressureReductionResults } from '../../shared/models/standalone';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
+import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
+import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 
 @Injectable()
 export class OpportunitySummaryService {
 
   constructor(private opportunitySheetService: OpportunitySheetService, private lightingReplacementService: LightingReplacementService,
     private replaceExistingService: ReplaceExistingService, private motorDriveService: MotorDriveService, private electricityReductionService: ElectricityReductionService,
-    private naturalGasReductionService: NaturalGasReductionService, private compressedAirReductionService: CompressedAirReductionService) { }
+    private naturalGasReductionService: NaturalGasReductionService, private compressedAirReductionService: CompressedAirReductionService,
+    private waterReductionService: WaterReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
 
   getOpportunitySummaries(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySummary> {
     let opportunitySummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
@@ -33,7 +36,10 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getNaturalGasReductionSummaries(treasureHunt.naturalGasReductions, opportunitySummaries, settings);
     //compressed air reduction
     opportunitySummaries = this.getCompressedAirReductionSummaries(treasureHunt.compressedAirReductions, opportunitySummaries, settings);
-
+    //compressed air pressure reduction
+    opportunitySummaries = this.getCompressedAirPressureReductionSummaries(treasureHunt.compressedAirPressureReductions, opportunitySummaries, settings);
+    //water reduction
+    opportunitySummaries = this.getWaterReductionSummaries(treasureHunt.waterReductions, opportunitySummaries, settings);
 
     //standalone opp sheets
     opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings);
@@ -198,6 +204,62 @@ export class OpportunitySummaryService {
           }
           else {
             oppSummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost);
+          }
+
+          opportunitySummaries.push(oppSummary);
+        }
+        index++;
+      });
+    }
+    return opportunitySummaries;
+  }
+
+  //getCompressedAirPressureReductionSummaries
+  getCompressedAirPressureReductionSummaries(compressedAirPressureReductions: Array<CompressedAirPressureReductionTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+    if (compressedAirPressureReductions) {
+      let index: number = 1;
+      compressedAirPressureReductions.forEach(compressedPressureAirReduction => {
+        if (compressedPressureAirReduction.selected) {
+          let name: string = 'Compressed Air Pressure Reduction #' + index;
+          let results: CompressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(settings, compressedPressureAirReduction.baseline, compressedPressureAirReduction.modification);
+          let opportunityCost: OpportunityCost;
+          if (compressedPressureAirReduction.opportunitySheet) {
+            if (compressedPressureAirReduction.opportunitySheet.name) {
+              name = compressedPressureAirReduction.opportunitySheet.name;
+            }
+            opportunityCost = compressedPressureAirReduction.opportunitySheet.opportunityCost;
+          }
+          let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Electricity', results.annualCostSavings, results.annualEnergySavings, opportunityCost);
+
+          opportunitySummaries.push(oppSummary);
+        }
+        index++;
+      });
+    }
+    return opportunitySummaries;
+  }
+
+  //getWaterReductionSummaries
+  getWaterReductionSummaries(waterReduction: Array<WaterReductionTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+    if (waterReduction) {
+      let index: number = 1;
+      waterReduction.forEach(waterReduction => {
+        if (waterReduction.selected) {
+          let name: string = 'Water Reduction #' + index;
+          let results: WaterReductionResults = this.waterReductionService.getResults(settings, waterReduction.baseline, waterReduction.modification);
+          let opportunityCost: OpportunityCost;
+          if (waterReduction.opportunitySheet) {
+            if (waterReduction.opportunitySheet.name) {
+              name = waterReduction.opportunitySheet.name;
+            }
+            opportunityCost = waterReduction.opportunitySheet.opportunityCost;
+          }
+          let oppSummary: OpportunitySummary;
+          if (waterReduction.baseline[0].isWastewater == true) {
+            oppSummary = this.getNewOpportunitySummary(name, 'Waste Water', results.annualCostSavings, results.annualWaterSavings, opportunityCost);
+          }
+          else {
+            oppSummary = this.getNewOpportunitySummary(name, 'Water', results.annualCostSavings, results.annualWaterSavings, opportunityCost);
           }
 
           opportunitySummaries.push(oppSummary);
