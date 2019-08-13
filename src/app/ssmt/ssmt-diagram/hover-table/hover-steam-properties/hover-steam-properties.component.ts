@@ -438,13 +438,13 @@ export class HoverSteamPropertiesComponent implements OnInit {
     } else {
       this.label = 'High to Low PRV Outlet';
     }
-    let prv: PrvOutput = this.outputData.lowPressurePRV;
+    let prv: PrvOutput = this.outputData.mediumPressureToLowPressurePrv;
     this.setOutletSteam(prv, prv.outletMassFlow);
   }
 
   mediumPressurePRVOutletHovered() {
     this.label = 'High to Medium PRV Outlet';
-    let prv: PrvOutput = this.outputData.highToMediumPressurePRV;
+    let prv: PrvOutput = this.outputData.highPressureToMediumPressurePrv;
     this.setOutletSteam(prv, prv.outletMassFlow);
   }
 
