@@ -91,10 +91,12 @@ export class SsmtComponent implements OnInit {
     private boilerService: BoilerService,
     private assessmentService: AssessmentService,
     private operationsService: OperationsService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private suiteTestService: SuiteTestService
   ) { }
 
   ngOnInit() {
+    this.suiteTestService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];

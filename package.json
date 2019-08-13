@@ -46,7 +46,7 @@
     "@angular/platform-server": "7.2.8",
     "@angular/router": "7.2.8",
     "ajv": "^5.2.2",
-    "amo-tools-suite": "0.5.1",
+    "amo-tools-suite": "file:../AMO-Tools-Suite",
     "bootstrap": "4.3.1",
     "c3": "^0.4.18",
     "core-js": "^2.4.1",
