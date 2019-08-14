@@ -593,6 +593,7 @@ export class SteamService {
 
   steamModeler(inputData){
     // debugger
+    console.log(inputData);
     return steamAddon.steamModeler(inputData);
   }
 }

@@ -69,10 +69,10 @@
         <tr>
           <td class="text-center w-50">Flow</td>
           <td class="text-center w-50">
-            {{outputData.makeupWaterVolumeFlow | number:'1.0-2'}} <span
+            {{outputData.operationsOutput.makeupWaterVolumeFlow | number:'1.0-2'}} <span
               [innerHTML]="settings.steamVolumeFlowMeasurement | settingsLabel"></span>
             <br>
-            {{outputData.annualMakeupWaterFlow | number:'1.0-2'}} <span
+            {{outputData.operationsOutput.makeupWaterVolumeFlowAnnual | number:'1.0-2'}} <span
               [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
 
           </td>

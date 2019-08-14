@@ -92,29 +92,25 @@ export class CalculateModelService {
 
 
   initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
-    this.calculateSuiteModel(_ssmt, _settings);
-
-
-     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(_ssmt));
-    // this.initResults();
-    // let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, _settings);
-    // let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings, ssmtCopy.boilerInput);
-    // let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, _settings);
-    // let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, _settings).valid;
+    console.log('init data and run!!!')
+    let ssmtCopy: SSMT = JSON.parse(JSON.stringify(_ssmt));
+    let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, _settings);
+    let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings, ssmtCopy.boilerInput);
+    let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCopy.turbineInput, ssmtCopy.headerInput, _settings);
+    let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, _settings).valid;
 
     // this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
-    // this.isBaselineCalculation = isBaseline;
-    // this.baselinePowerDemand = baselinePowerDemand;
-    // this.calcCount = 0;
+    this.isBaselineCalculation = isBaseline;
+    this.baselinePowerDemand = baselinePowerDemand;
     this.inputData = this.getInputDataFromSSMT(ssmtCopy);
     // this.settings = _settings;
-    // if (turbineValid && headerValid && boilerValid && operationsValid) {
-    //   return this.calculateModelRunner();
-    // } else {
-    let outputData: SSMTOutput = this.suiteTestService.test();
-
-    return { inputData: this.inputData, outputData: outputData };
-    // }
+    if (turbineValid && headerValid && boilerValid && operationsValid) {
+      let outputData: SSMTOutput = this.suiteTestService.calculateModel(this.inputData, _settings);
+      return { inputData: this.inputData, outputData: outputData };
+    } else {
+      let outputData: SSMTOutput = this.getResultsObject();
+      return { inputData: this.inputData, outputData: outputData };
+    }
   }
 
   getInputDataFromSSMT(ssmt: SSMT): SSMTInputs {
