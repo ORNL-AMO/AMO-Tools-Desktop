@@ -55,6 +55,7 @@ export class FanAnalysisComponent implements OnInit {
     private fanInfoFormService: FanInfoFormService, private gasDensityFormService: GasDensityFormService, private fanShaftPowerFormService: FanShaftPowerFormService ) { }
 
   ngOnInit() {
+    this.fanAnalysisService.inAssessmentModal = false;
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }

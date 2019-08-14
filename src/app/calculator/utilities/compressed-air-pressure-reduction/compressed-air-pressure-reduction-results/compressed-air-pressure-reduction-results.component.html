@@ -1,0 +1,56 @@
+<table #copyTable class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td></td>
+      <td class="bold text-center">Baseline</td>
+      <td class="bold text-center">Modification</td>
+    </tr>
+    <tr>
+      <td class="bold">Energy Use</td>
+      <td class="text-center">{{compressedAirPressureReductionResults.baselineResults.energyUse | number:'.0-0'}}
+        <span> kWh/yr</span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span
+          *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | number:'.0-0'}}
+          <span> kWh/yr</span>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Energy Cost</td>
+      <td class="text-center">
+        {{compressedAirPressureReductionResults.baselineResults.energyCost | currency: 'USD'}} /yr
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span
+          *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | currency: 'USD'}}
+          /yr
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Annual Energy Savings</td>
+      <td class="text-center" colspan="2">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span *ngIf="modificationExists">
+          {{compressedAirPressureReductionResults.annualEnergySavings | number: '.0-0'}}
+          <span> kWh/yr</span>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Annual Cost Savings</td>
+      <td class="text-center" colspan="2">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span *ngIf="modificationExists">
+          {{compressedAirPressureReductionResults.annualCostSavings | currency: 'USD'}} /yr
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<app-exportable-results-table *ngIf="modificationExists" [tableString]="tableString"
+  (updateTableString)="updateTableString()"></app-exportable-results-table>

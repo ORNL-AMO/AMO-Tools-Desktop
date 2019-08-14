@@ -59,6 +59,15 @@
       (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirReduction')" [treasureHunt]="treasureHunt"
       (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
       [displayEnergyType]="displayEnergyType"></app-compressed-air-reduction-card>
+    <!--compressed air pressure reduction-->
+    <app-compressed-air-pressure-reduction-card
+      *ngFor="let compressedAirPressureReduction of treasureHunt.compressedAirPressureReductions; let index = index;"
+      [compressedAirPressureReduction]="compressedAirPressureReduction" [settings]="settings" [index]="index"
+      (emitEditCompressedAirPressureReduction)="editCompressedAirPressureReduction($event, index)"
+      (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'compressedAirReduction')"
+      (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirPressureReduction')" [treasureHunt]="treasureHunt"
+      (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+      [displayEnergyType]="displayEnergyType"></app-compressed-air-pressure-reduction-card>
     <!--water reduction-->
     <app-water-reduction-card *ngFor="let waterReduction of treasureHunt.waterReductions; let index = index;"
       [waterReduction]="waterReduction" [settings]="settings" [index]="index"
@@ -116,6 +125,11 @@
   (emitSave)="saveEditCompressedAirReduction($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="opperatingHoursPerYear"></app-compressed-air-reduction>
+
+<app-compressed-air-pressure-reduction *ngIf="selectedCalc == 'compressed-air-pressure-reduction'"
+  [inTreasureHunt]="true" (emitSave)="saveEditCompressedAirPressureReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="opperatingHoursPerYear"></app-compressed-air-pressure-reduction>
 
 <app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
   (emitSave)="saveEditWaterReduction($event)" (emitCancel)="cancelEditCalc()"

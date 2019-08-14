@@ -82,7 +82,7 @@
         onfocus="this.select();">
       <span class="input-group-addon units"
         *ngIf="turbineForm.controls.turbineProperty.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
-      <span class="input-group-addon units" *ngIf="turbineForm.controls.turbineProperty.value == 1">kW</span>
+      <span class="input-group-addon units" *ngIf="turbineForm.controls.turbineProperty.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="turbineForm.controls.massFlowOrPowerOut.invalid && !turbineForm.controls.massFlowOrPowerOut.pristine">
@@ -90,12 +90,12 @@
       <span *ngIf="turbineForm.controls.massFlowOrPowerOut.errors.max">Value can't be greater than
         {{turbineForm.controls.massFlowOrPowerOut.errors.max.max}}
         <span *ngIf="turbineForm.controls.turbineProperty.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
-        <span *ngIf="turbineForm.controls.turbineProperty.value == 1">kW</span>
+        <span *ngIf="turbineForm.controls.turbineProperty.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
         .</span>
       <span *ngIf="turbineForm.controls.massFlowOrPowerOut.errors.min">Value can't be less than
         {{turbineForm.controls.massFlowOrPowerOut.errors.min.min}}
         <span *ngIf="turbineForm.controls.turbineProperty.value == 0"><span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>/hr</span>
-        <span *ngIf="turbineForm.controls.turbineProperty.value == 1">kW</span>
+        <span *ngIf="turbineForm.controls.turbineProperty.value == 1" [innerHTML]="settings.steamPowerMeasurement | settingsLabel"></span>
         .</span>
     </span>
   </div>

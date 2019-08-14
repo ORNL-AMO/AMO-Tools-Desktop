@@ -4,7 +4,8 @@
       [ngClass]="{'justify-content-between': inTreasureHunt}">
       <div class="d-flex pl-2 align-items-center">
         <div class="text-center">
-          <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png" class="compressed-air-icon">
+          <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png"
+            class="compressed-air-icon">
         </div>
         <div class="pl-2">
           <h3>Compressed Air Reduction</h3>
@@ -110,7 +111,7 @@
             </div>
           </div>
 
-          <div class="px-2">
+          <div class="p-2">
             <!-- app results if results tab -->
             <app-compressed-air-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
               [compressedAirReductionResults]="compressedAirReductionResults" [modificationExists]="modificationExists"

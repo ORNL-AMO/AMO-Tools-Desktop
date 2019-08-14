@@ -21,6 +21,7 @@ import { ElectricityReductionModule } from './electricity-reduction/electricity-
 import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-reduction.module';
 import { CompressedAirReductionModule } from './compressed-air-reduction/compressed-air-reduction.module';
 import { WaterReductionModule } from './water-reduction/water-reduction.module';
+import { CompressedAirPressureReductionModule } from './compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 
 @NgModule({
     declarations: [
@@ -49,6 +50,7 @@ import { WaterReductionModule } from './water-reduction/water-reduction.module';
         ElectricityReductionModule,
         NaturalGasReductionModule,
         CompressedAirReductionModule,
+        CompressedAirPressureReductionModule,
         WaterReductionModule
     ],
     providers: [
@@ -58,4 +60,4 @@ import { WaterReductionModule } from './water-reduction/water-reduction.module';
 
 })
 
-export class UtilitiesModule {}
+export class UtilitiesModule { }
