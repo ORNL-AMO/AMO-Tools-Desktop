@@ -101,15 +101,16 @@ export class CalculateModelService {
 
     // this.executeCalculateMarginalCosts = executeCalculateMarginalCosts;
     this.isBaselineCalculation = isBaseline;
-    this.baselinePowerDemand = baselinePowerDemand;
-    this.inputData = this.getInputDataFromSSMT(ssmtCopy);
+    // this.baselinePowerDemand = baselinePowerDemand;
+    let inputData: SSMTInputs = this.getInputDataFromSSMT(ssmtCopy);
+    inputData.baselinePowerDemand = baselinePowerDemand;
     // this.settings = _settings;
     if (turbineValid && headerValid && boilerValid && operationsValid) {
-      let outputData: SSMTOutput = this.suiteTestService.calculateModel(this.inputData, _settings);
-      return { inputData: this.inputData, outputData: outputData };
+      let outputData: SSMTOutput = this.suiteTestService.calculateModel(inputData, _settings);
+      return { inputData: inputData, outputData: outputData };
     } else {
-      let outputData: SSMTOutput = this.getResultsObject();
-      return { inputData: this.inputData, outputData: outputData };
+      let outputData: SSMTOutput = this.getEmptyResults();
+      return { inputData: inputData, outputData: outputData };
     }
   }
 
@@ -2102,5 +2103,52 @@ export class CalculateModelService {
     // // };
     // return output;
     return;
+  }
+
+  getEmptyResults(): SSMTOutput {
+    return {
+      boilerOutput: undefined,
+
+      highPressureHeaderSteam: undefined,
+      highPressureSteamHeatLoss: undefined,
+
+      mediumPressureToLowPressurePrv: undefined,
+      highPressureToMediumPressurePrv: undefined,
+
+      highPressureToLowPressureTurbine: undefined,
+      highPressureToMediumPressureTurbine: undefined,
+      highPressureCondensateFlashTank: undefined,
+
+      lowPressureHeaderSteam: undefined,
+      lowPressureSteamHeatLoss: undefined,
+
+      mediumPressureToLowPressureTurbine: undefined,
+      mediumPressureCondensateFlashTank: undefined,
+
+      mediumPressureHeaderSteam: undefined,
+      mediumPressureSteamHeatLoss: undefined,
+
+      blowdownFlashTank: undefined,
+
+      highPressureCondensate: undefined,
+      lowPressureCondensate: undefined,
+      mediumPressureCondensate: undefined,
+      combinedCondensate: undefined,
+      returnCondensate: undefined,
+      condensateFlashTank: undefined,
+
+      makeupWater: undefined,
+      makeupWaterAndCondensate: undefined,
+
+      condensingTurbine: undefined,
+      deaeratorOutput: undefined,
+
+      highPressureProcessSteamUsage: undefined,
+      mediumPressureProcessUsage: undefined,
+      lowPressureProcessUsage: undefined,
+      lowPressureVentedSteam: undefined,
+      heatExchangerOutput: undefined,
+      operationsOutput: undefined
+    }
   }
 }

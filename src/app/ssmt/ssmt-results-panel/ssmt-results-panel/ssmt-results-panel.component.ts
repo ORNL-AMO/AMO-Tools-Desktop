@@ -24,21 +24,20 @@ export class SsmtResultsPanelComponent implements OnInit {
   @Input()
   inModifyConditions: boolean;
 
-  // baselineOutput: SSMTOutput;
+  baselineOutput: SSMTOutput;
   baselineInputs: SSMTInputs;
   baselineLosses: SSMTLosses;
-  // modificationOutput: SSMTOutput;
+  modificationOutput: SSMTOutput;
   modificationInputs: SSMTInputs;
   modificationLosses: SSMTLosses;
   updateDataSub: Subscription;
 
-  counter: any;
   showResults: boolean;
   percentSavings: number;
   annualSavings: number;
   modValid: boolean;
   baselineValid: boolean;
-  constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService, ) { }
+  constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService) { }
 
   ngOnInit() {
     this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); });
@@ -55,50 +54,29 @@ export class SsmtResultsPanelComponent implements OnInit {
   }
 
   getResults() {
-    this.showResults = false;
-    if (this.counter) {
-      clearTimeout(this.counter);
+    //baseline
+    let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.ssmt, this.settings, true, false, 0);
+    this.baselineInputs = resultData.inputData;
+    this.baselineOutput = resultData.outputData;
+    //modification
+    resultData = this.calculateModelService.initDataAndRun(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, false, this.baselineOutput.operationsOutput.sitePowerDemand);
+    this.modificationInputs = resultData.inputData;
+    this.modificationOutput = resultData.outputData;
+    this.checkValid();
+    if (this.modValid) {
+      this.getSavings(this.baselineOutput.operationsOutput.totalOperatingCost, this.modificationOutput.operationsOutput.totalOperatingCost);
     }
-
-    let calculateModification: boolean = !this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated;
-    let calculateBaseline: boolean = !this.ssmt.resultsCalculated;
-    if (calculateBaseline || calculateModification) {
-      this.counter = setTimeout(() => {
-        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput };
-        if (calculateBaseline) {
-          resultData = this.calculateModelService.initDataAndRun(this.ssmt, this.settings, true, false);
-          this.ssmt.outputData = resultData.outputData;
-        }
-        if (calculateModification || calculateBaseline) {
-          resultData = this.calculateModelService.initDataAndRun(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, false, this.ssmt.outputData.operationsOutput.sitePowerDemand);
-          this.ssmt.modifications[this.modificationIndex].ssmt.outputData = resultData.outputData;
-        }
-        this.getInputs();
-        this.getSavings(this.ssmt.outputData.operationsOutput.totalOperatingCost, this.ssmt.modifications[this.modificationIndex].ssmt.outputData.operationsOutput.totalOperatingCost);
-        this.getLosses();
-        this.showResults = true;
-        this.ssmt.resultsCalculated = true;
-        this.ssmt.modifications[this.modificationIndex].ssmt.resultsCalculated = true;
-        this.save();
-        this.checkValid();
-      }, 750);
-    } else {
-      this.getInputs();
-      this.getLosses();
-      this.getSavings(this.ssmt.outputData.operationsOutput.totalOperatingCost, this.ssmt.modifications[this.modificationIndex].ssmt.outputData.operationsOutput.totalOperatingCost);
-      this.showResults = true;
-      this.checkValid();
-    }
+    this.getLosses();
 
   }
 
   checkValid() {
-    if (this.ssmt.modifications[this.modificationIndex].ssmt.outputData && this.ssmt.modifications[this.modificationIndex].ssmt.outputData.boilerOutput) {
+    if (this.modificationOutput && this.modificationOutput.boilerOutput) {
       this.modValid = true;
     } else {
       this.modValid = false;
     }
-    if (this.ssmt.outputData.boilerOutput) {
+    if (this.baselineOutput.boilerOutput) {
       this.baselineValid = true;
     } else {
       this.baselineValid = false;
@@ -111,16 +89,12 @@ export class SsmtResultsPanelComponent implements OnInit {
   }
 
   getLosses() {
-    this.baselineLosses = this.calculateLossesService.calculateLosses(this.ssmt.outputData, this.baselineInputs, this.settings, this.ssmt);
-    this.modificationLosses = this.calculateLossesService.calculateLosses(this.ssmt.modifications[this.modificationIndex].ssmt.outputData, this.modificationInputs, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
+    this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputs, this.settings, this.ssmt);
+    this.modificationLosses = this.calculateLossesService.calculateLosses(this.modificationOutput, this.modificationInputs, this.settings, this.ssmt.modifications[this.modificationIndex].ssmt);
   }
 
   getSavings(baselineCost: number, modificationCost: number) {
     this.percentSavings = Number(Math.round(((((baselineCost - modificationCost) * 100) / baselineCost) * 100) / 100).toFixed(0));
     this.annualSavings = baselineCost - modificationCost;
-  }
-
-  save() {
-    this.ssmtService.saveSSMT.next(this.ssmt);
   }
 }

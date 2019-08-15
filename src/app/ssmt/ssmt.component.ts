@@ -96,7 +96,7 @@ export class SsmtComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.suiteTestService.test();
+    // this.suiteTestService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
