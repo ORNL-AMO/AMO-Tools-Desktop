@@ -20,9 +20,9 @@ export class SuiteTestService {
   }
 
   test() {
-    let results = this.steamService.steamModeler(AT1);
-    console.log(results);
-    return results;
+    // let results = this.steamService.steamModeler(AT1);
+    // console.log(results);
+    return;
   }
 
   setupInputData(inputData: SSMTInputs): SSMTInputs {

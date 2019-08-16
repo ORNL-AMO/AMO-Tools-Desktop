@@ -3,11 +3,12 @@ import { SteamService } from '../../calculator/steam/steam.service';
 import { HeatExchangerOutput, SteamPropertiesOutput } from '../../shared/models/steam/steam-outputs';
 import { HeatExchangerInput } from '../../shared/models/steam/steam-inputs';
 import { Settings } from '../../shared/models/settings';
+import { ConvertSteamService } from '../../calculator/steam/convert-steam.service';
 
 @Injectable()
 export class HeatExchangerService {
 
-  constructor(private steamService: SteamService) { }
+  constructor(private steamService: SteamService, private convertSteamService: ConvertSteamService) { }
 
   heatExchange(approachTemp: number, heatExchangerInput: HeatExchangerInput, settings: Settings): HeatExchangerOutput {
     let maxTempDiff: number = heatExchangerInput.hotInletTemperature - heatExchangerInput.coldInletTemperature;
@@ -108,18 +109,18 @@ export class HeatExchangerService {
   }
 
   calculateEnergyFlow(massFlow: number, specificEnthalpy: number, settings: Settings): number {
-    let convertedMassFlow: number = this.steamService.convertSteamMassFlowInput(massFlow, settings);
-    let convertedEnthalpy: number = this.steamService.convertSteamSpecificEnthalpyInput(specificEnthalpy, settings);
+    let convertedMassFlow: number = this.convertSteamService.convertSteamMassFlowInput(massFlow, settings);
+    let convertedEnthalpy: number = this.convertSteamService.convertSteamSpecificEnthalpyInput(specificEnthalpy, settings);
     let energyFlow: number = convertedMassFlow * convertedEnthalpy;
-    energyFlow = this.steamService.convertEnergyFlowOutput(energyFlow, settings);
+    energyFlow = this.convertSteamService.convertEnergyFlowOutput(energyFlow, settings);
     return energyFlow;
   }
 
   calculateSpecificEnthalpy(energyFlow: number, massFlow: number, settings: Settings): number {
-    let convertedEnergyFlow: number = this.steamService.convertEnergyFlowInput(energyFlow, settings);
-    let convertedMassFlow: number = this.steamService.convertSteamMassFlowInput(massFlow, settings);
+    let convertedEnergyFlow: number = this.convertSteamService.convertEnergyFlowInput(energyFlow, settings);
+    let convertedMassFlow: number = this.convertSteamService.convertSteamMassFlowInput(massFlow, settings);
     let enthalpy: number = convertedEnergyFlow / convertedMassFlow;
-    let convertedEnthalpy: number = this.steamService.convertSteamSpecificEnthalpyOutput(enthalpy, settings);
+    let convertedEnthalpy: number = this.convertSteamService.convertSteamSpecificEnthalpyOutput(enthalpy, settings);
     return convertedEnthalpy;
   }
 }

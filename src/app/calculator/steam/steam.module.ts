@@ -12,6 +12,7 @@ import { PrvModule } from './prv/prv.module';
 import { DeaeratorModule } from './deaerator/deaerator.module';
 import { HeaderModule } from './header/header.module';
 import { TurbineModule } from './turbine/turbine.module';
+import { ConvertSteamService } from './convert-steam.service';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { TurbineModule } from './turbine/turbine.module';
     SteamComponent
   ],
   providers: [
-    SteamService
+    SteamService,
+    ConvertSteamService
   ]
 })
 export class SteamModule { }
