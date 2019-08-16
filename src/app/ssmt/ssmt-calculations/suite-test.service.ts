@@ -85,13 +85,13 @@ export class SuiteTestService {
       turbineInput.condensingTurbine = this.convertCondensingTurbine(turbineInput.condensingTurbine, settings);
     }
     if (turbineInput.highToLowTurbine.useTurbine == true) {
-      turbineInput.highToLowTurbine = this.convertPressureTurbine(turbineInput.condensingTurbine, settings);
+      turbineInput.highToLowTurbine = this.convertPressureTurbine(turbineInput.highToLowTurbine, settings);
     }
     if (turbineInput.highToMediumTurbine.useTurbine == true) {
-      turbineInput.highToMediumTurbine = this.convertPressureTurbine(turbineInput.condensingTurbine, settings);
+      turbineInput.highToMediumTurbine = this.convertPressureTurbine(turbineInput.highToMediumTurbine, settings);
     }
     if (turbineInput.mediumToLowTurbine.useTurbine == true) {
-      turbineInput.mediumToLowTurbine = this.convertPressureTurbine(turbineInput.condensingTurbine, settings);
+      turbineInput.mediumToLowTurbine = this.convertPressureTurbine(turbineInput.mediumToLowTurbine, settings);
     }
     return turbineInput;
   }

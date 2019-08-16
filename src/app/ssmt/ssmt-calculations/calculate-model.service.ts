@@ -102,6 +102,7 @@ export class CalculateModelService {
     this.isBaselineCalculation = isBaseline;
     // this.baselinePowerDemand = baselinePowerDemand;
     let inputData: SSMTInputs = this.getInputDataFromSSMT(ssmtCopy);
+    console.log(inputData);
     inputData.baselinePowerDemand = baselinePowerDemand;
     // this.settings = _settings;
     if (turbineValid && headerValid && boilerValid && operationsValid) {
