@@ -296,24 +296,20 @@ export class SsmtComponent implements OnInit {
 
   saveBoiler(boilerData: BoilerInput) {
     this._ssmt.boilerInput = boilerData;
-    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveHeaderData(headerInput: HeaderInput) {
     this._ssmt.headerInput = headerInput;
-    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveTurbineData(turbineData: TurbineInput) {
     this._ssmt.turbineInput = turbineData;
-    this._ssmt.resultsCalculated = false;
     this.save();
   }
 
   saveSetup(newSSMT: SSMT) {
-    newSSMT.resultsCalculated = false;
     this.saveSsmt(newSSMT);
   }
 

@@ -91,8 +91,7 @@ export class CalculateModelService {
   }
 
 
-  initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand?: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
-    console.log('init data and run!!!')
+  initDataAndRun(_ssmt: SSMT, _settings: Settings, isBaseline: boolean, executeCalculateMarginalCosts: boolean, baselinePowerDemand: number): { inputData: SSMTInputs, outputData: SSMTOutput } {
     let ssmtCopy: SSMT = JSON.parse(JSON.stringify(_ssmt));
     let boilerValid: boolean = this.boilerService.isBoilerValid(ssmtCopy.boilerInput, _settings);
     let headerValid: boolean = this.headerService.isHeaderValid(ssmtCopy.headerInput, _settings, ssmtCopy.boilerInput);

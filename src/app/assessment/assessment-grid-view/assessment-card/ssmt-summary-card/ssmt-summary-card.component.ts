@@ -36,7 +36,10 @@ export class SsmtSummaryCardComponent implements OnInit {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessmentCpy);
     if (this.setupDone) {
       this.getBaselineData();
-      if (this.assessmentCpy.ssmt.modifications) {
+      if (this.baselineData.outputData.boilerOutput == undefined) {
+        this.setupDone = false;
+      }
+      if (this.assessmentCpy.ssmt.modifications && this.setupDone) {
         this.getModificationData();
       }
     }
@@ -62,14 +65,8 @@ export class SsmtSummaryCardComponent implements OnInit {
   }
 
   getData(ssmt: SSMT, isBaseline: boolean): { inputData: SSMTInputs, outputData: SSMTOutput } {
-    if (ssmt.resultsCalculated) {
-      let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(JSON.parse(JSON.stringify(ssmt)));
-      return {
-        inputData: inputData,
-        outputData: ssmt.outputData
-      }
-    } else if (isBaseline) {
-      return this.calculateModelService.initDataAndRun(ssmt, this.settings, true, false);
+    if (isBaseline) {
+      return this.calculateModelService.initDataAndRun(ssmt, this.settings, true, false, 0);
     } else {
       return this.calculateModelService.initDataAndRun(ssmt, this.settings, false, false, this.baselineData.outputData.operationsOutput.sitePowerDemand);
     }

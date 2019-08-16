@@ -453,7 +453,7 @@ export class ReportRollupService {
       if (val.assessment.ssmt.setupDone && val.assessment.ssmt.modifications.length !== 0) {
         //get results
         if (!val.assessment.ssmt.resultsCalculated) {
-          val.assessment.ssmt.outputData = this.calculateModelService.initDataAndRun(val.assessment.ssmt, val.settings, true, false).outputData;
+          val.assessment.ssmt.outputData = this.calculateModelService.initDataAndRun(val.assessment.ssmt, val.settings, true, false, 0).outputData;
           val.assessment.ssmt.resultsCalculated = true;
         }
         let baselineResults: SSMTOutput = val.assessment.ssmt.outputData;

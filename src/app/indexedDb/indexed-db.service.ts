@@ -213,6 +213,9 @@ export class IndexedDbService {
       let getRequest = store.getAll();
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
+        e.target.result.forEach(assessment => {
+          assessment = this.updateDataService.checkAssessment(assessment);
+        })
         resolve(e.target.result);
       };
       getRequest.onerror = (error) => {

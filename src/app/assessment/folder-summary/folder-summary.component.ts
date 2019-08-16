@@ -115,21 +115,12 @@ export class FolderSummaryComponent implements OnInit {
         } else if (assessment.type === 'SSMT') {
           if (assessment.ssmt.setupDone) {
             let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-            let results: { inputData: SSMTInputs, outputData: SSMTOutput }
-            if (assessment.ssmt.resultsCalculated) {
-              let inputData: SSMTInputs = this.calculateModelService.getInputDataFromSSMT(JSON.parse(JSON.stringify(assessment.ssmt)));
-              results = {
-                inputData: inputData,
-                outputData: JSON.parse(JSON.stringify(assessment.ssmt.outputData))
-              }
+            let results: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(assessment.ssmt, settings, true, false, 0);
+            if (results.outputData.boilerOutput != undefined) {
+              results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
+              this.ssmtEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + this.ssmtEnergyUsed;
+              this.ssmtEnergyCost = results.outputData.operationsOutput.totalOperatingCost + this.ssmtEnergyCost;
             }
-            else {
-              console.log('calculate');
-              results = this.calculateModelService.initDataAndRun(assessment.ssmt, settings, true, false);
-            }
-            results.outputData.operationsOutput.boilerFuelUsage = this.convertUnitsService.value(results.outputData.operationsOutput.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
-            this.ssmtEnergyUsed = results.outputData.operationsOutput.boilerFuelUsage + this.ssmtEnergyUsed;
-            this.ssmtEnergyCost = results.outputData.operationsOutput.totalOperatingCost + this.ssmtEnergyCost;
           }
         }
       });

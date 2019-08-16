@@ -95,7 +95,6 @@ export class UpdateDataService {
     }
 
     updateSSMT(assessment: Assessment): Assessment {
-        console.log(assessment.appVersion);
         if (assessment.ssmt.headerInput.highPressureHeader == undefined && assessment.ssmt.headerInput.highPressure != undefined) {
             assessment.ssmt.headerInput.highPressureHeader = assessment.ssmt.headerInput.highPressure;
         }

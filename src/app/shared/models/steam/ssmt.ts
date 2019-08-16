@@ -134,12 +134,12 @@ export interface BoilerInput {
 
 export interface HeaderInput {
     numberOfHeaders: number;
-    
+
     //old model
     highPressure?: HeaderWithHighestPressure;
     mediumPressure?: HeaderNotHighestPressure;
     lowPressure?: HeaderNotHighestPressure;
-    
+
     //new suite model
     highPressureHeader?: HeaderWithHighestPressure;
     mediumPressureHeader?: HeaderNotHighestPressure;

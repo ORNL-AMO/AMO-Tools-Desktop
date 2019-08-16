@@ -74,7 +74,7 @@ export class SsmtReportComponent implements OnInit {
   ngOnInit() {
     if (this.assessment.ssmt.setupDone) {
       setTimeout(() => {
-        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, true);
+        let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.assessment.ssmt, this.settings, true, true, 0);
         this.assessment.ssmt.outputData = resultData.outputData;
         this.baselineOutput = resultData.outputData;
         this.baselineInputData = resultData.inputData;
