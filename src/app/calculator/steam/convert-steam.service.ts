@@ -335,14 +335,16 @@ export class ConvertSteamService {
   //convert operations
   convertOperationsOutput(ssmtOperationsOutput: SSMTOperationsOutput, settings: Settings): SSMTOperationsOutput {
     ssmtOperationsOutput.powerGenerated = this.convertUnitsService.value(ssmtOperationsOutput.powerGenerated).from('kJh').to(settings.steamPowerMeasurement);
-    // ssmtOperationsOutput.boilerFuelCost: number,
-    //   ssmtOperationsOutput.makeupWaterCost: number,
-    //     ssmtOperationsOutput.powerGenerationCost: number,
-    //       ssmtOperationsOutput.boilerFuelUsage: number,
+    ssmtOperationsOutput.boilerFuelUsage = this.convertEnergyFlowOutput(ssmtOperationsOutput.boilerFuelUsage, settings);
+    //TODO: Costs
+    // ssmtOperationsOutput.boilerFuelCost
+    // ssmtOperationsOutput.makeupWaterCost
+    // ssmtOperationsOutput.totalOperatingCost
+    // ssmtOperationsOutput.powerGenerationCost
+   
     ssmtOperationsOutput.sitePowerImport = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerImport).from('kJh').to(settings.steamPowerMeasurement);
     ssmtOperationsOutput.sitePowerDemand = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerDemand).from('kJh').to(settings.steamPowerMeasurement);
     ssmtOperationsOutput.makeupWaterVolumeFlow = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('gpm').to(settings.steamVolumeFlowMeasurement);
-    //makeupWaterVolumeFlowAnnual (suite) = annualMakeupWaterFlow (desktop)
     ssmtOperationsOutput.makeupWaterVolumeFlowAnnual = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('gal').to(settings.steamVolumeMeasurement);
     return ssmtOperationsOutput;
   }
