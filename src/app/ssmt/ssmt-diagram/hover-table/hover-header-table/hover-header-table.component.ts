@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { HeaderOutputObj, HeatLossOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, HeatLossOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -23,7 +23,7 @@ export class HoverHeaderTableComponent implements OnInit {
   @ViewChild('copyTable') copyTable: ElementRef;
   tableString: any;
 
-  header: HeaderOutputObj;
+  header: SteamPropertiesOutput;
   heatLoss: HeatLossOutput;
   headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
   condensingWarning: boolean;

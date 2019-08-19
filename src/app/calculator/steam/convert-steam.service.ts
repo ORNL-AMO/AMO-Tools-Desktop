@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
-import { TurbineOutput, FlashTankOutput, HeaderOutput, PrvOutput, HeatLossOutput, DeaeratorOutput, BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput } from '../../shared/models/steam/steam-outputs';
+import { TurbineOutput, FlashTankOutput, HeaderOutput, PrvOutput, HeatLossOutput, DeaeratorOutput, BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, SSMTOutput, ProcessSteamUsage, HeatExchangerOutput, SSMTOperationsOutput } from '../../shared/models/steam/steam-outputs';
 
 @Injectable()
 export class ConvertSteamService {
@@ -61,235 +61,348 @@ export class ConvertSteamService {
 
   //convert turbine output
   convertTurbineOutput(turbineOutput: TurbineOutput, settings: Settings): TurbineOutput {
-    //mass flow
-    turbineOutput.massFlow = this.convertSteamMassFlowOutput(turbineOutput.massFlow, settings);
-    //energy flow
-    turbineOutput.outletEnergyFlow = this.convertEnergyFlowOutput(turbineOutput.outletEnergyFlow, settings);
-    turbineOutput.inletEnergyFlow = this.convertEnergyFlowOutput(turbineOutput.inletEnergyFlow, settings);
-    turbineOutput.energyOut = this.convertEnergyFlowOutput(turbineOutput.energyOut, settings);
-    //power out (only power conversion)
-    turbineOutput.powerOut = this.convertUnitsService.value(turbineOutput.powerOut).from('kJh').to(settings.steamPowerMeasurement);
-    //outlet pressure
-    turbineOutput.outletPressure = this.convertSteamPressureOutput(turbineOutput.outletPressure, settings);
-    turbineOutput.inletPressure = this.convertSteamPressureOutput(turbineOutput.inletPressure, settings);
-    turbineOutput.outletIdealPressure = this.convertSteamPressureOutput(turbineOutput.outletIdealPressure, settings);
-    //specific enthalpy
-    turbineOutput.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(turbineOutput.outletSpecificEnthalpy, settings);
-    turbineOutput.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(turbineOutput.inletSpecificEnthalpy, settings);
-    turbineOutput.outletIdealSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(turbineOutput.outletIdealSpecificEnthalpy, settings);
-    //specific entropy
-    turbineOutput.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(turbineOutput.outletSpecificEntropy, settings);
-    turbineOutput.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(turbineOutput.inletSpecificEntropy, settings);
-    turbineOutput.outletIdealSpecificEntropy = this.convertSteamSpecificEntropyOutput(turbineOutput.outletIdealSpecificEntropy, settings);
-    //temperature
-    turbineOutput.outletTemperature = this.convertSteamTemperatureOutput(turbineOutput.outletTemperature, settings);
-    turbineOutput.inletTemperature = this.convertSteamTemperatureOutput(turbineOutput.inletTemperature, settings);
-    turbineOutput.outletIdealTemperature = this.convertSteamTemperatureOutput(turbineOutput.outletIdealTemperature, settings);
+    if (turbineOutput) {
+      //mass flow
+      turbineOutput.massFlow = this.convertSteamMassFlowOutput(turbineOutput.massFlow, settings);
+      //energy flow
+      turbineOutput.outletEnergyFlow = this.convertEnergyFlowOutput(turbineOutput.outletEnergyFlow, settings);
+      turbineOutput.inletEnergyFlow = this.convertEnergyFlowOutput(turbineOutput.inletEnergyFlow, settings);
+      turbineOutput.energyOut = this.convertEnergyFlowOutput(turbineOutput.energyOut, settings);
+      //power out (only power conversion)
+      turbineOutput.powerOut = this.convertUnitsService.value(turbineOutput.powerOut).from('kJh').to(settings.steamPowerMeasurement);
+      //outlet pressure
+      turbineOutput.outletPressure = this.convertSteamPressureOutput(turbineOutput.outletPressure, settings);
+      turbineOutput.inletPressure = this.convertSteamPressureOutput(turbineOutput.inletPressure, settings);
+      turbineOutput.outletIdealPressure = this.convertSteamPressureOutput(turbineOutput.outletIdealPressure, settings);
+      //specific enthalpy
+      turbineOutput.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(turbineOutput.outletSpecificEnthalpy, settings);
+      turbineOutput.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(turbineOutput.inletSpecificEnthalpy, settings);
+      turbineOutput.outletIdealSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(turbineOutput.outletIdealSpecificEnthalpy, settings);
+      //specific entropy
+      turbineOutput.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(turbineOutput.outletSpecificEntropy, settings);
+      turbineOutput.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(turbineOutput.inletSpecificEntropy, settings);
+      turbineOutput.outletIdealSpecificEntropy = this.convertSteamSpecificEntropyOutput(turbineOutput.outletIdealSpecificEntropy, settings);
+      //temperature
+      turbineOutput.outletTemperature = this.convertSteamTemperatureOutput(turbineOutput.outletTemperature, settings);
+      turbineOutput.inletTemperature = this.convertSteamTemperatureOutput(turbineOutput.inletTemperature, settings);
+      turbineOutput.outletIdealTemperature = this.convertSteamTemperatureOutput(turbineOutput.outletIdealTemperature, settings);
+    }
     return turbineOutput;
   }
 
   //convert flash tank output
   convertFlashTankOutput(flashTankOutput: FlashTankOutput, settings: Settings): FlashTankOutput {
-    //flow
-    flashTankOutput.inletWaterMassFlow = this.convertSteamMassFlowOutput(flashTankOutput.inletWaterMassFlow, settings);
-    flashTankOutput.outletGasMassFlow = this.convertSteamMassFlowOutput(flashTankOutput.outletGasMassFlow, settings);
-    flashTankOutput.outletLiquidMassFlow = this.convertSteamMassFlowOutput(flashTankOutput.outletLiquidMassFlow, settings);
-    //pressure
-    flashTankOutput.inletWaterPressure = this.convertSteamPressureOutput(flashTankOutput.inletWaterPressure, settings);
-    flashTankOutput.outletGasPressure = this.convertSteamPressureOutput(flashTankOutput.outletGasPressure, settings);
-    flashTankOutput.outletLiquidPressure = this.convertSteamPressureOutput(flashTankOutput.outletLiquidPressure, settings);
-    //enthalpy
-    flashTankOutput.inletWaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(flashTankOutput.inletWaterSpecificEnthalpy, settings);
-    flashTankOutput.outletGasSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(flashTankOutput.outletGasSpecificEnthalpy, settings);
-    flashTankOutput.outletLiquidSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(flashTankOutput.outletLiquidSpecificEnthalpy, settings);
-    //entropy
-    flashTankOutput.inletWaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(flashTankOutput.inletWaterSpecificEntropy, settings);
-    flashTankOutput.outletGasSpecificEntropy = this.convertSteamSpecificEntropyOutput(flashTankOutput.outletGasSpecificEntropy, settings);
-    flashTankOutput.outletLiquidSpecificEntropy = this.convertSteamSpecificEntropyOutput(flashTankOutput.outletLiquidSpecificEntropy, settings);
-    //temp
-    flashTankOutput.inletWaterTemperature = this.convertSteamTemperatureOutput(flashTankOutput.inletWaterTemperature, settings);
-    flashTankOutput.outletGasTemperature = this.convertSteamTemperatureOutput(flashTankOutput.outletGasTemperature, settings);
-    flashTankOutput.outletLiquidTemperature = this.convertSteamTemperatureOutput(flashTankOutput.outletLiquidTemperature, settings);
-    //energy flow    
-    flashTankOutput.inletWaterEnergyFlow = this.convertEnergyFlowOutput(flashTankOutput.inletWaterEnergyFlow, settings);
-    flashTankOutput.outletGasEnergyFlow = this.convertEnergyFlowOutput(flashTankOutput.outletGasEnergyFlow, settings);
-    flashTankOutput.outletLiquidEnergyFlow = this.convertEnergyFlowOutput(flashTankOutput.outletLiquidEnergyFlow, settings);
-    if (flashTankOutput.outletGasMassFlow < 0) {
-      flashTankOutput.outletGasMassFlow = 0;
-      flashTankOutput.outletGasEnergyFlow = 0;
-      flashTankOutput.outletLiquidEnergyFlow = flashTankOutput.inletWaterEnergyFlow;
-      flashTankOutput.outletLiquidMassFlow = flashTankOutput.inletWaterMassFlow;
-      flashTankOutput.outletLiquidPressure = flashTankOutput.inletWaterPressure;
-      flashTankOutput.outletLiquidQuality = flashTankOutput.inletWaterQuality;
-      flashTankOutput.outletLiquidSpecificEnthalpy = flashTankOutput.inletWaterSpecificEnthalpy;
-      flashTankOutput.outletLiquidSpecificEntropy = flashTankOutput.inletWaterSpecificEntropy;
-      flashTankOutput.outletLiquidTemperature = flashTankOutput.inletWaterTemperature;
+    if (flashTankOutput) {
+      //flow
+      flashTankOutput.inletWaterMassFlow = this.convertSteamMassFlowOutput(flashTankOutput.inletWaterMassFlow, settings);
+      flashTankOutput.outletGasMassFlow = this.convertSteamMassFlowOutput(flashTankOutput.outletGasMassFlow, settings);
+      flashTankOutput.outletLiquidMassFlow = this.convertSteamMassFlowOutput(flashTankOutput.outletLiquidMassFlow, settings);
+      //pressure
+      flashTankOutput.inletWaterPressure = this.convertSteamPressureOutput(flashTankOutput.inletWaterPressure, settings);
+      flashTankOutput.outletGasPressure = this.convertSteamPressureOutput(flashTankOutput.outletGasPressure, settings);
+      flashTankOutput.outletLiquidPressure = this.convertSteamPressureOutput(flashTankOutput.outletLiquidPressure, settings);
+      //enthalpy
+      flashTankOutput.inletWaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(flashTankOutput.inletWaterSpecificEnthalpy, settings);
+      flashTankOutput.outletGasSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(flashTankOutput.outletGasSpecificEnthalpy, settings);
+      flashTankOutput.outletLiquidSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(flashTankOutput.outletLiquidSpecificEnthalpy, settings);
+      //entropy
+      flashTankOutput.inletWaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(flashTankOutput.inletWaterSpecificEntropy, settings);
+      flashTankOutput.outletGasSpecificEntropy = this.convertSteamSpecificEntropyOutput(flashTankOutput.outletGasSpecificEntropy, settings);
+      flashTankOutput.outletLiquidSpecificEntropy = this.convertSteamSpecificEntropyOutput(flashTankOutput.outletLiquidSpecificEntropy, settings);
+      //temp
+      flashTankOutput.inletWaterTemperature = this.convertSteamTemperatureOutput(flashTankOutput.inletWaterTemperature, settings);
+      flashTankOutput.outletGasTemperature = this.convertSteamTemperatureOutput(flashTankOutput.outletGasTemperature, settings);
+      flashTankOutput.outletLiquidTemperature = this.convertSteamTemperatureOutput(flashTankOutput.outletLiquidTemperature, settings);
+      //energy flow    
+      flashTankOutput.inletWaterEnergyFlow = this.convertEnergyFlowOutput(flashTankOutput.inletWaterEnergyFlow, settings);
+      flashTankOutput.outletGasEnergyFlow = this.convertEnergyFlowOutput(flashTankOutput.outletGasEnergyFlow, settings);
+      flashTankOutput.outletLiquidEnergyFlow = this.convertEnergyFlowOutput(flashTankOutput.outletLiquidEnergyFlow, settings);
+      if (flashTankOutput.outletGasMassFlow < 0) {
+        flashTankOutput.outletGasMassFlow = 0;
+        flashTankOutput.outletGasEnergyFlow = 0;
+        flashTankOutput.outletLiquidEnergyFlow = flashTankOutput.inletWaterEnergyFlow;
+        flashTankOutput.outletLiquidMassFlow = flashTankOutput.inletWaterMassFlow;
+        flashTankOutput.outletLiquidPressure = flashTankOutput.inletWaterPressure;
+        flashTankOutput.outletLiquidQuality = flashTankOutput.inletWaterQuality;
+        flashTankOutput.outletLiquidSpecificEnthalpy = flashTankOutput.inletWaterSpecificEnthalpy;
+        flashTankOutput.outletLiquidSpecificEntropy = flashTankOutput.inletWaterSpecificEntropy;
+        flashTankOutput.outletLiquidTemperature = flashTankOutput.inletWaterTemperature;
+      }
     }
-
     return flashTankOutput;
   }
   //convert header output
   convertHeaderOutput(headerOutput: HeaderOutput, settings: Settings): HeaderOutput {
-    //iterate each HeaderOutputObj
-    for (var key in headerOutput) {
-      headerOutput[key].energyFlow = this.convertEnergyFlowOutput(headerOutput[key].energyFlow, settings);
-      headerOutput[key].massFlow = this.convertSteamMassFlowOutput(headerOutput[key].massFlow, settings);
-      headerOutput[key].pressure = this.convertSteamPressureOutput(headerOutput[key].pressure, settings);
-      headerOutput[key].specificEnthalpy = this.convertSteamSpecificEnthalpyOutput(headerOutput[key].specificEnthalpy, settings);
-      headerOutput[key].specificEntropy = this.convertSteamSpecificEntropyOutput(headerOutput[key].specificEntropy, settings);
-      headerOutput[key].temperature = this.convertSteamTemperatureOutput(headerOutput[key].temperature, settings);
+    if (headerOutput) {
+      //iterate each header object
+      for (var key in headerOutput) {
+        headerOutput[key] = this.convertSteamPropertiesOutput(headerOutput[key], settings);
+      }
     }
     return headerOutput;
   }
   //convert steam properties
   convertSteamPropertiesOutput(steamPropertiesOutput: SteamPropertiesOutput, settings: Settings): SteamPropertiesOutput {
-    //pressure
-    steamPropertiesOutput.pressure = this.convertSteamPressureOutput(steamPropertiesOutput.pressure, settings);
-    //specific volume
-    steamPropertiesOutput.specificVolume = this.convertSteamSpecificVolumeMeasurementOutput(steamPropertiesOutput.specificVolume, settings);
-    //temperature
-    steamPropertiesOutput.temperature = this.convertSteamTemperatureOutput(steamPropertiesOutput.temperature, settings);
-    //specific entropy
-    steamPropertiesOutput.specificEntropy = this.convertSteamSpecificEntropyOutput(steamPropertiesOutput.specificEntropy, settings);
-    //specific enthalpy
-    steamPropertiesOutput.specificEnthalpy = this.convertSteamSpecificEnthalpyOutput(steamPropertiesOutput.specificEnthalpy, settings);
+    if (steamPropertiesOutput) {
+      //pressure
+      steamPropertiesOutput.pressure = this.convertSteamPressureOutput(steamPropertiesOutput.pressure, settings);
+      //specific volume
+      steamPropertiesOutput.specificVolume = this.convertSteamSpecificVolumeMeasurementOutput(steamPropertiesOutput.specificVolume, settings);
+      //temperature
+      steamPropertiesOutput.temperature = this.convertSteamTemperatureOutput(steamPropertiesOutput.temperature, settings);
+      //specific entropy
+      steamPropertiesOutput.specificEntropy = this.convertSteamSpecificEntropyOutput(steamPropertiesOutput.specificEntropy, settings);
+      //specific enthalpy
+      steamPropertiesOutput.specificEnthalpy = this.convertSteamSpecificEnthalpyOutput(steamPropertiesOutput.specificEnthalpy, settings);
+      //energy flow
+      steamPropertiesOutput.energyFlow = this.convertEnergyFlowOutput(steamPropertiesOutput.energyFlow, settings);
+      //mass flow
+      steamPropertiesOutput.massFlow = this.convertSteamMassFlowOutput(steamPropertiesOutput.massFlow, settings);
+    }
     return steamPropertiesOutput;
   }
   //convert saturated properties
   convertSaturatedPropertiesOutput(saturatedPropertiesOutput: SaturatedPropertiesOutput, settings: Settings): SaturatedPropertiesOutput {
-    //entropy
-    saturatedPropertiesOutput.gasEntropy = this.convertSteamSpecificEntropyOutput(saturatedPropertiesOutput.gasEntropy, settings);
-    saturatedPropertiesOutput.liquidEntropy = this.convertSteamSpecificEntropyOutput(saturatedPropertiesOutput.liquidEntropy, settings);
-    saturatedPropertiesOutput.evaporationEntropy = this.convertSteamSpecificEntropyOutput(saturatedPropertiesOutput.evaporationEntropy, settings);
-    //enthalpy
-    saturatedPropertiesOutput.evaporationEnthalpy = this.convertSteamSpecificEnthalpyOutput(saturatedPropertiesOutput.evaporationEnthalpy, settings);
-    saturatedPropertiesOutput.gasEnthalpy = this.convertSteamSpecificEnthalpyOutput(saturatedPropertiesOutput.gasEnthalpy, settings);
-    saturatedPropertiesOutput.liquidEnthalpy = this.convertSteamSpecificEnthalpyOutput(saturatedPropertiesOutput.liquidEnthalpy, settings);
-    //pressure
-    saturatedPropertiesOutput.saturatedPressure = this.convertSteamPressureOutput(saturatedPropertiesOutput.saturatedPressure, settings);
-    //temperature
-    saturatedPropertiesOutput.saturatedTemperature = this.convertSteamTemperatureOutput(saturatedPropertiesOutput.saturatedTemperature, settings);
-    //volume
-    saturatedPropertiesOutput.evaporationVolume = this.convertSteamSpecificVolumeMeasurementOutput(saturatedPropertiesOutput.evaporationVolume, settings);
-    saturatedPropertiesOutput.gasVolume = this.convertSteamSpecificVolumeMeasurementOutput(saturatedPropertiesOutput.gasVolume, settings);
-    saturatedPropertiesOutput.liquidVolume = this.convertSteamSpecificVolumeMeasurementOutput(saturatedPropertiesOutput.liquidVolume, settings);
+    if (saturatedPropertiesOutput) {
+      //entropy
+      saturatedPropertiesOutput.gasEntropy = this.convertSteamSpecificEntropyOutput(saturatedPropertiesOutput.gasEntropy, settings);
+      saturatedPropertiesOutput.liquidEntropy = this.convertSteamSpecificEntropyOutput(saturatedPropertiesOutput.liquidEntropy, settings);
+      saturatedPropertiesOutput.evaporationEntropy = this.convertSteamSpecificEntropyOutput(saturatedPropertiesOutput.evaporationEntropy, settings);
+      //enthalpy
+      saturatedPropertiesOutput.evaporationEnthalpy = this.convertSteamSpecificEnthalpyOutput(saturatedPropertiesOutput.evaporationEnthalpy, settings);
+      saturatedPropertiesOutput.gasEnthalpy = this.convertSteamSpecificEnthalpyOutput(saturatedPropertiesOutput.gasEnthalpy, settings);
+      saturatedPropertiesOutput.liquidEnthalpy = this.convertSteamSpecificEnthalpyOutput(saturatedPropertiesOutput.liquidEnthalpy, settings);
+      //pressure
+      saturatedPropertiesOutput.saturatedPressure = this.convertSteamPressureOutput(saturatedPropertiesOutput.saturatedPressure, settings);
+      //temperature
+      saturatedPropertiesOutput.saturatedTemperature = this.convertSteamTemperatureOutput(saturatedPropertiesOutput.saturatedTemperature, settings);
+      //volume
+      saturatedPropertiesOutput.evaporationVolume = this.convertSteamSpecificVolumeMeasurementOutput(saturatedPropertiesOutput.evaporationVolume, settings);
+      saturatedPropertiesOutput.gasVolume = this.convertSteamSpecificVolumeMeasurementOutput(saturatedPropertiesOutput.gasVolume, settings);
+      saturatedPropertiesOutput.liquidVolume = this.convertSteamSpecificVolumeMeasurementOutput(saturatedPropertiesOutput.liquidVolume, settings);
+    }
     return saturatedPropertiesOutput;
   }
   //convert deaerator
   convertDeaeratorOutput(deaeratorOutput: DeaeratorOutput, settings: Settings): DeaeratorOutput {
-    //energy flow
-    deaeratorOutput.feedwaterEnergyFlow = this.convertEnergyFlowOutput(deaeratorOutput.feedwaterEnergyFlow, settings);
-    deaeratorOutput.inletSteamEnergyFlow = this.convertEnergyFlowOutput(deaeratorOutput.inletSteamEnergyFlow, settings);
-    deaeratorOutput.inletWaterEnergyFlow = this.convertEnergyFlowOutput(deaeratorOutput.inletWaterEnergyFlow, settings);
-    deaeratorOutput.ventedSteamEnergyFlow = this.convertEnergyFlowOutput(deaeratorOutput.ventedSteamEnergyFlow, settings);
-    //mass flow
-    deaeratorOutput.feedwaterMassFlow = this.convertSteamMassFlowOutput(deaeratorOutput.feedwaterMassFlow, settings);
-    deaeratorOutput.inletSteamMassFlow = this.convertSteamMassFlowOutput(deaeratorOutput.inletSteamMassFlow, settings);
-    deaeratorOutput.inletWaterMassFlow = this.convertSteamMassFlowOutput(deaeratorOutput.inletWaterMassFlow, settings);
-    deaeratorOutput.ventedSteamMassFlow = this.convertSteamMassFlowOutput(deaeratorOutput.ventedSteamMassFlow, settings);
-    //pressure
-    deaeratorOutput.feedwaterPressure = this.convertSteamPressureOutput(deaeratorOutput.feedwaterPressure, settings);
-    deaeratorOutput.inletSteamPressure = this.convertSteamPressureOutput(deaeratorOutput.inletSteamPressure, settings);
-    deaeratorOutput.inletWaterPressure = this.convertSteamPressureOutput(deaeratorOutput.inletWaterPressure, settings);
-    deaeratorOutput.ventedSteamPressure = this.convertSteamPressureOutput(deaeratorOutput.ventedSteamPressure, settings);
-    //specific enthalpy
-    deaeratorOutput.feedwaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(deaeratorOutput.feedwaterSpecificEnthalpy, settings);
-    deaeratorOutput.inletSteamSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(deaeratorOutput.inletSteamSpecificEnthalpy, settings);
-    deaeratorOutput.inletWaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(deaeratorOutput.inletWaterSpecificEnthalpy, settings);
-    deaeratorOutput.ventedSteamSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(deaeratorOutput.ventedSteamSpecificEnthalpy, settings);
-    //specific entropy
-    deaeratorOutput.feedwaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(deaeratorOutput.feedwaterSpecificEntropy, settings);
-    deaeratorOutput.inletSteamSpecificEntropy = this.convertSteamSpecificEntropyOutput(deaeratorOutput.inletSteamSpecificEntropy, settings);
-    deaeratorOutput.inletWaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(deaeratorOutput.inletWaterSpecificEntropy, settings);
-    deaeratorOutput.ventedSteamSpecificEntropy = this.convertSteamSpecificEntropyOutput(deaeratorOutput.ventedSteamSpecificEntropy, settings);
-    //feedwater temp
-    deaeratorOutput.feedwaterTemperature = this.convertSteamTemperatureOutput(deaeratorOutput.feedwaterTemperature, settings);
-    deaeratorOutput.inletSteamTemperature = this.convertSteamTemperatureOutput(deaeratorOutput.inletSteamTemperature, settings);
-    deaeratorOutput.inletWaterTemperature = this.convertSteamTemperatureOutput(deaeratorOutput.inletWaterTemperature, settings);
-    deaeratorOutput.ventedSteamTemperature = this.convertSteamTemperatureOutput(deaeratorOutput.ventedSteamTemperature, settings);
+    if (deaeratorOutput) {
+      //energy flow
+      deaeratorOutput.feedwaterEnergyFlow = this.convertEnergyFlowOutput(deaeratorOutput.feedwaterEnergyFlow, settings);
+      deaeratorOutput.inletSteamEnergyFlow = this.convertEnergyFlowOutput(deaeratorOutput.inletSteamEnergyFlow, settings);
+      deaeratorOutput.inletWaterEnergyFlow = this.convertEnergyFlowOutput(deaeratorOutput.inletWaterEnergyFlow, settings);
+      deaeratorOutput.ventedSteamEnergyFlow = this.convertEnergyFlowOutput(deaeratorOutput.ventedSteamEnergyFlow, settings);
+      //mass flow
+      deaeratorOutput.feedwaterMassFlow = this.convertSteamMassFlowOutput(deaeratorOutput.feedwaterMassFlow, settings);
+      deaeratorOutput.inletSteamMassFlow = this.convertSteamMassFlowOutput(deaeratorOutput.inletSteamMassFlow, settings);
+      deaeratorOutput.inletWaterMassFlow = this.convertSteamMassFlowOutput(deaeratorOutput.inletWaterMassFlow, settings);
+      deaeratorOutput.ventedSteamMassFlow = this.convertSteamMassFlowOutput(deaeratorOutput.ventedSteamMassFlow, settings);
+      //pressure
+      deaeratorOutput.feedwaterPressure = this.convertSteamPressureOutput(deaeratorOutput.feedwaterPressure, settings);
+      deaeratorOutput.inletSteamPressure = this.convertSteamPressureOutput(deaeratorOutput.inletSteamPressure, settings);
+      deaeratorOutput.inletWaterPressure = this.convertSteamPressureOutput(deaeratorOutput.inletWaterPressure, settings);
+      deaeratorOutput.ventedSteamPressure = this.convertSteamPressureOutput(deaeratorOutput.ventedSteamPressure, settings);
+      //specific enthalpy
+      deaeratorOutput.feedwaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(deaeratorOutput.feedwaterSpecificEnthalpy, settings);
+      deaeratorOutput.inletSteamSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(deaeratorOutput.inletSteamSpecificEnthalpy, settings);
+      deaeratorOutput.inletWaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(deaeratorOutput.inletWaterSpecificEnthalpy, settings);
+      deaeratorOutput.ventedSteamSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(deaeratorOutput.ventedSteamSpecificEnthalpy, settings);
+      //specific entropy
+      deaeratorOutput.feedwaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(deaeratorOutput.feedwaterSpecificEntropy, settings);
+      deaeratorOutput.inletSteamSpecificEntropy = this.convertSteamSpecificEntropyOutput(deaeratorOutput.inletSteamSpecificEntropy, settings);
+      deaeratorOutput.inletWaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(deaeratorOutput.inletWaterSpecificEntropy, settings);
+      deaeratorOutput.ventedSteamSpecificEntropy = this.convertSteamSpecificEntropyOutput(deaeratorOutput.ventedSteamSpecificEntropy, settings);
+      //feedwater temp
+      deaeratorOutput.feedwaterTemperature = this.convertSteamTemperatureOutput(deaeratorOutput.feedwaterTemperature, settings);
+      deaeratorOutput.inletSteamTemperature = this.convertSteamTemperatureOutput(deaeratorOutput.inletSteamTemperature, settings);
+      deaeratorOutput.inletWaterTemperature = this.convertSteamTemperatureOutput(deaeratorOutput.inletWaterTemperature, settings);
+      deaeratorOutput.ventedSteamTemperature = this.convertSteamTemperatureOutput(deaeratorOutput.ventedSteamTemperature, settings);
+    }
     return deaeratorOutput;
   }
   //convert boiler
   convertBoilerOutput(boilerOutput: BoilerOutput, settings: Settings): BoilerOutput {
-    //pressure
-    boilerOutput.steamPressure = this.convertSteamPressureOutput(boilerOutput.steamPressure, settings);
-    boilerOutput.blowdownPressure = this.convertSteamPressureOutput(boilerOutput.blowdownPressure, settings);
-    boilerOutput.feedwaterPressure = this.convertSteamPressureOutput(boilerOutput.feedwaterPressure, settings);
-    //temp
-    boilerOutput.steamTemperature = this.convertSteamTemperatureOutput(boilerOutput.steamTemperature, settings);
-    boilerOutput.blowdownTemperature = this.convertSteamTemperatureOutput(boilerOutput.blowdownTemperature, settings);
-    boilerOutput.feedwaterTemperature = this.convertSteamTemperatureOutput(boilerOutput.feedwaterTemperature, settings);
-    //enthalpy
-    boilerOutput.steamSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(boilerOutput.steamSpecificEnthalpy, settings);
-    boilerOutput.blowdownSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(boilerOutput.blowdownSpecificEnthalpy, settings);
-    boilerOutput.feedwaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(boilerOutput.feedwaterSpecificEnthalpy, settings);
-    //entropy
-    boilerOutput.steamSpecificEntropy = this.convertSteamSpecificEntropyOutput(boilerOutput.steamSpecificEntropy, settings);
-    boilerOutput.blowdownSpecificEntropy = this.convertSteamSpecificEntropyOutput(boilerOutput.blowdownSpecificEntropy, settings);
-    boilerOutput.feedwaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(boilerOutput.feedwaterSpecificEntropy, settings);
-    //massFlow
-    boilerOutput.steamMassFlow = this.convertSteamMassFlowOutput(boilerOutput.steamMassFlow, settings);
-    boilerOutput.blowdownMassFlow = this.convertSteamMassFlowOutput(boilerOutput.blowdownMassFlow, settings);
-    boilerOutput.feedwaterMassFlow = this.convertSteamMassFlowOutput(boilerOutput.feedwaterMassFlow, settings);
-    //energy
-    boilerOutput.steamEnergyFlow = this.convertEnergyFlowOutput(boilerOutput.steamEnergyFlow, settings);
-    boilerOutput.blowdownEnergyFlow = this.convertEnergyFlowOutput(boilerOutput.blowdownEnergyFlow, settings);
-    boilerOutput.feedwaterEnergyFlow = this.convertEnergyFlowOutput(boilerOutput.feedwaterEnergyFlow, settings);
-    boilerOutput.boilerEnergy = this.convertEnergyFlowOutput(boilerOutput.boilerEnergy, settings);
-    boilerOutput.fuelEnergy = this.convertEnergyFlowOutput(boilerOutput.fuelEnergy, settings);
+    if (boilerOutput) {
+      //pressure
+      boilerOutput.steamPressure = this.convertSteamPressureOutput(boilerOutput.steamPressure, settings);
+      boilerOutput.blowdownPressure = this.convertSteamPressureOutput(boilerOutput.blowdownPressure, settings);
+      boilerOutput.feedwaterPressure = this.convertSteamPressureOutput(boilerOutput.feedwaterPressure, settings);
+      //temp
+      boilerOutput.steamTemperature = this.convertSteamTemperatureOutput(boilerOutput.steamTemperature, settings);
+      boilerOutput.blowdownTemperature = this.convertSteamTemperatureOutput(boilerOutput.blowdownTemperature, settings);
+      boilerOutput.feedwaterTemperature = this.convertSteamTemperatureOutput(boilerOutput.feedwaterTemperature, settings);
+      //enthalpy
+      boilerOutput.steamSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(boilerOutput.steamSpecificEnthalpy, settings);
+      boilerOutput.blowdownSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(boilerOutput.blowdownSpecificEnthalpy, settings);
+      boilerOutput.feedwaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(boilerOutput.feedwaterSpecificEnthalpy, settings);
+      //entropy
+      boilerOutput.steamSpecificEntropy = this.convertSteamSpecificEntropyOutput(boilerOutput.steamSpecificEntropy, settings);
+      boilerOutput.blowdownSpecificEntropy = this.convertSteamSpecificEntropyOutput(boilerOutput.blowdownSpecificEntropy, settings);
+      boilerOutput.feedwaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(boilerOutput.feedwaterSpecificEntropy, settings);
+      //massFlow
+      boilerOutput.steamMassFlow = this.convertSteamMassFlowOutput(boilerOutput.steamMassFlow, settings);
+      boilerOutput.blowdownMassFlow = this.convertSteamMassFlowOutput(boilerOutput.blowdownMassFlow, settings);
+      boilerOutput.feedwaterMassFlow = this.convertSteamMassFlowOutput(boilerOutput.feedwaterMassFlow, settings);
+      //energy
+      boilerOutput.steamEnergyFlow = this.convertEnergyFlowOutput(boilerOutput.steamEnergyFlow, settings);
+      boilerOutput.blowdownEnergyFlow = this.convertEnergyFlowOutput(boilerOutput.blowdownEnergyFlow, settings);
+      boilerOutput.feedwaterEnergyFlow = this.convertEnergyFlowOutput(boilerOutput.feedwaterEnergyFlow, settings);
+      boilerOutput.boilerEnergy = this.convertEnergyFlowOutput(boilerOutput.boilerEnergy, settings);
+      boilerOutput.fuelEnergy = this.convertEnergyFlowOutput(boilerOutput.fuelEnergy, settings);
+    }
     return boilerOutput;
   }
   //convert PRV
   convertPrvOutput(prvOutput: PrvOutput, settings: Settings): PrvOutput {
-    //flow
-    prvOutput.inletMassFlow = this.convertSteamMassFlowOutput(prvOutput.inletMassFlow, settings);
-    prvOutput.outletMassFlow = this.convertSteamMassFlowOutput(prvOutput.outletMassFlow, settings);
-    prvOutput.feedwaterMassFlow = this.convertSteamMassFlowOutput(prvOutput.feedwaterMassFlow, settings);
-    //pressure
-    prvOutput.inletPressure = this.convertSteamPressureOutput(prvOutput.inletPressure, settings);
-    prvOutput.outletPressure = this.convertSteamPressureOutput(prvOutput.outletPressure, settings);
-    prvOutput.feedwaterPressure = this.convertSteamPressureOutput(prvOutput.feedwaterPressure, settings);
-    //enthalpy
-    prvOutput.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(prvOutput.inletSpecificEnthalpy, settings);
-    prvOutput.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(prvOutput.outletSpecificEnthalpy, settings);
-    prvOutput.feedwaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(prvOutput.feedwaterSpecificEnthalpy, settings);
-    //entropy
-    prvOutput.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(prvOutput.inletSpecificEntropy, settings);
-    prvOutput.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(prvOutput.outletSpecificEntropy, settings);
-    prvOutput.feedwaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(prvOutput.feedwaterSpecificEntropy, settings);
-    //temp
-    prvOutput.inletTemperature = this.convertSteamTemperatureOutput(prvOutput.inletTemperature, settings);
-    prvOutput.outletTemperature = this.convertSteamTemperatureOutput(prvOutput.outletTemperature, settings);
-    prvOutput.feedwaterTemperature = this.convertSteamTemperatureOutput(prvOutput.feedwaterTemperature, settings);
-    //energyFlow
-    prvOutput.inletEnergyFlow = this.convertEnergyFlowOutput(prvOutput.inletEnergyFlow, settings);
-    prvOutput.outletEnergyFlow = this.convertEnergyFlowOutput(prvOutput.outletEnergyFlow, settings);
-    prvOutput.feedwaterEnergyFlow = this.convertEnergyFlowOutput(prvOutput.feedwaterEnergyFlow, settings);
+    if (prvOutput) {
+      //flow
+      prvOutput.inletMassFlow = this.convertSteamMassFlowOutput(prvOutput.inletMassFlow, settings);
+      prvOutput.outletMassFlow = this.convertSteamMassFlowOutput(prvOutput.outletMassFlow, settings);
+      prvOutput.feedwaterMassFlow = this.convertSteamMassFlowOutput(prvOutput.feedwaterMassFlow, settings);
+      //pressure
+      prvOutput.inletPressure = this.convertSteamPressureOutput(prvOutput.inletPressure, settings);
+      prvOutput.outletPressure = this.convertSteamPressureOutput(prvOutput.outletPressure, settings);
+      prvOutput.feedwaterPressure = this.convertSteamPressureOutput(prvOutput.feedwaterPressure, settings);
+      //enthalpy
+      prvOutput.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(prvOutput.inletSpecificEnthalpy, settings);
+      prvOutput.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(prvOutput.outletSpecificEnthalpy, settings);
+      prvOutput.feedwaterSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(prvOutput.feedwaterSpecificEnthalpy, settings);
+      //entropy
+      prvOutput.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(prvOutput.inletSpecificEntropy, settings);
+      prvOutput.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(prvOutput.outletSpecificEntropy, settings);
+      prvOutput.feedwaterSpecificEntropy = this.convertSteamSpecificEntropyOutput(prvOutput.feedwaterSpecificEntropy, settings);
+      //temp
+      prvOutput.inletTemperature = this.convertSteamTemperatureOutput(prvOutput.inletTemperature, settings);
+      prvOutput.outletTemperature = this.convertSteamTemperatureOutput(prvOutput.outletTemperature, settings);
+      prvOutput.feedwaterTemperature = this.convertSteamTemperatureOutput(prvOutput.feedwaterTemperature, settings);
+      //energyFlow
+      prvOutput.inletEnergyFlow = this.convertEnergyFlowOutput(prvOutput.inletEnergyFlow, settings);
+      prvOutput.outletEnergyFlow = this.convertEnergyFlowOutput(prvOutput.outletEnergyFlow, settings);
+      prvOutput.feedwaterEnergyFlow = this.convertEnergyFlowOutput(prvOutput.feedwaterEnergyFlow, settings);
+    }
     return prvOutput;
   }
 
   //convert heat loss
   convertHeatLossOutput(heatLossOutput: HeatLossOutput, settings: Settings): HeatLossOutput {
-    //flow
-    heatLossOutput.inletMassFlow = this.convertSteamMassFlowOutput(heatLossOutput.inletMassFlow, settings);
-    heatLossOutput.outletMassFlow = this.convertSteamMassFlowOutput(heatLossOutput.outletMassFlow, settings);
-    //pressure
-    heatLossOutput.inletPressure = this.convertSteamPressureOutput(heatLossOutput.inletPressure, settings);
-    heatLossOutput.outletPressure = this.convertSteamPressureOutput(heatLossOutput.outletPressure, settings);
-    //enthalpy
-    heatLossOutput.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(heatLossOutput.inletSpecificEnthalpy, settings);
-    heatLossOutput.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(heatLossOutput.outletSpecificEnthalpy, settings);
-    //entropy
-    heatLossOutput.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(heatLossOutput.inletSpecificEntropy, settings);
-    heatLossOutput.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(heatLossOutput.outletSpecificEntropy, settings);
-    //temp
-    heatLossOutput.inletTemperature = this.convertSteamTemperatureOutput(heatLossOutput.inletTemperature, settings);
-    heatLossOutput.outletTemperature = this.convertSteamTemperatureOutput(heatLossOutput.outletTemperature, settings);
-    //energy flow
-    heatLossOutput.inletEnergyFlow = this.convertEnergyFlowOutput(heatLossOutput.inletEnergyFlow, settings);
-    heatLossOutput.outletEnergyFlow = this.convertEnergyFlowOutput(heatLossOutput.outletEnergyFlow, settings);
-    heatLossOutput.heatLoss = this.convertEnergyFlowOutput(heatLossOutput.heatLoss, settings);
+    if (heatLossOutput) {
+      //flow
+      heatLossOutput.inletMassFlow = this.convertSteamMassFlowOutput(heatLossOutput.inletMassFlow, settings);
+      heatLossOutput.outletMassFlow = this.convertSteamMassFlowOutput(heatLossOutput.outletMassFlow, settings);
+      //pressure
+      heatLossOutput.inletPressure = this.convertSteamPressureOutput(heatLossOutput.inletPressure, settings);
+      heatLossOutput.outletPressure = this.convertSteamPressureOutput(heatLossOutput.outletPressure, settings);
+      //enthalpy
+      heatLossOutput.inletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(heatLossOutput.inletSpecificEnthalpy, settings);
+      heatLossOutput.outletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(heatLossOutput.outletSpecificEnthalpy, settings);
+      //entropy
+      heatLossOutput.inletSpecificEntropy = this.convertSteamSpecificEntropyOutput(heatLossOutput.inletSpecificEntropy, settings);
+      heatLossOutput.outletSpecificEntropy = this.convertSteamSpecificEntropyOutput(heatLossOutput.outletSpecificEntropy, settings);
+      //temp
+      heatLossOutput.inletTemperature = this.convertSteamTemperatureOutput(heatLossOutput.inletTemperature, settings);
+      heatLossOutput.outletTemperature = this.convertSteamTemperatureOutput(heatLossOutput.outletTemperature, settings);
+      //energy flow
+      heatLossOutput.inletEnergyFlow = this.convertEnergyFlowOutput(heatLossOutput.inletEnergyFlow, settings);
+      heatLossOutput.outletEnergyFlow = this.convertEnergyFlowOutput(heatLossOutput.outletEnergyFlow, settings);
+      heatLossOutput.heatLoss = this.convertEnergyFlowOutput(heatLossOutput.heatLoss, settings);
+    }
     return heatLossOutput;
   }
+
+  //heat exchanger
+  convertHeatExchangerOutput(heatExchangerOutput: HeatExchangerOutput, settings: Settings): HeatExchangerOutput {
+    if (heatExchangerOutput) {
+      heatExchangerOutput.hotOutletMassFlow = this.convertSteamMassFlowOutput(heatExchangerOutput.hotOutletMassFlow, settings);
+      heatExchangerOutput.hotOutletEnergyFlow = this.convertEnergyFlowOutput(heatExchangerOutput.hotOutletEnergyFlow, settings);
+      heatExchangerOutput.hotOutletTemperature = this.convertSteamTemperatureOutput(heatExchangerOutput.hotOutletTemperature, settings);
+      heatExchangerOutput.hotOutletSpecificVolume = this.convertSteamSpecificVolumeMeasurementOutput(heatExchangerOutput.hotOutletSpecificVolume, settings);
+      // heatExchangerOutput.hotOutletDensity: number 
+      heatExchangerOutput.hotOutletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(heatExchangerOutput.hotOutletSpecificEnthalpy, settings)
+      heatExchangerOutput.hotOutletSpecificEntropy = this.convertSteamSpecificEntropyOutput(heatExchangerOutput.hotOutletSpecificEntropy, settings);
+      heatExchangerOutput.hotOutletPressure = this.convertSteamPressureOutput(heatExchangerOutput.hotOutletPressure, settings);
+      heatExchangerOutput.coldOutletMassFlow = this.convertSteamMassFlowOutput(heatExchangerOutput.coldOutletMassFlow, settings);
+      heatExchangerOutput.coldOutletEnergyFlow = this.convertEnergyFlowOutput(heatExchangerOutput.coldOutletEnergyFlow, settings);
+      heatExchangerOutput.coldOutletTemperature = this.convertSteamTemperatureOutput(heatExchangerOutput.coldOutletTemperature, settings);
+      heatExchangerOutput.coldOutletPressure = this.convertSteamPressureOutput(heatExchangerOutput.coldOutletPressure, settings);
+      heatExchangerOutput.coldOutletSpecificVolume = this.convertSteamSpecificVolumeMeasurementOutput(heatExchangerOutput.coldOutletSpecificVolume, settings);
+      // heatExchangerOutput.coldOutletDensity: number
+      heatExchangerOutput.coldOutletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(heatExchangerOutput.coldOutletSpecificEnthalpy, settings);
+      heatExchangerOutput.coldOutletSpecificEntropy = this.convertSteamSpecificEntropyOutput(heatExchangerOutput.coldOutletSpecificEntropy, settings);
+    }
+    return heatExchangerOutput;
+  }
+
+
   //convert operations
+  convertOperationsOutput(ssmtOperationsOutput: SSMTOperationsOutput, settings: Settings): SSMTOperationsOutput {
+    ssmtOperationsOutput.powerGenerated = this.convertUnitsService.value(ssmtOperationsOutput.powerGenerated).from('kJh').to(settings.steamPowerMeasurement);
+    // ssmtOperationsOutput.boilerFuelCost: number,
+    //   ssmtOperationsOutput.makeupWaterCost: number,
+    //     ssmtOperationsOutput.powerGenerationCost: number,
+    //       ssmtOperationsOutput.boilerFuelUsage: number,
+    ssmtOperationsOutput.sitePowerImport = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerImport).from('kJh').to(settings.steamPowerMeasurement);
+    ssmtOperationsOutput.sitePowerDemand = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerDemand).from('kJh').to(settings.steamPowerMeasurement);
+    ssmtOperationsOutput.makeupWaterVolumeFlow = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('gpm').to(settings.steamVolumeFlowMeasurement);
+    //makeupWaterVolumeFlowAnnual (suite) = annualMakeupWaterFlow (desktop)
+    ssmtOperationsOutput.makeupWaterVolumeFlowAnnual = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('gal').to(settings.steamVolumeMeasurement);
+    return ssmtOperationsOutput;
+  }
+
+  //convert process usage
+  convertProcessUsageOutput(processUsageOutput: ProcessSteamUsage, settings: Settings): ProcessSteamUsage {
+    if (processUsageOutput) {
+      processUsageOutput.pressure = this.convertSteamPressureOutput(processUsageOutput.pressure, settings);
+      processUsageOutput.temperature = this.convertSteamTemperatureOutput(processUsageOutput.temperature, settings);
+      processUsageOutput.energyFlow = this.convertEnergyFlowOutput(processUsageOutput.energyFlow, settings);
+      processUsageOutput.massFlow = this.convertSteamMassFlowOutput(processUsageOutput.massFlow, settings);
+      processUsageOutput.processUsage = this.convertEnergyFlowOutput(processUsageOutput.processUsage, settings);
+    }
+    return processUsageOutput;
+  }
+
+  convertSsmtOutput(ssmtOutput: SSMTOutput, settings: Settings): SSMTOutput {
+    ssmtOutput.boilerOutput = this.convertBoilerOutput(ssmtOutput.boilerOutput, settings);
+
+    ssmtOutput.highPressureHeaderSteam = this.convertSteamPropertiesOutput(ssmtOutput.highPressureHeaderSteam, settings);
+    ssmtOutput.highPressureSteamHeatLoss = this.convertHeatLossOutput(ssmtOutput.highPressureSteamHeatLoss, settings);
+
+    ssmtOutput.mediumPressureToLowPressurePrv = this.convertPrvOutput(ssmtOutput.mediumPressureToLowPressurePrv, settings);
+    ssmtOutput.highPressureToMediumPressurePrv = this.convertPrvOutput(ssmtOutput.highPressureToMediumPressurePrv, settings);
+
+    ssmtOutput.highPressureToLowPressureTurbine = this.convertTurbineOutput(ssmtOutput.highPressureToLowPressureTurbine, settings);
+    ssmtOutput.highPressureToMediumPressureTurbine = this.convertTurbineOutput(ssmtOutput.highPressureToMediumPressureTurbine, settings);
+    ssmtOutput.highPressureCondensateFlashTank = this.convertFlashTankOutput(ssmtOutput.highPressureCondensateFlashTank, settings);
+
+    ssmtOutput.lowPressureHeaderSteam = this.convertSteamPropertiesOutput(ssmtOutput.lowPressureHeaderSteam, settings);
+    ssmtOutput.lowPressureSteamHeatLoss = this.convertHeatLossOutput(ssmtOutput.lowPressureSteamHeatLoss, settings);
+
+    ssmtOutput.mediumPressureToLowPressureTurbine = this.convertTurbineOutput(ssmtOutput.mediumPressureToLowPressureTurbine, settings);
+    ssmtOutput.mediumPressureCondensateFlashTank = this.convertFlashTankOutput(ssmtOutput.mediumPressureCondensateFlashTank, settings);
+
+    ssmtOutput.mediumPressureHeaderSteam = this.convertSteamPropertiesOutput(ssmtOutput.mediumPressureHeaderSteam, settings);
+    ssmtOutput.mediumPressureSteamHeatLoss = this.convertHeatLossOutput(ssmtOutput.mediumPressureSteamHeatLoss, settings);
+
+    ssmtOutput.blowdownFlashTank = this.convertFlashTankOutput(ssmtOutput.blowdownFlashTank, settings);
+
+    ssmtOutput.highPressureCondensate = this.convertSteamPropertiesOutput(ssmtOutput.highPressureCondensate, settings);
+    ssmtOutput.lowPressureCondensate = this.convertSteamPropertiesOutput(ssmtOutput.lowPressureCondensate, settings);
+    ssmtOutput.mediumPressureCondensate = this.convertSteamPropertiesOutput(ssmtOutput.mediumPressureCondensate, settings);
+    ssmtOutput.combinedCondensate = this.convertSteamPropertiesOutput(ssmtOutput.combinedCondensate, settings);
+    ssmtOutput.returnCondensate = this.convertSteamPropertiesOutput(ssmtOutput.returnCondensate, settings);
+    ssmtOutput.condensateFlashTank = this.convertFlashTankOutput(ssmtOutput.condensateFlashTank, settings);
+
+    ssmtOutput.makeupWater = this.convertSteamPropertiesOutput(ssmtOutput.makeupWater, settings);
+    ssmtOutput.makeupWaterAndCondensate = this.convertSteamPropertiesOutput(ssmtOutput.makeupWaterAndCondensate, settings);
+
+    ssmtOutput.condensingTurbine = this.convertTurbineOutput(ssmtOutput.condensingTurbine, settings);
+    ssmtOutput.deaeratorOutput = this.convertDeaeratorOutput(ssmtOutput.deaeratorOutput, settings);
+
+    ssmtOutput.highPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.highPressureProcessSteamUsage, settings);
+    ssmtOutput.mediumPressureProcessUsage = this.convertProcessUsageOutput(ssmtOutput.mediumPressureProcessUsage, settings);
+    ssmtOutput.lowPressureProcessUsage = this.convertProcessUsageOutput(ssmtOutput.lowPressureProcessUsage, settings);
+
+    ssmtOutput.lowPressureVentedSteam = this.convertSteamPropertiesOutput(ssmtOutput.lowPressureVentedSteam, settings);
+    ssmtOutput.heatExchangerOutput = this.convertHeatExchangerOutput(ssmtOutput.heatExchangerOutput, settings);
+    ssmtOutput.operationsOutput = this.convertOperationsOutput(ssmtOutput.operationsOutput, settings);
+    return ssmtOutput;
+  }
 }

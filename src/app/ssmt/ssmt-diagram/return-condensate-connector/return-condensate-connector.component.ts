@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { DeaeratorOutput, HeaderOutputObj } from '../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -11,7 +11,7 @@ export class ReturnCondensateConnectorComponent implements OnInit {
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
   @Input()
-  makeupWaterAndCondensateHeader: HeaderOutputObj;
+  makeupWaterAndCondensateHeader: SteamPropertiesOutput;
   @Input()
   settings: Settings;
   @Output('emitSelectEquipment')

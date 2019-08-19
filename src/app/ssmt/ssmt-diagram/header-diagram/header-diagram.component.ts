@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { HeaderOutputObj, ProcessSteamUsage, SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, ProcessSteamUsage } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -9,7 +9,7 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class HeaderDiagramComponent implements OnInit {
   @Input()
-  header: HeaderOutputObj;
+  header: SteamPropertiesOutput;
   @Input()
   pressureLevel: string;
   @Input()

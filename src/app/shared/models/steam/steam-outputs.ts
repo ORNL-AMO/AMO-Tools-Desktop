@@ -2,7 +2,7 @@
 export interface SSMTOutput {
   boilerOutput: BoilerOutput;
 
-  highPressureHeaderSteam: HeaderOutputObj;
+  highPressureHeaderSteam: SteamPropertiesOutput;
   highPressureSteamHeatLoss: HeatLossOutput;
 
   mediumPressureToLowPressurePrv: PrvOutput;
@@ -12,13 +12,13 @@ export interface SSMTOutput {
   highPressureToMediumPressureTurbine: TurbineOutput;
   highPressureCondensateFlashTank: FlashTankOutput;
 
-  lowPressureHeaderSteam: HeaderOutputObj;
+  lowPressureHeaderSteam: SteamPropertiesOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
 
   mediumPressureToLowPressureTurbine: TurbineOutput;
   mediumPressureCondensateFlashTank: FlashTankOutput;
 
-  mediumPressureHeaderSteam: HeaderOutputObj;
+  mediumPressureHeaderSteam: SteamPropertiesOutput;
   mediumPressureSteamHeatLoss: HeatLossOutput;
 
   blowdownFlashTank: FlashTankOutput;
@@ -26,12 +26,12 @@ export interface SSMTOutput {
   highPressureCondensate: SteamPropertiesOutput;
   lowPressureCondensate: SteamPropertiesOutput;
   mediumPressureCondensate: SteamPropertiesOutput;
-  combinedCondensate: HeaderOutputObj;
+  combinedCondensate: SteamPropertiesOutput;
   returnCondensate: SteamPropertiesOutput;
   condensateFlashTank: FlashTankOutput;
 
   makeupWater: SteamPropertiesOutput;
-  makeupWaterAndCondensate: HeaderOutputObj;
+  makeupWaterAndCondensate: SteamPropertiesOutput;
 
   condensingTurbine: TurbineOutput;
   deaeratorOutput: DeaeratorOutput;
@@ -208,33 +208,27 @@ export interface FlashTankOutput {
 }
 
 export interface HeaderOutput {
-  header: HeaderOutputObj;
-  inlet1: HeaderOutputObj;
-  inlet2: HeaderOutputObj;
-  inlet3: HeaderOutputObj;
-  inlet4: HeaderOutputObj;
-  inlet5: HeaderOutputObj;
-  inlet6: HeaderOutputObj;
-  inlet7: HeaderOutputObj;
-  inlet8: HeaderOutputObj;
-  inlet9: HeaderOutputObj;
+  header: SteamPropertiesOutput;
+  inlet1: SteamPropertiesOutput;
+  inlet2: SteamPropertiesOutput;
+  inlet3: SteamPropertiesOutput;
+  inlet4: SteamPropertiesOutput;
+  inlet5: SteamPropertiesOutput;
+  inlet6: SteamPropertiesOutput;
+  inlet7: SteamPropertiesOutput;
+  inlet8: SteamPropertiesOutput;
+  inlet9: SteamPropertiesOutput;
 }
 
-export interface HeaderOutputObj {
-  energyFlow: number;
-  massFlow: number;
-  pressure: number;
-  quality: number;
-  specificEnthalpy: number;
-  specificEntropy: number;
-  temperature: number;
-  specificVolume?: number;
-  //this may not be needed on header output,
-  //used during php calculation, still working through this piece
-  // heatLoss?: HeatLossOutput;
-  remainingSteam?: SteamPropertiesOutput;
-  finalHeaderSteam?: SteamPropertiesOutput;
-}
+// export interface HeaderOutputObj {
+//   energyFlow: number;
+//   massFlow: number;
+//   pressure: number;
+//   quality: number;
+//   specificEnthalpy: number;
+//   specificEntropy: number;
+//   temperature: number;
+// }
 
 
 export interface HeatLossOutput {

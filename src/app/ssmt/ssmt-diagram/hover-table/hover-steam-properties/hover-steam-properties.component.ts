@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
-import { SteamPropertiesOutput, BoilerOutput, PrvOutput, TurbineOutput, HeaderOutputObj, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput, HeatExchangerOutput } from '../../../../shared/models/steam/steam-outputs';
+import { BoilerOutput, PrvOutput, TurbineOutput, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, SSMTOutput, HeatExchangerOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 
@@ -165,7 +165,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
   }
   makeupWaterCondensatePropertiesHovered() {
     this.label = 'Condensate and Make-Up Water';
-    let headerObj: HeaderOutputObj = this.outputData.makeupWaterAndCondensate;
+    let headerObj: SteamPropertiesOutput = this.outputData.makeupWaterAndCondensate;
     this.setSteamProperties(headerObj);
   }
   returnCondensateHovered() {
@@ -280,7 +280,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
     this.setSteamProperties(condensate);
   }
 
-  setSteamProperties(steamData: SteamPropertiesOutput | HeaderOutputObj) {
+  setSteamProperties(steamData: SteamPropertiesOutput | SteamPropertiesOutput) {
     this.steam = {
       pressure: steamData.pressure,
       temperature: steamData.temperature,
@@ -294,7 +294,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   lowPressureProcessSteamInletHovered() {
     this.label = 'Low Pressure Process Steam';
-    let header: HeaderOutputObj = this.outputData.lowPressureHeaderSteam;
+    let header: SteamPropertiesOutput = this.outputData.lowPressureHeaderSteam;
     let processUsage: ProcessSteamUsage = this.outputData.lowPressureProcessUsage;
     this.setSteamProperties(header);
     this.steam.massFlow = processUsage.massFlow;
@@ -302,7 +302,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   mediumPressureProcessSteamInletHovered() {
     this.label = 'Medium Pressure Process Steam';
-    let header: HeaderOutputObj = this.outputData.mediumPressureHeaderSteam;
+    let header: SteamPropertiesOutput = this.outputData.mediumPressureHeaderSteam;
     let processUsage: ProcessSteamUsage = this.outputData.mediumPressureProcessUsage;
     this.setSteamProperties(header);
     this.steam.massFlow = processUsage.massFlow;
@@ -311,7 +311,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   highPressureProcessSteamInletHovered() {
     this.label = 'High Pressure Process Steam';
-    let header: HeaderOutputObj = this.outputData.highPressureHeaderSteam;
+    let header: SteamPropertiesOutput = this.outputData.highPressureHeaderSteam;
     let processUsage: ProcessSteamUsage = this.outputData.highPressureProcessSteamUsage;
     this.setSteamProperties(header);
     this.steam.massFlow = processUsage.massFlow;

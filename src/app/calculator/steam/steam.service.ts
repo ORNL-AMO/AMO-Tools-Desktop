@@ -296,10 +296,11 @@ export class SteamService {
     return results;
   }
 
-  steamModeler(inputData: SSMTInputs): SSMTOutput {
+  steamModeler(inputData: SSMTInputs, settings: Settings): SSMTOutput {
     // debugger
     console.log(inputData);
     let outputData: SSMTOutput = steamAddon.steamModeler(inputData);
+    outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
     console.log(outputData);
     //convert output 
     return outputData;

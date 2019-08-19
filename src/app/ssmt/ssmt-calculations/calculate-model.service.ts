@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SteamService } from '../../calculator/steam/steam.service';
-import { BoilerOutput, SteamPropertiesOutput, HeaderOutputObj, HeatLossOutput, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, HeaderOutput, SSMTOutput, HeatExchangerOutput } from '../../shared/models/steam/steam-outputs';
+import { BoilerOutput, SteamPropertiesOutput, HeatLossOutput, PrvOutput, TurbineOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, HeaderOutput, SSMTOutput, HeatExchangerOutput } from '../../shared/models/steam/steam-outputs';
 import { Settings } from '../../shared/models/settings';
 import { SSMTInputs, SSMT, HeaderNotHighestPressure, HeaderWithHighestPressure } from '../../shared/models/steam/ssmt';
 import { HeaderInputObj, HeaderInput, HeatExchangerInput } from '../../shared/models/steam/steam-inputs';
@@ -19,7 +19,7 @@ export class CalculateModelService {
 
   boilerOutput: BoilerOutput;
 
-  highPressureHeader: HeaderOutputObj;
+  highPressureHeader: SteamPropertiesOutput;
   highPressureSteamHeatLoss: HeatLossOutput;
 
   lowPressurePRV: PrvOutput;
@@ -29,13 +29,13 @@ export class CalculateModelService {
   highPressureToMediumPressureTurbine: TurbineOutput;
   highPressureCondensateFlashTank: FlashTankOutput;
 
-  lowPressureHeader: HeaderOutputObj;
+  lowPressureHeader: SteamPropertiesOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
 
   mediumToLowPressureTurbine: TurbineOutput;
   mediumPressureCondensateFlashTank: FlashTankOutput;
 
-  mediumPressureHeader: HeaderOutputObj;
+  mediumPressureHeader: SteamPropertiesOutput;
   mediumPressureSteamHeatLoss: HeatLossOutput;
 
   blowdownFlashTank: FlashTankOutput;
@@ -43,12 +43,12 @@ export class CalculateModelService {
   highPressureCondensate: SteamPropertiesOutput;
   lowPressureCondensate: SteamPropertiesOutput;
   mediumPressureCondensate: SteamPropertiesOutput;
-  combinedCondensate: HeaderOutputObj;
+  combinedCondensate: SteamPropertiesOutput;
   returnCondensate: SteamPropertiesOutput;
   condensateFlashTank: FlashTankOutput;
 
   makeupWater: SteamPropertiesOutput;
-  makeupWaterAndCondensateHeader: HeaderOutputObj;
+  makeupWaterAndCondensateHeader: SteamPropertiesOutput;
 
   condensingTurbine: TurbineOutput;
   deaeratorOutput: DeaeratorOutput;
@@ -1166,7 +1166,7 @@ export class CalculateModelService {
   /********** 4. Calculate Low Pressure Header *********/
   //4A. Calculate Low Pressure PRV
   calculateLowPressurePRV() {
-    let headerObj: HeaderOutputObj;
+    let headerObj: SteamPropertiesOutput;
     let prvMassFlow: number = 0;
     //either medium to low or high to low
     if (this.inputData.headerInput.numberOfHeaders === 2) {
@@ -1227,7 +1227,7 @@ export class CalculateModelService {
   //4B. Calculate Medium Pressure Flash Tank
   calculateMediumPressureFlashTank() {
     //mix inlet condensate using header calculate
-    let tmpHighMediumPressureMix: HeaderOutputObj;
+    let tmpHighMediumPressureMix: SteamPropertiesOutput;
     //if high pressure condensate has been flashed into medium pressure header
     if (this.inputData.headerInput.numberOfHeaders === 3 && this.inputData.headerInput.mediumPressureHeader.flashCondensateIntoHeader === true) {
       //inlets will be leftover condensate from flash tank and medium pressure condensate
@@ -1742,7 +1742,7 @@ export class CalculateModelService {
   calculateDearator() {
     //6A. Get Feedwater Details and Inlet header
     let feedwaterMassFlow: number = this.boilerOutput.feedwaterMassFlow;
-    let inletHeader: HeaderOutputObj = this.highPressureHeader;
+    let inletHeader: SteamPropertiesOutput = this.highPressureHeader;
     if (this.inputData.headerInput.numberOfHeaders > 1) {
       if (this.inputData.headerInput.lowPressureHeader.desuperheatSteamIntoNextHighest === true) {
         feedwaterMassFlow = feedwaterMassFlow + this.lowPressurePRV.feedwaterMassFlow;

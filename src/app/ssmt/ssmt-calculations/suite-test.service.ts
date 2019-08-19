@@ -15,7 +15,7 @@ export class SuiteTestService {
     let inputCpy: SSMTInputs = JSON.parse(JSON.stringify(inputData));
     let convertedInputData: SSMTInputs = this.convertInputData(inputCpy, settings);
     let setupInputData: SSMTInputs = this.setupInputData(convertedInputData);
-    let results = this.steamService.steamModeler(setupInputData);
+    let results = this.steamService.steamModeler(setupInputData, settings);
     return results;
   }
 
