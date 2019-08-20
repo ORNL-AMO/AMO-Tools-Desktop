@@ -64,7 +64,19 @@ export class TreasureHuntComponent implements OnInit {
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
-            setupDone: false
+            setupDone: false,
+            operatingHours: {
+              weeksPerYear: 52,
+              daysPerWeek: 7,
+              hoursPerYear: 8736
+            }
+          }
+        }
+        if (!this.assessment.treasureHunt.operatingHours) {
+          this.assessment.treasureHunt.operatingHours = {
+            weeksPerYear: 52,
+            daysPerWeek: 7,
+            hoursPerYear: 8736
           }
         }
 
