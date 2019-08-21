@@ -427,3 +427,63 @@ export interface WaterReductionResult {
   costSavings: number
 };
 //===== END water/wastewater reduction objects =====
+
+
+//====== steam reduction objects ======
+export interface SteamReductionInput {
+  steamReductionInputVec: Array<SteamReductionData>
+};
+
+export interface SteamReductionData {
+  name: string,
+  hoursPerYear: number,
+  utilityType: number,
+  utilityCost: number,
+  measurementMethod: number,
+  systemEfficiency: number,
+  pressure: number,
+  flowMeterMethodData: SteamFlowMeterMethodData,
+  airMassFlowMethodData: SteamMassFlowMethodData,
+  waterMassFlowMethodData: SteamMassFlowMethodData,
+  otherMethodData: SteamOtherMethodData,
+  units: number
+};
+
+export interface SteamFlowMeterMethodData {
+  flowRate: number
+};
+
+export interface SteamMassFlowNameplateData {
+  flowRate: number
+};
+
+export interface SteamMassFlowMeasuredData {
+  areaOfDuct: number,
+  airVelocity: number
+};
+
+export interface SteamMassFlowMethodData {
+  isNameplate: boolean,
+  massFlowMeasuredData: SteamMassFlowMeasuredData,
+  massFlowNameplateData: SteamMassFlowNameplateData,
+  inletTemperature: number,
+  outletTemperature: number
+};
+
+export interface SteamOtherMethodData {
+  consumption: number
+};
+
+export interface SteamReductionResults {
+  baselineResults: SteamReductionResult,
+  modificationResults: SteamReductionResult,
+  annualEnergySavings: number,
+  annualCostSavings: number
+};
+
+export interface SteamReductionResult {
+  energyCost: number,
+  energyUse: number,
+  steamUse: number
+};
+//===== END steam reduction objects =====

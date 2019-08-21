@@ -7,7 +7,7 @@ import {
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
   PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
-  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult
+  ElectricityReductionInput, ElectricityReductionResults, NaturalGasReductionResults, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, SteamReductionResult
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -321,5 +321,16 @@ export class StandaloneService {
 
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
     return calculatorAddon.waterReduction(inputObj);
+  }
+
+  steamReduction(inputObj: SteamReductionInput): any {
+    console.log('inputObj = ');
+    console.log(inputObj.steamReductionInputVec);
+    // return null;
+    let result = calculatorAddon.steamReduction(inputObj);
+    console.log('result = ');
+    console.log(result);
+    return result;
+    // return calculatorAddon.steamReduction(inputObj);
   }
 }

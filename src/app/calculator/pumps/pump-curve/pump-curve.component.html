@@ -143,6 +143,7 @@
           [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"
           [lossCoefficient]="lossCoefficient" [graphSystemCurve]="graphSystemCurve"></app-pump-curve-graph>
         <div *ngIf="graphPumpCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
+<<<<<<< Updated upstream
           <p>Pump Curve Regression: &nbsp; &nbsp; </p>
           <p [innerHTML]="regEquation"></p>
         </div>
@@ -162,6 +163,14 @@
         <div *ngIf="graphSystemCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
           <p>System Curve Regression: &nbsp; &nbsp; </p>
           <p [innerHTML]="systemRegEquation"></p>
+=======
+          <p>Pump Curve Regression: </p>
+          <p [innerHTML]="regEquation"></p>
+        </div>
+        <div *ngIf="graphSystemCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
+          <p>System Curve Regression: </p>
+          <p [innerHTML]="regEquation2"></p>
+>>>>>>> Stashed changes
         </div>
       </div>
     </div>
