@@ -5,11 +5,13 @@ import { OperationsFormComponent } from './operations-form/operations-form.compo
 import { OperationsComponent } from './operations.component';
 import { OperationsService } from './operations.service';
 import { OperationsCompareService } from './operations-compare.service';
+import { SharedModule } from '../../../shared/shared.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   declarations: [OperationsFormComponent, OperationsComponent],
   providers: [OperationsService, OperationsCompareService],

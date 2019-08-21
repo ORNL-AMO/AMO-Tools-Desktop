@@ -76,7 +76,7 @@ export class ReplaceExistingComponent implements OnInit {
   }
 
   initMotorInputs() {
-    let oppHours: number = 5200;
+    let oppHours: number = 8760;
     if (this.opperatingHours) {
       oppHours = this.opperatingHours;
     }

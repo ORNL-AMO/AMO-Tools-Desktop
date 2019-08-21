@@ -9,14 +9,11 @@
   </div>
   <!--end header-->
   <div *ngIf="mainTab == 'system-setup'" class="d-flex tab-content">
-    <div class="w-50 panel-column modification scroll-item" [ngStyle]="{'height.px': containerHeight}">
+    <div class="w-50 panel-column modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true}"
+      [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="subTab == 'settings'" [(settings)]="settings" [assessment]="assessment"
-        (updateSettings)="getSettings()">
+        (updateSettings)="getSettings()" (emitSave)="saveTreasureHunt($event)">
       </app-system-basics>
-      <app-operating-hours *ngIf="subTab == 'operating-hours'" [treasureHunt]="assessment.treasureHunt"
-        (emitSave)="saveTreasureHunt($event)">
-      </app-operating-hours>
-
       <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings"
         [treasureHunt]="assessment.treasureHunt" (emitSave)="saveTreasureHunt($event)">
       </app-operation-costs>

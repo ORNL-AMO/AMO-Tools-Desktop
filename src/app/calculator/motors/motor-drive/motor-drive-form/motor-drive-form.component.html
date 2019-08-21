@@ -1,6 +1,24 @@
-<form [formGroup]="form">
+<form [formGroup]="form" #formElement>
   <div class="row">
     <div class="col-12">
+      <div class="form-group">
+        <label for="annualOperatingHours">Annual Operating Hours</label>
+        <div class="input-group calc-addon-group">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input name="annualOperatingHours" type="number" min="0" step="any" class="form-control"
+            id="annualOperatingHours" formControlName="annualOperatingHours" (input)="calculate()"
+            onfocus="this.select();" (focus)="focusField('annualOperatingHours')">
+          <span class="units">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.annualOperatingHours.invalid && !form.controls.annualOperatingHours.pristine">
+          <span *ngIf="form.controls.annualOperatingHours.errors.required">Value required.</span>
+          <span *ngIf="form.controls.annualOperatingHours.errors.min">Value cannot not be less than
+            {{form.controls.annualOperatingHours.errors.min.min}}.</span>
+        </span>
+      </div>
       <!-- <label class="group-label">Operating Conditions</label> -->
       <div class="form-group">
         <label for="electricityCost">Electricity Cost</label>
@@ -17,35 +35,21 @@
             {{form.controls.electricityCost.errors.min.min}}.</span>
         </span>
       </div>
-      <div class="form-group">
-        <label for="annualOperatingHours">Annual Operating Hours</label>
-        <div class="input-group calc-addon-group">
-          <input name="annualOperatingHours" type="number" min="0" step="any" class="form-control"
-            id="annualOperatingHours" formControlName="annualOperatingHours" (input)="calculate()"
-            onfocus="this.select();" (focus)="focusField('annualOperatingHours')">
-          <span class="units">hrs/yr</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.annualOperatingHours.invalid && !form.controls.annualOperatingHours.pristine">
-          <span *ngIf="form.controls.annualOperatingHours.errors.required">Value required.</span>
-          <span *ngIf="form.controls.annualOperatingHours.errors.min">Value cannot not be less than
-            {{form.controls.annualOperatingHours.errors.min.min}}.</span>
-        </span>
-      </div>
+
       <div class="form-group">
         <label for="motorPower">Motor Power</label>
         <div class="input-group calc-addon-group">
-          <input name="motorPower" type="number" min="0" step="any" class="form-control"
-            id="motorPower" formControlName="motorPower" (input)="calculate()" onfocus="this.select();"
+          <input name="motorPower" type="number" min="0" step="any" class="form-control" id="motorPower"
+            formControlName="motorPower" (input)="calculate()" onfocus="this.select();"
             (focus)="focusField('motorPower')">
-            <span class="units" *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
-            <span class="units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
+          <span class="units" *ngIf="settings.unitsOfMeasure != 'Metric'">hp</span>
+          <span class="units" *ngIf="settings.unitsOfMeasure == 'Metric'">kW</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
           <span *ngIf="form.controls.motorPower.errors.required">Value required.</span>
           <span *ngIf="form.controls.motorPower.errors.min">Value cannot not be less than
-              {{form.controls.motorPower.errors.min.min}}.</span>
+            {{form.controls.motorPower.errors.min.min}}.</span>
         </span>
       </div>
 
@@ -85,3 +89,8 @@
     </div>
   </div>
 </form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+  [operatingHours]="motorDriveService.operatingHours">
+</app-operating-hours-modal>

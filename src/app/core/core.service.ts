@@ -8,8 +8,11 @@ import { MockPsat, MockPsatCalculator, MockPsatSettings } from './mockPsat';
 import { MockFsat, MockFsatSettings, MockFsatCalculator } from './mockFsat';
 import { MockSsmt, MockSsmtSettings } from './mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from './mockTreasureHunt';
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class CoreService {
+
+  showTranslateModal: BehaviorSubject<boolean>;
 
   exampleDirectoryId: number;
   examplePhastId: number;
@@ -17,7 +20,9 @@ export class CoreService {
   exampleFsatId: number;
   exampleSsmtId: number;
   exampleTreasureHuntId: number;
-  constructor(private indexedDbService: IndexedDbService) { }
+  constructor(private indexedDbService: IndexedDbService) { 
+    this.showTranslateModal = new BehaviorSubject<boolean>(false);
+  }
 
   createExamples(): Promise<any> {
     return new Promise((resolve, reject) => {

@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirReductionService } from '../compressed-air-reduction.service';
 import { CompressedAirReductionResult, CompressedAirReductionData } from '../../../../shared/models/standalone';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-compressed-air-reduction-form',
@@ -28,6 +29,15 @@ export class CompressedAirReductionFormComponent implements OnInit {
   selected: boolean;
   @Input()
   utilityType: number;
+
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean;
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Flow Meter' },
@@ -109,6 +119,12 @@ export class CompressedAirReductionFormComponent implements OnInit {
         }
       }
     }
+  }
+
+  ngAfterViewInit(){
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
   }
 
   changeCompressorType() {
@@ -195,5 +211,26 @@ export class CompressedAirReductionFormComponent implements OnInit {
   }
 
   focusOut() {
+  }
+
+  closeOperatingHoursModal(){
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal(){
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: OperatingHours){
+    this.compressedAirReductionService.operatingHours = oppHours;
+    this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth(){
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

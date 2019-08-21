@@ -18,3 +18,8 @@ ul{
 	padding-top: 6.5px;
 	padding-bottom: 6.5px;
 }
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }

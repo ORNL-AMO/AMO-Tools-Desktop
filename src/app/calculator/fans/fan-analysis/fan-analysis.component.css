@@ -1,0 +1,20 @@
+.fan-analysis-container{
+    height: 100%;
+}
+
+.calc-footer{
+    border-top: #FFE400 solid 3px;
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+    z-index: 5;
+}
+
+.calc-footer .btn{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}

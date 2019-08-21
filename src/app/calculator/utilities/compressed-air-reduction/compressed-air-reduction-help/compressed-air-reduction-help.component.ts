@@ -7,11 +7,11 @@ import {Settings} from "../../../../shared/models/settings";
   styleUrls: ['./compressed-air-reduction-help.component.css']
 })
 export class CompressedAirReductionHelpComponent implements OnInit {
-
   @Input()
   settings: Settings;
   @Input()
   currentField: string;
+  
   constructor() { }
 
   ngOnInit() {

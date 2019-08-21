@@ -28,8 +28,8 @@ export class StackLossByMassComponent implements OnInit {
     'Oxygen in Flue Gas'
   ];
 
-  calculationExcessAir:number = 0.0;
-  calculationFlueGasO2:number = 0.0;
+  calculationExcessAir: number = 0.0;
+  calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
   stackTemperatureWarning: boolean = false;
   tempMin: number;
@@ -51,10 +51,8 @@ export class StackLossByMassComponent implements OnInit {
     this.setCombustionValidation();
     this.setFuelTempValidation();
     this.tempMin = 212;
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to('C');
-      this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
-    }
+    this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to(this.settings.steamTemperatureMeasurement);
+    this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
     this.checkStackLossTemp();
   }
   focusOut() {

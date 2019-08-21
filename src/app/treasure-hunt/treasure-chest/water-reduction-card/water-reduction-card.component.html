@@ -1,0 +1,58 @@
+<div class="col-12" [hidden]="hideCard">
+  <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !waterReduction.selected}">
+    <div class="card-body d-flex w-100 p-0">
+      <div class="col-1 col-item-br">
+        <div class="row align-items-center h-100">
+          <div class="col text-center">
+            <app-animated-checkmark [active]="waterReduction.selected" (click)="toggleSelected()">
+            </app-animated-checkmark>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 col-item-br opportunity-name">
+        <div class="row align-items-center h-100">
+          <div class="col text-center">
+            <img src="assets/images/calculator-icons/utilities-icons/water-reduction-icon.png" class="calc-icon">
+            <a (click)="editWaterReduction()">
+              <span *ngIf="!waterReduction.opportunitySheet || !waterReduction.opportunitySheet.name">
+                Water Reduction #{{index+1}}
+              </span>
+              <span *ngIf="waterReduction.opportunitySheet && waterReduction.opportunitySheet.name">
+                {{waterReduction.opportunitySheet.name}}
+              </span>
+            </a><br>
+            <span>Annual Cost Savings: {{waterReductionResults.annualCostSavings | currency:'USD'}}</span><br>
+            <span>Annual {{energyType}} Savings: {{waterReductionResults.annualWaterSavings | number:'1.0-0'}}
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 col-item-br text-center graph-col treasure-hunt-item">
+        <div class="large pt-2">{{energyType}} Cost Savings</div>
+        <app-treasure-hunt-gauge [value]="percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
+      </div>
+      <div class="col-2 col-item-br opp-sheet-col">
+        <div class="row align-items-center h-100">
+          <div class="col text-center"
+            [ngClass]="{'no-opp-sheet': !waterReduction.opportunitySheet, 'opp-sheet-exists': waterReduction.opportunitySheet}"
+            (click)="editOpportunitySheet()">
+            <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
+            <span class="large pt-2" *ngIf="!waterReduction.opportunitySheet">Add Opportunity Sheet</span>
+            <span class="large pt-2" *ngIf="waterReduction.opportunitySheet">Edit Opportunity Sheet</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="row align-items-center h-100">
+          <div class="col text-center">
+            <a class="click-link" (click)="editWaterReduction()">Edit Opportunity</a><br>
+            <a class="click-link danger" (click)="deletedItem()">Delete</a><br>
+            <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

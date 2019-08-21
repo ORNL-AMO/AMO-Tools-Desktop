@@ -39,6 +39,8 @@ export class TreasureHuntComponent implements OnInit {
   subTabSub: Subscription;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  modalOpenSub: Subscription;
+  isModalOpen: boolean = false;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -62,7 +64,19 @@ export class TreasureHuntComponent implements OnInit {
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
-            setupDone: false
+            setupDone: false,
+            operatingHours: {
+              weeksPerYear: 52,
+              daysPerWeek: 7,
+              hoursPerYear: 8736
+            }
+          }
+        }
+        if (!this.assessment.treasureHunt.operatingHours) {
+          this.assessment.treasureHunt.operatingHours = {
+            weeksPerYear: 52,
+            daysPerWeek: 7,
+            hoursPerYear: 8736
           }
         }
 
@@ -80,6 +94,9 @@ export class TreasureHuntComponent implements OnInit {
 
     this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
       this.subTab = val;
+    });
+    this.modalOpenSub = this.treasureHuntService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
     })
   }
 
@@ -88,6 +105,7 @@ export class TreasureHuntComponent implements OnInit {
     this.subTabSub.unsubscribe();
     this.treasureHuntService.mainTab.next('system-setup');
     this.treasureHuntService.subTab.next('settings');
+    this.modalOpenSub.unsubscribe();
   }
 
   ngAfterViewInit() {

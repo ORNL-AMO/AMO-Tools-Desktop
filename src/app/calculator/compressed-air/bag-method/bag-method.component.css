@@ -23,3 +23,8 @@
 .btn-form {
   border-radius: 4px !important;
 }
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+}

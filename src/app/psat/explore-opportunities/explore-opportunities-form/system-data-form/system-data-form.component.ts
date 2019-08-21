@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FieldDataWarnings } from '../../../psat-warning.service';
 import { FormGroup } from '@angular/forms';
+import { OperatingHours } from '../../../../shared/models/operations';
+import { PSAT } from '../../../../shared/models/psat';
 @Component({
     selector: 'app-system-data-form',
     templateUrl: './system-data-form.component.html',
@@ -29,12 +30,22 @@ export class SystemDataFormComponent implements OnInit {
     modificationForm: FormGroup;
     @Output('openHeadToolModal')
     openHeadToolModal = new EventEmitter<boolean>();
+    @Input()
+    modificationPsat: PSAT;
 
     showSystemData: boolean = false;
     showFlowRate: boolean = false;
     showHead: boolean = false;
 
-    constructor(private convertUnitsService: ConvertUnitsService) { }
+    @ViewChild('formElement') formElement: ElementRef;
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        this.setOpHoursModalWidth();
+    }
+
+    formWidth: number;
+    showOperatingHoursModal: boolean = false;
+    constructor() { }
 
     ngOnInit() {
         this.init();
@@ -46,11 +57,17 @@ export class SystemDataFormComponent implements OnInit {
                 this.init()
             }
         }
-        if(changes.isVFD){
-            if(!changes.isVFD.isFirstChange()){
+        if (changes.isVFD) {
+            if (!changes.isVFD.isFirstChange()) {
                 this.init();
             }
         }
+    }
+
+    ngAfterViewInit() {
+        setTimeout(() => {
+            this.setOpHoursModalWidth();
+        }, 100)
     }
 
     init() {
@@ -114,15 +131,29 @@ export class SystemDataFormComponent implements OnInit {
         this.changeField.emit(str);
     }
 
-    getDisplayUnit(unit: string) {
-        let tmpUnit = this.convertUnitsService.getUnit(unit);
-        let dsp = tmpUnit.unit.name.display.replace('(', '');
-        dsp = dsp.replace(')', '');
-        return dsp;
-    }
-
     showHeadToolModal() {
         this.openHeadToolModal.emit(true);
+    }
+
+    closeOperatingHoursModal() {
+        this.showOperatingHoursModal = false;
+    }
+
+    openOperatingHoursModal() {
+        this.showOperatingHoursModal = true;
+    }
+
+    updateOperatingHours(oppHours: OperatingHours) {
+        this.modificationPsat.operatingHours = oppHours;
+        this.modificationForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+        this.calculate();
+        this.closeOperatingHoursModal();
+    }
+
+    setOpHoursModalWidth() {
+        if (this.formElement.nativeElement.clientWidth) {
+            this.formWidth = this.formElement.nativeElement.clientWidth;
+        }
     }
 
 }

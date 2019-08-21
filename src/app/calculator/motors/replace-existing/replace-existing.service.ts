@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class ReplaceExistingService {
 
   replaceExistingData: ReplaceExistingData;
+  operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder) { }
 
   initForm(settings: Settings, operatingHours: number): FormGroup {

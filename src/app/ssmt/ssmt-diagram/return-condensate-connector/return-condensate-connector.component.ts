@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
+import { DeaeratorOutput, HeaderOutputObj } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -11,7 +11,7 @@ export class ReturnCondensateConnectorComponent implements OnInit {
   @Output('emitSetHover')
   emitSetHover = new EventEmitter<string>();
   @Input()
-  deaerator: DeaeratorOutput;
+  makeupWaterAndCondensateHeader: HeaderOutputObj;
   @Input()
   settings: Settings;
   @Output('emitSelectEquipment')
@@ -29,7 +29,7 @@ export class ReturnCondensateConnectorComponent implements OnInit {
 
   setClasses() {
     this.makeupWaterClasses = [];
-    if (this.deaerator.inletWaterMassFlow < 1e-3) {
+    if (this.makeupWaterAndCondensateHeader.massFlow < 1e-3) {
       this.makeupWaterClasses = ['no-steam-flow'];
     }
 

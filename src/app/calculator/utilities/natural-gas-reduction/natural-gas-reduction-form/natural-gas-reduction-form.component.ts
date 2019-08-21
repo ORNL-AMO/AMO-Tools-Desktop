@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { NaturalGasReductionService } from '../natural-gas-reduction.service';
 import { NaturalGasReductionResult, NaturalGasReductionData } from '../../../../shared/models/standalone';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-natural-gas-reduction-form',
@@ -27,6 +28,14 @@ export class NaturalGasReductionFormComponent implements OnInit {
   @Input()
   selected: boolean;
 
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+  showOperatingHoursModal: boolean;
 
   measurementOptions: Array<{ value: number, name: string }> = [
     { value: 0, name: 'Flow Meter Method' },
@@ -65,6 +74,12 @@ export class NaturalGasReductionFormComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
+  }
+
   changeMeasurementMethod() {
     this.naturalGasReductionService.setValidators(this.form);
     this.calculate();
@@ -76,7 +91,7 @@ export class NaturalGasReductionFormComponent implements OnInit {
     this.emitCalculate.emit(tmpObj);
   }
 
-  calculateIndividualResult(){
+  calculateIndividualResult() {
     let tmpObj: NaturalGasReductionData = this.naturalGasReductionService.getObjFromForm(this.form);
     this.individualResults = this.naturalGasReductionService.calculateIndividualEquipment(tmpObj, this.settings);
   }
@@ -98,5 +113,26 @@ export class NaturalGasReductionFormComponent implements OnInit {
   }
 
   focusOut() {
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.naturalGasReductionService.operatingHours = oppHours;
+    this.form.controls.operatingHours.patchValue(oppHours.hoursPerYear);
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

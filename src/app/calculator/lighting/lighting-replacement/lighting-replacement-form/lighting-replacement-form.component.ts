@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges, HostListener } from '@angular/core';
 import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { FormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-lighting-replacement-form',
@@ -24,9 +25,19 @@ export class LightingReplacementFormComponent implements OnInit {
   @Input()
   selected: boolean;
 
+  @ViewChild('formElement') formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+
   idString: string;
   isEditingName: boolean = false;
   form: FormGroup;
+
+  showOperatingHoursModal: boolean;
 
   constructor(private lightingReplacementService: LightingReplacementService) { }
 
@@ -53,6 +64,12 @@ export class LightingReplacementFormComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
+  }
+
   calculate() {
     let tmpObj: LightingReplacementData = this.lightingReplacementService.getObjFromForm(this.form);
     this.emitCalculate.emit(tmpObj);
@@ -75,5 +92,26 @@ export class LightingReplacementFormComponent implements OnInit {
   }
 
   focusOut() {
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.lightingReplacementService.operatingHours = oppHours;
+    this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
+    this.calculate();
+    this.closeOperatingHoursModal();
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
   }
 }

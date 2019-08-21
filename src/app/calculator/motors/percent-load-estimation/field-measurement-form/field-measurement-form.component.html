@@ -2,11 +2,16 @@
   <label class="group-label">Motor Phases</label>
   <div class="form-group pt-1 pb-3">
     <label>Average Power Factor</label>
+    <div class="input-group">
     <input type="number" step="any" class="form-control" name="powerFactor" formControlName="powerFactor"
       (input)="calculate()" onfocus="this.select();">
+      <span class="input-group-addon units">%</span>
+      </div>
     <span class="alert-danger pull-right small"
       *ngIf="form.controls.powerFactor.invalid && !form.controls.powerFactor.pristine">
       <span *ngIf="form.controls.powerFactor.errors.required">Value required.</span>
+      <span *ngIf="form.controls.powerFactor.errors.max">Value cannot exceed {{form.controls.powerFactor.errors.max.max}}%</span>
+      <span *ngIf="form.controls.powerFactor.errors.min">Value cannot be less than {{form.controls.powerFactor.errors.min.min}}%</span>
     </span>
   </div>
 

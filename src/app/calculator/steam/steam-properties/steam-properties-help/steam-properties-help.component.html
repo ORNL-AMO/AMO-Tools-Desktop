@@ -1,6 +1,6 @@
 <div class="p-4 pt-2 d-flex flex-column help-info">
   <h5>
-    Steam Properties
+    PRV W/ Desuperheating
     <br>
     <small class="text-muted"> Calculates the properties of steam under various conditions.
     </small>
@@ -12,7 +12,7 @@
       Pressure
       <br>
       <small class="text-muted">
-        Absolute Pressure of the steam.
+        Pressure of the steam.
         <hr>
       </small>
     </h6>
@@ -37,10 +37,11 @@
   </div>
   <div class="my-2" *ngIf="currentField == 'thermodynamicQuantity'">
     <h6>
-      Measurement Method
+      Known Variable
       <br>
       <small class="text-muted">
-        NEEDED
+        Choose a known steam property (Temperature, Specific Enthalpy, Specific Entropy, or Quality) to further
+        characterize the inlet steam.
         <hr>
       </small>
     </h6>
@@ -54,12 +55,16 @@
       <span *ngIf="thermodynamicQuantity == 3">Saturated Quality</span>
       <br>
       <small class="text-muted">
-        <span *ngIf="thermodynamicQuantity == 0">The temperature at the inlet. If below boiling point, inlet will be a liquid.</span>
-        <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy (h) is the combination of the steam's internal energy and the work needed to make room for the
+        <span *ngIf="thermodynamicQuantity == 0">The temperature at the inlet. If below boiling point, inlet will be a
+          liquid.</span>
+        <span *ngIf="thermodynamicQuantity == 1">Specific Enthalpy (h) is the combination of the steam's internal energy
+          and the work needed to make room for the
           material, compared to the standard state, in terms of mass.</span>
-        <span *ngIf="thermodynamicQuantity == 2">Specific Entropy (s) is a measure of the amount of energy which is unavailable to do work, compared to the standard
+        <span *ngIf="thermodynamicQuantity == 2">Specific Entropy (s) is a measure of the amount of energy which is
+          unavailable to do work, compared to the standard
           state, in terms of mass.</span>
-        <span *ngIf="thermodynamicQuantity == 3">Quality is the vapor mass percentage of the steam/water mixture. Quality is zero for liquid water and 1 for steam;
+        <span *ngIf="thermodynamicQuantity == 3">Quality is the vapor mass percentage of the steam/water mixture.
+          Quality is zero for liquid water and 1 for steam;
           a value between 0 and 1 indicates mixed flow (both liquid and vapor).</span>
         <hr>
       </small>
@@ -73,10 +78,12 @@
           </tr>
           <tr>
             <td class="w-50 text-center">{{ranges.minQuantityValue}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
             </td>
             <td class="w-50 text-center">{{ranges.maxQuantityValue}}
-              <span *ngIf="thermodynamicQuantity != 3" [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
+              <span *ngIf="thermodynamicQuantity != 3"
+                [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span>
             </td>
           </tr>
         </tbody>

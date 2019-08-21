@@ -11,7 +11,8 @@
       <th class="table-col-3">Specific Entropy <br>
         (<span [innerHTML]="settings.steamSpecificEntropyMeasurement | settingsLabel"></span>)
       </th>
-      <th class="table-col-4">Quantity Type</th>
+      <th class="table-col-4">Quality</th>
+      <th class="table-col-4">Known Variable</th>
       <th class="table-col-5">Specific Volume <br>
         (<span [innerHTML]="settings.steamSpecificVolumeMeasurement | settingsLabel"></span>)
       </th>
@@ -24,6 +25,11 @@
       <td>{{row.temperature | number:'1.0-4'}}</td>
       <td>{{row.enthalpy | number:'1.0-4'}}</td>
       <td>{{row.entropy | number:'1.0-4'}}</td>
+      <td>
+          <span *ngIf="row.quality == 0">Liquid</span>
+          <span *ngIf="row.quality == 1">Gas</span>
+          <span *ngIf="row.quality != 1 && row.quality != 0">{{row.quality | number:'1.0-2'}}</span>
+      </td>
       <td *ngIf="row.thermodynamicQuantity == 0">Temperature</td>
       <td *ngIf="row.thermodynamicQuantity == 1">Specific Enthalpy</td>
       <td *ngIf="row.thermodynamicQuantity == 2">Specific Entropy</td>

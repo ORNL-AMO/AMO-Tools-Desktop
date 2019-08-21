@@ -1,20 +1,8 @@
-import {Injectable} from '@angular/core';
-import {
-  AirVelocityInput,
-  BagMethodInput,
-  PneumaticValve,
-  OperatingCostInput,
-  PipeSizingInput,
-  PneumaticAirRequirementInput,
-  CalculateUsableCapacity,
-  ReceiverTankDedicatedStorage,
-  ReceiverTankBridgingCompressor,
-  ReceiverTankGeneral,
-  ReceiverTankMeteredStorage,
-  AirSystemCapacityInput
-} from '../../shared/models/standalone';
-import {ConvertUnitsService} from '../../shared/convert-units/convert-units.service';
-import {Settings} from '../../shared/models/settings';
+import { Injectable } from '@angular/core';
+import { AirVelocityInput, BagMethodInput, PneumaticValve, OperatingCostInput, PipeSizingInput, PneumaticAirRequirementInput, CalculateUsableCapacity, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage, AirSystemCapacityInput } from '../../shared/models/standalone';
+import { OperatingHours } from '../../shared/models/operations';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { Settings } from '../../shared/models/settings';
 
 @Injectable()
 export class CompressedAirService {
@@ -29,9 +17,11 @@ export class CompressedAirService {
     inputsArray: Array<BagMethodInput>,
     operatingHours: number
   } = {
-    inputsArray: new Array<BagMethodInput>(),
-    operatingHours: 0
-  };
+      inputsArray: new Array<BagMethodInput>(),
+      operatingHours: 8760
+    };
+
+  bagMethodOperatingHours: OperatingHours;
 
   pnuematicValveInputs: PneumaticValve = {
     inletPressure: 0,
@@ -42,12 +32,14 @@ export class CompressedAirService {
   operatingCostInput: OperatingCostInput = {
     motorBhp: 0,
     bhpUnloaded: 0,
-    annualOperatingHours: 0,
+    annualOperatingHours: 8760,
     runTimeLoaded: 0,
     efficiencyLoaded: 0,
     efficiencyUnloaded: 0,
     costOfElectricity: 0,
   };
+
+  operatingCostOperatingHours: OperatingHours;
 
   pipeSizingInput: PipeSizingInput = {
     airFlow: 0,
