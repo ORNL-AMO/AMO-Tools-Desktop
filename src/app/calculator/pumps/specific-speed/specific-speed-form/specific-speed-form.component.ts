@@ -23,7 +23,7 @@ export class SpecificSpeedFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.pumpTypes = pumpTypesConstant;
+    this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
     //remove specified
     this.pumpTypes.pop();
   }
