@@ -105,7 +105,7 @@ export class LightingReplacementComponent implements OnInit {
     }
     if (this.lightingReplacementService.modificationData) {
       this.modificationData = this.lightingReplacementService.modificationData;
-      if(this.modificationData.length != 0){
+      if (this.modificationData.length != 0) {
         this.modificationExists = true;
       }
     }
@@ -191,7 +191,7 @@ export class LightingReplacementComponent implements OnInit {
       modifications: this.modificationData,
       baselineElectricityCost: this.baselineElectricityCost,
       modificationElectricityCost: this.modificationElectricityCost
-    }
+    };
   }
 
   save() {
@@ -212,6 +212,32 @@ export class LightingReplacementComponent implements OnInit {
     this.baselineData = [tmpObj];
     this.modificationData = new Array<LightingReplacementData>();
     this.modificationExists = false;
+    this.getResults();
+  }
+
+  generateExample() {
+    let tmpBaselineObj: LightingReplacementData = this.lightingReplacementService.getDefaultData(true);
+    tmpBaselineObj = this.lightingReplacementService.calculateElectricityUse(tmpBaselineObj);
+    tmpBaselineObj = this.lightingReplacementService.calculateTotalLighting(tmpBaselineObj);
+    this.baselineData = [tmpBaselineObj];
+    this.lightingReplacementService.baselineData = this.baselineData;
+    let tmpModificationObj: LightingReplacementData = this.lightingReplacementService.getDefaultData(false);
+    tmpModificationObj = this.lightingReplacementService.calculateElectricityUse(tmpModificationObj);
+    tmpModificationObj = this.lightingReplacementService.calculateTotalLighting(tmpModificationObj);
+    this.modificationData = [tmpModificationObj];
+    this.lightingReplacementService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineElectricityCost = 0.062;
+    this.modificationElectricityCost = 0.062;
+    this.lightingReplacementService.baselineElectricityCost = this.baselineElectricityCost;
+    this.lightingReplacementService.modificationElectricityCost = this.modificationElectricityCost;
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
     this.getResults();
   }
 

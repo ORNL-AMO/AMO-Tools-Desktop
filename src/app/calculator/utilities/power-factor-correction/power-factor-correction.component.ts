@@ -47,12 +47,18 @@ export class PowerFactorCorrectionComponent implements OnInit {
   }
 
   btnResetData() {
-    this.inputData = {
-      existingDemand: 100,
-      currentPowerFactor: 0.5,
-      proposedPowerFactor: 0.95
-    };
+    this.inputData = this.powerFactorCorrectionService.getResetData();
     this.powerFactorCorrectionService.inputData = this.inputData;
+    this.calculate(this.inputData);
+  }
+
+  generateExample() {
+    this.inputData = this.powerFactorCorrectionService.getDefaultData();
+    this.powerFactorCorrectionService.inputData = this.inputData;
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
     this.calculate(this.inputData);
   }
 

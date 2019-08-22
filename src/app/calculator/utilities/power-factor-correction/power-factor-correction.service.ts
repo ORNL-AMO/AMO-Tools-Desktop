@@ -6,6 +6,22 @@ export class PowerFactorCorrectionService {
   inputData: PowerFactorCorrectionInputs;
   constructor() { }
 
+  getDefaultData(): PowerFactorCorrectionInputs {
+    return {
+      existingDemand: 286,
+      currentPowerFactor: 0.88,
+      proposedPowerFactor: 0.95
+    };
+  }
+
+  getResetData(): PowerFactorCorrectionInputs {
+    return {
+      existingDemand: 0,
+      currentPowerFactor: 0,
+      proposedPowerFactor: 0
+    };
+  }
+
   existingApparentPower(data: PowerFactorCorrectionInputs): number {
     return data.existingDemand / data.currentPowerFactor;
   }
