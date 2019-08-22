@@ -99,9 +99,7 @@ export class FanEfficiencyComponent implements OnInit {
     }
 
     if (this.fanEfficiencyForm.valid) {
-      console.log('valid calculate')
       this.fanEfficiency = this.fsatService.optimalFanEfficiency(tmpFanEfficiencyInputs, this.settings);
-      console.log(this.fanEfficiency);
     } else {
       this.fanEfficiency = 0;
     }
