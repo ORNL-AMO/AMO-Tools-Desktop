@@ -90,6 +90,7 @@ export class TreasureHuntComponent implements OnInit {
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.getContainerHeight();
     });
 
     this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
