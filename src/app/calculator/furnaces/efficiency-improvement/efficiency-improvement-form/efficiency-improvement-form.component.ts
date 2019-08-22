@@ -29,12 +29,6 @@ export class EfficiencyImprovementFormComponent implements OnInit {
     this.calc();
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.efficiencyImprovementInputs) {
-  //     this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
-  //   }
-  // }
-  
   calc() {
     this.efficiencyImprovementInputs = this.efficiencyImprovementService.getObjFromForm(this.form);
     this.efficiencyImprovementService.updateFormValidators(this.form, this.efficiencyImprovementInputs);
