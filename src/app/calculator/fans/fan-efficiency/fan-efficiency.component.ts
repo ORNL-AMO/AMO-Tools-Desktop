@@ -38,6 +38,7 @@ export class FanEfficiencyComponent implements OnInit {
   headerHeight: number;
   currentField: string;
   toggleCalculate: boolean = true;
+  toggleExampleData: boolean = true;
   tabSelect: string = 'results';
   fanEfficiency: number = 0;
   calcExists: boolean;
@@ -46,8 +47,8 @@ export class FanEfficiencyComponent implements OnInit {
   originalCalculator: Calculator;
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanEfficiencyService: FanEfficiencyService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
-  
-    ngOnInit() {
+
+  ngOnInit() {
     if (this.inAssessment) {
       this.getCalculator();
       this.originalCalculator = this.calculator;
@@ -81,6 +82,19 @@ export class FanEfficiencyComponent implements OnInit {
     this.calculate();
   }
 
+  generateExample() {
+    this.fanEfficiencyInputs = this.fanEfficiencyService.getDefaultData(this.settings);
+    this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.fanEfficiencyInputs);
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
+    this.toggleExampleData = !this.toggleExampleData;
+    this.calculate();
+  }
 
   resizeTabs() {
     if (this.leftPanelHeader) {

@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FSAT } from '../../../shared/models/fans';
+import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class FanEfficiencyService {
   fanEfficiencyInputs: FanEfficiencyInputs;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
   initForm(): FormGroup {
     return this.formBuilder.group({
@@ -49,6 +51,21 @@ export class FanEfficiencyService {
       flowRate: form.controls.flowRate.value,
       compressibility: form.controls.compressibility.value
     };
+  }
+
+  getDefaultData(settings: Settings): FanEfficiencyInputs {
+    let tmpFlowRate = 129691;
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpFlowRate = (this.convertUnitsService.value(tmpFlowRate).from('ft3').to('m3') * 100) / 100;
+    }
+    return {
+      fanType: 0,
+      fanSpeed: 1180,
+      inletPressure: -16.36,
+      outletPressure: 1.1,
+      flowRate: tmpFlowRate,
+      compressibility: 0.988
+    }
   }
 }
 

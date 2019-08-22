@@ -33,3 +33,7 @@ margin-right: 15px;
 .btn-margin-10 {
     margin: 10px 0px;
 }
+
+.btn-form {
+    border-radius: 4px !important;
+  }

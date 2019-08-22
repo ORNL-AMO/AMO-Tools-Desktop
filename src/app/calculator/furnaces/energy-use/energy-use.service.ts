@@ -59,9 +59,7 @@ export class EnergyUseService {
     return this.flowCalculations;
   }
 
-
-
-  initDefaultValues(settings: Settings) {
+  getDefaultData(settings: Settings) {
     if (settings.unitsOfMeasure === 'Metric') {
       return this.flowCalculations = {
         //natural gas
@@ -94,6 +92,24 @@ export class EnergyUseService {
         orificePressureDrop: 10,
         operatingTime: 10
       };
+    }
+  }
+
+  getResetData() {
+    return this.flowCalculations = {
+      //natural gas
+      gasType: 0,
+      specificGravity: 0,
+      orificeDiameter: 0,
+      insidePipeDiameter: 0,
+      // 1 is sharp edge
+      sectionType: 0,
+      dischargeCoefficient: 0,
+      gasHeatingValue: 0,
+      gasTemperature: 0,
+      gasPressure: 0,
+      orificePressureDrop: 0,
+      operatingTime: 0
     }
   }
 }

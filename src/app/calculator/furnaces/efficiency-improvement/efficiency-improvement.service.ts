@@ -36,13 +36,13 @@ export class EfficiencyImprovementService {
     };
     return this.efficiencyImprovementInputs;
   }
-  
+
   updateFormValidators(form: FormGroup, inputObj: EfficiencyImprovementInputs): void {
     form.controls.currentCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.currentFlueGasTemp)]);
     form.controls.newCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.newFlueGasTemp)]);
   }
 
-  initDefaultValues(settings: Settings): EfficiencyImprovementInputs {
+  getDefaultData(settings: Settings): EfficiencyImprovementInputs {
     if (settings.unitsOfMeasure === 'Metric') {
       return {
         currentFlueGasOxygen: 6,
@@ -64,6 +64,18 @@ export class EfficiencyImprovementService {
         currentEnergyInput: 10,
         newFlueGasTemp: 1600
       };
+    }
+  }
+
+  getResetData(): EfficiencyImprovementInputs {
+    return {
+      currentFlueGasOxygen: 0,
+      newFlueGasOxygen: 0,
+      currentFlueGasTemp: 0,
+      currentCombustionAirTemp: 0,
+      newCombustionAirTemp: 0,
+      currentEnergyInput: 0,
+      newFlueGasTemp: 0
     }
   }
 

@@ -53,6 +53,7 @@ export class O2EnrichmentComponent implements OnInit {
   originalCalculator: Calculator;
   o2Form: FormGroup;
   toggleResetData: boolean = true;
+  toggleExampleData: boolean = true;
   constructor(private phastService: PhastService, private settingsDbService: SettingsDbService, private o2EnrichmentService: O2EnrichmentService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
 
@@ -94,8 +95,7 @@ export class O2EnrichmentComponent implements OnInit {
     if (this.inAssessment) {
       this.calculator = this.originalCalculator;
     } else {
-      this.o2Form = this.o2EnrichmentService.initForm(this.settings);
-
+      this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.o2EnrichmentService.getResetData());
     }
     this.lines = [];
     if (this.o2EnrichmentService.lines) {
@@ -104,6 +104,22 @@ export class O2EnrichmentComponent implements OnInit {
     this.calculate();
     this.toggleResetData = !this.toggleResetData;
   }
+
+  generateExample() {
+    this.o2Enrichment = this.o2EnrichmentService.getDefaultData(this.settings);
+    this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.o2Enrichment);
+    this.calculate();
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
+    this.toggleExampleData = !this.toggleExampleData;
+    this.calculate();
+  }
+
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
