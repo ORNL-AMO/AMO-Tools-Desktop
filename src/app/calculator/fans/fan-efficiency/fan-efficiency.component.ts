@@ -83,7 +83,7 @@ export class FanEfficiencyComponent implements OnInit {
   }
 
   generateExample() {
-    this.fanEfficiencyInputs = this.fanEfficiencyService.getDefaultData(this.settings);
+    this.fanEfficiencyInputs = this.fanEfficiencyService.generateExample(this.settings);
     this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.fanEfficiencyInputs);
   }
 

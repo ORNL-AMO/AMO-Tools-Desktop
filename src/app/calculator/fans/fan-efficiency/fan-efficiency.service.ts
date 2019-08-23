@@ -11,12 +11,12 @@ export class FanEfficiencyService {
 
   initForm(): FormGroup {
     return this.formBuilder.group({
-      fanType: ['', Validators.required],
-      fanSpeed: ['', [Validators.required, Validators.min(0)]],
-      inletPressure: ['', Validators.required],
-      outletPressure: ['', Validators.required],
-      flowRate: ['', Validators.required],
-      compressibility: ['', Validators.required]
+      fanType: [0, Validators.required],
+      fanSpeed: [0, [Validators.required, Validators.min(0)]],
+      inletPressure: [0, Validators.required],
+      outletPressure: [0, Validators.required],
+      flowRate: [0, Validators.required],
+      compressibility: [0, Validators.required]
     });
   }
 
@@ -53,7 +53,7 @@ export class FanEfficiencyService {
     };
   }
 
-  getDefaultData(settings: Settings): FanEfficiencyInputs {
+  generateExample(settings: Settings): FanEfficiencyInputs {
     let tmpFlowRate = 129691;
     if (settings.unitsOfMeasure == 'Metric') {
       tmpFlowRate = (this.convertUnitsService.value(tmpFlowRate).from('ft3').to('m3') * 100) / 100;

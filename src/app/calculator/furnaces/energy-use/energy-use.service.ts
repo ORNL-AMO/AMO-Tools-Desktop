@@ -59,7 +59,7 @@ export class EnergyUseService {
     return this.flowCalculations;
   }
 
-  getDefaultData(settings: Settings) {
+  generateExample(settings: Settings) {
     if (settings.unitsOfMeasure === 'Metric') {
       return this.flowCalculations = {
         //natural gas

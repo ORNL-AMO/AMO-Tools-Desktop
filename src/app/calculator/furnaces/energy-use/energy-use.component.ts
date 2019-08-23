@@ -93,7 +93,7 @@ export class EnergyUseComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.flowCalculations = this.energyUseService.getDefaultData(this.settings);
+    this.flowCalculations = this.energyUseService.generateExample(this.settings);
     this.calculate();
   }
 
@@ -131,7 +131,7 @@ export class EnergyUseComponent implements OnInit {
       if (this.calculator.flowCalculations) {
         this.flowCalculations = this.calculator.flowCalculations;
       } else {
-        let tmpFlowCalculations: FlowCalculations = this.energyUseService.getDefaultData(this.settings);
+        let tmpFlowCalculations: FlowCalculations = this.energyUseService.generateExample(this.settings);
         this.calculator.flowCalculations = tmpFlowCalculations;
         this.flowCalculations = this.calculator.flowCalculations;
         this.saveCalculator();
@@ -144,7 +144,7 @@ export class EnergyUseComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    let tmpFlowCalculations: FlowCalculations = this.energyUseService.getDefaultData(this.settings);
+    let tmpFlowCalculations: FlowCalculations = this.energyUseService.generateExample(this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       flowCalculations: tmpFlowCalculations
@@ -156,7 +156,7 @@ export class EnergyUseComponent implements OnInit {
     if (this.energyUseService.flowCalculations) {
       this.flowCalculations = this.energyUseService.flowCalculations;
     } else {
-      this.flowCalculations = this.energyUseService.getDefaultData(this.settings);
+      this.flowCalculations = this.energyUseService.generateExample(this.settings);
     }
   }
 

@@ -6,7 +6,7 @@ export class PowerFactorCorrectionService {
   inputData: PowerFactorCorrectionInputs;
   constructor() { }
 
-  getDefaultData(): PowerFactorCorrectionInputs {
+  generateExample(): PowerFactorCorrectionInputs {
     return {
       existingDemand: 286,
       currentPowerFactor: 0.88,

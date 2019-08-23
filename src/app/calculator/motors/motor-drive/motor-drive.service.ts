@@ -10,7 +10,7 @@ export class MotorDriveService {
   operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder) { }
 
-  getDefaultData(settings: Settings): MotorDriveInputs{
+  generateExample(settings: Settings): MotorDriveInputs{
     return {
       motorPower: 5,
       annualOperatingHours: 8760,

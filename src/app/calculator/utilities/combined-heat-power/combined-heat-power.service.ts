@@ -9,7 +9,7 @@ export class CombinedHeatPowerService {
   operatingHours: OperatingHours;
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  getDefaultData(): CombinedHeatPower {
+  generateExample(): CombinedHeatPower {
     return {
       annualOperatingHours: 7000,
       annualElectricityConsumption: 1885367,

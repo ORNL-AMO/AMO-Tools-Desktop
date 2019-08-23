@@ -60,7 +60,7 @@ export class LightingReplacementService {
     return tmpData;
   }
 
-  getDefaultData(isBaseline: boolean): LightingReplacementData {
+  generateExample(isBaseline: boolean): LightingReplacementData {
     if (isBaseline) {
       return {
         name: 'Fixture #1',

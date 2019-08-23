@@ -93,7 +93,7 @@ export class O2EnrichmentService {
     };
   }
 
-  getDefaultData(settings: Settings): O2Enrichment {
+  generateExample(settings: Settings): O2Enrichment {
     let tmpFlueGasTemp: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(1800).from('F').to(settings.temperatureMeasurement), 2);
     let tmpFlueGasTempEnriched: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(1800).from('F').to(settings.temperatureMeasurement), 2);
     let tmpCombAirTemp: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(900).from('F').to(settings.temperatureMeasurement), 2);

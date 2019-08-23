@@ -6,7 +6,7 @@ export class Co2SavingsService {
   modificationData: Array<Co2SavingsData>;
   constructor() { }
 
-  getDefaultData(isBaseline: boolean): Co2SavingsData {
+  generateExample(isBaseline: boolean): Co2SavingsData {
     if (isBaseline) {
       return {
         energyType: 'fuel',

@@ -53,7 +53,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
   }
 
   generateExample() {
-    this.inputData = this.powerFactorCorrectionService.getDefaultData();
+    this.inputData = this.powerFactorCorrectionService.generateExample();
     this.powerFactorCorrectionService.inputData = this.inputData;
   }
 

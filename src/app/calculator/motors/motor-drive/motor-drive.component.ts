@@ -56,7 +56,7 @@ export class MotorDriveComponent implements OnInit {
     if (this.motorDriveService.motorDriveData) {
       this.motorDriveData = this.motorDriveService.motorDriveData;
     } else {
-      this.motorDriveData = this.motorDriveService.getDefaultData(this.settings);
+      this.motorDriveData = this.motorDriveService.generateExample(this.settings);
     }
     this.motorDriveForm = this.motorDriveService.getFormFromObj(this.motorDriveData);
     this.calculate(this.motorDriveData);
@@ -118,7 +118,7 @@ export class MotorDriveComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.motorDriveData = this.motorDriveService.getDefaultData(this.settings);
+    this.motorDriveData = this.motorDriveService.generateExample(this.settings);
     this.motorDriveForm = this.motorDriveService.getFormFromObj(this.motorDriveData);
     this.calculate(this.motorDriveData);
   }

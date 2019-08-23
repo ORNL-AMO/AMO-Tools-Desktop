@@ -216,12 +216,12 @@ export class LightingReplacementComponent implements OnInit {
   }
 
   generateExample() {
-    let tmpBaselineObj: LightingReplacementData = this.lightingReplacementService.getDefaultData(true);
+    let tmpBaselineObj: LightingReplacementData = this.lightingReplacementService.generateExample(true);
     tmpBaselineObj = this.lightingReplacementService.calculateElectricityUse(tmpBaselineObj);
     tmpBaselineObj = this.lightingReplacementService.calculateTotalLighting(tmpBaselineObj);
     this.baselineData = [tmpBaselineObj];
     this.lightingReplacementService.baselineData = this.baselineData;
-    let tmpModificationObj: LightingReplacementData = this.lightingReplacementService.getDefaultData(false);
+    let tmpModificationObj: LightingReplacementData = this.lightingReplacementService.generateExample(false);
     tmpModificationObj = this.lightingReplacementService.calculateElectricityUse(tmpModificationObj);
     tmpModificationObj = this.lightingReplacementService.calculateTotalLighting(tmpModificationObj);
     this.modificationData = [tmpModificationObj];

@@ -77,7 +77,7 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
 
   generateExample() {
-    this.inputs = this.combinedHeatPowerService.getDefaultData();
+    this.inputs = this.combinedHeatPowerService.generateExample();
     this.combinedHeatPowerService.inputData = this.inputs;
   }
 

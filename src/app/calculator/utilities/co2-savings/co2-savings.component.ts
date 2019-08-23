@@ -86,10 +86,10 @@ export class Co2SavingsComponent implements OnInit {
   }
 
   generateExample() {
-    let tmpBaselineObj: Co2SavingsData = this.co2SavingsService.getDefaultData(true);
+    let tmpBaselineObj: Co2SavingsData = this.co2SavingsService.generateExample(true);
     this.baselineData = [tmpBaselineObj];
     this.co2SavingsService.baselineData = this.baselineData;
-    let tmpModificationObj: Co2SavingsData = this.co2SavingsService.getDefaultData(false);
+    let tmpModificationObj: Co2SavingsData = this.co2SavingsService.generateExample(false);
     this.modificationData = [tmpModificationObj];
     this.co2SavingsService.modificationData = this.modificationData;
     this.modificationExists = true;

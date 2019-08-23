@@ -106,7 +106,7 @@ export class O2EnrichmentComponent implements OnInit {
   }
 
   generateExample() {
-    this.o2Enrichment = this.o2EnrichmentService.getDefaultData(this.settings);
+    this.o2Enrichment = this.o2EnrichmentService.generateExample(this.settings);
     this.o2Form = this.o2EnrichmentService.initFormFromObj(this.settings, this.o2Enrichment);
     this.calculate();
   }

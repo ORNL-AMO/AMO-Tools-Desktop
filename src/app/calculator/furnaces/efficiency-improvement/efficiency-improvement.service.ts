@@ -42,13 +42,13 @@ export class EfficiencyImprovementService {
     form.controls.newCombustionAirTemp.setValidators([Validators.required, LessThanValidator.lessThan(inputObj.newFlueGasTemp)]);
   }
 
-  getDefaultData(settings: Settings): EfficiencyImprovementInputs {
+  generateExample(settings: Settings): EfficiencyImprovementInputs {
     if (settings.unitsOfMeasure === 'Metric') {
       return {
         currentFlueGasOxygen: 6,
         newFlueGasOxygen: 2,
         currentFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
-        currentCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to('C'), 2),
+        currentCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(79).from('F').to('C'), 2),
         newCombustionAirTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(750).from('F').to('C'), 2),
         currentEnergyInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2),
         newFlueGasTemp: this.convertUnitsService.roundVal(this.convertUnitsService.value(1600).from('F').to('C'), 2)
