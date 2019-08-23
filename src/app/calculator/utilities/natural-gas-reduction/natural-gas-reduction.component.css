@@ -24,6 +24,10 @@
     margin: 10px 0px;
 }
 
+.btn-form {
+    border-radius: 4px !important;
+}
+
 .panel-column.disabled {
     background-color: #ececec;
     transition: all 0.2s ease-in-out;
@@ -52,14 +56,14 @@
     margin-bottom: 0px;
 }
 
-.add-fixture{
+.add-fixture {
     margin-top: 10px;
 }
 
-.ngas-icon{
+.ngas-icon {
     height: 55px;
 }
 
-.opp-sheet-icon{
+.opp-sheet-icon {
     width: 35px;
 }

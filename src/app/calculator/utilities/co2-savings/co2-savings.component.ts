@@ -47,7 +47,6 @@ export class Co2SavingsComponent implements OnInit {
     }
     if (this.co2SavingsService.baselineData) {
       this.baselineData = this.co2SavingsService.baselineData;
-      console.log(this.baselineData);
     }
     if (this.co2SavingsService.modificationData && this.co2SavingsService.modificationData.length !== 0) {
       this.modificationData = this.co2SavingsService.modificationData;
@@ -83,6 +82,23 @@ export class Co2SavingsComponent implements OnInit {
     this.modificationExists = false;
     this.co2SavingsService.baselineData = this.baselineData;
     this.co2SavingsService.modificationData = this.modificationData;
+    this.calculate();
+  }
+
+  generateExample() {
+    let tmpBaselineObj: Co2SavingsData = this.co2SavingsService.getDefaultData(true);
+    this.baselineData = [tmpBaselineObj];
+    this.co2SavingsService.baselineData = this.baselineData;
+    let tmpModificationObj: Co2SavingsData = this.co2SavingsService.getDefaultData(false);
+    this.modificationData = [tmpModificationObj];
+    this.co2SavingsService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
     this.calculate();
   }
 

@@ -152,7 +152,7 @@ export class CompressedAirReductionComponent implements OnInit {
     dataArray[index].name = data.name;
     dataArray[index].hoursPerYear = data.hoursPerYear;
     dataArray[index].utilityType = data.utilityType;
-    dataArray[index].utilityCost = data.utilityType == 0 ? data.compressedAirCost : data.electricityCost,
+    dataArray[index].utilityCost = data.utilityType == 0 ? data.compressedAirCost : data.electricityCost;
     dataArray[index].compressedAirCost = data.compressedAirCost;
     dataArray[index].electricityCost = data.electricityCost;
     dataArray[index].measurementMethod = data.measurementMethod;
@@ -173,6 +173,26 @@ export class CompressedAirReductionComponent implements OnInit {
     this.baselineData = [tmpObj];
     this.modificationData = new Array<CompressedAirReductionData>();
     this.modificationExists = false;
+    this.getResults();
+  }
+
+  generateExample() {
+    let tmpBaselineObj: CompressedAirReductionData = this.compressedAirReductionService.generateExample(this.settings, true);
+    this.baselineData = [tmpBaselineObj];
+    this.compressedAirReductionService.baselineData = this.baselineData;
+    let tmpModificationData: CompressedAirReductionData = this.compressedAirReductionService.generateExample(this.settings, false);
+    this.modificationData = [tmpModificationData];
+    this.compressedAirReductionService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
     this.getResults();
   }
 

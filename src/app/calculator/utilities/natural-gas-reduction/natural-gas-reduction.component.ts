@@ -171,6 +171,25 @@ export class NaturalGasReductionComponent implements OnInit {
     this.getResults();
   }
 
+  generateExample() {
+    let tmpBaselineObj: NaturalGasReductionData = this.naturalGasReductionService.generateExample(this.settings, true);
+    this.baselineData = [tmpBaselineObj];
+    this.naturalGasReductionService.baselineData = this.baselineData;
+    let tmpModificationData: NaturalGasReductionData = this.naturalGasReductionService.generateExample(this.settings, false);
+    this.modificationData = [tmpModificationData];
+    this.naturalGasReductionService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
+    this.getResults();
+  }
+
   save() {
     this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
   }
