@@ -18,54 +18,14 @@ export class SteamReductionService {
   constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours): SteamReductionData {
-    // let defaultFlowMeterData: SteamFlowMeterMethodData = {
-    //   flowRate: 50000
-    // };
-    // let defaultMassFlowNameplateData: SteamMassFlowNameplateData = {
-    //   flowRate: 400
-    // };
-    // let defaultMassFlowMeasuredData: SteamMassFlowMeasuredData = {
-    //   areaOfDuct: 100,
-    //   airVelocity: 5
-    // };
-    // let defaultAirMassFlowMethodData: SteamMassFlowMethodData = {
-    //   isNameplate: false,
-    //   massFlowMeasuredData: defaultMassFlowMeasuredData,
-    //   massFlowNameplateData: defaultMassFlowNameplateData,
-    //   inletTemperature: 75,
-    //   outletTemperature: 500
-    // };
-    // let defaultWaterMassFlowMethodData: SteamMassFlowMethodData = defaultAirMassFlowMethodData;
-    // let defaultOtherMethodData: SteamOtherMethodData = {
-    //   consumption: 400000
-    // };
-    // let hoursPerYear: number = 8760;
-    // if (operatingHours) {
-    //   hoursPerYear = operatingHours.hoursPerYear;
-    // }
-    // let utilityCost: number = .12;
-    // if (settings && settings.steamCost) {
-    //   utilityCost = settings.steamCost;
-    // }
-    // let defaultSteamReduction: SteamReductionData = {
-    //   name: 'Equipment #' + (index + 1),
-    //   hoursPerYear: hoursPerYear,
-    //   utilityType: 1,
-    //   utilityCost: utilityCost,
-    //   measurementMethod: 0,
-    //   systemEfficiency: 100,
-    //   pressure: 0.790800732,
-    //   flowMeterMethodData: defaultFlowMeterData,
-    //   airMassFlowMethodData: defaultAirMassFlowMethodData,
-    //   waterMassFlowMethodData: defaultWaterMassFlowMethodData,
-    //   otherMethodData: defaultOtherMethodData,
-    //   units: 1
-    // };
     let defaultSteamReduction: SteamReductionData = {
       name: "Equipment #" + (index + 1),
       hoursPerYear: 8760,
       utilityType: 1,
       utilityCost: 5.5,
+      steamUtilityCost: settings.steamCost ? settings.steamCost : 0.12,
+      naturalGasUtilityCost: settings.fuelCost ? settings.fuelCost : 0.006,
+      otherUtilityCost: 0.05,
       measurementMethod: 0,
       systemEfficiency: 100,
       pressure: 0.790800732,
@@ -110,7 +70,16 @@ export class SteamReductionService {
       name: [obj.name, Validators.required],
       operatingHours: [obj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [obj.utilityType],
-      utilityCost: [obj.utilityCost, [Validators.required, Validators.min(0)]],
+      utilityCost: [
+        //if utilityType 0 = steam, utilityType 1 = naturalGas, utilityType 2 = other
+        obj.utilityType == 0
+          ? obj.steamUtilityCost
+          : obj.utilityType == 1
+            ? obj.naturalGasUtilityCost
+            : obj.otherUtilityCost,
+
+        [Validators.required, Validators.min(0)]
+      ],
       measurementMethod: [obj.measurementMethod],
       systemEfficiency: [obj.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       pressure: [obj.pressure, [Validators.required, Validators.min(0)]],
@@ -180,7 +149,7 @@ export class SteamReductionService {
     return form;
   }
 
-  getObjFromForm(form: FormGroup): SteamReductionData {
+  getObjFromForm(form: FormGroup, obj: SteamReductionData): SteamReductionData {
     let flowMeterData: SteamFlowMeterMethodData = {
       flowRate: form.controls.flowMeterFlowRate.value
     };
@@ -204,7 +173,7 @@ export class SteamReductionService {
     };
     let waterMassFlowMethodData: SteamMassFlowMethodData = {
       isNameplate: true,
-      massFlowMeasuredData: null,
+      massFlowMeasuredData: massFlowMeasuredData,
       massFlowNameplateData: waterMassFlowNameplateData,
       inletTemperature: form.controls.waterInletTemperature.value,
       outletTemperature: form.controls.waterOutletTemperature.value
@@ -218,6 +187,24 @@ export class SteamReductionService {
       hoursPerYear: form.controls.operatingHours.value,
       utilityType: form.controls.utilityType.value,
       utilityCost: form.controls.utilityCost.value,
+      steamUtilityCost:
+
+        form.controls.utilityType.value == 0
+          ? form.controls.utilityCost.value
+          : obj.steamUtilityCost,
+
+      naturalGasUtilityCost:
+
+        form.controls.utilityType.value == 1
+          ? form.controls.utilityCost.value
+          : obj.naturalGasUtilityCost,
+
+      otherUtilityCost:
+
+        form.controls.utilityType.value == 2
+          ? form.controls.utilityCost.value
+          : obj.otherUtilityCost,
+
       measurementMethod: form.controls.measurementMethod.value,
       systemEfficiency: form.controls.systemEfficiency.value,
       pressure: form.controls.pressure.value,
@@ -236,6 +223,7 @@ export class SteamReductionService {
     let modificationResults: SteamReductionResult;
     let annualEnergySavings: number = 0;
     let annualCostSavings: number = 0;
+    let annualSteamSavings: number = 0;
     if (modification) {
       let modificationInpCpy: Array<SteamReductionData> = JSON.parse(JSON.stringify(modification));
       modificationResults = this.calculate(modificationInpCpy, settings);
@@ -244,12 +232,14 @@ export class SteamReductionService {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
       annualCostSavings: annualCostSavings,
-      annualEnergySavings: annualEnergySavings
-    }
+      annualEnergySavings: annualEnergySavings,
+      annualSteamSavings: annualSteamSavings
+    };
     steamReductionResults = this.convertResults(steamReductionResults, settings);
     if (modificationResults) {
       steamReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
       steamReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
+      steamReductionResults.annualSteamSavings = baselineResults.steamUse - modificationResults.steamUse;
     }
     return steamReductionResults;
   }
@@ -305,7 +295,7 @@ export class SteamReductionService {
         }
 
         tmpWaterMassFlowData = {
-          isNameplate: tmp.waterMassFlowMethodData.isNameplate,
+          isNameplate: false,
           massFlowNameplateData: tmpWaterMassFlowNameplateData,
           massFlowMeasuredData: tmp.waterMassFlowMethodData.massFlowMeasuredData,
           inletTemperature: this.convertUnitsService.value(tmp.waterMassFlowMethodData.inletTemperature).from('C').to('F'),
@@ -321,6 +311,9 @@ export class SteamReductionService {
         hoursPerYear: tmp.hoursPerYear,
         utilityType: tmp.utilityType,
         utilityCost: tmp.utilityCost,
+        steamUtilityCost: tmp.steamUtilityCost,
+        naturalGasUtilityCost: tmp.naturalGasUtilityCost,
+        otherUtilityCost: tmp.otherUtilityCost,
         measurementMethod: tmp.measurementMethod,
         systemEfficiency: tmp.systemEfficiency,
         pressure: tmp.pressure,

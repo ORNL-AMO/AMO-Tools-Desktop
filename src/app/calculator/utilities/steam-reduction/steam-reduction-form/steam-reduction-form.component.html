@@ -93,6 +93,8 @@
           <span *ngIf="form.controls.systemEfficiency.errors.required">Value required.</span>
           <span *ngIf="form.controls.systemEfficiency.errors.min">Value can't be less than
             {{form.controls.systemEfficiency.errors.min.min}}.</span>
+          <span *ngIf="form.controls.systemEfficiency.errors.max">Value can't be more than
+            {{form.controls.systemEfficiency.errors.max.max}}.</span>
         </span>
       </div>
 
@@ -133,8 +135,8 @@
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
 
       <div class="form-group">
-        <label class="small" for="{{'isNameplate_'+idString}}">Air Flow Measurement</label>
-        <select class="form-control" name="airIsNameplate" id="{{'isNameplate_'+idString}}"
+        <label class="small" for="{{'airIsNameplate_'+idString}}">Air Flow Measurement</label>
+        <select class="form-control" name="airIsNameplate" id="{{'airIsNameplate_'+idString}}"
           formControlName="airIsNameplate" (change)="calculate()" (focus)="focusField('isNameplate')"
           (blur)="focusOut()">
           <option [ngValue]="false">Measured</option>
@@ -158,7 +160,7 @@
         </span>
       </div>
 
-      <div class="form-group" *ngIf="form.controls.isNameplate.value == false">
+      <div class="form-group" *ngIf="form.controls.airIsNameplate.value == false">
         <label class="small" for="{{'airVelocity_'+idString}}">Air Velocity</label>
         <div class="input-group">
           <input class="form-control" name="airMeasuredAirVelocity" id="{{'airVelocity_'+idString}}"
@@ -237,31 +239,13 @@
         </div>
       </div>
 
-      <!-- <div class="form-group">
-        <label class="small" for="{{'airSystemEfficiency_'+idString}}">System Efficiency</label>
-        <div class="input-group">
-          <input class="form-control" name="airSystemEfficiency" id="{{'airSystemEfficiency_'+idString}}"
-            formControlName="airSystemEfficiency" type="number" (input)="calculate()"
-            (focus)="focusField('systemEfficiency')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon">%</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.airSystemEfficiency.invalid && !form.controls.airSystemEfficiency.pristine">
-          <span *ngIf="form.controls.airSystemEfficiency.errors.required">Value required.</span>
-          <span *ngIf="form.controls.airSystemEfficiency.errors.min">Value can't be less than
-            {{form.controls.airSystemEfficiency.errors.min.min}}%.</span>
-          <span *ngIf="form.controls.airSystemEfficiency.errors.max">Value can't be more than
-            {{form.controls.airSystemEfficiency.errors.max.max}}%.</span>
-        </span>
-      </div> -->
-
     </div>
 
 
     <!-- water mass flow -->
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 2">
       <div class="form-group">
-        <label class="small" for="{{'waterFlow_'+idString}}">Water Flow Rate</label>
+        <label class="small" for="{{'waterNameplateFlowRate_'+idString}}">Water Flow Rate</label>
         <div class="input-group">
           <input class="form-control" name="waterNameplateFlowRate" id="{{'waterNameplateFlowRate_'+idString}}"
             formControlName="waterNameplateFlowRate" type="number" (input)="calculate()"

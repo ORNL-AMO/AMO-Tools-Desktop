@@ -439,6 +439,9 @@ export interface SteamReductionData {
   hoursPerYear: number,
   utilityType: number,
   utilityCost: number,
+  steamUtilityCost: number,
+  naturalGasUtilityCost: number,
+  otherUtilityCost: number,
   measurementMethod: number,
   systemEfficiency: number,
   pressure: number,
@@ -478,7 +481,8 @@ export interface SteamReductionResults {
   baselineResults: SteamReductionResult,
   modificationResults: SteamReductionResult,
   annualEnergySavings: number,
-  annualCostSavings: number
+  annualCostSavings: number,
+  annualSteamSavings: number
 };
 
 export interface SteamReductionResult {

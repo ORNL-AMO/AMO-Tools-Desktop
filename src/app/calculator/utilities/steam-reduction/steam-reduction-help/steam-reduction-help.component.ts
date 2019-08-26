@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-steam-reduction-help',
@@ -6,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./steam-reduction-help.component.css']
 })
 export class SteamReductionHelpComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  @Input()
+  currentField: string;
 
   constructor() { }
 

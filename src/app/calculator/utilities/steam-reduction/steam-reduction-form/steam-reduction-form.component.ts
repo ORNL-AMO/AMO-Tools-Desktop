@@ -93,18 +93,30 @@ export class SteamReductionFormComponent implements OnInit {
     this.calculate();
   }
 
+  changeUtilityType() {
+    let tmpCost;
+    if (this.form.controls.utilityType.value == 0) {
+      tmpCost = this.data.steamUtilityCost;
+    }
+    else if (this.form.controls.utilityType.value == 1) {
+      tmpCost = this.data.naturalGasUtilityCost;
+    }
+    else {
+      tmpCost = this.data.otherUtilityCost;
+    }
+    this.form.controls.utilityCost.setValue(tmpCost);
+    this.calculate();
+  }
+
   calculate() {
-    let tmpObj: SteamReductionData = this.steamReductionService.getObjFromForm(this.form);
+    let tmpObj = this.steamReductionService.getObjFromForm(this.form, this.data);
+    this.data = tmpObj;
     this.calculateIndividualResult();
     this.emitCalculate.emit(tmpObj);
   }
 
   calculateIndividualResult() {
-    let tmpObj: SteamReductionData = this.steamReductionService.getObjFromForm(this.form);
-    console.log('tmpObj = ');
-    console.log(tmpObj);
-    this.individualResults = this.steamReductionService.calculateIndividualEquipment(tmpObj, this.settings);
-    console.log('finish calculateIndividualResults()');
+    this.individualResults = this.steamReductionService.calculateIndividualEquipment(this.data, this.settings);
   }
 
   removeEquipment() {
