@@ -4,7 +4,7 @@
       <label for="frequency">Line Frequency</label>
       <select class="form-control" id="frequency" formControlName="frequency" autofocus (focus)="focusField('frequency')"
         (change)="calculate()">
-        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
+        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
       </select>
     </div>
 

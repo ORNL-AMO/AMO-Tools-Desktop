@@ -9,6 +9,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { PsatService } from '../../../psat/psat.service';
+import { FSAT } from '../../../shared/models/fans';
 
 @Component({
   selector: 'app-nema-energy-efficiency',
@@ -18,6 +19,8 @@ import { PsatService } from '../../../psat/psat.service';
 export class NemaEnergyEfficiencyComponent implements OnInit {
   @Input()
   psat: PSAT;
+  @Input()
+  fsat: FSAT;
   @Input()
   settings: Settings;
   @Input()
@@ -74,6 +77,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       } else {
         if (this.psat) {
           this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
+        } else if (this.fsat) {
+          this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromFsat(this.fsat);
         } else {
           this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
         }
@@ -102,6 +107,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   initCalculator(): Calculator {
     if (this.psat) {
       this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromPsat(this.psat);
+    } else if (this.fsat) {
+      this.nemaForm = this.nemaEnergyEfficiencyService.initFormFromFsat(this.fsat);
     } else {
       this.nemaForm = this.nemaEnergyEfficiencyService.initForm();
     }

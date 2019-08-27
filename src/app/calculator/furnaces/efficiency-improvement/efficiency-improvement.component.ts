@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -50,7 +51,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    if(this.settings.unitsOfMeasure == 'Custom'){
+    if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
     if (this.inAssessment) {
