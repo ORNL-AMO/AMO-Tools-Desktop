@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+import { FSAT } from '../../../shared/models/fans';
 
 @Injectable()
 export class MotorPerformanceService {
@@ -10,7 +11,7 @@ export class MotorPerformanceService {
 
   initFormFromPsat(psat: PSAT): FormGroup {
     return this.formBuilder.group({
-      frequency: [60, [Validators.required]],
+      frequency: [psat.inputs.line_frequency, [Validators.required]],
       horsePower: [psat.inputs.motor_rated_power, [Validators.required]],
       motorRPM: [psat.inputs.motor_rated_speed, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       efficiencyClass: [psat.inputs.efficiency_class, [Validators.required]],
@@ -18,6 +19,19 @@ export class MotorPerformanceService {
       fullLoadAmps: [psat.inputs.motor_rated_fla, [Validators.required]],
       sizeMargin: [1, [Validators.required]],
       efficiency: [psat.inputs.efficiency, [Validators.min(0), Validators.max(100)]]
+    });
+  }
+
+  initFormFromFsat(fsat: FSAT): FormGroup{
+    return this.formBuilder.group({
+      frequency: [fsat.fanMotor.lineFrequency, [Validators.required]],
+      horsePower: [fsat.fanMotor.motorRatedPower, [Validators.required]],
+      motorRPM: [fsat.fanMotor.motorRpm, [Validators.required]],
+      efficiencyClass: [fsat.fanMotor.efficiencyClass, [Validators.required]],
+      motorVoltage: [fsat.fanMotor.motorRatedVoltage, [Validators.required]],
+      fullLoadAmps: [fsat.fanMotor.fullLoadAmps, [Validators.required]],
+      sizeMargin: [1, [Validators.required]],
+      efficiency: [fsat.fanMotor.specifiedEfficiency, [Validators.min(0), Validators.max(100)]]
     });
   }
 

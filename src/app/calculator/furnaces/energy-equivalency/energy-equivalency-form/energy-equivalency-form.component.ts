@@ -18,10 +18,10 @@ export class EnergyEquivalencyFormComponent implements OnInit {
   energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput;
   @Input()
   energyEquivalencyFuelOutput: EnergyEquivalencyFuelOutput;
-  @Output('calculateFuel')
-  calculateFuel = new EventEmitter<boolean>();
-  @Output('calculateElectric')
-  calculateElectric = new EventEmitter<boolean>();
+  @Output('updateElectric')
+  updateElectric = new EventEmitter<EnergyEquivalencyElectric>();
+  @Output('updateFuel')
+  updateFuel = new EventEmitter<EnergyEquivalencyFuel>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Input()
@@ -29,7 +29,6 @@ export class EnergyEquivalencyFormComponent implements OnInit {
 
   formElectric: FormGroup;
   formFuel: FormGroup;
-
   constructor(private energyEquivalencyService: EnergyEquivalencyService) { }
 
   ngOnInit() {
@@ -37,22 +36,13 @@ export class EnergyEquivalencyFormComponent implements OnInit {
     this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.energyEquivalencyElectric) {
-      this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
-    }
-    if (changes.energyEquivalencyFuel) {
-      this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
-    }
-  }
-
   calcElectric() {
-    this.energyEquivalencyElectric = this.energyEquivalencyService.getElectricObjFromForm(this.formElectric);
-    this.calculateElectric.emit(true);
+    let energyEquivalencyElectric: EnergyEquivalencyElectric = this.energyEquivalencyService.getElectricObjFromForm(this.formElectric);
+    this.updateElectric.emit(energyEquivalencyElectric);
   }
   calcFuel() {
-    this.energyEquivalencyFuel = this.energyEquivalencyService.getFuelObjFromForm(this.formFuel);
-    this.calculateFuel.emit(true);
+    let energyEquivalencyFuel: EnergyEquivalencyFuel = this.energyEquivalencyService.getFuelObjFromForm(this.formFuel);
+    this.updateFuel.emit(energyEquivalencyFuel);
   }
 
   focusField(str: string) {

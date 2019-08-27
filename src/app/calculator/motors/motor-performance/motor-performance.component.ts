@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { FSAT } from '../../../shared/models/fans';
 
 @Component({
   selector: 'app-motor-performance',
@@ -17,6 +18,8 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 export class MotorPerformanceComponent implements OnInit {
   @Input()
   psat: PSAT;
+  @Input()
+  fsat: FSAT;
   @Input()
   settings: Settings;
   @Input()
@@ -53,7 +56,7 @@ export class MotorPerformanceComponent implements OnInit {
     //use system settings for standalone calculator
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
-      if (this.settings.powerMeasurement !== 'hp') {
+      if (this.settings.powerMeasurement !== 'hp' && !this.inAssessment) {
         this.performanceForm.patchValue({
           horsePower: '150'
         });
@@ -104,6 +107,8 @@ export class MotorPerformanceComponent implements OnInit {
       } else {
         if (this.psat) {
           this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+        } else if (this.fsat) {
+          this.performanceForm = this.motorPerformanceService.initFormFromFsat(this.fsat);
         } else {
           this.performanceForm = this.motorPerformanceService.initForm();
         }
@@ -120,6 +125,8 @@ export class MotorPerformanceComponent implements OnInit {
   initCalculator(): Calculator {
     if (this.psat) {
       this.performanceForm = this.motorPerformanceService.initFormFromPsat(this.psat);
+    } else if (this.fsat) {
+      this.performanceForm = this.motorPerformanceService.initFormFromFsat(this.fsat);
     } else {
       this.performanceForm = this.motorPerformanceService.initForm();
     }

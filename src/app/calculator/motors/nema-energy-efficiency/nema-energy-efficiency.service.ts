@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
+import { FSAT } from '../../../shared/models/fans';
 
 @Injectable()
 export class NemaEnergyEfficiencyService {
@@ -27,14 +28,22 @@ export class NemaEnergyEfficiencyService {
   }
 
   initFormFromPsat(psat: PSAT): FormGroup {
-    // let lineFreq: string = this.psatService.getLineFreqFromEnum(psat.inputs.line_frequency);
-    // let efficiency: string = this.psatService.getEfficiencyClassFromEnum(psat.inputs.efficiency_class);
     return this.formBuilder.group({
       frequency: [psat.inputs.line_frequency, [Validators.required]],
       horsePower: [psat.inputs.motor_rated_power, [Validators.required, Validators.min(0)]],
       efficiencyClass: [psat.inputs.efficiency_class, [Validators.required]],
       motorRPM: [psat.inputs.motor_rated_speed, [Validators.required]],
       efficiency: [psat.inputs.efficiency, [Validators.min(1), Validators.max(100)]]
+    });
+  }
+
+  initFormFromFsat(fsat: FSAT): FormGroup {
+    return this.formBuilder.group({
+      frequency: [fsat.fanMotor.lineFrequency, [Validators.required]],
+      horsePower: [fsat.fanMotor.motorRatedPower, [Validators.required, Validators.min(0)]],
+      efficiencyClass: [fsat.fanMotor.efficiencyClass, [Validators.required]],
+      motorRPM: [fsat.fanMotor.motorRpm, [Validators.required]],
+      efficiency: [fsat.fanMotor.specifiedEfficiency, [Validators.min(1), Validators.max(100)]]
     });
   }
 

@@ -22,12 +22,12 @@ export class FanEfficiencyService {
 
   initFormFromFsat(fsat: FSAT): FormGroup {
     return this.formBuilder.group({
-      fanType: ['', Validators.required],
-      fanSpeed: ['', [Validators.required, Validators.min(0)]],
-      inletPressure: ['', Validators.required],
-      outletPressure: ['', Validators.required],
-      flowRate: ['', Validators.required],
-      compressibility: ['', Validators.required]
+      fanType: [fsat.fanSetup.fanType, Validators.required],
+      fanSpeed: [fsat.fanSetup.fanSpeed, [Validators.required, Validators.min(0)]],
+      inletPressure: [fsat.fieldData.inletPressure, Validators.required],
+      outletPressure: [fsat.fieldData.outletPressure, Validators.required],
+      flowRate: [fsat.fieldData.flowRate, Validators.required],
+      compressibility: [fsat.fieldData.compressibilityFactor, Validators.required]
     });
   }
 

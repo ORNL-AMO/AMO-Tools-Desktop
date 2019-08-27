@@ -110,6 +110,11 @@ export class EnergyEquivalencyComponent implements OnInit {
     }
   }
 
+  updateFuel(data: EnergyEquivalencyFuel) {
+    this.energyEquivalencyFuel = data;
+    this.calculateFuel();
+  }
+
   calculateFuel() {
     if (!this.inAssessment) {
       this.energyEquivalencyService.energyEquivalencyFuel = this.energyEquivalencyFuel;
@@ -118,6 +123,11 @@ export class EnergyEquivalencyComponent implements OnInit {
       this.saveCalculator();
     }
     this.energyEquivalencyFuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel, this.settings);
+  }
+
+  updateElectric(data: EnergyEquivalencyElectric){
+    this.energyEquivalencyElectric = data;
+    this.calculateElectric();
   }
 
   calculateElectric() {
@@ -206,5 +216,4 @@ export class EnergyEquivalencyComponent implements OnInit {
       }
     }
   }
-
 }

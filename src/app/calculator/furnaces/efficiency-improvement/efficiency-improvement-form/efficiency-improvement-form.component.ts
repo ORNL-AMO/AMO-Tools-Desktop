@@ -29,13 +29,6 @@ export class EfficiencyImprovementFormComponent implements OnInit {
     this.calc();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.efficiencyImprovementInputs) {
-      this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
-    }
-  }
-
-
   calc() {
     this.efficiencyImprovementInputs = this.efficiencyImprovementService.getObjFromForm(this.form);
     this.efficiencyImprovementService.updateFormValidators(this.form, this.efficiencyImprovementInputs);
@@ -43,9 +36,7 @@ export class EfficiencyImprovementFormComponent implements OnInit {
     this.form.controls.currentCombustionAirTemp.updateValueAndValidity({ onlySelf: true, emitEvent: true });
     this.form.controls.newCombustionAirTemp.markAsDirty({ onlySelf: true });
     this.form.controls.newCombustionAirTemp.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-    if (this.form.valid) {
-      this.calculate.emit(this.efficiencyImprovementInputs);
-    }
+    this.calculate.emit(this.efficiencyImprovementInputs);
   }
 
   focusField(str: string) {
