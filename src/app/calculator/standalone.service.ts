@@ -324,13 +324,7 @@ export class StandaloneService {
   }
 
   steamReduction(inputObj: SteamReductionInput): any {
-    console.log('inputObj = ');
-    console.log(inputObj.steamReductionInputVec);
-    // return null;
     let result = calculatorAddon.steamReduction(inputObj);
-    console.log('result = ');
-    console.log(result);
     return result;
-    // return calculatorAddon.steamReduction(inputObj);
   }
 }

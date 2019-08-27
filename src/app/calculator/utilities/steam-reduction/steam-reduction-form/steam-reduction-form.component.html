@@ -144,7 +144,7 @@
         </select>
       </div>
 
-      <div class="form-group" *ngIf="form.controls.isNameplate.value == false">
+      <div class="form-group" *ngIf="form.controls.airIsNameplate.value == false">
         <label class="small" for="{{'areaOfDuct_'+idString}}">Area of Duct</label>
         <div class="input-group">
           <input class="form-control" name="airMeasuredAreaOfDuct" id="{{'areaOfDuct_'+idString}}"
@@ -177,7 +177,7 @@
         </span>
       </div>
 
-      <div class="form-group" *ngIf="form.controls.isNameplate.value == true">
+      <div class="form-group" *ngIf="form.controls.airIsNameplate.value == true">
         <label class="small" for="{{'airFlow_'+idString}}">Nameplate Air Flow</label>
         <div class="input-group">
           <input class="form-control" name="airNameplateFlowRate" id="{{'airFlow_'+idString}}"
@@ -196,10 +196,10 @@
         </span>
       </div>
 
-    </div>
+      <!-- </div> -->
 
-    <!-- air flow measurement inlet/outlet stuff -->
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
+      <!-- air flow measurement inlet/outlet stuff -->
+      <!-- <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1"> -->
       <div class="form-group">
         <label class="small" for="{{'airInletTemperature_'+idString}}">Inlet Temperature</label>
         <div class="input-group">
