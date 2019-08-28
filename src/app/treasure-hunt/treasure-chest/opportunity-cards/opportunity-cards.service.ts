@@ -48,9 +48,14 @@ export class OpportunityCardsService {
           opportunityType: 'lighting-replacement',
           opportunityIndex: index,
           annualCostSavings: results.totalCostSavings,
+          annualEnergySavings: results.totalEnergySavings,
           utilityType: 'Electricity',
+          energyUnit: 'kWh',
           percentSavings: this.getPercentSavings(results.totalCostSavings, currentEnergyUsage.electricityCosts),
-          lightingReplacement: lightingReplacement
+          lightingReplacement: lightingReplacement,
+          name: this.getName(lightingReplacement.opportunitySheet, index, 'Lighting Replacement #'),
+          opportunitySheet: lightingReplacement.opportunitySheet,
+          iconString: 'assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png'
         }
         opportunityCardsData.push(cardData);
         index++;
@@ -72,9 +77,14 @@ export class OpportunityCardsService {
           opportunityType: 'replace-existing',
           opportunityIndex: index,
           annualCostSavings: results.costSavings,
+          annualEnergySavings: results.annualEnergySavings,
           utilityType: 'Electricity',
+          energyUnit: 'kWh',
           percentSavings: this.getPercentSavings(results.costSavings, currentEnergyUsage.electricityCosts),
-          replaceExistingMotor: replaceExistingMotor
+          replaceExistingMotor: replaceExistingMotor,
+          name: this.getName(replaceExistingMotor.opportunitySheet, index, 'Replace Existing Motor #'),
+          opportunitySheet: replaceExistingMotor.opportunitySheet,
+          iconString: 'assets/images/calculator-icons/motor-icons/replace.png'
         };
         opportunityCardsData.push(cardData);
         index++;
@@ -94,9 +104,14 @@ export class OpportunityCardsService {
           opportunityType: 'motor-drive',
           opportunityIndex: index,
           annualCostSavings: results.annualCostSavings,
+          annualEnergySavings: results.annualEnergySavings,
           utilityType: 'Electricity',
+          energyUnit: 'kWh',
           percentSavings: this.getPercentSavings(results.annualCostSavings, currentEnergyUsage.electricityCosts),
           motorDrive: drive,
+          name: this.getName(drive.opportunitySheet, index, 'Motor Drive #'),
+          opportunitySheet: drive.opportunitySheet,
+          iconString: 'assets/images/calculator-icons/motor-icons/motor-drive.png'
         }
         opportunityCardsData.push(cardData);
         index++;
@@ -111,14 +126,23 @@ export class OpportunityCardsService {
       let index: number = 0;
       naturalGasReductions.forEach(naturalGasReduction => {
         let results: NaturalGasReductionResults = this.naturalGasReductionService.getResults(settings, naturalGasReduction.baseline, naturalGasReduction.modification);
+        let unitStr: string = 'MMBtu/yr';
+        if (settings.unitsOfMeasure == 'Metric') {
+          unitStr = 'MJ/yr';
+        }
         let cardData: OpportunityCardData = {
           selected: naturalGasReduction.selected,
           opportunityType: 'natural-gas-reduction',
           opportunityIndex: index,
           annualCostSavings: results.annualCostSavings,
+          annualEnergySavings: results.annualEnergySavings,
           percentSavings: this.getPercentSavings(results.annualCostSavings, currentEnergyUsage.naturalGasCosts),
           utilityType: 'Natural Gas',
-          naturalGasReduction: naturalGasReduction
+          naturalGasReduction: naturalGasReduction,
+          name: this.getName(naturalGasReduction.opportunitySheet, index, 'Natural Gas Reduction #'),
+          opportunitySheet: naturalGasReduction.opportunitySheet,
+          iconString: 'assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png',
+          energyUnit: unitStr
         }
         opportunityCardsData.push(cardData);
         index++;
@@ -138,9 +162,14 @@ export class OpportunityCardsService {
           opportunityType: 'electricity-reduction',
           opportunityIndex: index,
           annualCostSavings: results.annualCostSavings,
+          annualEnergySavings: results.annualEnergySavings,
           percentSavings: this.getPercentSavings(results.annualCostSavings, currentEnergyUsage.electricityCosts),
           utilityType: 'Electricity',
-          electricityReduction: reduction
+          energyUnit: 'kWh',
+          electricityReduction: reduction,
+          name: this.getName(reduction.opportunitySheet, index, 'Electricity Reduction #'),
+          opportunitySheet: reduction.opportunitySheet,
+          iconString: 'assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png'
         };
         opportunityCardsData.push(cardData);
         index++;
@@ -157,19 +186,28 @@ export class OpportunityCardsService {
         let results: CompressedAirReductionResults = this.compressedAirReductionService.getResults(settings, reduction.baseline, reduction.modification);
         let utilityCost: number = currentEnergyUsage.compressedAirCosts;
         let energyType: string = 'Compressed Air';
+        let unitStr: string = 'kSCF'
         //electricity utility
         if (reduction.baseline[0].utilityType == 1) {
           energyType = 'Electricity';
           utilityCost = currentEnergyUsage.electricityCosts;
+          unitStr = 'kWh'
+        } else if (settings.unitsOfMeasure == 'Metric') {
+          unitStr = 'Nm3'
         }
         let cardData: OpportunityCardData = {
           selected: reduction.selected,
           opportunityType: 'compressed-air-reduction',
           opportunityIndex: index,
           annualCostSavings: results.annualCostSavings,
+          annualEnergySavings: results.annualEnergySavings,
           percentSavings: this.getPercentSavings(results.annualCostSavings, utilityCost),
           utilityType: energyType,
-          compressedAirReduction: reduction
+          compressedAirReduction: reduction,
+          name: this.getName(reduction.opportunitySheet, index, 'Compressed Air Reduction #'),
+          opportunitySheet: reduction.opportunitySheet,
+          iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png',
+          energyUnit: unitStr
         };
         opportunityCardsData.push(cardData);
         index++;
@@ -190,9 +228,14 @@ export class OpportunityCardsService {
           opportunityType: 'compressed-air-reduction',
           opportunityIndex: index,
           annualCostSavings: results.annualCostSavings,
+          annualEnergySavings: results.annualEnergySavings,
           percentSavings: this.getPercentSavings(results.annualCostSavings, currentEnergyUsage.electricityCosts),
           utilityType: 'Electricity',
-          compressedAirPressureReduction: reduction
+          energyUnit: 'kWh',
+          compressedAirPressureReduction: reduction,
+          name: this.getName(reduction.opportunitySheet, index, 'Compressed Air Pressure Reduction #'),
+          opportunitySheet: reduction.opportunitySheet,
+          iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png'
         };
         opportunityCardsData.push(cardData);
         index++;
@@ -209,6 +252,10 @@ export class OpportunityCardsService {
         let results: WaterReductionResults = this.waterReductionService.getResults(settings, reduction.baseline, reduction.modification);
         let utilityCost: number = currentEnergyUsage.waterCosts;
         let energyType: string = 'Water';
+        let unitStr: string = 'm3';
+        if (settings.unitsOfMeasure == 'Imperial') {
+          unitStr = 'kgal';
+        }
         //electricity utility
         if (reduction.baseline[0].isWastewater == true) {
           energyType = 'Waste Water';
@@ -219,9 +266,14 @@ export class OpportunityCardsService {
           opportunityType: 'water-reduction',
           opportunityIndex: index,
           annualCostSavings: results.annualCostSavings,
+          annualEnergySavings: results.annualWaterSavings,
           percentSavings: this.getPercentSavings(results.annualCostSavings, utilityCost),
           utilityType: energyType,
-          waterReduction: reduction
+          waterReduction: reduction,
+          name: this.getName(reduction.opportunitySheet, index, energyType + ' Reduction #'),
+          opportunitySheet: reduction.opportunitySheet,
+          iconString: 'assets/images/calculator-icons/utilities-icons/water-reduction-icon.png',
+          energyUnit: unitStr
         }
         opportunityCardsData.push(cardData);
         index++;
@@ -233,6 +285,14 @@ export class OpportunityCardsService {
   getPercentSavings(totalCostSavings: number, totalUtiltyCost: number): number {
     return (totalCostSavings / totalUtiltyCost) * 100;
   }
+
+  getName(opporunitySheet: OpportunitySheet, index: number, defaultName: string): string {
+    if (opporunitySheet && opporunitySheet.name) {
+      return opporunitySheet.name;
+    } else {
+      return defaultName + (index + 1);
+    }
+  }
 }
 
 
@@ -243,8 +303,13 @@ export interface OpportunityCardData {
   opportunityType: string;
   opportunityIndex: number;
   annualCostSavings: number;
+  annualEnergySavings: number;
   percentSavings: number;
   utilityType: string;
+  name: string;
+  opportunitySheet: OpportunitySheet,
+  energyUnit: string,
+  iconString: string,
   lightingReplacement?: LightingReplacementTreasureHunt;
   opportunitySheets?: OpportunitySheet;
   replaceExistingMotor?: ReplaceExistingMotorTreasureHunt;

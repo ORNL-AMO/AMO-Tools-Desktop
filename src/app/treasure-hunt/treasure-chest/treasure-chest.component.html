@@ -5,8 +5,9 @@
         (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"
         (emitImportExport)="openImportExportModal()"></app-treasure-chest-menu>
     </div>
-    <app-opportunity-cards [treasureHunt]="treasureHunt" [settings]="settings"></app-opportunity-cards>
-
+    <div class="col-12">
+      <app-opportunity-cards [treasureHunt]="treasureHunt" [settings]="settings"></app-opportunity-cards>
+    </div>
   </div>
   <div class="scroll-item result-column justify-content-center mr-3 ml-3" [ngStyle]="{'height.px': containerHeight}">
     <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>

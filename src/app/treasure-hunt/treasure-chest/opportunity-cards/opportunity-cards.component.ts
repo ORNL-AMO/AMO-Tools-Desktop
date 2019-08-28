@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import { OpportunityCardsService } from './opportunity-cards.service';
+import { OpportunityCardsService, OpportunityCardData } from './opportunity-cards.service';
 
 @Component({
   selector: 'app-opportunity-cards',
@@ -14,11 +14,11 @@ export class OpportunityCardsComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  opportunityCardsData: Array<OpportunityCardData>;
   constructor(private opportunityCardsService: OpportunityCardsService) { }
 
   ngOnInit() {
-    let data = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
-    console.log(data);
+    this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
   }
 
 }
