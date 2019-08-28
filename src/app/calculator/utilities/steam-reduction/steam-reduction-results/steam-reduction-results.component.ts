@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamReductionResults } from '../../../../shared/models/standalone';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-steam-reduction-results',
@@ -18,10 +19,27 @@ export class SteamReductionResultsComponent implements OnInit {
   @ViewChild('copyTable0') copyTable0: ElementRef;
   table0String: any;
 
+  energyResultUnit = 'MMBtu';
 
-  constructor() { }
+
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.results) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.energyResultUnit = 'GJ';
+        if (Math.abs(this.results.baselineResults.energyUse) < 0.01) {
+          this.energyResultUnit = 'MJ';
+          this.results.baselineResults.energyUse = this.convertUnitsService.value(this.results.baselineResults.energyUse).from('GJ').to(this.energyResultUnit);
+          if (this.modificationExists) {
+            this.results.modificationResults.energyUse = this.convertUnitsService.value(this.results.modificationResults.energyUse).from('GJ').to(this.energyResultUnit);
+          }
+        }
+      }
+    }
   }
 
   updateTable0String() {

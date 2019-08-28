@@ -10,7 +10,7 @@
       <td class="text-center">
         {{results.baselineResults.steamUse | number:'.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-          lb
+          klb
         </span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">
           tonnes
@@ -21,7 +21,7 @@
         <span *ngIf="modificationExists">
           {{results.modificationResults.steamUse | number:'.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-            lb
+            klb
           </span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">
             tonnes
@@ -32,12 +32,24 @@
     <tr>
       <td class="bold">Energy Use</td>
       <td class="text-center">
-        {{results.baselineResults.energyUse | number:'.0-0'}} kW
+        {{results.baselineResults.energyUse | number:'.0-0'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+          MMBtu
+        </span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+          {{energyResultUnit}}
+        </span>
       </td>
       <td class="text-center w-50">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{results.modificationResults.energyUse | number:'.0-0'}} kW
+          {{results.modificationResults.energyUse | number:'.0-0'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+            MMBtu
+          </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+            {{energyResultUnit}}
+          </span>
         </span>
       </td>
     </tr>
@@ -60,7 +72,7 @@
         <span *ngIf="modificationExists">
           {{results.annualSteamSavings | number:'.0-1'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-            lb
+            klb
           </span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">
             tonnes
@@ -73,7 +85,13 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{results.annualEnergySavings | number:'.0-1'}} kW
+          {{results.annualEnergySavings | number:'.0-1'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
+            MMBtu
+          </span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">
+            MJ
+          </span>
         </span>
       </td>
     </tr>
