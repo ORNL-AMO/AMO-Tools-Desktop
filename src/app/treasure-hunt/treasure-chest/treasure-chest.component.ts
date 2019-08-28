@@ -12,6 +12,7 @@ import { CompressedAirReductionService } from '../../calculator/utilities/compre
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
+import { ImportOpportunitiesService } from './import-opportunities.service';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -63,7 +64,8 @@ export class TreasureChestComponent implements OnInit {
     private compressedAirReductionService: CompressedAirReductionService,
     private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private treasureHuntService: TreasureHuntService,
-    private waterReductionService: WaterReductionService) { }
+    private waterReductionService: WaterReductionService,
+    private importOpportunitiesService: ImportOpportunitiesService) { }
 
   ngOnInit() {
   }
@@ -451,60 +453,7 @@ export class TreasureChestComponent implements OnInit {
   }
 
   importData(data: ImportExportOpportunities) {
-    if (data.compressedAirReductions) {
-      if (this.treasureHunt.compressedAirReductions == undefined) {
-        this.treasureHunt.compressedAirReductions = new Array();
-      }
-      this.treasureHunt.compressedAirReductions = this.treasureHunt.compressedAirReductions.concat(data.compressedAirReductions);
-    }
-    if (data.opportunitySheets) {
-      if (this.treasureHunt.opportunitySheets == undefined) {
-        this.treasureHunt.opportunitySheets = new Array();
-      }
-      this.treasureHunt.opportunitySheets = this.treasureHunt.opportunitySheets.concat(data.opportunitySheets);
-    }
-    if (data.replaceExistingMotors) {
-      if (this.treasureHunt.replaceExistingMotors == undefined) {
-        this.treasureHunt.replaceExistingMotors = new Array();
-      }
-      this.treasureHunt.replaceExistingMotors = this.treasureHunt.replaceExistingMotors.concat(data.replaceExistingMotors);
-    }
-    if (data.motorDrives) {
-      if (this.treasureHunt.motorDrives == undefined) {
-        this.treasureHunt.motorDrives = new Array();
-      }
-      this.treasureHunt.motorDrives = this.treasureHunt.motorDrives.concat(data.motorDrives);
-    }
-    if (data.naturalGasReductions) {
-      if (this.treasureHunt.naturalGasReductions == undefined) {
-        this.treasureHunt.naturalGasReductions = new Array();
-      }
-      this.treasureHunt.naturalGasReductions = this.treasureHunt.naturalGasReductions.concat(data.naturalGasReductions);
-    }
-    if (data.electricityReductions) {
-      if (this.treasureHunt.electricityReductions == undefined) {
-        this.treasureHunt.electricityReductions = new Array();
-      }
-      this.treasureHunt.electricityReductions = this.treasureHunt.electricityReductions.concat(data.electricityReductions);
-    }
-    if (data.lightingReplacements) {
-      if (this.treasureHunt.lightingReplacements == undefined) {
-        this.treasureHunt.lightingReplacements = new Array();
-      }
-      this.treasureHunt.lightingReplacements = this.treasureHunt.lightingReplacements.concat(data.lightingReplacements);
-    }
-    if (data.waterReductions) {
-      if (this.treasureHunt.waterReductions == undefined) {
-        this.treasureHunt.waterReductions = new Array();
-      }
-      this.treasureHunt.waterReductions = this.treasureHunt.waterReductions.concat(data.waterReductions);
-    }
-    if (data.compressedAirPressureReductions) {
-      if (this.treasureHunt.compressedAirPressureReductions == undefined) {
-        this.treasureHunt.compressedAirPressureReductions = new Array();
-      }
-      this.treasureHunt.compressedAirPressureReductions = this.treasureHunt.compressedAirPressureReductions.concat(data.compressedAirPressureReductions);
-    }
+    this.treasureHunt = this.importOpportunitiesService.importData(data, this.treasureHunt);
     this.save();
     this.treasureHuntService.updateMenuOptions.next(true);
   }

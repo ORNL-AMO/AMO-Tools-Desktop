@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { LightingReplacementTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
-import { Settings } from '../../../shared/models/settings';
-import { LightingReplacementResults } from '../../../shared/models/lighting';
-import { LightingReplacementService } from '../../../calculator/lighting/lighting-replacement/lighting-replacement.service';
+import { LightingReplacementTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../../shared/models/treasure-hunt';
+import { Settings } from '../../../../shared/models/settings';
+import { LightingReplacementResults } from '../../../../shared/models/lighting';
+import { LightingReplacementService } from '../../../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement-card',

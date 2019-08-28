@@ -1,0 +1,85 @@
+
+
+
+AYYOOO
+
+
+
+<!--lighting replacement--
+<app-lighting-replacement-card *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;"
+  [replacement]="replacement" [settings]="settings" [index]="index" (emitEditLighting)="editLighting($event, index)"
+  (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'lightingReplacement')"
+  (emitDeleteItem)="showDeleteItem($event, index, 'lightingReplacement')" [treasureHunt]="treasureHunt"
+  (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+  [displayEnergyType]="displayEnergyType">
+</app-lighting-replacement-card>
+<!--replace existing motor--
+<app-replace-existing-motor-card
+  *ngFor="let replaceExistingMotor of treasureHunt.replaceExistingMotors; let index = index;"
+  [replaceExistingMotor]="replaceExistingMotor" [index]="index"
+  (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'replaceExistingMotor')" [settings]="settings"
+  [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+  (emitDeleteReplaceExistingMotor)="showDeleteItem($event, index, 'replaceExistingMotor')"
+  (emitEditReplaceExistingMotor)="editReplaceExistingMotor($event, index)"
+  [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
+</app-replace-existing-motor-card>
+<!--motor drive--
+<app-motor-drive-card *ngFor="let motorDrive of treasureHunt.motorDrives; let index = index;" [motorDrive]="motorDrive"
+  [index]="index" (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'motorDrive')"
+  [settings]="settings" [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+  (emitDeleteItem)="showDeleteItem($event, index, 'motorDrive')" (emitEditItem)="editMotorDrive($event, index)"
+  [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
+</app-motor-drive-card>
+<!--natural gas reduction--
+<app-natural-gas-reduction-card
+  *ngFor="let naturalGasReduction of treasureHunt.naturalGasReductions; let index = index;"
+  [naturalGasReduction]="naturalGasReduction" [settings]="settings" [index]="index"
+  (emitEditNaturalGasReduction)="editNaturalGasReduction($event, index)"
+  (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'naturalGasReduction')"
+  (emitDeleteItem)="showDeleteItem($event, index, 'naturalGasReduction')" [treasureHunt]="treasureHunt"
+  (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+  [displayEnergyType]="displayEnergyType"></app-natural-gas-reduction-card>
+<!--electricity reduction--
+<app-electricity-reduction-card
+  *ngFor="let electricityReduction of treasureHunt.electricityReductions; let index = index;"
+  [electricityReduction]="electricityReduction" [settings]="settings" [index]="index"
+  (emitEditElectricityReduction)="editElectricityReduction($event, index)"
+  (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'electricityReduction')"
+  (emitDeleteItem)="showDeleteItem($event, index, 'electricityReduction')" [treasureHunt]="treasureHunt"
+  (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+  [displayEnergyType]="displayEnergyType"></app-electricity-reduction-card>
+<!--compressed air reduction--
+<app-compressed-air-reduction-card
+  *ngFor="let compressedAirReduction of treasureHunt.compressedAirReductions; let index = index;"
+  [compressedAirReduction]="compressedAirReduction" [settings]="settings" [index]="index"
+  (emitEditCompressedAirReduction)="editCompressedAirReduction($event, index)"
+  (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'compressedAirReduction')"
+  (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirReduction')" [treasureHunt]="treasureHunt"
+  (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+  [displayEnergyType]="displayEnergyType"></app-compressed-air-reduction-card>
+<!--compressed air pressure reduction--
+<app-compressed-air-pressure-reduction-card
+  *ngFor="let compressedAirPressureReduction of treasureHunt.compressedAirPressureReductions; let index = index;"
+  [compressedAirPressureReduction]="compressedAirPressureReduction" [settings]="settings" [index]="index"
+  (emitEditCompressedAirPressureReduction)="editCompressedAirPressureReduction($event, index)"
+  (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'compressedAirReduction')"
+  (emitDeleteItem)="showDeleteItem($event, index, 'compressedAirPressureReduction')" [treasureHunt]="treasureHunt"
+  (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+  [displayEnergyType]="displayEnergyType"></app-compressed-air-pressure-reduction-card>
+<!--water reduction--
+<app-water-reduction-card *ngFor="let waterReduction of treasureHunt.waterReductions; let index = index;"
+  [waterReduction]="waterReduction" [settings]="settings" [index]="index"
+  (emitEditWaterReduction)="editWaterReduction($event, index)"
+  (emitEditOpportunitySheet)="editItemOpportunitySheet($event, index, 'waterReduction')"
+  (emitDeleteItem)="showDeleteItem($event, index, 'waterReduction')" [treasureHunt]="treasureHunt"
+  (emitSaveTreasureHunt)="save()" [displayCalculatorType]="displayCalculatorType"
+  [displayEnergyType]="displayEnergyType"></app-water-reduction-card>
+
+<!--standalone opportunity sheet--
+<app-opportunity-sheet-card *ngFor="let opportunitySheet of treasureHunt.opportunitySheets; let index = index;"
+  [opportunitySheet]="opportunitySheet" [index]="index"
+  (emitEditOpportunitySheet)="editStandaloneOpportunitySheet($event)" [settings]="settings"
+  [treasureHunt]="treasureHunt" (emitSaveTreasureHunt)="save()"
+  (emitDeleteOpportunity)="showDeleteItem($event, index, 'opportunitySheet')"
+  [displayCalculatorType]="displayCalculatorType" [displayEnergyType]="displayEnergyType">
+</app-opportunity-sheet-card>-->

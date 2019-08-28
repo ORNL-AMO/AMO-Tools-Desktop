@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { CompressedAirReductionTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirReductionResults } from '../../../shared/models/standalone';
-import { CompressedAirReductionService } from '../../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
+import { CompressedAirReductionTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../../shared/models/treasure-hunt';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirReductionResults } from '../../../../shared/models/standalone';
+import { CompressedAirReductionService } from '../../../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 
 @Component({
   selector: 'app-compressed-air-reduction-card',

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { MotorDriveInputsTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
-import { Settings } from '../../../shared/models/settings';
-import { MotorDriveService } from '../../../calculator/motors/motor-drive/motor-drive.service';
-import { MotorDriveOutputs } from '../../../shared/models/calculators';
+import { MotorDriveInputsTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../../shared/models/treasure-hunt';
+import { Settings } from '../../../../shared/models/settings';
+import { MotorDriveService } from '../../../../calculator/motors/motor-drive/motor-drive.service';
+import { MotorDriveOutputs } from '../../../../shared/models/calculators';
 
 @Component({
   selector: 'app-motor-drive-card',

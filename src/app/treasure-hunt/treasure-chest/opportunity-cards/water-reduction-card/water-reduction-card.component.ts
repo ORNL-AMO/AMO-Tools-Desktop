@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { WaterReductionTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
-import { Settings } from '../../../shared/models/settings';
-import { WaterReductionResults } from '../../../shared/models/standalone';
-import { WaterReductionService } from '../../../calculator/utilities/water-reduction/water-reduction.service';
+import { WaterReductionTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../../shared/models/treasure-hunt';
+import { Settings } from '../../../../shared/models/settings';
+import { WaterReductionResults } from '../../../../shared/models/standalone';
+import { WaterReductionService } from '../../../../calculator/utilities/water-reduction/water-reduction.service';
 
 @Component({
   selector: 'app-water-reduction-card',

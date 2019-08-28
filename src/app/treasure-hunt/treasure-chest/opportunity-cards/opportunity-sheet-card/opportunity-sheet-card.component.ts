@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { OpportunitySheet, OpportunitySheetResults, TreasureHunt, TreasureHuntResults } from '../../../shared/models/treasure-hunt';
-import { OpportunitySheetService } from '../../standalone-opportunity-sheet/opportunity-sheet.service';
-import { Settings } from '../../../shared/models/settings';
+import { OpportunitySheet, OpportunitySheetResults, TreasureHunt, TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
+import { OpportunitySheetService } from '../../../standalone-opportunity-sheet/opportunity-sheet.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-opportunity-sheet-card',

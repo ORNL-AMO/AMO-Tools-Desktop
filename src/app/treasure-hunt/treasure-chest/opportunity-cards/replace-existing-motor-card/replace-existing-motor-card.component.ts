@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { ReplaceExistingMotorTreasureHunt, TreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
-import { Settings } from '../../../shared/models/settings';
-import { ReplaceExistingResults } from '../../../shared/models/calculators';
-import { ReplaceExistingService } from '../../../calculator/motors/replace-existing/replace-existing.service';
+import { ReplaceExistingMotorTreasureHunt, TreasureHunt, OpportunitySheet } from '../../../../shared/models/treasure-hunt';
+import { Settings } from '../../../../shared/models/settings';
+import { ReplaceExistingResults } from '../../../../shared/models/calculators';
+import { ReplaceExistingService } from '../../../../calculator/motors/replace-existing/replace-existing.service';
 
 @Component({
   selector: 'app-replace-existing-motor-card',

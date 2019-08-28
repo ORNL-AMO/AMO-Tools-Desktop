@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
-import { ElectricityReductionTreasureHunt, TreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
-import { ElectricityReductionResults } from '../../../shared/models/standalone';
-import { ElectricityReductionService } from '../../../calculator/utilities/electricity-reduction/electricity-reduction.service';
+import { Settings } from '../../../../shared/models/settings';
+import { ElectricityReductionTreasureHunt, TreasureHunt, OpportunitySheet } from '../../../../shared/models/treasure-hunt';
+import { ElectricityReductionResults } from '../../../../shared/models/standalone';
+import { ElectricityReductionService } from '../../../../calculator/utilities/electricity-reduction/electricity-reduction.service';
 
 @Component({
   selector: 'app-electricity-reduction-card',

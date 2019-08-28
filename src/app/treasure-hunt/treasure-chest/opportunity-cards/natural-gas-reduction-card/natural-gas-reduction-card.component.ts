@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { NaturalGasReductionTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
-import { Settings } from '../../../shared/models/settings';
-import { NaturalGasReductionResults } from '../../../shared/models/standalone';
-import { NaturalGasReductionService } from '../../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
+import { NaturalGasReductionTreasureHunt, OpportunitySheet, TreasureHunt } from '../../../../shared/models/treasure-hunt';
+import { Settings } from '../../../../shared/models/settings';
+import { NaturalGasReductionResults } from '../../../../shared/models/standalone';
+import { NaturalGasReductionService } from '../../../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 
 @Component({
   selector: 'app-natural-gas-reduction-card',
