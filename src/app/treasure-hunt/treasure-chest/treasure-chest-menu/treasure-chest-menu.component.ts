@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHunt, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from '../../standalone-opportunity-sheet/opportunity-sheet.service';
@@ -23,6 +23,7 @@ export class TreasureChestMenuComponent implements OnInit {
   emitChangeEnergyType = new EventEmitter<string>();
   @Output('emitChangeCalculatorType')
   emitChangeCalculatorType = new EventEmitter<string>();
+  @ViewChild('navbar') navbar: ElementRef;
 
   displayEnergyType: string = 'All';
   displayCalculatorType: string = 'All';
@@ -30,6 +31,12 @@ export class TreasureChestMenuComponent implements OnInit {
   energyTypeOptions: Array<{ value: string, numCalcs: number }> = [];
   calculatorTypeOptions: Array<{ value: string, numCalcs: number }> = [];
   updateMenuSubscription: Subscription;
+
+  displayUtilityTypeDropdown: boolean = false;
+  displayCalculatorTypeDropdown: boolean = false;
+  displayAdditionalFiltersDropdown: boolean = false;
+  sortByDropdown: boolean = false;
+  navbarWidth: number;
   constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
@@ -44,13 +51,42 @@ export class TreasureChestMenuComponent implements OnInit {
     this.updateMenuSubscription.unsubscribe();
   }
 
+  ngAfterViewInit(){
+    this.getNavbarWidth();
+  }
+
+  toggleUtilityType() {
+    this.displayUtilityTypeDropdown = !this.displayUtilityTypeDropdown;
+  }
+
+  toggleCalculatorType() {
+    this.displayCalculatorTypeDropdown = !this.displayCalculatorTypeDropdown;
+  }
+
+  toggleAdditionalFilters() {
+    this.displayAdditionalFiltersDropdown = !this.displayAdditionalFiltersDropdown;
+  }
+
+  toggleSortBy(){
+    this.sortByDropdown = !this.sortByDropdown;
+  }
+
+  getNavbarWidth(){
+    if (this.navbar) {
+      setTimeout(() => {
+        this.navbarWidth = this.navbar.nativeElement.clientWidth *.95;
+      }, 100);
+    }
+  }
+
   showImportExport() {
     this.emitImportExport.emit(true);
   }
 
-  setEnergyType() {
+  setEnergyType(str: string) {
+    this.displayEnergyType = str;
     this.displayCalculatorType = 'All';
-    this.setCalculatorType();
+    this.setCalculatorType('All');
     this.emitChangeEnergyType.emit(this.displayEnergyType);
     this.setCalculatorOptions();
   }
@@ -141,7 +177,8 @@ export class TreasureChestMenuComponent implements OnInit {
     }
   }
 
-  setCalculatorType() {
+  setCalculatorType(str: string) {
+    this.displayCalculatorType = str;
     this.emitChangeCalculatorType.emit(this.displayCalculatorType);
   }
 

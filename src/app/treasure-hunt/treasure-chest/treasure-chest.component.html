@@ -1,11 +1,9 @@
 <div class="d-flex modify-conditions panel-container skyline" *ngIf="selectedCalc == 'none'">
   <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
-    <div class="col-12">
-      <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
-        (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"
-        (emitImportExport)="openImportExportModal()"></app-treasure-chest-menu>
-    </div>
-    <div class="col-12">
+    <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
+      (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"
+      (emitImportExport)="openImportExportModal()"></app-treasure-chest-menu>
+    <div class="col-12 pt-2">
       <app-opportunity-cards [treasureHunt]="treasureHunt" [settings]="settings"></app-opportunity-cards>
     </div>
   </div>

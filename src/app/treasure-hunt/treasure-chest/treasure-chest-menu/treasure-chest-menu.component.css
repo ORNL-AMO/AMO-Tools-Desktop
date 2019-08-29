@@ -1,10 +1,63 @@
-label, select {
+/* label, select {
     font-size: 20px !important;
+} */
+
+
+ .nav-btn{
+    background: #2E4053;
+    color: white;
+    border: none;
+    line-height: 2;
+}
+
+.nav-btn.middle{
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-right-width: 2px;
+    border-right-style: solid;
+}
+
+.nav-item .dropdown-toggle{
+    color: white;
+    background: #2E4053;
+}
+
+.navbar-nav .dropdown-menu{
+    position: absolute;
+}
+
+.navbar{
+    background: white;
+    border-bottom: solid 4px;
 }
 
 
-.btn{
-    padding: 6px;
-    background: #2E4053;
+.nav-link, .btn{
+    padding: 4px;
+}
+
+.list-group-item{
+    padding: 8px;
+}
+
+.list-group-item.active{
     color: white;
+    background: #2E4053;
+}
+
+.dropdown-menu.filter-menu{
+    right: 0px;
+    left: inherit;
+}
+
+a.list-group-item:hover, .nav-link{
+    cursor: pointer;
+}
+
+a.list-group-item.active:hover{
+    color: white;
+}
+
+.nav-link.dropdown-toggle:hover, .nav-btn:hover{
+    background-color: #808B96;
 }

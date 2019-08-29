@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-5">
     <div class="form-group">
       <label for="energyType" class="large w-100">Utility Type</label>
@@ -23,4 +23,93 @@
       <button class="btn btn-sm btn-secondary" (click)="showImportExport()">Import/Export Opportunities</button>
     </div>
   </div>
-</div>
+</div> -->
+
+<nav class="navbar" #navbar>
+  <div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleSortBy()">
+      Sort By
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action" >Annual Cost</a>
+        <a class="list-group-item list-group-item-action" >Annual Savings</a>
+        <a class="list-group-item list-group-item-action" >Annual Energy Use</a>
+        <a class="list-group-item list-group-item-action" >Annual Energy Savings</a>
+        <a class="list-group-item list-group-item-action" >Team (A-Z)</a>
+        <a class="list-group-item list-group-item-action" >Equipment (A-Z)</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleUtilityType()">
+      Utility Type
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': displayUtilityTypeDropdown == true}">
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action" *ngFor="let option of energyTypeOptions"
+          [ngClass]="{'active': option.value == displayEnergyType}"
+          (click)="setEnergyType(option.value)">{{option.value}} ({{option.numCalcs}})</a>
+      </div>
+    </div>
+  </div>
+  <div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
+      Calculator Type
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': displayCalculatorTypeDropdown == true}">
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action" *ngFor="let option of calculatorTypeOptions"
+          [ngClass]="{'active': option.value == displayCalculatorType}"
+          (click)="setCalculatorType(option.value)">{{option.value}}
+          ({{option.numCalcs}})</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-item">
+    <div class="btn-group">
+      <button type="button" class="nav-btn">Import</button>
+      <button type="button" class="nav-btn middle">Export</button>
+      <button type="button" class="nav-btn">Select All</button>
+    </div>
+  </div>
+
+  <div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleAdditionalFilters()">
+      Add'l Filters
+    </a>
+    <div class="dropdown-menu p-0 filter-menu" [ngClass]="{'show': displayAdditionalFiltersDropdown == true}"
+      [ngStyle]="{'width.px': navbarWidth}">
+      <div class="d-flex flex-wrap w-100 justify-content-between">
+        <div class="col-4 card">
+          <div class="card-header p-2">
+            Process / Equipment
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+              <a class="list-group-item list-group-item-action">Equipment 1</a>
+              <a class="list-group-item list-group-item-action">Equipment 2</a>
+              <a class="list-group-item list-group-item-action">Equipment 3</a>
+              <a class="list-group-item list-group-item-action">Equipment 4</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 card">
+          <div class="card-header p-2">
+            Team
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+              <a class="list-group-item list-group-item-action">Team 1</a>
+              <a class="list-group-item list-group-item-action">Team 2</a>
+              <a class="list-group-item list-group-item-action">Team 3</a>
+              <a class="list-group-item list-group-item-action">Team 4</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
