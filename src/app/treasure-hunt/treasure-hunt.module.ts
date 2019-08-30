@@ -34,7 +34,8 @@ import { ImportExportOpportunitiesComponent } from './treasure-chest/import-expo
 import { WaterReductionModule } from '../calculator/utilities/water-reduction/water-reduction.module';
 import { CompressedAirPressureReductionModule } from '../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { ImportOpportunitiesService } from './treasure-chest/import-opportunities.service';
-import { OpportunityCardsModule } from './treasure-chest/opportunity-cards/opportunity-cards.module';
+import { OpportunityCardsComponent } from './treasure-chest/opportunity-cards/opportunity-cards.component';
+import { OpportunityCardsService } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @NgModule({
   imports: [
@@ -51,8 +52,7 @@ import { OpportunityCardsModule } from './treasure-chest/opportunity-cards/oppor
     ElectricityReductionModule,
     CompressedAirReductionModule,
     WaterReductionModule,
-    CompressedAirPressureReductionModule,
-    OpportunityCardsModule
+    CompressedAirPressureReductionModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -71,8 +71,9 @@ import { OpportunityCardsModule } from './treasure-chest/opportunity-cards/oppor
     OpportunitySheetResultsComponent, 
     OperationCostsComponent, 
     TreasureChestMenuComponent,
-    ImportExportOpportunitiesComponent
+    ImportExportOpportunitiesComponent,
+    OpportunityCardsComponent
   ],
-  providers: [ TreasureHuntService, OpportunitySheetService, TreasureHuntReportService, ImportOpportunitiesService ]
+  providers: [ TreasureHuntService, OpportunitySheetService, TreasureHuntReportService, ImportOpportunitiesService, OpportunityCardsService ]
 })
 export class TreasureHuntModule { }
