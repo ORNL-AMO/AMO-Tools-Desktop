@@ -49,3 +49,8 @@
     .calc-icon{
       width: 35px;
     }
+
+    .treasure-hunt-item{
+      padding-left: .25rem;
+      padding-right: .25rem;
+    }

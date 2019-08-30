@@ -18,17 +18,26 @@
                 {{cardData.name}}
               </a><br>
               <span>Annual Cost Savings: {{cardData.annualCostSavings | currency:'USD'}}</span><br>
-              <span>Annual {{cardData.utilityType}} Savings: {{cardData.annualEnergySavings | number:'1.0-0'}}
-                {{cardData.energyUnit}}
+              <span *ngFor="let energySavings of cardData.annualEnergySavings">
+                Annual {{energySavings.label}} Savings: {{energySavings.savings | number:'1.0-0'}}
+                {{energySavings.energyUnit}}
               </span>
             </div>
           </div>
         </div>
-        <div class="col-3 col-item-br text-center graph-col treasure-hunt-item">
-          <div class="large pt-2">{{cardData.utilityType}} Cost Savings</div>
-          <app-treasure-hunt-gauge [value]="cardData.percentSavings" [chartHeight]="75"></app-treasure-hunt-gauge>
+        <div class="col-3 col-item-br"
+          [ngClass]="{'col-3': cardData.opportunityType != 'opportunity-sheet', 'col-5': cardData.opportunityType == 'opportunity-sheet'}">
+          <!-- <div class="col-3 col-item-br"> -->
+          <div class="d-flex w-100 flex-wrap justify-content-center">
+            <div class="text-center graph-col treasure-hunt-item" *ngFor="let percentSaving of cardData.percentSavings">
+              <div class="large pt-2">{{percentSaving.label}} Cost Savings</div>
+              <app-treasure-hunt-gauge [value]="percentSaving.percent" [chartHeight]="75"></app-treasure-hunt-gauge>
+            </div>
+          </div>
+          <!-- </div> -->
+
         </div>
-        <div class="col-2 col-item-br opp-sheet-col">
+        <div class="col-2 col-item-br opp-sheet-col" *ngIf="cardData.opportunityType != 'opportunity-sheet'">
           <div class="row align-items-center h-100">
             <div class="col text-center"
               [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet, 'opp-sheet-exists': cardData.opportunitySheet}"
