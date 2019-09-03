@@ -13,24 +13,5 @@
 </div>
 
 <app-calculators *ngIf="selectedCalc != 'none'" [settings]="settings"></app-calculators>
-
-
-
-<div bsModal #deletedItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="deletedItemModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-body p-2 text-center" *ngIf="deletedItemModal.isShown">
-        Are you sure you want to delete "{{deleteItemName}}"?<br>
-        <span class="small danger">This cannot be undone.</span>
-      </div>
-      <div class="modal-footer p-2 justify-content-end delete-modal">
-        <button class="btn btn-danger" (click)="deleteItem()">Delete</button>
-        <button class="btn btn-primary" (click)="cancelDelete()">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <app-import-export-opportunities *ngIf="showImportExportModal" [treasureHunt]="treasureHunt"
   (emitImportData)="importData($event)" (emitCloseModal)="closeImportExportModal()"></app-import-export-opportunities>

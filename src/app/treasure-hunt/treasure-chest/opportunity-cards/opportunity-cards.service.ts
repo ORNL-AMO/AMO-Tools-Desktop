@@ -434,7 +434,7 @@ export class OpportunityCardsService {
 
         let cardData: OpportunityCardData = {
           selected: reduction.selected,
-          opportunityType: 'compressed-air-reduction',
+          opportunityType: 'compressed-air-pressure-reduction',
           opportunityIndex: index,
           annualCostSavings: results.annualCostSavings,
           annualEnergySavings: [{

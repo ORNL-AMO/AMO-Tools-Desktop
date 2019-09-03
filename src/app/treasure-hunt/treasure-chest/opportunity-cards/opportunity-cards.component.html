@@ -52,11 +52,28 @@
           <div class="row align-items-center h-100">
             <div class="col text-center">
               <a class="click-link" (click)="editOpportunity(cardData)">Edit Opportunity</a><br>
-              <a class="click-link danger" (click)="deleteItem()">Delete</a><br>
+              <a class="click-link danger" (click)="setDeleteItem(cardData)">Delete</a><br>
               <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #deletedItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="deletedItemModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body p-2 text-center" *ngIf="deletedItemModal.isShown">
+        Are you sure you want to delete "{{deleteOpportunity.name}}"?<br>
+        <span class="small danger">This cannot be undone.</span>
+      </div>
+      <div class="modal-footer p-2 justify-content-end delete-modal">
+        <button class="btn btn-danger" (click)="deleteItem()">Delete</button>
+        <button class="btn btn-primary" (click)="hideDeleteItemModal()">Cancel</button>
       </div>
     </div>
   </div>

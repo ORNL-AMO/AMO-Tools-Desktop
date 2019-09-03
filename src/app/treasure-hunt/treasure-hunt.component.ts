@@ -115,6 +115,8 @@ export class TreasureHuntComponent implements OnInit {
     this.treasureHuntService.mainTab.next('system-setup');
     this.treasureHuntService.subTab.next('settings');
     this.modalOpenSub.unsubscribe();
+    this.treasureHuntService.treasureHunt.next(undefined);
+    this.treasureHuntSub.unsubscribe();
   }
 
   ngAfterViewInit() {
