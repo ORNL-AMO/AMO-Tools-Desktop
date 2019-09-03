@@ -4,7 +4,6 @@ import { TreasureHuntComponent } from './treasure-hunt.component';
 import { TreasureHuntBannerComponent } from './treasure-hunt-banner/treasure-hunt-banner.component';
 import { FindTreasureComponent } from './find-treasure/find-treasure.component';
 import { TreasureHuntService } from './treasure-hunt.service';
-import { LightingReplacementModule } from '../calculator/lighting/lighting-replacement/lighting-replacement.module';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { SettingsModule } from '../settings/settings.module';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
@@ -22,37 +21,24 @@ import { OpportunitySheetResultsComponent } from './standalone-opportunity-sheet
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
 import { SharedModule } from '../shared/shared.module';
-import { ReplaceExistingModule } from '../calculator/motors/replace-existing/replace-existing.module';
-import { MotorDriveModule } from '../calculator/motors/motor-drive/motor-drive.module';
 import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
-import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-report.service';
-import { NaturalGasReductionModule } from '../calculator/utilities/natural-gas-reduction/natural-gas-reduction.module';
-import { ElectricityReductionModule } from '../calculator/utilities/electricity-reduction/electricity-reduction.module';
-import { CompressedAirReductionModule } from '../calculator/utilities/compressed-air-reduction/compressed-air-reduction.module';
 import { ImportExportOpportunitiesComponent } from './treasure-chest/import-export-opportunities/import-export-opportunities.component';
-import { WaterReductionModule } from '../calculator/utilities/water-reduction/water-reduction.module';
-import { CompressedAirPressureReductionModule } from '../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { ImportOpportunitiesService } from './treasure-chest/import-opportunities.service';
 import { OpportunityCardsComponent } from './treasure-chest/opportunity-cards/opportunity-cards.component';
 import { OpportunityCardsService } from './treasure-chest/opportunity-cards/opportunity-cards.service';
+import { CalculatorsModule } from './calculators/calculators.module';
+import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    LightingReplacementModule,
     SettingsModule,
     ModalModule,
     FormsModule,
     SharedModule,
-    ReplaceExistingModule,
-    MotorDriveModule,
-    TreasureHuntReportModule,
-    NaturalGasReductionModule,
-    ElectricityReductionModule,
-    CompressedAirReductionModule,
-    WaterReductionModule,
-    CompressedAirPressureReductionModule
+    CalculatorsModule,
+    TreasureHuntReportModule
   ],
   declarations: [
     TreasureHuntComponent, 

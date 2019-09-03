@@ -13,6 +13,8 @@ import { TreasureHuntService } from '../treasure-hunt.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 import { ImportOpportunitiesService } from './import-opportunities.service';
+import { CalculatorsService } from '../calculators/calculators.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-treasure-chest',
@@ -21,11 +23,7 @@ import { ImportOpportunitiesService } from './import-opportunities.service';
 })
 export class TreasureChestComponent implements OnInit {
   @Input()
-  treasureHunt: TreasureHunt;
-  @Input()
   settings: Settings;
-  @Output('emitUpdateTreasureHunt')
-  emitUpdateTreasureHunt = new EventEmitter<TreasureHunt>();
   @Input()
   containerHeight: number;
 
@@ -55,6 +53,9 @@ export class TreasureChestComponent implements OnInit {
   itemType: string;
   opperatingHoursPerYear: number;
   showImportExportModal: boolean = false;
+  selectedCalcSubscription: Subscription;
+  treasureHunt: TreasureHunt;
+  treasureHuntSub: Subscription;
   constructor(
     private lightingReplacementService: LightingReplacementService,
     private replaceExistingService: ReplaceExistingService,
@@ -65,10 +66,22 @@ export class TreasureChestComponent implements OnInit {
     private compressedAirPressureReductionService: CompressedAirPressureReductionService,
     private treasureHuntService: TreasureHuntService,
     private waterReductionService: WaterReductionService,
-    private importOpportunitiesService: ImportOpportunitiesService) { }
+    private importOpportunitiesService: ImportOpportunitiesService,
+    private calculatorsService: CalculatorsService) { }
 
   ngOnInit() {
+    this.selectedCalcSubscription = this.calculatorsService.selectedCalc.subscribe(val => {
+      this.selectedCalc = val;
+    });
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
+      this.treasureHunt = val;
+    })
   }
+
+  ngOnDestroy(){
+    this.selectedCalcSubscription.unsubscribe();
+  }
+
   //utilities
   setCaclulatorType(str: string) {
     this.displayCalculatorType = str;
@@ -116,7 +129,7 @@ export class TreasureChestComponent implements OnInit {
     this.showDeleteItemModal();
   }
   save() {
-    this.emitUpdateTreasureHunt.emit(this.treasureHunt);
+    // this.emitUpdateTreasureHunt.emit(this.treasureHunt);
   }
 
   deleteItem() {

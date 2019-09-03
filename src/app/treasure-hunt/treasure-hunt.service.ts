@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { OpportunitySheet } from '../shared/models/treasure-hunt';
+import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt } from '../shared/models/treasure-hunt';
 
 @Injectable()
 export class TreasureHuntService {
+
+  treasureHunt: BehaviorSubject<TreasureHunt>;
 
   mainTab: BehaviorSubject<string>;
   subTab: BehaviorSubject<string>;
@@ -16,6 +18,7 @@ export class TreasureHuntService {
     this.getResults = new BehaviorSubject<boolean>(true);
     this.updateMenuOptions = new BehaviorSubject<boolean>(true);
     this.modalOpen = new BehaviorSubject<boolean>(false);
+    this.treasureHunt = new BehaviorSubject<TreasureHunt>(undefined);
   }
 
   initOpportunitySheet(): OpportunitySheet {
@@ -41,5 +44,26 @@ export class TreasureHuntService {
       }],
       modificationEnergyUseItems: []
     };
+  }
+
+  addNewLightingReplacementTreasureHuntItem(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt){
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    if(!treasureHunt.lightingReplacements){
+      treasureHunt.lightingReplacements = new Array();
+    }
+    treasureHunt.lightingReplacements.push(lightingReplacementTreasureHunt);
+    this.treasureHunt.next(treasureHunt);
+  }
+
+  editLightingReplacementTreasureHuntItem(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt, index: number){
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.lightingReplacements[index] = lightingReplacementTreasureHunt;
+    this.treasureHunt.next(treasureHunt);
+  }
+
+  deleteLightingReplacementTreasureHuntItem(index: number){
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.lightingReplacements.splice(index, 1);
+    this.treasureHunt.next(treasureHunt);
   }
 }

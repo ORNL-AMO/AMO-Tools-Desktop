@@ -14,7 +14,7 @@
           <div class="row align-items-center h-100">
             <div class="col text-center">
               <img src={{cardData.iconString}} class="calc-icon">
-              <a (click)="editCardItem(cardData)">
+              <a (click)="editOpportunity(cardData)">
                 {{cardData.name}}
               </a><br>
               <span>Annual Cost Savings: {{cardData.annualCostSavings | currency:'USD'}}</span><br>
@@ -51,7 +51,7 @@
         <div class="col-2">
           <div class="row align-items-center h-100">
             <div class="col text-center">
-              <a class="click-link" (click)="editLighting()">Edit Opportunity</a><br>
+              <a class="click-link" (click)="editOpportunity(cardData)">Edit Opportunity</a><br>
               <a class="click-link danger" (click)="deleteItem()">Delete</a><br>
               <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
             </div>

@@ -13,8 +13,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./treasure-chest-menu.component.css']
 })
 export class TreasureChestMenuComponent implements OnInit {
-  @Input()
-  treasureHunt: TreasureHunt;
+
   @Input()
   settings: Settings;
   @Output('emitImportExport')
@@ -30,17 +29,19 @@ export class TreasureChestMenuComponent implements OnInit {
 
   energyTypeOptions: Array<{ value: string, numCalcs: number }> = [];
   calculatorTypeOptions: Array<{ value: string, numCalcs: number }> = [];
-  updateMenuSubscription: Subscription;
+  treasureHuntSub: Subscription;
 
   displayUtilityTypeDropdown: boolean = false;
   displayCalculatorTypeDropdown: boolean = false;
   displayAdditionalFiltersDropdown: boolean = false;
   sortByDropdown: boolean = false;
   navbarWidth: number;
+  treasureHunt: TreasureHunt;
   constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
-    this.updateMenuSubscription = this.treasureHuntService.updateMenuOptions.subscribe(() => {
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
+      this.treasureHunt = val;
       this.energyTypeOptions = new Array();
       this.calculatorTypeOptions = new Array();
       this.setEnergyTypeOptions();
@@ -48,10 +49,10 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.updateMenuSubscription.unsubscribe();
+    this.treasureHuntSub.unsubscribe();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.getNavbarWidth();
   }
 
@@ -67,14 +68,14 @@ export class TreasureChestMenuComponent implements OnInit {
     this.displayAdditionalFiltersDropdown = !this.displayAdditionalFiltersDropdown;
   }
 
-  toggleSortBy(){
+  toggleSortBy() {
     this.sortByDropdown = !this.sortByDropdown;
   }
 
-  getNavbarWidth(){
+  getNavbarWidth() {
     if (this.navbar) {
       setTimeout(() => {
-        this.navbarWidth = this.navbar.nativeElement.clientWidth *.95;
+        this.navbarWidth = this.navbar.nativeElement.clientWidth * .95;
       }, 100);
     }
   }

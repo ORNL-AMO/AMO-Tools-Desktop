@@ -3,6 +3,9 @@ import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, Replac
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
 import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
+import { CalculatorsService } from '../calculators/calculators.service';
+import { Subscription } from 'rxjs';
+import { TreasureHuntService } from '../treasure-hunt.service';
 
 @Component({
   selector: 'app-find-treasure',
@@ -10,10 +13,6 @@ import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calcu
   styleUrls: ['./find-treasure.component.css']
 })
 export class FindTreasureComponent implements OnInit {
-  @Input()
-  treasureHunt: TreasureHunt;
-  @Output('emitSave')
-  emitSave = new EventEmitter<TreasureHunt>();
   @Input()
   settings: Settings;
 
@@ -33,13 +32,29 @@ export class FindTreasureComponent implements OnInit {
   newCompressedAirPressureReductionTreasureHunt: CompressedAirPressureReductionTreasureHunt;
 
   showOpportunitySheetOnSave: boolean;
-  opperatingHoursPerYear: number;
   displayCalculatorType: string = 'All';
-  constructor() { }
+
+  selectedCalcSubscription: Subscription;
+  treasureHunt: TreasureHunt;
+  treasureHuntSub: Subscription;
+  constructor(private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
-    this.treasureHunt.currentEnergyUsage.electricityUsed
-    this.opperatingHoursPerYear = this.treasureHunt.operatingHours.hoursPerYear;
+    this.selectedCalcSubscription = this.calculatorsService.selectedCalc.subscribe(val => {
+      this.selectedCalc = val;
+    });
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
+      this.treasureHunt = val;
+    })
+  }
+
+  ngOnDestroy() {
+    this.selectedCalcSubscription.unsubscribe();
+    this.treasureHuntSub.unsubscribe();
+  }
+
+  selectLightingCalc() {
+    this.calculatorsService.addNewLighting();
   }
 
   selectCalc(str: string) {
@@ -55,7 +70,7 @@ export class FindTreasureComponent implements OnInit {
     this.newOpportunitySheet = undefined;
     this.showOpportunitySheetOnSave = true;
     this.selectCalc('none');
-    this.emitSave.emit(this.treasureHunt);
+    this.treasureHuntService.treasureHunt.next(this.treasureHunt);
   }
 
   saveNewCalc() {
@@ -112,7 +127,7 @@ export class FindTreasureComponent implements OnInit {
     }
     this.treasureHunt.opportunitySheets.push(newSheet);
     this.selectCalc('none');
-    this.emitSave.emit(this.treasureHunt);
+    this.treasureHuntService.treasureHunt.next(this.treasureHunt);
   }
 
   saveOpportunitySheet(newOppSheet: OpportunitySheet) {

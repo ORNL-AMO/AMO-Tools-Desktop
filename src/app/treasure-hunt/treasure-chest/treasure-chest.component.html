@@ -1,115 +1,20 @@
 <div class="d-flex modify-conditions panel-container skyline" *ngIf="selectedCalc == 'none'">
   <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
-    <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)" [treasureHunt]="treasureHunt"
+    <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)"
       (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"
       (emitImportExport)="openImportExportModal()"></app-treasure-chest-menu>
     <div class="col-12 pt-2">
-      <app-opportunity-cards [treasureHunt]="treasureHunt" [settings]="settings"></app-opportunity-cards>
+      <app-opportunity-cards [settings]="settings"></app-opportunity-cards>
     </div>
   </div>
   <div class="scroll-item result-column justify-content-center mr-3 ml-3" [ngStyle]="{'height.px': containerHeight}">
-    <app-summary-card [treasureHunt]="treasureHunt" [settings]="settings"></app-summary-card>
+    <app-summary-card [settings]="settings"></app-summary-card>
   </div>
 </div>
 
-<!--edit calcs-->
-<app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
-  (emitSave)="saveEditLighting($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="treasureHunt.operatingHours"></app-lighting-replacement>
-
-<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="cancelEditCalc()"
-  (emitSave)="saveEditOpportunity($event)" [settings]="settings" [(opportunitySheet)]="selectedEditOpportunitySheet">
-</app-standalone-opportunity-sheet>
-
-<app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="cancelEditCalc()"
-  (emitSave)="saveEditReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
-  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
-</app-replace-existing>
-
-<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="cancelEditCalc()"
-  (emitSave)="saveEditMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
-  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
-</app-motor-drive>
-
-<app-natural-gas-reduction *ngIf="selectedCalc == 'natural-gas-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveEditNaturalGasReduction($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-natural-gas-reduction>
-
-<app-electricity-reduction *ngIf="selectedCalc == 'electricity-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveEditElectricityReduction($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-electricity-reduction>
-
-<app-compressed-air-reduction *ngIf="selectedCalc == 'compressed-air-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveEditCompressedAirReduction($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-compressed-air-reduction>
-
-<app-compressed-air-pressure-reduction *ngIf="selectedCalc == 'compressed-air-pressure-reduction'"
-  [inTreasureHunt]="true" (emitSave)="saveEditCompressedAirPressureReduction($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-compressed-air-pressure-reduction>
-
-<app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveEditWaterReduction($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-water-reduction>
-
-<div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header p-1">
-        <h5 class="mb-0">Save Changes</h5>
-        <!-- <button class="close" (click)="closeSaveCalcModal()">
-          <span aria-hidden="true">&times;</span>
-        </button> -->
-      </div>
-      <div class="modal-body text-center" *ngIf="itemType != 'opportunitySheet'">
-        <p class="help-text" *ngIf="!selectedEditOpportunitySheet">There is no opportunity sheet filled out for this
-          opportunity. Would you like to add one
-          before saving?</p>
-        <p class="help-text" *ngIf="selectedEditOpportunitySheet">Would you like to edit your opportunity sheet before
-          saving?</p>
-        <a class="click-link" (click)="showOpportunitySheetModal()">
-          <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="save-opportunity">
-        </a> <br>
-        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="!selectedEditOpportunitySheet">+Add
-          Opportunity Sheet</a>
-        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="selectedEditOpportunitySheet">Edit
-          Opportunity Sheet</a>
-      </div>
-      <div class="modal-body text-center" *ngIf="itemType == 'opportunitySheet'">
-        <p class="help-text">Are you sure you want to save the changes to your existing opportunity? These changes
-          cannot be
-          undone.</p>
-      </div>
-      <div class="modal-footer p-1">
-        <button class="btn btn-danger btn-sm pull-right" (click)="hideSaveCalcModal()">Cancel</button>
-        <button class="btn btn-primary btn-sm pull-right" (click)="saveEditCalc()"
-          *ngIf="itemType != 'opportunitySheet'">Save</button>
-        <button class="btn btn-primary btn-sm pull-right" (click)="saveEditOpportunitySheet()"
-          *ngIf="itemType == 'opportunitySheet'">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-calculators *ngIf="selectedCalc != 'none'" [settings]="settings"></app-calculators>
 
 
-<div bsModal #opportunitySheetModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="opportunitySheetModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body pl-0 pr-0" *ngIf="opportunitySheetModal.isShown">
-        <app-opportunity-sheet (emitCancel)="hideOpportunitySheetModal()" (emitSave)="saveItemOpportunitySheet($event)"
-          [(opportunitySheet)]="selectedEditOpportunitySheet">
-        </app-opportunity-sheet>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div bsModal #deletedItemModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="deletedItemModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
