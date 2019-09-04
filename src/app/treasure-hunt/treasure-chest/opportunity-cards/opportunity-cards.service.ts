@@ -14,15 +14,21 @@ import { CompressedAirReductionService } from '../../../calculator/utilities/com
 import { CompressedAirPressureReductionService } from '../../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 import { WaterReductionService } from '../../../calculator/utilities/water-reduction/water-reduction.service';
 import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class OpportunityCardsService {
+
+  // opportunityCardsData: BehaviorSubject<Array<OpportunityCardData>>;
+
 
   constructor(private lightingReplacementService: LightingReplacementService, private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService,
     private electricityReductionService: ElectricityReductionService, private compressedAirReductionService: CompressedAirReductionService,
     private compressedAirPressureReductionService: CompressedAirPressureReductionService, private waterReductionService: WaterReductionService,
-    private opportunitySheetService: OpportunitySheetService) { }
+    private opportunitySheetService: OpportunitySheetService) { 
+      // this.opportunityCardsData = new BehaviorSubject(new Array());
+    }
 
   getOpportunityCardsData(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunityCardData> {
     let opportunityCardsData: Array<OpportunityCardData> = new Array();
@@ -33,9 +39,9 @@ export class OpportunityCardsService {
     let compressedAirReductionData: Array<OpportunityCardData> = this.getCompressedAirReductions(treasureHunt.compressedAirReductions, treasureHunt.currentEnergyUsage, settings);
     let compressedAirPressureReductionData: Array<OpportunityCardData> = this.getCompressedAirPressureReductions(treasureHunt.compressedAirPressureReductions, treasureHunt.currentEnergyUsage, settings);
     let waterReductionData: Array<OpportunityCardData> = this.getWaterReductions(treasureHunt.waterReductions, treasureHunt.currentEnergyUsage, settings);
-    //TODO Oppsheets
     let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloeOpportunitySheets(treasureHunt.opportunitySheets, settings, treasureHunt.currentEnergyUsage)
     opportunityCardsData = _.union(lightingReplacementsCardData, replaceExistingData, naturalGasReductionData, electricityReductionData, compressedAirReductionData, compressedAirPressureReductionData, waterReductionData, standaloneOpportunitySheetData);
+    // this.opportunityCardsData.next(opportunityCardsData);
     return opportunityCardsData;
   }
 

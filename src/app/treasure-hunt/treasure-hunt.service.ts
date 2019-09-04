@@ -57,7 +57,9 @@ export class TreasureHuntService {
 
   editLightingReplacementTreasureHuntItem(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt, index: number) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    console.log(lightingReplacementTreasureHunt.selected);
     treasureHunt.lightingReplacements[index] = lightingReplacementTreasureHunt;
+    console.log(treasureHunt.lightingReplacements[index].selected);
     this.treasureHunt.next(treasureHunt);
   }
 

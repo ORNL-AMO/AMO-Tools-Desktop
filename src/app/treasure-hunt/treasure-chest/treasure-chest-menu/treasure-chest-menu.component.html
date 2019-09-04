@@ -1,30 +1,3 @@
-<!-- <div class="row">
-  <div class="col-5">
-    <div class="form-group">
-      <label for="energyType" class="large w-100">Utility Type</label>
-      <select class="form-control w-100" id="energyType" [(ngModel)]="displayEnergyType" (change)="setEnergyType()">
-        <option *ngFor="let option of energyTypeOptions" [ngValue]="option.value">{{option.value}} ({{option.numCalcs}})
-        </option>
-      </select>
-    </div>
-  </div>
-  <div class="col-5">
-    <div class="form-group">
-      <label for="calculatorType" class="large w-100">Calculator Type</label>
-      <select class="form-control w-100" id="calculatorType" (change)="setCalculatorType()"
-        [(ngModel)]="displayCalculatorType">
-        <option *ngFor="let option of calculatorTypeOptions" [ngValue]="option.value">{{option.value}}
-          ({{option.numCalcs}})</option>
-      </select>
-    </div>
-  </div>
-  <div class="col-2">
-    <div class="d-flex h-100 align-items-center">
-      <button class="btn btn-sm btn-secondary" (click)="showImportExport()">Import/Export Opportunities</button>
-    </div>
-  </div>
-</div> -->
-
 <nav class="navbar" #navbar>
   <div class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" (click)="toggleSortBy()">
@@ -72,7 +45,7 @@
     <div class="btn-group">
       <button type="button" class="nav-btn">Import</button>
       <button type="button" class="nav-btn middle">Export</button>
-      <button type="button" class="nav-btn">Select All</button>
+      <button type="button" class="nav-btn" (click)="selectAll()">Select All</button>
     </div>
   </div>
 
