@@ -63,6 +63,11 @@ export class CalculatorsComponent implements OnInit {
     this.opportunitySheetModal.hide();
   }
 
+  saveItemOpportunitySheet(updatedOpportunitySheet: OpportunitySheet){
+    this.calculatorOpportunitySheet = updatedOpportunitySheet;
+    this.hideOpportunitySheetModal();
+  }
+
   confirmSaveCalc() {
     if (this.selectedCalc == 'lighting-replacement') {
       this.confirmSaveLighting();
