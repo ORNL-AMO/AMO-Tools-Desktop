@@ -1,4 +1,3 @@
-<!--edit calcs-->
 <app-lighting-replacement *ngIf="selectedCalc == 'lighting-replacement'" [inTreasureHunt]="true"
   (emitSave)="saveLighting($event)" (emitCancel)="cancelEditLighting()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
@@ -8,40 +7,40 @@
   (emitSave)="saveEditOpportunity($event)" [settings]="settings" [(opportunitySheet)]="selectedEditOpportunitySheet">
 </app-standalone-opportunity-sheet> -->
 
-<app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="cancelEditCalc()"
-  (emitSave)="saveEditReplaceExistingMotor($event)" [settings]="settings" [inTreasureHunt]="true"
-  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+<app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="cancelReplaceExisting()"
+  (emitSave)="saveReplaceExisting($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="treasureHunt.operatingHours" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
 </app-replace-existing>
 
-<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="cancelEditCalc()"
-  (emitSave)="saveEditMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
-  [opperatingHours]="opperatingHoursPerYear" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
+<app-motor-drive *ngIf="selectedCalc == 'motor-drive'" (emitCancel)="cancelMotorDrive()"
+  (emitSave)="saveMotorDrive($event)" [settings]="settings" [inTreasureHunt]="true"
+  [opperatingHours]="treasureHunt.operatingHours" (emitAddOpportunitySheet)="showOpportunitySheetModal()">
 </app-motor-drive>
 
 <app-natural-gas-reduction *ngIf="selectedCalc == 'natural-gas-reduction'" [inTreasureHunt]="true"
   (emitSave)="saveEditNaturalGasReduction($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-natural-gas-reduction>
+  [operatingHours]="treasureHunt.operatingHours"></app-natural-gas-reduction>
 
 <app-electricity-reduction *ngIf="selectedCalc == 'electricity-reduction'" [inTreasureHunt]="true"
   (emitSave)="saveEditElectricityReduction($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-electricity-reduction>
+  [operatingHours]="treasureHunt.operatingHours"></app-electricity-reduction>
 
 <app-compressed-air-reduction *ngIf="selectedCalc == 'compressed-air-reduction'" [inTreasureHunt]="true"
   (emitSave)="saveEditCompressedAirReduction($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-compressed-air-reduction>
+  [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-reduction>
 
 <app-compressed-air-pressure-reduction *ngIf="selectedCalc == 'compressed-air-pressure-reduction'"
   [inTreasureHunt]="true" (emitSave)="saveEditCompressedAirPressureReduction($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-compressed-air-pressure-reduction>
+  [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-pressure-reduction>
 
 <app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
   (emitSave)="saveEditWaterReduction($event)" (emitCancel)="cancelEditCalc()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="opperatingHoursPerYear"></app-water-reduction>
+  [operatingHours]="treasureHunt.operatingHours"></app-water-reduction>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
@@ -54,17 +53,17 @@
         </button> -->
       </div>
       <div class="modal-body text-center" *ngIf="itemType != 'opportunitySheet'">
-        <p class="help-text" *ngIf="!selectedEditOpportunitySheet">There is no opportunity sheet filled out for this
+        <p class="help-text" *ngIf="!calculatorOpportunitySheet">There is no opportunity sheet filled out for this
           opportunity. Would you like to add one
           before saving?</p>
-        <p class="help-text" *ngIf="selectedEditOpportunitySheet">Would you like to edit your opportunity sheet before
+        <p class="help-text" *ngIf="calculatorOpportunitySheet">Would you like to edit your opportunity sheet before
           saving?</p>
         <a class="click-link" (click)="showOpportunitySheetModal()">
           <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="save-opportunity">
         </a> <br>
-        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="!selectedEditOpportunitySheet">+Add
+        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="!calculatorOpportunitySheet">+Add
           Opportunity Sheet</a>
-        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="selectedEditOpportunitySheet">Edit
+        <a class="click-link small" (click)="showOpportunitySheetModal()" *ngIf="calculatorOpportunitySheet">Edit
           Opportunity Sheet</a>
       </div>
       <div class="modal-body text-center" *ngIf="itemType == 'opportunitySheet'">
@@ -74,7 +73,7 @@
       </div>
       <div class="modal-footer p-1">
         <button class="btn btn-danger btn-sm pull-right" (click)="hideSaveCalcModal()">Cancel</button>
-        <button class="btn btn-primary btn-sm pull-right" (click)="saveEditCalc()"
+        <button class="btn btn-primary btn-sm pull-right" (click)="confirmSaveCalc()"
           *ngIf="itemType != 'opportunitySheet'">Save</button>
         <button class="btn btn-primary btn-sm pull-right" (click)="saveEditOpportunitySheet()"
           *ngIf="itemType == 'opportunitySheet'">Save</button>

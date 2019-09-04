@@ -63,7 +63,7 @@
     <!--replace existing motor-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-      class="card calc-card-item motors m-2" (click)="selectCalc('replace-existing')">
+      class="card calc-card-item motors m-2" (click)="selectReplaceExisting()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon-div d-flex justify-content-center align-items-center">
           <img class="calc-img" src="assets/images/calculator-icons/motor-icons/replace.png">
@@ -78,7 +78,7 @@
     <!--upgrade motor drive-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-      class="card calc-card-item motors m-2" (click)="selectCalc('motor-drive')">
+      class="card calc-card-item motors m-2" (click)="selectMotorDrive()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon-div d-flex justify-content-center align-items-center">
           <img class="calc-img" src="assets/images/calculator-icons/motor-icons/motor-drive.png">
@@ -93,7 +93,7 @@
     <!--natural gas reduction-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Natural Gas') && treasureHunt.currentEnergyUsage.naturalGasUsed == true"
-      class="card calc-card-item m-2" (click)="selectCalc('natural-gas-reduction')">
+      class="card calc-card-item m-2" (click)="selectNaturalGas()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
           <img src="assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png" class="calc-img">
@@ -107,7 +107,7 @@
     <!--electricity reduction-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && treasureHunt.currentEnergyUsage.electricityUsed == true"
-      class="card calc-card-item m-2" (click)="selectCalc('electricity-reduction')">
+      class="card calc-card-item m-2" (click)="selectElectricityReduction()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
           <img src="assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png" class="calc-img">
@@ -121,7 +121,7 @@
     <!--compressed air reduction-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity' || displayCalculatorType == 'Compressed Air') && (treasureHunt.currentEnergyUsage.electricityUsed == true || treasureHunt.currentEnergyUsage.compressedAirUsed == true)"
-      class="card calc-card-item m-2" (click)="selectCalc('compressed-air-reduction')">
+      class="card calc-card-item m-2" (click)="selectCompressedAirReduction()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
           <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png" class="calc-img">
@@ -135,7 +135,7 @@
     <!--compressed air reduction-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Electricity') && (treasureHunt.currentEnergyUsage.electricityUsed == true)"
-      class="card calc-card-item m-2" (click)="selectCalc('compressed-air-pressure-reduction')">
+      class="card calc-card-item m-2" (click)="selectCompressedAirPressureReduction()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
           <img src="assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png"
@@ -151,7 +151,7 @@
     <!--water reduction-->
     <div
       *ngIf="(displayCalculatorType == 'All' || displayCalculatorType == 'Waste Water' || displayCalculatorType == 'Water') && (treasureHunt.currentEnergyUsage.waterUsed == true || treasureHunt.currentEnergyUsage.wasteWaterUsed == true)"
-      class="card calc-card-item m-2" (click)="selectCalc('water-reduction')">
+      class="card calc-card-item m-2" (click)="selectWaterReduction()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
           <img src="assets/images/calculator-icons/utilities-icons/water-reduction-icon.png" class="calc-img">
@@ -164,7 +164,7 @@
       </div>
     </div>
     <!--stand alone opp sheet-->
-    <div class="card calc-card-item m-2" (click)="selectCalc('opportunity-sheet')">
+    <div class="card calc-card-item m-2" (click)="selectOpportunitySheet()">
       <div class="card-body d-flex flex-column p-2 align-items-center">
         <div class="calc-icon d-flex justify-content-center align-items-center">
           <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-img">
@@ -181,7 +181,7 @@
 
 <app-calculators *ngIf="selectedCalc != 'none'" [settings]="settings"></app-calculators>
 
-<div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+<!-- <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -189,7 +189,7 @@
         <h5 class="mb-0">Save Opportunity</h5>
         <!-- <button class="close" (click)="closeSaveCalcModal()">
           <span aria-hidden="true">&times;</span>
-        </button> -->
+        </button> --
       </div>
       <div class="modal-body text-center">
         <p class="help-text" *ngIf="showOpportunitySheetOnSave">There is no opportunity sheet filled out for this
@@ -226,4 +226,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
