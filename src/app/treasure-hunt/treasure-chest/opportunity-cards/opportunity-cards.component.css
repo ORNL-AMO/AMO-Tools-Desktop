@@ -54,3 +54,14 @@
       padding-left: .25rem;
       padding-right: .25rem;
     }
+
+    .modal-footer .btn.btn-sm{
+      padding: 6px;
+  }
+  
+
+  .modal-dialog{
+    top: 0px;
+    min-width: 750px;
+}
+  

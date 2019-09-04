@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { TreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunityCardsService, OpportunityCardData } from './opportunity-cards.service';
 import { CalculatorsService } from '../../calculators/calculators.service';
@@ -17,11 +17,13 @@ export class OpportunityCardsComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('deletedItemModal') public deletedItemModal: ModalDirective;
+  @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
 
   opportunityCardsData: Array<OpportunityCardData>;
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
   deleteOpportunity: OpportunityCardData;
+  editOpportunitySheetCardData: OpportunityCardData;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
@@ -90,5 +92,54 @@ export class OpportunityCardsComponent implements OnInit {
       this.treasureHuntService.deleteWaterReductionsItem(this.deleteOpportunity.opportunityIndex);
     }
     this.hideDeleteItemModal();
+  }
+
+  editOpportunitySheet(cardData: OpportunityCardData) {
+    this.editOpportunitySheetCardData = cardData;
+    this.showOpportunitySheetModal();
+  }
+
+  showOpportunitySheetModal() {
+    this.opportunitySheetModal.show();
+  }
+  hideOpportunitySheetModal() {
+    this.opportunitySheetModal.hide();
+    this.editOpportunitySheetCardData = undefined;
+  }
+
+  saveItemOpportunitySheet(updatedOpportunitySheet: OpportunitySheet) {
+    if (this.editOpportunitySheetCardData.opportunityType == 'lighting-replacement') {
+      this.editOpportunitySheetCardData.lightingReplacement.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editLightingReplacementTreasureHuntItem(this.editOpportunitySheetCardData.lightingReplacement, this.editOpportunitySheetCardData.opportunityIndex);
+
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'replace-existing') {
+      this.editOpportunitySheetCardData.replaceExistingMotor.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editReplaceExistingMotorsItem(this.editOpportunitySheetCardData.replaceExistingMotor, this.editOpportunitySheetCardData.opportunityIndex);
+
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'motor-drive') {
+      this.editOpportunitySheetCardData.motorDrive.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editMotorDrivesItem(this.editOpportunitySheetCardData.motorDrive, this.editOpportunitySheetCardData.opportunityIndex);
+
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'natural-gas-reduction') {
+      this.editOpportunitySheetCardData.naturalGasReduction.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editNaturalGasReductionsItem(this.editOpportunitySheetCardData.naturalGasReduction, this.editOpportunitySheetCardData.opportunityIndex);
+
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'electricity-reduction') {
+      this.editOpportunitySheetCardData.electricityReduction.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editElectricityReductionsItem(this.editOpportunitySheetCardData.electricityReduction, this.editOpportunitySheetCardData.opportunityIndex);
+
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'compressed-air-reduction') {
+      this.editOpportunitySheetCardData.compressedAirReduction.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editCompressedAirReductionsItem(this.editOpportunitySheetCardData.compressedAirReduction, this.editOpportunitySheetCardData.opportunityIndex);
+
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'compressed-air-pressure-reduction') {
+      this.editOpportunitySheetCardData.compressedAirPressureReduction.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editCompressedAirPressureReductionsItem(this.editOpportunitySheetCardData.compressedAirPressureReduction, this.editOpportunitySheetCardData.opportunityIndex);
+
+    } else if (this.editOpportunitySheetCardData.opportunityType == 'water-reduction') {
+      this.editOpportunitySheetCardData.waterReduction.opportunitySheet = updatedOpportunitySheet;
+      this.treasureHuntService.editWaterReductionsItem(this.editOpportunitySheetCardData.waterReduction, this.editOpportunitySheetCardData.opportunityIndex);
+    }
+    this.hideOpportunitySheetModal();
   }
 }

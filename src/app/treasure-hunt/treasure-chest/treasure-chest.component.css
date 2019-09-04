@@ -1,28 +1,3 @@
-.summary-item{
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-
-
-
-.report-btn{
-    font-size: small;
-    padding: 6px;
-    background-color: #2E4053;
-  }
-
-  .modal-dialog{
-    top: 0px;
-    min-width: 750px;
-}
-
-
-.modal-footer .btn.btn-sm{
-    padding: 6px;
-}
-
-
 .chest-column{
     width: 65%;
 }
@@ -31,33 +6,10 @@
     width: 35%;
 }
 
-.card.header-card{
-    padding: .25rem;
-    font-size: small;
-    font-weight: bold;
-}
-
-.col-item-br{
-    border-right: solid;
-}
-
-.delete-modal .btn{
-    padding: 6px;
-}
-
-.small.danger{
-    color: red;    
-}
-
-
 .skyline{
     background-image: url('../../../assets/images/industrial-skyline.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: bottom center; 
     background-size: 100%;
-}
-
-.save-opportunity{
-    width: 75px;
 }
