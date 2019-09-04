@@ -12,9 +12,27 @@ import { CompressedAirPressureReductionModule } from '../../calculator/utilities
 import { LightingReplacementModule } from '../../calculator/lighting/lighting-replacement/lighting-replacement.module';
 import { ModalModule } from 'ngx-bootstrap';
 
+import { OpportunitySheetHelpComponent } from './standalone-opportunity-sheet/opportunity-sheet-help/opportunity-sheet-help.component';
+import { OpportunitySheetResultsComponent } from './standalone-opportunity-sheet/opportunity-sheet-results/opportunity-sheet-results.component';
+import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
+import { OpportunitySheetComponent } from './opportunity-sheet/opportunity-sheet.component';
+import { CostsFormComponent } from './opportunity-sheet/costs-form/costs-form.component';
+import { GeneralDetailsFormComponent } from './opportunity-sheet/general-details-form/general-details-form.component';
+import { StandaloneOpportunitySheetComponent } from './standalone-opportunity-sheet/standalone-opportunity-sheet.component';
+import { EnergyUseFormComponent } from './standalone-opportunity-sheet/energy-use-form/energy-use-form.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
+
 @NgModule({
   declarations: [
-    CalculatorsComponent
+    CalculatorsComponent,
+    StandaloneOpportunitySheetComponent,
+    OpportunitySheetHelpComponent,
+    OpportunitySheetResultsComponent,
+    EnergyUseFormComponent,
+    CostsFormComponent,
+    GeneralDetailsFormComponent,
+    OpportunitySheetComponent
   ],
   imports: [
     CommonModule,
@@ -26,13 +44,16 @@ import { ModalModule } from 'ngx-bootstrap';
     CompressedAirReductionModule,
     WaterReductionModule,
     CompressedAirPressureReductionModule,
-    LightingReplacementModule
+    LightingReplacementModule,
+    FormsModule
   ],
   providers: [
-    CalculatorsService
+    CalculatorsService,
+    OpportunitySheetService
   ],
   exports: [
-    CalculatorsComponent
+    CalculatorsComponent,
+    OpportunitySheetComponent,
   ]
 })
 export class CalculatorsModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-energy-use-form',

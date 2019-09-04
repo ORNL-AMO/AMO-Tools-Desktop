@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { OpportunitySheet } from '../../../shared/models/treasure-hunt';
+import { OpportunitySheet } from '../../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-general-details-form',

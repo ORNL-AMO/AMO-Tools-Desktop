@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OpportunitySheetResults, OpportunitySheet } from '../../../shared/models/treasure-hunt';
+import { OpportunitySheetResults, OpportunitySheet } from '../../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-opportunity-sheet-results',

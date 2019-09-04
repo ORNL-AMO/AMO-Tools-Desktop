@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, OpportunityCost } from '../../shared/models/treasure-hunt';
-import { Settings } from '../../shared/models/settings';
+import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, OpportunityCost } from '../../../shared/models/treasure-hunt';
+import { Settings } from '../../../shared/models/settings';
 import * as _ from 'lodash';
 
 @Injectable()
 export class OpportunitySheetService {
 
+  opportunitySheet: OpportunitySheet;
   constructor() { }
 
 

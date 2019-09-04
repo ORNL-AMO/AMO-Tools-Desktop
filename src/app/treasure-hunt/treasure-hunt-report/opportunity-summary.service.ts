@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OpportunitySheetService } from '../standalone-opportunity-sheet/opportunity-sheet.service';
+import { OpportunitySheetService } from '../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
 import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';

@@ -3,9 +3,9 @@
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-lighting-replacement>
 
-<!-- <app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="cancelEditCalc()"
-  (emitSave)="saveEditOpportunity($event)" [settings]="settings" [(opportunitySheet)]="selectedEditOpportunitySheet">
-</app-standalone-opportunity-sheet> -->
+<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="cancelStandaloneOpportunitySheet()"
+  (emitSave)="saveStandaloneOpportunitySheet($event)" [settings]="settings">
+</app-standalone-opportunity-sheet>
 
 <app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="cancelReplaceExisting()"
   (emitSave)="saveReplaceExisting($event)" [settings]="settings" [inTreasureHunt]="true"
@@ -18,27 +18,27 @@
 </app-motor-drive>
 
 <app-natural-gas-reduction *ngIf="selectedCalc == 'natural-gas-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveEditNaturalGasReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitSave)="saveNaturalGasReduction($event)" (emitCancel)="cancelNaturalGasReduction()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-natural-gas-reduction>
 
 <app-electricity-reduction *ngIf="selectedCalc == 'electricity-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveEditElectricityReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitSave)="saveElectricityReduction($event)" (emitCancel)="cancelElectricityReduction()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-electricity-reduction>
 
 <app-compressed-air-reduction *ngIf="selectedCalc == 'compressed-air-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveEditCompressedAirReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitSave)="saveCompressedAirReduction($event)" (emitCancel)="cancelCompressedAirReduction()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-reduction>
 
 <app-compressed-air-pressure-reduction *ngIf="selectedCalc == 'compressed-air-pressure-reduction'"
-  [inTreasureHunt]="true" (emitSave)="saveEditCompressedAirPressureReduction($event)" (emitCancel)="cancelEditCalc()"
-  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
-  [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-pressure-reduction>
+  [inTreasureHunt]="true" (emitSave)="saveCompressedAirPressureReduction($event)"
+  (emitCancel)="cancelCompressedAirPressureReduction()" (emitAddOpportunitySheet)="showOpportunitySheetModal()"
+  [settings]="settings" [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-pressure-reduction>
 
 <app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
-  (emitSave)="saveEditWaterReduction($event)" (emitCancel)="cancelEditCalc()"
+  (emitSave)="saveWaterReduction($event)" (emitCancel)="cancelWaterReduction()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-water-reduction>
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { OpportunitySheet } from '../../shared/models/treasure-hunt';
-import { TreasureHuntService } from '../treasure-hunt.service';
+import { OpportunitySheet } from '../../../shared/models/treasure-hunt';
+import { TreasureHuntService } from '../../treasure-hunt.service';
 
 @Component({
   selector: 'app-opportunity-sheet',

@@ -13,7 +13,7 @@ import { ElectricityReductionService } from '../../../calculator/utilities/elect
 import { CompressedAirReductionService } from '../../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 import { CompressedAirPressureReductionService } from '../../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 import { WaterReductionService } from '../../../calculator/utilities/water-reduction/water-reduction.service';
-import { OpportunitySheetService } from '../../standalone-opportunity-sheet/opportunity-sheet.service';
+import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
 
 @Injectable()
 export class OpportunityCardsService {

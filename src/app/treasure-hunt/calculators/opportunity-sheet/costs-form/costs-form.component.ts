@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { OpportunityCost } from '../../../shared/models/treasure-hunt';
+import { OpportunityCost } from '../../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-costs-form',

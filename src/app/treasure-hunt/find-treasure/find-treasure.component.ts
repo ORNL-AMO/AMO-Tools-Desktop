@@ -1,8 +1,6 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt } from '../../shared/models/treasure-hunt';
-import { ModalDirective } from 'ngx-bootstrap';
+import { Component, OnInit, Input } from '@angular/core';
+import { TreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
-import { ReplaceExistingData, MotorDriveInputs } from '../../shared/models/calculators';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from '../treasure-hunt.service';
@@ -15,10 +13,6 @@ import { TreasureHuntService } from '../treasure-hunt.service';
 export class FindTreasureComponent implements OnInit {
   @Input()
   settings: Settings;
-
-  // @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
-  // @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
-
 
   showOpportunitySheetOnSave: boolean;
   displayCalculatorType: string = 'All';
@@ -76,6 +70,6 @@ export class FindTreasureComponent implements OnInit {
   }
 
   selectOpportunitySheet(){
-    // this.calculatorsService.addNewCompressedAirPres
+    this.calculatorsService.addNewOpportunitySheet();
   }
 }

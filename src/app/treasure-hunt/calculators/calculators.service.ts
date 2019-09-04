@@ -9,6 +9,7 @@ import { ElectricityReductionService } from '../../calculator/utilities/electric
 import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
+import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -20,7 +21,7 @@ export class CalculatorsService {
   constructor(private lightingReplacementService: LightingReplacementService, private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService, private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
-    private waterReductionService: WaterReductionService) {
+    private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
   cancelCalc() {
@@ -57,7 +58,21 @@ export class CalculatorsService {
     this.cancelCalc();
   }
   //opportunitySheet
-  editOpportunitySheetItem
+  addNewOpportunitySheet() {
+    this.isNewOpportunity = true;
+    this.opportunitySheetService.opportunitySheet = undefined;
+    this.selectedCalc.next('opportunity-sheet');
+  }
+  editOpportunitySheetItem(opportunitySheet: OpportunitySheet, index: number) {
+    this.isNewOpportunity = false;
+    this.opportunitySheetService.opportunitySheet = opportunitySheet;
+    this.itemIndex = index;
+    this.selectedCalc.next('opportunity-sheet');
+  }
+  cancelOpportunitySheet() {
+    this.opportunitySheetService.opportunitySheet = undefined;
+    this.cancelCalc();
+  }
 
   //replace existing
   addNewReplaceExistingMotor() {

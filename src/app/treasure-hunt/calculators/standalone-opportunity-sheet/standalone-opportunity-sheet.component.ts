@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEmitter, Input } from '@angular/core';
-import { OpportunitySheet, OpportunitySheetResults } from '../../shared/models/treasure-hunt';
-import { TreasureHuntService } from '../treasure-hunt.service';
-import { Settings } from '../../shared/models/settings';
+import { OpportunitySheet, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
+import { TreasureHuntService } from '../../treasure-hunt.service';
+import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from './opportunity-sheet.service';
 
 @Component({
@@ -12,8 +12,6 @@ import { OpportunitySheetService } from './opportunity-sheet.service';
 export class StandaloneOpportunitySheetComponent implements OnInit {
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Input()
-  opportunitySheet: OpportunitySheet;
   @Output('emitSave')
   emitSave = new EventEmitter<OpportunitySheet>();
   @Input()
@@ -30,10 +28,13 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   tabSelect: string = 'help';
   opportunitySheetResults: OpportunitySheetResults;
   currentField: string = 'default';
+  opportunitySheet: OpportunitySheet;
   constructor(private treasureHuntService: TreasureHuntService, private opportunitySheetService: OpportunitySheetService) { }
 
   ngOnInit() {
-    if (!this.opportunitySheet) {
+    if (this.opportunitySheetService.opportunitySheet) {
+      this.opportunitySheet = this.opportunitySheetService.opportunitySheet;
+    } else {
       this.opportunitySheet = this.treasureHuntService.initOpportunitySheet();
     }
     this.getResults();
@@ -83,7 +84,7 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
     this.opportunitySheetResults = this.opportunitySheetService.getResults(this.opportunitySheet, this.settings);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.currentField = str;
   }
 }

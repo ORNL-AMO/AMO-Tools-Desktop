@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHunt, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import { OpportunitySheetService } from '../../standalone-opportunity-sheet/opportunity-sheet.service';
+import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
 import * as _ from 'lodash';
 import { OpportunitySummaryService } from '../../treasure-hunt-report/opportunity-summary.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';

@@ -38,21 +38,21 @@ export class OpportunityCardsComponent implements OnInit {
   editOpportunity(opportunityCard: OpportunityCardData) {
     if (opportunityCard.opportunityType == 'lighting-replacement') {
       this.calculatorsService.editLightingReplacementItem(opportunityCard.lightingReplacement, opportunityCard.opportunityIndex);
-    } else if (this.deleteOpportunity.opportunityType == 'opportunity-sheet') {
+    } else if (opportunityCard.opportunityType == 'opportunity-sheet') {
       this.calculatorsService.editOpportunitySheetItem(opportunityCard.opportunitySheet, opportunityCard.opportunityIndex);
-    } else if (this.deleteOpportunity.opportunityType == 'replace-existing') {
+    } else if (opportunityCard.opportunityType == 'replace-existing') {
       this.calculatorsService.editReplaceExistingMotorsItem(opportunityCard.replaceExistingMotor, opportunityCard.opportunityIndex);
-    } else if (this.deleteOpportunity.opportunityType == 'motor-drive') {
+    } else if (opportunityCard.opportunityType == 'motor-drive') {
       this.calculatorsService.editMotorDrivesItem(opportunityCard.motorDrive, opportunityCard.opportunityIndex);
-    } else if (this.deleteOpportunity.opportunityType == 'natural-gas-reduction') {
+    } else if (opportunityCard.opportunityType == 'natural-gas-reduction') {
       this.calculatorsService.editNaturalGasReductionsItem(opportunityCard.naturalGasReduction, opportunityCard.opportunityIndex);
-    } else if (this.deleteOpportunity.opportunityType == 'electricity-reduction') {
+    } else if (opportunityCard.opportunityType == 'electricity-reduction') {
       this.calculatorsService.editElectricityReductionsItem(opportunityCard.electricityReduction, opportunityCard.opportunityIndex);
-    } else if (this.deleteOpportunity.opportunityType == 'compressed-air-reduction') {
+    } else if (opportunityCard.opportunityType == 'compressed-air-reduction') {
       this.calculatorsService.editCompressedAirReductionsItem(opportunityCard.compressedAirReduction, opportunityCard.opportunityIndex);
-    } else if (this.deleteOpportunity.opportunityType == 'compressed-air-pressure-reduction') {
+    } else if (opportunityCard.opportunityType == 'compressed-air-pressure-reduction') {
       this.calculatorsService.editCompressedAirPressureReductionsItem(opportunityCard.compressedAirPressureReduction, opportunityCard.opportunityIndex);
-    } else if (this.deleteOpportunity.opportunityType == 'water-reduction') {
+    } else if (opportunityCard.opportunityType == 'water-reduction') {
       this.calculatorsService.editWaterReductionsItem(opportunityCard.waterReduction, opportunityCard.opportunityIndex);
     }
   }

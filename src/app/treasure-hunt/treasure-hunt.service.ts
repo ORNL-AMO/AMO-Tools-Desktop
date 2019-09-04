@@ -67,7 +67,7 @@ export class TreasureHuntService {
     this.treasureHunt.next(treasureHunt);
   }
   // opportunitySheets
-  addOpportunitySheetsItem(opportunitySheetsItem: OpportunitySheet) {
+  addNewOpportunitySheetsItem(opportunitySheetsItem: OpportunitySheet) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     if (!treasureHunt.opportunitySheets) {
       treasureHunt.opportunitySheets = new Array();
