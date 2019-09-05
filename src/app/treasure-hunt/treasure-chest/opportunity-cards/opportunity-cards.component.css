@@ -73,10 +73,6 @@
   padding: .25rem;
 }
 
-.data-card{
-  margin-bottom: .25rem;
-}
-
 td{
   font-size: small;
   padding: 3px;
@@ -92,6 +88,9 @@ td{
 
 tr.active{
   font-weight: bold;
-  background-color: #2E4053;
-  color: white;
+}
+
+.input-group-prepend{
+  align-items: center;
+  padding-right: 5px;
 }

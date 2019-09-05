@@ -172,37 +172,37 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   toggleSelected(cardData: OpportunityCardData) {
-    cardData.selected = !cardData.selected;
+    // cardData.selected = !cardData.selected;
     if (cardData.opportunityType == 'lighting-replacement') {
-      cardData.lightingReplacement.selected = !cardData.lightingReplacement.selected;
+      cardData.lightingReplacement.selected = cardData.selected;
       this.treasureHuntService.editLightingReplacementTreasureHuntItem(cardData.lightingReplacement, cardData.opportunityIndex);
 
     } else if (cardData.opportunityType == 'replace-existing') {
-      cardData.replaceExistingMotor.selected = !cardData.replaceExistingMotor.selected;
+      cardData.replaceExistingMotor.selected = cardData.selected;
       this.treasureHuntService.editReplaceExistingMotorsItem(cardData.replaceExistingMotor, cardData.opportunityIndex);
 
     } else if (cardData.opportunityType == 'motor-drive') {
-      cardData.motorDrive.selected = !cardData.motorDrive.selected;
+      cardData.motorDrive.selected = cardData.selected;
       this.treasureHuntService.editMotorDrivesItem(cardData.motorDrive, cardData.opportunityIndex);
 
     } else if (cardData.opportunityType == 'natural-gas-reduction') {
-      cardData.naturalGasReduction.selected = !cardData.naturalGasReduction.selected;
+      cardData.naturalGasReduction.selected = cardData.selected;
       this.treasureHuntService.editNaturalGasReductionsItem(cardData.naturalGasReduction, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'electricity-reduction') {
-      cardData.electricityReduction.selected = !cardData.electricityReduction.selected;
+      cardData.electricityReduction.selected = cardData.selected
       this.treasureHuntService.editElectricityReductionsItem(cardData.electricityReduction, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'compressed-air-reduction') {
-      cardData.compressedAirReduction.selected = !cardData.compressedAirReduction.selected;
+      cardData.compressedAirReduction.selected = cardData.selected;
       this.treasureHuntService.editCompressedAirReductionsItem(cardData.compressedAirReduction, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'compressed-air-pressure-reduction') {
-      cardData.compressedAirPressureReduction.selected = !cardData.compressedAirPressureReduction.selected;
+      cardData.compressedAirPressureReduction.selected = cardData.selected;
       this.treasureHuntService.editCompressedAirPressureReductionsItem(cardData.compressedAirPressureReduction, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'water-reduction') {
-      cardData.waterReduction.selected = !cardData.waterReduction.selected;
+      cardData.waterReduction.selected = cardData.selected;
       this.treasureHuntService.editWaterReductionsItem(cardData.waterReduction, cardData.opportunityIndex, this.settings);
     }
   }
