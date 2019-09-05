@@ -11,10 +11,9 @@ export class OpportunityCardsService {
 
   updatedOpportunityCard: BehaviorSubject<OpportunityCardData>;
   // opportunityCards: BehaviorSubject<Array<OpportunityCardData>>;
-  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService) 
-    {
-      this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
-      // this.opportunityCards = new BehaviorSubject(new Array());
+  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService) {
+    this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
+    // this.opportunityCards = new BehaviorSubject(new Array());
   }
 
   getOpportunityCardsData(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunityCardData> {
@@ -67,7 +66,8 @@ export class OpportunityCardsService {
       lightingReplacement: lightingReplacement,
       name: opportunitySummary.opportunityName,
       opportunitySheet: lightingReplacement.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png'
+      iconString: 'assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png',
+      teamName: this.getTeamName(lightingReplacement.opportunitySheet)
     }
     return cardData;
   }
@@ -101,7 +101,8 @@ export class OpportunityCardsService {
       opportunitySheet: oppSheet,
       name: opportunitySummary.opportunityName,
       iconString: 'assets/images/calculator-icons/opportunity-sheet-icon.png',
-      utilityType: energyData.utilityTypes
+      utilityType: energyData.utilityTypes,
+      teamName: this.getTeamName(oppSheet)
     }
     return cardData;
   }
@@ -286,7 +287,8 @@ export class OpportunityCardsService {
       replaceExistingMotor: replaceExistingMotor,
       name: opportunitySummary.opportunityName,
       opportunitySheet: replaceExistingMotor.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/motor-icons/replace.png'
+      iconString: 'assets/images/calculator-icons/motor-icons/replace.png',
+      teamName: this.getTeamName(replaceExistingMotor.opportunitySheet)
     };
     return cardData;
   }
@@ -327,7 +329,8 @@ export class OpportunityCardsService {
       motorDrive: drive,
       name: opportunitySummary.opportunityName,
       opportunitySheet: drive.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/motor-icons/motor-drive.png'
+      iconString: 'assets/images/calculator-icons/motor-icons/motor-drive.png',
+      teamName: this.getTeamName(drive.opportunitySheet)
     }
     return cardData;
   }
@@ -371,7 +374,8 @@ export class OpportunityCardsService {
       naturalGasReduction: naturalGasReduction,
       name: opportunitySummary.opportunityName,
       opportunitySheet: naturalGasReduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png'
+      iconString: 'assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png',
+      teamName: this.getTeamName(naturalGasReduction.opportunitySheet)
     }
     return cardData;
   }
@@ -389,7 +393,7 @@ export class OpportunityCardsService {
     }
     return opportunityCardsData;
   }
-  getElectricityReductionCard(reduction: ElectricityReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData{
+  getElectricityReductionCard(reduction: ElectricityReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     // let results: ElectricityReductionResults = this.electricityReductionService.getResults(settings, reduction.baseline, reduction.modification);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getElectricityReductionSummary(reduction, index, settings);
     let cardData: OpportunityCardData = {
@@ -411,7 +415,8 @@ export class OpportunityCardsService {
       electricityReduction: reduction,
       name: opportunitySummary.opportunityName,
       opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png'
+      iconString: 'assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png',
+      teamName: this.getTeamName(reduction.opportunitySheet)
     };
     return cardData;
   }
@@ -430,7 +435,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getCompressedAirReductionCardData(reduction: CompressedAirReductionTreasureHunt, settings: Settings, currentEnergyUsage: EnergyUsage, index: number): OpportunityCardData{
+  getCompressedAirReductionCardData(reduction: CompressedAirReductionTreasureHunt, settings: Settings, currentEnergyUsage: EnergyUsage, index: number): OpportunityCardData {
     // let results: CompressedAirReductionResults = this.compressedAirReductionService.getResults(settings, reduction.baseline, reduction.modification);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getCompressedAirReductionSummary(reduction, index, settings);
     let utilityCost: number = currentEnergyUsage.compressedAirCosts;
@@ -461,7 +466,8 @@ export class OpportunityCardsService {
       compressedAirReduction: reduction,
       name: opportunitySummary.opportunityName,
       opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png'
+      iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png',
+      teamName: this.getTeamName(reduction.opportunitySheet)
     };
     return cardData;
   }
@@ -480,7 +486,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getCompressedAirPressureReductionCardData(reduction: CompressedAirPressureReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData{
+  getCompressedAirPressureReductionCardData(reduction: CompressedAirPressureReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     // let results: CompressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(settings, reduction.baseline, reduction.modification);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getCompressedAirPressureReductionSummary(reduction, index, settings);
     let cardData: OpportunityCardData = {
@@ -502,7 +508,8 @@ export class OpportunityCardsService {
       compressedAirPressureReduction: reduction,
       name: opportunitySummary.opportunityName,
       opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png'
+      iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png',
+      teamName: this.getTeamName(reduction.opportunitySheet)
     };
     return cardData;
   }
@@ -521,7 +528,7 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
-  getWaterReductionCardData(reduction: WaterReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData{
+  getWaterReductionCardData(reduction: WaterReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     // let results: WaterReductionResults = this.waterReductionService.getResults(settings, reduction.baseline, reduction.modification);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getWaterReductionSummary(reduction, index, settings);
     let utilityCost: number = currentEnergyUsage.waterCosts;
@@ -552,7 +559,8 @@ export class OpportunityCardsService {
       waterReduction: reduction,
       name: opportunitySummary.opportunityName,
       opportunitySheet: reduction.opportunitySheet,
-      iconString: 'assets/images/calculator-icons/utilities-icons/water-reduction-icon.png'
+      iconString: 'assets/images/calculator-icons/utilities-icons/water-reduction-icon.png',
+      teamName: this.getTeamName(reduction.opportunitySheet)
     }
     return cardData;
   }
@@ -560,12 +568,21 @@ export class OpportunityCardsService {
   getPercentSavings(totalCostSavings: number, totalUtiltyCost: number): number {
     return (totalCostSavings / totalUtiltyCost) * 100;
   }
+
+  getTeamName(opportunitySheet: OpportunitySheet): string {
+    if (opportunitySheet) {
+      return opportunitySheet.owner;
+    } else {
+      return undefined;
+    }
+  }
 }
 
 
 
 
 export interface OpportunityCardData {
+  teamName: string;
   paybackPeriod: number;
   selected: boolean;
   opportunityType: string;

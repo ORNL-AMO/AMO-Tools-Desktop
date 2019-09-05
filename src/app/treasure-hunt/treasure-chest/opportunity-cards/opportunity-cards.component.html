@@ -18,23 +18,40 @@
         </div>
       </div>
       <div class="card-body d-flex w-100 p-0">
-        <!-- <div class="col-1 col-item-br">
-          <div class="row align-items-center h-100">
-            <div class="col text-center">
-
-            </div>
-          </div>
-        </div> -->
         <div class="col-4 col-item-br opportunity-name">
-          <div class="row align-items-center h-100">
-            <div class="col text-center">
-              <span>Annual Cost Savings: {{cardData.annualCostSavings | currency:'USD'}}</span><br>
-              <span *ngFor="let energySavings of cardData.annualEnergySavings">
-                Annual {{energySavings.label}} Savings: {{energySavings.savings | number:'1.0-0'}}
-                {{energySavings.energyUnit}}
-              </span>
-            </div>
-          </div>
+          <table class="table">
+            <tbody>
+              <tr class="no-border-top">
+                <td>
+                  Owner/Lead/Team
+                </td>
+                <td>
+                  <span *ngIf="cardData.teamName">{{cardData.teamName}}</span>
+                  <span *ngIf="!cardData.teamName">&mdash;</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Annual Cost Savings</td>
+                <td>{{cardData.annualCostSavings | currency:'USD'}}</td>
+              </tr>
+              <tr *ngFor="let energySavings of cardData.annualEnergySavings">
+                <td>
+                  Annual {{energySavings.label}} Savings
+                </td>
+                <td>
+                  {{energySavings.savings | number:'1.0-0'}} {{energySavings.energyUnit}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Payback Period
+                </td>
+                <td>
+                  {{cardData.paybackPeriod | number:'1.2-2'}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div class="col-4 col-item-br"
           [ngClass]="{'col-3': cardData.opportunityType != 'opportunity-sheet', 'col-5': cardData.opportunityType == 'opportunity-sheet'}">

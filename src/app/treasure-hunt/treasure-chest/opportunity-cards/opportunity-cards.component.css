@@ -76,3 +76,16 @@
 .data-card{
   margin-bottom: .25rem;
 }
+
+td{
+  font-size: small;
+  padding: 3px;
+}
+
+.table{
+  margin-bottom: 0px;
+}
+
+.no-border-top td{
+  border-top: none;
+}
