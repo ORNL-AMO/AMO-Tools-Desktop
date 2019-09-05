@@ -43,6 +43,7 @@ export class TreasureChestComponent implements OnInit {
     private calculatorsService: CalculatorsService) { }
 
   ngOnInit() {
+    console.log('init');
     this.selectedCalcSubscription = this.calculatorsService.selectedCalc.subscribe(val => {
       this.selectedCalc = val;
     });
@@ -53,6 +54,7 @@ export class TreasureChestComponent implements OnInit {
 
   ngOnDestroy(){
     this.selectedCalcSubscription.unsubscribe();
+    this.treasureHuntSub.unsubscribe();
   }
 
   //utilities

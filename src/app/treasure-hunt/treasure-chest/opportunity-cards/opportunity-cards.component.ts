@@ -24,20 +24,28 @@ export class OpportunityCardsComponent implements OnInit {
   treasureHunt: TreasureHunt;
   deleteOpportunity: OpportunityCardData;
   editOpportunitySheetCardData: OpportunityCardData;
+  updateData: boolean = true;
+  modifyDataIndex: number;
+  updateOpportunityCardSub: Subscription;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
-    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
-      this.treasureHunt = val;
-      this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
+    this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
+    this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
+    this.updateOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(val => {
+      if (val) {
+        this.opportunityCardsData[this.modifyDataIndex] = val;
+        this.opportunityCardsService.updatedOpportunityCard.next(undefined);
+      }
     });
   }
 
   ngOnDestroy() {
-    this.treasureHuntSub.unsubscribe();
+    this.updateOpportunityCardSub.unsubscribe();
   }
 
-  editOpportunity(opportunityCard: OpportunityCardData) {
+  editOpportunity(opportunityCard: OpportunityCardData, index: number) {
+    this.modifyDataIndex = index;
     if (opportunityCard.opportunityType == 'lighting-replacement') {
       this.calculatorsService.editLightingReplacementItem(opportunityCard.lightingReplacement, opportunityCard.opportunityIndex);
     } else if (opportunityCard.opportunityType == 'opportunity-sheet') {
@@ -60,7 +68,8 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   //delete
-  setDeleteItem(cardItem: OpportunityCardData) {
+  setDeleteItem(cardItem: OpportunityCardData, index: number) {
+    this.modifyDataIndex = index;
     this.deleteOpportunity = cardItem;
     this.showDeleteItemModal();
   }
@@ -72,6 +81,7 @@ export class OpportunityCardsComponent implements OnInit {
     this.deletedItemModal.hide();
   }
   deleteItem() {
+    this.opportunityCardsData.splice(this.modifyDataIndex, 1);
     if (this.deleteOpportunity.opportunityType == 'lighting-replacement') {
       this.treasureHuntService.deleteLightingReplacementTreasureHuntItem(this.deleteOpportunity.opportunityIndex);
     } else if (this.deleteOpportunity.opportunityType == 'opportunity-sheet') {
@@ -94,7 +104,8 @@ export class OpportunityCardsComponent implements OnInit {
     this.hideDeleteItemModal();
   }
 
-  editOpportunitySheet(cardData: OpportunityCardData) {
+  editOpportunitySheet(cardData: OpportunityCardData, index: number) {
+    this.modifyDataIndex = index;
     this.editOpportunitySheetCardData = cardData;
     this.showOpportunitySheetModal();
   }
@@ -108,6 +119,8 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   saveItemOpportunitySheet(updatedOpportunitySheet: OpportunitySheet) {
+    this.editOpportunitySheetCardData.opportunitySheet = updatedOpportunitySheet;
+    this.opportunityCardsData[this.modifyDataIndex] = this.editOpportunitySheetCardData;
     if (this.editOpportunitySheetCardData.opportunityType == 'lighting-replacement') {
       this.editOpportunitySheetCardData.lightingReplacement.opportunitySheet = updatedOpportunitySheet;
       this.treasureHuntService.editLightingReplacementTreasureHuntItem(this.editOpportunitySheetCardData.lightingReplacement, this.editOpportunitySheetCardData.opportunityIndex);
@@ -122,29 +135,30 @@ export class OpportunityCardsComponent implements OnInit {
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'natural-gas-reduction') {
       this.editOpportunitySheetCardData.naturalGasReduction.opportunitySheet = updatedOpportunitySheet;
-      this.treasureHuntService.editNaturalGasReductionsItem(this.editOpportunitySheetCardData.naturalGasReduction, this.editOpportunitySheetCardData.opportunityIndex);
+      this.treasureHuntService.editNaturalGasReductionsItem(this.editOpportunitySheetCardData.naturalGasReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'electricity-reduction') {
       this.editOpportunitySheetCardData.electricityReduction.opportunitySheet = updatedOpportunitySheet;
-      this.treasureHuntService.editElectricityReductionsItem(this.editOpportunitySheetCardData.electricityReduction, this.editOpportunitySheetCardData.opportunityIndex);
+      this.treasureHuntService.editElectricityReductionsItem(this.editOpportunitySheetCardData.electricityReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'compressed-air-reduction') {
       this.editOpportunitySheetCardData.compressedAirReduction.opportunitySheet = updatedOpportunitySheet;
-      this.treasureHuntService.editCompressedAirReductionsItem(this.editOpportunitySheetCardData.compressedAirReduction, this.editOpportunitySheetCardData.opportunityIndex);
+      this.treasureHuntService.editCompressedAirReductionsItem(this.editOpportunitySheetCardData.compressedAirReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'compressed-air-pressure-reduction') {
       this.editOpportunitySheetCardData.compressedAirPressureReduction.opportunitySheet = updatedOpportunitySheet;
-      this.treasureHuntService.editCompressedAirPressureReductionsItem(this.editOpportunitySheetCardData.compressedAirPressureReduction, this.editOpportunitySheetCardData.opportunityIndex);
+      this.treasureHuntService.editCompressedAirPressureReductionsItem(this.editOpportunitySheetCardData.compressedAirPressureReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'water-reduction') {
       this.editOpportunitySheetCardData.waterReduction.opportunitySheet = updatedOpportunitySheet;
-      this.treasureHuntService.editWaterReductionsItem(this.editOpportunitySheetCardData.waterReduction, this.editOpportunitySheetCardData.opportunityIndex);
+      this.treasureHuntService.editWaterReductionsItem(this.editOpportunitySheetCardData.waterReduction, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
     }
     this.hideOpportunitySheetModal();
   }
 
   toggleSelected(cardData: OpportunityCardData) {
     cardData.selected = !cardData.selected;
+    this.updateData = false;
     if (cardData.opportunityType == 'lighting-replacement') {
       cardData.lightingReplacement.selected = !cardData.lightingReplacement.selected;
       this.treasureHuntService.editLightingReplacementTreasureHuntItem(cardData.lightingReplacement, cardData.opportunityIndex);
@@ -159,23 +173,23 @@ export class OpportunityCardsComponent implements OnInit {
 
     } else if (cardData.opportunityType == 'natural-gas-reduction') {
       cardData.naturalGasReduction.selected = !cardData.naturalGasReduction.selected;
-      this.treasureHuntService.editNaturalGasReductionsItem(cardData.naturalGasReduction, cardData.opportunityIndex);
+      this.treasureHuntService.editNaturalGasReductionsItem(cardData.naturalGasReduction, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'electricity-reduction') {
       cardData.electricityReduction.selected = !cardData.electricityReduction.selected;
-      this.treasureHuntService.editElectricityReductionsItem(cardData.electricityReduction, cardData.opportunityIndex);
+      this.treasureHuntService.editElectricityReductionsItem(cardData.electricityReduction, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'compressed-air-reduction') {
       cardData.compressedAirReduction.selected = !cardData.compressedAirReduction.selected;
-      this.treasureHuntService.editCompressedAirReductionsItem(cardData.compressedAirReduction, cardData.opportunityIndex);
+      this.treasureHuntService.editCompressedAirReductionsItem(cardData.compressedAirReduction, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'compressed-air-pressure-reduction') {
       cardData.compressedAirPressureReduction.selected = !cardData.compressedAirPressureReduction.selected;
-      this.treasureHuntService.editCompressedAirPressureReductionsItem(cardData.compressedAirPressureReduction, cardData.opportunityIndex);
+      this.treasureHuntService.editCompressedAirPressureReductionsItem(cardData.compressedAirPressureReduction, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'water-reduction') {
       cardData.waterReduction.selected = !cardData.waterReduction.selected;
-      this.treasureHuntService.editWaterReductionsItem(cardData.waterReduction, cardData.opportunityIndex);
+      this.treasureHuntService.editWaterReductionsItem(cardData.waterReduction, cardData.opportunityIndex, this.settings);
     }
   }
 }

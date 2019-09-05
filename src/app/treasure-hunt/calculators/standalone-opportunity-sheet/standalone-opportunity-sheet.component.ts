@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import { OpportunitySheet, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
-import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from './opportunity-sheet.service';
 
@@ -29,13 +28,13 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   opportunitySheetResults: OpportunitySheetResults;
   currentField: string = 'default';
   opportunitySheet: OpportunitySheet;
-  constructor(private treasureHuntService: TreasureHuntService, private opportunitySheetService: OpportunitySheetService) { }
+  constructor(private opportunitySheetService: OpportunitySheetService) { }
 
   ngOnInit() {
     if (this.opportunitySheetService.opportunitySheet) {
       this.opportunitySheet = this.opportunitySheetService.opportunitySheet;
     } else {
-      this.opportunitySheet = this.treasureHuntService.initOpportunitySheet();
+      this.opportunitySheet = this.opportunitySheetService.initOpportunitySheet();
     }
     this.getResults();
   }

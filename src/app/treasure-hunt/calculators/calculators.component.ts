@@ -169,7 +169,7 @@ export class CalculatorsComponent implements OnInit {
     if (this.calculatorsService.isNewOpportunity == true) {
       this.treasureHuntService.addNewNaturalGasReductionsItem(this.naturalGasReductionTreasureHunt);
     } else {
-      this.treasureHuntService.editNaturalGasReductionsItem(this.naturalGasReductionTreasureHunt, this.calculatorsService.itemIndex);
+      this.treasureHuntService.editNaturalGasReductionsItem(this.naturalGasReductionTreasureHunt, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }
@@ -188,7 +188,7 @@ export class CalculatorsComponent implements OnInit {
     if (this.calculatorsService.isNewOpportunity == true) {
       this.treasureHuntService.addNewElectricityReductionsItem(this.electricityReduction);
     } else {
-      this.treasureHuntService.editElectricityReductionsItem(this.electricityReduction, this.calculatorsService.itemIndex);
+      this.treasureHuntService.editElectricityReductionsItem(this.electricityReduction, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }
@@ -207,7 +207,7 @@ export class CalculatorsComponent implements OnInit {
     if (this.calculatorsService.isNewOpportunity == true) {
       this.treasureHuntService.addNewCompressedAirReductionsItem(this.compressedAirReduction);
     } else {
-      this.treasureHuntService.editCompressedAirReductionsItem(this.compressedAirReduction, this.calculatorsService.itemIndex);
+      this.treasureHuntService.editCompressedAirReductionsItem(this.compressedAirReduction, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }
@@ -226,7 +226,7 @@ export class CalculatorsComponent implements OnInit {
     if (this.calculatorsService.isNewOpportunity == true) {
       this.treasureHuntService.addNewCompressedAirPressureReductionsItem(this.compressedAirPressureReduction);
     } else {
-      this.treasureHuntService.editCompressedAirPressureReductionsItem(this.compressedAirPressureReduction, this.calculatorsService.itemIndex);
+      this.treasureHuntService.editCompressedAirPressureReductionsItem(this.compressedAirPressureReduction, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }
@@ -245,7 +245,7 @@ export class CalculatorsComponent implements OnInit {
     if (this.calculatorsService.isNewOpportunity == true) {
       this.treasureHuntService.addNewWaterReductionsItem(this.waterReduction);
     } else {
-      this.treasureHuntService.editWaterReductionsItem(this.waterReduction, this.calculatorsService.itemIndex);
+      this.treasureHuntService.editWaterReductionsItem(this.waterReduction, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }
@@ -263,7 +263,7 @@ export class CalculatorsComponent implements OnInit {
     if (this.calculatorsService.isNewOpportunity == true) {
       this.treasureHuntService.addNewOpportunitySheetsItem(this.standaloneOpportunitySheet);
     } else {
-      this.treasureHuntService.editOpportunitySheetItem(this.standaloneOpportunitySheet, this.calculatorsService.itemIndex);
+      this.treasureHuntService.editOpportunitySheetItem(this.standaloneOpportunitySheet, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }

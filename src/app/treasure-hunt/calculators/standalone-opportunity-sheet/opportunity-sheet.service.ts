@@ -9,6 +9,30 @@ export class OpportunitySheetService {
   opportunitySheet: OpportunitySheet;
   constructor() { }
 
+  initOpportunitySheet(): OpportunitySheet {
+    return {
+      name: 'New Opportunity',
+      equipment: '',
+      description: '',
+      originator: '',
+      date: new Date(),
+      owner: '',
+      businessUnits: '',
+      opportunityCost: {
+        engineeringServices: 0,
+        material: 0,
+        otherCosts: [],
+        costDescription: '',
+        labor: 0,
+        additionalSavings: undefined
+      },
+      baselineEnergyUseItems: [{
+        type: 'Electricity',
+        amount: 0
+      }],
+      modificationEnergyUseItems: []
+    };
+  }
 
   getResults(opportunitySheet: OpportunitySheet, settings: Settings): OpportunitySheetResults {
     let baselineElectricityResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.electricityCost, 'Electricity');

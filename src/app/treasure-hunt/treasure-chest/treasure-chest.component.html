@@ -1,4 +1,4 @@
-<div class="d-flex modify-conditions panel-container skyline" *ngIf="selectedCalc == 'none'">
+<div class="d-flex modify-conditions panel-container skyline" [ngClass]="{'hide': selectedCalc != 'none'}">
   <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
     <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)"
       (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"

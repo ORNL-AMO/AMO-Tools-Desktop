@@ -1,5 +1,5 @@
 <div class="row no-gutters">
-  <div class="col-12" *ngFor="let cardData of opportunityCardsData">
+  <div class="col-12" *ngFor="let cardData of opportunityCardsData; let index = index;">
     <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !cardData.selected}">
       <div class="card-body d-flex w-100 p-0">
         <div class="col-1 col-item-br">
@@ -14,7 +14,7 @@
           <div class="row align-items-center h-100">
             <div class="col text-center">
               <img src={{cardData.iconString}} class="calc-icon">
-              <a (click)="editOpportunity(cardData)">
+              <a (click)="editOpportunity(cardData, index)">
                 {{cardData.name}}
               </a><br>
               <span>Annual Cost Savings: {{cardData.annualCostSavings | currency:'USD'}}</span><br>
@@ -30,7 +30,7 @@
           <div class="d-flex w-100 flex-wrap justify-content-center">
             <div class="text-center graph-col treasure-hunt-item" *ngFor="let percentSaving of cardData.percentSavings">
               <div class="large pt-2">{{percentSaving.label}} Cost Savings</div>
-              <!-- <app-treasure-hunt-gauge [value]="percentSaving.percent" [chartHeight]="75"></app-treasure-hunt-gauge> -->
+              <app-treasure-hunt-gauge [value]="percentSaving.percent" [chartHeight]="75"></app-treasure-hunt-gauge>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
           <div class="row align-items-center h-100">
             <div class="col text-center"
               [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet, 'opp-sheet-exists': cardData.opportunitySheet}"
-              (click)="editOpportunitySheet(cardData)">
+              (click)="editOpportunitySheet(cardData, index)">
               <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
               <span class="large pt-2" *ngIf="!cardData.opportunitySheet">Add Opportunity Sheet</span>
               <span class="large pt-2" *ngIf="cardData.opportunitySheet">Edit Opportunity Sheet</span>
@@ -48,8 +48,8 @@
         <div class="col-2">
           <div class="row align-items-center h-100">
             <div class="col text-center">
-              <a class="click-link" (click)="editOpportunity(cardData)">Edit Opportunity</a><br>
-              <a class="click-link danger" (click)="setDeleteItem(cardData)">Delete</a><br>
+              <a class="click-link" (click)="editOpportunity(cardData, index)">Edit Opportunity</a><br>
+              <a class="click-link danger" (click)="setDeleteItem(cardData, index)">Delete</a><br>
               <!-- <a class="click-link" (click)="createCopy()">Create Copy</a> -->
             </div>
           </div>

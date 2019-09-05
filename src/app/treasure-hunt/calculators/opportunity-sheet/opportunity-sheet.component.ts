@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OpportunitySheet } from '../../../shared/models/treasure-hunt';
-import { TreasureHuntService } from '../../treasure-hunt.service';
+import { OpportunitySheetService } from '../standalone-opportunity-sheet/opportunity-sheet.service';
 
 @Component({
   selector: 'app-opportunity-sheet',
@@ -15,11 +15,11 @@ export class OpportunitySheetComponent implements OnInit {
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
 
-  constructor(private treasureHuntService: TreasureHuntService) { }
+  constructor(private opportunitySheetService: OpportunitySheetService) { }
 
   ngOnInit() {
     if (!this.opportunitySheet) {
-      this.opportunitySheet = this.treasureHuntService.initOpportunitySheet();
+      this.opportunitySheet = this.opportunitySheetService.initOpportunitySheet();
     }
   }
 

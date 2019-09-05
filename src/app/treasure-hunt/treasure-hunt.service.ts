@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt } from '../shared/models/treasure-hunt';
+import { OpportunityCardsService, OpportunityCardData } from './treasure-chest/opportunity-cards/opportunity-cards.service';
+import { Settings } from '../shared/models/settings';
 
 @Injectable()
 export class TreasureHuntService {
@@ -12,7 +14,7 @@ export class TreasureHuntService {
   getResults: BehaviorSubject<boolean>;
   updateMenuOptions: BehaviorSubject<boolean>;
   modalOpen: BehaviorSubject<boolean>;
-  constructor() {
+  constructor(private opportunityCardsService: OpportunityCardsService) {
     this.mainTab = new BehaviorSubject<string>('system-basics');
     this.subTab = new BehaviorSubject<string>('settings');
     this.getResults = new BehaviorSubject<boolean>(true);
@@ -21,30 +23,6 @@ export class TreasureHuntService {
     this.treasureHunt = new BehaviorSubject<TreasureHunt>(undefined);
   }
 
-  initOpportunitySheet(): OpportunitySheet {
-    return {
-      name: 'New Opportunity',
-      equipment: '',
-      description: '',
-      originator: '',
-      date: new Date(),
-      owner: '',
-      businessUnits: '',
-      opportunityCost: {
-        engineeringServices: 0,
-        material: 0,
-        otherCosts: [],
-        costDescription: '',
-        labor: 0,
-        additionalSavings: undefined
-      },
-      baselineEnergyUseItems: [{
-        type: 'Electricity',
-        amount: 0
-      }],
-      modificationEnergyUseItems: []
-    };
-  }
   //lighting
   addNewLightingReplacementTreasureHuntItem(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
@@ -57,9 +35,9 @@ export class TreasureHuntService {
 
   editLightingReplacementTreasureHuntItem(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt, index: number) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
-    console.log(lightingReplacementTreasureHunt.selected);
     treasureHunt.lightingReplacements[index] = lightingReplacementTreasureHunt;
-    console.log(treasureHunt.lightingReplacements[index].selected);
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getLightingReplacementCardData(lightingReplacementTreasureHunt, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
 
@@ -77,9 +55,11 @@ export class TreasureHuntService {
     treasureHunt.opportunitySheets.push(opportunitySheetsItem);
     this.treasureHunt.next(treasureHunt);
   }
-  editOpportunitySheetItem(opportunitySheetsItem: OpportunitySheet, index: number) {
+  editOpportunitySheetItem(opportunitySheetsItem: OpportunitySheet, index: number, settings: Settings) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.opportunitySheets[index] = opportunitySheetsItem;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getOpportunitySheetCardData(opportunitySheetsItem, treasureHunt.currentEnergyUsage, index, settings);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
   deleteOpportunitySheetItem(index: number) {
@@ -100,6 +80,8 @@ export class TreasureHuntService {
   editReplaceExistingMotorsItem(replaceExistingMotorsItem: ReplaceExistingMotorTreasureHunt, index: number) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.replaceExistingMotors[index] = replaceExistingMotorsItem;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getReplaceExistingCardData(replaceExistingMotorsItem, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
   deleteReplaceExistingMotorsItem(index: number) {
@@ -119,6 +101,8 @@ export class TreasureHuntService {
   editMotorDrivesItem(motorDriveItem: MotorDriveInputsTreasureHunt, index: number) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.motorDrives[index] = motorDriveItem;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getMotorDriveCard(motorDriveItem, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
   deleteMotorDrivesItem(index: number) {
@@ -135,9 +119,11 @@ export class TreasureHuntService {
     treasureHunt.naturalGasReductions.push(naturalGasReductionsItem);
     this.treasureHunt.next(treasureHunt);
   }
-  editNaturalGasReductionsItem(naturalGasReductionsItem: NaturalGasReductionTreasureHunt, index: number) {
+  editNaturalGasReductionsItem(naturalGasReductionsItem: NaturalGasReductionTreasureHunt, index: number, settings: Settings) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.naturalGasReductions[index] = naturalGasReductionsItem;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getNaturalGasReductionCard(naturalGasReductionsItem, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
   deleteNaturalGasReductionsItem(index: number) {
@@ -154,9 +140,11 @@ export class TreasureHuntService {
     treasureHunt.electricityReductions.push(electricityReductionsItem);
     this.treasureHunt.next(treasureHunt);
   }
-  editElectricityReductionsItem(electricityReductionsItem: ElectricityReductionTreasureHunt, index: number) {
+  editElectricityReductionsItem(electricityReductionsItem: ElectricityReductionTreasureHunt, index: number, settings: Settings) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.electricityReductions[index] = electricityReductionsItem;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getElectricityReductionCard(electricityReductionsItem, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
   deleteElectricityReductionsItem(index: number) {
@@ -173,9 +161,11 @@ export class TreasureHuntService {
     treasureHunt.compressedAirReductions.push(compressedAirReductionsItem);
     this.treasureHunt.next(treasureHunt);
   }
-  editCompressedAirReductionsItem(compressedAirReductionsItem: CompressedAirReductionTreasureHunt, index: number) {
+  editCompressedAirReductionsItem(compressedAirReductionsItem: CompressedAirReductionTreasureHunt, index: number, settings: Settings) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.compressedAirReductions[index] = compressedAirReductionsItem;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getCompressedAirReductionCardData(compressedAirReductionsItem, settings, treasureHunt.currentEnergyUsage, index);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
   deleteCompressedAirReductionsItem(index: number) {
@@ -192,9 +182,11 @@ export class TreasureHuntService {
     treasureHunt.compressedAirPressureReductions.push(compressedAirPressureReductionsItem);
     this.treasureHunt.next(treasureHunt);
   }
-  editCompressedAirPressureReductionsItem(compressedAirPressureReductionsItem: CompressedAirPressureReductionTreasureHunt, index: number) {
+  editCompressedAirPressureReductionsItem(compressedAirPressureReductionsItem: CompressedAirPressureReductionTreasureHunt, index: number, settings: Settings) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.compressedAirPressureReductions[index] = compressedAirPressureReductionsItem;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getCompressedAirPressureReductionCardData(compressedAirPressureReductionsItem, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
   deleteCompressedAirPressureReductionsItem(index: number) {
@@ -211,9 +203,11 @@ export class TreasureHuntService {
     treasureHunt.waterReductions.push(waterReductionsItem);
     this.treasureHunt.next(treasureHunt);
   }
-  editWaterReductionsItem(waterReductionsItem: WaterReductionTreasureHunt, index: number) {
+  editWaterReductionsItem(waterReductionsItem: WaterReductionTreasureHunt, index: number, settings: Settings) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.waterReductions[index] = waterReductionsItem;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getWaterReductionCardData(waterReductionsItem, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
   deleteWaterReductionsItem(index: number) {

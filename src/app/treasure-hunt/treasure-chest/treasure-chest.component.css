@@ -13,3 +13,7 @@
     background-position: bottom center; 
     background-size: 100%;
 }
+
+.hide{
+    display: none !important;
+}
