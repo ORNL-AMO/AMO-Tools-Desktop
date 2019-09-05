@@ -89,3 +89,9 @@ td{
 .no-border-top td{
   border-top: none;
 }
+
+tr.active{
+  font-weight: bold;
+  background-color: #2E4053;
+  color: white;
+}

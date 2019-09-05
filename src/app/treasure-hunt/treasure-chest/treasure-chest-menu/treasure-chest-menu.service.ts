@@ -5,7 +5,9 @@ import { BehaviorSubject } from 'rxjs';
 export class TreasureChestMenuService {
 
   selectAll: BehaviorSubject<boolean>
+  sortBy: BehaviorSubject<string>;
   constructor() {
     this.selectAll = new BehaviorSubject<boolean>(false);
+    this.sortBy = new BehaviorSubject<string>('annualCostSavings');
    }
 }

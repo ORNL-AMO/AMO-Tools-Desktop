@@ -28,6 +28,8 @@ export class OpportunityCardsComponent implements OnInit {
   modifyDataIndex: number;
   updateOpportunityCardSub: Subscription;
   selectAllSub: Subscription;
+  sortBySub: Subscription;
+  sortByVal: string;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
     private treasureChestMenuService: TreasureChestMenuService) { }
 
@@ -44,12 +46,17 @@ export class OpportunityCardsComponent implements OnInit {
       if(val == true){
         this.selectAll();
       }
+    });
+    this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
+      this.sortByVal = val;
     })
+
   }
 
   ngOnDestroy() {
     this.updateOpportunityCardSub.unsubscribe();
     this.selectAllSub.unsubscribe();
+    this.sortBySub.unsubscribe();
   }
 
   editOpportunity(opportunityCard: OpportunityCardData, index: number) {

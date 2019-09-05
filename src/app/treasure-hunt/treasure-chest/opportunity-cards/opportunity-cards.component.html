@@ -1,5 +1,6 @@
 <div class="row no-gutters">
-  <div class="col-12 data-card" *ngFor="let cardData of opportunityCardsData; let index = index;">
+  <div class="col-12 data-card"
+    *ngFor="let cardData of opportunityCardsData | sortCardsBy:sortByVal:'desc'; let index = index;">
     <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !cardData.selected}">
       <div class="card-header">
         <div class="row">
@@ -21,7 +22,7 @@
         <div class="col-4 col-item-br opportunity-name">
           <table class="table">
             <tbody>
-              <tr class="no-border-top">
+              <tr class="no-border-top" [ngClass]="{'active': sortByVal == 'teamName'}">
                 <td>
                   Owner/Lead/Team
                 </td>
@@ -30,11 +31,11 @@
                   <span *ngIf="!cardData.teamName">&mdash;</span>
                 </td>
               </tr>
-              <tr>
-                <td>Annual Cost Savings</td>
+              <tr [ngClass]="{'active': sortByVal == 'annualCostSavings'}">
+                <td>Annual Savings</td>
                 <td>{{cardData.annualCostSavings | currency:'USD'}}</td>
               </tr>
-              <tr *ngFor="let energySavings of cardData.annualEnergySavings">
+              <tr *ngFor="let energySavings of cardData.annualEnergySavings" [ngClass]="{'active': sortByVal == 'teamName'}">
                 <td>
                   Annual {{energySavings.label}} Savings
                 </td>
@@ -42,7 +43,15 @@
                   {{energySavings.savings | number:'1.0-0'}} {{energySavings.energyUnit}}
                 </td>
               </tr>
-              <tr>
+              <tr [ngClass]="{'active': sortByVal == 'implementationCost'}">
+                <td>
+                  Implementation Cost
+                </td>
+                <td>
+                  {{cardData.implementationCost | currency:'USD'}}
+                </td>
+              </tr>
+              <tr [ngClass]="{'active': sortByVal == 'paybackPeriod'}">
                 <td>
                   Payback Period
                 </td>

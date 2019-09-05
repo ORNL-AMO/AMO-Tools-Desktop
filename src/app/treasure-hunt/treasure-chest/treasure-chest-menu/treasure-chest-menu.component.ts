@@ -38,6 +38,9 @@ export class TreasureChestMenuComponent implements OnInit {
   sortByDropdown: boolean = false;
   navbarWidth: number;
   treasureHunt: TreasureHunt;
+  sortBy: string;
+  sortBySub: Subscription;
+  sortByLabel: string;
   constructor(private treasureChestMenuService: TreasureChestMenuService, private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
@@ -46,20 +49,46 @@ export class TreasureChestMenuComponent implements OnInit {
       this.energyTypeOptions = new Array();
       this.calculatorTypeOptions = new Array();
       this.setEnergyTypeOptions();
+    });
+    this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
+      this.sortBy = val;
+      this.getSortByLabel();
     })
   }
 
   ngOnDestroy() {
     this.treasureHuntSub.unsubscribe();
+    this.sortBySub.unsubscribe();
   }
 
   ngAfterViewInit() {
     this.getNavbarWidth();
   }
 
-  selectAll(){
+  selectAll() {
     this.treasureChestMenuService.selectAll.next(true);
     this.treasureChestMenuService.selectAll.next(false);
+  }
+
+  setSortBy(str: string) {
+    this.treasureChestMenuService.sortBy.next(str);
+    this.toggleSortBy();
+  }
+
+  getSortByLabel() {
+    if (this.sortBy == 'annualCostSavings') {
+      this.sortByLabel = 'Annual Savings';
+    } else if (this.sortBy == 'annualEnergySavings') {
+      this.sortByLabel = 'Annual Energy Savings';
+    } else if (this.sortBy == 'team') {
+      this.sortByLabel = 'Team';
+    } else if (this.sortBy == 'name') {
+      this.sortByLabel = 'Name';
+    } else if (this.sortBy == 'implementationCost') {
+      this.sortByLabel = 'Implementation Cost';
+    } else if (this.sortBy == 'paybackPeriod') {
+      this.sortByLabel = 'Payback Period';
+    }
   }
 
   toggleUtilityType() {

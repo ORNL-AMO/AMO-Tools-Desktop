@@ -1,16 +1,22 @@
 <nav class="navbar" #navbar>
   <div class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" (click)="toggleSortBy()">
-      Sort By
+      Sort By ({{sortByLabel}})
     </a>
     <div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
       <div class="list-group">
-        <a class="list-group-item list-group-item-action" >Annual Cost</a>
-        <a class="list-group-item list-group-item-action" >Annual Savings</a>
-        <a class="list-group-item list-group-item-action" >Annual Energy Use</a>
-        <a class="list-group-item list-group-item-action" >Annual Energy Savings</a>
-        <a class="list-group-item list-group-item-action" >Team (A-Z)</a>
-        <a class="list-group-item list-group-item-action" >Equipment (A-Z)</a>
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'annualCostSavings'}"
+          (click)="setSortBy('annualCostSavings')">Annual Savings</a>
+        <!-- <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'annualEnergySavings'}"
+          (click)="setSortBy('annualEnergySavings')">Annual Energy Savings</a> -->
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'teamName'}"
+          (click)="setSortBy('teamName')">Team (A-Z)</a>
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'name'}"
+          (click)="setSortBy('name')">Equipment (A-Z)</a>
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'implementationCost'}"
+          (click)="setSortBy('implementationCost')">Implementation Cost</a>
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'paybackPeriod'}"
+          (click)="setSortBy('paybackPeriod')">Payback Period</a>
       </div>
     </div>
   </div>

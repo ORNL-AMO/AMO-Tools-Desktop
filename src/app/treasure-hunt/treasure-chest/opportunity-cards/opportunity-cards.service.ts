@@ -48,6 +48,7 @@ export class OpportunityCardsService {
   getLightingReplacementCardData(lightingReplacement: LightingReplacementTreasureHunt, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getLightingSummary(lightingReplacement, index);
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: lightingReplacement.selected,
       opportunityType: 'lighting-replacement',
@@ -91,6 +92,7 @@ export class OpportunityCardsService {
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getOpportunitySheetSummary(oppSheet, settings);
     let energyData = this.getOpportunitySheetEnergySavings(results, currentEnergyUsage, settings);
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: oppSheet.selected,
       opportunityType: 'opportunity-sheet',
@@ -268,6 +270,7 @@ export class OpportunityCardsService {
     // let results: ReplaceExistingResults = this.replaceExistingService.getResults(replaceExistingMotor.replaceExistingData);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getReplaceExistingSummary(replaceExistingMotor, index);
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: replaceExistingMotor.selected,
       opportunityType: 'replace-existing',
@@ -311,6 +314,7 @@ export class OpportunityCardsService {
     // let results: MotorDriveOutputs = this.motorDriveService.getResults(drive.motorDriveInputs);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getMotorDriveSummary(drive, index);
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: drive.selected,
       opportunityType: 'motor-drive',
@@ -356,6 +360,7 @@ export class OpportunityCardsService {
       unitStr = 'MJ/yr';
     }
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: naturalGasReduction.selected,
       opportunityType: 'natural-gas-reduction',
@@ -397,6 +402,7 @@ export class OpportunityCardsService {
     // let results: ElectricityReductionResults = this.electricityReductionService.getResults(settings, reduction.baseline, reduction.modification);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getElectricityReductionSummary(reduction, index, settings);
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: reduction.selected,
       opportunityType: 'electricity-reduction',
@@ -448,6 +454,7 @@ export class OpportunityCardsService {
       unitStr = 'Nm3'
     }
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: reduction.selected,
       opportunityType: 'compressed-air-reduction',
@@ -490,6 +497,7 @@ export class OpportunityCardsService {
     // let results: CompressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(settings, reduction.baseline, reduction.modification);
     let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getCompressedAirPressureReductionSummary(reduction, index, settings);
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: reduction.selected,
       opportunityType: 'compressed-air-pressure-reduction',
@@ -541,6 +549,7 @@ export class OpportunityCardsService {
       utilityCost = currentEnergyUsage.wasteWaterCosts;
     }
     let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: reduction.selected,
       opportunityType: 'water-reduction',
@@ -588,6 +597,7 @@ export interface OpportunityCardData {
   opportunityType: string;
   opportunityIndex: number;
   annualCostSavings: number;
+  implementationCost: number;
   annualEnergySavings: Array<{
     savings: number,
     label: string,

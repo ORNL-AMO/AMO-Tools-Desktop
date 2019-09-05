@@ -22,6 +22,7 @@ import { OpportunityCardsService } from './treasure-chest/opportunity-cards/oppo
 import { CalculatorsModule } from './calculators/calculators.module';
 import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
+import { SortCardsByPipe } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/t
     OperationCostsComponent, 
     TreasureChestMenuComponent,
     ImportExportOpportunitiesComponent,
-    OpportunityCardsComponent
+    OpportunityCardsComponent,
+    SortCardsByPipe
   ],
   providers: [ TreasureHuntService, TreasureHuntReportService, ImportOpportunitiesService, OpportunityCardsService, TreasureChestMenuService ]
 })
