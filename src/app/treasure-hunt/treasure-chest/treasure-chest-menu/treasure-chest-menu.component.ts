@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { OpportunitySummaryService } from '../../treasure-hunt-report/opportunity-summary.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Subscription } from 'rxjs';
+import { TreasureChestMenuService } from './treasure-chest-menu.service';
 
 @Component({
   selector: 'app-treasure-chest-menu',
@@ -37,7 +38,7 @@ export class TreasureChestMenuComponent implements OnInit {
   sortByDropdown: boolean = false;
   navbarWidth: number;
   treasureHunt: TreasureHunt;
-  constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
+  constructor(private treasureChestMenuService: TreasureChestMenuService, private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
@@ -54,6 +55,11 @@ export class TreasureChestMenuComponent implements OnInit {
 
   ngAfterViewInit() {
     this.getNavbarWidth();
+  }
+
+  selectAll(){
+    this.treasureChestMenuService.selectAll.next(true);
+    this.treasureChestMenuService.selectAll.next(false);
   }
 
   toggleUtilityType() {

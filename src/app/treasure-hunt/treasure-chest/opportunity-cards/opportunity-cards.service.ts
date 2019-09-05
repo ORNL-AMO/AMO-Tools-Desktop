@@ -20,6 +20,7 @@ import { BehaviorSubject } from 'rxjs';
 export class OpportunityCardsService {
 
   updatedOpportunityCard: BehaviorSubject<OpportunityCardData>;
+  // opportunityCards: BehaviorSubject<Array<OpportunityCardData>>;
   constructor(private lightingReplacementService: LightingReplacementService, private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService,
     private electricityReductionService: ElectricityReductionService, private compressedAirReductionService: CompressedAirReductionService,
@@ -27,6 +28,7 @@ export class OpportunityCardsService {
     private opportunitySheetService: OpportunitySheetService) 
     {
       this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
+      // this.opportunityCards = new BehaviorSubject(new Array());
   }
 
   getOpportunityCardsData(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunityCardData> {
@@ -40,6 +42,7 @@ export class OpportunityCardsService {
     let waterReductionData: Array<OpportunityCardData> = this.getWaterReductions(treasureHunt.waterReductions, treasureHunt.currentEnergyUsage, settings);
     let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, settings, treasureHunt.currentEnergyUsage)
     opportunityCardsData = _.union(lightingReplacementsCardData, replaceExistingData, naturalGasReductionData, electricityReductionData, compressedAirReductionData, compressedAirPressureReductionData, waterReductionData, standaloneOpportunitySheetData);
+    // this.opportunityCards.next(opportunityCardsData);
     return opportunityCardsData;
   }
 

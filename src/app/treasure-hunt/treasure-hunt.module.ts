@@ -21,6 +21,7 @@ import { OpportunityCardsComponent } from './treasure-chest/opportunity-cards/op
 import { OpportunityCardsService } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 import { CalculatorsModule } from './calculators/calculators.module';
 import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
+import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 
 @NgModule({
   imports: [
@@ -45,6 +46,6 @@ import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-r
     ImportExportOpportunitiesComponent,
     OpportunityCardsComponent
   ],
-  providers: [ TreasureHuntService, TreasureHuntReportService, ImportOpportunitiesService, OpportunityCardsService ]
+  providers: [ TreasureHuntService, TreasureHuntReportService, ImportOpportunitiesService, OpportunityCardsService, TreasureChestMenuService ]
 })
 export class TreasureHuntModule { }

@@ -6,6 +6,7 @@ import { CalculatorsService } from '../../calculators/calculators.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { ModalDirective } from 'ngx-bootstrap';
+import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
 
 @Component({
   selector: 'app-opportunity-cards',
@@ -24,10 +25,11 @@ export class OpportunityCardsComponent implements OnInit {
   treasureHunt: TreasureHunt;
   deleteOpportunity: OpportunityCardData;
   editOpportunitySheetCardData: OpportunityCardData;
-  updateData: boolean = true;
   modifyDataIndex: number;
   updateOpportunityCardSub: Subscription;
-  constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService) { }
+  selectAllSub: Subscription;
+  constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
+    private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
     this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
@@ -38,10 +40,16 @@ export class OpportunityCardsComponent implements OnInit {
         this.opportunityCardsService.updatedOpportunityCard.next(undefined);
       }
     });
+    this.selectAllSub = this.treasureChestMenuService.selectAll.subscribe(val => {
+      if(val == true){
+        this.selectAll();
+      }
+    })
   }
 
   ngOnDestroy() {
     this.updateOpportunityCardSub.unsubscribe();
+    this.selectAllSub.unsubscribe();
   }
 
   editOpportunity(opportunityCard: OpportunityCardData, index: number) {
@@ -158,7 +166,6 @@ export class OpportunityCardsComponent implements OnInit {
 
   toggleSelected(cardData: OpportunityCardData) {
     cardData.selected = !cardData.selected;
-    this.updateData = false;
     if (cardData.opportunityType == 'lighting-replacement') {
       cardData.lightingReplacement.selected = !cardData.lightingReplacement.selected;
       this.treasureHuntService.editLightingReplacementTreasureHuntItem(cardData.lightingReplacement, cardData.opportunityIndex);
@@ -191,5 +198,13 @@ export class OpportunityCardsComponent implements OnInit {
       cardData.waterReduction.selected = !cardData.waterReduction.selected;
       this.treasureHuntService.editWaterReductionsItem(cardData.waterReduction, cardData.opportunityIndex, this.settings);
     }
+  }
+
+  selectAll(){
+    this.opportunityCardsData.forEach(card => {
+      if(card.selected == false){
+        this.toggleSelected(card);
+      }
+    })
   }
 }
