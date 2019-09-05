@@ -1,22 +1,33 @@
 <div class="row no-gutters">
-  <div class="col-12" *ngFor="let cardData of opportunityCardsData; let index = index;">
+  <div class="col-12 data-card" *ngFor="let cardData of opportunityCardsData; let index = index;">
     <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !cardData.selected}">
-      <div class="card-body d-flex w-100 p-0">
-        <div class="col-1 col-item-br">
-          <div class="row align-items-center h-100">
-            <div class="col text-center">
-              <app-animated-checkmark [active]="cardData.selected" (click)="toggleSelected(cardData)">
-              </app-animated-checkmark>
-            </div>
+      <div class="card-header">
+        <div class="row">
+          <div class="col-1">
+            <app-animated-checkmark [active]="cardData.selected" (click)="toggleSelected(cardData)">
+            </app-animated-checkmark>
+          </div>
+          <div class="col-10 text-center">
+            <a (click)="editOpportunity(cardData, index)">
+              {{cardData.name}}
+            </a>
+          </div>
+          <div class="col-1">
+            <img src={{cardData.iconString}} class="calc-icon">
           </div>
         </div>
+      </div>
+      <div class="card-body d-flex w-100 p-0">
+        <!-- <div class="col-1 col-item-br">
+          <div class="row align-items-center h-100">
+            <div class="col text-center">
+
+            </div>
+          </div>
+        </div> -->
         <div class="col-4 col-item-br opportunity-name">
           <div class="row align-items-center h-100">
             <div class="col text-center">
-              <img src={{cardData.iconString}} class="calc-icon">
-              <a (click)="editOpportunity(cardData, index)">
-                {{cardData.name}}
-              </a><br>
               <span>Annual Cost Savings: {{cardData.annualCostSavings | currency:'USD'}}</span><br>
               <span *ngFor="let energySavings of cardData.annualEnergySavings">
                 Annual {{energySavings.label}} Savings: {{energySavings.savings | number:'1.0-0'}}
@@ -25,7 +36,7 @@
             </div>
           </div>
         </div>
-        <div class="col-3 col-item-br"
+        <div class="col-4 col-item-br"
           [ngClass]="{'col-3': cardData.opportunityType != 'opportunity-sheet', 'col-5': cardData.opportunityType == 'opportunity-sheet'}">
           <div class="d-flex w-100 flex-wrap justify-content-center">
             <div class="text-center graph-col treasure-hunt-item" *ngFor="let percentSaving of cardData.percentSavings">

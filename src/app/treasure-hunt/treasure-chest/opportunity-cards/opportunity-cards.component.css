@@ -1,10 +1,11 @@
 .card.treasure-hunt-card{
     padding: .25rem;
+    padding-bottom: 0px;
     font-size: small;
   }
   
   .col-item-br{
-    border-right: solid 2px #2E4053;
+    border-right: 1px solid rgba(0, 0, 0, 0.125);
   }
   
   .opp-sheet-col .fa.fa-edit{
@@ -22,7 +23,7 @@
     cursor: pointer;
   }
   
-  .card.not-selected{
+  .card.not-selected, .card.not-selected .card-header{
     background-color: #efefef;
   }
   
@@ -65,3 +66,13 @@
     min-width: 750px;
 }
   
+
+.card-header{
+  font-size: large;
+  background: white;
+  padding: .25rem;
+}
+
+.data-card{
+  margin-bottom: .25rem;
+}
