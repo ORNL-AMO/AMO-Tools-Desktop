@@ -54,6 +54,7 @@ export class TreasureChestMenuComponent implements OnInit {
   sortBySub: Subscription;
   sortByLabel: string;
   teams: Array<{ name: string, selected: boolean }>;
+  equipments: Array<{ name: string, selected: boolean }>;
   opportunityCardsSub: Subscription;
   constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService, private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
@@ -71,6 +72,7 @@ export class TreasureChestMenuComponent implements OnInit {
 
     this.opportunityCardsSub = this.opportuntiyCardsService.opportunityCards.subscribe(val => {
       this.setTeams(val);
+      this.setEquipments(val);
     })
   }
 
@@ -98,8 +100,17 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortCardsData.teams = [];
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
+  setEquipments(oppData: Array<OpportunityCardData>) {
+    let equipmentNames: Array<string> = this.treasureChestMenuService.getAllEquipment(oppData);
+    this.equipments = new Array();
+    equipmentNames.forEach(equipment => {
+      this.equipments.push({ name: equipment, selected: false });
+    });
+    this.sortCardsData.teams = [];
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
 
-  setSelected(team: { name: string, selected: boolean }) {
+  setSelectedTeam(team: { name: string, selected: boolean }) {
     team.selected = !team.selected;
     let selectedNames: Array<string> = new Array();
     this.teams.forEach(team => {
@@ -108,6 +119,18 @@ export class TreasureChestMenuComponent implements OnInit {
       }
     })
     this.sortCardsData.teams = selectedNames;
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
+  setSelectedEquipment(equipment: { name: string, selected: boolean }) {
+    equipment.selected = !equipment.selected;
+    let selectedEquipment: Array<string> = new Array();
+    this.equipments.forEach(equipment => {
+      if (equipment.selected == true) {
+        selectedEquipment.push(equipment.name);
+      }
+    })
+    this.sortCardsData.equipments = selectedEquipment;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
@@ -131,11 +154,15 @@ export class TreasureChestMenuComponent implements OnInit {
     }
   }
 
-  clearAllFilters(){
+  clearAllFilters() {
     this.teams.forEach(team => {
       team.selected = false;
     })
+    this.equipments.forEach(equipment => {
+      equipment.selected = false;
+    })
     this.sortCardsData.teams = [];
+    this.sortCardsData.equipments = [];
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
@@ -148,10 +175,10 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   toggleAdditionalFilters() {
-    if(this.displayAdditionalFiltersDropdown == 'hide'){
-      this.displayAdditionalFiltersDropdown ='show';
-    }else{
-      this.displayAdditionalFiltersDropdown ='hide';
+    if (this.displayAdditionalFiltersDropdown == 'hide') {
+      this.displayAdditionalFiltersDropdown = 'show';
+    } else {
+      this.displayAdditionalFiltersDropdown = 'hide';
     }
   }
 

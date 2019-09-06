@@ -12,6 +12,15 @@ export class SortCardsByPipe implements PipeTransform {
     if (sortByData.teams.length != 0) {
       value = _.filter(value, (item: OpportunityCardData) => { return _.includes(sortByData.teams, item.teamName) });
     }
+    if (sortByData.equipments.length != 0) {
+      value = _.filter(value, (item: OpportunityCardData) => {
+        if (item.opportunitySheet) {
+          return _.includes(sortByData.equipments, item.opportunitySheet.equipment);
+        } else {
+          return false;
+        }
+      });
+    }
     let direction: string = 'desc';
     if (sortByData.sortBy == 'teamName' || sortByData.sortBy == 'name') {
       direction = 'asc';
@@ -26,4 +35,5 @@ export class SortCardsByPipe implements PipeTransform {
 export interface SortCardsData {
   sortBy: string;
   teams: Array<string>;
+  equipments: Array<string>;
 }
