@@ -210,6 +210,7 @@ export class OpportunityCardsComponent implements OnInit {
   selectAll(){
     this.opportunityCardsData.forEach(card => {
       if(card.selected == false){
+        card.selected = !card.selected
         this.toggleSelected(card);
       }
     })

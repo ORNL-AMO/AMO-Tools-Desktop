@@ -24,13 +24,13 @@
 
 .navbar-nav .dropdown-menu{
     position: absolute;
-    font-size: medium;
+    font-size: small;
 }
 
 .navbar{
     background: white;
     border-bottom: solid 4px;
-    font-size: medium;
+    font-size: small;
 }
 
 
@@ -40,7 +40,7 @@
 
 .list-group-item{
     padding: 8px;
-    font-size: medium;
+    font-size: small;
 }
 
 .list-group-item.active{

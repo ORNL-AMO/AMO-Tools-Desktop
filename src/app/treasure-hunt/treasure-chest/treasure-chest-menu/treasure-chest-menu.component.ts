@@ -78,12 +78,10 @@ export class TreasureChestMenuComponent implements OnInit {
   getSortByLabel() {
     if (this.sortBy == 'annualCostSavings') {
       this.sortByLabel = 'Annual Savings';
-    } else if (this.sortBy == 'annualEnergySavings') {
-      this.sortByLabel = 'Annual Energy Savings';
-    } else if (this.sortBy == 'team') {
+    }else if (this.sortBy == 'teamName') {
       this.sortByLabel = 'Team';
     } else if (this.sortBy == 'name') {
-      this.sortByLabel = 'Name';
+      this.sortByLabel = 'Equipment Name';
     } else if (this.sortBy == 'implementationCost') {
       this.sortByLabel = 'Implementation Cost';
     } else if (this.sortBy == 'paybackPeriod') {

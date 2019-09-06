@@ -7,7 +7,11 @@ import { OpportunityCardData } from './opportunity-cards.service';
 })
 export class SortCardsByPipe implements PipeTransform {
 
-  transform(value: Array<OpportunityCardData>, by: string, direction: "asc" | "desc" ): any {
+  transform(value: Array<OpportunityCardData>, by: string ): Array<OpportunityCardData> {
+    let direction: string = 'desc';
+    if(by == 'teamName' || by == 'name'){
+      direction = 'asc';
+    }
     value = _.orderBy(value, [by], direction);
     return value;
   }

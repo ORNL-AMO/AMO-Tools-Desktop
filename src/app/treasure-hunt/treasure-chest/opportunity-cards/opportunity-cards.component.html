@@ -1,6 +1,6 @@
 <div class="row no-gutters">
   <div class="col-12 data-card"
-    *ngFor="let cardData of opportunityCardsData | sortCardsBy:sortByVal:'desc'; let index = index;">
+    *ngFor="let cardData of opportunityCardsData | sortCardsBy:sortByVal; let index = index;">
     <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !cardData.selected}">
       <!-- <div class="card-header">
         <div class="row">
@@ -39,61 +39,67 @@
           </div>
         </div>
         <div class="col-4 col-item-br opportunity-name pl-1 pr-1">
-          <table class="table">
-            <tbody>
-              <tr class="no-border-top" [ngClass]="{'active': sortByVal == 'teamName'}">
-                <td class="w-75">
-                  Owner/Lead/Team
-                </td>
-                <td class="w-25">
-                  <span *ngIf="cardData.teamName">{{cardData.teamName}}</span>
-                  <span *ngIf="!cardData.teamName">&mdash;</span>
-                </td>
-              </tr>
-              <tr [ngClass]="{'active': sortByVal == 'annualCostSavings'}">
-                <td class="w-75">Annual Savings</td>
-                <td class="w-25">{{cardData.annualCostSavings | currency:'USD'}}</td>
-              </tr>
-              <tr [ngClass]="{'active': sortByVal == 'implementationCost'}">
-                <td class="w-75">
-                  Implementation Cost
-                </td>
-                <td class="w-25">
-                  {{cardData.implementationCost | currency:'USD'}}
-                </td>
-              </tr>
-              <tr [ngClass]="{'active': sortByVal == 'paybackPeriod'}">
-                <td class="w-75">
-                  Payback Period
-                </td>
-                <td class="w-25">
-                  {{cardData.paybackPeriod | number:'1.2-2'}}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="d-flex h-100 align-items-center w-100">
+            <table class="mb-0">
+              <tbody>
+                <tr class="no-border-top" [ngClass]="{'active': sortByVal == 'teamName'}">
+                  <td class="w-75">
+                    Owner/Lead/Team
+                  </td>
+                  <td class="w-25">
+                    <span *ngIf="cardData.teamName">{{cardData.teamName}}</span>
+                    <span *ngIf="!cardData.teamName">&mdash;</span>
+                  </td>
+                </tr>
+                <tr [ngClass]="{'active': sortByVal == 'annualCostSavings'}">
+                  <td class="w-75">Annual Savings</td>
+                  <td class="w-25">{{cardData.annualCostSavings | currency:'USD'}}</td>
+                </tr>
+                <tr [ngClass]="{'active': sortByVal == 'implementationCost'}">
+                  <td class="w-75">
+                    Implementation Cost
+                  </td>
+                  <td class="w-25">
+                    {{cardData.implementationCost | currency:'USD'}}
+                  </td>
+                </tr>
+                <tr [ngClass]="{'active': sortByVal == 'paybackPeriod'}">
+                  <td class="w-75">
+                    Payback Period
+                  </td>
+                  <td class="w-25">
+                    {{cardData.paybackPeriod | number:'1.2-2'}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
-        <div class="col-3 col-item-br"
-          [ngClass]="{'col-3': cardData.opportunityType != 'opportunity-sheet', 'col-5': cardData.opportunityType == 'opportunity-sheet'}">
+        <div class="col-3 col-item-br">
           <div class="d-flex w-100 flex-wrap justify-content-center">
-            <div class="text-center graph-col treasure-hunt-item" *ngFor="let percentSaving of cardData.percentSavings">
-              <div class="large pt-2">{{percentSaving.label}} Cost Savings</div>
+            <div class="text-center graph-col treasure-hunt-item w-100"
+              *ngFor="let percentSaving of cardData.percentSavings">
+              <div class="large">{{percentSaving.label}} Cost Savings</div>
               <app-treasure-hunt-gauge [value]="percentSaving.percent" [chartHeight]="75"></app-treasure-hunt-gauge>
             </div>
           </div>
         </div>
-        <div class="col-3 text-center pr-0">
-          <span *ngIf="cardData.opportunityType != 'opportunity-sheet'"
-            [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet, 'opp-sheet-exists': cardData.opportunitySheet}"
-            (click)="editOpportunitySheet(cardData, index)">
-            <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon"><br>
-            <span class="large pt-2" *ngIf="!cardData.opportunitySheet">Add Opportunity Sheet</span>
-            <span class="large pt-2" *ngIf="cardData.opportunitySheet">Edit Opportunity Sheet</span><br>
-          </span>
+        <div class="col-3 pr-0">
+          <div class="d-flex flex-column h-100 align-items-center w-100 justify-content-center">
+            <div class="d-flex flex-column w-100 align-items-center"
+              *ngIf="cardData.opportunityType != 'opportunity-sheet'"
+              [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet, 'opp-sheet-exists': cardData.opportunitySheet}"
+              (click)="editOpportunitySheet(cardData, index)">
+              <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon">
+              <a *ngIf="!cardData.opportunitySheet">Add Opportunity Sheet</a>
+              <a *ngIf="cardData.opportunitySheet">Edit Opportunity Sheet</a>
+            </div>
 
-          <a class="click-link" (click)="editOpportunity(cardData, index)">Edit Opportunity</a><br>
-          <a class="click-link danger" (click)="setDeleteItem(cardData, index)">Delete</a><br>
-          <a class="click-link" (click)="createCopy()">Create Copy</a>
+            <a class="click-link" (click)="editOpportunity(cardData, index)">Edit Opportunity</a>
+            <a class="click-link" (click)="createCopy()">Create Copy</a>
+            <a class="click-link danger" (click)="setDeleteItem(cardData, index)">Delete</a>
+          </div>
         </div>
       </div>
     </div>
