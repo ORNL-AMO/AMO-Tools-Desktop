@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { TreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunityCardsService, OpportunityCardData } from './opportunity-cards.service';
@@ -31,7 +31,7 @@ export class OpportunityCardsComponent implements OnInit {
   sortBySub: Subscription;
   sortByVal: string;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
-    private treasureChestMenuService: TreasureChestMenuService, private cd: ChangeDetectorRef) { }
+    private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
     this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
@@ -172,7 +172,6 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   toggleSelected(cardData: OpportunityCardData) {
-    // cardData.selected = !cardData.selected;
     if (cardData.opportunityType == 'lighting-replacement') {
       cardData.lightingReplacement.selected = cardData.selected;
       this.treasureHuntService.editLightingReplacementTreasureHuntItem(cardData.lightingReplacement, cardData.opportunityIndex);
@@ -217,34 +216,64 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   createCopy(cardData: OpportunityCardData) {
-    let newOpportunityCard: OpportunityCardData;
-    if (cardData.opportunityType == 'lighting-replacement') {
-      cardData.lightingReplacement.opportunitySheet = this.updateCopyName(cardData.lightingReplacement.opportunitySheet);
-      this.treasureHuntService.addNewLightingReplacementTreasureHuntItem(cardData.lightingReplacement);
+    let newOpportunityCard: OpportunityCardData = JSON.parse(JSON.stringify(cardData));
+    if (newOpportunityCard.opportunityType == 'lighting-replacement') {
+      newOpportunityCard.lightingReplacement.opportunitySheet = this.updateCopyName(newOpportunityCard.lightingReplacement.opportunitySheet);
+      this.treasureHuntService.addNewLightingReplacementTreasureHuntItem(newOpportunityCard.lightingReplacement);
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-      newOpportunityCard = this.opportunityCardsService.getLightingReplacementCardData(cardData.lightingReplacement, treasureHunt.lightingReplacements.length + 1, treasureHunt.currentEnergyUsage);
-    } else if (cardData.opportunityType == 'replace-existing') {
-      this.treasureHuntService.addNewReplaceExistingMotorsItem(cardData.replaceExistingMotor);
-    } else if (cardData.opportunityType == 'motor-drive') {
-      this.treasureHuntService.addNewMotorDrivesItem(cardData.motorDrive);
-    } else if (cardData.opportunityType == 'natural-gas-reduction') {
-      this.treasureHuntService.addNewNaturalGasReductionsItem(cardData.naturalGasReduction);
-    } else if (cardData.opportunityType == 'electricity-reduction') {
-      this.treasureHuntService.addNewElectricityReductionsItem(cardData.electricityReduction);
-    } else if (cardData.opportunityType == 'compressed-air-reduction') {
-      this.treasureHuntService.addNewCompressedAirReductionsItem(cardData.compressedAirReduction);
-    } else if (cardData.opportunityType == 'compressed-air-pressure-reduction') {
-      this.treasureHuntService.addNewCompressedAirPressureReductionsItem(cardData.compressedAirPressureReduction);
-    } else if (cardData.opportunityType == 'water-reduction') {
-      this.treasureHuntService.addNewWaterReductionsItem(cardData.waterReduction);
+      newOpportunityCard = this.opportunityCardsService.getLightingReplacementCardData(newOpportunityCard.lightingReplacement, treasureHunt.lightingReplacements.length + 1, treasureHunt.currentEnergyUsage);
+
+    } else if (newOpportunityCard.opportunityType == 'replace-existing') {
+      newOpportunityCard.replaceExistingMotor.opportunitySheet = this.updateCopyName(newOpportunityCard.replaceExistingMotor.opportunitySheet);
+      this.treasureHuntService.addNewReplaceExistingMotorsItem(newOpportunityCard.replaceExistingMotor);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getReplaceExistingCardData(newOpportunityCard.replaceExistingMotor, treasureHunt.replaceExistingMotors.length + 1, treasureHunt.currentEnergyUsage);
+
+
+    } else if (newOpportunityCard.opportunityType == 'motor-drive') {
+      newOpportunityCard.motorDrive.opportunitySheet = this.updateCopyName(newOpportunityCard.motorDrive.opportunitySheet);
+      this.treasureHuntService.addNewMotorDrivesItem(newOpportunityCard.motorDrive);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getMotorDriveCard(newOpportunityCard.motorDrive, treasureHunt.motorDrives.length + 1, treasureHunt.currentEnergyUsage);
+
+    } else if (newOpportunityCard.opportunityType == 'natural-gas-reduction') {
+      newOpportunityCard.naturalGasReduction.opportunitySheet = this.updateCopyName(newOpportunityCard.naturalGasReduction.opportunitySheet);
+      this.treasureHuntService.addNewNaturalGasReductionsItem(newOpportunityCard.naturalGasReduction);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getNaturalGasReductionCard(newOpportunityCard.naturalGasReduction, this.settings, treasureHunt.naturalGasReductions.length + 1, treasureHunt.currentEnergyUsage);
+
+    } else if (newOpportunityCard.opportunityType == 'electricity-reduction') {
+      newOpportunityCard.electricityReduction.opportunitySheet = this.updateCopyName(newOpportunityCard.electricityReduction.opportunitySheet);
+      this.treasureHuntService.addNewElectricityReductionsItem(newOpportunityCard.electricityReduction);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getElectricityReductionCard(newOpportunityCard.electricityReduction, this.settings, treasureHunt.electricityReductions.length + 1, treasureHunt.currentEnergyUsage);
+
+    } else if (newOpportunityCard.opportunityType == 'compressed-air-reduction') {
+      newOpportunityCard.compressedAirReduction.opportunitySheet = this.updateCopyName(newOpportunityCard.compressedAirReduction.opportunitySheet);
+      this.treasureHuntService.addNewCompressedAirReductionsItem(newOpportunityCard.compressedAirReduction);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getCompressedAirReductionCardData(newOpportunityCard.compressedAirReduction, this.settings, treasureHunt.currentEnergyUsage, treasureHunt.compressedAirReductions.length + 1);
+
+    } else if (newOpportunityCard.opportunityType == 'compressed-air-pressure-reduction') {
+      newOpportunityCard.compressedAirPressureReduction.opportunitySheet = this.updateCopyName(newOpportunityCard.compressedAirPressureReduction.opportunitySheet);
+      this.treasureHuntService.addNewCompressedAirPressureReductionsItem(newOpportunityCard.compressedAirPressureReduction);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getCompressedAirPressureReductionCardData(newOpportunityCard.compressedAirPressureReduction, this.settings, treasureHunt.compressedAirPressureReductions.length + 1, treasureHunt.currentEnergyUsage);
+
+    } else if (newOpportunityCard.opportunityType == 'water-reduction') {
+      newOpportunityCard.waterReduction.opportunitySheet = this.updateCopyName(newOpportunityCard.waterReduction.opportunitySheet);
+      this.treasureHuntService.addNewWaterReductionsItem(newOpportunityCard.waterReduction);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getWaterReductionCardData(newOpportunityCard.waterReduction, this.settings, treasureHunt.waterReductions.length + 1, treasureHunt.currentEnergyUsage);
+
     }
     this.opportunityCardsData.push(newOpportunityCard);
   }
 
   updateCopyName(oppSheet: OpportunitySheet): OpportunitySheet {
     if (oppSheet) {
-     oppSheet.name =  oppSheet.name + ' (copy)';
-     return oppSheet;
+      oppSheet.name = oppSheet.name + ' (copy)';
+      return oppSheet;
     } else { return }
   }
 }

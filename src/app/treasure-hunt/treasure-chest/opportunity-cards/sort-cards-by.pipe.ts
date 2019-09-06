@@ -3,7 +3,8 @@ import * as _ from 'lodash';
 import { OpportunityCardData } from './opportunity-cards.service';
 
 @Pipe({
-  name: 'sortCardsBy'
+  name: 'sortCardsBy',
+  pure: false
 })
 export class SortCardsByPipe implements PipeTransform {
 
