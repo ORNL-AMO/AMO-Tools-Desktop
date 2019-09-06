@@ -24,12 +24,12 @@
 
   <div class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" (click)="toggleUtilityType()">
-      Utility Type
+      Utility Type ({{sortCardsData.utilityType}})
     </a>
     <div class="dropdown-menu p-0" [ngClass]="{'show': displayUtilityTypeDropdown == true}">
       <div class="list-group">
         <a class="list-group-item list-group-item-action" *ngFor="let option of energyTypeOptions"
-          [ngClass]="{'active': option.value == displayEnergyType}"
+          [ngClass]="{'active': option.value == sortCardsData.utilityType}"
           (click)="setEnergyType(option.value)">{{option.value}} ({{option.numCalcs}})</a>
       </div>
     </div>

@@ -9,6 +9,9 @@ import { OpportunityCardData } from './opportunity-cards.service';
 export class SortCardsByPipe implements PipeTransform {
 
   transform(value: Array<OpportunityCardData>, sortByData: SortCardsData): Array<OpportunityCardData> {
+    if (sortByData.utilityType != 'All') {
+      value = _.filter(value, (item: OpportunityCardData) => { return _.includes(item.utilityType, sortByData.utilityType) });
+    }
     if (sortByData.teams.length != 0) {
       value = _.filter(value, (item: OpportunityCardData) => { return _.includes(sortByData.teams, item.teamName) });
     }
@@ -36,4 +39,5 @@ export interface SortCardsData {
   sortBy: string;
   teams: Array<string>;
   equipments: Array<string>;
+  utilityType: string;
 }

@@ -19,7 +19,8 @@ export class TreasureChestMenuService {
     let sortCardsData: SortCardsData = {
       sortBy: 'annualCostSavings',
       teams: [],
-      equipments: []
+      equipments: [],
+      utilityType: 'All'
     };
     return sortCardsData;
   }

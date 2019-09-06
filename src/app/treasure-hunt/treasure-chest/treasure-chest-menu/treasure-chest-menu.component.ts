@@ -199,6 +199,9 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   setEnergyType(str: string) {
+    this.sortCardsData.utilityType = str;
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    this.toggleUtilityType();
     this.displayEnergyType = str;
     this.displayCalculatorType = 'All';
     this.setCalculatorType('All');
