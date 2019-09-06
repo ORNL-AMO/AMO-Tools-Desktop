@@ -57,36 +57,28 @@
   </div>
 
   <div class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" (click)="toggleAdditionalFilters()">
-      Add'l Filters
-    </a>
-    <div class="dropdown-menu p-0 filter-menu" [ngClass]="{'show': displayAdditionalFiltersDropdown == true}"
-      [ngStyle]="{'width.px': navbarWidth}">
-      <div class="d-flex flex-wrap w-100 justify-content-between">
-        <div class="col-4 card">
-          <div class="card-header p-2">
-            Process / Equipment
-          </div>
-          <div class="card-body p-0">
-            <div class="list-group list-group-flush">
-              <a class="list-group-item list-group-item-action">Equipment 1</a>
-              <a class="list-group-item list-group-item-action">Equipment 2</a>
-              <a class="list-group-item list-group-item-action">Equipment 3</a>
-              <a class="list-group-item list-group-item-action">Equipment 4</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-4 card">
-          <div class="card-header p-2">
-            Team
-          </div>
-          <div class="card-body p-0">
+    <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
+    <div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}">
+      <div class="card-header p-2">
+        <span class="filters-header">Additional Filters</span>
+        <button class="nav-btn pull-right my-auto" (click)="clearAllFilters()">Clear All</button>
+      </div>
+      <div class="card-body p-2">
+        <div class="row">
+          <div class="col-6">
+            <h5>Select Teams</h5>
             <div class="list-group list-group-flush">
               <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
                 [ngClass]="{'active': team.selected}" (click)="setSelected(team)">{{team.name}}</a>
             </div>
           </div>
+          <div class="col-6">
+
+          </div>
         </div>
+      </div>
+      <div class="card-footer p-2">
+        <button class="nav-btn pull-right" (click)="toggleAdditionalFilters()">Close</button>
       </div>
     </div>
   </div>

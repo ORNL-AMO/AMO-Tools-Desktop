@@ -9,11 +9,21 @@ import { Subscription } from 'rxjs';
 import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { OpportunityCardsService, OpportunityCardData } from '../opportunity-cards/opportunity-cards.service';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-treasure-chest-menu',
   templateUrl: './treasure-chest-menu.component.html',
-  styleUrls: ['./treasure-chest-menu.component.css']
+  styleUrls: ['./treasure-chest-menu.component.css'],
+  animations: [
+    trigger('menuModal', [
+      state('show', style({
+        top: '20px'
+      })),
+      transition('hide => show', animate('.5s ease-in')),
+      transition('show => hide', animate('.5s ease-out'))
+    ])
+  ]
 })
 export class TreasureChestMenuComponent implements OnInit {
 
@@ -36,7 +46,7 @@ export class TreasureChestMenuComponent implements OnInit {
 
   displayUtilityTypeDropdown: boolean = false;
   displayCalculatorTypeDropdown: boolean = false;
-  displayAdditionalFiltersDropdown: boolean = false;
+  displayAdditionalFiltersDropdown: string = 'hide';
   sortByDropdown: boolean = false;
   navbarWidth: number;
   treasureHunt: TreasureHunt;
@@ -121,6 +131,14 @@ export class TreasureChestMenuComponent implements OnInit {
     }
   }
 
+  clearAllFilters(){
+    this.teams.forEach(team => {
+      team.selected = false;
+    })
+    this.sortCardsData.teams = [];
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
   toggleUtilityType() {
     this.displayUtilityTypeDropdown = !this.displayUtilityTypeDropdown;
   }
@@ -130,7 +148,11 @@ export class TreasureChestMenuComponent implements OnInit {
   }
 
   toggleAdditionalFilters() {
-    this.displayAdditionalFiltersDropdown = !this.displayAdditionalFiltersDropdown;
+    if(this.displayAdditionalFiltersDropdown == 'hide'){
+      this.displayAdditionalFiltersDropdown ='show';
+    }else{
+      this.displayAdditionalFiltersDropdown ='hide';
+    }
   }
 
   toggleSortBy() {

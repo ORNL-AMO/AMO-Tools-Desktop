@@ -64,3 +64,18 @@ a.list-group-item.active:hover{
 .nav-link.dropdown-toggle:hover, .nav-btn:hover{
     background-color: #808B96;
 }
+
+
+.menu-modal{
+    position: fixed;
+    z-index: 8000;
+    border-style: solid;
+    border-width: 4px;
+    top: -100%;
+    left: 10px;
+  }
+
+  .filters-header{
+      font-size: 1.5rem;
+      font-weight: bold;
+  }
