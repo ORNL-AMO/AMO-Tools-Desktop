@@ -210,9 +210,34 @@ export class OpportunityCardsComponent implements OnInit {
   selectAll(){
     this.opportunityCardsData.forEach(card => {
       if(card.selected == false){
-        card.selected = !card.selected
+        card.selected = true;
         this.toggleSelected(card);
       }
     })
+  }
+
+  createCopy(cardData: OpportunityCardData){
+    console.log(cardData);
+    let newOpportunityCard: OpportunityCardData;
+    if (cardData.opportunityType == 'lighting-replacement') {
+      this.treasureHuntService.addNewLightingReplacementTreasureHuntItem(cardData.lightingReplacement);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getLightingReplacementCardData(cardData.lightingReplacement, treasureHunt.lightingReplacements.length, treasureHunt.currentEnergyUsage);
+      this.opportunityCardsData.push(newOpportunityCard);
+    } else if (cardData.opportunityType == 'replace-existing') {
+      this.treasureHuntService.addNewReplaceExistingMotorsItem(cardData.replaceExistingMotor);
+    } else if (cardData.opportunityType == 'motor-drive') {
+      this.treasureHuntService.addNewMotorDrivesItem(cardData.motorDrive);
+    } else if (cardData.opportunityType == 'natural-gas-reduction') {
+      this.treasureHuntService.addNewNaturalGasReductionsItem(cardData.naturalGasReduction);
+    } else if (cardData.opportunityType == 'electricity-reduction') {
+      this.treasureHuntService.addNewElectricityReductionsItem(cardData.electricityReduction);
+    } else if (cardData.opportunityType == 'compressed-air-reduction') {
+      this.treasureHuntService.addNewCompressedAirReductionsItem(cardData.compressedAirReduction);
+    } else if (cardData.opportunityType == 'compressed-air-pressure-reduction') {
+      this.treasureHuntService.addNewCompressedAirPressureReductionsItem(cardData.compressedAirPressureReduction);
+    } else if (cardData.opportunityType == 'water-reduction') {
+      this.treasureHuntService.addNewWaterReductionsItem(cardData.waterReduction);
+    }
   }
 }
