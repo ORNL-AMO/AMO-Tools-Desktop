@@ -41,7 +41,7 @@
           <div class="d-flex h-100 align-items-center w-100">
             <table class="mb-0">
               <tbody>
-                <tr class="no-border-top" [ngClass]="{'active': sortByVal == 'teamName'}">
+                <tr class="no-border-top" [ngClass]="{'active': sortByVal.sortBy == 'teamName'}">
                   <td class="w-75">
                     Owner/Lead/Team
                   </td>
@@ -50,11 +50,11 @@
                     <span *ngIf="!cardData.teamName">&mdash;</span>
                   </td>
                 </tr>
-                <tr [ngClass]="{'active': sortByVal == 'annualCostSavings'}">
+                <tr [ngClass]="{'active': sortByVal.sortBy == 'annualCostSavings'}">
                   <td class="w-75">Annual Savings</td>
                   <td class="w-25">{{cardData.annualCostSavings | currency:'USD'}}</td>
                 </tr>
-                <tr [ngClass]="{'active': sortByVal == 'implementationCost'}">
+                <tr [ngClass]="{'active': sortByVal.sortBy == 'implementationCost'}">
                   <td class="w-75">
                     Implementation Cost
                   </td>
@@ -62,7 +62,7 @@
                     {{cardData.implementationCost | currency:'USD'}}
                   </td>
                 </tr>
-                <tr [ngClass]="{'active': sortByVal == 'paybackPeriod'}">
+                <tr [ngClass]="{'active': sortByVal.sortBy == 'paybackPeriod'}">
                   <td class="w-75">
                     Payback Period
                   </td>
@@ -91,12 +91,12 @@
               [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet, 'opp-sheet-exists': cardData.opportunitySheet}"
               (click)="editOpportunitySheet(cardData, index)">
               <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon">
-              <a *ngIf="!cardData.opportunitySheet">Add Opportunity Sheet</a>
-              <a *ngIf="cardData.opportunitySheet">Edit Opportunity Sheet</a>
+              <a class="text-center" *ngIf="!cardData.opportunitySheet">Add Opportunity Sheet</a>
+              <a class="text-center" *ngIf="cardData.opportunitySheet">Edit Opportunity Sheet</a>
             </div>
 
-            <a class="click-link" (click)="editOpportunity(cardData, index)">Edit Opportunity</a>
-            <a class="click-link" (click)="createCopy(cardData)">Create Copy</a>
+            <a class="click-link text-center" (click)="editOpportunity(cardData, index)">Edit Opportunity</a>
+            <a class="click-link text-center" (click)="createCopy(cardData)">Create Copy</a>
             <a class="click-link danger" (click)="setDeleteItem(cardData, index)">Delete</a>
           </div>
         </div>

@@ -7,6 +7,8 @@ import { OpportunitySummaryService } from '../../treasure-hunt-report/opportunit
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { TreasureChestMenuService } from './treasure-chest-menu.service';
+import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
+import { OpportunityCardsService, OpportunityCardData } from '../opportunity-cards/opportunity-cards.service';
 
 @Component({
   selector: 'app-treasure-chest-menu',
@@ -38,10 +40,12 @@ export class TreasureChestMenuComponent implements OnInit {
   sortByDropdown: boolean = false;
   navbarWidth: number;
   treasureHunt: TreasureHunt;
-  sortBy: string;
+  sortCardsData: SortCardsData;
   sortBySub: Subscription;
   sortByLabel: string;
-  constructor(private treasureChestMenuService: TreasureChestMenuService, private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
+  teams: Array<{ name: string, selected: boolean }>;
+  opportunityCardsSub: Subscription;
+  constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService, private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
@@ -51,14 +55,19 @@ export class TreasureChestMenuComponent implements OnInit {
       this.setEnergyTypeOptions();
     });
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
-      this.sortBy = val;
+      this.sortCardsData = val;
       this.getSortByLabel();
+    });
+
+    this.opportunityCardsSub = this.opportuntiyCardsService.opportunityCards.subscribe(val => {
+      this.setTeams(val);
     })
   }
 
   ngOnDestroy() {
     this.treasureHuntSub.unsubscribe();
     this.sortBySub.unsubscribe();
+    this.opportunityCardsSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -70,21 +79,44 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.selectAll.next(false);
   }
 
+  setTeams(oppData: Array<OpportunityCardData>) {
+    let teamNames: Array<string> = this.treasureChestMenuService.getAllTeams(oppData);
+    this.teams = new Array();
+    teamNames.forEach(name => {
+      this.teams.push({ name: name, selected: false });
+    });
+    this.sortCardsData.teams = [];
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
+  setSelected(team: { name: string, selected: boolean }) {
+    team.selected = !team.selected;
+    let selectedNames: Array<string> = new Array();
+    this.teams.forEach(team => {
+      if (team.selected == true) {
+        selectedNames.push(team.name);
+      }
+    })
+    this.sortCardsData.teams = selectedNames;
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
   setSortBy(str: string) {
-    this.treasureChestMenuService.sortBy.next(str);
+    this.sortCardsData.sortBy = str;
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
     this.toggleSortBy();
   }
 
   getSortByLabel() {
-    if (this.sortBy == 'annualCostSavings') {
+    if (this.sortCardsData.sortBy == 'annualCostSavings') {
       this.sortByLabel = 'Annual Savings';
-    }else if (this.sortBy == 'teamName') {
+    } else if (this.sortCardsData.sortBy == 'teamName') {
       this.sortByLabel = 'Team';
-    } else if (this.sortBy == 'name') {
+    } else if (this.sortCardsData.sortBy == 'name') {
       this.sortByLabel = 'Equipment Name';
-    } else if (this.sortBy == 'implementationCost') {
+    } else if (this.sortCardsData.sortBy == 'implementationCost') {
       this.sortByLabel = 'Implementation Cost';
-    } else if (this.sortBy == 'paybackPeriod') {
+    } else if (this.sortCardsData.sortBy == 'paybackPeriod') {
       this.sortByLabel = 'Payback Period';
     }
   }

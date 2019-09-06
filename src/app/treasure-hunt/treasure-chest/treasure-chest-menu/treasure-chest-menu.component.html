@@ -5,16 +5,19 @@
     </a>
     <div class="dropdown-menu p-0" [ngClass]="{'show': sortByDropdown == true}">
       <div class="list-group">
-        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'annualCostSavings'}"
+        <a class="list-group-item list-group-item-action"
+          [ngClass]="{'active': sortCardsData.sortBy == 'annualCostSavings'}"
           (click)="setSortBy('annualCostSavings')">Annual Savings</a>
-        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'teamName'}"
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortCardsData.sortBy == 'teamName'}"
           (click)="setSortBy('teamName')">Team (A-Z)</a>
-        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'name'}"
+        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortCardsData.sortBy == 'name'}"
           (click)="setSortBy('name')">Equipment (A-Z)</a>
-        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'implementationCost'}"
+        <a class="list-group-item list-group-item-action"
+          [ngClass]="{'active': sortCardsData.sortBy == 'implementationCost'}"
           (click)="setSortBy('implementationCost')">Implementation Cost</a>
-        <a class="list-group-item list-group-item-action" [ngClass]="{'active': sortBy == 'paybackPeriod'}"
-          (click)="setSortBy('paybackPeriod')">Payback Period</a>
+        <a class="list-group-item list-group-item-action"
+          [ngClass]="{'active': sortCardsData.sortBy == 'paybackPeriod'}" (click)="setSortBy('paybackPeriod')">Payback
+          Period</a>
       </div>
     </div>
   </div>
@@ -79,10 +82,8 @@
           </div>
           <div class="card-body p-0">
             <div class="list-group list-group-flush">
-              <a class="list-group-item list-group-item-action">Team 1</a>
-              <a class="list-group-item list-group-item-action">Team 2</a>
-              <a class="list-group-item list-group-item-action">Team 3</a>
-              <a class="list-group-item list-group-item-action">Team 4</a>
+              <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
+                [ngClass]="{'active': team.selected}" (click)="setSelected(team)">{{team.name}}</a>
             </div>
           </div>
         </div>

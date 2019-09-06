@@ -7,6 +7,7 @@ import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { ModalDirective } from 'ngx-bootstrap';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
+import { SortCardsData } from './sort-cards-by.pipe';
 
 @Component({
   selector: 'app-opportunity-cards',
@@ -29,7 +30,7 @@ export class OpportunityCardsComponent implements OnInit {
   updateOpportunityCardSub: Subscription;
   selectAllSub: Subscription;
   sortBySub: Subscription;
-  sortByVal: string;
+  sortByVal: SortCardsData;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
     private treasureChestMenuService: TreasureChestMenuService) { }
 
@@ -40,6 +41,7 @@ export class OpportunityCardsComponent implements OnInit {
       if (val) {
         this.opportunityCardsData[this.modifyDataIndex] = val;
         this.opportunityCardsService.updatedOpportunityCard.next(undefined);
+        this.updateOpportunityCardsData();
       }
     });
     this.selectAllSub = this.treasureChestMenuService.selectAll.subscribe(val => {
@@ -57,6 +59,10 @@ export class OpportunityCardsComponent implements OnInit {
     this.updateOpportunityCardSub.unsubscribe();
     this.selectAllSub.unsubscribe();
     this.sortBySub.unsubscribe();
+  }
+
+  updateOpportunityCardsData(){
+    this.opportunityCardsService.opportunityCards.next(this.opportunityCardsData);
   }
 
   editOpportunity(opportunityCard: OpportunityCardData, index: number) {
@@ -117,6 +123,7 @@ export class OpportunityCardsComponent implements OnInit {
       this.treasureHuntService.deleteWaterReductionsItem(this.deleteOpportunity.opportunityIndex);
     }
     this.hideDeleteItemModal();
+    this.updateOpportunityCardsData();
   }
 
   editOpportunitySheet(cardData: OpportunityCardData, index: number) {
@@ -268,6 +275,7 @@ export class OpportunityCardsComponent implements OnInit {
 
     }
     this.opportunityCardsData.push(newOpportunityCard);
+    this.updateOpportunityCardsData();
   }
 
   updateCopyName(oppSheet: OpportunitySheet): OpportunitySheet {
