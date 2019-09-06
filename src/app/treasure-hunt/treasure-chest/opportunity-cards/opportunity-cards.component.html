@@ -1,6 +1,6 @@
 <div class="row no-gutters">
   <div class="col-12 data-card"
-    *ngFor="let cardData of opportunityCardsData | sortCardsBy:sortByVal; let index = index;">
+    *ngFor="let cardData of opportunityCardsData">
     <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !cardData.selected}">
       <!-- <div class="card-header">
         <div class="row">

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { TreasureHunt, OpportunitySheet } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunityCardsService, OpportunityCardData } from './opportunity-cards.service';
@@ -31,7 +31,7 @@ export class OpportunityCardsComponent implements OnInit {
   sortBySub: Subscription;
   sortByVal: string;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
-    private treasureChestMenuService: TreasureChestMenuService) { }
+    private treasureChestMenuService: TreasureChestMenuService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
@@ -43,7 +43,7 @@ export class OpportunityCardsComponent implements OnInit {
       }
     });
     this.selectAllSub = this.treasureChestMenuService.selectAll.subscribe(val => {
-      if(val == true){
+      if (val == true) {
         this.selectAll();
       }
     });
@@ -207,23 +207,22 @@ export class OpportunityCardsComponent implements OnInit {
     }
   }
 
-  selectAll(){
+  selectAll() {
     this.opportunityCardsData.forEach(card => {
-      if(card.selected == false){
+      if (card.selected == false) {
         card.selected = true;
         this.toggleSelected(card);
       }
     })
   }
 
-  createCopy(cardData: OpportunityCardData){
-    console.log(cardData);
+  createCopy(cardData: OpportunityCardData) {
     let newOpportunityCard: OpportunityCardData;
     if (cardData.opportunityType == 'lighting-replacement') {
+      cardData.lightingReplacement.opportunitySheet = this.updateCopyName(cardData.lightingReplacement.opportunitySheet);
       this.treasureHuntService.addNewLightingReplacementTreasureHuntItem(cardData.lightingReplacement);
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-      newOpportunityCard = this.opportunityCardsService.getLightingReplacementCardData(cardData.lightingReplacement, treasureHunt.lightingReplacements.length, treasureHunt.currentEnergyUsage);
-      this.opportunityCardsData.push(newOpportunityCard);
+      newOpportunityCard = this.opportunityCardsService.getLightingReplacementCardData(cardData.lightingReplacement, treasureHunt.lightingReplacements.length + 1, treasureHunt.currentEnergyUsage);
     } else if (cardData.opportunityType == 'replace-existing') {
       this.treasureHuntService.addNewReplaceExistingMotorsItem(cardData.replaceExistingMotor);
     } else if (cardData.opportunityType == 'motor-drive') {
@@ -239,5 +238,13 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (cardData.opportunityType == 'water-reduction') {
       this.treasureHuntService.addNewWaterReductionsItem(cardData.waterReduction);
     }
+    this.opportunityCardsData.push(newOpportunityCard);
+  }
+
+  updateCopyName(oppSheet: OpportunitySheet): OpportunitySheet {
+    if (oppSheet) {
+     oppSheet.name =  oppSheet.name + ' (copy)';
+     return oppSheet;
+    } else { return }
   }
 }
