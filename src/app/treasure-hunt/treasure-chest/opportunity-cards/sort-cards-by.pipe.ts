@@ -12,6 +12,9 @@ export class SortCardsByPipe implements PipeTransform {
     if (sortByData.utilityType != 'All') {
       value = _.filter(value, (item: OpportunityCardData) => { return _.includes(item.utilityType, sortByData.utilityType) });
     }
+    if (sortByData.calculatorType != 'All') {
+      value = _.filter(value, (item: OpportunityCardData) => { return _.includes(item.opportunityType, sortByData.calculatorType) });
+    }
     if (sortByData.teams.length != 0) {
       value = _.filter(value, (item: OpportunityCardData) => { return _.includes(sortByData.teams, item.teamName) });
     }
@@ -40,4 +43,5 @@ export interface SortCardsData {
   teams: Array<string>;
   equipments: Array<string>;
   utilityType: string;
+  calculatorType: string;
 }

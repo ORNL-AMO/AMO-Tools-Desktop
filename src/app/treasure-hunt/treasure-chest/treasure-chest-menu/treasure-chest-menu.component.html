@@ -36,13 +36,13 @@
   </div>
   <div class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
-      Calculator Type
+      Calculator Type ({{sortCardsData.calculatorType}})
     </a>
     <div class="dropdown-menu p-0" [ngClass]="{'show': displayCalculatorTypeDropdown == true}">
       <div class="list-group">
         <a class="list-group-item list-group-item-action" *ngFor="let option of calculatorTypeOptions"
-          [ngClass]="{'active': option.value == displayCalculatorType}"
-          (click)="setCalculatorType(option.value)">{{option.value}}
+          [ngClass]="{'active': option.value == sortCardsData.calculatorType}"
+          (click)="setCalculatorType(option.value)">{{option.display}}
           ({{option.numCalcs}})</a>
       </div>
     </div>

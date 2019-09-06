@@ -41,7 +41,7 @@ export class TreasureChestMenuComponent implements OnInit {
   displayCalculatorType: string = 'All';
 
   energyTypeOptions: Array<{ value: string, numCalcs: number }> = [];
-  calculatorTypeOptions: Array<{ value: string, numCalcs: number }> = [];
+  calculatorTypeOptions: Array<{ display: string, value: string, numCalcs: number }> = [];
   treasureHuntSub: Subscription;
 
   displayUtilityTypeDropdown: boolean = false;
@@ -56,34 +56,51 @@ export class TreasureChestMenuComponent implements OnInit {
   teams: Array<{ name: string, selected: boolean }>;
   equipments: Array<{ name: string, selected: boolean }>;
   opportunityCardsSub: Subscription;
+  opportunityCardsData: Array<OpportunityCardData>;
   constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService, private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
-    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
-      this.treasureHunt = val;
-      this.energyTypeOptions = new Array();
-      this.calculatorTypeOptions = new Array();
-      this.setEnergyTypeOptions();
-    });
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
       this.getSortByLabel();
     });
 
     this.opportunityCardsSub = this.opportuntiyCardsService.opportunityCards.subscribe(val => {
+      this.opportunityCardsData = val;
       this.setTeams(val);
       this.setEquipments(val);
-    })
+      this.setEnergyTypeOptions(val);
+      this.setCalculatorOptions(val);
+    });
   }
 
   ngOnDestroy() {
-    this.treasureHuntSub.unsubscribe();
     this.sortBySub.unsubscribe();
     this.opportunityCardsSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     this.getNavbarWidth();
+  }
+
+  toggleUtilityType() {
+    this.displayUtilityTypeDropdown = !this.displayUtilityTypeDropdown;
+  }
+
+  toggleCalculatorType() {
+    this.displayCalculatorTypeDropdown = !this.displayCalculatorTypeDropdown;
+  }
+
+  toggleAdditionalFilters() {
+    if (this.displayAdditionalFiltersDropdown == 'hide') {
+      this.displayAdditionalFiltersDropdown = 'show';
+    } else {
+      this.displayAdditionalFiltersDropdown = 'hide';
+    }
+  }
+
+  toggleSortBy() {
+    this.sortByDropdown = !this.sortByDropdown;
   }
 
   selectAll() {
@@ -100,6 +117,7 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortCardsData.teams = [];
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
+
   setEquipments(oppData: Array<OpportunityCardData>) {
     let equipmentNames: Array<string> = this.treasureChestMenuService.getAllEquipment(oppData);
     this.equipments = new Array();
@@ -163,27 +181,9 @@ export class TreasureChestMenuComponent implements OnInit {
     })
     this.sortCardsData.teams = [];
     this.sortCardsData.equipments = [];
+    this.sortCardsData.utilityType = 'All';
+    this.sortCardsData.calculatorType = 'All';
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
-  }
-
-  toggleUtilityType() {
-    this.displayUtilityTypeDropdown = !this.displayUtilityTypeDropdown;
-  }
-
-  toggleCalculatorType() {
-    this.displayCalculatorTypeDropdown = !this.displayCalculatorTypeDropdown;
-  }
-
-  toggleAdditionalFilters() {
-    if (this.displayAdditionalFiltersDropdown == 'hide') {
-      this.displayAdditionalFiltersDropdown = 'show';
-    } else {
-      this.displayAdditionalFiltersDropdown = 'hide';
-    }
-  }
-
-  toggleSortBy() {
-    this.sortByDropdown = !this.sortByDropdown;
   }
 
   getNavbarWidth() {
@@ -200,114 +200,21 @@ export class TreasureChestMenuComponent implements OnInit {
 
   setEnergyType(str: string) {
     this.sortCardsData.utilityType = str;
+    this.sortCardsData.calculatorType = 'All';
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    this.setCalculatorOptions(this.opportunityCardsData);
     this.toggleUtilityType();
-    this.displayEnergyType = str;
-    this.displayCalculatorType = 'All';
-    this.setCalculatorType('All');
-    this.emitChangeEnergyType.emit(this.displayEnergyType);
-    this.setCalculatorOptions();
   }
 
-  getNumberOfCalcs() {
-    let numCalcs: number = 0;
-    if (this.treasureHunt.opportunitySheets) {
-      numCalcs = numCalcs + this.getNumberOfOppSheetCalcs();
-    }
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Electricity') {
-      numCalcs = numCalcs + this.getNumberOfElectricityCalcs();
-    }
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Natural Gas') {
-      numCalcs = numCalcs + this.getNumberOfNaturalGasCalcs();
-    }
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Compressed Air') {
-      numCalcs = numCalcs + this.getNumberOfCompressedAirCalcs();
-    }
-    //add getNumberUtilities once additional calcs are added for other utilities.
-    return numCalcs;
-  }
-
-  getNumberOfElectricityCalcs(): number {
-    let numElectricity: number = 0;
-    if (this.treasureHunt.lightingReplacements && this.treasureHunt.lightingReplacements.length != 0) {
-      numElectricity = this.treasureHunt.lightingReplacements.length;
-    }
-    if (this.treasureHunt.motorDrives && this.treasureHunt.motorDrives.length != 0) {
-      numElectricity = numElectricity + this.treasureHunt.motorDrives.length;
-    }
-    if (this.treasureHunt.replaceExistingMotors && this.treasureHunt.replaceExistingMotors.length != 0) {
-      numElectricity = numElectricity + this.treasureHunt.replaceExistingMotors.length;
-    }
-    if (this.treasureHunt.electricityReductions && this.treasureHunt.electricityReductions.length != 0) {
-      numElectricity = numElectricity + this.treasureHunt.electricityReductions.length;
-    }
-
-    if (this.treasureHunt.compressedAirReductions && this.treasureHunt.compressedAirReductions.length != 0) {
-      this.treasureHunt.compressedAirReductions.forEach(reduction => {
-        if (reduction.baseline[0].utilityType == 1) {
-          numElectricity++;
-        }
-      })
-    }
-    return numElectricity;
-  }
-
-  getNumberOfNaturalGasCalcs(): number {
-    let numGas: number = 0;
-    if (this.treasureHunt.naturalGasReductions && this.treasureHunt.naturalGasReductions.length != 0) {
-      numGas = numGas + this.treasureHunt.naturalGasReductions.length;
-    }
-    return numGas;
-  }
-
-  getNumberOfCompressedAirCalcs(): number {
-    let numCompressedAir: number = 0;
-    if (this.treasureHunt.compressedAirReductions && this.treasureHunt.compressedAirReductions.length != 0) {
-      this.treasureHunt.compressedAirReductions.forEach(reduction => {
-        if (reduction.baseline[0].utilityType == 0) {
-          numCompressedAir++;
-        }
-      })
-    }
-    return numCompressedAir;
-  }
-
-  getNumberOfOppSheetCalcs(): number {
-    if (this.treasureHunt.opportunitySheets) {
-      let numCalcs: number = this.treasureHunt.opportunitySheets.length;
-      if (this.displayEnergyType != 'All') {
-        let summaries = this.opportunitySummaryService.getOpportunitySheetSummaries(this.treasureHunt.opportunitySheets, new Array(), this.settings, true);
-        let filteredItems = _.filter(summaries, (summary) => {
-          if (summary.utilityType == this.displayEnergyType) {
-            return summary
-          } else if (summary.utilityType == 'Mixed' && summary.mixedIndividualResults) {
-            let filteredMixedItems = _.filter(summary.mixedIndividualResults, (mixedSummary) => { return mixedSummary.utilityType == this.displayEnergyType });
-            if (filteredMixedItems.length != 0) {
-              return summary;
-            }
-          }
-        })
-        numCalcs = filteredItems.length;
-      }
-      return numCalcs;
-    } else {
-      return 0;
-    }
-  }
-
-  setCalculatorType(str: string) {
-    this.displayCalculatorType = str;
-    this.emitChangeCalculatorType.emit(this.displayCalculatorType);
-  }
-
-  setEnergyTypeOptions() {
-    let numSteam: number = this.setSteam();
-    let numElectricity: number = this.setElectricityCalcs();
-    let numNaturalGas: number = this.setNaturalGas();
-    let numWater: number = this.setWater();
-    let numWasteWater: number = this.setWasteWater();
-    let numOtherFuel: number = this.setOtherFuel();
-    let numCompressedAir: number = this.setCompressedAir();
+  setEnergyTypeOptions(oppData: Array<OpportunityCardData>) {
+    this.energyTypeOptions = new Array();
+    let numSteam: number = this.getFilteredCalcsByUtility(oppData, 'Steam').length;
+    let numElectricity: number = this.getFilteredCalcsByUtility(oppData, 'Electricity').length;
+    let numNaturalGas: number = this.getFilteredCalcsByUtility(oppData, 'Natural Gas').length;
+    let numWater: number = this.getFilteredCalcsByUtility(oppData, 'Water').length;
+    let numWasteWater: number = this.getFilteredCalcsByUtility(oppData, 'Waste Water').length;
+    let numOtherFuel: number = this.getFilteredCalcsByUtility(oppData, 'Other Fuel').length;
+    let numCompressedAir: number = this.getFilteredCalcsByUtility(oppData, 'Compressed Air').length;
 
     //electricity
     if (numElectricity != 0) {
@@ -337,187 +244,73 @@ export class TreasureChestMenuComponent implements OnInit {
     if (numSteam != 0) {
       this.energyTypeOptions.push({ value: 'Steam', numCalcs: numSteam });
     }
-    //set opp sheet option
-    this.setOppSheetOption();
-    let numCalcs = this.getNumberOfCalcs();
-
-    this.energyTypeOptions.unshift({ value: 'All', numCalcs: numCalcs });
-    this.calculatorTypeOptions.unshift({ value: 'All', numCalcs: numCalcs });
+    this.energyTypeOptions.unshift({ value: 'All', numCalcs: oppData.length });
   }
 
-  setCalculatorOptions() {
+  setCalculatorType(str: string) {
+    this.sortCardsData.calculatorType = str;
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+    this.toggleCalculatorType();
+  }
+
+  setCalculatorOptions(oppData: Array<OpportunityCardData>) {
     this.calculatorTypeOptions = new Array();
-    //electricity
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Electricity') {
-      this.setElectricityCalcs();
+    let filteredCalcs: Array<OpportunityCardData> = oppData;
+    if (this.sortCardsData.utilityType != 'All') {
+      console.log('NOT ALL FILTER')
+      filteredCalcs = this.getFilteredCalcsByUtility(oppData, this.sortCardsData.utilityType)
     }
-    //natural gas
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Natural Gas') {
-      this.setNaturalGas();
+    this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: filteredCalcs.length });
+    //lighting
+    let numLighting: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'lighting-replacement' }).length;
+    if (numLighting != 0) {
+      this.calculatorTypeOptions.push({ display: 'Lighting Replacement', value: 'lighting-replacement', numCalcs: numLighting });
     }
-    // water
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Water') {
-      this.setWater();
+    //opportunitySheets
+    let numOppSheets: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'opportunity-sheet' }).length;
+    if (numOppSheets != 0) {
+      this.calculatorTypeOptions.push({ display: 'Opportunity Sheet', value: 'opportunity-sheet', numCalcs: numOppSheets });
     }
-    // wasteWater
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Waste Water') {
-      this.setWasteWater();
+    //replaceExistingMotors
+    let numReplaceExisting: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'replace-existing' }).length;
+    if (numReplaceExisting != 0) {
+      this.calculatorTypeOptions.push({ display: 'Replace Existing Motor', value: 'replace-existing', numCalcs: numReplaceExisting });
     }
-    // otherFuel
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Other Fuel') {
-      this.setOtherFuel();
+    //motorDrives
+    let numMotorDrives: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'motor-drive' }).length;
+    if (numMotorDrives != 0) {
+      this.calculatorTypeOptions.push({ display: 'Motor Drive', value: 'motor-drive', numCalcs: numMotorDrives });
     }
-    // compressedAir
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Compressed Air') {
-      this.setCompressedAir();
+    //naturalGasReductions
+    let numNgReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'natural-gas-reduction' }).length;
+    if (numNgReductions != 0) {
+      this.calculatorTypeOptions.push({ display: 'Natural Gas Reduction', value: 'natural-gas-reduction', numCalcs: numNgReductions });
     }
-    // steam
-    if (this.displayEnergyType == 'All' || this.displayEnergyType == 'Steam') {
-      this.setSteam();
+    //electricityReductions
+    let electricityReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'electricity-reduction' }).length;
+    if (electricityReductions != 0) {
+      this.calculatorTypeOptions.push({ display: 'Electricity Reduction', value: 'electricity-reduction', numCalcs: electricityReductions });
+    }
+    //compressedAirReductions
+    let compressedAirReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'compressed-air-reduction' }).length;
+    if (compressedAirReductions != 0) {
+      this.calculatorTypeOptions.push({ display: 'Compressed Air Reduction', value: 'compressed-air-reduction', numCalcs: compressedAirReductions });
+    }
+    //compressedAirPressureReductions
+    let compressedAirPressureReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'compressed-air-pressure-reduction' }).length;
+    if (compressedAirPressureReductions != 0) {
+      this.calculatorTypeOptions.push({ display: 'Compressed Air Pressure Reduction', value: 'compressed-air-pressure-reduction', numCalcs: compressedAirPressureReductions });
+    }
+    //waterReductions
+    let waterReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'water-reduction' }).length;
+    if (waterReductions != 0) {
+      this.calculatorTypeOptions.push({ display: 'Water Reduction', value: 'water-reduction', numCalcs: waterReductions });
     }
 
-    //set opp sheet option
-    this.setOppSheetOption();
-
-    let numCalcs: number = this.getNumberOfCalcs();
-    this.calculatorTypeOptions.unshift({ value: 'All', numCalcs: numCalcs });
   }
 
-  setOppSheetOption() {
-    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
-      let numCalcs: number = this.getNumberOfOppSheetCalcs();
-      if (numCalcs != 0) {
-        this.calculatorTypeOptions.push({ value: 'Opportunity Sheet', numCalcs: numCalcs });
-      }
-    }
-  }
-
-  setElectricityCalcs(): number {
-    let numElectricity: number = 0;
-    if (this.treasureHunt.lightingReplacements && this.treasureHunt.lightingReplacements.length != 0) {
-      this.calculatorTypeOptions.push({ value: 'Lighting Replacement', numCalcs: this.treasureHunt.lightingReplacements.length });
-      numElectricity = this.treasureHunt.lightingReplacements.length;
-    }
-    if (this.treasureHunt.motorDrives && this.treasureHunt.motorDrives.length != 0) {
-      this.calculatorTypeOptions.push({ value: 'Upgrade Motor Drive', numCalcs: this.treasureHunt.motorDrives.length });
-      numElectricity = numElectricity + this.treasureHunt.motorDrives.length;
-    }
-    if (this.treasureHunt.replaceExistingMotors && this.treasureHunt.replaceExistingMotors.length != 0) {
-      this.calculatorTypeOptions.push({ value: 'Replace Existing Motor', numCalcs: this.treasureHunt.replaceExistingMotors.length });
-      numElectricity = numElectricity + this.treasureHunt.replaceExistingMotors.length;
-    }
-    if (this.treasureHunt.electricityReductions && this.treasureHunt.electricityReductions.length != 0) {
-      this.calculatorTypeOptions.push({ value: 'Electricity Reduction', numCalcs: this.treasureHunt.electricityReductions.length });
-      numElectricity = numElectricity + this.treasureHunt.electricityReductions.length;
-    }
-
-    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
-      this.treasureHunt.opportunitySheets.forEach(sheet => {
-        let results: OpportunitySheetResults = this.opportunitySheetService.getResults(sheet, this.settings);
-        if (results.electricityResults.energyCostSavings > 0) {
-          numElectricity++;
-        }
-      })
-    }
-
-    if (this.treasureHunt.compressedAirReductions && this.treasureHunt.compressedAirReductions.length != 0) {
-      this.calculatorTypeOptions.push({ value: 'Compressed Air Reduction', numCalcs: this.treasureHunt.compressedAirReductions.length });
-      this.treasureHunt.compressedAirReductions.forEach(reduction => {
-        if (reduction.baseline[0].utilityType == 1) {
-          numElectricity++;
-        }
-      })
-    }
-    return numElectricity;
-  }
-
-  setNaturalGas(): number {
-    let numGas: number = 0;
-    if (this.treasureHunt.naturalGasReductions && this.treasureHunt.naturalGasReductions.length != 0) {
-      this.calculatorTypeOptions.push({ value: 'Natural Gas Reduction', numCalcs: this.treasureHunt.naturalGasReductions.length });
-      numGas = numGas + this.treasureHunt.naturalGasReductions.length;
-    }
-    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
-      this.treasureHunt.opportunitySheets.forEach(sheet => {
-        let results: OpportunitySheetResults = this.opportunitySheetService.getResults(sheet, this.settings);
-        if (results.gasResults.energyCostSavings > 0) {
-          numGas++;
-        }
-      })
-    }
-    return numGas;
-  }
-
-  setWater(): number {
-    let numGas: number = 0;
-    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
-      this.treasureHunt.opportunitySheets.forEach(sheet => {
-        let results: OpportunitySheetResults = this.opportunitySheetService.getResults(sheet, this.settings);
-        if (results.waterResults.energyCostSavings > 0) {
-          numGas++;
-        }
-      })
-    }
-    return numGas;
-  }
-
-  setCompressedAir(): number {
-    let numCompressedAir: number = 0;
-    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
-      this.treasureHunt.opportunitySheets.forEach(sheet => {
-        let results: OpportunitySheetResults = this.opportunitySheetService.getResults(sheet, this.settings);
-        if (results.compressedAirResults.energyCostSavings > 0) {
-          numCompressedAir++;
-        }
-      })
-    }
-    if (this.treasureHunt.compressedAirReductions && this.treasureHunt.compressedAirReductions.length != 0) {
-      //this.calculatorTypeOptions.push({value: 'Compressed Air Reduction', numCalcs: this.treasureHunt.compressedAirReductions.length});
-      this.treasureHunt.compressedAirReductions.forEach(reduction => {
-        if (reduction.baseline[0].utilityType == 0) {
-          numCompressedAir++;
-        }
-      })
-    }
-    return numCompressedAir;
-  }
-
-  setWasteWater(): number {
-    let numWasteWater: number = 0;
-    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
-      this.treasureHunt.opportunitySheets.forEach(sheet => {
-        let results: OpportunitySheetResults = this.opportunitySheetService.getResults(sheet, this.settings);
-        if (results.wasteWaterResults.energyCostSavings > 0) {
-          numWasteWater++;
-        }
-      })
-    }
-    return numWasteWater;
-  }
-
-  setOtherFuel(): number {
-    let numOtherFuel: number = 0;
-    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
-      this.treasureHunt.opportunitySheets.forEach(sheet => {
-        let results: OpportunitySheetResults = this.opportunitySheetService.getResults(sheet, this.settings);
-        if (results.otherFuelResults.energyCostSavings > 0) {
-          numOtherFuel++;
-        }
-      })
-    }
-    return numOtherFuel;
-  }
-
-  setSteam(): number {
-    let numSteam: number = 0;
-    if (this.treasureHunt.opportunitySheets && this.treasureHunt.opportunitySheets.length != 0) {
-      this.treasureHunt.opportunitySheets.forEach(sheet => {
-        let results: OpportunitySheetResults = this.opportunitySheetService.getResults(sheet, this.settings);
-        if (results.steamResults.energyCostSavings > 0) {
-          numSteam++;
-        }
-      })
-    }
-    return numSteam;
+  getFilteredCalcsByUtility(opData: Array<OpportunityCardData>, utilityType: string): Array<OpportunityCardData> {
+    let filteredCards: Array<OpportunityCardData> = _.filter(opData, (data) => { return _.includes(data.utilityType, utilityType) });
+    return filteredCards;
   }
 }

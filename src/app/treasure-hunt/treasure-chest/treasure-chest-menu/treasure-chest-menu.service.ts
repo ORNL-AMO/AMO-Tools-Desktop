@@ -20,7 +20,8 @@ export class TreasureChestMenuService {
       sortBy: 'annualCostSavings',
       teams: [],
       equipments: [],
-      utilityType: 'All'
+      utilityType: 'All',
+      calculatorType: 'All'
     };
     return sortCardsData;
   }
