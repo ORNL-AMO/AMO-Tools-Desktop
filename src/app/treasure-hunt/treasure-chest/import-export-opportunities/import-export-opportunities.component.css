@@ -18,3 +18,7 @@ ul{
 label{
     font-size: 20px;
 }
+
+.btn-secondary{
+    padding: 6px;
+}

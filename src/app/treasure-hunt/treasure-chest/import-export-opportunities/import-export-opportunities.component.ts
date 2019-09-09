@@ -3,56 +3,35 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 import { ImportExportService } from '../../../shared/import-export/import-export.service';
+import { TreasureHuntService } from '../../treasure-hunt.service';
+import { ImportOpportunitiesService } from '../import-opportunities.service';
+import { OpportunityCardsService } from '../opportunity-cards/opportunity-cards.service';
 @Component({
   selector: 'app-import-export-opportunities',
   templateUrl: './import-export-opportunities.component.html',
-  styleUrls: ['./import-export-opportunities.component.css'],
-  animations: [
-    trigger('modal', [
-      state('show', style({
-        top: '0px'
-      })),
-      transition('hide => show', animate('.5s ease-in')),
-      transition('show => hide', animate('.5s ease-out'))
-    ])
-  ]
+  styleUrls: ['./import-export-opportunities.component.css']
 })
 export class ImportExportOpportunitiesComponent implements OnInit {
   @Input()
-  treasureHunt: TreasureHunt;
-  @Output('emitImportData')
-  emitImportData = new EventEmitter<ImportExportOpportunities>();
-  @Output('emitCloseModal')
-  emitCloseModal = new EventEmitter<boolean>();
+  tabSelect: string;
+  @Output('emitClose')
+  emitClose = new EventEmitter<boolean>()
 
   exportOpportunities: ImportExportOpportunities;
   fileReference: any;
   validFile: boolean;
   importJson = null;
+  treasureHunt: TreasureHunt;
 
-  showModal: string = 'hide';
-  destroyModal: boolean = false;
-  tabSelect: string = 'import';
-  constructor(private importExportService: ImportExportService) { }
+  constructor(private importExportService: ImportExportService, private treasureHuntService: TreasureHuntService,
+     private importOpportunitiesService: ImportOpportunitiesService, private opportunityCardsService: OpportunityCardsService) { }
 
   ngOnInit() {
-    this.setImportExportData();
-    setTimeout(() => {
-      this.showModal = 'show';
-    }, 100);
-  }
-
-
-  closeModal() {
-    this.showModal = 'hide';
-    setTimeout(() => {
-      this.destroyModal = true;
-      this.emitCloseModal.emit(true);
-    }, 500);
-  }
-
-  setTab(str: string){
-    this.tabSelect = str;
+    this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
+    this.treasureHuntService.treasureHunt.subscribe(val => {
+      this.treasureHunt = val;
+      this.setImportExportData();
+    });
   }
 
   setImportExportData() {
@@ -119,7 +98,7 @@ export class ImportExportOpportunitiesComponent implements OnInit {
 
   exportData() {
     this.importExportService.downloadOpportunities(this.exportOpportunities, 'Opportunity Data');
-    this.closeModal();
+    this.emitClose.emit(true);
   }
 
   setImportFile($event) {
@@ -160,11 +139,11 @@ export class ImportExportOpportunitiesComponent implements OnInit {
       fr.readAsText(this.fileReference.target.files[0]);
       fr.onloadend = (e) => {
         this.importJson = JSON.parse(JSON.stringify(fr.result));
-        this.emitImport(this.importJson);
+        this.importData(this.importJson);
       };
     }
     else {
-      this.emitImport(this.importJson);
+      this.importData(this.importJson);
     }
   }
 
@@ -177,9 +156,11 @@ export class ImportExportOpportunitiesComponent implements OnInit {
     }
   }
 
-  emitImport(data: any) {
+  importData(data: any) {
     let importData = JSON.parse(data);
-    this.emitImportData.emit(importData);
-    this.closeModal();
+    this.treasureHunt = this.importOpportunitiesService.importData(importData, this.treasureHunt);
+    this.treasureHuntService.treasureHunt.next(this.treasureHunt);
+    this.opportunityCardsService.updateOpportunityCards.next(true);
+    this.emitClose.emit(true);
   }
 }

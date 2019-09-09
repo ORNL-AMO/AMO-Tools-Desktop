@@ -27,17 +27,23 @@ export class OpportunityCardsComponent implements OnInit {
   deleteOpportunity: OpportunityCardData;
   editOpportunitySheetCardData: OpportunityCardData;
   modifyDataIndex: number;
-  updateOpportunityCardSub: Subscription;
+  updatedOpportunityCardSub: Subscription;
   selectAllSub: Subscription;
   sortBySub: Subscription;
   sortByVal: SortCardsData;
+  updateOpportunityCardsSub: Subscription;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
     private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
-    this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
-    this.updateOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(val => {
+    this.updateOpportunityCardsSub = this.opportunityCardsService.updateOpportunityCards.subscribe(val => {
+      if (val == true) {
+        this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
+        this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
+        this.opportunityCardsService.updateOpportunityCards.next(false);
+      }
+    });
+    this.updatedOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(val => {
       if (val) {
         this.opportunityCardsData[this.modifyDataIndex] = val;
         this.opportunityCardsService.updatedOpportunityCard.next(undefined);
@@ -56,12 +62,13 @@ export class OpportunityCardsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.updateOpportunityCardSub.unsubscribe();
+    this.updatedOpportunityCardSub.unsubscribe();
     this.selectAllSub.unsubscribe();
     this.sortBySub.unsubscribe();
+    this.updateOpportunityCardsSub.unsubscribe();
   }
 
-  updateOpportunityCardsData(){
+  updateOpportunityCardsData() {
     this.opportunityCardsService.opportunityCards.next(this.opportunityCardsData);
   }
 

@@ -47,6 +47,7 @@ export class TreasureChestMenuComponent implements OnInit {
   displayUtilityTypeDropdown: boolean = false;
   displayCalculatorTypeDropdown: boolean = false;
   displayAdditionalFiltersDropdown: string = 'hide';
+  displayImportExportModal: string = 'hide';
   sortByDropdown: boolean = false;
   navbarWidth: number;
   treasureHunt: TreasureHunt;
@@ -57,6 +58,7 @@ export class TreasureChestMenuComponent implements OnInit {
   equipments: Array<{ name: string, selected: boolean }>;
   opportunityCardsSub: Subscription;
   opportunityCardsData: Array<OpportunityCardData>;
+  importExportOption: string;
   constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService, private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
@@ -312,5 +314,19 @@ export class TreasureChestMenuComponent implements OnInit {
   getFilteredCalcsByUtility(opData: Array<OpportunityCardData>, utilityType: string): Array<OpportunityCardData> {
     let filteredCards: Array<OpportunityCardData> = _.filter(opData, (data) => { return _.includes(data.utilityType, utilityType) });
     return filteredCards;
+  }
+
+  openImportModal(){
+    this.displayImportExportModal = 'show';
+    this.importExportOption = 'import';
+  }
+
+  openExportModal(){
+    this.displayImportExportModal = 'show';
+    this.importExportOption = 'export';
+  }
+
+  hideImportExportModal(){
+    this.displayImportExportModal = 'hide';
   }
 }

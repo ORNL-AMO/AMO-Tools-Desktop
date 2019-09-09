@@ -75,7 +75,7 @@ a.list-group-item.active:hover{
     left: 10px;
   }
 
-  .filters-header{
+  .modal-card-header{
       font-size: 1.5rem;
       font-weight: bold;
   }

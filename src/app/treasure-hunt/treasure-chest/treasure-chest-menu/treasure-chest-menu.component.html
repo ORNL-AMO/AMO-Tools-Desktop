@@ -50,40 +50,61 @@
 
   <div class="nav-item">
     <div class="btn-group">
-      <button type="button" class="nav-btn">Import</button>
-      <button type="button" class="nav-btn middle">Export</button>
+      <button type="button" class="nav-btn" (click)="openImportModal()">Import</button>
+      <button type="button" class="nav-btn middle" (click)="openExportModal()">Export</button>
       <button type="button" class="nav-btn" (click)="selectAll()">Select All</button>
     </div>
   </div>
 
   <div class="nav-item dropdown">
     <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
-    <div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}">
-      <div class="card-header p-2">
-        <span class="filters-header">Additional Filters</span>
-        <button class="nav-btn pull-right my-auto" (click)="clearAllFilters()">Clear All</button>
-      </div>
-      <div class="card-body p-2">
-        <div class="row">
-          <div class="col-6">
-            <h5>Select Teams</h5>
-            <div class="list-group list-group-flush">
-              <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
-                [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.name}}</a>
-            </div>
-          </div>
-          <div class="col-6">
-            <h5>Select Process / Equipment</h5>
-            <div class="list-group list-group-flush">
-              <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
-                [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.name}}</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer p-2">
-        <button class="nav-btn pull-right" (click)="toggleAdditionalFilters()">Close</button>
-      </div>
-    </div>
   </div>
 </nav>
+<!--additional features modal-->
+<div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}">
+  <div class="card-header p-2">
+    <span class="modal-card-header">Additional Filters</span>
+    <button class="nav-btn pull-right my-auto" (click)="clearAllFilters()">Clear All</button>
+  </div>
+  <div class="card-body p-2">
+    <div class="row">
+      <div class="col-6">
+        <h5>Select Teams</h5>
+        <div class="list-group list-group-flush">
+          <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
+            [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.name}}</a>
+        </div>
+      </div>
+      <div class="col-6">
+        <h5>Select Process / Equipment</h5>
+        <div class="list-group list-group-flush">
+          <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
+            [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.name}}</a>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="col-12">
+        <input type="range" step="25" min="0" max="100" class="form-fontrol">
+      </div>
+    </div> -->
+  </div>
+  <div class="card-footer p-2">
+    <button class="nav-btn pull-right" (click)="toggleAdditionalFilters()">Close</button>
+  </div>
+</div>
+
+
+
+
+<!--import modal-->
+<div class="card menu-modal" [@menuModal]="displayImportExportModal" [ngStyle]="{'width.px': navbarWidth}">
+  <div class="card-header p-2">
+    <span class="modal-card-header" *ngIf="importExportOption == 'import'">Import Opportunities From File</span>
+    <span class="modal-card-header" *ngIf="importExportOption == 'export'">Export Selected Opportunities</span>
+    <button class="nav-btn pull-right" (click)="hideImportExportModal()">Close</button>
+  </div>
+  <div class="card-body p-2">
+    <app-import-export-opportunities [tabSelect]="importExportOption" (emitClose)="hideImportExportModal();"></app-import-export-opportunities>
+  </div>
+</div>

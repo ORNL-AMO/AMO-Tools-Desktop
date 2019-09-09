@@ -11,9 +11,11 @@ export class OpportunityCardsService {
 
   updatedOpportunityCard: BehaviorSubject<OpportunityCardData>;
   opportunityCards: BehaviorSubject<Array<OpportunityCardData>>;
+  updateOpportunityCards: BehaviorSubject<boolean>;
   constructor(private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
+    this.updateOpportunityCards = new BehaviorSubject<boolean>(true);
   }
 
   getOpportunityCardsData(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunityCardData> {
