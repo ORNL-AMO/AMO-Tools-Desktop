@@ -46,6 +46,7 @@ export class OpportunityCardsComponent implements OnInit {
     this.updatedOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(val => {
       if (val) {
         this.opportunityCardsData[this.modifyDataIndex] = val;
+        this.updateAllIndexes();
         this.opportunityCardsService.updatedOpportunityCard.next(undefined);
         this.updateOpportunityCardsData();
       }

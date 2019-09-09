@@ -57,14 +57,16 @@ export class CalculatorsComponent implements OnInit {
     this.saveCalcModal.hide();
   }
   showOpportunitySheetModal() {
+    this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
     this.opportunitySheetModal.show();
   }
   hideOpportunitySheetModal() {
     this.opportunitySheetModal.hide();
   }
 
-  saveItemOpportunitySheet(updatedOpportunitySheet: OpportunitySheet){
+  saveItemOpportunitySheet(updatedOpportunitySheet: OpportunitySheet) {
     this.calculatorOpportunitySheet = updatedOpportunitySheet;
+    this.calculatorsService.calcOpportunitySheet = updatedOpportunitySheet;
     this.hideOpportunitySheetModal();
   }
 
@@ -85,7 +87,7 @@ export class CalculatorsComponent implements OnInit {
       this.confirmCompressedAirPressureReduction();
     } else if (this.selectedCalc == 'water-reduction') {
       this.confirmSaveWaterReduction();
-    } else if(this.selectedCalc == 'opportunity-sheet'){
+    } else if (this.selectedCalc == 'opportunity-sheet') {
       this.confirmSaveStandaloneOpportunitySheet();
     }
   }
