@@ -23,6 +23,8 @@ import { CalculatorsModule } from './calculators/calculators.module';
 import { TreasureHuntReportModule } from './treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsByPipe } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
+import { UtilitySummaryComponent } from './treasure-chest/summary-card/utility-summary/utility-summary.component';
+import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.service';
 
 @NgModule({
   imports: [
@@ -46,8 +48,16 @@ import { SortCardsByPipe } from './treasure-chest/opportunity-cards/sort-cards-b
     TreasureChestMenuComponent,
     ImportExportOpportunitiesComponent,
     OpportunityCardsComponent,
-    SortCardsByPipe
+    SortCardsByPipe,
+    UtilitySummaryComponent
   ],
-  providers: [ TreasureHuntService, TreasureHuntReportService, ImportOpportunitiesService, OpportunityCardsService, TreasureChestMenuService ]
+  providers: [ 
+    TreasureHuntService, 
+    TreasureHuntReportService, 
+    ImportOpportunitiesService, 
+    OpportunityCardsService, 
+    TreasureChestMenuService,
+    SortCardsService
+  ]
 })
 export class TreasureHuntModule { }

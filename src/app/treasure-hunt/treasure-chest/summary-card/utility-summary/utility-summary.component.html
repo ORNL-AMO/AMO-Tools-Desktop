@@ -1,0 +1,31 @@
+<label class="group-label pt-2">{{label}} Cost Savings</label>
+<app-treasure-hunt-gauge [value]="summaryData.totalPercentSavings" [chartHeight]="75">
+</app-treasure-hunt-gauge>
+<table class="mx-auto">
+  <tbody>
+    <tr>
+      <td>
+        Baseline
+      </td>
+      <td>
+        {{summaryData.baselineCost | currency:'USD'}}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Modified
+      </td>
+      <td>
+        {{summaryData.modificationCost | currency:'USD'}}
+      </td>
+    </tr>
+    <tr class="bold">
+      <td>
+        Annual Savings
+      </td>
+      <td>
+        {{summaryData.totalCostSavings | currency:'USD'}}
+      </td>
+    </tr>
+  </tbody>
+</table>

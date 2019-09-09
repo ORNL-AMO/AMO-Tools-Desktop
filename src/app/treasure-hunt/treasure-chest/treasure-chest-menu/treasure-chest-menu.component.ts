@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { TreasureHunt, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
@@ -31,6 +31,13 @@ export class TreasureChestMenuComponent implements OnInit {
 
   @ViewChild('navbar') navbar: ElementRef;
   navbarWidth: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.getNavbarWidth();
+  }
+
+
 
   displayEnergyType: string = 'All';
   displayCalculatorType: string = 'All';
@@ -249,7 +256,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.calculatorTypeOptions = new Array();
     let filteredCalcs: Array<OpportunityCardData> = oppData;
     if (this.sortCardsData.utilityType != 'All') {
-      console.log('NOT ALL FILTER')
       filteredCalcs = this.getFilteredCalcsByUtility(oppData, this.sortCardsData.utilityType)
     }
     this.calculatorTypeOptions.unshift({ display: 'All', value: 'All', numCalcs: filteredCalcs.length });

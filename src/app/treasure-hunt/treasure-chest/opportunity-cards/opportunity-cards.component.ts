@@ -239,6 +239,9 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (cardData.opportunityType == 'water-reduction') {
       cardData.waterReduction.selected = cardData.selected;
       this.treasureHuntService.editWaterReductionsItem(cardData.waterReduction, cardData.opportunityIndex, this.settings);
+    } else if (cardData.opportunityType == 'opportunity-sheet') {
+      cardData.opportunitySheet.selected = cardData.selected;
+      this.treasureHuntService.editOpportunitySheetItem(cardData.opportunitySheet, cardData.opportunityIndex, this.settings);
     }
   }
 
@@ -302,7 +305,14 @@ export class OpportunityCardsComponent implements OnInit {
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
       newOpportunityCard = this.opportunityCardsService.getWaterReductionCardData(newOpportunityCard.waterReduction, this.settings, treasureHunt.waterReductions.length - 1, treasureHunt.currentEnergyUsage);
 
+    } else if (cardData.opportunityType == 'opportunity-sheet') {
+      newOpportunityCard.opportunitySheet = this.updateCopyName(newOpportunityCard.opportunitySheet);
+      this.treasureHuntService.addNewOpportunitySheetsItem(newOpportunityCard.opportunitySheet);
+      let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+      newOpportunityCard = this.opportunityCardsService.getOpportunitySheetCardData(newOpportunityCard.opportunitySheet, treasureHunt.currentEnergyUsage, treasureHunt.waterReductions.length - 1, this.settings);
+
     }
+
     this.opportunityCardsData.push(newOpportunityCard);
     this.updateAllIndexes();
     this.updateOpportunityCardsData();

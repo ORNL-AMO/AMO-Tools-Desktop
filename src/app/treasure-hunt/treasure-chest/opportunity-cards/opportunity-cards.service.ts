@@ -70,7 +70,9 @@ export class OpportunityCardsService {
       utilityType: ['Electricity'],
       percentSavings: [{
         percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity'
+        label: 'Electricity',
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost
       }],
       lightingReplacement: lightingReplacement,
       name: opportunitySummary.opportunityName,
@@ -123,14 +125,11 @@ export class OpportunityCardsService {
       label: string,
       energyUnit: string
     }>,
-    percentSavings: Array<{
-      percent: number,
-      label: string
-    }>,
+    percentSavings: Array<{percent: number, label: string, baselineCost: number, modificationCost: number }>,
     utilityTypes: Array<string>
   } {
     let annualEnergySavings: Array<{ savings: number, label: string, energyUnit: string }> = new Array();
-    let percentSavings: Array<{ percent: number, label: string }> = new Array();
+    let percentSavings: Array<{ percent: number, label: string, baselineCost: number, modificationCost: number }> = new Array();
     let utilityTypes: Array<string> = new Array();
 
     if (results.electricityResults.energySavings != 0) {
@@ -142,7 +141,9 @@ export class OpportunityCardsService {
       percentSavings.push(
         {
           percent: this.getPercentSavings(results.electricityResults.energyCostSavings, currentEnergyUsage.electricityCosts),
-          label: 'Electricity'
+          label: 'Electricity',
+          baselineCost: results.electricityResults.baselineEnergyCost,
+          modificationCost: results.electricityResults.modificationEnergyCost
         }
       )
       utilityTypes.push('Electricity');
@@ -160,7 +161,9 @@ export class OpportunityCardsService {
       percentSavings.push(
         {
           percent: this.getPercentSavings(results.gasResults.energyCostSavings, currentEnergyUsage.naturalGasCosts),
-          label: 'Natural Gas'
+          label: 'Natural Gas',
+          baselineCost: results.gasResults.baselineEnergyCost,
+          modificationCost: results.gasResults.modificationEnergyCost
         }
       )
       utilityTypes.push('Natural Gas');
@@ -178,7 +181,9 @@ export class OpportunityCardsService {
       percentSavings.push(
         {
           percent: this.getPercentSavings(results.compressedAirResults.energyCostSavings, currentEnergyUsage.compressedAirCosts),
-          label: 'Compressed Air'
+          label: 'Compressed Air',
+          baselineCost: results.compressedAirResults.baselineEnergyCost,
+          modificationCost: results.compressedAirResults.modificationEnergyCost
         }
       );
       utilityTypes.push('Compressed Air');
@@ -196,7 +201,9 @@ export class OpportunityCardsService {
       percentSavings.push(
         {
           percent: this.getPercentSavings(results.otherFuelResults.energyCostSavings, currentEnergyUsage.otherFuelCosts),
-          label: 'Other Fuel'
+          label: 'Other Fuel',
+          baselineCost: results.otherFuelResults.baselineEnergyCost,
+          modificationCost: results.otherFuelResults.modificationEnergyCost
         }
       )
       utilityTypes.push('Other Fuel');
@@ -214,7 +221,9 @@ export class OpportunityCardsService {
       percentSavings.push(
         {
           percent: this.getPercentSavings(results.steamResults.energyCostSavings, currentEnergyUsage.steamCosts),
-          label: 'Steam'
+          label: 'Steam',
+          baselineCost: results.steamResults.baselineEnergyCost,
+          modificationCost: results.steamResults.modificationEnergyCost
         }
       )
       utilityTypes.push('Steam');
@@ -232,7 +241,9 @@ export class OpportunityCardsService {
       percentSavings.push(
         {
           percent: this.getPercentSavings(results.waterResults.energyCostSavings, currentEnergyUsage.waterCosts),
-          label: 'Water'
+          label: 'Water',
+          baselineCost: results.waterResults.baselineEnergyCost,
+          modificationCost: results.waterResults.modificationEnergyCost
         }
       )
       utilityTypes.push('Water');
@@ -251,7 +262,9 @@ export class OpportunityCardsService {
       percentSavings.push(
         {
           percent: this.getPercentSavings(results.wasteWaterResults.energyCostSavings, currentEnergyUsage.wasteWaterCosts),
-          label: 'Waste Water'
+          label: 'Waste Water',
+          baselineCost: results.wasteWaterResults.baselineEnergyCost,
+          modificationCost: results.wasteWaterResults.modificationEnergyCost
         }
       )
       utilityTypes.push('Waste Water');
@@ -292,7 +305,9 @@ export class OpportunityCardsService {
       utilityType: ['Electricity'],
       percentSavings: [{
         percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity'
+        label: 'Electricity',
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
       }],
 
       replaceExistingMotor: replaceExistingMotor,
@@ -336,7 +351,9 @@ export class OpportunityCardsService {
       utilityType: ['Electricity'],
       percentSavings: [{
         percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity'
+        label: 'Electricity',
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
       }],
       motorDrive: drive,
       name: opportunitySummary.opportunityName,
@@ -382,7 +399,9 @@ export class OpportunityCardsService {
       utilityType: ['Natural Gas'],
       percentSavings: [{
         percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.naturalGasCosts),
-        label: 'Natural Gas'
+        label: 'Natural Gas',
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
       }],
       naturalGasReduction: naturalGasReduction,
       name: opportunitySummary.opportunityName,
@@ -424,7 +443,9 @@ export class OpportunityCardsService {
       utilityType: ['Electricity'],
       percentSavings: [{
         percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity'
+        label: 'Electricity',
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
       }],
       electricityReduction: reduction,
       name: opportunitySummary.opportunityName,
@@ -476,7 +497,9 @@ export class OpportunityCardsService {
       utilityType: [opportunitySummary.utilityType],
       percentSavings: [{
         percent: this.getPercentSavings(opportunitySummary.costSavings, utilityCost),
-        label: opportunitySummary.utilityType
+        label: opportunitySummary.utilityType,
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
       }],
       compressedAirReduction: reduction,
       name: opportunitySummary.opportunityName,
@@ -519,7 +542,9 @@ export class OpportunityCardsService {
       utilityType: ['Electricity'],
       percentSavings: [{
         percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.electricityCosts),
-        label: 'Electricity'
+        label: 'Electricity',
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
       }],
       compressedAirPressureReduction: reduction,
       name: opportunitySummary.opportunityName,
@@ -571,7 +596,9 @@ export class OpportunityCardsService {
       utilityType: [opportunitySummary.utilityType],
       percentSavings: [{
         percent: this.getPercentSavings(opportunitySummary.costSavings, utilityCost),
-        label: opportunitySummary.utilityType
+        label: opportunitySummary.utilityType,
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
       }],
       waterReduction: reduction,
       name: opportunitySummary.opportunityName,
@@ -614,7 +641,9 @@ export interface OpportunityCardData {
   }>;
   percentSavings: Array<{
     percent: number,
-    label: string
+    label: string,
+    baselineCost: number,
+    modificationCost: number,
   }>;
   utilityType: Array<string>;
   name: string;
