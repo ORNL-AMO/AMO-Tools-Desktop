@@ -79,3 +79,14 @@ a.list-group-item.active:hover{
       font-size: 1.5rem;
       font-weight: bold;
   }
+
+  .navbar.second-nav{
+    background: none;
+    border-bottom: none;
+    justify-content: flex-end;
+  }
+
+  .navbar.second-nav .nav-item:not(:first-child){
+      padding-left: 2px;
+      padding-right: 2px;
+  }

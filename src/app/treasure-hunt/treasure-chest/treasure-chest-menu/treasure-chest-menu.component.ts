@@ -155,6 +155,26 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
+  removeTeam(teamName: string, index: number) {
+    this.sortCardsData.teams.splice(index, 1);
+    this.teams.forEach(team => {
+      if (team.name == teamName) {
+        team.selected = false;
+      }
+    });
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
+  removeEquipment(equipmentName: string, index: number) {
+    this.sortCardsData.equipments.splice(index, 1);
+    this.equipments.forEach(equipment => {
+      if (equipment.name == equipmentName) {
+        equipment.selected = false;
+      }
+    });
+    this.treasureChestMenuService.sortBy.next(this.sortCardsData);
+  }
+
   setSortBy(str: string) {
     this.sortCardsData.sortBy = str;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
@@ -312,17 +332,17 @@ export class TreasureChestMenuComponent implements OnInit {
     return filteredCards;
   }
 
-  openImportModal(){
+  openImportModal() {
     this.displayImportExportModal = 'show';
     this.importExportOption = 'import';
   }
 
-  openExportModal(){
+  openExportModal() {
     this.displayImportExportModal = 'show';
     this.importExportOption = 'export';
   }
 
-  hideImportExportModal(){
+  hideImportExportModal() {
     this.displayImportExportModal = 'hide';
   }
 }

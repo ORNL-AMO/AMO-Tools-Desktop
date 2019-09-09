@@ -60,11 +60,25 @@
     <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
   </div>
 </nav>
+<nav class="navbar second-nav" *ngIf="sortCardsData.teams.length != 0 || sortCardsData.equipments.length != 0">
+  <div class="nav-item" *ngFor="let team of sortCardsData.teams; let index = index;">
+    <button type="button" class="nav-btn" (click)="removeTeam(team, index)"><span aria-hidden="true"
+        class="pr-1">&times;</span>{{team}}</button>
+  </div>
+  <div class="nav-item" *ngFor="let equipment of sortCardsData.equipments; let index = index;">
+    <button type="button" class="nav-btn" (click)="removeEquipment(equipment, index)"><span aria-hidden="true"
+        class="pr-1">&times;</span>{{equipment}}</button>
+  </div>
+  <div class="nav-item pull-right">
+    <button class="nav-btn pull-right" (click)="clearAllFilters()">Clear All</button>
+  </div>
+</nav>
+
+
 <!--additional features modal-->
 <div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}">
   <div class="card-header p-2">
     <span class="modal-card-header">Additional Filters</span>
-    <button class="nav-btn pull-right my-auto" (click)="clearAllFilters()">Clear All</button>
   </div>
   <div class="card-body p-2">
     <div class="row">
@@ -105,6 +119,7 @@
     <button class="nav-btn pull-right" (click)="hideImportExportModal()">Close</button>
   </div>
   <div class="card-body p-2">
-    <app-import-export-opportunities [tabSelect]="importExportOption" (emitClose)="hideImportExportModal();"></app-import-export-opportunities>
+    <app-import-export-opportunities [tabSelect]="importExportOption" (emitClose)="hideImportExportModal();">
+    </app-import-export-opportunities>
   </div>
 </div>
