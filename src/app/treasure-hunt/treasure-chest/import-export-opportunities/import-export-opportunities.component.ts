@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 import { ImportExportService } from '../../../shared/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { ImportOpportunitiesService } from '../import-opportunities.service';
 import { OpportunityCardsService } from '../opportunity-cards/opportunity-cards.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-import-export-opportunities',
   templateUrl: './import-export-opportunities.component.html',
@@ -22,16 +22,19 @@ export class ImportExportOpportunitiesComponent implements OnInit {
   validFile: boolean;
   importJson = null;
   treasureHunt: TreasureHunt;
-
+  treasureHuntSub: Subscription;
   constructor(private importExportService: ImportExportService, private treasureHuntService: TreasureHuntService,
      private importOpportunitiesService: ImportOpportunitiesService, private opportunityCardsService: OpportunityCardsService) { }
 
   ngOnInit() {
-    this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    this.treasureHuntService.treasureHunt.subscribe(val => {
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
       this.setImportExportData();
     });
+  }
+
+  ngOnDestroy(){
+    this.treasureHuntSub.unsubscribe();
   }
 
   setImportExportData() {

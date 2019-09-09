@@ -29,7 +29,13 @@ export class OpportunityCardsService {
     let waterReductionData: Array<OpportunityCardData> = this.getWaterReductions(treasureHunt.waterReductions, treasureHunt.currentEnergyUsage, settings);
     let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, settings, treasureHunt.currentEnergyUsage)
     opportunityCardsData = _.union(lightingReplacementsCardData, replaceExistingData, naturalGasReductionData, electricityReductionData, compressedAirReductionData, compressedAirPressureReductionData, waterReductionData, standaloneOpportunitySheetData);
+    let index: number = 0;
+    opportunityCardsData.forEach(card => {
+      card.index = index;
+      index++;
+    })
     this.opportunityCards.next(opportunityCardsData);
+
     return opportunityCardsData;
   }
 
@@ -593,6 +599,7 @@ export class OpportunityCardsService {
 
 
 export interface OpportunityCardData {
+  index?: number,
   teamName: string;
   paybackPeriod: number;
   selected: boolean;

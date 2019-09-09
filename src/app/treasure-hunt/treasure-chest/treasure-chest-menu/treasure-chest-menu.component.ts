@@ -26,16 +26,11 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   ]
 })
 export class TreasureChestMenuComponent implements OnInit {
-
   @Input()
   settings: Settings;
-  @Output('emitImportExport')
-  emitImportExport = new EventEmitter<boolean>();
-  @Output('emitChangeEnergyType')
-  emitChangeEnergyType = new EventEmitter<string>();
-  @Output('emitChangeCalculatorType')
-  emitChangeCalculatorType = new EventEmitter<string>();
+
   @ViewChild('navbar') navbar: ElementRef;
+  navbarWidth: number;
 
   displayEnergyType: string = 'All';
   displayCalculatorType: string = 'All';
@@ -49,7 +44,6 @@ export class TreasureChestMenuComponent implements OnInit {
   displayAdditionalFiltersDropdown: string = 'hide';
   displayImportExportModal: string = 'hide';
   sortByDropdown: boolean = false;
-  navbarWidth: number;
   treasureHunt: TreasureHunt;
   sortCardsData: SortCardsData;
   sortBySub: Subscription;
@@ -194,10 +188,6 @@ export class TreasureChestMenuComponent implements OnInit {
         this.navbarWidth = this.navbar.nativeElement.clientWidth * .95;
       }, 100);
     }
-  }
-
-  showImportExport() {
-    this.emitImportExport.emit(true);
   }
 
   setEnergyType(str: string) {

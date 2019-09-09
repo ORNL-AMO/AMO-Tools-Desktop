@@ -1,8 +1,6 @@
 <div class="d-flex modify-conditions panel-container skyline" [ngClass]="{'hide': selectedCalc != 'none'}">
   <div class="scroll-item chest-column pb-3" [ngStyle]="{'height.px': containerHeight}">
-    <app-treasure-chest-menu (emitChangeEnergyType)="setEnergyType($event)"
-      (emitChangeCalculatorType)="setCaclulatorType($event)" [settings]="settings"
-      (emitImportExport)="openImportExportModal()"></app-treasure-chest-menu>
+    <app-treasure-chest-menu [settings]="settings"></app-treasure-chest-menu>
     <div class="col-12 pt-2">
       <app-opportunity-cards [settings]="settings"></app-opportunity-cards>
     </div>
@@ -13,5 +11,3 @@
 </div>
 
 <app-calculators *ngIf="selectedCalc != 'none'" [settings]="settings"></app-calculators>
-<!-- <app-import-export-opportunities *ngIf="showImportExportModal" [treasureHunt]="treasureHunt"
-  (emitImportData)="importData($event)" (emitCloseModal)="closeImportExportModal()"></app-import-export-opportunities> -->

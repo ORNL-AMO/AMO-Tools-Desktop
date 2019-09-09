@@ -1,35 +1,17 @@
 <div class="row no-gutters">
-  <div class="col-12 data-card" *ngFor="let cardData of opportunityCardsData | sortCardsBy:sortByVal; let index = index;">
+  <div class="col-12 data-card" *ngFor="let cardData of opportunityCardsData | sortCardsBy:sortByVal;">
     <div class="card treasure-hunt-card" [ngClass]="{'not-selected': !cardData.selected}">
-      <!-- <div class="card-header">
-        <div class="row">
-          <div class="col-1">
-            <app-animated-checkmark [active]="cardData.selected" (click)="toggleSelected(cardData)">
-            </app-animated-checkmark>
-          </div>
-          <div class="col-10 text-center">
-            <a (click)="editOpportunity(cardData, index)">
-              {{cardData.name}}
-            </a>
-          </div>
-          <div class="col-1">
-            <img src={{cardData.iconString}} class="calc-icon">
-          </div>
-        </div>
-      </div> -->
       <div class="card-body d-flex w-100 p-0">
         <div class="col-2 col-item-br pl-0 pr-0">
           <div class="input-group h-100">
             <div class="input-group-prepend col-item-br h-100">
               <input type="checkbox" [(ngModel)]="cardData.selected" (change)="toggleSelected(cardData)">
             </div>
-            <!-- <app-animated-checkmark [active]="cardData.selected" (click)="toggleSelected(cardData)">
-          </app-animated-checkmark> -->
             <div class="col pl-1 pr-1">
               <div class="d-flex flex-column w-100 h-100 justify-content-center align-items-center">
                 <img src={{cardData.iconString}} class="calc-icon">
                 <div class="text-center">
-                  <a (click)="editOpportunity(cardData, index)">
+                  <a (click)="editOpportunity(cardData)">
                     {{cardData.name}}
                   </a>
                 </div>
@@ -89,15 +71,15 @@
             <div class="d-flex flex-column w-100 align-items-center"
               *ngIf="cardData.opportunityType != 'opportunity-sheet'"
               [ngClass]="{'no-opp-sheet': !cardData.opportunitySheet, 'opp-sheet-exists': cardData.opportunitySheet}"
-              (click)="editOpportunitySheet(cardData, index)">
+              (click)="editOpportunitySheet(cardData)">
               <img src="assets/images/calculator-icons/opportunity-sheet-icon.png" class="calc-icon">
               <a class="text-center" *ngIf="!cardData.opportunitySheet">Add Opportunity Sheet</a>
               <a class="text-center" *ngIf="cardData.opportunitySheet">Edit Opportunity Sheet</a>
             </div>
 
-            <a class="click-link text-center" (click)="editOpportunity(cardData, index)">Edit Opportunity</a>
+            <a class="click-link text-center" (click)="editOpportunity(cardData)">Edit Opportunity</a>
             <a class="click-link text-center" (click)="createCopy(cardData)">Create Copy</a>
-            <a class="click-link danger" (click)="setDeleteItem(cardData, index)">Delete</a>
+            <a class="click-link danger" (click)="setDeleteItem(cardData)">Delete</a>
           </div>
         </div>
       </div>
