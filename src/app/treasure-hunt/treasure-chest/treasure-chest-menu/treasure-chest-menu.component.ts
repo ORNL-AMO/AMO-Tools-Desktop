@@ -65,7 +65,7 @@ export class TreasureChestMenuComponent implements OnInit {
   ngOnInit() {
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
-      this.getSortByLabel();
+      this.setSortByLabel();
     });
 
     this.opportunityCardsSub = this.opportuntiyCardsService.opportunityCards.subscribe(val => {
@@ -181,7 +181,7 @@ export class TreasureChestMenuComponent implements OnInit {
     this.toggleSortBy();
   }
 
-  getSortByLabel() {
+  setSortByLabel() {
     if (this.sortCardsData.sortBy == 'annualCostSavings') {
       this.sortByLabel = 'Annual Savings';
     } else if (this.sortCardsData.sortBy == 'teamName') {
@@ -206,6 +206,7 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortCardsData.equipments = [];
     this.sortCardsData.utilityType = 'All';
     this.sortCardsData.calculatorType = 'All';
+    this.displayCalculatorType = 'All';
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
@@ -266,8 +267,9 @@ export class TreasureChestMenuComponent implements OnInit {
     this.energyTypeOptions.unshift({ value: 'All', numCalcs: oppData.length });
   }
 
-  setCalculatorType(str: string) {
-    this.sortCardsData.calculatorType = str;
+  setCalculatorType(calcOption: { display: string, value: string, numCalcs: number }) {
+    this.displayCalculatorType = calcOption.display;
+    this.sortCardsData.calculatorType = calcOption.value;
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
     this.toggleCalculatorType();
   }

@@ -30,20 +30,27 @@
       <div class="list-group">
         <a class="list-group-item list-group-item-action" *ngFor="let option of energyTypeOptions"
           [ngClass]="{'active': option.value == sortCardsData.utilityType}"
-          (click)="setEnergyType(option.value)">{{option.value}} ({{option.numCalcs}})</a>
+          (click)="setEnergyType(option.value)">{{option.value}}
+          <span class="badge badge-pill pull-right">
+            {{option.numCalcs}}
+          </span>
+        </a>
       </div>
     </div>
   </div>
   <div class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" (click)="toggleCalculatorType()">
-      Calculator Type ({{sortCardsData.calculatorType}})
+      Calculator Type ({{displayCalculatorType}})
     </a>
     <div class="dropdown-menu p-0" [ngClass]="{'show': displayCalculatorTypeDropdown == true}">
-      <div class="list-group">
+      <div class="list-group calc-width">
         <a class="list-group-item list-group-item-action" *ngFor="let option of calculatorTypeOptions"
           [ngClass]="{'active': option.value == sortCardsData.calculatorType}"
-          (click)="setCalculatorType(option.value)">{{option.display}}
-          ({{option.numCalcs}})</a>
+          (click)="setCalculatorType(option)">{{option.display}}
+          <span class="badge badge-pill pull-right">
+            {{option.numCalcs}}
+          </span>
+        </a>
       </div>
     </div>
   </div>

@@ -90,3 +90,17 @@ a.list-group-item.active:hover{
       padding-left: 2px;
       padding-right: 2px;
   }
+
+  .list-group.calc-width{
+      min-width: 250px;
+  }
+
+  .badge-pill{
+    background-color: #2E4053;
+    color: white;
+  }
+
+  .active .badge-pill{
+      background-color: white;
+      color: black;
+  }
