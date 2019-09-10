@@ -344,8 +344,8 @@ export class ConvertSteamService {
    
     ssmtOperationsOutput.sitePowerImport = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerImport).from('kJh').to(settings.steamPowerMeasurement);
     ssmtOperationsOutput.sitePowerDemand = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerDemand).from('kJh').to(settings.steamPowerMeasurement);
-    ssmtOperationsOutput.makeupWaterVolumeFlow = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('gpm').to(settings.steamVolumeFlowMeasurement);
-    ssmtOperationsOutput.makeupWaterVolumeFlowAnnual = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('gal').to(settings.steamVolumeMeasurement);
+    ssmtOperationsOutput.makeupWaterVolumeFlow = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('m3/h').to(settings.steamVolumeFlowMeasurement);
+    ssmtOperationsOutput.makeupWaterVolumeFlowAnnual = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlowAnnual).from('m3').to(settings.steamVolumeMeasurement);
     return ssmtOperationsOutput;
   }
 
@@ -399,8 +399,8 @@ export class ConvertSteamService {
     ssmtOutput.deaeratorOutput = this.convertDeaeratorOutput(ssmtOutput.deaeratorOutput, settings);
 
     ssmtOutput.highPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.highPressureProcessSteamUsage, settings);
-    ssmtOutput.mediumPressureProcessUsage = this.convertProcessUsageOutput(ssmtOutput.mediumPressureProcessUsage, settings);
-    ssmtOutput.lowPressureProcessUsage = this.convertProcessUsageOutput(ssmtOutput.lowPressureProcessUsage, settings);
+    ssmtOutput.mediumPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.mediumPressureProcessSteamUsage, settings);
+    ssmtOutput.lowPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.lowPressureProcessSteamUsage, settings);
 
     ssmtOutput.lowPressureVentedSteam = this.convertSteamPropertiesOutput(ssmtOutput.lowPressureVentedSteam, settings);
     ssmtOutput.heatExchangerOutput = this.convertHeatExchangerOutput(ssmtOutput.heatExchangerOutput, settings);

@@ -2144,8 +2144,8 @@ export class CalculateModelService {
       deaeratorOutput: undefined,
 
       highPressureProcessSteamUsage: undefined,
-      mediumPressureProcessUsage: undefined,
-      lowPressureProcessUsage: undefined,
+      mediumPressureProcessSteamUsage: undefined,
+      lowPressureProcessSteamUsage: undefined,
       lowPressureVentedSteam: undefined,
       heatExchangerOutput: undefined,
       operationsOutput: undefined

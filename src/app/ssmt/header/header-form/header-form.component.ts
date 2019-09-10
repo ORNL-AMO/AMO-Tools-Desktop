@@ -55,7 +55,6 @@ export class HeaderFormComponent implements OnInit {
     if (changes.numberOfHeaders && !changes.numberOfHeaders.isFirstChange()) {
       this.setErrorMsgs();
     }
-    console.log(this.headerForm);
   }
 
   setErrorMsgs() {

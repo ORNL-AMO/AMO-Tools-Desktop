@@ -24,6 +24,7 @@ export class PrvDiagramComponent implements OnInit {
   inletSteamClasses: Array<string>;
   outletSteamClasses: Array<string>;
   feedwaterClasses: Array<string>;
+  showFeedwater: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -32,6 +33,11 @@ export class PrvDiagramComponent implements OnInit {
 
   ngOnChanges() {
     this.setClasses();
+    if(isNaN(this.prv.feedwaterMassFlow) == false && this.prv.feedwaterMassFlow != 0){
+      this.showFeedwater = true;
+    }else{
+      this.showFeedwater = false;
+    }
   }
 
   setClasses() {

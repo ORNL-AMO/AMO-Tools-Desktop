@@ -37,8 +37,8 @@ export interface SSMTOutput {
   deaeratorOutput: DeaeratorOutput;
 
   highPressureProcessSteamUsage: ProcessSteamUsage;
-  mediumPressureProcessUsage: ProcessSteamUsage;
-  lowPressureProcessUsage: ProcessSteamUsage;
+  mediumPressureProcessSteamUsage: ProcessSteamUsage;
+  lowPressureProcessSteamUsage: ProcessSteamUsage;
 
   // powerGenerated: number;
   // boilerFuelCost: number;

@@ -295,7 +295,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
   lowPressureProcessSteamInletHovered() {
     this.label = 'Low Pressure Process Steam';
     let header: SteamPropertiesOutput = this.outputData.lowPressureHeaderSteam;
-    let processUsage: ProcessSteamUsage = this.outputData.lowPressureProcessUsage;
+    let processUsage: ProcessSteamUsage = this.outputData.lowPressureProcessSteamUsage;
     this.setSteamProperties(header);
     this.steam.massFlow = processUsage.massFlow;
   }
@@ -303,7 +303,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
   mediumPressureProcessSteamInletHovered() {
     this.label = 'Medium Pressure Process Steam';
     let header: SteamPropertiesOutput = this.outputData.mediumPressureHeaderSteam;
-    let processUsage: ProcessSteamUsage = this.outputData.mediumPressureProcessUsage;
+    let processUsage: ProcessSteamUsage = this.outputData.mediumPressureProcessSteamUsage;
     this.setSteamProperties(header);
     this.steam.massFlow = processUsage.massFlow;
 

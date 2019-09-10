@@ -10,7 +10,7 @@
         <span class="condensing-warning fa fa-exclamation-triangle">
         </span>
       </span>
-      <div class="vented-steam-holder" *ngIf="ventedLowPressureSteam">
+      <div class="vented-steam-holder" *ngIf="showVentedSteam">
         <span class="vented-steam">
           {{ventedLowPressureSteam.massFlow | number:'1.0-2'}}
           <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>

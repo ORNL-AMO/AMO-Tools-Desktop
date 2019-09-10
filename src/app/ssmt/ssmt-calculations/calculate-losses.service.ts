@@ -178,10 +178,10 @@ export class CalculateLossesService {
   calculateUsefulProcessUsage(outputData: SSMTOutput, numberOfHeaders: number): number {
     let usefulProcessUsage: number = outputData.highPressureProcessSteamUsage.processUsage;
     if (numberOfHeaders > 1) {
-      usefulProcessUsage = usefulProcessUsage + outputData.lowPressureProcessUsage.processUsage;
+      usefulProcessUsage = usefulProcessUsage + outputData.lowPressureProcessSteamUsage.processUsage;
 
       if (numberOfHeaders === 3) {
-        usefulProcessUsage = usefulProcessUsage + outputData.mediumPressureProcessUsage.processUsage;
+        usefulProcessUsage = usefulProcessUsage + outputData.mediumPressureProcessSteamUsage.processUsage;
       }
     }
     return usefulProcessUsage;

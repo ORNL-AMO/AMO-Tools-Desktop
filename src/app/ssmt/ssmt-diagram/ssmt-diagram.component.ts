@@ -25,6 +25,7 @@ export class SsmtDiagramComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.inputData);
   }
 
   setHover(str: string) {
