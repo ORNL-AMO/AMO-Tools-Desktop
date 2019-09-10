@@ -80,6 +80,7 @@ export class TreasureChestMenuComponent implements OnInit {
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.opportunityCardsSub.unsubscribe();
+    this.clearAllFilters();
   }
 
   ngAfterViewInit() {

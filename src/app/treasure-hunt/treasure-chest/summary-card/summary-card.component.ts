@@ -48,6 +48,7 @@ export class SummaryCardComponent implements OnInit {
 
   ngOnDestroy() {
     this.opportunityCardsSub.unsubscribe();
+    this.sortBySub.unsubscribe();
   }
 
   setSavingsData() {
