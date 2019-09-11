@@ -195,7 +195,9 @@ export interface OpportunitySummary {
     payback: number,
     opportunityCost: OpportunityCost,
     mixedIndividualResults?: Array<OpportunitySummary>,
-    selected: boolean
+    selected: boolean,
+    baselineCost: number,
+    modificationCost: number
 }
 
 export interface UtilityUsageData {

@@ -1,17 +1,7 @@
-  .card-body{
-    padding: .5rem;
-  }
-
-  td{
+td{
     font-size: small;
     padding: 3px;
     text-align: left;
-  }
-
-  .group-label{
-    font-size: large;
-    width: auto;
-    padding-bottom: 0px;
   }
   
   .table{
@@ -20,4 +10,9 @@
 
   .total-border{
     border-bottom: 1px solid rgba(0, 0, 0, 0.5)
+  }
+
+  .group-label{
+    width: auto;
+    padding-bottom: 0px;
   }

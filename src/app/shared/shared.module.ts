@@ -29,6 +29,7 @@ import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service
 import { ToastComponent } from './toast/toast.component';
 import { OperatingHoursModalComponent } from './operating-hours-modal/operating-hours-modal.component';
 import { OperatingHoursModalService } from './operating-hours-modal/operating-hours-modal.service';
+import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { OperatingHoursModalService } from './operating-hours-modal/operating-ho
     SettingsLabelPipe,
     WaterfallGraphComponent,
     ToastComponent,
-    OperatingHoursModalComponent
+    OperatingHoursModalComponent,
+    TreasureHuntGaugeComponent
   ],
   exports: [
     ControlMessagesComponent,
@@ -73,7 +75,8 @@ import { OperatingHoursModalService } from './operating-hours-modal/operating-ho
     SettingsLabelPipe,
     WaterfallGraphComponent,
     ToastComponent,
-    OperatingHoursModalComponent
+    OperatingHoursModalComponent,
+    TreasureHuntGaugeComponent
   ],
   providers: [
     ValidationService,
