@@ -39,14 +39,14 @@
         <td class="bold" [ngStyle]="{'width.%': 15}">Power Cost</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baselineOutput.boilerOutput">
-            {{baselineOutput.powerGenerationCost / 1000 | currency:'USD'}}
+            {{baselineOutput.operationsOutput.powerGenerationCost / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!baselineOutput.boilerOutput">&mdash;</span>
         </td>
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.outputData.boilerOutput">
-            {{modResults.outputData.powerGenerationCost / 1000 | currency:'USD'}}
+            {{modResults.outputData.operationsOutput.powerGenerationCost / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
@@ -57,7 +57,7 @@
         <td *ngFor="let modResults of modificationOutputs; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modResults.outputData.boilerOutput">
-            {{(baselineOutput.powerGenerationCost - modResults.outputData.powerGenerationCost) / 1000 | currency:'USD'}}
+            {{(baselineOutput.operationsOutput.powerGenerationCost - modResults.outputData.operationsOutput.powerGenerationCost) / 1000 | currency:'USD'}}
           </span>
           <span *ngIf="!modResults.outputData.boilerOutput">&mdash;</span>
         </td>
