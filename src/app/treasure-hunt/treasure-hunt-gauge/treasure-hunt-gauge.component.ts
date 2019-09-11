@@ -73,7 +73,7 @@ export class TreasureHuntGaugeComponent implements OnInit {
         max: 50
       },
       color: {
-        pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
+        pattern: ['#52489C','#27AE60'], // the three color levels for the percentage values.
         threshold: {
           values: [25, 50]
         }
@@ -86,9 +86,5 @@ export class TreasureHuntGaugeComponent implements OnInit {
         width: this.chartWidth
       }
     });
-
-    // if (this.value && this.chart) {
-    //   this.updateChart();
-    // }
   }
 }
