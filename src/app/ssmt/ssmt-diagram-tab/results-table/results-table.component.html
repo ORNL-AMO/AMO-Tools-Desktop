@@ -31,9 +31,9 @@
 <app-flash-tank-table *ngIf="selectedTable == 'blowdownFlashTank'" [flashTank]="outputData.blowdownFlashTank"
     [flashTankType]="'Blowdown'" [settings]="settings"></app-flash-tank-table>
 <app-prv-table *ngIf="selectedTable == 'highToMediumPressurePRV'" [prvType]="'highToMediumPressurePRV'"
-    [settings]="settings" [inputData]="inputData" [prv]="outputData.highToMediumPressurePRV"></app-prv-table>
+    [settings]="settings" [inputData]="inputData" [prv]="outputData.highPressureToMediumPressurePrv"></app-prv-table>
 <app-prv-table *ngIf="selectedTable == 'lowPressurePRV'" [prvType]="'lowPressurePRV'" [settings]="settings"
-    [inputData]="inputData" [prv]="outputData.lowPressurePRV"></app-prv-table>
+    [inputData]="inputData" [prv]="outputData.mediumPressureToLowPressurePrv"></app-prv-table>
 <app-deaerator-table *ngIf="selectedTable == 'deaerator'" [deaerator]="outputData.deaeratorOutput" [settings]="settings"
     [inputData]="inputData"></app-deaerator-table>
 
