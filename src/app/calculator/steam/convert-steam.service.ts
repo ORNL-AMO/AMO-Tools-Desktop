@@ -382,7 +382,7 @@ export class ConvertSteamService {
     ssmtOutput.highPressureCondensate = this.convertSteamPropertiesOutput(ssmtOutput.highPressureCondensate, settings);
     ssmtOutput.lowPressureCondensate = this.convertSteamPropertiesOutput(ssmtOutput.lowPressureCondensate, settings);
     ssmtOutput.mediumPressureCondensate = this.convertSteamPropertiesOutput(ssmtOutput.mediumPressureCondensate, settings);
-    ssmtOutput.combinedCondensate = this.convertSteamPropertiesOutput(ssmtOutput.combinedCondensate, settings);
+    ssmtOutput.combinedCondensateHeader = this.convertSteamPropertiesOutput(ssmtOutput.combinedCondensateHeader, settings);
     ssmtOutput.returnCondensate = this.convertSteamPropertiesOutput(ssmtOutput.returnCondensate, settings);
     ssmtOutput.condensateFlashTank = this.convertFlashTankOutput(ssmtOutput.condensateFlashTank, settings);
 

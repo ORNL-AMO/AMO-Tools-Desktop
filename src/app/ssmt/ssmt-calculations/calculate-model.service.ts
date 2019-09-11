@@ -2133,7 +2133,7 @@ export class CalculateModelService {
       highPressureCondensate: undefined,
       lowPressureCondensate: undefined,
       mediumPressureCondensate: undefined,
-      combinedCondensate: undefined,
+      combinedCondensateHeader: undefined,
       returnCondensate: undefined,
       condensateFlashTank: undefined,
 

@@ -26,62 +26,62 @@ export class CalculateLossesService {
     let turbineValid: boolean = this.turbineService.isTurbineValid(ssmtCpy.turbineInput, ssmtCpy.headerInput, settings);
     let operationsValid: boolean = this.operationsService.getForm(ssmtCpy, settings).valid;
 
-    // if (boilerValid && headerValid && turbineValid && operationsValid) {
-    //   ssmtLosses.stack = this.calculateStack(resultsCpy);
-    //   ssmtLosses.blowdown = this.calculateBlowdown(resultsCpy.boilerOutput, settings);
-    //   ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
-    //   ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessSteamUsage, resultsCpy.highPressureCondensate, settings);
-    //   ssmtLosses.highPressureProcessUsage = resultsCpy.highPressureProcessSteamUsage.processUsage;
-    //   //
-    //   ssmtLosses.highPressureHeader = resultsCpy.highPressureSteamHeatLoss.heatLoss;
-    //   if (inputCpy.turbineInput.condensingTurbine.useTurbine === true) {
-    //     ssmtLosses.condensingTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.condensingTurbine);
-    //     ssmtLosses.condensingTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.condensingTurbine);
+    if (boilerValid && headerValid && turbineValid && operationsValid) {
+      ssmtLosses.stack = this.calculateStack(resultsCpy);
+      ssmtLosses.blowdown = this.calculateBlowdown(resultsCpy.boilerOutput, settings);
+      ssmtLosses.deaeratorVentLoss = this.calculateDeaeratorVentLoss(resultsCpy.deaeratorOutput, settings);
+      ssmtLosses.highPressureProcessLoss = this.calculateProcessLoss(resultsCpy.highPressureProcessSteamUsage, resultsCpy.highPressureCondensate, settings);
+      ssmtLosses.highPressureProcessUsage = resultsCpy.highPressureProcessSteamUsage.processUsage;
+      //
+      ssmtLosses.highPressureHeader = resultsCpy.highPressureSteamHeatLoss.heatLoss;
+      if (inputCpy.turbineInput.condensingTurbine.useTurbine === true) {
+        ssmtLosses.condensingTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.condensingTurbine);
+        ssmtLosses.condensingTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.condensingTurbine);
 
-    //   }
+      }
 
-    //   if (inputCpy.headerInput.highPressureHeader.flashCondensateReturn === true) {
-    //     ssmtLosses.condensateFlashTankLoss = this.calculateCondensateFlashTankLoss(resultsCpy.condensateFlashTank);
-    //   }
-    //   if (inputCpy.headerInput.numberOfHeaders > 1) {
-    //     //low pressure vent
-    //     ssmtLosses.lowPressureVentLoss = this.calculateLowPressureVentLoss(resultsCpy.lowPressureVentedSteam, settings);
-    //     //header
-    //     ssmtLosses.lowPressureHeader = resultsCpy.lowPressureSteamHeatLoss.heatLoss;
-    //     //process
-    //     ssmtLosses.lowPressureProcessUsage = resultsCpy.lowPressureProcessUsage.processUsage;
-    //     ssmtLosses.lowPressureProcessLoss = this.calculateProcessLoss(resultsCpy.lowPressureProcessUsage, resultsCpy.lowPressureCondensate, settings);
-    //     //turbine
-    //     if (inputCpy.turbineInput.highToLowTurbine.useTurbine === true) {
-    //       ssmtLosses.highToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToLowPressureTurbine);
-    //       ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highPressureToLowPressureTurbine);
-    //     }
+      if (inputCpy.headerInput.highPressureHeader.flashCondensateReturn === true) {
+        ssmtLosses.condensateFlashTankLoss = this.calculateCondensateFlashTankLoss(resultsCpy.condensateFlashTank);
+      }
+      if (inputCpy.headerInput.numberOfHeaders > 1) {
+        //low pressure vent
+        ssmtLosses.lowPressureVentLoss = this.calculateLowPressureVentLoss(resultsCpy.lowPressureVentedSteam, settings);
+        //header
+        ssmtLosses.lowPressureHeader = resultsCpy.lowPressureSteamHeatLoss.heatLoss;
+        //process
+        ssmtLosses.lowPressureProcessUsage = resultsCpy.lowPressureProcessSteamUsage.processUsage;
+        ssmtLosses.lowPressureProcessLoss = this.calculateProcessLoss(resultsCpy.lowPressureProcessSteamUsage, resultsCpy.lowPressureCondensate, settings);
+        //turbine
+        if (inputCpy.turbineInput.highToLowTurbine.useTurbine === true) {
+          ssmtLosses.highToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToLowPressureTurbine);
+          ssmtLosses.highToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highPressureToLowPressureTurbine);
+        }
 
-    //     if (inputCpy.headerInput.numberOfHeaders === 3) {
-    //       ssmtLosses.mediumPressureProcessUsage = resultsCpy.mediumPressureProcessUsage.processUsage;
-    //       ssmtLosses.mediumPressureHeader = resultsCpy.mediumPressureSteamHeatLoss.heatLoss;
-    //       if (inputCpy.turbineInput.highToMediumTurbine.useTurbine === true) {
-    //         ssmtLosses.highToMediumTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToMediumPressureTurbine);
-    //         ssmtLosses.highToMediumTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highPressureToMediumPressureTurbine);
-    //       }
-    //       if (inputCpy.turbineInput.mediumToLowTurbine.useTurbine === true) {
-    //         ssmtLosses.mediumToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.mediumPressureToLowPressureTurbine);
-    //         ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.mediumPressureToLowPressureTurbine);
-    //       }
-    //       ssmtLosses.mediumPressureProcessLoss = this.calculateProcessLoss(resultsCpy.mediumPressureProcessUsage, resultsCpy.mediumPressureCondensate, settings);
-    //     }
-    //   }
-    //   ssmtLosses.condensateLosses = this.calculateCondensateLoss(resultsCpy, settings);
-    //   ssmtLosses.condensingLosses = this.calculateCondensingLosses(resultsCpy.condensingTurbine, inputCpy, settings);
+        if (inputCpy.headerInput.numberOfHeaders === 3) {
+          ssmtLosses.mediumPressureProcessUsage = resultsCpy.mediumPressureProcessSteamUsage.processUsage;
+          ssmtLosses.mediumPressureHeader = resultsCpy.mediumPressureSteamHeatLoss.heatLoss;
+          if (inputCpy.turbineInput.highToMediumTurbine.useTurbine === true) {
+            ssmtLosses.highToMediumTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.highPressureToMediumPressureTurbine);
+            ssmtLosses.highToMediumTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.highPressureToMediumPressureTurbine);
+          }
+          if (inputCpy.turbineInput.mediumToLowTurbine.useTurbine === true) {
+            ssmtLosses.mediumToLowTurbineUsefulEnergy = this.calculateTurbineUsefulEnergy(resultsCpy.mediumPressureToLowPressureTurbine);
+            ssmtLosses.mediumToLowTurbineEfficiencyLoss = this.calculateTurbineLoss(resultsCpy.mediumPressureToLowPressureTurbine);
+          }
+          ssmtLosses.mediumPressureProcessLoss = this.calculateProcessLoss(resultsCpy.mediumPressureProcessSteamUsage, resultsCpy.mediumPressureCondensate, settings);
+        }
+      }
+      ssmtLosses.condensateLosses = this.calculateCondensateLoss(resultsCpy, settings);
+      ssmtLosses.condensingLosses = this.calculateCondensingLosses(resultsCpy.condensingTurbine, inputCpy, settings);
 
-    //   ssmtLosses.fuelEnergy = resultsCpy.boilerOutput.fuelEnergy;
-    //   ssmtLosses.makeupWaterEnergy = this.calculateMakeupWaterEnergy(resultsCpy.makeupWater, settings);
-    //   ssmtLosses.allProcessUsageUsefulEnergy = this.calculateUsefulProcessUsage(resultsCpy, inputCpy.headerInput.numberOfHeaders);
-    //   ssmtLosses.totalProcessLosses = this.calculateTotalProcessLoss(ssmtLosses);
-    //   ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses);
-    //   ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses);
-    //   ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses);
-    // }
+      ssmtLosses.fuelEnergy = resultsCpy.boilerOutput.fuelEnergy;
+      ssmtLosses.makeupWaterEnergy = this.calculateMakeupWaterEnergy(resultsCpy.makeupWater, settings);
+      ssmtLosses.allProcessUsageUsefulEnergy = this.calculateUsefulProcessUsage(resultsCpy, inputCpy.headerInput.numberOfHeaders);
+      ssmtLosses.totalProcessLosses = this.calculateTotalProcessLoss(ssmtLosses);
+      ssmtLosses.totalVentLosses = this.calculateTotalVentLoss(ssmtLosses);
+      ssmtLosses.totalOtherLosses = this.calculateTotalOtherLosses(ssmtLosses);
+      ssmtLosses.totalTurbineLosses = this.calculateTotalTurbineLosses(ssmtLosses);
+    }
     return ssmtLosses;
   }
 
@@ -126,7 +126,7 @@ export class CalculateLossesService {
   }
 
   calculateCondensateLoss(ssmtResults: SSMTOutput, settings: Settings): number {
-    let combinedCondensateEnergy: number = this.calculateEnergy(ssmtResults.combinedCondensate.massFlow, ssmtResults.combinedCondensate.specificEnthalpy, settings);
+    let combinedCondensateEnergy: number = this.calculateEnergy(ssmtResults.combinedCondensateHeader.massFlow, ssmtResults.combinedCondensateHeader.specificEnthalpy, settings);
     let returnCondensateEnergy: number = this.calculateEnergy(ssmtResults.returnCondensate.massFlow, ssmtResults.returnCondensate.specificEnthalpy, settings);
     let loss: number = combinedCondensateEnergy - returnCondensateEnergy;
     loss = this.convertUnitsService.value(loss).from('MJ').to(settings.steamEnergyMeasurement);
