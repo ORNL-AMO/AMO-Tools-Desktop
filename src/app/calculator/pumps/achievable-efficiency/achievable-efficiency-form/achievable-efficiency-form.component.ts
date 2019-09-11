@@ -23,7 +23,7 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   constructor(private psatWarningsService: PsatWarningService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.pumpTypes = pumpTypesConstant;
+    this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
     //remove specified efficiency
     this.pumpTypes.pop();
     this.checkWarnings();

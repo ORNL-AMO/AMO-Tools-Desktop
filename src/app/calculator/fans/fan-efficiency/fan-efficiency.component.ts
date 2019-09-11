@@ -37,7 +37,6 @@ export class FanEfficiencyComponent implements OnInit {
   fanEfficiencyForm: FormGroup;
   headerHeight: number;
   currentField: string;
-  toggleCalculate: boolean = true;
   tabSelect: string = 'results';
   fanEfficiency: number = 0;
   calcExists: boolean;
@@ -99,12 +98,11 @@ export class FanEfficiencyComponent implements OnInit {
       this.saveCalculator();
     }
 
-    if (this.fanEfficiencyForm.status === 'VALID') {
+    if (this.fanEfficiencyForm.valid) {
       this.fanEfficiency = this.fsatService.optimalFanEfficiency(tmpFanEfficiencyInputs, this.settings);
     } else {
       this.fanEfficiency = 0;
     }
-    this.toggleCalculate = !this.toggleCalculate;
   }
 
   setTab(str: string) {
