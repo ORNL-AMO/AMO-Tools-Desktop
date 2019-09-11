@@ -9,13 +9,16 @@ export interface SSMTOutput {
   highPressureToMediumPressurePrv: PrvOutput;
 
   highPressureToLowPressureTurbine: TurbineOutput;
+  highPressureToLowPressureTurbineIdeal?: TurbineOutput;
   highPressureToMediumPressureTurbine: TurbineOutput;
+  highPressureToMediumPressureTurbineIdeal?: TurbineOutput;
   highPressureCondensateFlashTank: FlashTankOutput;
 
   lowPressureHeaderSteam: SteamPropertiesOutput;
   lowPressureSteamHeatLoss: HeatLossOutput;
 
   mediumPressureToLowPressureTurbine: TurbineOutput;
+  mediumPressureToLowPressureTurbineIdeal?: TurbineOutput;
   mediumPressureCondensateFlashTank: FlashTankOutput;
 
   mediumPressureHeaderSteam: SteamPropertiesOutput;
@@ -34,6 +37,7 @@ export interface SSMTOutput {
   makeupWaterAndCondensate: SteamPropertiesOutput;
 
   condensingTurbine: TurbineOutput;
+  condensingTurbineIdeal?: TurbineOutput;
   deaeratorOutput: DeaeratorOutput;
 
   highPressureProcessSteamUsage: ProcessSteamUsage;

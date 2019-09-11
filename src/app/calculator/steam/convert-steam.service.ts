@@ -365,13 +365,22 @@ export class ConvertSteamService {
     ssmtOutput.highPressureToMediumPressurePrv = this.convertPrvOutput(ssmtOutput.highPressureToMediumPressurePrv, settings);
 
     ssmtOutput.highPressureToLowPressureTurbine = this.convertTurbineOutput(ssmtOutput.highPressureToLowPressureTurbine, settings);
+    ssmtOutput.highPressureToLowPressureTurbineIdeal = this.convertTurbineOutput(ssmtOutput.highPressureToLowPressureTurbineIdeal, settings);
+    ssmtOutput.highPressureToLowPressureTurbine = this.updateTurbineWithIdealValues(ssmtOutput.highPressureToLowPressureTurbine, ssmtOutput.highPressureToLowPressureTurbineIdeal);
+
     ssmtOutput.highPressureToMediumPressureTurbine = this.convertTurbineOutput(ssmtOutput.highPressureToMediumPressureTurbine, settings);
+    ssmtOutput.highPressureToMediumPressureTurbineIdeal = this.convertTurbineOutput(ssmtOutput.highPressureToMediumPressureTurbineIdeal, settings);
+    ssmtOutput.highPressureToMediumPressureTurbine = this.updateTurbineWithIdealValues(ssmtOutput.highPressureToMediumPressureTurbine, ssmtOutput.highPressureToMediumPressureTurbineIdeal);
+
     ssmtOutput.highPressureCondensateFlashTank = this.convertFlashTankOutput(ssmtOutput.highPressureCondensateFlashTank, settings);
 
     ssmtOutput.lowPressureHeaderSteam = this.convertSteamPropertiesOutput(ssmtOutput.lowPressureHeaderSteam, settings);
     ssmtOutput.lowPressureSteamHeatLoss = this.convertHeatLossOutput(ssmtOutput.lowPressureSteamHeatLoss, settings);
 
     ssmtOutput.mediumPressureToLowPressureTurbine = this.convertTurbineOutput(ssmtOutput.mediumPressureToLowPressureTurbine, settings);
+    ssmtOutput.mediumPressureToLowPressureTurbineIdeal = this.convertTurbineOutput(ssmtOutput.mediumPressureToLowPressureTurbineIdeal, settings);
+    ssmtOutput.mediumPressureToLowPressureTurbine = this.updateTurbineWithIdealValues(ssmtOutput.mediumPressureToLowPressureTurbine, ssmtOutput.mediumPressureToLowPressureTurbineIdeal);
+
     ssmtOutput.mediumPressureCondensateFlashTank = this.convertFlashTankOutput(ssmtOutput.mediumPressureCondensateFlashTank, settings);
 
     ssmtOutput.mediumPressureHeaderSteam = this.convertSteamPropertiesOutput(ssmtOutput.mediumPressureHeaderSteam, settings);
@@ -390,6 +399,9 @@ export class ConvertSteamService {
     ssmtOutput.makeupWaterAndCondensate = this.convertSteamPropertiesOutput(ssmtOutput.makeupWaterAndCondensate, settings);
 
     ssmtOutput.condensingTurbine = this.convertTurbineOutput(ssmtOutput.condensingTurbine, settings);
+    ssmtOutput.condensingTurbineIdeal = this.convertTurbineOutput(ssmtOutput.condensingTurbineIdeal, settings);
+    ssmtOutput.condensingTurbine = this.updateTurbineWithIdealValues(ssmtOutput.condensingTurbine, ssmtOutput.condensingTurbine);
+
     ssmtOutput.deaeratorOutput = this.convertDeaeratorOutput(ssmtOutput.deaeratorOutput, settings);
 
     ssmtOutput.highPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.highPressureProcessSteamUsage, settings);
@@ -400,5 +412,15 @@ export class ConvertSteamService {
     ssmtOutput.heatExchangerOutput = this.convertHeatExchangerOutput(ssmtOutput.heatExchangerOutput, settings);
     ssmtOutput.operationsOutput = this.convertOperationsOutput(ssmtOutput.operationsOutput, settings);
     return ssmtOutput;
+  }
+
+  updateTurbineWithIdealValues(turbine: TurbineOutput, idealValues: TurbineOutput): TurbineOutput {
+    turbine.outletIdealPressure = idealValues.outletPressure;
+    turbine.outletIdealQuality = idealValues.outletQuality;
+    turbine.outletIdealSpecificEnthalpy = idealValues.outletSpecificEnthalpy;
+    turbine.outletIdealSpecificEntropy = idealValues.outletSpecificEntropy;
+    turbine.outletIdealTemperature = idealValues.outletTemperature;
+    turbine.outletIdealVolume = idealValues.outletVolume;
+    return turbine;
   }
 }
