@@ -336,12 +336,6 @@ export class ConvertSteamService {
   convertOperationsOutput(ssmtOperationsOutput: SSMTOperationsOutput, settings: Settings): SSMTOperationsOutput {
     ssmtOperationsOutput.powerGenerated = this.convertUnitsService.value(ssmtOperationsOutput.powerGenerated).from('kJh').to(settings.steamPowerMeasurement);
     ssmtOperationsOutput.boilerFuelUsage = this.convertEnergyFlowOutput(ssmtOperationsOutput.boilerFuelUsage, settings);
-    //TODO: Costs
-    // ssmtOperationsOutput.boilerFuelCost
-    // ssmtOperationsOutput.makeupWaterCost
-    // ssmtOperationsOutput.totalOperatingCost
-    // ssmtOperationsOutput.powerGenerationCost
-   
     ssmtOperationsOutput.sitePowerImport = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerImport).from('kJh').to(settings.steamPowerMeasurement);
     ssmtOperationsOutput.sitePowerDemand = this.convertUnitsService.value(ssmtOperationsOutput.sitePowerDemand).from('kJh').to(settings.steamPowerMeasurement);
     ssmtOperationsOutput.makeupWaterVolumeFlow = this.convertUnitsService.value(ssmtOperationsOutput.makeupWaterVolumeFlow).from('m3/h').to(settings.steamVolumeFlowMeasurement);
