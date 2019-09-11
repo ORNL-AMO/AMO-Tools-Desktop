@@ -54,7 +54,7 @@
             </div>
             <div class="p-0 w-25">
               <!--high to medium turbine-->
-              <app-turbine-diagram *ngIf="inputData.turbineInput.highToMediumTurbine.useTurbine == true"
+              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.highToMediumTurbine.useTurbine == true"
                 [noOutletConnection]="false" [turbine]="outputData.highPressureToMediumPressureTurbine"
                 [inletColor]="'high-pressure'" [outletColor]="'medium-pressure'" (emitSetHover)="setHover($event)"
                 [turbineType]="'highToMedium'"
@@ -63,7 +63,7 @@
             </div>
             <div class="p-0 w-25">
               <!--high to low turbine-->
-              <app-turbine-diagram *ngIf="inputData.turbineInput.highToLowTurbine.useTurbine == true"
+              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders > 1 && inputData.turbineInput.highToLowTurbine.useTurbine == true"
                 [noOutletConnection]="inputData.headerInput.numberOfHeaders == 3"
                 [turbine]="outputData.highPressureToLowPressureTurbine" [inletColor]="'high-pressure'"
                 [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)" [turbineType]="'highToLow'"
@@ -128,7 +128,7 @@
             </div>
             <div class="p-0 w-25">
               <!--medium to low pressure turbine-->
-              <app-turbine-diagram *ngIf="inputData.turbineInput.mediumToLowTurbine.useTurbine == true"
+              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.mediumToLowTurbine.useTurbine == true"
                 [noOutletConnection]="false" [turbine]="outputData.mediumPressureToLowPressureTurbine"
                 [inletColor]="'medium-pressure'" [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)"
                 [turbineType]="'mediumToLow'" (emitSelectEquipment)="selectTable('mediumToLowPressureTurbine')"
@@ -148,12 +148,12 @@
           <div class="w-25">
             <!--medium pressure flash tank (more then 1 header, flash condesnate into low pressure header-->
             <app-flash-tank-diagram
-              *ngIf="inputData.headerInput.numberOfHeaders > 1 && inputData.headerInput.lowPressureHeader.flashCondensateIntoHeader == true"
+              *ngIf="inputData.headerInput.numberOfHeaders > 2 && inputData.headerInput.lowPressureHeader.flashCondensateIntoHeader == true"
               [flashTank]="outputData.mediumPressureCondensateFlashTank" [steamPressure]="'low-pressure'"
               (emitSetHover)="setHover($event)" [flashTankType]="'mediumPressure'"
               (emitSelectEquipment)="selectTable($event)" [settings]="settings"></app-flash-tank-diagram>
             <app-condensate-connector
-              *ngIf="inputData.headerInput.numberOfHeaders > 1 && inputData.headerInput.lowPressureHeader.flashCondensateIntoHeader == false"
+              *ngIf="inputData.headerInput.numberOfHeaders > 2 && inputData.headerInput.lowPressureHeader.flashCondensateIntoHeader == false"
               (emitSetHover)="setHover($event)" [settings]="settings" [returnCondensate]="outputData.returnCondensate"
               [isConnector]="true" (emitSelectEquipment)="selectTable($event)">
             </app-condensate-connector>
