@@ -10,9 +10,9 @@ export class MotorDriveTableComponent implements OnInit {
   @Input()
   results: MotorDriveOutputs;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
-  @ViewChild('copyTable2') copyTable2: ElementRef;
+  @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
   constructor() { }
 
   ngOnInit() {

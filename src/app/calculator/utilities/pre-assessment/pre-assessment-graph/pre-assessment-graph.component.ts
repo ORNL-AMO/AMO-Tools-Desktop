@@ -35,7 +35,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   @Input()
   directoryId: number;
 
-  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
+  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
 
   directorySettings: Settings;
 

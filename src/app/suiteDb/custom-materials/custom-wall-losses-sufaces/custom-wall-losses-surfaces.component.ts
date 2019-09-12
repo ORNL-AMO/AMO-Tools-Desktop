@@ -26,7 +26,7 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   deletingMaterial: boolean = false;
   wallLossesSurfaces: Array<WallLossesSurface>;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }

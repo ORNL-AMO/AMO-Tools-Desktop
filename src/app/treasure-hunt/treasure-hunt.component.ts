@@ -20,9 +20,9 @@ import { TreasureHunt } from '../shared/models/treasure-hunt';
   styleUrls: ['./treasure-hunt.component.css']
 })
 export class TreasureHuntComponent implements OnInit {
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])

@@ -27,7 +27,7 @@ export class DirectoryCardComponent implements OnInit {
   isFirstChange: boolean = true;
   editForm: FormGroup;
   directories: Array<Directory>;
-  @ViewChild('editModal') public editModal: ModalDirective;
+  @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
   constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit() {

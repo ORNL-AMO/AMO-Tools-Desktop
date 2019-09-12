@@ -16,7 +16,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
   };
   results: PowerFactorCorrectionOutputs;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

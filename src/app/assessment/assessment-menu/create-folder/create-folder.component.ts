@@ -53,7 +53,7 @@ export class CreateFolderComponent implements OnInit {
   }
 
   //  CREATE FOLDER MODAL
-  @ViewChild('createModal') public createModal: ModalDirective;
+  @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
   showCreateModal() {
     this.createModal.show();
   }

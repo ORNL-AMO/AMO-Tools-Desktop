@@ -20,9 +20,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
+  @ViewChild('btnDownload', { static: false }) btnDownload: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();

@@ -23,8 +23,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
   resetData: boolean;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();

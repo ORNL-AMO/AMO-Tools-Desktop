@@ -15,7 +15,7 @@ export class CompressedAirPressureReductionResultsComponent implements OnInit {
   @Input()
   modificationExists: boolean;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
 

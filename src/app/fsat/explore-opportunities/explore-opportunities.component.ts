@@ -29,7 +29,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   @Output('exploreOppsToast')
   exploreOppsToast = new EventEmitter<boolean>();
 
-  @ViewChild('resultTabs') resultTabs: ElementRef;
+  @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
 
   tabSelect: string = 'results';

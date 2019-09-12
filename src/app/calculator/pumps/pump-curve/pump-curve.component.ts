@@ -55,7 +55,7 @@ export class PumpCurveComponent implements OnInit {
 
   tabSelect: string = 'results';
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

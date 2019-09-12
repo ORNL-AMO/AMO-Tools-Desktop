@@ -18,7 +18,7 @@ export class TreasureHuntGaugeComponent implements OnInit {
     this.initChart();
   }
   chart: any;
-  @ViewChild('tHuntChart') tHuntChart: ElementRef;
+  @ViewChild('tHuntChart', { static: false }) tHuntChart: ElementRef;
   constructor() { }
 
   ngOnInit() { }

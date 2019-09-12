@@ -10,7 +10,7 @@ export class VersionModalComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<boolean>();
 
-  @ViewChild('versionModal') public versionModal: ModalDirective;
+  @ViewChild('versionModal', { static: false }) public versionModal: ModalDirective;
   versionNum: any;
   constructor() { }
 

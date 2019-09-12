@@ -18,7 +18,7 @@ export class CashFlowComponent implements OnInit {
     results: 0,
     payback: 0
   };
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();

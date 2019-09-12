@@ -11,7 +11,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
 
   chart: any;
-  @ViewChild('barChartElement') barChartElement: ElementRef;
+  @ViewChild('barChartElement', { static: false }) barChartElement: ElementRef;
   constructor() { }
 
   ngOnInit() { }

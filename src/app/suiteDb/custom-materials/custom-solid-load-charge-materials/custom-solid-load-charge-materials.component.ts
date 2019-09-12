@@ -25,7 +25,7 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   editExistingMaterial: boolean = false;
   deletingMaterial: boolean = false;
   existingMaterial: SolidLoadChargeMaterial;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
 

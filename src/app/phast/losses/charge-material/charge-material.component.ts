@@ -6,7 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { ChargeMaterial, SolidChargeMaterial, GasChargeMaterial, LiquidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from './charge-material.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms/src/model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-charge-material',

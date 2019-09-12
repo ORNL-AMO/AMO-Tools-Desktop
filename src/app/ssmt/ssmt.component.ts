@@ -27,15 +27,15 @@ import { OperationsService } from './operations/operations.service';
   styleUrls: ['./ssmt.component.css']
 })
 export class SsmtComponent implements OnInit {
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getContainerHeight();
   }
-  @ViewChild('addNewModal') public addNewModal: ModalDirective;
-  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
+  @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
+  @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
 
   stepTabs: Array<string> = [
     'system-basics',

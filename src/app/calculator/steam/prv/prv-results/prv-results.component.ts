@@ -14,7 +14,7 @@ export class PrvResultsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('copyTable0') copyTable0: ElementRef;
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
   constructor() { }
 

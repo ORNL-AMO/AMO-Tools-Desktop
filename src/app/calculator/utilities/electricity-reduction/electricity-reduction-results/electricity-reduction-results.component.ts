@@ -15,11 +15,11 @@ export class ElectricityReductionResultsComponent implements OnInit {
   @Input()
   modificationExists: boolean;
 
-  @ViewChild('copyTable0') copyTable0: ElementRef;
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
-  @ViewChild('copyTable1') copyTable1: ElementRef;
+  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
   table1String: any;
-  @ViewChild('copyTable2') copyTable2: ElementRef;
+  @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
   table2String: any;
 
   constructor() { }

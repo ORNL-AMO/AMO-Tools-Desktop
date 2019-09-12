@@ -58,7 +58,7 @@ export class PrintOptionsMenuComponent implements OnInit {
   @Output('emitPrint')
   emitPrint = new EventEmitter<void>();
 
-  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
+  @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
 
   constructor() { }
 

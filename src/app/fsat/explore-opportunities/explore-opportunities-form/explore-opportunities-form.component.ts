@@ -30,8 +30,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
 
-  @ViewChild('modalBody') public modalBody: ElementRef;
-  @ViewChild('pressureModal') public pressureModal: ModalDirective;
+  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
+  @ViewChild('pressureModal', { static: false }) public pressureModal: ModalDirective;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getBodyHeight();

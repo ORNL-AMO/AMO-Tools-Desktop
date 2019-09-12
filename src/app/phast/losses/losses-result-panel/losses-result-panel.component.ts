@@ -34,7 +34,7 @@ export class LossesResultPanelComponent implements OnInit {
   modificationIndex: number;
 
 
-  @ViewChild('resultTabs') resultTabs: ElementRef;
+  @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
   tabSelect: string = 'results';
   helpHeight: number;

@@ -19,7 +19,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
   @Input()
   printView: boolean;
 
-  @ViewChild('barChartContainer') barChartContainer: ElementRef;
+  @ViewChild('barChartContainer', { static: false }) barChartContainer: ElementRef;
 
   firstLoad: boolean = true;
   isUpdate: boolean = false;

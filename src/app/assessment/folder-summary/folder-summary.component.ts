@@ -29,7 +29,7 @@ export class FolderSummaryComponent implements OnInit {
   @Input()
   assessments: Array<Assessment>;
 
-  @ViewChild('settingsModal') public settingsModal: ModalDirective;
+  @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
   numAssessments: number = 0;
   numPhasts: number = 0;

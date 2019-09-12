@@ -35,7 +35,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   @Output('exploreOppsToast')
   exploreOppsToast = new EventEmitter<boolean>();
 
-  @ViewChild('resultTabs') resultTabs: ElementRef;
+  @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
   annualSavings: number = 0;
   percentSavings: number = 0;

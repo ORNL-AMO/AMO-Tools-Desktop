@@ -26,14 +26,14 @@ import { FanSetupService } from './fan-setup/fan-setup.service';
   styleUrls: ['./fsat.component.css']
 })
 export class FsatComponent implements OnInit {
-  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
+  @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
 
-  @ViewChild('fsat203Modal') public fsat203Modal: ModalDirective;
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('fsat203Modal', { static: false }) public fsat203Modal: ModalDirective;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
 
-  @ViewChild('addNewModal') public addNewModal: ModalDirective;
+  @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])

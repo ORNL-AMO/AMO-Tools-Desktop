@@ -29,8 +29,8 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   printGraphs: boolean;
 
-  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
-  @ViewChild('barChartContainer') barChartContainer: ElementRef;
+  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
+  @ViewChild('barChartContainer', { static: false }) barChartContainer: ElementRef;
 
   selectedPhast1: any;
   selectedPhast2: any;

@@ -26,9 +26,9 @@ export class AssessmentListItemComponent implements OnInit {
   changeDirectory = new EventEmitter<boolean>();
 
   isFirstChange: boolean = true;
-  @ViewChild('editModal') public editModal: ModalDirective;
-  @ViewChild('copyModal') public copyModal: ModalDirective;
-  @ViewChild('deleteModal') public deleteModal: ModalDirective;
+  @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
+  @ViewChild('copyModal', { static: false }) public copyModal: ModalDirective;
+  @ViewChild('deleteModal', { static: false }) public deleteModal: ModalDirective;
 
   directories: Array<Directory>;
 
@@ -42,7 +42,7 @@ export class AssessmentListItemComponent implements OnInit {
   assessmentCopy: Assessment;
   settingsCopy: Settings;
 
-  @ViewChild('reportModal') public reportModal: ModalDirective;
+  @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
   constructor(private assessmentService: AssessmentService, private router: Router, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {

@@ -33,8 +33,8 @@ export class FsatBarChartComponent implements OnInit {
   chartContainerWidth: number;
   chartContainerHeight: number;
 
-  @ViewChild("ngChart") ngChart: ElementRef;
-  @ViewChild("btnDownload") btnDownload: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
+  @ViewChild("btnDownload", { static: false }) btnDownload: ElementRef;
 
   exportName: string;
 

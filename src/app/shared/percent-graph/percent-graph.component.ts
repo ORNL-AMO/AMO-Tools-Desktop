@@ -46,7 +46,7 @@ export class PercentGraphComponent implements OnInit {
 
   potential: number = 0;
 
-  @ViewChild('ngChart') ngChart: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
   // @ViewChild('btnDownload') btnDownload: ElementRef;
 
   //booleans for tooltip

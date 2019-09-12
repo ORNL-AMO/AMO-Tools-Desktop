@@ -36,12 +36,12 @@ export class FanFieldDataComponent implements OnInit {
   @Input()
   fsat: FSAT;
 
-  @ViewChild('modalBody') public modalBody: ElementRef;
-  @ViewChild('amcaModal') public amcaModal: ModalDirective;
-  @ViewChild('pressureModal') public pressureModal: ModalDirective;
+  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
+  @ViewChild('amcaModal', { static: false }) public amcaModal: ModalDirective;
+  @ViewChild('pressureModal', { static: false }) public pressureModal: ModalDirective;
 
   @HostListener('window:resize', ['$event'])
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

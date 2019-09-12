@@ -26,9 +26,9 @@ export class FanAnalysisComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

@@ -22,7 +22,7 @@ export class AnimatedCheckmarkComponent implements OnInit {
   @Input()
   svgContainerWidth: number;
   svgContainerHeight: number;
-  @ViewChild('checkMarkContainer') checkMarkContainer: ElementRef;
+  @ViewChild('checkMarkContainer', { static: false }) checkMarkContainer: ElementRef;
 
   htmlElement: any;
   radius: number;

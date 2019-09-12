@@ -15,7 +15,7 @@ export class HeaderResultsComponent implements OnInit {
   @Input()
   numberOfInlets: number;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   resultsArray: Array<HeaderOutputObj>;

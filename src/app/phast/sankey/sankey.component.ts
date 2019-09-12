@@ -52,8 +52,8 @@ export class SankeyComponent implements OnInit {
   assessmentName: string;
 
   //real version
-  @ViewChild("ngChart") ngChart: ElementRef;
-  @ViewChild("btnDownload") btnDownload: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
+  @ViewChild("btnDownload", { static: false }) btnDownload: ElementRef;
 
   exportName: string;
 

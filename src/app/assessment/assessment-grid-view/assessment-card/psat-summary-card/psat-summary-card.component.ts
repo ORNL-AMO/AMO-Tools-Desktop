@@ -26,7 +26,7 @@ export class PsatSummaryCardComponent implements OnInit {
 
     showReport: boolean = false;
 
-    @ViewChild('reportModal') public reportModal: ModalDirective;
+    @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
     constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 

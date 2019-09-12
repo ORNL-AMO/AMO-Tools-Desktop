@@ -23,7 +23,7 @@ export class ExportableTableComponent implements OnInit {
   @Output('deleteFromTable')
   deleteFromTable = new EventEmitter<number>();
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
 
   exportColumnTitles: Array<string>;
   exportRowData: Array<Array<string>>;

@@ -24,7 +24,7 @@ export class WaterfallGraphComponent implements OnInit {
   containerHeight: number;
   @Input()
   printView: boolean;
-  @ViewChild('ngChart') ngChart: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
   canvasWidth: number;
   canvasHeight: number;
   width: number;

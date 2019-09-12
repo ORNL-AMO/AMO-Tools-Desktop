@@ -32,8 +32,8 @@ export class BoilerComponent implements OnInit {
   @Input()
   headerInput: HeaderInput;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setBlowdownRateModalWidth();

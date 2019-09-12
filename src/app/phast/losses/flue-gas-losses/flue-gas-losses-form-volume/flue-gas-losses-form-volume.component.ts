@@ -35,7 +35,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @Output('inputError')
   inputError = new EventEmitter<boolean>();
 

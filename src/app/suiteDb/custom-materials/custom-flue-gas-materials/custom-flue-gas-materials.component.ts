@@ -23,7 +23,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   @Input()
   importing: boolean;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   flueGasMaterials: Array<FlueGasMaterial>;
   editExistingMaterial: boolean = false;

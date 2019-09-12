@@ -26,7 +26,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   existingMaterial: GasLoadChargeMaterial;
   deletingMaterial: boolean = false;
   gasChargeMaterials: Array<GasLoadChargeMaterial>;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
 

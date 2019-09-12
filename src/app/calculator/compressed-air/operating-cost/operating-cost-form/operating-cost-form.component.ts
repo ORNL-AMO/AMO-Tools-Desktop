@@ -21,7 +21,7 @@ export class OperatingCostFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

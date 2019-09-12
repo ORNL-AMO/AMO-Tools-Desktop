@@ -14,7 +14,7 @@ export class MotorDriveGraphComponent implements OnInit {
   @Input()
   results: MotorDriveOutputs;
 
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
 
   barChart: any;
   graphColors: Array<string>;

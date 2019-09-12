@@ -25,8 +25,8 @@ export class PieChartComponent implements OnInit {
   @Input()
   sideBySide: boolean;
 
-  @ViewChild('ngChart') ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
+  @ViewChild('btnDownload', { static: false }) btnDownload: ElementRef;
 
   htmlElement: any;
   radius: number;

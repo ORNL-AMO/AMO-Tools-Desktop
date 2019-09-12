@@ -50,12 +50,12 @@ export class PhastReportComponent implements OnInit {
   @Input()
   printExecutiveSummary: boolean;
 
-  @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
+  @ViewChild('reportTemplate', { static: false }) reportTemplate: TemplateRef<any>;
 
-  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
+  @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
 
-  @ViewChild('reportBtns') reportBtns: ElementRef;
-  @ViewChild('reportHeader') reportHeader: ElementRef;
+  @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
+  @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
@@ -270,7 +270,6 @@ export class PhastReportComponent implements OnInit {
     this.phastReportService.showPrint.next(true);
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
-      let doc = this.windowRefService.getDoc();
       win.print();
       //after printing hide content again
       this.phastReportService.showPrint.next(false);

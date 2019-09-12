@@ -13,7 +13,7 @@ export class ReceiverTankComponent implements OnInit {
   @Input()
   calcType: string;
   
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

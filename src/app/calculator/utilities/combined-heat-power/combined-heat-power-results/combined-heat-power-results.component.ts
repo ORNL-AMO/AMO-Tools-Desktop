@@ -9,7 +9,7 @@ export class CombinedHeatPowerResultsComponent implements OnInit {
   @Input()
   results: CombinedHeatPowerOutput;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
   constructor() { }
 

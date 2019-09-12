@@ -21,11 +21,11 @@ export class CashFlowDiagramComponent implements OnInit {
   @Input()
   cashFlowForm: CashFlowForm;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();

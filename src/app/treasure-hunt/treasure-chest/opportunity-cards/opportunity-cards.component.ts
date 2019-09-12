@@ -18,8 +18,8 @@ export class OpportunityCardsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('deletedItemModal') public deletedItemModal: ModalDirective;
-  @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
+  @ViewChild('deletedItemModal', { static: false }) public deletedItemModal: ModalDirective;
+  @ViewChild('opportunitySheetModal', { static: false }) public opportunitySheetModal: ModalDirective;
 
   opportunityCardsData: Array<OpportunityCardData>;
   treasureHuntSub: Subscription;

@@ -27,7 +27,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   deletingMaterial: boolean = false;
   atmosphereSpecificHeatMaterials: Array<AtmosphereSpecificHeat>;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
 

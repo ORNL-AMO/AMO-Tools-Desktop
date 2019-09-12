@@ -14,7 +14,7 @@ export class CostPieChartComponent implements OnInit {
   isBaseline: boolean;
 
   chart: any;
-  @ViewChild('pieChartElement') pieChartElement: ElementRef;
+  @ViewChild('pieChartElement', { static: false }) pieChartElement: ElementRef;
 
   columnData: Array<any>;
 

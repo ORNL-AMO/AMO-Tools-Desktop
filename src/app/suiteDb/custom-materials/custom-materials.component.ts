@@ -31,9 +31,9 @@ export class CustomMaterialsComponent implements OnInit {
 
   isAllSelected: boolean = false;
   deleteModalOpen: boolean = false;
-  @ViewChild('exportModal') public exportModal: ModalDirective;
-  @ViewChild('importModal') public importModal: ModalDirective;
-  @ViewChild('deleteModal') public deleteModal: ModalDirective;
+  @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
+  @ViewChild('importModal', { static: false }) public importModal: ModalDirective;
+  @ViewChild('deleteModal', { static: false }) public deleteModal: ModalDirective;
   selectedMaterialData: MaterialData;
   exportModalOpen: boolean = false;
   fileReference: any;

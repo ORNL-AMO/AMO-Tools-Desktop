@@ -34,8 +34,8 @@ export class FieldDataComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  @ViewChild('headToolModal') public headToolModal: ModalDirective;
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('headToolModal', { static: false }) public headToolModal: ModalDirective;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

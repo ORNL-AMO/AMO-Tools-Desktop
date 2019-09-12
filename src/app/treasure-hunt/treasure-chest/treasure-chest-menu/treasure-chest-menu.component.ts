@@ -29,7 +29,7 @@ export class TreasureChestMenuComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('navbar') navbar: ElementRef;
+  @ViewChild('navbar', { static: false }) navbar: ElementRef;
   navbarWidth: number;
 
   @HostListener('window:resize', ['$event'])

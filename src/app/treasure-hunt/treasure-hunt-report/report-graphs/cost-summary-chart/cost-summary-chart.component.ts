@@ -29,7 +29,7 @@ export class CostSummaryChartComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('ngChart') ngChart: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
 
   exportName: string;
   graphColors: Array<string>;

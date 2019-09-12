@@ -50,8 +50,8 @@ export class PsatReportComponent implements OnInit {
   @Input()
   containerHeight: number;
 
-  @ViewChild('reportBtns') reportBtns: ElementRef;
-  @ViewChild('reportHeader') reportHeader: ElementRef;
+  @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
+  @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
   showPrint: boolean = false;
   showPrintMenu: boolean = false;
@@ -243,7 +243,6 @@ export class PsatReportComponent implements OnInit {
     this.psatReportService.showPrint.next(true);
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
-      let doc = this.windowRefService.getDoc();
       win.print();
       //after printing hide content again
       this.psatReportService.showPrint.next(false);

@@ -5,7 +5,7 @@ import { FixtureLossesService } from './fixture-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms/src/model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-fixture-losses',

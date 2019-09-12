@@ -39,7 +39,7 @@ export class PsatSankeyComponent implements OnInit {
   modIndex: number;
   @Input()
   assessmentName: string;
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @Input()
   isBaseline: boolean;
   @Input()

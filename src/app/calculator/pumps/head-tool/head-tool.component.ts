@@ -28,7 +28,7 @@ export class HeadToolComponent implements OnInit {
   @Input()
   assessmentId: number;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

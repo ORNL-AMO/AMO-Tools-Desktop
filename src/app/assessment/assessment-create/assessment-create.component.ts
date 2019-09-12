@@ -79,7 +79,7 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   //  CREATE ASSESSMENT MODAL
-  @ViewChild('createModal') public createModal: ModalDirective;
+  @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
   showCreateModal() {
     this.createModal.show();
   }

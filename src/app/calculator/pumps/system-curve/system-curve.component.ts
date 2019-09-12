@@ -35,7 +35,7 @@ export class SystemCurveComponent implements OnInit {
 
   curveConstants: { form: FormGroup };
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

@@ -25,7 +25,7 @@ import { MockTreasureHunt, MockTreasureHuntSettings } from '../../core/mockTreas
 export class ResetDataModalComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<boolean>();
-  @ViewChild('resetSystemSettingsModal') public resetSystemSettingsModal: ModalDirective;
+  @ViewChild('resetSystemSettingsModal', { static: false }) public resetSystemSettingsModal: ModalDirective;
 
   resetAll: boolean = false;
   resetAppSettings: boolean = false;

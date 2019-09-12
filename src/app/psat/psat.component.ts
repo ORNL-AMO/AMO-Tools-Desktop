@@ -29,12 +29,12 @@ import { FieldDataService } from './field-data/field-data.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
-  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
-  @ViewChild('addNewModal') public addNewModal: ModalDirective;
+  @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
+  @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
 
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])

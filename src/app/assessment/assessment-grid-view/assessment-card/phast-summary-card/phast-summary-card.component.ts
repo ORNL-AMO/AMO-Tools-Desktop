@@ -19,7 +19,7 @@ export class PhastSummaryCardComponent implements OnInit {
     @Input()
     assessment: Assessment;
 
-    @ViewChild('reportModal') public reportModal: ModalDirective;
+    @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
     phastResults: ExecutiveSummary;
     modResults: ExecutiveSummary;

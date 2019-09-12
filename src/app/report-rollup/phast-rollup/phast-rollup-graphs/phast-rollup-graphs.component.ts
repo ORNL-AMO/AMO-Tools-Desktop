@@ -21,7 +21,7 @@ export class PhastRollupGraphsComponent implements OnInit {
   // @Input()
   // preAssessmentData: 
 
-  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
+  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
 
   furnaceSavingsPotential: number = 0;
   energySavingsPotential: number = 0;

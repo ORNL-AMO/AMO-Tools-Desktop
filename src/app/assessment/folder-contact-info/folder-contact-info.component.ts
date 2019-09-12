@@ -16,7 +16,7 @@ export class FolderContactInfoComponent implements OnInit {
   @Input()
   directory: Directory;
 
-  @ViewChild('facilityModal') public facilityModal: ModalDirective;
+  @ViewChild('facilityModal', { static: false }) public facilityModal: ModalDirective;
   settings: Settings;
   showModal: boolean = false;
   isParentSettings: boolean = false;

@@ -25,7 +25,7 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   editExistingMaterial: boolean = false;
   deletingMaterial: boolean = false;
   existingMaterial: SolidLiquidFlueGasMaterial;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
