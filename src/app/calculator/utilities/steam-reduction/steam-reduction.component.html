@@ -70,7 +70,7 @@
             <div *ngFor="let data of modificationData; let i = index;">
               <app-steam-reduction-form [settings]="settings" [data]="data" [index]="i" [isBaseline]="false"
                 (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
-                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="modificationSelected">
+                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected">
               </app-steam-reduction-form>
             </div>
           </div>
