@@ -49,6 +49,7 @@ export class CalculatorsComponent implements OnInit {
   ngOnDestroy() {
     this.selectedCalcSubscription.unsubscribe();
     this.treasureHuntSub.unsubscribe();
+    this.calculatorsService.selectedCalc.next('none');
   }
 
   showSaveCalcModal() {
@@ -90,7 +91,7 @@ export class CalculatorsComponent implements OnInit {
       this.confirmSaveWaterReduction();
     } else if (this.selectedCalc == 'opportunity-sheet') {
       this.confirmSaveStandaloneOpportunitySheet();
-    } else if(this.selectedCalc == 'steam-reduction'){
+    } else if (this.selectedCalc == 'steam-reduction') {
       this.confirmSaveSteamReduction();
     }
   }
@@ -255,24 +256,24 @@ export class CalculatorsComponent implements OnInit {
     this.finishSaveCalc();
   }
 
-    //steam reduction
-    cancelSteamReduction() {
-      this.calculatorsService.cancelSteamReduction();
+  //steam reduction
+  cancelSteamReduction() {
+    this.calculatorsService.cancelSteamReduction();
+  }
+  saveSteamReduction(steamReduction: SteamReductionTreasureHunt) {
+    this.steamReduction = steamReduction;
+    this.initSaveCalc();
+  }
+  confirmSaveSteamReduction() {
+    this.steamReduction.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
+    this.steamReduction.selected = true;
+    if (this.calculatorsService.isNewOpportunity == true) {
+      this.treasureHuntService.addNewSteamReductionItem(this.steamReduction);
+    } else {
+      this.treasureHuntService.editSteamReductionItem(this.steamReduction, this.calculatorsService.itemIndex, this.settings);
     }
-    saveSteamReduction(steamReduction: SteamReductionTreasureHunt) {
-      this.steamReduction = steamReduction;
-      this.initSaveCalc();
-    }
-    confirmSaveSteamReduction() {
-      this.steamReduction.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
-      this.steamReduction.selected = true;
-      if (this.calculatorsService.isNewOpportunity == true) {
-        this.treasureHuntService.addNewSteamReductionItem(this.steamReduction);
-      } else {
-        this.treasureHuntService.editSteamReductionItem(this.steamReduction, this.calculatorsService.itemIndex, this.settings);
-      }
-      this.finishSaveCalc();
-    }
+    this.finishSaveCalc();
+  }
 
 
   //stand alone opportunity sheet

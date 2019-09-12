@@ -224,8 +224,8 @@ export class CalculatorsService {
     this.cancelCalc();
   }
 
-   //steam reductions
-   addNewSteamReduction() {
+  //steam reductions
+  addNewSteamReduction() {
     this.calcOpportunitySheet = undefined;
     this.steamReductionService.baselineData = undefined;
     this.steamReductionService.modificationData = undefined;
