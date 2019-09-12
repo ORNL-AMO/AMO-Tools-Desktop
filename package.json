@@ -8,7 +8,7 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "10.11.0",
+    "node": "12.8.0",
     "npm": "6.4.1"
   },
   "scripts": {
