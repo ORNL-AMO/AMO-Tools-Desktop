@@ -314,7 +314,7 @@ export class ConvertSteamService {
       heatExchangerOutput.hotOutletMassFlow = this.convertSteamMassFlowOutput(heatExchangerOutput.hotOutletMassFlow, settings);
       heatExchangerOutput.hotOutletEnergyFlow = this.convertEnergyFlowOutput(heatExchangerOutput.hotOutletEnergyFlow, settings);
       heatExchangerOutput.hotOutletTemperature = this.convertSteamTemperatureOutput(heatExchangerOutput.hotOutletTemperature, settings);
-      heatExchangerOutput.hotOutletSpecificVolume = this.convertSteamSpecificVolumeMeasurementOutput(heatExchangerOutput.hotOutletSpecificVolume, settings);
+      heatExchangerOutput.hotOutletVolume = this.convertSteamSpecificVolumeMeasurementOutput(heatExchangerOutput.hotOutletVolume, settings);
       // heatExchangerOutput.hotOutletDensity: number 
       heatExchangerOutput.hotOutletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(heatExchangerOutput.hotOutletSpecificEnthalpy, settings)
       heatExchangerOutput.hotOutletSpecificEntropy = this.convertSteamSpecificEntropyOutput(heatExchangerOutput.hotOutletSpecificEntropy, settings);
@@ -323,7 +323,7 @@ export class ConvertSteamService {
       heatExchangerOutput.coldOutletEnergyFlow = this.convertEnergyFlowOutput(heatExchangerOutput.coldOutletEnergyFlow, settings);
       heatExchangerOutput.coldOutletTemperature = this.convertSteamTemperatureOutput(heatExchangerOutput.coldOutletTemperature, settings);
       heatExchangerOutput.coldOutletPressure = this.convertSteamPressureOutput(heatExchangerOutput.coldOutletPressure, settings);
-      heatExchangerOutput.coldOutletSpecificVolume = this.convertSteamSpecificVolumeMeasurementOutput(heatExchangerOutput.coldOutletSpecificVolume, settings);
+      heatExchangerOutput.coldOutletVolume = this.convertSteamSpecificVolumeMeasurementOutput(heatExchangerOutput.coldOutletVolume, settings);
       // heatExchangerOutput.coldOutletDensity: number
       heatExchangerOutput.coldOutletSpecificEnthalpy = this.convertSteamSpecificEnthalpyOutput(heatExchangerOutput.coldOutletSpecificEnthalpy, settings);
       heatExchangerOutput.coldOutletSpecificEntropy = this.convertSteamSpecificEntropyOutput(heatExchangerOutput.coldOutletSpecificEntropy, settings);
@@ -409,7 +409,7 @@ export class ConvertSteamService {
     ssmtOutput.lowPressureProcessSteamUsage = this.convertProcessUsageOutput(ssmtOutput.lowPressureProcessSteamUsage, settings);
 
     ssmtOutput.lowPressureVentedSteam = this.convertSteamPropertiesOutput(ssmtOutput.lowPressureVentedSteam, settings);
-    ssmtOutput.heatExchangerOutput = this.convertHeatExchangerOutput(ssmtOutput.heatExchangerOutput, settings);
+    ssmtOutput.heatExchanger = this.convertHeatExchangerOutput(ssmtOutput.heatExchanger, settings);
     ssmtOutput.operationsOutput = this.convertOperationsOutput(ssmtOutput.operationsOutput, settings);
     return ssmtOutput;
   }

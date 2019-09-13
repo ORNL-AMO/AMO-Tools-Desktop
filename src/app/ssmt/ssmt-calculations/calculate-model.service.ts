@@ -73,7 +73,7 @@ export class CalculateModelService {
 
   calcCount: number = 0;
   //heatExchanger: HeatExchanger
-  heatExchangerOutput: HeatExchangerOutput;
+  heatExchanger: HeatExchangerOutput;
   ventedLowPressureSteam: SteamPropertiesOutput;
 
   isBaselineCalculation: boolean;
@@ -1658,8 +1658,8 @@ export class CalculateModelService {
         approachTemp: this.inputData.boilerInput.approachTemperature
       }
     }
-    this.heatExchangerOutput = this.heatExchangerService.heatExchange(this.inputData.boilerInput.approachTemperature, heatExhangerInput, this.settings);
-    //this.heatExchangerOutput = this.steamService.heatExchanger(heatExhangerInput, this.settings);
+    this.heatExchanger = this.heatExchangerService.heatExchange(this.inputData.boilerInput.approachTemperature, heatExhangerInput, this.settings);
+    //this.heatExchanger = this.steamService.heatExchanger(heatExhangerInput, this.settings);
   }
 
   //5G. Calculate make up water and condensate combined header
@@ -1703,10 +1703,10 @@ export class CalculateModelService {
       //heat exchanger
       inlets.push(
         {
-          pressure: this.heatExchangerOutput.coldOutletPressure,
+          pressure: this.heatExchanger.coldOutletPressure,
           thermodynamicQuantity: 0, //temperature
-          quantityValue: this.heatExchangerOutput.coldOutletTemperature,
-          massFlow: this.heatExchangerOutput.coldOutletMassFlow
+          quantityValue: this.heatExchanger.coldOutletTemperature,
+          massFlow: this.heatExchanger.coldOutletMassFlow
         }
       );
     } else {
@@ -2037,7 +2037,7 @@ export class CalculateModelService {
     this.sitePowerImport = 0;
     this.sitePowerDemand = 0;
     this.executeCalculateMarginalCosts = undefined;
-    this.heatExchangerOutput = undefined;
+    this.heatExchanger = undefined;
     this.isBaselineCalculation = undefined;
     this.baselinePowerDemand = undefined;
   }
@@ -2096,7 +2096,7 @@ export class CalculateModelService {
     // //     sitePowerDemand: this.sitePowerDemand
     // //   },
     // //   ventedLowPressureSteam: this.ventedLowPressureSteam,
-    // //   heatExchangerOutput: this.heatExchangerOutput,
+    // //   heatExchanger: this.heatExchanger,
     // //   marginalHPCost: 0,
     // //   marginalMPCost: 0,
     // //   marginalLPCost: 0,
@@ -2147,7 +2147,7 @@ export class CalculateModelService {
       mediumPressureProcessSteamUsage: undefined,
       lowPressureProcessSteamUsage: undefined,
       lowPressureVentedSteam: undefined,
-      heatExchangerOutput: undefined,
+      heatExchanger: undefined,
       operationsOutput: undefined
     }
   }

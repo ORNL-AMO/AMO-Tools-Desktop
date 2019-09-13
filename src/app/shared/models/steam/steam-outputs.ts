@@ -59,7 +59,7 @@ export interface SSMTOutput {
   // annualMakeupWaterFlow: number;
 
   lowPressureVentedSteam: SteamPropertiesOutput;
-  heatExchangerOutput: HeatExchangerOutput;
+  heatExchanger: HeatExchangerOutput;
 
   // sitePowerImport: number;
   // sitePowerDemand: number;
@@ -371,7 +371,7 @@ export interface HeatExchangerOutput {
   hotOutletTemperature: number;
   hotOutletPressure: number;
   hotOutletQuality: number;
-  hotOutletSpecificVolume: number;
+  hotOutletVolume: number;
   hotOutletDensity: number;
   hotOutletSpecificEnthalpy: number;
   hotOutletSpecificEntropy: number;
@@ -380,7 +380,7 @@ export interface HeatExchangerOutput {
   coldOutletTemperature: number;
   coldOutletPressure: number;
   coldOutletQuality: number;
-  coldOutletSpecificVolume: number;
+  coldOutletVolume: number;
   coldOutletDensity: number;
   coldOutletSpecificEnthalpy: number;
   coldOutletSpecificEntropy: number;

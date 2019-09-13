@@ -487,7 +487,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   hoverHeatExchangerHotOutlet() {
     this.label = 'Boiler Blowdown Drain';
-    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
+    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchanger;
     this.steam = {
       pressure: heatExchangerOutput.hotOutletPressure,
       temperature: heatExchangerOutput.hotOutletTemperature,
@@ -500,7 +500,7 @@ export class HoverSteamPropertiesComponent implements OnInit {
 
   hoverHeatExchangerColdOutlet() {
     this.label = 'Make-up Water';
-    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchangerOutput;
+    let heatExchangerOutput: HeatExchangerOutput = this.outputData.heatExchanger;
     this.steam = {
       pressure: heatExchangerOutput.coldOutletPressure,
       temperature: heatExchangerOutput.coldOutletTemperature,
