@@ -7,12 +7,14 @@ import { CombinedHeatPowerHelpComponent } from './combined-heat-power-help/combi
 import { CombinedHeatPowerResultsComponent } from './combined-heat-power-results/combined-heat-power-results.component';
 import { CombinedHeatPowerService } from './combined-heat-power.service';
 import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     CombinedHeatPowerComponent,

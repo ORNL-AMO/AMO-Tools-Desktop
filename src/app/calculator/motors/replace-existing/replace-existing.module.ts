@@ -7,13 +7,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { ReplaceExistingService } from './replace-existing.service';
 import { ReplaceExistingResultsComponent } from './replace-existing-results/replace-existing-results.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ExportableResultsTableModule
   ],
   providers: [
     ReplaceExistingService

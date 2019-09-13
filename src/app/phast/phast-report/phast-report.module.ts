@@ -17,6 +17,7 @@ import { ExecutiveSummaryService } from './executive-summary.service';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
 import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { ModalModule } from 'ngx-bootstrap';
     // ChartsModule,
     SharedModule,
     PhastInputSummaryModule,
-    ModalModule
+    ModalModule,
+    PrintOptionsMenuModule
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent, ReportGraphsPrintComponent],
   exports: [PhastReportComponent, ResultsDataComponent],

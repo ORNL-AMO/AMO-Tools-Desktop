@@ -8,13 +8,15 @@ import { MotorDriveTableComponent } from './motor-drive-table/motor-drive-table.
 import { MotorDriveHelpComponent } from './motor-drive-help/motor-drive-help.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [MotorDriveComponent, MotorDriveFormComponent, MotorDriveGraphComponent, MotorDriveTableComponent, MotorDriveHelpComponent],
   providers: [MotorDriveService],

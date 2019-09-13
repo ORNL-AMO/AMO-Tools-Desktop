@@ -7,12 +7,14 @@ import { Co2SavingsHelpComponent } from './co2-savings-help/co2-savings-help.com
 import { Co2SavingsService } from './co2-savings.service';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [Co2SavingsComponent, Co2SavingsFormComponent, Co2SavingsResultsComponent, Co2SavingsHelpComponent],
   providers: [Co2SavingsService],

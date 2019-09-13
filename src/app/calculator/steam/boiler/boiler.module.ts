@@ -7,13 +7,15 @@ import { BoilerResultsComponent } from './boiler-results/boiler-results.componen
 import { BoilerService } from './boiler.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '../../../../../node_modules/@angular/forms';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [BoilerComponent, BoilerFormComponent, BoilerHelpComponent, BoilerResultsComponent],
   exports: [BoilerComponent, BoilerResultsComponent],

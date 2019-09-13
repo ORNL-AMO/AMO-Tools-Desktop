@@ -8,13 +8,15 @@ import { MotorPerformanceComponent } from './motor-performance.component';
 import { MotorPerformanceHelpComponent } from './motor-performance-help/motor-performance-help.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { MotorPerformanceService } from './motor-performance.service';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     MotorPerformanceComponent,

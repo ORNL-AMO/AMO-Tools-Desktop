@@ -48,6 +48,7 @@ import { SsmtRollupEnergyTableComponent } from './ssmt-rollup/ssmt-rollup-energy
 import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-steam-summary-table/ssmt-rollup-steam-summary-table.component';
 import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-summary/treasure-hunt-summary.component';
+import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-sum
     PreAssessmentModule,
     FsatReportModule,
     SsmtReportModule,
-    TreasureHuntReportModule
+    TreasureHuntReportModule,
+    PrintOptionsMenuModule
   ],
   declarations: [
     ReportRollupComponent, 

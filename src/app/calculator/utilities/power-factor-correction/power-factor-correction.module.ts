@@ -7,13 +7,15 @@ import { PowerFactorCorrectionResultsComponent } from './power-factor-correction
 import { PowerFactorCorrectionService } from './power-factor-correction.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ExportableResultsTableModule
   ],
   declarations: [PowerFactorCorrectionComponent, PowerFactorCorrectionFormComponent, PowerFactorCorrectionHelpComponent, PowerFactorCorrectionResultsComponent],
   providers: [PowerFactorCorrectionService],

@@ -11,6 +11,7 @@ import { PumpCurveHelpComponent } from './pump-curve-help/pump-curve-help.compon
 import { PumpCurveService } from './pump-curve.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { SystemCurveModule } from '../system-curve/system-curve.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { SystemCurveModule } from '../system-curve/system-curve.module';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    SystemCurveModule
+    SystemCurveModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     PumpCurveComponent,

@@ -16,6 +16,7 @@ import { FsatReportSankeyComponent } from './fsat-report-sankey/fsat-report-sank
 import { FsatReportService } from './fsat-report.service';
 import { ModalModule } from '../../../../node_modules/ngx-bootstrap';
 import { FsatReportGraphsPrintComponent } from './fsat-report-graphs/fsat-report-graphs-print/fsat-report-graphs-print.component';
+import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { FsatReportGraphsPrintComponent } from './fsat-report-graphs/fsat-report
     ReactiveFormsModule,
     FsatSankeyModule,
     ModalModule,
+    PrintOptionsMenuModule
   ],
   declarations: [FsatReportComponent, FsatReportGraphsComponent, FsatBarChartComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent],
   exports: [FsatReportComponent],

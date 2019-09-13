@@ -7,6 +7,7 @@ import { NaturalGasReductionFormComponent } from './natural-gas-reduction-form/n
 import { NaturalGasReductionHelpComponent } from './natural-gas-reduction-help/natural-gas-reduction-help.component';
 import { NaturalGasReductionResultsComponent } from './natural-gas-reduction-results/natural-gas-reduction-results.component';
 import { NaturalGasReductionService } from './natural-gas-reduction.service';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { NaturalGasReductionService } from './natural-gas-reduction.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     NaturalGasReductionComponent,

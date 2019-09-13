@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { Settings } from '../models/settings';
+import { Settings } from '../../models/settings';
 
 @Component({
   selector: 'app-exportable-table',

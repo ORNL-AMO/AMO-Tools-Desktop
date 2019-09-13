@@ -7,13 +7,15 @@ import { SpecificSpeedComponent } from './specific-speed.component';
 import { SpecificSpeedHelpComponent } from './specific-speed-help/specific-speed-help.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { SpecificSpeedService } from './specific-speed.service';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     SpecificSpeedGraphComponent,

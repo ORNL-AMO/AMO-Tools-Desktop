@@ -35,6 +35,7 @@ import { SsmtSummaryCardComponent } from './assessment-grid-view/assessment-card
 import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 import { TreasureHuntSummaryCardComponent } from './assessment-grid-view/assessment-card/treasure-hunt-summary-card/treasure-hunt-summary-card.component';
 import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
+import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/
     PsatModule,
     FsatReportModule,
     SsmtReportModule,
-    TreasureHuntReportModule
+    TreasureHuntReportModule,
+    AnimatedCheckmarkModule
   ],
   providers: []
 })

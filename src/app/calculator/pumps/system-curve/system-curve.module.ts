@@ -8,13 +8,15 @@ import { SystemCurveGraphComponent } from './system-curve-graph/system-curve-gra
 import { SystemCurveService } from './system-curve.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { SystemCurveHelpComponent } from './system-curve-help/system-curve-help.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     SystemCurveComponent,

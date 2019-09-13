@@ -7,6 +7,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { WaterReductionFormComponent } from './water-reduction-form/water-reduction-form.component';
 import { WaterReductionResultsComponent } from './water-reduction-results/water-reduction-results.component';
 import { WaterReductionHelpComponent } from './water-reduction-help/water-reduction-help.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { WaterReductionHelpComponent } from './water-reduction-help/water-reduct
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   providers: [
     WaterReductionService

@@ -7,6 +7,7 @@ import { CompressedAirPressureReductionService } from './compressed-air-pressure
 import { CompressedAirPressureReductionFormComponent } from './compressed-air-pressure-reduction-form/compressed-air-pressure-reduction-form.component';
 import { CompressedAirPressureReductionResultsComponent } from './compressed-air-pressure-reduction-results/compressed-air-pressure-reduction-results.component';
 import { CompressedAirPressureReductionHelpComponent } from './compressed-air-pressure-reduction-help/compressed-air-pressure-reduction-help.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { CompressedAirPressureReductionHelpComponent } from './compressed-air-pr
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   providers: [
     CompressedAirPressureReductionService

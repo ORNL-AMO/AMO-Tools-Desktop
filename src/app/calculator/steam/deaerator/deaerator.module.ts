@@ -7,13 +7,15 @@ import { DeaeratorFormComponent } from './deaerator-form/deaerator-form.componen
 import { DeaeratorService } from './deaerator.service';
 import { ReactiveFormsModule, FormsModule } from '../../../../../node_modules/@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [DeaeratorComponent, DeaeratorHelpComponent, DeaeratorResultsComponent, DeaeratorFormComponent],
   exports: [DeaeratorComponent, DeaeratorResultsComponent],

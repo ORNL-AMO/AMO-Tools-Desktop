@@ -7,6 +7,7 @@ import { SteamReductionHelpComponent } from './steam-reduction-help/steam-reduct
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { SteamReductionService } from './steam-reduction.service';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [SteamReductionComponent, SteamReductionResultsComponent, SteamReductionFormComponent, SteamReductionHelpComponent],
@@ -14,7 +15,8 @@ import { SteamReductionService } from './steam-reduction.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   providers: [
     SteamReductionService

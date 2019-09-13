@@ -9,6 +9,7 @@ import { HeadToolResultsComponent } from './head-tool-results/head-tool-results.
 import { HeadToolSuctionFormComponent } from './head-tool-suction-form/head-tool-suction-form.component';
 import { HeadToolService } from './head-tool.service';
 import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { SharedModule } from '../../../shared/shared.module';
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     HeadToolComponent,

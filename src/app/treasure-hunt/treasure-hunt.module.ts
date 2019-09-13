@@ -25,6 +25,8 @@ import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/t
 import { SortCardsByPipe } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
 import { UtilitySummaryComponent } from './treasure-chest/summary-card/utility-summary/utility-summary.component';
 import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.service';
+import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
+import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
 
 @NgModule({
   imports: [
@@ -34,7 +36,8 @@ import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.
     FormsModule,
     SharedModule,
     CalculatorsModule,
-    TreasureHuntReportModule
+    TreasureHuntReportModule,
+    AnimatedCheckmarkModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -49,7 +52,8 @@ import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.
     ImportExportOpportunitiesComponent,
     OpportunityCardsComponent,
     SortCardsByPipe,
-    UtilitySummaryComponent
+    UtilitySummaryComponent,
+    TreasureHuntGaugeComponent
   ],
   providers: [ 
     TreasureHuntService, 

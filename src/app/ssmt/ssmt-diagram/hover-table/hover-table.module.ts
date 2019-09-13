@@ -14,11 +14,13 @@ import { HoverTableComponent } from './hover-table.component';
 import { HoverDeaeratorTableComponent } from './hover-deaerator-table/hover-deaerator-table.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { HoverHeatExchangerComponent } from './hover-heat-exchanger/hover-heat-exchanger.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     HoverTableComponent,

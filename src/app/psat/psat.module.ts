@@ -50,6 +50,7 @@ import { PumpFluidService } from './pump-fluid/pump-fluid.service';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { UtilitiesModule } from '../calculator/utilities/utilities.module';
+import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     AchievableEfficiencyModule, 
     PumpCurveModule,
     ExploreOpportunitiesModule,
-    UtilitiesModule
+    UtilitiesModule,
+    PrintOptionsMenuModule
   ],
   providers: [
     PsatService,

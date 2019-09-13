@@ -20,13 +20,15 @@ import { SsmtReportService } from './ssmt-report.service';
 import { ModalModule } from 'ngx-bootstrap';
 import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
 import { ReportGraphsService } from './report-graphs/report-graphs.service';
+import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 @NgModule({
   imports: [
     CommonModule,
     SsmtDiagramModule,
     SharedModule,
     FormsModule,
-    ModalModule
+    ModalModule,
+    PrintOptionsMenuModule
   ],
   declarations: [
     SsmtReportComponent,

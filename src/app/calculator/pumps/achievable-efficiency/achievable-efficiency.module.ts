@@ -6,13 +6,15 @@ import { AchievableEfficiencyGraphComponent } from './achievable-efficiency-grap
 import { AchievableEfficiencyComponent } from './achievable-efficiency.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { AchievableEfficiencyService } from './achievable-efficiency.service';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     AchievableEfficiencyComponent,

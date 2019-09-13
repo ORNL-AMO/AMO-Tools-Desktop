@@ -16,6 +16,7 @@ import { PreAssessmentDesignedComponent } from './pre-assessment-form/pre-assess
 import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { PreAssessmentService } from './pre-assessment.service';
 import { PreAssessmentCostFormComponent } from './pre-assessment-cost-form/pre-assessment-cost-form.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -26,7 +27,8 @@ import { PreAssessmentCostFormComponent } from './pre-assessment-cost-form/pre-a
     // ChartsModule,
     BrowserModule,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     PreAssessmentComponent,

@@ -7,13 +7,15 @@ import { HeaderComponent } from './header.component';
 import { HeaderService } from './header.service';
 import { ReactiveFormsModule, FormsModule } from '../../../../../node_modules/@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ExportableResultsTableModule
   ],
   declarations: [HeaderFormComponent, HeaderHelpComponent, HeaderResultsComponent, HeaderComponent],
   providers: [HeaderService],

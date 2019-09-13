@@ -8,13 +8,15 @@ import { O2EnrichmentComponent } from '../o2-enrichment/o2-enrichment.component'
 import { O2EnrichmentGraphComponent } from '../o2-enrichment/o2-enrichment-graph/o2-enrichment-graph.component';
 import { O2EnrichmentFormComponent } from '../o2-enrichment/o2-enrichment-form/o2-enrichment-form.component';
 import { O2EnrichmentService } from './o2-enrichment.service';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     O2EnrichmentFormComponent,

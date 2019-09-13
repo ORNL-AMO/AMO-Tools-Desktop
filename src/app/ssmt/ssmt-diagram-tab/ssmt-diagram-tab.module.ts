@@ -21,6 +21,7 @@ import { FlashTankModule } from '../../calculator/steam/flash-tank/flash-tank.mo
 import { HeatExchangerTableComponent } from './heat-exchanger-table/heat-exchanger-table.component';
 import { HoverTableModule } from '../ssmt-diagram/hover-table/hover-table.module';
 import { ResultsTableComponent } from './results-table/results-table.component';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { ResultsTableComponent } from './results-table/results-table.component';
     DeaeratorModule,
     PrvModule,
     FlashTankModule,
-    HoverTableModule
+    HoverTableModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     SsmtDiagramTabComponent,

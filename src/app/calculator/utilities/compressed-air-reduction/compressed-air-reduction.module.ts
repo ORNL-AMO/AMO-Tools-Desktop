@@ -7,13 +7,15 @@ import { CompressedAirReductionService } from './compressed-air-reduction.servic
 import { CompressedAirReductionFormComponent } from './compressed-air-reduction-form/compressed-air-reduction-form.component';
 import { CompressedAirReductionResultsComponent } from './compressed-air-reduction-results/compressed-air-reduction-results.component';
 import { CompressedAirReductionHelpComponent } from './compressed-air-reduction-help/compressed-air-reduction-help.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     CompressedAirReductionComponent,

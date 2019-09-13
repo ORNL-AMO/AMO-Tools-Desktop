@@ -7,13 +7,15 @@ import { HeatLossResultsComponent } from './heat-loss-results/heat-loss-results.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeatLossService } from './heat-loss.service';
 import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ExportableResultsTableModule
   ],
   declarations: [HeatLossComponent, HeatLossFormComponent, HeatLossHelpComponent, HeatLossResultsComponent],
   exports: [HeatLossComponent],
