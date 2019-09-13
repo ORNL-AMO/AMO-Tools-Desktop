@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ModalModule } from 'ngx-bootstrap';
 
-import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
 import { ModelService } from './model.service';
 
@@ -41,7 +40,6 @@ import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-
     // ChartsModule
   ],
   declarations: [
-    ControlMessagesComponent,
     PercentGraphComponent,
     SigFigsPipe,
     FacilityInfoSummaryComponent,
@@ -60,7 +58,6 @@ import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-
     TreasureHuntGaugeComponent
   ],
   exports: [
-    ControlMessagesComponent,
     PercentGraphComponent,
     SigFigsPipe,
     FacilityInfoSummaryComponent,

@@ -1,6 +1,4 @@
-import { Component, OnInit, Input, ElementRef, SimpleChange, ViewChild, HostListener } from '@angular/core';
-import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
-import * as d3 from 'd3';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import * as c3 from 'c3';
 
 @Component({
@@ -55,7 +53,7 @@ export class PercentGraphComponent implements OnInit {
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
 
-  constructor(private svgToPngService: SvgToPngService) { }
+  constructor() { }
 
   ngOnInit() {
 

@@ -1,14 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models/psat';
+import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
 import { CompareService } from '../compare.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { PumpFluidService } from '../pump-fluid/pump-fluid.service';
-import { FieldDataService } from '../field-data/field-data.service';
-import { MotorService } from '../motor/motor.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-explore-opportunities',

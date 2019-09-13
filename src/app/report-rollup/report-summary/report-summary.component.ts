@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { ModalDirective } from 'ngx-bootstrap';
 import { PhastResultsData } from '../report-rollup-models';
 
 @Component({

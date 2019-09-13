@@ -1,15 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ReportRollupService } from './report-rollup.service';
-import { PhastReportService } from '../phast/phast-report/phast-report.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
-import { AssessmentService } from '../assessment/assessment.service';
 import { Calculator } from '../shared/models/calculators';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { ActivatedRoute } from '../../../node_modules/@angular/router';
 import { ReportItem } from './report-rollup-models';
 
 @Component({
@@ -88,7 +85,7 @@ export class ReportRollupComponent implements OnInit {
 
   gatheringAssessments: boolean = true;
   sidebarCollapsed: boolean = false;
-  constructor(private activatedRoute: ActivatedRoute, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private phastReportService: PhastReportService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService, private cd: ChangeDetectorRef) { }
+  constructor(private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsDbService: SettingsDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this._phastAssessments = new Array<ReportItem>();

@@ -23,7 +23,6 @@ import { PsatRollupGraphsComponent } from './psat-rollup/psat-rollup-graphs/psat
 import { PsatRollupPumpSummaryComponent } from './psat-rollup/psat-rollup-pump-summary/psat-rollup-pump-summary.component';
 import { PhastRollupFurnaceSummaryComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary.component';
 import { PhastRollupPrintComponent } from './phast-rollup/phast-rollup-print/phast-rollup-print.component';
-import { ReportRollupPrintComponent } from './report-rollup-print/report-rollup-print.component';
 import { RollupPieChartComponent } from './rollup-pie-chart/rollup-pie-chart.component';
 import { RollupBarChartComponent } from './rollup-bar-chart/rollup-bar-chart.component';
 import { PhastRollupEnergyUseTableComponent } from './phast-rollup/phast-rollup-energy-use-table/phast-rollup-energy-use-table.component';
@@ -35,7 +34,6 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 import { FsatSummaryComponent } from './report-summary/fsat-summary/fsat-summary.component';
 import { FsatRollupComponent } from './fsat-rollup/fsat-rollup.component';
-import { FsatPrintComponent } from './fsat-rollup/fsat-print/fsat-print.component';
 import { FsatRollupEnergyTableComponent } from './fsat-rollup/fsat-rollup-energy-table/fsat-rollup-energy-table.component';
 import { FsatRollupFanSummaryComponent } from './fsat-rollup/fsat-rollup-fan-summary/fsat-rollup-fan-summary.component';
 import { FsatRollupFanSummaryTableComponent } from './fsat-rollup/fsat-rollup-fan-summary-table/fsat-rollup-fan-summary-table.component';
@@ -81,7 +79,6 @@ import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-sum
     PsatRollupPumpSummaryComponent,
     PhastRollupFurnaceSummaryComponent,
     PhastRollupPrintComponent,
-    ReportRollupPrintComponent,
     RollupPieChartComponent,
     RollupBarChartComponent,
     PhastRollupEnergyUseTableComponent,
@@ -91,7 +88,6 @@ import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-sum
     PreAssessmentTableComponent,
     FsatSummaryComponent,
     FsatRollupComponent,
-    FsatPrintComponent,
     FsatRollupEnergyTableComponent,
     FsatRollupFanSummaryComponent,
     FsatRollupFanSummaryTableComponent,

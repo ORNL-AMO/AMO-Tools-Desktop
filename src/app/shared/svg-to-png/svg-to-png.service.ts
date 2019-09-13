@@ -1,10 +1,9 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { ImportExportService } from '../import-export/import-export.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 @Injectable()
 export class SvgToPngService {
 
-  constructor(private importExportService: ImportExportService, private windowRefService: WindowRefService) { }
+  constructor(private windowRefService: WindowRefService) { }
 
   //saves an svg chart as a png given a chart 
   // element containing an svg and a file name

@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterViewInit, SimpleChanges } from '@angular/core';
-import { WaterfallGraphService, WaterfallInput, WaterfallItem } from './waterfall-graph.service';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { WaterfallGraphService, WaterfallInput } from './waterfall-graph.service';
 import * as d3 from 'd3';
 
 @Component({

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Directory } from './models/directory';
-import { Assessment } from "./models/assessment";
 @Injectable()
 export class ModelService {
 

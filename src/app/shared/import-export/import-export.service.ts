@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
-declare var screenshot;
-declare var electron;
 import { ElectronService } from 'ngx-electron';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { DirectoryDbRef, Directory } from '../models/directory';
+import { Directory } from '../models/directory';
 
 import { BehaviorSubject } from 'rxjs';
 
@@ -17,7 +14,7 @@ export class ImportExportService {
 
   toggleDownload: BehaviorSubject<boolean>;
 
-  constructor(private windowRefService: WindowRefService, private electronService: ElectronService, private indexedDbService: IndexedDbService) {
+  constructor(private windowRefService: WindowRefService, private electronService: ElectronService) {
     this.toggleDownload = new BehaviorSubject<boolean>(null);
    }
 

@@ -1,13 +1,10 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
-import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Directory } from '../../shared/models/directory';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { SettingsService } from '../../settings/settings.service';
-import { ModalDirective } from 'ngx-bootstrap';
 import { PsatReportService } from './psat-report.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';

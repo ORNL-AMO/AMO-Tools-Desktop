@@ -1,11 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models/psat';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { PSAT, PsatOutputs, PsatInputs } from '../../shared/models/psat';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
 import * as d3 from 'd3';
-import { PHAST } from '../../shared/models/phast/phast';
 import { CompareService } from '../compare.service';
 var svg;
 

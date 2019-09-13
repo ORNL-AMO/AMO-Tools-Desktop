@@ -1,6 +1,5 @@
 import { Injectable, ElementRef } from '@angular/core';
 import * as d3 from 'd3';
-import { repeat } from 'rxjs/operators';
 
 @Injectable()
 export class LineChartHelperService {

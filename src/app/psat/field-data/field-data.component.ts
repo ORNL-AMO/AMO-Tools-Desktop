@@ -67,7 +67,7 @@ export class FieldDataComponent implements OnInit {
   fieldDataWarnings: FieldDataWarnings;
   idString: string;
 
-  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
+  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
     if (!this.baseline) {
