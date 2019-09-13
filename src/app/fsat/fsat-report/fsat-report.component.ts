@@ -4,7 +4,6 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory } from '../../shared/models/directory';
-import { FsatService } from '../fsat.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsService } from '../../settings/settings.service';

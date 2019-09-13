@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { StepTab, stepTabs, specTabs } from '../tabs';
 @Component({

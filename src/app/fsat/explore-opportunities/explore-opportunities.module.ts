@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExploreOpportunitiesComponent } from './explore-opportunities.component';
-import { ExploreOpportunitiesService } from './explore-opportunities.service';
 import { ExploreOpportunitiesHelpComponent } from './explore-opportunities-help/explore-opportunities-help.component';
 import { ExploreOpportunitiesFormComponent } from './explore-opportunities-form/explore-opportunities-form.component';
 import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities-sankey/explore-opportunities-sankey.component';
@@ -39,7 +38,7 @@ import { SharedModule } from '../../shared/shared.module';
     FanDataFormComponent,
     VariableFrequencyDriveFormComponent
     ],
-  providers: [ExploreOpportunitiesService],
+  providers: [],
   exports: [ExploreOpportunitiesComponent]
 })
 export class ExploreOpportunitiesModule { }

@@ -7,7 +7,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { GasMaterialWarnings, ChargeMaterialService } from '../charge-material.service';
 import { GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 @Component({
@@ -44,7 +43,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   showModal: boolean = false;
   warnings: GasMaterialWarnings;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isBaseline) {

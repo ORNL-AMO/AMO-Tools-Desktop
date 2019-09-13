@@ -1,11 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PhastService } from '../../../phast.service';
-import { PHAST, Losses, PhastResults, ShowResultsCategories, Modification } from '../../../../shared/models/phast/phast';
+import { PHAST, PhastResults, ShowResultsCategories, Modification } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { Assessment } from '../../../../shared/models/assessment';
-import { PhastResultsService } from '../../../phast-results.service';
-import { graphColors } from '../graphColors';
-import { PhastReportService } from '../../phast-report.service';
 
 @Component({
     selector: 'app-report-graphs-print',

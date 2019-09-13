@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { AtmosphereLossesCompareService } from '../atmosphere-losses-compare.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';

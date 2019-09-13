@@ -1,12 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { PhastService } from '../../phast.service';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
-import { graphColors, phastGraphColors } from './graphColors';
-import { PhastReportService } from '../phast-report.service';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
+import { phastGraphColors } from './graphColors';
 
 @Component({
   selector: 'app-report-graphs',
@@ -70,7 +67,7 @@ export class ReportGraphsComponent implements OnInit {
   modifiedLabels: Array<string>;
   window: any;
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private phastReportService: PhastReportService, private windowRefService: WindowRefService) { }
+  constructor(private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
     let selectedPhast1PieResults, selectedPhast2PieResults;

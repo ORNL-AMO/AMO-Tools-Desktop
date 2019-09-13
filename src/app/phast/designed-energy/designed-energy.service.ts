@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
-import { DesignedEnergy, DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergyResults, DesignedEnergySteam } from '../../shared/models/phast/designedEnergy';
+import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergyResults, DesignedEnergySteam } from '../../shared/models/phast/designedEnergy';
 import { AuxEquipmentService } from '../aux-equipment/aux-equipment.service';
 import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
@@ -10,9 +10,6 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 export class DesignedEnergyService {
 
   constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
-
-  //6/7/18 update
-  /////////////////////////////////////////////////////////////////////////////////////
 
   calculateDesignedEnergy(phast: PHAST, settings: Settings): DesignedEnergyResults {
     let tmpResults: DesignedEnergyResults = {

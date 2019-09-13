@@ -1,13 +1,10 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { Losses, PHAST } from '../../shared/models/phast/phast';
+import { PHAST } from '../../shared/models/phast/phast';
 import * as _ from 'lodash';
-import { PhastService } from '../phast.service';
 import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import { Settings } from '../../shared/models/settings';
 import { SankeyService, FuelResults } from './sankey.service';
-import { PhastResultsService } from '../phast-results.service';
-import { Assessment } from '../../shared/models/assessment';
 
 var svg;
 // use these values to alter label font position and size
@@ -71,7 +68,7 @@ export class SankeyComponent implements OnInit {
   usefulOutputY: number;
 
 
-  constructor(private phastResultService: PhastResultsService, private phastService: PhastService, private sankeyService: SankeyService, private svgToPngService: SvgToPngService) {
+  constructor(private sankeyService: SankeyService, private svgToPngService: SvgToPngService) {
   }
 
   ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
 import { PhastCompareService } from '../phast-compare.service';
 import { Subscription } from 'rxjs';

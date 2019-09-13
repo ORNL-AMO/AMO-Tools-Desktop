@@ -1,10 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { SettingsService } from '../../settings/settings.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertPhastService } from '../convert-phast.service';
 import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';

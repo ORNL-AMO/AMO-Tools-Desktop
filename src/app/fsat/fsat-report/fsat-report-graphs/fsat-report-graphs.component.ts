@@ -4,9 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { FsatService } from '../../fsat.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-fsat-report-graphs',

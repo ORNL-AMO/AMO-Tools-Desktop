@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { PHAST } from '../../../shared/models/phast/phast';
 

@@ -4,10 +4,6 @@ function getWindow(): any {
   return window;
 }
 
-declare var screenshot;
-declare var Pageres;
-import { ElectronService } from 'ngx-electron';
-
 @Injectable()
 export class WindowRefService {
   get nativeWindow(): any {

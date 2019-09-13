@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
-import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { graphColors } from '../graphColors';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
@@ -55,7 +54,7 @@ export class PhastBarChartComponent implements OnInit {
   hoverBtnGridLines: boolean = false;
   displayGridLinesTooltip: boolean = false;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.getData(this.results, this.modResults, this.resultCats);

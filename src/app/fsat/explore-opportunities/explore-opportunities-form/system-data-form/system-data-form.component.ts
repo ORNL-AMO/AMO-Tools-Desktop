@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
 import { FanFieldDataWarnings } from '../../../fsat-warning.service';
@@ -51,7 +50,6 @@ export class SystemDataFormComponent implements OnInit {
     showPressure: boolean = false;
 
     constructor(
-        private convertUnitsService: ConvertUnitsService,
         private helpPanelService: HelpPanelService,
         private modifyConditionsService: ModifyConditionsService) {
     }
