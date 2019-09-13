@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/cor
 import { Settings } from '../../../shared/models/settings';
 import { SolidLoadChargeMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
-import { SuiteDbService } from '../../suite-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
@@ -29,7 +28,7 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.solidChargeMaterials = new Array<SolidLoadChargeMaterial>();

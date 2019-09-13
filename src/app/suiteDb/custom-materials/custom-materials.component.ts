@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { CustomMaterialsService, MaterialData } from './custom-materials.service';
 import { ModalDirective } from 'ngx-bootstrap';

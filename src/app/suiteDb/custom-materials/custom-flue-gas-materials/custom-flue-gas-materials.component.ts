@@ -4,7 +4,6 @@ import { FlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
 import { LossesService } from '../../../phast/losses/losses.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { SuiteDbService } from '../../suite-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -33,7 +32,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private indexedDbService: IndexedDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.flueGasMaterials = new Array<FlueGasMaterial>();

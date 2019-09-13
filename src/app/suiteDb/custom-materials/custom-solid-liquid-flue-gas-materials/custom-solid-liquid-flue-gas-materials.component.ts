@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/cor
 import { Settings } from '../../../shared/models/settings';
 import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
-import { SuiteDbService } from '../../suite-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
@@ -28,7 +27,7 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
+  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService) { }
 
   ngOnInit() {
     this.solidLiquidFlueGasMaterials = new Array<SolidLiquidFlueGasMaterial>();

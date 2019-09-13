@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ElectronService } from 'ngx-electron';
-import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-update-toast',
@@ -35,7 +34,7 @@ export class UpdateToastComponent implements OnInit {
   downloadingUpdate: boolean = false;
   updateDownloaded: boolean = false;
   version: string;
-  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef, private assessmentService: AssessmentService) { }
+  constructor(private electronService: ElectronService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.releaseName = this.info.releaseName;
