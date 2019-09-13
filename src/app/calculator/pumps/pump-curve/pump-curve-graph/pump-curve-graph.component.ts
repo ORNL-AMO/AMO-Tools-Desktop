@@ -6,7 +6,6 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 import { PumpCurveService } from '../pump-curve.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SystemCurveService } from '../../system-curve/system-curve.service';
 import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
 
@@ -123,7 +122,7 @@ export class PumpCurveGraphComponent implements OnInit {
   @Input()
   toggleCalculate: boolean;
   tmpHeadFlow: any;
-  constructor(private systemCurveService: SystemCurveService, private lineChartHelperService: LineChartHelperService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
+  constructor(private systemCurveService: SystemCurveService, private lineChartHelperService: LineChartHelperService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.isGridToggled = false;

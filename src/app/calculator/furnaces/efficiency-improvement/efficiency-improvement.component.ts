@@ -8,7 +8,6 @@ import { Calculator } from '../../../shared/models/calculators';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-efficiency-improvement',

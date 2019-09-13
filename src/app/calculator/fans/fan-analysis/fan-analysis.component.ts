@@ -3,7 +3,6 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Fan203Inputs } from '../../../shared/models/fans';
 import { FanAnalysisService } from './fan-analysis.service';
-import { ConvertFsatService } from '../../../fsat/convert-fsat.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-data-form.service';

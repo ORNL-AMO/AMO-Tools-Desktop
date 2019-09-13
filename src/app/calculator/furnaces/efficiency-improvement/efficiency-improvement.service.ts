@@ -4,7 +4,6 @@ import { Settings } from '../../../shared/models/settings';
 import { EfficiencyImprovementInputs } from '../../../shared/models/phast/efficiencyImprovement';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LessThanValidator } from '../../../shared/validators/less-than';
-import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class EfficiencyImprovementService {

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { PowerFactorCorrectionService } from './power-factor-correction.service';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-power-factor-correction',
@@ -27,7 +26,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
   currentField: string;
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
-  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService, private settingsDbService: SettingsDbService) { }
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService) { }
 
   ngOnInit() {
     this.calculate(this.inputData);

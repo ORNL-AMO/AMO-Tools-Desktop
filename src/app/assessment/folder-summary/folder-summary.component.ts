@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';

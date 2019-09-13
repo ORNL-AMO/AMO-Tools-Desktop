@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { LightingReplacementData, LightingReplacementResults } from '../../../../shared/models/lighting';
-import { LightingReplacementService } from '../lighting-replacement.service';
 
 @Component({
   selector: 'app-lighting-replacement-results',

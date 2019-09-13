@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { ElectricityReductionResults } from '../../../../shared/models/standalone';
 

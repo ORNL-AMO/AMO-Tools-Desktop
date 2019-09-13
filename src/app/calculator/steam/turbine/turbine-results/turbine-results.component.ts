@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { TurbineOutput } from '../../../../shared/models/steam/steam-outputs';
-import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-turbine-results',

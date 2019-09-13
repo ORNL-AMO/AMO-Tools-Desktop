@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
-import { TreasureHunt } from '../shared/models/treasure-hunt';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CashFlowForm, CashFlowResults } from './cash-flow';
 import { CashFlowService } from './cash-flow.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';

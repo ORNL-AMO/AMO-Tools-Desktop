@@ -3,7 +3,6 @@ import { CashFlowResults } from '../cash-flow';
 import { CashFlowForm } from '../cash-flow';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
-import { CashFlowService } from '../cash-flow.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { Subscription } from '../../../../../../node_modules/rxjs';
 
@@ -92,7 +91,7 @@ export class CashFlowDiagramComponent implements OnInit {
   //add this boolean to keep track if graph has been expanded
   expanded: boolean = false;
   calcSub: Subscription;
-  constructor(private cashFlowService: CashFlowService, private svgToPngService: SvgToPngService) {
+  constructor(private svgToPngService: SvgToPngService) {
 
   }
 

@@ -7,9 +7,6 @@ import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.servic
 import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
 import { SpecificSpeedService } from '../specific-speed.service';
 
-var tableEfficiencyCorrection: number;
-var tableSpecificSpeed: number;
-
 @Component({
   selector: 'app-specific-speed-graph',
   templateUrl: './specific-speed-graph.component.html',

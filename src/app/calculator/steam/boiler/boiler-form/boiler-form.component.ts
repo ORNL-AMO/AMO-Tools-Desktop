@@ -3,7 +3,6 @@ import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
-import { BoilerService } from '../boiler.service';
 
 @Component({
   selector: 'app-boiler-form',
@@ -21,7 +20,7 @@ export class BoilerFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
-  constructor(private steamService: SteamService, private boilerService: BoilerService) { }
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;

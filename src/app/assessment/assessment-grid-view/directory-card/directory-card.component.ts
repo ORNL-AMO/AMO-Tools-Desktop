@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
+import { Directory } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { AssessmentService } from '../../assessment.service';
-import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -28,7 +27,7 @@ export class DirectoryCardComponent implements OnInit {
   editForm: FormGroup;
   directories: Array<Directory>;
   @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
-  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService, private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private indexedDbService: IndexedDbService, private directoryDbService: DirectoryDbService, private assessmentDbService: AssessmentDbService, private assessmentService: AssessmentService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.populateDirectories(this.directory);

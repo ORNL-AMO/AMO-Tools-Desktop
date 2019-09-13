@@ -48,7 +48,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   baselineData: Array<CompressedAirPressureReductionData>;
   modificationData: Array<CompressedAirPressureReductionData>;
 
-  constructor(private settingsDbService: SettingsDbService, private compressedAirPressureReductionService: CompressedAirPressureReductionService, private formBuilder: FormBuilder) { }
+  constructor(private settingsDbService: SettingsDbService, private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {

@@ -2,7 +2,6 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostLis
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import * as d3 from 'd3';
-import { PsatService } from '../../../../psat/psat.service';
 import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import { SystemCurveService } from '../system-curve.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';

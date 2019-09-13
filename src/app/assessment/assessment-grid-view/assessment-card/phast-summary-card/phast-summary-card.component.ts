@@ -1,8 +1,6 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../shared/models/assessment';
-import { PhastResultsService } from '../../../../phast/phast-results.service';
-import { PhastResults, ExecutiveSummary } from '../../../../shared/models/phast/phast';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+import { ExecutiveSummary } from '../../../../shared/models/phast/phast';
 import { ExecutiveSummaryService } from '../../../../phast/phast-report/executive-summary.service';
 import { Settings } from '../../../../shared/models/settings';
 import { AssessmentService } from '../../../assessment.service';

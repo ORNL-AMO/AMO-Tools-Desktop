@@ -1,6 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-
 import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT } from '../../../../shared/models/fans';

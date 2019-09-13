@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, ViewChildren, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
-import { ModelService } from '../../shared/model.service';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../assessment.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';

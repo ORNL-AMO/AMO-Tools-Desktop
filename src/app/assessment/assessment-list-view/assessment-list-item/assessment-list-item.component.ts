@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
-import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment.service';
-import { PsatService } from '../../../psat/psat.service';
 import { Directory } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
@@ -43,7 +41,7 @@ export class AssessmentListItemComponent implements OnInit {
   settingsCopy: Settings;
 
   @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
-  constructor(private assessmentService: AssessmentService, private router: Router, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
+  constructor(private assessmentService: AssessmentService, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (this.assessment.phast) {

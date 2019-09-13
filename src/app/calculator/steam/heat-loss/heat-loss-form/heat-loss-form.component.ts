@@ -3,7 +3,6 @@ import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
-import { HeatLossService } from '../heat-loss.service';
 
 @Component({
   selector: 'app-heat-loss-form',
@@ -21,7 +20,7 @@ export class HeatLossFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
-  constructor(private steamService: SteamService, private heatLossService: HeatLossService) { }
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;

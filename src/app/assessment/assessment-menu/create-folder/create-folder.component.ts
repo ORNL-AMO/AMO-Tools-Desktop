@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChange
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
-import { ModelService } from '../../../shared/model.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
@@ -28,7 +27,7 @@ export class CreateFolderComponent implements OnInit {
 
   directorySettings: Settings;
 
-  constructor(private formBuilder: FormBuilder, private modelService: ModelService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService) { }
+  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     this.newFolderForm = this.initForm();

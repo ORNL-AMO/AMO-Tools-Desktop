@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
