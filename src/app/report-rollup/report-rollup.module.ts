@@ -14,7 +14,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { PhastRollupGraphsComponent } from './phast-rollup/phast-rollup-graphs/phast-rollup-graphs.component';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
 import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { PsatRollupComponent } from './psat-rollup/psat-rollup.component';
 import { PsatRollupEnergyTableComponent } from './psat-rollup/psat-rollup-energy-table/psat-rollup-energy-table.component';
 import { PsatRollupGraphsComponent } from './psat-rollup/psat-rollup-graphs/psat-rollup-graphs.component';
@@ -57,7 +57,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     PhastReportModule,
     ModalModule,
     FormsModule,
-    ReactiveFormsModule,
     PreAssessmentModule,
     FsatReportModule,
     SsmtReportModule,
