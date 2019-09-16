@@ -3,8 +3,8 @@ import { PsatService } from '../../../../psat/psat.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
-import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
+import { LineChartHelperService } from '../../../../shared/helper-services/line-chart-helper.service';
 import { SpecificSpeedService } from '../specific-speed.service';
 
 @Component({

@@ -3,19 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 
-import { ValidationService } from './validation.service';
-import { ModelService } from './model.service';
-
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { PercentGraphComponent } from './percent-graph/percent-graph.component';
 import { SigFigsPipe } from './pipes/sig-figs.pipe';
-import { UpdateDataService } from './update-data.service';
-import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
-import { SvgToPngService } from './svg-to-png/svg-to-png.service';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
 import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
-import { LineChartHelperService } from './line-chart-helper/line-chart-helper.service';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
@@ -34,7 +27,6 @@ import { OperatingHoursModalService } from './operating-hours-modal/operating-ho
   declarations: [
     PercentGraphComponent,
     SigFigsPipe,
-    FacilityInfoSummaryComponent,
     PieChartComponent,
     PhonePipe,
     SimpleTooltipComponent,
@@ -47,7 +39,6 @@ import { OperatingHoursModalService } from './operating-hours-modal/operating-ho
   exports: [
     PercentGraphComponent,
     SigFigsPipe,
-    FacilityInfoSummaryComponent,
     PieChartComponent,
     PhonePipe,
     SimpleTooltipComponent,
@@ -58,12 +49,7 @@ import { OperatingHoursModalService } from './operating-hours-modal/operating-ho
     OperatingHoursModalComponent
   ],
   providers: [
-    ValidationService,
-    ModelService,
     ConvertUnitsService,
-    UpdateDataService,
-    SvgToPngService,
-    LineChartHelperService,
     WaterfallGraphService,
     OperatingHoursModalService
   ]

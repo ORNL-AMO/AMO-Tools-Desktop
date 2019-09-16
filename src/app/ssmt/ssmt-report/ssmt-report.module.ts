@@ -21,6 +21,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
 import { ReportGraphsService } from './report-graphs/report-graphs.service';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -28,7 +29,8 @@ import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-op
     SharedModule,
     FormsModule,
     ModalModule,
-    PrintOptionsMenuModule
+    PrintOptionsMenuModule,
+    FacilityInfoSummaryModule
   ],
   declarations: [
     SsmtReportComponent,

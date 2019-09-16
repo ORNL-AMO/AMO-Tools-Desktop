@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Assessment } from './models/assessment';
-import { Settings } from './models/settings';
-import { SettingsService } from '../settings/settings.service';
+import { Assessment } from '../models/assessment';
+import { Settings } from '../models/settings';
+import { SettingsService } from '../../settings/settings.service';
 declare const packageJson;
 
 @Injectable()

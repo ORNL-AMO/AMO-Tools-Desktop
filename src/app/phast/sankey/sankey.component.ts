@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
 import * as _ from 'lodash';
-import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../shared/helper-services/svg-to-png.service';
 import * as d3 from 'd3';
 import { Settings } from '../../shared/models/settings';
 import { SankeyService, FuelResults } from './sankey.service';

@@ -2,10 +2,10 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostLis
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import * as d3 from 'd3';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { SystemCurveService } from '../system-curve.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
+import { LineChartHelperService } from '../../../../shared/helper-services/line-chart-helper.service';
 import { FormGroup } from '@angular/forms';
 
 var headOrPressure: string;

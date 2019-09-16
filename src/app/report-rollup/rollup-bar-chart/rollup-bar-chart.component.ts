@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
-import { SvgToPngService } from '../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../shared/helper-services/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 

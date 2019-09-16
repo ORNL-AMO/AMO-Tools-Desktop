@@ -5,9 +5,9 @@ import * as _ from 'lodash';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { PumpCurveService } from '../pump-curve.service';
 import { Settings } from '../../../../shared/models/settings';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { SystemCurveService } from '../../system-curve/system-curve.service';
-import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
+import { LineChartHelperService } from '../../../../shared/helper-services/line-chart-helper.service';
 
 @Component({
   selector: 'app-pump-curve-graph',

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, HostLis
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import * as d3 from 'd3';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 

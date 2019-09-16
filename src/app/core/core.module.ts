@@ -17,7 +17,6 @@ import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-i
 import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
 import { SettingsModule } from '../settings/settings.module';
 
-import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
 
@@ -59,6 +58,7 @@ import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
 import { SharedModule } from '../shared/shared.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
+import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
 
 @NgModule({
   declarations: [
@@ -103,7 +103,6 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
-    JsonToCsvModule,
     SuiteDbModule,
     ImportExportModule,
     ReportRollupModule,
@@ -111,7 +110,8 @@ import { UpdateToastComponent } from '../update-toast/update-toast.component';
     PreAssessmentModule,
     SsmtModule,
     TreasureHuntModule,
-    SharedModule
+    SharedModule,
+    HelperServicesModule
   ],
   providers: [
     AssessmentService,

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChange, ViewChild, ElementRef, SimpleChanges, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 import { PreAssessment } from '../pre-assessment';

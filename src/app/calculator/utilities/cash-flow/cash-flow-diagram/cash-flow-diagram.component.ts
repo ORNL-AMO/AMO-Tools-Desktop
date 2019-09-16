@@ -3,7 +3,7 @@ import { CashFlowResults } from '../cash-flow';
 import { CashFlowForm } from '../cash-flow';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { Subscription } from '../../../../../../node_modules/rxjs';
 
 

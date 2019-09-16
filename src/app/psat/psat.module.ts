@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 
 import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
@@ -51,6 +50,7 @@ import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
+import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
 
 @NgModule({
   declarations: [
@@ -86,7 +86,6 @@ import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-optio
     SharedModule,
     ModalModule.forRoot(),
     SettingsModule,
-    JsonToCsvModule,
     HelpPanelModule,
     SystemCurveModule,
     SpecificSpeedModule,
@@ -97,7 +96,8 @@ import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-optio
     PumpCurveModule,
     ExploreOpportunitiesModule,
     UtilitiesModule,
-    PrintOptionsMenuModule
+    PrintOptionsMenuModule,
+    FacilityInfoSummaryModule
   ],
   providers: [
     PsatService,
