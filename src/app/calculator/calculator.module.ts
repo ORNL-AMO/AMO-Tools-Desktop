@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { FurnacesModule } from './furnaces/furnaces.module';
 import { CalculatorComponent } from './calculator.component';
 
@@ -23,9 +21,6 @@ import { LightingModule } from './lighting/lighting.module';
     CalculatorComponent
   ],
   imports: [
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
     CommonModule,
     PumpsModule,
     SteamModule,
