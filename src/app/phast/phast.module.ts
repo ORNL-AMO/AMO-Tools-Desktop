@@ -36,6 +36,7 @@ import { AddModificationComponent } from './add-modification/add-modification.co
 import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
+import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ToastModule } from '../shared/toast/toast.module';
     LossesTabsModule,
     UtilitiesModule,
     TabsTooltipModule,
-    ToastModule
+    ToastModule,
+    UnitConverterModule
   ],
   providers: [
     PhastService,

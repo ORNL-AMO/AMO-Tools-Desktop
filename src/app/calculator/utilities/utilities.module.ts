@@ -17,15 +17,13 @@ import { WaterReductionModule } from './water-reduction/water-reduction.module';
 import { CompressedAirPressureReductionModule } from './compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
 import { CashFlowModule } from './cash-flow/cash-flow.module';
+import { UnitConverterModule } from './unit-converter/unit-converter.module';
 
 @NgModule({
     declarations: [
-        UtilitiesComponent,
-        UnitConverterComponent,
-        SortByPipe
+        UtilitiesComponent
     ],
     exports: [
-        UnitConverterComponent,
         UtilitiesComponent
     ],
     imports: [
@@ -42,12 +40,9 @@ import { CashFlowModule } from './cash-flow/cash-flow.module';
         CompressedAirPressureReductionModule,
         SteamReductionModule,
         WaterReductionModule,
-        CashFlowModule
-    ],
-    providers: [
-        UnitConverterService
+        CashFlowModule,
+        UnitConverterModule
     ]
-
 })
 
 export class UtilitiesModule { }

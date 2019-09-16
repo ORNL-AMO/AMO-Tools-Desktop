@@ -57,6 +57,7 @@ import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.mod
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,8 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     SimpleTooltipModule,
     TabsTooltipModule,
     ToastModule,
-    SharedPipesModule
+    SharedPipesModule,
+    UnitConverterModule
   ],
   providers: [
     PsatService,
