@@ -22,6 +22,7 @@ import { NaturalGasReductionModule } from './natural-gas-reduction/natural-gas-r
 import { CompressedAirReductionModule } from './compressed-air-reduction/compressed-air-reduction.module';
 import { WaterReductionModule } from './water-reduction/water-reduction.module';
 import { CompressedAirPressureReductionModule } from './compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
+import { SteamReductionModule } from './steam-reduction/steam-reduction.module';
 
 @NgModule({
     declarations: [
@@ -51,6 +52,7 @@ import { CompressedAirPressureReductionModule } from './compressed-air-pressure-
         NaturalGasReductionModule,
         CompressedAirReductionModule,
         CompressedAirPressureReductionModule,
+        SteamReductionModule,
         WaterReductionModule
     ],
     providers: [
