@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 import { MeteredEnergyModule } from './metered-energy/metered-energy.module';
 import { LossesModule } from './losses/losses.module';
@@ -56,7 +56,6 @@ import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit
   imports: [
     RouterModule,
     CommonModule,
-    ReactiveFormsModule,
     FormsModule,
     ModalModule,
     LossesModule,

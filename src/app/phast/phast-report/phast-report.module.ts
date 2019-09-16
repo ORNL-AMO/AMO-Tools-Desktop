@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { PhastReportComponent } from './phast-report.component';
 import { EnergyUsedComponent } from './energy-used/energy-used.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
@@ -14,7 +14,6 @@ import { PhastReportService } from './phast-report.service';
 import { ExecutiveSummaryService } from './executive-summary.service';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
 import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
-import { ModalModule } from 'ngx-bootstrap';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
@@ -25,11 +24,9 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
 @NgModule({
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FormsModule,
     SankeyModule,
     PhastInputSummaryModule,
-    ModalModule,
     PrintOptionsMenuModule,
     FacilityInfoSummaryModule,
     PercentGraphModule,
