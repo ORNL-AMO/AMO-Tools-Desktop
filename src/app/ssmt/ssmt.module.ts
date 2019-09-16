@@ -46,6 +46,7 @@ import { ConvertSsmtService } from './convert-ssmt.service';
 import { HeatExchangerService } from './ssmt-calculations/heat-exchanger.service';
 import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { ToastModule } from '../shared/toast/toast.module';
 
 @NgModule({
   imports: [
@@ -72,7 +73,8 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
     HeaderModule,
     TurbineModule,
     BlowdownRateModalModule,
-    TabsTooltipModule
+    TabsTooltipModule,
+    ToastModule
   ],
   declarations: [
     SsmtComponent,

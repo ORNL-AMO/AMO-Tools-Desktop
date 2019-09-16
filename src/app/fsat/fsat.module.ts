@@ -43,6 +43,7 @@ import { CalculatePressuresModule } from './calculate-pressures/calculate-pressu
 import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.module';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { ToastModule } from '../shared/toast/toast.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -66,7 +67,8 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
     CalculatePressuresModule,
     FanAnalysisModule,
     OperatingHoursModalModule,
-    TabsTooltipModule
+    TabsTooltipModule,
+    ToastModule
   ],
   declarations: [
     FsatComponent,

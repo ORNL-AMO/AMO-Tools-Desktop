@@ -18,6 +18,7 @@ import { SsmtResultsPanelModule } from '../ssmt-results-panel/ssmt-results-panel
 import { SharedModule } from '../../shared/shared.module';
 import { BlowdownRateModalModule } from '../blowdown-rate-modal/blowdown-rate-modal.module';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ToastModule } from '../../shared/toast/toast.module';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/op
     SsmtResultsPanelModule,
     SharedModule,
     BlowdownRateModalModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    ToastModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
   exports: [ExploreOpportunitiesComponent],

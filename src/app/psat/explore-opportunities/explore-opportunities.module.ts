@@ -15,6 +15,7 @@ import { HeadToolModule } from '../../calculator/pumps/head-tool/head-tool.modul
 import { ModalModule } from 'ngx-bootstrap';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
+import { ToastModule } from '../../shared/toast/toast.module';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
     HeadToolModule,
     ModalModule,
     OperatingHoursModalModule,
-    PercentGraphModule
+    PercentGraphModule,
+    ToastModule
   ],
   declarations: [
     ExploreOpportunitiesComponent, 

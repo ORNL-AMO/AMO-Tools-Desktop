@@ -59,6 +59,7 @@ import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
 import { SharedModule } from '../shared/shared.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
+import { ToastModule } from '../shared/toast/toast.module';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { HelperServicesModule } from '../shared/helper-services/helper-services.
     SsmtModule,
     TreasureHuntModule,
     SharedModule,
-    HelperServicesModule
+    HelperServicesModule,
+    ToastModule
   ],
   providers: [
     AssessmentService,

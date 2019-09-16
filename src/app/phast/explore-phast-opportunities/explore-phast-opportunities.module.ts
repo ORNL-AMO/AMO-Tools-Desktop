@@ -18,6 +18,7 @@ import { ExploreCoolingFormComponent } from './explore-phast-opportunities-form/
 import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-form/explore-atmosphere-form/explore-atmosphere-form.component';
 import { SharedModule } from '../../shared/shared.module';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ToastModule } from '../../shared/toast/toast.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/op
     LossesModule,
     ModalModule,
     SharedModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    ToastModule
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,

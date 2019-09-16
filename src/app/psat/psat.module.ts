@@ -56,6 +56,7 @@ import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module
 import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
 import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { ToastModule } from '../shared/toast/toast.module';
 
 @NgModule({
   declarations: [
@@ -107,7 +108,8 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
     PercentGraphModule,
     PieChartModule,
     SimpleTooltipModule,
-    TabsTooltipModule
+    TabsTooltipModule,
+    ToastModule
   ],
   providers: [
     PsatService,

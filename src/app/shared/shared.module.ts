@@ -9,7 +9,6 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
 import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
-import { ToastComponent } from './toast/toast.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,15 +20,13 @@ import { ToastComponent } from './toast/toast.component';
     SigFigsPipe,
     PhonePipe,
     SettingsLabelPipe,
-    WaterfallGraphComponent,
-    ToastComponent
+    WaterfallGraphComponent
   ],
   exports: [
     SigFigsPipe,
     PhonePipe,
     SettingsLabelPipe,
-    WaterfallGraphComponent,
-    ToastComponent
+    WaterfallGraphComponent
   ],
   providers: [
     ConvertUnitsService,
