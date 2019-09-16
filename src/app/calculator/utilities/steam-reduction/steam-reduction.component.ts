@@ -156,6 +156,9 @@ export class SteamReductionComponent implements OnInit {
     dataArray[index].waterMassFlowMethodData = data.waterMassFlowMethodData;
     dataArray[index].otherMethodData = data.otherMethodData;
     dataArray[index].units = data.units;
+    dataArray[index].otherUtilityCost = data.otherUtilityCost;
+    dataArray[index].steamUtilityCost = data.steamUtilityCost;
+    dataArray[index].naturalGasUtilityCost = data.naturalGasUtilityCost;
   }
 
   getResults() {

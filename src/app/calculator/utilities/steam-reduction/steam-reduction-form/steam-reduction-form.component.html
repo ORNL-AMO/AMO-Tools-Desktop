@@ -378,5 +378,5 @@
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
-  [operatingHours]="naturalGasReductionService.operatingHours">
+  [operatingHours]="steamReductionService.operatingHours">
 </app-operating-hours-modal>
