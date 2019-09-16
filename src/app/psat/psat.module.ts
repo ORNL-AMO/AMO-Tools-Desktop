@@ -53,6 +53,8 @@ import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-optio
 import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
+import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   declarations: [
@@ -101,7 +103,9 @@ import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module
     PrintOptionsMenuModule,
     FacilityInfoSummaryModule,
     OperatingHoursModalModule,
-    PercentGraphModule
+    PercentGraphModule,
+    PieChartModule,
+    SimpleTooltipModule
   ],
   providers: [
     PsatService,

@@ -8,13 +8,15 @@ import { SharedModule } from "../../../shared/shared.module";
 import { SaturatedPropertiesHelpComponent } from './saturated-properties-help/saturated-properties-help.component';
 import { SaturatedPropertiesTableComponent } from './saturated-properties-table/saturated-properties-table.component';
 import { SaturatedPropertiesPhGraphComponent } from './saturated-properties-ph-graph/saturated-properties-ph-graph.component';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    SimpleTooltipModule
   ],
   declarations: [
     SaturatedPropertiesGraphComponent, SaturatedPropertiesComponent, SaturatedPropertiesFormComponent, SaturatedPropertiesHelpComponent, SaturatedPropertiesTableComponent, SaturatedPropertiesPhGraphComponent

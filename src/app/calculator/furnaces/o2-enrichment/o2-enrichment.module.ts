@@ -10,6 +10,7 @@ import { O2EnrichmentFormComponent } from '../o2-enrichment/o2-enrichment-form/o
 import { O2EnrichmentService } from './o2-enrichment.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     ReactiveFormsModule,
     SharedModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    SimpleTooltipModule
   ],
   declarations: [
     O2EnrichmentFormComponent,

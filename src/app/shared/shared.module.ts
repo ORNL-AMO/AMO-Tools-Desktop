@@ -5,9 +5,7 @@ import { ModalModule } from 'ngx-bootstrap';
 
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { SigFigsPipe } from './pipes/sig-figs.pipe';
-import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
-import { SimpleTooltipComponent } from './simple-tooltip/simple-tooltip.component';
 import { TabsTooltipComponent } from './tabs-tooltip/tabs-tooltip.component';
 import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
@@ -22,9 +20,7 @@ import { ToastComponent } from './toast/toast.component';
   ],
   declarations: [
     SigFigsPipe,
-    PieChartComponent,
     PhonePipe,
-    SimpleTooltipComponent,
     TabsTooltipComponent,
     SettingsLabelPipe,
     WaterfallGraphComponent,
@@ -32,9 +28,7 @@ import { ToastComponent } from './toast/toast.component';
   ],
   exports: [
     SigFigsPipe,
-    PieChartComponent,
     PhonePipe,
-    SimpleTooltipComponent,
     TabsTooltipComponent,
     SettingsLabelPipe,
     WaterfallGraphComponent,

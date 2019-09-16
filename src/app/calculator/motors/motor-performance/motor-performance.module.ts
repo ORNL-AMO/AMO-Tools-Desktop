@@ -9,6 +9,7 @@ import { MotorPerformanceHelpComponent } from './motor-performance-help/motor-pe
 import { SharedModule } from '../../../shared/shared.module';
 import { MotorPerformanceService } from './motor-performance.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SimpleTooltipModule
   ],
   declarations: [
     MotorPerformanceComponent,

@@ -23,6 +23,7 @@ import { ReportGraphsService } from './report-graphs/report-graphs.service';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
+import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -32,7 +33,8 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
     ModalModule,
     PrintOptionsMenuModule,
     FacilityInfoSummaryModule,
-    PercentGraphModule
+    PercentGraphModule,
+    PieChartModule
   ],
   declarations: [
     SsmtReportComponent,

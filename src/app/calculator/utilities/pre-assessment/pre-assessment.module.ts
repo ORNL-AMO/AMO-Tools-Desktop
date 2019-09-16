@@ -17,6 +17,7 @@ import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { PreAssessmentService } from './pre-assessment.service';
 import { PreAssessmentCostFormComponent } from './pre-assessment-cost-form/pre-assessment-cost-form.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { PieChartModule } from '../../../shared/pie-chart/pie-chart.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -28,7 +29,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     BrowserModule,
     BrowserAnimationsModule,
     SharedModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    PieChartModule
   ],
   declarations: [
     PreAssessmentComponent,

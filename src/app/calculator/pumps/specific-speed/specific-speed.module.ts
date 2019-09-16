@@ -8,6 +8,7 @@ import { SpecificSpeedHelpComponent } from './specific-speed-help/specific-speed
 import { SharedModule } from '../../../shared/shared.module';
 import { SpecificSpeedService } from './specific-speed.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SimpleTooltipModule
   ],
   declarations: [
     SpecificSpeedGraphComponent,

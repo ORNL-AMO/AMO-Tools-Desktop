@@ -20,6 +20,8 @@ import { ModalModule } from 'ngx-bootstrap';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
+import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
+import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
@@ -33,7 +35,9 @@ import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.mod
     ModalModule,
     PrintOptionsMenuModule,
     FacilityInfoSummaryModule,
-    PercentGraphModule
+    PercentGraphModule,
+    PieChartModule,
+    SimpleTooltipModule
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent, ReportGraphsPrintComponent],
   exports: [PhastReportComponent, ResultsDataComponent],

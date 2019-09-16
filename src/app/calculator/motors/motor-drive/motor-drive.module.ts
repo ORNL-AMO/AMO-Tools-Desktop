@@ -11,6 +11,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.
     SharedModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule,
-    PercentGraphModule
+    PercentGraphModule,
+    SimpleTooltipModule
   ],
   declarations: [MotorDriveComponent, MotorDriveFormComponent, MotorDriveGraphComponent, MotorDriveTableComponent, MotorDriveHelpComponent],
   providers: [MotorDriveService],

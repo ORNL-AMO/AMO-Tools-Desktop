@@ -49,6 +49,7 @@ import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-
 import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-summary/treasure-hunt-summary.component';
 import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
+import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-optio
     FsatReportModule,
     SsmtReportModule,
     TreasureHuntReportModule,
-    PrintOptionsMenuModule
+    PrintOptionsMenuModule,
+    PieChartModule
   ],
   declarations: [
     ReportRollupComponent, 
