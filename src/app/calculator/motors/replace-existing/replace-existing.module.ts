@@ -4,7 +4,6 @@ import { ReplaceExistingComponent } from './replace-existing.component';
 import { ReplaceExistingFormComponent } from './replace-existing-form/replace-existing-form.component';
 import { ReplaceExistingHelpComponent } from './replace-existing-help/replace-existing-help.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { ReplaceExistingService } from './replace-existing.service';
 import { ReplaceExistingResultsComponent } from './replace-existing-results/replace-existing-results.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
@@ -14,7 +13,6 @@ import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,

@@ -6,7 +6,6 @@ import { SystemCurveComponent } from './system-curve.component';
 import { SystemCurveFormComponent } from './system-curve-form/system-curve-form.component';
 import { SystemCurveGraphComponent } from './system-curve-graph/system-curve-graph.component';
 import { SystemCurveService } from './system-curve.service';
-import { SharedModule } from '../../../shared/shared.module';
 import { SystemCurveHelpComponent } from './system-curve-help/system-curve-help.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
@@ -16,7 +15,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     SimpleTooltipModule
   ],

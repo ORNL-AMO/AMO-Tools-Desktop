@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { TreasureChestComponent } from './treasure-chest/treasure-chest.component';
 import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
-import { SharedModule } from '../shared/shared.module';
 import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
 import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-report.service';
 import { ImportExportOpportunitiesComponent } from './treasure-chest/import-export-opportunities/import-export-opportunities.component';
@@ -36,7 +35,6 @@ import { ToastModule } from '../shared/toast/toast.module';
     SettingsModule,
     ModalModule,
     FormsModule,
-    SharedModule,
     CalculatorsModule,
     TreasureHuntReportModule,
     AnimatedCheckmarkModule,

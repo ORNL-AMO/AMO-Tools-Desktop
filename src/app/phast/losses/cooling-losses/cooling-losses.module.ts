@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { SharedModule } from "../../../shared/shared.module";
 import { CoolingLossesCompareService } from "./cooling-losses-compare.service";
 import { CoolingLossesComponent } from "./cooling-losses.component";
 import { CoolingLossesService } from "./cooling-losses.service";
@@ -12,7 +11,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     SharedPipesModule

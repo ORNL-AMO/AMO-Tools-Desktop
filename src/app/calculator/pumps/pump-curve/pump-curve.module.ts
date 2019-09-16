@@ -9,7 +9,6 @@ import { PumpCurveFormComponent } from './pump-curve-form/pump-curve-form.compon
 import { PumpCurveGraphComponent } from './pump-curve-graph/pump-curve-graph.component';
 import { PumpCurveHelpComponent } from './pump-curve-help/pump-curve-help.component';
 import { PumpCurveService } from './pump-curve.service';
-import { SharedModule } from '../../../shared/shared.module';
 import { SystemCurveModule } from '../system-curve/system-curve.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
@@ -19,7 +18,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     SystemCurveModule,
     ExportableResultsTableModule,
     SimpleTooltipModule

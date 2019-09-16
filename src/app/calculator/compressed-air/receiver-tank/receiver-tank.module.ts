@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { ReceiverTankComponent } from './receiver-tank.component';
 import { GeneralMethodFormComponent } from './general-method-form/general-method-form.component';
 import { DedicatedStorageFormComponent } from './dedicated-storage-form/dedicated-storage-form.component';
@@ -18,8 +17,7 @@ import { MeteredStorageHelpComponent } from './metered-storage-help/metered-stor
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    SharedModule
+    ReactiveFormsModule
   ],
   declarations: [
     ReceiverTankComponent,

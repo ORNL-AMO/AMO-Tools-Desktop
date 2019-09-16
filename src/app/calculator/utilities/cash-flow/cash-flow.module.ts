@@ -6,7 +6,6 @@ import { CashFlowFormComponent } from './cash-flow-form/cash-flow-form.component
 import { CashFlowDiagramComponent } from './cash-flow-diagram/cash-flow-diagram.component';
 import { CashFlowService } from './cash-flow.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
@@ -22,7 +21,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     SimpleTooltipModule
   ],

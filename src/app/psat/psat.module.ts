@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 
@@ -90,7 +89,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ModalModule.forRoot(),
     SettingsModule,
     HelpPanelModule,

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AchievableEfficiencyFormComponent } from './achievable-efficiency-form/achievable-efficiency-form.component';
 import { AchievableEfficiencyGraphComponent } from './achievable-efficiency-graph/achievable-efficiency-graph.component';
 import { AchievableEfficiencyComponent } from './achievable-efficiency.component';
-import { SharedModule } from '../../../shared/shared.module';
 import { AchievableEfficiencyService } from './achievable-efficiency.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
@@ -14,7 +13,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     SimpleTooltipModule
   ],

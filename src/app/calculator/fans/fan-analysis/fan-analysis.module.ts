@@ -10,7 +10,6 @@ import { FanShaftPowerFormComponent } from './fan-analysis-form/fan-shaft-power-
 import { GasDensityFormComponent } from './fan-analysis-form/gas-density-form/gas-density-form.component';
 import { FanAnalysisService } from './fan-analysis.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
 import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
@@ -58,7 +57,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     PercentGraphModule,
     SharedPipesModule
   ],

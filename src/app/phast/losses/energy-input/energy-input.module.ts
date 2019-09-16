@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
-
 import { EnergyInputComponent } from './energy-input.component';
 import { EnergyInputFormComponent } from './energy-input-form/energy-input-form.component';
 import { EnergyInputCompareService } from './energy-input-compare.service';
@@ -14,7 +12,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     SharedPipesModule
   ],
   declarations: [

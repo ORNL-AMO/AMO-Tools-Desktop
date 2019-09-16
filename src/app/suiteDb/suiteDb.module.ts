@@ -16,7 +16,6 @@ import { LiquidLoadChargeMaterialHelpComponent } from './liquid-load-charge-mate
 import { SolidLoadChargeMaterialHelpComponent } from './solid-load-charge-material/solid-load-charge-material-help/solid-load-charge-material-help.component';
 import { WallLossesSurfaceHelpComponent } from './wall-losses-surface/wall-losses-surface-help/wall-losses-surface-help.component';
 import { AtmosphereSpecificHeatMaterialHelpComponent } from './atmosphere-specific-heat-material/atmosphere-specific-heat-material-help/atmosphere-specific-heat-material-help.component';
-import { SharedModule } from "../shared/shared.module";
 import { CustomMaterialsComponent } from './custom-materials/custom-materials.component';
 import { CustomFlueGasMaterialsComponent } from './custom-materials/custom-flue-gas-materials/custom-flue-gas-materials.component';
 import { CustomGasLoadChargeMaterialsComponent } from './custom-materials/custom-gas-load-charge-materials/custom-gas-load-charge-materials.component';
@@ -33,7 +32,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        SharedModule,
         ModalModule,
         SharedPipesModule
     ],

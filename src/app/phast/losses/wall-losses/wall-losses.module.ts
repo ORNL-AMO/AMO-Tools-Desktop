@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { WallLossesService } from './wall-losses.service';
@@ -15,7 +14,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     SuiteDbModule,
     ModalModule,
     SharedPipesModule

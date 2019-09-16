@@ -16,7 +16,6 @@ import { ModalModule } from 'ngx-bootstrap';
 import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/explore-slag-form/explore-slag-form.component';
 import { ExploreCoolingFormComponent } from './explore-phast-opportunities-form/explore-cooling-form/explore-cooling-form.component';
 import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-form/explore-atmosphere-form/explore-atmosphere-form.component';
-import { SharedModule } from '../../shared/shared.module';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ToastModule } from '../../shared/toast/toast.module';
 
@@ -27,7 +26,6 @@ import { ToastModule } from '../../shared/toast/toast.module';
     ReactiveFormsModule,
     LossesModule,
     ModalModule,
-    SharedModule,
     OperatingHoursModalModule,
     ToastModule
   ],

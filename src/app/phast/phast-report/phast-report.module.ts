@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared/shared.module';
 import { PhastReportComponent } from './phast-report.component';
 import { EnergyUsedComponent } from './energy-used/energy-used.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
@@ -11,7 +10,6 @@ import { ReportSankeyComponent } from './report-sankey/report-sankey.component';
 import { SankeyModule } from '../sankey/sankey.module';
 import { PhastPieChartComponent } from './report-graphs/phast-pie-chart/phast-pie-chart.component';
 import { PhastBarChartComponent } from './report-graphs/phast-bar-chart/phast-bar-chart.component';
-// import { ChartsModule } from 'ng2-charts';
 import { PhastReportService } from './phast-report.service';
 import { ExecutiveSummaryService } from './executive-summary.service';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
@@ -30,8 +28,6 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     ReactiveFormsModule,
     FormsModule,
     SankeyModule,
-    // ChartsModule,
-    SharedModule,
     PhastInputSummaryModule,
     ModalModule,
     PrintOptionsMenuModule,

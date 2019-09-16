@@ -11,7 +11,6 @@ import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { FsatFluidComponent } from './fsat-fluid/fsat-fluid.component';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
-import { SharedModule } from '../shared/shared.module';
 import { FanSetupComponent } from './fan-setup/fan-setup.component';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorComponent } from './fan-motor/fan-motor.component';
@@ -54,7 +53,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     SettingsModule,
     SettingsModule,
     ModalModule,
-    SharedModule,
     ExploreOpportunitiesModule,
     FsatResultsModule,
     FsatReportModule,

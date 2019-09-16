@@ -5,7 +5,6 @@ import { BoilerFormComponent } from './boiler-form/boiler-form.component';
 import { BoilerHelpComponent } from './boiler-help/boiler-help.component';
 import { BoilerResultsComponent } from './boiler-results/boiler-results.component';
 import { BoilerService } from './boiler.service';
-import { SharedModule } from '../../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '../../../../../node_modules/@angular/forms';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
@@ -15,7 +14,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     SharedPipesModule
   ],

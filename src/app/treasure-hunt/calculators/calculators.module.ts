@@ -20,8 +20,7 @@ import { CostsFormComponent } from './opportunity-sheet/costs-form/costs-form.co
 import { GeneralDetailsFormComponent } from './opportunity-sheet/general-details-form/general-details-form.component';
 import { StandaloneOpportunitySheetComponent } from './standalone-opportunity-sheet/standalone-opportunity-sheet.component';
 import { EnergyUseFormComponent } from './standalone-opportunity-sheet/energy-use-form/energy-use-form.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [

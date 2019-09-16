@@ -5,7 +5,6 @@ import { EnergyUseFormComponent } from './energy-use-form/energy-use-form.compon
 import { EnergyUseComponent } from './energy-use.component';
 import { EnergyUseHelpComponent } from './energy-use-help/energy-use-help.component';
 import { EnergyUseService } from './energy-use.service';
-import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
@@ -13,7 +12,6 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule
   ],
   declarations: [

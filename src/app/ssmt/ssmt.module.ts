@@ -26,7 +26,6 @@ import { TurbineService } from './turbine/turbine.service';
 import { CondensingTurbineFormComponent } from './turbine/condensing-turbine-form/condensing-turbine-form.component';
 import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pressure-turbine-form.component';
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
-import { SharedModule } from '../shared/shared.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
 import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
@@ -59,7 +58,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     ExploreOpportunitiesModule,
     ModalModule,
     SuiteDbModule,
-    SharedModule,
     HelpPanelModule,
     SsmtDiagramTabModule,
     SsmtReportModule,

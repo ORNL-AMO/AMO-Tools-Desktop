@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { SharedModule } from "../../../shared/shared.module";
-
 import { PercentLoadEstimationGraphComponent } from './percent-load-estimation-graph/percent-load-estimation-graph.component';
 import { PercentLoadEstimationComponent } from "./percent-load-estimation.component";
 import { SlipMethodFormComponent } from './slip-method-form/slip-method-form.component';
@@ -17,7 +15,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     PercentGraphModule,
     SharedPipesModule
   ],

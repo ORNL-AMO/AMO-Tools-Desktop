@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CompressedAirPressureReductionComponent } from './compressed-air-pressure-reduction.component';
-import { SharedModule } from '../../../shared/shared.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CompressedAirPressureReductionService } from './compressed-air-pressure-reduction.service';
 import { CompressedAirPressureReductionFormComponent } from './compressed-air-pressure-reduction-form/compressed-air-pressure-reduction-form.component';
@@ -19,7 +18,6 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule
   ],
   providers: [

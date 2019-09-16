@@ -8,7 +8,6 @@ import { ReportDiagramComponent } from './report-diagram/report-diagram.componen
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { InputSummaryComponent } from './input-summary/input-summary.component';
 import { SsmtDiagramModule } from '../ssmt-diagram/ssmt-diagram.module';
-import { SharedModule } from '../../shared/shared.module';
 import { OperationsSummaryComponent } from './input-summary/operations-summary/operations-summary.component';
 import { TurbineSummaryComponent } from './input-summary/turbine-summary/turbine-summary.component';
 import { HeaderSummaryComponent } from './input-summary/header-summary/header-summary.component';
@@ -30,7 +29,6 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
   imports: [
     CommonModule,
     SsmtDiagramModule,
-    SharedModule,
     FormsModule,
     ModalModule,
     PrintOptionsMenuModule,

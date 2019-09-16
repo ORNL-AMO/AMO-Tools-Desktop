@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
-
 import { FixtureLossesCompareService } from "./fixture-losses-compare.service";
 import { FixtureLossesComponent } from "./fixture-losses.component";
 import { FixtureLossesService } from "./fixture-losses.service";
@@ -16,7 +14,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ModalModule,
     SuiteDbModule,
     SharedPipesModule

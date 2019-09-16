@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
-
 import { O2EnrichmentHelpComponent } from '../o2-enrichment/o2-enrichment-help/o2-enrichment-help.component';
 import { O2EnrichmentComponent } from '../o2-enrichment/o2-enrichment.component';
 import { O2EnrichmentGraphComponent } from '../o2-enrichment/o2-enrichment-graph/o2-enrichment-graph.component';
@@ -18,7 +16,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule,
     SimpleTooltipModule,

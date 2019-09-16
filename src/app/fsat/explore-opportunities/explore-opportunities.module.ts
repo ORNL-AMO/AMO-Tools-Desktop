@@ -14,7 +14,6 @@ import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
 import { VariableFrequencyDriveFormComponent } from './explore-opportunities-form/variable-frequency-drive-form/variable-frequency-drive-form.component';
 import { CalculatePressuresModule } from '../calculate-pressures/calculate-pressures.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { SharedModule } from '../../shared/shared.module';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ToastModule } from '../../shared/toast/toast.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
@@ -29,7 +28,6 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     FsatSankeyModule,
     CalculatePressuresModule,
     ModalModule,
-    SharedModule,
     OperatingHoursModalModule,
     ToastModule,
     SharedPipesModule

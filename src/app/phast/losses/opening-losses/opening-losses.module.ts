@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
-
 import { OpeningLossesService } from './opening-losses.service';
 import { OpeningLossesCompareService } from './opening-losses-compare.service';
 import { OpeningLossesComponent } from './opening-losses.component';
@@ -14,7 +12,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     SharedPipesModule
   ],
   declarations: [

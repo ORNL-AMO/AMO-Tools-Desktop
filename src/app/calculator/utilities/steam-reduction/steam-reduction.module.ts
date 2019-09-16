@@ -5,7 +5,6 @@ import { SteamReductionResultsComponent } from './steam-reduction-results/steam-
 import { SteamReductionFormComponent } from './steam-reduction-form/steam-reduction-form.component';
 import { SteamReductionHelpComponent } from './steam-reduction-help/steam-reduction-help.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { SteamReductionService } from './steam-reduction.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
@@ -17,7 +16,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule,
     SharedPipesModule

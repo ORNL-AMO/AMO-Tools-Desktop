@@ -6,14 +6,12 @@ import { FlashTankResultsComponent } from './flash-tank-results/flash-tank-resul
 import { FlashTankHelpComponent } from './flash-tank-help/flash-tank-help.component';
 import { FlashTankService } from './flash-tank.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
     ReactiveFormsModule,
     FormsModule,
     ExportableResultsTableModule,

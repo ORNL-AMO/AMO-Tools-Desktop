@@ -6,7 +6,6 @@ import { DeaeratorResultsComponent } from './deaerator-results/deaerator-results
 import { DeaeratorFormComponent } from './deaerator-form/deaerator-form.component';
 import { DeaeratorService } from './deaerator.service';
 import { ReactiveFormsModule, FormsModule } from '../../../../../node_modules/@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
@@ -15,7 +14,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     SharedPipesModule
   ],

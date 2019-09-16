@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { WaterReductionComponent } from './water-reduction.component';
 import { WaterReductionService } from './water-reduction.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { WaterReductionFormComponent } from './water-reduction-form/water-reduction-form.component';
 import { WaterReductionResultsComponent } from './water-reduction-results/water-reduction-results.component';
 import { WaterReductionHelpComponent } from './water-reduction-help/water-reduction-help.component';
@@ -21,7 +20,6 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule
   ],

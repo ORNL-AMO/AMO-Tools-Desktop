@@ -56,7 +56,6 @@ import { FsatReportTutorialComponent } from '../tutorials/fsat-report-tutorial/f
 import { FsatAssessmentTutorialComponent } from '../tutorials/fsat-assessment-tutorial/fsat-assessment-tutorial.component';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
-import { SharedModule } from '../shared/shared.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
 import { ToastModule } from '../shared/toast/toast.module';
@@ -111,7 +110,6 @@ import { ToastModule } from '../shared/toast/toast.module';
     PreAssessmentModule,
     SsmtModule,
     TreasureHuntModule,
-    SharedModule,
     HelperServicesModule,
     ToastModule
   ],

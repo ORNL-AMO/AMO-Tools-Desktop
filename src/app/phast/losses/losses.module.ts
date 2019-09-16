@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
 
 import { WallLossesModule } from './wall-losses/wall-losses.module';
@@ -56,7 +55,6 @@ import { LossesResultPanelComponent } from './losses-result-panel/losses-result-
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ModalModule,
     SuiteDbModule,
     WallLossesModule,

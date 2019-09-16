@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
-
 import { ExhaustGasService } from './exhaust-gas.service';
 import { ExhaustGasCompareService } from './exhaust-gas-compare.service';
 import { ExhaustGasComponent } from './exhaust-gas.component';
@@ -14,7 +12,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     SharedPipesModule
   ],
   declarations: [

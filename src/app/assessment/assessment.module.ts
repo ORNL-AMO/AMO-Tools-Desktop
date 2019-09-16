@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
 
 import { AssessmentBannerComponent } from './assessment-banner/assessment-banner.component';
@@ -70,7 +69,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
   ],
   imports: [
     CommonModule,
-    SharedModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,

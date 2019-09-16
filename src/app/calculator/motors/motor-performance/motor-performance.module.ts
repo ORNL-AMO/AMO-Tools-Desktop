@@ -6,7 +6,6 @@ import { MotorPerformanceGraphComponent } from './motor-performance-graph/motor-
 import { MotorPerformanceFormComponent } from './motor-performance-form/motor-performance-form.component';
 import { MotorPerformanceComponent } from './motor-performance.component';
 import { MotorPerformanceHelpComponent } from './motor-performance-help/motor-performance-help.component';
-import { SharedModule } from '../../../shared/shared.module';
 import { MotorPerformanceService } from './motor-performance.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
@@ -16,7 +15,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ExportableResultsTableModule,
     SimpleTooltipModule
   ],

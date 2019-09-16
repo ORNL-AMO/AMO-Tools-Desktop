@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeatSystemEfficiencyComponent } from './heat-system-efficiency.component';
 import { HeatSystemEfficiencyCompareService } from './heat-system-efficiency-compare.service';
-import {SharedModule} from "../../../shared/shared.module";
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
@@ -11,7 +10,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     SharedPipesModule
   ],
   declarations: [HeatSystemEfficiencyComponent],
