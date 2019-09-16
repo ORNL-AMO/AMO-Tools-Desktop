@@ -9,6 +9,7 @@ import { ReplaceExistingService } from './replace-existing.service';
 import { ReplaceExistingResultsComponent } from './replace-existing-results/replace-existing-results.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    PercentGraphModule
   ],
   providers: [
     ReplaceExistingService

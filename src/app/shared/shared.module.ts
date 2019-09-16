@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 
 import { ConvertUnitsService } from './convert-units/convert-units.service';
-import { PercentGraphComponent } from './percent-graph/percent-graph.component';
 import { SigFigsPipe } from './pipes/sig-figs.pipe';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { PhonePipe } from './pipes/phone.pipe';
@@ -22,7 +21,6 @@ import { ToastComponent } from './toast/toast.component';
     ModalModule
   ],
   declarations: [
-    PercentGraphComponent,
     SigFigsPipe,
     PieChartComponent,
     PhonePipe,
@@ -33,7 +31,6 @@ import { ToastComponent } from './toast/toast.component';
     ToastComponent
   ],
   exports: [
-    PercentGraphComponent,
     SigFigsPipe,
     PieChartComponent,
     PhonePipe,

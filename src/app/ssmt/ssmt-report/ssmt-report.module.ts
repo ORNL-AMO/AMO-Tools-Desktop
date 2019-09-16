@@ -22,6 +22,7 @@ import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/
 import { ReportGraphsService } from './report-graphs/report-graphs.service';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
+import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -30,7 +31,8 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
     FormsModule,
     ModalModule,
     PrintOptionsMenuModule,
-    FacilityInfoSummaryModule
+    FacilityInfoSummaryModule,
+    PercentGraphModule
   ],
   declarations: [
     SsmtReportComponent,

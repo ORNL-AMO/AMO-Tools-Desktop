@@ -14,6 +14,7 @@ import { VariableFrequencyDriveFormComponent } from './explore-opportunities-for
 import { HeadToolModule } from '../../calculator/pumps/head-tool/head-tool.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
+import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/op
     ReactiveFormsModule,
     HeadToolModule,
     ModalModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    PercentGraphModule
   ],
   declarations: [
     ExploreOpportunitiesComponent, 

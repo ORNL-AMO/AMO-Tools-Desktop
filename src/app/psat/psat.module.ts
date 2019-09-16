@@ -52,6 +52,7 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
+import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { OperatingHoursModalModule } from '../shared/operating-hours-modal/opera
     UtilitiesModule,
     PrintOptionsMenuModule,
     FacilityInfoSummaryModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    PercentGraphModule
   ],
   providers: [
     PsatService,

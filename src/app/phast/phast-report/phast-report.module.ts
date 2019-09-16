@@ -19,6 +19,7 @@ import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/
 import { ModalModule } from 'ngx-bootstrap';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
+import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
     PhastInputSummaryModule,
     ModalModule,
     PrintOptionsMenuModule,
-    FacilityInfoSummaryModule
+    FacilityInfoSummaryModule,
+    PercentGraphModule
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent, ReportGraphsPrintComponent],
   exports: [PhastReportComponent, ResultsDataComponent],

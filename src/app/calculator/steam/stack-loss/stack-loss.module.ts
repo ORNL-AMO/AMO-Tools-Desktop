@@ -8,13 +8,15 @@ import { StackLossByMassComponent } from './stack-loss-form/stack-loss-by-mass/s
 import { StackLossByVolumeComponent } from './stack-loss-form/stack-loss-by-volume/stack-loss-by-volume.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { StackLossService } from './stack-loss.service';
+import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    PercentGraphModule
   ],
   declarations: [StackLossComponent, StackLossFormComponent, StackLossHelpComponent, StackLossByMassComponent, StackLossByVolumeComponent],
   exports: [StackLossComponent],

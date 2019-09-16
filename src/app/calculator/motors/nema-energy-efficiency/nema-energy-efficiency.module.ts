@@ -9,13 +9,15 @@ import { NemaEnergyEfficiencyComponent } from './nema-energy-efficiency.componen
 import { NemaEnergyEfficiencyFormComponent } from './nema-energy-efficiency-form/nema-energy-efficiency-form.component';
 import { NemaEnergyEfficiencyHelpComponent } from './nema-energy-efficiency-help/nema-energy-efficiency-help.component';
 import { NemaEnergyEfficiencyService } from './nema-energy-efficiency.service';
+import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    PercentGraphModule
   ],
   declarations: [
     NemaEnergyEfficiencyComponent,

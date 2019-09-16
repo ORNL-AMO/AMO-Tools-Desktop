@@ -9,13 +9,15 @@ import { SlipMethodFormComponent } from './slip-method-form/slip-method-form.com
 import { FieldMeasurementFormComponent } from './field-measurement-form/field-measurement-form.component';
 import { FieldMeasurementTableComponent } from './field-measurement-table/field-measurement-table.component';
 import { PercentLoadEstimationService } from './percent-load-estimation.service';
+import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    PercentGraphModule
   ],
   declarations: [
     PercentLoadEstimationComponent,
