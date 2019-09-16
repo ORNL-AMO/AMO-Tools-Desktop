@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CalculatorsService } from './calculators.service';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet } from '../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -28,6 +28,7 @@ export class CalculatorsComponent implements OnInit {
   compressedAirPressureReduction: CompressedAirPressureReductionTreasureHunt;
   waterReduction: WaterReductionTreasureHunt;
   standaloneOpportunitySheet: OpportunitySheet;
+  steamReduction: SteamReductionTreasureHunt;
 
   selectedCalc: string;
   selectedCalcSubscription: Subscription;
@@ -48,6 +49,7 @@ export class CalculatorsComponent implements OnInit {
   ngOnDestroy() {
     this.selectedCalcSubscription.unsubscribe();
     this.treasureHuntSub.unsubscribe();
+    this.calculatorsService.selectedCalc.next('none');
   }
 
   showSaveCalcModal() {
@@ -89,6 +91,8 @@ export class CalculatorsComponent implements OnInit {
       this.confirmSaveWaterReduction();
     } else if (this.selectedCalc == 'opportunity-sheet') {
       this.confirmSaveStandaloneOpportunitySheet();
+    } else if (this.selectedCalc == 'steam-reduction') {
+      this.confirmSaveSteamReduction();
     }
   }
   initSaveCalc() {
@@ -251,6 +255,26 @@ export class CalculatorsComponent implements OnInit {
     }
     this.finishSaveCalc();
   }
+
+  //steam reduction
+  cancelSteamReduction() {
+    this.calculatorsService.cancelSteamReduction();
+  }
+  saveSteamReduction(steamReduction: SteamReductionTreasureHunt) {
+    this.steamReduction = steamReduction;
+    this.initSaveCalc();
+  }
+  confirmSaveSteamReduction() {
+    this.steamReduction.opportunitySheet = this.calculatorsService.calcOpportunitySheet;
+    this.steamReduction.selected = true;
+    if (this.calculatorsService.isNewOpportunity == true) {
+      this.treasureHuntService.addNewSteamReductionItem(this.steamReduction);
+    } else {
+      this.treasureHuntService.editSteamReductionItem(this.steamReduction, this.calculatorsService.itemIndex, this.settings);
+    }
+    this.finishSaveCalc();
+  }
+
 
   //stand alone opportunity sheet
   cancelStandaloneOpportunitySheet() {

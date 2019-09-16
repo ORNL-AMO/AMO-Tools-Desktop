@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
-import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet } from '../../shared/models/treasure-hunt';
+import { LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, OpportunitySheet, SteamReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { ReplaceExistingService } from '../../calculator/motors/replace-existing/replace-existing.service';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
@@ -10,6 +10,7 @@ import { CompressedAirReductionService } from '../../calculator/utilities/compre
 import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
+import { SteamReductionService } from '../../calculator/utilities/steam-reduction/steam-reduction.service';
 
 @Injectable()
 export class CalculatorsService {
@@ -21,7 +22,7 @@ export class CalculatorsService {
   constructor(private lightingReplacementService: LightingReplacementService, private replaceExistingService: ReplaceExistingService,
     private motorDriveService: MotorDriveService, private naturalGasReductionService: NaturalGasReductionService, private electricityReductionService: ElectricityReductionService,
     private compressedAirReductionService: CompressedAirReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
-    private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService) {
+    private waterReductionService: WaterReductionService, private opportunitySheetService: OpportunitySheetService, private steamReductionService: SteamReductionService) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
   cancelCalc() {
@@ -220,6 +221,29 @@ export class CalculatorsService {
     this.calcOpportunitySheet = undefined;
     this.waterReductionService.baselineData = undefined;
     this.waterReductionService.modificationData = undefined;
+    this.cancelCalc();
+  }
+
+  //steam reductions
+  addNewSteamReduction() {
+    this.calcOpportunitySheet = undefined;
+    this.steamReductionService.baselineData = undefined;
+    this.steamReductionService.modificationData = undefined;
+    this.isNewOpportunity = true;
+    this.selectedCalc.next('steam-reduction');
+  }
+  editSteamReductionsItem(steamReduction: SteamReductionTreasureHunt, index: number) {
+    this.calcOpportunitySheet = steamReduction.opportunitySheet;
+    this.isNewOpportunity = false;
+    this.itemIndex = index;
+    this.steamReductionService.baselineData = steamReduction.baseline;
+    this.steamReductionService.modificationData = steamReduction.modification;
+    this.selectedCalc.next('steam-reduction');
+  }
+  cancelSteamReduction() {
+    this.calcOpportunitySheet = undefined;
+    this.steamReductionService.baselineData = undefined;
+    this.steamReductionService.modificationData = undefined;
     this.cancelCalc();
   }
 }

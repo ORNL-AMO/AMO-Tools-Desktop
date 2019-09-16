@@ -327,7 +327,11 @@ export class TreasureChestMenuComponent implements OnInit {
     if (waterReductions != 0) {
       this.calculatorTypeOptions.push({ display: 'Water Reduction', value: 'water-reduction', numCalcs: waterReductions });
     }
-
+    //steamReductions
+    let steamReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'steam-reduction' }).length;
+    if (steamReductions != 0) {
+      this.calculatorTypeOptions.push({ display: 'Steam Reduction', value: 'steam-reduction', numCalcs: steamReductions });
+    }
   }
 
   getFilteredCalcsByUtility(opData: Array<OpportunityCardData>, utilityType: string): Array<OpportunityCardData> {
