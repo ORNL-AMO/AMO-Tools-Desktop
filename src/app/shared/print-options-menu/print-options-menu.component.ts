@@ -19,6 +19,8 @@ export class PrintOptionsMenuComponent implements OnInit {
   @Input()
   showSsmtReportOptions: boolean;
   @Input()
+  showTHReportOptions: boolean;
+  @Input()
   selectAll: boolean;
   @Input()
   printReportGraphs: boolean;
@@ -47,9 +49,18 @@ export class PrintOptionsMenuComponent implements OnInit {
   //---- phast-specific options --------
   @Input()
   printEnergyUsed: boolean;
+  //---- end phast-specific options ----
+
+  //phast and treasure hunt
   @Input()
   printExecutiveSummary: boolean;
-  //---- end phast-specific options ----
+
+  //---- treasure hunt specific options ----
+  @Input()
+  printReportOpportunitySummary: boolean;
+  @Input()
+  printReportOpportunityPayback: boolean;
+  //---- end treasure hunt specific options ---
 
   @Output('emitTogglePrint')
   emitTogglePrint = new EventEmitter<string>();

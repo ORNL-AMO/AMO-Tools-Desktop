@@ -3,10 +3,15 @@ import { TreasureHuntResults, UtilityUsageData, OpportunitySummary, EnergyUsage,
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { OpportunitySummaryService } from './opportunity-summary.service';
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class TreasureHuntReportService {
 
-  constructor(private opportunitySummaryService: OpportunitySummaryService) { }
+  showPrint: BehaviorSubject<boolean>;
+
+  constructor(private opportunitySummaryService: OpportunitySummaryService) {
+    this.showPrint = new BehaviorSubject<boolean>(false);
+  }
 
   calculateTreasureHuntResults(treasureHunt: TreasureHunt, settings: Settings): TreasureHuntResults {
     let opportunitySummaries: Array<OpportunitySummary> = this.opportunitySummaryService.getOpportunitySummaries(treasureHunt, settings);
