@@ -6,12 +6,14 @@ import { EnergyInputExhaustGasFormComponent } from './energy-input-exhaust-gas-f
 import { EnergyInputExhaustGasLossesComponent } from './energy-input-exhaust-gas-losses.component';
 import { EnergyInputExhaustGasCompareService } from './energy-input-exhaust-gas-compare.service';
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    SharedPipesModule
   ],
   declarations: [EnergyInputExhaustGasFormComponent, EnergyInputExhaustGasLossesComponent],
   providers: [EnergyInputExhaustGasCompareService, EnergyInputExhaustGasService],

@@ -9,6 +9,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { SteamReductionService } from './steam-reduction.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [SteamReductionComponent, SteamReductionResultsComponent, SteamReductionFormComponent, SteamReductionHelpComponent],
@@ -18,7 +19,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     ReactiveFormsModule,
     SharedModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    SharedPipesModule
   ],
   providers: [
     SteamReductionService

@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InletFormComponent } from './inlet-form/inlet-form.component';
 import { FeedwaterFormComponent } from './feedwater-form/feedwater-form.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   declarations: [PrvComponent, PrvHelpComponent, PrvResultsComponent, InletFormComponent, FeedwaterFormComponent],
   providers: [PrvService],

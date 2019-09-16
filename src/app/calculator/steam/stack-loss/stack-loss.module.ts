@@ -9,6 +9,7 @@ import { StackLossByVolumeComponent } from './stack-loss-form/stack-loss-by-volu
 import { SharedModule } from '../../../shared/shared.module';
 import { StackLossService } from './stack-loss.service';
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
-    PercentGraphModule
+    PercentGraphModule,
+    SharedPipesModule
   ],
   declarations: [StackLossComponent, StackLossFormComponent, StackLossHelpComponent, StackLossByMassComponent, StackLossByVolumeComponent],
   exports: [StackLossComponent],

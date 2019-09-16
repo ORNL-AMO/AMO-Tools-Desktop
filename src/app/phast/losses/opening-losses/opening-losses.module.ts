@@ -7,13 +7,15 @@ import { OpeningLossesService } from './opening-losses.service';
 import { OpeningLossesCompareService } from './opening-losses-compare.service';
 import { OpeningLossesComponent } from './opening-losses.component';
 import { OpeningLossesFormComponent } from './opening-losses-form/opening-losses-form.component';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    SharedPipesModule
   ],
   declarations: [
     OpeningLossesComponent,

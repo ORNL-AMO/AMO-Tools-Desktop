@@ -9,6 +9,7 @@ import { ElectricityReductionHelpComponent } from './electricity-reduction-help/
 import { ElectricityReductionResultsComponent } from './electricity-reduction-results/electricity-reduction-results.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     ReactiveFormsModule,
     SharedModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    SharedPipesModule
   ],
   declarations: [
     ElectricityReductionComponent,

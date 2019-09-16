@@ -25,6 +25,7 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { WaterfallGraphModule } from '../../shared/waterfall-graph/waterfall-graph.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,7 +37,8 @@ import { WaterfallGraphModule } from '../../shared/waterfall-graph/waterfall-gra
     FacilityInfoSummaryModule,
     PercentGraphModule,
     PieChartModule,
-    WaterfallGraphModule
+    WaterfallGraphModule,
+    SharedPipesModule
   ],
   declarations: [
     SsmtReportComponent,

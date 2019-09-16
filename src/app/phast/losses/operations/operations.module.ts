@@ -7,13 +7,15 @@ import { OperationsService } from './operations.service';
 import { OperationsCompareService } from './operations-compare.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    SharedPipesModule
   ],
   declarations: [OperationsFormComponent, OperationsComponent],
   providers: [OperationsService, OperationsCompareService],

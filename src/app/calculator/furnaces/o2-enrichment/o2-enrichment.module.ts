@@ -11,6 +11,7 @@ import { O2EnrichmentService } from './o2-enrichment.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
     SharedModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule,
-    SimpleTooltipModule
+    SimpleTooltipModule,
+    SharedPipesModule
   ],
   declarations: [
     O2EnrichmentFormComponent,

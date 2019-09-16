@@ -8,6 +8,7 @@ import { HeaderService } from './header.service';
 import { ReactiveFormsModule, FormsModule } from '../../../../../node_modules/@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   declarations: [HeaderFormComponent, HeaderHelpComponent, HeaderResultsComponent, HeaderComponent],
   providers: [HeaderService],

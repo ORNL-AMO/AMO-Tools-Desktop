@@ -47,6 +47,7 @@ import { HeatExchangerService } from './ssmt-calculations/heat-exchanger.service
 import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { ToastModule } from '../shared/toast/toast.module';
     TurbineModule,
     BlowdownRateModalModule,
     TabsTooltipModule,
-    ToastModule
+    ToastModule,
+    SharedPipesModule
   ],
   declarations: [
     SsmtComponent,

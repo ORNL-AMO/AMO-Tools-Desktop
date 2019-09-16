@@ -7,13 +7,15 @@ import { OtherLossesService } from './other-losses.service';
 import { OtherLossesCompareService } from './other-losses-compare.service';
 import { OtherLossesComponent } from './other-losses.component';
 import { OtherLossesFormComponent } from './other-losses-form/other-losses-form.component';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedPipesModule
   ],
   declarations: [
     OtherLossesComponent,

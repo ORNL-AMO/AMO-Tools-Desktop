@@ -27,13 +27,15 @@ import { CustomAtmosphereSpecificHeatMaterialsComponent } from './custom-materia
 import { CustomWallLossesSurfacesComponent } from './custom-materials/custom-wall-losses-sufaces/custom-wall-losses-surfaces.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { CustomMaterialsService } from './custom-materials/custom-materials.service';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 @NgModule({
     imports: [
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
         SharedModule,
-        ModalModule
+        ModalModule,
+        SharedPipesModule
     ],
     providers: [
         SuiteDbService,

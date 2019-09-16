@@ -22,6 +22,7 @@ import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/fa
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.
     FacilityInfoSummaryModule,
     PercentGraphModule,
     PieChartModule,
-    SimpleTooltipModule
+    SimpleTooltipModule,
+    SharedPipesModule
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent, ReportGraphsPrintComponent],
   exports: [PhastReportComponent, ResultsDataComponent],

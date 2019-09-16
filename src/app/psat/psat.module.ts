@@ -57,6 +57,7 @@ import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
 import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,8 @@ import { ToastModule } from '../shared/toast/toast.module';
     PieChartModule,
     SimpleTooltipModule,
     TabsTooltipModule,
-    ToastModule
+    ToastModule,
+    SharedPipesModule
   ],
   providers: [
     PsatService,

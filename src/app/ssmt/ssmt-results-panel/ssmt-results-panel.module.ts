@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { SsmtResultsPanelComponent } from './ssmt-results-panel/ssmt-results-panel.component';
 import { SharedModule } from '../../shared/shared.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    PercentGraphModule
+    PercentGraphModule,
+    SharedPipesModule
   ],
   declarations: [
     SsmtResultsPanelComponent

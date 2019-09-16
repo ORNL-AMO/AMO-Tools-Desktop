@@ -11,6 +11,7 @@ import { FlueGasCompareService } from "./flue-gas-compare.service";
 import { FlueGasLossesService } from "./flue-gas-losses.service";
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 import { ModalModule } from 'ngx-bootstrap';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -18,7 +19,8 @@ import { ModalModule } from 'ngx-bootstrap';
     ReactiveFormsModule,
     SharedModule,
     SuiteDbModule,
-    ModalModule
+    ModalModule,
+    SharedPipesModule
   ],
   declarations: [
     FlueGasLossesComponent,

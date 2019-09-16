@@ -9,6 +9,7 @@ import { SteamPropertiesHelpComponent } from './steam-properties-help/steam-prop
 import { SteamPropertiesTableComponent } from './steam-properties-table/steam-properties-table.component';
 import { SteamPropertiesPhGraphComponent } from './steam-properties-ph-graph/steam-properties-ph-graph.component';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    SimpleTooltipModule
+    SimpleTooltipModule,
+    SharedPipesModule
   ],
   declarations: [
     SteamPropertiesGraphComponent,

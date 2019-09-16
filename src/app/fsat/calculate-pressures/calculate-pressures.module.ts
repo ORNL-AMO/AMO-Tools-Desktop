@@ -9,6 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CalculateFlowPressureComponent } from './calculate-flow-pressure/calculate-flow-pressure.component';
 import { FanAnalysisModule } from '../../calculator/fans/fan-analysis/fan-analysis.module';
 import { CalculateFlowPressureBannerComponent } from './calculate-flow-pressure/calculate-flow-pressure-banner/calculate-flow-pressure-banner.component';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { CalculateFlowPressureBannerComponent } from './calculate-flow-pressure/
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    FanAnalysisModule
+    FanAnalysisModule,
+    SharedPipesModule
   ],
   declarations: [
     CalculateInletPressureComponent,

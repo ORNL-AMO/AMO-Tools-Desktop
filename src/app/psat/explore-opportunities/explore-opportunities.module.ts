@@ -16,6 +16,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { ToastModule } from '../../shared/toast/toast.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { ToastModule } from '../../shared/toast/toast.module';
     ModalModule,
     OperatingHoursModalModule,
     PercentGraphModule,
-    ToastModule
+    ToastModule,
+    SharedPipesModule
   ],
   declarations: [
     ExploreOpportunitiesComponent, 

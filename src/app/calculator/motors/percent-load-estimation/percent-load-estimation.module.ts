@@ -10,6 +10,7 @@ import { FieldMeasurementFormComponent } from './field-measurement-form/field-me
 import { FieldMeasurementTableComponent } from './field-measurement-table/field-measurement-table.component';
 import { PercentLoadEstimationService } from './percent-load-estimation.service';
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    PercentGraphModule
+    PercentGraphModule,
+    SharedPipesModule
   ],
   declarations: [
     PercentLoadEstimationComponent,

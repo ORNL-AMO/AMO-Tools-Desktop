@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeatLossService } from './heat-loss.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   declarations: [HeatLossComponent, HeatLossFormComponent, HeatLossHelpComponent, HeatLossResultsComponent],
   exports: [HeatLossComponent],

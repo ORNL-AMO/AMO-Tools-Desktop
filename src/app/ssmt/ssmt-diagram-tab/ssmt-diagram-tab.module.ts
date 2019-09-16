@@ -22,6 +22,7 @@ import { HeatExchangerTableComponent } from './heat-exchanger-table/heat-exchang
 import { HoverTableModule } from '../ssmt-diagram/hover-table/hover-table.module';
 import { ResultsTableComponent } from './results-table/results-table.component';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     PrvModule,
     FlashTankModule,
     HoverTableModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   declarations: [
     SsmtDiagramTabComponent,

@@ -8,6 +8,7 @@ import { TurbineService } from './turbine.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '../../../../../node_modules/@angular/forms';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   declarations: [TurbineComponent, TurbineFormComponent, TurbineHelpComponent, TurbineResultsComponent],
   exports: [TurbineComponent, TurbineResultsComponent],

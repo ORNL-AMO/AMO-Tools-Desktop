@@ -8,6 +8,7 @@ import { WallLossesService } from './wall-losses.service';
 import { WallLossesComponent } from './wall-losses.component';
 import { WallLossesFormComponent } from './wall-losses-form/wall-losses-form.component';
 import { WallLossCompareService } from './wall-loss-compare.service';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { WallLossCompareService } from './wall-loss-compare.service';
     ReactiveFormsModule,
     SharedModule,
     SuiteDbModule,
-    ModalModule
+    ModalModule,
+    SharedPipesModule
   ],
   declarations: [
     WallLossesComponent,

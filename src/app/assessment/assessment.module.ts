@@ -36,6 +36,7 @@ import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 import { TreasureHuntSummaryCardComponent } from './assessment-grid-view/assessment-card/treasure-hunt-summary-card/treasure-hunt-summary-card.component';
 import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
 import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-c
     FsatReportModule,
     SsmtReportModule,
     TreasureHuntReportModule,
-    AnimatedCheckmarkModule
+    AnimatedCheckmarkModule,
+    SharedPipesModule
   ],
   providers: []
 })

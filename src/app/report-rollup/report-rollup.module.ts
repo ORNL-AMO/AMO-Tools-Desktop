@@ -50,6 +50,7 @@ import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/
 import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-summary/treasure-hunt-summary.component';
 import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
 import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -65,7 +66,8 @@ import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
     SsmtReportModule,
     TreasureHuntReportModule,
     PrintOptionsMenuModule,
-    PieChartModule
+    PieChartModule,
+    SharedPipesModule
   ],
   declarations: [
     ReportRollupComponent, 

@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { OperationsService } from './operations.service';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/op
     FormsModule,
     SharedModule,
     ReactiveFormsModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    SharedPipesModule
   ],
   declarations: [
     OperationsComponent,

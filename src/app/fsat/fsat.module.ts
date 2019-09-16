@@ -44,6 +44,7 @@ import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -68,7 +69,8 @@ import { ToastModule } from '../shared/toast/toast.module';
     FanAnalysisModule,
     OperatingHoursModalModule,
     TabsTooltipModule,
-    ToastModule
+    ToastModule,
+    SharedPipesModule
   ],
   declarations: [
     FsatComponent,

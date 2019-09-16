@@ -8,6 +8,7 @@ import { FlashTankService } from './flash-tank.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     SharedModule,
     ReactiveFormsModule,
     FormsModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   declarations: [FlashTankComponent, FlashTankFormComponent, FlashTankResultsComponent, FlashTankHelpComponent],
   providers: [FlashTankService],

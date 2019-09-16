@@ -18,6 +18,7 @@ import { PreAssessmentService } from './pre-assessment.service';
 import { PreAssessmentCostFormComponent } from './pre-assessment-cost-form/pre-assessment-cost-form.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { PieChartModule } from '../../../shared/pie-chart/pie-chart.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -30,7 +31,8 @@ import { PieChartModule } from '../../../shared/pie-chart/pie-chart.module';
     BrowserAnimationsModule,
     SharedModule,
     ExportableResultsTableModule,
-    PieChartModule
+    PieChartModule,
+    SharedPipesModule
   ],
   declarations: [
     PreAssessmentComponent,

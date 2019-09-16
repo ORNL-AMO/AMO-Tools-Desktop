@@ -29,6 +29,7 @@ import { FsatBasicsHelpComponent } from './help-and-results-panel/operating-poin
 import { FanShaftPowerHelpComponent } from './help-and-results-panel/operating-points-help/fan-shaft-power-help/fan-shaft-power-help.component';
 import { FanDataHelpComponent } from './help-and-results-panel/operating-points-help/fan-data-help/fan-data-help.component';
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    PercentGraphModule
+    PercentGraphModule,
+    SharedPipesModule
   ],
   exports: [FanAnalysisComponent, HelpAndResultsPanelComponent, PlaneDataFormComponent, FanInfoFormComponent],
   providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService, PlaneDataFormService, ConvertFanAnalysisService]

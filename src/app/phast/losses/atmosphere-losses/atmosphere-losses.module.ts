@@ -9,6 +9,7 @@ import { AtmosphereLossesCompareService } from "./atmosphere-losses-compare.serv
 import { AtmosphereLossesService } from "./atmosphere-losses.service";
 import { AtmosphereLossesFormComponent } from "./atmosphere-losses-form/atmosphere-losses-form.component";
 import { AtmosphereLossesComponent } from "./atmosphere-losses.component";
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +17,8 @@ import { AtmosphereLossesComponent } from "./atmosphere-losses.component";
     ReactiveFormsModule,
     SharedModule,
     ModalModule,
-    SuiteDbModule
+    SuiteDbModule,
+    SharedPipesModule
   ],
   declarations: [
     AtmosphereLossesComponent,

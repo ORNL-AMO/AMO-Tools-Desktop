@@ -7,13 +7,15 @@ import { EnergyInputComponent } from './energy-input.component';
 import { EnergyInputFormComponent } from './energy-input-form/energy-input-form.component';
 import { EnergyInputCompareService } from './energy-input-compare.service';
 import { EnergyInputService } from './energy-input.service';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    SharedPipesModule
   ],
   declarations: [
     EnergyInputComponent,

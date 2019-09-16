@@ -17,6 +17,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { SharedModule } from '../../shared/shared.module';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ToastModule } from '../../shared/toast/toast.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { ToastModule } from '../../shared/toast/toast.module';
     ModalModule,
     SharedModule,
     OperatingHoursModalModule,
-    ToastModule
+    ToastModule,
+    SharedPipesModule
   ],
   declarations: [
     ExploreOpportunitiesComponent,

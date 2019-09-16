@@ -9,6 +9,7 @@ import { NaturalGasReductionResultsComponent } from './natural-gas-reduction-res
 import { NaturalGasReductionService } from './natural-gas-reduction.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     ReactiveFormsModule,
     SharedModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    SharedPipesModule
   ],
   declarations: [
     NaturalGasReductionComponent,

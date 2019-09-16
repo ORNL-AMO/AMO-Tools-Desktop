@@ -12,6 +12,7 @@ import { SolidChargeMaterialFormComponent } from "./solid-charge-material-form/s
 
 import { ModalModule } from 'ngx-bootstrap';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,7 +20,8 @@ import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
     ReactiveFormsModule,
     SharedModule,
     ModalModule,
-    SuiteDbModule
+    SuiteDbModule,
+    SharedPipesModule
   ],
   declarations: [
     ChargeMaterialComponent,

@@ -22,6 +22,7 @@ import { FeedwaterDiagramComponent } from './feedwater-diagram/feedwater-diagram
 import { ReturnCondensateConnectorComponent } from './return-condensate-connector/return-condensate-connector.component';
 import { HoverTableModule } from './hover-table/hover-table.module';
 import { FormsModule } from '@angular/forms';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     SharedModule,
     HoverTableModule,
-    FormsModule
+    FormsModule,
+    SharedPipesModule
   ],
   declarations: [
     SsmtDiagramComponent,

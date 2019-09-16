@@ -19,6 +19,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { BlowdownRateModalModule } from '../blowdown-rate-modal/blowdown-rate-modal.module';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ToastModule } from '../../shared/toast/toast.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { ToastModule } from '../../shared/toast/toast.module';
     SharedModule,
     BlowdownRateModalModule,
     OperatingHoursModalModule,
-    ToastModule
+    ToastModule,
+    SharedPipesModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
   exports: [ExploreOpportunitiesComponent],
