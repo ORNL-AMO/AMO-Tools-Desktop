@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { MotorPerformanceGraphComponent } from './motor-performance-graph/motor-performance-graph.component';
 import { MotorPerformanceFormComponent } from './motor-performance-form/motor-performance-form.component';
 import { MotorPerformanceComponent } from './motor-performance.component';
@@ -13,7 +12,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
     SimpleTooltipModule

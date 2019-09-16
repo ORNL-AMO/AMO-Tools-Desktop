@@ -6,7 +6,7 @@ import { MotorDriveFormComponent } from './motor-drive-form/motor-drive-form.com
 import { MotorDriveGraphComponent } from './motor-drive-graph/motor-drive-graph.component';
 import { MotorDriveTableComponent } from './motor-drive-table/motor-drive-table.component';
 import { MotorDriveHelpComponent } from './motor-drive-help/motor-drive-help.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
@@ -15,7 +15,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule,

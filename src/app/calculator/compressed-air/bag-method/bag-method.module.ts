@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BagMethodComponent } from './bag-method.component';
 import { BagMethodFormComponent } from './bag-method-form/bag-method-form.component';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
@@ -8,7 +8,6 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     OperatingHoursModalModule
   ],
   declarations: [

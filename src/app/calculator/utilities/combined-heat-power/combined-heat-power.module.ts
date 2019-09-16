@@ -12,7 +12,6 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule
   ],

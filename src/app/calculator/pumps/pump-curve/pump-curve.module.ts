@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { PumpCurveComponent } from './pump-curve.component';
 import { PumpCurveDataFormComponent } from './pump-curve-data-form/pump-curve-data-form.component';
@@ -16,7 +16,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     SystemCurveModule,
     ExportableResultsTableModule,

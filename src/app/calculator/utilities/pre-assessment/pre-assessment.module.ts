@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PreAssessmentComponent } from './pre-assessment.component';
@@ -21,7 +21,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     DesignedEnergyModule,
     MeteredEnergyModule,
     BrowserModule,

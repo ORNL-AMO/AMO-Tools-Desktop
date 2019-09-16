@@ -5,13 +5,12 @@ import { PowerFactorCorrectionFormComponent } from './power-factor-correction-fo
 import { PowerFactorCorrectionHelpComponent } from './power-factor-correction-help/power-factor-correction-help.component';
 import { PowerFactorCorrectionResultsComponent } from './power-factor-correction-results/power-factor-correction-results.component';
 import { PowerFactorCorrectionService } from './power-factor-correction.service';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FormsModule,
     ExportableResultsTableModule
   ],

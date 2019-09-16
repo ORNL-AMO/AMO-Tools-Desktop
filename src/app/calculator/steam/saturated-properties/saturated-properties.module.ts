@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SaturatedPropertiesGraphComponent } from './saturated-properties-graph/saturated-properties-graph.component';
 import { SaturatedPropertiesComponent } from './saturated-properties.component';
 import { SaturatedPropertiesFormComponent } from './saturated-properties-form/saturated-properties-form.component';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { SaturatedPropertiesHelpComponent } from './saturated-properties-help/saturated-properties-help.component';
 import { SaturatedPropertiesTableComponent } from './saturated-properties-table/saturated-properties-table.component';
 import { SaturatedPropertiesPhGraphComponent } from './saturated-properties-ph-graph/saturated-properties-ph-graph.component';
@@ -13,7 +13,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     SimpleTooltipModule,
     SharedPipesModule

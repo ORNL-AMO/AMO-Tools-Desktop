@@ -20,8 +20,6 @@ import { PumpsComponent } from './pumps.component';
     ],
     imports: [
         CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
         ModalModule,
         SystemCurveModule,
         SpecificSpeedModule,

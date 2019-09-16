@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CompressedAirReductionComponent } from './compressed-air-reduction.component';
 import { CompressedAirReductionService } from './compressed-air-reduction.service';
 import { CompressedAirReductionFormComponent } from './compressed-air-reduction-form/compressed-air-reduction-form.component';
@@ -12,7 +12,6 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule

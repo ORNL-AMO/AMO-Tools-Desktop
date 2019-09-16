@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AchievableEfficiencyFormComponent } from './achievable-efficiency-form/achievable-efficiency-form.component';
 import { AchievableEfficiencyGraphComponent } from './achievable-efficiency-graph/achievable-efficiency-graph.component';
 import { AchievableEfficiencyComponent } from './achievable-efficiency.component';
@@ -11,7 +11,6 @@ import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-toolt
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
     SimpleTooltipModule

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ElectricityReductionComponent } from './electricity-reduction.component';
 import { ElectricityReductionService } from './electricity-reduction.service';
 import { ElectricityReductionFormComponent } from './electricity-reduction-form/electricity-reduction-form.component';
@@ -13,7 +13,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule,

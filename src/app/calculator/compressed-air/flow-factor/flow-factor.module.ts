@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { FlowFactorComponent } from './flow-factor.component';
 import { FlowFactorFormComponent } from './flow-factor-form/flow-factor-form.component';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
@@ -8,7 +8,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     SharedPipesModule
   ],
   declarations: [

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { SettingsModule } from '../../../settings/settings.module';
 import { HeadToolComponent } from './head-tool.component';
 import { HeadToolFormComponent } from './head-tool-form/head-tool-form.component';
@@ -14,7 +14,6 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     SettingsModule,
     ExportableResultsTableModule

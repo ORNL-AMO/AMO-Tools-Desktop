@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NaturalGasReductionComponent } from './natural-gas-reduction.component';
 import { NaturalGasReductionFormComponent } from './natural-gas-reduction-form/natural-gas-reduction-form.component';
 import { NaturalGasReductionHelpComponent } from './natural-gas-reduction-help/natural-gas-reduction-help.component';
@@ -14,7 +14,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
     OperatingHoursModalModule,

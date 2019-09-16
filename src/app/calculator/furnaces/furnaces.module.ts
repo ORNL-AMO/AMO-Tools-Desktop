@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FurnacesComponent } from './furnaces.component';
 import { EnergyEquivalencyModule } from './energy-equivalency/energy-equivalency.module';
 import { EnergyUseModule } from './energy-use/energy-use.module';
@@ -10,8 +9,6 @@ import { EfficiencyImprovementModule } from './efficiency-improvement/efficiency
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     EnergyUseModule,
     O2EnrichmentModule,
     EnergyEquivalencyModule,
