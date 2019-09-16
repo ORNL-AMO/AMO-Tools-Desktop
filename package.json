@@ -12,6 +12,7 @@
     "npm": "6.4.1"
   },
   "scripts": {
+    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --prod --aot",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
