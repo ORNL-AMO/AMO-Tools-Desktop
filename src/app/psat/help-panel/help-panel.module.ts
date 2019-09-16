@@ -8,13 +8,12 @@ import { MotorHelpComponent } from './motor-help/motor-help.component';
 import { FieldDataHelpComponent } from './field-data-help/field-data-help.component';
 import { ModifyConditionsNotesComponent } from '../modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
 import { HelpPanelService } from './help-panel.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ExploreOpportunitiesModule } from '../explore-opportunities/explore-opportunities.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     ExploreOpportunitiesModule
   ],
   declarations: [
