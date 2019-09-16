@@ -7,8 +7,6 @@ import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { SigFigsPipe } from './pipes/sig-figs.pipe';
 import { PhonePipe } from './pipes/phone.pipe';
 import { SettingsLabelPipe } from './pipes/settings-label.pipe';
-import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
-import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,18 +17,15 @@ import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service
   declarations: [
     SigFigsPipe,
     PhonePipe,
-    SettingsLabelPipe,
-    WaterfallGraphComponent
+    SettingsLabelPipe
   ],
   exports: [
     SigFigsPipe,
     PhonePipe,
-    SettingsLabelPipe,
-    WaterfallGraphComponent
+    SettingsLabelPipe
   ],
   providers: [
-    ConvertUnitsService,
-    WaterfallGraphService
+    ConvertUnitsService
   ]
 })
 
