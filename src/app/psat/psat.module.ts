@@ -55,6 +55,7 @@ import { OperatingHoursModalModule } from '../shared/operating-hours-modal/opera
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
 import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.mod
     OperatingHoursModalModule,
     PercentGraphModule,
     PieChartModule,
-    SimpleTooltipModule
+    SimpleTooltipModule,
+    TabsTooltipModule
   ],
   providers: [
     PsatService,

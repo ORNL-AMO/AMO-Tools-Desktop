@@ -19,11 +19,13 @@ import { WallTabComponent } from './wall-tab/wall-tab.component';
 import { OperationsTabComponent } from './operations-tab/operations-tab.component';
 import { ExhaustGasTabComponent } from './exhaust-gas-tab/exhaust-gas-tab.component';
 import { SharedModule } from '../../../shared/shared.module';
+import { TabsTooltipModule } from '../../../shared/tabs-tooltip/tabs-tooltip.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    TabsTooltipModule
   ],
   declarations: [LossesTabsComponent, ChargeMaterialTabComponent, AtmosphereTabComponent, AuxiliaryPowerTabComponent, CoolingTabComponent, EnergyInputTabComponent, EnergyInputExhaustGasTabComponent, ExtendedSurfaceTabComponent, FixtureTabComponent, FlueGasTabComponent, GasLeakageTabComponent, SystemEfficiencyTabComponent, OpeningTabComponent, OtherTabComponent, SlagTabComponent, WallTabComponent, OperationsTabComponent, ExhaustGasTabComponent],
   exports: [LossesTabsComponent]

@@ -45,6 +45,7 @@ import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module'
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { HeatExchangerService } from './ssmt-calculations/heat-exchanger.service';
 import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-modal.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-mod
     DeaeratorModule,
     HeaderModule,
     TurbineModule,
-    BlowdownRateModalModule
+    BlowdownRateModalModule,
+    TabsTooltipModule
   ],
   declarations: [
     SsmtComponent,

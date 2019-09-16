@@ -35,6 +35,7 @@ import { ModificationNavbarComponent } from './modification-navbar/modification-
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { UtilitiesModule } from '../calculator/utilities/utilities.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     EnergyUseModule,
     ExplorePhastOpportunitiesModule,
     LossesTabsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    TabsTooltipModule
   ],
   providers: [
     PhastService,

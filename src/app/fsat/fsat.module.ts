@@ -42,6 +42,7 @@ import { FsatWarningService } from './fsat-warning.service';
 import { CalculatePressuresModule } from './calculate-pressures/calculate-pressures.module';
 import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.module';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -64,7 +65,8 @@ import { OperatingHoursModalModule } from '../shared/operating-hours-modal/opera
     FanEfficiencyModule,
     CalculatePressuresModule,
     FanAnalysisModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    TabsTooltipModule
   ],
   declarations: [
     FsatComponent,
