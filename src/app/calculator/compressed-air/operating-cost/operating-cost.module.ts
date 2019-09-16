@@ -5,12 +5,14 @@ import { SharedModule } from '../../../shared/shared.module';
 import { OperatingCostComponent } from './operating-cost.component';
 import { OperatingCostFormComponent } from './operating-cost-form/operating-cost-form.component';
 import { OperatingCostHelpComponent } from './operating-cost-help/operating-cost-help.component';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     OperatingCostComponent,

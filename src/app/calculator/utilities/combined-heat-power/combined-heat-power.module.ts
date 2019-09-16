@@ -8,13 +8,15 @@ import { CombinedHeatPowerResultsComponent } from './combined-heat-power-results
 import { CombinedHeatPowerService } from './combined-heat-power.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     CombinedHeatPowerComponent,

@@ -51,6 +51,7 @@ import { FieldDataService } from './field-data/field-data.service';
 import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facil
     ExploreOpportunitiesModule,
     UtilitiesModule,
     PrintOptionsMenuModule,
-    FacilityInfoSummaryModule
+    FacilityInfoSummaryModule,
+    OperatingHoursModalModule
   ],
   providers: [
     PsatService,

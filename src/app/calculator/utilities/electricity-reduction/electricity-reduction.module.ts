@@ -8,6 +8,7 @@ import { ElectricityReductionFormComponent } from './electricity-reduction-form/
 import { ElectricityReductionHelpComponent } from './electricity-reduction-help/electricity-reduction-help.component';
 import { ElectricityReductionResultsComponent } from './electricity-reduction-results/electricity-reduction-results.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     ElectricityReductionComponent,

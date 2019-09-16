@@ -13,6 +13,7 @@ import { PumpDataFormComponent } from './explore-opportunities-form/pump-data-fo
 import { VariableFrequencyDriveFormComponent } from './explore-opportunities-form/variable-frequency-drive-form/variable-frequency-drive-form.component';
 import { HeadToolModule } from '../../calculator/pumps/head-tool/head-tool.module';
 import { ModalModule } from 'ngx-bootstrap';
+import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { ModalModule } from 'ngx-bootstrap';
     SharedModule,
     ReactiveFormsModule,
     HeadToolModule,
-    ModalModule
+    ModalModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     ExploreOpportunitiesComponent, 

@@ -9,6 +9,7 @@ import { MotorDriveHelpComponent } from './motor-drive-help/motor-drive-help.com
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    OperatingHoursModalModule
   ],
   declarations: [MotorDriveComponent, MotorDriveFormComponent, MotorDriveGraphComponent, MotorDriveTableComponent, MotorDriveHelpComponent],
   providers: [MotorDriveService],

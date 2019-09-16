@@ -14,9 +14,6 @@ import { SettingsLabelPipe } from './pipes/settings-label.pipe';
 import { WaterfallGraphComponent } from './waterfall-graph/waterfall-graph.component';
 import { WaterfallGraphService } from './waterfall-graph/waterfall-graph.service';
 import { ToastComponent } from './toast/toast.component';
-import { OperatingHoursModalComponent } from './operating-hours-modal/operating-hours-modal.component';
-import { OperatingHoursModalService } from './operating-hours-modal/operating-hours-modal.service';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -33,8 +30,7 @@ import { OperatingHoursModalService } from './operating-hours-modal/operating-ho
     TabsTooltipComponent,
     SettingsLabelPipe,
     WaterfallGraphComponent,
-    ToastComponent,
-    OperatingHoursModalComponent
+    ToastComponent
   ],
   exports: [
     PercentGraphComponent,
@@ -45,13 +41,11 @@ import { OperatingHoursModalService } from './operating-hours-modal/operating-ho
     TabsTooltipComponent,
     SettingsLabelPipe,
     WaterfallGraphComponent,
-    ToastComponent,
-    OperatingHoursModalComponent
+    ToastComponent
   ],
   providers: [
     ConvertUnitsService,
-    WaterfallGraphService,
-    OperatingHoursModalService
+    WaterfallGraphService
   ]
 })
 

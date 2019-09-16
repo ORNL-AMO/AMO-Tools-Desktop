@@ -15,6 +15,7 @@ import { VariableFrequencyDriveFormComponent } from './explore-opportunities-for
 import { CalculatePressuresModule } from '../calculate-pressures/calculate-pressures.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { SharedModule } from '../../shared/shared.module';
+import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { SharedModule } from '../../shared/shared.module';
     FsatSankeyModule,
     CalculatePressuresModule,
     ModalModule,
-    SharedModule
+    SharedModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     ExploreOpportunitiesComponent,

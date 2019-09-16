@@ -8,6 +8,7 @@ import { CompressedAirReductionFormComponent } from './compressed-air-reduction-
 import { CompressedAirReductionResultsComponent } from './compressed-air-reduction-results/compressed-air-reduction-results.component';
 import { CompressedAirReductionHelpComponent } from './compressed-air-reduction-help/compressed-air-reduction-help.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     CompressedAirReductionComponent,

@@ -27,6 +27,7 @@ import { UtilitySummaryComponent } from './treasure-chest/summary-card/utility-s
 import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.service';
 import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
 import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-c
     SharedModule,
     CalculatorsModule,
     TreasureHuntReportModule,
-    AnimatedCheckmarkModule
+    AnimatedCheckmarkModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     TreasureHuntComponent, 

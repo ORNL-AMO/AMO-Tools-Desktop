@@ -6,13 +6,15 @@ import { GeneralOperationsComponent } from './general-operations/general-operati
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { OperationsService } from './operations.service';
+import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     OperationsComponent,

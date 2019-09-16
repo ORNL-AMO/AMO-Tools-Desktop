@@ -41,6 +41,7 @@ import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
 import { FsatWarningService } from './fsat-warning.service';
 import { CalculatePressuresModule } from './calculate-pressures/calculate-pressures.module';
 import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.module';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -62,7 +63,8 @@ import { FanAnalysisModule } from '../calculator/fans/fan-analysis/fan-analysis.
     PumpCurveModule,
     FanEfficiencyModule,
     CalculatePressuresModule,
-    FanAnalysisModule
+    FanAnalysisModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     FsatComponent,

@@ -17,6 +17,7 @@ import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/exp
 import { ExploreCoolingFormComponent } from './explore-phast-opportunities-form/explore-cooling-form/explore-cooling-form.component';
 import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-form/explore-atmosphere-form/explore-atmosphere-form.component';
 import { SharedModule } from '../../shared/shared.module';
+import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { SharedModule } from '../../shared/shared.module';
     ReactiveFormsModule,
     LossesModule,
     ModalModule,
-    SharedModule
+    SharedModule,
+    OperatingHoursModalModule
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,
