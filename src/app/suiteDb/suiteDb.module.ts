@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SuiteDbService } from './suite-db.service';
 import { FlueGasMaterialComponent } from './flue-gas-material/flue-gas-material.component';
@@ -30,7 +30,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 @NgModule({
     imports: [
         FormsModule,
-        ReactiveFormsModule,
         CommonModule,
         ModalModule,
         SharedPipesModule
