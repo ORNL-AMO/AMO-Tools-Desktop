@@ -97,9 +97,6 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     CompareService,
     ConvertFsatService,
     FsatWarningService
-  ],
-  exports: [
-    FsatComponent
   ]
 })
 export class FsatModule { }

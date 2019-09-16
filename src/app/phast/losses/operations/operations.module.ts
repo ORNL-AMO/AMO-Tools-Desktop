@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { OperationsFormComponent } from './operations-form/operations-form.component';
 import { OperationsComponent } from './operations.component';
 import { OperationsService } from './operations.service';
@@ -10,7 +10,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     OperatingHoursModalModule,
     SharedPipesModule

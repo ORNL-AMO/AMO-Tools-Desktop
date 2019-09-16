@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { OtherLossesService } from './other-losses.service';
 import { OtherLossesCompareService } from './other-losses-compare.service';
 import { OtherLossesComponent } from './other-losses.component';
@@ -10,7 +10,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     SharedPipesModule
   ],

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 
 import { WallLossesModule } from './wall-losses/wall-losses.module';
@@ -32,7 +32,6 @@ import { GasLeakageLossesHelpComponent } from './losses-help/gas-leakage-losses-
 import { OpeningLossesHelpComponent } from './losses-help/opening-losses-help/opening-losses-help.component';
 import { OtherLossesHelpComponent } from './losses-help/other-losses-help/other-losses-help.component';
 import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-losses-help.component';
-import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
 
 import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power-losses-help/auxiliary-power-losses-help.component';
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
@@ -54,9 +53,7 @@ import { LossesResultPanelComponent } from './losses-result-panel/losses-result-
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     ModalModule,
-    SuiteDbModule,
     WallLossesModule,
     SlagModule,
     OtherLossesModule,

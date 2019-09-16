@@ -10,7 +10,7 @@ import { ExploreOpeningFormComponent } from './explore-phast-opportunities-form/
 import { ExploreOperationsFormComponent } from './explore-phast-opportunities-form/explore-operations-form/explore-operations-form.component';
 import { ExploreFlueGasFormComponent } from './explore-phast-opportunities-form/explore-flue-gas-form/explore-flue-gas-form.component';
 import { ExploreSystemEfficiencyFormComponent } from './explore-phast-opportunities-form/explore-system-efficiency-form/explore-system-efficiency-form.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { LossesModule } from '../losses/losses.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/explore-slag-form/explore-slag-form.component';
@@ -23,7 +23,6 @@ import { ToastModule } from '../../shared/toast/toast.module';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     LossesModule,
     ModalModule,
     OperatingHoursModalModule,

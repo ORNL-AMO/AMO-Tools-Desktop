@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AuxiliaryPowerCompareService } from './auxiliary-power-compare.service';
 import { AuxiliaryPowerLossesService } from './auxiliary-power-losses.service';
 import { AuxiliaryPowerLossesFormComponent } from './auxiliary-power-losses-form/auxiliary-power-losses-form.component';
@@ -10,7 +10,6 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     SharedPipesModule
   ],

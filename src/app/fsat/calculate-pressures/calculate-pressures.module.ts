@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CalculateOutletPressureComponent } from './calculate-outlet-pressure/calculate-outlet-pressure.component';
 import { CalculateInletPressureComponent } from './calculate-inlet-pressure/calculate-inlet-pressure.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CalculateInletPressureHelpComponent } from './calculate-inlet-pressure/calculate-inlet-pressure-help/calculate-inlet-pressure-help.component';
 import { CalculateOutletPressureHelpComponent } from './calculate-outlet-pressure/calculate-outlet-pressure-help/calculate-outlet-pressure-help.component';
 import { CalculateFlowPressureComponent } from './calculate-flow-pressure/calculate-flow-pressure.component';
@@ -14,7 +14,6 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     FanAnalysisModule,
     SharedPipesModule
   ],
