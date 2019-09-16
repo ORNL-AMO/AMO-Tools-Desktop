@@ -41,6 +41,7 @@ export class TreasureHuntComponent implements OnInit {
   showToast: boolean = false;
   modalOpenSub: Subscription;
   isModalOpen: boolean = false;
+  treasureHuntSub: Subscription;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -85,11 +86,14 @@ export class TreasureHuntComponent implements OnInit {
         if (tmpTab) {
           this.treasureHuntService.mainTab.next(tmpTab);
         }
+
+        this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
       })
     })
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.getContainerHeight();
     });
 
     this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
@@ -97,6 +101,11 @@ export class TreasureHuntComponent implements OnInit {
     });
     this.modalOpenSub = this.treasureHuntService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
+    });
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
+      if (val) {
+        this.saveTreasureHunt(val);
+      }
     })
   }
 
@@ -106,6 +115,8 @@ export class TreasureHuntComponent implements OnInit {
     this.treasureHuntService.mainTab.next('system-setup');
     this.treasureHuntService.subTab.next('settings');
     this.modalOpenSub.unsubscribe();
+    this.treasureHuntService.treasureHunt.next(undefined);
+    this.treasureHuntSub.unsubscribe();
   }
 
   ngAfterViewInit() {

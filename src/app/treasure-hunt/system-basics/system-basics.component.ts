@@ -21,8 +21,6 @@ export class SystemBasicsComponent implements OnInit {
   assessment: Assessment;
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
-  @Output('emitSave')
-  emitSave = new EventEmitter<TreasureHunt>();
 
   @ViewChild('formElement') formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -65,7 +63,7 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   saveTreasureHunt(){
-    this.emitSave.emit(this.assessment.treasureHunt);
+    this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
   }
 
   closeOperatingHoursModal() {
