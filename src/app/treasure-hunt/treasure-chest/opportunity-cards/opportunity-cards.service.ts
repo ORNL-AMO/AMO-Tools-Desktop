@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
@@ -28,7 +28,8 @@ export class OpportunityCardsService {
     let compressedAirPressureReductionData: Array<OpportunityCardData> = this.getCompressedAirPressureReductions(treasureHunt.compressedAirPressureReductions, treasureHunt.currentEnergyUsage, settings);
     let waterReductionData: Array<OpportunityCardData> = this.getWaterReductions(treasureHunt.waterReductions, treasureHunt.currentEnergyUsage, settings);
     let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, settings, treasureHunt.currentEnergyUsage)
-    opportunityCardsData = _.union(lightingReplacementsCardData, replaceExistingData, naturalGasReductionData, electricityReductionData, compressedAirReductionData, compressedAirPressureReductionData, waterReductionData, standaloneOpportunitySheetData);
+    let steamReductionData: Array<OpportunityCardData> = this.getSteamReductions(treasureHunt.steamReductions, treasureHunt.currentEnergyUsage, settings);
+    opportunityCardsData = _.union(lightingReplacementsCardData, replaceExistingData, naturalGasReductionData, electricityReductionData, compressedAirReductionData, compressedAirPressureReductionData, waterReductionData, standaloneOpportunitySheetData, steamReductionData);
     let index: number = 0;
     opportunityCardsData.forEach(card => {
       card.index = index;
@@ -125,7 +126,7 @@ export class OpportunityCardsService {
       label: string,
       energyUnit: string
     }>,
-    percentSavings: Array<{percent: number, label: string, baselineCost: number, modificationCost: number }>,
+    percentSavings: Array<{ percent: number, label: string, baselineCost: number, modificationCost: number }>,
     utilityTypes: Array<string>
   } {
     let annualEnergySavings: Array<{ savings: number, label: string, energyUnit: string }> = new Array();
@@ -608,6 +609,54 @@ export class OpportunityCardsService {
     }
     return cardData;
   }
+  //steamReductions
+  getSteamReductions(steamReductions: Array<SteamReductionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (steamReductions) {
+      let index: number = 0;
+      steamReductions.forEach(reduction => {
+        let cardData: OpportunityCardData = this.getSteamReductionCardData(reduction, settings, index, currentEnergyUsage);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
+  getSteamReductionCardData(reduction: SteamReductionTreasureHunt, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+    // let results: WaterReductionResults = this.waterReductionService.getResults(settings, reduction.baseline, reduction.modification);
+    let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getSteamReductionSummary(reduction, index, settings);
+    let unitStr: string = 'klb';
+    if (settings.unitsOfMeasure == 'Imperial') {
+      unitStr = 'tonnes';
+    }
+    let cardData: OpportunityCardData = {
+      implementationCost: opportunitySummary.totalCost,
+      paybackPeriod: opportunitySummary.payback,
+      selected: reduction.selected,
+      opportunityType: 'steam-reduction',
+      opportunityIndex: index,
+      annualCostSavings: opportunitySummary.costSavings,
+      annualEnergySavings: [{
+        savings: opportunitySummary.totalEnergySavings,
+        energyUnit: unitStr,
+        label: opportunitySummary.utilityType
+      }],
+      utilityType: [opportunitySummary.utilityType],
+      percentSavings: [{
+        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.steamCosts),
+        label: opportunitySummary.utilityType,
+        baselineCost: opportunitySummary.baselineCost,
+        modificationCost: opportunitySummary.modificationCost,
+      }],
+      steamReduction: reduction,
+      name: opportunitySummary.opportunityName,
+      opportunitySheet: reduction.opportunitySheet,
+      iconString: 'assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png',
+      teamName: this.getTeamName(reduction.opportunitySheet)
+    }
+    return cardData;
+  }
 
   getPercentSavings(totalCostSavings: number, totalUtiltyCost: number): number {
     return (totalCostSavings / totalUtiltyCost) * 100;
@@ -658,4 +707,5 @@ export interface OpportunityCardData {
   compressedAirReduction?: CompressedAirReductionTreasureHunt;
   compressedAirPressureReduction?: CompressedAirPressureReductionTreasureHunt;
   waterReduction?: WaterReductionTreasureHunt;
+  steamReduction?: SteamReductionTreasureHunt;
 }

@@ -21,6 +21,7 @@ import { GeneralDetailsFormComponent } from './opportunity-sheet/general-details
 import { StandaloneOpportunitySheetComponent } from './standalone-opportunity-sheet/standalone-opportunity-sheet.component';
 import { EnergyUseFormComponent } from './standalone-opportunity-sheet/energy-use-form/energy-use-form.component';
 import { FormsModule } from '@angular/forms';
+import { SteamReductionModule } from '../../calculator/utilities/steam-reduction/steam-reduction.module';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { FormsModule } from '@angular/forms';
     WaterReductionModule,
     CompressedAirPressureReductionModule,
     LightingReplacementModule,
-    FormsModule
+    FormsModule,
+    SteamReductionModule
   ],
   providers: [
     CalculatorsService,

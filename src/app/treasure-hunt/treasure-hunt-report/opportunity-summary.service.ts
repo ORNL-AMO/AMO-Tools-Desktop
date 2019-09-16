@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { LightingReplacementService } from '../../calculator/lighting/lighting-replacement/lighting-replacement.service';
 import { LightingReplacementResults } from '../../shared/models/lighting';
@@ -8,11 +8,12 @@ import { ReplaceExistingService } from '../../calculator/motors/replace-existing
 import { ReplaceExistingResults, MotorDriveOutputs } from '../../shared/models/calculators';
 import { MotorDriveService } from '../../calculator/motors/motor-drive/motor-drive.service';
 import { ElectricityReductionService } from '../../calculator/utilities/electricity-reduction/electricity-reduction.service';
-import { ElectricityReductionResults, NaturalGasReductionResults, CompressedAirReductionResults, WaterReductionResults, CompressedAirPressureReductionResults } from '../../shared/models/standalone';
+import { ElectricityReductionResults, NaturalGasReductionResults, CompressedAirReductionResults, WaterReductionResults, CompressedAirPressureReductionResults, SteamReductionResults } from '../../shared/models/standalone';
 import { NaturalGasReductionService } from '../../calculator/utilities/natural-gas-reduction/natural-gas-reduction.service';
 import { CompressedAirReductionService } from '../../calculator/utilities/compressed-air-reduction/compressed-air-reduction.service';
 import { WaterReductionService } from '../../calculator/utilities/water-reduction/water-reduction.service';
 import { CompressedAirPressureReductionService } from '../../calculator/utilities/compressed-air-pressure-reduction/compressed-air-pressure-reduction.service';
+import { SteamReductionService } from '../../calculator/utilities/steam-reduction/steam-reduction.service';
 
 @Injectable()
 export class OpportunitySummaryService {
@@ -20,7 +21,8 @@ export class OpportunitySummaryService {
   constructor(private opportunitySheetService: OpportunitySheetService, private lightingReplacementService: LightingReplacementService,
     private replaceExistingService: ReplaceExistingService, private motorDriveService: MotorDriveService, private electricityReductionService: ElectricityReductionService,
     private naturalGasReductionService: NaturalGasReductionService, private compressedAirReductionService: CompressedAirReductionService,
-    private waterReductionService: WaterReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
+    private waterReductionService: WaterReductionService, private compressedAirPressureReductionService: CompressedAirPressureReductionService,
+    private steamReductionService: SteamReductionService) { }
 
   getOpportunitySummaries(treasureHunt: TreasureHunt, settings: Settings): Array<OpportunitySummary> {
     let opportunitySummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
@@ -40,7 +42,8 @@ export class OpportunitySummaryService {
     opportunitySummaries = this.getCompressedAirPressureReductionSummaries(treasureHunt.compressedAirPressureReductions, opportunitySummaries, settings);
     //water reduction
     opportunitySummaries = this.getWaterReductionSummaries(treasureHunt.waterReductions, opportunitySummaries, settings);
-
+    //steam reduction
+    opportunitySummaries = this.getSteamReductionSummaries(treasureHunt.steamReductions, opportunitySummaries, settings);
     //standalone opp sheets
     opportunitySummaries = this.getOpportunitySheetSummaries(treasureHunt.opportunitySheets, opportunitySummaries, settings);
 
@@ -275,10 +278,10 @@ export class OpportunitySummaryService {
   }
 
   //getWaterReductionSummaries
-  getWaterReductionSummaries(waterReduction: Array<WaterReductionTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
-    if (waterReduction) {
+  getWaterReductionSummaries(waterReductions: Array<WaterReductionTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+    if (waterReductions) {
       let index: number = 1;
-      waterReduction.forEach(waterReduction => {
+      waterReductions.forEach(waterReduction => {
         if (waterReduction.selected) {
           let oppSummary: OpportunitySummary = this.getWaterReductionSummary(waterReduction, index, settings);
           opportunitySummaries.push(oppSummary);
@@ -309,6 +312,34 @@ export class OpportunitySummaryService {
     return oppSummary;
   }
 
+  //getSteamReductionSummaries
+  getSteamReductionSummaries(steamReductions: Array<SteamReductionTreasureHunt>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings): Array<OpportunitySummary> {
+    if (steamReductions) {
+      let index: number = 1;
+      steamReductions.forEach(steamReduction => {
+        if (steamReduction.selected) {
+          let oppSummary: OpportunitySummary = this.getSteamReductionSummary(steamReduction, index, settings);
+          opportunitySummaries.push(oppSummary);
+        }
+        index++;
+      });
+    }
+    return opportunitySummaries;
+  }
+
+  getSteamReductionSummary(steamReduction: SteamReductionTreasureHunt, index: number, settings: Settings): OpportunitySummary {
+    let name: string = 'Stea, Reduction #' + index;
+    let results: SteamReductionResults = this.steamReductionService.getResults(settings, steamReduction.baseline, steamReduction.modification);
+    let opportunityCost: OpportunityCost;
+    if (steamReduction.opportunitySheet) {
+      if (steamReduction.opportunitySheet.name) {
+        name = steamReduction.opportunitySheet.name;
+      }
+      opportunityCost = steamReduction.opportunitySheet.opportunityCost;
+    }
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Steam', results.annualCostSavings, results.annualSteamSavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    return oppSummary;
+  }
 
   //stand alone opp sheets
   getOpportunitySheetSummaries(opportunitySheets: Array<OpportunitySheet>, opportunitySummaries: Array<OpportunitySummary>, settings: Settings, getAllResults?: boolean): Array<OpportunitySummary> {
