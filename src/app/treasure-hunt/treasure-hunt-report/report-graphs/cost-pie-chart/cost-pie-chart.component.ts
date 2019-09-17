@@ -12,6 +12,8 @@ export class CostPieChartComponent implements OnInit {
   treasureHuntResults: TreasureHuntResults;
   @Input()
   isBaseline: boolean;
+  @Input()
+  showPrint: boolean;
 
   chart: any;
   @ViewChild('pieChartElement', { static: false }) pieChartElement: ElementRef;
@@ -66,6 +68,9 @@ export class CostPieChartComponent implements OnInit {
         type: 'pie',
         columns: this.columnData
       },
+      legend: {
+        position: 'right'
+      }
       // legend: {
       //   show: false
       // },
@@ -79,6 +84,9 @@ export class CostPieChartComponent implements OnInit {
       //   show: false
       // },
     });
+    if (this.showPrint) {
+      this.chart.resize({ height: 250, width: 500 });
+    }
   }
 
 

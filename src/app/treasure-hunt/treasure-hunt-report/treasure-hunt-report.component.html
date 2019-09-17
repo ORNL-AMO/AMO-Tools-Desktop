@@ -16,7 +16,7 @@
   <div #reportHeader class="report-header" [ngClass]="{'hide-print': inTHunt}">
 
     <div *ngIf="!inRollup" class="btn-group hide-print">
-      <button class="btn btn-secondary" (click)="showModal()" [disabled]="true">Print</button>
+      <button class="btn btn-secondary" (click)="showModal()">Print</button>
       <button class="btn btn-secondary" (click)="exportToCsv()" [disabled]="true">Export to CSV</button>
     </div>
 
@@ -41,7 +41,7 @@
   </div>
   <!-- End .report-header -->
 
-  <!-- <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
+  <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
     <div class="col-12 print-col">
       <h4>Building Print View</h4>
       <h5>One Moment Please</h5>
@@ -52,7 +52,7 @@
         <div class="bounce3"></div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <div class="report-data" *ngIf="assessment.treasureHunt.setupDone">
 
@@ -81,49 +81,41 @@
     <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'executiveSummary' && !showPrint) || (showPrint && printExecutiveSummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <!-- <label class="group-label">Cost Summary</label> -->
+      <h4 class="show-print">Executive Summary</h4>
       <div class="d-flex justify-content-center">
         <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
-          [showFullSummary]="false" [title]="'Cost Summary'"></app-executive-summary>
+          [showFullSummary]="false" [title]="'Cost Summary'" [showPrint]="showPrint && printExecutiveSummary">
+        </app-executive-summary>
       </div>
       <div class="d-flex justify-content-center">
-        <!-- <label class="group-label">Detailed Summary</label> -->
         <app-executive-summary [treasureHuntResults]="treasureHuntResults" [settings]="settings"
-          [showFullSummary]="true" [title]="'Detailed Summary'">
+          [showFullSummary]="true" [title]="'Detailed Summary'" [showPrint]="showPrint && printExecutiveSummary">
         </app-executive-summary>
       </div>
     </div>
-    <div class="results scroll-item print-height"
+    <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'reportGraphs' && !showPrint) || (showPrint && printReportGraphs)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <app-report-graphs [treasureHuntResults]="treasureHuntResults"></app-report-graphs>
+      <h4 class="show-print">Report Graphs</h4>
+      <app-report-graphs [treasureHuntResults]="treasureHuntResults" [showPrint]="showPrint && printReportGraphs">
+      </app-report-graphs>
     </div>
-    <div class="results scroll-item print-height"
+    <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'opportunitySummary' && !showPrint) || (showPrint && printReportOpportunitySummary)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
+      <h4 class="show-print">Opportunity Summary</h4>
       <app-opportunity-summary [opportunitySummaries]="treasureHuntResults.opportunitySummaries" [settings]="settings"
         [inRollup]="inRollup" (emitUpdateOpportunities)="updateResults($event)" [assessment]="assessment">
       </app-opportunity-summary>
     </div>
 
-    <div class="results scroll-item print-height"
+    <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'opportunityPayback' && !showPrint) || (showPrint && printReportOpportunityPayback)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
+      <h4 class="show-print">Identified Opportunity</h4>
       <app-opportunity-payback [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
       </app-opportunity-payback>
     </div>
-
-    <!-- <div class="results scroll-item hide-print" *ngIf="!dataCalculated" [ngStyle]="{'height.px':reportContainerHeight}">
-      <div class="d-flex flex-column w-100 h-100 justify-content-center align-items-center">
-        <div class="d-flex spinner">
-          <div class="bounce1"></div>
-          <div class="bounce2"></div>
-          <div class="bounce3"></div>
-        </div>
-        <h5> Calculating...</h5>
-      </div>
-    </div> -->
-
   </div>
   <!-- End .report-data -->
 
@@ -135,10 +127,9 @@
 
 </div>
 
-<!-- no support for diagram, temp version -->
-<!-- <app-print-options-menu *ngIf="showPrintMenu && !inRollup" [showSsmtReportOptions]="true" [selectAll]="selectAll"
-  [printReportGraphs]="printReportGraphs" [printInputData]="printInputData"
-  [printExecutiveSummary]="printExecutiveSummary" [printLossesSummary]="printLossesSummary"
-  [printEnergySummary]="printEnergySummary" (emitClosePrintModal)="closeModal($event)"
+<app-print-options-menu *ngIf="showPrintMenu && !inRollup" [showTHReportOptions]="true" [selectAll]="selectAll"
+  [printExecutiveSummary]="printExecutiveSummary" [printReportGraphs]="printReportGraphs"
+  [printReportOpportunitySummary]="printReportOpportunitySummary"
+  [printReportOpportunityPayback]="printReportOpportunityPayback" (emitClosePrintModal)="closeModal($event)"
   (emitTogglePrint)="togglePrint($event)" (emitPrint)="print()">
-</app-print-options-menu> -->
+</app-print-options-menu>
