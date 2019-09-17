@@ -30,7 +30,7 @@ export class LossesComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  @ViewChild('modificationHeader') modificationHeader: ElementRef;
+  @ViewChild('modificationHeader', { static: false }) modificationHeader: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getHeaderHeight();

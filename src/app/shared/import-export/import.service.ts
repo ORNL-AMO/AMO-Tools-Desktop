@@ -4,8 +4,6 @@ import { ImportExportData, ImportExportAssessment, ImportExportDirectory } from 
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
-import { Directory } from '../models/directory';
-import { Assessment } from '../models/assessment';
 import * as _ from 'lodash';
 import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 

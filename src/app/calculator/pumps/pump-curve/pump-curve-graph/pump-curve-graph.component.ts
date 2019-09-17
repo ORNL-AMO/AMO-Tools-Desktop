@@ -5,10 +5,9 @@ import * as _ from 'lodash';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { PumpCurveService } from '../pump-curve.service';
 import { Settings } from '../../../../shared/models/settings';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import { SystemCurveService } from '../../system-curve/system-curve.service';
-import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
+import { LineChartHelperService } from '../../../../shared/helper-services/line-chart-helper.service';
 
 @Component({
   selector: 'app-pump-curve-graph',
@@ -45,8 +44,8 @@ export class PumpCurveGraphComponent implements OnInit {
   graphSystemCurve: boolean;
   graphModificationCurve: boolean = false;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();
@@ -123,7 +122,7 @@ export class PumpCurveGraphComponent implements OnInit {
   @Input()
   toggleCalculate: boolean;
   tmpHeadFlow: any;
-  constructor(private systemCurveService: SystemCurveService, private lineChartHelperService: LineChartHelperService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
+  constructor(private systemCurveService: SystemCurveService, private lineChartHelperService: LineChartHelperService, private pumpCurveService: PumpCurveService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.isGridToggled = false;

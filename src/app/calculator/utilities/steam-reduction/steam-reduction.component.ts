@@ -24,8 +24,8 @@ export class SteamReductionComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -156,6 +156,9 @@ export class SteamReductionComponent implements OnInit {
     dataArray[index].waterMassFlowMethodData = data.waterMassFlowMethodData;
     dataArray[index].otherMethodData = data.otherMethodData;
     dataArray[index].units = data.units;
+    dataArray[index].otherUtilityCost = data.otherUtilityCost;
+    dataArray[index].steamUtilityCost = data.steamUtilityCost;
+    dataArray[index].naturalGasUtilityCost = data.naturalGasUtilityCost;
   }
 
   getResults() {

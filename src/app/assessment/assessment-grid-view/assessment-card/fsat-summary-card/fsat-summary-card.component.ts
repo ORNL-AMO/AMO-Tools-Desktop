@@ -22,7 +22,7 @@ export class FsatSummaryCardComponent implements OnInit {
   maxEnergySavings: number = 0;
   showReport: boolean = false;
 
-  @ViewChild('reportModal') public reportModal: ModalDirective;
+  @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
   baseline: FSAT;
   fsatResults: FsatOutput;
   setupDone: boolean = true;

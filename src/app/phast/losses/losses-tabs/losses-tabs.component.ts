@@ -1,9 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
-import { PHAST, Losses } from '../../../shared/models/phast/phast';
+import { Component, OnInit, Input } from '@angular/core';
+import { PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
-import { PhastService } from '../../phast.service';
 import { LossesService } from '../losses.service';
-import { defaultTabs, LossTab } from '../../tabs';
+import { LossTab } from '../../tabs';
 import * as _ from 'lodash';
 @Component({
   selector: 'app-losses-tabs',

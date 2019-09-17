@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
-import { Location } from '@angular/common';
 import { AssessmentService } from '../assessment/assessment.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
@@ -20,9 +19,9 @@ import { TreasureHunt } from '../shared/models/treasure-hunt';
   styleUrls: ['./treasure-hunt.component.css']
 })
 export class TreasureHuntComponent implements OnInit {
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])
@@ -43,7 +42,6 @@ export class TreasureHuntComponent implements OnInit {
   isModalOpen: boolean = false;
   treasureHuntSub: Subscription;
   constructor(
-    private location: Location,
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,

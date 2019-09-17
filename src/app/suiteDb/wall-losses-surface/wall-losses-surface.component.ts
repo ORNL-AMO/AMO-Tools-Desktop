@@ -4,7 +4,6 @@ import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
@@ -39,7 +38,7 @@ export class WallLossesSurfaceComponent implements OnInit {
   currentField: string = 'selectedMaterial';
   idbEditMaterialId: number;
   sdbEditMaterialId: number;
-  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private settingsDbService: SettingsDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     if (!this.settings) {

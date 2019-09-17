@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { GasLoadChargeMaterial, FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, WallLossesSurface, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../../shared/models/materials';
-import { ImportExportService } from '../../shared/import-export/import-export.service';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 
@@ -19,7 +18,7 @@ export class CustomMaterialsService {
 
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
-  constructor(private importExportService: ImportExportService, private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) {
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) {
     this.selectedAtmosphere = new Array<AtmosphereSpecificHeat>();
     this.selectedFlueGas = new Array<FlueGasMaterial>();
     this.selectedGasLoadCharge = new Array<GasLoadChargeMaterial>();

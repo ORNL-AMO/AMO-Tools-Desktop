@@ -4,10 +4,8 @@ import { DirectoryDbRef } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
-import { UpdateDataService } from '../shared/update-data.service';
+import { UpdateDataService } from '../shared/helper-services/update-data.service';
 import { Calculator } from '../shared/models/calculators';
-import { BehaviorSubject } from 'rxjs';
-
 
 var myDb: any = {
   name: 'CrudDB',

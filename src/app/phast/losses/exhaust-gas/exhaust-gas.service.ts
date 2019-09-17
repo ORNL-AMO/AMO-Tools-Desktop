@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ExhaustGasEAF } from '../../../shared/models/phast/losses/exhaustGasEAF';
-import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @Injectable()
 export class ExhaustGasService {

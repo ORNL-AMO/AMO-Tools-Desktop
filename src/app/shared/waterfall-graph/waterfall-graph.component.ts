@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, AfterViewInit, SimpleChanges } from '@angular/core';
-import { WaterfallGraphService, WaterfallInput, WaterfallItem } from './waterfall-graph.service';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { WaterfallGraphService, WaterfallInput } from './waterfall-graph.service';
 import * as d3 from 'd3';
 
 @Component({
@@ -24,7 +24,7 @@ export class WaterfallGraphComponent implements OnInit {
   containerHeight: number;
   @Input()
   printView: boolean;
-  @ViewChild('ngChart') ngChart: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
   canvasWidth: number;
   canvasHeight: number;
   width: number;

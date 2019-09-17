@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { PsatReportService } from '../psat-report.service';
 
 @Component({
   selector: 'app-psat-report-sankey',
@@ -29,7 +28,7 @@ export class PsatReportSankeyComponent implements OnInit {
   psat1CostSavings: number;
   psat2CostSavings: number;
 
-  constructor(private psatReportService: PsatReportService,) { }
+  constructor() { }
 
   ngOnInit() {
     this.prepPsatOptions();

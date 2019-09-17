@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PhastService } from '../../phast.service';
-import { PHAST, PhastResults, ExecutiveSummary } from '../../../shared/models/phast/phast';
+import { PHAST, ExecutiveSummary } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
-import { PhastResultsService } from '../../phast-results.service';
 import { ExecutiveSummaryService, SummaryNote } from '../executive-summary.service';
 import * as _ from 'lodash';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';

@@ -22,7 +22,7 @@ export class PrvComponent implements OnInit {
   onResize(event) {
     this.resizeTabs();
   }
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   headerHeight: number;
 
   tabSelect: string = 'results';

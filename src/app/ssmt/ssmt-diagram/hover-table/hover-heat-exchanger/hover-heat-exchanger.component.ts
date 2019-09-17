@@ -19,7 +19,7 @@ export class HoverHeatExchangerComponent implements OnInit {
   @Input()
   inResultsPanel: boolean;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   heatExchangerInput: HeatExchangerInput;

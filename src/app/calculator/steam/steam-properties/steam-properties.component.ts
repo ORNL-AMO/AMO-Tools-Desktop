@@ -26,10 +26,10 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   headerHeight: number;
 
-  @ViewChild('lineChartContainer') lineChartContainer: ElementRef;
+  @ViewChild('lineChartContainer', { static: false }) lineChartContainer: ElementRef;
   chartContainerHeight: number;
   chartContainerWidth: number;
 

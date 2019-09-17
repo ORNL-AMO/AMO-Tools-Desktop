@@ -14,8 +14,8 @@ export class BagMethodComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

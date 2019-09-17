@@ -5,7 +5,6 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { PhastService } from '../../phast/phast.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({

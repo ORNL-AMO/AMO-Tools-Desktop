@@ -2,11 +2,9 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener, Input, Output, 
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { LightingReplacementService } from './lighting-replacement.service';
-import { LightingReplacementData, LightingReplacementResults, LightingReplacementResult } from '../../../shared/models/lighting';
+import { LightingReplacementData, LightingReplacementResults } from '../../../shared/models/lighting';
 import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
-import { FormGroup } from '@angular/forms';
-
 @Component({
   selector: 'app-lighting-replacement',
   templateUrl: './lighting-replacement.component.html',
@@ -26,8 +24,8 @@ export class LightingReplacementComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {

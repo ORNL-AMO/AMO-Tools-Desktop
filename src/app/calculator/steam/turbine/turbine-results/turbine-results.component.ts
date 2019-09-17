@@ -15,7 +15,7 @@ export class TurbineResultsComponent implements OnInit {
   @Input()
   toggleGenerateExample: boolean;
 
-  @ViewChild('copyTable0') copyTable0: ElementRef;
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
   constructor() { }
 

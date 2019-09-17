@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PSAT, PsatInputs } from '../../../shared/models/psat';
+import { PsatInputs } from '../../../shared/models/psat';
 import { SpecificSpeedInputs } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
-import { PsatService } from '../../../psat/psat.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Injectable()
 export class SpecificSpeedService {
   specificSpeedInputs: SpecificSpeedInputs;
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
 
   initForm(settings: Settings): FormGroup {

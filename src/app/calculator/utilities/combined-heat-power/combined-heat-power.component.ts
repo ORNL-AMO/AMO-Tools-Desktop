@@ -12,7 +12,7 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class CombinedHeatPowerComponent implements OnInit {
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

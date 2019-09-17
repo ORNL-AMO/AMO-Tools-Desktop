@@ -1,11 +1,9 @@
-import {Component, OnInit, ViewChild, Input, ElementRef, HostListener} from '@angular/core';
-import {PhastService} from '../../../phast/phast.service';
-import {FlueGasLossesService} from '../../../phast/losses/flue-gas-losses/flue-gas-losses.service';
-import {SettingsDbService} from '../../../indexedDb/settings-db.service';
-import {Settings} from '../../../shared/models/settings';
-import {FormGroup} from '../../../../../node_modules/@angular/forms';
-import {FlueGasByVolume, FlueGasByMass} from '../../../shared/models/phast/losses/flueGas';
-import {StackLossService} from './stack-loss.service';
+import { Component, OnInit, ViewChild, Input, ElementRef, HostListener } from '@angular/core';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '../../../../../node_modules/@angular/forms';
+import { FlueGasByVolume, FlueGasByMass } from '../../../shared/models/phast/losses/flueGas';
+import { StackLossService } from './stack-loss.service';
 
 @Component({
   selector: 'app-stack-loss-calculator',
@@ -16,7 +14,7 @@ export class StackLossComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

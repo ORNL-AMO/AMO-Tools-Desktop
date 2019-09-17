@@ -1,10 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { TreasureHunt, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
-import { OpportunitySheetService } from '../../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
 import * as _ from 'lodash';
-import { OpportunitySummaryService } from '../../treasure-hunt-report/opportunity-summary.service';
-import { TreasureHuntService } from '../../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
@@ -29,7 +26,7 @@ export class TreasureChestMenuComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('navbar') navbar: ElementRef;
+  @ViewChild('navbar', { static: false }) navbar: ElementRef;
   navbarWidth: number;
 
   @HostListener('window:resize', ['$event'])
@@ -60,7 +57,7 @@ export class TreasureChestMenuComponent implements OnInit {
   opportunityCardsSub: Subscription;
   opportunityCardsData: Array<OpportunityCardData>;
   importExportOption: string;
-  constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService, private opportunitySheetService: OpportunitySheetService, private opportunitySummaryService: OpportunitySummaryService, private treasureHuntService: TreasureHuntService) { }
+  constructor(private opportuntiyCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
@@ -327,7 +324,11 @@ export class TreasureChestMenuComponent implements OnInit {
     if (waterReductions != 0) {
       this.calculatorTypeOptions.push({ display: 'Water Reduction', value: 'water-reduction', numCalcs: waterReductions });
     }
-
+    //steamReductions
+    let steamReductions: number = _.filter(filteredCalcs, (calc) => { return calc.opportunityType == 'steam-reduction' }).length;
+    if (steamReductions != 0) {
+      this.calculatorTypeOptions.push({ display: 'Steam Reduction', value: 'steam-reduction', numCalcs: steamReductions });
+    }
   }
 
   getFilteredCalcsByUtility(opData: Array<OpportunityCardData>, utilityType: string): Array<OpportunityCardData> {

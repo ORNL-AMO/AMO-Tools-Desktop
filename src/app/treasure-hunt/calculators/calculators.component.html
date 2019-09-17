@@ -3,8 +3,9 @@
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-lighting-replacement>
 
-<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'" (emitCancel)="cancelStandaloneOpportunitySheet()"
-  (emitSave)="saveStandaloneOpportunitySheet($event)" [settings]="settings">
+<app-standalone-opportunity-sheet *ngIf="selectedCalc == 'opportunity-sheet'"
+  (emitCancel)="cancelStandaloneOpportunitySheet()" (emitSave)="saveStandaloneOpportunitySheet($event)"
+  [settings]="settings">
 </app-standalone-opportunity-sheet>
 
 <app-replace-existing *ngIf="selectedCalc == 'replace-existing'" (emitCancel)="cancelReplaceExisting()"
@@ -41,6 +42,11 @@
   (emitSave)="saveWaterReduction($event)" (emitCancel)="cancelWaterReduction()"
   (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-water-reduction>
+
+<app-steam-reduction *ngIf="selectedCalc == 'steam-reduction'" [inTreasureHunt]="true"
+  (emitSave)="saveSteamReduction($event)" (emitCancel)="cancelSteamReduction()"
+  (emitAddOpportunitySheet)="showOpportunitySheetModal()" [settings]="settings"
+  [operatingHours]="treasureHunt.operatingHours"></app-steam-reduction>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
@@ -23,7 +22,6 @@ export class TutorialSettingsComponent implements OnInit {
 
   checkDisableAll() {
     this.disableAllTutorials = (this.settings.disableTutorial && this.settings.disableDashboardTutorial && this.settings.disablePsatSetupTutorial && this.settings.disablePsatAssessmentTutorial && this.settings.disablePsatReportTutorial && this.settings.disablePhastSetupTutorial && this.settings.disablePhastAssessmentTutorial && this.settings.disablePhastReportTutorial && this.settings.disableFsatSetupTutorial && this.settings.disableFsatAssessmentTutorial && this.settings.disableFsatReportTutorial);
-    console.log(this.disableAllTutorials);
   }
 
   toggleDisableAll() {

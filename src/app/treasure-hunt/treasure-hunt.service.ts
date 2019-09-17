@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt } from '../shared/models/treasure-hunt';
+import { OpportunitySheet, TreasureHunt, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt } from '../shared/models/treasure-hunt';
 import { OpportunityCardsService, OpportunityCardData } from './treasure-chest/opportunity-cards/opportunity-cards.service';
 import { Settings } from '../shared/models/settings';
 
@@ -213,6 +213,27 @@ export class TreasureHuntService {
   deleteWaterReductionsItem(index: number) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.waterReductions.splice(index, 1);
+    this.treasureHunt.next(treasureHunt);
+  }
+  //steam reduction
+  addNewSteamReductionItem(steamReduction: SteamReductionTreasureHunt) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    if (!treasureHunt.steamReductions) {
+      treasureHunt.steamReductions = new Array();
+    }
+    treasureHunt.steamReductions.push(steamReduction);
+    this.treasureHunt.next(treasureHunt);
+  }
+  editSteamReductionItem(steamReductions: SteamReductionTreasureHunt, index: number, settings: Settings) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.steamReductions[index] = steamReductions;
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getSteamReductionCardData(steamReductions, settings, index, treasureHunt.currentEnergyUsage);
+    this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
+    this.treasureHunt.next(treasureHunt);
+  }
+  deleteSteamReductionsItem(index: number) {
+    let treasureHunt: TreasureHunt = this.treasureHunt.value;
+    treasureHunt.steamReductions.splice(index, 1);
     this.treasureHunt.next(treasureHunt);
   }
 

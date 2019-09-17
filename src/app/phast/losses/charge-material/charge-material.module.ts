@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { SharedModule } from "../../../shared/shared.module";
-
 import { ChargeMaterialCompareService } from './charge-material-compare.service';
 import { ChargeMaterialComponent } from "./charge-material.component";
 import { ChargeMaterialService } from "./charge-material.service";
@@ -12,14 +10,15 @@ import { SolidChargeMaterialFormComponent } from "./solid-charge-material-form/s
 
 import { ModalModule } from 'ngx-bootstrap';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ModalModule,
-    SuiteDbModule
+    SuiteDbModule,
+    SharedPipesModule
   ],
   declarations: [
     ChargeMaterialComponent,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CalculatorService } from '../calculator.service';
 
 @Component({

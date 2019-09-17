@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -33,7 +32,7 @@ export class OpeningSummaryComponent implements OnInit {
   emissivityDiff: Array<boolean>;
   percentTimeOpenDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef) { }
 
   //debug trying something
   ngOnInit() {

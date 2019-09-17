@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 import { ImportExportService } from '../../../shared/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
@@ -45,7 +45,10 @@ export class ImportExportOpportunitiesComponent implements OnInit {
       motorDrives: this.getSelectedMotorDrives(this.treasureHunt.motorDrives),
       naturalGasReductions: this.getSelectedNgReductions(this.treasureHunt.naturalGasReductions),
       electricityReductions: this.getSelectedElectricityReductions(this.treasureHunt.electricityReductions),
-      compressedAirReductions: this.getSelectedCompressedAirReductions(this.treasureHunt.compressedAirReductions)
+      compressedAirReductions: this.getSelectedCompressedAirReductions(this.treasureHunt.compressedAirReductions),
+      compressedAirPressureReductions: this.getSelectedCompressedAirPressureReductions(this.treasureHunt.compressedAirPressureReductions),
+      steamReductions: this.getSelectedSteamReductions(this.treasureHunt.steamReductions),
+      waterReductions: this.getSelectedWaterReductions(this.treasureHunt.waterReductions)
     }
   }
 
@@ -94,6 +97,27 @@ export class ImportExportOpportunitiesComponent implements OnInit {
   getSelectedOpportunities(opportunities: Array<OpportunitySheet>): Array<OpportunitySheet> {
     if (opportunities) {
       return _.filter(opportunities, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+
+  getSelectedCompressedAirPressureReductions(reductions: Array<CompressedAirPressureReductionTreasureHunt>): Array<CompressedAirPressureReductionTreasureHunt> {
+    if (reductions) {
+      return _.filter(reductions, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+
+  getSelectedWaterReductions(reductions: Array<WaterReductionTreasureHunt>): Array<WaterReductionTreasureHunt> {
+    if (reductions) {
+      return _.filter(reductions, (opportunity) => { return opportunity.selected });
+    }
+    return undefined;
+  }
+
+  getSelectedSteamReductions(reductions: Array<SteamReductionTreasureHunt>): Array<SteamReductionTreasureHunt> {
+    if (reductions) {
+      return _.filter(reductions, (opportunity) => { return opportunity.selected });
     }
     return undefined;
   }

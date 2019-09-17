@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
-import { PhastService } from '../../phast.service';
 import { Losses, PHAST, PhastResults } from '../../../shared/models/phast/phast';
 import { EnergyInputService } from './energy-input.service';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
@@ -43,7 +42,7 @@ export class EnergyInputComponent implements OnInit {
   lossesLocked: boolean = false;
   energyInputTotal: number = 0;
   electricalHeatDelivered: number = 0;
-  constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private phastResultsService: PhastResultsService) { }
+  constructor(private energyInputService: EnergyInputService, private phastResultsService: PhastResultsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {

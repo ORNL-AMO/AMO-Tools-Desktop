@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { TreasureChestComponent } from './treasure-chest/treasure-chest.component';
 import { SummaryCardComponent } from './treasure-chest/summary-card/summary-card.component';
 import { OperationCostsComponent } from './operation-costs/operation-costs.component';
-import { SharedModule } from '../shared/shared.module';
 import { TreasureChestMenuComponent } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.component';
 import { TreasureHuntReportService } from './treasure-hunt-report/treasure-hunt-report.service';
 import { ImportExportOpportunitiesComponent } from './treasure-chest/import-export-opportunities/import-export-opportunities.component';
@@ -25,6 +24,10 @@ import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/t
 import { SortCardsByPipe } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
 import { UtilitySummaryComponent } from './treasure-chest/summary-card/utility-summary/utility-summary.component';
 import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.service';
+import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
+import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
+import { ToastModule } from '../shared/toast/toast.module';
 
 @NgModule({
   imports: [
@@ -32,9 +35,11 @@ import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.
     SettingsModule,
     ModalModule,
     FormsModule,
-    SharedModule,
     CalculatorsModule,
-    TreasureHuntReportModule
+    TreasureHuntReportModule,
+    AnimatedCheckmarkModule,
+    OperatingHoursModalModule,
+    ToastModule
   ],
   declarations: [
     TreasureHuntComponent, 
@@ -49,7 +54,8 @@ import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.
     ImportExportOpportunitiesComponent,
     OpportunityCardsComponent,
     SortCardsByPipe,
-    UtilitySummaryComponent
+    UtilitySummaryComponent,
+    TreasureHuntGaugeComponent
   ],
   providers: [ 
     TreasureHuntService, 

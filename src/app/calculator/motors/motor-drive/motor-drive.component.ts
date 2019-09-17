@@ -24,8 +24,8 @@ export class MotorDriveComponent implements OnInit {
   @Input()
   opperatingHours: number
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -78,7 +78,7 @@ export class MotorDriveComponent implements OnInit {
 
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
     }

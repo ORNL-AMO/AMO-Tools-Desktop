@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, Testability, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PHAST, Modification } from '../../shared/models/phast/phast';
 import { PhastCompareService } from '../phast-compare.service';
 import { LossesService } from '../losses/losses.service';

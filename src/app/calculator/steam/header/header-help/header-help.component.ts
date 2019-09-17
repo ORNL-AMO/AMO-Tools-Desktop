@@ -19,7 +19,7 @@ export class HeaderHelpComponent implements OnInit {
 
   inletRanges: InletRanges;
   pressureRanges: {min: number, max: number};
-  constructor(private headerService: HeaderService, private steamService: SteamService) { }
+  constructor(private headerService: HeaderService) { }
 
   ngOnInit() {
     this.pressureRanges = this.headerService.getPressureRangeValues(this.settings);

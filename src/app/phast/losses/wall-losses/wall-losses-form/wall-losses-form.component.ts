@@ -37,7 +37,7 @@ export class WallLossesFormComponent implements OnInit {
   isBaseline: boolean;
 
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;

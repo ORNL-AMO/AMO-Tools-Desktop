@@ -3,8 +3,8 @@ import { PhastService } from '../../../../phast/phast.service';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
 import { Settings } from '../../../../shared/models/settings';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
-import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
+import { LineChartHelperService } from '../../../../shared/helper-services/line-chart-helper.service';
 import { O2EnrichmentService } from '../o2-enrichment.service';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -26,8 +26,8 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   @Input()
   settings: Settings;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();

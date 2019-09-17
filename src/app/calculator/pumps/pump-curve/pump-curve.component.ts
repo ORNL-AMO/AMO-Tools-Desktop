@@ -5,7 +5,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
 import { PumpCurveService } from './pump-curve.service';
-import { PumpCurve, PumpCurveDataRow, Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
+import { PumpCurve, Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
 import { Assessment } from '../../../shared/models/assessment';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -55,7 +55,7 @@ export class PumpCurveComponent implements OnInit {
 
   tabSelect: string = 'results';
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ValueNotInListValidator } from '../../../shared/validators/value-not-in-list';
 import { LessThanValidator } from '../../../shared/validators/less-than';

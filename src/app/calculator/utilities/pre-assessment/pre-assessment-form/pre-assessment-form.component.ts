@@ -40,7 +40,7 @@ export class PreAssessmentFormComponent implements OnInit {
 
   isEditingName: boolean = false;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   constructor(private preAssessmentService: PreAssessmentService) { }

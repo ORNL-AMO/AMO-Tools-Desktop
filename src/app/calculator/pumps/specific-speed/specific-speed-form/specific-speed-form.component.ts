@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { pumpTypesConstant } from '../../../../psat/psatConstants';

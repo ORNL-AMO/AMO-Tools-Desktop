@@ -23,7 +23,7 @@ export class O2EnrichmentComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

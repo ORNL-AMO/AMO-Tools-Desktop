@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { FormGroup } from '@angular/forms';
 import { HeatSystemEfficiencyCompareService } from '../../heat-system-efficiency/heat-system-efficiency-compare.service';
 import { Subscription } from 'rxjs';
 
