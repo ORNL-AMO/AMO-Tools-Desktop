@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
-import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
+import { JsonToCsvService } from '../shared/helper-services/json-to-csv.service';
 import { CompareService } from './compare.service';
 import { SettingsService } from '../settings/settings.service';
 import { Subscription } from 'rxjs';
@@ -29,12 +29,12 @@ import { FieldDataService } from './field-data/field-data.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
-  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
-  @ViewChild('addNewModal') public addNewModal: ModalDirective;
+  @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
+  @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
 
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])

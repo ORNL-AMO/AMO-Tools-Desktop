@@ -41,7 +41,7 @@ export class FsatSankeyComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
-  @ViewChild('ngChart') ngChart: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
   width: number;
   height: number;
 

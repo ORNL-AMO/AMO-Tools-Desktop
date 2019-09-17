@@ -31,9 +31,9 @@ export class PreAssessmentCardComponent implements OnInit {
   @Input()
   index: number;
 
-  @ViewChild('editModal') public editModal: ModalDirective;
-  @ViewChild('deleteModal') public deleteModal: ModalDirective;
-  @ViewChild('copyModal') public copyModal: ModalDirective;
+  @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
+  @ViewChild('deleteModal', { static: false }) public deleteModal: ModalDirective;
+  @ViewChild('copyModal', { static: false }) public copyModal: ModalDirective;
 
   directories: Array<Directory>;
   editForm: FormGroup;

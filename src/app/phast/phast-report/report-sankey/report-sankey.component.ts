@@ -1,9 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PHAST, ExecutiveSummary } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
-import { PhastReportService } from '../phast-report.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { ExecutiveSummaryService, SummaryNote } from '../executive-summary.service';
+import { ExecutiveSummaryService } from '../executive-summary.service';
 
 @Component({
   selector: 'app-report-sankey',
@@ -36,7 +35,7 @@ export class ReportSankeyComponent implements OnInit {
   phast1: {name, phast};
   phast2: {name, phast};
   modExists: boolean = false;
-  constructor(private phastReportService: PhastReportService, private executiveSummaryService: ExecutiveSummaryService) { }
+  constructor(private executiveSummaryService: ExecutiveSummaryService) { }
 
   ngOnInit() {
     this.baseline = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);

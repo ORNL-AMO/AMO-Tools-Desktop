@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { length } from '../../../shared/convert-units/definitions/length';
 import { UnitConverterService } from './unit-converter.service';
 
 @Component({

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { PHAST, Modification } from '../../../shared/models/phast/phast';
+import { PHAST } from '../../../shared/models/phast/phast';
 
 @Injectable()
 export class HeatSystemEfficiencyCompareService {

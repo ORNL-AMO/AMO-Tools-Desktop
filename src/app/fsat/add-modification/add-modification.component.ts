@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Modification, FSAT, FsatOutput } from '../../shared/models/fans';
+import { Modification, FSAT } from '../../shared/models/fans';
 import { FsatService } from '../fsat.service';
 import { Settings } from '../../shared/models/settings';
 

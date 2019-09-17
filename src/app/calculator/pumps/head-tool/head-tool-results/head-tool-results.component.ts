@@ -12,7 +12,7 @@ export class HeadToolResultsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   constructor(private convertUnitsService: ConvertUnitsService) { }

@@ -4,7 +4,6 @@ import { TreasureHuntReportComponent } from './treasure-hunt-report.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
 import { OpportunitySummaryComponent } from './opportunity-summary/opportunity-summary.component';
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
-import { SharedModule } from '../../shared/shared.module';
 import { OpportunityPaybackTableComponent } from './opportunity-payback/opportunity-payback-table/opportunity-payback-table.component';
 import { OpportunityPaybackComponent } from './opportunity-payback/opportunity-payback.component';
 import { OpportunityPaybackDonutComponent } from './opportunity-payback/opportunity-payback-donut/opportunity-payback-donut.component';
@@ -16,12 +15,15 @@ import { CostSummaryChartComponent } from './report-graphs/cost-summary-chart/co
 import { CostSummaryChartService } from './report-graphs/cost-summary-chart/cost-summary-chart.service';
 import { OpportunitySummaryService } from './opportunity-summary.service';
 import { FormsModule } from '@angular/forms';
+import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
+import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
-    FormsModule
+    FormsModule,
+    FacilityInfoSummaryModule,
+    PrintOptionsMenuModule
   ],
   declarations: [
     TreasureHuntReportComponent,

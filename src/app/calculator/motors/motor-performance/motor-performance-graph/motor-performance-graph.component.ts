@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
-import { LineChartHelperService } from '../../../../shared/line-chart-helper/line-chart-helper.service';
+import { LineChartHelperService } from '../../../../shared/helper-services/line-chart-helper.service';
 
 @Component({
   selector: 'app-motor-performance-graph',
@@ -20,9 +20,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild("ngChart") ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
+  @ViewChild('btnDownload', { static: false }) btnDownload: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeGraph();

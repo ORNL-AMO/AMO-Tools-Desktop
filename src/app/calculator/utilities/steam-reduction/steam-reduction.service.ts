@@ -18,9 +18,13 @@ export class SteamReductionService {
   constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours): SteamReductionData {
+    let hoursPerYear: number = 8760;
+    if (operatingHours) {
+      hoursPerYear = operatingHours.hoursPerYear;
+    }
     let defaultSteamReduction: SteamReductionData = {
       name: "Equipment #" + (index + 1),
-      hoursPerYear: 8760,
+      hoursPerYear: hoursPerYear,
       utilityType: 1,
       utilityCost: 5.5,
       steamUtilityCost: settings.steamCost ? settings.steamCost : 0.12,
@@ -66,20 +70,20 @@ export class SteamReductionService {
   }
 
   getFormFromObj(obj: SteamReductionData): FormGroup {
+    //if utilityType 0 = steam, utilityType 1 = naturalGas, utilityType 2 = other
+    let utilityCost: number = obj.steamUtilityCost;
+    if (obj.utilityType == 1) {
+      utilityCost = obj.naturalGasUtilityCost
+    } else if (obj.utilityType == 2) {
+      utilityCost = obj.otherUtilityCost;
+    }
+
+
     let form: FormGroup = this.fb.group({
       name: [obj.name, Validators.required],
       operatingHours: [obj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [obj.utilityType],
-      utilityCost: [
-        //if utilityType 0 = steam, utilityType 1 = naturalGas, utilityType 2 = other
-        obj.utilityType == 0
-          ? obj.steamUtilityCost
-          : obj.utilityType == 1
-            ? obj.naturalGasUtilityCost
-            : obj.otherUtilityCost,
-
-        [Validators.required, Validators.min(0)]
-      ],
+      utilityCost: [utilityCost, [Validators.required, Validators.min(0)]],
       measurementMethod: [obj.measurementMethod],
       systemEfficiency: [obj.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       pressure: [obj.pressure, [Validators.required, Validators.min(0)]],
@@ -150,6 +154,7 @@ export class SteamReductionService {
   }
 
   getObjFromForm(form: FormGroup, obj: SteamReductionData): SteamReductionData {
+
     let flowMeterData: SteamFlowMeterMethodData = {
       flowRate: form.controls.flowMeterFlowRate.value
     };
@@ -182,29 +187,26 @@ export class SteamReductionService {
       consumption: form.controls.consumption.value
     };
 
+    //if utilityType 0 = steam, utilityType 1 = naturalGas, utilityType 2 = other
+    let steamUtilityCost: number = obj.steamUtilityCost;
+    let ngUtilityCost: number = obj.naturalGasUtilityCost;
+    let otherUtilityCost: number = obj.otherUtilityCost;
+    if (form.controls.utilityType.value == 0) {
+      steamUtilityCost = form.controls.utilityCost.value;
+    } else if (form.controls.utilityType.value == 1) {
+      ngUtilityCost = form.controls.utilityCost.value;
+    } else if (form.controls.utilityType.value == 2) {
+      otherUtilityCost = form.controls.utilityCost.value;
+    }
+
     let steamReduction: SteamReductionData = {
       name: form.controls.name.value,
       hoursPerYear: form.controls.operatingHours.value,
       utilityType: form.controls.utilityType.value,
       utilityCost: form.controls.utilityCost.value,
-      steamUtilityCost:
-
-        form.controls.utilityType.value == 0
-          ? form.controls.utilityCost.value
-          : obj.steamUtilityCost,
-
-      naturalGasUtilityCost:
-
-        form.controls.utilityType.value == 1
-          ? form.controls.utilityCost.value
-          : obj.naturalGasUtilityCost,
-
-      otherUtilityCost:
-
-        form.controls.utilityType.value == 2
-          ? form.controls.utilityCost.value
-          : obj.otherUtilityCost,
-
+      steamUtilityCost: steamUtilityCost,
+      naturalGasUtilityCost: ngUtilityCost,
+      otherUtilityCost: otherUtilityCost,
       measurementMethod: form.controls.measurementMethod.value,
       systemEfficiency: form.controls.systemEfficiency.value,
       pressure: form.controls.pressure.value,

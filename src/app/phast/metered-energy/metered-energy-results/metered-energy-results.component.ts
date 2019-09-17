@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
 import { Settings } from '../../../shared/models/settings';
 @Component({

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { SuiteDbService } from '../../suite-db.service';
 import { LiquidLoadChargeMaterial } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CustomMaterialsService } from '../custom-materials.service';
@@ -26,11 +25,11 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   editExistingMaterial: boolean = false;
   deletingMaterial: boolean = false;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.liquidChargeMaterials = new Array<LiquidLoadChargeMaterial>();

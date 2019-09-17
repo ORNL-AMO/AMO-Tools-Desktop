@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BagMethodInput, BagMethodOutput } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 

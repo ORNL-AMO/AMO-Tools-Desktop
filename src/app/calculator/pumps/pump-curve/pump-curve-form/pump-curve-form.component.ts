@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { PumpCurve, PumpCurveDataRow } from '../../../../shared/models/calculators';
+import { PumpCurveDataRow } from '../../../../shared/models/calculators';
 import * as regression from 'regression';
 import { PumpCurveService } from '../pump-curve.service';
-import { PsatService } from '../../../../psat/psat.service';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';

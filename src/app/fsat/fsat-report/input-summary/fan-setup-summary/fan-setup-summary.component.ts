@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { FSAT, FanSetup, FieldData } from '../../../../shared/models/fans';
+import { FSAT, FanSetup } from '../../../../shared/models/fans';
 import { FanTypes, Drives } from '../../../fanOptions';
 import * as _ from 'lodash';
 

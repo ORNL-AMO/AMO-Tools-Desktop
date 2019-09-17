@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { OpeningLossesCompareService } from '../opening-losses-compare.service';
 import { OpeningLossesService, OpeningLossWarnings } from '../opening-losses.service';

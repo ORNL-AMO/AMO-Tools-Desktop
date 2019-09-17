@@ -2,12 +2,11 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityPaybackService } from './opportunity-payback.service';
-import { OpportunitySummaryService } from './opportunity-summary.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -35,8 +34,8 @@ export class TreasureHuntReportComponent implements OnInit {
   @Input()
   printReportOpportunitySummary: boolean;
 
-  @ViewChild('reportBtns') reportBtns: ElementRef;
-  @ViewChild('reportHeader') reportHeader: ElementRef;
+  @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
+  @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
   reportContainerHeight: number;
 
   //print logic
@@ -50,7 +49,8 @@ export class TreasureHuntReportComponent implements OnInit {
   dataCalculated: boolean = true;
   treasureHuntResults: TreasureHuntResults;
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
-  constructor(private directoryDbService: DirectoryDbService, private treasureHuntReportService: TreasureHuntReportService,
+  showPrintSub: Subscription;
+  constructor(private treasureHuntReportService: TreasureHuntReportService,
     private opportunityPaybackService: OpportunityPaybackService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
@@ -67,7 +67,7 @@ export class TreasureHuntReportComponent implements OnInit {
     }
 
     //subscribe to print event
-    this.treasureHuntReportService.showPrint.subscribe(printVal => {
+    this.showPrintSub = this.treasureHuntReportService.showPrint.subscribe(printVal => {
       //shows loading print view
       this.showPrintDiv = printVal;
       if (printVal == true) {
@@ -94,6 +94,10 @@ export class TreasureHuntReportComponent implements OnInit {
     if (changes.printViewSelection && !changes.printViewSelection.firstChange) {
       this.initPrintLogic();
     }
+  }
+
+  ngOnDestroy(){
+    this.showPrintSub.unsubscribe();
   }
 
   getContainerHeight() {
@@ -196,7 +200,6 @@ export class TreasureHuntReportComponent implements OnInit {
     this.treasureHuntReportService.showPrint.next(true);
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
-      let doc = this.windowRefService.getDoc();
       win.print();
       //after printing hide content again
       this.treasureHuntReportService.showPrint.next(false);

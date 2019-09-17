@@ -1,7 +1,5 @@
-import { Component, OnInit, Input, Output, ViewChild, EventEmitter, TemplateRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
-
 @Component({
   selector: 'app-print-options-menu',
   templateUrl: './print-options-menu.component.html',
@@ -69,7 +67,7 @@ export class PrintOptionsMenuComponent implements OnInit {
   @Output('emitPrint')
   emitPrint = new EventEmitter<void>();
 
-  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
+  @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
 
   constructor() { }
 

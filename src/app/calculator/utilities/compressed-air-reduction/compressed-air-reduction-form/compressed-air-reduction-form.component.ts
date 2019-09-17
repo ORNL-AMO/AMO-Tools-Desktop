@@ -30,7 +30,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
   @Input()
   utilityType: number;
 
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

@@ -25,7 +25,7 @@ export class DirectoryListItemComponent implements OnInit {
   isFirstChange: boolean = true;
   editForm: FormGroup;
   directories: Array<Directory>;
-  @ViewChild('editModal') public editModal: ModalDirective;
+  @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private directoryDbService: DirectoryDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {

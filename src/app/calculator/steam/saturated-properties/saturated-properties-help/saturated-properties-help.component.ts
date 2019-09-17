@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-saturated-properties-help',

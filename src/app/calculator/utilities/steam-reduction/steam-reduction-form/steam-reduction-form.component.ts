@@ -31,7 +31,7 @@ export class SteamReductionFormComponent implements OnInit {
   formWidth: number;
   showOperatingHoursModal: boolean;
 
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

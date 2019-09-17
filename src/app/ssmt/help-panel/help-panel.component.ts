@@ -21,7 +21,7 @@ export class HelpPanelComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  @ViewChild('resultTabs') resultTabs: ElementRef;
+  @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
   stepTab: string;
   stepTabSubscription: Subscription;
   tabSelect: string = 'help';

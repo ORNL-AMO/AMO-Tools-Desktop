@@ -14,7 +14,7 @@ export class OpeningLossesHelpComponent implements OnInit {
   @Input()
   currentField: string;
 
-  @ViewChild('viewFactorModal') public viewFactorModal: ModalDirective;
+  @ViewChild('viewFactorModal', { static: false }) public viewFactorModal: ModalDirective;
 
   constructor(private lossesService: LossesService) { }
 

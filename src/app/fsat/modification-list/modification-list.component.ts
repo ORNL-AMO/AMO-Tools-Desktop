@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FSAT, Modification, FsatOutput } from '../../shared/models/fans';
+import { FSAT, Modification } from '../../shared/models/fans';
 import { Subscription } from 'rxjs';
 import { CompareService } from '../compare.service';
 import { FsatService } from '../fsat.service';

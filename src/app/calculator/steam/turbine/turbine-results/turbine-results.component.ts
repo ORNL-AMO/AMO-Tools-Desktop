@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { TurbineOutput } from '../../../../shared/models/steam/steam-outputs';
-import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-turbine-results',
@@ -14,7 +13,7 @@ export class TurbineResultsComponent implements OnInit {
   @Input()
   results: TurbineOutput;
 
-  @ViewChild('copyTable0') copyTable0: ElementRef;
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
   constructor() { }
 

@@ -17,7 +17,7 @@ export class WaterReductionResultsComponent implements OnInit {
   @Input()
   isWastewater: boolean;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   constructor() { }

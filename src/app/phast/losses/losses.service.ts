@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Losses, PHAST, Modification } from '../../shared/models/phast/phast';
+import { PHAST } from '../../shared/models/phast/phast';
 import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';

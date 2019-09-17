@@ -104,6 +104,45 @@
       </li>
     </ul>
   </div>
+  <div class="col-6 p-2" *ngIf="exportOpportunities.compressedAirPressureReductions">
+    <label>Compressed Air Pressure Reductions</label>
+    <ul>
+      <li *ngFor="let compressedAirPressureReduction of exportOpportunities.compressedAirPressureReductions; let index = index;">
+        <span *ngIf="!compressedAirPressureReduction.opportunitySheet || !compressedAirPressureReduction.opportunitySheet.name">
+          Compressed Air Pressure Reduction #{{index+1}}
+        </span>
+        <span *ngIf="compressedAirPressureReduction.opportunitySheet && compressedAirPressureReduction.opportunitySheet.name">
+          {{compressedAirPressureReduction.opportunitySheet.name}}
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div class="col-6 p-2" *ngIf="exportOpportunities.waterReductions">
+    <label>Water Reductions</label>
+    <ul>
+      <li *ngFor="let waterReduction of exportOpportunities.waterReductions; let index = index;">
+        <span *ngIf="!waterReduction.opportunitySheet || !waterReduction.opportunitySheet.name">
+          Water Reduction #{{index+1}}
+        </span>
+        <span *ngIf="waterReduction.opportunitySheet && waterReduction.opportunitySheet.name">
+          {{waterReduction.opportunitySheet.name}}
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div class="col-6 p-2" *ngIf="exportOpportunities.steamReductions">
+    <label>Steam Reductions</label>
+    <ul>
+      <li *ngFor="let steamReduction of exportOpportunities.steamReductions; let index = index;">
+        <span *ngIf="!steamReduction.opportunitySheet || !steamReduction.opportunitySheet.name">
+          Steam Reduction #{{index+1}}
+        </span>
+        <span *ngIf="steamReduction.opportunitySheet && steamReduction.opportunitySheet.name">
+          {{steamReduction.opportunitySheet.name}}
+        </span>
+      </li>
+    </ul>
+  </div>
   <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
     <label>Opportunity Sheets</label>
     <ul>

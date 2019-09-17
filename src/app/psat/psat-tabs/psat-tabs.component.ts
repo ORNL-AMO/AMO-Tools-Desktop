@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PsatService } from '../psat.service';
 import { PSAT } from '../../shared/models/psat';
 import { Subscription } from 'rxjs';

@@ -1,6 +1,5 @@
 import { Component, OnInit, SimpleChanges, Input } from '@angular/core';
 import { DeaeratorService, DeaeratorRanges } from '../deaerator.service';
-import { SteamService } from '../../steam.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -19,7 +18,7 @@ export class DeaeratorHelpComponent implements OnInit {
   steamThermodynamicQuantity: number;
 
   rangeValues: DeaeratorRanges;
-  constructor(private deaeratorService: DeaeratorService, private steamService: SteamService) { }
+  constructor(private deaeratorService: DeaeratorService) { }
 
   ngOnInit() {
     this.getRanges();

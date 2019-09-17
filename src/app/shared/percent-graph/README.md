@@ -18,7 +18,7 @@ It takes the following inputs:
 
 #Usage
 
-To include in a component add the SharedModule to the desired components root module
+To include in a component add the PercentGraphModule to the desired components root module
 
 Then simply add the PercentGraphComponent to the html of the desired component
 

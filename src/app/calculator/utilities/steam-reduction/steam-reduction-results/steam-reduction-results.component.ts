@@ -16,7 +16,7 @@ export class SteamReductionResultsComponent implements OnInit {
   @Input()
   modificationExists: boolean;
 
-  @ViewChild('copyTable0') copyTable0: ElementRef;
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
 
   energyResultUnit = 'MMBtu';

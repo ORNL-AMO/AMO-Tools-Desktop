@@ -72,4 +72,8 @@ export class FindTreasureComponent implements OnInit {
   selectOpportunitySheet(){
     this.calculatorsService.addNewOpportunitySheet();
   }
+
+  selectSteamReduction(){
+    this.calculatorsService.addNewSteamReduction();
+  }
 }

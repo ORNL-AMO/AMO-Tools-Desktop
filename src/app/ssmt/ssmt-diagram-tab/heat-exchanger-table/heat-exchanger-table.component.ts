@@ -18,7 +18,7 @@ export class HeatExchangerTableComponent implements OnInit {
   @Input()
   inputData: SSMTInputs;
 
-  @ViewChild('copyTable0') copyTable0: ElementRef;
+  @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
 
   heatExchangerOutput: HeatExchangerOutput;

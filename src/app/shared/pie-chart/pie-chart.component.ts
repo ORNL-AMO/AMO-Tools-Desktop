@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../helper-services/svg-to-png.service';
 import * as _ from 'lodash';
 import * as d3 from 'd3';
 @Component({
@@ -25,8 +25,8 @@ export class PieChartComponent implements OnInit {
   @Input()
   sideBySide: boolean;
 
-  @ViewChild('ngChart') ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
+  @ViewChild('btnDownload', { static: false }) btnDownload: ElementRef;
 
   htmlElement: any;
   radius: number;

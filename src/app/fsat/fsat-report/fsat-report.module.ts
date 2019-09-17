@@ -5,7 +5,6 @@ import { FsatReportComponent } from './fsat-report.component';
 import { InputSummaryComponent } from './input-summary/input-summary.component';
 import { ResultsSummaryComponent } from './results-summary/results-summary.component';
 import { FsatReportGraphsComponent } from './fsat-report-graphs/fsat-report-graphs.component';
-import { SharedModule } from '../../shared/shared.module';
 import { FieldDataSummaryComponent } from './input-summary/field-data-summary/field-data-summary.component';
 import { FanMotorSummaryComponent } from './input-summary/fan-motor-summary/fan-motor-summary.component';
 import { FanSetupSummaryComponent } from './input-summary/fan-setup-summary/fan-setup-summary.component';
@@ -16,16 +15,23 @@ import { FsatReportSankeyComponent } from './fsat-report-sankey/fsat-report-sank
 import { FsatReportService } from './fsat-report.service';
 import { ModalModule } from '../../../../node_modules/ngx-bootstrap';
 import { FsatReportGraphsPrintComponent } from './fsat-report-graphs/fsat-report-graphs-print/fsat-report-graphs-print.component';
+import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
+import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
+import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     FsatSankeyModule,
     ModalModule,
+    PrintOptionsMenuModule,
+    FacilityInfoSummaryModule,
+    PercentGraphModule,
+    PieChartModule
   ],
   declarations: [FsatReportComponent, FsatReportGraphsComponent, FsatBarChartComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent],
   exports: [FsatReportComponent],

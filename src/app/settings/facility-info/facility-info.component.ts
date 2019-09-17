@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Settings, FacilityInfo, Contact, StreetAddress } from '../../shared/models/settings';
+import { Settings, Contact, StreetAddress } from '../../shared/models/settings';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { PhonePipe } from '../../shared/pipes/phone.pipe';
 
 @Component({
   selector: 'app-facility-info',

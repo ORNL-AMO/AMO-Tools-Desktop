@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { PHAST, PhastResults, ExecutiveSummary, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
-import { Assessment } from '../../shared/models/assessment';
 import { PhastResultsService } from '../phast-results.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Injectable()

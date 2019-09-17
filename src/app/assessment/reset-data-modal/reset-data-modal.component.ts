@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Settings } from '../../shared/models/settings';
@@ -25,7 +24,7 @@ import { MockTreasureHunt, MockTreasureHuntSettings } from '../../core/mockTreas
 export class ResetDataModalComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<boolean>();
-  @ViewChild('resetSystemSettingsModal') public resetSystemSettingsModal: ModalDirective;
+  @ViewChild('resetSystemSettingsModal', { static: false }) public resetSystemSettingsModal: ModalDirective;
 
   resetAll: boolean = false;
   resetAppSettings: boolean = false;
@@ -33,7 +32,7 @@ export class ResetDataModalComponent implements OnInit {
   resetUserAssessments: boolean = false;
   resetCustomMaterials: boolean = false;
   deleting: boolean = false;
-  constructor(private suiteDbService: SuiteDbService, private assessmentService: AssessmentService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
+  constructor(private assessmentService: AssessmentService, private calculatorDbService: CalculatorDbService, private coreService: CoreService, private directoryDbService: DirectoryDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService) { }
 
   ngOnInit() {
   }

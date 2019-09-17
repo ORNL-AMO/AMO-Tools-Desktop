@@ -24,7 +24,7 @@ export class OperationsFormComponent implements OnInit {
   @Input()
   phast: PHAST;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
+  @ViewChild('lossForm', { static: false }) lossForm: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

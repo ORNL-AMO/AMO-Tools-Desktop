@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService } from '../../report-rollup.service';
-import { PsatService } from '../../../psat/psat.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -17,7 +16,7 @@ export class PsatRollupGraphsComponent implements OnInit {
   @Input()
   printView: boolean;
 
-  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
+  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
 
   chartContainerWidth: number;
   isUpdate: boolean = false;
@@ -38,7 +37,7 @@ export class PsatRollupGraphsComponent implements OnInit {
   // contains results for every option to build print view charts
   allResults: Array<any>;
   resultsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService, private psatService: PsatService) { }
+  constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
