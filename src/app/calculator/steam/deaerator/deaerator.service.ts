@@ -12,17 +12,51 @@ export class DeaeratorService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) { }
 
   initForm(settings: Settings): FormGroup {
-    let ranges: DeaeratorRanges = this.getRangeValues(settings, 2, 1);
+    let tmpDeaeratorPressure = 14;
+    let tmpFeedwaterMassFlow = 400;
+    let tmpWaterPressure = 14;
+    let tmpWaterQuantityValue = 98;
+    let tmpSteamPressure = 20;
+    let tmpSteamQuantityValue = 260;
+    if (settings.steamPressureMeasurement !== 'psig') {
+      tmpDeaeratorPressure = Math.round(this.convertUnitsService.value(tmpDeaeratorPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+      tmpWaterPressure = Math.round(this.convertUnitsService.value(tmpWaterPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+      tmpSteamPressure = Math.round(this.convertUnitsService.value(tmpSteamPressure).from('psig').to(settings.steamPressureMeasurement) * 100) / 100;
+    }
+    if (settings.steamMassFlowMeasurement !== 'klb') {
+      tmpFeedwaterMassFlow = Math.round(this.convertUnitsService.value(tmpFeedwaterMassFlow).from('klb').to(settings.steamMassFlowMeasurement) * 100) / 100;
+    }
+    if (settings.steamTemperatureMeasurement !== 'F') {
+      tmpWaterQuantityValue = Math.round(this.convertUnitsService.value(tmpWaterQuantityValue).from('F').to(settings.steamTemperatureMeasurement) * 100) / 100;
+      tmpSteamQuantityValue = Math.round(this.convertUnitsService.value(tmpSteamQuantityValue).from('F').to(settings.steamTemperatureMeasurement) * 100) / 100;
+    }
+    let ranges: DeaeratorRanges = this.getRangeValues(settings, 0, 0);
     let tmpForm: FormGroup = this.formBuilder.group({
-      deaeratorPressure: ['', [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
-      ventRate: ['', [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
-      feedwaterMassFlow: ['', [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
-      waterPressure: ['', [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
-      waterThermodynamicQuantity: [1, [Validators.required]],
-      waterQuantityValue: ['', [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
-      steamPressure: ['', [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
-      steamThermodynamicQuantity: [2, [Validators.required]],
-      steamQuantityValue: ['', [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
+      deaeratorPressure: [tmpDeaeratorPressure, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
+      ventRate: [0.1, [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
+      feedwaterMassFlow: [tmpFeedwaterMassFlow, [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
+      waterPressure: [tmpWaterPressure, [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
+      waterThermodynamicQuantity: [0, [Validators.required]],
+      waterQuantityValue: [tmpWaterQuantityValue, [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
+      steamPressure: [tmpSteamPressure, [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
+      steamThermodynamicQuantity: [0, [Validators.required]],
+      steamQuantityValue: [tmpSteamQuantityValue, [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
+    });
+    return tmpForm;
+  }
+
+  resetForm(settings: Settings): FormGroup {
+    let ranges: DeaeratorRanges = this.getRangeValues(settings, 0, 0);
+    let tmpForm: FormGroup = this.formBuilder.group({
+      deaeratorPressure: [0, [Validators.required, Validators.min(ranges.deaeratorPressureMin), Validators.max(ranges.deaeratorPressureMax)]],
+      ventRate: [0, [Validators.required, Validators.min(ranges.ventRateMin), Validators.max(ranges.ventRateMax)]],
+      feedwaterMassFlow: [0, [Validators.required, Validators.min(ranges.feedwaterMassFlowMin)]],
+      waterPressure: [0, [Validators.required, Validators.min(ranges.waterPressureMin), Validators.max(ranges.waterPressureMax)]],
+      waterThermodynamicQuantity: [0, [Validators.required]],
+      waterQuantityValue: [0, [Validators.required, Validators.min(ranges.waterQuantityValueMin), Validators.max(ranges.waterQuantityValueMax)]],
+      steamPressure: [0, [Validators.required, Validators.min(ranges.steamPressureMin), Validators.max(ranges.steamPressureMax)]],
+      steamThermodynamicQuantity: [0, [Validators.required]],
+      steamQuantityValue: [0, [Validators.required, Validators.min(ranges.steamQuantityValueMin), Validators.max(ranges.steamQuantityValueMax)]]
     });
     return tmpForm;
   }
@@ -73,7 +107,7 @@ export class DeaeratorService {
       waterQuantityValueMin: waterQuantityMinMax.min,
       waterQuantityValueMax: waterQuantityMinMax.max,
       steamPressureMin: Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
-      steamPressureMax: Number(this.convertUnitsService.value(22064 ).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
+      steamPressureMax: Number(this.convertUnitsService.value(22064).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3)),
       steamQuantityValueMin: steamQuantityMinMax.min,
       steamQuantityValueMax: steamQuantityMinMax.max
     };

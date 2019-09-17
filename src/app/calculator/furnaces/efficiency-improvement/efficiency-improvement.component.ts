@@ -60,7 +60,6 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.initForm();
     }
 
-
     this.calculate(this.efficiencyImprovementInputs);
   }
 
@@ -76,8 +75,17 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.efficiencyImprovementInputs = this.calculator.efficiencyImprovementInputs;
     }
     else {
-      this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+      this.efficiencyImprovementInputs = this.efficiencyImprovementService.getResetData();
     }
+    this.calculate(this.efficiencyImprovementInputs);
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
+    // this.toggleExampleData = !this.toggleExampleData;
     this.calculate(this.efficiencyImprovementInputs);
   }
 
@@ -109,7 +117,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       if (this.calculator.efficiencyImprovementInputs) {
         this.efficiencyImprovementInputs = this.calculator.efficiencyImprovementInputs;
       } else {
-        this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+        this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
         this.calculator.efficiencyImprovementInputs = this.efficiencyImprovementInputs;
         this.saveCalculator();
       }
@@ -120,7 +128,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    let tmpEfficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+    let tmpEfficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       efficiencyImprovementInputs: tmpEfficiencyImprovementInputs
@@ -132,7 +140,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     if (this.efficiencyImprovementService.efficiencyImprovementInputs) {
       this.efficiencyImprovementInputs = this.efficiencyImprovementService.efficiencyImprovementInputs;
     } else {
-      this.efficiencyImprovementInputs = this.efficiencyImprovementService.initDefaultValues(this.settings);
+      this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
     }
   }
 

@@ -477,11 +477,6 @@ export class PumpCurveGraphComponent implements OnInit {
       };
     }
 
-    console.log('dIntersectBaseline = ');
-    console.log(this.dIntersectBaseline);
-    console.log('dIntersectMod = ');
-    console.log(this.dIntersectMod);
-
     this.detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
     this.detailBoxPointer = this.lineChartHelperService.appendDetailBoxPointer(this.ngChart);
     let format = d3.format(",.2f");

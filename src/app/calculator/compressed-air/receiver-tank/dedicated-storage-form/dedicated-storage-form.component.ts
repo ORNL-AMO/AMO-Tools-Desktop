@@ -15,6 +15,8 @@ export class DedicatedStorageFormComponent implements OnInit {
   toggleResetData: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  toggleGenerateExample: boolean;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
@@ -33,6 +35,22 @@ export class DedicatedStorageFormComponent implements OnInit {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetData();
     }
+    if (changes.toggleGenerateExample && !changes.toggleGenerateExample.firstChange) {
+      this.generateExample();
+    }
+  }
+
+  generateExample() {
+    let tempInputs = {
+      method: 1,
+      atmosphericPressure: 14.7,
+      lengthOfDemand: 0.8333333,
+      airFlowRequirement: 1000,
+      initialTankPressure: 110,
+      finalTankPressure: 100
+    };
+    this.inputs = this.compressedAirService.convertDedicatedStorageExample(tempInputs, this.settings);
+    this.getReceiverVolume();
   }
 
   resetData() {

@@ -27,3 +27,6 @@ h5.group-label:hover{
 .remove-curve {
     color: #dc3545;
 }
+.btn-form {
+  border-radius: 4px !important;
+}

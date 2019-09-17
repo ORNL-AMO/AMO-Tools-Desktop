@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { HeaderInput } from '../../../shared/models/steam/steam-inputs';
-import { FormGroup } from '../../../../../node_modules/@angular/forms';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SteamService } from '../steam.service';
-import { HeaderService } from './header.service';
-import { Settings } from '../../../shared/models/settings';
-import { HeaderOutput } from '../../../shared/models/steam/steam-outputs';
+import {Component, OnInit, Input, ViewChild, ElementRef, HostListener} from '@angular/core';
+import {HeaderInput} from '../../../shared/models/steam/steam-inputs';
+import {FormGroup} from '../../../../../node_modules/@angular/forms';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {SteamService} from '../steam.service';
+import {HeaderService} from './header.service';
+import {Settings} from '../../../shared/models/settings';
+import {HeaderOutput} from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-header-calculator',
@@ -15,6 +15,7 @@ import { HeaderOutput } from '../../../shared/models/steam/steam-outputs';
 export class HeaderComponent implements OnInit {
   @Input()
   settings: Settings;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -30,7 +31,8 @@ export class HeaderComponent implements OnInit {
   numInletOptions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   inletThermoQuantity: number = 0;
 
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private headerService: HeaderService) { }
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private headerService: HeaderService) {
+  }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -42,6 +44,7 @@ export class HeaderComponent implements OnInit {
     this.initForms();
     this.calculate();
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
@@ -52,20 +55,17 @@ export class HeaderComponent implements OnInit {
     this.headerService.headerInput = this.input;
   }
 
-  btnResetData() {
-    this.inletForms = new Array<FormGroup>();
-    this.headerPressureForm = this.headerService.initHeaderForm(this.settings);
-    this.getInletForms();
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string, index?: number) {
     this.currentField = str;
     if (index) {
@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit {
       });
       this.headerPressureForm = this.headerService.getHeaderFormFromObj(this.headerService.headerInput, this.settings);
     } else {
-      this.headerPressureForm = this.headerService.initHeaderForm(this.settings);
+      this.headerPressureForm = this.headerService.resetHeaderForm(this.settings);
       this.getInletForms();
     }
   }
@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit {
   getInletForms() {
     if (this.headerPressureForm.controls.numInlets.value > this.inletForms.length) {
       for (let i = (this.inletForms.length); i < this.headerPressureForm.controls.numInlets.value; i++) {
-        let tmpForm: FormGroup = this.headerService.initInletForm(this.settings);
+        let tmpForm: FormGroup = this.headerService.resetInletForm(this.settings);
         this.inletForms.push(tmpForm);
       }
     } else {
@@ -232,5 +232,18 @@ export class HeaderComponent implements OnInit {
     };
 
     return emptyResults;
+  }
+
+  btnResetData() {
+    this.inletForms = new Array<FormGroup>();
+    this.headerPressureForm = this.headerService.resetHeaderForm(this.settings);
+    this.getInletForms();
+  }
+
+  btnGenerateExample() {
+    this.inletForms = new Array<FormGroup>();
+    this.inletForms = this.headerService.initInletForm(this.settings);
+    this.headerPressureForm = this.headerService.initHeaderForm(this.settings);
+    this.getInletForms();
   }
 }

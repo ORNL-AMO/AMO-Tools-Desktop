@@ -53,7 +53,7 @@ export class EnergyUseComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    if(this.settings.unitsOfMeasure == 'Custom'){
+    if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -84,8 +84,16 @@ export class EnergyUseComponent implements OnInit {
       this.calculator = this.originalCalculator;
     }
     else {
-      this.flowCalculations = this.energyUseService.initDefaultValues(this.settings);
+      this.flowCalculations = this.energyUseService.getResetData();
     }
+    this.calculate();
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.flowCalculations = this.energyUseService.generateExample(this.settings);
     this.calculate();
   }
 
@@ -123,7 +131,7 @@ export class EnergyUseComponent implements OnInit {
       if (this.calculator.flowCalculations) {
         this.flowCalculations = this.calculator.flowCalculations;
       } else {
-        let tmpFlowCalculations: FlowCalculations = this.energyUseService.initDefaultValues(this.settings);
+        let tmpFlowCalculations: FlowCalculations = this.energyUseService.generateExample(this.settings);
         this.calculator.flowCalculations = tmpFlowCalculations;
         this.flowCalculations = this.calculator.flowCalculations;
         this.saveCalculator();
@@ -136,7 +144,7 @@ export class EnergyUseComponent implements OnInit {
   }
 
   initCalculator(): Calculator {
-    let tmpFlowCalculations: FlowCalculations = this.energyUseService.initDefaultValues(this.settings);
+    let tmpFlowCalculations: FlowCalculations = this.energyUseService.generateExample(this.settings);
     let tmpCalculator: Calculator = {
       assessmentId: this.assessment.id,
       flowCalculations: tmpFlowCalculations
@@ -148,7 +156,7 @@ export class EnergyUseComponent implements OnInit {
     if (this.energyUseService.flowCalculations) {
       this.flowCalculations = this.energyUseService.flowCalculations;
     } else {
-      this.flowCalculations = this.energyUseService.initDefaultValues(this.settings);
+      this.flowCalculations = this.energyUseService.generateExample(this.settings);
     }
   }
 

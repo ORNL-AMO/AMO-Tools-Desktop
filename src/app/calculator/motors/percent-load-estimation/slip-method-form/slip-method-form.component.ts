@@ -15,6 +15,8 @@ export class SlipMethodFormComponent implements OnInit {
   data: SlipMethod;
   @Input()
   toggleResetData: boolean;
+  @Input()
+  toggleExampleData: boolean;
 
   form: FormGroup;
 
@@ -36,6 +38,11 @@ export class SlipMethodFormComponent implements OnInit {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.lineFrequency = 60;
       this.form = this.percentLoadEstimationService.getSlipMethodFormFromObj(this.data, this.lineFrequency, this.synchronousSpeeds);
+    }
+    if (changes.toggleExampleData && !changes.toggleExampleData.firstChange) {
+      this.lineFrequency = 60;
+      this.form = this.percentLoadEstimationService.getSlipMethodFormFromObj(this.data, this.lineFrequency, this.synchronousSpeeds);
+      this.calculate();
     }
   }
 

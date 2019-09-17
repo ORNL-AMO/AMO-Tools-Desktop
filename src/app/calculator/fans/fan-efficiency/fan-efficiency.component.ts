@@ -45,8 +45,8 @@ export class FanEfficiencyComponent implements OnInit {
   originalCalculator: Calculator;
   constructor(private fsatService: FsatService, private settingsDbService: SettingsDbService, private fanEfficiencyService: FanEfficiencyService,
     private indexedDbService: IndexedDbService, private calculatorDbService: CalculatorDbService) { }
-  
-    ngOnInit() {
+
+  ngOnInit() {
     if (this.inAssessment) {
       this.getCalculator();
       this.originalCalculator = this.calculator;
@@ -80,6 +80,18 @@ export class FanEfficiencyComponent implements OnInit {
     this.calculate();
   }
 
+  generateExample() {
+    this.fanEfficiencyInputs = this.fanEfficiencyService.generateExample(this.settings);
+    this.fanEfficiencyForm = this.fanEfficiencyService.initFormFromObj(this.fanEfficiencyInputs);
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
+    this.calculate();
+  }
 
   resizeTabs() {
     if (this.leftPanelHeader) {

@@ -47,11 +47,6 @@ export class FlashTankComponent implements OnInit {
     }, 50);
   }
 
-  btnResetData() {
-    this.flashTankForm = this.flashTankService.initForm(this.settings);
-    this.calculate(this.flashTankForm);
-  }
-
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
@@ -69,7 +64,7 @@ export class FlashTankComponent implements OnInit {
     if (this.flashTankService.flashTankInput) {
       this.flashTankForm = this.flashTankService.getFormFromObj(this.flashTankService.flashTankInput, this.settings);
     } else {
-      this.flashTankForm = this.flashTankService.initForm(this.settings);
+      this.flashTankForm = this.flashTankService.resetForm(this.settings);
     }
   }
 
@@ -112,5 +107,15 @@ export class FlashTankComponent implements OnInit {
     };
 
     return emptyResults;
+  }
+
+  btnResetData() {
+    this.flashTankForm = this.flashTankService.resetForm(this.settings);
+    this.calculate(this.flashTankForm);
+  }
+
+  btnGenerateExample() {
+    this.flashTankForm = this.flashTankService.initForm(this.settings);
+    this.calculate(this.flashTankForm);
   }
 }

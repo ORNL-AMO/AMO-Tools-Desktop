@@ -52,7 +52,7 @@ export class NaturalGasReductionService {
       outletTemperature: 40,
       systemEfficiency: 80
     };
-    let hoursPerYear: number = 8760;
+    let hoursPerYear: number = 8736;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
@@ -69,6 +69,52 @@ export class NaturalGasReductionService {
       otherMethodData: defaultOtherData,
       airMassFlowData: defaultAirMassFlowData,
       waterMassFlowData: defaultWaterMassFlowData,
+      units: 1
+    }
+    return obj;
+  }
+
+  generateExample(settings: Settings, isBaseline: boolean): NaturalGasReductionData {
+    let flowRate: number = isBaseline ? 5 : 4
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      flowRate = this.convertUnitsService.roundVal(this.convertUnitsService.value(flowRate).from('ft3').to('m3'), 2);
+    }
+    let exampleFlowMeterData: FlowMeterMethodData = {
+      flowRate: flowRate
+    };
+    let exampleOtherData: NaturalGasOtherMethodData = {
+      consumption: 89900.00
+    };
+    let exampleAirMassFlowMeasuredData: AirMassFlowMeasuredData = {
+      areaOfDuct: 5,
+      airVelocity: 10
+    };
+    let exampleAirMassFlowNameplateData: AirMassFlowNameplateData = {
+      airFlow: 50
+    };
+    let exampleAirMassFlowData: AirMassFlowData = {
+      isNameplate: true,
+      airMassFlowMeasuredData: exampleAirMassFlowMeasuredData,
+      airMassFlowNameplateData: exampleAirMassFlowNameplateData,
+      inletTemperature: 25,
+      outletTemperature: 40,
+      systemEfficiency: 80
+    };
+    let exampleWaterMassFlowData: WaterMassFlowData = {
+      waterFlow: 25,
+      inletTemperature: 25,
+      outletTemperature: 40,
+      systemEfficiency: 80
+    };
+    let obj: NaturalGasReductionData = {
+      name: 'Equipment #1',
+      operatingHours: 6000,
+      fuelCost: 4.99,
+      measurementMethod: 0,
+      flowMeterMethodData: exampleFlowMeterData,
+      otherMethodData: exampleOtherData,
+      airMassFlowData: exampleAirMassFlowData,
+      waterMassFlowData: exampleWaterMassFlowData,
       units: 1
     }
     return obj;

@@ -23,6 +23,10 @@
     margin: 10px 0px;
 }
 
+.btn-form {
+    border-radius: 4px !important;
+}
+
 .fa-save, .fa-times, .fa-edit {
     font-size: xx-large;
 }
@@ -60,11 +64,10 @@
     background-color: #fff;
 }
 
-.lighting-icon{
+.lighting-icon {
     height: 55px;
 }
 
-
-.opp-sheet-icon{
+.opp-sheet-icon {
     width: 35px;
 }
