@@ -6,14 +6,14 @@
   <div class="d-flex pt-2 w-50 h-100 align-self-end" (mouseenter)="hoverEquipment('makeupWaterCondensateHovered')"
     (mouseleave)="hoverEquipment('default')">
     <div class="d-flex w-100 makeup-water justify-content-end" [ngClass]="makeupWaterClasses">
-      <div class="cold-outlet-holder" *ngIf="heatExchangerOutput">
+      <div class="cold-outlet-holder" *ngIf="heatExchangerOutput.coldOutletMassFlow">
         <span class="cold-outlet">{{heatExchangerOutput.coldOutletTemperature | number:'1.0-2'}}
           <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </span>
         <span class="fa fa-chevron-left" (mouseenter)="hoverEquipment('heatExchangerColdOutlet')"
           (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')" (click)="selectEquipment('heatExchangerColdOutlet')"></span>
       </div>
-      <div class="heat-exchanger-holder" *ngIf="heatExchangerOutput"
+      <div class="heat-exchanger-holder" *ngIf="heatExchangerOutput.coldOutletMassFlow"
         (mouseenter)="hoverEquipment('heatExchangerHovered')"
         (mouseleave)="hoverEquipment('makeupWaterCondensateHovered')">
         <div class="heat-exchanger" (click)="selectEquipment('heat-exchanger')">
