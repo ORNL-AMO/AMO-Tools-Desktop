@@ -43,7 +43,9 @@ export class MotorPerformanceComponent implements OnInit {
   tabSelect: string = 'results';
   calcExists: boolean;
   saving: boolean;
-  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+
+  constructor(private settingsDbService: SettingsDbService, private motorPerformanceService: MotorPerformanceService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
+  }
 
   ngOnInit() {
     if (this.inAssessment) {
@@ -70,11 +72,6 @@ export class MotorPerformanceComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);
-  }
-
-  btnResetData() {
-    this.performanceForm = this.motorPerformanceService.initForm();
-    this.calculate();
   }
 
   resizeTabs() {
@@ -145,7 +142,7 @@ export class MotorPerformanceComponent implements OnInit {
     if (this.motorPerformanceService.motorPerformanceInputs) {
       this.performanceForm = this.motorPerformanceService.initFormFromObj(this.motorPerformanceService.motorPerformanceInputs);
     } else {
-      this.performanceForm = this.motorPerformanceService.initForm();
+      this.performanceForm = this.motorPerformanceService.resetForm();
     }
   }
 
@@ -167,5 +164,15 @@ export class MotorPerformanceComponent implements OnInit {
         });
       }
     }
+  }
+
+  btnResetData() {
+    this.performanceForm = this.motorPerformanceService.resetForm();
+    this.calculate();
+  }
+
+  btnGenerateExample() {
+    this.performanceForm = this.motorPerformanceService.initForm();
+    this.calculate();
   }
 }

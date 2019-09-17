@@ -60,6 +60,20 @@ export class ReplaceExistingService {
     };
   }
 
+  resetReplaceExistingData(settings: Settings, operatingHours: number): ReplaceExistingData {
+    return {
+      operatingHours: operatingHours,
+      motorSize: 0,
+      load: 0,
+      electricityCost: settings.electricityCost,
+      existingEfficiency: 0,
+      newEfficiency: 0,
+      purchaseCost: 0,
+      rewindCost: 0,
+      rewindEfficiencyLoss: 0
+    };
+  }
+
   getResults(inputs: ReplaceExistingData): ReplaceExistingResults {
     let results: ReplaceExistingResults = {
       existingEnergyUse: 0,

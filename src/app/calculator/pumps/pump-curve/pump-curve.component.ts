@@ -116,8 +116,7 @@ export class PumpCurveComponent implements OnInit {
     if (this.inAssessment) {
       if (this.isFan) {
         this.fsat.name = "Baseline";
-      }
-      else {
+      } else {
         this.psat.name = "Baseline";
       }
       this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
@@ -128,8 +127,7 @@ export class PumpCurveComponent implements OnInit {
           this.pumpCurve = this.calculator.pumpCurve;
           this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
           this.subscribe();
-        }
-        else {
+        } else {
           this.initForm();
           this.subscribe();
         }
@@ -143,8 +141,7 @@ export class PumpCurveComponent implements OnInit {
             systemLossExponent: this.calculator.systemCurve.systemLossExponent
           });
           this.showSystemCurveForm = true;
-        }
-        else {
+        } else {
           this.initializeCalculator();
           this.initDefault();
           this.setPointValuesFromCalc(true);
@@ -154,8 +151,7 @@ export class PumpCurveComponent implements OnInit {
           });
           this.showSystemCurveForm = true;
         }
-      }
-      else {
+      } else {
         this.initForm();
         this.subscribe();
         //system curve merge
@@ -219,40 +215,19 @@ export class PumpCurveComponent implements OnInit {
     this.systemRegEquationSubscription.unsubscribe();
   }
 
-  btnResetSystemCurveData() {
-    this.initDefault();
-    if (!this.isFan) {
-      this.convertPumpDefaults(this.settings);
-    }
-    else {
-      this.convertFanDefaults(this.settings);
-    }
-    this.calculateP1Flow();
-    this.calculateP2Flow();
-    this.calculateValues();
-  }
-
-  btnResetPumpCurveData() {
-    this.pumpCurve = this.pumpCurveService.initPumpCurve();
-    this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
-    this.calculate(this.pumpCurveForm);
-  }
-
   initForm() {
     if (this.pumpCurveService.pumpCurveData && !this.inAssessment && !this.isFan) {
       this.pumpCurve = this.pumpCurveService.pumpCurveData;
       this.curveConstants = this.pumpCurveService.pumpCurveConstants;
       this.pointOne = this.pumpCurveService.pumpPointOne;
       this.pointTwo = this.pumpCurveService.pumpPointTwo;
-    }
-    else if (this.pumpCurveService.fanCurveData && !this.inAssessment && this.isFan) {
+    } else if (this.pumpCurveService.fanCurveData && !this.inAssessment && this.isFan) {
       this.pumpCurve = this.pumpCurveService.fanCurveData;
       this.curveConstants = this.pumpCurveService.fanCurveConstants;
       this.pointOne = this.pumpCurveService.fanPointOne;
       this.pointTwo = this.pumpCurveService.fanPointTwo;
-    }
-    else {
-      this.pumpCurve = this.pumpCurveService.initPumpCurve();
+    } else {
+      this.pumpCurve = this.pumpCurveService.initPumpCurve(this.settings);
       this.initDefault();
       if (!this.isFan) {
         this.convertPumpDefaults(this.settings);
@@ -423,10 +398,18 @@ export class PumpCurveComponent implements OnInit {
       this.calculator.systemCurve.systemLossExponent = this.curveConstants.form.controls.systemLossExponent.value;
       this.calculator.systemCurve.selectedP1Name = this.pointTwo.form.controls.pointAdjustment.value + "1";
       this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
-      _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; }).flowRate = this.pointOne.form.controls.flowRate.value;
-      _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; }).head = this.pointOne.form.controls.head.value;
-      _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; }).flowRate = this.pointTwo.form.controls.flowRate.value;
-      _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; }).head = this.pointTwo.form.controls.head.value;
+      _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => {
+        return point.modName === this.calculator.systemCurve.selectedP1Name;
+      }).flowRate = this.pointOne.form.controls.flowRate.value;
+      _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => {
+        return point.modName === this.calculator.systemCurve.selectedP1Name;
+      }).head = this.pointOne.form.controls.head.value;
+      _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => {
+        return point.modName === this.calculator.systemCurve.selectedP2Name;
+      }).flowRate = this.pointTwo.form.controls.flowRate.value;
+      _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => {
+        return point.modName === this.calculator.systemCurve.selectedP2Name;
+      }).head = this.pointTwo.form.controls.head.value;
       this.calculateP1Flow();
       this.calculateP2Flow();
       this.calculateValues();
@@ -492,20 +475,51 @@ export class PumpCurveComponent implements OnInit {
     this.calculateValues();
   }
 
+  resetDefault() {
+    if (!this.isFan) {
+      this.curveConstants = {
+        form: this.systemCurveService.initPumpCurveConstants()
+      };
+      this.pointOne = {
+        form: this.systemCurveService.initDefaultPoints(1),
+        fluidPower: 0
+      };
+      this.pointTwo = {
+        form: this.systemCurveService.initDefaultPoints(1),
+        fluidPower: 0
+      };
+    } else {
+      this.curveConstants = {
+        form: this.systemCurveService.initFanCurveConstants()
+      };
+      this.pointOne = {
+        form: this.systemCurveService.initDefaultPoints(1),
+        fluidPower: 0
+      };
+      this.pointTwo = {
+        form: this.systemCurveService.initDefaultPoints(1),
+        fluidPower: 0
+      };
+    }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
+  }
+
   setPointValuesFromCalc(init?: boolean) {
     if (this.pointOne && !init) {
       this.calculator.systemCurve.selectedP1Name = this.pointTwo.form.controls.pointAdjustment.value + "1";
-    }
-    else {
+    } else {
       this.calculator.systemCurve.selectedP1Name = "Baseline1";
     }
     if (this.pointTwo && !init) {
       this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
-    }
-    else {
+    } else {
       this.calculator.systemCurve.selectedP2Name = "Baseline";
     }
-    let p1 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; });
+    let p1 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => {
+      return point.modName === this.calculator.systemCurve.selectedP1Name;
+    });
     if (p1 === undefined) {
       p1 = {
         flowRate: 0,
@@ -518,7 +532,9 @@ export class PumpCurveComponent implements OnInit {
       head: p1.head,
       pointAdjustment: p1.modName
     });
-    let p2 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; });
+    let p2 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => {
+      return point.modName === this.calculator.systemCurve.selectedP2Name;
+    });
     this.pointTwo.form.patchValue({
       flowRate: p2.flowRate,
       head: p2.head,
@@ -629,8 +645,7 @@ export class PumpCurveComponent implements OnInit {
         selectedP2Name: dataPoints[1].modName,
       };
       return systemCurve;
-    }
-    else {
+    } else {
       let systemCurve: SystemCurve = {
         specificGravity: this.fsat.fieldData.compressibilityFactor,
         systemLossExponent: 1.9,
@@ -701,8 +716,12 @@ export class PumpCurveComponent implements OnInit {
   convertPumpDefaults(settings: Settings) {
     if (settings.flowMeasurement !== 'gpm') {
       let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('gpm').to(settings.flowMeasurement);
+      let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.flowRate.value).from('gpm').to(settings.flowMeasurement);
       this.pointOne.form.patchValue({
         flowRate: this.psatService.roundVal(tmpVal, 2)
+      });
+      this.pointTwo.form.patchValue({
+        flowRate: this.psatService.roundVal(tmpVal2, 2)
       });
     }
     if (settings.distanceMeasurement !== 'ft') {
@@ -764,5 +783,41 @@ export class PumpCurveComponent implements OnInit {
       this.pumpCurveCollapsed = 'open';
       this.graphPumpCurve = true;
     }
+  }
+
+  btnResetSystemCurveData() {
+    this.resetDefault();
+    if (!this.isFan) {
+      this.convertPumpDefaults(this.settings);
+    } else {
+      this.convertFanDefaults(this.settings);
+    }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
+  }
+
+  btnResetPumpCurveData() {
+    this.pumpCurve = this.pumpCurveService.resetPumpCurve();
+    this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
+    this.calculate(this.pumpCurveForm);
+  }
+
+  btnGeneratePumpCurveExample() {
+    this.pumpCurve = this.pumpCurveService.initPumpCurve(this.settings);
+    this.pumpCurveForm = this.pumpCurveService.getFormFromObj(this.pumpCurve);
+    this.calculate(this.pumpCurveForm);
+  }
+
+  btnGenerateSystemCurveExample() {
+    this.initDefault();
+    if (!this.isFan) {
+      this.convertPumpDefaults(this.settings);
+    } else {
+      this.convertFanDefaults(this.settings);
+    }
+    this.calculateP1Flow();
+    this.calculateP2Flow();
+    this.calculateValues();
   }
 }

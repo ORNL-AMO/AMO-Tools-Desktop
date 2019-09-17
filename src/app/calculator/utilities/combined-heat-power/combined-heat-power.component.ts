@@ -3,6 +3,7 @@ import { StandaloneService } from '../../standalone.service';
 import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CombinedHeatPowerService } from './combined-heat-power.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-combined-heat-power',
@@ -17,6 +18,8 @@ export class CombinedHeatPowerComponent implements OnInit {
   onResize(event) {
     this.resizeTabs();
   }
+
+  settings: Settings;
 
   headerHeight: number;
 
@@ -68,21 +71,21 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
 
   btnResetData() {
-    this.inputs = {
-      annualOperatingHours: 8760,
-      annualElectricityConsumption: 0,
-      annualThermalDemand: 0,
-      boilerThermalFuelCosts: 0,
-      avgElectricityCosts: 0,
-      option: 0,
-      boilerThermalFuelCostsCHPcase: 0,
-      CHPfuelCosts: 0,
-      percentAvgkWhElectricCostAvoidedOrStandbyRate: 75,
-      displacedThermalEfficiency: 0,
-      chpAvailability: 0,
-      thermalUtilization: 0
-    };
+    this.inputs = this.combinedHeatPowerService.getResetData();
     this.combinedHeatPowerService.inputData = this.inputs;
+    this.calculate();
+  }
+
+  generateExample() {
+    this.inputs = this.combinedHeatPowerService.generateExample();
+    this.combinedHeatPowerService.inputData = this.inputs;
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
     this.calculate();
   }
 

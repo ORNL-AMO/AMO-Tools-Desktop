@@ -14,6 +14,8 @@ export class AirCapacityFormComponent implements OnInit {
   @Input()
   toggleResetData: boolean;
   @Input()
+  toggleGenerateExample: boolean;
+  @Input()
   settings: Settings;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
@@ -34,6 +36,19 @@ export class AirCapacityFormComponent implements OnInit {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetData();
     }
+    if (changes.toggleGenerateExample && !changes.toggleGenerateExample.firstChange) {
+      this.generateExample();
+    }
+  }
+
+  generateExample() {
+    let tempInputs = {
+      tankSize: 1000,
+      airPressureIn: 110,
+      airPressureOut: 100
+    };
+    this.inputs = this.compressedAirService.convertCalculateUsableCapacityExample(tempInputs, this.settings);
+    this.getAirCapacity();
   }
 
   resetData() {

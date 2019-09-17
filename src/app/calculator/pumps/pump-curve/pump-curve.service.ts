@@ -128,24 +128,46 @@ export class PumpCurveService {
     return form;
   }
 
-  initPumpCurve(): PumpCurve {
+  initPumpCurve(settings: Settings): PumpCurve {
+    let tmpMaxFlow = 1020;
+    let tmpFlow1 = 100;
+    let tmpFlow2 = 630;
+    let tmpFlow3 = 1020;
+    let tmpHead0 = 355;
+    let tmpHead1 = 351;
+    let tmpHead2 = 294;
+    let tmpHead3 = 202;
+    let tmpHeadConstant = 356.96;
+    if (settings.flowMeasurement !== 'gpm') {
+      tmpMaxFlow = Math.round(this.convertUnitsService.value(tmpMaxFlow).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+      tmpFlow1 = Math.round(this.convertUnitsService.value(tmpFlow1).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+      tmpFlow2 = Math.round(this.convertUnitsService.value(tmpFlow2).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+      tmpFlow3 = Math.round(this.convertUnitsService.value(tmpFlow3).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+    }
+    if (settings.distanceMeasurement !== 'ft') {
+      tmpHeadConstant = Math.round(this.convertUnitsService.value(tmpHeadConstant).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+      tmpHead0 = Math.round(this.convertUnitsService.value(tmpHead0).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+      tmpHead1 = Math.round(this.convertUnitsService.value(tmpHead1).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+      tmpHead2 = Math.round(this.convertUnitsService.value(tmpHead2).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+      tmpHead3 = Math.round(this.convertUnitsService.value(tmpHead3).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+    }
     return {
       dataRows: new Array<PumpCurveDataRow>(
-        { flow: 0, head: 355 },
-        { flow: 100, head: 351 },
+        { flow: 0, head: tmpHead0 },
+        { flow: tmpFlow1, head: tmpHead1 },
         // { flow: 200, head: 343.6188 },
         // { flow: 300, head: 335.9542 },
         // { flow: 400, head: 324.9089 },
         // { flow: 480, head: 314.7216 },
         // { flow: 560, head: 304.5332 },
-        { flow: 630, head: 294 },
+        { flow: tmpFlow2, head: tmpHead2 },
         // { flow: 690, head: 284.1775 },
         // { flow: 800, head: 264.6842 },
         // { flow: 900, head: 241.8114 },
         // { flow: 970, head: 222.3425 },
-        { flow: 1020, head: 202 }
+        { flow: tmpFlow3, head: tmpHead3 }
       ),
-      maxFlow: 1020,
+      maxFlow: tmpMaxFlow,
       dataOrder: 3,
       baselineMeasurement: 1800,
       modifiedMeasurement: 1800,
@@ -154,7 +176,7 @@ export class PumpCurveService {
       exploreHead: 0,
       explorePumpEfficiency: 0,
       headOrder: 3,
-      headConstant: 356.96,
+      headConstant: tmpHeadConstant,
       headFlow: -0.0686,
       headFlow2: 0.000005,
       headFlow3: -0.00000008,
@@ -165,6 +187,45 @@ export class PumpCurveService {
       pumpEfficiencyConstant: 0,
       measurementOption: 'Speed'
     }
+  }
+
+  resetPumpCurve(): PumpCurve {
+    return {
+      dataRows: new Array<PumpCurveDataRow>(
+        { flow: 0, head: 0 },
+        { flow: 0, head: 0 },
+        // { flow: 200, head: 343.6188 },
+        // { flow: 300, head: 335.9542 },
+        // { flow: 400, head: 324.9089 },
+        // { flow: 480, head: 314.7216 },
+        // { flow: 560, head: 304.5332 },
+        { flow: 0, head: 0 },
+        // { flow: 690, head: 284.1775 },
+        // { flow: 800, head: 264.6842 },
+        // { flow: 900, head: 241.8114 },
+        // { flow: 970, head: 222.3425 },
+        { flow: 0, head: 0 }
+      ),
+      maxFlow: 0,
+      dataOrder: 2,
+      baselineMeasurement: 0,
+      modifiedMeasurement: 0,
+      exploreLine: 0,
+      exploreFlow: 0,
+      exploreHead: 0,
+      explorePumpEfficiency: 0,
+      headOrder: 2,
+      headConstant: 0,
+      headFlow: 0,
+      headFlow2: 0,
+      headFlow3: 0,
+      headFlow4: 0,
+      headFlow5: 0,
+      headFlow6: 0,
+      pumpEfficiencyOrder: 0,
+      pumpEfficiencyConstant: 0,
+      measurementOption: 'Speed'
+    };
   }
 
   initColumnTitles(settings: Settings, isFan: boolean, graphPumpCurve: boolean, graphModificationCurve: boolean, graphSystemCurve: boolean): Array<string> {

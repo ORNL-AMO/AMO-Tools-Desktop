@@ -1,18 +1,16 @@
-.header .fa.fa-tachometer{
+.header .fa.fa-tachometer {
     font-size: -webkit-xxx-large;
 }
 
-
-.fa.fa-times-circle-o:hover{
+.fa.fa-times-circle-o:hover {
     cursor: pointer;
 }
 
-.no-data{
+.no-data {
     background: none;
 }
 
-
-.btn.btn-primary{
+.btn.btn-primary {
     padding: 4px;
     background-color: #145A32;
 }
@@ -28,4 +26,8 @@
 
 .btn-margin-10 {
     margin: 10px 0px;
+}
+
+.btn-form {
+    border-radius: 4px !important;
 }

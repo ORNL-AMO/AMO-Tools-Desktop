@@ -32,7 +32,9 @@ export class StackLossComponent implements OnInit {
 
   stackLossPercent: number = 0;
   boilerEfficiency: number = 0;
-  constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService) { }
+
+  constructor(private settingsDbService: SettingsDbService, private stackLossService: StackLossService) {
+  }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -41,7 +43,7 @@ export class StackLossComponent implements OnInit {
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
-    this.initForm();
+    this.resetForm();
   }
 
   ngAfterViewInit() {
@@ -50,15 +52,6 @@ export class StackLossComponent implements OnInit {
     }, 100);
   }
 
-  btnResetData() {
-    this.stackLossService.stackLossInput = {
-      flueGasType: undefined,
-      flueGasByVolume: undefined,
-      flueGasByMass: undefined
-    };
-    this.initForm();
-    this.calculate(this.stackLossForm);
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -69,11 +62,37 @@ export class StackLossComponent implements OnInit {
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string) {
     this.currentField = str;
   }
 
-  initForm() {
+  createExampleForm() {
+    if (this.stackLossService.stackLossInput) {
+      if (this.stackLossService.stackLossInput.flueGasType) {
+        this.method = this.stackLossService.stackLossInput.flueGasType;
+        if (this.method === 'volume') {
+          this.stackLossForm = this.stackLossService.initByVolumeFormFromLoss(this.stackLossService.stackLossInput);
+        } else if (this.method === 'mass') {
+          this.stackLossForm = this.stackLossService.initByMassFormFromLoss(this.stackLossService.stackLossInput);
+        }
+      } else {
+        if (this.method === 'volume') {
+          this.stackLossForm = this.stackLossService.initFormVolume();
+        } else if (this.method === 'mass') {
+          this.stackLossForm = this.stackLossService.initFormMass();
+        }
+      }
+    } else {
+      if (this.method === 'volume') {
+        this.stackLossForm = this.stackLossService.initFormVolume();
+      } else if (this.method === 'mass') {
+        this.stackLossForm = this.stackLossService.initFormMass();
+      }
+    }
+  }
+
+  resetForm() {
     if (this.stackLossService.stackLossInput) {
       if (this.stackLossService.stackLossInput.flueGasType) {
         this.method = this.stackLossService.stackLossInput.flueGasType;
@@ -143,5 +162,44 @@ export class StackLossComponent implements OnInit {
         this.boilerEfficiency = 0;
       }
     }
+  }
+
+  btnResetData() {
+    this.stackLossService.stackLossInput = {
+      flueGasType: undefined,
+      flueGasByVolume: undefined,
+      flueGasByMass: undefined
+    };
+    this.resetForm();
+    this.calculate(this.stackLossForm);
+  }
+
+  btnGenerateData() {
+    this.stackLossService.stackLossInput = {
+      flueGasByMass: undefined,
+      flueGasByVolume: {
+        C2H6: 8.5,
+        C3H8: 0,
+        C4H10_CnH2n: 0,
+        CH4: 87,
+        CO: 0,
+        CO2: 0.4,
+        H2: 0.4,
+        H2O: 0,
+        N2: 3.6,
+        O2: 0.1,
+        SO2: 0,
+        combustionAirTemperature: 80,
+        excessAirPercentage: 15,
+        flueGasTemperature: 320,
+        fuelTemperature: 80,
+        gasTypeId: 1,
+        o2InFlueGas: 2.8570007028309443,
+        oxygenCalculationMethod: "Excess Air"
+      },
+      flueGasType: "volume"
+    };
+    this.createExampleForm();
+    this.calculate(this.stackLossForm);
   }
 }

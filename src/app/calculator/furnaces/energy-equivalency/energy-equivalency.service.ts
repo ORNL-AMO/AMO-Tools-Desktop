@@ -47,7 +47,7 @@ export class EnergyEquivalencyService {
   }
 
 
-  initEquivalencyElectric(settings: Settings): EnergyEquivalencyElectric {
+  getDefaultElectricData(settings: Settings): EnergyEquivalencyElectric {
     if (settings.unitsOfMeasure === 'Metric') {
       this.energyEquivalencyElectric = {
         fuelFiredEfficiency: 60,
@@ -66,12 +66,28 @@ export class EnergyEquivalencyService {
     }
   }
 
-  initEquivalencyFuel(): EnergyEquivalencyFuel {
+  getDefaultFuelData(): EnergyEquivalencyFuel {
     this.energyEquivalencyFuel = {
       electricallyHeatedEfficiency: 90,
       fuelFiredEfficiency: 60,
       electricalHeatInput: 1800
     };
     return this.energyEquivalencyFuel;
+  }
+
+  getResetElectricData(): EnergyEquivalencyElectric {
+    return {
+      fuelFiredEfficiency: 0,
+      electricallyHeatedEfficiency: 0,
+      fuelFiredHeatInput: 0
+    };
+  }
+
+  getResetFuelData(): EnergyEquivalencyFuel {
+    return {
+      electricallyHeatedEfficiency: 0,
+      fuelFiredEfficiency: 0,
+      electricalHeatInput: 0
+    };
   }
 }

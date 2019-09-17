@@ -100,13 +100,6 @@ export class HeadToolComponent implements OnInit {
     }
   }
 
-  btnResetData() {
-    this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
-    this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
-    this.calculateHeadTool();
-    this.calculateHeadToolSuctionTank();
-    // this.save();
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -176,13 +169,13 @@ export class HeadToolComponent implements OnInit {
           this.calculatorDbService.setAll().then(() => {
             this.closeTool();
           });
-        }); ;
+        });
+        ;
       }
     } else {
       this.closeTool();
     }
   }
-
 
 
   calculateHeadTool() {
@@ -239,5 +232,21 @@ export class HeadToolComponent implements OnInit {
 
   setFormView(str: string) {
     this.headToolType = str;
+  }
+
+  btnResetData() {
+    this.headToolForm = this.headToolService.resetHeadToolForm(this.settings);
+    this.headToolSuctionForm = this.headToolService.resetHeadToolSuctionForm(this.settings);
+    this.calculateHeadTool();
+    this.calculateHeadToolSuctionTank();
+    // this.save();
+  }
+
+  btnGenerateExample() {
+    this.headToolForm = this.headToolService.initHeadToolForm(this.settings);
+    this.headToolSuctionForm = this.headToolService.initHeadToolSuctionForm(this.settings);
+    this.calculateHeadTool();
+    this.setFormView('Suction gauge elevation');
+    this.calculateHeadToolSuctionTank();
   }
 }

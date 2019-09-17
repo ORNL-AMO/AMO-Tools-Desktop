@@ -21,12 +21,19 @@
             </div>
             <div class="pb-2" *ngFor="let data of baselineData; let index = index;">
               <label class="group-label w-100 bold"><span class="fa fa-tachometer pr-2"></span>Energy Use #{{index+1}}
-                <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeBaselineFixture(index)"></span></label>
-              <app-co2-savings-form [data]="data" (emitCalculate)="calculate()" [modId]="'baseline'" [index]="index"></app-co2-savings-form>
+                <span *ngIf="baselineData.length != 1" class="fa fa-times-circle-o pull-right large"
+                  (click)="removeBaselineFixture(index)"></span></label>
+              <app-co2-savings-form [data]="data" (emitCalculate)="calculate()" [modId]="'baseline'" [index]="index">
+              </app-co2-savings-form>
             </div>
             <div class="w-100 justify-content-center btn-group btn-group-sm">
-              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10" (click)="btnResetData()">
+              <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
                 Reset Data
+              </button>
+              <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+              <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                (click)="btnGenerateExample()">
+                Generate Example
               </button>
             </div>
           </div>
@@ -46,8 +53,10 @@
             </div>
             <div class="pb-2" *ngFor="let data of modificationData; let index = index;">
               <label class="group-label w-100 bold"><span class="fa fa-tachometer pr-2"></span>Energy Use #{{index+1}}
-                <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large" (click)="removeModificationFixture(index)"></span></label>
-              <app-co2-savings-form [data]="data" (emitCalculate)="calculate()" [modId]="'modification'" [index]="index"></app-co2-savings-form>
+                <span *ngIf="modificationData.length != 1" class="fa fa-times-circle-o pull-right large"
+                  (click)="removeModificationFixture(index)"></span></label>
+              <app-co2-savings-form [data]="data" (emitCalculate)="calculate()" [modId]="'modification'"
+                [index]="index"></app-co2-savings-form>
             </div>
           </div>
         </div>
@@ -71,7 +80,8 @@
         <div class="d-flex flex-column mh-100 scroll-item">
           <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
             <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
-              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+              <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                (click)="setTab('results')">
                 <div>Results</div>
               </a>
             </div>
@@ -82,8 +92,9 @@
             </div>
           </div>
           <div class="p-2">
-            <app-co2-savings-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData" [modificationData]="modificationData"
-              [baselineTotal]="baselineTotal" [modificationTotal]="modificationTotal"></app-co2-savings-results>
+            <app-co2-savings-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData"
+              [modificationData]="modificationData" [baselineTotal]="baselineTotal"
+              [modificationTotal]="modificationTotal"></app-co2-savings-results>
             <app-co2-savings-help *ngIf="tabSelect == 'help'"></app-co2-savings-help>
           </div>
         </div>

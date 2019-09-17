@@ -93,6 +93,47 @@ export class O2EnrichmentService {
     };
   }
 
+  generateExample(settings: Settings): O2Enrichment {
+    let tmpFlueGasTemp: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(1800).from('F').to(settings.temperatureMeasurement), 2);
+    let tmpFlueGasTempEnriched: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(1800).from('F').to(settings.temperatureMeasurement), 2);
+    let tmpCombAirTemp: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(900).from('F').to(settings.temperatureMeasurement), 2);
+    let tmpCombAirTempEnriched: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(80).from('F').to(settings.temperatureMeasurement), 2);
+    let tmpFuelConsumption: number = this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to(settings.energyResultUnit), 100);
+    return {
+      operatingHours: 8640,
+      operatingHoursEnriched: 8640,
+      fuelCost: settings.fuelCost,
+      fuelCostEnriched: settings.fuelCost,
+      o2CombAir: 21,
+      o2CombAirEnriched: 100,
+      combAirTemp: tmpCombAirTemp,
+      combAirTempEnriched: tmpCombAirTempEnriched,
+      flueGasTemp: tmpFlueGasTemp,
+      flueGasTempEnriched: tmpFlueGasTempEnriched,
+      o2FlueGas: 5,
+      o2FlueGasEnriched: 1,
+      fuelConsumption: tmpFuelConsumption
+    };
+  }
+
+  getResetData(): O2Enrichment {
+    return {
+      operatingHours: 0,
+      operatingHoursEnriched: 0,
+      fuelCost: 0,
+      fuelCostEnriched: 0,
+      o2CombAir: 0,
+      o2CombAirEnriched: 0,
+      combAirTemp: 0,
+      combAirTempEnriched: 0,
+      flueGasTemp: 0,
+      flueGasTempEnriched: 0,
+      o2FlueGas: 0,
+      o2FlueGasEnriched: 0,
+      fuelConsumption: 0
+    };
+  }
+
   getMinMaxRanges(settings: Settings, o2Enrichment?: O2Enrichment): O2EnrichmentMinMax {
     let tmpTempMin: number = 0;
     let tmpFlueGasTempMax: number = 4000;

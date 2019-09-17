@@ -26,6 +26,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   @Input()
   toggleResetData: boolean;
   @Input()
+  toggleExampleData: boolean;
+  @Input()
   settings: Settings;
 
   @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
@@ -134,6 +136,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleResetData) {
         this.resetTableData();
+      }
+      if (changes.toggleExampleData) {
+        if (this.checkForm()) {
+          this.makeGraph();
+        }
       }
       if (changes.toggleCalculate) {
         if (this.checkForm()) {

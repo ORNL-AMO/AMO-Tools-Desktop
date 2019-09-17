@@ -10,10 +10,19 @@ export class NemaEnergyEfficiencyService {
 
   initForm(): FormGroup {
     return this.formBuilder.group({
-      frequency: [50, [Validators.required]],
+      frequency: [60, [Validators.required]],
       horsePower: [200, [Validators.required]],
       efficiencyClass: [0, [Validators.required]],
       motorRPM: [1200, [Validators.required]],
+      efficiency: ['', [Validators.min(1), Validators.max(100)]]
+    });
+  }
+  resetForm(): FormGroup {
+    return this.formBuilder.group({
+      frequency: [60, [Validators.required]],
+      horsePower: [0, [Validators.required]],
+      efficiencyClass: [0, [Validators.required]],
+      motorRPM: [0, [Validators.required]],
       efficiency: ['', [Validators.min(1), Validators.max(100)]]
     });
   }

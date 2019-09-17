@@ -41,9 +41,15 @@
               [selectedFormView]="selectedFormView"></app-pump-curve-form>
 
             <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
-              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10"
-                (click)="btnResetPumpCurveData()">Reset
-                Data</button>
+              <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+                (click)="btnResetPumpCurveData()">
+                Reset Data
+              </button>
+              <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+              <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                (click)="btnGeneratePumpCurveExample()">
+                Generate Example
+              </button>
             </div>
           </div>
         </div>
@@ -61,9 +67,15 @@
             (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"
             (changeField)="setField($event, 'system-curve')"></app-system-curve-form>
           <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
-            <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10"
-              (click)="btnResetSystemCurveData()">Reset
-              Data</button>
+            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+              (click)="btnResetSystemCurveData()">
+              Reset Data
+            </button>
+            <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+              (click)="btnGenerateSystemCurveExample()">
+              Generate Example
+            </button>
           </div>
         </div>
       </div>
@@ -80,9 +92,15 @@
             (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"
             (changeField)="setField($event, 'system-curve')"></app-system-curve-form>
           <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
-            <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10"
-              (click)="btnResetSystemCurveData()">Reset
-              Data</button>
+            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+              (click)="btnResetSystemCurveData()">
+              Reset Data
+            </button>
+            <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+              (click)="btnGenerateSystemCurveExample()">
+              Generate Example
+            </button>
           </div>
         </div>
       </div>
@@ -109,9 +127,15 @@
 
           </div>
           <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
-            <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10"
-              (click)="btnResetPumpCurveData()">Reset
-              Data</button>
+            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+              (click)="btnResetPumpCurveData()">
+              Reset Data
+            </button>
+            <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+              (click)="btnGeneratePumpCurveExample()">
+              Generate Example
+            </button>
           </div>
         </div>
       </div>
