@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../shared/models/assessment';
 import { PsatOutputs, PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { PsatService } from '../../../../psat/psat.service';
-import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { AssessmentService } from '../../../assessment.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
@@ -26,7 +25,7 @@ export class PsatSummaryCardComponent implements OnInit {
 
     showReport: boolean = false;
 
-    @ViewChild('reportModal') public reportModal: ModalDirective;
+    @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
     constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
 

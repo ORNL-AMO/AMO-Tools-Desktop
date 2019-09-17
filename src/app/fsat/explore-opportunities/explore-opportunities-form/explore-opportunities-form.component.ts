@@ -30,8 +30,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
 
-  @ViewChild('modalBody') public modalBody: ElementRef;
-  @ViewChild('pressureModal') public pressureModal: ModalDirective;
+  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
+  @ViewChild('pressureModal', { static: false }) public pressureModal: ModalDirective;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getBodyHeight();
@@ -63,9 +63,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   ngOnInit() {
     this.initForms();
     this.checkWarnings();
-    this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
-      this.getBodyHeight();
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -78,11 +75,16 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   ngOnDestroy() {
     this.pressureModalSub.unsubscribe();
-    console.log(this.fsat.modifications[this.exploreModIndex].fsat.name);
     if (this.fsat.modifications[this.exploreModIndex] && !this.fsat.modifications[this.exploreModIndex].fsat.name) {
       this.fsat.modifications[this.exploreModIndex].fsat.name = 'Opportunities Modification';
       this.save();
     }
+  }
+
+  ngAfterViewInit(){
+    this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
+      this.getBodyHeight();
+    });
   }
 
   save() {

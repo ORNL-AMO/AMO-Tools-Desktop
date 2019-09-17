@@ -26,8 +26,8 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -48,7 +48,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   baselineData: Array<CompressedAirPressureReductionData>;
   modificationData: Array<CompressedAirPressureReductionData>;
 
-  constructor(private settingsDbService: SettingsDbService, private compressedAirPressureReductionService: CompressedAirPressureReductionService, private formBuilder: FormBuilder) { }
+  constructor(private settingsDbService: SettingsDbService, private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {

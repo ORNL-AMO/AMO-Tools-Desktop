@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-percent-load-estimation-graph',
@@ -15,9 +14,4 @@ export class PercentLoadEstimationGraphComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-
-  }
-
 }

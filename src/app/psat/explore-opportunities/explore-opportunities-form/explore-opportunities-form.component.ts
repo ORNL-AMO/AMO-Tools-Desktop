@@ -33,7 +33,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
 
 
-  @ViewChild('headToolModal') public headToolModal: ModalDirective;
+  @ViewChild('headToolModal', { static: false }) public headToolModal: ModalDirective;
   headToolResults: any = {
     differentialElevationHead: 0.0,
     differentialPressureHead: 0.0,

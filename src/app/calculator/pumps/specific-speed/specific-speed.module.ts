@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { SpecificSpeedGraphComponent } from './specific-speed-graph/specific-speed-graph.component';
 import { SpecificSpeedFormComponent } from './specific-speed-form/specific-speed-form.component';
 import { SpecificSpeedComponent } from './specific-speed.component';
 import { SpecificSpeedHelpComponent } from './specific-speed-help/specific-speed-help.component';
-import { SharedModule } from '../../../shared/shared.module';
 import { SpecificSpeedService } from './specific-speed.service';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    ExportableResultsTableModule,
+    SimpleTooltipModule
   ],
   declarations: [
     SpecificSpeedGraphComponent,

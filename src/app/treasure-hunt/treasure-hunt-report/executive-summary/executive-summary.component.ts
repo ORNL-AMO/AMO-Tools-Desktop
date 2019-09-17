@@ -18,7 +18,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   @Input()
   title: string;
 
-  @ViewChild('costSummaryChartContainer') costSummaryChartContainer: ElementRef;
+  @ViewChild('costSummaryChartContainer', { static: false }) costSummaryChartContainer: ElementRef;
 
   //data set titles describe the different sections of each bar, i.e. the legend titles
   dataSetTitles: Array<string> = ['Projected Cost', 'Savings'];

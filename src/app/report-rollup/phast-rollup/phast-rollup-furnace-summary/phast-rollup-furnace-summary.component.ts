@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { PhastService } from '../../../phast/phast.service';
 import { PhastResults, ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import { Subscription } from 'rxjs';
@@ -19,7 +18,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
   @Input()
   printView: boolean;
 
-  @ViewChild('barChartContainer') barChartContainer: ElementRef;
+  @ViewChild('barChartContainer', { static: false }) barChartContainer: ElementRef;
 
   firstLoad: boolean = true;
   isUpdate: boolean = false;
@@ -57,7 +56,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
   ];
   graphOption: string = 'Energy Use';
   resultsSub: Subscription;
-  constructor(private reportRollupService: ReportRollupService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
+  constructor(private reportRollupService: ReportRollupService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.resultData = new Array();

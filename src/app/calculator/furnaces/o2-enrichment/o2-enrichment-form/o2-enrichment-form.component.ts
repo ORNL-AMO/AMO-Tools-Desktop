@@ -23,7 +23,7 @@ export class O2EnrichmentFormComponent implements OnInit {
   @Input()
   o2Form: FormGroup;
 
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

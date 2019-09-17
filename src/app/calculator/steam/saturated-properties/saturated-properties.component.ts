@@ -16,7 +16,7 @@ export class SaturatedPropertiesComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('lineChartContainer') lineChartContainer: ElementRef;
+  @ViewChild('lineChartContainer', { static: false }) lineChartContainer: ElementRef;
   chartContainerHeight: number;
   chartContainerWidth: number;
 
@@ -27,7 +27,7 @@ export class SaturatedPropertiesComponent implements OnInit {
     this.resizeTabs();
   }
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   headerHeight: number;
 

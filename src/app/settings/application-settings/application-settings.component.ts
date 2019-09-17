@@ -3,7 +3,6 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { SettingsService } from '../settings.service';
 import { FormGroup } from '@angular/forms';
 import { CoreService } from '../../core/core.service';
-import { WindowRefService } from '../../indexedDb/window-ref.service';
 declare var google: any;
 
 @Component({

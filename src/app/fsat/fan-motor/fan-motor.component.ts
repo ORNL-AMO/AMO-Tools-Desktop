@@ -3,7 +3,6 @@ import { FormGroup, ValidatorFn } from '@angular/forms';
 import { FanMotorService } from './fan-motor.service';
 import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../../shared/models/settings';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FanMotor, FieldData, FSAT } from '../../shared/models/fans';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { CompareService } from '../compare.service';
@@ -54,7 +53,7 @@ export class FanMotorComponent implements OnInit {
   disableFLAOptimized: boolean = false;
   fanMotorForm: FormGroup;
   idString: string;
-  constructor(private compareService: CompareService, private fanMotorService: FanMotorService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private helpPanelService: HelpPanelService, private fsatWarningService: FsatWarningService) { }
+  constructor(private compareService: CompareService, private fanMotorService: FanMotorService, private psatService: PsatService, private helpPanelService: HelpPanelService, private fsatWarningService: FsatWarningService) { }
 
   ngOnInit() {
     if (!this.baseline) {

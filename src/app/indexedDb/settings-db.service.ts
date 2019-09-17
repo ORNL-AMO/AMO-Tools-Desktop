@@ -3,7 +3,6 @@ import { Settings } from '../shared/models/settings';
 import { IndexedDbService } from './indexed-db.service';
 import * as _ from 'lodash';
 import { Assessment } from '../shared/models/assessment';
-import { UpdateDataService } from '../shared/update-data.service';
 import { SettingsService } from '../settings/settings.service';
 @Injectable()
 export class SettingsDbService {

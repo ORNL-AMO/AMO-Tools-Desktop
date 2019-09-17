@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
-import { Location } from '@angular/common';
 import { AssessmentService } from '../assessment/assessment.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
@@ -20,9 +19,9 @@ import { TreasureHunt } from '../shared/models/treasure-hunt';
   styleUrls: ['./treasure-hunt.component.css']
 })
 export class TreasureHuntComponent implements OnInit {
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])
@@ -41,8 +40,8 @@ export class TreasureHuntComponent implements OnInit {
   showToast: boolean = false;
   modalOpenSub: Subscription;
   isModalOpen: boolean = false;
+  treasureHuntSub: Subscription;
   constructor(
-    private location: Location,
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
@@ -64,7 +63,19 @@ export class TreasureHuntComponent implements OnInit {
         if (!this.assessment.treasureHunt) {
           this.assessment.treasureHunt = {
             name: 'Treasure Hunt',
-            setupDone: false
+            setupDone: false,
+            operatingHours: {
+              weeksPerYear: 52,
+              daysPerWeek: 7,
+              hoursPerYear: 8736
+            }
+          }
+        }
+        if (!this.assessment.treasureHunt.operatingHours) {
+          this.assessment.treasureHunt.operatingHours = {
+            weeksPerYear: 52,
+            daysPerWeek: 7,
+            hoursPerYear: 8736
           }
         }
 
@@ -73,11 +84,14 @@ export class TreasureHuntComponent implements OnInit {
         if (tmpTab) {
           this.treasureHuntService.mainTab.next(tmpTab);
         }
+
+        this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
       })
     })
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
+      this.getContainerHeight();
     });
 
     this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
@@ -85,6 +99,11 @@ export class TreasureHuntComponent implements OnInit {
     });
     this.modalOpenSub = this.treasureHuntService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
+    });
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
+      if (val) {
+        this.saveTreasureHunt(val);
+      }
     })
   }
 
@@ -94,6 +113,8 @@ export class TreasureHuntComponent implements OnInit {
     this.treasureHuntService.mainTab.next('system-setup');
     this.treasureHuntService.subTab.next('settings');
     this.modalOpenSub.unsubscribe();
+    this.treasureHuntService.treasureHunt.next(undefined);
+    this.treasureHuntSub.unsubscribe();
   }
 
   ngAfterViewInit() {

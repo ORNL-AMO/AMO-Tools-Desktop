@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PsatInputs, PsatOutputs, PsatCalcResults, PsatOutputsExistingOptimal } from '../shared/models/psat';
+import { PsatInputs, PsatOutputs } from '../shared/models/psat';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 declare var psatAddon: any;

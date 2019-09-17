@@ -20,7 +20,7 @@ export class OperationsFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<SSMT>();
 
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

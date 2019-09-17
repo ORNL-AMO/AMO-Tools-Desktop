@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Slag } from '../../../shared/models/phast/losses/slag';
 import { Losses } from '../../../shared/models/phast/phast';
 import { SlagService } from './slag.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms/src/model';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-slag',
   templateUrl: './slag.component.html',

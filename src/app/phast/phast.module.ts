@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap';
 import { MeteredEnergyModule } from './metered-energy/metered-energy.module';
 import { LossesModule } from './losses/losses.module';
@@ -35,6 +34,9 @@ import { ModificationNavbarComponent } from './modification-navbar/modification-
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { UtilitiesModule } from '../calculator/utilities/utilities.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { ToastModule } from '../shared/toast/toast.module';
+import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 
 @NgModule({
   declarations: [
@@ -54,9 +56,7 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
   imports: [
     RouterModule,
     CommonModule,
-    ReactiveFormsModule,
     FormsModule,
-    SharedModule,
     ModalModule,
     LossesModule,
     SettingsModule,
@@ -72,7 +72,10 @@ import { UtilitiesModule } from '../calculator/utilities/utilities.module';
     EnergyUseModule,
     ExplorePhastOpportunitiesModule,
     LossesTabsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    TabsTooltipModule,
+    ToastModule,
+    UnitConverterModule
   ],
   providers: [
     PhastService,

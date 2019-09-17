@@ -24,7 +24,7 @@ export class SsmtDiagramTabComponent implements OnInit {
     this.setScaleValue();
   }
 
-  @ViewChild('diagramContainer') diagramContainer: ElementRef;
+  @ViewChild('diagramContainer', { static: false }) diagramContainer: ElementRef;
 
   outputData: SSMTOutput;
   inputData: SSMTInputs;

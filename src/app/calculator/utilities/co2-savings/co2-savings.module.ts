@@ -6,13 +6,15 @@ import { Co2SavingsResultsComponent } from './co2-savings-results/co2-savings-re
 import { Co2SavingsHelpComponent } from './co2-savings-help/co2-savings-help.component';
 import { Co2SavingsService } from './co2-savings.service';
 import { FormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    SharedModule
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   declarations: [Co2SavingsComponent, Co2SavingsFormComponent, Co2SavingsResultsComponent, Co2SavingsHelpComponent],
   providers: [Co2SavingsService],

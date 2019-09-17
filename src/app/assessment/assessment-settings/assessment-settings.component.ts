@@ -3,7 +3,6 @@ import { Directory } from '../../shared/models/directory';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FormGroup } from '@angular/forms';

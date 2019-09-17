@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { GasLeakageCompareService } from "../gas-leakage-compare.service";
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';

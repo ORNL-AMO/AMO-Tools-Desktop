@@ -4,7 +4,7 @@ import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/mode
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
-import { PHAST, Losses } from '../shared/models/phast/phast';
+import { Losses } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
 import { GasCoolingLoss, LiquidCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
@@ -15,7 +15,7 @@ import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
 import { Slag } from '../shared/models/phast/losses/slag';
 import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPowerLoss';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
-import { FlueGasByMass, FlueGasByVolume, FlueGas } from '../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume } from '../shared/models/phast/losses/flueGas';
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';

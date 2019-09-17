@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SuiteDbService } from '../../../../../suiteDb/suite-db.service';
-import { LossesService } from '../../../../../phast/losses/losses.service';
 import { PhastService } from '../../../../../phast/phast.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';

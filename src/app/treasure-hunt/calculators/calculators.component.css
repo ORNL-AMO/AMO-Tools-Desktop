@@ -1,0 +1,12 @@
+.modal-dialog{
+    top: 0px;
+    min-width: 750px;
+}
+
+.modal-footer .btn.btn-sm{
+    padding: 6px;
+}
+
+.save-opportunity{
+    width: 75px;
+}

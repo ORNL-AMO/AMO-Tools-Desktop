@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
@@ -38,7 +37,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   materialTypes: any;
   selectedMaterial: any;
@@ -46,7 +45,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   warnings: LiquidMaterialWarnings;
   showModal: boolean = false;
   idString: string;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {

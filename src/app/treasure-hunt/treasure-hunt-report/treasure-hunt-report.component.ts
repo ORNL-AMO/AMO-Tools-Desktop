@@ -2,11 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary } from '../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityPaybackService } from './opportunity-payback.service';
-import { OpportunitySummaryService } from './opportunity-summary.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -31,7 +29,7 @@ export class TreasureHuntReportComponent implements OnInit {
   dataCalculated: boolean = true;
   treasureHuntResults: TreasureHuntResults;
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
-  constructor(private directoryDbService: DirectoryDbService, private treasureHuntReportService: TreasureHuntReportService,
+  constructor(private treasureHuntReportService: TreasureHuntReportService,
     private opportunityPaybackService: OpportunityPaybackService) { }
 
   ngOnInit() {

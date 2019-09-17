@@ -13,17 +13,14 @@ import { PhastRollupComponent } from './phast-rollup/phast-rollup.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { PhastRollupGraphsComponent } from './phast-rollup/phast-rollup-graphs/phast-rollup-graphs.component';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
-
-import { SharedModule } from '../shared/shared.module';
 import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { PsatRollupComponent } from './psat-rollup/psat-rollup.component';
 import { PsatRollupEnergyTableComponent } from './psat-rollup/psat-rollup-energy-table/psat-rollup-energy-table.component';
 import { PsatRollupGraphsComponent } from './psat-rollup/psat-rollup-graphs/psat-rollup-graphs.component';
 import { PsatRollupPumpSummaryComponent } from './psat-rollup/psat-rollup-pump-summary/psat-rollup-pump-summary.component';
 import { PhastRollupFurnaceSummaryComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary.component';
 import { PhastRollupPrintComponent } from './phast-rollup/phast-rollup-print/phast-rollup-print.component';
-import { ReportRollupPrintComponent } from './report-rollup-print/report-rollup-print.component';
 import { RollupPieChartComponent } from './rollup-pie-chart/rollup-pie-chart.component';
 import { RollupBarChartComponent } from './rollup-bar-chart/rollup-bar-chart.component';
 import { PhastRollupEnergyUseTableComponent } from './phast-rollup/phast-rollup-energy-use-table/phast-rollup-energy-use-table.component';
@@ -35,7 +32,6 @@ import { PreAssessmentTableComponent } from './pre-assessment-table/pre-assessme
 import { FsatReportModule } from '../fsat/fsat-report/fsat-report.module';
 import { FsatSummaryComponent } from './report-summary/fsat-summary/fsat-summary.component';
 import { FsatRollupComponent } from './fsat-rollup/fsat-rollup.component';
-import { FsatPrintComponent } from './fsat-rollup/fsat-print/fsat-print.component';
 import { FsatRollupEnergyTableComponent } from './fsat-rollup/fsat-rollup-energy-table/fsat-rollup-energy-table.component';
 import { FsatRollupFanSummaryComponent } from './fsat-rollup/fsat-rollup-fan-summary/fsat-rollup-fan-summary.component';
 import { FsatRollupFanSummaryTableComponent } from './fsat-rollup/fsat-rollup-fan-summary-table/fsat-rollup-fan-summary-table.component';
@@ -50,6 +46,9 @@ import { SsmtRollupEnergyTableComponent } from './ssmt-rollup/ssmt-rollup-energy
 import { SsmtRollupSteamSummaryTableComponent } from './ssmt-rollup/ssmt-rollup-steam-summary-table/ssmt-rollup-steam-summary-table.component';
 import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
 import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-summary/treasure-hunt-summary.component';
+import { PrintOptionsMenuModule } from '../shared/print-options-menu/print-options-menu.module';
+import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -57,13 +56,14 @@ import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-sum
     PsatModule,
     PhastReportModule,
     ModalModule,
-    SharedModule,
     FormsModule,
-    ReactiveFormsModule,
     PreAssessmentModule,
     FsatReportModule,
     SsmtReportModule,
-    TreasureHuntReportModule
+    TreasureHuntReportModule,
+    PrintOptionsMenuModule,
+    PieChartModule,
+    SharedPipesModule
   ],
   declarations: [
     ReportRollupComponent, 
@@ -81,7 +81,6 @@ import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-sum
     PsatRollupPumpSummaryComponent,
     PhastRollupFurnaceSummaryComponent,
     PhastRollupPrintComponent,
-    ReportRollupPrintComponent,
     RollupPieChartComponent,
     RollupBarChartComponent,
     PhastRollupEnergyUseTableComponent,
@@ -91,7 +90,6 @@ import { TreasureHuntSummaryComponent } from './report-summary/treasure-hunt-sum
     PreAssessmentTableComponent,
     FsatSummaryComponent,
     FsatRollupComponent,
-    FsatPrintComponent,
     FsatRollupEnergyTableComponent,
     FsatRollupFanSummaryComponent,
     FsatRollupFanSummaryTableComponent,

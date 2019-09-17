@@ -3,7 +3,6 @@ import { ImportExportAssessment, ImportExportDirectory, ImportExportData } from 
 import { Directory } from '../models/directory';
 import { Assessment } from '../models/assessment';
 import * as _ from 'lodash';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Calculator } from '../models/calculators';
 import { Settings } from '../models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';

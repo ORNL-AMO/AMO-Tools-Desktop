@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { Calculator, CurveData, SystemCurve, PumpCurve, PumpCurveDataRow } from '../../../shared/models/calculators';
+import { Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
 import * as _ from 'lodash';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -35,7 +35,7 @@ export class SystemCurveComponent implements OnInit {
 
   curveConstants: { form: FormGroup };
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

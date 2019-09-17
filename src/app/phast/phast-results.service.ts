@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PHAST, PhastResults, Losses, ShowResultsCategories, CalculatedByPhast } from '../shared/models/phast/phast';
+import { PHAST, PhastResults, ShowResultsCategories, CalculatedByPhast } from '../shared/models/phast/phast';
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { AuxEquipmentService } from './aux-equipment/aux-equipment.service';

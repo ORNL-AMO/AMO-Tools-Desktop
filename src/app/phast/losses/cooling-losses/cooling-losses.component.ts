@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
-import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
+import { CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { CoolingLossesCompareService } from './cooling-losses-compare.service';

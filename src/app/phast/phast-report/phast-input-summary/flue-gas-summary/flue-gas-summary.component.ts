@@ -23,18 +23,6 @@ export class FlueGasSummaryComponent implements OnInit {
   numLosses: number = 0;
   collapse: boolean = true;
 
-  // typeDiff: boolean = false;
-  // fuelNameDiff: boolean = false;
-  // flueGasTempDiff: boolean = false;
-  // excessAirMethodDiff: boolean = false;
-  // oxygenInFlueGasDiff: boolean = false;
-  // excessAirDiff: boolean = false;
-  // combustionAirTempDiff: boolean = false;
-  // fuelTemperatureDiff: boolean = false;
-  // moistureInAirDiff: boolean = false;
-  // dischargeTempDiff: boolean = false;
-  // unburnedCarbonDiff: boolean = false;
-
   typeDiff: Array<boolean>;
   fuelNameDiff: Array<boolean>;
   flueGasTempDiff: Array<boolean>;

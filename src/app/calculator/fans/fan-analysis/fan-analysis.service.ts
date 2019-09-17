@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Fan203Inputs, Plane, FSAT } from '../../../shared/models/fans';
+import { Fan203Inputs, Plane } from '../../../shared/models/fans';
 
 @Injectable()
 export class FanAnalysisService {

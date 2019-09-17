@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { FixtureLossesCompareService } from "./fixture-losses-compare.service";
 import { FixtureLossesComponent } from "./fixture-losses.component";
 import { FixtureLossesService } from "./fixture-losses.service";
@@ -10,14 +8,14 @@ import { FixtureLossesFormComponent } from "./fixture-losses-form/fixture-losses
 
 import { ModalModule } from 'ngx-bootstrap';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
-    SharedModule,
     ModalModule,
-    SuiteDbModule
+    SuiteDbModule,
+    SharedPipesModule
   ],
   declarations: [
     FixtureLossesComponent,

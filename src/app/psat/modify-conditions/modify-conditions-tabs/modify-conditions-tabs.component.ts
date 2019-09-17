@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CompareService } from '../../compare.service';
 import { PsatService } from '../../psat.service';
 import { FormGroup } from '@angular/forms';

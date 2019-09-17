@@ -1,7 +1,6 @@
-import { Component, OnInit, EventEmitter, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
-import { SuiteDbService } from '../../suite-db.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { GasLoadChargeMaterial } from '../../../shared/models/materials';
 import * as _ from 'lodash';
@@ -26,11 +25,11 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   existingMaterial: GasLoadChargeMaterial;
   deletingMaterial: boolean = false;
   gasChargeMaterials: Array<GasLoadChargeMaterial>;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private indexedDbService: IndexedDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.gasChargeMaterials = new Array<GasLoadChargeMaterial>();

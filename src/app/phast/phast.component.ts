@@ -24,12 +24,12 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
   styleUrls: ['./phast.component.css']
 })
 export class PhastComponent implements OnInit {
-  @ViewChild('changeModificationModal') public changeModificationModal: ModalDirective;
-  @ViewChild('addNewModal') public addNewModal: ModalDirective;
+  @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
+  @ViewChild('addNewModal', { static: false }) public addNewModal: ModalDirective;
   //elementRefs used for getting container height for scrolling
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
   containerHeight: number;
 
   @HostListener('window:resize', ['$event'])

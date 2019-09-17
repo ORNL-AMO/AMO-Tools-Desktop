@@ -3,9 +3,8 @@ import { SSMT } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
-import { WaterfallItem, WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
+import { WaterfallInput } from '../../../shared/waterfall-graph/waterfall-graph.service';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
-import * as d3 from 'd3';
 import { ReportGraphsService } from './report-graphs.service';
 
 @Component({
@@ -29,8 +28,8 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   printGraphs: boolean;
 
-  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
-  @ViewChild('waterfallChartContainer') waterfallChartContainer: ElementRef;
+  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
+  @ViewChild('waterfallChartContainer', { static: false }) waterfallChartContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.getPieWidth();

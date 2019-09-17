@@ -57,9 +57,9 @@
     <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment"
       [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings" [inAssessment]="true"
-      [assessment]="assessment"></app-motor-performance>
+      [assessment]="assessment" [fsat]="_fsat"></app-motor-performance>
     <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inAssessment]="true"
-      [assessment]="assessment" [settings]="settings"></app-nema-energy-efficiency>
+      [assessment]="assessment" [settings]="settings" [fsat]="_fsat"></app-nema-energy-efficiency>
     <app-pump-curve *ngIf="calcTab == 'pump-curve'" [isFan]="true" [inAssessment]="true" [settings]="settings"
       [assessment]="assessment" [fsat]="_fsat" [pumpCurvePrimary]="true"></app-pump-curve>
   </div>

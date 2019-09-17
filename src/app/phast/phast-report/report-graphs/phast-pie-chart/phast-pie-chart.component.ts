@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
-import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import * as _ from 'lodash';
 import * as d3 from 'd3';
 @Component({
@@ -24,8 +23,8 @@ export class PhastPieChartComponent implements OnInit {
   @Input()
   exportName: string;
 
-  @ViewChild('ngChart') ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
+  @ViewChild('btnDownload', { static: false }) btnDownload: ElementRef;
 
   htmlElement: any;
   radius: number;
@@ -34,7 +33,7 @@ export class PhastPieChartComponent implements OnInit {
   width: number;
   height: number;
 
-  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
+  constructor(private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
   }

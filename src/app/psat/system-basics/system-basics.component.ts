@@ -34,7 +34,7 @@ export class SystemBasicsComponent implements OnInit {
   oldSettings: Settings;
   showUpdateData: boolean = false;
   dataUpdated: boolean = false;
-  @ViewChild('settingsModal') public settingsModal: ModalDirective;
+  @ViewChild('settingsModal', { static: false }) public settingsModal: ModalDirective;
 
   constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private settingsDbService: SettingsDbService) { }
 

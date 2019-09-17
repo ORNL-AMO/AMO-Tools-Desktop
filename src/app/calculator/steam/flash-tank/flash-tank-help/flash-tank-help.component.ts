@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FlashTankRanges, FlashTankService } from '../flash-tank.service';
-import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-flash-tank-help',
@@ -16,7 +15,7 @@ export class FlashTankHelpComponent implements OnInit {
   @Input()
   settings: Settings;
   rangeValues: FlashTankRanges;
-  constructor(private flashTankService: FlashTankService, private steamService: SteamService) { }
+  constructor(private flashTankService: FlashTankService) { }
 
   ngOnInit() {
     this.getRanges();

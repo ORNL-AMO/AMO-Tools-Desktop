@@ -4,7 +4,6 @@ import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatWarningService, FieldDataWarnings } from '../psat-warning.service';
@@ -34,8 +33,8 @@ export class FieldDataComponent implements OnInit {
   @Input()
   modificationIndex: number;
 
-  @ViewChild('headToolModal') public headToolModal: ModalDirective;
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('headToolModal', { static: false }) public headToolModal: ModalDirective;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -67,7 +66,7 @@ export class FieldDataComponent implements OnInit {
   fieldDataWarnings: FieldDataWarnings;
   idString: string;
 
-  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService, private fieldDataService: FieldDataService) { }
+  constructor(private psatService: PsatService, private psatWarningService: PsatWarningService, private compareService: CompareService, private helpPanelService: HelpPanelService, private fieldDataService: FieldDataService) { }
 
   ngOnInit() {
     if (!this.baseline) {

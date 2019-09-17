@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
-import { PHAST, Losses } from '../../../../shared/models/phast/phast';
+import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-import { ChargeMaterial, SolidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
-import { PhastService } from '../../../phast.service';
+import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
@@ -23,31 +22,6 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   massOptions: Array<any>;
   numLosses: number = 0;
   collapse: boolean = true;
-
-  //real version
-  // materialTypeDiff: boolean = false;
-  // materialNameDiff: boolean = false;
-  // reactionTypeDiff: boolean = false;
-  // specificHeatGasDiff: boolean = false;
-  // feedRateDiff: boolean = false;
-  // percentVaporDiff: boolean = false;
-  // initialTempDiff: boolean = false;
-  // dischargeTempDiff: boolean = false;
-  // percentReactedDiff: boolean = false;
-  // reactionHeatDiff: boolean = false;
-  // heatRequiredDiff: boolean = false;
-  // specificHeatSolidDiff: boolean = false;
-  // specificHeatLiquidDiff: boolean = false;
-  // meltingPointDiff: boolean = false;
-  // waterContentChargedDiff: boolean = false;
-  // waterContentDischargedDiff: boolean = false;
-  // waterVaporDischargeTempDiff: boolean = false;
-  // latentHeatDiff: boolean = false;
-  // additionalHeatDiff: boolean = false;
-  // vaporizingTemperatureDiff: boolean = false;
-  // chargeMeltedDiff: boolean = false;
-
-  //debug
   materialTypeDiff: Array<boolean>;
   materialNameDiff: Array<boolean>;
   reactionTypeDiff: Array<boolean>;
@@ -70,7 +44,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   vaporizingTemperatureDiff: Array<boolean>;
   chargeMeltedDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService, private cd: ChangeDetectorRef) { }
+  constructor(private suiteDbService: SuiteDbService, private convertUnitsService: ConvertUnitsService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.materialTypeDiff = new Array();

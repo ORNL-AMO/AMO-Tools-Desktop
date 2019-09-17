@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { ExhaustGasEAF } from '../../../shared/models/phast/losses/exhaustGasEAF';
 import { ExhaustGasService } from './exhaust-gas.service';
-import { ExhaustGasCompareService } from './exhaust-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 

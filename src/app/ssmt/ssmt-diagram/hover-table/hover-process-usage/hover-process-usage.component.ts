@@ -17,7 +17,7 @@ export class HoverProcessUsageComponent implements OnInit {
   @Input()
   inResultsPanel: boolean;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   processSteamUsage: ProcessSteamUsage;

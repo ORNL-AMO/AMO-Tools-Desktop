@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { pumpTypesConstant } from '../../../../psat/psatConstants';
@@ -23,7 +23,7 @@ export class SpecificSpeedFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.pumpTypes = pumpTypesConstant;
+    this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
     //remove specified
     this.pumpTypes.pop();
   }

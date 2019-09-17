@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { Slag } from '../../../shared/models/phast/losses/slag';
 import { PHAST } from '../../../shared/models/phast/phast';
 

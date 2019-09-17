@@ -1,7 +1,9 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TreasureHunt, EnergyUsage, TreasureHuntResults } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
+import { TreasureHuntService } from '../treasure-hunt.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-operation-costs',
@@ -10,17 +12,25 @@ import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt
 })
 export class OperationCostsComponent implements OnInit {
   @Input()
-  treasureHunt: TreasureHunt;
-  @Output('emitSave')
-  emitSave = new EventEmitter<TreasureHunt>();
-  @Input()
   settings: Settings;
 
+  treasureHuntSub: Subscription;
+  treasureHunt: TreasureHunt;
   treasureHuntResults: TreasureHuntResults;
-  constructor(private treasureHuntReportService: TreasureHuntReportService) { }
+  constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService) { }
 
   ngOnInit() {
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
+      this.treasureHunt = val;
+      this.initData();
+    });
+  }
 
+  ngOnDestroy() {
+    this.treasureHuntSub.unsubscribe();
+  }
+
+  initData() {
     if (!this.treasureHunt.currentEnergyUsage) {
       let defaultUsage: EnergyUsage = {
         electricityUsage: 0,
@@ -50,31 +60,32 @@ export class OperationCostsComponent implements OnInit {
     }
 
     this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
-    if(this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed){
+    if (this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed) {
       this.treasureHunt.currentEnergyUsage.electricityUsed = true;
     }
-    if(this.treasureHuntResults.naturalGas.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.naturalGasUsed){
+    if (this.treasureHuntResults.naturalGas.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.naturalGasUsed) {
       this.treasureHunt.currentEnergyUsage.naturalGasUsed = true;
     }
-    if(this.treasureHuntResults.otherFuel.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.otherFuelUsed){
+    if (this.treasureHuntResults.otherFuel.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.otherFuelUsed) {
       this.treasureHunt.currentEnergyUsage.otherFuelUsed = true;
     }
-    if(this.treasureHuntResults.water.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.waterUsed){
+    if (this.treasureHuntResults.water.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.waterUsed) {
       this.treasureHunt.currentEnergyUsage.waterUsed = true;
     }
-    if(this.treasureHuntResults.wasteWater.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.wasteWaterUsed){
+    if (this.treasureHuntResults.wasteWater.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.wasteWaterUsed) {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsed = true;
     }
-    if(this.treasureHuntResults.compressedAir.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.compressedAirUsed){
+    if (this.treasureHuntResults.compressedAir.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.compressedAirUsed) {
       this.treasureHunt.currentEnergyUsage.compressedAirUsed = true;
     }
-    if(this.treasureHuntResults.steam.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.steamUsed){
+    if (this.treasureHuntResults.steam.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.steamUsed) {
       this.treasureHunt.currentEnergyUsage.steamUsed = true;
     }
   }
 
+
   save() {
-    this.emitSave.emit(this.treasureHunt);
+    this.treasureHuntService.treasureHunt.next(this.treasureHunt);
   }
 
   toggleElectricityUsed() {

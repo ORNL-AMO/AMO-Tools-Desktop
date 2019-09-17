@@ -14,7 +14,7 @@ export class UtilityDonutChartComponent implements OnInit {
 
 
   chart: any;
-  @ViewChild('donutChartElement') donutChartElement: ElementRef;
+  @ViewChild('donutChartElement', { static: false }) donutChartElement: ElementRef;
   constructor() { }
 
   ngOnInit() { }

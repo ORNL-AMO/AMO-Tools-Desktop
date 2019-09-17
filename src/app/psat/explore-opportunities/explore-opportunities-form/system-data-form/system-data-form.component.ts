@@ -37,7 +37,7 @@ export class SystemDataFormComponent implements OnInit {
     showFlowRate: boolean = false;
     showHead: boolean = false;
 
-    @ViewChild('formElement') formElement: ElementRef;
+    @ViewChild('formElement', { static: false }) formElement: ElementRef;
     @HostListener('window:resize', ['$event'])
     onResize(event) {
         this.setOpHoursModalWidth();

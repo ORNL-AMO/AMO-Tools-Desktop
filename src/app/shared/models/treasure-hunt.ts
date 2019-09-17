@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData } from "./standalone";
 
 export interface TreasureHunt {
     name: string,
@@ -14,6 +14,7 @@ export interface TreasureHunt {
     compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
     compressedAirPressureReductions?: Array<CompressedAirPressureReductionTreasureHunt>;
     waterReductions?: Array<WaterReductionTreasureHunt>;
+    steamReductions?: Array<SteamReductionTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     setupDone: boolean;
@@ -74,6 +75,13 @@ export interface OpportunityCost {
 export interface OtherCostItem {
     cost?: number,
     description?: string
+}
+
+export interface SteamReductionTreasureHunt {
+    baseline: Array<SteamReductionData>;
+    modification: Array<SteamReductionData>;
+    opportunitySheet?: OpportunitySheet
+    selected?: boolean;
 }
 
 export interface ReplaceExistingMotorTreasureHunt {
@@ -195,7 +203,9 @@ export interface OpportunitySummary {
     payback: number,
     opportunityCost: OpportunityCost,
     mixedIndividualResults?: Array<OpportunitySummary>,
-    selected: boolean
+    selected: boolean,
+    baselineCost: number,
+    modificationCost: number
 }
 
 export interface UtilityUsageData {
@@ -229,5 +239,6 @@ export interface ImportExportOpportunities {
     electricityReductions?: Array<ElectricityReductionTreasureHunt>;
     compressedAirReductions?: Array<CompressedAirReductionTreasureHunt>;
     waterReductions?: Array<WaterReductionTreasureHunt>;
-    compressedAirPressureReductions?: Array<CompressedAirPressureReductionTreasureHunt>
+    compressedAirPressureReductions?: Array<CompressedAirPressureReductionTreasureHunt>;
+    steamReductions?: Array<SteamReductionTreasureHunt>;
 }
