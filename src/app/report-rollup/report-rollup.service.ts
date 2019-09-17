@@ -18,11 +18,11 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { FsatOutput } from '../shared/models/fans';
 import { FsatService } from '../fsat/fsat.service';
 import { ReportItem, PsatCompare, PsatResultsData, AllPsatResultsData, PhastCompare, PhastResultsData, AllPhastResultsData, FsatCompare, FsatResultsData, AllFsatResultsData, AllSsmtResultsData, SsmtCompare, SsmtResultsData, TreasureHuntResultsData } from './report-rollup-models';
-import { CalculateModelService } from '../ssmt/ssmt-calculations/calculate-model.service';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
 import { TreasureHuntReportService } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
 import { TreasureHuntResults, OpportunitySummary } from '../shared/models/treasure-hunt';
 import { OpportunitySummaryService } from '../treasure-hunt/treasure-hunt-report/opportunity-summary.service';
+import { SsmtService } from '../ssmt/ssmt.service';
 
 
 @Injectable()
@@ -73,7 +73,7 @@ export class ReportRollupService {
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
     private fsatService: FsatService,
-    private calculateModelService: CalculateModelService,
+    private ssmtService: SsmtService,
     private treasureHuntReportService: TreasureHuntReportService,
     private opportunitySummaryService: OpportunitySummaryService
   ) {
@@ -452,7 +452,7 @@ export class ReportRollupService {
       if (val.assessment.ssmt.setupDone && val.assessment.ssmt.modifications.length !== 0) {
         //get results
         if (!val.assessment.ssmt.resultsCalculated) {
-          val.assessment.ssmt.outputData = this.calculateModelService.initDataAndRun(val.assessment.ssmt, val.settings, true, false, 0).outputData;
+          val.assessment.ssmt.outputData = this.ssmtService.calculateModel(val.assessment.ssmt, val.settings, true, 0).outputData;
           val.assessment.ssmt.resultsCalculated = true;
         }
         let baselineResults: SSMTOutput = val.assessment.ssmt.outputData;
@@ -461,7 +461,7 @@ export class ReportRollupService {
             let modResultsArr = new Array<SSMTOutput>();
             val.assessment.ssmt.modifications.forEach(mod => {
               if (!mod.ssmt.resultsCalculated) {
-                mod.ssmt.outputData = this.calculateModelService.initDataAndRun(mod.ssmt, val.settings, false, false, baselineResults.operationsOutput.sitePowerDemand).outputData;
+                mod.ssmt.outputData = this.ssmtService.calculateModel(mod.ssmt, val.settings, false, baselineResults.operationsOutput.sitePowerDemand).outputData;
                 mod.ssmt.resultsCalculated = true;
               }
               let tmpResults: SSMTOutput = mod.ssmt.outputData;
@@ -519,7 +519,7 @@ export class ReportRollupService {
     let resultToBeUpdated: TreasureHuntResultsData = currentResults.find(result => { return result.assessment.id == assessmentId });
     let updatedResults: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, resultToBeUpdated.assessment.treasureHunt.currentEnergyUsage);
     resultToBeUpdated.treasureHuntResults = updatedResults;
-    this.allTreasureHuntResults.next(currentResults);     
+    this.allTreasureHuntResults.next(currentResults);
   }
 
   checkSettings(settings: Settings) {

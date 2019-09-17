@@ -4,8 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput, SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import { Subscription } from 'rxjs';
 import { SsmtService } from '../../ssmt.service';
-import { CalculateModelService } from '../../ssmt-calculations/calculate-model.service';
-import { CalculateLossesService } from '../../ssmt-calculations/calculate-losses.service';
+import { CalculateLossesService } from '../../calculate-losses.service';
 
 @Component({
   selector: 'app-ssmt-results-panel',
@@ -37,7 +36,7 @@ export class SsmtResultsPanelComponent implements OnInit {
   annualSavings: number;
   modValid: boolean;
   baselineValid: boolean;
-  constructor(private ssmtService: SsmtService, private calculateModelService: CalculateModelService, private calculateLossesService: CalculateLossesService) { }
+  constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService) { }
 
   ngOnInit() {
     this.updateDataSub = this.ssmtService.updateData.subscribe(() => { this.getResults(); });
@@ -55,11 +54,11 @@ export class SsmtResultsPanelComponent implements OnInit {
 
   getResults() {
     //baseline
-    let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.calculateModelService.initDataAndRun(this.ssmt, this.settings, true, false, 0);
+    let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(this.ssmt, this.settings, true, 0);
     this.baselineInputs = resultData.inputData;
     this.baselineOutput = resultData.outputData;
     //modification
-    resultData = this.calculateModelService.initDataAndRun(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, false, this.baselineOutput.operationsOutput.sitePowerDemand);
+    resultData = this.ssmtService.calculateModel(this.ssmt.modifications[this.modificationIndex].ssmt, this.settings, false, this.baselineOutput.operationsOutput.sitePowerDemand);
     this.modificationInputs = resultData.inputData;
     this.modificationOutput = resultData.outputData;
     this.checkValid();
@@ -81,11 +80,6 @@ export class SsmtResultsPanelComponent implements OnInit {
     } else {
       this.baselineValid = false;
     }
-  }
-
-  getInputs() {
-    this.baselineInputs = this.calculateModelService.getInputDataFromSSMT(this.ssmt);
-    this.modificationInputs = this.calculateModelService.getInputDataFromSSMT(this.ssmt.modifications[this.modificationIndex].ssmt);
   }
 
   getLosses() {

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CalculateModelService } from '../../../ssmt-calculations/calculate-model.service';
 import { PrvOutput, SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';

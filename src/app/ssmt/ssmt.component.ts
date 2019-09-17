@@ -18,9 +18,7 @@ import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { BoilerService } from './boiler/boiler.service';
 import { AssessmentService } from '../assessment/assessment.service';
-import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
 import { OperationsService } from './operations/operations.service';
-import { SuiteTestService } from './ssmt-calculations/suite-test.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -91,12 +89,10 @@ export class SsmtComponent implements OnInit {
     private boilerService: BoilerService,
     private assessmentService: AssessmentService,
     private operationsService: OperationsService,
-    private cd: ChangeDetectorRef,
-    private suiteTestService: SuiteTestService
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-    // this.suiteTestService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];

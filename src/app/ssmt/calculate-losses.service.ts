@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { SSMTLosses, SSMTOutput, TurbineOutput, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, BoilerOutput } from '../../shared/models/steam/steam-outputs';
-import { SSMTInputs, SSMT } from '../../shared/models/steam/ssmt';
-import { SteamService } from '../../calculator/steam/steam.service';
-import { Settings } from '../../shared/models/settings';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { BoilerService } from '../boiler/boiler.service';
-import { HeaderService } from '../header/header.service';
-import { TurbineService } from '../turbine/turbine.service';
-import { OperationsService } from '../operations/operations.service';
+import { SSMTLosses, SSMTOutput, TurbineOutput, SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput, ProcessSteamUsage, BoilerOutput } from '../shared/models/steam/steam-outputs';
+import { SSMTInputs, SSMT } from '../shared/models/steam/ssmt';
+import { SteamService } from '../calculator/steam/steam.service';
+import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { BoilerService } from './boiler/boiler.service';
+import { HeaderService } from './header/header.service';
+import { TurbineService } from './turbine/turbine.service';
+import { OperationsService } from './operations/operations.service';
 
 @Injectable()
 export class CalculateLossesService {
