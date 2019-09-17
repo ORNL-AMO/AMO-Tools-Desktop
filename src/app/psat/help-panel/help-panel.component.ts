@@ -34,7 +34,7 @@ export class HelpPanelComponent implements OnInit {
   containerHeight: number;
   @Input()
   showResults: boolean;
-  @ViewChild('resultTabs') resultTabs: ElementRef;
+  @ViewChild('resultTabs', { static: false }) resultTabs: ElementRef;
 
 
   tabSelect: string = 'results';

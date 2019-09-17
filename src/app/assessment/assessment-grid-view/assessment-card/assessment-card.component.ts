@@ -27,9 +27,9 @@ export class AssessmentCardComponent implements OnInit {
   changeDirectory = new EventEmitter<boolean>();
 
   isFirstChange: boolean = true;
-  @ViewChild('editModal') public editModal: ModalDirective;
-  @ViewChild('copyModal') public copyModal: ModalDirective;
-  @ViewChild('deleteModal') public deleteModal: ModalDirective;
+  @ViewChild('editModal', { static: false }) public editModal: ModalDirective;
+  @ViewChild('copyModal', { static: false }) public copyModal: ModalDirective;
+  @ViewChild('deleteModal', { static: false }) public deleteModal: ModalDirective;
   directories: Array<Directory>;
 
   editForm: FormGroup;

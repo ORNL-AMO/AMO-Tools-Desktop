@@ -26,7 +26,6 @@ import { TurbineService } from './turbine/turbine.service';
 import { CondensingTurbineFormComponent } from './turbine/condensing-turbine-form/condensing-turbine-form.component';
 import { PressureTurbineFormComponent } from './turbine/pressure-turbine-form/pressure-turbine-form.component';
 import { SsmtSankeyComponent } from './ssmt-sankey/ssmt-sankey.component';
-import { SharedModule } from '../shared/shared.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { SsmtReportModule } from './ssmt-report/ssmt-report.module';
 import { CalculateModelService } from './ssmt-calculations/calculate-model.service';
@@ -45,6 +44,9 @@ import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module'
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { HeatExchangerService } from './ssmt-calculations/heat-exchanger.service';
 import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-modal.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { ToastModule } from '../shared/toast/toast.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -56,7 +58,6 @@ import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-mod
     ExploreOpportunitiesModule,
     ModalModule,
     SuiteDbModule,
-    SharedModule,
     HelpPanelModule,
     SsmtDiagramTabModule,
     SsmtReportModule,
@@ -70,7 +71,10 @@ import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-mod
     DeaeratorModule,
     HeaderModule,
     TurbineModule,
-    BlowdownRateModalModule
+    BlowdownRateModalModule,
+    TabsTooltipModule,
+    ToastModule,
+    SharedPipesModule
   ],
   declarations: [
     SsmtComponent,

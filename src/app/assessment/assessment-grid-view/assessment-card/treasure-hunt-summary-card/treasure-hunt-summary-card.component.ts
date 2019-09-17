@@ -16,7 +16,7 @@ export class TreasureHuntSummaryCardComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  @ViewChild('reportModal') public reportModal: ModalDirective;
+  @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
   results: TreasureHuntResults;
   settings: Settings;

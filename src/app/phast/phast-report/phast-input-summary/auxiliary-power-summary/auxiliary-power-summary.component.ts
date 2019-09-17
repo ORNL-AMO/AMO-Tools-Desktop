@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
-import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -25,7 +24,7 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
   powerFactorDiff: boolean = false;
   operatingTimeDiff: boolean = false;
   numMods: number = 0;
-  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.lossData = new Array();

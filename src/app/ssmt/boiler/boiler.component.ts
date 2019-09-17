@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { BoilerService, BoilerRanges } from './boiler.service';
-import { BoilerInput, HeaderWithHighestPressure, HeaderInput } from '../../shared/models/steam/ssmt';
+import { BoilerService } from './boiler.service';
+import { BoilerInput, HeaderInput } from '../../shared/models/steam/ssmt';
 import { FormGroup, Validators } from '@angular/forms';
 import { SuiteDbService } from '../../suiteDb/suite-db.service';
 import { SsmtService } from '../ssmt.service';
@@ -32,8 +32,8 @@ export class BoilerComponent implements OnInit {
   @Input()
   headerInput: HeaderInput;
 
-  @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setBlowdownRateModalWidth();

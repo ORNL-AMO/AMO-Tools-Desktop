@@ -4,10 +4,9 @@ import { PhastService } from '../../phast.service';
 import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
 import { Losses } from '../../../shared/models/phast/phast';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses.service';
-import { ExtendedSurfaceCompareService } from './extended-surface-compare.service';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms/src/model';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-extended-surface-losses',
   templateUrl: './extended-surface-losses.component.html',

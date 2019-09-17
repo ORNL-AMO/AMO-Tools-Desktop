@@ -4,7 +4,6 @@ import { FSAT } from '../../../../shared/models/fans';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { HelpPanelService } from '../../../help-panel/help-panel.service';
 import { ModifyConditionsService } from '../../../modify-conditions/modify-conditions.service';
-import { FsatWarningService, FanMotorWarnings } from '../../../fsat-warning.service';
 import { PsatService } from '../../../../psat/psat.service';
 import { FormGroup, ValidatorFn } from '@angular/forms';
 import { FanMotorService } from '../../../fan-motor/fan-motor.service';

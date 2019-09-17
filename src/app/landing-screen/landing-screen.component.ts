@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { CalculatorService } from '../calculator/calculator.service';
 import { AssessmentService } from '../assessment/assessment.service';

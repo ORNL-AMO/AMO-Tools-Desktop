@@ -20,7 +20,7 @@ export class MotorDriveFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

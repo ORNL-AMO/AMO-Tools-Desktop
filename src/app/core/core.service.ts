@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { DirectoryDbRef, Directory } from '../shared/models/directory';
+import { Directory } from '../shared/models/directory';
 import { Settings } from '../shared/models/settings';
-declare const packageJson;
 import { MockPhast, MockPhastSettings } from './mockPhast';
 import { MockPsat, MockPsatCalculator, MockPsatSettings } from './mockPsat';
 import { MockFsat, MockFsatSettings, MockFsatCalculator } from './mockFsat';
@@ -51,7 +50,6 @@ export class CoreService {
 
                   MockTreasureHunt.directoryId = this.exampleDirectoryId;
                   this.indexedDbService.addAssessment(MockTreasureHunt).then(tHuntId => {
-                    console.log('added treasure hunt')
                     this.exampleTreasureHuntId = tHuntId;
                     resolve(true);
                   })

@@ -36,10 +36,10 @@ export class DashboardComponent implements OnInit {
   newDirEventToggle: boolean = false;
   dashboardView: string = 'landing-screen';
   goCalcHome: boolean = false;
-  @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
-  @ViewChild('exportModal') public exportModal: ModalDirective;
-  @ViewChild('importModal') public importModal: ModalDirective;
-  @ViewChild('preAssessmentModal') public preAssessmentModal: ModalDirective;
+  @ViewChild('deleteItemsModal', { static: false }) public deleteItemsModal: ModalDirective;
+  @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;
+  @ViewChild('importModal', { static: false }) public importModal: ModalDirective;
+  @ViewChild('preAssessmentModal', { static: false }) public preAssessmentModal: ModalDirective;
 
   importInProgress: boolean = false;
   isExportView: boolean = false;

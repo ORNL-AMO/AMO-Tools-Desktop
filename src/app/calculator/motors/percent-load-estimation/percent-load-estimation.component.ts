@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { FieldMeasurementInputs, SlipMethod, FieldMeasurementOutputs, PercentLoadEstimationService } from './percent-load-estimation.service';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -13,7 +12,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

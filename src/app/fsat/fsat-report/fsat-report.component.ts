@@ -4,7 +4,6 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Directory } from '../../shared/models/directory';
-import { FsatService } from '../fsat.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsService } from '../../settings/settings.service';
@@ -49,9 +48,9 @@ export class FsatReportComponent implements OnInit {
   @Input()
   containerHeight: number;
 
-  @ViewChild('printMenuModal') public printMenuModal: ModalDirective;
-  @ViewChild('reportBtns') reportBtns: ElementRef;
-  @ViewChild('reportHeader') reportHeader: ElementRef;
+  @ViewChild('printMenuModal', { static: false }) public printMenuModal: ModalDirective;
+  @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
+  @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
   showPrint: boolean = false;
   showPrintMenu: boolean = false;
@@ -240,7 +239,6 @@ export class FsatReportComponent implements OnInit {
     this.fsatReportService.showPrint.next(true);
     setTimeout(() => {
       let win = this.windowRefService.nativeWindow;
-      let doc = this.windowRefService.getDoc();
       win.print();
       //after printing hide content again
       this.fsatReportService.showPrint.next(false);

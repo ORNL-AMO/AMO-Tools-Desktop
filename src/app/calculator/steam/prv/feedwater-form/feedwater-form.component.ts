@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ThermodynamicQuantityOptions, Quantity } from '../../../../shared/models/steam/steam-inputs';
-import { PrvService } from '../prv.service';
 import { SteamService } from '../../steam.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
@@ -21,7 +20,7 @@ export class FeedwaterFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
-  constructor(private steamService: SteamService, private prvService: PrvService) { }
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;

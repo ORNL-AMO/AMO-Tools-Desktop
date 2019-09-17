@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PumpCurve, PumpCurveDataRow } from '../../../shared/models/calculators';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import * as regression from 'regression';
 import * as _ from 'lodash';

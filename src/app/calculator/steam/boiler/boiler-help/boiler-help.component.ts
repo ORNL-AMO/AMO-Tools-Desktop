@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { BoilerRanges, BoilerService } from '../boiler.service';
-import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-boiler-help',
@@ -17,7 +16,7 @@ export class BoilerHelpComponent implements OnInit {
   thermodynamicQuantity: number;
 
   rangeValues: BoilerRanges;
-  constructor(private boilerService: BoilerService, private steamService: SteamService) { }
+  constructor(private boilerService: BoilerService) { }
 
   ngOnInit() {
     this.getRanges();

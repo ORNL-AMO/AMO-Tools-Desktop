@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PSAT, PsatInputs } from '../../shared/models/psat';
+import { PsatInputs } from '../../shared/models/psat';
 import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 
 @Injectable()

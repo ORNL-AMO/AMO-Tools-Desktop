@@ -10,7 +10,6 @@ import { FanShaftPowerFormComponent } from './fan-analysis-form/fan-shaft-power-
 import { GasDensityFormComponent } from './fan-analysis-form/gas-density-form/gas-density-form.component';
 import { FanAnalysisService } from './fan-analysis.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../shared/shared.module';
 import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-form.service';
 import { GasDensityFormService } from './fan-analysis-form/gas-density-form/gas-density-form.service';
 import { FanShaftPowerFormService } from './fan-analysis-form/fan-shaft-power-form/fan-shaft-power-form.service';
@@ -28,6 +27,8 @@ import { GasDensityHelpComponent } from './help-and-results-panel/operating-poin
 import { FsatBasicsHelpComponent } from './help-and-results-panel/operating-points-help/fsat-basics-help/fsat-basics-help.component';
 import { FanShaftPowerHelpComponent } from './help-and-results-panel/operating-points-help/fan-shaft-power-help/fan-shaft-power-help.component';
 import { FanDataHelpComponent } from './help-and-results-panel/operating-points-help/fan-data-help/fan-data-help.component';
+import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { FanDataHelpComponent } from './help-and-results-panel/operating-points-
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    PercentGraphModule,
+    SharedPipesModule
   ],
   exports: [FanAnalysisComponent, HelpAndResultsPanelComponent, PlaneDataFormComponent, FanInfoFormComponent],
   providers: [FanAnalysisService, FanInfoFormService, GasDensityFormService, FanShaftPowerFormService, PlaneDataFormService, ConvertFanAnalysisService]

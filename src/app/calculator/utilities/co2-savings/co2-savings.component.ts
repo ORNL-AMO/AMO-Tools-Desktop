@@ -10,8 +10,8 @@ import * as _ from 'lodash';
   styleUrls: ['./co2-savings.component.css']
 })
 export class Co2SavingsComponent implements OnInit {
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();

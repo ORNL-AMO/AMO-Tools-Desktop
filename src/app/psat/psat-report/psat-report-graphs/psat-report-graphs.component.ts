@@ -27,8 +27,8 @@ export class PsatReportGraphsComponent implements OnInit {
   @Input()
   printGraphs: boolean;
 
-  @ViewChild('pieChartContainer') pieChartContainer: ElementRef;
-  @ViewChild('barChartContainer') barChartContainer: ElementRef;
+  @ViewChild('pieChartContainer', { static: false }) pieChartContainer: ElementRef;
+  @ViewChild('barChartContainer', { static: false }) barChartContainer: ElementRef;
 
   selectedResults: PsatOutputs;
   selectedInputs: PsatInputs;

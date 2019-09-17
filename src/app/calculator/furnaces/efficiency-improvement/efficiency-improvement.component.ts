@@ -8,7 +8,6 @@ import { Calculator } from '../../../shared/models/calculators';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-efficiency-improvement',
@@ -23,7 +22,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   @Input()
   inAssessment: boolean;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', {static: false}) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

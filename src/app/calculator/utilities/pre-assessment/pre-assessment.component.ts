@@ -32,9 +32,9 @@ export class PreAssessmentComponent implements OnInit {
 
   showName: boolean = false;
 
-  @ViewChild('container') container: ElementRef;
+  @ViewChild('container', { static: false }) container: ElementRef;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

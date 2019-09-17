@@ -6,7 +6,6 @@ import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { PhastCompareService } from '../../phast-compare.service';
 
 @Component({
   selector: 'app-atmosphere-losses',
@@ -41,7 +40,7 @@ export class AtmosphereLossesComponent implements OnInit {
   resultsUnit: string;
   lossesLocked: boolean = false;
   selectedMod: PHAST;
-  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService, private phastCompareService: PhastCompareService) { }
+  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {

@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SteamPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
-import { SteamService } from "../../steam.service";
 
 @Component({
   selector: 'app-steam-properties-form',
@@ -24,7 +23,7 @@ export class SteamPropertiesFormComponent implements OnInit {
   emitQuantityChange = new EventEmitter<number>();
 
 
-  constructor(private steamService: SteamService) {
+  constructor() {
   }
 
   ngOnInit() {

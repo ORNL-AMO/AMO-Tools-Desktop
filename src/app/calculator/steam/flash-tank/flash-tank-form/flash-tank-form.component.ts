@@ -3,7 +3,6 @@ import { ThermodynamicQuantityOptions, Quantity } from '../../../../shared/model
 import { FormGroup, Validators } from '../../../../../../node_modules/@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
-import { FlashTankService } from '../flash-tank.service';
 
 @Component({
   selector: 'app-flash-tank-form',
@@ -21,7 +20,7 @@ export class FlashTankFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
-  constructor(private steamService: SteamService, private flashTankService: FlashTankService) { }
+  constructor(private steamService: SteamService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;

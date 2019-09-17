@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../shared/models/settings';
-import { FsatInput, OutletPressureData, InletPressureData, FSAT, BaseGasDensity, Plane, FanRatedInfo, PlaneData, Fan203Inputs, PlaneResults, PlaneResult, Fan203Results, FsatOutput, FanShaftPower } from '../shared/models/fans';
+import { FsatInput, OutletPressureData, InletPressureData, FSAT, FsatOutput } from '../shared/models/fans';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
 @Injectable()

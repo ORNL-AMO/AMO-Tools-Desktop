@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { HeatLossRanges, HeatLossService } from '../heat-loss.service';
 import { Settings } from '../../../../shared/models/settings';
-import { SteamService } from '../../steam.service';
 
 @Component({
   selector: 'app-heat-loss-help',
@@ -17,7 +16,7 @@ export class HeatLossHelpComponent implements OnInit {
   thermodynamicQuantity: number;
 
   rangeValues: HeatLossRanges;
-  constructor(private heatLossService: HeatLossService, private steamService: SteamService) { }
+  constructor(private heatLossService: HeatLossService) { }
 
   ngOnInit() {
     this.getRanges();

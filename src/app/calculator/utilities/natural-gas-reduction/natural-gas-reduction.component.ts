@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { NaturalGasReductionService } from './natural-gas-reduction.service';
 import { NaturalGasReductionResults, NaturalGasReductionData } from '../../../shared/models/standalone';
@@ -27,8 +26,8 @@ export class NaturalGasReductionComponent implements OnInit {
   operatingHours: OperatingHours;
 
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
+  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {

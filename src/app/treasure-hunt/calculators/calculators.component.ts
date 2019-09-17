@@ -16,8 +16,8 @@ export class CalculatorsComponent implements OnInit {
   settings: Settings;
 
 
-  @ViewChild('saveCalcModal') public saveCalcModal: ModalDirective;
-  @ViewChild('opportunitySheetModal') public opportunitySheetModal: ModalDirective;
+  @ViewChild('saveCalcModal', { static: false }) public saveCalcModal: ModalDirective;
+  @ViewChild('opportunitySheetModal', { static: false }) public opportunitySheetModal: ModalDirective;
 
   lightingReplacementTreasureHunt: LightingReplacementTreasureHunt;
   replaceExistingMotorsTreasureHunt: ReplaceExistingMotorTreasureHunt;

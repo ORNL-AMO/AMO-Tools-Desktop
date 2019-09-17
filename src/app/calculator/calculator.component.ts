@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CalculatorService } from './calculator.service';
 import { Subscription } from 'rxjs';
 

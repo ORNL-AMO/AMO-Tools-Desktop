@@ -1,12 +1,9 @@
 import { Injectable, Input } from '@angular/core';
-import { PhastService } from '../phast.service';
-import { Losses, ShowResultsCategories, PhastResults } from '../../shared/models/phast/phast';
+import { ShowResultsCategories, PhastResults } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { PhastResultsService } from '../phast-results.service';
 import * as d3 from 'd3';
-import { EnergyInputEAF } from '../../shared/models/phast/losses/energyInputEAF';
-import { EnergyInputExhaustGasLoss } from '../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Injectable()
@@ -20,7 +17,7 @@ export class SankeyService {
   electricalEnergy: number;
   chemicalEnergy: number;
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {

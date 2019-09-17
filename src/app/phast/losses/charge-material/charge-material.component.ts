@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
-import { ChargeMaterial, SolidChargeMaterial, GasChargeMaterial, LiquidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from './charge-material.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms/src/model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-charge-material',
@@ -48,7 +47,7 @@ export class ChargeMaterialComponent implements OnInit {
     endoExoHeat: number
   };
   idString: string;
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
+  constructor(private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {

@@ -9,7 +9,6 @@ import { DeaeratorTableComponent } from './deaerator-table/deaerator-table.compo
 import { BoilerTableComponent } from './boiler-table/boiler-table.component';
 import { PrvTableComponent } from './prv-table/prv-table.component';
 import { TurbineTableComponent } from './turbine-table/turbine-table.component';
-import { SharedModule } from '../../shared/shared.module';
 import { SsmtDiagramModule } from '../ssmt-diagram/ssmt-diagram.module';
 import { FormsModule } from '@angular/forms';
 import { BoilerModule } from '../../calculator/steam/boiler/boiler.module';
@@ -21,11 +20,12 @@ import { FlashTankModule } from '../../calculator/steam/flash-tank/flash-tank.mo
 import { HeatExchangerTableComponent } from './heat-exchanger-table/heat-exchanger-table.component';
 import { HoverTableModule } from '../ssmt-diagram/hover-table/hover-table.module';
 import { ResultsTableComponent } from './results-table/results-table.component';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
     SsmtDiagramModule,
     FormsModule,
     BoilerModule,
@@ -33,7 +33,9 @@ import { ResultsTableComponent } from './results-table/results-table.component';
     DeaeratorModule,
     PrvModule,
     FlashTankModule,
-    HoverTableModule
+    HoverTableModule,
+    ExportableResultsTableModule,
+    SharedPipesModule
   ],
   declarations: [
     SsmtDiagramTabComponent,

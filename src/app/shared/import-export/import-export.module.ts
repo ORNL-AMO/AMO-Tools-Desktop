@@ -4,13 +4,12 @@ import { ImportExportService } from './import-export.service';
 import { ImportExportComponent } from './import-export.component';
 import { ExportService } from './export.service';
 import { ImportService } from './import.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule
+    FormsModule
   ],
   declarations: [ImportExportComponent],
   providers: [

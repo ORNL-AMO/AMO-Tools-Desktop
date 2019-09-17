@@ -3,7 +3,6 @@ import { PsatService } from '../../../psat/psat.service';
 import { PSAT } from '../../../shared/models/psat';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
-import { SettingsService } from '../../../settings/settings.service';
 import { FormGroup } from '@angular/forms';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
@@ -28,7 +27,7 @@ export class HeadToolComponent implements OnInit {
   @Input()
   assessmentId: number;
 
-  @ViewChild('leftPanelHeader') leftPanelHeader: ElementRef;
+  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -56,7 +55,7 @@ export class HeadToolComponent implements OnInit {
   canSave: boolean = false;
   isSavedCalc: boolean = false;
   calculator: Calculator;
-  constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, private settingsService: SettingsService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
+  constructor(private headToolService: HeadToolService, private psatService: PsatService, private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     if (!this.settings) {

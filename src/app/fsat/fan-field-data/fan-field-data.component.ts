@@ -36,12 +36,12 @@ export class FanFieldDataComponent implements OnInit {
   @Input()
   fsat: FSAT;
 
-  @ViewChild('modalBody') public modalBody: ElementRef;
-  @ViewChild('amcaModal') public amcaModal: ModalDirective;
-  @ViewChild('pressureModal') public pressureModal: ModalDirective;
+  @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
+  @ViewChild('amcaModal', { static: false }) public amcaModal: ModalDirective;
+  @ViewChild('pressureModal', { static: false }) public pressureModal: ModalDirective;
 
   @HostListener('window:resize', ['$event'])
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -80,9 +80,6 @@ export class FanFieldDataComponent implements OnInit {
       this.disableForm();
     }
 
-    this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
-      this.getBodyHeight();
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -105,7 +102,11 @@ export class FanFieldDataComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.setOpHoursModalWidth();
-    }, 100)
+    }, 100);
+    
+    this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
+      this.getBodyHeight();
+    });
   }
 
   disableForm() {

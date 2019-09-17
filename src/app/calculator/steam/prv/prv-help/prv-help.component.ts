@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PrvRanges, PrvService, FeedwaterRanges } from '../prv.service';
-import { SteamService } from '../../steam.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -22,7 +21,7 @@ export class PrvHelpComponent implements OnInit {
   
   rangeValues: PrvRanges;
   feedwaterRangesValues: FeedwaterRanges;
-  constructor(private prvService: PrvService, private steamService: SteamService) { }
+  constructor(private prvService: PrvService) { }
 
   ngOnInit() {
     this.getRanges();

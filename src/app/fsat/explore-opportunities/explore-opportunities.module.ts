@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExploreOpportunitiesComponent } from './explore-opportunities.component';
-import { ExploreOpportunitiesService } from './explore-opportunities.service';
 import { ExploreOpportunitiesHelpComponent } from './explore-opportunities-help/explore-opportunities-help.component';
 import { ExploreOpportunitiesFormComponent } from './explore-opportunities-form/explore-opportunities-form.component';
 import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities-sankey/explore-opportunities-sankey.component';
@@ -15,7 +14,9 @@ import { FsatSankeyModule } from '../fsat-sankey/fsat-sankey.module';
 import { VariableFrequencyDriveFormComponent } from './explore-opportunities-form/variable-frequency-drive-form/variable-frequency-drive-form.component';
 import { CalculatePressuresModule } from '../calculate-pressures/calculate-pressures.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { SharedModule } from '../../shared/shared.module';
+import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ToastModule } from '../../shared/toast/toast.module';
+import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,9 @@ import { SharedModule } from '../../shared/shared.module';
     FsatSankeyModule,
     CalculatePressuresModule,
     ModalModule,
-    SharedModule
+    OperatingHoursModalModule,
+    ToastModule,
+    SharedPipesModule
   ],
   declarations: [
     ExploreOpportunitiesComponent,
@@ -39,7 +42,7 @@ import { SharedModule } from '../../shared/shared.module';
     FanDataFormComponent,
     VariableFrequencyDriveFormComponent
     ],
-  providers: [ExploreOpportunitiesService],
+  providers: [],
   exports: [ExploreOpportunitiesComponent]
 })
 export class ExploreOpportunitiesModule { }

@@ -5,7 +5,6 @@ import { FormGroup } from '@angular/forms';
 import { SettingsService } from '../../settings/settings.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { TreasureHunt } from '../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../shared/models/operations';
 import { TreasureHuntService } from '../treasure-hunt.service';
 
@@ -22,7 +21,7 @@ export class SystemBasicsComponent implements OnInit {
   @Output('updateSettings')
   updateSettings = new EventEmitter<boolean>();
 
-  @ViewChild('formElement') formElement: ElementRef;
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();

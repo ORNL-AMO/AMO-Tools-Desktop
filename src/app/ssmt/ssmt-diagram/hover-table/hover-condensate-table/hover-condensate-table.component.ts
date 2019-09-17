@@ -16,7 +16,7 @@ export class HoverCondensateTableComponent implements OnInit {
   @Input()
   inResultsPanel: boolean;
 
-  @ViewChild('copyTable') copyTable: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
 
   returnCondensate: SteamPropertiesOutput;

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '
 import { Settings } from '../../../../shared/models/settings';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
+import { SvgToPngService } from '../../../../shared/helper-services/svg-to-png.service';
 import * as d3 from 'd3';
 
 @Component({
@@ -26,9 +26,9 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
   @Input()
   plotReady: boolean;
 
-  @ViewChild("ngChartContainer") ngChartContainer: ElementRef;
-  @ViewChild('ngChart') ngChart: ElementRef;
-  @ViewChild('btnDownload') btnDownload: ElementRef;
+  @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @ViewChild('ngChart', { static: false }) ngChart: ElementRef;
+  @ViewChild('btnDownload', { static: false }) btnDownload: ElementRef;
 
   yMax: number;
   yMin: number;

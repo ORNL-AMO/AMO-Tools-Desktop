@@ -3,7 +3,6 @@ import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Fan203Inputs } from '../../../shared/models/fans';
 import { FanAnalysisService } from './fan-analysis.service';
-import { ConvertFsatService } from '../../../fsat/convert-fsat.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { PlaneDataFormService } from './fan-analysis-form/plane-data-form/plane-data-form.service';
@@ -26,9 +25,9 @@ export class FanAnalysisComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  @ViewChild('header') header: ElementRef;
-  @ViewChild('footer') footer: ElementRef;
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('header', { static: false }) header: ElementRef;
+  @ViewChild('footer', { static: false }) footer: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {

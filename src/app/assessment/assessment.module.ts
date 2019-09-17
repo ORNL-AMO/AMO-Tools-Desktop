@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
 
 import { AssessmentBannerComponent } from './assessment-banner/assessment-banner.component';
@@ -35,6 +34,8 @@ import { SsmtSummaryCardComponent } from './assessment-grid-view/assessment-card
 import { SsmtReportModule } from '../ssmt/ssmt-report/ssmt-report.module';
 import { TreasureHuntSummaryCardComponent } from './assessment-grid-view/assessment-card/treasure-hunt-summary-card/treasure-hunt-summary-card.component';
 import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/treasure-hunt-report.module';
+import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,6 @@ import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/
   ],
   imports: [
     CommonModule,
-    SharedModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
@@ -79,7 +79,9 @@ import { TreasureHuntReportModule } from '../treasure-hunt/treasure-hunt-report/
     PsatModule,
     FsatReportModule,
     SsmtReportModule,
-    TreasureHuntReportModule
+    TreasureHuntReportModule,
+    AnimatedCheckmarkModule,
+    SharedPipesModule
   ],
   providers: []
 })
