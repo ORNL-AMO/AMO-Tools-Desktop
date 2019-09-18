@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
 import { FanFieldDataService } from './fan-field-data.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -103,7 +103,7 @@ export class FanFieldDataComponent implements OnInit {
     setTimeout(() => {
       this.setOpHoursModalWidth();
     }, 100);
-    
+
     this.pressureModalSub = this.pressureModal.onShown.subscribe(() => {
       this.getBodyHeight();
     });
@@ -245,7 +245,7 @@ export class FanFieldDataComponent implements OnInit {
     this.fsatCopy = fsat;
   }
 
-  setCalcInvalid(){
+  setCalcInvalid() {
     this.disableApplyData = true;
   }
 
@@ -275,6 +275,14 @@ export class FanFieldDataComponent implements OnInit {
     this.fieldDataForm.controls.operatingHours.patchValue(oppHours.hoursPerYear);
     this.save();
     this.closeOperatingHoursModal();
+  }
+
+  setPressureValidators() {
+    this.fieldDataForm.controls.inletPressure.setValidators([Validators.required, Validators.max(this.fieldDataForm.controls.outletPressure.value)]);
+    this.fieldDataForm.controls.inletPressure.updateValueAndValidity();
+    this.fieldDataForm.controls.outletPressure.setValidators([Validators.required, Validators.min(this.fieldDataForm.controls.inletPressure.value)]);
+    this.fieldDataForm.controls.outletPressure.updateValueAndValidity();
+    this.save();
   }
 
   setOpHoursModalWidth() {
