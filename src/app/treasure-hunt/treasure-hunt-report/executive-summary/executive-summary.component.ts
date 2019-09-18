@@ -17,6 +17,8 @@ export class ExecutiveSummaryComponent implements OnInit {
   showFullSummary: boolean;
   @Input()
   title: string;
+  @Input()
+  showPrint: boolean;
 
   @ViewChild('costSummaryChartContainer', { static: false }) costSummaryChartContainer: ElementRef;
 

@@ -40,7 +40,7 @@ export class ElectricityReductionService {
       energy: 400000
     };
 
-    let hoursPerYear: number = 8760;
+    let hoursPerYear: number = 8736;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
@@ -165,9 +165,72 @@ export class ElectricityReductionService {
     return obj;
   }
 
+  generateExample(settings: Settings, isBaseline: boolean): ElectricityReductionData {
+    let defaultData: ElectricityReductionData
+    if (isBaseline) {
+      defaultData = {
+        name: 'Equipment #1',
+        operatingHours: 8736,
+        electricityCost: settings.electricityCost,
+        measurementMethod: 1,
+        multimeterData: {
+          numberOfPhases: 3,
+          supplyVoltage: 0,
+          averageCurrent: 0,
+          powerFactor: 0.0
+        },
+        nameplateData: {
+          ratedMotorPower: this.convertUnitsService.roundVal(this.convertUnitsService.value(200).from('hp').to(settings.powerMeasurement), 2),
+          variableSpeedMotor: true,
+          operationalFrequency: 50,
+          lineFrequency: 60,
+          motorAndDriveEfficiency: 100,
+          loadFactor: 10
+        },
+        powerMeterData: {
+          power: 0
+        },
+        otherMethodData: {
+          energy: 0
+        },
+        units: 1
+      };
+    }
+    else {
+      defaultData = {
+        name: 'Equipment #1',
+        operatingHours: 8736,
+        electricityCost: settings.electricityCost,
+        measurementMethod: 1,
+        multimeterData: {
+          numberOfPhases: 3,
+          supplyVoltage: 0,
+          averageCurrent: 0,
+          powerFactor: 0.0
+        },
+        nameplateData: {
+          ratedMotorPower: 150,
+          variableSpeedMotor: true,
+          operationalFrequency: 50,
+          lineFrequency: 60,
+          motorAndDriveEfficiency: 100,
+          loadFactor: 10
+        },
+        powerMeterData: {
+          power: 0
+        },
+        otherMethodData: {
+          energy: 0
+        },
+        units: 1
+      };
+    }
+
+    return defaultData;
+  }
+
   getResults(settings: Settings, baseline: Array<ElectricityReductionData>, modification?: Array<ElectricityReductionData>): ElectricityReductionResults {
     let baselineInpCpy: Array<ElectricityReductionData> = JSON.parse(JSON.stringify(baseline));
-
     let baselineResults: ElectricityReductionResult = this.calculate(baselineInpCpy, settings);
     let modificationResults: ElectricityReductionResult;
     let annualEnergySavings: number = 0;
@@ -188,7 +251,7 @@ export class ElectricityReductionService {
     }
     return naturalGasReductionResults;
   }
-  
+
   calculate(input: Array<ElectricityReductionData>, settings: Settings): ElectricityReductionResult {
     let inputArray: Array<ElectricityReductionData> = this.convertInputs(input, settings);
     let inputObj: ElectricityReductionInput = {

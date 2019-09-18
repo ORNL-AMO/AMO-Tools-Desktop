@@ -10,11 +10,21 @@ export class MotorDriveService {
   operatingHours: OperatingHours;
   constructor(private formBuilder: FormBuilder) { }
 
-  getDefaultData(settings: Settings): MotorDriveInputs{
+  generateExample(settings: Settings): MotorDriveInputs{
     return {
       motorPower: 5,
       annualOperatingHours: 8760,
       averageMotorLoad: 50,
+      electricityCost: settings.electricityCost,
+      baselineDriveType: 0,
+      modificationDriveType: 2
+    }
+  }
+  getResetData(settings: Settings): MotorDriveInputs{
+    return {
+      motorPower: 0,
+      annualOperatingHours: 0,
+      averageMotorLoad: 0,
       electricityCost: settings.electricityCost,
       baselineDriveType: 0,
       modificationDriveType: 0

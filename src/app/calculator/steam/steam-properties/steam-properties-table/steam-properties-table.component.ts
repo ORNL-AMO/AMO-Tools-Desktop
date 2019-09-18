@@ -11,6 +11,8 @@ export class SteamPropertiesTableComponent implements OnInit {
   @Input()
   toggleResetData: boolean;
   @Input()
+  toggleExampleData: boolean;
+  @Input()
   settings: Settings;
   @Input()
   data: { pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number };
@@ -29,6 +31,8 @@ export class SteamPropertiesTableComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetTable();
+    } if (changes.toggleExampleData && !changes.toggleExampleData.firstChange) {
+      //this.addRow();
     }
     if (changes.data && !changes.data.firstChange) {
       this.addRow();

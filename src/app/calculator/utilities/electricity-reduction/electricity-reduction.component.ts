@@ -172,6 +172,26 @@ export class ElectricityReductionComponent implements OnInit {
     this.getResults();
   }
 
+  generateExample() {
+    let tmpBaselineObj: ElectricityReductionData = this.electricityReductionService.generateExample(this.settings, true);
+    this.baselineData = [tmpBaselineObj];
+    this.electricityReductionService.baselineData = this.baselineData;
+    let tmpModificationData: ElectricityReductionData = this.electricityReductionService.generateExample(this.settings, false);
+    this.modificationData = [tmpModificationData];
+    this.electricityReductionService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+  }
+
+  btnGenerateExample() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.generateExample();
+    this.getResults();
+  }
+
   save() {
     this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
   }

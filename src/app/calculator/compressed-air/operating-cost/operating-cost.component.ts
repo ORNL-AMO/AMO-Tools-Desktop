@@ -65,4 +65,19 @@ export class OperatingCostComponent implements OnInit {
   setField(str: string) {
     this.currentField = str;
   }
+
+  btnGenerateExample() {
+    let tempInputs = {
+      motorBhp: 215,
+      bhpUnloaded: 25,
+      annualOperatingHours: 6800,
+      runTimeLoaded: 85,
+      runTimeUnloaded: 15,
+      efficiencyLoaded: 95,
+      efficiencyUnloaded: 90,
+      costOfElectricity: 0.05,
+    };
+    this.inputs = this.compressedAirService.convertOperatingCostExample(tempInputs, this.settings);
+    this.calculateOperationCost(this.inputs)
+  }
 }

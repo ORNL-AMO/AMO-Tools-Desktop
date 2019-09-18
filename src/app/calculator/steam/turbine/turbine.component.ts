@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Settings } from '../../../shared/models/settings';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SteamService } from '../steam.service';
-import { TurbineInput } from '../../../shared/models/steam/steam-inputs';
-import { TurbineService } from './turbine.service';
-import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
+import {Component, OnInit, Input, ViewChild, ElementRef, HostListener} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {Settings} from '../../../shared/models/settings';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {SteamService} from '../steam.service';
+import {TurbineInput} from '../../../shared/models/steam/steam-inputs';
+import {TurbineService} from './turbine.service';
+import {TurbineOutput} from '../../../shared/models/steam/steam-outputs';
 
 @Component({
   selector: 'app-turbine-calculator',
@@ -28,10 +28,12 @@ export class TurbineComponent implements OnInit {
   turbineForm: FormGroup;
   input: TurbineInput;
   results: TurbineOutput;
+  toggleGenerateExample: boolean = false;
 
   warning: string;
 
-  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private turbineService: TurbineService) { }
+  constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private turbineService: TurbineService) {
+  }
 
   ngOnInit() {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -44,15 +46,11 @@ export class TurbineComponent implements OnInit {
     this.input = this.turbineService.getObjFromForm(this.turbineForm);
     this.calculate(this.turbineForm);
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
     }, 50);
-  }
-
-  btnResetData() {
-    this.turbineForm = this.turbineService.initForm(this.settings);
-    this.calculate(this.turbineForm);
   }
 
   resizeTabs() {
@@ -64,6 +62,7 @@ export class TurbineComponent implements OnInit {
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string) {
     this.currentField = str;
   }
@@ -72,7 +71,7 @@ export class TurbineComponent implements OnInit {
     if (this.turbineService.turbineInput) {
       this.turbineForm = this.turbineService.getFormFromObj(this.turbineService.turbineInput, this.settings);
     } else {
-      this.turbineForm = this.turbineService.initForm(this.settings);
+      this.turbineForm = this.turbineService.resetForm(this.settings);
     }
   }
 
@@ -81,8 +80,7 @@ export class TurbineComponent implements OnInit {
     this.turbineService.turbineInput = this.input;
     if (this.input.inletPressure < this.input.outletSteamPressure) {
       this.warning = "Outlet pressure of the turbine cannot be greater than the inlet pressure.";
-    }
-    else {
+    } else {
       this.warning = null;
     }
 
@@ -122,5 +120,21 @@ export class TurbineComponent implements OnInit {
       outletIdealVolume: 0
     };
     return emptyResults;
+  }
+
+  btnResetData() {
+    this.turbineForm = this.turbineService.resetForm(this.settings);
+    this.calculate(this.turbineForm);
+  }
+
+  btnGenerateExample() {
+      this.toggleGenerateExample = !this.toggleGenerateExample;
+      if (this.turbineForm.value.solveFor === 1) {
+        this.turbineForm = this.turbineService.initIsentropicForm(this.settings);
+        this.calculate(this.turbineForm);
+      } else {
+        this.turbineForm = this.turbineService.initOutletForm(this.settings);
+        this.calculate(this.turbineForm);
+      }
   }
 }

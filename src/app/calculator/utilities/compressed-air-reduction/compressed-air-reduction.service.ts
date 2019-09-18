@@ -61,6 +61,79 @@ export class CompressedAirReductionService {
     return obj;
   }
 
+  generateExample(settings: Settings, isBaseline: boolean): CompressedAirReductionData {
+    let defaultData: CompressedAirReductionData
+    if (isBaseline) {
+      defaultData = {
+        name: 'Equipment #1',
+        hoursPerYear: 8736,
+        utilityType: 0,
+        utilityCost: 0.12,
+        compressedAirCost: 0.12,
+        electricityCost: settings.electricityCost,
+        measurementMethod: 0,
+        flowMeterMethodData: {
+          meterReading: 0.2
+        },
+        bagMethodData: {
+          height: 0,
+          diameter: 0,
+          fillTime: 0
+        },
+        pressureMethodData: {
+          nozzleType: 0,
+          numberOfNozzles: 0,
+          supplyPressure: 0
+        },
+        otherMethodData: {
+          consumption: 0
+        },
+        compressorElectricityData: {
+          compressorControl: 0,
+          compressorControlAdjustment: 0,
+          compressorSpecificPowerControl: 0,
+          compressorSpecificPower: 0
+        },
+        units: 1
+      };
+    }
+    else {
+      defaultData = {
+        name: 'Equipment #1',
+        hoursPerYear: 8736,
+        utilityType: 0,
+        utilityCost: 0.12,
+        compressedAirCost: 0.12,
+        electricityCost: settings.electricityCost,
+        measurementMethod: 0,
+        flowMeterMethodData: {
+          meterReading: 0.1
+        },
+        bagMethodData: {
+          height: 0,
+          diameter: 0,
+          fillTime: 0
+        },
+        pressureMethodData: {
+          nozzleType: 0,
+          numberOfNozzles: 0,
+          supplyPressure: 0
+        },
+        otherMethodData: {
+          consumption: 0
+        },
+        compressorElectricityData: {
+          compressorControl: 0,
+          compressorControlAdjustment: 0,
+          compressorSpecificPowerControl: 0,
+          compressorSpecificPower: 0
+        },
+        units: 1
+      };
+    }
+    return defaultData;
+  }
+
   getFormFromObj(inputObj: CompressedAirReductionData, index: number, isBaseline): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],

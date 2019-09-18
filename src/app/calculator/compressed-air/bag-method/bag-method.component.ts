@@ -23,8 +23,7 @@ export class BagMethodComponent implements OnInit {
   }
 
   headerHeight: number;
-
-  //inputs: BagMethodInput;
+  inputs: BagMethodInput;
   outputs: BagMethodOutput;
 
   inputsArray: Array<BagMethodInput>;
@@ -151,6 +150,35 @@ export class BagMethodComponent implements OnInit {
     this.currentField = str;
   }
 
+  btnGenerateExample() {
+    //each calculator will have some form of an input object, assign default values from pdf
+    const temp: Array<BagMethodInput> = [{
+      operatingTime: 5000,
+      bagFillTime: 300,
+      heightOfBag: 50,
+      diameterOfBag: 40,
+      numberOfUnits: 1
+    }
+      ,{
+      operatingTime: 5000,
+      bagFillTime: 360,
+      heightOfBag: 50,
+      diameterOfBag: 48,
+      numberOfUnits: 1
+    }];
+    this.inputsArray = temp;
+    this.totalOperatingTime = 5000;
+    //need to handle conversion if unit of measurement is set to Metric
+    this.inputsArray = this.compressedAirService.convertLeakLossEstimatorExample(this.inputsArray, this.settings);
+    //not every calculator will store values in the service,
+    //but be sure to store it in calcs that already do
+    this.compressedAirService.bagMethodInputs = {
+      inputsArray: this.inputsArray,
+      operatingHours: 5000,
+    };
+    //execute calculation procedure to update calculator with example values
+    this.calculateAnnualConsumption();
+  }
   openOperatingHoursModal() {
     this.showOperatingHoursModal = true;
   }

@@ -28,6 +28,14 @@ tr > th:not(:first-child){
     .chart-row{
         padding: 0px !important;
     }
+
+    .print-bottom-padding {
+        padding-bottom: 40px !important;
+    }
+
+    .print-space-from-title {
+        padding-top: 20px;
+    }
 }
 
 .show-print{

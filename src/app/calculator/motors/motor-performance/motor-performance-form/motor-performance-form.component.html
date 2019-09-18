@@ -13,11 +13,12 @@
       <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
     </select> -->
     <div class="input-group calc-addon-group">
-      <input name="horsePower" type="number" min="0" step="any" class="form-control" id="horsePower" formControlName="horsePower"
-        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('horsePower')">
+      <input name="horsePower" type="number" min="0" step="any" class="form-control" id="horsePower"
+        formControlName="horsePower" (input)="emitChange()" onfocus="this.select();" (focus)="focusField('horsePower')">
       <span class="units">{{settings.powerMeasurement}}</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="performanceForm.controls.horsePower.invalid && !performanceForm.controls.horsePower.pristine">
+    <span class="alert-danger pull-right small"
+      *ngIf="performanceForm.controls.horsePower.invalid && !performanceForm.controls.horsePower.pristine">
       <span *ngIf="performanceForm.controls.horsePower.errors.required">Value required.</span>
       <span *ngIf="performanceForm.controls.horsePower.errors.min">Value cannot be less than
         {{performanceForm.controls.horsePower.errors.min.min}} {{settings.powerMeasurement}}.</span>
@@ -27,10 +28,12 @@
   <div class="form-group">
     <label for="motorRPM">Motor RPM</label>
     <div class="input-group calc-addon-group">
-      <input name="motorRPM" type="number" formControlName="motorRPM" step="10" min="0" class="form-control" id="motorRPM"
-        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('motorRPM')">
+      <input name="motorRPM" type="number" formControlName="motorRPM" step="10" min="0" class="form-control"
+        id="motorRPM" (input)="emitChange()" onfocus="this.select();" (focus)="focusField('motorRPM')">
+      <span class="units">RPM</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="performanceForm.controls.motorRPM.invalid && !performanceForm.controls.motorRPM.pristine">
+    <span class="alert-danger pull-right small"
+      *ngIf="performanceForm.controls.motorRPM.invalid && !performanceForm.controls.motorRPM.pristine">
       <span *ngIf="performanceForm.controls.motorRPM.errors.required">Value required.</span>
       <span *ngIf="performanceForm.controls.motorRPM.errors.min">Motor RPM too small for selected efficiency class,
         should
@@ -41,8 +44,10 @@
 
   <div class="form-group">
     <label for="efficiencyClass">Efficiency Class</label>
-    <select name="efficiencyClass" class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (change)="changePowerArrays()">
-      <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">{{efficiencyClass.display}}</option>
+    <select name="efficiencyClass" class="form-control" id="efficiencyClass" formControlName="efficiencyClass"
+      (change)="changePowerArrays()">
+      <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">
+        {{efficiencyClass.display}}</option>
     </select>
   </div>
   <!--specified efficiency-->
@@ -53,7 +58,8 @@
         formControlName="efficiency" (input)="emitChange()" onfocus="this.select();" (focus)="focusField('efficiency')">
       <span class="units">%</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="performanceForm.controls.efficiency.invalid && !performanceForm.controls.efficiency.pristine">
+    <span class="alert-danger pull-right small"
+      *ngIf="performanceForm.controls.efficiency.invalid && !performanceForm.controls.efficiency.pristine">
       <span *ngIf="performanceForm.controls.efficiency.errors.required">Value required.</span>
       <span *ngIf="performanceForm.controls.efficiency.errors.max">Value can't be greater than
         {{performanceForm.controls.efficiency.errors.max.max}}
@@ -67,11 +73,13 @@
   <div class="form-group">
     <label for="motorVoltage">Voltage</label>
     <div class="input-group calc-addon-group">
-      <input name="motorVoltage" type="number" step="any" class="form-control" id="motorVoltage" formControlName="motorVoltage"
-        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('motorVoltage')">
+      <input name="motorVoltage" type="number" step="any" class="form-control" id="motorVoltage"
+        formControlName="motorVoltage" (input)="emitChange()" onfocus="this.select();"
+        (focus)="focusField('motorVoltage')">
       <span class="input-group-addon units">V</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="performanceForm.controls.motorVoltage.invalid && !performanceForm.controls.motorVoltage.pristine">
+    <span class="alert-danger pull-right small"
+      *ngIf="performanceForm.controls.motorVoltage.invalid && !performanceForm.controls.motorVoltage.pristine">
       <span *ngIf="performanceForm.controls.motorVoltage.errors.required">Value required.</span>
     </span>
   </div>
@@ -80,14 +88,17 @@
     <label for="fullLoadAmps" aria-describedby="flaHelp">
       Full-Load Amps
       <a class="form-text small click-link" (click)="calculateFullLoadAmps()">Estimate Full-Load Amps</a>
-      <span class="alert-danger form-text small" *ngIf="calcFLAError">The rest of the form must be valid before estimation.</span>
+      <span class="alert-danger form-text small" *ngIf="calcFLAError">The rest of the form must be valid before
+        estimation.</span>
     </label>
     <div class="input-group calc-addon-group">
-      <input name="fullLoadAmps" type="number" step="any" class="form-control addon-input" id="fullLoadAmps" (input)="emitChange()"
-        onfocus="this.select();" (focus)="focusField('fullLoadAmps')" formControlName="fullLoadAmps">
+      <input name="fullLoadAmps" type="number" step="any" class="form-control addon-input" id="fullLoadAmps"
+        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('fullLoadAmps')"
+        formControlName="fullLoadAmps">
       <span class="input-group-addon units">A</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="performanceForm.controls.fullLoadAmps.invalid && !performanceForm.controls.fullLoadAmps.pristine">
+    <span class="alert-danger pull-right small"
+      *ngIf="performanceForm.controls.fullLoadAmps.invalid && !performanceForm.controls.fullLoadAmps.pristine">
       <span *ngIf="performanceForm.controls.fullLoadAmps.errors.required">Value required.</span>
     </span>
   </div>

@@ -23,6 +23,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   tabSelect: string = 'results';
   toggleCalculate = false;
   toggleResetData = false;
+  toggleExampleData = false;
   loadEstimationMethod: number;
   percentLoadEstimation: number;
 
@@ -30,7 +31,9 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   fieldMeasurementData: FieldMeasurementInputs;
   fieldMeasurementResults: FieldMeasurementOutputs;
-  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService) { }
+
+  constructor(private percentLoadEstimationService: PercentLoadEstimationService, private settingsDbService: SettingsDbService) {
+  }
 
   ngOnInit() {
     if (!this.settings) {
@@ -54,15 +57,6 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   ngOnDestroy() {
     this.percentLoadEstimationService.loadEstimationMethod = this.loadEstimationMethod;
-  }
-
-
-  btnResetData() {
-    this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
-    this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
-    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
-    this.calculateSlipMethod(this.slipMethodData);
-    this.toggleResetData = !this.toggleResetData;
   }
 
   resizeTabs() {
@@ -93,5 +87,20 @@ export class PercentLoadEstimationComponent implements OnInit {
     }
   }
 
+  btnResetData() {
+    this.slipMethodData = this.percentLoadEstimationService.initSlipMethodInputs();
+    this.fieldMeasurementData = this.percentLoadEstimationService.initFieldMeasurementInputs();
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    this.calculateSlipMethod(this.slipMethodData);
+    this.toggleResetData = !this.toggleResetData;
+  }
+
+  btnGenerateExample() {
+    this.fieldMeasurementData = this.percentLoadEstimationService.generateFieldMeasurementInputs();
+    this.slipMethodData = this.percentLoadEstimationService.generateSlipMethodInputsExample();
+    this.calculateFieldMeasurementMethod(this.fieldMeasurementData);
+    this.calculateSlipMethod(this.slipMethodData);
+    this.toggleExampleData = !this.toggleExampleData;
+  }
 }
 

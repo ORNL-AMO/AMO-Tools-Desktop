@@ -60,6 +60,31 @@ export class LightingReplacementService {
     return tmpData;
   }
 
+  generateExample(isBaseline: boolean): LightingReplacementData {
+    if (isBaseline) {
+      return {
+        name: 'Fixture #1',
+        hoursPerYear: 4368,
+        wattsPerLamp: 28,
+        lampsPerFixture: 6,
+        numberOfFixtures: 300,
+        lumensPerLamp: 2520,
+        totalLighting: 0,
+        electricityUse: 0
+      }
+    }
+    return {
+      name: 'Fixture #1',
+      hoursPerYear: 4368,
+      wattsPerLamp: 18,
+      lampsPerFixture: 6,
+      numberOfFixtures: 300,
+      lumensPerLamp: 2200,
+      totalLighting: 0,
+      electricityUse: 0
+    }
+  }
+
   calculateElectricityUse(data: LightingReplacementData): LightingReplacementData {
     data.electricityUse = data.wattsPerLamp * data.lampsPerFixture * data.numberOfFixtures * (1 / 1000) * data.hoursPerYear;
     return data;

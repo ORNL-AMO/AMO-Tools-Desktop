@@ -9,6 +9,8 @@ import { TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 export class ReportGraphsComponent implements OnInit {
   @Input()
   treasureHuntResults: TreasureHuntResults;
+  @Input()
+  showPrint: boolean;
 
   constructor() { }
 

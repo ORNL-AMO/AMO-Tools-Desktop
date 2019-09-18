@@ -1,8 +1,7 @@
-<div class="d-flex" [ngClass]="{'flex-row' : title == 'Cost Summary', 'flex-column' : title != 'Cost Summary'}">
+<div class="d-flex" [ngClass]="{'flex-row print-space-from-title' : title == 'Cost Summary', 'flex-column' : title != 'Cost Summary'}">
 
   <div class="d-flex flex-column output-summary pb-5" #costSummaryChartContainer>
 
-    <!-- <h4 class="show-print">Executive Summary</h4> -->
     <label class="group-label">{{title}}</label>
     <table class="table table-striped table-hover">
       <tbody>
@@ -358,10 +357,17 @@
     are under "Mixed."
   </div>
 
-  <div class="d-flex flex-column" *ngIf="title == 'Cost Summary'">
+  <div class="d-flex flex-column hide-print" *ngIf="title == 'Cost Summary'">
     <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles"
       [data]="data" [chartContainerWidth]="getChartWidth()" [chartContainerHeight]="getChartHeight()">
     </app-cost-summary-chart>
   </div>
 
+</div>
+
+<!-- print version of the chart -->
+<div class="d-flex flex-row show-print print-bottom-padding" *ngIf="title == 'Cost Summary' && showPrint">
+  <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles" [data]="data"
+    [chartContainerWidth]="getChartWidth()" [chartContainerHeight]="getChartHeight()">
+  </app-cost-summary-chart>
 </div>

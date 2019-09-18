@@ -16,12 +16,14 @@ import { CostSummaryChartService } from './report-graphs/cost-summary-chart/cost
 import { OpportunitySummaryService } from './opportunity-summary.service';
 import { FormsModule } from '@angular/forms';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
+import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    FacilityInfoSummaryModule
+    FacilityInfoSummaryModule,
+    PrintOptionsMenuModule
   ],
   declarations: [
     TreasureHuntReportComponent,

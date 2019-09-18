@@ -1,13 +1,14 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { PSAT } from '../../../shared/models/psat';
-import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { FormGroup } from '@angular/forms';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SpecificSpeedService } from './specific-speed.service';
-import { Assessment } from '../../../shared/models/assessment';
-import { Calculator, SpecificSpeedInputs } from '../../../shared/models/calculators';
-import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
+import {Component, OnInit, Input, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {PSAT} from '../../../shared/models/psat';
+import {Settings} from '../../../shared/models/settings';
+import {IndexedDbService} from '../../../indexedDb/indexed-db.service';
+import {FormGroup} from '@angular/forms';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {SpecificSpeedService} from './specific-speed.service';
+import {Assessment} from '../../../shared/models/assessment';
+import {Calculator, SpecificSpeedInputs} from '../../../shared/models/calculators';
+import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
+
 @Component({
   selector: 'app-specific-speed',
   templateUrl: './specific-speed.component.html',
@@ -42,8 +43,10 @@ export class SpecificSpeedComponent implements OnInit {
   calcExists: boolean;
   saving: boolean;
   calculator: Calculator;
+
   constructor(private specificSpeedService: SpecificSpeedService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
+              private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) {
+  }
 
   ngOnInit() {
     if (!this.settings) {
@@ -68,11 +71,6 @@ export class SpecificSpeedComponent implements OnInit {
     }, 100);
   }
 
-  btnResetData() {
-    this.toggleResetData = !this.toggleResetData;
-    this.speedForm = this.specificSpeedService.initForm(this.settings);
-    this.calculate();
-  }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
@@ -156,5 +154,17 @@ export class SpecificSpeedComponent implements OnInit {
         });
       }
     }
+  }
+
+  btnResetData() {
+    this.toggleResetData = !this.toggleResetData;
+    this.speedForm = this.specificSpeedService.resetForm(this.settings);
+    this.calculate();
+  }
+
+  btnGenerateExample() {
+    this.toggleResetData = !this.toggleResetData;
+    this.speedForm = this.specificSpeedService.initForm(this.settings);
+    this.calculate();
   }
 }

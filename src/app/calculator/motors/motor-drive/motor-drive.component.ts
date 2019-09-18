@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, EventEmitter, Output } from '@angular/core';
-import { MotorDriveService } from './motor-drive.service';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { Settings } from '../../../shared/models/settings';
-import { MotorDriveInputs, MotorDriveOutputs } from '../../../shared/models/calculators';
-import { FormGroup } from '@angular/forms';
+import {Component, OnInit, ViewChild, HostListener, ElementRef, Input, EventEmitter, Output} from '@angular/core';
+import {MotorDriveService} from './motor-drive.service';
+import {SettingsDbService} from '../../../indexedDb/settings-db.service';
+import {Settings} from '../../../shared/models/settings';
+import {MotorDriveInputs, MotorDriveOutputs} from '../../../shared/models/calculators';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-motor-drive',
@@ -42,10 +42,12 @@ export class MotorDriveComponent implements OnInit {
   headerHeight: number;
   percentSavings: number;
   containerHeight: number;
-  constructor(private motorDriveService: MotorDriveService, private settingsDbService: SettingsDbService) { }
+
+  constructor(private motorDriveService: MotorDriveService, private settingsDbService: SettingsDbService) {
+  }
 
   ngOnInit() {
-    if(!this.settings){
+    if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
@@ -53,8 +55,8 @@ export class MotorDriveComponent implements OnInit {
     }
     if (this.motorDriveService.motorDriveData) {
       this.motorDriveData = this.motorDriveService.motorDriveData;
-    }else{
-      this.motorDriveData = this.motorDriveService.getDefaultData(this.settings);
+    } else {
+      this.motorDriveData = this.motorDriveService.generateExample(this.settings);
     }
     this.motorDriveForm = this.motorDriveService.getFormFromObj(this.motorDriveData);
     this.calculate(this.motorDriveData);
@@ -66,22 +68,17 @@ export class MotorDriveComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy(){
-    if(!this.inTreasureHunt){
+  ngOnDestroy() {
+    if (!this.inTreasureHunt) {
       this.motorDriveService.motorDriveData = this.motorDriveData;
-    }else{
+    } else {
       this.motorDriveService.motorDriveData = undefined;
     }
   }
 
-  btnResetData() {
-    this.motorDriveData = this.motorDriveService.getDefaultData(this.settings);
-    this.motorDriveForm = this.motorDriveService.getFormFromObj(this.motorDriveData);
-    this.calculate(this.motorDriveData);
-  }
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
       this.containerHeight = this.contentContainer.nativeElement.clientHeight - this.leftPanelHeader.nativeElement.clientHeight;
     }
@@ -97,6 +94,7 @@ export class MotorDriveComponent implements OnInit {
   setTab(str: string) {
     this.tabSelect = str;
   }
+
   changeField(str: string) {
     this.currentField = str;
   }
@@ -111,6 +109,18 @@ export class MotorDriveComponent implements OnInit {
 
   addOpportunitySheet() {
     this.emitAddOpportunitySheet.emit(true);
+  }
+
+  btnResetData() {
+    this.motorDriveData = this.motorDriveService.getResetData(this.settings);
+    this.motorDriveForm = this.motorDriveService.getFormFromObj(this.motorDriveData);
+    this.calculate(this.motorDriveData);
+  }
+
+  btnGenerateExample() {
+    this.motorDriveData = this.motorDriveService.generateExample(this.settings);
+    this.motorDriveForm = this.motorDriveService.getFormFromObj(this.motorDriveData);
+    this.calculate(this.motorDriveData);
   }
 }
 

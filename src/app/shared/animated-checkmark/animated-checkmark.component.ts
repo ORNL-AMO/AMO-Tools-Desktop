@@ -42,12 +42,10 @@ export class AnimatedCheckmarkComponent implements OnInit {
   ngOnInit() {
     this.animationTime = 350;
     this.initColors();
-    this.setupSvg();
-    this.initCircles();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.active) {
+    if (changes.active && changes.active.isFirstChange() == false) {
       if (this.svg === undefined) {
         this.setupSvg();
         this.initCircles();
@@ -56,6 +54,11 @@ export class AnimatedCheckmarkComponent implements OnInit {
         this.updateCheckMark();
       }
     }
+  }
+
+  ngAfterViewInit(){
+    this.setupSvg();
+    this.initCircles();
   }
 
   initColors(): void {

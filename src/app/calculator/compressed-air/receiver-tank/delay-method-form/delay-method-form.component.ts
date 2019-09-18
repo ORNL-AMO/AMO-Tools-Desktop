@@ -14,6 +14,8 @@ export class DelayMethodFormComponent implements OnInit {
   toggleResetData: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  toggleGenerateExample: boolean;
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
   inputs: ReceiverTankBridgingCompressor;
@@ -31,6 +33,22 @@ export class DelayMethodFormComponent implements OnInit {
     if (changes.toggleResetData && !changes.toggleResetData.firstChange) {
       this.resetData();
     }
+    if (changes.toggleGenerateExample && !changes.toggleGenerateExample.firstChange) {
+      this.generateExample();
+    }
+  }
+
+  generateExample() {
+    let tempInputs = {
+      method: 3,
+      distanceToCompressorRoom: 1000,
+      speedOfAir: 250,
+      airDemand: 600,
+      allowablePressureDrop: 2,
+      atmosphericPressure: 14.7
+    };
+    this.inputs = this.compressedAirService.convertTankBridgingCompressorExample(tempInputs, this.settings);
+    this.getTotalReceiverVolume();
   }
 
   resetData() {

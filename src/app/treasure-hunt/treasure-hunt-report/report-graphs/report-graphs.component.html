@@ -1,55 +1,59 @@
 <div class="row">
-  <div class="col-6">
+
+  <div class="print-avoid-break" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
     <label class="group-label w-100 large">Current Cost Status</label>
-    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true"></app-cost-pie-chart>
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true" [showPrint]="showPrint">
+    </app-cost-pie-chart>
   </div>
-  <div class="col-6">
+  <div class="print-avoid-break" [ngClass]="{'col-6': !showPrint, 'col-12': showPrint}">
     <label class="group-label w-100 large">Projected Cost Status</label>
-    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false"></app-cost-pie-chart>
+    <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false" [showPrint]="showPrint">
+    </app-cost-pie-chart>
   </div>
-  <div class="col">
+  <div class="col print-avoid-break">
     <label class="group-label w-100 large">Total Utility Expenditures</label>
     <app-utility-donut-chart [savings]="treasureHuntResults.totalSavings"
       [newCost]="treasureHuntResults.totalModificationCost"></app-utility-donut-chart>
   </div>
-  <div class="col" *ngIf="treasureHuntResults.electricity.costSavings">
+  <div class="col print-avoid-break"
+    *ngIf="treasureHuntResults.electricity.costSavings">
     <label class="group-label w-100 large">Electricity Utility Expenditures</label>
     <app-utility-donut-chart [savings]="treasureHuntResults.electricity.costSavings"
       [newCost]="treasureHuntResults.electricity.modifiedEnergyCost"></app-utility-donut-chart>
   </div>
-  <div class="col" *ngIf="treasureHuntResults.naturalGas.costSavings">
-    <label class="group-label w-100 large">Natural Gas Utility Expenditures</label>
+  <div class="col print-avoid-break" *ngIf="treasureHuntResults.naturalGas.costSavings">
+    <label class="group-label w-100 large print-break-before">Natural Gas Utility Expenditures</label>
     <app-utility-donut-chart [savings]="treasureHuntResults.naturalGas.costSavings"
       [newCost]="treasureHuntResults.naturalGas.modifiedEnergyCost"></app-utility-donut-chart>
   </div>
-  <div class="col" *ngIf="treasureHuntResults.water.costSavings">
-    <label class="group-label w-100 large">Water Utility Expenditures</label>
+  <div class="col print-avoid-break" *ngIf="treasureHuntResults.water.costSavings">
+    <label class="group-label w-100 large print-break-before">Water Utility Expenditures</label>
     <app-utility-donut-chart [savings]="treasureHuntResults.water.costSavings"
       [newCost]="treasureHuntResults.water.modifiedEnergyCost"></app-utility-donut-chart>
   </div>
-  <div class="col" *ngIf="treasureHuntResults.wasteWater.costSavings">
+  <div class="col print-avoid-break" *ngIf="treasureHuntResults.wasteWater.costSavings">
     <label class="group-label w-100 large">Waste Water Utility Expenditures</label>
     <app-utility-donut-chart [savings]="treasureHuntResults.wasteWater.costSavings"
       [newCost]="treasureHuntResults.wasteWater.modifiedEnergyCost"></app-utility-donut-chart>
   </div>
-  <div class="col" *ngIf="treasureHuntResults.otherFuel.costSavings">
+  <div class="col print-avoid-break" *ngIf="treasureHuntResults.otherFuel.costSavings">
     <label class="group-label w-100 large">Other fuel Utility Expenditures</label>
     <app-utility-donut-chart [savings]="treasureHuntResults.otherFuel.costSavings"
       [newCost]="treasureHuntResults.otherFuel.modifiedEnergyCost"></app-utility-donut-chart>
   </div>
-  <div class="col" *ngIf="treasureHuntResults.compressedAir.costSavings">
+  <div class="col print-avoid-break" *ngIf="treasureHuntResults.compressedAir.costSavings">
     <label class="group-label w-100 large">Compressed Air Utility Expenditures</label>
     <app-utility-donut-chart [savings]="treasureHuntResults.compressedAir.costSavings"
       [newCost]="treasureHuntResults.compressedAir.modifiedEnergyCost"></app-utility-donut-chart>
   </div>
-  <div class="col" *ngIf="treasureHuntResults.steam.costSavings">
+  <div class="col print-avoid-break" *ngIf="treasureHuntResults.steam.costSavings">
     <label class="group-label w-100 large">Steam Utility Expenditures</label>
     <app-utility-donut-chart [savings]="treasureHuntResults.steam.costSavings"
       [newCost]="treasureHuntResults.steam.modifiedEnergyCost"></app-utility-donut-chart>
   </div>
-  <!-- <div class="col" *ngIf="treasureHuntResults.other.costSavings">
-    <label class="group-label w-100 large">Other Utility Expenditures</label>
-    <app-utility-donut-chart [savings]="treasureHuntResults.other.costSavings"
-      [newCost]="treasureHuntResults.other.modifiedEnergyCost"></app-utility-donut-chart>
-  </div> -->
+  <!-- <div class="col print-avoid-break" *ngIf="treasureHuntResults.other.costSavings">
+            <label class="group-label w-100 large">Other Utility Expenditures</label>
+            <app-utility-donut-chart [savings]="treasureHuntResults.other.costSavings"
+              [newCost]="treasureHuntResults.other.modifiedEnergyCost"></app-utility-donut-chart>
+          </div> -->
 </div>
