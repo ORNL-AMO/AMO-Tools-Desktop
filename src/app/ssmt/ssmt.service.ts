@@ -54,7 +54,7 @@ export class SsmtService {
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, settings).valid;
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselinePowerDemand, isBaselineCalculation);
     if (turbineValid && headerValid && boilerValid && operationsValid) {
-      let convertedInputData: SSMTInputs = this.convertInputData(setupInputData, settings);
+      let convertedInputData: SSMTInputs = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
       let outputData: SSMTOutput = this.steamService.steamModeler(convertedInputData, settings);
       return { inputData: setupInputData, outputData: outputData };
     } else {
@@ -301,20 +301,28 @@ export class SsmtService {
     let marginalHPCost: number = 0;
     let marginalMPCost: number = 0;
     let marginalLPCost: number = 0;
-    convertedInputData.headerInput.highPressureHeader.processSteamUsage = convertedInputData.headerInput.highPressureHeader.processSteamUsage + 100;
+
+    setupInputData.headerInput.highPressureHeader.processSteamUsage = setupInputData.headerInput.highPressureHeader.processSteamUsage + 100;
+    convertedInputData = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
+
     let highPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(convertedInputData, settings);
-    convertedInputData.headerInput.highPressureHeader.processSteamUsage = convertedInputData.headerInput.highPressureHeader.processSteamUsage - 100;
+
+    setupInputData.headerInput.highPressureHeader.processSteamUsage = setupInputData.headerInput.highPressureHeader.processSteamUsage - 100;
     marginalHPCost = this.getCostDifference(balancedResults, highPressureMarginalResults, setupInputData);
 
-    if (convertedInputData.headerInput.numberOfHeaders > 1) {
-      convertedInputData.headerInput.lowPressureHeader.processSteamUsage = convertedInputData.headerInput.lowPressureHeader.processSteamUsage + 100;
+    if (setupInputData.headerInput.numberOfHeaders > 1) {
+      setupInputData.headerInput.lowPressureHeader.processSteamUsage = setupInputData.headerInput.lowPressureHeader.processSteamUsage + 100;
+      convertedInputData = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
       let lowPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(convertedInputData, settings);
-      convertedInputData.headerInput.lowPressureHeader.processSteamUsage = convertedInputData.headerInput.lowPressureHeader.processSteamUsage - 100;
+      setupInputData.headerInput.lowPressureHeader.processSteamUsage = setupInputData.headerInput.lowPressureHeader.processSteamUsage - 100;
       marginalLPCost = this.getCostDifference(balancedResults, lowPressureMarginalResults, setupInputData);
-      if (convertedInputData.headerInput.numberOfHeaders === 3) {
-        convertedInputData.headerInput.mediumPressureHeader.processSteamUsage = convertedInputData.headerInput.mediumPressureHeader.processSteamUsage + 100;
+
+      if (setupInputData.headerInput.numberOfHeaders === 3) {
+        setupInputData.headerInput.mediumPressureHeader.processSteamUsage = setupInputData.headerInput.mediumPressureHeader.processSteamUsage + 100;
+        convertedInputData = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
+
         let mediumPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(convertedInputData, settings);
-        convertedInputData.headerInput.mediumPressureHeader.processSteamUsage = convertedInputData.headerInput.mediumPressureHeader.processSteamUsage - 100;
+        setupInputData.headerInput.mediumPressureHeader.processSteamUsage = setupInputData.headerInput.mediumPressureHeader.processSteamUsage - 100;
         marginalMPCost = this.getCostDifference(balancedResults, mediumPressureMarginalResults, setupInputData);
       }
     }
@@ -322,7 +330,6 @@ export class SsmtService {
   }
 
   getCostDifference(balancedResults: SSMTOutput, adjustedResults: SSMTOutput, inputData: SSMTInputs): number {
-    debugger
     let powerGenOC: number = balancedResults.operationsOutput.powerGenerated * inputData.operationsInput.electricityCosts;
     let adjustedPowerGenOC: number = adjustedResults.operationsOutput.powerGenerated * inputData.operationsInput.electricityCosts;
     let totalOC: number = balancedResults.operationsOutput.totalOperatingCost / inputData.operationsInput.operatingHoursPerYear;
