@@ -37,6 +37,7 @@ export class SsmtDiagramTabComponent implements OnInit {
   scaleValue: number = 100;
 
   setDiagramPixelWidth: number = 900;
+  baselinePowerDemand: number;
   constructor(private ssmtService: SsmtService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -65,8 +66,9 @@ export class SsmtDiagramTabComponent implements OnInit {
     let resultsData: { inputData: SSMTInputs, outputData: SSMTOutput };
     if (this.selectedSSMT.name == 'Baseline') {
       resultsData = this.ssmtService.calculateModel(this.selectedSSMT, this.settings, true, 0);
+      this.baselinePowerDemand = resultsData.outputData.operationsOutput.sitePowerDemand;
     } else {
-      resultsData = this.ssmtService.calculateModel(this.selectedSSMT, this.settings, false, this.ssmt.outputData.operationsOutput.powerGenerationCost);
+      resultsData = this.ssmtService.calculateModel(this.selectedSSMT, this.settings, false, this.baselinePowerDemand);
     }
     this.inputData = resultsData.inputData;
     this.outputData = resultsData.outputData;

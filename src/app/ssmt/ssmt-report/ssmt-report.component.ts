@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { SSMTInputs } from '../../shared/models/steam/ssmt';
+import { SSMTInputs, SSMT } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
@@ -74,6 +74,7 @@ export class SsmtReportComponent implements OnInit {
     if (this.assessment.ssmt.setupDone) {
       setTimeout(() => {
         let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(this.assessment.ssmt, this.settings, true, 0);
+        resultData.outputData = this.calculateResultsWithMarginalCosts(this.assessment.ssmt, resultData.outputData);
         this.assessment.ssmt.outputData = resultData.outputData;
         this.baselineOutput = resultData.outputData;
         this.baselineInputData = resultData.inputData;
@@ -84,6 +85,7 @@ export class SsmtReportComponent implements OnInit {
         if (this.assessment.ssmt.modifications) {
           this.assessment.ssmt.modifications.forEach(modification => {
             let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModel(modification.ssmt, this.settings, false, this.baselineOutput.operationsOutput.sitePowerDemand);
+            resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData);
             modification.ssmt.outputData = resultData.outputData;
             this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData });
             this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData });
@@ -262,7 +264,6 @@ export class SsmtReportComponent implements OnInit {
     }
   }
 
-
   print(): void {
     this.closeModal(false);
     this.ssmtReportService.showPrint.next(true);
@@ -274,4 +275,14 @@ export class SsmtReportComponent implements OnInit {
       this.resetPrintSelection();
     }, 2000);
   }
+
+  calculateResultsWithMarginalCosts(ssmt: SSMT, outputData: SSMTOutput): SSMTOutput {
+    let marginalCosts: { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } = this.ssmtService.calculateMarginalCosts(ssmt, outputData, this.settings);
+    outputData.marginalHPCost = marginalCosts.marginalHPCost;
+    outputData.marginalMPCost = marginalCosts.marginalMPCost;
+    outputData.marginalLPCost = marginalCosts.marginalLPCost;
+    return outputData;
+  }
+
+
 }

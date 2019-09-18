@@ -4,11 +4,11 @@ import { SSMT, SSMTInputs, TurbineInput, PressureTurbine, HeaderInput, Condensin
 import { SteamService } from '../calculator/steam/steam.service';
 import { Settings } from '../shared/models/settings';
 import { SSMTOutput } from '../shared/models/steam/steam-outputs';
-import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { BoilerService } from './boiler/boiler.service';
 import { HeaderService } from './header/header.service';
 import { TurbineService } from './turbine/turbine.service';
 import { OperationsService } from './operations/operations.service';
+import { ConvertSteamService } from '../calculator/steam/convert-steam.service';
 
 @Injectable()
 export class SsmtService {
@@ -27,7 +27,7 @@ export class SsmtService {
   numberOfHeadersHelp: BehaviorSubject<number>;
   calcTab: BehaviorSubject<string>;
   saveSSMT: BehaviorSubject<SSMT>;
-  constructor(private steamService: SteamService, private convertUnitsService: ConvertUnitsService, private boilerService: BoilerService, private headerService: HeaderService,
+  constructor(private steamService: SteamService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
     private turbineService: TurbineService, private operationsService: OperationsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.stepTab = new BehaviorSubject<string>('system-basics');
@@ -54,8 +54,8 @@ export class SsmtService {
     let operationsValid: boolean = this.operationsService.getForm(ssmtCopy, settings).valid;
     let setupInputData: SSMTInputs = this.setupInputData(ssmtCopy, baselinePowerDemand, isBaselineCalculation);
     if (turbineValid && headerValid && boilerValid && operationsValid) {
-      let convertedInputData: SSMTInputs = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
-      let outputData: SSMTOutput = this.steamService.steamModeler(convertedInputData, settings);
+      // let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
+      let outputData: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       return { inputData: setupInputData, outputData: outputData };
     } else {
       let outputData: SSMTOutput = this.getEmptyResults();
@@ -128,126 +128,6 @@ export class SsmtService {
     return headerInput;
   }
 
-  convertInputData(inputData: SSMTInputs, settings: Settings): SSMTInputs {
-    inputData.turbineInput = this.convertTurbineInputData(inputData.turbineInput, settings);
-    inputData.boilerInput = this.convertBoilerInputData(inputData.boilerInput, settings);
-    inputData.headerInput = this.convertHeaderInputData(inputData.headerInput, settings);
-    inputData.operationsInput = this.convertOperationsData(inputData.operationsInput, settings);
-    return inputData;
-  }
-
-  convertTurbineInputData(turbineInput: TurbineInput, settings: Settings): TurbineInput {
-    if (turbineInput.condensingTurbine.useTurbine == true) {
-      turbineInput.condensingTurbine = this.convertCondensingTurbine(turbineInput.condensingTurbine, settings);
-    }
-    if (turbineInput.highToLowTurbine.useTurbine == true) {
-      turbineInput.highToLowTurbine = this.convertPressureTurbine(turbineInput.highToLowTurbine, settings);
-    }
-    if (turbineInput.highToMediumTurbine.useTurbine == true) {
-      turbineInput.highToMediumTurbine = this.convertPressureTurbine(turbineInput.highToMediumTurbine, settings);
-    }
-    if (turbineInput.mediumToLowTurbine.useTurbine == true) {
-      turbineInput.mediumToLowTurbine = this.convertPressureTurbine(turbineInput.mediumToLowTurbine, settings);
-    }
-    return turbineInput;
-  }
-
-  convertPressureTurbine(turbine: PressureTurbine, settings: Settings): PressureTurbine {
-    //2 = balance header no conversion
-    if (turbine.operationType == 0) {
-      //steam flow (mass flow)
-      turbine.operationValue1 = this.convertSteamMassFlowInput(turbine.operationValue1, settings);
-    } else if (turbine.operationType == 1) {
-      //power generation (power)
-      turbine.operationValue1 = this.convertSteamPowerInput(turbine.operationValue1, settings);
-    } else if (turbine.operationType == 3) {
-      //power range (power)
-      turbine.operationValue1 = this.convertSteamPowerInput(turbine.operationValue1, settings);
-      turbine.operationValue2 = this.convertSteamPowerInput(turbine.operationValue2, settings);
-
-    } else if (turbine.operationType == 4) {
-      //flow range (mass flow)
-      turbine.operationValue1 = this.convertSteamMassFlowInput(turbine.operationValue1, settings);
-      turbine.operationValue2 = this.convertSteamMassFlowInput(turbine.operationValue2, settings);
-    }
-    return turbine;
-  }
-
-  convertCondensingTurbine(turbine: CondensingTurbine, settings: Settings): CondensingTurbine {
-    turbine.condenserPressure = this.convertUnitsService.value(turbine.condenserPressure).from(settings.steamVacuumPressure).to('MPaa');
-    if (turbine.operationType == 0) {
-      //steam flow (mass flow)
-      turbine.operationValue = this.convertSteamMassFlowInput(turbine.operationValue, settings);
-    } else if (turbine.operationType == 1) {
-      //power generation (power)
-      turbine.operationValue = this.convertSteamPowerInput(turbine.operationValue, settings);
-    }
-    return turbine;
-  }
-
-  convertBoilerInputData(boilerInput: BoilerInput, settings: Settings): BoilerInput {
-    boilerInput.steamTemperature = this.convertSteamTemperatureInput(boilerInput.steamTemperature, settings);
-    boilerInput.deaeratorPressure = this.convertSteamPressureInput(boilerInput.deaeratorPressure, settings);
-    boilerInput.approachTemperature = this.convertSteamTemperatureInput(boilerInput.approachTemperature, settings);
-    return boilerInput;
-  }
-
-  convertHeaderInputData(headerInput: HeaderInput, settings: Settings): HeaderInput {
-    headerInput.highPressureHeader = this.convertWithHighPressureHeader(headerInput.highPressureHeader, settings);
-    if (headerInput.numberOfHeaders > 1) {
-      headerInput.lowPressureHeader = this.convertNotHighestPressureHeader(headerInput.lowPressureHeader, settings);
-    }
-    if (headerInput.numberOfHeaders == 3) {
-      headerInput.mediumPressureHeader = this.convertNotHighestPressureHeader(headerInput.mediumPressureHeader, settings);
-    }
-    return headerInput;
-  }
-
-  convertWithHighPressureHeader(header: HeaderWithHighestPressure, settings: Settings): HeaderWithHighestPressure {
-    header.pressure = this.convertSteamPressureInput(header.pressure, settings);
-    header.processSteamUsage = this.convertSteamMassFlowInput(header.processSteamUsage, settings);
-    header.condensateReturnTemperature = this.convertSteamTemperatureInput(header.condensateReturnTemperature, settings);
-    return header;
-  }
-
-  convertNotHighestPressureHeader(header: HeaderNotHighestPressure, settings: Settings): HeaderNotHighestPressure {
-    header.pressure = this.convertSteamPressureInput(header.pressure, settings);
-    header.processSteamUsage = this.convertSteamMassFlowInput(header.processSteamUsage, settings);
-    header.desuperheatSteamTemperature = this.convertSteamTemperatureInput(header.desuperheatSteamTemperature, settings);
-    return header;
-  }
-
-  convertOperationsData(operationsInput: OperationsInput, settings: Settings): OperationsInput {
-    operationsInput.makeUpWaterTemperature = this.convertSteamTemperatureInput(operationsInput.makeUpWaterTemperature, settings);
-    operationsInput.sitePowerImport = this.convertSteamPowerInput(operationsInput.sitePowerImport, settings);
-    //convert unit costs
-    let electricityCostHelper: number = this.convertUnitsService.value(1).from('kW').to('kJh');
-    operationsInput.electricityCosts = operationsInput.electricityCosts / electricityCostHelper;
-    // debugger
-    let volumeCostHelper: number = this.convertUnitsService.value(1).from(settings.steamVolumeMeasurement).to('m3');
-    operationsInput.makeUpWaterCosts = operationsInput.makeUpWaterCosts / volumeCostHelper;
-    let fuelCostHelper: number = this.convertUnitsService.value(1).from(settings.steamEnergyMeasurement).to('kJ');
-    operationsInput.fuelCosts = operationsInput.fuelCosts / fuelCostHelper;
-    return operationsInput;
-  }
-  //PRESSURE
-  convertSteamPressureInput(val: number, settings: Settings): number {
-    let tmpPressure: number = this.convertUnitsService.value(val).from(settings.steamPressureMeasurement).to('MPaa');
-    return tmpPressure;
-  }
-  //TEMPERATURE
-  convertSteamTemperatureInput(val: number, settings: Settings): number {
-    return this.convertUnitsService.value(val).from(settings.steamTemperatureMeasurement).to('C') + 273.15;
-  }
-  //MASS FLOW
-  convertSteamMassFlowInput(val: number, settings: Settings): number {
-    return this.convertUnitsService.value(val).from(settings.steamMassFlowMeasurement).to('kg');
-  }
-  //POWER
-  convertSteamPowerInput(val: number, settings: Settings): number {
-    return this.convertUnitsService.value(val).from(settings.steamPowerMeasurement).to('kJh');
-  }
-
   getEmptyResults(): SSMTOutput {
     return {
       boilerOutput: undefined,
@@ -297,31 +177,26 @@ export class SsmtService {
 
   calculateMarginalCosts(ssmt: SSMT, balancedResults: SSMTOutput, settings: Settings): { marginalHPCost: number, marginalMPCost: number, marginalLPCost: number } {
     let setupInputData: SSMTInputs = this.setupInputData(JSON.parse(JSON.stringify(ssmt)), 0, true);
-    let convertedInputData: SSMTInputs = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
     let marginalHPCost: number = 0;
     let marginalMPCost: number = 0;
     let marginalLPCost: number = 0;
-
+    //high pressure header
     setupInputData.headerInput.highPressureHeader.processSteamUsage = setupInputData.headerInput.highPressureHeader.processSteamUsage + 100;
-    convertedInputData = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
-
-    let highPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(convertedInputData, settings);
-
+    let highPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
     setupInputData.headerInput.highPressureHeader.processSteamUsage = setupInputData.headerInput.highPressureHeader.processSteamUsage - 100;
     marginalHPCost = this.getCostDifference(balancedResults, highPressureMarginalResults, setupInputData);
 
     if (setupInputData.headerInput.numberOfHeaders > 1) {
+      //low pressure header
       setupInputData.headerInput.lowPressureHeader.processSteamUsage = setupInputData.headerInput.lowPressureHeader.processSteamUsage + 100;
-      convertedInputData = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
-      let lowPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(convertedInputData, settings);
+      let lowPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
       setupInputData.headerInput.lowPressureHeader.processSteamUsage = setupInputData.headerInput.lowPressureHeader.processSteamUsage - 100;
       marginalLPCost = this.getCostDifference(balancedResults, lowPressureMarginalResults, setupInputData);
 
+      //medium pressure header
       if (setupInputData.headerInput.numberOfHeaders === 3) {
         setupInputData.headerInput.mediumPressureHeader.processSteamUsage = setupInputData.headerInput.mediumPressureHeader.processSteamUsage + 100;
-        convertedInputData = this.convertInputData(JSON.parse(JSON.stringify(setupInputData)), settings);
-
-        let mediumPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(convertedInputData, settings);
+        let mediumPressureMarginalResults: SSMTOutput = this.steamService.steamModeler(setupInputData, settings);
         setupInputData.headerInput.mediumPressureHeader.processSteamUsage = setupInputData.headerInput.mediumPressureHeader.processSteamUsage - 100;
         marginalMPCost = this.getCostDifference(balancedResults, mediumPressureMarginalResults, setupInputData);
       }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
+import { SSMT } from '../models/steam/ssmt';
 declare const packageJson;
 
 @Injectable()
@@ -95,15 +96,25 @@ export class UpdateDataService {
     }
 
     updateSSMT(assessment: Assessment): Assessment {
-        if (assessment.ssmt.headerInput.highPressureHeader == undefined && assessment.ssmt.headerInput.highPressure != undefined) {
-            assessment.ssmt.headerInput.highPressureHeader = assessment.ssmt.headerInput.highPressure;
-        }
-        if (assessment.ssmt.headerInput.mediumPressureHeader == undefined && assessment.ssmt.headerInput.mediumPressure != undefined) {
-            assessment.ssmt.headerInput.mediumPressureHeader = assessment.ssmt.headerInput.mediumPressure;
-        }
-        if (assessment.ssmt.headerInput.lowPressureHeader == undefined && assessment.ssmt.headerInput.lowPressure != undefined) {
-            assessment.ssmt.headerInput.lowPressureHeader = assessment.ssmt.headerInput.lowPressure;
-        }
+        assessment.ssmt = this.updateHeaders(assessment.ssmt);
+        if (assessment.ssmt.modifications) {
+            assessment.ssmt.modifications.forEach(mod => {
+                mod.ssmt = this.updateHeaders(mod.ssmt);
+            })
+        };
         return assessment;
+    }
+
+    updateHeaders(ssmt: SSMT) {
+        if (ssmt.headerInput.highPressureHeader == undefined && ssmt.headerInput.highPressure != undefined) {
+            ssmt.headerInput.highPressureHeader = ssmt.headerInput.highPressure;
+        }
+        if (ssmt.headerInput.mediumPressureHeader == undefined && ssmt.headerInput.mediumPressure != undefined) {
+            ssmt.headerInput.mediumPressureHeader = ssmt.headerInput.mediumPressure;
+        }
+        if (ssmt.headerInput.lowPressureHeader == undefined && ssmt.headerInput.lowPressure != undefined) {
+            ssmt.headerInput.lowPressureHeader = ssmt.headerInput.lowPressure;
+        }
+        return ssmt;
     }
 }
