@@ -8,13 +8,15 @@ import { BoilerService } from './boiler.service';
 import { ReactiveFormsModule } from '../../../../../node_modules/@angular/forms';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { StackLossModule } from '../stack-loss/stack-loss.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
-    SharedPipesModule
+    SharedPipesModule,
+    StackLossModule
   ],
   declarations: [BoilerComponent, BoilerFormComponent, BoilerHelpComponent, BoilerResultsComponent],
   exports: [BoilerComponent, BoilerResultsComponent],

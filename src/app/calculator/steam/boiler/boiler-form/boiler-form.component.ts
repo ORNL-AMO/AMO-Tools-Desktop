@@ -20,6 +20,7 @@ export class BoilerFormComponent implements OnInit {
   emitChangeField = new EventEmitter<string>();
 
   thermoOptions: Array<Quantity>;
+  showBoilerEfficiencyModal: boolean = false;
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
@@ -63,5 +64,42 @@ export class BoilerFormComponent implements OnInit {
     this.boilerForm.controls.quantityValue.setValue(0);
     this.boilerForm.controls.quantityValue.setValidators([Validators.required, Validators.min(quantityMinMax.min), Validators.max(quantityMinMax.max)]);
     this.calculate();
+  }
+
+  openBoilerEfficiencyModal() {
+    // if (this.boilerForm.controls.fuelType.value == 0) {
+    //   this.stackLossService.stackLossInput = {
+    //     flueGasType: this.boilerForm.controls.fuelType.value,
+    //     flueGasByVolume: undefined,
+    //     flueGasByMass: {
+    //       gasTypeId: this.boilerForm.controls.fuel.value,
+    //       oxygenCalculationMethod: "Excess Air"
+    //     },
+    //     name: undefined
+    //   }
+
+    // } else {
+    //   this.stackLossService.stackLossInput = {
+    //     flueGasType: this.boilerForm.controls.fuelType.value,
+    //     flueGasByMass: undefined,
+    //     flueGasByVolume: {
+    //       gasTypeId: this.boilerForm.controls.fuel.value,
+    //       oxygenCalculationMethod: "Excess Air"
+    //     },
+    //     name: undefined
+    //   }
+    // }
+    this.showBoilerEfficiencyModal = true;
+    // this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
+  }
+
+  closeBoilerEfficiencyModal() {
+    this.showBoilerEfficiencyModal = false;
+    // this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal)
+  }
+
+  setBoilerEfficiencyAndClose(efficiency: number) {
+    this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
+    this.closeBoilerEfficiencyModal();
   }
 }
