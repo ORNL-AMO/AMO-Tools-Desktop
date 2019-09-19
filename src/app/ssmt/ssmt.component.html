@@ -1,5 +1,5 @@
 <div #content class="ssmt-container d-flex flex-column ssmt" *ngIf="assessment && settings">
-  <div #header class="w-100 hide-print sticky-top">
+  <div #header class="w-100 hide-print sticky-top" [ngClass]="{'modal-open': isModalOpen == true}">
     <app-ssmt-banner [assessment]="assessment"></app-ssmt-banner>
     <app-ssmt-tabs [settings]="settings" [ssmt]="_ssmt"></app-ssmt-tabs>
   </div>
@@ -12,7 +12,8 @@
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
         (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'" [boilerInput]="_ssmt.boilerInput" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" [headerInput]="_ssmt.headerInput">
+        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" [headerInput]="_ssmt.headerInput"
+        [containerHeight]="containerHeight">
       </app-boiler>
       <app-header *ngIf="stepTab == 'header'" [headerInput]="_ssmt.headerInput" [selected]="true" [inSetup]="true"
         [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"

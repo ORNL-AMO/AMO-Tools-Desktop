@@ -8,6 +8,7 @@ import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
+import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
 
 @Component({
   selector: 'app-boiler',
@@ -31,6 +32,8 @@ export class BoilerComponent implements OnInit {
   modificationIndex: number;
   @Input()
   headerInput: HeaderInput;
+  @Input()
+  containerHeight: number;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -41,7 +44,7 @@ export class BoilerComponent implements OnInit {
 
   formWidth: number;
   showBlowdownRateModal: boolean = false;
-
+  showBoilerEfficiencyModal: boolean = false;
   boilerForm: FormGroup;
   options: any;
   showModal: boolean;
@@ -49,7 +52,7 @@ export class BoilerComponent implements OnInit {
   highPressureHeaderForm: FormGroup;
   lowPressureHeaderForm: FormGroup;
   constructor(private boilerService: BoilerService, private suiteDbService: SuiteDbService, private ssmtService: SsmtService,
-    private compareService: CompareService, private headerService: HeaderService) { }
+    private compareService: CompareService, private headerService: HeaderService, private stackLossService: StackLossService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -260,5 +263,42 @@ export class BoilerComponent implements OnInit {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+  openBoilerEfficiencyModal() {
+    if (this.boilerForm.controls.fuelType.value == 0) {
+      this.stackLossService.stackLossInput = {
+        flueGasType: this.boilerForm.controls.fuelType.value,
+        flueGasByVolume: undefined,
+        flueGasByMass: {
+          gasTypeId: this.boilerForm.controls.fuel.value,
+          oxygenCalculationMethod: "Excess Air"
+        },
+        name: undefined
+      }
+
+    } else {
+      this.stackLossService.stackLossInput = {
+        flueGasType: this.boilerForm.controls.fuelType.value,
+        flueGasByMass: undefined,
+        flueGasByVolume: {
+          gasTypeId: this.boilerForm.controls.fuel.value,
+          oxygenCalculationMethod: "Excess Air"
+        },
+        name: undefined
+      }
+    }
+    this.showBoilerEfficiencyModal = true;
+    this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
+  }
+
+  closeBoilerEfficiencyModal() {
+    this.showBoilerEfficiencyModal = false;
+    this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal)
+  }
+
+  setBoilerEfficiencyAndClose(efficiency: number) {
+    this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
+    this.closeBoilerEfficiencyModal();
   }
 }

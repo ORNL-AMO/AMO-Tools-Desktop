@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '../../../../../node_modules/@angular/forms';
@@ -13,7 +13,11 @@ import { StackLossService } from './stack-loss.service';
 export class StackLossComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @Input()
+  inModal: boolean;
+  @Output('emitEfficiency')
+  emitEfficiency = new EventEmitter<number>();
+  
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
@@ -24,7 +28,7 @@ export class StackLossComponent implements OnInit {
   headerHeight: number;
 
   currentField: string = 'default';
-  method: string = 'volume';
+  method: number = 0;
   tabSelect: string = 'results';
   stackLossForm: FormGroup;
   flueGasByVolume: FlueGasByVolume;
@@ -49,12 +53,12 @@ export class StackLossComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
-    }, 100);
+    }, 200);
   }
 
 
   resizeTabs() {
-    if (this.leftPanelHeader.nativeElement.clientHeight) {
+    if (this.leftPanelHeader) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
@@ -71,22 +75,22 @@ export class StackLossComponent implements OnInit {
     if (this.stackLossService.stackLossInput) {
       if (this.stackLossService.stackLossInput.flueGasType) {
         this.method = this.stackLossService.stackLossInput.flueGasType;
-        if (this.method === 'volume') {
+        if (this.method === 1) {
           this.stackLossForm = this.stackLossService.initByVolumeFormFromLoss(this.stackLossService.stackLossInput);
-        } else if (this.method === 'mass') {
+        } else if (this.method === 0) {
           this.stackLossForm = this.stackLossService.initByMassFormFromLoss(this.stackLossService.stackLossInput);
         }
       } else {
-        if (this.method === 'volume') {
+        if (this.method === 1) {
           this.stackLossForm = this.stackLossService.initFormVolume();
-        } else if (this.method === 'mass') {
+        } else if (this.method === 0) {
           this.stackLossForm = this.stackLossService.initFormMass();
         }
       }
     } else {
-      if (this.method === 'volume') {
+      if (this.method === 1) {
         this.stackLossForm = this.stackLossService.initFormVolume();
-      } else if (this.method === 'mass') {
+      } else if (this.method === 0) {
         this.stackLossForm = this.stackLossService.initFormMass();
       }
     }
@@ -96,35 +100,35 @@ export class StackLossComponent implements OnInit {
     if (this.stackLossService.stackLossInput) {
       if (this.stackLossService.stackLossInput.flueGasType) {
         this.method = this.stackLossService.stackLossInput.flueGasType;
-        if (this.method === 'volume') {
+        if (this.method === 1) {
           this.stackLossForm = this.stackLossService.initByVolumeFormFromLoss(this.stackLossService.stackLossInput);
-        } else if (this.method === 'mass') {
+        } else if (this.method === 0) {
           this.stackLossForm = this.stackLossService.initByMassFormFromLoss(this.stackLossService.stackLossInput);
         }
       } else {
-        if (this.method === 'volume') {
+        if (this.method === 1) {
           this.stackLossForm = this.stackLossService.initFormVolume();
-        } else if (this.method === 'mass') {
+        } else if (this.method === 0) {
           this.stackLossForm = this.stackLossService.initFormMass();
         }
       }
     } else {
-      if (this.method === 'volume') {
+      if (this.method === 1) {
         this.stackLossForm = this.stackLossService.initFormVolume();
-      } else if (this.method === 'mass') {
+      } else if (this.method === 0) {
         this.stackLossForm = this.stackLossService.initFormMass();
       }
     }
   }
 
   getForm() {
-    if (this.method === 'volume') {
+    if (this.method === 1) {
       if (this.stackLossService.stackLossInput.flueGasByVolume) {
         this.stackLossForm = this.stackLossService.initByVolumeFormFromLoss(this.stackLossService.stackLossInput);
       } else {
         this.stackLossForm = this.stackLossService.initFormVolume();
       }
-    } else if (this.method === 'mass') {
+    } else if (this.method === 0) {
       if (this.stackLossService.stackLossInput.flueGasByMass) {
         this.stackLossForm = this.stackLossService.initByMassFormFromLoss(this.stackLossService.stackLossInput);
       } else {
@@ -137,11 +141,11 @@ export class StackLossComponent implements OnInit {
     form.patchValue({
       fuelTemperature: this.stackLossForm.controls.combustionAirTemperature.value
     });
-    if (this.method === "volume") {
+    if (this.method === 1) {
       this.flueGasByVolume = this.stackLossService.buildByVolumeLossFromForm(form);
       this.stackLossService.stackLossInput.flueGasType = this.method;
       this.stackLossService.stackLossInput.flueGasByVolume = this.flueGasByVolume;
-      if (form.status === 'VALID') {
+      if (form.valid == true) {
         const availableHeat = this.stackLossService.flueGasByVolume(this.flueGasByVolume, this.settings);
         this.boilerEfficiency = availableHeat * 100;
         this.stackLossPercent = (1 - availableHeat) * 100;
@@ -149,11 +153,11 @@ export class StackLossComponent implements OnInit {
         this.stackLossPercent = 0;
         this.boilerEfficiency = 0;
       }
-    } else if (this.method === "mass") {
+    } else if (this.method === 0) {
       this.flueGasByMass = this.stackLossService.buildByMassLossFromForm(form);
       this.stackLossService.stackLossInput.flueGasType = this.method;
       this.stackLossService.stackLossInput.flueGasByMass = this.flueGasByMass;
-      if (form.status === 'VALID') {
+      if (form.valid == true) {
         const availableHeat = this.stackLossService.flueGasByMass(this.flueGasByMass, this.settings);
         this.boilerEfficiency = availableHeat * 100;
         this.stackLossPercent = (1 - availableHeat) * 100;
@@ -162,13 +166,17 @@ export class StackLossComponent implements OnInit {
         this.boilerEfficiency = 0;
       }
     }
+    if(this.inModal == true){
+      this.emitEfficiency.emit(this.boilerEfficiency);
+    }
   }
 
   btnResetData() {
     this.stackLossService.stackLossInput = {
       flueGasType: undefined,
       flueGasByVolume: undefined,
-      flueGasByMass: undefined
+      flueGasByMass: undefined,
+      name: undefined
     };
     this.resetForm();
     this.calculate(this.stackLossForm);
@@ -197,7 +205,8 @@ export class StackLossComponent implements OnInit {
         o2InFlueGas: 2.8570007028309443,
         oxygenCalculationMethod: "Excess Air"
       },
-      flueGasType: "volume"
+      flueGasType: 1,
+      name: 'Example Stack Loss'
     };
     this.createExampleForm();
     this.calculate(this.stackLossForm);
