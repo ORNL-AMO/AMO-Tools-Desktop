@@ -10,8 +10,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 export class BoilerEfficiencyModalComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  containerHeight: number;
   @Output('emitClose')
   emitClose = new EventEmitter<boolean>();
   @Output('emitSave')

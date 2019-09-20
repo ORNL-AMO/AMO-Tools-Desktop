@@ -1,5 +1,5 @@
 <div class="d-flex flex-column">
-  <app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings" [containerHeight]="containerHeight" (emitClose)="closeBoilerEfficiencyModal()"
+  <app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings" (emitClose)="closeBoilerEfficiencyModal()"
   (emitSave)="setBoilerEfficiencyAndClose($event)">
   </app-boiler-efficiency-modal>
   <div *ngIf="inSetup" class="header mr-2 ml-2">

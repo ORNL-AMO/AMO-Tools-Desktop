@@ -32,8 +32,6 @@ export class BoilerComponent implements OnInit {
   modificationIndex: number;
   @Input()
   headerInput: HeaderInput;
-  @Input()
-  containerHeight: number;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;

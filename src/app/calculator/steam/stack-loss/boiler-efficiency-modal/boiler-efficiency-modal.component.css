@@ -1,18 +1,6 @@
   .btn{
     padding-top: 6px;
     padding-bottom: 6px;
-    font-size: small;
-}
-
-.card-header, .card-footer{
-    padding: .5rem;
-}
-
-.card-body{
-  padding: 0px;
-}
-
-.card{
 }
 
 .modal-dialog{
@@ -22,4 +10,15 @@
 .modal-content{
   background-color: #efefef;
   height: 95vh;
+}
+
+.btn-margin{
+  margin-right: .5rem;
+  margin-left: .5rem;
+}
+
+.btn-col{
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  border-top: 2px inset gray;
 }
