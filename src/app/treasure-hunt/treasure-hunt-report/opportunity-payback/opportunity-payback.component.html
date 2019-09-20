@@ -1,14 +1,32 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col-12 print-pad-top">
     <app-opportunity-payback-table [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
     </app-opportunity-payback-table>
   </div>
+</div>
+
+<div class="row" *ngIf="!showPrint">
   <div class="col-6">
     <app-opportunity-payback-bar-chart [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
     </app-opportunity-payback-bar-chart>
   </div>
   <div class="col-6">
     <app-opportunity-payback-donut [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+    </app-opportunity-payback-donut>
+  </div>
+</div>
+
+<div class="row" *ngIf="showPrint">
+  <div class="print-graph-container">
+    <app-opportunity-payback-bar-chart [showPrint]="showPrint"
+      [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+    </app-opportunity-payback-bar-chart>
+  </div>
+</div>
+
+<div class="row" *ngIf="showPrint">
+  <div class="print-graph-container">
+    <app-opportunity-payback-donut [showPrint]="showPrint" [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
     </app-opportunity-payback-donut>
   </div>
 </div>

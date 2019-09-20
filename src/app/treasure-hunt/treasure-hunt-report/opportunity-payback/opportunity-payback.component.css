@@ -1,0 +1,25 @@
+
+@media print {
+
+    .hide-print {
+        display: none;
+    }
+
+    .print-pad-top {
+        padding-top: 40px;
+    }
+    .print-avoid-break {
+        padding-bottom: 70px;
+        page-break-inside: avoid;
+    }
+    .print-break-before {
+        break-before: always;
+    }
+    .print-graph-container {
+        width: 450px !important;
+        display: inline-block;
+        padding: 10px;
+        text-align: left;
+        left: 0 !important;
+    }
+}
