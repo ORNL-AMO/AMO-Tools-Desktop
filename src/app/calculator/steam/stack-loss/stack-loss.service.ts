@@ -3,14 +3,16 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { StackLossInput } from '../../../shared/models/steam/steam-inputs';
 declare var phastAddon: any;
 
 @Injectable()
 export class StackLossService {
-  stackLossInput: FlueGas = {
+  stackLossInput: StackLossInput = {
     flueGasType: undefined,
     flueGasByVolume: undefined,
-    flueGasByMass: undefined
+    flueGasByMass: undefined,
+    name: undefined
   };
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
   }
@@ -62,7 +64,7 @@ export class StackLossService {
     });
   }
 
-  initByVolumeFormFromLoss(loss: FlueGas): FormGroup {
+  initByVolumeFormFromLoss(loss: StackLossInput): FormGroup {
     return this.formBuilder.group({
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
@@ -86,7 +88,7 @@ export class StackLossService {
     });
   }
 
-  initByMassFormFromLoss(loss: FlueGas): FormGroup {
+  initByMassFormFromLoss(loss: StackLossInput): FormGroup {
     return this.formBuilder.group({
       'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],

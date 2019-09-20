@@ -1,4 +1,7 @@
 <div class="d-flex flex-column">
+  <app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings" (emitClose)="closeBoilerEfficiencyModal()"
+  (emitSave)="setBoilerEfficiencyAndClose($event)">
+  </app-boiler-efficiency-modal>
   <div *ngIf="inSetup" class="header mr-2 ml-2">
     <h3>Boiler Details</h3>
   </div>
@@ -26,7 +29,10 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="{{idString+'combustionEfficiency'}}">Boiler Combustion Efficiency</label>
+        <label for="{{idString+'combustionEfficiency'}}">Boiler Combustion Efficiency
+          <a class="form-text small click-link" (click)="openBoilerEfficiencyModal()">Calculate Efficiency</a>
+
+        </label>
         <div class="input-group">
           <input name="combustionEfficiency" type="number" step="any" class="form-control"
             id="{{idString+'combustionEfficiency'}}" (input)="save()" [readonly]="!selected"

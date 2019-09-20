@@ -17,7 +17,7 @@ export class StackLossFormComponent implements OnInit {
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
   @Input()
-  method: string;
+  method: number;
   
   constructor() { }
 

@@ -6,6 +6,7 @@ import {SettingsDbService} from '../../../indexedDb/settings-db.service';
 import {SteamService} from '../steam.service';
 import {BoilerService} from './boiler.service';
 import {BoilerOutput} from '../../../shared/models/steam/steam-outputs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-boiler-calculator',
@@ -27,7 +28,8 @@ export class BoilerComponent implements OnInit {
   boilerForm: FormGroup;
   input: BoilerInput;
   results: BoilerOutput;
-
+  isModalOpen: boolean;
+  modalOpenSub: Subscription;
   constructor(private settingsDbService: SettingsDbService, private steamService: SteamService, private boilerService: BoilerService) {
   }
 
@@ -40,6 +42,9 @@ export class BoilerComponent implements OnInit {
     }
     this.initForm();
     this.calculate(this.boilerForm);
+    this.modalOpenSub = this.boilerService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    })
   }
 
   ngAfterViewInit() {
@@ -49,6 +54,8 @@ export class BoilerComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.modalOpenSub.unsubscribe();
+    this.boilerService.modalOpen.next(false);
   }
 
 

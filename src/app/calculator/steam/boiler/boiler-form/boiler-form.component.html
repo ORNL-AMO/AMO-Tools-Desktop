@@ -1,3 +1,6 @@
+<app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings"
+  (emitClose)="closeBoilerEfficiencyModal()" (emitSave)="setBoilerEfficiencyAndClose($event)">
+</app-boiler-efficiency-modal>
 <form [formGroup]="boilerForm">
   <div class="form-group">
     <label class="small" for="deaeratorPressure">Deaerator Pressure</label>
@@ -13,15 +16,17 @@
       <span *ngIf="boilerForm.controls.deaeratorPressure.errors.required">Value Required</span>
       <span *ngIf="boilerForm.controls.deaeratorPressure.errors.max">Value can't be greater than
         {{boilerForm.controls.deaeratorPressure.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>..</span>
+          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
       <span *ngIf="boilerForm.controls.deaeratorPressure.errors.min">Value can't be less than
         {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>..</span>
+          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
     </span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="combustionEfficiency">Combustion Efficiency</label>
+    <label class="small" for="combustionEfficiency">Combustion Efficiency
+      <a class="form-text small click-link" (click)="openBoilerEfficiencyModal()">Calculate Efficiency</a>
+    </label>
     <div class="input-group">
       <input class="form-control" name="combustionEfficiency" id="combustionEfficiency"
         formControlName="combustionEfficiency" type="number" (input)="calculate()"
@@ -95,11 +100,13 @@
       <span *ngIf="boilerForm.controls.quantityValue.errors.required">Value Required</span>
       <span *ngIf="boilerForm.controls.quantityValue.errors.max">Value can't be greater than
         {{boilerForm.controls.quantityValue.errors.max.max}}
-        <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+        <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3"
+          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
         .</span>
       <span *ngIf="boilerForm.controls.quantityValue.errors.min">Value can't be less than
         {{boilerForm.controls.quantityValue.errors.min.min}}
-        <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
+        <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3"
+          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
       </span>
     </span>
   </div>
