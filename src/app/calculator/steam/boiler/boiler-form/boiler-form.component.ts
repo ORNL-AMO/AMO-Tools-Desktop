@@ -3,6 +3,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../../steam.service';
+import { BoilerService } from '../boiler.service';
 
 @Component({
   selector: 'app-boiler-form',
@@ -21,7 +22,7 @@ export class BoilerFormComponent implements OnInit {
 
   thermoOptions: Array<Quantity>;
   showBoilerEfficiencyModal: boolean = false;
-  constructor(private steamService: SteamService) { }
+  constructor(private steamService: SteamService, private boilerService: BoilerService) { }
 
   ngOnInit() {
     this.thermoOptions = ThermodynamicQuantityOptions;
@@ -90,12 +91,12 @@ export class BoilerFormComponent implements OnInit {
     //   }
     // }
     this.showBoilerEfficiencyModal = true;
-    // this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
+    this.boilerService.modalOpen.next(this.showBoilerEfficiencyModal);
   }
 
   closeBoilerEfficiencyModal() {
     this.showBoilerEfficiencyModal = false;
-    // this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal)
+    this.boilerService.modalOpen.next(this.showBoilerEfficiencyModal)
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
