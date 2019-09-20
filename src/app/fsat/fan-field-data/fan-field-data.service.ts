@@ -12,11 +12,21 @@ export class FanFieldDataService {
     if (!obj.operatingHours && obj.operatingFraction) {
       obj.operatingHours = obj.operatingFraction * 8760;
     }
+
+    let inletPressureValidators: Array<Validators> = [Validators.required];
+    let outletPressureValidators: Array<Validators> = [Validators.required];
+    if(obj.outletPressure){
+      inletPressureValidators.push(Validators.max(obj.outletPressure));
+    }
+    if(obj.inletPressure){
+      outletPressureValidators.push(Validators.min(obj.inletPressure));
+    }
+
     let form: FormGroup = this.formBuilder.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       flowRate: [obj.flowRate, [Validators.required, Validators.min(0)]],
-      inletPressure: [obj.inletPressure, Validators.required],
-      outletPressure: [obj.outletPressure, Validators.required],
+      inletPressure: [obj.inletPressure, inletPressureValidators],
+      outletPressure: [obj.outletPressure, outletPressureValidators],
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
       cost: [obj.cost, [Validators.required, Validators.min(0)]],
@@ -50,10 +60,6 @@ export class FanFieldDataService {
 
   isFanFieldDataValid(obj: FieldData): boolean {
     let form: FormGroup = this.getFormFromObj(obj);
-    if (form.status === 'VALID') {
-      return true;
-    } else {
-      return false;
-    }
+    return form.valid;
   }
 }

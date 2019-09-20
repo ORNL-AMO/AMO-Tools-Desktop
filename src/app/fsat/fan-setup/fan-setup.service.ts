@@ -72,10 +72,6 @@ export class FanSetupService {
 
   isFanSetupValid(obj: FanSetup, isModification: boolean): boolean {
     let form: FormGroup = this.getFormFromObj(obj, isModification);
-    if (form.status === 'VALID') {
-      return true;
-    } else {
-      return false;
-    }
+    return form.valid;
   }
 }
