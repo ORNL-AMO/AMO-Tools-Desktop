@@ -252,7 +252,7 @@ export class SteamReductionService {
       annualEnergySavings: annualEnergySavings,
       annualSteamSavings: annualSteamSavings
     };
-    steamReductionResults = this.convertResults(steamReductionResults, settings);
+    // steamReductionResults = this.convertResults(steamReductionResults, settings);
     if (modificationResults) {
       steamReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
       steamReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
@@ -302,6 +302,7 @@ export class SteamReductionService {
     let utilityCostConversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
     let convertedInput: SteamReductionData = input;
     convertedInput.utilityCost = input.utilityCost / utilityCostConversionHelper;
+    convertedInput.pressure = this.convertUnitsService.value(input.pressure).from('barg').to('MPaa');
     convertedInput.flowMeterMethodData.flowRate = this.convertUnitsService.value(input.flowMeterMethodData.flowRate).from('kg').to('lb');
     convertedInput.airMassFlowMethodData.massFlowNameplateData.flowRate = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowNameplateData.flowRate).from('L/s').to('ft3/min');
     convertedInput.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct).from('cm2').to('ft2');
@@ -310,7 +311,7 @@ export class SteamReductionService {
     convertedInput.airMassFlowMethodData.outletTemperature = this.convertUnitsService.value(input.airMassFlowMethodData.outletTemperature).from('C').to('F');
     convertedInput.waterMassFlowMethodData.inletTemperature = this.convertUnitsService.value(input.waterMassFlowMethodData.inletTemperature).from('C').to('F');
     convertedInput.waterMassFlowMethodData.outletTemperature = this.convertUnitsService.value(input.waterMassFlowMethodData.outletTemperature).from('C').to('F');
-    convertedInput.otherMethodData.consumption = this.convertUnitsService.value(input.otherMethodData.consumption).from(settings.energyResultUnit).to('MMBtu');
+    convertedInput.otherMethodData.consumption = this.convertUnitsService.value(input.otherMethodData.consumption).from('GJ').to('MMBtu');
     return convertedInput;
   }
 
@@ -320,51 +321,16 @@ export class SteamReductionService {
     return convertedInput;
   }
 
-  convertResults(results: SteamReductionResults, settings: Settings): SteamReductionResults {
-    // results.baselineResults = this.convertSteamReductionResult(results.baselineResults, settings);
-    console.log('pre-conversion results = ');
-    console.log(results);
-    console.log('lb to kb / 1000 = ' + (this.convertUnitsService.value(1000).from('lb').to('kg') / 1000));
-    if (settings.unitsOfMeasure == 'Imperial') {
-      results.baselineResults.steamUse = results.baselineResults.steamUse / 1000;
-    }
-    else if (settings.unitsOfMeasure == 'Metric') {
-      results.baselineResults.energyUse = this.convertUnitsService.value(results.baselineResults.energyUse).from('MMBtu').to('GJ');
+  convertSteamReductionResult(results: SteamReductionResult, settings: Settings): SteamReductionResult {
+    if (settings.unitsOfMeasure == 'Metric') {
+      results.energyUse = this.convertUnitsService.value(results.energyUse).from('MMBtu').to('GJ');
+      results.steamUse = this.convertUnitsService.value(results.steamUse).from('lb').to('kg') / 1000;
       let energyCostConversionHelper = this.convertUnitsService.value(1).from('MMBtu').to('GJ');
-      results.baselineResults.energyCost = results.baselineResults.energyCost / energyCostConversionHelper;
-      results.baselineResults.steamUse = this.convertUnitsService.value(results.baselineResults.steamUse).from('lb').to('kg') / 1000;
+      results.energyCost = results.energyCost / energyCostConversionHelper;
     }
-
-    if (results.modificationResults) {
-      // results.modificationResults = this.convertSteamReductionResult(results.modificationResults, settings);
-      if (settings.unitsOfMeasure == 'Imperial') {
-        results.modificationResults.steamUse = results.modificationResults.steamUse / 1000;
-      }
-      else if (settings.unitsOfMeasure == 'Metric') {
-        results.modificationResults.energyUse = this.convertUnitsService.value(results.modificationResults.energyUse).from('MMBtu').to('GJ');
-        let energyCostConversionHelper = this.convertUnitsService.value(1).from('MMBtu').to('GJ');
-        results.modificationResults.energyCost = results.modificationResults.energyCost / energyCostConversionHelper;
-        results.modificationResults.steamUse = this.convertUnitsService.value(results.modificationResults.steamUse).from('lb').to('kg') / 1000;
-      }
+    else if (settings.unitsOfMeasure == 'Imperial') {
+      results.steamUse = results.steamUse / 1000;
     }
     return results;
-  }
-
-  convertSteamReductionResult(results: SteamReductionResult, settings: Settings): SteamReductionResult {
-    let tmpEnergyUse = results.energyUse;
-    let tmpSteamUse = results.steamUse;
-    let tmpEnergyCost = results.energyCost;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpEnergyUse = this.convertUnitsService.value(tmpEnergyUse).from('MMBtu').to('GJ');
-      tmpSteamUse = this.convertUnitsService.value(tmpSteamUse).from('lb').to('tonne');
-      let energyCostConversionHelper = this.convertUnitsService.value(1).from('MMBtu').to('GJ');
-      tmpEnergyCost = tmpEnergyCost / energyCostConversionHelper;
-    }
-    let tmpSteamReductionResult: SteamReductionResult = {
-      energyCost: tmpEnergyCost,
-      energyUse: tmpEnergyUse,
-      steamUse: tmpSteamUse
-    };
-    return tmpSteamReductionResult;
   }
 }
