@@ -132,11 +132,15 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
 
   ngOnInit() {
     this.initData();
+  }
+
+  ngAfterViewInit(){
     this.initCanvas();
     if (this.chartContainerHeight && this.chartContainerWidth) {
       this.buildChart();
     }
   }
+
   // ========== export/gridline tooltip functions ==========
   // if you get a large angular error, make sure to add SimpleTooltipComponent to the imports of the calculator's module
   // for example, check motor-performance-graph.module.ts

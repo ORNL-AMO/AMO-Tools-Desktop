@@ -155,6 +155,9 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
 
   ngOnInit() {
     this.initData();
+  }
+
+  ngAfterViewInit() {
     this.initCanvas();
     if (this.chartContainerHeight && this.chartContainerWidth) {
       this.buildChart();
@@ -162,13 +165,13 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartContainerWidth || changes.chartContainerHeight) {
+    if ((changes.chartContainerWidth.firstChange == false && changes.chartContainerWidth) || (changes.chartContainerHeight.firstChange == false && changes.chartContainerHeight)) {
       if (this.dataPopulated && this.canvasReady) {
         this.buildChart();
       }
     }
 
-    if (changes.steamPropertiesOutput) {
+    if (changes.steamPropertiesOutput ) {
       if (changes.steamPropertiesOutput.firstChange) {
         if (this.steamPropertiesOutput !== undefined) {
           setTimeout(() => {

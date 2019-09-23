@@ -35,11 +35,14 @@ export class ExportableTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     this.updateTableString();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.rowData) {
+    if (changes.rowData && changes.rowData.firstChange == false) {
       this.updateTableString();
     }
   }

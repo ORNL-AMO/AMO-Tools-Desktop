@@ -120,13 +120,39 @@ export class SteamPropertiesGraphComponent implements OnInit {
 
   ngOnInit() {
     this.initData();
+
+  }
+
+  ngAfterViewInit() {
     this.initCanvas();
     if (this.chartContainerHeight && this.chartContainerWidth) {
       this.buildChart();
     }
   }
 
-  ngAfterViewInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.chartContainerWidth || changes.chartContainerHeight) {
+      if (this.dataPopulated && this.canvasReady) {
+        this.buildChart();
+      }
+    }
+
+    if (changes.steamPropertiesOutput) {
+      if (changes.steamPropertiesOutput.firstChange) {
+        if (this.steamPropertiesOutput !== undefined) {
+          setTimeout(() => {
+            if (this.dataPopulated && this.canvasReady && this.plotReady) {
+              this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+            }
+          }, 500);
+        }
+      }
+      else {
+        if (this.dataPopulated && this.canvasReady && this.plotReady && this.steamPropertiesOutput !== undefined) {
+          this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
+        }
+      }
+    }
   }
 
   // ========== export/gridline tooltip functions ==========
@@ -207,30 +233,6 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
   // ========== end tooltip functions ==========
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartContainerWidth || changes.chartContainerHeight) {
-      if (this.dataPopulated && this.canvasReady) {
-        this.buildChart();
-      }
-    }
-
-    if (changes.steamPropertiesOutput) {
-      if (changes.steamPropertiesOutput.firstChange) {
-        if (this.steamPropertiesOutput !== undefined) {
-          setTimeout(() => {
-            if (this.dataPopulated && this.canvasReady && this.plotReady) {
-              this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
-            }
-          }, 500);
-        }
-      }
-      else {
-        if (this.dataPopulated && this.canvasReady && this.plotReady && this.steamPropertiesOutput !== undefined) {
-          this.plotPoint(this.steamPropertiesOutput.temperature, this.steamPropertiesOutput.specificEntropy);
-        }
-      }
-    }
-  }
 
 
   initData() {

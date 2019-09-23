@@ -25,8 +25,12 @@ export class WaterReductionResultsComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngAfterViewInit() {
+    this.updateTableString();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.waterReductionResults) {
+    if (changes.waterReductionResults && changes.waterReductionResults.firstChange == false) {
       this.updateTableString();
     }
   }

@@ -24,8 +24,12 @@ export class CompressedAirPressureReductionResultsComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngAfterViewInit(){
+    this.updateTableString();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.compressedAirPressureReductionResults) {
+    if (changes.compressedAirPressureReductionResults && changes.compressedAirPressureReductionResults.firstChange == false) {
       this.updateTableString();
     }
   }
