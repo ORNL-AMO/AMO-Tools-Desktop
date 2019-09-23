@@ -11,7 +11,7 @@
       <app-system-basics *ngIf="subTab == 'settings'" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
       </app-system-basics>
-      <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings">
+      <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings" (updateSettings)="getSettings()">
       </app-operation-costs>
 
     </div>

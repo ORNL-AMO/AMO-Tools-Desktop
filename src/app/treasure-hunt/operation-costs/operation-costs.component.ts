@@ -1,9 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { TreasureHunt, EnergyUsage, TreasureHuntResults } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { Subscription } from 'rxjs';
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-operation-costs',
@@ -13,11 +15,14 @@ import { Subscription } from 'rxjs';
 export class OperationCostsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Output('updateSettings')
+  updateSettings = new EventEmitter<boolean>();
 
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
   treasureHuntResults: TreasureHuntResults;
-  constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService) { }
+  constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
+    private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
@@ -165,4 +170,18 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
+  saveSettings(){
+    // let id: number = this.settings.id;
+    // this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    // this.settings.id = id;
+    // this.settings.assessmentId = this.assessment.id;
+    this.indexedDbService.putSettings(this.settings).then(
+      results => {
+        this.settingsDbService.setAll().then(() => {
+          //get updated settings
+          this.updateSettings.emit(true);
+        })
+      }
+    )
+  }
 }

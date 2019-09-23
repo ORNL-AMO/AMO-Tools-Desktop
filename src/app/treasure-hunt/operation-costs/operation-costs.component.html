@@ -17,7 +17,7 @@
           <label for="electricityCost">Electricity Unit Costs</label>
           <div class="input-group">
             <input name="electricityCost" type="number" step="any" class="form-control" id="electricityCost"
-              [(ngModel)]="settings.electricityCost" (change)="save()">
+              [(ngModel)]="settings.electricityCost" (input)="saveSettings()">
             <span class="units input-group-addon">$/kWh</span>
           </div>
         </div>
@@ -53,7 +53,7 @@
           <label for="fuelCost">Natural Gas Unit Cost</label>
           <div class="input-group">
             <input name="fuelCost" type="number" step="any" class="form-control" id="fuelCost"
-              [(ngModel)]="settings.fuelCost" (change)="save()">
+              [(ngModel)]="settings.fuelCost" (input)="saveSettings()">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
           </div>
@@ -91,7 +91,7 @@
           <label for="otherFuelCost">Other Fuel Unit Cost</label>
           <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="settings.otherFuelCost" id="otherFuelCost"
-              (input)="save()">
+              (input)="saveSettings()">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">$/MMBtu</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/MJ</span>
           </div>
@@ -128,7 +128,7 @@
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.waterUsed == true">
           <label for="waterCost">Water</label>
           <div class="input-group">
-            <input type="number" class="form-control" [(ngModel)]="settings.waterCost" id="waterCost" (input)="save()">
+            <input type="number" class="form-control" [(ngModel)]="settings.waterCost" id="waterCost" (input)="saveSettings()">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">$/gal</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/L</span>
           </div>
@@ -166,7 +166,7 @@
           <label for="waterWasteCost">Waste Water Unit Cost</label>
           <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="settings.waterWasteCost" id="waterWasteCost"
-              (input)="save()">
+              (input)="saveSettings()">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">$/gal</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/L</span>
           </div>
@@ -204,7 +204,7 @@
           <label for="compressedAirCost">Compressed Air Unit Cost</label>
           <div class="input-group">
             <input type="number" class="form-control" [(ngModel)]="settings.compressedAirCost" id="compressedAirCost"
-              (input)="save()">
+              (input)="saveSettings()">
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/SCF</span>
             <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">$/m<sup>3</sup></span>
           </div>
@@ -242,7 +242,7 @@
           <label for="steamCost">Steam Unit Cost</label>
           <div class="input-group">
             <input name="steamCost" type="number" step="any" class="form-control" id="steamCost"
-              [(ngModel)]="settings.steamCost" (change)="save()">
+              [(ngModel)]="settings.steamCost" (change)="saveSettings()">
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/klb</span>
             <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/tonne</span>
           </div>
