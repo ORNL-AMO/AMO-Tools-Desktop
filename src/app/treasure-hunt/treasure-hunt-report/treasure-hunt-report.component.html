@@ -112,8 +112,9 @@
     <div class="results scroll-item print-height print-break-before"
       *ngIf="((currentTab == 'opportunityPayback' && !showPrint) || (showPrint && printReportOpportunityPayback)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
-      <h4 class="show-print">Identified Opportunity</h4>
-      <app-opportunity-payback [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
+      <h4 class="show-print">Payback Details</h4>
+      <app-opportunity-payback [showPrint]="showPrint && printReportOpportunityPayback"
+        [opportunitiesPaybackDetails]="opportunitiesPaybackDetails">
       </app-opportunity-payback>
     </div>
   </div>
