@@ -20,7 +20,10 @@ export class OpportunitySummaryComponent implements OnInit {
   emitUpdateOpportunities = new EventEmitter<Array<OpportunitySummary>>();
   @Input()
   assessment: Assessment;
-  
+
+  sortBy: string = 'utilityType';
+  sortByDirection: string = 'asc';
+
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -28,7 +31,7 @@ export class OpportunitySummaryComponent implements OnInit {
 
   updateOpportunities() {
     this.emitUpdateOpportunities.emit(this.opportunitySummaries);
-    if(this.inRollup){
+    if (this.inRollup) {
       this.reportRollupService.updateTreasureHuntResults(this.opportunitySummaries, this.assessment.id);
     }
   }
@@ -66,6 +69,19 @@ export class OpportunitySummaryComponent implements OnInit {
       return oppCost.engineeringServices;
     } else {
       return 0;
+    }
+  }
+
+  setSortBy(str: string) {
+    if (str == this.sortBy) {
+      if (this.sortByDirection == 'desc') {
+        this.sortByDirection = 'asc';
+      } else if (this.sortByDirection == 'asc') {
+        this.sortByDirection = 'desc';
+      }
+    } else {
+      this.sortBy = str;
+      this.sortByDirection = 'desc';
     }
   }
 }
