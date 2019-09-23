@@ -1021,7 +1021,7 @@ export const MockTreasureHuntSettings: Settings = {
     "phastRollupFuelUnit": "MMBtu",
     "phastRollupElectricityUnit": "MMBtu",
     "phastRollupSteamUnit": "MMBtu",
-    "defaultPanelTab": "help",
+    "defaultPanelTab": "results",
     "fuelCost": 4,
     "steamCost": 5,
     "electricityCost": 0.05,
