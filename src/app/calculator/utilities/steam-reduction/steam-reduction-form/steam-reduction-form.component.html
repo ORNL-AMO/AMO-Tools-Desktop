@@ -73,7 +73,8 @@
           <input class="form-control" name="pressure" id="{{'pressure_'+idString}}" formControlName="pressure"
             type="number" (input)="calculate()" (focus)="focusField('pressure')" (blur)="focusOut()"
             onfocus="this.select();">
-          <span class="units input-group-addon">{{settings.steamPressureMeasurement}}</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">MPaa</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.pressure.invalid && !form.controls.pressure.pristine">
@@ -122,8 +123,8 @@
           <input class="form-control" name="flowMeterFlowRate" id="{{'flowMeterFlowRate_'+idString}}"
             formControlName="flowMeterFlowRate" type="number" (input)="calculate()"
             (focus)="focusField('flowMeterFlowRate')" (blur)="focusOut()" onfocus="this.select();">
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">ft<sup>3</sup>/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">m<sup>3</sup>/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">lb/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kg/hr</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.flowMeterFlowRate.invalid && !form.controls.flowMeterFlowRate.pristine">
@@ -238,7 +239,8 @@
         </div>
         <div class="col-6 text-center">
           <span class="small bold">{{individualResults.steamUse | number:'.1-3'}}
-            <span [innerHTML]="settings.energyResultUnit | settingsLabel:'/hr'"></span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">klb/yr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">tonne/yr</span>
           </span>
         </div>
       </div>
