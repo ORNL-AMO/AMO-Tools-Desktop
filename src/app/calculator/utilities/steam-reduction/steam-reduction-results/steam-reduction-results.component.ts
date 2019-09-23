@@ -31,14 +31,17 @@ export class SteamReductionResultsComponent implements OnInit {
     if (changes.results) {
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.energyResultUnit = 'GJ';
-        if (Math.abs(this.results.baselineResults.energyUse) < 0.01) {
+        if (Math.abs(this.results.baselineResults.energyUse) < 0.001) {
           this.energyResultUnit = 'MJ';
-          this.results.baselineResults.energyUse = this.convertUnitsService.value(this.results.baselineResults.energyUse).from('GJ').to(this.energyResultUnit);
+          this.results.baselineResults.energyUse = this.results.baselineResults.energyUse * 1000;
           if (this.modificationExists) {
-            this.results.modificationResults.energyUse = this.convertUnitsService.value(this.results.modificationResults.energyUse).from('GJ').to(this.energyResultUnit);
+            this.results.modificationResults.energyUse = this.results.modificationResults.energyUse * 1000;
           }
         }
       }
+      // else if (this.settings.unitsOfMeasure == 'Imperial') {
+      //   this.energyResultUnit = 'MMBtu';
+      // }
     }
   }
 

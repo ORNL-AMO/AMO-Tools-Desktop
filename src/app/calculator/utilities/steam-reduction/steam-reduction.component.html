@@ -42,7 +42,8 @@
             <div *ngFor="let data of baselineData; let index = index;">
               <app-steam-reduction-form [settings]="settings" [data]="data" [index]="index" [isBaseline]="true"
                 (emitCalculate)="updateBaselineData($event, index)" (emitChangeField)="changeField($event)"
-                (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected">
+                (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected"
+                [utilityType]="baselineData[0].utilityType" [utilityCost]="baselineData[0].utilityCost">
               </app-steam-reduction-form>
             </div>
 
@@ -70,7 +71,8 @@
             <div *ngFor="let data of modificationData; let i = index;">
               <app-steam-reduction-form [settings]="settings" [data]="data" [index]="i" [isBaseline]="false"
                 (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
-                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected">
+                (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
+                [utilityType]="baselineData[0].utilityType" [utilityCost]="baselineData[0].utilityCost">
               </app-steam-reduction-form>
             </div>
           </div>

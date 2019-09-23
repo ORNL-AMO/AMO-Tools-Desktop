@@ -17,22 +17,38 @@ export class SteamReductionService {
 
   constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
-  initObject(index: number, settings: Settings, operatingHours: OperatingHours): SteamReductionData {
+  initObject(index: number, settings: Settings, operatingHours: OperatingHours, utilityType: number, steamCost: number, naturalGasCost: number, otherCost: number): SteamReductionData {
     let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
+    let utilityCost: number;
+    if (utilityType == 0) {
+      utilityCost = steamCost;
+    } else if (utilityType == 1) {
+      utilityCost = naturalGasCost;
+    } else {
+      utilityCost = otherCost;
+    }
+    let pressure: number;
+    if (settings.unitsOfMeasure == 'Imperial') {
+      pressure = 100;
+    } else if (settings.unitsOfMeasure == 'Metric') {
+      pressure = 0.790801;
+    } else {
+      pressure = 0;
+    }
     let defaultSteamReduction: SteamReductionData = {
       name: "Equipment #" + (index + 1),
       hoursPerYear: hoursPerYear,
-      utilityType: 1,
-      utilityCost: 5.5,
-      steamUtilityCost: settings.steamCost ? settings.steamCost : 0.12,
-      naturalGasUtilityCost: settings.fuelCost ? settings.fuelCost : 0.006,
-      otherUtilityCost: 0.05,
+      utilityType: utilityType,
+      utilityCost: utilityCost,
+      steamUtilityCost: steamCost,
+      naturalGasUtilityCost: naturalGasCost,
+      otherUtilityCost: otherCost,
       measurementMethod: 0,
       systemEfficiency: 100,
-      pressure: 0.790800732,
+      pressure: pressure,
       flowMeterMethodData: {
         flowRate: 50000
       },
@@ -55,7 +71,7 @@ export class SteamReductionService {
           airVelocity: 1000
         },
         massFlowNameplateData: {
-          flowRate: 40000
+          flowRate: 2.5
         },
         inletTemperature: 75,
         outletTemperature: 500
@@ -69,7 +85,7 @@ export class SteamReductionService {
     return defaultSteamReduction;
   }
 
-  getFormFromObj(obj: SteamReductionData): FormGroup {
+  getFormFromObj(obj: SteamReductionData, index: number, isBaseline: boolean): FormGroup {
     //if utilityType 0 = steam, utilityType 1 = naturalGas, utilityType 2 = other
     let utilityCost: number = obj.steamUtilityCost;
     if (obj.utilityType == 1) {
@@ -78,12 +94,11 @@ export class SteamReductionService {
       utilityCost = obj.otherUtilityCost;
     }
 
-
     let form: FormGroup = this.fb.group({
       name: [obj.name, Validators.required],
       operatingHours: [obj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      utilityType: [obj.utilityType],
-      utilityCost: [utilityCost, [Validators.required, Validators.min(0)]],
+      utilityType: [{ value: obj.utilityType, disabled: (index != 0 || !isBaseline) }],
+      utilityCost: [{ value: utilityCost, disabled: (index != 0 || !isBaseline) }, [Validators.required, Validators.min(0)]],
       measurementMethod: [obj.measurementMethod],
       systemEfficiency: [obj.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       pressure: [obj.pressure, [Validators.required, Validators.min(0)]],
@@ -237,7 +252,7 @@ export class SteamReductionService {
       annualEnergySavings: annualEnergySavings,
       annualSteamSavings: annualSteamSavings
     };
-    steamReductionResults = this.convertResults(steamReductionResults, settings);
+    // steamReductionResults = this.convertResults(steamReductionResults, settings);
     if (modificationResults) {
       steamReductionResults.annualEnergySavings = baselineResults.energyUse - modificationResults.energyUse;
       steamReductionResults.annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
@@ -264,101 +279,58 @@ export class SteamReductionService {
     };
     let results: SteamReductionResult = this.standaloneService.steamReduction(inputObj);
     results = this.convertSteamReductionResult(results, settings);
+    if (settings.unitsOfMeasure == 'Imperial') {
+      results.steamUse = results.steamUse / 1000;
+    }
     return results;
   }
 
   convertInput(inputArray: Array<SteamReductionData>, settings: Settings): Array<SteamReductionData> {
     for (let i = 0; i < inputArray.length; i++) {
-      let tmpFlowMeterMethodData: SteamFlowMeterMethodData = inputArray[i].flowMeterMethodData;
-      let tmpAirMassFlowMeasuredData: SteamMassFlowMeasuredData = inputArray[i].airMassFlowMethodData.massFlowMeasuredData;
-      let tmpAirMassFlowNameplateData: SteamMassFlowNameplateData = inputArray[i].airMassFlowMethodData.massFlowNameplateData;
-      let tmpAirMassFlowData: SteamMassFlowMethodData = inputArray[i].airMassFlowMethodData;
-      let tmpWaterMassFlowData: SteamMassFlowMethodData = inputArray[i].waterMassFlowMethodData;
-      let tmpWaterMassFlowNameplateData: SteamMassFlowNameplateData = tmpWaterMassFlowData.massFlowNameplateData;
-      let tmpOtherMethodData: SteamOtherMethodData = inputArray[i].otherMethodData;
-      let tmpUtilityCost: number = inputArray[i].utilityCost;
-      let tmp = inputArray[i];
-      if (settings.unitsOfMeasure == 'Metric') {
-        tmpFlowMeterMethodData = {
-          flowRate: this.convertUnitsService.value(tmp.flowMeterMethodData.flowRate).from('m3/h').to('ft3/h')
-        };
-        tmpAirMassFlowMeasuredData = {
-          areaOfDuct: this.convertUnitsService.value(tmp.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct).from('cm2').to('ft2'),
-          airVelocity: this.convertUnitsService.value(tmp.airMassFlowMethodData.massFlowMeasuredData.airVelocity).from('m').to('ft')
-        };
-        tmpAirMassFlowNameplateData = {
-          flowRate: this.convertUnitsService.value(tmp.airMassFlowMethodData.massFlowNameplateData.flowRate).from('L/s').to('ft3/min')
-        };
-        tmpAirMassFlowData = {
-          isNameplate: tmp.airMassFlowMethodData.isNameplate,
-          massFlowNameplateData: tmpAirMassFlowNameplateData,
-          massFlowMeasuredData: tmpAirMassFlowMeasuredData,
-          inletTemperature: this.convertUnitsService.value(tmp.airMassFlowMethodData.inletTemperature).from('C').to('F'),
-          outletTemperature: this.convertUnitsService.value(tmp.airMassFlowMethodData.outletTemperature).from('C').to('F'),
-        }
-
-        tmpWaterMassFlowData = {
-          isNameplate: false,
-          massFlowNameplateData: tmpWaterMassFlowNameplateData,
-          massFlowMeasuredData: tmp.waterMassFlowMethodData.massFlowMeasuredData,
-          inletTemperature: this.convertUnitsService.value(tmp.waterMassFlowMethodData.inletTemperature).from('C').to('F'),
-          outletTemperature: this.convertUnitsService.value(tmp.waterMassFlowMethodData.outletTemperature).from('C').to('F'),
-        };
-        tmpOtherMethodData = {
-          consumption: this.convertUnitsService.value(tmp.otherMethodData.consumption).from(settings.energyResultUnit).to('MMBtu')
-        };
-
-        let utilityCostConversionHelper = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
-        tmpUtilityCost = tmpUtilityCost / utilityCostConversionHelper;
+      let tmp: SteamReductionData;
+      if (settings.unitsOfMeasure == 'Imperial') {
+        tmp = this.convertImperialInput(inputArray[i]);
+      } else if (settings.unitsOfMeasure == 'Metric') {
+        tmp = this.convertMetricInput(inputArray[i], settings);
       }
-
-      inputArray[i] = {
-        name: tmp.name,
-        hoursPerYear: tmp.hoursPerYear,
-        utilityType: tmp.utilityType,
-        utilityCost: tmpUtilityCost,
-        steamUtilityCost: tmp.steamUtilityCost,
-        naturalGasUtilityCost: tmp.naturalGasUtilityCost,
-        otherUtilityCost: tmp.otherUtilityCost,
-        measurementMethod: tmp.measurementMethod,
-        systemEfficiency: tmp.systemEfficiency,
-        pressure: tmp.pressure,
-        flowMeterMethodData: tmpFlowMeterMethodData,
-        airMassFlowMethodData: tmpAirMassFlowData,
-        waterMassFlowMethodData: tmpWaterMassFlowData,
-        otherMethodData: tmpOtherMethodData,
-        units: tmp.units
-      };
+      inputArray[i] = tmp;
     }
     return inputArray;
   }
 
-  convertResults(results: SteamReductionResults, settings: Settings): SteamReductionResults {
-    results.baselineResults = this.convertSteamReductionResult(results.baselineResults, settings);
-    if (results.modificationResults) {
-      results.modificationResults = this.convertSteamReductionResult(results.modificationResults, settings);
-    }
-    return results;
+  convertMetricInput(input: SteamReductionData, settings: Settings): SteamReductionData {
+    let utilityCostConversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
+    let convertedInput: SteamReductionData = input;
+    convertedInput.utilityCost = input.utilityCost / utilityCostConversionHelper;
+    convertedInput.pressure = this.convertUnitsService.value(input.pressure).from('barg').to('MPaa');
+    convertedInput.flowMeterMethodData.flowRate = this.convertUnitsService.value(input.flowMeterMethodData.flowRate).from('kg').to('lb');
+    convertedInput.airMassFlowMethodData.massFlowNameplateData.flowRate = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowNameplateData.flowRate).from('L/s').to('ft3/min');
+    convertedInput.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct).from('cm2').to('ft2');
+    convertedInput.airMassFlowMethodData.massFlowMeasuredData.airVelocity = this.convertUnitsService.value(input.airMassFlowMethodData.massFlowMeasuredData.airVelocity).from('m').to('ft');
+    convertedInput.airMassFlowMethodData.inletTemperature = this.convertUnitsService.value(input.airMassFlowMethodData.inletTemperature).from('C').to('F');
+    convertedInput.airMassFlowMethodData.outletTemperature = this.convertUnitsService.value(input.airMassFlowMethodData.outletTemperature).from('C').to('F');
+    convertedInput.waterMassFlowMethodData.inletTemperature = this.convertUnitsService.value(input.waterMassFlowMethodData.inletTemperature).from('C').to('F');
+    convertedInput.waterMassFlowMethodData.outletTemperature = this.convertUnitsService.value(input.waterMassFlowMethodData.outletTemperature).from('C').to('F');
+    convertedInput.otherMethodData.consumption = this.convertUnitsService.value(input.otherMethodData.consumption).from('GJ').to('MMBtu');
+    return convertedInput;
+  }
+
+  convertImperialInput(input: SteamReductionData): SteamReductionData {
+    let convertedInput: SteamReductionData = input;
+    convertedInput.pressure = this.convertUnitsService.value(input.pressure).from('psig').to('MPaa');
+    return convertedInput;
   }
 
   convertSteamReductionResult(results: SteamReductionResult, settings: Settings): SteamReductionResult {
-    let tmpEnergyUse = results.energyUse;
-    let tmpSteamUse = results.steamUse;
-    let tmpEnergyCost = results.energyCost;
     if (settings.unitsOfMeasure == 'Metric') {
-      tmpEnergyUse = this.convertUnitsService.value(tmpEnergyUse).from('MMBtu').to('GJ');
-      tmpSteamUse = this.convertUnitsService.value(tmpSteamUse).from('lb').to('tonne');
+      results.energyUse = this.convertUnitsService.value(results.energyUse).from('MMBtu').to('GJ');
+      results.steamUse = this.convertUnitsService.value(results.steamUse).from('lb').to('kg') / 1000;
       let energyCostConversionHelper = this.convertUnitsService.value(1).from('MMBtu').to('GJ');
-      tmpEnergyCost = tmpEnergyCost / energyCostConversionHelper;
+      results.energyCost = results.energyCost / energyCostConversionHelper;
     }
-    else {
-      tmpSteamUse = this.convertUnitsService.value(tmpSteamUse).from('lb').to('klb');
+    else if (settings.unitsOfMeasure == 'Imperial') {
+      results.steamUse = results.steamUse / 1000;
     }
-    let tmpSteamReductionResult: SteamReductionResult = {
-      energyCost: tmpEnergyCost,
-      energyUse: tmpEnergyUse,
-      steamUse: tmpSteamUse
-    };
-    return tmpSteamReductionResult;
+    return results;
   }
 }
