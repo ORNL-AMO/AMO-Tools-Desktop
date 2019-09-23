@@ -1166,7 +1166,7 @@ export const MockPhastSettings: Settings = {
     fuelCost: 3.99,
     steamCost: 4.69,
     electricityCost: 0.066,
-    defaultPanelTab: 'help',
+    defaultPanelTab: 'results',
     phastRollupFuelUnit: 'MMBtu',
     phastRollupElectricityUnit: 'kWh',
     phastRollupSteamUnit: 'MMBtu',
