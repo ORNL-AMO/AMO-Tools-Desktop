@@ -17,19 +17,27 @@ export class SteamReductionService {
 
   constructor(private fb: FormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
-  initObject(index: number, settings: Settings, operatingHours: OperatingHours): SteamReductionData {
+  initObject(index: number, settings: Settings, operatingHours: OperatingHours, utilityType: number, steamCost: number, naturalGasCost: number, otherCost: number): SteamReductionData {
     let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
+    let utilityCost: number;
+    if (utilityType == 0) {
+      utilityCost = steamCost;
+    } else if (utilityType == 1) {
+      utilityCost = naturalGasCost;
+    } else {
+      utilityCost = otherCost;
+    }
     let defaultSteamReduction: SteamReductionData = {
       name: "Equipment #" + (index + 1),
       hoursPerYear: hoursPerYear,
-      utilityType: 1,
-      utilityCost: 5.5,
-      steamUtilityCost: settings.steamCost ? settings.steamCost : 0.12,
-      naturalGasUtilityCost: settings.fuelCost ? settings.fuelCost : 0.006,
-      otherUtilityCost: 0.05,
+      utilityType: utilityType,
+      utilityCost: utilityCost,
+      steamUtilityCost: steamCost,
+      naturalGasUtilityCost: naturalGasCost,
+      otherUtilityCost: otherCost,
       measurementMethod: 0,
       systemEfficiency: 100,
       pressure: 0.790800732,
@@ -69,7 +77,7 @@ export class SteamReductionService {
     return defaultSteamReduction;
   }
 
-  getFormFromObj(obj: SteamReductionData): FormGroup {
+  getFormFromObj(obj: SteamReductionData, index: number, isBaseline: boolean): FormGroup {
     //if utilityType 0 = steam, utilityType 1 = naturalGas, utilityType 2 = other
     let utilityCost: number = obj.steamUtilityCost;
     if (obj.utilityType == 1) {
@@ -78,12 +86,11 @@ export class SteamReductionService {
       utilityCost = obj.otherUtilityCost;
     }
 
-
     let form: FormGroup = this.fb.group({
       name: [obj.name, Validators.required],
       operatingHours: [obj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      utilityType: [obj.utilityType],
-      utilityCost: [utilityCost, [Validators.required, Validators.min(0)]],
+      utilityType: [{ value: obj.utilityType, disabled: (index != 0 || !isBaseline) }],
+      utilityCost: [{ value: utilityCost, disabled: (index != 0 || !isBaseline) }, [Validators.required, Validators.min(0)]],
       measurementMethod: [obj.measurementMethod],
       systemEfficiency: [obj.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
       pressure: [obj.pressure, [Validators.required, Validators.min(0)]],
