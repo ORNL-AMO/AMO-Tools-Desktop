@@ -26,16 +26,6 @@ a:not([href]):not([tabindex]):hover {
 a:not([href]):not([tabindex]){
     color: blue;
 }
-.calc-content-container{
-    padding: 1rem;
-    background: #fff;
-    padding: 10px;
-    border: #ddd solid 1px;
-    border-radius: 4px;
-    margin-top: 30px;
-    box-shadow: 0px 0px 8px 5px grey;
-}
-
 .calc-icon-div:hover{
     cursor: pointer;
 }
