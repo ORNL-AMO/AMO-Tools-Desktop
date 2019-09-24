@@ -434,6 +434,7 @@ export class ConvertSteamService {
     inputData.boilerInput = this.convertBoilerInputData(inputData.boilerInput, settings);
     inputData.headerInput = this.convertHeaderInputData(inputData.headerInput, settings);
     inputData.operationsInput = this.convertOperationsData(inputData.operationsInput, settings);
+    inputData.baselinePowerDemand = this.convertSteamPowerInput(inputData.baselinePowerDemand, settings);
     return inputData;
   }
 
