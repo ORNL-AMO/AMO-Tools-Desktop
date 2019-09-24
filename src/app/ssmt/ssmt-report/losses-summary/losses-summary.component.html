@@ -172,10 +172,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.highPressureProcessSteamUsage">
-            {{modification.outputData.highPressureProcessSteamUsage | number:'1.0-2'}}
+          <span *ngIf="modification.outputData.highPressureProcessUsage">
+            {{modification.outputData.highPressureProcessUsage | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.highPressureProcessSteamUsage">
+          <span *ngIf="!modification.outputData.highPressureProcessUsage">
             &mdash;
           </span>
         </td>
@@ -192,10 +192,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.mediumPressureProcessSteamUsage">
-            {{modification.outputData.mediumPressureProcessSteamUsage | number:'1.0-2'}}
+          <span *ngIf="modification.outputData.mediumPressureProcessUsage">
+            {{modification.outputData.mediumPressureProcessUsage | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.mediumPressureProcessSteamUsage">
+          <span *ngIf="!modification.outputData.mediumPressureProcessUsage">
             &mdash;
           </span>
         </td>
@@ -213,10 +213,10 @@
         </td>
         <td *ngFor="let modification of modificationLosses; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.outputData.lowPressureProcessSteamUsage">
-            {{modification.outputData.lowPressureProcessSteamUsage | number:'1.0-2'}}
+          <span *ngIf="modification.outputData.lowPressureProcessUsage">
+            {{modification.outputData.lowPressureProcessUsage | number:'1.0-2'}}
           </span>
-          <span *ngIf="!modification.outputData.lowPressureProcessSteamUsage">
+          <span *ngIf="!modification.outputData.lowPressureProcessUsage">
             &mdash;
           </span>
         </td>
