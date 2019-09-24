@@ -1,0 +1,24 @@
+<div class="d-block pt-3">
+    <h5 class="group-label" (click)="toggleCollapse()">System Curve Data
+        <span *ngIf="systemCurveCollapsed == 'open'" class="remove-curve fa fa-minus pull-right"></span>
+        <span *ngIf="systemCurveCollapsed == 'closed'" class="add-curve fa fa-plus pull-right"></span>
+    </h5>
+    <div class="mb-3 d-block" [@collapsed]="systemCurveCollapsed">
+        <app-system-curve-form></app-system-curve-form>
+        <!-- <app-system-curve-form *ngIf="systemCurveCollapsed == 'open'" [psat]="psat" [fsat]="fsat" [isFan]="isFan"
+                [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
+                (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"
+                (changeField)="setField($event, 'system-curve')"></app-system-curve-form> -->
+        <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
+            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+                (click)="btnResetSystemCurveData()">
+                Reset Data
+            </button>
+            <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                (click)="btnGenerateSystemCurveExample()">
+                Generate Example
+            </button>
+        </div>
+    </div>
+</div>
