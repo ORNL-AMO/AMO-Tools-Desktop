@@ -198,7 +198,7 @@
       </div>
       <div class="d-flex flex-fill flex-column p-1">
         <label class="group-label" (click)="toggleCompressedAirUsed()">
-          Compressed Air
+          Compressed Air (as utility)
         </label>
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.compressedAirUsed == true">
           <label for="compressedAirCost">Compressed Air Unit Cost</label>
@@ -236,7 +236,7 @@
       </div>
       <div class="d-flex flex-fill flex-column p-1">
         <label class="group-label" (click)="toggleSteamUsed()">
-          Steam
+          Steam (as utility)
         </label>
         <div class="form-group" *ngIf="treasureHunt.currentEnergyUsage.steamUsed == true">
           <label for="steamCost">Steam Unit Cost</label>
