@@ -328,7 +328,7 @@ export class OpportunitySummaryService {
   }
 
   getSteamReductionSummary(steamReduction: SteamReductionTreasureHunt, index: number, settings: Settings): OpportunitySummary {
-    let name: string = 'Stea, Reduction #' + index;
+    let name: string = 'Steam Reduction #' + index;
     let results: SteamReductionResults = this.steamReductionService.getResults(settings, steamReduction.baseline, steamReduction.modification);
     let opportunityCost: OpportunityCost;
     if (steamReduction.opportunitySheet) {
@@ -337,7 +337,17 @@ export class OpportunitySummaryService {
       }
       opportunityCost = steamReduction.opportunitySheet.opportunityCost;
     }
-    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, 'Steam', results.annualCostSavings, results.annualSteamSavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
+    let energySavings: number = results.annualSteamSavings;
+    let utilityTypeStr: string = 'Steam';
+    if (steamReduction.baseline[0].utilityType == 1) {
+      utilityTypeStr = 'Natural Gas';
+      energySavings = results.annualEnergySavings;
+    } else if (steamReduction.baseline[0].utilityType == 2) {
+      utilityTypeStr = 'Other Fuel';
+      energySavings = results.annualEnergySavings;
+    }
+
+    let oppSummary: OpportunitySummary = this.getNewOpportunitySummary(name, utilityTypeStr, results.annualCostSavings, energySavings, opportunityCost, results.baselineResults.energyCost, results.modificationResults.energyCost);
     return oppSummary;
   }
 

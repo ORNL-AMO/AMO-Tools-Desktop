@@ -630,6 +630,21 @@ export class OpportunityCardsService {
     if (settings.unitsOfMeasure == 'Imperial') {
       unitStr = 'tonnes';
     }
+    let currentCosts: number = currentEnergyUsage.steamCosts;
+    if (reduction.baseline[0].utilityType == 1) {
+      currentCosts = currentEnergyUsage.naturalGasCosts;
+      unitStr = 'MMBtu';
+      if (settings.unitsOfMeasure == 'Imperial') {
+        unitStr = 'GJ';
+      }
+    } else if (reduction.baseline[0].utilityType == 2) {
+      currentCosts = currentEnergyUsage.otherFuelCosts;
+      unitStr = 'MMBtu';
+      if (settings.unitsOfMeasure == 'Imperial') {
+        unitStr = 'GJ';
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -644,7 +659,7 @@ export class OpportunityCardsService {
       }],
       utilityType: [opportunitySummary.utilityType],
       percentSavings: [{
-        percent: this.getPercentSavings(opportunitySummary.costSavings, currentEnergyUsage.steamCosts),
+        percent: this.getPercentSavings(opportunitySummary.costSavings, currentCosts),
         label: opportunitySummary.utilityType,
         baselineCost: opportunitySummary.baselineCost,
         modificationCost: opportunitySummary.modificationCost,
