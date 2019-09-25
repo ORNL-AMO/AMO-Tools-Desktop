@@ -47,6 +47,7 @@ export class PumpSystemCurveFormComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.systemAndEquipmentCurveService.focusedCalculator.next('pump-system-curve');
     this.systemAndEquipmentCurveService.currentField.next(str);
   }
 

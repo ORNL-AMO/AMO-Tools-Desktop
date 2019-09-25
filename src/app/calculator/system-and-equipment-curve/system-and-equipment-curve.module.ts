@@ -14,6 +14,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { PumpSystemCurveFormService } from './system-curve/pump-system-curve-form.service';
 import { FanSystemCurveFormService } from './system-curve/fan-system-curve-form.service';
+import { SystemAndEquipmentCurveHelpComponent } from './system-and-equipment-curve-help/system-and-equipment-curve-help.component';
+import { FanCurveHelpComponent } from './system-and-equipment-curve-help/fan-curve-help/fan-curve-help.component';
+import { FanSystemCurveHelpComponent } from './system-and-equipment-curve-help/fan-system-curve-help/fan-system-curve-help.component';
+import { PumpSystemCurveHelpComponent } from './system-and-equipment-curve-help/pump-system-curve-help/pump-system-curve-help.component';
+import { PumpCurveHelpComponent } from './system-and-equipment-curve-help/pump-curve-help/pump-curve-help.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +26,7 @@ import { FanSystemCurveFormService } from './system-curve/fan-system-curve-form.
     SystemCurveComponent,
     EquipmentCurveComponent,
     FanSystemCurveFormComponent,
-    PumpSystemCurveFormComponent, PumpCurveFormComponent, FanCurveFormComponent
+    PumpSystemCurveFormComponent, PumpCurveFormComponent, FanCurveFormComponent, SystemAndEquipmentCurveHelpComponent, FanCurveHelpComponent, FanSystemCurveHelpComponent, PumpSystemCurveHelpComponent, PumpCurveHelpComponent
   ],
   imports: [
     CommonModule,

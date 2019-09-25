@@ -7,10 +7,12 @@ export class SystemAndEquipmentCurveService {
   currentField: BehaviorSubject<string>;
   pumpSystemCurveData: BehaviorSubject<PumpSystemCurveData>;
   fanSystemCurveData: BehaviorSubject<FanSystemCurveData>;
+  focusedCalculator: BehaviorSubject<string>;
   constructor() {
     this.currentField = new BehaviorSubject<string>('default');
     this.pumpSystemCurveData = new BehaviorSubject<PumpSystemCurveData>(undefined);
     this.fanSystemCurveData = new BehaviorSubject<FanSystemCurveData>(undefined);
+    this.focusedCalculator = new BehaviorSubject<string>(undefined);
   }
 }
 

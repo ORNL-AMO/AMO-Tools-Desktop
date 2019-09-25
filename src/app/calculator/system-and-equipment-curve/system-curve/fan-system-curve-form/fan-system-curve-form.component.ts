@@ -47,6 +47,7 @@ export class FanSystemCurveFormComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.systemAndEquipmentCurveService.focusedCalculator.next('fan-system-curve');
     this.systemAndEquipmentCurveService.currentField.next(str);
   }
 

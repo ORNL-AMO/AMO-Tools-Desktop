@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { SystemAndEquipmentCurveService } from './system-and-equipment-curve.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve',
@@ -20,7 +21,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
 
   calculatorTitle: string;
   tabSelect: string = 'results';
-  constructor(private settingsDbService: SettingsDbService) { }
+  constructor(private settingsDbService: SettingsDbService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
     this.setCalculatorTitle();
@@ -40,14 +41,18 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     if (this.equipmentType == 'fan') {
       if (this.isEquipmentCurvePrimary == true) {
         this.calculatorTitle = 'Fan Curve'
+        this.systemAndEquipmentCurveService.focusedCalculator.next('fan-curve');
       } else {
         this.calculatorTitle = 'Fan System Curve';
+        this.systemAndEquipmentCurveService.focusedCalculator.next('fan-system-curve');
       }
     } else {
       if (this.isEquipmentCurvePrimary == true) {
         this.calculatorTitle = 'Pump Curve'
+        this.systemAndEquipmentCurveService.focusedCalculator.next('pump-curve');
       } else {
         this.calculatorTitle = 'Pump System Curve';
+        this.systemAndEquipmentCurveService.focusedCalculator.next('pump-system-curve');
       }
     }
   }
