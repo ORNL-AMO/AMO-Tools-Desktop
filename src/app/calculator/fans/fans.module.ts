@@ -5,6 +5,7 @@ import { SystemCurveModule } from '../pumps/system-curve/system-curve.module';
 import { PumpCurveModule } from '../pumps/pump-curve/pump-curve.module';
 import { FanEfficiencyModule } from './fan-efficiency/fan-efficiency.module';
 import { FanAnalysisModule } from './fan-analysis/fan-analysis.module';
+import { SystemAndEquipmentCurveModule } from '../system-and-equipment-curve/system-and-equipment-curve.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { FanAnalysisModule } from './fan-analysis/fan-analysis.module';
     SystemCurveModule,
     PumpCurveModule,
     FanEfficiencyModule,
-    FanAnalysisModule
+    FanAnalysisModule,
+    SystemAndEquipmentCurveModule
   ],
   declarations: [FansComponent],
   exports: [FansComponent]

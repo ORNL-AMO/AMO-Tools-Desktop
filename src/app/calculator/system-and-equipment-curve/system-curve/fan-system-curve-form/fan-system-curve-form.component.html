@@ -114,12 +114,12 @@
     <div class="row">
         <div class="col-6">
             <small>Fluid Power,
-                <span *ngIf="isFan" [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
+                <span [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
             </small>
         </div>
         <div class="col-6 text-center">
             <small>
-                <strong>{{pointTwofluidPower | number:'2.2-2'}}</strong>
+                <strong>{{pointTwoFluidPower | number:'2.2-2'}}</strong>
             </small>
         </div>
     </div>

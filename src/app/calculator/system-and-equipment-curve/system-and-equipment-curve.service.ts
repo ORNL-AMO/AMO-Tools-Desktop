@@ -6,9 +6,11 @@ export class SystemAndEquipmentCurveService {
 
   currentField: BehaviorSubject<string>;
   pumpSystemCurveData: BehaviorSubject<PumpSystemCurveData>;
-  constructor() { 
+  fanSystemCurveData: BehaviorSubject<FanSystemCurveData>;
+  constructor() {
     this.currentField = new BehaviorSubject<string>('default');
     this.pumpSystemCurveData = new BehaviorSubject<PumpSystemCurveData>(undefined);
+    this.fanSystemCurveData = new BehaviorSubject<FanSystemCurveData>(undefined);
   }
 }
 
@@ -20,4 +22,14 @@ export interface PumpSystemCurveData {
   pointTwo: string,
   pointTwoFlowRate: number,
   pointTwoHead: number,
+}
+
+export interface FanSystemCurveData {
+  compressibilityFactor: number,
+  systemLossExponent: number,
+  pointOneFlowRate: number,
+  pointOnePressure: number,
+  pointTwo: string,
+  pointTwoFlowRate: number,
+  pointTwoPressure: number
 }
