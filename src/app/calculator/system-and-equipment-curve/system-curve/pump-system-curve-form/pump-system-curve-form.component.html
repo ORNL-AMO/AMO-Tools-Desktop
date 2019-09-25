@@ -1,1 +1,125 @@
-<p>pump-system-curve-form works!</p>
+<form [formGroup]="pumpSystemCurveForm" class="form-section">
+    <label class="group-label">
+        System Curve</label>
+    <div class="form-group">
+        <label class="small" for="specificGravity">Fluid Specific Gravity</label>
+        <input type="number" step="any" class="form-control" formControlName="specificGravity" id="specificGravity"
+            (input)="saveChanges()" onfocus="this.select();" (focus)="focusField('specificGravity')">
+        <span class="alert-danger pull-right small"
+            *ngIf="pumpSystemCurveForm.controls.specificGravity.invalid && !pumpSystemCurveForm.controls.specificGravity.pristine">
+            <span *ngIf="pumpSystemCurveForm.controls.specificGravity.errors.required">Value required.</span>
+            <span *ngIf="pumpSystemCurveForm.controls.specificGravity.errors.min">Value can't be less than
+                {{pumpSystemCurveForm.controls.specificGravity.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
+        <input type="number" min="1" max="2.5" step="any" class="form-control" formControlName="systemLossExponent"
+            id="systemLossExponent" (input)="saveChanges()" onfocus="this.select();"
+            (focus)="focusField('systemLossExponent')">
+        <span class="alert-danger pull-right small"
+            *ngIf="pumpSystemCurveForm.controls.systemLossExponent.invalid && !pumpSystemCurveForm.controls.systemLossExponent.pristine">
+            <span *ngIf="pumpSystemCurveForm.controls.systemLossExponent.errors.required">Value required.</span>
+            <span *ngIf="pumpSystemCurveForm.controls.systemLossExponent.errors.min">Value can't be less than
+                {{pumpSystemCurveForm.controls.systemLossExponent.errors.min.min}}.</span>
+            <span class="alert-danger pull-right small"
+                *ngIf="exponentInputWarning !== null">{{exponentInputWarning}}</span>
+        </span>
+    </div>
+    <!--Point 1-->
+    <div class="form-group">
+        <label class="group-label point-label" for="pointAdjustment">Point 1</label>
+    </div>
+    <div class="form-group">
+        <label class="small" for="pointOneFlowRate">Flow Rate</label>
+        <div class="input-group calc-addon-group">
+            <input type="number" step="any" class="form-control addon-input" id="pointOneFlowRate"
+                formControlName="pointOneFlowRate" (input)="saveChanges()" onfocus="this.select();"
+                (focus)="focusField('pointOneFlowRate')">
+            <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="pumpSystemCurveForm.controls.pointOneFlowRate.invalid && !pumpSystemCurveForm.controls.pointOneFlowRate.pristine">
+            <span *ngIf="pumpSystemCurveForm.controls.pointOneFlowRate.errors.required">Value required.</span>
+            <span *ngIf="pumpSystemCurveForm.controls.pointOneFlowRate.errors.min">Value can't be less than
+                {{pumpSystemCurveForm.controls.pointOneFlowRate.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label class="small" for="pointOneHead">Head</label>
+        <div class="input-group calc-addon-group">
+            <input type="number" step="any" class="form-control addon-input" id="pointOneHead"
+                formControlName="pointOneHead" (input)="saveChanges()" onfocus="this.select();"
+                (focus)="focusField('pointOneHead')">
+            <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="pumpSystemCurveForm.controls.pointOneHead.invalid && !pumpSystemCurveForm.controls.pointOneHead.pristine">
+            <span *ngIf="pumpSystemCurveForm.controls.pointOneHead.errors.required">Value required.</span>
+            <span *ngIf="pumpSystemCurveForm.controls.pointOneHead.errors.min">Value can't be less than
+                {{pumpSystemCurveForm.controls.pointOneHead.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <small>Fluid Power,
+                <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+            </small>
+        </div>
+        <div class="col-6 text-center">
+            <small>
+                <strong>{{pointOneFluidPower| number:'2.2-2'}}</strong>
+            </small>
+        </div>
+    </div>
+    <!--Point 2-->
+    <div class="form-group">
+        <label class="group-label point-label" for="pointTwo">Point 2</label>
+        <!-- <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointTwo"
+            id="pointTwo" (focus)="focusField('pointTwo')">
+            <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
+        </select> -->
+    </div>
+    <div class="form-group">
+        <label class="small" for="pointTwoFlowRate">Flow Rate</label>
+        <div class="input-group calc-addon-group">
+            <input type="number" step="any" class="form-control addon-input" id="pointTwoFlowRate"
+                formControlName="pointTwoFlowRate" (input)="saveChanges()" onfocus="this.select();"
+                (focus)="focusField('pointTwoFlowRate')">
+            <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="pumpSystemCurveForm.controls.pointTwoFlowRate.invalid && !pumpSystemCurveForm.controls.pointTwoFlowRate.pristine">
+            <span *ngIf="pumpSystemCurveForm.controls.pointTwoFlowRate.errors.required">Value required.</span>
+            <span *ngIf="pumpSystemCurveForm.controls.pointTwoFlowRate.errors.min">Value can't be less than
+                {{pumpSystemCurveForm.controls.pointTwoFlowRate.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label class="small" for="pointTwoHead">Head</label>
+        <div class="input-group calc-addon-group">
+            <input type="number" step="any" class="form-control addon-input" id="pointTwoHead"
+                formControlName="pointTwoHead" (input)="saveChanges()" onfocus="this.select();"
+                (focus)="focusField('pointTwoHead')">
+            <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="pumpSystemCurveForm.controls.pointTwoHead.invalid && !pumpSystemCurveForm.controls.pointTwoHead.pristine">
+            <span *ngIf="pumpSystemCurveForm.controls.pointTwoHead.errors.required">Value required.</span>
+            <span *ngIf="pumpSystemCurveForm.controls.pointTwoHead.errors.min">Value can't be less than
+                {{pumpSystemCurveForm.controls.pointTwoHead.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <small>Fluid Power,
+                <span [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+            </small>
+        </div>
+        <div class="col-6 text-center">
+            <small>
+                <strong>{{pointTwoFluidPower | number:'2.2-2'}}</strong>
+            </small>
+        </div>
+    </div>
+</form>

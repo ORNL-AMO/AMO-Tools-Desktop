@@ -4,8 +4,8 @@
         <span *ngIf="systemCurveCollapsed == 'closed' && !isPrimaryCalculator" class="add-curve fa fa-plus pull-right"></span>
     </h5>
     <div class="mb-3 d-block" [@collapsed]="systemCurveCollapsed">
-        <app-fan-system-curve-form *ngIf="equipmentType == 'fan'"></app-fan-system-curve-form>
-        <app-pump-system-curve-form *ngIf="equipmentType == 'pump'"></app-pump-system-curve-form>
+        <app-fan-system-curve-form *ngIf="equipmentType == 'fan'" [settings]="settings"></app-fan-system-curve-form>
+        <app-pump-system-curve-form *ngIf="equipmentType == 'pump'" [settings]="settings"></app-pump-system-curve-form>
         <!-- <app-system-curve-form *ngIf="systemCurveCollapsed == 'open'" [psat]="psat" [fsat]="fsat" [isFan]="isFan"
                 [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
                 (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"

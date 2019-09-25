@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { collapseAnimation } from '../collapse-animations';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-system-curve',
@@ -12,6 +13,8 @@ export class SystemCurveComponent implements OnInit {
   equipmentType: string;
   @Input()
   isPrimaryCalculator: boolean;
+  @Input()
+  settings: Settings;
 
   systemCurveCollapsed: string = 'closed';
   constructor() { }
