@@ -15,9 +15,11 @@
             </div>
         </div>
         <div class="d-flex flex-column pt-2 pr-4 pl-4 pb-4">
-            <app-system-curve [ngClass]="{'order-2': isEquipmentCurvePrimary == true}" [equipmentType]="equipmentType">
+            <app-system-curve [ngClass]="{'order-2': isEquipmentCurvePrimary == true}" [equipmentType]="equipmentType"
+                [isPrimaryCalculator]="!isEquipmentCurvePrimary">
             </app-system-curve>
-            <app-equipment-curve [ngClass]="{'order-1': isEquipmentCurvePrimary == true}">
+            <app-equipment-curve [ngClass]="{'order-1': isEquipmentCurvePrimary == true}"
+                [equipmentType]="equipmentType" [isPrimaryCalculator]="isEquipmentCurvePrimary">
             </app-equipment-curve>
         </div>
 

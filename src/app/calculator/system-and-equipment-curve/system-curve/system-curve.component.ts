@@ -10,11 +10,16 @@ import { collapseAnimation } from '../collapse-animations';
 export class SystemCurveComponent implements OnInit {
   @Input()
   equipmentType: string;
+  @Input()
+  isPrimaryCalculator: boolean;
 
   systemCurveCollapsed: string = 'closed';
   constructor() { }
 
   ngOnInit() {
+    if(this.isPrimaryCalculator == true){
+      this.systemCurveCollapsed = 'open';
+    }
   }
 
   toggleCollapse() {
