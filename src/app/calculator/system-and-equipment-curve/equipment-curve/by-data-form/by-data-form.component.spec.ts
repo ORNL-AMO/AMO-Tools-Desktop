@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FanCurveFormComponent } from './fan-curve-form.component';
+import { ByDataFormComponent } from './by-data-form.component';
 
-describe('FanCurveFormComponent', () => {
-  let component: FanCurveFormComponent;
-  let fixture: ComponentFixture<FanCurveFormComponent>;
+describe('ByDataFormComponent', () => {
+  let component: ByDataFormComponent;
+  let fixture: ComponentFixture<ByDataFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FanCurveFormComponent ]
+      declarations: [ ByDataFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FanCurveFormComponent);
+    fixture = TestBed.createComponent(ByDataFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

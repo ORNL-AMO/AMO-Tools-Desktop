@@ -56,6 +56,11 @@ export class PumpSystemCurveFormService {
     if (settings.flowMeasurement !== 'gpm') {
       flow = this.convertUnitsService.value(flow).from(settings.flowMeasurement).to('gpm');
     }
-    return (head * flow * specificGravity) / 3960;
+    let fluidPower: number = (head * flow * specificGravity) / 3960;
+
+    if (settings.powerMeasurement !== 'hp') {
+      fluidPower = this.convertUnitsService.value(fluidPower).from('hp').to(settings.powerMeasurement);
+    }
+    return fluidPower;
   }
 }

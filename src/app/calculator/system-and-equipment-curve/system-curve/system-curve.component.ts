@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { collapseAnimation } from '../collapse-animations';
 import { Settings } from '../../../shared/models/settings';
+import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 
 @Component({
   selector: 'app-system-curve',
@@ -17,19 +18,22 @@ export class SystemCurveComponent implements OnInit {
   settings: Settings;
 
   systemCurveCollapsed: string = 'closed';
-  constructor() { }
+  constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
-    if(this.isPrimaryCalculator == true){
+    if (this.isPrimaryCalculator == true) {
       this.systemCurveCollapsed = 'open';
     }
   }
 
   toggleCollapse() {
-    if (this.systemCurveCollapsed == 'closed') {
-      this.systemCurveCollapsed = 'open';
-    } else {
-      this.systemCurveCollapsed = 'closed';
+    if (this.isPrimaryCalculator == false) {
+      if (this.systemCurveCollapsed == 'closed') {
+        this.systemCurveCollapsed = 'open';
+        this.systemAndEquipmentCurveService.focusedCalculator.next(this.equipmentType + '-system-curve');
+      } else {
+        this.systemCurveCollapsed = 'closed';
+      }
     }
   }
 }

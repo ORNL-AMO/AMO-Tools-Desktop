@@ -17,7 +17,7 @@
   </div>
 
 
-  <div *ngFor="let control of pumpCurveForm.controls.dataRows.value.controls; let i = index;">
+  <div *ngFor="let control of pumpCurveForm.controls.dataRows.value.controls; let index = index;">
     <form [formGroup]="control">
       <div class="row align-items-end">
         <div class="form-group col-5">

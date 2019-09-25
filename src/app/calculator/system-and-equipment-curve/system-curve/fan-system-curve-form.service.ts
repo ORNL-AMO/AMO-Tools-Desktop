@@ -56,6 +56,10 @@ export class FanSystemCurveFormService {
     if (settings.fanFlowRate !== 'ft3/min') {
       flow = this.convertUnitsService.value(flow).from(settings.fanFlowRate).to('ft3/min');
     }
-    return (pressure * flow * compressibilityFactor) / 6362;
+    let fluidPower: number = (pressure * flow * compressibilityFactor) / 6362;
+    if (settings.powerMeasurement !== 'hp') {
+      fluidPower = this.convertUnitsService.value(fluidPower).from('hp').to(settings.fanPowerMeasurement);
+    }
+    return fluidPower;
   }
 }

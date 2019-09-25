@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PumpCurveFormComponent } from './pump-curve-form.component';
+import { EquipmentCurveFormComponent } from './equipment-curve-form.component';
 
-describe('PumpCurveFormComponent', () => {
-  let component: PumpCurveFormComponent;
-  let fixture: ComponentFixture<PumpCurveFormComponent>;
+describe('EquipmentCurveFormComponent', () => {
+  let component: EquipmentCurveFormComponent;
+  let fixture: ComponentFixture<EquipmentCurveFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PumpCurveFormComponent ]
+      declarations: [ EquipmentCurveFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PumpCurveFormComponent);
+    fixture = TestBed.createComponent(EquipmentCurveFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

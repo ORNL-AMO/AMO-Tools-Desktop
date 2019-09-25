@@ -6,10 +6,6 @@ import { SystemCurveComponent } from './system-curve/system-curve.component';
 import { EquipmentCurveComponent } from './equipment-curve/equipment-curve.component';
 import { FanSystemCurveFormComponent } from './system-curve/fan-system-curve-form/fan-system-curve-form.component';
 import { PumpSystemCurveFormComponent } from './system-curve/pump-system-curve-form/pump-system-curve-form.component';
-import { PumpCurveFormComponent } from './equipment-curve/pump-curve-form/pump-curve-form.component';
-import { FanCurveFormComponent } from './equipment-curve/fan-curve-form/fan-curve-form.component';
-import { FanCurveFormService } from './equipment-curve/fan-curve-form.service';
-import { PumpCurveFormService } from './equipment-curve/pump-curve-form.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { PumpSystemCurveFormService } from './system-curve/pump-system-curve-form.service';
@@ -19,6 +15,10 @@ import { FanCurveHelpComponent } from './system-and-equipment-curve-help/fan-cur
 import { FanSystemCurveHelpComponent } from './system-and-equipment-curve-help/fan-system-curve-help/fan-system-curve-help.component';
 import { PumpSystemCurveHelpComponent } from './system-and-equipment-curve-help/pump-system-curve-help/pump-system-curve-help.component';
 import { PumpCurveHelpComponent } from './system-and-equipment-curve-help/pump-curve-help/pump-curve-help.component';
+import { ByDataFormComponent } from './equipment-curve/by-data-form/by-data-form.component';
+import { ByEquationFormComponent } from './equipment-curve/by-equation-form/by-equation-form.component';
+import { EquipmentCurveFormComponent } from './equipment-curve/equipment-curve-form/equipment-curve-form.component';
+import { EquipmentCurveService } from './equipment-curve/equipment-curve.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,12 @@ import { PumpCurveHelpComponent } from './system-and-equipment-curve-help/pump-c
     SystemCurveComponent,
     EquipmentCurveComponent,
     FanSystemCurveFormComponent,
-    PumpSystemCurveFormComponent, PumpCurveFormComponent, FanCurveFormComponent, SystemAndEquipmentCurveHelpComponent, FanCurveHelpComponent, FanSystemCurveHelpComponent, PumpSystemCurveHelpComponent, PumpCurveHelpComponent
+    PumpSystemCurveFormComponent, 
+    SystemAndEquipmentCurveHelpComponent, 
+    FanCurveHelpComponent, 
+    FanSystemCurveHelpComponent, 
+    PumpSystemCurveHelpComponent, 
+    PumpCurveHelpComponent, ByDataFormComponent, ByEquationFormComponent, EquipmentCurveFormComponent
   ],
   imports: [
     CommonModule,
@@ -35,10 +40,9 @@ import { PumpCurveHelpComponent } from './system-and-equipment-curve-help/pump-c
   ],
   providers: [
     SystemAndEquipmentCurveService,
-    FanCurveFormService,
-    PumpCurveFormService,
     PumpSystemCurveFormService,
-    FanSystemCurveFormService
+    FanSystemCurveFormService,
+    EquipmentCurveService
   ],
   exports: [
     SystemAndEquipmentCurveComponent
