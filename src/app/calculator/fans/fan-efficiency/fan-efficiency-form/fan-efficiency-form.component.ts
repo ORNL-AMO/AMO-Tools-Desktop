@@ -21,7 +21,7 @@ export class FanEfficiencyFormComponent implements OnInit {
 
   fanTypes: Array<{ display: string, value: number }>;
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor() { }
 
   ngOnInit() {
     this.fanTypes = FanTypes;
@@ -35,14 +35,6 @@ export class FanEfficiencyFormComponent implements OnInit {
 
   emitCalculate() {
     this.calculate.emit(true);
-  }
-  getDisplayUnit(unit: any) {
-    if (unit) {
-      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
-      dispUnit = dispUnit.replace('(', '');
-      dispUnit = dispUnit.replace(')', '');
-      return dispUnit;
-    }
   }
 
 }

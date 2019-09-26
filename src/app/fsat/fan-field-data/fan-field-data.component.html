@@ -59,14 +59,14 @@
       </label>
       <div class="input-group">
         <input name="inletPressure" type="number" step="any" class="form-control" formControlName="inletPressure"
-          id="{{'inletPressure_'+idString}}" (input)="setPressureValidators()"
-          (focus)="focusField('inletPressure')" onfocus="this.select();" [readonly]="!selected">
+          id="{{'inletPressure_'+idString}}" (input)="save()" (focus)="focusField('inletPressure')"
+          onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.inletPressure.invalid && !fieldDataForm.controls.inletPressure.pristine">
         <span *ngIf="fieldDataForm.controls.inletPressure.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.inletPressure.errors.max">Value can't be greater than outlet pressure:
+        <span *ngIf="fieldDataForm.controls.inletPressure.errors.max">Value can't be greater than
           {{fieldDataForm.controls.inletPressure.errors.max.max}} <span
             [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></span>
       </span>
@@ -82,14 +82,14 @@
       </label>
       <div class="input-group">
         <input name="outletPressure" type="number" min="0.1" step="any" class="form-control"
-          formControlName="outletPressure" id="{{'outletPressure_'+idString}}" (input)="setPressureValidators()"
+          formControlName="outletPressure" id="{{'outletPressure_'+idString}}" (input)="save()"
           (focus)="focusField('outletPressure')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="fieldDataForm.controls.outletPressure.invalid && !fieldDataForm.controls.outletPressure.pristine">
         <span *ngIf="fieldDataForm.controls.outletPressure.errors.required">Value Required</span>
-        <span *ngIf="fieldDataForm.controls.outletPressure.errors.min">Value can't be less than inlet pressure:
+        <span *ngIf="fieldDataForm.controls.outletPressure.errors.min">Value can't be less than
           {{fieldDataForm.controls.outletPressure.errors.min.min}} <span
             [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span></span>
       </span>
