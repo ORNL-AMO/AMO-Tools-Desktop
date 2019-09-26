@@ -419,7 +419,6 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
 
   buildChart() {
     this.host.html('');
-
     let containerWidth: number, containerHeight: number;
 
     if (!this.expanded) {
