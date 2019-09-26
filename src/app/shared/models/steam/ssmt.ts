@@ -1,5 +1,6 @@
 import { OperatingHours, OperatingCosts } from "../operations";
 import { SSMTOutput } from "./steam-outputs";
+import { StackLossInput } from "./steam-inputs";
 
 export interface SSMT {
     name?: string;
@@ -126,7 +127,8 @@ export interface BoilerInput {
     deaeratorPressure: number;
     approachTemperature: number;
     blowdownConductivity?: number;
-    feedwaterConductivity?: number
+    feedwaterConductivity?: number,
+    stackLossInput?: StackLossInput
 }
 
 
