@@ -12,21 +12,11 @@ export class FanFieldDataService {
     if (!obj.operatingHours && obj.operatingFraction) {
       obj.operatingHours = obj.operatingFraction * 8760;
     }
-
-    let inletPressureValidators: Array<Validators> = [Validators.required];
-    let outletPressureValidators: Array<Validators> = [Validators.required];
-    if(obj.outletPressure){
-      inletPressureValidators.push(Validators.max(obj.outletPressure));
-    }
-    if(obj.inletPressure){
-      outletPressureValidators.push(Validators.min(obj.inletPressure));
-    }
-
     let form: FormGroup = this.formBuilder.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       flowRate: [obj.flowRate, [Validators.required, Validators.min(0)]],
-      inletPressure: [obj.inletPressure, inletPressureValidators],
-      outletPressure: [obj.outletPressure, outletPressureValidators],
+      inletPressure: [obj.inletPressure, [Validators.required, Validators.max(0)]],
+      outletPressure: [obj.outletPressure, [Validators.required, Validators.min(0)]],
       loadEstimatedMethod: [obj.loadEstimatedMethod, Validators.required],
       motorPower: [obj.motorPower, Validators.required],
       cost: [obj.cost, [Validators.required, Validators.min(0)]],
