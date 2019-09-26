@@ -44,7 +44,7 @@ export class DedicatedStorageFormComponent implements OnInit {
     let tempInputs = {
       method: 1,
       atmosphericPressure: 14.7,
-      lengthOfDemand: 0.8333333,
+      lengthOfDemand: 1,
       airFlowRequirement: 1000,
       initialTankPressure: 110,
       finalTankPressure: 100

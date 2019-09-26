@@ -189,10 +189,11 @@ export class CompressedAirService {
   convertTankBridgingCompressorExample(inputs: ReceiverTankBridgingCompressor, settings: Settings) {
     let tmpInputs: ReceiverTankBridgingCompressor = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.distanceToCompressorRoom = Math.round(this.convertUnitsService.value(tmpInputs.distanceToCompressorRoom).from('ft3').to('m3') * 100) / 100;
+      tmpInputs.distanceToCompressorRoom = Math.round(this.convertUnitsService.value(tmpInputs.distanceToCompressorRoom).from('ft').to('m') * 100) / 100;
       tmpInputs.speedOfAir = Math.round(this.convertUnitsService.value(tmpInputs.speedOfAir).from('ft').to('m') * 100) / 100;
       tmpInputs.allowablePressureDrop = Math.round(this.convertUnitsService.value(tmpInputs.allowablePressureDrop).from('psi').to('kPa') * 100) / 100;
       tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
+      tmpInputs.airDemand = Math.round(this.convertUnitsService.value(tmpInputs.airDemand).from('ft3').to('m3') * 100) / 100;
     }
     return tmpInputs;
   }
