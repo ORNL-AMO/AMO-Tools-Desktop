@@ -122,7 +122,7 @@ export class ReplaceExistingComponent implements OnInit {
 
   calculate() {
     this.inputs = this.replaceExistingService.getObjFromForm(this.replaceExistingForm);
-    this.results = this.replaceExistingService.getResults(this.inputs);
+    this.results = this.replaceExistingService.getResults(this.inputs, this.settings);
   }
 
   save() {

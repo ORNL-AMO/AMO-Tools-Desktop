@@ -77,10 +77,10 @@ export class TreasureHuntService {
     treasureHunt.replaceExistingMotors.push(replaceExistingMotorsItem);
     this.treasureHunt.next(treasureHunt);
   }
-  editReplaceExistingMotorsItem(replaceExistingMotorsItem: ReplaceExistingMotorTreasureHunt, index: number) {
+  editReplaceExistingMotorsItem(replaceExistingMotorsItem: ReplaceExistingMotorTreasureHunt, index: number, settings: Settings) {
     let treasureHunt: TreasureHunt = this.treasureHunt.value;
     treasureHunt.replaceExistingMotors[index] = replaceExistingMotorsItem;
-    let updatedCard: OpportunityCardData = this.opportunityCardsService.getReplaceExistingCardData(replaceExistingMotorsItem, index, treasureHunt.currentEnergyUsage);
+    let updatedCard: OpportunityCardData = this.opportunityCardsService.getReplaceExistingCardData(replaceExistingMotorsItem, index, treasureHunt.currentEnergyUsage, settings);
     this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHunt.next(treasureHunt);
   }
