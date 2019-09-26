@@ -60,17 +60,17 @@
       <input class="form-control" name="inletMassFlow" id="inletMassFlow" formControlName="inletMassFlow" type="number"
         (input)="calculate()" (focus)="focusField('inletMassFlow')" (blur)="focusOut()" onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel:'/hr'"></span></span>
+          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span></span>
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="inletForm.controls.inletMassFlow.invalid && !inletForm.controls.inletMassFlow.pristine">
       <span *ngIf="inletForm.controls.inletMassFlow.errors.required">Value Required</span>
       <span *ngIf="inletForm.controls.inletMassFlow.errors.max">Value can't be greater than
         {{inletForm.controls.inletMassFlow.errors.max.max}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel:'/hr'"></span>.</span>
+          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
       <span *ngIf="inletForm.controls.inletMassFlow.errors.min">Value can't be less than
         {{inletForm.controls.inletMassFlow.errors.min.min}} <span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel:'/hr'"></span>.</span>
+          [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>.</span>
     </span>
   </div>
 
