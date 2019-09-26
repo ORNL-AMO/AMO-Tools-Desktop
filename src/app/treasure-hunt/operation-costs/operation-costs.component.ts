@@ -36,32 +36,8 @@ export class OperationCostsComponent implements OnInit {
   }
 
   initData() {
-    if (!this.treasureHunt.currentEnergyUsage) {
-      let defaultUsage: EnergyUsage = {
-        electricityUsage: 0,
-        electricityCosts: 0,
-        electricityUsed: false,
-        naturalGasUsage: 0,
-        naturalGasCosts: 0,
-        naturalGasUsed: false,
-        otherFuelUsage: 0,
-        otherFuelCosts: 0,
-        otherFuelUsed: false,
-        waterUsage: 0,
-        waterCosts: 0,
-        waterUsed: false,
-        wasteWaterUsage: 0,
-        wasteWaterCosts: 0,
-        wasteWaterUsed: false,
-        compressedAirUsage: 0,
-        compressedAirCosts: 0,
-        compressedAirUsed: false,
-        steamUsage: 0,
-        steamCosts: 0,
-        steamUsed: false
-      }
-      this.treasureHunt.currentEnergyUsage = defaultUsage;
-      this.save();
+    if (this.treasureHunt.currentEnergyUsage == undefined) {
+      this.initCurrentEnergyUse();
     }
 
     this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
@@ -86,6 +62,34 @@ export class OperationCostsComponent implements OnInit {
     if (this.treasureHuntResults.steam.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.steamUsed) {
       this.treasureHunt.currentEnergyUsage.steamUsed = true;
     }
+  }
+
+  initCurrentEnergyUse() {
+    let defaultUsage: EnergyUsage = {
+      electricityUsage: 0,
+      electricityCosts: 0,
+      electricityUsed: false,
+      naturalGasUsage: 0,
+      naturalGasCosts: 0,
+      naturalGasUsed: false,
+      otherFuelUsage: 0,
+      otherFuelCosts: 0,
+      otherFuelUsed: false,
+      waterUsage: 0,
+      waterCosts: 0,
+      waterUsed: false,
+      wasteWaterUsage: 0,
+      wasteWaterCosts: 0,
+      wasteWaterUsed: false,
+      compressedAirUsage: 0,
+      compressedAirCosts: 0,
+      compressedAirUsed: false,
+      steamUsage: 0,
+      steamCosts: 0,
+      steamUsed: false
+    }
+    this.treasureHunt.currentEnergyUsage = defaultUsage;
+    this.save();
   }
 
 
@@ -170,11 +174,7 @@ export class OperationCostsComponent implements OnInit {
     this.save();
   }
 
-  saveSettings(){
-    // let id: number = this.settings.id;
-    // this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    // this.settings.id = id;
-    // this.settings.assessmentId = this.assessment.id;
+  saveSettings() {
     this.indexedDbService.putSettings(this.settings).then(
       results => {
         this.settingsDbService.setAll().then(() => {
