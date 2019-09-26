@@ -61,4 +61,13 @@ export class EquipmentCurveFormComponent implements OnInit {
     this.systemAndEquipmentCurveService.focusedCalculator.next(this.equipmentType + '-curve');
     this.systemAndEquipmentCurveService.currentField.next(str);
   }
+
+  changeMeasurementOption(){
+    this.equipmentCurveForm.controls.modificationMeasurementOption.patchValue(this.equipmentCurveForm.controls.measurementOption.value);
+    this.save();
+  }
+
+  save(){
+    
+  }
 }

@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+import { EquipmentCurveService } from '../equipment-curve.service';
+import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 
 @Component({
   selector: 'app-by-equation-form',
@@ -6,10 +10,40 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./by-equation-form.component.css']
 })
 export class ByEquationFormComponent implements OnInit {
+  @Input()
+  equipmentType: string;
+  @Input()
+  settings: Settings;
 
-  constructor() { }
+  byEquationForm: FormGroup;
+  formLabel: string;
+  flowUnit: string;
+  orderOptions: Array<number> = [
+    2, 3, 4, 5, 6
+  ]
+  constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
+    this.setFormLabelAndUnit();
+    this.byEquationForm = this.equipmentCurveService.getByEquationForm(this.flowUnit, this.settings.distanceMeasurement);
   }
 
+  setFormLabelAndUnit() {
+    if (this.equipmentType == 'fan') {
+      this.formLabel = 'Pressure Equation Coefficients';
+      this.flowUnit = this.settings.fanFlowRate;
+    } else if (this.equipmentType == 'pump') {
+      this.formLabel = 'Head Equation Coefficients';
+      this.flowUnit = this.settings.flowMeasurement;
+    }
+  }
+
+  save() {
+
+  }
+
+  focusField(str: string) {
+    this.systemAndEquipmentCurveService.focusedCalculator.next(this.equipmentType + '-curve');
+    this.systemAndEquipmentCurveService.currentField.next(str);
+  }
 }

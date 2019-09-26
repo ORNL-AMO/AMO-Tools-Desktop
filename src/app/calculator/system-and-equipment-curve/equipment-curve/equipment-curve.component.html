@@ -15,7 +15,7 @@
                 Data</button>
         </div>
         <app-by-data-form *ngIf="selectedFormView == 'Data'"></app-by-data-form>
-        <app-by-equation-form *ngIf="selectedFormView == 'Equation'"></app-by-equation-form>
+        <app-by-equation-form *ngIf="selectedFormView == 'Equation'" [equipmentType]="equipmentType" [settings]="settings"></app-by-equation-form>
         <app-equipment-curve-form [equipmentType]="equipmentType" [settings]="settings"></app-equipment-curve-form>
         <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
             <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"

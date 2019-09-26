@@ -13,7 +13,7 @@
                 <div class="input-group">
                     <input name="baselineMeasurement" formControlName="baselineMeasurement" type="number" step="any"
                         class="form-control" id="baselineMeasurement" onfocus="this.select();"
-                        (focus)="focusField('baselineMeasurement')" (input)="calculate()">
+                        (focus)="focusField('baselineMeasurement')" (input)="save()">
                     <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 0"
                         class="input-group-addon units">{{smallUnit}}</span>
                     <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 1"
@@ -36,7 +36,7 @@
             <label class="group-label w-auto">Modified Condition</label>
             <div class="form-group">
                 <select id="modificationMeasurementOption" name="modificationMeasurementOption" class="form-control"
-                    (change)="changeMeasurementOption()" formControlName="modificationMeasurementOption"
+                    (change)="save()" formControlName="modificationMeasurementOption"
                     (focus)="focusField('measurementOption')">
                     <option *ngFor="let option of options" [ngValue]="option.value">{{option.display}}</option>
                 </select>
@@ -45,7 +45,7 @@
                 <div class="input-group">
                     <input name="modifiedMeasurement" formControlName="modifiedMeasurement" type="number" step="any"
                         class="form-control" id="modifiedMeasurement" onfocus="this.select();"
-                        (focus)="focusField('modifiedMeasurement')" (input)="calculate()">
+                        (focus)="focusField('modifiedMeasurement')" (input)="save()">
                     <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 0"
                         class="input-group-addon units">{{smallUnit}}</span>
                     <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 1"
