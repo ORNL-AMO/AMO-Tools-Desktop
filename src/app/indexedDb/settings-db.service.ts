@@ -93,13 +93,13 @@ export class SettingsDbService {
       settings = this.settingService.setFanUnits(settings);
     }
 
-    if (!settings.fuelCost) {
+    if (settings.fuelCost == undefined) {
       settings.fuelCost = 3.99;
     }
-    if (!settings.steamCost) {
+    if (settings.steamCost == undefined) {
       settings.steamCost = 4.69;
     }
-    if (!settings.electricityCost) {
+    if (settings.electricityCost == undefined) {
       settings.electricityCost = .066;
     }
     return settings;
