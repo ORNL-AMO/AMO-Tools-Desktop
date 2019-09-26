@@ -10,7 +10,7 @@
       <div class="form-group">
         <label class="small" for="method">Type of fuel</label>
         <select class="form-control" id="method" [(ngModel)]="method" (focus)="changeField('measurementType')" (blur)="changeField('default')"
-          (change)="getForm()">
+          (change)="changeFuelType()">
           <option [ngValue]="1">Gas</option>
           <option [ngValue]="0">Solid/Liquid</option>
         </select>
