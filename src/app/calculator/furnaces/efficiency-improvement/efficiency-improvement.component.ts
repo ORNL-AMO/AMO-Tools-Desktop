@@ -81,11 +81,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
     this.efficiencyImprovementInputs = this.efficiencyImprovementService.generateExample(this.settings);
-    // this.toggleExampleData = !this.toggleExampleData;
     this.calculate(this.efficiencyImprovementInputs);
   }
 
