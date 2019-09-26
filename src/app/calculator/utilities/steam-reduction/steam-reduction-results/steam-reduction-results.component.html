@@ -8,23 +8,23 @@
     <tr>
       <td class="bold">Steam Use</td>
       <td class="text-center">
-        {{results.baselineResults.steamUse | number:'.0-0'}}
+        {{results.baselineResults.steamUse | number:'.0-3'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-          klb
+          klb/yr
         </span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-          tonnes
+          tonnes/yr
         </span>
       </td>
       <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{results.modificationResults.steamUse | number:'.0-0'}}
+          {{results.modificationResults.steamUse | number:'.0-3'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-            klb
+            klb/yr
           </span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-            tonnes
+            tonnes/yr
           </span>
         </span>
       </td>
@@ -32,23 +32,23 @@
     <tr>
       <td class="bold">Energy Use</td>
       <td class="text-center">
-        {{results.baselineResults.energyUse | number:'.0-0'}}
+        {{results.baselineResults.energyUse | number:'.0-3'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-          MMBtu
+          MMBtu/yr
         </span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-          {{energyResultUnit}}
+          {{energyResultUnit}}/yr
         </span>
       </td>
       <td class="text-center w-50">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{results.modificationResults.energyUse | number:'.0-0'}}
+          {{results.modificationResults.energyUse | number:'.0-3'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-            MMBtu
+            MMBtu/yr
           </span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-            {{energyResultUnit}}
+            {{energyResultUnit}}/yr
           </span>
         </span>
       </td>
@@ -56,12 +56,12 @@
     <tr>
       <td class="bold">Energy Cost</td>
       <td class="text-center">
-        {{results.baselineResults.energyCost | currency}}
+        {{results.baselineResults.energyCost | currency}}/yr
       </td>
       <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{results.modificationResults.energyCost | currency}}
+          {{results.modificationResults.energyCost | currency}}/yr
         </span>
       </td>
     </tr>
@@ -70,12 +70,12 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{results.annualSteamSavings | number:'.0-1'}}
+          {{results.annualSteamSavings | number:'.0-3'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-            klb
+            klb/yr
           </span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-            tonnes
+            tonnes/yr
           </span>
         </span>
       </td>
@@ -85,12 +85,12 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{results.annualEnergySavings | number:'.0-1'}}
+          {{results.annualEnergySavings | number:'.0-3'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
-            MMBtu
+            MMBtu/yr
           </span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">
-            GJ
+            GJ/yr
           </span>
         </span>
       </td>
@@ -100,7 +100,7 @@
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
-          {{results.annualCostSavings | currency}}
+          {{results.annualCostSavings | currency}}/yr
         </span>
       </td>
     </tr>

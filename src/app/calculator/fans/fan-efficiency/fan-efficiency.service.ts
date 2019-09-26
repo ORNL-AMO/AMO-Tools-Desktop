@@ -13,8 +13,8 @@ export class FanEfficiencyService {
     return this.formBuilder.group({
       fanType: [0, Validators.required],
       fanSpeed: [0, [Validators.required, Validators.min(0)]],
-      inletPressure: [0, Validators.required],
-      outletPressure: [0, Validators.required],
+      inletPressure: [0, [Validators.required, Validators.max(0)]],
+      outletPressure: [0, [Validators.required, Validators.min(0)]],
       flowRate: [0, Validators.required],
       compressibility: [0, Validators.required]
     });
@@ -24,8 +24,8 @@ export class FanEfficiencyService {
     return this.formBuilder.group({
       fanType: [fsat.fanSetup.fanType, Validators.required],
       fanSpeed: [fsat.fanSetup.fanSpeed, [Validators.required, Validators.min(0)]],
-      inletPressure: [fsat.fieldData.inletPressure, Validators.required],
-      outletPressure: [fsat.fieldData.outletPressure, Validators.required],
+      inletPressure: [fsat.fieldData.inletPressure, [Validators.required, Validators.max(0)]],
+      outletPressure: [fsat.fieldData.outletPressure, [Validators.required, Validators.min(0)]],
       flowRate: [fsat.fieldData.flowRate, Validators.required],
       compressibility: [fsat.fieldData.compressibilityFactor, Validators.required]
     });
@@ -35,8 +35,8 @@ export class FanEfficiencyService {
     return this.formBuilder.group({
       fanType: [obj.fanType, Validators.required],
       fanSpeed: [obj.fanSpeed, [Validators.required, Validators.min(0)]],
-      inletPressure: [obj.inletPressure, Validators.required],
-      outletPressure: [obj.outletPressure, Validators.required],
+      inletPressure: [obj.inletPressure, [Validators.required, Validators.max(0)]],
+      outletPressure: [obj.outletPressure, [Validators.required, Validators.min(0)]],
       flowRate: [obj.flowRate, Validators.required],
       compressibility: [obj.compressibility, Validators.required]
     });

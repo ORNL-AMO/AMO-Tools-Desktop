@@ -27,6 +27,10 @@ export class SteamReductionFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  utilityType: number;
+  @Input()
+  utilityCost: number;
 
   formWidth: number;
   showOperatingHoursModal: boolean;
@@ -65,7 +69,7 @@ export class SteamReductionFormComponent implements OnInit {
     else {
       this.idString = 'modification_' + this.index;
     }
-    this.form = this.steamReductionService.getFormFromObj(this.data);
+    this.form = this.steamReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
     if (this.selected == false) {
       this.form.disable();
     }
@@ -73,11 +77,23 @@ export class SteamReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.utilityType && !changes.utilityType.firstChange) {
+      this.form.patchValue({ utilityType: this.utilityType });
+      this.changeUtilityType();
+    }
+    if (changes.utilityCost && !changes.utilityCost.firstChange) {
+      this.form.patchValue({ utilityCost: this.utilityCost });
+    }
+
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
         this.form.disable();
       } else {
         this.form.enable();
+        if (this.index != 0 || !this.isBaseline) {
+          this.form.controls.utilityType.disable();
+          this.form.controls.utilityCost.disable();
+        }
       }
     }
   }

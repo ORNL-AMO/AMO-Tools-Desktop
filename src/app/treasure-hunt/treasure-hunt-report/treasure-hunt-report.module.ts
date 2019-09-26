@@ -17,6 +17,7 @@ import { OpportunitySummaryService } from './opportunity-summary.service';
 import { FormsModule } from '@angular/forms';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { SortSummariesPipe } from './opportunity-summary/sort-summaries.pipe';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-op
     OpportunityPaybackBarChartComponent,
     CostPieChartComponent,
     UtilityDonutChartComponent,
-    CostSummaryChartComponent
+    CostSummaryChartComponent,
+    SortSummariesPipe
   ],
   exports: [TreasureHuntReportComponent],
   providers: [OpportunityPaybackService, OpportunitySummaryService, CostSummaryChartService]

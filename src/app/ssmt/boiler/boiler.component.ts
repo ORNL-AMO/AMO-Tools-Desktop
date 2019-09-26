@@ -140,6 +140,9 @@ export class BoilerComponent implements OnInit {
   save() {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
+    if (this.boilerInput) {
+      tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
+    }
     this.emitSave.emit(tmpBoiler);
   }
 
@@ -264,7 +267,9 @@ export class BoilerComponent implements OnInit {
   }
 
   openBoilerEfficiencyModal() {
-    if (this.boilerForm.controls.fuelType.value == 0) {
+    if (this.boilerInput && this.boilerInput.stackLossInput) {
+      this.stackLossService.stackLossInput = this.boilerInput.stackLossInput;
+    } else if (this.boilerForm.controls.fuelType.value == 0) {
       this.stackLossService.stackLossInput = {
         flueGasType: this.boilerForm.controls.fuelType.value,
         flueGasByVolume: undefined,
@@ -293,9 +298,11 @@ export class BoilerComponent implements OnInit {
   closeBoilerEfficiencyModal() {
     this.showBoilerEfficiencyModal = false;
     this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal)
+    this.save();
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
+    this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }
