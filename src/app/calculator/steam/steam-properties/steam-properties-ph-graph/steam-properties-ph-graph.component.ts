@@ -59,7 +59,8 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
   dataPopulated: boolean = false;
   canvasReady: boolean = false;
 
-  defaultPressureUnit: string = 'MPa';
+  pressureConversion: string;
+  defaultPressureUnit: string = 'MPaa';
   defaultEnthalpyUnit: string = 'kJkg';
   pressureArray: Array<number>;
   enthalpyArray: Array<number>;
@@ -154,6 +155,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
   constructor(private svgToPngService: SvgToPngService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.initPressureConversion();
     this.initData();
   }
 
@@ -165,25 +167,32 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes.chartContainerWidth.firstChange == false && changes.chartContainerWidth) || (changes.chartContainerHeight.firstChange == false && changes.chartContainerHeight)) {
+    if (changes.chartContainerWidth || changes.chartContainerHeight) {
       if (this.dataPopulated && this.canvasReady) {
         this.buildChart();
       }
     }
+    // if ((changes.chartContainerWidth.firstChange == false && changes.chartContainerWidth) || (changes.chartContainerHeight.firstChange == false && changes.chartContainerHeight)) {
+    //   if (this.dataPopulated && this.canvasReady) {
+    //     this.buildChart();
+    //   }
+    // }
 
-    if (changes.steamPropertiesOutput ) {
+    if (changes.steamPropertiesOutput) {
       if (changes.steamPropertiesOutput.firstChange) {
         if (this.steamPropertiesOutput !== undefined) {
           setTimeout(() => {
             if (this.dataPopulated && this.canvasReady && this.plotReady) {
-              this.plotPoint(this.steamPropertiesOutput.pressure, this.steamPropertiesOutput.specificEnthalpy);
+              let convertedPressure = this.convertVal(this.steamPropertiesOutput.pressure, this.settings.steamPressureMeasurement, this.pressureConversion);
+              this.plotPoint(convertedPressure, this.steamPropertiesOutput.specificEnthalpy);
             }
           }, 500);
         }
       }
       else {
         if (this.dataPopulated && this.canvasReady && this.plotReady && this.steamPropertiesOutput !== undefined) {
-          this.plotPoint(this.steamPropertiesOutput.pressure, this.steamPropertiesOutput.specificEnthalpy);
+          let convertedPressure = this.convertVal(this.steamPropertiesOutput.pressure, this.settings.steamPressureMeasurement, this.pressureConversion);
+          this.plotPoint(convertedPressure, this.steamPropertiesOutput.specificEnthalpy);
         }
       }
     }
@@ -267,9 +276,15 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     }
   }
   // ========== end tooltip functions ==========
-
-
-
+  initPressureConversion() {
+    if (this.defaultPressureUnit == this.settings.steamPressureMeasurement) {
+      this.pressureConversion = this.defaultPressureUnit;
+    } else if (this.settings.steamPressureMeasurement.includes('psi')) {
+      this.pressureConversion = 'psia';
+    } else if (this.settings.steamPressureMeasurement.includes('Pa') || this.settings.steamPressureMeasurement.includes('bar')) {
+      this.pressureConversion = 'bara';
+    }
+  }
 
   initData() {
     //pressure default is MPa
@@ -419,42 +434,42 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     }
 
     if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement !== this.defaultPressureUnit) {
-      this.pressureArray = this.convertArray(this.pressureArray, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality01p = this.convertArray(this.quality01p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality02p = this.convertArray(this.quality02p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality03p = this.convertArray(this.quality03p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality04p = this.convertArray(this.quality04p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality05p = this.convertArray(this.quality05p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality06p = this.convertArray(this.quality06p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality07p = this.convertArray(this.quality07p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality08p = this.convertArray(this.quality08p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.quality09p = this.convertArray(this.quality09p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
+      this.pressureArray = this.convertArray(this.pressureArray, this.defaultPressureUnit, this.pressureConversion);
+      this.quality01p = this.convertArray(this.quality01p, this.defaultPressureUnit, this.pressureConversion);
+      this.quality02p = this.convertArray(this.quality02p, this.defaultPressureUnit, this.pressureConversion);
+      this.quality03p = this.convertArray(this.quality03p, this.defaultPressureUnit, this.pressureConversion);
+      this.quality04p = this.convertArray(this.quality04p, this.defaultPressureUnit, this.pressureConversion);
+      this.quality05p = this.convertArray(this.quality05p, this.defaultPressureUnit, this.pressureConversion);
+      this.quality06p = this.convertArray(this.quality06p, this.defaultPressureUnit, this.pressureConversion);
+      this.quality07p = this.convertArray(this.quality07p, this.defaultPressureUnit, this.pressureConversion);
+      this.quality08p = this.convertArray(this.quality08p, this.defaultPressureUnit, this.pressureConversion);
+      this.quality09p = this.convertArray(this.quality09p, this.defaultPressureUnit, this.pressureConversion);
 
-      // this.temp0p = this.convertArray(this.temp0p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp25p = this.convertArray(this.temp25p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp50p = this.convertArray(this.temp50p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp75p = this.convertArray(this.temp75p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp100p = this.convertArray(this.temp100p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp125p = this.convertArray(this.temp125p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp150p = this.convertArray(this.temp150p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp175p = this.convertArray(this.temp175p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp200p = this.convertArray(this.temp200p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp225p = this.convertArray(this.temp225p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp250p = this.convertArray(this.temp250p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp275p = this.convertArray(this.temp275p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp300p = this.convertArray(this.temp300p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp325p = this.convertArray(this.temp325p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp350p = this.convertArray(this.temp350p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp375p = this.convertArray(this.temp375p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp400p = this.convertArray(this.temp400p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp425p = this.convertArray(this.temp425p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp450p = this.convertArray(this.temp450p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp475p = this.convertArray(this.temp475p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp500p = this.convertArray(this.temp500p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp525p = this.convertArray(this.temp525p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp550p = this.convertArray(this.temp550p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp575p = this.convertArray(this.temp575p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
-      this.temp600p = this.convertArray(this.temp600p, this.defaultPressureUnit, this.settings.steamPressureMeasurement);
+      // this.temp0p = this.convertArray(this.temp0p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp25p = this.convertArray(this.temp25p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp50p = this.convertArray(this.temp50p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp75p = this.convertArray(this.temp75p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp100p = this.convertArray(this.temp100p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp125p = this.convertArray(this.temp125p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp150p = this.convertArray(this.temp150p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp175p = this.convertArray(this.temp175p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp200p = this.convertArray(this.temp200p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp225p = this.convertArray(this.temp225p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp250p = this.convertArray(this.temp250p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp275p = this.convertArray(this.temp275p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp300p = this.convertArray(this.temp300p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp325p = this.convertArray(this.temp325p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp350p = this.convertArray(this.temp350p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp375p = this.convertArray(this.temp375p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp400p = this.convertArray(this.temp400p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp425p = this.convertArray(this.temp425p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp450p = this.convertArray(this.temp450p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp475p = this.convertArray(this.temp475p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp500p = this.convertArray(this.temp500p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp525p = this.convertArray(this.temp525p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp550p = this.convertArray(this.temp550p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp575p = this.convertArray(this.temp575p, this.defaultPressureUnit, this.pressureConversion);
+      this.temp600p = this.convertArray(this.temp600p, this.defaultPressureUnit, this.pressureConversion);
     }
 
     this.dataPopulated = true;
@@ -500,8 +515,8 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     }
 
     if (this.settings.steamPressureMeasurement !== undefined && this.settings.steamPressureMeasurement !== 'kPa') {
-      this.yMax = this.convertVal(this.yMax, 'kPa', this.settings.steamPressureMeasurement);
-      this.yMin = this.convertVal(this.yMin, 'kPa', this.settings.steamPressureMeasurement);
+      this.yMax = this.convertVal(this.yMax, 'kPa', this.pressureConversion);
+      this.yMin = this.convertVal(this.yMin, 'kPa', this.pressureConversion);
     }
 
     this.canvasReady = true;
@@ -510,7 +525,6 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
 
   buildChart() {
     this.host.html('');
-
     let containerWidth: number, containerHeight: number;
 
     if (!this.expanded) {
@@ -524,9 +538,7 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
       };
       this.width = containerWidth - this.margin.left - this.margin.right;
       this.height = containerHeight - this.margin.top - this.margin.bottom;
-    }
-    else {
-
+    } else {
       let graphContainer = this.ngChartContainer.nativeElement;
       containerWidth = graphContainer.clientWidth;
       containerHeight = graphContainer.clientHeight * .9;
@@ -536,7 +548,6 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
         bottom: containerHeight * 0.1,
         left: containerWidth * 0.05
       };
-
       this.width = containerWidth - this.margin.left - this.margin.right;
       this.height = containerHeight - this.margin.top - this.margin.bottom;
     }
@@ -605,13 +616,6 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     //update domains to keep area from expanding to negative values
     //main dataset with area
     let dataset = this.getDataSet(this.pressureArray, this.enthalpyArray);
-
-    // if (this.settings.steamSpecificEnthalpyMeasurement !== undefined && this.settings.steamSpecificEnthalpyMeasurement != this.defaultEnthalpyUnit) {
-    //   x.domain([this.convertVal(0, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement), this.convertVal(this.xMax, this.defaultEnthalpyUnit, this.settings.steamSpecificEnthalpyMeasurement)]);
-    // }
-    // else {
-    //   x.domain([0, this.xMax]);
-    // }
 
     // add the area
     this.svg.append("path")
@@ -727,33 +731,20 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
     }
   }
 
+  addXGridLines() {
+    let x = d3.scaleLinear().range([0, this.width]);
+    let y = d3.scaleLog().range([this.height, 0]);
+    x.domain([this.xMin, this.xMax]);
+    y.domain([this.yMin, this.yMax]);
+    return d3.axisBottom(x).ticks(11);
+  }
+
   addYGridLines() {
     let x = d3.scaleLinear().range([0, this.width]);
     let y = d3.scaleLog().range([this.height, 0]);
     x.domain([this.xMin, this.xMax]);
     y.domain([this.yMin, this.yMax]);
     return d3.axisLeft(y).ticks(5);
-  }
-
-  addXGridLines() {
-    let x = d3.scaleLinear().range([0, this.width]);
-    let y = d3.scaleLog().range([this.height, 0]);
-    x.domain([this.xMin, this.xMax]);
-    y.domain([this.yMin, this.yMax]);
-
-    return d3.axisBottom(x).ticks(11);
-  }
-
-  addYAxisLabel() {
-    this.yAxisLabel = "Pressure (" + this.settings.steamPressureMeasurement + ")";
-    this.svg.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - this.margin.left)
-      .attr("x", 0 - (this.height / 2))
-      .attr("dy", "1em")
-      .style('font-size', '16px')
-      .style("text-anchor", "middle")
-      .html(this.yAxisLabel);
   }
 
   addXAxisLabel() {
@@ -768,6 +759,18 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
       .style("text-anchor", "middle")
       .style('font-size', '16px')
       .html(this.xAxisLabel);
+  }
+
+  addYAxisLabel() {
+    this.yAxisLabel = "Pressure (" + this.pressureConversion + ")";
+    this.svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - this.margin.left)
+      .attr("x", 0 - (this.height / 2))
+      .attr("dy", "1em")
+      .style('font-size', '16px')
+      .style("text-anchor", "middle")
+      .html(this.yAxisLabel);
   }
 
   rescaleAxis() {
@@ -859,7 +862,6 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
       let x = d3.scaleLinear().range([0, this.width]);
       let y = d3.scaleLog().range([this.height, 0]);
 
-
       if (this.checkRescale(enthalpy, pressure)) {
         this.rescaleAxis();
       }
@@ -875,7 +877,6 @@ export class SteamPropertiesPhGraphComponent implements OnInit {
 
       if (this.point === undefined || !this.point) {
         this.svg.selectAll('circle').remove();
-
         this.point = this.svg.append('circle')
           .attr("r", 5)
           .attr("cx", x(dataset.enthalpy))
