@@ -6,6 +6,7 @@ import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { BoilerService } from '../../../boiler/boiler.service';
 import { FormGroup } from '@angular/forms';
+import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 
 @Component({
   selector: 'app-boiler-form',
@@ -227,7 +228,9 @@ export class BoilerFormComponent implements OnInit {
     // not needed unless we enable baseline fields
     // let tmpBaselineBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.baselineForm);
     // this.ssmt.boilerInput = tmpBaselineBoilerInput;
+    let stackLossInput: StackLossInput = this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.stackLossInput;
     let tmpModificationBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.modificationForm);
+    tmpModificationBoilerInput.stackLossInput = stackLossInput;
     this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput = tmpModificationBoilerInput;
     this.emitSave.emit(this.ssmt);
   }
