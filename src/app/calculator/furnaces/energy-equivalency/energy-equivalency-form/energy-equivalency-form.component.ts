@@ -11,9 +11,9 @@ import { EnergyEquivalencyService } from '../energy-equivalency.service';
 })
 export class EnergyEquivalencyFormComponent implements OnInit {
   @Input()
-  energyEquivalencyElectric: EnergyEquivalencyElectric;
+  formElectric: FormGroup;
   @Input()
-  energyEquivalencyFuel: EnergyEquivalencyFuel;
+  formFuel: FormGroup;
   @Input()
   energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput;
   @Input()
@@ -27,13 +27,11 @@ export class EnergyEquivalencyFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  formElectric: FormGroup;
-  formFuel: FormGroup;
   constructor(private energyEquivalencyService: EnergyEquivalencyService) { }
 
   ngOnInit() {
-    this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
-    this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
+    // this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
+    // this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
   }
 
   calcElectric() {

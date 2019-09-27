@@ -124,6 +124,7 @@ export class EfficiencyImprovementComponent implements OnInit {
       this.calculator = this.initCalculator();
       this.saveCalculator();
     }
+    this.efficiencyImprovementForm = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
   }
 
   initCalculator(): Calculator {
