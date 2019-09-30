@@ -134,7 +134,7 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
     this.initData();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.initCanvas();
     if (this.chartContainerHeight && this.chartContainerWidth) {
       this.buildChart();
@@ -621,8 +621,11 @@ export class SaturatedPropertiesGraphComponent implements OnInit {
   }
 
   addYAxisLabel() {
-    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement !== this.defaultTempUnit) {
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'F') {
       this.yAxisLabel = "Temperature &#8457;"; // F
+    }
+    else if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'K') {
+      this.yAxisLabel = "Temperature K"; // K
     }
     else {
       this.yAxisLabel = "Temperature &#8451;"; // C

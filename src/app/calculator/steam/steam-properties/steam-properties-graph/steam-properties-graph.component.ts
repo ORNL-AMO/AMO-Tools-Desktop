@@ -576,8 +576,11 @@ export class SteamPropertiesGraphComponent implements OnInit {
   }
 
   addYAxisLabel() {
-    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement !== this.defaultTempUnit) {
+    if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'F') {
       this.yAxisLabel = "Temperature &#8457;"; // F
+    }
+    else if (this.settings.steamTemperatureMeasurement !== undefined && this.settings.steamTemperatureMeasurement == 'K') {
+      this.yAxisLabel = "Temperature K"; // K
     }
     else {
       this.yAxisLabel = "Temperature &#8451;"; // C
@@ -682,7 +685,13 @@ export class SteamPropertiesGraphComponent implements OnInit {
         rescale = true;
       }
     }
-
+    let yBound = 800; // F
+    if (this.settings.steamTemperatureMeasurement == 'C') {
+      yBound = this.convertUnitsService.value(yBound).from('F').to(this.settings.steamTemperatureMeasurement);
+    } else if (this.settings.steamTemperatureMeasurement == 'K') {
+      yBound = this.convertUnitsService.value(yBound).from('F').to('C') + 273.15;
+    }
+    this.yMax = Math.max(this.yMax, yBound);
     return rescale;
   }
 
