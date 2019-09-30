@@ -320,7 +320,8 @@ export class StandaloneService {
   }
 
   compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
-    return calculatorAddon.compressedAirReduction(inputObj);
+    let results: CompressedAirReductionResult = calculatorAddon.compressedAirReduction(inputObj);
+    return results;
   }
 
   compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {

@@ -240,7 +240,7 @@
           <label class="small bold">Flow Rate</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{individualResults.flowRate | number:'.0-1'}}
+          <span class="small bold">{{individualResults.flowRate | number:'.0-4'}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
           </span>
