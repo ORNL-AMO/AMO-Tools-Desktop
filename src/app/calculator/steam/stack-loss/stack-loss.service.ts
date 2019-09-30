@@ -178,4 +178,46 @@ export class StackLossService {
     return results;
   }
 
+
+  getExampleData(settings: Settings): StackLossInput {
+    let exampleCombAirTemp: number = 80;
+    let exampleFlueGasTemp: number = 320;
+    let exampleFuelTemp: number = 80;
+    if(settings.unitsOfMeasure != 'Imperial'){
+      exampleCombAirTemp = this.convertUnitsService.value(exampleCombAirTemp).from('F').to('C');
+      exampleCombAirTemp = Number(exampleCombAirTemp.toFixed(2));
+
+      exampleFlueGasTemp = this.convertUnitsService.value(exampleFlueGasTemp).from('F').to('C');
+      exampleFlueGasTemp = Number(exampleFlueGasTemp.toFixed(2));
+
+      exampleFuelTemp = this.convertUnitsService.value(exampleFuelTemp).from('F').to('C');
+      exampleFuelTemp = Number(exampleFuelTemp.toFixed(2));
+    }
+    let exampleInput: StackLossInput = {
+      flueGasByMass: undefined,
+      flueGasByVolume: {
+        C2H6: 8.5,
+        C3H8: 0,
+        C4H10_CnH2n: 0,
+        CH4: 87,
+        CO: 0,
+        CO2: 0.4,
+        H2: 0.4,
+        H2O: 0,
+        N2: 3.6,
+        O2: 0.1,
+        SO2: 0,
+        combustionAirTemperature: exampleCombAirTemp,
+        excessAirPercentage: 15,
+        flueGasTemperature: exampleFlueGasTemp,
+        fuelTemperature: exampleFuelTemp,
+        gasTypeId: 1,
+        o2InFlueGas: 2.857,
+        oxygenCalculationMethod: "Excess Air"
+      },
+      flueGasType: 1,
+      name: 'Example Stack Loss'
+    }
+    return exampleInput;
+  }
 }

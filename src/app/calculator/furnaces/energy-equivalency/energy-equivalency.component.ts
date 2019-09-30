@@ -8,6 +8,7 @@ import { Calculator } from '../../../shared/models/calculators';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { Assessment } from '../../../shared/models/assessment';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-energy-equivalency',
@@ -43,6 +44,8 @@ export class EnergyEquivalencyComponent implements OnInit {
   saving: boolean;
   calculator: Calculator;
   originalCalculator: Calculator;
+  formElectric: FormGroup;
+  formFuel: FormGroup;
   constructor(private phastService: PhastService, private energyEquivalencyService: EnergyEquivalencyService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
@@ -83,6 +86,8 @@ export class EnergyEquivalencyComponent implements OnInit {
       this.energyEquivalencyElectric = this.energyEquivalencyService.getResetElectricData();
       this.energyEquivalencyService.energyEquivalencyElectric = this.energyEquivalencyElectric;
     }
+    this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
+    this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
     this.calculateFuel();
     this.calculateElectric();
   }
@@ -92,13 +97,11 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.energyEquivalencyService.energyEquivalencyElectric = this.energyEquivalencyElectric;
     this.energyEquivalencyFuel = this.energyEquivalencyService.getDefaultFuelData();
     this.energyEquivalencyService.energyEquivalencyFuel = this.energyEquivalencyFuel;
-
+    this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
+    this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
   }
 
   btnGenerateExample() {
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
     this.generateExample();
     this.calculateElectric();
     this.calculateFuel();
@@ -125,7 +128,7 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.energyEquivalencyFuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel, this.settings);
   }
 
-  updateElectric(data: EnergyEquivalencyElectric){
+  updateElectric(data: EnergyEquivalencyElectric) {
     this.energyEquivalencyElectric = data;
     this.calculateElectric();
   }
@@ -169,6 +172,8 @@ export class EnergyEquivalencyComponent implements OnInit {
       this.calculator = this.initCalculator();
       this.saveCalculator();
     }
+    this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
+    this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
   }
 
   initCalculator(): Calculator {
@@ -195,6 +200,8 @@ export class EnergyEquivalencyComponent implements OnInit {
     } else {
       this.energyEquivalencyFuel = this.energyEquivalencyService.getDefaultFuelData();
     }
+    this.formElectric = this.energyEquivalencyService.getElectricFormFromObj(this.energyEquivalencyElectric);
+    this.formFuel = this.energyEquivalencyService.getFuelFormFromObj(this.energyEquivalencyFuel);
   }
 
   saveCalculator() {

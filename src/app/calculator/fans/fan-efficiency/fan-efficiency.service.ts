@@ -54,16 +54,27 @@ export class FanEfficiencyService {
   }
 
   generateExample(settings: Settings): FanEfficiencyInputs {
-    let tmpFlowRate = 129691;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpFlowRate = (this.convertUnitsService.value(tmpFlowRate).from('ft3').to('m3') * 100) / 100;
+    let defaultFlowRate: number = 129691;
+    if (settings.fanFlowRate != 'ft3/min') {
+      defaultFlowRate = this.convertUnitsService.value(defaultFlowRate).from('ft3').to('m3');
+      defaultFlowRate = Number(defaultFlowRate.toFixed(2));
     }
+    let defaultInletPressure: number = -16.36;
+    let defaultOutletPressure: number = 1.1;
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      defaultInletPressure = this.convertUnitsService.value(defaultInletPressure).from('inH2o').to(settings.fanPressureMeasurement);
+      defaultInletPressure = Number(defaultInletPressure.toFixed(3));
+
+      defaultOutletPressure = this.convertUnitsService.value(defaultOutletPressure).from('inH2o').to(settings.fanPressureMeasurement);
+      defaultOutletPressure = Number(defaultOutletPressure.toFixed(3));
+    }
+
     return {
       fanType: 0,
       fanSpeed: 1180,
-      inletPressure: -16.36,
-      outletPressure: 1.1,
-      flowRate: tmpFlowRate,
+      inletPressure: defaultInletPressure,
+      outletPressure: defaultOutletPressure,
+      flowRate: defaultFlowRate,
       compressibility: 0.988
     }
   }
