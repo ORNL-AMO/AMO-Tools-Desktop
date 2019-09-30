@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CombinedHeatPower } from '../../../shared/models/standalone';
 import { OperatingHours } from '../../../shared/models/operations';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class CombinedHeatPowerService {
@@ -9,16 +10,25 @@ export class CombinedHeatPowerService {
   operatingHours: OperatingHours;
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
-  generateExample(): CombinedHeatPower {
+  generateExample(settings: Settings): CombinedHeatPower {
+    let annualThermalDemand: number = 3560;
+    let fuelCosts: number = 7.9;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      let fuelCostHelper: number = this.convertUnitsService.value(1).from('MMBtu').to('GJ'); 
+      fuelCosts = fuelCosts / fuelCostHelper;
+      fuelCosts = Number(fuelCosts.toFixed(2));
+      annualThermalDemand = this.convertUnitsService.value(annualThermalDemand).from('MMBtu').to('GJ');
+      annualThermalDemand = Number(annualThermalDemand.toFixed(2));
+    }
     return {
       annualOperatingHours: 7000,
       annualElectricityConsumption: 1885367,
-      annualThermalDemand: 3560,
-      boilerThermalFuelCosts: 7.90,
+      annualThermalDemand: annualThermalDemand,
+      boilerThermalFuelCosts: fuelCosts,
       avgElectricityCosts: 0.066,
       option: 0,
-      boilerThermalFuelCostsCHPcase: 7.90,
-      CHPfuelCosts: 7.90,
+      boilerThermalFuelCostsCHPcase: fuelCosts,
+      CHPfuelCosts: fuelCosts,
       percentAvgkWhElectricCostAvoidedOrStandbyRate: 75,
       displacedThermalEfficiency: 80,
       chpAvailability: 93,
