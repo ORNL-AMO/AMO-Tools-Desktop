@@ -208,4 +208,17 @@ export class SteamReductionComponent implements OnInit {
       this.baselineSelected = false;
     }
   }
+
+  btnGenerateExample() {
+    let tmpObj: SteamReductionData = this.steamReductionService.initObject(0, this.settings, this.operatingHours, 1, this.steamUtilityCost, this.naturalGasUtilityCost, this.otherUtilityCost);
+    this.baselineData = [tmpObj];
+    this.getResults();
+    let modificationObj: SteamReductionData = JSON.parse(JSON.stringify(tmpObj));
+    modificationObj.measurementMethod = 3;
+    modificationObj.otherMethodData.consumption = this.steamReductionResults.baselineResults.energyUse * .95;
+    modificationObj.otherMethodData.consumption = Number(modificationObj.otherMethodData.consumption.toFixed(3));
+    this.modificationData = [modificationObj];
+    this.getResults();
+    this.modificationExists = true;
+  }
 }
