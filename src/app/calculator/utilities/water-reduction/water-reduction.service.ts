@@ -56,7 +56,27 @@ export class WaterReductionService {
       otherMethodData: defaultOtherMethodData,
       isWastewater: isWastewater
     };
+    if (settings.unitsOfMeasure != 'Imperial') {
+      obj = this.convertInitData(obj);
+    }
     return obj;
+  }
+
+  convertInitData(inputData: WaterReductionData): WaterReductionData {
+    let gallonConversionHelper = this.convertUnitsService.value(1).from('gal').to('L');
+    inputData.waterCost = inputData.waterCost / gallonConversionHelper;
+    inputData.waterCost = Number(inputData.waterCost.toFixed(3));
+    inputData.meteredFlowMethodData.meterReading = this.convertUnitsService.value(inputData.meteredFlowMethodData.meterReading).from('gal').to('L');
+    inputData.meteredFlowMethodData.meterReading = Number(inputData.meteredFlowMethodData.meterReading.toFixed(3));
+    inputData.volumeMeterMethodData.finalMeterReading = this.convertUnitsService.value(inputData.volumeMeterMethodData.finalMeterReading).from('gal').to('L');
+    inputData.volumeMeterMethodData.finalMeterReading = Number(inputData.volumeMeterMethodData.finalMeterReading.toFixed(3));
+    inputData.volumeMeterMethodData.initialMeterReading = this.convertUnitsService.value(inputData.volumeMeterMethodData.initialMeterReading).from('gal').to('L');
+    inputData.volumeMeterMethodData.initialMeterReading = Number(inputData.volumeMeterMethodData.initialMeterReading.toFixed(3));
+    inputData.bucketMethodData.bucketVolume = this.convertUnitsService.value(inputData.bucketMethodData.bucketVolume).from('gal').to('L');
+    inputData.bucketMethodData.bucketVolume = Number(inputData.bucketMethodData.bucketVolume.toFixed(3));
+    inputData.otherMethodData.consumption = this.convertUnitsService.value(inputData.otherMethodData.consumption).from('gal').to('L');
+    inputData.otherMethodData.consumption = Number(inputData.otherMethodData.consumption.toFixed(3));
+    return inputData;
   }
 
   getFormFromObj(inputObj: WaterReductionData, index: number, isBaseline: boolean): FormGroup {
@@ -210,5 +230,16 @@ export class WaterReductionService {
   }
 
 
+  getBaselineExample(settings: Settings, operatingHours: OperatingHours): WaterReductionData {
+    let baselineData: WaterReductionData = this.initObject(0, settings, false, operatingHours);
+    baselineData.measurementMethod = 2;
+    baselineData.bucketMethodData.bucketFillTime = 20;
+    baselineData.bucketMethodData.bucketVolume = 10;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      baselineData.bucketMethodData.bucketVolume = this.convertUnitsService.value(baselineData.bucketMethodData.bucketVolume).from('gal').to('L');
+      baselineData.bucketMethodData.bucketVolume = Number(baselineData.bucketMethodData.bucketVolume.toFixed(3));
+    }
+    return baselineData;
+  }
 
 }
