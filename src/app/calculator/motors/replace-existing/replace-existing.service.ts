@@ -50,9 +50,8 @@ export class ReplaceExistingService {
   initReplaceExistingData(settings: Settings, operatingHours: number): ReplaceExistingData {
     let motorSize: number = 150;
     if (settings.unitsOfMeasure != 'Imperial') {
-      motorSize = this.convertUnitsService.value(motorSize).from('hp').to('kW');
+      motorSize = 100;
     }
-    console.log(motorSize);
     return {
       operatingHours: operatingHours,
       motorSize: motorSize,
