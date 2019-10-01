@@ -21,6 +21,7 @@ export class OperationCostsComponent implements OnInit {
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
   treasureHuntResults: TreasureHuntResults;
+  saveSettingsOnDestroy: boolean = false;
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
     private indexedDbService: IndexedDbService, private settingsDbService: SettingsDbService) { }
 
@@ -32,6 +33,9 @@ export class OperationCostsComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    if(this.saveSettingsOnDestroy == true){
+      this.saveSettings();
+    }
     this.treasureHuntSub.unsubscribe();
   }
 
@@ -172,6 +176,10 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.steamCosts = 0;
     }
     this.save();
+  }
+
+  setSaveSettings(){
+    this.saveSettingsOnDestroy = true;
   }
 
   saveSettings() {
