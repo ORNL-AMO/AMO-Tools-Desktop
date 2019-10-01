@@ -297,8 +297,8 @@ export class SteamService {
   }
 
   steamModeler(inputData: SSMTInputs, settings: Settings): SSMTOutput {
-    console.log('TEST');
     let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(inputData)), settings);
+    console.log(convertedInputData.boilerInput.approachTemperature);
     let outputData: SSMTOutput = steamAddon.steamModeler(convertedInputData);
     outputData = this.convertSteamService.convertSsmtOutput(outputData, settings);
     return outputData;

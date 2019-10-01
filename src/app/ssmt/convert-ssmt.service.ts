@@ -66,6 +66,12 @@ export class ConvertSsmtService {
       turbine.operationValue1 = this.convertValue(turbine.operationValue1, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement);
       turbine.operationValue2 = this.convertValue(turbine.operationValue2, oldSettings.steamMassFlowMeasurement, newSettings.steamMassFlowMeasurement);
     }
+    if(turbine.operationValue1 == undefined){
+      turbine.operationValue1 = null;
+    }
+    if(turbine.operationValue2 == undefined){
+      turbine.operationValue2 = null;
+    }
     return turbine;
   }
 

@@ -490,8 +490,17 @@ export class ConvertSteamService {
   convertBoilerInputData(boilerInput: BoilerInput, settings: Settings): BoilerInput {
     boilerInput.steamTemperature = this.convertSteamTemperatureInput(boilerInput.steamTemperature, settings);
     boilerInput.deaeratorPressure = this.convertSteamPressureInput(boilerInput.deaeratorPressure, settings);
-    boilerInput.approachTemperature = this.convertSteamTemperatureInput(boilerInput.approachTemperature, settings);
+    boilerInput.approachTemperature = this.convertApproachTemperature(boilerInput.approachTemperature, settings);
     return boilerInput;
+  }
+
+  convertApproachTemperature(approachTemp: number, settings: Settings): number {
+    let approachTempUnit: string = 'R';
+    if (settings.steamTemperatureMeasurement == 'C' || settings.steamTemperatureMeasurement == 'K') {
+      approachTempUnit = 'K';
+    }
+    approachTemp = this.convertUnitsService.value(approachTemp).from(approachTempUnit).to('K');
+    return approachTemp;
   }
 
   convertHeaderInputData(headerInput: HeaderInput, settings: Settings): HeaderInput {
