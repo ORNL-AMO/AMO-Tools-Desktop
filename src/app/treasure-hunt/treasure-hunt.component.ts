@@ -41,6 +41,7 @@ export class TreasureHuntComponent implements OnInit {
   modalOpenSub: Subscription;
   isModalOpen: boolean = false;
   treasureHuntSub: Subscription;
+  nextDisabled: boolean;
   constructor(
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
@@ -91,10 +92,12 @@ export class TreasureHuntComponent implements OnInit {
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
       this.getContainerHeight();
+      this.getCanContinue();
     });
 
     this.subTabSub = this.treasureHuntService.subTab.subscribe(val => {
       this.subTab = val;
+      this.getCanContinue();
     });
     this.modalOpenSub = this.treasureHuntService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
@@ -103,6 +106,7 @@ export class TreasureHuntComponent implements OnInit {
       if (val) {
         this.saveTreasureHunt(val);
       }
+      this.getCanContinue();
     })
   }
 
@@ -192,37 +196,35 @@ export class TreasureHuntComponent implements OnInit {
 
   getCanContinue() {
     if (this.subTab == 'settings') {
-      return true;
-    } else if (this.subTab == 'operating-hours') {
-      if (this.assessment.treasureHunt.operatingHours) {
-        return true;
-      } else {
-        return false
-      }
+      this.nextDisabled = false;
     } else if (this.subTab == 'operation-costs') {
       if (this.assessment.treasureHunt.setupDone) {
-        return true;
+        this.nextDisabled = false;
       } else {
-        return false;
+        this.nextDisabled = true;
       }
     }
   }
 
   back() {
-    if (this.subTab == 'operating-hours') {
-      this.treasureHuntService.subTab.next('settings');
-    } else if (this.subTab == 'operation-costs') {
-      this.treasureHuntService.subTab.next('operating-hours');
+    if (this.mainTab == 'system-setup') {
+      if (this.subTab == 'operation-costs') {
+        this.treasureHuntService.subTab.next('settings');
+      }
+    } else if (this.mainTab == 'find-treasure') {
+      this.treasureHuntService.mainTab.next('system-setup');
     }
   }
 
   continue() {
-    if (this.subTab == 'settings') {
-      this.treasureHuntService.subTab.next('operating-hours');
-    } else if (this.subTab == 'operating-hours') {
-      this.treasureHuntService.subTab.next('operation-costs');
-    } else if (this.subTab == 'operation-costs') {
-      this.treasureHuntService.mainTab.next('find-treasure');
+    if (this.mainTab == 'system-setup') {
+      if (this.subTab == 'settings') {
+        this.treasureHuntService.subTab.next('operation-costs');
+      } else if (this.subTab == 'operation-costs') {
+        this.treasureHuntService.mainTab.next('find-treasure');
+      }
+    } else if (this.mainTab == 'find-treasure') {
+      this.treasureHuntService.mainTab.next('treasure-chest');
     }
   }
 

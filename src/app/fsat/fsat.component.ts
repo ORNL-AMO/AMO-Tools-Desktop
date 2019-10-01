@@ -406,10 +406,12 @@ export class FsatComponent implements OnInit {
   }
 
   back() {
-    if (this.stepTab !== 'system-basics') {
+    if (this.stepTab !== 'system-basics' && this.mainTab == 'system-setup') {
       let assessmentTabIndex: number = this.stepTabIndex - 1;
       let nextTab: string = this.stepTabs[assessmentTabIndex];
       this.fsatService.stepTab.next(nextTab);
+    } else if (this.mainTab == 'assessment') {
+      this.fsatService.mainTab.next('system-setup');
     }
   }
 
