@@ -126,7 +126,7 @@ export class CalculateLossesService {
   }
 
   calculateCondensateLoss(ssmtResults: SSMTOutput, settings: Settings): number {
-    let combinedCondensateEnergy: number = this.calculateEnergy(ssmtResults.combinedCondensateHeader.massFlow, ssmtResults.combinedCondensateHeader.specificEnthalpy, settings);
+    let combinedCondensateEnergy: number = this.calculateEnergy(ssmtResults.combinedCondensate.massFlow, ssmtResults.combinedCondensate.specificEnthalpy, settings);
     let returnCondensateEnergy: number = this.calculateEnergy(ssmtResults.returnCondensate.massFlow, ssmtResults.returnCondensate.specificEnthalpy, settings);
     let loss: number = combinedCondensateEnergy - returnCondensateEnergy;
     loss = this.convertUnitsService.value(loss).from('MJ').to(settings.steamEnergyMeasurement);

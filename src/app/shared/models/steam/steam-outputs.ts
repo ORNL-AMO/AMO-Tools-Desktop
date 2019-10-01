@@ -29,7 +29,7 @@ export interface SSMTOutput {
   highPressureCondensate: SteamPropertiesOutput;
   lowPressureCondensate: SteamPropertiesOutput;
   mediumPressureCondensate: SteamPropertiesOutput;
-  combinedCondensateHeader: SteamPropertiesOutput;
+  combinedCondensate: SteamPropertiesOutput;
   returnCondensate: SteamPropertiesOutput;
   condensateFlashTank: FlashTankOutput;
 

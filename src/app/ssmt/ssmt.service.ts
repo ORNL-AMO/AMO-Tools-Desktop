@@ -156,7 +156,7 @@ export class SsmtService {
       highPressureCondensate: undefined,
       lowPressureCondensate: undefined,
       mediumPressureCondensate: undefined,
-      combinedCondensateHeader: undefined,
+      combinedCondensate: undefined,
       returnCondensate: undefined,
       condensateFlashTank: undefined,
 
