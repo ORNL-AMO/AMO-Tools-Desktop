@@ -17,8 +17,8 @@
         </span>
       </td>
       <td class="text-center">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">
+        <span *ngIf="!results.modificationResults">&mdash;</span>
+        <span *ngIf="results.modificationResults">
           {{results.modificationResults.steamUse | number:'.0-3'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
             klb/yr
@@ -41,8 +41,8 @@
         </span>
       </td>
       <td class="text-center w-50">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">
+        <span *ngIf="!results.modificationResults">&mdash;</span>
+        <span *ngIf="results.modificationResults">
           {{results.modificationResults.energyUse | number:'.0-3'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
             MMBtu/yr
@@ -59,8 +59,8 @@
         {{results.baselineResults.energyCost | currency}}/yr
       </td>
       <td class="text-center">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">
+        <span *ngIf="!results.modificationResults">&mdash;</span>
+        <span *ngIf="results.modificationResults">
           {{results.modificationResults.energyCost | currency}}/yr
         </span>
       </td>
@@ -68,8 +68,8 @@
     <tr>
       <td class="bold">Steam Savings</td>
       <td class="text-center" colspan="2">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">
+        <span *ngIf="!results.modificationResults">&mdash;</span>
+        <span *ngIf="results.modificationResults">
           {{results.annualSteamSavings | number:'.0-3'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
             klb/yr
@@ -83,8 +83,8 @@
     <tr>
       <td class="bold">Energy Savings</td>
       <td class="text-center" colspan="2">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">
+        <span *ngIf="!results.modificationResults">&mdash;</span>
+        <span *ngIf="results.modificationResults">
           {{results.annualEnergySavings | number:'.0-3'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">
             MMBtu/yr
@@ -98,8 +98,8 @@
     <tr>
       <td class="bold">Cost Savings</td>
       <td class="text-center" colspan="2">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">
+        <span *ngIf="!results.modificationResults">&mdash;</span>
+        <span *ngIf="results.modificationResults">
           {{results.annualCostSavings | currency}}/yr
         </span>
       </td>

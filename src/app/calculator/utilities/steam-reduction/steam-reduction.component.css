@@ -24,6 +24,9 @@
     margin: 10px 0px;
 }
 
+.btn-form {
+    border-radius: 4px !important;
+}
 .panel-column.disabled {
     background-color: #ececec;
     transition: all 0.2s ease-in-out;

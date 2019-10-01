@@ -17,7 +17,7 @@
     <tr>
       <td class="bold w-50">Flow Rate</td>
       <td class="text-center w-50">
-        {{compressedAirReductionResults.baselineResults.flowRate | number:'.0-2'}}
+        {{compressedAirReductionResults.baselineResults.flowRate | number:'.0-4'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
@@ -25,7 +25,7 @@
     <tr>
       <td class="bold w-50">Consumption</td>
       <td class="text-center w-50">
-        {{compressedAirReductionResults.baselineResults.consumption | number:'.0-2'}}
+        {{compressedAirReductionResults.baselineResults.consumption | number:'.0-4'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kSCF</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
       </td>
@@ -57,7 +57,7 @@
     <tr>
       <td class="bold w-50">Flow Rate</td>
       <td class="text-center w-50">
-        {{compressedAirReductionResults.modificationResults.flowRate | number:'.0-2'}}
+        {{compressedAirReductionResults.modificationResults.flowRate | number:'.0-4'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
@@ -95,7 +95,7 @@
     </tr>
     <tr>
       <td class="bold w-50">Flow Rate Reduction</td>
-      <td class="text-center w-50">{{compressedAirReductionResults.annualFlowRateReduction | number: '.0-2'}}
+      <td class="text-center w-50">{{compressedAirReductionResults.annualFlowRateReduction | number: '.0-4'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>

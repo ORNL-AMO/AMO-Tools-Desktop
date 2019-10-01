@@ -52,6 +52,9 @@ export class CombinedHeatPowerComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private combinedHeatPowerService: CombinedHeatPowerService, private standaloneService: StandaloneService) { }
 
   ngOnInit() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -76,16 +79,9 @@ export class CombinedHeatPowerComponent implements OnInit {
     this.calculate();
   }
 
-  generateExample() {
-    this.inputs = this.combinedHeatPowerService.generateExample();
-    this.combinedHeatPowerService.inputData = this.inputs;
-  }
-
   btnGenerateExample() {
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
-    this.generateExample();
+    this.inputs = this.combinedHeatPowerService.generateExample(this.settings);
+    this.combinedHeatPowerService.inputData = this.inputs;
     this.calculate();
   }
 
@@ -104,7 +100,7 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.standaloneService.CHPcalculator(this.inputs);
+    this.results = this.standaloneService.CHPcalculator(this.inputs, this.settings);
   }
 
 }

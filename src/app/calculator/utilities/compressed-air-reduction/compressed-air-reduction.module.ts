@@ -8,6 +8,7 @@ import { CompressedAirReductionResultsComponent } from './compressed-air-reducti
 import { CompressedAirReductionHelpComponent } from './compressed-air-reduction-help/compressed-air-reduction-help.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ConvertCompressedAirReductionService } from './convert-compressed-air-reduction.service';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     CompressedAirReductionHelpComponent,
   ],
    providers: [
-     CompressedAirReductionService
+     CompressedAirReductionService,
+     ConvertCompressedAirReductionService
    ],
    exports: [
      CompressedAirReductionComponent
