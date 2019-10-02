@@ -7,8 +7,8 @@
       </td>
     </tr>
     <tr *ngFor="let data of baselineData; let index = index;">
-      <td class="bold">Energy Use #{{index+1 | sigFigs:'2'}}</td>
-      <td class="text-center">{{data.totalEmissionOutput | sigFigs:'2'}} tonne CO<sub>2</sub></td>
+      <td class="bold">Energy Use #{{index+1}}</td>
+      <td class="text-center">{{data.totalEmissionOutput | number:'1.1-1'}} tonne CO<sub>2</sub></td>
     </tr>
   </tbody>
 </table>
@@ -24,8 +24,8 @@
       </td>
     </tr>
     <tr *ngFor="let data of modificationData; let index = index;">
-      <td class="bold">Energy Use #{{index+1 | sigFigs:'2'}}</td>
-      <td class="text-center">{{data.totalEmissionOutput | sigFigs:'2'}} tonne CO<sub>2</sub></td>
+      <td class="bold">Energy Use #{{index+1}}</td>
+      <td class="text-center">{{data.totalEmissionOutput | number:'1.1-1'}} tonne CO<sub>2</sub></td>
     </tr>
   </tbody>
 </table>
@@ -61,7 +61,7 @@
       </td>
     </tr>
     <tr>
-      <td class="text-center w-50">{{baselineTotal - modificationTotal | sigFigs:'2'}} tonne CO<sub>2</sub></td>
+      <td class="text-center w-50">{{baselineTotal - modificationTotal | number:'1.1-1'}} tonne CO<sub>2</sub></td>
     </tr>
   </tbody>
 </table>
