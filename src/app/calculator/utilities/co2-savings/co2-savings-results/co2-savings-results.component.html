@@ -1,68 +1,38 @@
-<label class="group-label">Baseline Summary</label>
+<label class="group-label">Total Emission Output Rate</label>
 <table #copyTable0 class="table table-hover table-striped">
   <tbody>
     <tr>
-      <td>&nbsp;</td>
-      <td class="bold text-center">Total Emission Output Rate
-      </td>
+      <td class="bold" colspan="2">Baseline Summary</td>
     </tr>
+
     <tr *ngFor="let data of baselineData; let index = index;">
-      <td class="bold">Energy Use #{{index+1 | sigFigs:'2'}}</td>
-      <td class="text-center">{{data.totalEmissionOutput | sigFigs:'2'}} tonne CO<sub>2</sub></td>
+      <td>Energy Use #{{index+1}}</td>
+      <td class="text-center">{{data.totalEmissionOutput | number:'1.1-1'}} tonne CO<sub>2</sub></td>
     </tr>
-  </tbody>
-</table>
-<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()"></app-exportable-results-table>
-
-
-<label class="group-label" *ngIf="modificationData.length != 0">Modification Summary</label>
-<table #copyTable1 class="table table-hover table-striped" *ngIf="modificationData.length != 0">
-  <tbody>
-    <tr>
-      <td>&nbsp;</td>
-      <td class="bold text-center">Total Emission Output Rate
-      </td>
+    <tr *ngIf="modificationData.length != 0">
+      <td class="bold" colspan="2">Modification Summary</td>
     </tr>
     <tr *ngFor="let data of modificationData; let index = index;">
-      <td class="bold">Energy Use #{{index+1 | sigFigs:'2'}}</td>
-      <td class="text-center">{{data.totalEmissionOutput | sigFigs:'2'}} tonne CO<sub>2</sub></td>
-    </tr>
-  </tbody>
-</table>
-<app-exportable-results-table *ngIf="modificationData.length != 0" [tableString]="table1String" (updateTableString)="updateTable1String()"></app-exportable-results-table>
-
-
-<label class="group-label">Totals</label>
-<table #copyTable2 class="table table-hover table-striped">
-  <tbody>
-    <tr>
-      <td>&nbsp;</td>
-      <td class="bold text-center">Total Emission Output Rate
-      </td>
+      <td>Energy Use #{{index+1}}</td>
+      <td class="text-center">{{data.totalEmissionOutput | number:'1.1-1'}} tonne CO<sub>2</sub></td>
     </tr>
     <tr>
-      <td class="bold">Baseline</td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="bold">Baseline Total</td>
       <td class="text-center">{{baselineTotal | number:'1.1-1'}} tonne CO<sub>2</sub>
       </td>
     </tr>
     <tr>
-      <td class="bold">Modification</td>
+      <td class="bold">Modification Total</td>
       <td class="text-center">{{modificationTotal | number:'1.1-1'}} tonne CO<sub>2</sub>
     </tr>
-  </tbody>
-</table>
-<app-exportable-results-table [tableString]="table2String" (updateTableString)="updateTable2String()"></app-exportable-results-table>
-
-
-<table #copyTable3 class="table table-hover table-striped mt-4">
-  <tbody>
     <tr>
-      <td class="bold text-center">Total Savings
-      </td>
-    </tr>
-    <tr>
-      <td class="text-center w-50">{{baselineTotal - modificationTotal | sigFigs:'2'}} tonne CO<sub>2</sub></td>
+      <td class="bold">Total Savings</td>
+      <td class="text-center">{{baselineTotal - modificationTotal | number:'1.1-1'}} tonne CO<sub>2</sub></td>
     </tr>
   </tbody>
 </table>
-<app-exportable-results-table [tableString]="table3String" (updateTableString)="updateTable3String()"></app-exportable-results-table>
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>
