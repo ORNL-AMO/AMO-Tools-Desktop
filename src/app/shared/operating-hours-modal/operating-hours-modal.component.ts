@@ -40,16 +40,16 @@ export class OperatingHoursModalComponent implements OnInit {
     }, 100)
     if (!this.operatingHours) {
       this.operatingHours = {
-        weeksPerYear: 52,
+        weeksPerYear: 52.14,
         daysPerWeek: 7,
         hoursPerDay: 24,
         minutesPerHour: 60,
         secondsPerMinute: 60,
-        hoursPerYear: 8736
+        hoursPerYear: 8760
       };
     }
     if(!this.operatingHours.weeksPerYear){
-      this.operatingHours.weeksPerYear = 52;
+      this.operatingHours.weeksPerYear = 52.14;
     }
     if(!this.operatingHours.daysPerWeek){
       this.operatingHours.daysPerWeek = 7;
