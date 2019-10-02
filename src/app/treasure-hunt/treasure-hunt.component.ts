@@ -12,6 +12,7 @@ import { Directory } from '../shared/models/directory';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
+import { CalculatorsService } from './calculators/calculators.service';
 
 @Component({
   selector: 'app-treasure-hunt',
@@ -42,6 +43,8 @@ export class TreasureHuntComponent implements OnInit {
   isModalOpen: boolean = false;
   treasureHuntSub: Subscription;
   nextDisabled: boolean;
+  selectedCalcSub: Subscription;
+  selectedCalc: string;
   constructor(
     private assessmentService: AssessmentService,
     private indexedDbService: IndexedDbService,
@@ -51,7 +54,8 @@ export class TreasureHuntComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private assessmentDbService: AssessmentDbService,
     private treasureHuntService: TreasureHuntService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private calculatorsService: CalculatorsService
   ) { }
 
   ngOnInit() {
@@ -107,6 +111,10 @@ export class TreasureHuntComponent implements OnInit {
         this.saveTreasureHunt(val);
       }
       this.getCanContinue();
+    });
+    this.selectedCalcSub = this.calculatorsService.selectedCalc.subscribe(val => {
+      this.selectedCalc = val;
+      this.getContainerHeight();
     })
   }
 
@@ -118,6 +126,7 @@ export class TreasureHuntComponent implements OnInit {
     this.modalOpenSub.unsubscribe();
     this.treasureHuntService.treasureHunt.next(undefined);
     this.treasureHuntSub.unsubscribe();
+    this.selectedCalcSub.unsubscribe();
   }
 
   ngAfterViewInit() {
