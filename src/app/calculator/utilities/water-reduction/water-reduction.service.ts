@@ -63,18 +63,18 @@ export class WaterReductionService {
   }
 
   convertInitData(inputData: WaterReductionData): WaterReductionData {
-    let gallonConversionHelper = this.convertUnitsService.value(1).from('gal').to('L');
+    let gallonConversionHelper = this.convertUnitsService.value(1).from('gal').to('m3');
     inputData.waterCost = inputData.waterCost / gallonConversionHelper;
     inputData.waterCost = Number(inputData.waterCost.toFixed(3));
-    inputData.meteredFlowMethodData.meterReading = this.convertUnitsService.value(inputData.meteredFlowMethodData.meterReading).from('gal').to('L');
+    inputData.meteredFlowMethodData.meterReading = this.convertUnitsService.value(inputData.meteredFlowMethodData.meterReading).from('gal').to('m3');
     inputData.meteredFlowMethodData.meterReading = Number(inputData.meteredFlowMethodData.meterReading.toFixed(3));
-    inputData.volumeMeterMethodData.finalMeterReading = this.convertUnitsService.value(inputData.volumeMeterMethodData.finalMeterReading).from('gal').to('L');
+    inputData.volumeMeterMethodData.finalMeterReading = this.convertUnitsService.value(inputData.volumeMeterMethodData.finalMeterReading).from('gal').to('m3');
     inputData.volumeMeterMethodData.finalMeterReading = Number(inputData.volumeMeterMethodData.finalMeterReading.toFixed(3));
-    inputData.volumeMeterMethodData.initialMeterReading = this.convertUnitsService.value(inputData.volumeMeterMethodData.initialMeterReading).from('gal').to('L');
+    inputData.volumeMeterMethodData.initialMeterReading = this.convertUnitsService.value(inputData.volumeMeterMethodData.initialMeterReading).from('gal').to('m3');
     inputData.volumeMeterMethodData.initialMeterReading = Number(inputData.volumeMeterMethodData.initialMeterReading.toFixed(3));
-    inputData.bucketMethodData.bucketVolume = this.convertUnitsService.value(inputData.bucketMethodData.bucketVolume).from('gal').to('L');
+    inputData.bucketMethodData.bucketVolume = this.convertUnitsService.value(inputData.bucketMethodData.bucketVolume).from('gal').to('m3');
     inputData.bucketMethodData.bucketVolume = Number(inputData.bucketMethodData.bucketVolume.toFixed(3));
-    inputData.otherMethodData.consumption = this.convertUnitsService.value(inputData.otherMethodData.consumption).from('gal').to('L');
+    inputData.otherMethodData.consumption = this.convertUnitsService.value(inputData.otherMethodData.consumption).from('gal').to('m3');
     inputData.otherMethodData.consumption = Number(inputData.otherMethodData.consumption.toFixed(3));
     return inputData;
   }
@@ -207,14 +207,14 @@ export class WaterReductionService {
 
   convertInputs(inputArray: Array<WaterReductionData>, settings: Settings): Array<WaterReductionData> {
     if (settings.unitsOfMeasure == 'Metric') {
-      let gallonConversionHelper = this.convertUnitsService.value(1).from('L').to('gal');
+      let gallonConversionHelper = this.convertUnitsService.value(1).from('m3').to('gal');
       for (let i = 0; i < inputArray.length; i++) {
         inputArray[i].waterCost = inputArray[i].waterCost / gallonConversionHelper;
-        inputArray[i].meteredFlowMethodData.meterReading = this.convertUnitsService.value(inputArray[i].meteredFlowMethodData.meterReading).from('L').to('gal');
-        inputArray[i].volumeMeterMethodData.finalMeterReading = this.convertUnitsService.value(inputArray[i].volumeMeterMethodData.finalMeterReading).from('L').to('gal');
-        inputArray[i].volumeMeterMethodData.initialMeterReading = this.convertUnitsService.value(inputArray[i].volumeMeterMethodData.initialMeterReading).from('L').to('gal');
-        inputArray[i].bucketMethodData.bucketVolume = this.convertUnitsService.value(inputArray[i].bucketMethodData.bucketVolume).from('L').to('gal');
-        inputArray[i].otherMethodData.consumption = this.convertUnitsService.value(inputArray[i].otherMethodData.consumption).from('L').to('gal');
+        inputArray[i].meteredFlowMethodData.meterReading = this.convertUnitsService.value(inputArray[i].meteredFlowMethodData.meterReading).from('m3').to('gal');
+        inputArray[i].volumeMeterMethodData.finalMeterReading = this.convertUnitsService.value(inputArray[i].volumeMeterMethodData.finalMeterReading).from('m3').to('gal');
+        inputArray[i].volumeMeterMethodData.initialMeterReading = this.convertUnitsService.value(inputArray[i].volumeMeterMethodData.initialMeterReading).from('m3').to('gal');
+        inputArray[i].bucketMethodData.bucketVolume = this.convertUnitsService.value(inputArray[i].bucketMethodData.bucketVolume).from('m3').to('gal');
+        inputArray[i].otherMethodData.consumption = this.convertUnitsService.value(inputArray[i].otherMethodData.consumption).from('m3').to('gal');
       }
     }
     return inputArray;
@@ -222,7 +222,7 @@ export class WaterReductionService {
 
   convertResults(results: WaterReductionResult, settings: Settings): WaterReductionResult {
     if (settings.unitsOfMeasure == 'Metric') {
-      results.waterUse = this.convertUnitsService.value(results.waterUse).from('gal').to('L');
+      results.waterUse = this.convertUnitsService.value(results.waterUse).from('gal').to('m3');
     } else if (settings.unitsOfMeasure == 'Imperial') {
       results.waterUse = results.waterUse / 1000;
     }
@@ -236,7 +236,7 @@ export class WaterReductionService {
     baselineData.bucketMethodData.bucketFillTime = 20;
     baselineData.bucketMethodData.bucketVolume = 10;
     if (settings.unitsOfMeasure != 'Imperial') {
-      baselineData.bucketMethodData.bucketVolume = this.convertUnitsService.value(baselineData.bucketMethodData.bucketVolume).from('gal').to('L');
+      baselineData.bucketMethodData.bucketVolume = this.convertUnitsService.value(baselineData.bucketMethodData.bucketVolume).from('gal').to('m3');
       baselineData.bucketMethodData.bucketVolume = Number(baselineData.bucketMethodData.bucketVolume.toFixed(3));
     }
     return baselineData;

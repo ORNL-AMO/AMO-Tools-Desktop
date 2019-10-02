@@ -173,7 +173,7 @@ export class WaterReductionComponent implements OnInit {
     this.modificationExists = false;
     this.getResults();
   }
-  
+
   btnGenerateExample() {
     let tmpObj: WaterReductionData = this.waterReductionService.getBaselineExample(this.settings, this.operatingHours);
     this.baselineData = [tmpObj];
@@ -181,6 +181,9 @@ export class WaterReductionComponent implements OnInit {
     let modificationObj: WaterReductionData = JSON.parse(JSON.stringify(tmpObj));
     modificationObj.measurementMethod = 3;
     modificationObj.otherMethodData.consumption = this.waterReductionResults.baselineResults.waterUse * .95;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      modificationObj.otherMethodData.consumption = modificationObj.otherMethodData.consumption * 1000;
+    }
     modificationObj.otherMethodData.consumption = Number(modificationObj.otherMethodData.consumption.toFixed(3));
     this.modificationData = [modificationObj];
     this.getResults();
