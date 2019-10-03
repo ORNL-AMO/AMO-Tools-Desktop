@@ -1,4 +1,62 @@
 <form [formGroup]="form">
+    <!--operating hours-->
+    <div class="form-group">
+        <label class="small" for="operatingHours">Operating Hours</label>
+        <div class="input-group">
+            <span class="input-group-addon op-hour-addon units">
+                <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input class="form-control" name="operatingHours" id="operatingHours" formControlName="operatingHours"
+                type="number" (input)="save()" (focus)="focusField('operatingHours')" (blur)="focusOut()"
+                onfocus="this.select();">
+            <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
+            <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
+            <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
+                {{form.controls.operatingHours.errors.max.max}}.</span>
+            <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
+                {{form.controls.operatingHours.errors.min.min}}.</span>
+        </span>
+    </div>
+    <!--fuel cost-->
+    <div class="form-group">
+        <label class="small" for="fuelCost">Fuel Cost</label>
+        <div class="input-group">
+            <input class="form-control" name="fuelCost" id="fuelCost" formControlName="fuelCost" type="number"
+                (input)="save()" (focus)="focusField('fuelCost')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="input-group-addon units">$/<span
+                    [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>
+            </span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">
+            <span *ngIf="form.controls.fuelCost.errors.required">Value Required</span>
+            <span *ngIf="form.controls.fuelCost.errors.min">Value can't be less than
+                {{form.controls.fuelCost.errors.min.min}} $/<span
+                    [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span></span>
+        </span>
+    </div>
+    <!--water cost-->
+    <div class="form-group">
+        <label class="small" for="waterCost">Water Cost</label>
+        <div class="input-group">
+            <input class="form-control" name="waterCost" id="waterCost" formControlName="waterCost" type="number"
+                (input)="save()" (focus)="focusField('waterCost')" (blur)="focusOut()" onfocus="this.select();">
+            <span class="input-group-addon units">$/<span
+                    [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
+            </span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.waterCost.invalid && !form.controls.waterCost.pristine">
+            <span *ngIf="form.controls.waterCost.errors.required">Value Required</span>
+            <span *ngIf="form.controls.waterCost.errors.min">Value can't be less than
+                {{form.controls.waterCost.errors.min.min}} $/<span
+                    [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span></span>
+        </span>
+    </div>
+    <!--steam flow-->
     <div class="form-group">
         <label class="small" for="steamFlow">Steam Flow</label>
         <div class="input-group">
@@ -18,7 +76,7 @@
                     [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>.</span>
         </span>
     </div>
-
+    <!--steam temperature-->
     <div class="form-group">
         <label class="small" for="steamTemperature">Steam Temperature</label>
         <div class="input-group">
@@ -39,6 +97,7 @@
                     [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
     </div>
+    <!--boiler efficiency-->
     <div class="form-group">
         <label class="small" for="boilerEfficiency">Boiler Efficiency
         </label>
@@ -57,7 +116,7 @@
                 {{form.controls.boilerEfficiency.errors.min.min}} %.</span>
         </span>
     </div>
-
+    <!--feedwater conductivity-->
     <div class="form-group">
         <label class="small" for="feedwaterConductivity">Feedwater Conductivity</label>
         <div class="input-group">
@@ -75,6 +134,7 @@
                 {{form.controls.feedwaterConductivity.errors.min.min}} &#x3bc;S/cm.</span>
         </span>
     </div>
+    <!--blowdown conductivity-->
     <div class="form-group">
         <label class="small" for="blowdownConductivity">Blowdown Conductivity</label>
         <div class="input-group">
@@ -92,6 +152,7 @@
                 {{form.controls.blowdownConductivity.errors.min.min}} &#x3bc;S/cm.</span>
         </span>
     </div>
+    <!--makeup water temperature-->
     <div class="form-group">
         <label class="small" for="makeupWaterTemperature">Makeup Water Temperature</label>
         <div class="input-group">
@@ -109,61 +170,7 @@
                     [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
             <span *ngIf="form.controls.makeupWaterTemperature.errors.min">Value can't be less than
                 {{form.controls.makeupWaterTemperature.errors.min.min}} <span
-                    [innerHTML]="settings.makeupWaterTemperature | settingsLabel"></span>.</span>
-        </span>
-    </div>
-    <div class="form-group">
-        <label class="small" for="fuelCost">Fuel Cost</label>
-        <div class="input-group">
-            <input class="form-control" name="fuelCost" id="fuelCost" formControlName="fuelCost" type="number"
-                (input)="save()" (focus)="focusField('fuelCost')" (blur)="focusOut()" onfocus="this.select();">
-            <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>
-            </span>
-        </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">
-            <span *ngIf="form.controls.fuelCost.errors.required">Value Required</span>
-            <span *ngIf="form.controls.fuelCost.errors.min">Value can't be less than
-                {{form.controls.fuelCost.errors.min.min}} $/<span
-                    [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span></span>
-        </span>
-    </div>
-    <div class="form-group">
-        <label class="small" for="waterCost">Water Cost</label>
-        <div class="input-group">
-            <input class="form-control" name="waterCost" id="waterCost" formControlName="waterCost" type="number"
-                (input)="save()" (focus)="focusField('waterCost')" (blur)="focusOut()" onfocus="this.select();">
-            <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
-            </span>
-        </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.waterCost.invalid && !form.controls.waterCost.pristine">
-            <span *ngIf="form.controls.waterCost.errors.required">Value Required</span>
-            <span *ngIf="form.controls.waterCost.errors.min">Value can't be less than
-                {{form.controls.waterCost.errors.min.min}} $/<span
-                    [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span></span>
-        </span>
-    </div>
-    <div class="form-group">
-        <label class="small" for="operatingHours">Operating Hours</label>
-        <div class="input-group">
-            <span class="input-group-addon op-hour-addon units">
-                <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
-            </span>
-            <input class="form-control" name="operatingHours" id="operatingHours" formControlName="operatingHours"
-                type="number" (input)="save()" (focus)="focusField('operatingHours')" (blur)="focusOut()"
-                onfocus="this.select();">
-            <span class="units input-group-addon">hrs/yr</span>
-        </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.operatingHours.invalid && !form.controls.operatingHours.pristine">
-            <span *ngIf="form.controls.operatingHours.errors.required">Value required.</span>
-            <span *ngIf="form.controls.operatingHours.errors.max">Value can't be greater than
-                {{form.controls.operatingHours.errors.max.max}}.</span>
-            <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
-                {{form.controls.operatingHours.errors.min.min}}.</span>
+                    [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
         </span>
     </div>
 </form>

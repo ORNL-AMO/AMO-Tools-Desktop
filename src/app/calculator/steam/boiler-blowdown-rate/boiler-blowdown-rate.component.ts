@@ -54,7 +54,10 @@ export class BoilerBlowdownRateComponent implements OnInit {
   }
 
   initData() {
-    let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.getDefaultInputs();
+    let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
+    if (baselineInputs == undefined) {
+      baselineInputs = this.boilerBlowdownRateService.getDefaultInputs();
+    }
     this.boilerBlowdownRateService.baselineInputs.next(baselineInputs);
   }
 
@@ -84,7 +87,8 @@ export class BoilerBlowdownRateComponent implements OnInit {
 
   btnResetData() {
     this.boilerBlowdownRateService.modificationInputs.next(undefined);
-    this.initData();
+    let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.getDefaultInputs();
+    this.boilerBlowdownRateService.baselineInputs.next(baselineInputs);
     this.boilerBlowdownRateService.setForms.next(true);
   }
 

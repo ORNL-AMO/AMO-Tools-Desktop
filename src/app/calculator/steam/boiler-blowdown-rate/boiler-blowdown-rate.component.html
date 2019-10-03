@@ -1,4 +1,4 @@
-<div class="d-flex h-100 modify-conditions general" #contentContainer>
+<div class="d-flex h-100 modify-conditions steam standalone-calculator" #contentContainer>
     <div class="d-flex flex-column w-100 h-100 scroll-item">
         <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center">
             <div class="d-flex pl-2 align-items-center">
@@ -89,7 +89,7 @@
                         <app-blowdown-rate-results *ngIf="tabSelect === 'results'" [settings]="settings">
                         </app-blowdown-rate-results>
                         <!-- app help if help tab -->
-                        <app-blowdown-rate-help *ngIf="tabSelect === 'help'"></app-blowdown-rate-help>
+                        <app-blowdown-rate-help *ngIf="tabSelect === 'help'" [settings]="settings"></app-blowdown-rate-help>
                     </div>
 
                 </div>
