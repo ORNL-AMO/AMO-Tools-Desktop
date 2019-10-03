@@ -1,0 +1,33 @@
+<table #copyTable0 class="table table-hover table-striped" *ngIf="baselineResults">
+    <tbody>
+        <tr class="bold">
+            <td>&nbsp;</td>
+            <td>Baseline</td>
+            <td *ngIf="modificationExists">Modification</td>
+        </tr>
+        <tr>
+            <td>Blowdown Rate</td>
+            <td>{{baselineResults.blowdownRate}} %</td>
+            <td *ngIf="modificationExists">{{modificationResults.blowdownRate}} %</td>
+        </tr>
+        <tr>
+            <td>Fuel Cost</td>
+            <td>{{baselineResults.boilerFuelCost | currency}}</td>
+            <td *ngIf="modificationExists">{{modificationResults.boilerFuelCost | currency}}</td>
+        </tr>
+        <tr>
+            <td>Makeup Water Cost</td>
+            <td>{{baselineResults.makeupWaterCost | currency}}</td>
+            <td *ngIf="modificationExists">{{modificationResults.makeupWaterCost | currency}}</td>
+        </tr>
+        <tr class="bold">
+            <td>Total Cost</td>
+            <td>{{baselineResults.totalCost | currency}}</td>
+            <td *ngIf="modificationExists">{{modificationResults.totalCost | currency}}</td>
+        </tr>
+        <tr class="bold" *ngIf="modificationExists">
+            <td colspan="2">Total Savings</td>
+            <td>{{baselineResults.totalCost - modificationResults.totalCost | currency}}</td>
+        </tr>
+    </tbody>
+</table>

@@ -9,7 +9,7 @@
         type="number" (input)="calculate()" (focus)="focusField('deaeratorPressure')" (blur)="focusOut()"
         onfocus="this.select();">
       <span class="input-group-addon units"><span
-          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
+          [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></span>
     </div>
     <span class="alert-danger pull-right small"
       *ngIf="boilerForm.controls.deaeratorPressure.invalid && !boilerForm.controls.deaeratorPressure.pristine">
