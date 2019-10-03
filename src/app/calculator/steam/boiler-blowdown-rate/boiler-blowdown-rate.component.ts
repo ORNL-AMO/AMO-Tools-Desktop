@@ -43,6 +43,12 @@ export class BoilerBlowdownRateComponent implements OnInit {
     })
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.resizeTabs();
+    }, 100);
+  }
+
   ngOnDestroy() {
     this.modificationSub.unsubscribe();
   }
@@ -55,6 +61,7 @@ export class BoilerBlowdownRateComponent implements OnInit {
   createModification() {
     let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
     this.boilerBlowdownRateService.modificationInputs.next(baselineInputs);
+    this.setModificationSelected();
   }
 
   setModificationSelected() {
@@ -73,5 +80,18 @@ export class BoilerBlowdownRateComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  btnResetData() {
+    this.boilerBlowdownRateService.modificationInputs.next(undefined);
+    this.initData();
+    this.boilerBlowdownRateService.setForms.next(true);
+  }
+
+  btnGenerateExample() {
+    let exampleData: { baseline: BoilerBlowdownRateInputs, modification: BoilerBlowdownRateInputs } = this.boilerBlowdownRateService.getExampleInputs(this.settings);
+    this.boilerBlowdownRateService.modificationInputs.next(exampleData.modification);
+    this.boilerBlowdownRateService.baselineInputs.next(exampleData.baseline);
+    this.boilerBlowdownRateService.setForms.next(true);
   }
 }

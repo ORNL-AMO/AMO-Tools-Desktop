@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { BoilerBlowdownRateService, BoilerBlowdownRateInputs } from '../boiler-blowdown-rate.service';
 import { FormGroup } from '@angular/forms';
@@ -14,6 +14,8 @@ export class BlowdownRateFormComponent implements OnInit {
   settings: Settings;
   @Input()
   isBaseline: boolean;
+  @Input()
+  disabled: boolean;
 
   form: FormGroup;
   setFormSub: Subscription;
@@ -29,13 +31,28 @@ export class BlowdownRateFormComponent implements OnInit {
     this.setFormSub.unsubscribe();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.disabled && changes.disabled.firstChange == false) {
+      if (this.disabled == true) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    }
+  }
+
   setForm() {
     if (this.isBaseline == true) {
       let inputData: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
       this.form = this.boilerBlowdownRateService.getFormFromObj(inputData, this.settings);
     } else {
       let inputData: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.modificationInputs.getValue();
-      this.form = this.boilerBlowdownRateService.getFormFromObj(inputData, this.settings);
+      if (inputData) {
+        this.form = this.boilerBlowdownRateService.getFormFromObj(inputData, this.settings);
+      }
+    }
+    if (this.disabled == true && this.form) {
+      this.form.disable();
     }
   }
 

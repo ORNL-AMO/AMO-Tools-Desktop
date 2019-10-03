@@ -7,7 +7,7 @@ export const specificVolume = {
                 display: '(m&#x00B3;/kg)'
             },
             to_anchor: 1
-        }, 
+        },
         m3g: {
             name: {
                 singular: 'Cubic Meter per Gram',
@@ -23,6 +23,14 @@ export const specificVolume = {
                 display: '(ft&#x00B3;/lb)'
             },
             to_anchor: 1 / 16.0185
+        },
+        gallb: {
+            name: {
+                singular: 'Gallon per Pound',
+                plural: 'Gallons per lb',
+                display: '(gal/lb)'
+            },
+            to_anchor: 1 / 119.826
         }
     },
     // imperial: {

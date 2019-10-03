@@ -22,31 +22,21 @@ export class BlowdownRateResultsComponent implements OnInit {
 
   ngOnInit() {
     this.baselineSub = this.boilerBlowdownRateService.baselineInputs.subscribe(val => {
-      console.log('baseline')
-      console.log(val);
-      console.log('=====')
       if (val) {
         let form: FormGroup = this.boilerBlowdownRateService.getFormFromObj(val, this.settings)
-        
         if (form.valid) {
-          console.log('get baseline results');
           this.baselineResults = this.boilerBlowdownRateService.calculateResults(val, this.settings);
-          console.log(this.baselineResults);
-          console.log('=====')
         } else {
           this.baselineResults = this.getEmptyResults();
         }
-      }else{
+      } else {
         this.baselineResults = this.getEmptyResults();
       }
     });
 
     this.modificationSub = this.boilerBlowdownRateService.modificationInputs.subscribe(val => {
-      console.log('modification')
-      console.log(val);
-      console.log('=====')
       if (val) {
-        this.modificationExists = false;
+        this.modificationExists = true;
         let form: FormGroup = this.boilerBlowdownRateService.getFormFromObj(val, this.settings);
         if (form.valid) {
           this.modificationResults = this.boilerBlowdownRateService.calculateResults(val, this.settings);

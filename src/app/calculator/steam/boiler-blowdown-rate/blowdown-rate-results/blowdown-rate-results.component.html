@@ -8,7 +8,7 @@
         <tr>
             <td>Blowdown Rate</td>
             <td>{{baselineResults.blowdownRate}} %</td>
-            <td *ngIf="modificationExists">{{modificationResults.blowdownRate}} %</td>
+            <td *ngIf="modificationExists">{{modificationResults.blowdownRate | number:'1.0-3'}} %</td>
         </tr>
         <tr>
             <td>Fuel Cost</td>

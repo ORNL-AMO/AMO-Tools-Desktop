@@ -33,6 +33,33 @@ export class BoilerBlowdownRateService {
     }
   }
 
+  getExampleInputs(settings: Settings): { baseline: BoilerBlowdownRateInputs, modification: BoilerBlowdownRateInputs } {
+    let steamFlow: number = this.convertUnitsService.value(1000).from('klb').to(settings.steamMassFlowMeasurement);
+    steamFlow = this.convertUnitsService.roundVal(steamFlow, 0);
+    let steamTemp: number = this.convertUnitsService.value(500).from('F').to(settings.steamTemperatureMeasurement);
+    steamTemp = this.convertUnitsService.roundVal(steamTemp, 0);
+    let makeupWaterTemp: number = this.convertUnitsService.value(50).from('F').to(settings.steamTemperatureMeasurement);
+    makeupWaterTemp = this.convertUnitsService.roundVal(makeupWaterTemp, 0);
+    let fuelCostConversionHelper: number = this.convertUnitsService.value(1).from('MMBtu').to(settings.steamEnergyMeasurement);
+    let convertedFuelCost: number = 4.99 / fuelCostConversionHelper;
+    convertedFuelCost = this.convertUnitsService.roundVal(convertedFuelCost, 4);
+    let makeupWaterConversionHelper: number = this.convertUnitsService.value(1).from('gal').to(settings.steamVolumeMeasurement);
+    let convertedMakupeWaterCost: number = .0025 / makeupWaterConversionHelper;
+    convertedMakupeWaterCost = this.convertUnitsService.roundVal(convertedMakupeWaterCost, 4);
+    let baselineInputs: BoilerBlowdownRateInputs = {
+      steamFlow: steamFlow,
+      steamTemperature: steamTemp,
+      feedwaterConductivity: 400,
+      blowdownConductivity: 5500,
+      makeupWaterTemperature: makeupWaterTemp,
+      fuelCost: convertedFuelCost,
+      waterCost: convertedMakupeWaterCost,
+      operatingHours: 8760
+    }
+    let modificationInputs: BoilerBlowdownRateInputs = JSON.parse(JSON.stringify(baselineInputs));
+    return { baseline: baselineInputs, modification: modificationInputs };
+  }
+
   getFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): FormGroup {
     let ranges: BoilerBlowdownRateRanges = this.getRanges(settings);
     let form: FormGroup = this.formBuilder.group({
@@ -82,12 +109,15 @@ export class BoilerBlowdownRateService {
     }
   }
 
+
+  //calculations
   calculateResults(inputs: BoilerBlowdownRateInputs, settings: Settings): BoilerBlowdownRateResults {
     let blowdownRate: number = this.calculateBlowdownRate(inputs.feedwaterConductivity, inputs.blowdownConductivity);
     let blowdownEnthalpy: number = this.calculateBlowdownEnthalpy(inputs.steamTemperature, settings);
     let makeupWaterProperties: { enthalpy: number, specificVolume: number } = this.calculateMakeupWaterProperties(inputs.makeupWaterTemperature, settings);
-    let boilerFuelCost: number = this.calculateBoilerFuelCost(blowdownRate, blowdownEnthalpy, makeupWaterProperties.enthalpy, inputs);
-    let makeupWaterCost: number = this.calculateWaterCost(inputs, blowdownRate, makeupWaterProperties.specificVolume);
+    let boilerFuelCost: number = this.calculateBoilerFuelCost(blowdownRate, blowdownEnthalpy, makeupWaterProperties.enthalpy, inputs, settings);
+    let makeupWaterCost: number = this.calculateWaterCost(inputs, blowdownRate, makeupWaterProperties.specificVolume, settings);
+    blowdownRate = this.convertUnitsService.roundVal(blowdownRate, 3) * 100;
     return {
       blowdownRate: blowdownRate,
       boilerFuelCost: boilerFuelCost,
@@ -113,13 +143,28 @@ export class BoilerBlowdownRateService {
     return { enthalpy: properties.specificEnthalpy, specificVolume: properties.specificVolume };
   }
 
-  calculateBoilerFuelCost(blowdownRate: number, blowdownEnthalpy: number, makeupWaterEnthalpy: number, inputs: BoilerBlowdownRateInputs): number {
-    return blowdownRate * inputs.steamFlow * (blowdownEnthalpy - makeupWaterEnthalpy) * inputs.operatingHours * inputs.fuelCost / 1000;
-
+  calculateBoilerFuelCost(blowdownRate: number, blowdownEnthalpy: number, makeupWaterEnthalpy: number, inputs: BoilerBlowdownRateInputs, settings: Settings): number {
+    //steam flow klb/hr
+    let convertedSteamFlow: number = this.convertUnitsService.value(inputs.steamFlow).from(settings.steamMassFlowMeasurement).to('klb');
+    // enthalpy btu/lb
+    let convertedBlowdownEnthalpy: number = this.convertUnitsService.value(blowdownEnthalpy).from(settings.steamSpecificEnthalpyMeasurement).to('btuLb');
+    let convertedMakeupWaterEnthalpy: number = this.convertUnitsService.value(makeupWaterEnthalpy).from(settings.steamSpecificEnthalpyMeasurement).to('btuLb');
+    // fuel cost $/mmbtu
+    let conversionHelper: number = this.convertUnitsService.value(1).from(settings.steamEnergyMeasurement).to('MMBtu');
+    let convertedFuelCost: number = inputs.fuelCost / conversionHelper;
+    return blowdownRate * convertedSteamFlow * (convertedBlowdownEnthalpy - convertedMakeupWaterEnthalpy) * inputs.operatingHours * convertedFuelCost / 1000;
   }
 
-  calculateWaterCost(inputs: BoilerBlowdownRateInputs, blowdownRate: number, makeupWaterSpecificVolume: number): number {
-    return (inputs.steamFlow / (1 - blowdownRate)) * inputs.operatingHours * inputs.waterCost / makeupWaterSpecificVolume;
+  calculateWaterCost(inputs: BoilerBlowdownRateInputs, blowdownRate: number, makeupWaterSpecificVolume: number, settings: Settings): number {
+    //steam flow klb/hr
+    let convertedSteamFlow: number = this.convertUnitsService.value(inputs.steamFlow).from(settings.steamMassFlowMeasurement).to('klb');
+    //water cost $/gal
+    let conversionHelper: number = this.convertUnitsService.value(1).from(settings.steamVolumeMeasurement).to('gal');
+    let convertedMakupeWaterCost: number = inputs.waterCost / conversionHelper;
+    //specific volume gal/lb
+    let convertedMakeupWaterSpecificVolume: number = this.convertUnitsService.value(makeupWaterSpecificVolume).from(settings.steamSpecificVolumeMeasurement).to('gallb');
+
+    return (convertedSteamFlow / (1 - blowdownRate)) * inputs.operatingHours * convertedMakupeWaterCost / convertedMakeupWaterSpecificVolume;
   }
 }
 

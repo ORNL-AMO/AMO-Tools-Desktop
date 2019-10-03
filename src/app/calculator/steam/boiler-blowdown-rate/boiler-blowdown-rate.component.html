@@ -14,7 +14,7 @@
 
 
         <!-- baseline -->
-        <div class="d-flex">
+        <div class="d-flex h-100">
             <div class="scroll-item p-0 col-8 d-flex bg-white" [ngStyle]="{'height.px': containerHeight}">
                 <div class="modification baseline w-50 panel-column" (click)="setBaselineSelected()"
                     [ngClass]="{'disabled': baselineSelected == false}">
@@ -24,8 +24,8 @@
 
                     <div class="d-flex flex-column mx-4 mb-4">
                         <!-- app form -->
-                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="true"></app-blowdown-rate-form>
-                        <!-- <div class="w-100 justify content-center btn-group btn-group-sm">
+                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="true" [disabled]="baselineSelected == false"></app-blowdown-rate-form>
+                        <div class="w-100 justify content-center btn-group btn-group-sm">
                             <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
                                 (click)="btnResetData()">
                                 Reset Data
@@ -34,7 +34,7 @@
                                 (click)="btnGenerateExample()">
                                 Generate Example
                             </button>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
 
@@ -47,7 +47,7 @@
                     </div>
                     <!-- forms -->
                     <div class="d-flex flex-column mx-4 mb-4">
-                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="false"></app-blowdown-rate-form>
+                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="false" [disabled]="baselineSelected == true"></app-blowdown-rate-form>
                     </div>
                 </div>
 
@@ -86,7 +86,8 @@
 
                     <div class="p-2">
                         <!-- app results if results tab -->
-                        <app-blowdown-rate-results *ngIf="tabSelect === 'results'" [settings]="settings"></app-blowdown-rate-results>
+                        <app-blowdown-rate-results *ngIf="tabSelect === 'results'" [settings]="settings">
+                        </app-blowdown-rate-results>
                         <!-- app help if help tab -->
                         <app-blowdown-rate-help *ngIf="tabSelect === 'help'"></app-blowdown-rate-help>
                     </div>
