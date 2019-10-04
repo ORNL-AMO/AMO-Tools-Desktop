@@ -13,11 +13,15 @@ export class BoilerBlowdownRateService {
   modificationInputs: BehaviorSubject<BoilerBlowdownRateInputs>;
   setForms: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
+  showBoiler: BehaviorSubject<boolean>;
+  showOperations: BehaviorSubject<boolean>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) {
     this.baselineInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
     this.modificationInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
     this.setForms = new BehaviorSubject<boolean>(true);
     this.currentField = new BehaviorSubject<string>('default');
+    this.showBoiler = new BehaviorSubject<boolean>(false);
+    this.showOperations = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultInputs(): BoilerBlowdownRateInputs {
@@ -64,36 +68,89 @@ export class BoilerBlowdownRateService {
     return { baseline: baselineInputs, modification: modificationInputs };
   }
 
-  getFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): FormGroup {
+  // getFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): FormGroup {
+  //   let ranges: BoilerBlowdownRateRanges = this.getRanges(settings);
+  //   let form: FormGroup = this.formBuilder.group({
+  //     steamFlow: [obj.steamFlow, [Validators.min(0), Validators.max(ranges.steamFlowMax)]],
+  //     steamTemperature: [obj.steamTemperature, [Validators.min(ranges.steamTempMin), Validators.max(ranges.steamTempMax)]],
+  //     feedwaterConductivity: [obj.feedwaterConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
+  //     blowdownConductivity: [obj.blowdownConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
+  //     makeupWaterTemperature: [obj.makeupWaterTemperature, [Validators.min(ranges.makeupWaterMin), Validators.max(ranges.makeupWaterMax)]],
+  //     fuelCost: [obj.fuelCost, [Validators.min(0)]],
+  //     waterCost: [obj.waterCost, [Validators.min(0)]],
+  //     operatingHours: [obj.operatingHours, [Validators.min(0), Validators.max(8760)]],
+  //     boilerEfficiency: [obj.boilerEfficiency, [Validators.min(50), Validators.max(100)]]
+  //   });
+  //   return form;
+  // }
+
+  getConductivityFormFromObj(obj: BoilerBlowdownRateInputs): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      feedwaterConductivity: [obj.feedwaterConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
+      blowdownConductivity: [obj.blowdownConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
+    });
+    return form;
+  }
+
+  getBoilerFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): FormGroup {
     let ranges: BoilerBlowdownRateRanges = this.getRanges(settings);
     let form: FormGroup = this.formBuilder.group({
       steamFlow: [obj.steamFlow, [Validators.required, Validators.min(0), Validators.max(ranges.steamFlowMax)]],
       steamTemperature: [obj.steamTemperature, [Validators.required, Validators.min(ranges.steamTempMin), Validators.max(ranges.steamTempMax)]],
-      feedwaterConductivity: [obj.feedwaterConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
-      blowdownConductivity: [obj.blowdownConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
-      makeupWaterTemperature: [obj.makeupWaterTemperature, [Validators.required, Validators.min(ranges.makeupWaterMin), Validators.max(ranges.makeupWaterMax)]],
-      fuelCost: [obj.fuelCost, [Validators.required, Validators.min(0)]],
-      waterCost: [obj.waterCost, [Validators.required, Validators.min(0)]],
-      operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       boilerEfficiency: [obj.boilerEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]]
     });
     return form;
   }
 
-  getObjFromForm(form: FormGroup): BoilerBlowdownRateInputs {
-    let obj: BoilerBlowdownRateInputs = {
-      steamFlow: form.controls.steamFlow.value,
-      steamTemperature: form.controls.steamTemperature.value,
-      feedwaterConductivity: form.controls.feedwaterConductivity.value,
-      blowdownConductivity: form.controls.blowdownConductivity.value,
-      makeupWaterTemperature: form.controls.makeupWaterTemperature.value,
-      fuelCost: form.controls.fuelCost.value,
-      waterCost: form.controls.waterCost.value,
-      operatingHours: form.controls.operatingHours.value,
-      boilerEfficiency: form.controls.boilerEfficiency.value
-    }
+  getOperationsFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): FormGroup {
+    let ranges: BoilerBlowdownRateRanges = this.getRanges(settings);
+    let form: FormGroup = this.formBuilder.group({
+      blowdownConductivity: [obj.blowdownConductivity, [Validators.required, Validators.required, Validators.min(0), Validators.max(9000)]],
+      makeupWaterTemperature: [obj.makeupWaterTemperature, [Validators.required, Validators.min(ranges.makeupWaterMin), Validators.max(ranges.makeupWaterMax)]],
+      fuelCost: [obj.fuelCost, [Validators.required, Validators.min(0)]],
+      waterCost: [obj.waterCost, [Validators.required, Validators.min(0)]],
+      operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]]
+    });
+    return form;
+  }
+
+
+  // getObjFromForm(form: FormGroup): BoilerBlowdownRateInputs {
+  //   let obj: BoilerBlowdownRateInputs = {
+  //     steamFlow: form.controls.steamFlow.value,
+  //     steamTemperature: form.controls.steamTemperature.value,
+  //     feedwaterConductivity: form.controls.feedwaterConductivity.value,
+  //     blowdownConductivity: form.controls.blowdownConductivity.value,
+  //     makeupWaterTemperature: form.controls.makeupWaterTemperature.value,
+  //     fuelCost: form.controls.fuelCost.value,
+  //     waterCost: form.controls.waterCost.value,
+  //     operatingHours: form.controls.operatingHours.value,
+  //     boilerEfficiency: form.controls.boilerEfficiency.value
+  //   }
+  //   return obj;
+  // }
+
+  updateObjFromConductivityForm(form: FormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
+    obj.feedwaterConductivity = form.controls.feedwaterConductivity.value;
+    obj.blowdownConductivity = form.controls.blowdownConductivity.value;
     return obj;
   }
+
+  updateObjFromBoilerForm(form: FormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
+    obj.steamFlow = form.controls.steamFlow.value;
+    obj.steamTemperature = form.controls.steamTemperature.value;
+    obj.boilerEfficiency = form.controls.boilerEfficiency.value;
+    return obj;
+  }
+
+  updateObjFromOperationsForm(form: FormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
+    obj.makeupWaterTemperature = form.controls.makeupWaterTemperature.value;
+    obj.fuelCost = form.controls.fuelCost.value;
+    obj.waterCost = form.controls.waterCost.value;
+    obj.operatingHours = form.controls.operatingHours.value;
+    return obj;
+  }
+
 
   getRanges(settings: Settings): BoilerBlowdownRateRanges {
     let steamFlowMax: number = this.convertUnitsService.value(100000).from('klb').to(settings.steamMassFlowMeasurement);
@@ -117,15 +174,27 @@ export class BoilerBlowdownRateService {
 
 
   //calculations
-  calculateResults(inputs: BoilerBlowdownRateInputs, settings: Settings): BoilerBlowdownRateResults {
+  calculateResults(inputs: BoilerBlowdownRateInputs, settings: Settings, calcBoilerVals: boolean, calcCostVals: boolean): BoilerBlowdownRateResults {
+    //always
     let blowdownRate: number = this.calculateBlowdownRate(inputs.feedwaterConductivity, inputs.blowdownConductivity);
-    let blowdownEnthalpy: number = this.calculateBlowdownEnthalpy(inputs.steamTemperature, settings);
-    let makeupWaterProperties: { enthalpy: number, specificVolume: number } = this.calculateMakeupWaterProperties(inputs.makeupWaterTemperature, settings);
-    let boilerFuelCost: number = this.calculateBoilerFuelCost(blowdownRate, blowdownEnthalpy, makeupWaterProperties.enthalpy, inputs, settings);
-    let makeupWaterCost: number = this.calculateWaterCost(inputs, blowdownRate, makeupWaterProperties.specificVolume, settings);
-    // blowdownRate = this.convertUnitsService.roundVal(blowdownRate, 3) * 100;
-    let feedwaterFlowRate: number = this.calculateFeedwaterFlowRate(blowdownRate, inputs);
-    let blowdownFlowRate: number = this.calculateBlowdownFlowRate(blowdownRate, inputs);
+    let feedwaterFlowRate: number
+    let blowdownFlowRate: number = 0;
+    let blowdownEnthalpy: number = 0;
+    let makeupWaterProperties: { enthalpy: number, specificVolume: number } = { enthalpy: 0, specificVolume: 0 };
+    let boilerFuelCost: number = 0;
+    let makeupWaterCost: number = 0;
+    //boiler
+    if (calcBoilerVals == true) {
+      feedwaterFlowRate = this.calculateFeedwaterFlowRate(blowdownRate, inputs);
+      blowdownFlowRate = this.calculateBlowdownFlowRate(blowdownRate, inputs);
+      blowdownEnthalpy = this.calculateBlowdownEnthalpy(inputs.steamTemperature, settings);
+      makeupWaterProperties = this.calculateMakeupWaterProperties(inputs.makeupWaterTemperature, settings);
+    }
+    //costs
+    if (calcCostVals == true) {
+      boilerFuelCost = this.calculateBoilerFuelCost(blowdownRate, blowdownEnthalpy, makeupWaterProperties.enthalpy, inputs, settings);
+      makeupWaterCost = this.calculateWaterCost(inputs, blowdownRate, makeupWaterProperties.specificVolume, settings);
+    }// blowdownRate = this.convertUnitsService.roundVal(blowdownRate, 3) * 100;
     return {
       blowdownRate: blowdownRate * 100,
       boilerFuelCost: boilerFuelCost,
