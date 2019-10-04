@@ -60,7 +60,9 @@ export class BlowdownRateResultsComponent implements OnInit {
       blowdownRate: 0,
       boilerFuelCost: 0,
       makeupWaterCost: 0,
-      totalCost: 0
+      totalCost: 0,
+      blowdownFlowRate: 0,
+      feedwaterFlowRate: 0
     }
   }
 }

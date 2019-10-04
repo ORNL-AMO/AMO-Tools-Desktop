@@ -124,12 +124,15 @@ export class BoilerBlowdownRateService {
     let boilerFuelCost: number = this.calculateBoilerFuelCost(blowdownRate, blowdownEnthalpy, makeupWaterProperties.enthalpy, inputs, settings);
     let makeupWaterCost: number = this.calculateWaterCost(inputs, blowdownRate, makeupWaterProperties.specificVolume, settings);
     // blowdownRate = this.convertUnitsService.roundVal(blowdownRate, 3) * 100;
-
+    let feedwaterFlowRate: number = this.calculateFeedwaterFlowRate(blowdownRate, inputs);
+    let blowdownFlowRate: number = this.calculateBlowdownFlowRate(blowdownRate, inputs);
     return {
       blowdownRate: blowdownRate * 100,
       boilerFuelCost: boilerFuelCost,
       makeupWaterCost: makeupWaterCost,
-      totalCost: boilerFuelCost + makeupWaterCost
+      totalCost: boilerFuelCost + makeupWaterCost,
+      feedwaterFlowRate: feedwaterFlowRate,
+      blowdownFlowRate: blowdownFlowRate
     }
   }
 
@@ -140,6 +143,15 @@ export class BoilerBlowdownRateService {
   calculateBlowdownEnthalpy(steamTemp: number, settings: Settings): number {
     return this.steamService.saturatedProperties({ saturatedTemperature: steamTemp }, 1, settings).liquidEnthalpy;
   }
+
+  calculateFeedwaterFlowRate(blowdownRate: number, inputs: BoilerBlowdownRateInputs): number {
+    return (inputs.steamFlow / (1 - blowdownRate));
+  }
+
+  calculateBlowdownFlowRate(blowdownRate: number, inputs: BoilerBlowdownRateInputs): number {
+    return ((inputs.steamFlow * blowdownRate) / (1 - blowdownRate));
+  }
+
 
   calculateMakeupWaterProperties(makeupWaterTemp: number, settings: Settings): { enthalpy: number, specificVolume: number } {
     let properties: SteamPropertiesOutput = this.steamService.steamProperties({
@@ -200,4 +212,6 @@ export interface BoilerBlowdownRateResults {
   boilerFuelCost: number;
   makeupWaterCost: number;
   totalCost: number;
+  blowdownFlowRate: number;
+  feedwaterFlowRate: number;
 }

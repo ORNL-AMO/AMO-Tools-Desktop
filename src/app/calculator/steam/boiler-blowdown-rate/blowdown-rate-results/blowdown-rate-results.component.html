@@ -7,11 +7,25 @@
             <td *ngIf="modificationExists">Savings</td>
         </tr>
         <tr>
-            <td>Blowdown Rate</td>
+            <td>Blowdown Rate (%)</td>
             <td>{{baselineResults.blowdownRate | number:'1.0-3'}} %</td>
             <td *ngIf="modificationExists">{{modificationResults.blowdownRate | number:'1.0-3'}} %</td>
             <td class="bold" *ngIf="modificationExists">
                 {{baselineResults.blowdownRate-modificationResults.blowdownRate | number:'1.0-3'}} %</td>
+        </tr>
+        <tr>
+            <td>Blowdown Rate (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
+            <td>{{baselineResults.blowdownFlowRate | number:'1.0-3'}}</td>
+            <td *ngIf="modificationExists">{{modificationResults.blowdownFlowRate | number:'1.0-3'}}</td>
+            <td class="bold" *ngIf="modificationExists">
+                {{baselineResults.blowdownFlowRate-modificationResults.blowdownFlowRate | number:'1.0-3'}}</td>
+        </tr>
+        <tr>
+            <td>Feedwater Rate (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>)</td>
+            <td>{{baselineResults.feedwaterFlowRate | number:'1.0-3'}}</td>
+            <td *ngIf="modificationExists">{{modificationResults.feedwaterFlowRate | number:'1.0-3'}}</td>
+            <td class="bold" *ngIf="modificationExists">
+                {{baselineResults.feedwaterFlowRate-modificationResults.feedwaterFlowRate | number:'1.0-3'}}</td>
         </tr>
         <tr>
             <td>Fuel Cost</td>
