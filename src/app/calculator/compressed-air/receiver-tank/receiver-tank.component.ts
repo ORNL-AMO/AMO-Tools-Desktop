@@ -65,7 +65,7 @@ export class ReceiverTankComponent implements OnInit {
   btnResetData() {
     if (this.calcType == 'size-calculations') {
       this.receiverTankService.setDefaults();
-    } else if (this.calcType == 'air-capacity') {
+    } else if (this.calcType == 'usable-air') {
       this.receiverTankService.setAirCapacityDefault();
     }
     this.receiverTankService.setForm.next(true);
@@ -74,7 +74,7 @@ export class ReceiverTankComponent implements OnInit {
   btnGenerateExample() {
     if (this.calcType == 'size-calculations') {
       this.receiverTankService.setExampleData(this.settings);
-    } else if (this.calcType == 'air-capacity') {
+    } else if (this.calcType == 'usable-air') {
       this.receiverTankService.setAirCapacityExample(this.settings);
     }
     this.receiverTankService.setForm.next(true);
