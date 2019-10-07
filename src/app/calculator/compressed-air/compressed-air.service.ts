@@ -7,135 +7,14 @@ import { Settings } from '../../shared/models/settings';
 @Injectable()
 export class CompressedAirService {
 
-
-
-
-
   pnuematicValveInputs: PneumaticValve = {
     inletPressure: 0,
     outletPressure: 0,
     flowRate: 0
-  };
-
-
-
-  airCapacityInputs: CalculateUsableCapacity = {
-    tankSize: 0,
-    airPressureIn: 0,
-    airPressureOut: 0,
-  };
-
-  dedicatedStorageInputs: ReceiverTankDedicatedStorage = {
-    method: 1,
-    atmosphericPressure: 14.7,
-    lengthOfDemand: 0,
-    airFlowRequirement: 0,
-    initialTankPressure: 0,
-    finalTankPressure: 0
-  };
-
-  bridgeCompressorInputs: ReceiverTankBridgingCompressor = {
-    method: 3,
-    distanceToCompressorRoom: 0,
-    speedOfAir: 0,
-    airDemand: 0,
-    allowablePressureDrop: 0,
-    atmosphericPressure: 14.7
-  };
-  generalMethodInputs: ReceiverTankGeneral = {
-    airDemand: 0,
-    allowablePressureDrop: 0,
-    method: 0,
-    atmosphericPressure: 14.7,
-  };
-  meteredStorageInputs: ReceiverTankMeteredStorage = {
-    method: 2,
-    lengthOfDemand: 0,
-    airFlowRequirement: 0,
-    atmosphericPressure: 14.7,
-    initialTankPressure: 0,
-    finalTankPressure: 0,
-    meteredControl: 0,
-  };
-  recieverTankMethod: number = 0;
-  systeCapacityInputs: AirSystemCapacityInput = {
-    receiverCapacities: [0],
-    customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
-    oneHalf: 0,
-    threeFourths: 0,
-    one: 0,
-    oneAndOneFourth: 0,
-    oneAndOneHalf: 0,
-    two: 0,
-    twoAndOneHalf: 0,
-    three: 0,
-    threeAndOneHalf: 0,
-    four: 0,
-    five: 0,
-    six: 0,
-  };
+  };  
 
   constructor(private convertUnitsService: ConvertUnitsService) {
   }
-
-
-
-
-  convertGeneralMethodExample(inputs: ReceiverTankGeneral, settings: Settings) {
-    let tmpInputs: ReceiverTankGeneral = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.airDemand = Math.round(this.convertUnitsService.value(tmpInputs.airDemand).from('ft3').to('m3') * 100) / 100;
-      tmpInputs.allowablePressureDrop = Math.round(this.convertUnitsService.value(tmpInputs.allowablePressureDrop).from('psi').to('kPa') * 100) / 100;
-      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
-    }
-    return tmpInputs;
-  }
-
-  convertDedicatedStorageExample(inputs: ReceiverTankDedicatedStorage, settings: Settings) {
-    let tmpInputs: ReceiverTankDedicatedStorage = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.airFlowRequirement = Math.round(this.convertUnitsService.value(tmpInputs.airFlowRequirement).from('ft3').to('m3') * 100) / 100;
-      tmpInputs.initialTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.initialTankPressure).from('psi').to('kPa') * 100) / 100;
-      tmpInputs.finalTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.finalTankPressure).from('psi').to('kPa') * 100) / 100;
-      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
-    }
-    return tmpInputs;
-  }
-
-  convertTankMeteredStorageExample(inputs: ReceiverTankMeteredStorage, settings: Settings) {
-    let tmpInputs: ReceiverTankMeteredStorage = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.airFlowRequirement = Math.round(this.convertUnitsService.value(tmpInputs.airFlowRequirement).from('ft3').to('m3') * 100) / 100;
-      tmpInputs.meteredControl = Math.round(this.convertUnitsService.value(tmpInputs.meteredControl).from('ft3').to('m3') * 100) / 100;
-      tmpInputs.initialTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.initialTankPressure).from('psi').to('kPa') * 100) / 100;
-      tmpInputs.finalTankPressure = Math.round(this.convertUnitsService.value(tmpInputs.finalTankPressure).from('psi').to('kPa') * 100) / 100;
-      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
-    }
-    return tmpInputs;
-  }
-
-  convertTankBridgingCompressorExample(inputs: ReceiverTankBridgingCompressor, settings: Settings) {
-    let tmpInputs: ReceiverTankBridgingCompressor = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.distanceToCompressorRoom = Math.round(this.convertUnitsService.value(tmpInputs.distanceToCompressorRoom).from('ft').to('m') * 100) / 100;
-      tmpInputs.speedOfAir = Math.round(this.convertUnitsService.value(tmpInputs.speedOfAir).from('ft').to('m') * 100) / 100;
-      tmpInputs.allowablePressureDrop = Math.round(this.convertUnitsService.value(tmpInputs.allowablePressureDrop).from('psi').to('kPa') * 100) / 100;
-      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
-      tmpInputs.airDemand = Math.round(this.convertUnitsService.value(tmpInputs.airDemand).from('ft3').to('m3') * 100) / 100;
-    }
-    return tmpInputs;
-  }
-
-  convertCalculateUsableCapacityExample(inputs: CalculateUsableCapacity, settings: Settings) {
-    let tmpInputs: CalculateUsableCapacity = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.tankSize = Math.round(this.convertUnitsService.value(tmpInputs.tankSize).from('gal').to('m3') * 100) / 100;
-      tmpInputs.airPressureIn = Math.round(this.convertUnitsService.value(tmpInputs.airPressureIn).from('psi').to('kPa') * 100) / 100;
-      tmpInputs.airPressureOut = Math.round(this.convertUnitsService.value(tmpInputs.airPressureOut).from('psi').to('kPa') * 100) / 100;
-    }
-    return tmpInputs;
-  }
-
 
   convertAirSystemCapacityExample(inputs: AirSystemCapacityInput, settings: Settings) {
     let tmpInputs: AirSystemCapacityInput = inputs;
@@ -159,42 +38,4 @@ export class CompressedAirService {
     return tmpInputs;
   }
 
-  initReceiverTankInputs() {
-    this.airCapacityInputs = {
-      tankSize: 0,
-      airPressureIn: 0,
-      airPressureOut: 0,
-    };
-    this.dedicatedStorageInputs = {
-      method: 1,
-      atmosphericPressure: 14.7,
-      lengthOfDemand: 0,
-      airFlowRequirement: 0,
-      initialTankPressure: 0,
-      finalTankPressure: 0
-    };
-    this.meteredStorageInputs = {
-      method: 2,
-      lengthOfDemand: 0,
-      airFlowRequirement: 0,
-      atmosphericPressure: 14.7,
-      initialTankPressure: 0,
-      finalTankPressure: 0,
-      meteredControl: 0,
-    };
-    this.bridgeCompressorInputs = {
-      method: 3,
-      distanceToCompressorRoom: 0,
-      speedOfAir: 0,
-      airDemand: 0,
-      allowablePressureDrop: 0,
-      atmosphericPressure: 14.7
-    };
-    this.generalMethodInputs = {
-      airDemand: 0,
-      allowablePressureDrop: 0,
-      method: 0,
-      atmosphericPressure: 14.7,
-    };
-  }
 }
