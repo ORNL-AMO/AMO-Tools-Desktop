@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BagMethodComponent } from './bag-method.component';
 import { BagMethodFormComponent } from './bag-method-form/bag-method-form.component';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { BagMethodService } from './bag-method.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -16,6 +17,9 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
   ],
   exports: [
     BagMethodComponent
+  ],
+  providers: [
+    BagMethodService
   ]
 })
 export class BagMethodModule { }

@@ -20,7 +20,7 @@
                   <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
                 </span>
                 <input name="operatingHours" class="form-control" type="number" step="any"
-                  [(ngModel)]="totalOperatingTime" id="operatingHours" (input)="calculateAnnualConsumption()"
+                  [(ngModel)]="inputs.operatingHours" id="operatingHours" (input)="calculateAnnualConsumption()"
                   onfocus="this.select();" (focus)="changeField('operatingHours')">
                 <span class="input-group-addon units">hrs/yr</span>
               </div>
@@ -45,10 +45,10 @@
         </form>
         <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
           (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
-          [operatingHours]="compressedAirService.bagMethodOperatingHours"></app-operating-hours-modal>
+          [operatingHours]="bagMethodService.bagMethodOperatingHours"></app-operating-hours-modal>
       </div>
 
-      <app-bag-method-form *ngFor="let input of inputsArray; let i = index" [settings]="settings" [index]="i"
+      <app-bag-method-form *ngFor="let input of inputs.inputsArray; let i = index" [settings]="settings" [index]="i"
         [inputs]="input" [outputs]="outputsArray[i]" (calculate)="calculateAnnualConsumption($event)"
         (deleteLeakage)="deleteLeakage($event)" (emitChangeField)="changeField($event)"></app-bag-method-form>
 

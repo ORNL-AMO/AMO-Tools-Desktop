@@ -9,15 +9,7 @@ export class CompressedAirService {
 
 
 
-  bagMethodInputs: {
-    inputsArray: Array<BagMethodInput>,
-    operatingHours: number
-  } = {
-      inputsArray: new Array<BagMethodInput>(),
-      operatingHours: 8760
-    };
 
-  bagMethodOperatingHours: OperatingHours;
 
   pnuematicValveInputs: PneumaticValve = {
     inletPressure: 0,
@@ -112,19 +104,6 @@ export class CompressedAirService {
   constructor(private convertUnitsService: ConvertUnitsService) {
   }
 
-  convertLeakLossEstimatorExample(inputs: Array<BagMethodInput>, settings: Settings) {
-    let tmpInputs: Array<BagMethodInput> = inputs;
-
-
-    if (settings.unitsOfMeasure == 'Metric') {
-      for (let i = 0; i < tmpInputs.length; i++) {
-        tmpInputs[i].diameterOfBag = Math.round(this.convertUnitsService.value(tmpInputs[i].diameterOfBag).from('in').to('cm') * 100) / 100;
-        tmpInputs[i].heightOfBag = Math.round(this.convertUnitsService.value(tmpInputs[i].heightOfBag).from('in').to('cm') * 100) / 100;
-      }
-      return tmpInputs;
-    }
-    return tmpInputs;
-  }
 
   convertPneumaticCylinderAirExample(inputs: PneumaticAirRequirementInput, settings: Settings) {
     let tmpInputs: PneumaticAirRequirementInput = inputs;

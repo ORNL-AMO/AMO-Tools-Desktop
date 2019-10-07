@@ -1,9 +1,10 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { BagMethodInput, BagMethodOutput } from "../../../shared/models/standalone";
-import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
+import { BagMethodService } from './bag-method.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-bag-method',
@@ -23,29 +24,27 @@ export class BagMethodComponent implements OnInit {
   }
 
   headerHeight: number;
-  inputs: BagMethodInput;
+  inputs: {
+    inputsArray: Array<BagMethodInput>,
+    operatingHours: number
+  };
   outputs: BagMethodOutput;
-
-  inputsArray: Array<BagMethodInput>;
   outputsArray: Array<BagMethodOutput>;
 
-  totalOperatingTime: number;
   showOperatingHoursModal: boolean = false;
   currentField: string = 'default';
-  formWidth: number = 350;
-  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
+  formWidth: number;
+  constructor(private standaloneService: StandaloneService, private bagMethodService: BagMethodService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.inputsArray = this.compressedAirService.bagMethodInputs.inputsArray;
-    this.totalOperatingTime = this.compressedAirService.bagMethodInputs.operatingHours;
-    if (this.inputsArray.length === 0) {
-      this.initBagMethodArrays();
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
     }
+    this.inputs = this.bagMethodService.bagMethodInputs;
     this.outputs = {
       flowRate: 0,
       annualConsumption: 0
     };
-
 
     this.calculateAnnualConsumption();
   }
@@ -57,29 +56,16 @@ export class BagMethodComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.compressedAirService.bagMethodInputs.operatingHours = this.totalOperatingTime;
+    this.bagMethodService.bagMethodInputs = this.inputs;
   }
 
   btnResetData() {
-    this.inputsArray = new Array<BagMethodInput>();
-    this.initBagMethodArrays();
-    this.totalOperatingTime = 8760;
+    this.inputs = this.bagMethodService.getDefault();
     this.outputs = {
       flowRate: 0,
       annualConsumption: 0
     };
     this.calculateAnnualConsumption();
-  }
-
-  initBagMethodArrays() {
-    let input: BagMethodInput = {
-      operatingTime: 0,
-      bagFillTime: 0,
-      heightOfBag: 0,
-      diameterOfBag: 0,
-      numberOfUnits: 0
-    };
-    this.inputsArray.push(input);
   }
 
   resizeTabs() {
@@ -91,17 +77,14 @@ export class BagMethodComponent implements OnInit {
     }
   }
 
-  calculateAnnualConsumption(inputsObject?: { inputs: BagMethodInput, index: number }) {
-    if (inputsObject) {
-      this.inputsArray[inputsObject.index] = inputsObject.inputs;
-    }
+  calculateAnnualConsumption() {
     this.outputs.flowRate = 0;
     this.outputs.annualConsumption = 0;
     this.outputsArray = new Array<BagMethodOutput>();
-    for (let i = 0; i < this.inputsArray.length; i++) {
-      this.inputsArray[i].operatingTime = JSON.parse(JSON.stringify(this.totalOperatingTime));
-      let outputs = this.standaloneService.bagMethod(this.inputsArray[i], this.settings);
-      outputs.annualConsumption = this.totalOperatingTime * outputs.flowRate * 60;
+    for (let i = 0; i < this.inputs.inputsArray.length; i++) {
+      this.inputs.inputsArray[i].operatingTime = JSON.parse(JSON.stringify(this.inputs.operatingHours));
+      let outputs = this.standaloneService.bagMethod(this.inputs.inputsArray[i], this.settings);
+      outputs.annualConsumption = this.inputs.operatingHours * outputs.flowRate * 60;
       this.outputsArray.push(outputs);
       this.outputs.flowRate += outputs.flowRate;
       this.outputs.annualConsumption += outputs.annualConsumption;
@@ -110,7 +93,7 @@ export class BagMethodComponent implements OnInit {
 
   addLeakage() {
     let input: BagMethodInput = {
-      operatingTime: JSON.parse(JSON.stringify(this.totalOperatingTime)),
+      operatingTime: JSON.parse(JSON.stringify(this.inputs.operatingHours)),
       bagFillTime: 0,
       heightOfBag: 0,
       diameterOfBag: 0,
@@ -121,28 +104,13 @@ export class BagMethodComponent implements OnInit {
       flowRate: 0,
       annualConsumption: 0
     };
-
-    this.inputsArray.push(input);
+    this.inputs.inputsArray.push(input);
     this.outputsArray.push(output);
   }
 
   deleteLeakage(i: number) {
-    if (i === this.inputsArray.length - 1) {
-      this.inputsArray.pop();
-      this.outputsArray.pop();
-    }
-    else {
-      let tempInputsArray = this.inputsArray;
-      let tempOutputsArray = this.outputsArray;
-      this.inputsArray = new Array<BagMethodInput>();
-      this.outputsArray = new Array<BagMethodOutput>();
-      for (let j = 0; j < tempInputsArray.length; j++) {
-        if (j !== i) {
-          this.inputsArray.push(tempInputsArray[j]);
-          this.outputsArray.push(tempOutputsArray[j]);
-        }
-      }
-    }
+    this.inputs.inputsArray.splice(i, 1);
+    this.outputsArray.splice(i, 1);
     this.calculateAnnualConsumption();
   }
 
@@ -151,32 +119,7 @@ export class BagMethodComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    //each calculator will have some form of an input object, assign default values from pdf
-    const temp: Array<BagMethodInput> = [{
-      operatingTime: 5000,
-      bagFillTime: 300,
-      heightOfBag: 50,
-      diameterOfBag: 40,
-      numberOfUnits: 1
-    }
-      ,{
-      operatingTime: 5000,
-      bagFillTime: 360,
-      heightOfBag: 50,
-      diameterOfBag: 48,
-      numberOfUnits: 1
-    }];
-    this.inputsArray = temp;
-    this.totalOperatingTime = 5000;
-    //need to handle conversion if unit of measurement is set to Metric
-    this.inputsArray = this.compressedAirService.convertLeakLossEstimatorExample(this.inputsArray, this.settings);
-    //not every calculator will store values in the service,
-    //but be sure to store it in calcs that already do
-    this.compressedAirService.bagMethodInputs = {
-      inputsArray: this.inputsArray,
-      operatingHours: 5000,
-    };
-    //execute calculation procedure to update calculator with example values
+    this.inputs = this.bagMethodService.getExample();
     this.calculateAnnualConsumption();
   }
   openOperatingHoursModal() {
@@ -188,8 +131,8 @@ export class BagMethodComponent implements OnInit {
   }
 
   updateOperatingHours(calculatedOpHrs: OperatingHours) {
-    this.compressedAirService.bagMethodOperatingHours = calculatedOpHrs;
-    this.totalOperatingTime = calculatedOpHrs.hoursPerYear;
+    this.bagMethodService.operatingHours = calculatedOpHrs;
+    this.inputs.operatingHours = calculatedOpHrs.hoursPerYear;
     this.closeOperatingHoursModal();
     this.calculateAnnualConsumption();
   }

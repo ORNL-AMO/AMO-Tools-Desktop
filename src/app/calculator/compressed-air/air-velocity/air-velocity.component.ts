@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, HostListener, ViewChild, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { AirVelocityInput, PipeSizes } from "../../../shared/models/standalone";
-import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
 import { AirVelocityService } from './air-velocity.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
