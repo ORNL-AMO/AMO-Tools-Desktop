@@ -1,8 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { PneumaticAirRequirementInput, PneumaticAirRequirementOutput } from "../../../shared/models/standalone";
-import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
+import { PneumaticAirService } from './pneumatic-air.service';
 
 @Component({
   selector: 'app-pneumatic-air',
@@ -25,10 +25,10 @@ export class PneumaticAirComponent implements OnInit {
   inputs: PneumaticAirRequirementInput;
   outputs: PneumaticAirRequirementOutput;
   currentField: string = 'default';
-  constructor(private compressedAirService: CompressedAirService, private standaloneService: StandaloneService) { }
+  constructor(private standaloneService: StandaloneService, private pneumaticAirService: PneumaticAirService) { }
 
   ngOnInit() {
-    this.inputs = this.compressedAirService.pneumaticAirinputs;
+    this.inputs = this.pneumaticAirService.inputs;
     this.calculatePneumaticAirRequirement(this.inputs);
   }
   ngAfterViewInit() {
@@ -37,15 +37,12 @@ export class PneumaticAirComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy() {
+    this.pneumaticAirService.inputs = this.inputs;
+  }
+
   btnResetData() {
-    this.inputs = {
-      pistonType: 0,
-      cylinderDiameter: 0,
-      cylinderStroke: 0,
-      pistonRodDiameter: 0,
-      airPressure: 0,
-      cyclesPerMinute: 0
-    };
+    this.inputs = this.pneumaticAirService.getDefaultData();
     this.calculatePneumaticAirRequirement(this.inputs);
   }
 
@@ -54,25 +51,18 @@ export class PneumaticAirComponent implements OnInit {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
     }
   }
+
   calculatePneumaticAirRequirement(inputs: PneumaticAirRequirementInput) {
     this.outputs = this.standaloneService.pneumaticAirRequirement(inputs, this.settings);
   }
-
 
   setField(str: string) {
     this.currentField = str;
   }
 
   btnGenerateExample() {
-    let tempInputs = {
-      pistonType: 0,
-      cylinderDiameter: 2.25,
-      cylinderStroke: 8,
-      pistonRodDiameter: 1,
-      airPressure: 90,
-      cyclesPerMinute: 16
-    };
-    this.inputs = this.compressedAirService.convertPneumaticCylinderAirExample(tempInputs, this.settings);
+    let tempInputs: PneumaticAirRequirementInput = this.pneumaticAirService.getExampleData();
+    this.inputs = this.pneumaticAirService.convertPneumaticCylinderAirExample(tempInputs, this.settings);
     this.calculatePneumaticAirRequirement(this.inputs);
   }
 }

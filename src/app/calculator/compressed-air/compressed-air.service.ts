@@ -18,14 +18,6 @@ export class CompressedAirService {
   };
 
 
-  pneumaticAirinputs: PneumaticAirRequirementInput = {
-    pistonType: 0,
-    cylinderDiameter: 0,
-    cylinderStroke: 0,
-    pistonRodDiameter: 0,
-    airPressure: 0,
-    cyclesPerMinute: 0
-  };
 
   airCapacityInputs: CalculateUsableCapacity = {
     tankSize: 0,
@@ -87,15 +79,7 @@ export class CompressedAirService {
   }
 
 
-  convertPneumaticCylinderAirExample(inputs: PneumaticAirRequirementInput, settings: Settings) {
-    let tmpInputs: PneumaticAirRequirementInput = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.cylinderDiameter = Math.round(this.convertUnitsService.value(tmpInputs.cylinderDiameter).from('in').to('cm') * 100) / 100;
-      tmpInputs.cylinderStroke = Math.round(this.convertUnitsService.value(tmpInputs.cylinderStroke).from('in').to('cm') * 100) / 100;
-      tmpInputs.airPressure = Math.round(this.convertUnitsService.value(tmpInputs.airPressure).from('psi').to('kPa') * 100) / 100;
-    }
-    return tmpInputs;
-  }
+
 
   convertGeneralMethodExample(inputs: ReceiverTankGeneral, settings: Settings) {
     let tmpInputs: ReceiverTankGeneral = inputs;
