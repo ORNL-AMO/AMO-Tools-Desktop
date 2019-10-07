@@ -68,7 +68,6 @@ export class PipeSizingComponent implements OnInit {
   btnGenerateExample() {
     let tempInputs: PipeSizingInput = this.pipeSizingService.getExampleData();
     this.inputs = this.pipeSizingService.convertPipeSizingExample(tempInputs, this.settings);
-    console.log('generate example');
     this.calculatePipeSize(this.inputs);
   }
 }

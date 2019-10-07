@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
 import { StandaloneService } from "../../standalone.service";
 import { OperatingCostInput, OperatingCostOutput } from "../../../shared/models/standalone";
-import { CompressedAirService } from '../compressed-air.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingCostService } from './operating-cost.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';

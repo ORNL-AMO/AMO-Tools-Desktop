@@ -1,19 +1,52 @@
 import { Injectable } from '@angular/core';
-import { AirVelocityInput, BagMethodInput, PneumaticValve, OperatingCostInput, PipeSizingInput, PneumaticAirRequirementInput, CalculateUsableCapacity, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankGeneral, ReceiverTankMeteredStorage, AirSystemCapacityInput } from '../../shared/models/standalone';
-import { OperatingHours } from '../../shared/models/operations';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { Settings } from '../../shared/models/settings';
+import { AirSystemCapacityInput } from '../../../shared/models/standalone';
+import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Injectable()
-export class CompressedAirService {
+export class SystemCapacityService {
 
-  pnuematicValveInputs: PneumaticValve = {
-    inletPressure: 0,
-    outletPressure: 0,
-    flowRate: 0
-  };  
-
+  inputs: AirSystemCapacityInput;
   constructor(private convertUnitsService: ConvertUnitsService) {
+    this.inputs = this.getSystemCapacityDefaults();
+  }
+
+  getSystemCapacityDefaults(): AirSystemCapacityInput {
+    return {
+      receiverCapacities: [0],
+      customPipes: [],
+      oneHalf: 0,
+      threeFourths: 0,
+      one: 0,
+      oneAndOneFourth: 0,
+      oneAndOneHalf: 0,
+      two: 0,
+      twoAndOneHalf: 0,
+      three: 0,
+      threeAndOneHalf: 0,
+      four: 0,
+      five: 0,
+      six: 0,
+    };
+  }
+
+  getSystemCapacityExample(): AirSystemCapacityInput {
+    return {
+      receiverCapacities: [400, 500, 660, 1060],
+      customPipes: [],
+      oneHalf: 2000,
+      threeFourths: 2000,
+      one: 1000,
+      oneAndOneFourth: 200,
+      oneAndOneHalf: 100,
+      two: 500,
+      twoAndOneHalf: 0,
+      three: 300,
+      threeAndOneHalf: 0,
+      four: 1000,
+      five: 0,
+      six: 0,
+    };
   }
 
   convertAirSystemCapacityExample(inputs: AirSystemCapacityInput, settings: Settings) {
@@ -37,5 +70,4 @@ export class CompressedAirService {
     }
     return tmpInputs;
   }
-
 }

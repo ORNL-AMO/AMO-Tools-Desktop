@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@
 import { Settings } from '../../../shared/models/settings';
 import { ReceiverTankService } from './receiver-tank.service';
 import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-receiver-tank',
@@ -43,10 +44,13 @@ export class ReceiverTankComponent implements OnInit {
   ];
   currentField: string;
   currentFieldSub: Subscription;
-  constructor(private receiverTankService: ReceiverTankService) {
+  constructor(private receiverTankService: ReceiverTankService, private settingsDbService: SettingsDbService) {
   }
 
   ngOnInit() {
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
     this.currentFieldSub = this.receiverTankService.currentField.subscribe(val => {
       this.currentField = val;
     });

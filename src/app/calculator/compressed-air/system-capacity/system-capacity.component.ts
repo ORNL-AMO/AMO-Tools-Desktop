@@ -1,8 +1,9 @@
-import {Component, OnInit, ViewChild, ElementRef, HostListener, Input} from '@angular/core';
-import {StandaloneService} from "../../standalone.service";
-import {AirSystemCapacityInput, AirSystemCapacityOutput} from "../../../shared/models/standalone";
-import {Settings} from '../../../shared/models/settings';
-import {CompressedAirService} from '../compressed-air.service';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
+import { StandaloneService } from "../../standalone.service";
+import { AirSystemCapacityInput, AirSystemCapacityOutput } from "../../../shared/models/standalone";
+import { Settings } from '../../../shared/models/settings';
+import { SystemCapacityService } from './system-capacity.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-system-capacity',
@@ -31,11 +32,14 @@ export class SystemCapacityComponent implements OnInit {
   };
   currentField: string = 'default';
 
-  constructor(private standaloneService: StandaloneService, private compressedAirService: CompressedAirService) {
+  constructor(private standaloneService: StandaloneService, private systemCapacityService: SystemCapacityService, private settingsDbService: SettingsDbService) {
   }
 
   ngOnInit() {
-    this.inputs = this.compressedAirService.systeCapacityInputs;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.inputs = this.systemCapacityService.inputs;
     this.calculate();
   }
 
@@ -45,24 +49,12 @@ export class SystemCapacityComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy(){
+    this.systemCapacityService.inputs = this.inputs;
+  }
+  
   btnResetData() {
-    this.inputs = {
-      receiverCapacities: [0],
-      customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
-      oneHalf: 0,
-      threeFourths: 0,
-      one: 0,
-      oneAndOneFourth: 0,
-      oneAndOneHalf: 0,
-      two: 0,
-      twoAndOneHalf: 0,
-      three: 0,
-      threeAndOneHalf: 0,
-      four: 0,
-      five: 0,
-      six: 0,
-    };
-    this.compressedAirService.systeCapacityInputs = this.inputs;
+    this.inputs = this.systemCapacityService.getSystemCapacityDefaults();
     this.calculate();
   }
 
@@ -81,23 +73,8 @@ export class SystemCapacityComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    let tempInputs = {
-      receiverCapacities: [400, 500, 660, 1060],
-      customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
-      oneHalf: 2000,
-      threeFourths: 2000,
-      one: 1000,
-      oneAndOneFourth: 200,
-      oneAndOneHalf: 100,
-      two: 500,
-      twoAndOneHalf: 0,
-      three: 300,
-      threeAndOneHalf: 0,
-      four: 1000,
-      five: 0,
-      six: 0,
-    };
-    this.inputs = this.compressedAirService.convertAirSystemCapacityExample(tempInputs, this.settings);
+    let tempInputs = this.systemCapacityService.getSystemCapacityExample();
+    this.inputs = this.systemCapacityService.convertAirSystemCapacityExample(tempInputs, this.settings);
     this.calculate();
   }
 }

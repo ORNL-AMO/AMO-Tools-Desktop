@@ -19,6 +19,7 @@ export class ReceiverTankService {
     this.setForm = new BehaviorSubject<boolean>(true);
     this.currentField = new BehaviorSubject<string>('default');
     this.setDefaults();
+    this.setAirCapacityDefault();
   }
 
   setDefaults() {
@@ -189,45 +190,7 @@ export class ReceiverTankService {
     return tmpInputs;
   }
 
-  //system capacity
-  // getSystemCapacityDefaults(): AirSystemCapacityInput {
-  //   return {
-  //     receiverCapacities: [0],
-  //     customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
-  //     oneHalf: 0,
-  //     threeFourths: 0,
-  //     one: 0,
-  //     oneAndOneFourth: 0,
-  //     oneAndOneHalf: 0,
-  //     two: 0,
-  //     twoAndOneHalf: 0,
-  //     three: 0,
-  //     threeAndOneHalf: 0,
-  //     four: 0,
-  //     five: 0,
-  //     six: 0,
-  //   };
-  // }
-
-  // getSystemCapacityExample(): AirSystemCapacityInput {
-  //   return {
-  //     receiverCapacities: [0],
-  //     customPipes: new Array<{ pipeSize: number, pipeLength: number }>(),
-  //     oneHalf: 0,
-  //     threeFourths: 0,
-  //     one: 0,
-  //     oneAndOneFourth: 0,
-  //     oneAndOneHalf: 0,
-  //     two: 0,
-  //     twoAndOneHalf: 0,
-  //     three: 0,
-  //     threeAndOneHalf: 0,
-  //     four: 0,
-  //     five: 0,
-  //     six: 0,
-  //   };
-  // }
-
+ 
   //air capacity
   getAirCapacityDefaults(): CalculateUsableCapacity {
     return {
