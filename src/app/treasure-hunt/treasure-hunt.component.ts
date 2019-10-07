@@ -216,24 +216,16 @@ export class TreasureHuntComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'system-setup') {
-      if (this.subTab == 'operation-costs') {
-        this.treasureHuntService.subTab.next('settings');
-      }
-    } else if (this.mainTab == 'find-treasure') {
-      this.treasureHuntService.mainTab.next('system-setup');
+    if (this.subTab == 'operation-costs') {
+      this.treasureHuntService.subTab.next('settings');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
-      if (this.subTab == 'settings') {
-        this.treasureHuntService.subTab.next('operation-costs');
-      } else if (this.subTab == 'operation-costs') {
-        this.treasureHuntService.mainTab.next('find-treasure');
-      }
-    } else if (this.mainTab == 'find-treasure') {
-      this.treasureHuntService.mainTab.next('treasure-chest');
+    if (this.subTab == 'settings') {
+      this.treasureHuntService.subTab.next('operation-costs');
+    } else if (this.subTab == 'operation-costs') {
+      this.treasureHuntService.mainTab.next('find-treasure');
     }
   }
 

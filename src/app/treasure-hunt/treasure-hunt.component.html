@@ -40,15 +40,12 @@
 
   <!--footer-->
   <div #footer id="thuntFooter" class="footer hide-print"
-    *ngIf="(mainTab == 'system-setup' || mainTab == 'find-treasure') && selectedCalc == 'none'">
-    <div class="pull-left" *ngIf="subTab != 'settings' || mainTab == 'find-treasure'">
+    *ngIf="mainTab == 'system-setup' && selectedCalc == 'none'">
+    <div class="pull-left" *ngIf="subTab != 'settings'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" [disabled]="nextDisabled" (click)="continue()"
-        *ngIf="mainTab == 'system-setup'">Next</button>
-      <button class="btn btn-primary" [disabled]="nextDisabled" (click)="continue()"
-        *ngIf="mainTab == 'find-treasure'">Treasure Chest</button>
+      <button class="btn btn-primary" [disabled]="nextDisabled" (click)="continue()">Next</button>
     </div>
   </div>
   <!--end footer-->
