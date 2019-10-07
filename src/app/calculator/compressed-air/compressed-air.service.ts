@@ -7,11 +7,7 @@ import { Settings } from '../../shared/models/settings';
 @Injectable()
 export class CompressedAirService {
 
-  airVelocityInputs: AirVelocityInput = {
-    airFlow: 0,
-    pipePressure: 0,
-    atmosphericPressure: 0,
-  };
+
 
   bagMethodInputs: {
     inputsArray: Array<BagMethodInput>,
@@ -114,19 +110,6 @@ export class CompressedAirService {
   };
 
   constructor(private convertUnitsService: ConvertUnitsService) {
-  }
-
-  convertAirVelocityExample(inputs: AirVelocityInput, settings: Settings) {
-    let tmpInputs: AirVelocityInput = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs = {
-        airFlow: Math.round(this.convertUnitsService.value(inputs.airFlow).from('ft3').to('m3') * 100) / 100,
-        pipePressure: Math.round(this.convertUnitsService.value(inputs.pipePressure).from('psi').to('kPa') * 100) / 100,
-        atmosphericPressure: Math.round(this.convertUnitsService.value(inputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100
-      };
-      return tmpInputs;
-    }
-    return tmpInputs;
   }
 
   convertLeakLossEstimatorExample(inputs: Array<BagMethodInput>, settings: Settings) {
