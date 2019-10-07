@@ -17,12 +17,6 @@ export class CompressedAirService {
     flowRate: 0
   };
 
-  pipeSizingInput: PipeSizingInput = {
-    airFlow: 0,
-    airlinePressure: 0,
-    designVelocity: 20,
-    atmosphericPressure: 14.7
-  };
 
   pneumaticAirinputs: PneumaticAirRequirementInput = {
     pistonType: 0,
@@ -158,16 +152,6 @@ export class CompressedAirService {
     return tmpInputs;
   }
 
-  convertPipeSizingExample(inputs: PipeSizingInput, settings: Settings) {
-    let tmpInputs: PipeSizingInput = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.airFlow = Math.round(this.convertUnitsService.value(tmpInputs.airFlow).from('ft3').to('m3') * 100) / 100;
-      tmpInputs.airlinePressure = Math.round(this.convertUnitsService.value(tmpInputs.airlinePressure).from('psi').to('kPa') * 100) / 100;
-      tmpInputs.designVelocity = Math.round(this.convertUnitsService.value(tmpInputs.designVelocity).from('ft').to('m') * 100) / 100;
-      tmpInputs.atmosphericPressure = Math.round(this.convertUnitsService.value(tmpInputs.atmosphericPressure).from('psia').to('kPaa') * 100) / 100;
-    }
-    return tmpInputs;
-  }
 
   convertAirSystemCapacityExample(inputs: AirSystemCapacityInput, settings: Settings) {
     let tmpInputs: AirSystemCapacityInput = inputs;
