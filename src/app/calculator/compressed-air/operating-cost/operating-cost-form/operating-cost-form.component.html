@@ -123,5 +123,5 @@
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
-  [operatingHours]="compressedAirService.operatingCostOperatingHours">
+  [operatingHours]="operatingCostService.operatingCostOperatingHours">
 </app-operating-hours-modal>

@@ -17,18 +17,6 @@ export class CompressedAirService {
     flowRate: 0
   };
 
-  operatingCostInput: OperatingCostInput = {
-    motorBhp: 0,
-    bhpUnloaded: 0,
-    annualOperatingHours: 8760,
-    runTimeLoaded: 0,
-    efficiencyLoaded: 0,
-    efficiencyUnloaded: 0,
-    costOfElectricity: 0,
-  };
-
-  operatingCostOperatingHours: OperatingHours;
-
   pipeSizingInput: PipeSizingInput = {
     airFlow: 0,
     airlinePressure: 0,
@@ -199,14 +187,6 @@ export class CompressedAirService {
       for (let i = 0; i < tmpInputs.receiverCapacities.length; i++) {
         tmpInputs.receiverCapacities[i] = Math.round(this.convertUnitsService.value(tmpInputs.receiverCapacities[i]).from('gal').to('m3') * 100) / 100;
       }
-    }
-    return tmpInputs;
-  }
-
-  convertOperatingCostExample(inputs: OperatingCostInput, settings: Settings) {
-    let tmpInputs: OperatingCostInput = inputs;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpInputs.motorBhp = Math.round(this.convertUnitsService.value(tmpInputs.motorBhp).from('hp').to('kW') * 100) / 100;
     }
     return tmpInputs;
   }

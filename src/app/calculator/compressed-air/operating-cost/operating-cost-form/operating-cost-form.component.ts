@@ -3,6 +3,7 @@ import { OperatingCostInput, OperatingCostOutput } from "../../../../shared/mode
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirService } from '../../compressed-air.service';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { OperatingCostService } from '../operating-cost.service';
 
 @Component({
   selector: 'app-operating-cost-form',
@@ -30,12 +31,12 @@ export class OperatingCostFormComponent implements OnInit {
   formWidth: number;
   showOperatingHoursModal: boolean;
 
-  constructor(private compressedAirService: CompressedAirService) { }
+  constructor(private operatingCostService: OperatingCostService) { }
 
   ngOnInit() {
   }
-  
-  ngAfterViewInit(){
+
+  ngAfterViewInit() {
     this.setOpHoursModalWidth();
   }
 
@@ -47,22 +48,22 @@ export class OperatingCostFormComponent implements OnInit {
     this.emitChangeField.emit(str);
   }
 
-  closeOperatingHoursModal(){
+  closeOperatingHoursModal() {
     this.showOperatingHoursModal = false;
   }
 
-  openOperatingHoursModal(){
+  openOperatingHoursModal() {
     this.showOperatingHoursModal = true;
   }
 
-  updateOperatingHours(oppHours: OperatingHours){
-    this.compressedAirService.operatingCostOperatingHours = oppHours;
+  updateOperatingHours(oppHours: OperatingHours) {
+    this.operatingCostService.operatingHours = oppHours;
     this.inputs.annualOperatingHours = oppHours.hoursPerYear;
     this.emitChange();
     this.closeOperatingHoursModal();
   }
 
-  setOpHoursModalWidth(){
+  setOpHoursModalWidth() {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
