@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CompressedAirComponent } from './compressed-air.component';
 import { AirVelocityModule } from './air-velocity/air-velocity.module';
 import { BagMethodModule } from './bag-method/bag-method.module';
-import { FlowFactorModule } from './flow-factor/flow-factor.module';
+// import { FlowFactorModule } from './flow-factor/flow-factor.module';
 import { OperatingCostModule } from './operating-cost/operating-cost.module';
 import { PipeSizingModule } from './pipe-sizing/pipe-sizing.module';
 import { PneumaticAirModule } from './pneumatic-air/pneumatic-air.module';
@@ -16,7 +16,7 @@ import { CompressedAirService } from './compressed-air.service';
     CommonModule,
     AirVelocityModule,
     BagMethodModule,
-    FlowFactorModule,
+    // FlowFactorModule,
     OperatingCostModule,
     PipeSizingModule,
     PneumaticAirModule,
