@@ -280,7 +280,7 @@ export class SteamReductionService {
     let results: SteamReductionResult = this.standaloneService.steamReduction(inputObj);
     results = this.convertSteamReductionResult(results, settings);
     if (settings.unitsOfMeasure == 'Imperial') {
-      results.steamUse = results.steamUse / 1000;
+      results.steamUse = results.steamUse;
     }
     return results;
   }
