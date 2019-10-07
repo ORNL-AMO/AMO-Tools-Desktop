@@ -40,7 +40,7 @@ export class BlowdownRateModalComponent implements OnInit {
 
   calculate() {
     if (this.form.controls.feedwaterConductivity.value != undefined && this.form.controls.blowdownConductivity.value != undefined) {
-      this.blowdownRate = this.boilerBlowdownRateService.calculateBlowdownRate(this.form.controls.feedwaterConductivity.value, this.form.controls.blowdownConductivity.value);
+      this.blowdownRate = this.boilerBlowdownRateService.calculateBlowdownRate(this.form.controls.feedwaterConductivity.value, this.form.controls.blowdownConductivity.value) * 100;
     } else {
       this.blowdownRate = 0;
     }
