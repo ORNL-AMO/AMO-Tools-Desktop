@@ -1,11 +1,11 @@
 <!--conductivity form-->
 <label class="group-label w-100">Conductivity Readings</label>
-<form [formGroup]="conductivityForm">
+<form [formGroup]="conductivityForm" #formElement>
     <!--feedwater conductivity-->
     <div class="form-group">
-        <label class="small" for="feedwaterConductivity">Feedwater Conductivity</label>
+        <label class="small" for="{{idString+'feedwaterConductivity'}}">Feedwater Conductivity</label>
         <div class="input-group">
-            <input class="form-control" name="feedwaterConductivity" id="feedwaterConductivity"
+            <input class="form-control" name="feedwaterConductivity" id="{{idString+'feedwaterConductivity'}}"
                 formControlName="feedwaterConductivity" type="number" (input)="saveConductivity()"
                 (focus)="focusField('feedwaterConductivity')" (blur)="focusOut()" onfocus="this.select();">
             <span class="input-group-addon units">&#x3bc;S/cm</span>
@@ -21,9 +21,9 @@
     </div>
     <!--blowdown conductivity-->
     <div class="form-group">
-        <label class="small" for="blowdownConductivity">Blowdown Conductivity</label>
+        <label class="small" for="{{idString+'blowdownConductivity'}}">Blowdown Conductivity</label>
         <div class="input-group">
-            <input class="form-control" name="blowdownConductivity" id="blowdownConductivity"
+            <input class="form-control" name="blowdownConductivity" id="{{idString+'blowdownConductivity'}}"
                 formControlName="blowdownConductivity" type="number" (input)="saveConductivity()"
                 (focus)="focusField('blowdownConductivity')" (blur)="focusOut()" onfocus="this.select();">
             <span class="input-group-addon units">&#x3bc;S/cm</span>
@@ -46,10 +46,11 @@
 <form [formGroup]="boilerForm" *ngIf="showBoiler">
     <!--steam flow-->
     <div class="form-group">
-        <label class="small" for="steamFlow">Steam Flow</label>
+        <label class="small" for="{{idString+'steamFlow'}}">Steam Flow</label>
         <div class="input-group">
-            <input class="form-control" name="steamFlow" id="steamFlow" formControlName="steamFlow" type="number"
-                (input)="saveBoiler()" (focus)="focusField('steamFlow')" (blur)="focusOut()" onfocus="this.select();">
+            <input class="form-control" name="steamFlow" id="{{idString+'steamFlow'}}" formControlName="steamFlow"
+                type="number" (input)="saveBoiler()" (focus)="focusField('steamFlow')" (blur)="focusOut()"
+                onfocus="this.select();">
             <span class="input-group-addon units"
                 [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel"></span>
         </div>
@@ -66,11 +67,11 @@
     </div>
     <!--steam temperature-->
     <div class="form-group">
-        <label class="small" for="steamTemperature">Steam Temperature</label>
+        <label class="small" for="{{idString+'steamTemperature'}}">Steam Temperature</label>
         <div class="input-group">
-            <input class="form-control" name="steamTemperature" id="steamTemperature" formControlName="steamTemperature"
-                type="number" (input)="saveBoiler()" (focus)="focusField('steamTemperature')" (blur)="focusOut()"
-                onfocus="this.select();">
+            <input class="form-control" name="steamTemperature" id="{{idString+'steamTemperature'}}"
+                formControlName="steamTemperature" type="number" (input)="saveBoiler()"
+                (focus)="focusField('steamTemperature')" (blur)="focusOut()" onfocus="this.select();">
             <span class="input-group-addon units"
                 [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
         </div>
@@ -87,12 +88,12 @@
     </div>
     <!--boiler efficiency-->
     <div class="form-group">
-        <label class="small" for="boilerEfficiency">Boiler Efficiency
+        <label class="small" for="{{idString+'boilerEfficiency'}}">Boiler Efficiency
         </label>
         <div class="input-group">
-            <input class="form-control" name="boilerEfficiency" id="boilerEfficiency" formControlName="boilerEfficiency"
-                type="number" (input)="saveBoiler()" (focus)="focusField('boilerEfficiency')" (blur)="focusOut()"
-                onfocus="this.select();">
+            <input class="form-control" name="boilerEfficiency" id="{{idString+'boilerEfficiency'}}"
+                formControlName="boilerEfficiency" type="number" (input)="saveBoiler()"
+                (focus)="focusField('boilerEfficiency')" (blur)="focusOut()" onfocus="this.select();">
             <span class="input-group-addon units">%</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -113,14 +114,14 @@
 <form [formGroup]="operationsForm" *ngIf="showOperations">
     <!--operating hours-->
     <div class="form-group">
-        <label class="small" for="operatingHours">Operating Hours</label>
+        <label class="small" for="{{idString+'operatingHours'}}">Operating Hours</label>
         <div class="input-group">
             <span class="input-group-addon op-hour-addon units">
                 <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
             </span>
-            <input class="form-control" name="operatingHours" id="operatingHours" formControlName="operatingHours"
-                type="number" (input)="saveOperations()" (focus)="focusField('operatingHours')" (blur)="focusOut()"
-                onfocus="this.select();">
+            <input class="form-control" name="operatingHours" id="{{idString+'operatingHours'}}"
+                formControlName="operatingHours" type="number" (input)="saveOperations()"
+                (focus)="focusField('operatingHours')" (blur)="focusOut()" onfocus="this.select();">
             <span class="units input-group-addon">hrs/yr</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -133,10 +134,11 @@
     </div>
     <!--fuel cost-->
     <div class="form-group">
-        <label class="small" for="fuelCost">Fuel Cost</label>
+        <label class="small" for="{{idString+'fuelCost'}}">Fuel Cost</label>
         <div class="input-group">
-            <input class="form-control" name="fuelCost" id="fuelCost" formControlName="fuelCost" type="number"
-                (input)="saveOperations()" (focus)="focusField('fuelCost')" (blur)="focusOut()" onfocus="this.select();">
+            <input class="form-control" name="fuelCost" id="{{idString+'fuelCost'}}" formControlName="fuelCost"
+                type="number" (input)="saveOperations()" (focus)="focusField('fuelCost')" (blur)="focusOut()"
+                onfocus="this.select();">
             <span class="input-group-addon units">$/<span
                     [innerHTML]="settings.steamEnergyMeasurement | settingsLabel"></span>
             </span>
@@ -151,10 +153,11 @@
     </div>
     <!--water cost-->
     <div class="form-group">
-        <label class="small" for="waterCost">Water Cost</label>
+        <label class="small" for="{{idString+'waterCost'}}">Water Cost</label>
         <div class="input-group">
-            <input class="form-control" name="waterCost" id="waterCost" formControlName="waterCost" type="number"
-                (input)="saveOperations()" (focus)="focusField('waterCost')" (blur)="focusOut()" onfocus="this.select();">
+            <input class="form-control" name="waterCost" id="{{idString+'waterCost'}}" formControlName="waterCost"
+                type="number" (input)="saveOperations()" (focus)="focusField('waterCost')" (blur)="focusOut()"
+                onfocus="this.select();">
             <span class="input-group-addon units">$/<span
                     [innerHTML]="settings.steamVolumeMeasurement | settingsLabel"></span>
             </span>
@@ -169,9 +172,9 @@
     </div>
     <!--makeup water temperature-->
     <div class="form-group">
-        <label class="small" for="makeupWaterTemperature">Makeup Water Temperature</label>
+        <label class="small" for="{{idString+'makeupWaterTemperature'}}">Makeup Water Temperature</label>
         <div class="input-group">
-            <input class="form-control" name="makeupWaterTemperature" id="makeupWaterTemperature"
+            <input class="form-control" name="makeupWaterTemperature" id="{{idString+'makeupWaterTemperature'}}"
                 formControlName="makeupWaterTemperature" type="number" (input)="saveOperations()"
                 (focus)="focusField('makeupWaterTemperature')" (blur)="focusOut()" onfocus="this.select();">
             <span class="input-group-addon units"
@@ -189,3 +192,8 @@
         </span>
     </div>
 </form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+    [operatingHours]="operatingHours">
+</app-operating-hours-modal>

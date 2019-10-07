@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { BoilerBlowdownRateService, BoilerBlowdownRateInputs } from '../boiler-blowdown-rate.service';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
   selector: 'app-blowdown-rate-form',
@@ -17,6 +18,14 @@ export class BlowdownRateFormComponent implements OnInit {
   @Input()
   disabled: boolean;
 
+  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setOpHoursModalWidth();
+  }
+
+  formWidth: number;
+
   conductivityForm: FormGroup;
   boilerForm: FormGroup;
   operationsForm: FormGroup;
@@ -25,9 +34,19 @@ export class BlowdownRateFormComponent implements OnInit {
   showBoilerSubscription: Subscription;
   showOperations: boolean;
   showOperationsSubscription: Subscription;
+  operatingHoursSubscription: Subscription;
+  operatingHours: OperatingHours;
+  showOperatingHoursModal: boolean = false;
+  idString: string;
   constructor(private boilerBlowdownRateService: BoilerBlowdownRateService) { }
 
   ngOnInit() {
+    if (this.isBaseline) {
+      this.idString = 'baseline_';
+    }
+    else {
+      this.idString = 'modification_';
+    }
     this.setFormSub = this.boilerBlowdownRateService.setForms.subscribe(val => {
       this.setForm();
     });
@@ -37,12 +56,16 @@ export class BlowdownRateFormComponent implements OnInit {
     this.showOperationsSubscription = this.boilerBlowdownRateService.showOperations.subscribe(val => {
       this.showOperations = val;
     });
+    this.operatingHoursSubscription = this.boilerBlowdownRateService.operatingHours.subscribe(val => {
+      this.operatingHours = val;
+    });
   }
 
   ngOnDestroy() {
     this.setFormSub.unsubscribe();
     this.showBoilerSubscription.unsubscribe();
     this.showOperationsSubscription.unsubscribe();
+    this.operatingHoursSubscription.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -53,6 +76,12 @@ export class BlowdownRateFormComponent implements OnInit {
         this.enableForms();
       }
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setOpHoursModalWidth();
+    }, 100)
   }
 
   setForm() {
@@ -151,5 +180,26 @@ export class BlowdownRateFormComponent implements OnInit {
         this.boilerBlowdownRateService.showOperations.next(false);
       }
     }
+  }
+
+  setOpHoursModalWidth() {
+    if (this.formElement.nativeElement.clientWidth) {
+      this.formWidth = this.formElement.nativeElement.clientWidth;
+    }
+  }
+
+  closeOperatingHoursModal() {
+    this.showOperatingHoursModal = false;
+  }
+
+  openOperatingHoursModal() {
+    this.showOperatingHoursModal = true;
+  }
+
+  updateOperatingHours(updatedHours: OperatingHours) {
+    this.operationsForm.controls.operatingHours.patchValue(updatedHours.hoursPerYear);
+    this.saveOperations();
+    this.closeOperatingHoursModal();
+    this.boilerBlowdownRateService.operatingHours.next(updatedHours);
   }
 }

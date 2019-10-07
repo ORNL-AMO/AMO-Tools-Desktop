@@ -5,6 +5,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { BehaviorSubject } from 'rxjs';
 import { SteamService } from '../steam.service';
 import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Injectable()
 export class BoilerBlowdownRateService {
@@ -15,6 +16,7 @@ export class BoilerBlowdownRateService {
   currentField: BehaviorSubject<string>;
   showBoiler: BehaviorSubject<boolean>;
   showOperations: BehaviorSubject<boolean>;
+  operatingHours: BehaviorSubject<OperatingHours>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private steamService: SteamService) {
     this.baselineInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
     this.modificationInputs = new BehaviorSubject<BoilerBlowdownRateInputs>(undefined);
@@ -22,6 +24,7 @@ export class BoilerBlowdownRateService {
     this.currentField = new BehaviorSubject<string>('default');
     this.showBoiler = new BehaviorSubject<boolean>(false);
     this.showOperations = new BehaviorSubject<boolean>(false);
+    this.operatingHours = new BehaviorSubject<OperatingHours>(undefined);
   }
 
   getDefaultInputs(): BoilerBlowdownRateInputs {
@@ -68,22 +71,6 @@ export class BoilerBlowdownRateService {
     return { baseline: baselineInputs, modification: modificationInputs };
   }
 
-  // getFormFromObj(obj: BoilerBlowdownRateInputs, settings: Settings): FormGroup {
-  //   let ranges: BoilerBlowdownRateRanges = this.getRanges(settings);
-  //   let form: FormGroup = this.formBuilder.group({
-  //     steamFlow: [obj.steamFlow, [Validators.min(0), Validators.max(ranges.steamFlowMax)]],
-  //     steamTemperature: [obj.steamTemperature, [Validators.min(ranges.steamTempMin), Validators.max(ranges.steamTempMax)]],
-  //     feedwaterConductivity: [obj.feedwaterConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
-  //     blowdownConductivity: [obj.blowdownConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
-  //     makeupWaterTemperature: [obj.makeupWaterTemperature, [Validators.min(ranges.makeupWaterMin), Validators.max(ranges.makeupWaterMax)]],
-  //     fuelCost: [obj.fuelCost, [Validators.min(0)]],
-  //     waterCost: [obj.waterCost, [Validators.min(0)]],
-  //     operatingHours: [obj.operatingHours, [Validators.min(0), Validators.max(8760)]],
-  //     boilerEfficiency: [obj.boilerEfficiency, [Validators.min(50), Validators.max(100)]]
-  //   });
-  //   return form;
-  // }
-
   getConductivityFormFromObj(obj: BoilerBlowdownRateInputs): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       feedwaterConductivity: [obj.feedwaterConductivity, [Validators.required, Validators.min(0), Validators.max(9000)]],
@@ -113,22 +100,6 @@ export class BoilerBlowdownRateService {
     });
     return form;
   }
-
-
-  // getObjFromForm(form: FormGroup): BoilerBlowdownRateInputs {
-  //   let obj: BoilerBlowdownRateInputs = {
-  //     steamFlow: form.controls.steamFlow.value,
-  //     steamTemperature: form.controls.steamTemperature.value,
-  //     feedwaterConductivity: form.controls.feedwaterConductivity.value,
-  //     blowdownConductivity: form.controls.blowdownConductivity.value,
-  //     makeupWaterTemperature: form.controls.makeupWaterTemperature.value,
-  //     fuelCost: form.controls.fuelCost.value,
-  //     waterCost: form.controls.waterCost.value,
-  //     operatingHours: form.controls.operatingHours.value,
-  //     boilerEfficiency: form.controls.boilerEfficiency.value
-  //   }
-  //   return obj;
-  // }
 
   updateObjFromConductivityForm(form: FormGroup, obj: BoilerBlowdownRateInputs): BoilerBlowdownRateInputs {
     obj.feedwaterConductivity = form.controls.feedwaterConductivity.value;

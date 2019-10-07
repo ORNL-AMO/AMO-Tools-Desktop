@@ -92,6 +92,7 @@ export class BoilerBlowdownRateComponent implements OnInit {
     this.boilerBlowdownRateService.showBoiler.next(false);
     this.boilerBlowdownRateService.showOperations.next(false);
     this.boilerBlowdownRateService.setForms.next(true);
+    this.boilerBlowdownRateService.operatingHours.next(undefined);
   }
 
   btnGenerateExample() {
