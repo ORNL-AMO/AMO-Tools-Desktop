@@ -115,6 +115,9 @@
       <li [ngClass]="{'selected': selectedCalculator == 'turbine'}">
         <span class="sidebar-item" (click)="selectCalculator('turbine')">Steam Turbine</span>
       </li>
+      <li [ngClass]="{'selected': selectedCalculator == 'boiler-blowdown-rate'}">
+        <span class="sidebar-item" (click)="selectCalculator('boiler-blowdown-rate')">Boiler Blowdown Rate</span>
+      </li>
     </ul>
   </li>
   <li [ngClass]="{'show-border': selectedCalculatorType == 'compressed-air'}">
