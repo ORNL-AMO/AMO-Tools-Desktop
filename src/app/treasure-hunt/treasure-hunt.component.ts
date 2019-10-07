@@ -69,17 +69,23 @@ export class TreasureHuntComponent implements OnInit {
             name: 'Treasure Hunt',
             setupDone: false,
             operatingHours: {
-              weeksPerYear: 52,
+              weeksPerYear: 52.14,
               daysPerWeek: 7,
-              hoursPerYear: 8736
+              hoursPerDay: 24,
+              minutesPerHour: 60,
+              secondsPerMinute: 60,
+              hoursPerYear: 8760
             }
           }
         }
         if (!this.assessment.treasureHunt.operatingHours) {
           this.assessment.treasureHunt.operatingHours = {
-            weeksPerYear: 52,
+            weeksPerYear: 52.14,
             daysPerWeek: 7,
-            hoursPerYear: 8736
+            hoursPerDay: 24,
+            minutesPerHour: 60,
+            secondsPerMinute: 60,
+            hoursPerYear: 8760
           }
         }
 

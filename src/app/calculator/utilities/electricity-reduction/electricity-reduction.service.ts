@@ -40,7 +40,7 @@ export class ElectricityReductionService {
       energy: 400000
     };
 
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
@@ -170,7 +170,7 @@ export class ElectricityReductionService {
     if (isBaseline) {
       defaultData = {
         name: 'Equipment #1',
-        operatingHours: 8736,
+        operatingHours: 8760,
         electricityCost: settings.electricityCost,
         measurementMethod: 1,
         multimeterData: {
@@ -199,7 +199,7 @@ export class ElectricityReductionService {
     else {
       defaultData = {
         name: 'Equipment #1',
-        operatingHours: 8736,
+        operatingHours: 8760,
         electricityCost: settings.electricityCost,
         measurementMethod: 1,
         multimeterData: {
