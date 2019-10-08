@@ -4,7 +4,7 @@
     <div class="form-group">
         <label for="dataOrder">Order</label>
         <select id="dataOrder" name="dataOrder" class="form-control" formControlName="dataOrder"
-            (focus)="focusField('dataOrder')" (change)="emitCalculateChanges()">
+            (focus)="focusField('dataOrder')" (change)="save()">
             <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
         </select>
     </div>
@@ -33,7 +33,7 @@
                     <div class="input-group">
                         <input name="secondValue" formControlName="secondValue" type="number" step="any"
                             class="form-control" id="secondValue" onfocus="this.select();"
-                            (focus)="focusField('secondValue')" (input)="emitCalculateChanges()">
+                            (focus)="focusField('secondValue')" (input)="save()">
                         <span class="input-group-addon units" [innerHTML]="secondValueUnit | settingsLabel"></span>
                     </div>
                     <span class="alert-danger pull-right small"

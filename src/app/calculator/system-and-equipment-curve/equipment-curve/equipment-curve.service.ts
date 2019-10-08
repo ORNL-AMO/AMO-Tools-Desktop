@@ -2,12 +2,21 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class EquipmentCurveService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  byDataInputs: BehaviorSubject<ByDataInputs>;
+  equipmentInputs: BehaviorSubject<EquipmentInputs>;
+  byEquationInputs: BehaviorSubject<ByEquationInputs>;
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
+    this.byDataInputs = new BehaviorSubject<ByDataInputs>(undefined);
+    this.equipmentInputs = new BehaviorSubject<EquipmentInputs>(undefined);
+    this.byEquationInputs = new BehaviorSubject<ByEquationInputs>(undefined);
+  }
 
+  //equipment curve
   getEquipmentCurveFormFromObj(obj: EquipmentInputs): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       measurementOption: [obj.measurementOption, Validators.required],
@@ -28,6 +37,16 @@ export class EquipmentCurveService {
     }
   }
 
+  getEquipmentCurveObjFromForm(form: FormGroup): EquipmentInputs {
+    return {
+      measurementOption: form.controls.measurementOption.value,
+      baselineMeasurement: form.controls.baselineMeasurement.value,
+      modificationMeasurementOption: form.controls.modificationMeasurementOption.value,
+      modifiedMeasurement: form.controls.modifiedMeasurement.value
+    }
+  }
+
+  //by equation
   getByEquationFormFromObj(obj: ByEquationInputs): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       maxFlow: [obj.maxFlow, [Validators.required, Validators.min(0), Validators.max(1000000)]],
@@ -65,6 +84,21 @@ export class EquipmentCurveService {
     }
   }
 
+  getByEquationObjFromForm(form: FormGroup): ByEquationInputs {
+    return {
+      maxFlow: form.controls.maxFlow.value,
+      equationOrder: form.controls.equationOrder.value,
+      constant: form.controls.constant.value,
+      flow: form.controls.flow.value,
+      flowTwo: form.controls.flowTwo.value,
+      flowThree: form.controls.flowThree.value,
+      flowFour: form.controls.flowFour.value,
+      flowFive: form.controls.flowFive.value,
+      flowSix: form.controls.flowSix.value
+    }
+  }
+
+  //by data
   getByDataDefault(settings: Settings): ByDataInputs {
     let tmpMaxFlow = 1020;
     let tmpFlow1 = 100;
@@ -127,6 +161,15 @@ export class EquipmentCurveService {
     });
     return tmpForm;
   }
+
+  getByDataObjFromForm(form: FormGroup): ByDataInputs {
+    let tmpFormArray: FormArray = form.controls.dataRows.value;
+    let dataRows: Array<{ flow: number, secondValue: number }> = tmpFormArray.value;
+    return {
+      dataRows: dataRows,
+      dataOrder: form.controls.dataOrder.value
+    }
+  }
 }
 
 
@@ -150,6 +193,6 @@ export interface EquipmentInputs {
 }
 
 export interface ByDataInputs {
-  dataRows: Array<{flow: number, secondValue: number}>,
+  dataRows: Array<{ flow: number, secondValue: number }>,
   dataOrder: number
 }
