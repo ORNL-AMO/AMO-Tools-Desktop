@@ -1,6 +1,8 @@
-import {Component, OnInit, HostListener, ViewChild, ElementRef, Input} from '@angular/core';
-import {CompressedAirService} from '../compressed-air.service';
-import {Settings} from '../../../shared/models/settings';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@angular/core';
+import { Settings } from '../../../shared/models/settings';
+import { ReceiverTankService } from './receiver-tank.service';
+import { Subscription } from 'rxjs';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-receiver-tank',
@@ -12,7 +14,7 @@ export class ReceiverTankComponent implements OnInit {
   settings: Settings;
   @Input()
   calcType: string;
-  
+
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
 
   @HostListener('window:resize', ['$event'])
@@ -40,27 +42,18 @@ export class ReceiverTankComponent implements OnInit {
       value: 3
     }
   ];
-  method: number;
-
-  currentField: string = 'default';
-  currentForm: string;
-  toggleResetData: boolean = false;
-  toggleGenerateExample: boolean = false;
-
-  constructor(private compressedAirService: CompressedAirService) {
+  currentField: string;
+  currentFieldSub: Subscription;
+  constructor(private receiverTankService: ReceiverTankService, private settingsDbService: SettingsDbService) {
   }
 
   ngOnInit() {
-    this.method = this.compressedAirService.recieverTankMethod;
-  }
-
-  ngOnDestroy() {
-    this.compressedAirService.recieverTankMethod = this.method;
-  }
-
-  changeField(str: string, formStr: string) {
-    this.currentField = str;
-    this.currentForm = formStr;
+    if (!this.settings) {
+      this.settings = this.settingsDbService.globalSettings;
+    }
+    this.currentFieldSub = this.receiverTankService.currentField.subscribe(val => {
+      this.currentField = val;
+    });
   }
 
   ngAfterViewInit() {
@@ -69,33 +62,31 @@ export class ReceiverTankComponent implements OnInit {
     }, 100);
   }
 
+  ngOnDestroy() {
+    this.currentFieldSub.unsubscribe();
+  }
+
   btnResetData() {
-    this.toggleResetData = !this.toggleResetData;
-    this.method = 0;
-    this.setCurrentForm();
+    if (this.calcType == 'size-calculations') {
+      this.receiverTankService.setDefaults();
+    } else if (this.calcType == 'usable-air') {
+      this.receiverTankService.setAirCapacityDefault();
+    }
+    this.receiverTankService.setForm.next(true);
   }
 
   btnGenerateExample() {
-    this.toggleGenerateExample = !this.toggleGenerateExample;
+    if (this.calcType == 'size-calculations') {
+      this.receiverTankService.setExampleData(this.settings);
+    } else if (this.calcType == 'usable-air') {
+      this.receiverTankService.setAirCapacityExample(this.settings);
+    }
+    this.receiverTankService.setForm.next(true);
   }
 
   resizeTabs() {
     if (this.leftPanelHeader.nativeElement.clientHeight) {
       this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-    }
-  }
-
-  setCurrentForm() {
-    if (this.method === 0) {
-      this.currentForm = 'general-method';
-    } else if (this.method === 1) {
-      this.currentForm = 'dedicated-storage';
-    } else if (this.method === 2) {
-      this.currentForm = 'metered-storage';
-    } else if (this.method === 3) {
-      this.currentForm = 'delay-method';
-    } else {
-      this.currentForm = 'air-capacity';
     }
   }
 }
