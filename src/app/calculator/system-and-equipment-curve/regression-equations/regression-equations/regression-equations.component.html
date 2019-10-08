@@ -30,5 +30,5 @@
 
 <div *ngIf="equipmentCurveCollapsed == 'open' && selectedEquipmentCurveFormView == 'Equation'">
     <span [innerHTML]="baselineEquipmentCurveByEquationRegressionEquation"></span><br>
-    <!-- <span>{{baselineEquipmentCurveByDataRSquared | number: '.1-4'}}</span> -->
+    <span [innerHTML]="modificationEquipmentCurveByEquationRegressionEquation"></span><br>
 </div>

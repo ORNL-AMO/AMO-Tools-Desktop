@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from './regression-equations.service';
-import { EquipmentInputs, ByDataInputs } from '../../equipment-curve/equipment-curve.service';
+import { EquipmentInputs, ByDataInputs, ByEquationInputs } from '../../equipment-curve/equipment-curve.service';
 
 @Component({
   selector: 'app-regression-equations',
@@ -20,7 +20,7 @@ export class RegressionEquationsComponent implements OnInit {
   modificationEquipmentCurveRSquared: number;
 
   baselineEquipmentCurveByEquationRegressionEquation: string;
-  baselineEquipmentCurveByEquationRSquared: string;
+  modificationEquipmentCurveByEquationRegressionEquation: string;
 
   curveDataSubscription: Subscription;
   byDataSubscription: Subscription;
@@ -58,14 +58,13 @@ export class RegressionEquationsComponent implements OnInit {
       }
     });
 
-    this.byEquationSubscription = this.systemAndEquipmentCurveService.byEquationInputs.subscribe(val => {
-      if (val != undefined) {
-        let secondValueLabel: string = 'Head';
-        if (this.equipmentType == 'fan') {
-          secondValueLabel = 'Pressure';
+    this.byEquationSubscription = this.systemAndEquipmentCurveService.byEquationInputs.subscribe(byEquationInputs => {
+      if (byEquationInputs != undefined) {
+        let equipmentInputs: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
+        if (equipmentInputs != undefined) {
+          this.calculateByEquationRegressions(byEquationInputs, equipmentInputs);
         }
-        let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(val, secondValueLabel);
-        this.baselineEquipmentCurveByEquationRegressionEquation = results;
+        this.cd.detectChanges();
       }
     });
 
@@ -74,6 +73,10 @@ export class RegressionEquationsComponent implements OnInit {
         let byDataInputs: ByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
         if (byDataInputs != undefined) {
           this.calculateByDataRegression(byDataInputs, equipmentInputs);
+        }
+        let byEquationInputs: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
+        if (byEquationInputs != undefined) {
+          this.calculateByEquationRegressions(byEquationInputs, equipmentInputs);
         }
         this.cd.detectChanges();
       }
@@ -105,7 +108,6 @@ export class RegressionEquationsComponent implements OnInit {
 
 
   calculateByDataRegression(byDataInputs: ByDataInputs, equipmentInputs: EquipmentInputs) {
-    console.log('CALCULATE');
     let secondValueLabel: string = 'Head';
     if (this.equipmentType == 'fan') {
       secondValueLabel = 'Pressure';
@@ -115,5 +117,15 @@ export class RegressionEquationsComponent implements OnInit {
     this.baselineEquipmentCurveByDataRSquared = results.baselineRSquared;
     this.modificationEquipmentCurveByDataRegressionEquation = results.modificationRegressionEquation;
     this.modificationEquipmentCurveRSquared = results.modificationRSquared;
+  }
+
+  calculateByEquationRegressions(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs) {
+    let secondValueLabel: string = 'Head';
+    if (this.equipmentType == 'fan') {
+      secondValueLabel = 'Pressure';
+    }
+    let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(byEquationInputs, equipmentInputs, secondValueLabel);
+    this.baselineEquipmentCurveByEquationRegressionEquation = results.baselineRegressionEquation;
+    this.modificationEquipmentCurveByEquationRegressionEquation = results.modificationRegressionEquation;
   }
 }

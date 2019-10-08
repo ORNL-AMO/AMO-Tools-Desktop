@@ -57,27 +57,57 @@ export class RegressionEquationsService {
     return regressionEquation;
   }
 
-  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, secondValueLabel: string): string {
-    let tmpStr = byEquationInputs.flowTwo + '(flow)&#x00B2; + ' + byEquationInputs.flow + ('(flow) +') + byEquationInputs.constant;
+  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string): { baselineRegressionEquation: string, modificationRegressionEquation: string } {
+    //baseline
+    let baselineRegressionEquation = byEquationInputs.flowTwo + '(flow)&#x00B2; + ' + byEquationInputs.flow + ('(flow) +') + byEquationInputs.constant;
     if (byEquationInputs.equationOrder > 2 && byEquationInputs.flowThree) {
-      tmpStr = byEquationInputs.flowThree + '(flow)&#x00B3; + ' + tmpStr;
+      baselineRegressionEquation = byEquationInputs.flowThree + '(flow)&#x00B3; + ' + baselineRegressionEquation;
     }
     if (byEquationInputs.equationOrder > 3 && byEquationInputs.flowFour) {
-      tmpStr = byEquationInputs.flowFour + '(flow)&#x2074; + ' + tmpStr;
+      baselineRegressionEquation = byEquationInputs.flowFour + '(flow)&#x2074; + ' + baselineRegressionEquation;
     }
     if (byEquationInputs.equationOrder > 4 && byEquationInputs.flowFive) {
-      tmpStr = byEquationInputs.flowFive + '(flow)&#x2075; + ' + tmpStr;
+      baselineRegressionEquation = byEquationInputs.flowFive + '(flow)&#x2075; + ' + baselineRegressionEquation;
     }
     if (byEquationInputs.equationOrder > 5 && byEquationInputs.flowSix) {
-      tmpStr = byEquationInputs.flowSix + '(flow)&#x2076; + ' + tmpStr;
+      baselineRegressionEquation = byEquationInputs.flowSix + '(flow)&#x2076; + ' + baselineRegressionEquation;
     }
-    let regEquation: string = secondValueLabel + ' = ' + tmpStr;
+    baselineRegressionEquation = secondValueLabel + ' = ' + baselineRegressionEquation;
     for (let i = 0; i < byEquationInputs.equationOrder; i++) {
-      regEquation = regEquation.replace('+ -', '- ');
+      baselineRegressionEquation = baselineRegressionEquation.replace('+ -', '- ');
     }
-    return regEquation;
+
+    //modification
+    let dataPoints: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
+    let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
+    let maxDataFlow: number = byEquationInputs.maxFlow;
+    dataPoints.push({
+      x: 0 * ratio,
+      y: this.calculateY(byEquationInputs, 0) * Math.pow(ratio, 2)
+    });
+    for (let i = 10; i <= maxDataFlow + 10; i = i + 10) {
+      let yVal = this.calculateY(byEquationInputs, i);
+      if (yVal > 0) {
+        dataPoints.push({
+          x: i * ratio,
+          y: yVal * Math.pow(ratio, 2)
+        })
+      }
+    }
+    let modificationData = new Array<any>();
+    dataPoints.forEach(dataPoint => {
+      modificationData.push([dataPoint.x, dataPoint.y]);
+    });
+    let modificationResults = regression.polynomial(modificationData, { order: byEquationInputs.equationOrder, precision: 10 });
+    let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byEquationInputs.equationOrder, secondValueLabel);
+
+    return { baselineRegressionEquation: baselineRegressionEquation, modificationRegressionEquation: modificationRegressionEquation };
   }
 
+  calculateY(data: ByEquationInputs, flow: number): number {
+    let result = data.constant + (data.flow * flow) + (data.flowTwo * Math.pow(flow, 2)) + (data.flowThree * Math.pow(flow, 3)) + (data.flowFour * Math.pow(flow, 4)) + (data.flowFive * Math.pow(flow, 5)) + (data.flowSix * Math.pow(flow, 6));
+    return result;
+  }
 
 
   // getData(pumpCurve: PumpCurve, selectedFormView: string): Array<{ x: number, y: number }> {
