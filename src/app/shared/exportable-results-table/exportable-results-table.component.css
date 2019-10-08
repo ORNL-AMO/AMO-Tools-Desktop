@@ -37,16 +37,17 @@
     text-align: center;
     height: 30px;
     width: 125px;
-    opacity: 0.6;
-    background-color: #dcdcdc;
+    opacity: 0.7;
+    background-color: #17202A;
     border: 1px solid transparent;
     border-radius: 2px;
+    color: white;
     transition: ease-in-out 0.2s all;
 }
 
 .btn-copy-table:hover {
     opacity: 1;
-    border-color: #212529;
+    border-color: #b0b5b9;
     cursor: pointer;
 }
 
