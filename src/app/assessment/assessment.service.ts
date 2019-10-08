@@ -125,7 +125,7 @@ export class AssessmentService {
         daysPerWeek: 7,
         // shiftsPerDay: 3,
         // hoursPerShift: 8,
-        hoursPerYear: 8736
+        hoursPerYear: 8760
       },
       operatingCosts: {
         fuelCost: 8.00,
@@ -220,11 +220,12 @@ export class AssessmentService {
       name: '',
       setupDone: false,
       operatingHours: {
-        weeksPerYear: 52,
+        weeksPerYear: 52.14,
         daysPerWeek: 7,
-        // shiftsPerDay: 3,
-        // hoursPerShift: 8,
-        hoursPerYear: 8736
+        hoursPerDay: 24,
+        minutesPerHour: 60,
+        secondsPerMinute: 60,
+        hoursPerYear: 8760
       },
       operatingCosts: {
         fuelCost: 5.78,

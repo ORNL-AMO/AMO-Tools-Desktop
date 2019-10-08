@@ -71,7 +71,7 @@ export class CompressedAirReductionService {
     }
     let defaultData: CompressedAirReductionData = {
       name: 'Equipment #1',
-      hoursPerYear: 8736,
+      hoursPerYear: 8760,
       utilityType: 0,
       utilityCost: 0.12,
       compressedAirCost: 0.12,
