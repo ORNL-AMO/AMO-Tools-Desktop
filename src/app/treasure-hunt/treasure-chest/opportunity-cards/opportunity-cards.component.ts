@@ -32,6 +32,7 @@ export class OpportunityCardsComponent implements OnInit {
   sortBySub: Subscription;
   sortByVal: SortCardsData;
   updateOpportunityCardsSub: Subscription;
+  deselectAllSub: Subscription;
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
     private treasureChestMenuService: TreasureChestMenuService) { }
 
@@ -59,12 +60,18 @@ export class OpportunityCardsComponent implements OnInit {
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortByVal = val;
     });
+    this.deselectAllSub = this.treasureChestMenuService.deselectAll.subscribe(val => {
+      if (val == true) {
+        this.deselectAll();
+      }
+    });
 
   }
 
   ngOnDestroy() {
     this.updatedOpportunityCardSub.unsubscribe();
     this.selectAllSub.unsubscribe();
+    this.deselectAllSub.unsubscribe();
     this.sortBySub.unsubscribe();
     this.updateOpportunityCardsSub.unsubscribe();
     this.opportunityCardsService.updateOpportunityCards.next(true);
@@ -266,6 +273,14 @@ export class OpportunityCardsComponent implements OnInit {
     })
   }
 
+  deselectAll() {
+    this.opportunityCardsData.forEach(card => {
+      if (card.selected == true) {
+        card.selected = false;
+        this.toggleSelected(card);
+      }
+    });
+  }
   createCopy(cardData: OpportunityCardData) {
     let newOpportunityCard: OpportunityCardData = JSON.parse(JSON.stringify(cardData));
     if (newOpportunityCard.opportunityType == 'lighting-replacement') {

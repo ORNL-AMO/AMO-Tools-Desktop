@@ -109,6 +109,11 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.selectAll.next(false);
   }
 
+  deselectAll(){
+    this.treasureChestMenuService.deselectAll.next(true);
+    this.treasureChestMenuService.deselectAll.next(false);
+  }
+
   setTeams(oppData: Array<OpportunityCardData>) {
     let teamNames: Array<string> = this.treasureChestMenuService.getAllTeams(oppData);
     this.teams = new Array();
