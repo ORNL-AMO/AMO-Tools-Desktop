@@ -52,7 +52,7 @@ export class NaturalGasReductionService {
       outletTemperature: 40,
       systemEfficiency: 80
     };
-    let hoursPerYear: number = 8736;
+    let hoursPerYear: number = 8760;
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }

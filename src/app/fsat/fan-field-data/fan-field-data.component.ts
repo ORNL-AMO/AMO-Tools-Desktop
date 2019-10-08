@@ -277,14 +277,6 @@ export class FanFieldDataComponent implements OnInit {
     this.closeOperatingHoursModal();
   }
 
-  setPressureValidators() {
-    this.fieldDataForm.controls.inletPressure.setValidators([Validators.required, Validators.max(this.fieldDataForm.controls.outletPressure.value)]);
-    this.fieldDataForm.controls.inletPressure.updateValueAndValidity();
-    this.fieldDataForm.controls.outletPressure.setValidators([Validators.required, Validators.min(this.fieldDataForm.controls.inletPressure.value)]);
-    this.fieldDataForm.controls.outletPressure.updateValueAndValidity();
-    this.save();
-  }
-
   setOpHoursModalWidth() {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;

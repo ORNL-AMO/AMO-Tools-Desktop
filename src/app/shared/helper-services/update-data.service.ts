@@ -17,7 +17,7 @@ export class UpdateDataService {
                 return this.updatePsat(assessment);
             } else if (assessment.type === 'PHAST') {
                 return this.updatePhast(assessment);
-            }else {
+            } else {
                 return assessment;
             }
         }
@@ -42,11 +42,12 @@ export class UpdateDataService {
         //logic for updating phast data
         if (!assessment.phast.operatingHours) {
             assessment.phast.operatingHours = {
-                weeksPerYear: 52,
+                weeksPerYear: 52.14,
                 daysPerWeek: 7,
-                // shiftsPerDay: 3,
-                // hoursPerShift: 8,
-                hoursPerYear: 8736
+                hoursPerDay: 24,
+                minutesPerHour: 60,
+                secondsPerMinute: 60,
+                hoursPerYear: 8760
             };
         }
         if (!assessment.phast.operatingCosts) {

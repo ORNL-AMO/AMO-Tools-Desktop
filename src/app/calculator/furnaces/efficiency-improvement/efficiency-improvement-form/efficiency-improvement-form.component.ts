@@ -10,7 +10,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()
-  efficiencyImprovementInputs: EfficiencyImprovementInputs;
+  form: FormGroup;
   @Input()
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
   @Output('calculate')
@@ -20,23 +20,19 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  form: FormGroup;
-
   constructor(private efficiencyImprovementService: EfficiencyImprovementService) { }
 
   ngOnInit() {
-    this.form = this.efficiencyImprovementService.getFormFromObj(this.efficiencyImprovementInputs);
-    this.calc();
   }
 
   calc() {
-    this.efficiencyImprovementInputs = this.efficiencyImprovementService.getObjFromForm(this.form);
-    this.efficiencyImprovementService.updateFormValidators(this.form, this.efficiencyImprovementInputs);
+    let efficiencyImprovementInputs: EfficiencyImprovementInputs = this.efficiencyImprovementService.getObjFromForm(this.form);
+    this.efficiencyImprovementService.updateFormValidators(this.form, efficiencyImprovementInputs);
     this.form.controls.currentCombustionAirTemp.markAsDirty({ onlySelf: true });
     this.form.controls.currentCombustionAirTemp.updateValueAndValidity({ onlySelf: true, emitEvent: true });
     this.form.controls.newCombustionAirTemp.markAsDirty({ onlySelf: true });
     this.form.controls.newCombustionAirTemp.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-    this.calculate.emit(this.efficiencyImprovementInputs);
+    this.calculate.emit(efficiencyImprovementInputs);
   }
 
   focusField(str: string) {

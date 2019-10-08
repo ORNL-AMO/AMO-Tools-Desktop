@@ -12,6 +12,7 @@ import { DedicatedStorageHelpComponent } from './dedicated-storage-help/dedicate
 import { DelayMethodHelpComponent } from './delay-method-help/delay-method-help.component';
 import { GeneralMethodHelpComponent } from './general-method-help/general-method-help.component';
 import { MeteredStorageHelpComponent } from './metered-storage-help/metered-storage-help.component';
+import { ReceiverTankService } from './receiver-tank.service';
 
 @NgModule({
   imports: [
@@ -33,6 +34,9 @@ import { MeteredStorageHelpComponent } from './metered-storage-help/metered-stor
   ],
   exports: [
     ReceiverTankComponent
+  ],
+  providers: [
+    ReceiverTankService
   ]
 })
 export class ReceiverTankModule { }

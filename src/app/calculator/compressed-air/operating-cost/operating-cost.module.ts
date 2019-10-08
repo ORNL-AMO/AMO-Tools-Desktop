@@ -5,6 +5,7 @@ import { OperatingCostComponent } from './operating-cost.component';
 import { OperatingCostFormComponent } from './operating-cost-form/operating-cost-form.component';
 import { OperatingCostHelpComponent } from './operating-cost-help/operating-cost-help.component';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { OperatingCostService } from './operating-cost.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -18,6 +19,9 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
   ],
   exports: [
     OperatingCostComponent
+  ],
+  providers: [
+    OperatingCostService
   ]
 })
 export class OperatingCostModule { }

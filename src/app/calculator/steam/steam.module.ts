@@ -12,6 +12,7 @@ import { PrvModule } from './prv/prv.module';
 import { DeaeratorModule } from './deaerator/deaerator.module';
 import { HeaderModule } from './header/header.module';
 import { TurbineModule } from './turbine/turbine.module';
+import { BoilerBlowdownRateModule } from './boiler-blowdown-rate/boiler-blowdown-rate.module';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { TurbineModule } from './turbine/turbine.module';
     PrvModule,
     DeaeratorModule,
     HeaderModule,
-    TurbineModule
+    TurbineModule,
+    BoilerBlowdownRateModule
   ],
   declarations: [
     SteamComponent

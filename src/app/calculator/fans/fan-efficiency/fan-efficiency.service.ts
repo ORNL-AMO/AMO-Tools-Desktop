@@ -13,8 +13,8 @@ export class FanEfficiencyService {
     return this.formBuilder.group({
       fanType: [0, Validators.required],
       fanSpeed: [0, [Validators.required, Validators.min(0)]],
-      inletPressure: [0, Validators.required],
-      outletPressure: [0, Validators.required],
+      inletPressure: [0, [Validators.required, Validators.max(0)]],
+      outletPressure: [0, [Validators.required, Validators.min(0)]],
       flowRate: [0, Validators.required],
       compressibility: [0, Validators.required]
     });
@@ -24,8 +24,8 @@ export class FanEfficiencyService {
     return this.formBuilder.group({
       fanType: [fsat.fanSetup.fanType, Validators.required],
       fanSpeed: [fsat.fanSetup.fanSpeed, [Validators.required, Validators.min(0)]],
-      inletPressure: [fsat.fieldData.inletPressure, Validators.required],
-      outletPressure: [fsat.fieldData.outletPressure, Validators.required],
+      inletPressure: [fsat.fieldData.inletPressure, [Validators.required, Validators.max(0)]],
+      outletPressure: [fsat.fieldData.outletPressure, [Validators.required, Validators.min(0)]],
       flowRate: [fsat.fieldData.flowRate, Validators.required],
       compressibility: [fsat.fieldData.compressibilityFactor, Validators.required]
     });
@@ -35,8 +35,8 @@ export class FanEfficiencyService {
     return this.formBuilder.group({
       fanType: [obj.fanType, Validators.required],
       fanSpeed: [obj.fanSpeed, [Validators.required, Validators.min(0)]],
-      inletPressure: [obj.inletPressure, Validators.required],
-      outletPressure: [obj.outletPressure, Validators.required],
+      inletPressure: [obj.inletPressure, [Validators.required, Validators.max(0)]],
+      outletPressure: [obj.outletPressure, [Validators.required, Validators.min(0)]],
       flowRate: [obj.flowRate, Validators.required],
       compressibility: [obj.compressibility, Validators.required]
     });
@@ -54,16 +54,27 @@ export class FanEfficiencyService {
   }
 
   generateExample(settings: Settings): FanEfficiencyInputs {
-    let tmpFlowRate = 129691;
-    if (settings.unitsOfMeasure == 'Metric') {
-      tmpFlowRate = (this.convertUnitsService.value(tmpFlowRate).from('ft3').to('m3') * 100) / 100;
+    let defaultFlowRate: number = 129691;
+    if (settings.fanFlowRate != 'ft3/min') {
+      defaultFlowRate = this.convertUnitsService.value(defaultFlowRate).from('ft3').to('m3');
+      defaultFlowRate = Number(defaultFlowRate.toFixed(2));
     }
+    let defaultInletPressure: number = -16.36;
+    let defaultOutletPressure: number = 1.1;
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      defaultInletPressure = this.convertUnitsService.value(defaultInletPressure).from('inH2o').to(settings.fanPressureMeasurement);
+      defaultInletPressure = Number(defaultInletPressure.toFixed(3));
+
+      defaultOutletPressure = this.convertUnitsService.value(defaultOutletPressure).from('inH2o').to(settings.fanPressureMeasurement);
+      defaultOutletPressure = Number(defaultOutletPressure.toFixed(3));
+    }
+
     return {
       fanType: 0,
       fanSpeed: 1180,
-      inletPressure: -16.36,
-      outletPressure: 1.1,
-      flowRate: tmpFlowRate,
+      inletPressure: defaultInletPressure,
+      outletPressure: defaultOutletPressure,
+      flowRate: defaultFlowRate,
       compressibility: 0.988
     }
   }

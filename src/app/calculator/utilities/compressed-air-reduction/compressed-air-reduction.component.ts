@@ -189,9 +189,6 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
     this.generateExample();
     this.getResults();
   }

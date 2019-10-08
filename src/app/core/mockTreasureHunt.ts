@@ -817,7 +817,7 @@ export const MockTreasureHunt: Assessment = {
         }, {
             "baseline": [{
                 "name": "Equipment #1",
-                "operatingHours": 8736,
+                "operatingHours": 8760,
                 "electricityCost": 0.066,
                 "measurementMethod": 1,
                 "multimeterData": {

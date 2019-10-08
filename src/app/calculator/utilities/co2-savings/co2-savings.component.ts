@@ -42,6 +42,7 @@ export class Co2SavingsComponent implements OnInit {
   constructor(private settingsDbService: SettingsDbService, private co2SavingsService: Co2SavingsService) { }
 
   ngOnInit() {
+    this.settings = this.settingsDbService.globalSettings;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
@@ -86,10 +87,10 @@ export class Co2SavingsComponent implements OnInit {
   }
 
   generateExample() {
-    let tmpBaselineObj: Co2SavingsData = this.co2SavingsService.generateExample(true);
+    let tmpBaselineObj: Co2SavingsData = this.co2SavingsService.generateExample(true, this.settings);
     this.baselineData = [tmpBaselineObj];
     this.co2SavingsService.baselineData = this.baselineData;
-    let tmpModificationObj: Co2SavingsData = this.co2SavingsService.generateExample(false);
+    let tmpModificationObj: Co2SavingsData = this.co2SavingsService.generateExample(false, this.settings);
     this.modificationData = [tmpModificationObj];
     this.co2SavingsService.modificationData = this.modificationData;
     this.modificationExists = true;
@@ -129,12 +130,12 @@ export class Co2SavingsComponent implements OnInit {
 
   calculate() {
     this.baselineData.forEach(data => {
-      data = this.co2SavingsService.calculate(data);
+      data = this.co2SavingsService.calculate(data, this.settings);
     });
     this.baselineTotal = _.sumBy(this.baselineData, 'totalEmissionOutput');
     if (this.modificationData) {
       this.modificationData.forEach(data => {
-        data = this.co2SavingsService.calculate(data);
+        data = this.co2SavingsService.calculate(data, this.settings);
       });
       this.modificationTotal = _.sumBy(this.modificationData, 'totalEmissionOutput');
     }

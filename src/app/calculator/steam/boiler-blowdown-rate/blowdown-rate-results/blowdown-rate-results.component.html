@@ -1,0 +1,53 @@
+<table #copyTable0 class="table table-hover table-striped" *ngIf="baselineResults">
+    <tbody>
+        <tr class="bold">
+            <td>&nbsp;</td>
+            <td>Baseline</td>
+            <td *ngIf="modificationExists">Modification</td>
+        </tr>
+        <tr>
+            <td>Blowdown Rate (%)</td>
+            <td>{{baselineResults.blowdownRate | number:'1.0-2'}} %</td>
+            <td *ngIf="modificationExists">{{modificationResults.blowdownRate | number:'1.0-2'}} %</td>
+        </tr>
+        <tr *ngIf="showBoiler">
+            <td>Blowdown Rate (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
+            <td>{{baselineResults.blowdownFlowRate | number:'1.0-2'}}</td>
+            <td *ngIf="modificationExists">{{modificationResults.blowdownFlowRate | number:'1.0-2'}}</td>
+        </tr>
+        <tr *ngIf="showBoiler">
+            <td>Feedwater Rate (<span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>)</td>
+            <td>{{baselineResults.feedwaterFlowRate | number:'1.0-2'}}</td>
+            <td *ngIf="modificationExists">{{modificationResults.feedwaterFlowRate | number:'1.0-2'}}</td>
+        </tr>
+        <tr *ngIf="showOperations">
+            <td>Fuel Cost</td>
+            <td>${{baselineResults.boilerFuelCost | number:'1.0-0'}}</td>
+            <td *ngIf="modificationExists">${{modificationResults.boilerFuelCost | number:'1.0-0'}}</td>
+        </tr>
+        <tr *ngIf="showOperations">
+            <td>Makeup Water Cost</td>
+            <td>${{baselineResults.makeupWaterCost | number:'1.0-0'}}</td>
+            <td *ngIf="modificationExists">${{modificationResults.makeupWaterCost | number:'1.0-0'}}</td>
+        </tr>
+        <tr *ngIf="showOperations">
+            <td>Total Cost</td>
+            <td>${{baselineResults.totalCost | number:'1.0-0'}}</td>
+            <td *ngIf="modificationExists">${{modificationResults.totalCost | number:'1.0-0'}}</td>
+        </tr>
+        <tr class="bold" *ngIf="showOperations && modificationExists">
+            <td>Fuel Savings</td>
+            <td colspan="2">${{baselineResults.boilerFuelCost - modificationResults.boilerFuelCost | number:'1.0-0'}}
+            </td>
+        </tr>
+        <tr class="bold" *ngIf="showOperations && modificationExists">
+            <td>Makeup Water Savings</td>
+            <td colspan="2">${{baselineResults.makeupWaterCost - modificationResults.makeupWaterCost | number:'1.0-0'}}
+            </td>
+        </tr>
+        <tr class="bold" *ngIf="showOperations && modificationExists">
+            <td>Total Savings</td>
+            <td colspan="2">${{baselineResults.totalCost - modificationResults.totalCost | number:'1.0-0'}}</td>
+        </tr>
+    </tbody>
+</table>

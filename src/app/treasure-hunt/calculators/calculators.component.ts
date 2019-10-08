@@ -137,7 +137,7 @@ export class CalculatorsComponent implements OnInit {
     if (this.calculatorsService.isNewOpportunity == true) {
       this.treasureHuntService.addNewReplaceExistingMotorsItem(this.replaceExistingMotorsTreasureHunt);
     } else {
-      this.treasureHuntService.editReplaceExistingMotorsItem(this.replaceExistingMotorsTreasureHunt, this.calculatorsService.itemIndex);
+      this.treasureHuntService.editReplaceExistingMotorsItem(this.replaceExistingMotorsTreasureHunt, this.calculatorsService.itemIndex, this.settings);
     }
     this.finishSaveCalc();
   }

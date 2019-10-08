@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalculatorService } from '../calculator.service';
-import { Settings } from '../../shared/models/settings';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-compressed-air',
@@ -10,16 +8,11 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 })
 export class CompressedAirComponent implements OnInit {
   @Input()
-  settings: Settings;
-  @Input()
   selectedTool: string;
 
-  constructor(private calculatorService: CalculatorService, private settingsDbService: SettingsDbService) { }
+  constructor(private calculatorService: CalculatorService) { }
 
   ngOnInit() {
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
   }
 
   showTool(str: string) {

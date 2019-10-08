@@ -130,4 +130,25 @@ export class CompressedAirPressureReductionService {
     }
     return inputArray;
   }
+
+  generateExample(settings: Settings, isBaseline: boolean): CompressedAirPressureReductionData {
+    let proposedPressure: number = 90;
+    let pressure: number = 100;
+    if(settings.unitsOfMeasure != 'Imperial'){
+      proposedPressure = this.convertUnitsService.value(proposedPressure).from('psig').to('barg');
+      proposedPressure = Number(proposedPressure.toFixed(3));
+      pressure = this.convertUnitsService.value(pressure).from('psig').to('barg');
+      pressure = Number(pressure.toFixed(3));
+    }
+    let exampleData: CompressedAirPressureReductionData = {
+      name: 'Equipment #1',
+      isBaseline: isBaseline,
+      hoursPerYear: 8760,
+      electricityCost: .066,
+      compressorPower: 200,
+      pressure: pressure,
+      proposedPressure: proposedPressure
+    }
+    return exampleData;
+  }
 }

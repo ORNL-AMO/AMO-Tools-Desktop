@@ -6,12 +6,14 @@ import { FanEfficiencyHelpComponent } from './fan-efficiency-help/fan-efficiency
 import { ReactiveFormsModule } from '@angular/forms';
 import { FanEfficiencyService } from './fan-efficiency.service';
 import { PercentGraphModule } from '../../../shared/percent-graph/percent-graph.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    PercentGraphModule
+    PercentGraphModule,
+    SharedPipesModule
   ],
   declarations: [FanEfficiencyComponent, FanEfficiencyFormComponent, FanEfficiencyHelpComponent],
   exports: [FanEfficiencyComponent],

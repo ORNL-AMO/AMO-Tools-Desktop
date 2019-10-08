@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AirVelocityComponent } from './air-velocity.component';
 import { AirVelocityFormComponent } from './air-velocity-form/air-velocity-form.component';
 import { AirVelocityHelpComponent } from './air-velocity-help/air-velocity-help.component';
+import { AirVelocityService } from './air-velocity.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -16,6 +17,9 @@ import { AirVelocityHelpComponent } from './air-velocity-help/air-velocity-help.
   ],
   exports: [
     AirVelocityComponent
+  ],
+  providers: [
+    AirVelocityService
   ]
 })
 export class AirVelocityModule { }

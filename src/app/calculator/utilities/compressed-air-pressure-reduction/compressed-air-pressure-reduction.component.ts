@@ -134,36 +134,17 @@ export class CompressedAirPressureReductionComponent implements OnInit {
     this.setModificationSelected();
   }
 
-  // addModificationEquipment() {
-  //   let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.initObject(this.modificationData.length, this.settings, false, this.operatingHours);
-  //   this.modificationData.push(tmpObj);
-  //   this.getResults();
-  // }
-
-  // removeModificationEquipment(i: number) {
-  //   this.modificationData.splice(i, 1);
-  //   if (this.modificationData.length === 0) {
-  //     this.modificationExists = false;
-  //   }
-  //   this.getResults();
-  // }
-
   updateBaselineData(data: CompressedAirPressureReductionData, index: number) {
-    // this.updateDataArray(this.baselineData, this.modificationData, data, index, true);
     this.updateDataArray(this.baselineData, data, index);
     this.getResults();
   }
 
   updateModificationData(data: CompressedAirPressureReductionData, index: number) {
     this.updateDataArray(this.modificationData, data, index);
-    // this.updateDataArray(this.baselineData, this.modificationData, data, index, false);
     this.getResults();
   }
 
   updateDataArray(dataArray: Array<CompressedAirPressureReductionData>, data: CompressedAirPressureReductionData, index: number) {
-    // console.log('updateDataArray, index = ' + index);
-    // console.log('data = ');
-    // console.log(data);
     dataArray[index].name = data.name;
     dataArray[index].isBaseline = data.isBaseline;
     dataArray[index].hoursPerYear = data.hoursPerYear;
@@ -176,18 +157,6 @@ export class CompressedAirPressureReductionComponent implements OnInit {
       this.modificationData[index].pressure = data.pressure;
     }
   }
-
-  // updateDataArray(baselineDataArray: Array<CompressedAirPressureReductionData>, modificationDataArray: Array<CompressedAirPressureReductionData>, data: CompressedAirPressureReductionData, index: number, isBaseline: boolean) {
-  //   if (isBaseline) {
-  //     baselineDataArray[index].name = data.name;
-  //     baselineDataArray[index].isBaseline = data.isBaseline;
-  //     baselineDataArray[index].hoursPerYear = data.hoursPerYear;
-  //     baselineDataArray[index].electricityCost = data.electricityCost;
-  //     baselineDataArray[index].compressorPower = data.compressorPower;
-  //     baselineDataArray[index].pressure = data.pressure;
-  //     baselineDataArray[index].proposedPressure = this.modificationExists ? modificationDataArray[index].proposedPressure : data.proposedPressure;
-  //   }
-  // }
 
   getResults() {
     this.compressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(this.settings, this.baselineData, this.modificationData);
@@ -202,6 +171,23 @@ export class CompressedAirPressureReductionComponent implements OnInit {
 
   }
 
+  generateExample() {
+    let tmpBaselineObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.generateExample(this.settings, true);
+    this.baselineData = [tmpBaselineObj];
+    this.compressedAirPressureReductionService.baselineData = this.baselineData;
+    let tmpModificationData: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.generateExample(this.settings, false);
+    this.modificationData = [tmpModificationData];
+    this.compressedAirPressureReductionService.modificationData = this.modificationData;
+    this.modificationExists = true;
+    this.baselineSelected = true;
+    this.modifiedSelected = false;
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
+    this.getResults();
+  }
+  
   save() {
     this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData });
   }

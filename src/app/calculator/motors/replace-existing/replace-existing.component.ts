@@ -4,6 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { ReplaceExistingData, ReplaceExistingResults } from '../../../shared/models/calculators';
 import { FormGroup } from '@angular/forms';
+import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
   selector: 'app-replace-existing',
@@ -22,7 +23,7 @@ export class ReplaceExistingComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  opperatingHours: number
+  opperatingHours: OperatingHours;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
@@ -78,14 +79,14 @@ export class ReplaceExistingComponent implements OnInit {
   initMotorInputs() {
     let oppHours: number = 8760;
     if (this.opperatingHours) {
-      oppHours = this.opperatingHours;
+      oppHours = this.opperatingHours.hoursPerYear;
     }
     this.inputs = this.replaceExistingService.initReplaceExistingData(this.settings, oppHours);
   }
   resetMotorInputs() {
     let oppHours: number = 0;
     if (this.opperatingHours) {
-      oppHours = this.opperatingHours;
+      oppHours = this.opperatingHours.hoursPerYear;
     }
     this.inputs = this.replaceExistingService.resetReplaceExistingData(this.settings, oppHours);
   }
@@ -122,7 +123,7 @@ export class ReplaceExistingComponent implements OnInit {
 
   calculate() {
     this.inputs = this.replaceExistingService.getObjFromForm(this.replaceExistingForm);
-    this.results = this.replaceExistingService.getResults(this.inputs);
+    this.results = this.replaceExistingService.getResults(this.inputs, this.settings);
   }
 
   save() {

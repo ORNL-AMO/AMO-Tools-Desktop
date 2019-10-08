@@ -182,7 +182,7 @@ export class OpportunityCardsComponent implements OnInit {
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'replace-existing') {
       this.editOpportunitySheetCardData.replaceExistingMotor.opportunitySheet = updatedOpportunitySheet;
-      this.treasureHuntService.editReplaceExistingMotorsItem(this.editOpportunitySheetCardData.replaceExistingMotor, this.editOpportunitySheetCardData.opportunityIndex);
+      this.treasureHuntService.editReplaceExistingMotorsItem(this.editOpportunitySheetCardData.replaceExistingMotor, this.editOpportunitySheetCardData.opportunityIndex, this.settings);
 
     } else if (this.editOpportunitySheetCardData.opportunityType == 'motor-drive') {
       this.editOpportunitySheetCardData.motorDrive.opportunitySheet = updatedOpportunitySheet;
@@ -221,7 +221,7 @@ export class OpportunityCardsComponent implements OnInit {
 
     } else if (cardData.opportunityType == 'replace-existing') {
       cardData.replaceExistingMotor.selected = cardData.selected;
-      this.treasureHuntService.editReplaceExistingMotorsItem(cardData.replaceExistingMotor, cardData.opportunityIndex);
+      this.treasureHuntService.editReplaceExistingMotorsItem(cardData.replaceExistingMotor, cardData.opportunityIndex, this.settings);
 
     } else if (cardData.opportunityType == 'motor-drive') {
       cardData.motorDrive.selected = cardData.selected;
@@ -278,7 +278,7 @@ export class OpportunityCardsComponent implements OnInit {
       newOpportunityCard.replaceExistingMotor.opportunitySheet = this.updateCopyName(newOpportunityCard.replaceExistingMotor.opportunitySheet);
       this.treasureHuntService.addNewReplaceExistingMotorsItem(newOpportunityCard.replaceExistingMotor);
       let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-      newOpportunityCard = this.opportunityCardsService.getReplaceExistingCardData(newOpportunityCard.replaceExistingMotor, treasureHunt.replaceExistingMotors.length - 1, treasureHunt.currentEnergyUsage);
+      newOpportunityCard = this.opportunityCardsService.getReplaceExistingCardData(newOpportunityCard.replaceExistingMotor, treasureHunt.replaceExistingMotors.length - 1, treasureHunt.currentEnergyUsage, this.settings);
 
 
     } else if (newOpportunityCard.opportunityType == 'motor-drive') {
