@@ -196,7 +196,6 @@
                     </div>
                 </div>
 
-
                 <!-- <div *ngIf="_ssmtAssessments.length > 0 && printSsmtRollup" class="row print-break-before">
                     <div class="col-12">
                         <app-ssmt-rollup-print [settings]="settings"></app-ssmt-rollup-print>
@@ -210,6 +209,25 @@
                             [printExecutiveSummary]="printExecutiveSummary" [printEnergySummary]="printEnergySummary"
                             [printLossesSummary]="printLossesSummary" [printInputData]="printInputData"
                             [printReportGraphs]="printReportGraphs"></app-ssmt-report>
+                    </div>
+                </div>
+
+                <div *ngIf="_treasureHuntAssessments.length > 0 && printTreasureHuntRollup"
+                    class="row print-break-before">
+                    <div class="col-12">
+                        <!--treasure hunt print-->
+                        <!-- <app-treasure-hunt-rollup-print [settings]="settings"></app-treasure-hunt-rollup-print> -->
+                    </div>
+                </div>
+                <div class="assessment-item row" *ngFor="let item of _treasureHuntAssessments"
+                    id="{{'assessment_'+item.assessment.id}}">
+                    <div class="col-12">
+                        <app-treasure-hunt-report *ngIf="item.assessment.treasureHunt" [assessment]="item.assessment"
+                            [settings]="item.settings" [inRollup]="true" [printView]="printView"
+                            [printReportGraphs]="printReportGraphs" [printExecutiveSummary]="printExecutiveSummary"
+                            [printReportOpportunityPayback]="printReportOpportunityPayback"
+                            [printReportOpportunitySummary]="printReportOpportunitySummary">
+                        </app-treasure-hunt-report>
                     </div>
                 </div>
             </div>
@@ -382,12 +400,12 @@
 
     <app-print-options-menu *ngIf="showPrintMenu" [showRollupReportOptions]="showRollupReportOptions"
         [showPsatReportOptions]="showPsatReportOptions" [showFsatReportOptions]="showFsatReportOptions"
-        [showPhastReportOptions]="showPhastReportOptions" [showSsmtReportOptions]="showSsmtReportOptions"
-        [selectAll]="selectAll" [printReportGraphs]="printReportGraphs" [printReportSankey]="printReportSankey"
-        [printResults]="printResults" [printInputData]="printInputData" [printEnergyUsed]="printEnergyUsed"
-        [printExecutiveSummary]="printExecutiveSummary" [printEnergySummary]="printEnergySummary"
-        [printLossesSummary]="printLossesSummary" [printPsatRollup]="printPsatRollup"
-        [printFsatRollup]="printFsatRollup" [printPhastRollup]="printPhastRollup"
+        [showPhastReportOptions]="showPhastReportOptions" [showTHReportOptions]="showTreasureHuntReportOptions"
+        [showSsmtReportOptions]="showSsmtReportOptions" [selectAll]="selectAll" [printReportGraphs]="printReportGraphs"
+        [printReportSankey]="printReportSankey" [printResults]="printResults" [printInputData]="printInputData"
+        [printEnergyUsed]="printEnergyUsed" [printExecutiveSummary]="printExecutiveSummary"
+        [printEnergySummary]="printEnergySummary" [printLossesSummary]="printLossesSummary"
+        [printPsatRollup]="printPsatRollup" [printFsatRollup]="printFsatRollup" [printPhastRollup]="printPhastRollup"
         (emitClosePrintModal)="closePrintModal($event)" (emitTogglePrint)="togglePrint($event)"
         (emitPrint)="setPrintViewThenPrint()">
     </app-print-options-menu>
