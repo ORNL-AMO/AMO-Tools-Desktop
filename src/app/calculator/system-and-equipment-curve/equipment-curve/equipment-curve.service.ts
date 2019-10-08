@@ -6,6 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class EquipmentCurveService {
+  
+
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
   }
 

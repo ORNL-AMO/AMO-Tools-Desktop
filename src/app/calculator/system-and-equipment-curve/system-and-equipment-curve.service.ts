@@ -12,6 +12,9 @@ export class SystemAndEquipmentCurveService {
   byDataInputs: BehaviorSubject<ByDataInputs>;
   equipmentInputs: BehaviorSubject<EquipmentInputs>;
   byEquationInputs: BehaviorSubject<ByEquationInputs>;
+  selectedEquipmentCurveFormView: BehaviorSubject<string>;
+  equipmentCurveCollapsed: BehaviorSubject<string>;
+  systemCurveCollapsed: BehaviorSubject<string>;
   constructor() {
     this.currentField = new BehaviorSubject<string>('default');
     this.pumpSystemCurveData = new BehaviorSubject<PumpSystemCurveData>(undefined);
@@ -20,6 +23,9 @@ export class SystemAndEquipmentCurveService {
     this.byDataInputs = new BehaviorSubject<ByDataInputs>(undefined);
     this.equipmentInputs = new BehaviorSubject<EquipmentInputs>(undefined);
     this.byEquationInputs = new BehaviorSubject<ByEquationInputs>(undefined);
+    this.selectedEquipmentCurveFormView = new BehaviorSubject<string>('Equation');
+    this.equipmentCurveCollapsed = new BehaviorSubject<string>('closed');
+    this.systemCurveCollapsed = new BehaviorSubject<string>('closed');
   }
 }
 

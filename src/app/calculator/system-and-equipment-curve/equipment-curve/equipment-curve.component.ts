@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { collapseAnimation } from '../collapse-animations';
 import { Settings } from '../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-equipment-curve',
@@ -20,13 +21,24 @@ export class EquipmentCurveComponent implements OnInit {
   equipmentCurveCollapsed: string = 'closed';
   title: string;
   selectedFormView: string = 'Equation';
+  selectedFormViewSub: Subscription;
+  equipmentCurveCollapsedSub: Subscription;
   constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
-    if (this.isPrimaryCalculator == true) {
-      this.equipmentCurveCollapsed = 'open';
-    }
+    this.selectedFormViewSub = this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.subscribe(val => {
+      this.selectedFormView = val;
+    });
+
+    this.equipmentCurveCollapsedSub = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.subscribe(val => {
+      this.equipmentCurveCollapsed = val;
+    });
     this.setTitle();
+  }
+
+  ngOnDestroy(){
+    this.selectedFormViewSub.unsubscribe();
+    this.equipmentCurveCollapsedSub.unsubscribe();
   }
 
   setTitle() {
@@ -40,15 +52,15 @@ export class EquipmentCurveComponent implements OnInit {
   toggleCollapse() {
     if (this.isPrimaryCalculator == false) {
       if (this.equipmentCurveCollapsed == 'closed') {
-        this.equipmentCurveCollapsed = 'open';
+        this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('open');
         this.systemAndEquipmentCurveService.focusedCalculator.next(this.equipmentType + '-curve');
       } else {
-        this.equipmentCurveCollapsed = 'closed';
+        this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next('closed');
       }
     }
   }
 
   setFormView(str: string) {
-    this.selectedFormView = str;;
+    this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.next(str);
   }
 }
