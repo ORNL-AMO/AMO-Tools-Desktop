@@ -58,7 +58,7 @@ export class OpportunityCardsComponent implements OnInit {
     });
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortByVal = val;
-    })
+    });
 
   }
 
@@ -246,11 +246,11 @@ export class OpportunityCardsComponent implements OnInit {
     } else if (cardData.opportunityType == 'water-reduction') {
       cardData.waterReduction.selected = cardData.selected;
       this.treasureHuntService.editWaterReductionsItem(cardData.waterReduction, cardData.opportunityIndex, this.settings);
-    
+
     } else if (cardData.opportunityType == 'opportunity-sheet') {
       cardData.opportunitySheet.selected = cardData.selected;
       this.treasureHuntService.editOpportunitySheetItem(cardData.opportunitySheet, cardData.opportunityIndex, this.settings);
-    
+
     } else if (cardData.opportunityType == 'steam-reduction') {
       cardData.steamReduction.selected = cardData.selected;
       this.treasureHuntService.editSteamReductionItem(cardData.steamReduction, cardData.opportunityIndex, this.settings);

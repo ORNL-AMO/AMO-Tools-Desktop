@@ -115,7 +115,7 @@ export class TreasureChestMenuComponent implements OnInit {
     teamNames.forEach(name => {
       this.teams.push({ name: name, selected: false });
     });
-    this.sortCardsData.teams = [];
+    this.sortCardsData.teams = _.intersection(this.sortCardsData.teams, teamNames);
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
@@ -125,7 +125,7 @@ export class TreasureChestMenuComponent implements OnInit {
     equipmentNames.forEach(equipment => {
       this.equipments.push({ name: equipment, selected: false });
     });
-    this.sortCardsData.teams = [];
+    this.sortCardsData.equipments = _.intersection(this.sortCardsData.equipments, equipmentNames);
     this.treasureChestMenuService.sortBy.next(this.sortCardsData);
   }
 
