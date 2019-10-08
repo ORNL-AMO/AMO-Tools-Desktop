@@ -159,10 +159,10 @@ export class BoilerBlowdownRateService {
       feedwaterFlowRate = this.calculateFeedwaterFlowRate(blowdownRate, inputs);
       blowdownFlowRate = this.calculateBlowdownFlowRate(blowdownRate, inputs);
       blowdownEnthalpy = this.calculateBlowdownEnthalpy(inputs.steamTemperature, settings);
-      makeupWaterProperties = this.calculateMakeupWaterProperties(inputs.makeupWaterTemperature, settings);
     }
     //costs
     if (calcCostVals == true) {
+      makeupWaterProperties = this.calculateMakeupWaterProperties(inputs.makeupWaterTemperature, settings);
       boilerFuelCost = this.calculateBoilerFuelCost(blowdownRate, blowdownEnthalpy, makeupWaterProperties.enthalpy, inputs, settings);
       makeupWaterCost = this.calculateWaterCost(inputs, blowdownRate, makeupWaterProperties.specificVolume, settings);
     }// blowdownRate = this.convertUnitsService.roundVal(blowdownRate, 3) * 100;
