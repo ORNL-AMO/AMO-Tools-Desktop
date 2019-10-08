@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { EquipmentCurveService } from '../equipment-curve.service';
+import { EquipmentCurveService, ByEquationInputs } from '../equipment-curve.service';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 
 @Component({
@@ -25,7 +25,12 @@ export class ByEquationFormComponent implements OnInit {
 
   ngOnInit() {
     this.setFormLabelAndUnit();
-    this.byEquationForm = this.equipmentCurveService.getByEquationForm(this.flowUnit, this.settings.distanceMeasurement);
+    this.initForm();
+  }
+
+  initForm() {
+    let defaultData: ByEquationInputs = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.distanceMeasurement);
+    this.byEquationForm = this.equipmentCurveService.getByEquationFormFromObj(defaultData);
   }
 
   setFormLabelAndUnit() {

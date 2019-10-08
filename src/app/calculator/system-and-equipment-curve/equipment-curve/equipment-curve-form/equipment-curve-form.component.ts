@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { EquipmentCurveService } from '../equipment-curve.service';
+import { EquipmentCurveService, EquipmentInputs } from '../equipment-curve.service';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
 
 @Component({
@@ -26,8 +26,13 @@ export class EquipmentCurveFormComponent implements OnInit {
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
-    this.equipmentCurveForm = this.equipmentCurveService.getEquipmentCurveForm();
+    this.initForm();
     this.setSmallUnit();
+  }
+
+  initForm() {
+    let defaultData: EquipmentInputs = this.equipmentCurveService.getEquipmentCurveDefault();
+    this.equipmentCurveForm = this.equipmentCurveService.getEquipmentCurveFormFromObj(defaultData);
   }
 
   setSmallUnit() {
@@ -62,12 +67,12 @@ export class EquipmentCurveFormComponent implements OnInit {
     this.systemAndEquipmentCurveService.currentField.next(str);
   }
 
-  changeMeasurementOption(){
+  changeMeasurementOption() {
     this.equipmentCurveForm.controls.modificationMeasurementOption.patchValue(this.equipmentCurveForm.controls.measurementOption.value);
     this.save();
   }
 
-  save(){
-    
+  save() {
+
   }
 }
