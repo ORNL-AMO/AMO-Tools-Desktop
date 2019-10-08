@@ -29,7 +29,7 @@ export class ByEquationFormComponent implements OnInit {
   }
 
   initForm() {
-    let defaultData: ByEquationInputs = this.equipmentCurveService.byEquationInputs.getValue();
+    let defaultData: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
     if (defaultData == undefined) {
       defaultData = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.distanceMeasurement);
     }
@@ -48,7 +48,7 @@ export class ByEquationFormComponent implements OnInit {
 
   save() {
     let byEquationInputs: ByEquationInputs = this.equipmentCurveService.getByEquationObjFromForm(this.byEquationForm);
-    this.equipmentCurveService.byEquationInputs.next(byEquationInputs);
+    this.systemAndEquipmentCurveService.byEquationInputs.next(byEquationInputs);
   }
 
   focusField(str: string) {

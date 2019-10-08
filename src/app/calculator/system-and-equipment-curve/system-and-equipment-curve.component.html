@@ -16,6 +16,17 @@
             <app-equipment-curve [ngClass]="{'order-1': isEquipmentCurvePrimary == true}"
                 [equipmentType]="equipmentType" [isPrimaryCalculator]="isEquipmentCurvePrimary" [settings]="settings">
             </app-equipment-curve>
+            <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
+                <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
+                    (click)="btnResetDefaults()">
+                    Reset Data
+                </button>
+                <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
+                <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+                    (click)="btnGenerateExample()">
+                    Generate Example
+                </button>
+            </div>
         </div>
     </div>
     <div class="d-flex flex-column w-50 mh-100 scroll-item">

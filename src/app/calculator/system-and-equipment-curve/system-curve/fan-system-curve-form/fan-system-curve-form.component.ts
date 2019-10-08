@@ -25,13 +25,12 @@ export class FanSystemCurveFormComponent implements OnInit {
 
   initForm() {
     let dataObj: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.value;
-    if (dataObj) {
-      this.fanSystemCurveForm = this.fanSystemCurveFormService.getFormFromObj(dataObj);
-      this.calculateFluidPowers(dataObj);
-      this.checkLossExponent(dataObj.systemLossExponent);
-    } else {
-      this.fanSystemCurveForm = this.fanSystemCurveFormService.getForm();
+    if (dataObj == undefined) {
+      dataObj = this.fanSystemCurveFormService.getFanSystemDefaults();
     }
+    this.fanSystemCurveForm = this.fanSystemCurveFormService.getFormFromObj(dataObj);
+    this.calculateFluidPowers(dataObj);
+    this.checkLossExponent(dataObj.systemLossExponent);
   }
 
   checkLossExponent(systemLossExponent: number) {

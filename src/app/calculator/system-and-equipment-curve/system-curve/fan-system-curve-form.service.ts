@@ -9,17 +9,17 @@ export class FanSystemCurveFormService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getForm(): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
-      compressibilityFactor: [.98, [Validators.required, Validators.min(0)]],
-      systemLossExponent: [1.9, [Validators.required, Validators.min(0)]],
-      pointOneFlowRate: [0, [Validators.required, Validators.min(0)]],
-      pointOnePressure: [0, [Validators.required, Validators.min(0)]],
-      pointTwo: [''],
-      pointTwoFlowRate: [0, [Validators.required, Validators.min(0)]],
-      pointTwoPressure: [0, [Validators.required, Validators.min(0)]],
-    })
-    return form;
+  getFanSystemDefaults(): FanSystemCurveData {
+    let data: FanSystemCurveData = {
+      compressibilityFactor: .98,
+      systemLossExponent: 1.9,
+      pointOneFlowRate: 0,
+      pointOnePressure: 0,
+      pointTwo: '',
+      pointTwoFlowRate: 0,
+      pointTwoPressure: 0
+    }
+    return data;
   }
 
   getObjFromForm(form: FormGroup): FanSystemCurveData {

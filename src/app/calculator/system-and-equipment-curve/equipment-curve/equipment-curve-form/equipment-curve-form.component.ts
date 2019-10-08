@@ -31,7 +31,7 @@ export class EquipmentCurveFormComponent implements OnInit {
   }
 
   initForm() {
-    let defaultData: EquipmentInputs = this.equipmentCurveService.equipmentInputs.getValue();
+    let defaultData: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
     if (defaultData == undefined) {
       defaultData = this.equipmentCurveService.getEquipmentCurveDefault();
     }
@@ -77,6 +77,6 @@ export class EquipmentCurveFormComponent implements OnInit {
 
   save() {
     let equipmentInputs: EquipmentInputs = this.equipmentCurveService.getEquipmentCurveObjFromForm(this.equipmentCurveForm);
-    this.equipmentCurveService.equipmentInputs.next(equipmentInputs);
+    this.systemAndEquipmentCurveService.equipmentInputs.next(equipmentInputs);
   }
 }

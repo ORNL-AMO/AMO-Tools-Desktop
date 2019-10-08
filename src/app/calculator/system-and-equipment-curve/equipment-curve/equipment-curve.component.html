@@ -19,16 +19,5 @@
         <app-by-equation-form *ngIf="selectedFormView == 'Equation'" [equipmentType]="equipmentType"
             [settings]="settings"></app-by-equation-form>
         <app-equipment-curve-form [equipmentType]="equipmentType" [settings]="settings"></app-equipment-curve-form>
-        <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
-            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
-                (click)="btnResetSystemCurveData()">
-                Reset Data
-            </button>
-            <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-            <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
-                (click)="btnGenerateSystemCurveExample()">
-                Generate Example
-            </button>
-        </div>
     </div>
 </div>

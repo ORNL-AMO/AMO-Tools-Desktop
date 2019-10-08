@@ -25,13 +25,12 @@ export class PumpSystemCurveFormComponent implements OnInit {
 
   initForm() {
     let dataObj: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.value;
-    if (dataObj) {
-      this.pumpSystemCurveForm = this.pumpSystemCurveFormService.getFormFromObj(dataObj);
-      this.calculateFluidPowers(dataObj);
-      this.checkLossExponent(dataObj.systemLossExponent);
-    } else {
-      this.pumpSystemCurveForm = this.pumpSystemCurveFormService.getForm();
+    if (dataObj == undefined) {
+      dataObj = this.pumpSystemCurveFormService.getPumpSystemCurveDefaults();
     }
+    this.pumpSystemCurveForm = this.pumpSystemCurveFormService.getFormFromObj(dataObj);
+    this.calculateFluidPowers(dataObj);
+    this.checkLossExponent(dataObj.systemLossExponent);
   }
 
   checkLossExponent(systemLossExponent: number) {

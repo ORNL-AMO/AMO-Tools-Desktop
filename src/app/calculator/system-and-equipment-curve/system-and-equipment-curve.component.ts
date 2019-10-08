@@ -57,4 +57,12 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     }
   }
 
+  btnGenerateExample(){
+
+  }
+
+  btnResetDefaults(){
+    
+  }
+
 }

@@ -1,0 +1,8 @@
+.btn-group{
+    display: block;
+    text-align: center;
+}
+
+.btn-group .btn-sm{
+    font-size: small !important;
+}

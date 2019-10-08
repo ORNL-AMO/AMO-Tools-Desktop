@@ -41,7 +41,7 @@ export class ByDataFormComponent implements OnInit {
   }
 
   initForm() {
-    let defaultData: ByDataInputs = this.equipmentCurveService.byDataInputs.getValue();
+    let defaultData: ByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
     if (defaultData == undefined) {
       defaultData = this.equipmentCurveService.getByDataDefault(this.settings);
     }
@@ -50,7 +50,7 @@ export class ByDataFormComponent implements OnInit {
 
   save() {
     let data = this.equipmentCurveService.getByDataObjFromForm(this.byDataForm);
-    this.equipmentCurveService.byDataInputs.next(data);
+    this.systemAndEquipmentCurveService.byDataInputs.next(data);
   }
 
   focusField(str: string) {

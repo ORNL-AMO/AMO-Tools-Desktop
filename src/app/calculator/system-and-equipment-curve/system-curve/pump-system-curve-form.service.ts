@@ -9,17 +9,17 @@ export class PumpSystemCurveFormService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getForm(): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
-      specificGravity: [1.0, [Validators.required, Validators.min(0)]],
-      systemLossExponent: [1.9, [Validators.required, Validators.min(0)]],
-      pointOneFlowRate: [0, [Validators.required, Validators.min(0)]],
-      pointOneHead: [0, [Validators.required, Validators.min(0)]],
-      pointTwo: [''],
-      pointTwoFlowRate: [0, [Validators.required, Validators.min(0)]],
-      pointTwoHead: [0, [Validators.required, Validators.min(0)]],
-    })
-    return form;
+  getPumpSystemCurveDefaults(): PumpSystemCurveData {
+    let data: PumpSystemCurveData = {
+      specificGravity: 1.0,
+      systemLossExponent: 1.9,
+      pointOneFlowRate: 0,
+      pointOneHead: 0,
+      pointTwo: '',
+      pointTwoFlowRate: 0,
+      pointTwoHead: 0,
+    };
+    return data;
   }
 
   getFormFromObj(obj: PumpSystemCurveData): FormGroup {

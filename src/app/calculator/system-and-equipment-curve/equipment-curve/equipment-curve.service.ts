@@ -6,14 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class EquipmentCurveService {
-
-  byDataInputs: BehaviorSubject<ByDataInputs>;
-  equipmentInputs: BehaviorSubject<EquipmentInputs>;
-  byEquationInputs: BehaviorSubject<ByEquationInputs>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) {
-    this.byDataInputs = new BehaviorSubject<ByDataInputs>(undefined);
-    this.equipmentInputs = new BehaviorSubject<EquipmentInputs>(undefined);
-    this.byEquationInputs = new BehaviorSubject<ByEquationInputs>(undefined);
   }
 
   //equipment curve
