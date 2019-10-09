@@ -12,6 +12,8 @@ import { EquipmentInputs, ByDataInputs, ByEquationInputs } from '../../equipment
 export class RegressionEquationsComponent implements OnInit {
   @Input()
   equipmentType: string;
+  @Input()
+  isEquipmentCurvePrimary: boolean;
 
   baselineEquipmentCurveByDataRegressionEquation: string;
   baselineEquipmentCurveByDataRSquared: number;
@@ -21,6 +23,8 @@ export class RegressionEquationsComponent implements OnInit {
 
   baselineEquipmentCurveByEquationRegressionEquation: string;
   modificationEquipmentCurveByEquationRegressionEquation: string;
+
+  systemCurveRegressionEquation: string;
 
   curveDataSubscription: Subscription;
   byDataSubscription: Subscription;
@@ -33,18 +37,24 @@ export class RegressionEquationsComponent implements OnInit {
   equipmentCurveCollapsed: string;
   systemCurveCollapsed: string;
 
-
+  equipmentLabel: string;
   constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     if (this.equipmentType == 'pump') {
+      this.equipmentLabel = 'Pump';
       this.curveDataSubscription = this.systemAndEquipmentCurveService.pumpSystemCurveData.subscribe(val => {
-
+        if (val != undefined) {
+          this.systemCurveRegressionEquation = this.regressionEquationsService.getPumpSystemCurveRegressionEquation(val);
+        }
       });
     } else {
+      this.equipmentLabel = 'Fan';
       this.curveDataSubscription = this.systemAndEquipmentCurveService.fanSystemCurveData.subscribe(val => {
-
+        if (val != undefined) {
+          this.systemCurveRegressionEquation = this.regressionEquationsService.getFanSystemCurveRegressionEquation(val);
+        }
       });
     }
 

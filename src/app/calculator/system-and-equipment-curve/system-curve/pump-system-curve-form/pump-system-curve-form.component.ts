@@ -27,6 +27,7 @@ export class PumpSystemCurveFormComponent implements OnInit {
     let dataObj: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.value;
     if (dataObj == undefined) {
       dataObj = this.pumpSystemCurveFormService.getPumpSystemCurveDefaults();
+      this.systemAndEquipmentCurveService.pumpSystemCurveData.next(dataObj);
     }
     this.pumpSystemCurveForm = this.pumpSystemCurveFormService.getFormFromObj(dataObj);
     this.calculateFluidPowers(dataObj);

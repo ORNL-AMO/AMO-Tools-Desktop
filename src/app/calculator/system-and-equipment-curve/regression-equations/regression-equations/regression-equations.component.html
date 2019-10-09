@@ -1,34 +1,50 @@
-<div *ngIf="graphPumpCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
-    <p>Pump Curve Regression: &nbsp; &nbsp; </p>
-    <p [innerHTML]="regEquation"></p>
-</div>
-<div *ngIf="graphPumpCurve" class="d-flex pt-1 w-100 justify-content-center align-items-center">
-    <p *ngIf="baselineR2 !== undefined && baselineR2 !== null">Baseline R<sup>2</sup>: &nbsp; &nbsp; </p>
-    <p *ngIf="baselineR2 !== undefined && baselineR2 !== null">{{baselineR2 | number: '.1-4'}}</p>
-</div>
-<div *ngIf="graphPumpCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
-    <p>Modified Regression: &nbsp; &nbsp; </p>
-    <p [innerHTML]="modificationRegEquation"></p>
-</div>
-<div *ngIf="graphPumpCurve" class="d-flex pt-1 w-100 justify-content-center align-items-center">
-    <p *ngIf="modificationR2 !== undefined && modificationR2 !== null">Modification R<sup>2</sup>: &nbsp; &nbsp;
-    </p>
-    <p *ngIf="modificationR2 !== undefined && modificationR2 !== null">{{modificationR2 | number: '.1-4'}}</p>
-</div>
-<div *ngIf="graphSystemCurve" class="d-flex pt-2 w-100 justify-content-center align-items-center">
-    <p>System Curve Regression: &nbsp; &nbsp; </p>
-    <p [innerHTML]="systemRegEquation"></p>
-</div>
+<label class="group-label w-100">Regression Equations</label>
 
-
-<div *ngIf="equipmentCurveCollapsed == 'open' && selectedEquipmentCurveFormView == 'Data'">
-    <span [innerHTML]="baselineEquipmentCurveByDataRegressionEquation"></span><br>
-    <span>{{baselineEquipmentCurveByDataRSquared | number: '.1-4'}}</span><br>
-    <span [innerHTML]="modificationEquipmentCurveByDataRegressionEquation"></span><br>
-    <span>{{modificationEquipmentCurveRSquared | number: '.1-4'}}</span><br>
-</div>
-
-<div *ngIf="equipmentCurveCollapsed == 'open' && selectedEquipmentCurveFormView == 'Equation'">
-    <span [innerHTML]="baselineEquipmentCurveByEquationRegressionEquation"></span><br>
-    <span [innerHTML]="modificationEquipmentCurveByEquationRegressionEquation"></span><br>
+<div class="d-flex flex-column w-100">
+    <table [ngClass]="{'order-2': isEquipmentCurvePrimary == true}" class="table table-hover table-striped w-100"
+        *ngIf="systemCurveCollapsed == 'open'">
+        <tbody>
+            <tr>
+                <td class="bold">System Curve</td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    <span [innerHTML]="systemCurveRegressionEquation"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table [ngClass]="{'order-1': isEquipmentCurvePrimary == true}" class="table table-hover table-striped w-100"
+        *ngIf="equipmentCurveCollapsed == 'open'">
+        <tbody>
+            <tr>
+                <td class="bold">Baseline {{equipmentLabel}} Curve</td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    <span *ngIf="selectedEquipmentCurveFormView == 'Data'"
+                        [innerHTML]="baselineEquipmentCurveByDataRegressionEquation"></span>
+                    <span *ngIf="selectedEquipmentCurveFormView == 'Equation'"
+                        [innerHTML]="baselineEquipmentCurveByEquationRegressionEquation"></span>
+                </td>
+            </tr>
+            <tr *ngIf="selectedEquipmentCurveFormView == 'Data'">
+                <td class="pl-2">r<sup>2</sup>: {{baselineEquipmentCurveByDataRSquared | number: '.1-4'}} </td>
+            </tr>
+            <tr>
+                <td class="bold">Modified {{equipmentLabel}} Curve</td>
+            </tr>
+            <tr>
+                <td class="pl-2">
+                    <span *ngIf="selectedEquipmentCurveFormView == 'Data'"
+                        [innerHTML]="modificationEquipmentCurveByDataRegressionEquation"></span>
+                    <span *ngIf="selectedEquipmentCurveFormView == 'Equation'"
+                        [innerHTML]="modificationEquipmentCurveByEquationRegressionEquation"></span>
+                </td>
+            </tr>
+            <tr *ngIf="selectedEquipmentCurveFormView == 'Data'">
+                <td class="pl-2">r<sup>2</sup>: {{modificationEquipmentCurveRSquared | number: '.1-4'}} </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

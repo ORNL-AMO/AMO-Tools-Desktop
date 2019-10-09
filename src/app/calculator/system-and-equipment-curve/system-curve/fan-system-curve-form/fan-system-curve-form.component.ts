@@ -27,6 +27,7 @@ export class FanSystemCurveFormComponent implements OnInit {
     let dataObj: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.value;
     if (dataObj == undefined) {
       dataObj = this.fanSystemCurveFormService.getFanSystemDefaults();
+      this.systemAndEquipmentCurveService.fanSystemCurveData.next(dataObj);
     }
     this.fanSystemCurveForm = this.fanSystemCurveFormService.getFormFromObj(dataObj);
     this.calculateFluidPowers(dataObj);

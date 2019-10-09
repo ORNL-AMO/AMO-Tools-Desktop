@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as regression from 'regression';
 import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../../equipment-curve/equipment-curve.service';
 import * as _ from 'lodash';
+import { FanSystemCurveData, PumpSystemCurveData } from '../../system-and-equipment-curve.service';
 @Injectable()
 export class RegressionEquationsService {
 
@@ -109,104 +110,50 @@ export class RegressionEquationsService {
     return result;
   }
 
+  getPumpSystemCurveRegressionEquation(data: PumpSystemCurveData): string {
+    let lossCoefficient: number = this.calculateStaticHead(
+      data.pointOneFlowRate,
+      data.pointOneHead,
+      data.pointTwoFlowRate,
+      data.pointTwoHead,
+      data.systemLossExponent
+    );
+    let staticHead: number = this.calculateStaticHead(
+      data.pointOneFlowRate,
+      data.pointOneHead,
+      data.pointTwoFlowRate,
+      data.pointTwoHead,
+      data.systemLossExponent
+    );
+    return 'Head = ' + staticHead + ' + (' + lossCoefficient + ' \xD7 flow' + '<sup>' + data.systemLossExponent + '</sup>)';
+  }
 
-  // getData(pumpCurve: PumpCurve, selectedFormView: string): Array<{ x: number, y: number }> {
-  //   let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
-  //   let maxDataFlow: number;
-  //   if (selectedFormView == 'Data') {
-  //     let tmpDataFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
-  //     maxDataFlow = tmpDataFlow.flow;
-  //     let tmpArr = new Array<any>();
-  //     pumpCurve.dataRows.forEach(val => {
-  //       tmpArr.push([val.flow, val.head]);
-  //     });
-  //     let results = regression.polynomial(tmpArr, { order: pumpCurve.dataOrder, precision: 10 });
-  //     regressionEquation.next(results.string);
-  //     this.baselineR2.next(results.r2);
-  //     for (let i = 0; i <= maxDataFlow; i = i + 10) {
-  //       let yVal = results.predict(i);
-  //       if (yVal[1] > 0) {
-  //         data.push({
-  //           x: i,
-  //           y: yVal[1]
-  //         });
-  //       }
-  //     }
-  //   } else if (selectedFormView == 'Equation') {
-  //     maxDataFlow = pumpCurve.maxFlow;
-  //     // regressionEquation.next(null);
-  //     // this.baselineR2.next(null);
-  //     for (let i = 0; i <= maxDataFlow + 10; i = i + 10) {
-  //       let yVal = this.calculateY(pumpCurve, i);
-  //       if (yVal > 0) {
-  //         data.push({
-  //           x: i,
-  //           y: yVal
-  //         });
-  //       }
-  //     }
-  //   }
-  //   return data;
-  // }
+  getFanSystemCurveRegressionEquation(data: FanSystemCurveData): string {
+    let lossCoefficient: number = this.calculateStaticHead(
+      data.pointOneFlowRate,
+      data.pointOnePressure,
+      data.pointTwoFlowRate,
+      data.pointTwoPressure,
+      data.systemLossExponent
+    );
+    let staticPressure: number = this.calculateStaticHead(
+      data.pointOneFlowRate,
+      data.pointOnePressure,
+      data.pointTwoFlowRate,
+      data.pointTwoPressure,
+      data.systemLossExponent
+    );
+    return 'Pressure = ' + staticPressure + ' + (' + lossCoefficient + ' \xD7 flow' + '<sup>' + data.systemLossExponent + '</sup>)';
+  }
 
-  // getModifiedData(pumpCurve: PumpCurve, selectedFormView: string, baseline: number, modified: number): Array<{ x: number, y: number }> {
-  //   let data: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
-  //   let ratio = modified / baseline;
-  //   let maxDataFlow: number;
-  //   if (selectedFormView == 'Data') {
-  //     let tmpDataFlow = _.maxBy(pumpCurve.dataRows, (val) => { return val.flow });
-  //     maxDataFlow = tmpDataFlow.flow;
-  //     let tmpArr = new Array<any>();
-  //     pumpCurve.dataRows.forEach(val => {
-  //       tmpArr.push([val.flow, val.head]);
-  //     });
-  //     let results = regression.polynomial(tmpArr, { order: pumpCurve.dataOrder, precision: 10 });
-  //     this.modificationRegEquation.next(results.string);
-  //     this.modificationR2.next(results.r2);
-  //     for (let i = 0; i <= maxDataFlow; i = i + 10) {
-  //       let yVal = results.predict(i);
-  //       if (yVal[1] > 0) {
-  //         data.push({
-  //           x: i * ratio,
-  //           y: yVal[1] * Math.pow(ratio, 2)
-  //         })
-  //       }
-  //     }
-  //   } else if (selectedFormView == 'Equation') {
-  //     maxDataFlow = pumpCurve.maxFlow;
-  //     this.modificationRegEquation.next(null);
-  //     this.modificationR2.next(null);
-  //     data.push({
-  //       x: 0 * ratio,
-  //       y: this.calculateY(pumpCurve, 0) * Math.pow(ratio, 2)
-  //     });
-  //     for (let i = 10; i <= maxDataFlow + 10; i = i + 10) {
-  //       let yVal = this.calculateY(pumpCurve, i);
-  //       if (yVal > 0) {
-  //         data.push({
-  //           x: i * ratio,
-  //           y: yVal * Math.pow(ratio, 2)
-  //         })
-  //       }
-  //     }
-  //   }
-  //   let data2 = new Array<any>();
-  //   for (let i = 0; i < data.length; i++) {
-  //     data2.push([data[i].x, data[i].y]);
-  //   }
-  //   let data3 = new Array<any>();
-  //   let results = regression.polynomial(data2, { order: pumpCurve.dataOrder, precision: 10 });
-  //   this.modificationRegEquation.next(results.string);
-  //   this.modificationR2.next(results.r2);
-  //   for (let i = 0; i <= maxDataFlow * ratio; i = i + 10) {
-  //     let yVal = results.predict(i)
-  //     if (yVal[1] > 0) {
-  //       data3.push({
-  //         x: i,
-  //         y: yVal[1]
-  //       });
-  //     }
-  //   }
-  //   return data3;
-  // }
+  calculateLossCoefficient(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {
+    //from PSAT/curve.html -> k = (h2-h1)/(Math.pow(f2,C)-Math.pow(f1,C))
+    return (headTwo - headOne) / (Math.pow(flowRateTwo, lossExponent) - Math.pow(flowRateOne, lossExponent));
+  }
+
+  calculateStaticHead(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {
+    //from PSAT/curve.html -> hS = h1-(Math.pow(f1,1.9) * (h2-h1) / (Math.pow(f2,C) - Math.pow(f1,C)))
+    let tmpStaticHead = headOne - (Math.pow(flowRateOne, lossExponent) * (headTwo - headOne) / (Math.pow(flowRateTwo, lossExponent) - Math.pow(flowRateOne, lossExponent)));
+    return tmpStaticHead;
+  }
 }

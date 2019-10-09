@@ -16,7 +16,7 @@ export class FanSystemCurveFormService {
       pointOneFlowRate: 0,
       pointOnePressure: 0,
       pointTwo: '',
-      pointTwoFlowRate: 0,
+      pointTwoFlowRate: 1,
       pointTwoPressure: 0
     }
     return data;
