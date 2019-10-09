@@ -21,6 +21,8 @@ import { EquipmentCurveFormComponent } from './equipment-curve/equipment-curve-f
 import { EquipmentCurveService } from './equipment-curve/equipment-curve.service';
 import { RegressionEquationsComponent } from './regression-equations/regression-equations.component';
 import { RegressionEquationsService } from './regression-equations/regression-equations.service';
+import { SystemAndEquipmentCurveGraphComponent } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.component';
+import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,7 @@ import { RegressionEquationsService } from './regression-equations/regression-eq
     FanCurveHelpComponent, 
     FanSystemCurveHelpComponent, 
     PumpSystemCurveHelpComponent, 
-    PumpCurveHelpComponent, ByDataFormComponent, ByEquationFormComponent, EquipmentCurveFormComponent, RegressionEquationsComponent
+    PumpCurveHelpComponent, ByDataFormComponent, ByEquationFormComponent, EquipmentCurveFormComponent, RegressionEquationsComponent, SystemAndEquipmentCurveGraphComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,8 @@ import { RegressionEquationsService } from './regression-equations/regression-eq
     PumpSystemCurveFormService,
     FanSystemCurveFormService,
     EquipmentCurveService,
-    RegressionEquationsService
+    RegressionEquationsService,
+    SystemAndEquipmentCurveGraphService
   ],
   exports: [
     SystemAndEquipmentCurveComponent
