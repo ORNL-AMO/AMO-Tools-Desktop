@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { BoilerBlowdownRateService, BoilerBlowdownRateResults, BoilerBlowdownRateInputs } from '../boiler-blowdown-rate.service';
 import { Subscription } from 'rxjs';
@@ -22,6 +22,9 @@ export class BlowdownRateResultsComponent implements OnInit {
   showBoiler: boolean;
   showOperationsSubscription: Subscription;
   showOperations: boolean;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
   constructor(private boilerBlowdownRateService: BoilerBlowdownRateService) { }
 
   ngOnInit() {
@@ -102,5 +105,9 @@ export class BlowdownRateResultsComponent implements OnInit {
     } else {
       this.baselineResults = this.getEmptyResults();
     }
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 }

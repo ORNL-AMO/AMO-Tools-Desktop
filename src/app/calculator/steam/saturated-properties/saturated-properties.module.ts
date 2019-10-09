@@ -9,13 +9,15 @@ import { SaturatedPropertiesTableComponent } from './saturated-properties-table/
 import { SaturatedPropertiesPhGraphComponent } from './saturated-properties-ph-graph/saturated-properties-ph-graph.component';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     SimpleTooltipModule,
-    SharedPipesModule
+    SharedPipesModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     SaturatedPropertiesGraphComponent, SaturatedPropertiesComponent, SaturatedPropertiesFormComponent, SaturatedPropertiesHelpComponent, SaturatedPropertiesTableComponent, SaturatedPropertiesPhGraphComponent

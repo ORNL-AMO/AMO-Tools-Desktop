@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
@@ -19,6 +19,8 @@ export class SteamPropertiesTableComponent implements OnInit {
 
   rowData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>;
 
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
@@ -54,5 +56,9 @@ export class SteamPropertiesTableComponent implements OnInit {
 
   deleteRow(index: number) {
     this.rowData.splice(index, 1);
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText.replace(/Delete/g, '');
   }
 }
