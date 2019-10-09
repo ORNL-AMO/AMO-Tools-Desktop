@@ -121,6 +121,25 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, yAxisLabel);
   }
 
+  setAxis() {
+    // let maxX = this.getXScaleMax(data, dataModification, this.pointOne.form.controls.flowRate.value, this.pointTwo.form.controls.flowRate.value);
+    // let maxY = this.getYScaleMax(data, dataModification, this.pointOne.form.controls.head.value, this.pointTwo.form.controls.head.value);
+    
+    // //create x and y graph scales
+    // let xRange: { min: number, max: number } = { min: 0, max: this.width };
+    // let xDomain: { min: number, max: number } = { min: 0, max: this.maxX.x + paddingX };
+    // let yRange: { min: number, max: number } = { min: this.height, max: 0 };
+    // let yDomain: { min: number, max: number } = { min: 0, max: this.maxY.y + paddingY };
+    // this.x = this.lineChartHelperService.setScale("linear", xRange, xDomain);
+    // this.y = this.lineChartHelperService.setScale("linear", yRange, yDomain);
+    // this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 5, null, null, null, tickFormat);
+    // this.lineChartHelperService.setYAxis(this.svg, this.y, this.width, this.isGridToggled, 6, 0, 0, 15, null);
+  }
+
+  setScales() {
+
+  }
+
   setColumnTitles() {
     this.columnTitles = this.systemAndEquipmentCurveGraphService.initColumnTitles(this.settings, this.equipmentType, this.isEquipmentCurveShown, this.isEquipmentModificationShown, this.isSystemCurveShown);
   }

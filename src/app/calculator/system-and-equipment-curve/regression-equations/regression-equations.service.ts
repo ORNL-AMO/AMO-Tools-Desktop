@@ -3,19 +3,48 @@ import * as regression from 'regression';
 import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../equipment-curve/equipment-curve.service';
 import * as _ from 'lodash';
 import { FanSystemCurveData, PumpSystemCurveData } from '../system-and-equipment-curve.service';
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class RegressionEquationsService {
 
-  constructor() { }
+  baselineEquipmentCurveByDataRegressionEquation: BehaviorSubject<string>;
+  baselineEquipmentCurveByDataRSquared: BehaviorSubject<number>;
 
-  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string): { baselineRegressionEquation: string, baselineRSquared: number, modificationRegressionEquation: string, modificationRSquared: number } {
+  modificationEquipmentCurveByDataRegressionEquation: BehaviorSubject<string>;
+  modificationEquipmentCurveRSquared: BehaviorSubject<number>;
 
-    let dataPairs: Array<Array<number>> = new Array();
+  baselineEquipmentCurveByEquationRegressionEquation: BehaviorSubject<string>;
+  modificationEquipmentCurveByEquationRegressionEquation: BehaviorSubject<string>;
+
+  systemCurveRegressionEquation: BehaviorSubject<string>;
+  constructor() {
+    this.baselineEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>(undefined);
+    this.baselineEquipmentCurveByDataRSquared = new BehaviorSubject<number>(undefined);
+
+    this.modificationEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>(undefined);
+    this.modificationEquipmentCurveRSquared = new BehaviorSubject<number>(undefined);
+
+    this.baselineEquipmentCurveByEquationRegressionEquation = new BehaviorSubject<string>(undefined);
+    this.modificationEquipmentCurveByEquationRegressionEquation = new BehaviorSubject<string>(undefined);
+
+    this.systemCurveRegressionEquation = new BehaviorSubject<string>(undefined);
+  }
+
+  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string): {
+    baselineRegressionEquation: string,
+    baselineRSquared: number,
+    modificationRegressionEquation: string,
+    modificationRSquared: number,
+    baselineDataPairs: Array<Array<number>>,
+    modifiedDataPairs: Array<Array<number>>
+  } {
+
+    let baselineDataPairs: Array<Array<number>> = new Array();
     byData.dataRows.forEach(row => {
-      dataPairs.push([row.flow, row.secondValue]);
+      baselineDataPairs.push([row.flow, row.secondValue]);
     })
 
-    let baselineResults = regression.polynomial(dataPairs, { order: byData.dataOrder, precision: 10 });
+    let baselineResults = regression.polynomial(baselineDataPairs, { order: byData.dataOrder, precision: 10 });
     let baselineRegressionEquation: string = baselineResults.string;
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, secondValueLabel);
 
@@ -39,10 +68,16 @@ export class RegressionEquationsService {
     let modificationResults = regression.polynomial(modifiedDataPairs, { order: byData.dataOrder, precision: 10 });
     let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byData.dataOrder, secondValueLabel);
 
-    return { baselineRegressionEquation: baselineRegressionEquation, baselineRSquared: baselineResults.r2, modificationRSquared: modificationResults.r2, modificationRegressionEquation: modificationRegressionEquation }
+    return {
+      baselineRegressionEquation: baselineRegressionEquation,
+      baselineRSquared: baselineResults.r2,
+      modificationRSquared: modificationResults.r2,
+      modificationRegressionEquation: modificationRegressionEquation,
+      baselineDataPairs: baselineDataPairs,
+      modifiedDataPairs: modifiedDataPairs
+    }
 
   }
-
 
   formatRegressionEquation(regressionEquation: string, order: number, secondValueLabel): string {
     for (let i = 0; i < order; i++) {
