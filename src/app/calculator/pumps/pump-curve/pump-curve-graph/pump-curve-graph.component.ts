@@ -420,6 +420,7 @@ export class PumpCurveGraphComponent implements OnInit {
       }
       //append and draw baseline curve
       this.linePump = this.lineChartHelperService.appendLine(this.svg, "#145A32", "2px");
+      debugger
       this.linePump = this.lineChartHelperService.drawLine(this.linePump, this.x, this.y, data);
       this.focusPump = this.lineChartHelperService.appendFocus(this.svg, "focusPump");
       allData.push(data);

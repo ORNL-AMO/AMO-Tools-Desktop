@@ -108,6 +108,10 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.next(results.baselineRSquared);
     this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.next(results.modificationRegressionEquation);
     this.regressionEquationsService.modificationEquipmentCurveRSquared.next(results.modificationRSquared);
+    if(this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Data'){
+      this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.next(results.baselineDataPairs);
+      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.next(results.modifiedDataPairs);
+    }
   }
 
   calculateByEquationRegressions(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs) {
@@ -118,6 +122,10 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(byEquationInputs, equipmentInputs, secondValueLabel);
     this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.next(results.baselineRegressionEquation);
     this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.next(results.modificationRegressionEquation);
+    if(this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Equation'){
+      this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.next(results.baselineDataPairs);
+      this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.next(results.modifiedDataPairs);
+    }
   }
 
   setTab(str: string) {

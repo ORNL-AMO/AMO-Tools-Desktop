@@ -35,37 +35,39 @@ export class RegressionEquationsService {
     baselineRSquared: number,
     modificationRegressionEquation: string,
     modificationRSquared: number,
-    baselineDataPairs: Array<Array<number>>,
-    modifiedDataPairs: Array<Array<number>>
+    baselineDataPairs: Array<{ x: number, y: number }>,
+    modifiedDataPairs: Array<{ x: number, y: number }>
   } {
 
-    let baselineDataPairs: Array<Array<number>> = new Array();
+    let baselineData: Array<Array<number>> = new Array();
+    let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
     byData.dataRows.forEach(row => {
-      baselineDataPairs.push([row.flow, row.secondValue]);
+      baselineData.push([row.flow, row.secondValue]);
+      baselineDataPairs.push({ x: row.flow, y: row.secondValue });
     })
 
-    let baselineResults = regression.polynomial(baselineDataPairs, { order: byData.dataOrder, precision: 10 });
+    let baselineResults = regression.polynomial(baselineData, { order: byData.dataOrder, precision: 10 });
     let baselineRegressionEquation: string = baselineResults.string;
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, secondValueLabel);
 
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
     let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
-    let modificationData: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
+    let modifiedDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
+    let modificationData: Array<Array<number>> = new Array();
+
     for (let i = 0; i <= maxDataFlow; i = i + 10) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
-        modificationData.push({
-          x: i * ratio,
-          y: yVal[1] * Math.pow(ratio, 2)
-        })
+        let x: number = i * ratio;
+        let y: number = yVal[1] * Math.pow(ratio, 2);
+        modifiedDataPairs.push({
+          x: x,
+          y: y
+        });
+        modificationData.push([x, y]);
       }
     }
-
-    let modifiedDataPairs: Array<Array<number>> = new Array();
-    modificationData.forEach(dataPoint => {
-      modifiedDataPairs.push([dataPoint.x, dataPoint.y]);
-    })
-    let modificationResults = regression.polynomial(modifiedDataPairs, { order: byData.dataOrder, precision: 10 });
+    let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 10 });
     let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byData.dataOrder, secondValueLabel);
 
     return {
@@ -93,7 +95,12 @@ export class RegressionEquationsService {
     return regressionEquation;
   }
 
-  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string): { baselineRegressionEquation: string, modificationRegressionEquation: string } {
+  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string): {
+    baselineRegressionEquation: string,
+    modificationRegressionEquation: string,
+    baselineDataPairs: Array<{ x: number, y: number }>,
+    modifiedDataPairs: Array<{ x: number, y: number }>
+  } {
     //baseline
     let baselineRegressionEquation = byEquationInputs.flowTwo + '(flow)&#x00B2; + ' + byEquationInputs.flow + ('(flow) +') + byEquationInputs.constant;
     if (byEquationInputs.equationOrder > 2 && byEquationInputs.flowThree) {
@@ -112,33 +119,36 @@ export class RegressionEquationsService {
     for (let i = 0; i < byEquationInputs.equationOrder; i++) {
       baselineRegressionEquation = baselineRegressionEquation.replace('+ -', '- ');
     }
-
+    // let baselineCalculationData: Array<Array<number>> = this.calculateByEquationDataPairs(byEquationInputs, 1);
+    let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1).dataPairs;
     //modification
-    let dataPoints: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
-    let maxDataFlow: number = byEquationInputs.maxFlow;
-    dataPoints.push({
-      x: 0 * ratio,
-      y: this.calculateY(byEquationInputs, 0) * Math.pow(ratio, 2)
-    });
-    for (let i = 10; i <= maxDataFlow + 10; i = i + 10) {
+    let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio);
+    let modificationResults = regression.polynomial(modifiedData.calculationData, { order: byEquationInputs.equationOrder, precision: 10 });
+    let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byEquationInputs.equationOrder, secondValueLabel);
+    return {
+      baselineRegressionEquation: baselineRegressionEquation,
+      modificationRegressionEquation: modificationRegressionEquation,
+      baselineDataPairs: baselineDataPairs,
+      modifiedDataPairs: modifiedData.dataPairs
+    };
+  }
+
+  calculateByEquationData(byEquationInputs: ByEquationInputs, ratio): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
+    let calculationData: Array<Array<number>> = new Array();
+    let dataPairs: Array<{ x: number, y: number }> = new Array();
+    for (let i = 0; i <= byEquationInputs.maxFlow + 10; i = i + 10) {
       let yVal = this.calculateY(byEquationInputs, i);
       if (yVal > 0) {
-        dataPoints.push({
-          x: i * ratio,
-          y: yVal * Math.pow(ratio, 2)
-        })
+        let x: number = i * ratio;
+        let y: number = yVal * Math.pow(ratio, 2);
+        calculationData.push([x, y]);
+        dataPairs.push({ x: x, y: y });
       }
     }
-    let modificationData = new Array<any>();
-    dataPoints.forEach(dataPoint => {
-      modificationData.push([dataPoint.x, dataPoint.y]);
-    });
-    let modificationResults = regression.polynomial(modificationData, { order: byEquationInputs.equationOrder, precision: 10 });
-    let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byEquationInputs.equationOrder, secondValueLabel);
-
-    return { baselineRegressionEquation: baselineRegressionEquation, modificationRegressionEquation: modificationRegressionEquation };
+    return { calculationData: calculationData, dataPairs: dataPairs };
   }
+
 
   calculateY(data: ByEquationInputs, flow: number): number {
     let result = data.constant + (data.flow * flow) + (data.flowTwo * Math.pow(flow, 2)) + (data.flowThree * Math.pow(flow, 3)) + (data.flowFour * Math.pow(flow, 4)) + (data.flowFive * Math.pow(flow, 5)) + (data.flowSix * Math.pow(flow, 6));
