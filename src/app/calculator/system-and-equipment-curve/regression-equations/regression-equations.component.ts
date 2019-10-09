@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
-import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from './regression-equations.service';
-import { EquipmentInputs, ByDataInputs, ByEquationInputs } from '../../equipment-curve/equipment-curve.service';
+import { EquipmentInputs, ByDataInputs, ByEquationInputs } from '../equipment-curve/equipment-curve.service';
 
 @Component({
   selector: 'app-regression-equations',

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as regression from 'regression';
-import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../../equipment-curve/equipment-curve.service';
+import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../equipment-curve/equipment-curve.service';
 import * as _ from 'lodash';
-import { FanSystemCurveData, PumpSystemCurveData } from '../../system-and-equipment-curve.service';
+import { FanSystemCurveData, PumpSystemCurveData } from '../system-and-equipment-curve.service';
 @Injectable()
 export class RegressionEquationsService {
 
