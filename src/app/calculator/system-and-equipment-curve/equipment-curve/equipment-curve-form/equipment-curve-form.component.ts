@@ -77,7 +77,11 @@ export class EquipmentCurveFormComponent implements OnInit {
   }
 
   save() {
-    let equipmentInputs: EquipmentInputs = this.equipmentCurveService.getEquipmentCurveObjFromForm(this.equipmentCurveForm);
-    this.systemAndEquipmentCurveService.equipmentInputs.next(equipmentInputs);
+    if (this.equipmentCurveForm.valid) {
+      let equipmentInputs: EquipmentInputs = this.equipmentCurveService.getEquipmentCurveObjFromForm(this.equipmentCurveForm);
+      this.systemAndEquipmentCurveService.equipmentInputs.next(equipmentInputs);
+    } else {
+      this.systemAndEquipmentCurveService.equipmentInputs.next(undefined);
+    }
   }
 }

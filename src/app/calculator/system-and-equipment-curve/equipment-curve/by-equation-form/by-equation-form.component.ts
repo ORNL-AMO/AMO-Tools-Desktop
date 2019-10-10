@@ -48,8 +48,13 @@ export class ByEquationFormComponent implements OnInit {
   }
 
   save() {
-    let byEquationInputs: ByEquationInputs = this.equipmentCurveService.getByEquationObjFromForm(this.byEquationForm);
-    this.systemAndEquipmentCurveService.byEquationInputs.next(byEquationInputs);
+    if(this.byEquationForm.valid){
+      let byEquationInputs: ByEquationInputs = this.equipmentCurveService.getByEquationObjFromForm(this.byEquationForm);
+      this.systemAndEquipmentCurveService.byEquationInputs.next(byEquationInputs);
+    }else{
+      this.systemAndEquipmentCurveService.byEquationInputs.next(undefined);
+    }
+    
   }
 
   focusField(str: string) {

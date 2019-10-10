@@ -52,10 +52,16 @@ export class FanSystemCurveFormComponent implements OnInit {
   }
 
   saveChanges() {
-    let dataObj: FanSystemCurveData = this.fanSystemCurveFormService.getObjFromForm(this.fanSystemCurveForm);
-    this.checkLossExponent(dataObj.systemLossExponent);
-    this.calculateFluidPowers(dataObj);
-    this.systemAndEquipmentCurveService.fanSystemCurveData.next(dataObj);
+    if (this.fanSystemCurveForm.valid) {
+      let dataObj: FanSystemCurveData = this.fanSystemCurveFormService.getObjFromForm(this.fanSystemCurveForm);
+      this.checkLossExponent(dataObj.systemLossExponent);
+      this.calculateFluidPowers(dataObj);
+      this.systemAndEquipmentCurveService.fanSystemCurveData.next(dataObj);
+    } else {
+      this.pointOneFluidPower = 0;
+      this.pointTwoFluidPower = 0;
+      this.systemAndEquipmentCurveService.fanSystemCurveData.next(undefined);
+    }
   }
 
   calculateFluidPowers(fanSystemCurveData: FanSystemCurveData) {

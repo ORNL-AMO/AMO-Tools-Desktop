@@ -50,8 +50,12 @@ export class ByDataFormComponent implements OnInit {
   }
 
   save() {
-    let data = this.equipmentCurveService.getByDataObjFromForm(this.byDataForm);
-    this.systemAndEquipmentCurveService.byDataInputs.next(data);
+    if (this.byDataForm.valid) {
+      let data = this.equipmentCurveService.getByDataObjFromForm(this.byDataForm);
+      this.systemAndEquipmentCurveService.byDataInputs.next(data);
+    } else {
+      this.systemAndEquipmentCurveService.byDataInputs.next(undefined);
+    }
   }
 
   focusField(str: string) {

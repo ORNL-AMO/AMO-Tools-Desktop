@@ -120,6 +120,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.drawEquipmentCurve();
     if (this.isSystemCurveShown && this.isEquipmentCurveShown) {
       this.addIntersectionPoints();
+    } else {
+      d3.select(this.ngChart.nativeElement).selectAll('#intersectBaseline').remove();
+      d3.select(this.ngChart.nativeElement).selectAll('#intersectModification').remove();
     }
   }
 
