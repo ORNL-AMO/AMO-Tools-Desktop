@@ -32,8 +32,8 @@ export class ByEquationFormComponent implements OnInit {
     let defaultData: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
     if (defaultData == undefined) {
       defaultData = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.distanceMeasurement);
-      this.systemAndEquipmentCurveService.byEquationInputs.next(defaultData);
     }
+    this.systemAndEquipmentCurveService.byEquationInputs.next(defaultData);
     this.byEquationForm = this.equipmentCurveService.getByEquationFormFromObj(defaultData);
   }
 

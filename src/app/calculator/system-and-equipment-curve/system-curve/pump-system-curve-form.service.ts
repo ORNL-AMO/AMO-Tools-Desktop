@@ -16,8 +16,8 @@ export class PumpSystemCurveFormService {
       pointOneFlowRate: 0,
       pointOneHead: 0,
       pointTwo: '',
-      pointTwoFlowRate: 1,
-      pointTwoHead: 0,
+      pointTwoFlowRate: 600,
+      pointTwoHead: 1000,
     };
     return data;
   }

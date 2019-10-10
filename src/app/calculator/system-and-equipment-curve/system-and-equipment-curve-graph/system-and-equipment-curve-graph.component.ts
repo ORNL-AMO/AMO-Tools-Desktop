@@ -7,6 +7,7 @@ import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { EquipmentInputs } from '../equipment-curve/equipment-curve.service';
+import { RegressionEquationsService } from '../regression-equations/regression-equations.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve-graph',
@@ -37,6 +38,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   equipmentInputsSub: Subscription;
   baselineEquipmentCurveDataPairsSub: Subscription;
   modificationEquipmentCurveDataPairsSub: Subscription;
+  curveDataSubscription: Subscription;
 
   baselineEquipmentLine: d3.Selection<any>;
   modificationEquipmentLine: d3.Selection<any>;
@@ -47,45 +49,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   xDomain: { min: number, max: number };
   yDomain: { min: number, max: number }
   constructor(private lineChartHelperService: LineChartHelperService, private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
-    private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
+    private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService) { }
 
   ngOnInit() {
-    // this.systemAndEquipmentCurveService.byDataInputs
-    // this.systemAndEquipmentCurveService.byEquationInputs
-    this.equipmentCurveCollapsedSub = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.subscribe(val => {
-      if (val != undefined) {
-        this.isEquipmentCurveShown = (val == 'open');
-        this.setColumnTitles();
-        this.setAxis();
-        this.drawEquipmentCurve();
-      }
-    });
-    this.equipmentInputsSub = this.systemAndEquipmentCurveService.equipmentInputs.subscribe(val => {
-      if (val != undefined) {
-        this.isEquipmentModificationShown = (val.baselineMeasurement != val.modificationMeasurementOption);
-        this.setColumnTitles();
-        this.setAxis();
-      }
-    });
-    // this.systemAndEquipmentCurveService.fanSystemCurveData
-    // this.systemAndEquipmentCurveService.pumpSystemCurveData
-    this.systemCurveCollapsedSub = this.systemAndEquipmentCurveService.systemCurveCollapsed.subscribe(val => {
-      this.isSystemCurveShown = (val == 'open');
-      this.setColumnTitles();
-      this.setAxis();
-    });
-    this.baselineEquipmentCurveDataPairsSub = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.subscribe(baselinePair => {
-      if (baselinePair != undefined) {
-        this.setAxis();
-        this.drawEquipmentCurve();
-      }
-    });
-    this.modificationEquipmentCurveDataPairsSub = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.subscribe(modificationPairs => {
-      if (modificationPairs != undefined) {
-        this.setAxis();
-        this.drawEquipmentCurve();
-      }
-    });
   }
 
   ngOnDestroy() {
@@ -94,12 +60,64 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.equipmentCurveCollapsedSub.unsubscribe();
     this.baselineEquipmentCurveDataPairsSub.unsubscribe();
     this.modificationEquipmentCurveDataPairsSub.unsubscribe();
+    this.curveDataSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {
     this.setGraphSize();
     this.createSVG();
     this.setAxisLabels();
+    this.equipmentCurveCollapsedSub = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.subscribe(val => {
+      if (val != undefined) {
+        this.isEquipmentCurveShown = (val == 'open');
+        this.setColumnTitles();
+        this.createGraph();
+      }
+    });
+    this.equipmentInputsSub = this.systemAndEquipmentCurveService.equipmentInputs.subscribe(val => {
+      if (val != undefined) {
+        this.isEquipmentModificationShown = (val.baselineMeasurement != val.modificationMeasurementOption);
+        this.setColumnTitles();
+        this.createGraph();
+      }
+    });
+    this.systemCurveCollapsedSub = this.systemAndEquipmentCurveService.systemCurveCollapsed.subscribe(val => {
+      if (val != undefined) {
+        this.isSystemCurveShown = (val == 'open');
+        this.setColumnTitles();
+        this.createGraph();
+      }
+    });
+    this.baselineEquipmentCurveDataPairsSub = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.subscribe(baselinePair => {
+      if (baselinePair != undefined) {
+        this.createGraph();
+      }
+    });
+    this.modificationEquipmentCurveDataPairsSub = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.subscribe(modificationPairs => {
+      if (modificationPairs != undefined) {
+        this.createGraph();
+      }
+    });
+
+    if (this.equipmentType == 'pump') {
+      this.curveDataSubscription = this.systemAndEquipmentCurveService.pumpSystemCurveData.subscribe(pumpSystemCurve => {
+        if (pumpSystemCurve != undefined) {
+          this.createGraph();
+        }
+      });
+    } else {
+      this.curveDataSubscription = this.systemAndEquipmentCurveService.fanSystemCurveData.subscribe(fanSystemCurve => {
+        if (fanSystemCurve != undefined) {
+          this.createGraph();
+        }
+      });
+    }
+  }
+
+  createGraph() {
+    this.setAxis();
+    this.drawSystemCurve();
+    this.drawEquipmentCurve();
   }
 
   //setup
@@ -145,43 +163,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
   setAxis() {
-    let maxX: { x: number, y: number } = { x: 0, y: 0 };
-    let maxY: { x: number, y: number } = { x: 0, y: 0 };
     d3.select(this.ngChart.nativeElement).selectAll('.axis-label').remove();
-
-    if (this.isEquipmentCurveShown == true) {
-      let baselineEquipmentData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.getValue();
-      let modificationEqupmentData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
-      let combinedData: Array<{ x: number, y: number }> = baselineEquipmentData.concat(modificationEqupmentData);
-      maxX = _.maxBy(combinedData, (data) => { return data.x });
-      maxY = _.maxBy(combinedData, (data) => { return data.y });
-    }
-
-    if (this.isSystemCurveShown == true) {
-      if (this.equipmentType == 'pump') {
-        let pumpSystemCurveData: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue();
-        let maxXValue: number = _.max([maxX.x, pumpSystemCurveData.pointOneFlowRate, pumpSystemCurveData.pointTwoFlowRate]);
-        maxX.x = maxXValue;
-        let maxYValue: number = _.max([maxY.y, pumpSystemCurveData.pointOneHead, pumpSystemCurveData.pointTwoHead]);
-        maxY.y = maxYValue;
-      } else if (this.equipmentType == 'fan') {
-        let fanSystemCurveData: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.getValue();
-        let maxXValue: number = _.max([maxX.x, fanSystemCurveData.pointOneFlowRate, fanSystemCurveData.pointTwoFlowRate]);
-        maxX.x = maxXValue;
-        let maxYValue: number = _.max([maxY.y, fanSystemCurveData.pointOnePressure, fanSystemCurveData.pointTwoPressure]);
-        maxY.y = maxYValue;
-      }
-    }
-
-    let paddingX = maxX.x * 0.1;
-    let paddingY = maxY.y * 0.1;
-    //create x and y graph scales
-    let xRange: { min: number, max: number } = { min: 0, max: this.width };
-    this.xDomain = { min: 0, max: maxX.x + paddingX };
-    let yRange: { min: number, max: number } = { min: this.height, max: 0 };
-    this.yDomain = { min: 0, max: maxY.y + paddingY };
-    this.x = this.lineChartHelperService.setScale("linear", xRange, this.xDomain);
-    this.y = this.lineChartHelperService.setScale("linear", yRange, this.yDomain);
+    let domainAndRanges = this.systemAndEquipmentCurveGraphService.getGraphDomainAndRange(this.isEquipmentCurveShown, this.isSystemCurveShown, this.equipmentType, this.width, this.height);
+    this.xDomain = domainAndRanges.xDomain;
+    this.yDomain = domainAndRanges.yDomain;
+    this.x = this.lineChartHelperService.setScale("linear", domainAndRanges.xRange, this.xDomain);
+    this.y = this.lineChartHelperService.setScale("linear", domainAndRanges.yRange, this.yDomain);
     let tickFormat = d3.format("d")
     this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 5, null, null, null, tickFormat);
     this.lineChartHelperService.setYAxis(this.svg, this.y, this.width, this.isGridToggled, 6, 0, 0, 15, null);
@@ -198,9 +185,13 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       if (baselinePair != undefined) {
         let modificationPairs: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
         if (modificationPairs != undefined) {
-          this.drawBaselineEquipmentCurve();
-          if (this.isEquipmentCurveShown) {
-            this.drawModificationEquipmentCurve();
+          this.setAxis();
+          this.drawBaselineEquipmentCurve(baselinePair);
+          let equipmentInputs: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
+          if (equipmentInputs && (equipmentInputs.baselineMeasurement != equipmentInputs.modifiedMeasurement)) {
+            this.drawModificationEquipmentCurve(modificationPairs);
+          }else{
+            d3.select(this.ngChart.nativeElement).selectAll('.modification-equipment-curve').remove();           
           }
         }
       }
@@ -211,28 +202,50 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   }
 
 
-  drawBaselineEquipmentCurve() {
+  drawBaselineEquipmentCurve(baselineData: Array<{ x: number, y: number }>) {
     d3.select(this.ngChart.nativeElement).selectAll('.baseline-equipment-curve').remove();
-    let baselineData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.getValue();
     this.baselineEquipmentLine = this.lineChartHelperService.appendLine(this.svg, "#145A32", "2px");
     this.baselineEquipmentLine = this.lineChartHelperService.drawLine(this.baselineEquipmentLine, this.x, this.y, baselineData, 'baseline-equipment-curve');
     // this.focusPump = this.lineChartHelperService.appendFocus(this.svg, "focusPump");
   }
 
-  drawModificationEquipmentCurve() {
+  drawModificationEquipmentCurve(modificationData: Array<{ x: number, y: number }>) {
     d3.select(this.ngChart.nativeElement).selectAll('.modification-equipment-curve').remove();
-    let modificationData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
     this.modificationEquipmentLine = this.lineChartHelperService.appendLine(this.svg, "#3498DB", "2px");
     this.modificationEquipmentLine = this.lineChartHelperService.drawLine(this.modificationEquipmentLine, this.x, this.y, modificationData, 'modification-equipment-curve');
     // this.focusPump = this.lineChartHelperService.appendFocus(this.svg, "focusPump");
   }
 
-  //system curves
+  //system curve
   drawSystemCurve() {
-    // d3.select(this.ngChart.nativeElement).selectAll('.system-curve').remove();
-    // let systemCurveData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
-    // this.systemCurveLine = this.lineChartHelperService.appendLine(this.svg, "red", "2px", "stroke-dasharray", "3, 3");
-    // this.systemCurveLine = this.lineChartHelperService.drawLine(this.systemCurveLine, this.x, this.y, dataSystem);
+    d3.select(this.ngChart.nativeElement).selectAll('.system-curve').remove();
+    if (this.equipmentType == 'pump' && this.isSystemCurveShown == true) {
+      let pumpSystemCurveData: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue();
+      if (pumpSystemCurveData != undefined) {
+        this.drawPumpSystemCurve(pumpSystemCurveData);
+      }
+    } else if (this.equipmentType == 'fan' && this.isSystemCurveShown == true) {
+      let fanSystemCurveData: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.getValue();
+      if (fanSystemCurveData != undefined) {
+        this.drawFanSystemCurve(fanSystemCurveData);
+      }
+    }
+  }
+
+
+  drawPumpSystemCurve(pumpSystemCurveData: PumpSystemCurveData) {
+    let pumpSystemCurveRegressionData = this.regressionEquationsService.calculatePumpSystemCurveData(pumpSystemCurveData, this.xDomain.max, this.settings);
+    this.systemCurveLine = this.lineChartHelperService.appendLine(this.svg, "red", "2px", "stroke-dasharray", "3, 3");
+    this.systemCurveLine = this.lineChartHelperService.drawLine(this.systemCurveLine, this.x, this.y, pumpSystemCurveRegressionData, 'system-curve');
+    // this.focusSystem = this.lineChartHelperService.appendFocus(this.svg, "focusSystem");
+  }
+
+  drawFanSystemCurve(fanSystemCurveData: FanSystemCurveData) {
+    let fanSystemCurveRegressionData = this.regressionEquationsService.calculateFanSystemCurveData(fanSystemCurveData, this.xDomain.max, this.settings);
+    this.systemCurveLine = this.lineChartHelperService.appendLine(this.svg, "red", "2px", "stroke-dasharray", "3, 3");
+    this.systemCurveLine = this.lineChartHelperService.drawLine(this.systemCurveLine, this.x, this.y, fanSystemCurveRegressionData, 'system-curve');
     // this.focusSystem = this.lineChartHelperService.appendFocus(this.svg, "focusSystem");
   }
 }
+
+

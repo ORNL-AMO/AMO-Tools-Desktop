@@ -156,9 +156,6 @@ export class SystemCurveService {
     }
     //Load data here
     let data: Array<{ x: number, y: number, fluidPower: number }> = new Array<{ x: number, y: number, fluidPower: number }>();
-    debugger
-    let test = x.domain()[1];
-    console.log(test);
     var head = staticHead + lossCoefficient * Math.pow(x.domain()[1], curveConstants.form.controls.systemLossExponent.value);
 
     if (head >= 0) {

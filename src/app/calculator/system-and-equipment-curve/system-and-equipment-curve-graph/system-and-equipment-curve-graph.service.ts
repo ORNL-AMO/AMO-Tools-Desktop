@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-
+import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData } from '../system-and-equipment-curve.service';
+import * as _ from 'lodash';
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   initColumnTitles(settings: Settings, equipmentType: string, displayEquipmentCurve: boolean, displayModificationCurve: boolean, displaySystemCurve: boolean): Array<string> {
     let columnTitles: Array<string> = new Array<string>();
@@ -47,6 +48,61 @@ export class SystemAndEquipmentCurveGraphService {
       dispUnit = dispUnit.replace(')', '');
       return dispUnit;
     }
+  }
+
+  getGraphDomainAndRange(isEquipmentCurveShown: boolean, isSystemCurveShown: boolean, equipmentType: string, width: number, height: number): {
+    xDomain: { min: number, max: number },
+    xRange: { min: number, max: number },
+    yDomain: { min: number, max: number },
+    yRange: { min: number, max: number }
+  } {
+    let maxX: { x: number, y: number } = { x: 0, y: 0 };
+    let maxY: { x: number, y: number } = { x: 0, y: 0 };
+
+    if (isEquipmentCurveShown == true) {
+      let baselineEquipmentData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.getValue();
+      let modificationEqupmentData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
+      let combinedData: Array<{ x: number, y: number }> = baselineEquipmentData.concat(modificationEqupmentData);
+      maxX = _.maxBy(combinedData, (data) => { return data.x });
+      maxY = _.maxBy(combinedData, (data) => { return data.y });
+    }
+
+    if (isSystemCurveShown == true) {
+      if (equipmentType == 'pump') {
+        let pumpSystemCurveData: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue();
+        if (pumpSystemCurveData != undefined) {
+          let maxXValue: number = _.max([maxX.x, pumpSystemCurveData.pointOneFlowRate, pumpSystemCurveData.pointTwoFlowRate]);
+          maxX.x = maxXValue;
+          let maxYValue: number = _.max([maxY.y, pumpSystemCurveData.pointOneHead, pumpSystemCurveData.pointTwoHead]);
+          maxY.y = maxYValue;
+        }
+      } else if (equipmentType == 'fan') {
+        let fanSystemCurveData: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.getValue();
+        if (fanSystemCurveData != undefined) {
+          let maxXValue: number = _.max([maxX.x, fanSystemCurveData.pointOneFlowRate, fanSystemCurveData.pointTwoFlowRate]);
+          maxX.x = maxXValue;
+          let maxYValue: number = _.max([maxY.y, fanSystemCurveData.pointOnePressure, fanSystemCurveData.pointTwoPressure]);
+          maxY.y = maxYValue;
+        }
+      }
+    }
+
+    if (maxX.x < 50) {
+      maxX.x = 50;
+    }
+
+    if (maxY.y < 50) {
+      maxY.y = 50;
+    }
+
+    let paddingX = maxX.x * 0.1;
+    let paddingY = maxY.y * 0.1;
+    //create x and y graph scales
+    let xRange: { min: number, max: number } = { min: 0, max: width };
+    let xDomain = { min: 0, max: maxX.x + paddingX };
+    let yRange: { min: number, max: number } = { min: height, max: 0 };
+    let yDomain = { min: 0, max: maxY.y + paddingY };
+    return { xDomain: xDomain, yDomain: yDomain, xRange: xRange, yRange: yRange }
   }
 
 }

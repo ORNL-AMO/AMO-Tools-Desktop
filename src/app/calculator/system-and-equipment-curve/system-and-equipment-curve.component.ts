@@ -2,10 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { SystemAndEquipmentCurveService } from './system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService, FanSystemCurveData, PumpSystemCurveData } from './system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from './regression-equations/regression-equations.service';
 import { ByDataInputs, ByEquationInputs, EquipmentInputs } from './equipment-curve/equipment-curve.service';
+import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve',
@@ -39,7 +40,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
-
 
     if (this.equipmentType == 'pump') {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.pumpSystemCurveData.subscribe(val => {
@@ -108,7 +108,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.next(results.baselineRSquared);
     this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.next(results.modificationRegressionEquation);
     this.regressionEquationsService.modificationEquipmentCurveRSquared.next(results.modificationRSquared);
-    if(this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Data'){
+    if (this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Data') {
       this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.next(results.baselineDataPairs);
       this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.next(results.modifiedDataPairs);
     }
@@ -122,11 +122,29 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(byEquationInputs, equipmentInputs, secondValueLabel);
     this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.next(results.baselineRegressionEquation);
     this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.next(results.modificationRegressionEquation);
-    if(this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Equation'){
+    if (this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Equation') {
       this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.next(results.baselineDataPairs);
       this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.next(results.modifiedDataPairs);
     }
   }
+
+  // calculatFanSystemCurveRegressions(fanSystemCurveData: FanSystemCurveData) {
+  //   let systemCurveRegressionEquation: string = this.regressionEquationsService.getFanSystemCurveRegressionEquation(fanSystemCurveData);
+  //   this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
+  //   let isEquipmentCurveShown: boolean = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open';
+  //   let domainAndRanges = this.systemAndEquipmentCurveGraphService.getGraphDomainAndRange(isEquipmentCurveShown, true, this.equipmentType, 0, 0);
+  //   let fanSystemCurveRegressionData = this.regressionEquationsService.calculateFanSystemCurveData(fanSystemCurveData, domainAndRanges.xDomain.max, this.settings);
+  //   this.systemAndEquipmentCurveService.systemCurveRegressionData.next(fanSystemCurveRegressionData);
+  // }
+
+  // calculatePumpSystemCurveRegressions(pumpSystemCurveData: PumpSystemCurveData) {
+  //   let systemCurveRegressionEquation: string = this.regressionEquationsService.getPumpSystemCurveRegressionEquation(val);
+  //   this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
+  //   let isEquipmentCurveShown: boolean = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open';
+  //   let domainAndRanges = this.systemAndEquipmentCurveGraphService.getGraphDomainAndRange(isEquipmentCurveShown, true, this.equipmentType, 0, 0);
+  //   let pumpSystemCurveRegressionData = this.regressionEquationsService.calculatePumpSystemCurveData(pumpSystemCurveData, domainAndRanges.xDomain.max, this.settings);
+  //   this.systemAndEquipmentCurveService.systemCurveRegressionData.next(pumpSystemCurveRegressionData);
+  // }
 
   setTab(str: string) {
     this.tabSelect = str;

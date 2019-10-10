@@ -136,7 +136,7 @@ export class RegressionEquationsService {
     };
   }
 
-  calculateByEquationData(byEquationInputs: ByEquationInputs, ratio): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
+  calculateByEquationData(byEquationInputs: ByEquationInputs, ratio: number): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
     let calculationData: Array<Array<number>> = new Array();
     let dataPairs: Array<{ x: number, y: number }> = new Array();
     for (let i = 0; i <= byEquationInputs.maxFlow + 10; i = i + 10) {
@@ -158,7 +158,7 @@ export class RegressionEquationsService {
   }
 
   getPumpSystemCurveRegressionEquation(data: PumpSystemCurveData): string {
-    let lossCoefficient: number = this.calculateStaticHead(
+    let lossCoefficient: number = this.calculateLossCoefficient(
       data.pointOneFlowRate,
       data.pointOneHead,
       data.pointTwoFlowRate,
@@ -176,7 +176,7 @@ export class RegressionEquationsService {
   }
 
   getFanSystemCurveRegressionEquation(data: FanSystemCurveData): string {
-    let lossCoefficient: number = this.calculateStaticHead(
+    let lossCoefficient: number = this.calculateLossCoefficient(
       data.pointOneFlowRate,
       data.pointOnePressure,
       data.pointTwoFlowRate,
@@ -207,7 +207,7 @@ export class RegressionEquationsService {
 
   calculateFanSystemCurveData(fanSystemCurveData: FanSystemCurveData, maxXValue: number, settings: Settings): Array<{ x: number, y: number, fluidPower: number }> {
     let data: Array<{ x: number, y: number, fluidPower: number }> = new Array<{ x: number, y: number, fluidPower: number }>();
-    let lossCoefficient: number = this.calculateStaticHead(
+    let lossCoefficient: number = this.calculateLossCoefficient(
       fanSystemCurveData.pointOneFlowRate,
       fanSystemCurveData.pointOnePressure,
       fanSystemCurveData.pointTwoFlowRate,
@@ -222,19 +222,11 @@ export class RegressionEquationsService {
       fanSystemCurveData.systemLossExponent
     );
     for (var i = 0; i <= maxXValue; i += 10) {
-      let pressureAndFluidPower: { head: number, fluidPower: number } = this.calculateFanPressureAndFluidPower(staticPressure, lossCoefficient, maxXValue, fanSystemCurveData.systemLossExponent, fanSystemCurveData.compressibilityFactor, settings);
+      let pressureAndFluidPower: { head: number, fluidPower: number } = this.calculateFanPressureAndFluidPower(staticPressure, lossCoefficient, i, fanSystemCurveData.systemLossExponent, fanSystemCurveData.compressibilityFactor, settings);
       if (pressureAndFluidPower.head >= 0) {
-        data.push({
-          x: i,
-          y: pressureAndFluidPower.head,
-          fluidPower: pressureAndFluidPower.fluidPower
-        })
+        data.push({ x: i, y: pressureAndFluidPower.head, fluidPower: pressureAndFluidPower.fluidPower })
       } else {
-        data.push({
-          x: 0,
-          y: 0,
-          fluidPower: 0
-        });
+        data.push({ x: 0, y: 0, fluidPower: 0 });
       }
     }
     return data;
@@ -243,7 +235,7 @@ export class RegressionEquationsService {
 
   calculatePumpSystemCurveData(pumpSystemCurveData: PumpSystemCurveData, maxXValue: number, settings: Settings): Array<{ x: number, y: number, fluidPower: number }> {
     let data: Array<{ x: number, y: number, fluidPower: number }> = new Array<{ x: number, y: number, fluidPower: number }>();
-    let lossCoefficient: number = this.calculateStaticHead(
+    let lossCoefficient: number = this.calculateLossCoefficient(
       pumpSystemCurveData.pointOneFlowRate,
       pumpSystemCurveData.pointOneHead,
       pumpSystemCurveData.pointTwoFlowRate,
@@ -259,19 +251,11 @@ export class RegressionEquationsService {
     );
 
     for (var i = 0; i <= maxXValue; i += 10) {
-      let headAndFluidPower: { head: number, fluidPower: number } = this.calculatePumpHeadAndFluidPower(staticHead, lossCoefficient, maxXValue, pumpSystemCurveData.systemLossExponent, pumpSystemCurveData.specificGravity, settings);
+      let headAndFluidPower: { head: number, fluidPower: number } = this.calculatePumpHeadAndFluidPower(staticHead, lossCoefficient, i, pumpSystemCurveData.systemLossExponent, pumpSystemCurveData.specificGravity, settings);
       if (headAndFluidPower.head >= 0) {
-        data.push({
-          x: i,
-          y: headAndFluidPower.head,
-          fluidPower: headAndFluidPower.fluidPower
-        });
+        data.push({ x: i, y: headAndFluidPower.head, fluidPower: headAndFluidPower.fluidPower });
       } else {
-        data.push({
-          x: 0,
-          y: 0,
-          fluidPower: 0
-        });
+        data.push({ x: 0, y: 0, fluidPower: 0 });
       }
     }
     return data;

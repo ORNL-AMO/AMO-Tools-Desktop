@@ -15,8 +15,9 @@ export class SystemAndEquipmentCurveService {
   selectedEquipmentCurveFormView: BehaviorSubject<string>;
   equipmentCurveCollapsed: BehaviorSubject<string>;
   systemCurveCollapsed: BehaviorSubject<string>;
-  baselineEquipmentCurveDataPairs: BehaviorSubject<Array<{x: number, y: number}>>;
-  modifiedEquipmentCurveDataPairs: BehaviorSubject<Array<{x: number, y: number}>>;
+  baselineEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
+  modifiedEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
+  // systemCurveRegressionData: BehaviorSubject<Array<{ x: number, y: number, fluidPower: number }>>;
   constructor() {
     this.currentField = new BehaviorSubject<string>('default');
     this.pumpSystemCurveData = new BehaviorSubject<PumpSystemCurveData>(undefined);
@@ -30,6 +31,7 @@ export class SystemAndEquipmentCurveService {
     this.systemCurveCollapsed = new BehaviorSubject<string>('closed');
     this.baselineEquipmentCurveDataPairs = new BehaviorSubject(undefined);
     this.modifiedEquipmentCurveDataPairs = new BehaviorSubject(undefined);
+    // this.systemCurveRegressionData = new BehaviorSubject(undefined);
   }
 }
 

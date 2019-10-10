@@ -34,8 +34,8 @@ export class EquipmentCurveFormComponent implements OnInit {
     let defaultData: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
     if (defaultData == undefined) {
       defaultData = this.equipmentCurveService.getEquipmentCurveDefault();
-      this.systemAndEquipmentCurveService.equipmentInputs.next(defaultData);
     }
+    this.systemAndEquipmentCurveService.equipmentInputs.next(defaultData);
     this.equipmentCurveForm = this.equipmentCurveService.getEquipmentCurveFormFromObj(defaultData);
   }
 
