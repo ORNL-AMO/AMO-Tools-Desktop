@@ -360,7 +360,6 @@ export class PumpCurveGraphComponent implements OnInit {
     this.initColumnTitles();
     //x and y scales are required for system curve data, need to check max x/y values from all lines
     this.maxX = this.getXScaleMax(data, dataModification, this.pointOne.form.controls.flowRate.value, this.pointTwo.form.controls.flowRate.value);
-    console.log(this.maxX);
     this.maxY = this.getYScaleMax(data, dataModification, this.pointOne.form.controls.head.value, this.pointTwo.form.controls.head.value);
     let paddingX = this.maxX.x * 0.1;
     let paddingY = this.maxY.y * 0.1;
@@ -372,7 +371,6 @@ export class PumpCurveGraphComponent implements OnInit {
     //create x and y graph scales
     let xRange: { min: number, max: number } = { min: 0, max: this.width };
     let xDomain: { min: number, max: number } = { min: 0, max: this.maxX.x + paddingX };
-    console.log(xDomain);
     let yRange: { min: number, max: number } = { min: this.height, max: 0 };
     let yDomain: { min: number, max: number } = { min: 0, max: this.maxY.y + paddingY };
     this.x = this.lineChartHelperService.setScale("linear", xRange, xDomain);

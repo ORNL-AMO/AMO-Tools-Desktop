@@ -423,9 +423,6 @@ export class LineChartHelperService {
   tableFocusHelper(svg: d3.Selection<any>, id: string, fill: string, stroke: string, transX: number, transY: number, label?: string): d3.Selection<any> {
     let splitText = id.split('-', 2);
     let internalText = parseInt(splitText[splitText.length - 1]) + 1;
-    console.log('label = ');
-    console.log(label);
-
     let focus: d3.Selection<any> = svg.append("g")
       .attr("class", "tablePoint")
       .style("display", null)
@@ -441,6 +438,7 @@ export class LineChartHelperService {
     focus.append("text")
       .attr('dx', -4)
       .attr('dy', -10)
+      .attr("id", id)
       .text((label === undefined || label === null) ? internalText : label)
       .style('font-size', '12px')
       .style('font-weight', 'bold')

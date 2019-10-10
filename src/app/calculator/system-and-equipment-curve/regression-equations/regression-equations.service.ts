@@ -42,22 +42,35 @@ export class RegressionEquationsService {
   } {
 
     let baselineData: Array<Array<number>> = new Array();
-    let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
     byData.dataRows.forEach(row => {
       baselineData.push([row.flow, row.secondValue]);
-      baselineDataPairs.push({ x: row.flow, y: row.secondValue });
     })
 
     let baselineResults = regression.polynomial(baselineData, { order: byData.dataOrder, precision: 10 });
     let baselineRegressionEquation: string = baselineResults.string;
+    
+    let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
+
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, secondValueLabel);
+    let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
+    for (let i = 0; i <= maxDataFlow; i += 10) {
+      let yVal = baselineResults.predict(i);
+      if (yVal[1] > 0) {
+        let x: number = i;
+        let y: number = yVal[1];
+        baselineDataPairs.push({
+          x: x,
+          y: y
+        });
+      }
+    }
+
 
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
-    let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
     let modifiedDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let modificationData: Array<Array<number>> = new Array();
 
-    for (let i = 0; i <= maxDataFlow; i = i + 10) {
+    for (let i = 0; i <= maxDataFlow; i += 10) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
         let x: number = i * ratio;

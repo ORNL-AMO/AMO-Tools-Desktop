@@ -118,6 +118,9 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.setAxis();
     this.drawSystemCurve();
     this.drawEquipmentCurve();
+    if (this.isSystemCurveShown && this.isEquipmentCurveShown) {
+      this.addIntersectionPoints();
+    }
   }
 
   //setup
@@ -190,8 +193,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
           let equipmentInputs: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
           if (equipmentInputs && (equipmentInputs.baselineMeasurement != equipmentInputs.modifiedMeasurement)) {
             this.drawModificationEquipmentCurve(modificationPairs);
-          }else{
-            d3.select(this.ngChart.nativeElement).selectAll('.modification-equipment-curve').remove();           
+          } else {
+            d3.select(this.ngChart.nativeElement).selectAll('.modification-equipment-curve').remove();
           }
         }
       }
@@ -232,7 +235,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     }
   }
 
-
   drawPumpSystemCurve(pumpSystemCurveData: PumpSystemCurveData) {
     let pumpSystemCurveRegressionData = this.regressionEquationsService.calculatePumpSystemCurveData(pumpSystemCurveData, this.xDomain.max, this.settings);
     this.systemCurveLine = this.lineChartHelperService.appendLine(this.svg, "red", "2px", "stroke-dasharray", "3, 3");
@@ -245,6 +247,25 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.systemCurveLine = this.lineChartHelperService.appendLine(this.svg, "red", "2px", "stroke-dasharray", "3, 3");
     this.systemCurveLine = this.lineChartHelperService.drawLine(this.systemCurveLine, this.x, this.y, fanSystemCurveRegressionData, 'system-curve');
     // this.focusSystem = this.lineChartHelperService.appendFocus(this.svg, "focusSystem");
+  }
+
+  addIntersectionPoints() {
+    d3.select(this.ngChart.nativeElement).selectAll('#intersectBaseline').remove();
+    d3.select(this.ngChart.nativeElement).selectAll('#intersectModification').remove();
+    let baselineEquipmentCurveDataPairs: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.getValue();
+    let intersectionPoint: { x: number, y: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.xDomain, this.settings, baselineEquipmentCurveDataPairs);
+    if (intersectionPoint != undefined) {
+      this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(intersectionPoint.x), this.y(intersectionPoint.y), 'OP1');
+    }
+    let equipementInputs: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
+    if (equipementInputs.baselineMeasurement != equipementInputs.modifiedMeasurement) {
+      let modificaitionEquipmentCurvePairs: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
+      let intersectionPoint: { x: number, y: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.xDomain, this.settings, modificaitionEquipmentCurvePairs);
+      if (intersectionPoint != undefined) {
+        this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", "#000", "#000", this.x(intersectionPoint.x), this.y(intersectionPoint.y), 'OP2');
+      }
+    }
+
   }
 }
 
