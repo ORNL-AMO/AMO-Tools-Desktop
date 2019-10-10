@@ -69,6 +69,7 @@ export class ReportRollupComponent implements OnInit {
   showFsatReportOptions: boolean = false;
   showPhastReportOptions: boolean = false;
   showSsmtReportOptions: boolean = false;
+  showTreasureHuntReportOptions: boolean = false;
   showRollupReportOptions: boolean;
   selectAll: boolean = false;
   printReportGraphs: boolean = false;
@@ -78,10 +79,13 @@ export class ReportRollupComponent implements OnInit {
   printPsatRollup: boolean = false;
   printPhastRollup: boolean = false;
   printFsatRollup: boolean = false;
+  printTreasureHuntRollup: boolean = false;
   printEnergyUsed: boolean = false;
   printExecutiveSummary: boolean = false;
   printEnergySummary: boolean = false;
   printLossesSummary: boolean = false;
+  printReportOpportunityPayback: boolean = false;
+  printReportOpportunitySummary: boolean = false;
 
   gatheringAssessments: boolean = true;
   sidebarCollapsed: boolean = false;
@@ -300,6 +304,7 @@ export class ReportRollupComponent implements OnInit {
     this.printPsatRollup = false;
     this.printFsatRollup = false;
     this.printPhastRollup = false;
+    // this.printTreasureHuntRollup = false;
     // this.printSsmtRollup = false;
     this.printReportGraphs = false;
     this.printReportSankey = false;
@@ -309,6 +314,8 @@ export class ReportRollupComponent implements OnInit {
     this.printExecutiveSummary = false;
     this.printEnergySummary = false;
     this.printLossesSummary = false;
+    this.printReportOpportunityPayback = false;
+    this.printReportOpportunitySummary = false;
   }
 
   togglePrint(section: string): void {
@@ -319,6 +326,7 @@ export class ReportRollupComponent implements OnInit {
           this.printPsatRollup = true;
           this.printPhastRollup = true;
           this.printFsatRollup = true;
+          // this.printTreasureHuntRollup = true;
           // this.printSsmtRollup = true;
           this.printReportGraphs = true;
           this.printReportSankey = true;
@@ -328,11 +336,14 @@ export class ReportRollupComponent implements OnInit {
           this.printEnergyUsed = true;
           this.printEnergySummary = true;
           this.printLossesSummary = true;
+          this.printReportOpportunityPayback = true;
+          this.printReportOpportunitySummary = true;
         }
         else {
           this.printPsatRollup = false;
           this.printPhastRollup = false;
           this.printFsatRollup = false;
+          // this.printTreasureHuntRollup = false;
           // this.printSsmtRollup = false;
           this.printResults = false;
           this.printReportGraphs = false;
@@ -342,6 +353,8 @@ export class ReportRollupComponent implements OnInit {
           this.printEnergyUsed = false;
           this.printEnergySummary = false;
           this.printLossesSummary = false;
+          this.printReportOpportunityPayback = false;
+          this.printReportOpportunitySummary = false;
         }
         break;
       }
@@ -357,6 +370,10 @@ export class ReportRollupComponent implements OnInit {
         this.printFsatRollup = !this.printFsatRollup;
         break;
       }
+      // case "treasureHuntRollup": {
+      //   this.printTreasureHuntRollup = !this.printTreasureHuntRollup;
+      //   break;
+      // }
       // case "ssmtRollup": {
       //   this.printSsmtRollup = !this.printSsmtRollup;
       //   break;
@@ -392,6 +409,12 @@ export class ReportRollupComponent implements OnInit {
       case "lossesSummary": {
         this.printLossesSummary = !this.printLossesSummary;
         break;
+      }
+      case "opportunityPayback": {
+        this.printReportOpportunityPayback = !this.printReportOpportunityPayback;
+      }
+      case "opportunitySummary": {
+        this.printReportOpportunitySummary = !this.printReportOpportunitySummary;
       }
       default: {
         break;
