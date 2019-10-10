@@ -96,8 +96,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.curveDataSubscription.unsubscribe();
   }
 
-
-
   calculateByDataRegression(byDataInputs: ByDataInputs, equipmentInputs: EquipmentInputs) {
     let secondValueLabel: string = 'Head';
     if (this.equipmentType == 'fan') {

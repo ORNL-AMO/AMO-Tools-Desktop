@@ -48,7 +48,7 @@ export class RegressionEquationsService {
 
     let baselineResults = regression.polynomial(baselineData, { order: byData.dataOrder, precision: 10 });
     let baselineRegressionEquation: string = baselineResults.string;
-    
+
     let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
 
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, secondValueLabel);
@@ -236,9 +236,9 @@ export class RegressionEquationsService {
       fanSystemCurveData.systemLossExponent
     );
     for (var i = 0; i <= maxXValue; i += 10) {
-      let pressureAndFluidPower: { head: number, fluidPower: number } = this.calculateFanPressureAndFluidPower(staticPressure, lossCoefficient, i, fanSystemCurveData.systemLossExponent, fanSystemCurveData.compressibilityFactor, settings);
-      if (pressureAndFluidPower.head >= 0) {
-        data.push({ x: i, y: pressureAndFluidPower.head, fluidPower: pressureAndFluidPower.fluidPower })
+      let pressureAndFluidPower: { pressure: number, fluidPower: number } = this.calculateFanPressureAndFluidPower(staticPressure, lossCoefficient, i, fanSystemCurveData.systemLossExponent, fanSystemCurveData.compressibilityFactor, settings);
+      if (pressureAndFluidPower.pressure >= 0) {
+        data.push({ x: i, y: pressureAndFluidPower.pressure, fluidPower: pressureAndFluidPower.fluidPower })
       } else {
         data.push({ x: 0, y: 0, fluidPower: 0 });
       }
@@ -277,110 +277,21 @@ export class RegressionEquationsService {
 
   calculatePumpHeadAndFluidPower(staticHead: number, lossCoefficient: number, flow: number, systemLossExponent: number, specificGravity: number, settings): { head: number, fluidPower: number } {
     let head: number = staticHead + lossCoefficient * Math.pow(flow, systemLossExponent);
-    let fluidPower = this.getPumpFluidPower(staticHead, flow, specificGravity, settings);
+    let fluidPower = this.getPumpFluidPower(head, flow, specificGravity, settings);
     if (settings.powerMeasurement !== 'hp' && fluidPower !== 0) {
       fluidPower = this.convertUnitsService.value(fluidPower).from('hp').to(settings.powerMeasurement);
     }
     return { head: head, fluidPower: fluidPower };
   }
 
-  calculateFanPressureAndFluidPower(staticPressure: number, lossCoefficient: number, flow: number, systemLossExponent: number, compressibilityFactor: number, settings): { head: number, fluidPower: number } {
-    let head: number = staticPressure + lossCoefficient * Math.pow(flow, systemLossExponent);
-    let fluidPower = this.getFanFluidPower(staticPressure, flow, compressibilityFactor, settings);
+  calculateFanPressureAndFluidPower(staticPressure: number, lossCoefficient: number, flow: number, systemLossExponent: number, compressibilityFactor: number, settings): { pressure: number, fluidPower: number } {
+    let pressure: number = staticPressure + lossCoefficient * Math.pow(flow, systemLossExponent);
+    let fluidPower = this.getFanFluidPower(pressure, flow, compressibilityFactor, settings);
     if (settings.fanPowerMeasurement !== 'hp' && fluidPower !== 0) {
       fluidPower = this.convertUnitsService.value(fluidPower).from('hp').to(settings.fanPowerMeasurement);
     }
-    return { head: head, fluidPower: fluidPower };
+    return { pressure: pressure, fluidPower: fluidPower };
   }
-
-  // getCurvePointData(settings: Settings, x: any, y: any, increment: number, isFan: boolean, staticHead: number, lossCoefficient: number, curveConstants: { form: FormGroup }): Array<{ x: number, y: number, fluidPower: number }> {
-  //   let powerMeasurement: string;
-  //   if (isFan) {
-  //     powerMeasurement = settings.fanPowerMeasurement;
-  //   }
-  //   else {
-  //     powerMeasurement = settings.powerMeasurement;
-  //   }
-  //   //Load data here
-  //   let data: Array<{ x: number, y: number, fluidPower: number }> = new Array<{ x: number, y: number, fluidPower: number }>();
-  //   var head = staticHead + lossCoefficient * Math.pow(x.domain()[1], curveConstants.form.controls.systemLossExponent.value);
-
-  //   if (head >= 0) {
-  //     let tmpFluidPower;
-  //     if (isFan) {
-  //       tmpFluidPower = this.getFanFluidPower(staticHead, 0, curveConstants.form.controls.specificGravity.value, settings);
-  //     } else {
-  //       tmpFluidPower = this.getPumpFluidPower(staticHead, 0, curveConstants.form.controls.specificGravity.value, settings);
-  //     }
-  //     if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
-  //       tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
-  //     }
-  //     data.push({
-  //       x: 0,
-  //       y: staticHead + lossCoefficient * Math.pow(0, curveConstants.form.controls.systemLossExponent.value),
-  //       fluidPower: tmpFluidPower
-  //     });
-  //   }
-  //   else {
-  //     data.push({
-  //       x: 0,
-  //       y: 0,
-  //       fluidPower: 0
-  //     });
-  //   }
-
-  //   for (var i = 0; i <= x.domain()[1]; i += increment) {
-  //     var head = staticHead + lossCoefficient * Math.pow(i, curveConstants.form.controls.systemLossExponent.value);
-  //     if (head >= 0) {
-  //       let tmpFluidPower: number;
-  //       if (isFan) {
-  //         tmpFluidPower = this.getFanFluidPower(head, i, curveConstants.form.controls.specificGravity.value, settings);
-  //       } else {
-  //         tmpFluidPower = this.getPumpFluidPower(head, i, curveConstants.form.controls.specificGravity.value, settings);
-  //       }
-  //       if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
-  //         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
-  //       }
-  //       data.push({
-  //         x: i,
-  //         y: head,
-  //         fluidPower: tmpFluidPower
-  //       });
-  //     }
-  //     else {
-  //       data.push({
-  //         x: i,
-  //         y: 0,
-  //         fluidPower: 0
-  //       });
-  //     }
-  //   }
-  //   head = staticHead + lossCoefficient * Math.pow(x.domain()[1], curveConstants.form.controls.systemLossExponent.value);
-  //   if (head >= 0) {
-  //     let tmpFluidPower: number;
-  //     if (isFan) {
-  //       tmpFluidPower = this.getFanFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value, settings);
-  //     } else {
-  //       tmpFluidPower = this.getPumpFluidPower(head, x.domain()[1], curveConstants.form.controls.specificGravity.value, settings);;
-  //     }
-  //     if (powerMeasurement !== 'hp' && tmpFluidPower !== 0) {
-  //       tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(powerMeasurement);
-  //     }
-  //     data.push({
-  //       x: x.domain()[1],
-  //       y: staticHead + lossCoefficient * Math.pow(x.domain()[1], curveConstants.form.controls.systemLossExponent.value),
-  //       fluidPower: tmpFluidPower
-  //     });
-  //   }
-  //   else {
-  //     data.push({
-  //       x: x.domain()[1],
-  //       y: 0,
-  //       fluidPower: 0
-  //     });
-  //   }
-  //   return data;
-  // }
 
   getFanFluidPower(pressure: number, flow: number, compressibilityFactor: number, settings: Settings): number {
     if (settings.fanPressureMeasurement !== 'inH2o') {

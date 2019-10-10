@@ -112,8 +112,8 @@ export class SystemAndEquipmentCurveGraphService {
     return { xDomain: xDomain, yDomain: yDomain, xRange: xRange, yRange: yRange }
   }
 
-  
-  getIntersectionPoint(equipmentType: string, xDomain: {max: number, min: number}, settings: Settings, curveDataPairs: Array<{x: number, y: number}>){
+
+  getIntersectionPoint(equipmentType: string, xDomain: { max: number, min: number }, settings: Settings, curveDataPairs: Array<{ x: number, y: number }>) {
     let systemCurveRegressionData: Array<{ x: number, y: number, fluidPower: number }>;
     let staticVal: number;
     let coefficient: number;
@@ -159,7 +159,7 @@ export class SystemAndEquipmentCurveGraphService {
     let intersectionPoint: { x: number, y: number } = this.caluclateIntersectionPoint(systemCurveRegressionData, curveDataPairs, staticVal, coefficient, systemLossExponent);
     return intersectionPoint;
   }
-  
+
   caluclateIntersectionPoint(
     systemCurve: Array<{ x: number, y: number, fluidPower: number }>,
     equipmentCurve: Array<{ x: number, y: number }>,
@@ -215,6 +215,82 @@ export class SystemAndEquipmentCurveGraphService {
 
   calculateXValFromY(yVal: number, staticVal: number, coefficient: number, systemLossExponent: number) {
     return Math.pow((yVal - staticVal) / coefficient, 1 / systemLossExponent);
+  }
+
+  initTooltipData(settings: Settings, equipmentType: string, isEquipmentCurveShown: boolean, isEquipmentModificationShown: boolean, isSystemCurveShown: boolean): Array<{ label: string, value: number, unit: string, formatX: boolean }> {
+    let tooltipData = new Array<{ label: string, value: number, unit: string, formatX: boolean }>();
+    let flowMeasurement: string;
+    let distanceMeasurement: string;
+    let yValueLabel: string;
+    let powerMeasurement: string;
+    if (equipmentType == 'fan') {
+      yValueLabel = "Pressure";
+      distanceMeasurement = this.getDisplayUnit(settings.fanPressureMeasurement);
+      flowMeasurement = this.getDisplayUnit(settings.fanFlowRate);
+      powerMeasurement = settings.fanPowerMeasurement;
+    } else {
+      yValueLabel = "Head";
+      distanceMeasurement = settings.distanceMeasurement;
+      flowMeasurement = settings.flowMeasurement;
+      powerMeasurement = settings.powerMeasurement;
+    }
+
+    if (isEquipmentCurveShown) {
+      tooltipData.push({
+        label: "Base Flow",
+        value: null,
+        unit: " " + flowMeasurement,
+        formatX: true
+      });
+      if (isEquipmentModificationShown) {
+        tooltipData.push({
+          label: "Mod Flow",
+          value: null,
+          unit: " " + flowMeasurement,
+          formatX: true
+        });
+      }
+    }
+    if (isSystemCurveShown) {
+      tooltipData.push({
+        label: "Sys. Flow",
+        value: null,
+        unit: " " + flowMeasurement,
+        formatX: true
+      });
+    }
+
+    if (isEquipmentCurveShown) {
+      tooltipData.push({
+        label: "Base " + yValueLabel,
+        value: null,
+        unit: " " + distanceMeasurement,
+        formatX: false
+      });
+      if (isEquipmentModificationShown) {
+        tooltipData.push({
+          label: "Mod " + yValueLabel,
+          value: null,
+          unit: " " + distanceMeasurement,
+          formatX: false
+        });
+      }
+    }
+    if (isSystemCurveShown) {
+      tooltipData.push({
+        label: "Sys. Curve " + yValueLabel,
+        value: null,
+        unit: " " + distanceMeasurement,
+        formatX: false
+      });
+      tooltipData.push({
+        label: "Fluid Power",
+        value: null,
+        unit: " " + powerMeasurement,
+        formatX: null
+      });
+    }
+    return tooltipData;
   }
 
 }
