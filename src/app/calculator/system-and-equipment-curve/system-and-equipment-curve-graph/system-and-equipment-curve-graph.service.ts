@@ -61,8 +61,12 @@ export class SystemAndEquipmentCurveGraphService {
 
     if (isEquipmentCurveShown == true) {
       let baselineEquipmentData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.getValue();
+      let baselineEquipmentDataCopy: Array<{ x: number, y: number }> = JSON.parse(JSON.stringify(baselineEquipmentData));
+
       let modificationEqupmentData: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
-      let combinedData: Array<{ x: number, y: number }> = baselineEquipmentData.concat(modificationEqupmentData);
+      let modificationEqupmentDataCopy: Array<{ x: number, y: number }> = JSON.parse(JSON.stringify(modificationEqupmentData));
+
+      let combinedData: Array<{ x: number, y: number }> = modificationEqupmentDataCopy.concat(baselineEquipmentDataCopy);
       maxX = _.maxBy(combinedData, (data) => { return data.x });
       maxY = _.maxBy(combinedData, (data) => { return data.y });
     }
@@ -71,17 +75,19 @@ export class SystemAndEquipmentCurveGraphService {
       if (equipmentType == 'pump') {
         let pumpSystemCurveData: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue();
         if (pumpSystemCurveData != undefined) {
-          let maxXValue: number = _.max([maxX.x, pumpSystemCurveData.pointOneFlowRate, pumpSystemCurveData.pointTwoFlowRate]);
+          let pumpSysteDataCpy: PumpSystemCurveData = JSON.parse(JSON.stringify(pumpSystemCurveData));
+          let maxXValue: number = _.max([maxX.x, pumpSysteDataCpy.pointOneFlowRate, pumpSysteDataCpy.pointTwoFlowRate]);
           maxX.x = maxXValue;
-          let maxYValue: number = _.max([maxY.y, pumpSystemCurveData.pointOneHead, pumpSystemCurveData.pointTwoHead]);
+          let maxYValue: number = _.max([maxY.y, pumpSysteDataCpy.pointOneHead, pumpSysteDataCpy.pointTwoHead]);
           maxY.y = maxYValue;
         }
       } else if (equipmentType == 'fan') {
         let fanSystemCurveData: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.getValue();
         if (fanSystemCurveData != undefined) {
-          let maxXValue: number = _.max([maxX.x, fanSystemCurveData.pointOneFlowRate, fanSystemCurveData.pointTwoFlowRate]);
+          let fanSystemCurveDataCpy: FanSystemCurveData = JSON.parse(JSON.stringify(fanSystemCurveData));
+          let maxXValue: number = _.max([maxX.x, fanSystemCurveDataCpy.pointOneFlowRate, fanSystemCurveDataCpy.pointTwoFlowRate]);
           maxX.x = maxXValue;
-          let maxYValue: number = _.max([maxY.y, fanSystemCurveData.pointOnePressure, fanSystemCurveData.pointTwoPressure]);
+          let maxYValue: number = _.max([maxY.y, fanSystemCurveDataCpy.pointOnePressure, fanSystemCurveDataCpy.pointTwoPressure]);
           maxY.y = maxYValue;
         }
       }

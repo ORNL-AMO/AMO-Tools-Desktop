@@ -121,8 +121,9 @@ export class RegressionEquationsService {
     for (let i = 0; i < byEquationInputs.equationOrder; i++) {
       baselineRegressionEquation = baselineRegressionEquation.replace('+ -', '- ');
     }
-    // let baselineCalculationData: Array<Array<number>> = this.calculateByEquationDataPairs(byEquationInputs, 1);
+    //baseline
     let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1).dataPairs;
+
     //modification
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
     let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio);
@@ -139,7 +140,7 @@ export class RegressionEquationsService {
   calculateByEquationData(byEquationInputs: ByEquationInputs, ratio: number): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
     let calculationData: Array<Array<number>> = new Array();
     let dataPairs: Array<{ x: number, y: number }> = new Array();
-    for (let i = 0; i <= byEquationInputs.maxFlow + 10; i = i + 10) {
+    for (let i = 0; i <= byEquationInputs.maxFlow + 10; i += 10) {
       let yVal = this.calculateY(byEquationInputs, i);
       if (yVal > 0) {
         let x: number = i * ratio;
