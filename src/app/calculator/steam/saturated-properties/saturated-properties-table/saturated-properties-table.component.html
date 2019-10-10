@@ -1,17 +1,17 @@
-<table class="steam-table calculator-table">
+<table #copyTable class="steam-table calculator-table">
   <thead>
     <tr>
-      <th class="table-col-0">Pressure<br>(<span [innerHTML]="settings.steamPressureMeasurement|settingsLabel"></span>)
+      <th class="table-col-0">Pressure(<span [innerHTML]="settings.steamPressureMeasurement|settingsLabel"></span>)
       </th>
-      <th class="table-col-1 parent-col">Temp.<br>
+      <th class="table-col-1 parent-col">Temp.
         (<span [innerHTML]="settings.steamTemperatureMeasurement|settingsLabel"></span>)
       </th>
       <th class="table-col-2 parent-col" colspan="3" scope="colgroup">Specific Enthalpy
-        <br>(<span [innerHTML]="settings.steamSpecificEnthalpyMeasurement|settingsLabel"></span>)</th>
-      <th class="table-col-3 parent-col" colspan="3" scope="colgroup">Specific Entropy <br>
+        (<span [innerHTML]="settings.steamSpecificEnthalpyMeasurement|settingsLabel"></span>)</th>
+      <th class="table-col-3 parent-col" colspan="3" scope="colgroup">Specific Entropy
         (<span [innerHTML]="settings.steamSpecificEntropyMeasurement|settingsLabel"></span>)
       </th>
-      <th class="table-col-4 parent-col" colspan="3" scope="colgroup">Specific Volume <br>
+      <th class="table-col-4 parent-col" colspan="3" scope="colgroup">Specific Volume
         (<span [innerHTML]="settings.steamSpecificVolumeMeasurement|settingsLabel"></span>)</th>
       <th></th>
     </tr>
@@ -51,3 +51,6 @@
     </tr>
   </tbody>
 </table>
+
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

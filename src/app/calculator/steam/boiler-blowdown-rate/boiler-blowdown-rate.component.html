@@ -24,9 +24,10 @@
 
                     <div class="d-flex flex-column mx-4 mb-4">
                         <!-- app form -->
-                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="true" [disabled]="baselineSelected == false"></app-blowdown-rate-form>
+                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="true"
+                            [disabled]="baselineSelected == false"></app-blowdown-rate-form>
                         <div class="w-100 justify content-center btn-group btn-group-sm">
-                            <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active"
+                            <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
                                 (click)="btnResetData()">
                                 Reset Data
                             </button>
@@ -47,7 +48,8 @@
                     </div>
                     <!-- forms -->
                     <div class="d-flex flex-column mx-4 mb-4">
-                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="false" [disabled]="baselineSelected == true"></app-blowdown-rate-form>
+                        <app-blowdown-rate-form [settings]="settings" [isBaseline]="false"
+                            [disabled]="baselineSelected == true"></app-blowdown-rate-form>
                     </div>
                 </div>
 
@@ -89,7 +91,8 @@
                         <app-blowdown-rate-results *ngIf="tabSelect === 'results'" [settings]="settings">
                         </app-blowdown-rate-results>
                         <!-- app help if help tab -->
-                        <app-blowdown-rate-help *ngIf="tabSelect === 'help'" [settings]="settings"></app-blowdown-rate-help>
+                        <app-blowdown-rate-help *ngIf="tabSelect === 'help'" [settings]="settings">
+                        </app-blowdown-rate-help>
                     </div>
 
                 </div>

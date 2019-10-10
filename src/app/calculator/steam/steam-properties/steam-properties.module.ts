@@ -9,13 +9,15 @@ import { SteamPropertiesTableComponent } from './steam-properties-table/steam-pr
 import { SteamPropertiesPhGraphComponent } from './steam-properties-ph-graph/steam-properties-ph-graph.component';
 import { SimpleTooltipModule } from '../../../shared/simple-tooltip/simple-tooltip.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     SimpleTooltipModule,
-    SharedPipesModule
+    SharedPipesModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     SteamPropertiesGraphComponent,

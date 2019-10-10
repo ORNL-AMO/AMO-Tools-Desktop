@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { BoilerBlowdownRateService } from './boiler-blowdown-rate.service';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [BoilerBlowdownRateComponent, BlowdownRateHelpComponent, BlowdownRateResultsComponent, BlowdownRateFormComponent],
@@ -15,7 +16,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     CommonModule,
     ReactiveFormsModule,
     SharedPipesModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    ExportableResultsTableModule
   ],
   exports: [BoilerBlowdownRateComponent],
   providers: [BoilerBlowdownRateService]
