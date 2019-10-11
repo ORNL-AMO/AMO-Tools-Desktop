@@ -48,7 +48,8 @@
         </app-exportable-table>
     </div> -->
 
-    <app-data-point-table [settings]="settings" [equipmentType]="equipmentType" [svg]="svg" [x]="x" [y]="y">
+    <app-data-point-table *ngIf="svg != undefined" [settings]="settings" [equipmentType]="equipmentType" [svg]="svg"
+        [x]="x" [y]="y" [ngChart]="ngChart">
     </app-data-point-table>
 
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
@@ -23,7 +23,8 @@ export class DataPointTableComponent implements OnInit {
   x: d3.Selection<any>;
   @Input()
   y: d3.Selection<any>;
-
+  @Input()
+  ngChart: ElementRef;
 
   isEquipmentCurveShown: boolean;
   isEquipmentModificationShown: boolean;
@@ -36,13 +37,32 @@ export class DataPointTableComponent implements OnInit {
   columnTitles: Array<string>;
   rowData: Array<Array<string>>;
   selectedDataPointSub: Subscription;
+  modificationIntersectionPointSub: Subscription;
+  baselineIntersectionPointSub: Subscription;
+  clearAllSub: Subscription;
+
   graphColors: Array<string>;
+  existingDataPoints: Array<{
+    keyColor: {
+      borderColor: string,
+      fillColor: string
+    },
+    dataStrings: Array<string>,
+    dataObj: {
+      flowRateX: string;
+      baselineEquipmentY: string;
+      modificationEquipmentY: string;
+      systemCurveY: string;
+      fluidPower: string;
+    }
+  }>;
   constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
-    private lineChartHelperService: LineChartHelperService) { }
+    private lineChartHelperService: LineChartHelperService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.graphColors = JSON.parse(JSON.stringify(graphColors));
     this.keyColors = new Array<{ borderColor: string, fillColor: string }>();
+    this.existingDataPoints = new Array();
     this.rowData = new Array();
     this.equipmentCurveCollapsedSub = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.subscribe(val => {
       if (val != undefined) {
@@ -69,9 +89,30 @@ export class DataPointTableComponent implements OnInit {
 
     this.selectedDataPointSub = this.systemAndEquipmentCurveGraphService.selectedDataPoint.subscribe(val => {
       if (val) {
-        this.addDataPoint(val);
+        this.addNewDataPoint(val);
       }
     });
+
+    this.baselineIntersectionPointSub = this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.subscribe(val => {
+      if (val) {
+        //add data point to rows
+        this.svg.selectAll('.tablePoint').remove();
+        this.rowData = new Array();
+        this.keyColors = new Array();
+        this.existingDataPoints = new Array();
+        this.addBaselinePoint(val);
+        if (this.isEquipmentModificationShown == true) {
+          let modVal = this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.getValue();
+          this.addModificationPoint(modVal);
+        }
+      }
+    });
+
+    this.clearAllSub = this.systemAndEquipmentCurveGraphService.clearDataPoints.subscribe(val => {
+      if (val == true) {
+        this.clearData();
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -80,6 +121,8 @@ export class DataPointTableComponent implements OnInit {
     this.systemCurveCollapsedSub.unsubscribe();
     this.selectedDataPointSub.unsubscribe();
     this.systemAndEquipmentCurveGraphService.selectedDataPoint.next(undefined);
+    this.baselineIntersectionPointSub.unsubscribe();
+    this.clearAllSub.unsubscribe();
   }
 
   highlightPoint() {
@@ -90,22 +133,87 @@ export class DataPointTableComponent implements OnInit {
 
   }
 
-  deleteFromTable() {
+  clearData() {
+    this.svg.selectAll('.tablePoint').remove();
+    this.rowData = new Array();
+    this.keyColors = new Array();
+    this.existingDataPoints = new Array();
+  }
 
+
+  addBaselinePoint(point: { x: number, y: number, fluidPower: number }) {
+    let rowData: Array<string> = new Array();
+    let flowRateX: string = point.x.toFixed(2);
+    rowData.push(flowRateX);
+    let baselineEquipmentY: string = point.y.toFixed(2);
+    rowData.push(baselineEquipmentY);
+    let modificationEquipmentY: string;
+    if (this.isEquipmentModificationShown == true) {
+      modificationEquipmentY = '&mdash;';
+      rowData.push(modificationEquipmentY);
+    }
+    let systemCurveY: string = point.y.toFixed(2);
+    rowData.push(systemCurveY);
+    let fluidPower: string = point.fluidPower.toFixed(2);
+    rowData.push(fluidPower);
+    let keyColor: { borderColor: string, fillColor: string } = { borderColor: "#145A32", fillColor: "#145A32" };
+    this.addDataPointToArrs(keyColor, rowData, flowRateX, baselineEquipmentY, modificationEquipmentY, systemCurveY, fluidPower);
+    this.renderBaselinePoint(point);
+  }
+
+  renderBaselinePoint(point: { x: number, y: number, fluidPower: number }) {
+    this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#145A32", "#145A32", this.x(point.x), this.y(point.y), 'OP1');
+  }
+
+  addModificationPoint(point: { x: number, y: number, fluidPower: number }) {
+    let flowRateX: string = point.x.toFixed(2);
+    let baselineEquipmentY: string = '&mdash;';
+    let modificationEquipmentY: string = point.y.toFixed(2);
+    let systemCurveY: string = point.y.toFixed(2);
+    let fluidPower: string = point.fluidPower.toFixed(2);
+    let rowData: Array<string> = [flowRateX, baselineEquipmentY, modificationEquipmentY, systemCurveY, fluidPower];
+    let keyColor: { borderColor: string, fillColor: string } = { borderColor: "#3498DB", fillColor: "#3498DB" };
+    this.addDataPointToArrs(keyColor, rowData, flowRateX, baselineEquipmentY, modificationEquipmentY, systemCurveY, fluidPower);
+    this.renderModificationPoint(point);
+  }
+
+  renderModificationPoint(point: { x: number, y: number, fluidPower: number }) {
+    this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", "#3498DB", "#3498DB", this.x(point.x), this.y(point.y), 'OP2');
+  }
+
+  deleteFromTable(index: number) {
+    this.svg.selectAll('.tablePoint').remove();
+    this.existingDataPoints.splice(index, 1);
+    this.rowData = new Array();
+    this.keyColors = new Array();
+    let iterateIndex: number = 1;
+    this.existingDataPoints.forEach(dataPoint => {
+      this.rowData.push(dataPoint.dataStrings);
+      this.keyColors.push(dataPoint.keyColor);
+      if (dataPoint.keyColor.borderColor == "#3498DB") {
+        this.renderModificationPoint({ x: Number(dataPoint.dataObj.flowRateX), y: Number(dataPoint.dataObj.modificationEquipmentY), fluidPower: 0 });
+      } else if (dataPoint.keyColor.borderColor == "#145A32") {
+        this.renderBaselinePoint({ x: Number(dataPoint.dataObj.flowRateX), y: Number(dataPoint.dataObj.baselineEquipmentY), fluidPower: 0 });
+      } else {
+        this.renderDataPoint(dataPoint, iterateIndex);
+      }
+      iterateIndex++;
+    });
+    this.cd.detectChanges();
   }
 
   setColumnTitles() {
     this.columnTitles = this.systemAndEquipmentCurveGraphService.initColumnTitles(this.settings, this.equipmentType, this.isEquipmentCurveShown, this.isEquipmentModificationShown, this.isSystemCurveShown);
   }
 
-  addDataPoint(dataPoint: Array<{ x: number, y: number, fluidPower?: number }>) {
+  addNewDataPoint(dataPoint: Array<{ x: number, y: number, fluidPower?: number }>) {
     let baselineEquipmentData: { x: number, y: number, fluidPower?: number };
     let modificationEquipmentData: { x: number, y: number, fluidPower?: number };
     let systemCurveData: { x: number, y: number, fluidPower?: number };
     let systemCurveIndex: number = 0;
     let flowRateX: string;
-    let baselineY: string;
-    let modificationY: string;
+    let baselineEquipmentY: string;
+    let modificationEquipmentY: string;
     let systemCurveY: string;
     let fluidPower: string;
 
@@ -123,20 +231,15 @@ export class DataPointTableComponent implements OnInit {
     }
 
     let newKeyColor: { borderColor: string, fillColor: string } = this.getNewKeyColor();
-    console.log(newKeyColor);
-    //rowData = Array<"baselineX", "baselineY", "modificationY", "systemCurveY", "fluidPower">;
+    //rowData = Array<"flowRateX", "baselineY?", "modificationY?", "systemCurveY", "fluidPower">;
     if (this.isEquipmentCurveShown == true) {
       flowRateX = baselineEquipmentData.x.toFixed(2);
       newRowDataArr.push(flowRateX);
-      baselineY = baselineEquipmentData.y.toFixed(2);
-      newRowDataArr.push(baselineY);
-      this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", newKeyColor.fillColor, newKeyColor.borderColor, this.x(flowRateX), this.y(baselineY), 'OP2');
-
-
+      baselineEquipmentY = baselineEquipmentData.y.toFixed(2);
+      newRowDataArr.push(baselineEquipmentY);
       if (this.isEquipmentModificationShown) {
-        modificationY = modificationEquipmentData.y.toFixed(2);
-        newRowDataArr.push(modificationY);
-        this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", newKeyColor.fillColor, newKeyColor.borderColor, this.x(flowRateX), this.y(modificationY), 'OP2');
+        modificationEquipmentY = modificationEquipmentData.y.toFixed(2);
+        newRowDataArr.push(modificationEquipmentY);
       }
     }
 
@@ -149,12 +252,58 @@ export class DataPointTableComponent implements OnInit {
       newRowDataArr.push(systemCurveY);
       fluidPower = systemCurveData.fluidPower.toFixed(2);
       newRowDataArr.push(fluidPower);
-      this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", newKeyColor.fillColor, newKeyColor.borderColor, this.x(flowRateX), this.y(systemCurveY), 'OP2');
     }
-    this.rowData.push(newRowDataArr);
-    this.keyColors.push(newKeyColor);
-    console.log(this.keyColors);
+
+    let newDataPoint = this.addDataPointToArrs(newKeyColor, newRowDataArr, flowRateX, baselineEquipmentY, modificationEquipmentY, systemCurveY, fluidPower);
+    this.renderDataPoint(newDataPoint, this.existingDataPoints.length);
   }
+
+
+  addDataPointToArrs(keyColor: { borderColor: string, fillColor: string }, rowDataArr: Array<string>, flowRateX: string, baselineEquipmentY: string, modificationEquipmentY: string, systemCurveY: string, fluidPower: string) {
+    let newDataPoint = {
+      keyColor: keyColor,
+      dataStrings: rowDataArr,
+      dataObj: {
+        flowRateX: flowRateX,
+        baselineEquipmentY: baselineEquipmentY,
+        modificationEquipmentY: modificationEquipmentY,
+        systemCurveY: systemCurveY,
+        fluidPower: fluidPower
+      }
+    }
+    this.existingDataPoints.push(newDataPoint);
+    this.rowData.push(rowDataArr);
+    this.keyColors.push(keyColor);
+    this.cd.detectChanges();
+    return newDataPoint;
+  }
+
+
+  renderDataPoint(dataPoint: {
+    keyColor: {
+      borderColor: string,
+      fillColor: string
+    },
+    dataStrings: Array<string>,
+    dataObj: {
+      flowRateX: string;
+      baselineEquipmentY: string;
+      modificationEquipmentY: string;
+      systemCurveY: string;
+      fluidPower: string;
+    }
+  }, index: number) {
+    if (dataPoint.dataObj.baselineEquipmentY) {
+      this.lineChartHelperService.tableFocusHelper(this.svg, "baselineEquipmentY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, this.x(dataPoint.dataObj.flowRateX), this.y(dataPoint.dataObj.baselineEquipmentY), index.toString());
+    };
+    if (dataPoint.dataObj.modificationEquipmentY) {
+      this.lineChartHelperService.tableFocusHelper(this.svg, "modificationEquipmentY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, this.x(dataPoint.dataObj.flowRateX), this.y(dataPoint.dataObj.modificationEquipmentY), index.toString());
+    }
+    if (dataPoint.dataObj.systemCurveY) {
+      this.lineChartHelperService.tableFocusHelper(this.svg, "systemCurveY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, this.x(dataPoint.dataObj.flowRateX), this.y(dataPoint.dataObj.systemCurveY), index.toString());
+    }
+  }
+
 
   getNewKeyColor(): { borderColor: string, fillColor: string } {
     let randomBorderIndex: number = this.getRandomInt(this.graphColors.length);
@@ -168,7 +317,6 @@ export class DataPointTableComponent implements OnInit {
       return this.getNewKeyColor();
     }
   }
-
 
   getRandomInt(max: number) {
     return Math.floor(Math.random() * Math.floor(max));

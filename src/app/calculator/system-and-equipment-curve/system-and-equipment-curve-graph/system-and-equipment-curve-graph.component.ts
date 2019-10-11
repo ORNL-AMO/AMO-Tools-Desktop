@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef } from '@angular/core';
 import * as d3 from 'd3';
 import { LineChartHelperService } from '../../../shared/helper-services/line-chart-helper.service';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph.service';
@@ -38,6 +38,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   baselineEquipmentCurveDataPairsSub: Subscription;
   modificationEquipmentCurveDataPairsSub: Subscription;
   curveDataSubscription: Subscription;
+  byEquationInputsSub: Subscription;
+  byDataInputsSub: Subscription;
 
   baselineEquipmentLine: d3.Selection<any>;
   modificationEquipmentLine: d3.Selection<any>;
@@ -53,7 +55,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   tooltipData: Array<{ label: string, value: number, unit: string, formatX: boolean }>;
   canvasWidth: number;
   constructor(private lineChartHelperService: LineChartHelperService, private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
-    private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService) { }
+    private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
@@ -65,6 +67,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.baselineEquipmentCurveDataPairsSub.unsubscribe();
     this.modificationEquipmentCurveDataPairsSub.unsubscribe();
     this.curveDataSubscription.unsubscribe();
+    this.byDataInputsSub.unsubscribe();
+    this.byEquationInputsSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -80,6 +84,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.equipmentInputsSub = this.systemAndEquipmentCurveService.equipmentInputs.subscribe(val => {
       if (val != undefined) {
         this.isEquipmentModificationShown = (val.baselineMeasurement != val.modifiedMeasurement);
+        this.systemAndEquipmentCurveGraphService.clearDataPoints.next(true);
+        this.systemAndEquipmentCurveGraphService.clearDataPoints.next(false);
         this.createGraph();
       }
     });
@@ -89,6 +95,23 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
         this.createGraph();
       }
     });
+
+    this.byEquationInputsSub = this.systemAndEquipmentCurveService.byEquationInputs.subscribe(val => {
+      if (val != undefined) {
+        this.systemAndEquipmentCurveGraphService.clearDataPoints.next(true);
+        this.systemAndEquipmentCurveGraphService.clearDataPoints.next(false);
+        this.createGraph();
+      }
+    })
+
+    this.byDataInputsSub = this.systemAndEquipmentCurveService.byDataInputs.subscribe(val => {
+      if (val != undefined) {
+        this.systemAndEquipmentCurveGraphService.clearDataPoints.next(true);
+        this.systemAndEquipmentCurveGraphService.clearDataPoints.next(false);
+        this.createGraph();
+      }
+    })
+
     this.baselineEquipmentCurveDataPairsSub = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.subscribe(baselinePair => {
       if (baselinePair != undefined) {
         this.createGraph();
@@ -103,12 +126,16 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     if (this.equipmentType == 'pump') {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.pumpSystemCurveData.subscribe(pumpSystemCurve => {
         if (pumpSystemCurve != undefined) {
+          this.systemAndEquipmentCurveGraphService.clearDataPoints.next(true);
+          this.systemAndEquipmentCurveGraphService.clearDataPoints.next(false);
           this.createGraph();
         }
       });
     } else {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.fanSystemCurveData.subscribe(fanSystemCurve => {
         if (fanSystemCurve != undefined) {
+          this.systemAndEquipmentCurveGraphService.clearDataPoints.next(true);
+          this.systemAndEquipmentCurveGraphService.clearDataPoints.next(false);
           this.createGraph();
         }
       });
@@ -258,16 +285,12 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     d3.select(this.ngChart.nativeElement).selectAll('#intersectBaseline').remove();
     d3.select(this.ngChart.nativeElement).selectAll('#intersectModification').remove();
     let baselineEquipmentCurveDataPairs: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.getValue();
-    let intersectionPoint: { x: number, y: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.xDomain, this.settings, baselineEquipmentCurveDataPairs);
-    if (intersectionPoint != undefined) {
-      this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#145A32", "#145A32", this.x(intersectionPoint.x), this.y(intersectionPoint.y), 'OP1');
-    }
+    let intersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.xDomain, this.settings, baselineEquipmentCurveDataPairs);
+    this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(intersectionPoint);
     if (this.isEquipmentModificationShown) {
       let modificationEquipmentCurvePairs: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
-      let intersectionPoint: { x: number, y: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.xDomain, this.settings, modificationEquipmentCurvePairs);
-      if (intersectionPoint != undefined) {
-        this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", "#3498DB", "#3498DB", this.x(intersectionPoint.x), this.y(intersectionPoint.y), 'OP2');
-      }
+      let intersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.xDomain, this.settings, modificationEquipmentCurvePairs);
+      this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(intersectionPoint);
     }
   }
 
