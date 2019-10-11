@@ -587,6 +587,7 @@ export class PumpCurveGraphComponent implements OnInit {
     };
     this.keyColors.push(colors);
     this.rowData.push(data);
+    console.log(this.rowData);
   }
 
   //dynamic table

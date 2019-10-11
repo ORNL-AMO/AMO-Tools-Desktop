@@ -28,7 +28,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   width: number;
   height: number;
   margin: { top: number, right: number, bottom: number, left: number };
-  columnTitles: Array<string>;
   isSystemCurveShown: boolean;
   isEquipmentCurveShown: boolean;
   isEquipmentModificationShown: boolean;
@@ -75,21 +74,18 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.equipmentCurveCollapsedSub = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.subscribe(val => {
       if (val != undefined) {
         this.isEquipmentCurveShown = (val == 'open');
-        this.setColumnTitles();
         this.createGraph();
       }
     });
     this.equipmentInputsSub = this.systemAndEquipmentCurveService.equipmentInputs.subscribe(val => {
       if (val != undefined) {
         this.isEquipmentModificationShown = (val.baselineMeasurement != val.modifiedMeasurement);
-        this.setColumnTitles();
         this.createGraph();
       }
     });
     this.systemCurveCollapsedSub = this.systemAndEquipmentCurveService.systemCurveCollapsed.subscribe(val => {
       if (val != undefined) {
         this.isSystemCurveShown = (val == 'open');
-        this.setColumnTitles();
         this.createGraph();
       }
     });
@@ -186,10 +182,6 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.lineChartHelperService.setYAxis(this.svg, this.y, this.width, this.isGridToggled, 6, 0, 0, 15, null);
   }
 
-  setColumnTitles() {
-    this.columnTitles = this.systemAndEquipmentCurveGraphService.initColumnTitles(this.settings, this.equipmentType, this.isEquipmentCurveShown, this.isEquipmentModificationShown, this.isSystemCurveShown);
-  }
-
   //equipment curves
   drawEquipmentCurve() {
     if (this.isEquipmentCurveShown == true) {
@@ -268,13 +260,13 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     let baselineEquipmentCurveDataPairs: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.getValue();
     let intersectionPoint: { x: number, y: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.xDomain, this.settings, baselineEquipmentCurveDataPairs);
     if (intersectionPoint != undefined) {
-      this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#000", "#000", this.x(intersectionPoint.x), this.y(intersectionPoint.y), 'OP1');
+      this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#145A32", "#145A32", this.x(intersectionPoint.x), this.y(intersectionPoint.y), 'OP1');
     }
     if (this.isEquipmentModificationShown) {
       let modificationEquipmentCurvePairs: Array<{ x: number, y: number }> = this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.getValue();
       let intersectionPoint: { x: number, y: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.xDomain, this.settings, modificationEquipmentCurvePairs);
       if (intersectionPoint != undefined) {
-        this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", "#000", "#000", this.x(intersectionPoint.x), this.y(intersectionPoint.y), 'OP2');
+        this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", "#3498DB", "#3498DB", this.x(intersectionPoint.x), this.y(intersectionPoint.y), 'OP2');
       }
     }
   }
@@ -350,7 +342,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   buildTable() {
     let dArray: Array<any> = this.lineChartHelperService.getDArray();
-    console.log(dArray);
+    this.systemAndEquipmentCurveGraphService.selectedDataPoint.next(dArray);
   }
 }
 

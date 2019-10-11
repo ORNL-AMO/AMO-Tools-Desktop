@@ -23,6 +23,8 @@ import { RegressionEquationsComponent } from './regression-equations/regression-
 import { RegressionEquationsService } from './regression-equations/regression-equations.service';
 import { SystemAndEquipmentCurveGraphComponent } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.component';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
+import { DataPointTableComponent } from './system-and-equipment-curve-graph/data-point-table/data-point-table.component';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -30,17 +32,24 @@ import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curv
     SystemCurveComponent,
     EquipmentCurveComponent,
     FanSystemCurveFormComponent,
-    PumpSystemCurveFormComponent, 
-    SystemAndEquipmentCurveHelpComponent, 
-    FanCurveHelpComponent, 
-    FanSystemCurveHelpComponent, 
-    PumpSystemCurveHelpComponent, 
-    PumpCurveHelpComponent, ByDataFormComponent, ByEquationFormComponent, EquipmentCurveFormComponent, RegressionEquationsComponent, SystemAndEquipmentCurveGraphComponent
+    PumpSystemCurveFormComponent,
+    SystemAndEquipmentCurveHelpComponent,
+    FanCurveHelpComponent,
+    FanSystemCurveHelpComponent,
+    PumpSystemCurveHelpComponent,
+    PumpCurveHelpComponent,
+    ByDataFormComponent,
+    ByEquationFormComponent,
+    EquipmentCurveFormComponent,
+    RegressionEquationsComponent,
+    SystemAndEquipmentCurveGraphComponent,
+    DataPointTableComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    SharedPipesModule
+    SharedPipesModule,
+    ExportableResultsTableModule
   ],
   providers: [
     SystemAndEquipmentCurveService,
