@@ -125,12 +125,42 @@ export class DataPointTableComponent implements OnInit {
     this.clearAllSub.unsubscribe();
   }
 
-  highlightPoint() {
-
+  getHighlightIds(index: number): Array<string> {
+    let baselineIntersection = this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.getValue();
+    let modificationIntersection = this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.getValue();
+    let ids: Array<string> = new Array<string>();
+    if (baselineIntersection != undefined && index == 0) {
+      //highlight baseline
+      ids.push('#intersectBaseline');
+    } else if (modificationIntersection != undefined && index == 1) {
+      //highlight modification
+      ids.push('#intersectModification');
+    } else {
+      //highlight other points
+      if (this.isSystemCurveShown == true) {
+        //hight light system curve
+        ids.push('#systemCurveY' + (index+1));
+      }
+      if (this.isEquipmentCurveShown == true) {
+        //highligh equipment curve
+        ids.push('#baselineEquipmentY' + (index+1));
+        if (this.isEquipmentModificationShown == true) {
+          //highlight modification
+          ids.push('#modificationEquipmentY' + (index+1));
+        }
+      }
+    }
+    return ids;
   }
 
-  unhighlightPoint() {
+  highlightPoint(index: number) {
+    let ids: Array<string> = this.getHighlightIds(index);
+    this.lineChartHelperService.tableHighlightPointHelper(this.svg, ids);
+  }
 
+  unhighlightPoint(index: number) {
+    let ids: Array<string> = this.getHighlightIds(index);
+    this.lineChartHelperService.tableUnhighlightPointHelper(this.svg, ids);
   }
 
   clearData() {
