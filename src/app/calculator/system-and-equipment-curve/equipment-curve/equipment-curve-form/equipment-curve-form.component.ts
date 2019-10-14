@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { EquipmentCurveService, EquipmentInputs } from '../equipment-curve.service';
-import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
+import { EquipmentCurveService } from '../equipment-curve.service';
+import { SystemAndEquipmentCurveService, EquipmentInputs } from '../../system-and-equipment-curve.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-equipment-curve-form',
@@ -23,11 +24,21 @@ export class EquipmentCurveFormComponent implements OnInit {
     { display: 'Speed', value: 1 }
   ];
   modWarning: string = null;
+  resetFormsSub: Subscription;
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
     this.initForm();
     this.setSmallUnit();
+    this.resetFormsSub = this.systemAndEquipmentCurveService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetForm();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.resetFormsSub.unsubscribe();
   }
 
   initForm() {
@@ -36,6 +47,11 @@ export class EquipmentCurveFormComponent implements OnInit {
       defaultData = this.equipmentCurveService.getEquipmentCurveDefault();
     }
     this.systemAndEquipmentCurveService.equipmentInputs.next(defaultData);
+    this.equipmentCurveForm = this.equipmentCurveService.getEquipmentCurveFormFromObj(defaultData);
+  }
+
+  resetForm() {
+    let defaultData: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
     this.equipmentCurveForm = this.equipmentCurveService.getEquipmentCurveFormFromObj(defaultData);
   }
 
@@ -57,13 +73,9 @@ export class EquipmentCurveFormComponent implements OnInit {
     }
   }
 
-  checkWarnings() {
-    // if (this.pumpCurveForm.controls.modifiedMeasurement.value < (this.pumpCurveForm.controls.baselineMeasurement.value * .5) || this.pumpCurveForm.controls.modifiedMeasurement.value > (this.pumpCurveForm.controls.baselineMeasurement.value * 1.5)) {
-    //   this.modWarning = "Modified value must be within +/-50% of the baseline value.";
-    // }
-    // else {
-    //   this.modWarning = null;
-    // }
+  setModifiedMeasurementValidator() {
+    this.equipmentCurveForm = this.equipmentCurveService.setModifiedMeasurementMinMax(this.equipmentCurveForm);
+    this.save();
   }
 
   focusField(str: string) {

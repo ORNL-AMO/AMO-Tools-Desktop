@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as regression from 'regression';
-import { ByDataInputs, ByEquationInputs, EquipmentInputs } from '../equipment-curve/equipment-curve.service';
 import * as _ from 'lodash';
-import { FanSystemCurveData, PumpSystemCurveData } from '../system-and-equipment-curve.service';
+import { FanSystemCurveData, PumpSystemCurveData, ByDataInputs, EquipmentInputs, ByEquationInputs } from '../system-and-equipment-curve.service';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -32,7 +31,7 @@ export class RegressionEquationsService {
     this.systemCurveRegressionEquation = new BehaviorSubject<string>(undefined);
   }
 
-  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string): {
+  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, yValue: string): {
     baselineRegressionEquation: string,
     baselineRSquared: number,
     modificationRegressionEquation: string,
@@ -43,7 +42,7 @@ export class RegressionEquationsService {
 
     let baselineData: Array<Array<number>> = new Array();
     byData.dataRows.forEach(row => {
-      baselineData.push([row.flow, row.secondValue]);
+      baselineData.push([row.flow, row.yValue]);
     })
 
     let baselineResults = regression.polynomial(baselineData, { order: byData.dataOrder, precision: 10 });
@@ -51,7 +50,7 @@ export class RegressionEquationsService {
 
     let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
 
-    baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, secondValueLabel);
+    baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, yValue);
     let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
     for (let i = 0; i <= maxDataFlow; i += 10) {
       let yVal = baselineResults.predict(i);
@@ -83,7 +82,7 @@ export class RegressionEquationsService {
       }
     }
     let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 10 });
-    let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byData.dataOrder, secondValueLabel);
+    let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byData.dataOrder, yValue);
 
     return {
       baselineRegressionEquation: baselineRegressionEquation,

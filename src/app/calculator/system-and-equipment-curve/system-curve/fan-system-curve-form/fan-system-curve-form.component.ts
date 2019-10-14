@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { FanSystemCurveFormService } from '../fan-system-curve-form.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SystemAndEquipmentCurveService, FanSystemCurveData } from '../../system-and-equipment-curve.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fan-system-curve-form',
@@ -17,10 +18,20 @@ export class FanSystemCurveFormComponent implements OnInit {
   pointOneFluidPower: number = 0;
   pointTwoFluidPower: number = 0;
   fanSystemCurveForm: FormGroup;
+  resetFormsSub: Subscription;
   constructor(private fanSystemCurveFormService: FanSystemCurveFormService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
     this.initForm();
+    this.resetFormsSub = this.systemAndEquipmentCurveService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.initForm();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.resetFormsSub.unsubscribe();
   }
 
   initForm() {
@@ -32,6 +43,12 @@ export class FanSystemCurveFormComponent implements OnInit {
     this.fanSystemCurveForm = this.fanSystemCurveFormService.getFormFromObj(dataObj);
     this.calculateFluidPowers(dataObj);
     this.checkLossExponent(dataObj.systemLossExponent);
+  }
+
+  resetForm() {
+    let dataObj: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.value;
+    this.fanSystemCurveForm = this.fanSystemCurveFormService.getFormFromObj(dataObj);
+    this.calculateFluidPowers(dataObj);
   }
 
   checkLossExponent(systemLossExponent: number) {

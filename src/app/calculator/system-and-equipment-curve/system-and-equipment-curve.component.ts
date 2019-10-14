@@ -2,11 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { SystemAndEquipmentCurveService, FanSystemCurveData, PumpSystemCurveData } from './system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService, ByDataInputs, ByEquationInputs, EquipmentInputs } from './system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from './regression-equations/regression-equations.service';
-import { ByDataInputs, ByEquationInputs, EquipmentInputs } from './equipment-curve/equipment-curve.service';
-import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve',
@@ -126,24 +124,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     }
   }
 
-  // calculatFanSystemCurveRegressions(fanSystemCurveData: FanSystemCurveData) {
-  //   let systemCurveRegressionEquation: string = this.regressionEquationsService.getFanSystemCurveRegressionEquation(fanSystemCurveData);
-  //   this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
-  //   let isEquipmentCurveShown: boolean = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open';
-  //   let domainAndRanges = this.systemAndEquipmentCurveGraphService.getGraphDomainAndRange(isEquipmentCurveShown, true, this.equipmentType, 0, 0);
-  //   let fanSystemCurveRegressionData = this.regressionEquationsService.calculateFanSystemCurveData(fanSystemCurveData, domainAndRanges.xDomain.max, this.settings);
-  //   this.systemAndEquipmentCurveService.systemCurveRegressionData.next(fanSystemCurveRegressionData);
-  // }
-
-  // calculatePumpSystemCurveRegressions(pumpSystemCurveData: PumpSystemCurveData) {
-  //   let systemCurveRegressionEquation: string = this.regressionEquationsService.getPumpSystemCurveRegressionEquation(val);
-  //   this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
-  //   let isEquipmentCurveShown: boolean = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open';
-  //   let domainAndRanges = this.systemAndEquipmentCurveGraphService.getGraphDomainAndRange(isEquipmentCurveShown, true, this.equipmentType, 0, 0);
-  //   let pumpSystemCurveRegressionData = this.regressionEquationsService.calculatePumpSystemCurveData(pumpSystemCurveData, domainAndRanges.xDomain.max, this.settings);
-  //   this.systemAndEquipmentCurveService.systemCurveRegressionData.next(pumpSystemCurveRegressionData);
-  // }
-
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -177,7 +157,9 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   }
 
   btnGenerateExample() {
-
+    this.systemAndEquipmentCurveService.setExample(this.settings, this.equipmentType);
+    this.systemAndEquipmentCurveService.resetForms.next(true);
+    this.systemAndEquipmentCurveService.resetForms.next(false);
   }
 
   btnResetDefaults() {

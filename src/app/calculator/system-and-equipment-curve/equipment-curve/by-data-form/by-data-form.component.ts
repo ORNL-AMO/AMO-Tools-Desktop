@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { EquipmentCurveService, ByDataInputs } from '../equipment-curve.service';
-import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
+import { EquipmentCurveService } from '../equipment-curve.service';
+import { SystemAndEquipmentCurveService, ByDataInputs } from '../../system-and-equipment-curve.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-by-data-form',
@@ -16,28 +17,38 @@ export class ByDataFormComponent implements OnInit {
   settings: Settings;
 
   byDataForm: FormGroup;
-  secondValueLabel: string;
-  secondValueUnit: string;
+  yValueLabel: string;
+  yValueUnit: string;
   flowUnit: string;
   formLabel: string;
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
   ];
+  resetFormsSub: Subscription;
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     if (this.equipmentType == 'fan') {
       this.formLabel = 'Fan Data';
-      this.secondValueLabel = 'Pressure';
+      this.yValueLabel = 'Pressure';
       this.flowUnit = this.settings.fanFlowRate;
-      this.secondValueUnit = this.settings.fanPressureMeasurement;
+      this.yValueUnit = this.settings.fanPressureMeasurement;
     } else {
       this.formLabel = 'Pump Data';
-      this.secondValueLabel = 'Head';
+      this.yValueLabel = 'Head';
       this.flowUnit = this.settings.flowMeasurement;
-      this.secondValueUnit = this.settings.distanceMeasurement;
+      this.yValueUnit = this.settings.distanceMeasurement;
     }
     this.initForm();
+    this.resetFormsSub = this.systemAndEquipmentCurveService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetForm();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.resetFormsSub.unsubscribe();
   }
 
   initForm() {
@@ -46,6 +57,11 @@ export class ByDataFormComponent implements OnInit {
       defaultData = this.equipmentCurveService.getByDataDefault(this.settings);
     }
     this.systemAndEquipmentCurveService.byDataInputs.next(defaultData);
+    this.byDataForm = this.equipmentCurveService.getByDataFormFromObj(defaultData);
+  }
+
+  resetForm() {
+    let defaultData: ByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
     this.byDataForm = this.equipmentCurveService.getByDataFormFromObj(defaultData);
   }
 
@@ -66,7 +82,7 @@ export class ByDataFormComponent implements OnInit {
   addRow() {
     let tmpDataRowForm = this.formBuilder.group({
       flow: [0, [Validators.required, Validators.max(1000000)]],
-      secondValue: [0, [Validators.required, Validators.min(0)]]
+      yValue: [0, [Validators.required, Validators.min(0)]]
     });
     this.byDataForm.controls.dataRows.value.controls.push(tmpDataRowForm);
     this.save();

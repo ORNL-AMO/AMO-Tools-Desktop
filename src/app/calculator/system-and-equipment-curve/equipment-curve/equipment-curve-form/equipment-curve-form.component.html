@@ -51,19 +51,13 @@
                     <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 1"
                         class="input-group-addon units">rpm</span>
                 </div>
-                <span class="alert-danger pull-right small" *ngIf="modWarning !== null">
-                    <span *ngIf="modWarning !== null">{{modWarning}}</span>
-                </span>
                 <span class="alert-danger pull-right small"
                     *ngIf="equipmentCurveForm.controls.modifiedMeasurement.invalid && !equipmentCurveForm.controls.modifiedMeasurement.pristine">
                     <span *ngIf="equipmentCurveForm.controls.modifiedMeasurement.errors.required">Value required.</span>
-                    <span *ngIf="equipmentCurveForm.controls.modifiedMeasurement.errors.min">Value can't be less than
-                        {{equipmentCurveForm.controls.modifiedMeasurement.errors.min.min}}
-                        <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 0"
-                            class="input-group-addon units">{{smallUnit}}</span>
-                        <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 1"
-                            class="input-group-addon units">rpm</span>.
-                    </span>
+                    <span *ngIf="equipmentCurveForm.controls.modifiedMeasurement.errors.min">Modified value must be
+                        within +/-50% of the baseline value.</span>
+                    <span *ngIf="equipmentCurveForm.controls.modifiedMeasurement.errors.max">Modified value must be
+                        within +/-50% of the baseline value.</span>
                 </span>
             </div>
         </div>

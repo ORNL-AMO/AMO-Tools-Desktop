@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
-import { EquipmentCurveService, ByEquationInputs } from '../equipment-curve.service';
-import { SystemAndEquipmentCurveService } from '../../system-and-equipment-curve.service';
+import { EquipmentCurveService } from '../equipment-curve.service';
+import { SystemAndEquipmentCurveService, ByEquationInputs } from '../../system-and-equipment-curve.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-by-equation-form',
@@ -21,11 +22,21 @@ export class ByEquationFormComponent implements OnInit {
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
   ]
+  resetFormsSub: Subscription;
   constructor(private equipmentCurveService: EquipmentCurveService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
     this.setFormLabelAndUnit();
     this.initForm();
+    this.resetFormsSub = this.systemAndEquipmentCurveService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.resetForm();
+      }
+    });
+  }
+
+  ngOnDestroy(){
+    this.resetFormsSub.unsubscribe();
   }
 
   initForm() {
@@ -34,6 +45,11 @@ export class ByEquationFormComponent implements OnInit {
       defaultData = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.distanceMeasurement);
     }
     this.systemAndEquipmentCurveService.byEquationInputs.next(defaultData);
+    this.byEquationForm = this.equipmentCurveService.getByEquationFormFromObj(defaultData);
+  }
+
+  resetForm(){
+    let defaultData: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
     this.byEquationForm = this.equipmentCurveService.getByEquationFormFromObj(defaultData);
   }
 

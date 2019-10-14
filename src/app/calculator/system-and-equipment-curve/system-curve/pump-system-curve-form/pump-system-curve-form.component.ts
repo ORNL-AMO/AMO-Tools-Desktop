@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { PumpSystemCurveFormService } from '../pump-system-curve-form.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SystemAndEquipmentCurveService, PumpSystemCurveData } from '../../system-and-equipment-curve.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pump-system-curve-form',
@@ -17,10 +18,20 @@ export class PumpSystemCurveFormComponent implements OnInit {
   pointOneFluidPower: number = 0;
   pointTwoFluidPower: number = 0;
   pumpSystemCurveForm: FormGroup;
+  resetFormsSub: Subscription;
   constructor(private pumpSystemCurveFormService: PumpSystemCurveFormService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
 
   ngOnInit() {
     this.initForm();
+    this.resetFormsSub = this.systemAndEquipmentCurveService.resetForms.subscribe(val => {
+      if (val == true) {
+        this.initForm();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.resetFormsSub.unsubscribe();
   }
 
   initForm() {
@@ -32,6 +43,12 @@ export class PumpSystemCurveFormComponent implements OnInit {
     this.pumpSystemCurveForm = this.pumpSystemCurveFormService.getFormFromObj(dataObj);
     this.calculateFluidPowers(dataObj);
     this.checkLossExponent(dataObj.systemLossExponent);
+  }
+
+  resetForm() {
+    let dataObj: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.value;
+    this.pumpSystemCurveForm = this.pumpSystemCurveFormService.getFormFromObj(dataObj);
+    this.calculateFluidPowers(dataObj);
   }
 
   checkLossExponent(systemLossExponent: number) {
