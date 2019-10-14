@@ -1,35 +1,35 @@
-.result-table-row{
+.result-table-row {
     border-left: solid 10px;
     margin-bottom: 5px;
 }
 
-td{
+td {
     padding: 0px;
     border-top: none;
 }
 
-.result-percent{
+.result-percent {
     vertical-align: middle;
     font-size: small;
     text-align: left;
 }
 
-.result-name{
+.result-name {
     font-weight: bold;
     text-align: left;
     padding-left: 10px;
     font-size: small;
 }
 
-.result-table{
+.result-table {
     margin-top: 25px;
 }
 
-.toggle-btn{
+.toggle-btn {
     font-size: 12px;
 }
 
-.action-row{
+.action-row {
     margin: 10px;
 }
 
@@ -37,75 +37,72 @@ td{
     font-size: larger;
 } */
 
-.general .btn-secondary:not([disabled]):not(.disabled).active{
+.general .btn-secondary:not([disabled]):not(.disabled).active {
     background-color: #145A32;
     transition: all .5s ease-in-out;
 }
 
-.phast .btn-secondary:not([disabled]):not(.disabled).active{
+.phast .btn-secondary:not([disabled]):not(.disabled).active {
     background-color: #BF3D00;
     transition: all .5s ease-in-out;
 }
 
-.psat .btn-secondary:not([disabled]):not(.disabled).active{
+.psat .btn-secondary:not([disabled]):not(.disabled).active {
     background-color: #2980b9;
     transition: all .5s ease-in-out;
 }
 
-.fsat .btn-secondary:not([disabled]):not(.disabled).active{
+.fsat .btn-secondary:not([disabled]):not(.disabled).active {
     background-color: #FFE400;
     transition: all .5s ease-in-out;
     color: black;
 }
 
-.general .ico-size3{
+.general .ico-size3 {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #145A32);
     transition: all .5s ease-in-out;
 }
-.phast .ico-size3{
+
+.phast .ico-size3 {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #BF3D00);
     transition: all .5s ease-in-out;
 }
-.psat .ico-size3{
+
+.psat .ico-size3 {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #2980b9);
     transition: all .5s ease-in-out;
 }
 
-.fsat .ico-size3{
+.fsat .ico-size3 {
     background: linear-gradient(rgba(228, 219, 219, 0.34), #FFE400);
-    transition: all .5s ease-in-out; 
+    transition: all .5s ease-in-out;
 }
 
-
-.no-data{
+.no-data {
     width: 100%;
 }
 
-
-.in-modal{
+.in-modal {
     min-height: 85vh;
     max-height: 85vh;
 }
 
 .note-row-width {
-  width: 96%;
-  margin-left: 2%;
+    width: 96%;
+    margin-left: 2%;
 }
 
-
-.pre-assessment-header{
+.pre-assessment-header {
     font-size: 15px !important;
 }
 
-.scroll-item{
+.scroll-item {
     overflow-x: hidden;
 }
 
-
-.submit-btn{
+.submit-btn {
     padding: 6px;
 }
-
 
 .btn-group {
     display: block;
@@ -114,4 +111,12 @@ td{
 
 .btn-group .btn-sm {
     font-size: small !important;
+}
+
+.btn-margin-10 {
+    margin: 10px 0px;
+}
+
+.btn-form {
+    border-radius: 4px !important;
 }

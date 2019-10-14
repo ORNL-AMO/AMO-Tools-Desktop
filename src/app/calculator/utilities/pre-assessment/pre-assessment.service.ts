@@ -148,4 +148,55 @@ export class PreAssessmentService {
     let percent = (value / sum) * 100;
     return percent;
   }
+
+  generateExample(settings: Settings): Array<PreAssessment> {
+    let examples: Array<PreAssessment>;
+    let example: PreAssessment = {
+      designedEnergy: null,
+      meteredEnergy: {
+        meteredEnergyFuel: {
+          fuelDescription: '',
+          fuelType: 0,
+          heatingValue: 0,
+          collectionTime: 0,
+          fuelFlowRateInput: 0,
+          electricityUsed: 0,
+          electricityCollectionTime: 0,
+          fuelEnergy: 0,
+          userDefinedMeteredEnergy: false
+        },
+        meteredEnergyElectricity: {
+          electricityCollectionTime: 1,
+          electricityUsed: 80000,
+          auxElectricityUsed: 0,
+          auxElectricityCollectionTime: 0
+        },
+        meteredEnergySteam: {
+          totalHeatSteam: 0,
+          flowRate: 0,
+          collectionTime: 0,
+          electricityUsed: 0,
+          electricityCollectionTime: 0
+        },
+        fuel: false,
+        steam: false,
+        electricity: true
+      },
+      energyUsed: 272.970,
+      name: 'EAF',
+      type: 'Metered',
+      settings: settings,
+      collapsed: false,
+      collapsedState: 'open',
+      borderColor: null,
+      fuelCost: 3.99,
+      steamCost: 4.69,
+      electricityCost: 0.066,
+      fuel: false,
+      electric: true,
+      steam: false
+    }
+    examples = [example];
+    return examples;
+  }
 }
