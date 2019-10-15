@@ -19,10 +19,10 @@ export class DataPointTableComponent implements OnInit {
   equipmentType: string;
   @Input()
   svg: d3.Selection<any>;
-  @Input()
-  x: d3.Selection<any>;
-  @Input()
-  y: d3.Selection<any>;
+  // @Input()
+  // x: d3.Selection<any>;
+  // @Input()
+  // y: d3.Selection<any>;
   @Input()
   ngChart: ElementRef;
 
@@ -103,7 +103,9 @@ export class DataPointTableComponent implements OnInit {
         this.addBaselinePoint(val);
         if (this.isEquipmentModificationShown == true) {
           let modVal = this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.getValue();
-          this.addModificationPoint(modVal);
+          if (modVal != undefined) {
+            this.addModificationPoint(modVal);
+          }
         }
       }
     });
@@ -139,14 +141,14 @@ export class DataPointTableComponent implements OnInit {
       //highlight other points
       if (this.isSystemCurveShown == true) {
         //hight light system curve
-        ids.push('#systemCurveY' + (index+1));
+        ids.push('#systemCurveY' + (index + 1));
       }
       if (this.isEquipmentCurveShown == true) {
         //highligh equipment curve
-        ids.push('#baselineEquipmentY' + (index+1));
+        ids.push('#baselineEquipmentY' + (index + 1));
         if (this.isEquipmentModificationShown == true) {
           //highlight modification
-          ids.push('#modificationEquipmentY' + (index+1));
+          ids.push('#modificationEquipmentY' + (index + 1));
         }
       }
     }
@@ -192,7 +194,9 @@ export class DataPointTableComponent implements OnInit {
   }
 
   renderBaselinePoint(point: { x: number, y: number, fluidPower: number }) {
-    this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#145A32", "#145A32", this.x(point.x), this.y(point.y), 'OP1');
+    let xRef = this.systemAndEquipmentCurveGraphService.xRef;
+    let yRef = this.systemAndEquipmentCurveGraphService.yRef;
+    this.lineChartHelperService.tableFocusHelper(this.svg, "intersectBaseline", "#145A32", "#145A32", xRef(point.x), yRef(point.y), 'OP1');
   }
 
   addModificationPoint(point: { x: number, y: number, fluidPower: number }) {
@@ -208,7 +212,9 @@ export class DataPointTableComponent implements OnInit {
   }
 
   renderModificationPoint(point: { x: number, y: number, fluidPower: number }) {
-    this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", "#3498DB", "#3498DB", this.x(point.x), this.y(point.y), 'OP2');
+    let xRef = this.systemAndEquipmentCurveGraphService.xRef;
+    let yRef = this.systemAndEquipmentCurveGraphService.yRef;
+    this.lineChartHelperService.tableFocusHelper(this.svg, "intersectModification", "#3498DB", "#3498DB", xRef(point.x), yRef(point.y), 'OP2');
   }
 
   deleteFromTable(index: number) {
@@ -323,14 +329,17 @@ export class DataPointTableComponent implements OnInit {
       fluidPower: string;
     }
   }, index: number) {
+
+    let xRef = this.systemAndEquipmentCurveGraphService.xRef;
+    let yRef = this.systemAndEquipmentCurveGraphService.yRef;
     if (dataPoint.dataObj.baselineEquipmentY) {
-      this.lineChartHelperService.tableFocusHelper(this.svg, "baselineEquipmentY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, this.x(dataPoint.dataObj.flowRateX), this.y(dataPoint.dataObj.baselineEquipmentY), index.toString());
+      this.lineChartHelperService.tableFocusHelper(this.svg, "baselineEquipmentY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, xRef(dataPoint.dataObj.flowRateX), yRef(dataPoint.dataObj.baselineEquipmentY), index.toString());
     };
     if (dataPoint.dataObj.modificationEquipmentY) {
-      this.lineChartHelperService.tableFocusHelper(this.svg, "modificationEquipmentY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, this.x(dataPoint.dataObj.flowRateX), this.y(dataPoint.dataObj.modificationEquipmentY), index.toString());
+      this.lineChartHelperService.tableFocusHelper(this.svg, "modificationEquipmentY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, xRef(dataPoint.dataObj.flowRateX), yRef(dataPoint.dataObj.modificationEquipmentY), index.toString());
     }
     if (dataPoint.dataObj.systemCurveY) {
-      this.lineChartHelperService.tableFocusHelper(this.svg, "systemCurveY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, this.x(dataPoint.dataObj.flowRateX), this.y(dataPoint.dataObj.systemCurveY), index.toString());
+      this.lineChartHelperService.tableFocusHelper(this.svg, "systemCurveY" + index, dataPoint.keyColor.fillColor, dataPoint.keyColor.borderColor, xRef(dataPoint.dataObj.flowRateX), yRef(dataPoint.dataObj.systemCurveY), index.toString());
     }
   }
 

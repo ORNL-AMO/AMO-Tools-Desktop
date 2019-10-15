@@ -19,7 +19,7 @@ export class SystemAndEquipmentCurveService {
   baselineEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
   modifiedEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
   resetForms: BehaviorSubject<boolean>;
-  // systemCurveRegressionData: BehaviorSubject<Array<{ x: number, y: number, fluidPower: number }>>;
+  systemCurveRegressionData: BehaviorSubject<Array<{ x: number, y: number, fluidPower: number }>>;
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.currentField = new BehaviorSubject<string>('default');
     this.pumpSystemCurveData = new BehaviorSubject<PumpSystemCurveData>(undefined);

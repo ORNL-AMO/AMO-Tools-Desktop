@@ -39,7 +39,6 @@ export class RegressionEquationsService {
     baselineDataPairs: Array<{ x: number, y: number }>,
     modifiedDataPairs: Array<{ x: number, y: number }>
   } {
-
     let baselineData: Array<Array<number>> = new Array();
     byData.dataRows.forEach(row => {
       baselineData.push([row.flow, row.yValue]);
@@ -52,33 +51,26 @@ export class RegressionEquationsService {
 
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, yValue);
     let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
-    for (let i = 0; i <= maxDataFlow; i += 10) {
-      let yVal = baselineResults.predict(i);
-      if (yVal[1] > 0) {
-        let x: number = i;
-        let y: number = yVal[1];
-        baselineDataPairs.push({
-          x: x,
-          y: y
-        });
-      }
-    }
-
 
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
     let modifiedDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let modificationData: Array<Array<number>> = new Array();
-
     for (let i = 0; i <= maxDataFlow; i += 10) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
-        let x: number = i * ratio;
-        let y: number = yVal[1] * Math.pow(ratio, 2);
+        let xBaseline: number = i;
+        let yBaseline: number = yVal[1];
+        let xModified: number = i * ratio;
+        let yModified: number = yVal[1] * Math.pow(ratio, 2);
         modifiedDataPairs.push({
-          x: x,
-          y: y
+          x: xModified,
+          y: yModified
         });
-        modificationData.push([x, y]);
+        modificationData.push([xModified, yModified]);
+        baselineDataPairs.push({
+          x: xBaseline,
+          y: yBaseline
+        });
       }
     }
     let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 10 });

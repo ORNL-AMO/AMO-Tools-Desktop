@@ -5,7 +5,7 @@
         <span *ngIf="systemCurveCollapsed == 'closed' && !isPrimaryCalculator"
             class="add-curve fa fa-plus pull-right"></span>
     </h5>
-    <div class="mb-3 d-block" [@collapsed]="systemCurveCollapsed">
+    <div class="mb-3 d-block" *ngIf="systemCurveCollapsed == 'open'">
         <app-fan-system-curve-form *ngIf="equipmentType == 'fan'" [settings]="settings"></app-fan-system-curve-form>
         <app-pump-system-curve-form *ngIf="equipmentType == 'pump'" [settings]="settings"></app-pump-system-curve-form>
     </div>
