@@ -16,9 +16,10 @@ export class SystemAndEquipmentCurveService {
   selectedEquipmentCurveFormView: BehaviorSubject<string>;
   equipmentCurveCollapsed: BehaviorSubject<string>;
   systemCurveCollapsed: BehaviorSubject<string>;
+  resetForms: BehaviorSubject<boolean>;
+
   baselineEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
   modifiedEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
-  resetForms: BehaviorSubject<boolean>;
   systemCurveRegressionData: BehaviorSubject<Array<{ x: number, y: number, fluidPower: number }>>;
   constructor(private convertUnitsService: ConvertUnitsService) {
     this.currentField = new BehaviorSubject<string>('default');

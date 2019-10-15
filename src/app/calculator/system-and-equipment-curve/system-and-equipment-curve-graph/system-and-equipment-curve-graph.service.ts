@@ -15,11 +15,13 @@ export class SystemAndEquipmentCurveGraphService {
   xRef: any;
   yRef: any;
   svg: any;
+  maxFlowRate: BehaviorSubject<number>;
   constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
     this.baselineIntersectionPoint = new BehaviorSubject(undefined);
     this.modificationIntersectionPoint = new BehaviorSubject(undefined);
     this.clearDataPoints = new BehaviorSubject<boolean>(false);
+    this.maxFlowRate = new BehaviorSubject<number>(0);
   }
 
   initColumnTitles(settings: Settings, equipmentType: string, displayEquipmentCurve: boolean, displayModificationCurve: boolean, displaySystemCurve: boolean): Array<string> {
@@ -202,9 +204,9 @@ export class SystemAndEquipmentCurveGraphService {
       equipmentStartGreater = true;
     }
     let iterateMax: number;
-    if(systemCurve.length <= equipmentCurve.length){
+    if (systemCurve.length <= equipmentCurve.length) {
       iterateMax = systemCurve.length;
-    }else{
+    } else {
       iterateMax = equipmentCurve.length;
     }
     if (equipmentStartGreater) {

@@ -5,6 +5,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SystemAndEquipmentCurveService, ByDataInputs, ByEquationInputs, EquipmentInputs } from './system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from './regression-equations/regression-equations.service';
+import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve',
@@ -27,8 +28,10 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   byDataSubscription: Subscription;
   byEquationSubscription: Subscription;
   equipmentInputsSubscription: Subscription;
+  maxFlowRate: number = 0;
+  maxFlowRateSubscription: Subscription;
   constructor(private settingsDbService: SettingsDbService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
-    private regressionEquationsService: RegressionEquationsService) { }
+    private regressionEquationsService: RegressionEquationsService, private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService) { }
 
   ngOnInit() {
     this.setCalculatorTitle();
@@ -85,6 +88,21 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
         }
       }
     });
+
+    this.maxFlowRateSubscription = this.systemAndEquipmentCurveGraphService.maxFlowRate.subscribe(val => {
+      if (this.maxFlowRate != val) {
+        this.maxFlowRate = val;
+        let equipmentInputs: EquipmentInputs = this.systemAndEquipmentCurveService.equipmentInputs.getValue();
+        let byDataInputs: ByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
+        let byEquationInputs: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
+        if (equipmentInputs != undefined && byDataInputs != undefined) {
+          this.calculateByDataRegression(byDataInputs, equipmentInputs);
+        }
+        if (equipmentInputs != undefined && byEquationInputs != undefined) {
+          this.calculateByEquationRegressions(byEquationInputs, equipmentInputs);
+        }
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -92,6 +110,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.byDataSubscription.unsubscribe();
     this.byDataSubscription.unsubscribe();
     this.curveDataSubscription.unsubscribe();
+    this.maxFlowRateSubscription.unsubscribe();
   }
 
   calculateByDataRegression(byDataInputs: ByDataInputs, equipmentInputs: EquipmentInputs) {
@@ -99,7 +118,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     if (this.equipmentType == 'fan') {
       secondValueLabel = 'Pressure';
     }
-    let results = this.regressionEquationsService.getEquipmentCurveRegressionByData(byDataInputs, equipmentInputs, secondValueLabel);
+    let results = this.regressionEquationsService.getEquipmentCurveRegressionByData(byDataInputs, equipmentInputs, secondValueLabel, this.maxFlowRate);
     this.regressionEquationsService.baselineEquipmentCurveByDataRegressionEquation.next(results.baselineRegressionEquation);
     this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.next(results.baselineRSquared);
     this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.next(results.modificationRegressionEquation);
@@ -115,7 +134,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     if (this.equipmentType == 'fan') {
       secondValueLabel = 'Pressure';
     }
-    let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(byEquationInputs, equipmentInputs, secondValueLabel);
+    let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(byEquationInputs, equipmentInputs, secondValueLabel, this.maxFlowRate);
     this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.next(results.baselineRegressionEquation);
     this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.next(results.modificationRegressionEquation);
     if (this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Equation') {

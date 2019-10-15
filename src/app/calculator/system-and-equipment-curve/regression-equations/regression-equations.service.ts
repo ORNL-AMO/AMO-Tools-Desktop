@@ -31,7 +31,7 @@ export class RegressionEquationsService {
     this.systemCurveRegressionEquation = new BehaviorSubject<string>(undefined);
   }
 
-  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, yValue: string): {
+  getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, yValue: string, maxFlowRate: number): {
     baselineRegressionEquation: string,
     baselineRSquared: number,
     modificationRegressionEquation: string,
@@ -49,13 +49,18 @@ export class RegressionEquationsService {
 
     let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
 
+    if (maxDataFlow > maxFlowRate) {
+      maxFlowRate = maxDataFlow;
+    }
+
     baselineRegressionEquation = this.formatRegressionEquation(baselineResults.string, byData.dataOrder, yValue);
     let baselineDataPairs: Array<{ x: number, y: number }> = new Array();
 
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
     let modifiedDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let modificationData: Array<Array<number>> = new Array();
-    for (let i = 0; i <= maxDataFlow; i += 10) {
+    baselineData = new Array();
+    for (let i = 0; i <= maxFlowRate; i += 10) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
         let xBaseline: number = i;
@@ -71,6 +76,7 @@ export class RegressionEquationsService {
           x: xBaseline,
           y: yBaseline
         });
+        baselineData.push([xBaseline, yBaseline]);
       }
     }
     let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 10 });
@@ -101,7 +107,7 @@ export class RegressionEquationsService {
     return regressionEquation;
   }
 
-  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string): {
+  getEquipmentCurveRegressionByEquation(byEquationInputs: ByEquationInputs, equipmentInputs: EquipmentInputs, secondValueLabel: string, maxFlowRate: number): {
     baselineRegressionEquation: string,
     modificationRegressionEquation: string,
     baselineDataPairs: Array<{ x: number, y: number }>,
@@ -126,11 +132,11 @@ export class RegressionEquationsService {
       baselineRegressionEquation = baselineRegressionEquation.replace('+ -', '- ');
     }
     //baseline
-    let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1).dataPairs;
+    let baselineDataPairs: Array<{ x: number, y: number }> = this.calculateByEquationData(byEquationInputs, 1, maxFlowRate).dataPairs;
 
     //modification
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
-    let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio);
+    let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio, maxFlowRate);
     let modificationResults = regression.polynomial(modifiedData.calculationData, { order: byEquationInputs.equationOrder, precision: 10 });
     let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byEquationInputs.equationOrder, secondValueLabel);
     return {
@@ -141,10 +147,10 @@ export class RegressionEquationsService {
     };
   }
 
-  calculateByEquationData(byEquationInputs: ByEquationInputs, ratio: number): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
+  calculateByEquationData(byEquationInputs: ByEquationInputs, ratio: number, maxFlowRate: number): { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } {
     let calculationData: Array<Array<number>> = new Array();
     let dataPairs: Array<{ x: number, y: number }> = new Array();
-    for (let i = 0; i <= byEquationInputs.maxFlow + 10; i += 10) {
+    for (let i = 0; i <= maxFlowRate; i += 10) {
       let yVal = this.calculateY(byEquationInputs, i);
       if (yVal > 0) {
         let x: number = i * ratio;
@@ -231,7 +237,7 @@ export class RegressionEquationsService {
       if (pressureAndFluidPower.pressure >= 0) {
         data.push({ x: i, y: pressureAndFluidPower.pressure, fluidPower: pressureAndFluidPower.fluidPower })
       } else {
-        data.push({ x: 0, y: 0, fluidPower: 0 });
+        data.push({ x: i, y: 0, fluidPower: 0 });
       }
     }
     return data;
