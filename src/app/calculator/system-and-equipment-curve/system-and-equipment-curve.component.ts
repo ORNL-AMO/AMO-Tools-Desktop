@@ -6,6 +6,9 @@ import { SystemAndEquipmentCurveService, ByDataInputs, ByEquationInputs, Equipme
 import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from './regression-equations/regression-equations.service';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
+import { Calculator } from '../../shared/models/calculators';
+import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-system-and-equipment-curve',
@@ -31,7 +34,8 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   maxFlowRate: number = 0;
   maxFlowRateSubscription: Subscription;
   constructor(private settingsDbService: SettingsDbService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService,
-    private regressionEquationsService: RegressionEquationsService, private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService) { }
+    private regressionEquationsService: RegressionEquationsService, private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
+    private calculatorDbService: CalculatorDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     this.setCalculatorTitle();
@@ -40,6 +44,10 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     }
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+    }
+
+    if (this.assessment != undefined) {
+      this.setAssessmentCalculatorData();
     }
 
     if (this.equipmentType == 'pump') {
@@ -111,6 +119,9 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.byDataSubscription.unsubscribe();
     this.curveDataSubscription.unsubscribe();
     this.maxFlowRateSubscription.unsubscribe();
+    if (this.assessment != undefined) {
+      this.saveCalculator();
+    }
   }
 
   calculateByDataRegression(byDataInputs: ByDataInputs, equipmentInputs: EquipmentInputs) {
@@ -186,7 +197,56 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.setCalculatorTitle();
     this.systemAndEquipmentCurveService.resetForms.next(true);
     this.systemAndEquipmentCurveService.resetForms.next(false);
-
   }
 
+
+  setAssessmentCalculatorData() {
+    let calculator: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (calculator.systemAndEquipmentCurveData != undefined) {
+      this.systemAndEquipmentCurveService.byDataInputs.next(calculator.systemAndEquipmentCurveData.byDataInputs);
+      this.systemAndEquipmentCurveService.byEquationInputs.next(calculator.systemAndEquipmentCurveData.byEquationInputs);
+      this.systemAndEquipmentCurveService.equipmentInputs.next(calculator.systemAndEquipmentCurveData.equipmentInputs);
+      if (this.equipmentType == 'fan') {
+        this.systemAndEquipmentCurveService.fanSystemCurveData.next(calculator.systemAndEquipmentCurveData.fanSystemCurveData);
+      } else if (this.equipmentType == 'pump') {
+        this.systemAndEquipmentCurveService.pumpSystemCurveData.next(calculator.systemAndEquipmentCurveData.pumpSystemCurveData);
+      }
+      this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.next(calculator.systemAndEquipmentCurveData.equipmentCurveFormView);
+    }
+    this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next("open");
+    this.systemAndEquipmentCurveService.systemCurveCollapsed.next("open");
+  }
+
+  saveCalculator() {
+    let calculator: Calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
+    if (calculator != undefined) {
+      calculator.systemAndEquipmentCurveData = {
+        pumpSystemCurveData: this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue(),
+        fanSystemCurveData: this.systemAndEquipmentCurveService.fanSystemCurveData.getValue(),
+        byEquationInputs: this.systemAndEquipmentCurveService.byEquationInputs.getValue(),
+        byDataInputs: this.systemAndEquipmentCurveService.byDataInputs.getValue(),
+        equipmentInputs: this.systemAndEquipmentCurveService.equipmentInputs.getValue(),
+        equipmentCurveFormView: this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue()
+      }
+
+      this.indexedDbService.putCalculator(calculator).then(() => {
+        this.calculatorDbService.setAll();
+      });
+    } else {
+      calculator = {
+        assessmentId: this.assessment.id,
+        systemAndEquipmentCurveData: {
+          pumpSystemCurveData: this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue(),
+          fanSystemCurveData: this.systemAndEquipmentCurveService.fanSystemCurveData.getValue(),
+          byEquationInputs: this.systemAndEquipmentCurveService.byEquationInputs.getValue(),
+          byDataInputs: this.systemAndEquipmentCurveService.byDataInputs.getValue(),
+          equipmentInputs: this.systemAndEquipmentCurveService.equipmentInputs.getValue(),
+          equipmentCurveFormView: this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue()
+        }
+      };
+      this.indexedDbService.addCalculator(calculator).then((result) => {
+        this.calculatorDbService.setAll();
+      });
+    }
+  }
 }

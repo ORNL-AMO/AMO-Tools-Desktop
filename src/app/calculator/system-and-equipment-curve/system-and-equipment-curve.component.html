@@ -16,7 +16,7 @@
             <app-equipment-curve [ngClass]="{'order-1': isEquipmentCurvePrimary == true}"
                 [equipmentType]="equipmentType" [isPrimaryCalculator]="isEquipmentCurvePrimary" [settings]="settings">
             </app-equipment-curve>
-            <div *ngIf="!inAssessment" class="w-100 justify-content-center btn-group btn-group-sm">
+            <div *ngIf="!assessment" class="w-100 justify-content-center btn-group btn-group-sm">
                 <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form"
                     (click)="btnResetDefaults()">
                     Reset Data

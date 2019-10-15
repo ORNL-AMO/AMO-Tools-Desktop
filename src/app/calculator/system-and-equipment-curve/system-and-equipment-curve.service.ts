@@ -91,6 +91,17 @@ export class SystemAndEquipmentCurveService {
 
 }
 
+export interface SystemAndEquipmentCurveData {
+  pumpSystemCurveData?: PumpSystemCurveData,
+  fanSystemCurveData?: FanSystemCurveData,
+  byEquationInputs?: ByEquationInputs,
+  byDataInputs?: ByDataInputs,
+  equipmentInputs?: EquipmentInputs,
+  equipmentCurveFormView?: string
+
+}
+
+
 export interface PumpSystemCurveData {
   specificGravity: number,
   systemLossExponent: number,

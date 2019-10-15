@@ -58,6 +58,7 @@ import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
+import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,6 @@ import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit
     ModalModule.forRoot(),
     SettingsModule,
     HelpPanelModule,
-    SystemCurveModule,
     SpecificSpeedModule,
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
@@ -111,7 +111,8 @@ import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit
     TabsTooltipModule,
     ToastModule,
     SharedPipesModule,
-    UnitConverterModule
+    UnitConverterModule,
+    SystemAndEquipmentCurveModule
   ],
   providers: [
     PsatService,
