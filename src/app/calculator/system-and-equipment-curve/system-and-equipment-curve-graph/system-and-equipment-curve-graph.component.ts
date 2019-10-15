@@ -3,11 +3,10 @@ import * as d3 from 'd3';
 import { LineChartHelperService } from '../../../shared/helper-services/line-chart-helper.service';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph.service';
 import { Settings } from '../../../shared/models/settings';
-import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData, EquipmentInputs, ByEquationInputs } from '../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { RegressionEquationsService } from '../regression-equations/regression-equations.service';
-import { FanCurveInputData } from '../../../shared/models/fans';
 
 @Component({
   selector: 'app-system-and-equipment-curve-graph',
@@ -218,12 +217,11 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   //setup
   setGraphSize() {
-    let curveGraph = this.ngChartContainer.nativeElement;
-    this.canvasWidth = curveGraph.clientWidth;
+    this.canvasWidth = this.ngChartContainer.nativeElement.clientWidth;
     let canvasHeight: number = this.canvasWidth * (3 / 5);
     //conditional sizing if graph is expanded/compressed
     if (this.expanded) {
-      canvasHeight = curveGraph.clientHeight * 0.9;
+      canvasHeight = this.canvasWidth * 0.9;
     }
 
     if (this.canvasWidth < 400) {
@@ -269,9 +267,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.systemAndEquipmentCurveGraphService.maxFlowRate.next(domainAndRanges.xDomain.max);
     }
     this.systemAndEquipmentCurveGraphService.xRef = this.lineChartHelperService.setScale("linear", domainAndRanges.xRange, this.xDomain);
-    // this.systemAndEquipmentCurveGraphService.xRef = this.x;
     this.systemAndEquipmentCurveGraphService.yRef = this.lineChartHelperService.setScale("linear", domainAndRanges.yRange, this.yDomain);
-    // this.systemAndEquipmentCurveGraphService.yRef = this.y;
     let tickFormat = d3.format("d")
     this.lineChartHelperService.setXAxis(this.systemAndEquipmentCurveGraphService.svg, this.systemAndEquipmentCurveGraphService.xRef, this.height, this.isGridToggled, 5, null, null, null, tickFormat);
     this.lineChartHelperService.setYAxis(this.systemAndEquipmentCurveGraphService.svg, this.systemAndEquipmentCurveGraphService.yRef, this.width, this.isGridToggled, 6, 0, 0, 15, null);
@@ -391,7 +387,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     );
   }
 
-  buildTable() {
+  addDataPoint() {
     let dArray: Array<any> = this.lineChartHelperService.getDArray();
     this.systemAndEquipmentCurveGraphService.selectedDataPoint.next(dArray);
   }
