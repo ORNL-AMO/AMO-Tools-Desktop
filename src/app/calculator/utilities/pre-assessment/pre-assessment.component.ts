@@ -97,9 +97,6 @@ export class PreAssessmentComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
     this.generateExample();
     this.calculate();
   }
