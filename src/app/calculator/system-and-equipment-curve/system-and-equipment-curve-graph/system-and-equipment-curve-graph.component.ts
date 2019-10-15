@@ -206,7 +206,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     this.createGraphTimer = setTimeout(() => {
       this.drawSystemCurve();
       this.drawEquipmentCurve();
-      if (this.isSystemCurveShown && this.isEquipmentCurveShown && this.baselineEquipmentCurveDataPairs != undefined && this.systemCurveRegressionData != undefined) {
+      if (this.isSystemCurveShown && this.isEquipmentCurveShown && this.baselineEquipmentCurveDataPairs != undefined && this.baselineEquipmentCurveDataPairs.length != 0 && this.systemCurveRegressionData != undefined && this.systemCurveRegressionData.length != 0) {
         this.addIntersectionPoints();
       } else {
         d3.select(this.ngChart.nativeElement).selectAll('#intersectBaseline').remove();

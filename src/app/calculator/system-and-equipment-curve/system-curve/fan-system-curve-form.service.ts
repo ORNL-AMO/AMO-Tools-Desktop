@@ -9,17 +9,38 @@ export class FanSystemCurveFormService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getFanSystemDefaults(): FanSystemCurveData {
-    let data: FanSystemCurveData = {
+  getFanSystemCurveDefaults(settings: Settings): FanSystemCurveData {
+    let systemCurveFlowRate: number = 115280;
+    let fanSystemCurvePressure: number = 16.5;
+    if (settings.fanFlowRate != 'ft3/min') {
+      systemCurveFlowRate = Math.round(this.convertUnitsService.value(systemCurveFlowRate).from('ft3/min').to(settings.fanFlowRate) * 100) / 100;
+    }
+    if (settings.fanPressureMeasurement != 'inH2o') {
+      fanSystemCurvePressure = Math.round(this.convertUnitsService.value(fanSystemCurvePressure).from('inH2o').to(settings.fanPressureMeasurement) * 100) / 100;
+    }
+    let exampleFanSystemCurveData: FanSystemCurveData = {
       compressibilityFactor: .98,
       systemLossExponent: 1.9,
-      pointOneFlowRate: 2000,
-      pointOnePressure: 276.8,
+      pointOneFlowRate: 0,
+      pointOnePressure: 0,
+      pointTwo: '',
+      pointTwoFlowRate: systemCurveFlowRate,
+      pointTwoPressure: fanSystemCurvePressure
+    };
+    return exampleFanSystemCurveData;
+  }
+
+  getResetFanSystemCurveInputs(): FanSystemCurveData {
+    let fanSystemCurveData: FanSystemCurveData = {
+      compressibilityFactor: .98,
+      systemLossExponent: 1.9,
+      pointOneFlowRate: 0,
+      pointOnePressure: 0,
       pointTwo: '',
       pointTwoFlowRate: 0,
-      pointTwoPressure: 200
-    }
-    return data;
+      pointTwoPressure: 0
+    };
+    return fanSystemCurveData;
   }
 
   getObjFromForm(form: FormGroup): FanSystemCurveData {

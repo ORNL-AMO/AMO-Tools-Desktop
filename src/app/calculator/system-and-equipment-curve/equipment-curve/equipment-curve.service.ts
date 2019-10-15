@@ -24,13 +24,25 @@ export class EquipmentCurveService {
     return form;
   }
 
+  //example/default same
   getEquipmentCurveDefault(): EquipmentInputs {
-    return {
-      measurementOption: 1,
+    let exampleEquipment: EquipmentInputs = {
+      measurementOption: 0,
       baselineMeasurement: 1800,
-      modificationMeasurementOption: 1,
-      modifiedMeasurement: 1800,
-    }
+      modificationMeasurementOption: 0,
+      modifiedMeasurement: 1800
+    };
+    return exampleEquipment;
+  }
+
+  getResetEquipmentInputs(): EquipmentInputs {
+    let exampleEquipment: EquipmentInputs = {
+      measurementOption: 0,
+      baselineMeasurement: 0,
+      modificationMeasurementOption: 0,
+      modifiedMeasurement: 0
+    };
+    return exampleEquipment;
   }
 
   getEquipmentCurveObjFromForm(form: FormGroup): EquipmentInputs {
@@ -71,6 +83,7 @@ export class EquipmentCurveService {
     return form;
   }
 
+  //example/default same
   getByEquationDefault(flowUnit: string, distanceUnit: string): ByEquationInputs {
     let tmpMaxFlow = 1020;
     let tmpConstant = 356.96;
@@ -87,6 +100,20 @@ export class EquipmentCurveService {
       flow: -0.0686,
       flowTwo: 0.000005,
       flowThree: -0.00000008,
+      flowFour: 0,
+      flowFive: 0,
+      flowSix: 0
+    }
+  }
+
+  getResetByEquationInputs(): ByEquationInputs{
+    return {
+      maxFlow: 0,
+      equationOrder: 3,
+      constant: 0,
+      flow: 0,
+      flowTwo: 0,
+      flowThree: 0,
       flowFour: 0,
       flowFive: 0,
       flowSix: 0
@@ -135,17 +162,73 @@ export class EquipmentCurveService {
       dataRows: [
         { flow: 0, yValue: yValue0 },
         { flow: tmpFlow1, yValue: yValue1 },
-        // { flow: 200, head: 343.6188 },
-        // { flow: 300, head: 335.9542 },
-        // { flow: 400, head: 324.9089 },
-        // { flow: 480, head: 314.7216 },
-        // { flow: 560, head: 304.5332 },
         { flow: tmpFlow2, yValue: yValue2 },
-        // { flow: 690, head: 284.1775 },
-        // { flow: 800, head: 264.6842 },
-        // { flow: 900, head: 241.8114 },
-        // { flow: 970, head: 222.3425 },
         { flow: tmpFlow3, yValue: yValue3 }
+      ],
+      dataOrder: 3
+    }
+  }
+
+
+  getFanByDataExample(settings: Settings): ByDataInputs {
+    let dataRows: Array<{ flow: number, yValue: number }> = [
+      { flow: 0, yValue: 22.3 },
+      { flow: 43200, yValue: 21.8 },
+      { flow: 72050, yValue: 20.3 },
+      { flow: 100870, yValue: 18 },
+      { flow: 129700, yValue: 14.8 },
+      { flow: 158500, yValue: 10.2 },
+      { flow: 172900, yValue: 7.3 },
+      { flow: 187300, yValue: 3.7 }
+    ];
+
+    dataRows.forEach(row => {
+      if (settings.fanFlowRate != 'ft3/min') {
+        row.flow = Math.round(this.convertUnitsService.value(row.yValue).from('ft3/min').to(settings.fanFlowRate) * 100) / 100;
+      }
+      if (settings.fanPressureMeasurement != 'inH2o') {
+        row.yValue = Math.round(this.convertUnitsService.value(row.yValue).from('inH2o').to(settings.fanPressureMeasurement) * 100) / 100;
+      }
+    })
+
+    let exampleByDataInputs: ByDataInputs = {
+      dataRows: dataRows,
+      dataOrder: 2
+    };
+    return exampleByDataInputs;
+  }
+
+  getPumpByDataExample(settings: Settings): ByDataInputs {
+    let dataRows: Array<{ flow: number, yValue: number }> = [
+      { flow: 0, yValue: 355 },
+      { flow: 100, yValue: 351 },
+      { flow: 630, yValue: 294 },
+      { flow: 1020, yValue: 202 }
+    ]
+
+    dataRows.forEach(row => {
+      if (settings.flowMeasurement !== 'gpm') {
+        row.flow = Math.round(this.convertUnitsService.value(row.flow).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+      }
+      if (settings.distanceMeasurement !== 'ft') {
+        row.yValue = Math.round(this.convertUnitsService.value(row.yValue).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+      }
+    })
+    let exampleByDataInputs: ByDataInputs = {
+      dataRows: dataRows,
+      dataOrder: 3
+    };
+    return exampleByDataInputs;
+  }
+
+
+  getResetByDataInputs():ByDataInputs {
+    return {
+      dataRows: [
+        { flow: 0, yValue: 0 },
+        { flow: 0, yValue: 0 },
+        { flow: 0, yValue: 0 },
+        { flow: 0, yValue: 0 }
       ],
       dataOrder: 3
     }

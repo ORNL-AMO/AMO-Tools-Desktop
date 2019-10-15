@@ -89,8 +89,10 @@ export class SystemAndEquipmentCurveGraphService {
       let baselineEquipmentDataCopy: Array<{ x: number, y: number }> = JSON.parse(JSON.stringify(baselineEquipmentData));
       let modificationEqupmentDataCopy: Array<{ x: number, y: number }> = JSON.parse(JSON.stringify(modificationEqupmentData));
       let combinedData: Array<{ x: number, y: number }> = modificationEqupmentDataCopy.concat(baselineEquipmentDataCopy);
-      maxX = _.maxBy(combinedData, (data) => { return data.x });
-      maxY = _.maxBy(combinedData, (data) => { return data.y });
+      let tmpMaxX = _.maxBy(combinedData, (data) => { return data.x });
+      if (tmpMaxX != undefined) { maxX = tmpMaxX };
+      let tmpMaxY = _.maxBy(combinedData, (data) => { return data.y });
+      if (tmpMaxY != undefined) { maxY = tmpMaxY };
     }
 
     if (isSystemCurveShown == true) {

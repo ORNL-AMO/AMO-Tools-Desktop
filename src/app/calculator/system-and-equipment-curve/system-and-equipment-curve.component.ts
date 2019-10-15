@@ -182,6 +182,10 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
   }
 
   btnResetDefaults() {
+    this.systemAndEquipmentCurveService.resetData(this.equipmentType);
+    this.setCalculatorTitle();
+    this.systemAndEquipmentCurveService.resetForms.next(true);
+    this.systemAndEquipmentCurveService.resetForms.next(false);
 
   }
 

@@ -9,17 +9,39 @@ export class PumpSystemCurveFormService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
 
-  getPumpSystemCurveDefaults(): PumpSystemCurveData {
-    let data: PumpSystemCurveData = {
+  //example/defaults same
+  getPumpSystemCurveDefaults(settings: Settings): PumpSystemCurveData {
+    let systemCurveFlowRate: number = 600;
+    let pumpSystemCurveHead: number = 1000;
+    if (settings.flowMeasurement !== 'gpm') {
+      systemCurveFlowRate = Math.round(this.convertUnitsService.value(systemCurveFlowRate).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+    }
+    if (settings.distanceMeasurement !== 'ft') {
+      pumpSystemCurveHead = Math.round(this.convertUnitsService.value(pumpSystemCurveHead).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+    }
+    let examplePumpSystemCurveData: PumpSystemCurveData = {
       specificGravity: 1.0,
       systemLossExponent: 1.9,
       pointOneFlowRate: 0,
       pointOneHead: 0,
       pointTwo: '',
-      pointTwoFlowRate: 600,
-      pointTwoHead: 1000,
+      pointTwoFlowRate: systemCurveFlowRate,
+      pointTwoHead: pumpSystemCurveHead,
     };
-    return data;
+    return examplePumpSystemCurveData;
+  }
+
+  getResetPumpSystemCurveInputs(): PumpSystemCurveData {
+    let pumpSystemCurveData: PumpSystemCurveData = {
+      specificGravity: 1.0,
+      systemLossExponent: 1.9,
+      pointOneFlowRate: 0,
+      pointOneHead: 0,
+      pointTwo: '',
+      pointTwoFlowRate: 0,
+      pointTwoHead: 0,
+    };
+    return pumpSystemCurveData;
   }
 
   getFormFromObj(obj: PumpSystemCurveData): FormGroup {
