@@ -13,11 +13,11 @@ export class FanSystemCurveFormService {
     let data: FanSystemCurveData = {
       compressibilityFactor: .98,
       systemLossExponent: 1.9,
-      pointOneFlowRate: 0,
-      pointOnePressure: 0,
+      pointOneFlowRate: 2000,
+      pointOnePressure: 276.8,
       pointTwo: '',
-      pointTwoFlowRate: 1,
-      pointTwoPressure: 0
+      pointTwoFlowRate: 0,
+      pointTwoPressure: 200
     }
     return data;
   }

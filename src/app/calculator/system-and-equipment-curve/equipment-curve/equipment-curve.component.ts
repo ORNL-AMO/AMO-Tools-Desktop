@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { collapseAnimation } from '../collapse-animations';
 import { Settings } from '../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
@@ -23,11 +23,12 @@ export class EquipmentCurveComponent implements OnInit {
   selectedFormView: string = 'Equation';
   selectedFormViewSub: Subscription;
   equipmentCurveCollapsedSub: Subscription;
-  constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService) { }
+  constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.selectedFormViewSub = this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.subscribe(val => {
       this.selectedFormView = val;
+      this.cd.detectChanges();
     });
 
     this.equipmentCurveCollapsedSub = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.subscribe(val => {

@@ -13,7 +13,7 @@
                 <div class="input-group">
                     <input name="baselineMeasurement" formControlName="baselineMeasurement" type="number" step="any"
                         class="form-control" id="baselineMeasurement" onfocus="this.select();"
-                        (focus)="focusField('baselineMeasurement')" (input)="save()">
+                        (focus)="focusField('baselineMeasurement')" (input)="setModifiedMeasurementValidator()">
                     <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 0"
                         class="input-group-addon units">{{smallUnit}}</span>
                     <span *ngIf="equipmentCurveForm.controls.measurementOption.value == 1"
