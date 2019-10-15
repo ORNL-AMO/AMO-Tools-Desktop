@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectorRef, HostListener } from '@angular/core';
 import * as d3 from 'd3';
 import { LineChartHelperService } from '../../../shared/helper-services/line-chart-helper.service';
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph.service';
@@ -22,9 +22,17 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
 
   @ViewChild("ngChart", { static: false }) ngChart: ElementRef;
   @ViewChild("ngChartContainer", { static: false }) ngChartContainer: ElementRef;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.setGraphSize();
+    this.createSVG();
+    this.setAxisLabels();
+    this.setAxis();
+    this.createGraph();
+  }
 
   expanded: boolean;
-  svg: d3.Selection<any>;
+  // svg: d3.Selection<any>;
   width: number;
   height: number;
   margin: { top: number, right: number, bottom: number, left: number };
@@ -44,8 +52,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   baselineEquipmentLine: d3.Selection<any>;
   modificationEquipmentLine: d3.Selection<any>;
   systemCurveLine: d3.Selection<any>;
-  x: any;
-  y: any;
+  // x: any;
+  // y: any;
   isGridToggled: boolean = false;
   xDomain: { min: number, max: number };
   yDomain: { min: number, max: number };
@@ -219,9 +227,11 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   //setup
   createSVG() {
     this.ngChart = this.lineChartHelperService.clearSvg(this.ngChart);
-    this.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
-    this.svg = this.lineChartHelperService.applyFilter(this.svg);
-    this.svg = this.lineChartHelperService.appendRect(this.svg, this.width, this.height);
+    this.systemAndEquipmentCurveGraphService.svg = this.lineChartHelperService.initSvg(this.ngChart, this.width, this.height, this.margin);
+    this.systemAndEquipmentCurveGraphService.svg = this.lineChartHelperService.applyFilter(this.systemAndEquipmentCurveGraphService.svg);
+    this.systemAndEquipmentCurveGraphService.svg = this.lineChartHelperService.appendRect(this.systemAndEquipmentCurveGraphService.svg, this.width, this.height);
+    this.cd.detectChanges();
+    // this.systemAndEquipmentCurveGraphService.svg = this.svg;
   }
 
   setAxisLabels() {
@@ -231,8 +241,8 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       xAxisLabel = "Flow (" + this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.flowMeasurement) + ")";
       yAxisLabel = "Head (" + this.systemAndEquipmentCurveGraphService.getDisplayUnit(this.settings.distanceMeasurement) + ")";
     }
-    this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, xAxisLabel);
-    this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, yAxisLabel);
+    this.lineChartHelperService.setXAxisLabel(this.systemAndEquipmentCurveGraphService.svg, this.width, this.height, 0, 70, xAxisLabel);
+    this.lineChartHelperService.setYAxisLabel(this.systemAndEquipmentCurveGraphService.svg, this.width, this.height, -60, 0, yAxisLabel);
   }
 
   setAxis() {
@@ -240,13 +250,13 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     let domainAndRanges = this.systemAndEquipmentCurveGraphService.getGraphDomainAndRange(this.isEquipmentCurveShown, this.isSystemCurveShown, this.equipmentType, this.width, this.height, this.baselineEquipmentCurveDataPairs, this.modifiedEquipmentCurveDataPairs, this.pumpCurveData, this.fanCurveData);
     this.xDomain = domainAndRanges.xDomain;
     this.yDomain = domainAndRanges.yDomain;
-    this.x = this.lineChartHelperService.setScale("linear", domainAndRanges.xRange, this.xDomain);
-    this.systemAndEquipmentCurveGraphService.xRef = this.x;
-    this.y = this.lineChartHelperService.setScale("linear", domainAndRanges.yRange, this.yDomain);
-    this.systemAndEquipmentCurveGraphService.yRef = this.y;
+    this.systemAndEquipmentCurveGraphService.xRef = this.lineChartHelperService.setScale("linear", domainAndRanges.xRange, this.xDomain);
+    // this.systemAndEquipmentCurveGraphService.xRef = this.x;
+    this.systemAndEquipmentCurveGraphService.yRef = this.lineChartHelperService.setScale("linear", domainAndRanges.yRange, this.yDomain);
+    // this.systemAndEquipmentCurveGraphService.yRef = this.y;
     let tickFormat = d3.format("d")
-    this.lineChartHelperService.setXAxis(this.svg, this.x, this.height, this.isGridToggled, 5, null, null, null, tickFormat);
-    this.lineChartHelperService.setYAxis(this.svg, this.y, this.width, this.isGridToggled, 6, 0, 0, 15, null);
+    this.lineChartHelperService.setXAxis(this.systemAndEquipmentCurveGraphService.svg, this.systemAndEquipmentCurveGraphService.xRef, this.height, this.isGridToggled, 5, null, null, null, tickFormat);
+    this.lineChartHelperService.setYAxis(this.systemAndEquipmentCurveGraphService.svg, this.systemAndEquipmentCurveGraphService.yRef, this.width, this.isGridToggled, 6, 0, 0, 15, null);
   }
 
   //equipment curves
@@ -270,26 +280,26 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   drawBaselineEquipmentCurve(baselineData: Array<{ x: number, y: number }>) {
     d3.select(this.ngChart.nativeElement).selectAll('#focusBaselineEquipmentCurve').remove();
     d3.select(this.ngChart.nativeElement).selectAll('.baseline-equipment-curve').remove();
-    this.baselineEquipmentLine = this.lineChartHelperService.appendLine(this.svg, "#145A32", "2px");
-    this.baselineEquipmentLine = this.lineChartHelperService.drawLine(this.baselineEquipmentLine, this.x, this.y, baselineData, 'baseline-equipment-curve');
-    this.focusBaselineEquipmentCurve = this.lineChartHelperService.appendFocus(this.svg, "focusBaselineEquipmentCurve");
+    this.baselineEquipmentLine = this.lineChartHelperService.appendLine(this.systemAndEquipmentCurveGraphService.svg, "#145A32", "2px");
+    this.baselineEquipmentLine = this.lineChartHelperService.drawLine(this.baselineEquipmentLine, this.systemAndEquipmentCurveGraphService.xRef, this.systemAndEquipmentCurveGraphService.yRef, baselineData, 'baseline-equipment-curve');
+    this.focusBaselineEquipmentCurve = this.lineChartHelperService.appendFocus(this.systemAndEquipmentCurveGraphService.svg, "focusBaselineEquipmentCurve");
   }
 
   drawModificationEquipmentCurve(modificationData: Array<{ x: number, y: number }>) {
     d3.select(this.ngChart.nativeElement).selectAll('#focusModificationEquipmentCurve').remove();
     d3.select(this.ngChart.nativeElement).selectAll('.modification-equipment-curve').remove();
-    this.modificationEquipmentLine = this.lineChartHelperService.appendLine(this.svg, "#3498DB", "2px");
-    this.modificationEquipmentLine = this.lineChartHelperService.drawLine(this.modificationEquipmentLine, this.x, this.y, modificationData, 'modification-equipment-curve');
-    this.focusModificationEquipmentCurve = this.lineChartHelperService.appendFocus(this.svg, "focusModificationEquipmentCurve");
+    this.modificationEquipmentLine = this.lineChartHelperService.appendLine(this.systemAndEquipmentCurveGraphService.svg, "#3498DB", "2px");
+    this.modificationEquipmentLine = this.lineChartHelperService.drawLine(this.modificationEquipmentLine, this.systemAndEquipmentCurveGraphService.xRef, this.systemAndEquipmentCurveGraphService.yRef, modificationData, 'modification-equipment-curve');
+    this.focusModificationEquipmentCurve = this.lineChartHelperService.appendFocus(this.systemAndEquipmentCurveGraphService.svg, "focusModificationEquipmentCurve");
   }
 
   //system curve
   drawSystemCurve() {
     d3.select(this.ngChart.nativeElement).selectAll('.system-curve').remove();
     if (this.isSystemCurveShown == true && this.systemCurveRegressionData != undefined) {
-      this.systemCurveLine = this.lineChartHelperService.appendLine(this.svg, "red", "2px", "stroke-dasharray", "3, 3");
-      this.systemCurveLine = this.lineChartHelperService.drawLine(this.systemCurveLine, this.x, this.y, this.systemCurveRegressionData, 'system-curve');
-      this.focusSystemCurve = this.lineChartHelperService.appendFocus(this.svg, "focusSystemCurve");
+      this.systemCurveLine = this.lineChartHelperService.appendLine(this.systemAndEquipmentCurveGraphService.svg, "red", "2px", "stroke-dasharray", "3, 3");
+      this.systemCurveLine = this.lineChartHelperService.drawLine(this.systemCurveLine, this.systemAndEquipmentCurveGraphService.xRef, this.systemAndEquipmentCurveGraphService.yRef, this.systemCurveRegressionData, 'system-curve');
+      this.focusSystemCurve = this.lineChartHelperService.appendFocus(this.systemAndEquipmentCurveGraphService.svg, "focusSystemCurve");
     }
   }
 
@@ -301,8 +311,10 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(intersectionPoint);
     }
     if (this.isEquipmentModificationShown && this.modifiedEquipmentCurveDataPairs != undefined) {
+      console.log('get modification intersection point')
       let intersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.modifiedEquipmentCurveDataPairs, this.systemCurveRegressionData);
       if (intersectionPoint != undefined) {
+        console.log('add modification intersection point')
         this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(intersectionPoint);
       }
     }
@@ -346,15 +358,15 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     let detailBoxPointer = this.lineChartHelperService.appendDetailBoxPointer(this.ngChart);
     let format = d3.format(",.2f");
     this.lineChartHelperService.mouseOverDriver(
-      this.svg,
+      this.systemAndEquipmentCurveGraphService.svg,
       detailBox,
       detailBoxPointer,
       this.margin,
       allD,
       allFocus,
       allData,
-      this.x,
-      this.y,
+      this.systemAndEquipmentCurveGraphService.xRef,
+      this.systemAndEquipmentCurveGraphService.yRef,
       format,
       format,
       this.tooltipData,

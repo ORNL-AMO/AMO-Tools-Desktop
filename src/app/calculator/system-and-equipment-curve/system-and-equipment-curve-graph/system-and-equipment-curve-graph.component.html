@@ -48,7 +48,7 @@
         </app-exportable-table>
     </div> -->
 
-    <app-data-point-table *ngIf="svg != undefined" [settings]="settings" [equipmentType]="equipmentType" [svg]="svg" [ngChart]="ngChart">
+    <app-data-point-table class="mt-3" *ngIf="systemAndEquipmentCurveGraphService.svg != undefined" [settings]="settings" [equipmentType]="equipmentType">
     </app-data-point-table>
 
 </div>

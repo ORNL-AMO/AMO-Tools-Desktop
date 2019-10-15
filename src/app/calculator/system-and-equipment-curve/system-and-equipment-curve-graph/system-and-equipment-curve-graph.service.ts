@@ -14,6 +14,7 @@ export class SystemAndEquipmentCurveGraphService {
   clearDataPoints: BehaviorSubject<boolean>;
   xRef: any;
   yRef: any;
+  svg: any;
   constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
     this.baselineIntersectionPoint = new BehaviorSubject(undefined);
