@@ -97,7 +97,8 @@ export interface SystemAndEquipmentCurveData {
   byEquationInputs?: ByEquationInputs,
   byDataInputs?: ByDataInputs,
   equipmentInputs?: EquipmentInputs,
-  equipmentCurveFormView?: string
+  equipmentCurveFormView?: string,
+  systemCurveDataPoints?: Array<{ pointName: string, flowRate: number, yValue: number }>
 
 }
 
@@ -105,6 +106,7 @@ export interface SystemAndEquipmentCurveData {
 export interface PumpSystemCurveData {
   specificGravity: number,
   systemLossExponent: number,
+  pointOne: string,
   pointOneFlowRate: number,
   pointOneHead: number,
   pointTwo: string,

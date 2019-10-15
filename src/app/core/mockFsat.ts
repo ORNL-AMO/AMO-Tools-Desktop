@@ -240,93 +240,99 @@ origin: "AMO-TOOLS-DESKTOP"
 */
 
 export const MockFsatCalculator: Calculator = {
-    pumpCurve: {
-        dataRows: [
+    systemAndEquipmentCurveData: {
+        pumpSystemCurveData: {
+            specificGravity: 0.988,
+            systemLossExponent: 1.9,
+            pointOne: "Baseline1",
+            pointOneFlowRate: 0,
+            pointOneHead: 0,
+            pointTwo: "Baseline",
+            pointTwoFlowRate: 129691,
+            pointTwoHead: 17.46,
+        },
+        equipmentCurveFormView: 'Data',
+        byEquationInputs: {
+            maxFlow: 160000,
+            equationOrder: 2,
+            constant: 22.2128629162,
+            flow: 0.0000164575,
+            flowTwo: -6e-10,
+            flowThree: 0,
+            flowFour: 0,
+            flowFive: 0,
+            flowSix: 0
+        },
+        equipmentInputs: {
+            measurementOption: 1,
+            baselineMeasurement: 1800,
+            modificationMeasurementOption: 1,
+            modifiedMeasurement: 1800
+        },
+        byDataInputs: {
+            dataRows: [
+                {
+                    yValue: 22.3,
+                    flow: 28800
+                },
+                {
+                    yValue: 21.8,
+                    flow: 43200
+                },
+                {
+                    yValue: 21.2,
+                    flow: 57640
+                },
+                {
+                    yValue: 20.3,
+                    flow: 72050
+                },
+                {
+                    yValue: 18,
+                    flow: 100871
+                },
+                {
+                    yValue: 14.8,
+                    flow: 129700
+                },
+                {
+                    yValue: 10.2,
+                    flow: 158500
+                }
+            ],
+            dataOrder: 2
+        },
+        systemCurveDataPoints: [
             {
-                head: 22.3,
-                flow: 28800
-            },
-            {
-                head: 21.8,
-                flow: 43200
-            },
-            {
-                head: 21.2,
-                flow: 57640
-            },
-            {
-                head: 20.3,
-                flow: 72050
-            },
-            {
-                head: 18,
-                flow: 100871
-            },
-            {
-                head: 14.8,
-                flow: 129700
-            },
-            {
-                head: 10.2,
-                flow: 158500
-            }
-        ],
-        maxFlow: 160000,
-        dataOrder: 2,
-        baselineMeasurement: 1800,
-        modifiedMeasurement: 1800,
-        exploreLine: 0,
-        exploreFlow: 0,
-        exploreHead: 0,
-        explorePumpEfficiency: 0,
-        headOrder: 2,
-        headConstant: 22.2128629162,
-        headFlow: 0.0000164575,
-        headFlow2: -6e-10,
-        headFlow3: 0,
-        headFlow4: 0,
-        headFlow5: 0,
-        headFlow6: 0,
-        pumpEfficiencyOrder: 3,
-        pumpEfficiencyConstant: 0,
-        measurementOption: "Speed"
-    },
-    systemCurve: {
-        specificGravity: 0.988,
-        systemLossExponent: 1.9,
-        dataPoints: [
-            {
-                modName: "Baseline1",
+                pointName: "Baseline1",
                 flowRate: 0,
-                head: 0
+                yValue: 0
             },
             {
-                modName: "Baseline",
+                pointName: "Baseline",
                 flowRate: 129691,
-                head: 17.46
+                yValue: 17.46
             },
             {
-                modName: "Optimize Fan & Motor Combo1",
+                pointName: "Optimize Fan & Motor Combo1",
                 flowRate: 0,
-                head: 0
+                yValue: 0
             },
             {
-                modName: "Optimize Fan & Motor Combo",
+                pointName: "Optimize Fan & Motor Combo",
                 flowRate: 129691,
-                head: 17.46
+                yValue: 17.46
             },
             {
-                modName: "Reduce pressure & flow1",
+                pointName: "Reduce pressure & flow1",
                 flowRate: 0,
-                head: 0
+                yValue: 0
             },
             {
-                modName: "Reduce pressure & flow",
+                pointName: "Reduce pressure & flow",
                 flowRate: 86461,
-                head: 20.48
+                yValue: 20.48
             }
-        ],
-        selectedP1Name: "Baseline1",
-        selectedP2Name: "Baseline"
+        ]
     }
 };

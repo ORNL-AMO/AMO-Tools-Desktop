@@ -19,8 +19,6 @@ export interface Calculator {
     headTool?: HeadTool;
     headToolSuction?: HeadToolSuction;
     headToolType?: string;
-    systemCurve?: SystemCurve;
-    pumpCurve?: PumpCurve;
     motorPerformanceInputs?: MotorPerformanceInputs;
     nemaInputs?: NemaInputs;
     specificSpeedInputs?: SpecificSpeedInputs;
