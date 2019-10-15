@@ -241,15 +241,15 @@ origin: "AMO-TOOLS-DESKTOP"
 
 export const MockFsatCalculator: Calculator = {
     systemAndEquipmentCurveData: {
-        pumpSystemCurveData: {
-            specificGravity: 0.988,
+        fanSystemCurveData: {
+            compressibilityFactor: 0.988,
             systemLossExponent: 1.9,
             pointOne: "Baseline1",
             pointOneFlowRate: 0,
-            pointOneHead: 0,
+            pointOnePressure: 0,
             pointTwo: "Baseline",
             pointTwoFlowRate: 129691,
-            pointTwoHead: 17.46,
+            pointTwoPressure: 17.46,
         },
         equipmentCurveFormView: 'Data',
         byEquationInputs: {

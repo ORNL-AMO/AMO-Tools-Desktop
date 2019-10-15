@@ -117,6 +117,7 @@ export interface PumpSystemCurveData {
 export interface FanSystemCurveData {
   compressibilityFactor: number,
   systemLossExponent: number,
+  pointOne: string,
   pointOneFlowRate: number,
   pointOnePressure: number,
   pointTwo: string,
