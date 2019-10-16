@@ -2,11 +2,11 @@ import { LightingFixtureData } from './lighting-data';
 
 export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
     {
-        category: 'Fluorescent 4 ft',
+        category: 5,
         type: '2-lamp 34-W T12',
         lampsPerFixture: 2,
-        lampsPerWattage: 34,
-        lampOutput: 2280,
+        wattsPerLamp: 34,
+        lumensPerLamp: 2280,
         lampLife: 20000,
         lampCRI: 62,
         coefficienyOfUtilization: .51,
@@ -14,11 +14,11 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent 4 ft',
+        category: 5,
         type: '2-lamp 40-W T12',
         lampsPerFixture: 2,
-        lampsPerWattage: 40,
-        lampOutput: 2910,
+        wattsPerLamp: 40,
+        lumensPerLamp: 2910,
         lampLife: 20000,
         lampCRI: 62,
         coefficienyOfUtilization: .51,
@@ -26,11 +26,11 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent 4 ft',
+        category: 5,
         type: '2-lamp 32-W T8 Retrofit',
         lampsPerFixture: 2,
-        lampsPerWattage: 32,
-        lampOutput: 2675,
+        wattsPerLamp: 32,
+        lumensPerLamp: 2675,
         lampLife: 31000,
         lampCRI: 83,
         coefficienyOfUtilization: .53,
@@ -38,11 +38,11 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent 4 ft',
+        category: 5,
         type: '4-lamp 34-W T12',
         lampsPerFixture: 4,
-        lampsPerWattage: 34,
-        lampOutput: 2280,
+        wattsPerLamp: 34,
+        lumensPerLamp: 2280,
         lampLife: 20000,
         lampCRI: 62,
         coefficienyOfUtilization: .51,
@@ -50,11 +50,11 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent 4 ft',
+        category: 5,
         type: '4-lamp 40-W T12',
         lampsPerFixture: 4,
-        lampsPerWattage: 40,
-        lampOutput: 2910,
+        wattsPerLamp: 40,
+        lumensPerLamp: 2910,
         lampLife: 20000,
         lampCRI: 62,
         coefficienyOfUtilization: .51,
@@ -62,11 +62,11 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent 4 ft',
+        category: 5,
         type: '4-lamp 32-W T8',
         lampsPerFixture: 4,
-        lampsPerWattage: 32,
-        lampOutput: 2675,
+        wattsPerLamp: 32,
+        lumensPerLamp: 2675,
         lampLife: 31000,
         lampCRI: 83,
         coefficienyOfUtilization: .53,
@@ -74,11 +74,11 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent 4 ft',
+        category: 5,
         type: '4-lamp 32-W T8 Retrofit',
         lampsPerFixture: 4,
-        lampsPerWattage: 32,
-        lampOutput: 2675,
+        wattsPerLamp: 32,
+        lumensPerLamp: 2675,
         lampLife: 31000,
         lampCRI: 83,
         coefficienyOfUtilization: .53,
@@ -86,11 +86,11 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent 4 ft',
+        category: 5,
         type: '4-lamp 28-W T5 Retrofit',
         lampsPerFixture: 4,
-        lampsPerWattage: 28,
-        lampOutput: 2900,
+        wattsPerLamp: 28,
+        lumensPerLamp: 2900,
         lampLife: 20000,
         lampCRI: 85,
         coefficienyOfUtilization: .6,

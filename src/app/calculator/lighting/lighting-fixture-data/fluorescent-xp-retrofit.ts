@@ -2,11 +2,11 @@ import { LightingFixtureData } from './lighting-data';
 
 export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
     {
-        category: 'Fluorescent XP Retrofit',
+        category: 4,
         type: '1-lamp 28-W T8 XPS',
         lampsPerFixture: 1,
-        lampsPerWattage: 28,
-        lampOutput: 2590,
+        wattsPerLamp: 28,
+        lumensPerLamp: 2590,
         lampLife: 36000,
         lampCRI: 85,
         coefficienyOfUtilization: .53,
@@ -14,11 +14,11 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent XP Retrofit',
+        category: 4,
         type: '1-lamp 32-W T8 XPS',
         lampsPerFixture: 1,
-        lampsPerWattage: 32,
-        lampOutput: 2850,
+        wattsPerLamp: 32,
+        lumensPerLamp: 2850,
         lampLife: 36000,
         lampCRI: 85,
         coefficienyOfUtilization: .53,
@@ -26,11 +26,11 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent XP Retrofit',
+        category: 4,
         type: '2-lamp 28-W T8 XPS',
         lampsPerFixture: 2,
-        lampsPerWattage: 28,
-        lampOutput: 2590,
+        wattsPerLamp: 28,
+        lumensPerLamp: 2590,
         lampLife: 36000,
         lampCRI: 85,
         coefficienyOfUtilization: .53,
@@ -38,11 +38,11 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent XP Retrofit',
+        category: 4,
         type: '2-lamp 32-W T8 XPS',
         lampsPerFixture: 2,
-        lampsPerWattage: 32,
-        lampOutput: 2850,
+        wattsPerLamp: 32,
+        lumensPerLamp: 2850,
         lampLife: 36000,
         lampCRI: 85,
         coefficienyOfUtilization: .53,
@@ -50,11 +50,11 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent XP Retrofit',
+        category: 4,
         type: '3-lamp 28-W T8 XPS',
         lampsPerFixture: 3,
-        lampsPerWattage: 28,
-        lampOutput: 2590,
+        wattsPerLamp: 28,
+        lumensPerLamp: 2590,
         lampLife: 36000,
         lampCRI: 85,
         coefficienyOfUtilization: .53,
@@ -62,11 +62,11 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent XP Retrofit',
+        category: 4,
         type: '3-lamp 32-W T8 XPS',
         lampsPerFixture: 3,
-        lampsPerWattage: 32,
-        lampOutput: 2850,
+        wattsPerLamp: 32,
+        lumensPerLamp: 2850,
         lampLife: 36000,
         lampCRI: 85,
         coefficienyOfUtilization: .53,
@@ -74,11 +74,11 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent XP Retrofit',
+        category: 4,
         type: '4-lamp 28-W T8 XPS',
         lampsPerFixture: 4,
-        lampsPerWattage: 28,
-        lampOutput: 2590,
+        wattsPerLamp: 28,
+        lumensPerLamp: 2590,
         lampLife: 36000,
         lampCRI: 85,
         coefficienyOfUtilization: .53,
@@ -86,11 +86,11 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: 1
     },
     {
-        category: 'Fluorescent XP Retrofit',
+        category: 4,
         type: '4-lamp 32-W T8 XPS',
         lampsPerFixture: 4,
-        lampsPerWattage: 32,
-        lampOutput: 2850,
+        wattsPerLamp: 32,
+        lumensPerLamp: 2850,
         lampLife: 36000,
         lampCRI: 85,
         coefficienyOfUtilization: .53,

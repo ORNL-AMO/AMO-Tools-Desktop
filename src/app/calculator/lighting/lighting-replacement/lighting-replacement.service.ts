@@ -28,7 +28,15 @@ export class LightingReplacementService {
       numberOfFixtures: 0,
       lumensPerLamp: 0,
       totalLighting: 0,
-      electricityUse: 0
+      electricityUse: 0,
+      //added for #2381
+      lampLife: 0,
+      ballastFactor: 0,
+      lumenDegradationFactor: 0,
+      coefficientOfUtilization: 0,
+      lampCRI: 0,
+      category: 0,
+      type: 'Custom'
     }
   }
 
@@ -40,6 +48,14 @@ export class LightingReplacementService {
       lampsPerFixture: [obj.lampsPerFixture, [Validators.required, Validators.min(0)]],
       numberOfFixtures: [obj.numberOfFixtures, [Validators.required, Validators.min(0)]],
       lumensPerLamp: [obj.lumensPerLamp, [Validators.required, Validators.min(0)]],
+      //added for #2381
+      lampLife: [obj.lampLife],
+      ballastFactor: [obj.ballastFactor],
+      lumenDegradationFactor: [obj.lumenDegradationFactor],
+      coefficientOfUtilization: [obj.coefficientOfUtilization],
+      lampCRI: [obj.lampCRI],
+      category: [obj.category],
+      type: [obj.type]
     });
     return form;
   }
@@ -53,7 +69,15 @@ export class LightingReplacementService {
       numberOfFixtures: form.controls.numberOfFixtures.value,
       lumensPerLamp: form.controls.lumensPerLamp.value,
       totalLighting: 0,
-      electricityUse: 0
+      electricityUse: 0,
+      //added for #2381
+      lampLife: form.controls.lumensPerLamp.value,
+      ballastFactor: form.controls.lumeballastFactornsPerLamp.value,
+      lumenDegradationFactor: form.controls.lumenDegradationFactor.value,
+      coefficientOfUtilization: form.controls.coefficientOfUtilization.value,
+      lampCRI: form.controls.lumensPelampCRIrLamp.value,
+      category: form.controls.category.value,
+      type: form.controls.type.value
     };
     tmpData = this.calculateElectricityUse(tmpData);
     tmpData = this.calculateTotalLighting(tmpData);
@@ -61,28 +85,29 @@ export class LightingReplacementService {
   }
 
   generateExample(isBaseline: boolean): LightingReplacementData {
-    if (isBaseline) {
-      return {
-        name: 'Fixture #1',
-        hoursPerYear: 4368,
-        wattsPerLamp: 28,
-        lampsPerFixture: 6,
-        numberOfFixtures: 300,
-        lumensPerLamp: 2520,
-        totalLighting: 0,
-        electricityUse: 0
-      }
-    }
-    return {
+    let exampleData: LightingReplacementData = {
       name: 'Fixture #1',
       hoursPerYear: 4368,
-      wattsPerLamp: 18,
+      wattsPerLamp: 28,
       lampsPerFixture: 6,
       numberOfFixtures: 300,
-      lumensPerLamp: 2200,
+      lumensPerLamp: 2520,
       totalLighting: 0,
-      electricityUse: 0
+      electricityUse: 0,
+      lampLife: 0,
+      ballastFactor: 0,
+      lumenDegradationFactor: 0,
+      coefficientOfUtilization: 0,
+      lampCRI: 0,
+      category: 0,
+      type: 'Custom'
     }
+    //modification
+    if (!isBaseline) {
+      exampleData.wattsPerLamp = 18;
+      exampleData.lumensPerLamp = 2200;
+    }
+    return exampleData;
   }
 
   calculateElectricityUse(data: LightingReplacementData): LightingReplacementData {

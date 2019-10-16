@@ -3,6 +3,7 @@ import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { FormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { LightingFixtureData, LightingFixtureCategories } from '../../lighting-fixture-data/lighting-data';
 
 @Component({
   selector: 'app-lighting-replacement-form',
@@ -39,7 +40,11 @@ export class LightingReplacementFormComponent implements OnInit {
 
   showOperatingHoursModal: boolean;
 
-  constructor(private lightingReplacementService: LightingReplacementService) { }
+  lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
+  fixtureTypes: Array<LightingFixtureData>;
+  constructor(private lightingReplacementService: LightingReplacementService) {
+    this.lightingFixtureCategories = LightingFixtureCategories;
+  }
 
   ngOnInit() {
     if (this.isBaseline) {
@@ -48,6 +53,7 @@ export class LightingReplacementFormComponent implements OnInit {
     else {
       this.idString = 'modification_' + this.index;
     }
+
     this.form = this.lightingReplacementService.getFormFromObj(this.data);
     if (this.selected == false) {
       this.form.disable();
@@ -113,5 +119,13 @@ export class LightingReplacementFormComponent implements OnInit {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+  setCategory() {
+    this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => { return fixtureCategory.category == this.form.controls.category.value }).fixturesData;
+  }
+
+  setProperties() {
+
   }
 }

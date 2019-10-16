@@ -2,11 +2,11 @@ import { LightingFixtureData } from './lighting-data';
 
 export const MercuryVaporFixtures: Array<LightingFixtureData> = [
     {
-        category: 'Mercury Vapor',
-        type: ' 75-W MV',
+        category: 8,
+        type: '75-W MV',
         lampsPerFixture: 1,
-        lampsPerWattage: 75,
-        lampOutput: 2700,
+        wattsPerLamp: 75,
+        lumensPerLamp: 2700,
         lampLife: 18000,
         lampCRI: 45,
         coefficienyOfUtilization: .4,
@@ -14,11 +14,11 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: .79
     },
     {
-        category: 'Mercury Vapor',
+        category: 8,
         type: '100-W MV',
         lampsPerFixture: 1,
-        lampsPerWattage: 100,
-        lampOutput: 4000,
+        wattsPerLamp: 100,
+        lumensPerLamp: 4000,
         lampLife: 24000,
         lampCRI: 45,
         coefficienyOfUtilization: .4,
@@ -26,11 +26,11 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: .79
     },
     {
-        category: 'Mercury Vapor',
+        category: 8,
         type: '175-W MV',
         lampsPerFixture: 1,
-        lampsPerWattage: 175,
-        lampOutput: 7700,
+        wattsPerLamp: 175,
+        lumensPerLamp: 7700,
         lampLife: 24000,
         lampCRI: 45,
         coefficienyOfUtilization: .4,
@@ -38,11 +38,11 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: .79
     },
     {
-        category: 'Mercury Vapor',
+        category: 8,
         type: '250-W MV',
         lampsPerFixture: 1,
-        lampsPerWattage: 250,
-        lampOutput: 12500,
+        wattsPerLamp: 250,
+        lumensPerLamp: 12500,
         lampLife: 24000,
         lampCRI: 45,
         coefficienyOfUtilization: .4,
@@ -50,11 +50,11 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumenDegradationFactor: .79
     },
     {
-        category: 'Mercury Vapor',
+        category: 8,
         type: '400-W MV',
         lampsPerFixture: 1,
-        lampsPerWattage: 400,
-        lampOutput: 22000,
+        wattsPerLamp: 400,
+        lumensPerLamp: 22000,
         lampLife: 24000,
         lampCRI: 45,
         coefficienyOfUtilization: .4,

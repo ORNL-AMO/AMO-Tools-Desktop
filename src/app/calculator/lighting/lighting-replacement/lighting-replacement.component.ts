@@ -172,6 +172,14 @@ export class LightingReplacementComponent implements OnInit {
     dataArray[index].lumensPerLamp = data.lumensPerLamp;
     dataArray[index].totalLighting = data.totalLighting;
     dataArray[index].electricityUse = data.electricityUse;
+    //added for #2381
+    dataArray[index].lampLife = data.lampLife;
+    dataArray[index].ballastFactor = data.ballastFactor;
+    dataArray[index].lumenDegradationFactor = data.lumenDegradationFactor;
+    dataArray[index].coefficientOfUtilization = data.coefficientOfUtilization;
+    dataArray[index].lampCRI = data.lampCRI;
+    dataArray[index].category = data.category;
+    dataArray[index].type = data.type;
   }
 
   getResults() {

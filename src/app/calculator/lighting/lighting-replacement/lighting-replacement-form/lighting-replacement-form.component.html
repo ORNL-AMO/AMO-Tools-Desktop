@@ -40,6 +40,29 @@
     <div class="form-section">
 
       <div class="form-group">
+        <label for="{{'category_'+idString}}">Fixture Category
+          <!-- <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a> -->
+        </label>
+        <select name="{{'category_'+lossIndex}}" class="form-control" id="{{'category_'+idString}}"
+          formControlName="category" (change)="setCategory()" (focus)="focusField('category')">
+          <option *ngFor="let fixtureCategory of lightingFixtureCategories" [ngValue]="fixtureCategory.category">
+            {{fixtureCategory.label}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="{{'type_'+idString}}">Fixture type
+          <!-- <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a> -->
+        </label>
+        <select name="{{'type_'+lossIndex}}" class="form-control" id="{{'type_'+idString}}"
+          formControlName="type" (change)="setProperties()" (focus)="focusField('type')">
+          <option *ngFor="let fixtureType of fixtureTypes" [ngValue]="fixtureType.type">
+            {{fixtureType.type}}</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
         <label for="{{'wattsPerLamp_'+idString}}">Watts Per Lamp</label>
         <div class="input-group">
           <input name="wattsPerLamp" formControlName="wattsPerLamp" type="number" step="any" class="form-control"
@@ -57,20 +80,24 @@
       </div>
 
       <div class="form-group">
-        <label for="{{'lumensPerLamp_'+idString}}">Lumens Per Lamp</label>
+        <label for="{{'ballastFactor_'+idString}}">Ballast Factor</label>
         <div class="input-group">
-          <input name="lumensPerLamp" formControlName="lumensPerLamp" type="number" step="any" class="form-control"
-            id="{{'lumensPerLamp_'+idString}}" (input)="calculate()" onfocus="this.select();"
-            (focus)="focusField('lumensPerLamp')">
-          <span class="input-group-addon units">lm/lamp</span>
+          <input name="ballastFactor" formControlName="ballastFactor" type="number" step="any" class="form-control"
+            id="{{'ballastFactor_'+idString}}" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('ballastFactor')">
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.lumensPerLamp.invalid && !form.controls.lumensPerLamp.pristine">
-          <span *ngIf="form.controls.lumensPerLamp.errors.required">Value required.</span>
-          <span *ngIf="form.controls.lumensPerLamp.errors.min">Value can't be less than
-            {{form.controls.lumensPerLamp.errors.min.min}}.</span>
-        </span>
+
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.wattsPerLamp.invalid && !form.controls.wattsPerLamp.pristine">
+          <span *ngIf="form.controls.wattsPerLamp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.wattsPerLamp.errors.min">Value can't be less than
+            {{form.controls.wattsPerLamp.errors.min.min}}.</span>
+        </span> -->
       </div>
+
+
+
+
 
       <div class="form-group">
         <label for="{{'lampsPerFixture_'+idString}}">Lamps Per Fixture</label>
@@ -98,8 +125,56 @@
         </span>
       </div>
 
-    </div>
+      <!--show/hide-->
+      <div class="form-group">
+        <label for="{{'lumensPerLamp_'+idString}}">Lumens Per Lamp</label>
+        <div class="input-group">
+          <input name="lumensPerLamp" formControlName="lumensPerLamp" type="number" step="any" class="form-control"
+            id="{{'lumensPerLamp_'+idString}}" (input)="calculate()" onfocus="this.select();"
+            (focus)="focusField('lumensPerLamp')">
+          <span class="input-group-addon units">lm/lamp</span>
+        </div>
+        <span class="alert-danger pull-right small"
+          *ngIf="form.controls.lumensPerLamp.invalid && !form.controls.lumensPerLamp.pristine">
+          <span *ngIf="form.controls.lumensPerLamp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.lumensPerLamp.errors.min">Value can't be less than
+            {{form.controls.lumensPerLamp.errors.min.min}}.</span>
+        </span>
+      </div>
 
+      <div class="form-group">
+        <label for="{{'coefficientOfUtilization_'+idString}}">Coeffient of Utilization</label>
+        <div class="input-group">
+          <input name="coefficientOfUtilization" formControlName="coefficientOfUtilization" type="number" step="any"
+            class="form-control" id="{{'coefficientOfUtilization_'+idString}}" (input)="calculate()"
+            onfocus="this.select();" (focus)="focusField('coefficientOfUtilization')">
+          <!-- <span class="input-group-addon units">lm/lamp</span> -->
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.lumensPerLamp.invalid && !form.controls.lumensPerLamp.pristine">
+          <span *ngIf="form.controls.lumensPerLamp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.lumensPerLamp.errors.min">Value can't be less than
+            {{form.controls.lumensPerLamp.errors.min.min}}.</span>
+        </span> -->
+      </div>
+
+      <div class="form-group">
+        <label for="{{'lumenDegradationFactor_'+idString}}">Lumen Degredation Factor</label>
+        <div class="input-group">
+          <input name="lumenDegradationFactor" formControlName="lumenDegradationFactor" type="number" step="any"
+            class="form-control" id="{{'lumenDegradationFactor_'+idString}}" (input)="calculate()"
+            onfocus="this.select();" (focus)="focusField('lumenDegradationFactor')">
+          <!-- <span class="input-group-addon units">lm/lamp</span> -->
+        </div>
+        <!-- <span class="alert-danger pull-right small"
+          *ngIf="form.controls.lumensPerLamp.invalid && !form.controls.lumensPerLamp.pristine">
+          <span *ngIf="form.controls.lumensPerLamp.errors.required">Value required.</span>
+          <span *ngIf="form.controls.lumensPerLamp.errors.min">Value can't be less than
+            {{form.controls.lumensPerLamp.errors.min.min}}.</span>
+        </span> -->
+      </div>
+
+    </div>
   </form>
 </div>
 

@@ -6,7 +6,15 @@ export interface LightingReplacementData {
   numberOfFixtures?: number,
   lumensPerLamp?: number,
   totalLighting?: number,
-  electricityUse?: number
+  electricityUse?: number,
+  //added for #2381 update
+  lampLife?: number,
+  ballastFactor?: number,
+  lumenDegradationFactor?: number,
+  coefficientOfUtilization?: number,
+  lampCRI?: number,
+  category?: number,
+  type?: string
 }
 
 
