@@ -8,7 +8,6 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 175,
         lumensPerLamp: 12000,
         lampLife: 10000,
-        lampCRI: 65,
         coefficientOfUtilization: .45,
         ballastFactor: 1.2,
         lumenDegradationFactor: .8333
@@ -20,7 +19,6 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 250,
         lumensPerLamp: 17000,
         lampLife: 10000,
-        lampCRI: 65,
         coefficientOfUtilization: .45,
         ballastFactor: 1.15,
         lumenDegradationFactor: .8696
@@ -32,7 +30,6 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 325,
         lumensPerLamp: 22000,
         lampLife: 15000,
-        lampCRI: 65,
         coefficientOfUtilization: .45,
         ballastFactor: 1.15,
         lumenDegradationFactor: .8696
@@ -44,7 +41,6 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 350,
         lumensPerLamp: 23000,
         lampLife: 20000,
-        lampCRI: 65,
         coefficientOfUtilization: .45,
         ballastFactor: 1.15,
         lumenDegradationFactor: .76
@@ -56,7 +52,6 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 400,
         lumensPerLamp: 26000,
         lampLife: 20000,
-        lampCRI: 65,
         coefficientOfUtilization: .45,
         ballastFactor: 1.15,
         lumenDegradationFactor: .8696
@@ -68,7 +63,6 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 1000,
         lumensPerLamp: 86000,
         lampLife: 20000,
-        lampCRI: 65,
         coefficientOfUtilization: .45,
         ballastFactor: 1.1,
         lumenDegradationFactor: .9091
@@ -80,7 +74,6 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: undefined,
         lumensPerLamp: undefined,
         lampLife: undefined,
-        lampCRI: undefined,
         coefficientOfUtilization: undefined,
         ballastFactor: undefined,
         lumenDegradationFactor: undefined

@@ -12,7 +12,6 @@ export interface LightingReplacementData {
   ballastFactor?: number,
   lumenDegradationFactor?: number,
   coefficientOfUtilization?: number,
-  lampCRI?: number,
   category?: number,
   type?: string
 }

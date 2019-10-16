@@ -79,7 +79,67 @@
         Per unit cost of electricity in $/kWh
         <hr>
       </small>
+      <!--todo: add options-->
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'category'">
+    <h6>
+      Lighting Fixture Category
+      <small class="text-muted">
+        <br>
+        Type of light fixture
+        <hr>
+      </small>
+      <!--TODO: add options-->
     </h6>
   </div>
 
+  <div class="my-2" *ngIf="currentField == 'type'">
+    <h6>
+      Lighting Fixture Type
+      <small class="text-muted">
+        <br>
+        Subtype of light fixture, based on Wattage, Number of Lamps or tube diameter
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'ballastFactor'">
+    <h6>
+      Ballast Factor
+      <small class="text-muted">
+        <br>
+        A light ballast regulates the amount of electric current passing through the lamp by distributing the current
+        equally among the various components of the lighting device. The Ballast Factor is the fraction of the light
+        that will be emitted from a lamp when using that particular ballast. Note: LEDs do not require ballasts, if
+        planning a lighting upgrade to LEDs, without bypassing or removing your ballasts, you will not see as much
+        energy savings or LED life.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'coefficientOfUtilization'">
+    <h6>
+      Coefficient of Utilization
+      <small class="text-muted">
+        <br>
+        A coefficient of utilization (CU) is a measure of the efficiency of a light in transferring luminous energy to
+        the working plane in a particular area. The CU is the ratio of luminous flux from a luminaire incident upon a
+        work plane to that emitted by the lamps within the luminaire.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'lumenDegradationFactor'">
+    <h6>
+      Lumen Degradation Factor
+      <small class="text-muted">
+        <br>
+        The ratio of lumen output at lamp half-life to the initial lumen output
+        <hr>
+      </small>
+    </h6>
+  </div>
 </div>

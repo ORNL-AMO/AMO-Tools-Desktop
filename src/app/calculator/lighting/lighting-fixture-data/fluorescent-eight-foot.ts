@@ -8,7 +8,6 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 60,
         lumensPerLamp: 5060,
         lampLife: 12000,
-        lampCRI: 60,
         coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
@@ -20,7 +19,6 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 75,
         lumensPerLamp: 6110,
         lampLife: 12000,
-        lampCRI: 72,
         coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
@@ -32,7 +30,6 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 95,
         lumensPerLamp: 6960,
         lampLife: 12000,
-        lampCRI: 62,
         coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
@@ -44,7 +41,6 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 110,
         lumensPerLamp: 8280,
         lampLife: 12000,
-        lampCRI: 70,
         coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
@@ -56,7 +52,6 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 120,
         lumensPerLamp: 8444,
         lampLife: 12000,
-        lampCRI: 62,
         coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
@@ -68,7 +63,6 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 59,
         lumensPerLamp: 5500,
         lampLife: 15000,
-        lampCRI: 78,
         coefficientOfUtilization: .53,
         ballastFactor: 1,
         lumenDegradationFactor: 1
@@ -80,7 +74,6 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 86,
         lumensPerLamp: 7600,
         lampLife: 18000,
-        lampCRI: 78,
         coefficientOfUtilization: .53,
         ballastFactor: 1,
         lumenDegradationFactor: 1
@@ -92,7 +85,6 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: undefined,
         lumensPerLamp: undefined,
         lampLife: undefined,
-        lampCRI: undefined,
         coefficientOfUtilization: undefined,
         ballastFactor: undefined,
         lumenDegradationFactor: undefined

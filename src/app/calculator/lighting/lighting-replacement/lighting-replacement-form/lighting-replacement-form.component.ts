@@ -135,7 +135,6 @@ export class LightingReplacementFormComponent implements OnInit {
         wattsPerLamp: fixtureData.wattsPerLamp,
         lumensPerLamp: fixtureData.lumensPerLamp,
         lampLife: fixtureData.lampLife,
-        lampCRI: fixtureData.lampCRI,
         coefficientOfUtilization: fixtureData.coefficientOfUtilization,
         ballastFactor: fixtureData.ballastFactor,
         lumenDegradationFactor: fixtureData.lumenDegradationFactor
@@ -151,12 +150,10 @@ export class LightingReplacementFormComponent implements OnInit {
       wattsPerLamp: undefined,
       lumensPerLamp: undefined,
       lampLife: undefined,
-      lampCRI: undefined,
       coefficientOfUtilization: undefined,
       ballastFactor: undefined,
       lumenDegradationFactor: undefined
     });
-    console.log(this.form);
     this.calculate();
   }
 

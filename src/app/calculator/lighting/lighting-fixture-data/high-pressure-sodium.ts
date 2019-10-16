@@ -8,7 +8,6 @@ export const HighPressureSodiumFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 70,
         lumensPerLamp: 5450,
         lampLife: 24000,
-        lampCRI: 22,
         coefficientOfUtilization: .4,
         ballastFactor: 1.35,
         lumenDegradationFactor: .7407
@@ -20,7 +19,6 @@ export const HighPressureSodiumFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 100,
         lumensPerLamp: 8550,
         lampLife: 24000,
-        lampCRI: 22,
         coefficientOfUtilization: .4,
         ballastFactor: 1.35,
         lumenDegradationFactor: .7407
@@ -32,7 +30,6 @@ export const HighPressureSodiumFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 150,
         lumensPerLamp: 14400,
         lampLife: 24000,
-        lampCRI: 22,
         coefficientOfUtilization: .4,
         ballastFactor: 1.25,
         lumenDegradationFactor: .8
@@ -44,7 +41,6 @@ export const HighPressureSodiumFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 250,
         lumensPerLamp: 27000,
         lampLife: 24000,
-        lampCRI: 22,
         coefficientOfUtilization: .4,
         ballastFactor: 1.2,
         lumenDegradationFactor: .8333
@@ -56,7 +52,6 @@ export const HighPressureSodiumFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 400,
         lumensPerLamp: 45000,
         lampLife: 24000,
-        lampCRI: 22,
         coefficientOfUtilization: .4,
         ballastFactor: 1.15,
         lumenDegradationFactor: .8696
@@ -68,7 +63,6 @@ export const HighPressureSodiumFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: undefined,
         lumensPerLamp: undefined,
         lampLife: undefined,
-        lampCRI: undefined,
         coefficientOfUtilization: undefined,
         ballastFactor: undefined,
         lumenDegradationFactor: undefined

@@ -8,7 +8,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 100,
         lumensPerLamp: 8000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -20,7 +19,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 120,
         lumensPerLamp: 9600,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -32,7 +30,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 150,
         lumensPerLamp: 12000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -44,7 +41,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 200,
         lumensPerLamp: 16000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -56,7 +52,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 100,
         lumensPerLamp: 8000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -68,7 +63,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 120,
         lumensPerLamp: 9600,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -80,7 +74,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 150,
         lumensPerLamp: 12000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -92,7 +85,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 200,
         lumensPerLamp: 16000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -104,7 +96,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 100,
         lumensPerLamp: 8000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -116,7 +107,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 120,
         lumensPerLamp: 9600,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -128,7 +118,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 150,
         lumensPerLamp: 12000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -140,7 +129,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 200,
         lumensPerLamp: 16000,
         lampLife: 100000,
-        lampCRI: 85,
         coefficientOfUtilization: .56,
         ballastFactor: 1.05,
         lumenDegradationFactor: .9
@@ -152,7 +140,6 @@ export const InductionHighBayFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: undefined,
         lumensPerLamp: undefined,
         lampLife: undefined,
-        lampCRI: undefined,
         coefficientOfUtilization: undefined,
         ballastFactor: undefined,
         lumenDegradationFactor: undefined

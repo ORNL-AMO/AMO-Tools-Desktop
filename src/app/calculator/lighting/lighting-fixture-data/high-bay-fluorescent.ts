@@ -8,7 +8,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 32,
         lumensPerLamp: 27000,
         lampLife: 30000,
-        lampCRI: 83,
         coefficientOfUtilization: .6,
         ballastFactor: 1.2,
         lumenDegradationFactor: 1
@@ -20,7 +19,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 54,
         lumensPerLamp: 4200,
         lampLife: 25000,
-        lampCRI: 85,
         coefficientOfUtilization: .65,
         ballastFactor: 1.1,
         lumenDegradationFactor: 1
@@ -32,7 +30,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 32,
         lumensPerLamp: 2700,
         lampLife: 30000,
-        lampCRI: 83,
         coefficientOfUtilization: .6,
         ballastFactor: 1.2,
         lumenDegradationFactor: 1
@@ -44,7 +41,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 54,
         lumensPerLamp: 4200,
         lampLife: 25000,
-        lampCRI: 85,
         coefficientOfUtilization: .65,
         ballastFactor: 1.1,
         lumenDegradationFactor: 1
@@ -56,7 +52,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 32,
         lumensPerLamp: 2700,
         lampLife: 30000,
-        lampCRI: 83,
         coefficientOfUtilization: .6,
         ballastFactor: 1.2,
         lumenDegradationFactor: 1
@@ -68,7 +63,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 54,
         lumensPerLamp: 4200,
         lampLife: 25000,
-        lampCRI: 85,
         coefficientOfUtilization: .65,
         ballastFactor: 1.1,
         lumenDegradationFactor: 1
@@ -80,7 +74,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 54,
         lumensPerLamp: 4200,
         lampLife: 25000,
-        lampCRI: 85,
         coefficientOfUtilization: .65,
         ballastFactor: 1.1,
         lumenDegradationFactor: 1
@@ -92,7 +85,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 32,
         lumensPerLamp: 2700,
         lampLife: 30000,
-        lampCRI: 83,
         coefficientOfUtilization: .6,
         ballastFactor: 1.2,
         lumenDegradationFactor: 1
@@ -104,7 +96,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 54,
         lumensPerLamp: 4200,
         lampLife: 25000,
-        lampCRI: 85,
         coefficientOfUtilization: .65,
         ballastFactor: 1.1,
         lumenDegradationFactor: 1
@@ -116,7 +107,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: 54,
         lumensPerLamp: 4200,
         lampLife: 25000,
-        lampCRI: 85,
         coefficientOfUtilization: .65,
         ballastFactor: 1.1,
         lumenDegradationFactor: 1
@@ -128,7 +118,6 @@ export const HighBayFluorescentFixtures: Array<LightingFixtureData> = [
         wattsPerLamp: undefined,
         lumensPerLamp: undefined,
         lampLife: undefined,
-        lampCRI: undefined,
         coefficientOfUtilization: undefined,
         ballastFactor: undefined,
         lumenDegradationFactor: undefined

@@ -34,7 +34,6 @@ export class LightingReplacementService {
       ballastFactor: 0,
       lumenDegradationFactor: 0,
       coefficientOfUtilization: 0,
-      lampCRI: 0,
       category: 0,
       type: 'Custom'
     }
@@ -50,10 +49,9 @@ export class LightingReplacementService {
       lumensPerLamp: [obj.lumensPerLamp, [Validators.required, Validators.min(0)]],
       //added for #2381
       lampLife: [obj.lampLife],
-      ballastFactor: [obj.ballastFactor],
+      ballastFactor: [obj.ballastFactor, [Validators.required, Validators.min(.5), Validators.max(1.5)]],
       lumenDegradationFactor: [obj.lumenDegradationFactor],
-      coefficientOfUtilization: [obj.coefficientOfUtilization],
-      lampCRI: [obj.lampCRI],
+      coefficientOfUtilization: [obj.coefficientOfUtilization, [Validators.required, Validators.min(.1), Validators.max(1)]],
       category: [obj.category],
       type: [obj.type]
     });
@@ -75,7 +73,6 @@ export class LightingReplacementService {
       ballastFactor: form.controls.ballastFactor.value,
       lumenDegradationFactor: form.controls.lumenDegradationFactor.value,
       coefficientOfUtilization: form.controls.coefficientOfUtilization.value,
-      lampCRI: form.controls.lampCRI.value,
       category: form.controls.category.value,
       type: form.controls.type.value
     };
@@ -92,14 +89,13 @@ export class LightingReplacementService {
       lampsPerFixture: 6,
       numberOfFixtures: 300,
       lumensPerLamp: 2520,
-      totalLighting: 0,
-      electricityUse: 0,
-      lampLife: 0,
-      ballastFactor: 0,
-      lumenDegradationFactor: 0,
-      coefficientOfUtilization: 0,
-      lampCRI: 0,
-      category: 0,
+      totalLighting: 1,
+      electricityUse: 1,
+      lampLife: 1,
+      ballastFactor: 1,
+      lumenDegradationFactor: 1,
+      coefficientOfUtilization: 1,
+      category: 1,
       type: 'Custom'
     }
     //modification
@@ -111,12 +107,12 @@ export class LightingReplacementService {
   }
 
   calculateElectricityUse(data: LightingReplacementData): LightingReplacementData {
-    data.electricityUse = data.wattsPerLamp * data.lampsPerFixture * data.numberOfFixtures * (1 / 1000) * data.hoursPerYear;
+    data.electricityUse = data.wattsPerLamp * data.lampsPerFixture * data.numberOfFixtures * data.ballastFactor * (1 / 1000) * data.hoursPerYear;
     return data;
   }
 
   calculateTotalLighting(data: LightingReplacementData): LightingReplacementData {
-    data.totalLighting = data.lumensPerLamp * data.lampsPerFixture * data.numberOfFixtures;
+    data.totalLighting = data.coefficientOfUtilization * data.lumenDegradationFactor * data.lumensPerLamp * data.lampsPerFixture * data.ballastFactor * data.numberOfFixtures;
     return data;
   }
 

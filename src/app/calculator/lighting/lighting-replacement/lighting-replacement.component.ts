@@ -177,7 +177,6 @@ export class LightingReplacementComponent implements OnInit {
     dataArray[index].ballastFactor = data.ballastFactor;
     dataArray[index].lumenDegradationFactor = data.lumenDegradationFactor;
     dataArray[index].coefficientOfUtilization = data.coefficientOfUtilization;
-    dataArray[index].lampCRI = data.lampCRI;
     dataArray[index].category = data.category;
     dataArray[index].type = data.type;
   }
