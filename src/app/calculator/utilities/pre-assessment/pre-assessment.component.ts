@@ -81,11 +81,6 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
-  btnResetData() {
-    this.nameIndex = 1;
-    this.initAssessments();
-  }
-
   getHeight() {
     setTimeout(() => {
       if (this.container.nativeElement) {
@@ -96,8 +91,29 @@ export class PreAssessmentComponent implements OnInit {
     }, 200);
   }
 
+  btnResetData() {
+    this.nameIndex = 1;
+    this.initAssessments();
+  }
+
+  btnGenerateExample() {
+    this.generateExample();
+    this.calculate();
+  }
+
+  generateExample() {
+    if (this.settings.unitsOfMeasure == 'Custom') {
+      this.settings.unitsOfMeasure = 'Imperial';
+    }
+    this.assessmentGraphColors = graphColors;
+    this.results = new Array<any>();
+    if (!this.calculator) {
+      this.preAssessments = this.preAssessmentService.generateExample(this.settings);
+    }
+  }
+
   initAssessments() {
-    if(this.settings.unitsOfMeasure == 'Custom'){
+    if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
     this.assessmentGraphColors = graphColors;
