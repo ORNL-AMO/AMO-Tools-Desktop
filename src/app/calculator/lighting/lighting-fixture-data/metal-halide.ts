@@ -9,7 +9,7 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 12000,
         lampLife: 10000,
         lampCRI: 65,
-        coefficienyOfUtilization: .45,
+        coefficientOfUtilization: .45,
         ballastFactor: 1.2,
         lumenDegradationFactor: .8333
     },
@@ -21,7 +21,7 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 17000,
         lampLife: 10000,
         lampCRI: 65,
-        coefficienyOfUtilization: .45,
+        coefficientOfUtilization: .45,
         ballastFactor: 1.15,
         lumenDegradationFactor: .8696
     },
@@ -33,7 +33,7 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 22000,
         lampLife: 15000,
         lampCRI: 65,
-        coefficienyOfUtilization: .45,
+        coefficientOfUtilization: .45,
         ballastFactor: 1.15,
         lumenDegradationFactor: .8696
     },
@@ -45,7 +45,7 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 23000,
         lampLife: 20000,
         lampCRI: 65,
-        coefficienyOfUtilization: .45,
+        coefficientOfUtilization: .45,
         ballastFactor: 1.15,
         lumenDegradationFactor: .76
     },
@@ -57,7 +57,7 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 26000,
         lampLife: 20000,
         lampCRI: 65,
-        coefficienyOfUtilization: .45,
+        coefficientOfUtilization: .45,
         ballastFactor: 1.15,
         lumenDegradationFactor: .8696
     },
@@ -69,8 +69,20 @@ export const MetalHalideFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 86000,
         lampLife: 20000,
         lampCRI: 65,
-        coefficienyOfUtilization: .45,
+        coefficientOfUtilization: .45,
         ballastFactor: 1.1,
         lumenDegradationFactor: .9091
+    },
+    {
+        category: 1,
+        type: '',
+        lampsPerFixture: undefined,
+        wattsPerLamp: undefined,
+        lumensPerLamp: undefined,
+        lampLife: undefined,
+        lampCRI: undefined,
+        coefficientOfUtilization: undefined,
+        ballastFactor: undefined,
+        lumenDegradationFactor: undefined
     }
 ]

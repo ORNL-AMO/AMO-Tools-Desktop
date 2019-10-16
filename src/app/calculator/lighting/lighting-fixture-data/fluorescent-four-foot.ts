@@ -9,7 +9,7 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2280,
         lampLife: 20000,
         lampCRI: 62,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: .87,
         lumenDegradationFactor: 1
     },
@@ -21,7 +21,7 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2910,
         lampLife: 20000,
         lampCRI: 62,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: .86,
         lumenDegradationFactor: 1
     },
@@ -33,7 +33,7 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2675,
         lampLife: 31000,
         lampCRI: 83,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .88,
         lumenDegradationFactor: 1
     },
@@ -45,7 +45,7 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2280,
         lampLife: 20000,
         lampCRI: 62,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: .88,
         lumenDegradationFactor: 1
     },
@@ -57,7 +57,7 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2910,
         lampLife: 20000,
         lampCRI: 62,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: .95,
         lumenDegradationFactor: 1
     },
@@ -69,7 +69,7 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2675,
         lampLife: 31000,
         lampCRI: 83,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .88,
         lumenDegradationFactor: 1
     },
@@ -81,7 +81,7 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2675,
         lampLife: 31000,
         lampCRI: 83,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .88,
         lumenDegradationFactor: 1
     },
@@ -93,8 +93,20 @@ export const FluorescentFourFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2900,
         lampLife: 20000,
         lampCRI: 85,
-        coefficienyOfUtilization: .6,
+        coefficientOfUtilization: .6,
         ballastFactor: .9,
         lumenDegradationFactor: 1
+    },
+    {
+        category: 5,
+        type: '',
+        lampsPerFixture: undefined,
+        wattsPerLamp: undefined,
+        lumensPerLamp: undefined,
+        lampLife: undefined,
+        lampCRI: undefined,
+        coefficientOfUtilization: undefined,
+        ballastFactor: undefined,
+        lumenDegradationFactor: undefined
     }
 ]

@@ -9,7 +9,7 @@ export const LEDTroffersFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 1900,
         lampLife: 60000,
         lampCRI: 75,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -21,7 +21,7 @@ export const LEDTroffersFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 1900,
         lampLife: 60000,
         lampCRI: 75,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -33,7 +33,7 @@ export const LEDTroffersFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 1900,
         lampLife: 60000,
         lampCRI: 80,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -45,7 +45,7 @@ export const LEDTroffersFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 950,
         lampLife: 60000,
         lampCRI: 70,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -57,8 +57,20 @@ export const LEDTroffersFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 950,
         lampLife: 60000,
         lampCRI: 80,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
+    },
+    {
+        category: 10,
+        type: '',
+        lampsPerFixture: undefined,
+        wattsPerLamp: undefined,
+        lumensPerLamp: undefined,
+        lampLife: undefined,
+        lampCRI: undefined,
+        coefficientOfUtilization: undefined,
+        ballastFactor: undefined,
+        lumenDegradationFactor: undefined
     }
 ]

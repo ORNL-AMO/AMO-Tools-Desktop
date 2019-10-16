@@ -43,22 +43,30 @@
         <label for="{{'category_'+idString}}">Fixture Category
           <!-- <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a> -->
         </label>
-        <select name="{{'category_'+lossIndex}}" class="form-control" id="{{'category_'+idString}}"
-          formControlName="category" (change)="setCategory()" (focus)="focusField('category')">
+        <select name="type" class="form-control" id="{{'category_'+idString}}" formControlName="category"
+          (change)="setCategory()" (focus)="focusField('category')">
           <option *ngFor="let fixtureCategory of lightingFixtureCategories" [ngValue]="fixtureCategory.category">
             {{fixtureCategory.label}}</option>
         </select>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="form.controls.category.value != 0">
         <label for="{{'type_'+idString}}">Fixture type
           <!-- <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a> -->
         </label>
-        <select name="{{'type_'+lossIndex}}" class="form-control" id="{{'type_'+idString}}"
-          formControlName="type" (change)="setProperties()" (focus)="focusField('type')">
+        <select name="type" class="form-control" id="{{'type_'+idString}}" formControlName="type"
+          (change)="setProperties()" (focus)="focusField('type')">
           <option *ngFor="let fixtureType of fixtureTypes" [ngValue]="fixtureType.type">
             {{fixtureType.type}}</option>
         </select>
+      </div>
+
+      <div class="form-group help-text" *ngIf="form.controls.category.value != 0 && form.controls.lampLife.value">
+        <label>Lamp Life
+        </label>
+        <div class="input-group">
+          {{form.controls.lampLife.value | number}} hrs
+        </div>
       </div>
 
 
@@ -124,9 +132,12 @@
             {{form.controls.numberOfFixtures.errors.min.min}}.</span>
         </span>
       </div>
-
+      <div class="w-100 text-center">
+        <a class="click-link small" *ngIf="displayDetails == false" (click)="showDetails()">Show Additional Fixture Details +</a>
+        <a class="click-link small" *ngIf="displayDetails == true" (click)="hideDetails()">Hide Additional Fixture Details -</a>
+      </div>
       <!--show/hide-->
-      <div class="form-group">
+      <div class="form-group" *ngIf="displayDetails == true">
         <label for="{{'lumensPerLamp_'+idString}}">Lumens Per Lamp</label>
         <div class="input-group">
           <input name="lumensPerLamp" formControlName="lumensPerLamp" type="number" step="any" class="form-control"
@@ -142,7 +153,7 @@
         </span>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="displayDetails == true">
         <label for="{{'coefficientOfUtilization_'+idString}}">Coeffient of Utilization</label>
         <div class="input-group">
           <input name="coefficientOfUtilization" formControlName="coefficientOfUtilization" type="number" step="any"
@@ -158,7 +169,7 @@
         </span> -->
       </div>
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="displayDetails == true">
         <label for="{{'lumenDegradationFactor_'+idString}}">Lumen Degredation Factor</label>
         <div class="input-group">
           <input name="lumenDegradationFactor" formControlName="lumenDegradationFactor" type="number" step="any"

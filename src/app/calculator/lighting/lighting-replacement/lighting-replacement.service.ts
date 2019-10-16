@@ -72,10 +72,10 @@ export class LightingReplacementService {
       electricityUse: 0,
       //added for #2381
       lampLife: form.controls.lumensPerLamp.value,
-      ballastFactor: form.controls.lumeballastFactornsPerLamp.value,
+      ballastFactor: form.controls.ballastFactor.value,
       lumenDegradationFactor: form.controls.lumenDegradationFactor.value,
       coefficientOfUtilization: form.controls.coefficientOfUtilization.value,
-      lampCRI: form.controls.lumensPelampCRIrLamp.value,
+      lampCRI: form.controls.lampCRI.value,
       category: form.controls.category.value,
       type: form.controls.type.value
     };

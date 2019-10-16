@@ -9,7 +9,7 @@ export const HighBayLEDFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2000,
         lampLife: 60000,
         lampCRI: 70,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -21,7 +21,7 @@ export const HighBayLEDFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2000,
         lampLife: 60000,
         lampCRI: 70,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -33,7 +33,7 @@ export const HighBayLEDFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2000,
         lampLife: 60000,
         lampCRI: 70,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -45,7 +45,7 @@ export const HighBayLEDFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2000,
         lampLife: 60000,
         lampCRI: 70,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -57,7 +57,7 @@ export const HighBayLEDFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 4800,
         lampLife: 50000,
         lampCRI: 80,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -69,7 +69,7 @@ export const HighBayLEDFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 7200,
         lampLife: 50000,
         lampCRI: 80,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -81,7 +81,7 @@ export const HighBayLEDFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 13300,
         lampLife: 50000,
         lampCRI: 80,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -93,8 +93,20 @@ export const HighBayLEDFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 16000,
         lampLife: 50000,
         lampCRI: 80,
-        coefficienyOfUtilization: .75,
+        coefficientOfUtilization: .75,
         ballastFactor: 1,
         lumenDegradationFactor: 1
+    },
+    {
+        category: 9,
+        type: '',
+        lampsPerFixture: undefined,
+        wattsPerLamp: undefined,
+        lumensPerLamp: undefined,
+        lampLife: undefined,
+        lampCRI: undefined,
+        coefficientOfUtilization: undefined,
+        ballastFactor: undefined,
+        lumenDegradationFactor: undefined
     }
 ]

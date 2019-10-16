@@ -17,7 +17,7 @@ export interface LightingFixtureData {
     lumensPerLamp: number,
     lampLife: number,
     lampCRI: number,
-    coefficienyOfUtilization: number,
+    coefficientOfUtilization: number,
     ballastFactor: number,
     lumenDegradationFactor: number
 }

@@ -42,6 +42,7 @@ export class LightingReplacementFormComponent implements OnInit {
 
   lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
   fixtureTypes: Array<LightingFixtureData>;
+  displayDetails: boolean = false;
   constructor(private lightingReplacementService: LightingReplacementService) {
     this.lightingFixtureCategories = LightingFixtureCategories;
   }
@@ -123,9 +124,47 @@ export class LightingReplacementFormComponent implements OnInit {
 
   setCategory() {
     this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => { return fixtureCategory.category == this.form.controls.category.value }).fixturesData;
+    this.clearProperties();
   }
 
   setProperties() {
+    let fixtureData: LightingFixtureData = this.fixtureTypes.find(fixtureType => { return fixtureType.type == this.form.controls.type.value });
+    if (fixtureData != undefined) {
+      this.form.patchValue({
+        lampsPerFixture: fixtureData.lampsPerFixture,
+        wattsPerLamp: fixtureData.wattsPerLamp,
+        lumensPerLamp: fixtureData.lumensPerLamp,
+        lampLife: fixtureData.lampLife,
+        lampCRI: fixtureData.lampCRI,
+        coefficientOfUtilization: fixtureData.coefficientOfUtilization,
+        ballastFactor: fixtureData.ballastFactor,
+        lumenDegradationFactor: fixtureData.lumenDegradationFactor
+      });
+    }
+    this.calculate();
+  }
 
+  clearProperties() {
+    this.form.patchValue({
+      type: '',
+      lampsPerFixture: undefined,
+      wattsPerLamp: undefined,
+      lumensPerLamp: undefined,
+      lampLife: undefined,
+      lampCRI: undefined,
+      coefficientOfUtilization: undefined,
+      ballastFactor: undefined,
+      lumenDegradationFactor: undefined
+    });
+    console.log(this.form);
+    this.calculate();
+  }
+
+  showDetails(){
+    this.displayDetails = true;
+  }
+
+  hideDetails(){
+    this.displayDetails = false;
   }
 }

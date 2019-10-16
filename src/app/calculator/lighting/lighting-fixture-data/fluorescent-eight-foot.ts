@@ -9,7 +9,7 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 5060,
         lampLife: 12000,
         lampCRI: 60,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -21,7 +21,7 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 6110,
         lampLife: 12000,
         lampCRI: 72,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -33,7 +33,7 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 6960,
         lampLife: 12000,
         lampCRI: 62,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -45,7 +45,7 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 8280,
         lampLife: 12000,
         lampCRI: 70,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -57,7 +57,7 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 8444,
         lampLife: 12000,
         lampCRI: 62,
-        coefficienyOfUtilization: .51,
+        coefficientOfUtilization: .51,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -69,7 +69,7 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 5500,
         lampLife: 15000,
         lampCRI: 78,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
@@ -81,8 +81,20 @@ export const FluorescentEightFootFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 7600,
         lampLife: 18000,
         lampCRI: 78,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: 1,
         lumenDegradationFactor: 1
     },
+    {
+        category: 6,
+        type: '',
+        lampsPerFixture: undefined,
+        wattsPerLamp: undefined,
+        lumensPerLamp: undefined,
+        lampLife: undefined,
+        lampCRI: undefined,
+        coefficientOfUtilization: undefined,
+        ballastFactor: undefined,
+        lumenDegradationFactor: undefined
+    }
 ]

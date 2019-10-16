@@ -9,7 +9,7 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2590,
         lampLife: 36000,
         lampCRI: 85,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .78,
         lumenDegradationFactor: 1
     },
@@ -21,7 +21,7 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2850,
         lampLife: 36000,
         lampCRI: 85,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .78,
         lumenDegradationFactor: 1
     },
@@ -33,7 +33,7 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2590,
         lampLife: 36000,
         lampCRI: 85,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .78,
         lumenDegradationFactor: 1
     },
@@ -45,7 +45,7 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2850,
         lampLife: 36000,
         lampCRI: 85,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .78,
         lumenDegradationFactor: 1
     },
@@ -57,7 +57,7 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2590,
         lampLife: 36000,
         lampCRI: 85,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .78,
         lumenDegradationFactor: 1
     },
@@ -69,7 +69,7 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2850,
         lampLife: 36000,
         lampCRI: 85,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .78,
         lumenDegradationFactor: 1
     },
@@ -81,7 +81,7 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2590,
         lampLife: 36000,
         lampCRI: 85,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .78,
         lumenDegradationFactor: 1
     },
@@ -93,8 +93,20 @@ export const FluorescentXpRetrofitFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2850,
         lampLife: 36000,
         lampCRI: 85,
-        coefficienyOfUtilization: .53,
+        coefficientOfUtilization: .53,
         ballastFactor: .78,
         lumenDegradationFactor: 1
+    },
+    {
+        category: 4,
+        type: '',
+        lampsPerFixture: undefined,
+        wattsPerLamp: undefined,
+        lumensPerLamp: undefined,
+        lampLife: undefined,
+        lampCRI: undefined,
+        coefficientOfUtilization: undefined,
+        ballastFactor: undefined,
+        lumenDegradationFactor: undefined
     }
 ]

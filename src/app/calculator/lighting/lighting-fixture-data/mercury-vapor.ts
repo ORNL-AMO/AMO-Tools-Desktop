@@ -9,7 +9,7 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 2700,
         lampLife: 18000,
         lampCRI: 45,
-        coefficienyOfUtilization: .4,
+        coefficientOfUtilization: .4,
         ballastFactor: 1.15,
         lumenDegradationFactor: .79
     },
@@ -21,7 +21,7 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 4000,
         lampLife: 24000,
         lampCRI: 45,
-        coefficienyOfUtilization: .4,
+        coefficientOfUtilization: .4,
         ballastFactor: 1.15,
         lumenDegradationFactor: .79
     },
@@ -33,7 +33,7 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 7700,
         lampLife: 24000,
         lampCRI: 45,
-        coefficienyOfUtilization: .4,
+        coefficientOfUtilization: .4,
         ballastFactor: 1.15,
         lumenDegradationFactor: .79
     },
@@ -45,7 +45,7 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 12500,
         lampLife: 24000,
         lampCRI: 45,
-        coefficienyOfUtilization: .4,
+        coefficientOfUtilization: .4,
         ballastFactor: 1.15,
         lumenDegradationFactor: .79
     },
@@ -57,8 +57,20 @@ export const MercuryVaporFixtures: Array<LightingFixtureData> = [
         lumensPerLamp: 22000,
         lampLife: 24000,
         lampCRI: 45,
-        coefficienyOfUtilization: .4,
+        coefficientOfUtilization: .4,
         ballastFactor: 1.15,
         lumenDegradationFactor: .79
+    },
+    {
+        category: 8,
+        type: '',
+        lampsPerFixture: undefined,
+        wattsPerLamp: undefined,
+        lumensPerLamp: undefined,
+        lampLife: undefined,
+        lampCRI: undefined,
+        coefficientOfUtilization: undefined,
+        ballastFactor: undefined,
+        lumenDegradationFactor: undefined
     }
 ]
