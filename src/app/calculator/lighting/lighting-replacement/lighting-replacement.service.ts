@@ -16,7 +16,7 @@ export class LightingReplacementService {
   modificationElectricityCost: number;
   operatingHours: OperatingHours;
   selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
-  constructor(private fb: FormBuilder) { 
+  constructor(private fb: FormBuilder) {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
   }
 
@@ -31,14 +31,14 @@ export class LightingReplacementService {
       wattsPerLamp: 0,
       lampsPerFixture: 0,
       numberOfFixtures: 0,
-      lumensPerLamp: 0,
+      lumensPerLamp: 1,
       totalLighting: 0,
       electricityUse: 0,
       //added for #2381
       lampLife: 0,
       ballastFactor: 0,
-      lumenDegradationFactor: 0,
-      coefficientOfUtilization: 0,
+      lumenDegradationFactor: 1,
+      coefficientOfUtilization: 1,
       category: 0,
       type: 'Custom'
     }
@@ -55,7 +55,7 @@ export class LightingReplacementService {
       //added for #2381
       lampLife: [obj.lampLife],
       ballastFactor: [obj.ballastFactor, [Validators.required, Validators.min(.5), Validators.max(1.5)]],
-      lumenDegradationFactor: [obj.lumenDegradationFactor],
+      lumenDegradationFactor: [obj.lumenDegradationFactor, [Validators.required, Validators.min(.5), Validators.max(1)]],
       coefficientOfUtilization: [obj.coefficientOfUtilization, [Validators.required, Validators.min(.1), Validators.max(1)]],
       category: [obj.category],
       type: [obj.type]

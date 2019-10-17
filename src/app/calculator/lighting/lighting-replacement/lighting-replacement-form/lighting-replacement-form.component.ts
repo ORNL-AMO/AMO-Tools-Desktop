@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges, HostListener, ChangeDetectorRef } from '@angular/core';
 import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { FormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
@@ -43,7 +43,16 @@ export class LightingReplacementFormComponent implements OnInit {
   lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
   fixtureTypes: Array<LightingFixtureData>;
   displayDetails: boolean = false;
-  constructor(private lightingReplacementService: LightingReplacementService) {
+
+  indicateLampsPerFixtureDiff: boolean = false;
+  indicateWattsPerLampDiff: boolean = false;
+  indicateLumensPerLampDiff: boolean = false;
+  indicateCoefficientOfUtilizationDiff: boolean = false;
+  indicateBallastFactorDiff: boolean = false;
+  indicateLumenDegradationFactorDiff: boolean = false;
+  indicateFixtureTypeDiff: boolean = false;
+
+  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef) {
     this.lightingFixtureCategories = LightingFixtureCategories;
   }
 
@@ -56,6 +65,7 @@ export class LightingReplacementFormComponent implements OnInit {
     }
 
     this.form = this.lightingReplacementService.getFormFromObj(this.data);
+    this.checkSelectFixtureDiff();
     this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => { return fixtureCategory.category == this.form.controls.category.value }).fixturesData;
     this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
     if (this.selected == false) {
@@ -81,6 +91,7 @@ export class LightingReplacementFormComponent implements OnInit {
 
   calculate() {
     let tmpObj: LightingReplacementData = this.lightingReplacementService.getObjFromForm(this.form);
+    this.checkSelectFixtureDiff();
     this.emitCalculate.emit(tmpObj);
   }
 
@@ -151,20 +162,49 @@ export class LightingReplacementFormComponent implements OnInit {
       type: '',
       lampsPerFixture: undefined,
       wattsPerLamp: undefined,
-      lumensPerLamp: undefined,
+      lumensPerLamp: 1,
       lampLife: undefined,
-      coefficientOfUtilization: undefined,
+      coefficientOfUtilization: 1,
       ballastFactor: undefined,
-      lumenDegradationFactor: undefined
+      lumenDegradationFactor: 1
     });
     this.calculate();
   }
 
-  showDetails(){
+  showDetails() {
     this.displayDetails = true;
   }
 
-  hideDetails(){
+  hideDetails() {
     this.displayDetails = false;
+  }
+
+  checkSelectFixtureDiff() {
+    if (this.form.controls.category.value != 0) {
+      let fixtureData: LightingFixtureData = this.fixtureTypes.find(fixtureType => { return fixtureType.type == this.form.controls.type.value });
+      if (fixtureData != undefined && fixtureData.type != "") {
+        this.indicateLampsPerFixtureDiff = fixtureData.lampsPerFixture != this.form.controls.lampsPerFixture.value;
+        this.indicateWattsPerLampDiff = fixtureData.wattsPerLamp != this.form.controls.wattsPerLamp.value;
+        this.indicateLumensPerLampDiff = fixtureData.lumensPerLamp != this.form.controls.lumensPerLamp.value;
+        this.indicateCoefficientOfUtilizationDiff = fixtureData.coefficientOfUtilization != this.form.controls.coefficientOfUtilization.value;
+        this.indicateBallastFactorDiff = fixtureData.ballastFactor != this.form.controls.ballastFactor.value;
+        this.indicateLumenDegradationFactorDiff = fixtureData.lumenDegradationFactor != this.form.controls.lumenDegradationFactor.value;
+      } else {
+        this.setNotDiff();
+      }
+    } else {
+      this.setNotDiff();
+    }
+    this.indicateFixtureTypeDiff = this.indicateLampsPerFixtureDiff || this.indicateWattsPerLampDiff || this.indicateLumensPerLampDiff || this.indicateCoefficientOfUtilizationDiff || this.indicateBallastFactorDiff || this.indicateLumenDegradationFactorDiff;
+    this.cd.detectChanges();
+  }
+
+  setNotDiff() {
+    this.indicateLampsPerFixtureDiff = false;
+    this.indicateWattsPerLampDiff = false;
+    this.indicateLumensPerLampDiff = false;
+    this.indicateCoefficientOfUtilizationDiff = false;
+    this.indicateBallastFactorDiff = false;
+    this.indicateLumenDegradationFactorDiff = false;
   }
 }
