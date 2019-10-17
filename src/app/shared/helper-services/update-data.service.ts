@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { Settings } from '../models/settings';
 import { SettingsService } from '../../settings/settings.service';
+import { LightingReplacementTreasureHunt } from '../models/treasure-hunt';
+import { LightingReplacementData } from '../models/lighting';
 declare const packageJson;
 
 @Injectable()
@@ -17,7 +19,10 @@ export class UpdateDataService {
                 return this.updatePsat(assessment);
             } else if (assessment.type === 'PHAST') {
                 return this.updatePhast(assessment);
-            } else {
+            } else if (assessment.type === 'TreasureHunt') {
+                return this.updateTreasureHunt(assessment);
+            }
+            else {
                 return assessment;
             }
         }
@@ -91,5 +96,42 @@ export class UpdateDataService {
         }
         settings.appVersion = packageJson.version;
         return settings;
+    }
+
+    updateTreasureHunt(assessment: Assessment): Assessment {
+        if (assessment.treasureHunt) {
+            if (assessment.treasureHunt.lightingReplacements) {
+                assessment.treasureHunt.lightingReplacements.forEach(replacement => {
+                    replacement = this.updateLightingReplacementTreasureHunt(replacement);
+                })
+            }
+        }
+        return assessment;
+    }
+
+    updateLightingReplacementTreasureHunt(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt): LightingReplacementTreasureHunt {
+        lightingReplacementTreasureHunt.baseline.forEach(replacement => {
+            replacement = this.updateLightingReplacement(replacement);
+        });
+        lightingReplacementTreasureHunt.modifications.forEach(replacement => {
+            replacement = this.updateLightingReplacement(replacement);
+        });
+        return lightingReplacementTreasureHunt;
+    }
+
+    updateLightingReplacement(lightingReplacement: LightingReplacementData): LightingReplacementData {
+        if (lightingReplacement.ballastFactor == undefined) {
+            lightingReplacement.ballastFactor = 1;
+        }
+        if (lightingReplacement.lumenDegradationFactor == undefined) {
+            lightingReplacement.lumenDegradationFactor = 1;
+        }
+        if (lightingReplacement.coefficientOfUtilization == undefined) {
+            lightingReplacement.coefficientOfUtilization = 1;
+        }
+        if (lightingReplacement.category == undefined) {
+            lightingReplacement.category = 0;
+        }
+        return lightingReplacement;
     }
 }
