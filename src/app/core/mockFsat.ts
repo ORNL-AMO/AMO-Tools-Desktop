@@ -244,7 +244,6 @@ export const MockFsatCalculator: Calculator = {
         fanSystemCurveData: {
             compressibilityFactor: 0.988,
             systemLossExponent: 1.9,
-            pointOne: "Baseline1",
             pointOneFlowRate: 0,
             pointOnePressure: 0,
             pointTwo: "Baseline",

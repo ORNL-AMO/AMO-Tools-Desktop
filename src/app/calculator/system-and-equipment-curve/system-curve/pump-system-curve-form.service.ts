@@ -22,7 +22,6 @@ export class PumpSystemCurveFormService {
     let examplePumpSystemCurveData: PumpSystemCurveData = {
       specificGravity: 1.0,
       systemLossExponent: 1.9,
-      pointOne: '',
       pointOneFlowRate: 0,
       pointOneHead: 0,
       pointTwo: '',
@@ -36,7 +35,6 @@ export class PumpSystemCurveFormService {
     let pumpSystemCurveData: PumpSystemCurveData = {
       specificGravity: 1.0,
       systemLossExponent: 1.9,
-      pointOne: '',
       pointOneFlowRate: 0,
       pointOneHead: 0,
       pointTwo: '',
@@ -50,7 +48,6 @@ export class PumpSystemCurveFormService {
     let form: FormGroup = this.formBuilder.group({
       specificGravity: [obj.specificGravity, [Validators.required, Validators.min(0)]],
       systemLossExponent: [obj.systemLossExponent, [Validators.required, Validators.min(0)]],
-      pointOne: [obj.pointOne],
       pointOneFlowRate: [obj.pointOneFlowRate, [Validators.required, Validators.min(0)]],
       pointOneHead: [obj.pointOneHead, [Validators.required, Validators.min(0)]],
       pointTwo: [obj.pointTwo],
@@ -65,7 +62,6 @@ export class PumpSystemCurveFormService {
       specificGravity: form.controls.specificGravity.value,
       systemLossExponent: form.controls.systemLossExponent.value,
       pointOneFlowRate: form.controls.pointOneFlowRate.value,
-      pointOne: form.controls.pointOne.value,
       pointOneHead: form.controls.pointOneHead.value,
       pointTwo: form.controls.pointTwo.value,
       pointTwoFlowRate: form.controls.pointTwoFlowRate.value,

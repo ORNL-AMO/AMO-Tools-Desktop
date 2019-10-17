@@ -362,7 +362,6 @@ export const MockPsatCalculator: Calculator = {
         pumpSystemCurveData: {
             specificGravity: 1.002,
             systemLossExponent: 1.9,
-            pointOne: "Baseline1",
             pointOneFlowRate: 0,
             pointOneHead: 50,
             pointTwo: "Baseline",

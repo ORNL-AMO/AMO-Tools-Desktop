@@ -21,7 +21,6 @@ export class FanSystemCurveFormService {
     let exampleFanSystemCurveData: FanSystemCurveData = {
       compressibilityFactor: .98,
       systemLossExponent: 1.9,
-      pointOne: '',
       pointOneFlowRate: 0,
       pointOnePressure: 0,
       pointTwo: '',
@@ -35,7 +34,6 @@ export class FanSystemCurveFormService {
     let fanSystemCurveData: FanSystemCurveData = {
       compressibilityFactor: .98,
       systemLossExponent: 1.9,
-      pointOne: '',
       pointOneFlowRate: 0,
       pointOnePressure: 0,
       pointTwo: '',
@@ -49,7 +47,6 @@ export class FanSystemCurveFormService {
     let data: FanSystemCurveData = {
       compressibilityFactor: form.controls.compressibilityFactor.value,
       systemLossExponent: form.controls.systemLossExponent.value,
-      pointOne: form.controls.pointOne.value,
       pointOneFlowRate: form.controls.pointOneFlowRate.value,
       pointOnePressure: form.controls.pointOnePressure.value,
       pointTwo: form.controls.pointTwo.value,
@@ -63,7 +60,6 @@ export class FanSystemCurveFormService {
     let form: FormGroup = this.formBuilder.group({
       compressibilityFactor: [obj.compressibilityFactor, [Validators.required, Validators.min(0)]],
       systemLossExponent: [obj.systemLossExponent, [Validators.required, Validators.min(0)]],
-      pointOne: [obj.pointOne],
       pointOneFlowRate: [obj.pointOneFlowRate, [Validators.required, Validators.min(0)]],
       pointOnePressure: [obj.pointOnePressure, [Validators.required, Validators.min(0)]],
       pointTwo: [obj.pointTwo],

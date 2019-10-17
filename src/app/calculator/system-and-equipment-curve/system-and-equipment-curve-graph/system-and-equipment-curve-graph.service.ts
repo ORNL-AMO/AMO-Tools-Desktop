@@ -135,7 +135,7 @@ export class SystemAndEquipmentCurveGraphService {
 
 
   getIntersectionPoint(equipmentType: string, settings: Settings, curveDataPairs: Array<{ x: number, y: number }>, systemCurveRegressionData: Array<{ x: number, y: number, fluidPower: number }>) {
-    let intersectionPoint: { x: number, y: number } = this.calculateIntersectionPoint(systemCurveRegressionData, curveDataPairs);
+    let intersectionPoint: { x: number, y: number } = this.calculateIntersectionPoint(JSON.parse(JSON.stringify(systemCurveRegressionData)), JSON.parse(JSON.stringify(curveDataPairs)));
     if (intersectionPoint != undefined) {
       let staticVal: number;
       let coefficient: number;

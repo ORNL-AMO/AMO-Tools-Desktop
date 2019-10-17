@@ -94,16 +94,17 @@ export class SystemAndEquipmentCurveService {
 
   initializeDataFromPSAT(psat: PSAT) {
     let systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = this.getPumpSystemCurveDataPoints(psat);
-    // let pumpSystemCurveData: PumpSystemCurveData = {
-    //   specificGravity: number,
-    //   systemLossExponent: number,
-    //   pointOne: string,
-    //   pointOneFlowRate: number,
-    //   pointOneHead: number,
-    //   pointTwo: string,
-    //   pointTwoFlowRate: number,
-    //   pointTwoHead: number,
-    // }
+    this.systemCurveDataPoints = systemCurveDataPoints;
+    let pumpSystemCurveData: PumpSystemCurveData = {
+      specificGravity: psat.inputs.specific_gravity,
+      systemLossExponent: 1.9,
+      pointOneFlowRate: 0,
+      pointOneHead: 0,
+      pointTwo: 'Baseline',
+      pointTwoFlowRate: psat.inputs.flow_rate,
+      pointTwoHead: psat.inputs.head,
+    };
+    this.pumpSystemCurveData.next(pumpSystemCurveData);
   }
 
   getPumpSystemCurveDataPoints(psat: PSAT): Array<{ pointName: string, flowRate: number, yValue: number }> {
@@ -126,6 +127,18 @@ export class SystemAndEquipmentCurveService {
   }
 
   initializeDataFromFSAT(fsat: FSAT) {
+    let systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = this.getFanSystemCurveDataPoints(fsat);
+    this.systemCurveDataPoints = systemCurveDataPoints;
+    let fanSystemCurveData: FanSystemCurveData = {
+      compressibilityFactor: fsat.fieldData.compressibilityFactor,
+      systemLossExponent: .98,
+      pointOneFlowRate: 0,
+      pointOnePressure: 0,
+      pointTwo: 'Baseline',
+      pointTwoFlowRate: fsat.fieldData.flowRate,
+      pointTwoPressure: fsat.fieldData.inletPressure - fsat.fieldData.outletPressure
+    }
+    this.fanSystemCurveData.next(fanSystemCurveData);
   }
 
   getFanSystemCurveDataPoints(fsat: FSAT): Array<{ pointName: string, flowRate: number, yValue: number }> {
@@ -165,7 +178,6 @@ export interface SystemAndEquipmentCurveData {
 export interface PumpSystemCurveData {
   specificGravity: number,
   systemLossExponent: number,
-  pointOne: string,
   pointOneFlowRate: number,
   pointOneHead: number,
   pointTwo: string,
@@ -176,7 +188,6 @@ export interface PumpSystemCurveData {
 export interface FanSystemCurveData {
   compressibilityFactor: number,
   systemLossExponent: number,
-  pointOne: string,
   pointOneFlowRate: number,
   pointOnePressure: number,
   pointTwo: string,
