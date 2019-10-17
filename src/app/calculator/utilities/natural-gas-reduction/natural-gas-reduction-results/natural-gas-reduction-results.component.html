@@ -16,7 +16,9 @@
     <tr>
       <td class="bold w-50">Total Flow</td>
       <td class="text-center w-50">
-        {{results.baselineResults.totalFlow | number:'.1-3'}} {{settings.flowMeasurement}}/yr
+        {{results.baselineResults.totalFlow | number:'.1-3'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{settings.flowMeasurement}}</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>/yr
       </td>
     </tr>
   </tbody>
@@ -45,7 +47,9 @@
     <tr>
       <td class="bold w-50">Total Flow</td>
       <td class="text-center w-50">
-        {{results.modificationResults.totalFlow | number:'.1-3'}} {{settings.flowMeasurement}}/yr
+        {{results.modificationResults.totalFlow | number:'.1-3'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{settings.flowMeasurement}}</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>/yr
       </td>
     </tr>
   </tbody>
