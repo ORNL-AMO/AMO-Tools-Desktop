@@ -6,20 +6,15 @@
       opportunities such as:
     </small>
   </h5>
-  <div class="my-2">
-    <h6>
-      <ul small class="text-muted">
-        <li>Reducing the operation time of lighting equipment.</li>
-        <br>
-        <li>Converting to a lower power usage fixture.</li>
-        <br>
-        <li>Reducing the number of lighting fixtures.</li>
-        <br>
-        <li>Turning off the lights when people are not present.</li>
-        <br>
-      </ul>
-    </h6>
-  </div>
+  <h6>
+    <ul small class="text-muted mb-0">
+      <li>Reducing the operation time of lighting equipment.</li>
+      <li>Converting to a lower power usage fixture.</li>
+      <li>Reducing the number of lighting fixtures.</li>
+      <li>Turning off the lights when people are not present.</li>
+      <br>
+    </ul>
+  </h6>
   <div class="my-2" *ngIf="currentField == 'hoursPerYear'">
     <h6>
       Hours per Year
@@ -79,19 +74,22 @@
         Per unit cost of electricity in $/kWh
         <hr>
       </small>
-      <!--todo: add options-->
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'category'">
-    <h6>
-      Lighting Fixture Category
-      <small class="text-muted">
-        <br>
-        Type of light fixture
-        <hr>
-      </small>
-      <!--TODO: add options-->
-    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Type of Fixture</th>
+          </tr>
+          <tr *ngFor="let fixtureCategory of lightingFixtureCategories">
+            <td>{{fixtureCategory.label}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr>
   </div>
 
   <div class="my-2" *ngIf="currentField == 'type'">
@@ -103,6 +101,15 @@
         <hr>
       </small>
     </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr *ngFor="let fixtureType of fixtureTypes">
+            <td>{{fixtureType.type}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="my-2" *ngIf="currentField == 'ballastFactor'">
     <h6>

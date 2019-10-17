@@ -56,6 +56,8 @@ export class LightingReplacementFormComponent implements OnInit {
     }
 
     this.form = this.lightingReplacementService.getFormFromObj(this.data);
+    this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => { return fixtureCategory.category == this.form.controls.category.value }).fixturesData;
+    this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
     if (this.selected == false) {
       this.form.disable();
     }
@@ -124,6 +126,7 @@ export class LightingReplacementFormComponent implements OnInit {
 
   setCategory() {
     this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => { return fixtureCategory.category == this.form.controls.category.value }).fixturesData;
+    this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
     this.clearProperties();
   }
 

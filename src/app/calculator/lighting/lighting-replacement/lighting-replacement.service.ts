@@ -4,6 +4,8 @@ import { LightingReplacementResults, LightingReplacementData, LightingReplacemen
 import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { LightingFixtureData } from '../lighting-fixture-data/lighting-data';
 
 @Injectable()
 export class LightingReplacementService {
@@ -13,7 +15,10 @@ export class LightingReplacementService {
   baselineElectricityCost: number;
   modificationElectricityCost: number;
   operatingHours: OperatingHours;
-  constructor(private fb: FormBuilder) { }
+  selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
+  constructor(private fb: FormBuilder) { 
+    this.selectedFixtureTypes = new BehaviorSubject(undefined);
+  }
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
     let hoursPerYear: number = 8760;
