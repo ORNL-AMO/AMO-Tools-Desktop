@@ -122,6 +122,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     if (this.assessment != undefined) {
       this.saveCalculator();
     }
+    this.systemAndEquipmentCurveService.systemCurveDataPoints = undefined;
   }
 
   calculateByDataRegression(byDataInputs: ByDataInputs, equipmentInputs: EquipmentInputs) {
@@ -208,10 +209,27 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       this.systemAndEquipmentCurveService.equipmentInputs.next(calculator.systemAndEquipmentCurveData.equipmentInputs);
       if (this.equipmentType == 'fan') {
         this.systemAndEquipmentCurveService.fanSystemCurveData.next(calculator.systemAndEquipmentCurveData.fanSystemCurveData);
+        if (calculator.systemAndEquipmentCurveData.systemCurveDataPoints) {
+          this.systemAndEquipmentCurveService.systemCurveDataPoints = calculator.systemAndEquipmentCurveData.systemCurveDataPoints;
+        } else {
+          this.systemAndEquipmentCurveService.systemCurveDataPoints = this.systemAndEquipmentCurveService.getFanSystemCurveDataPoints(this.assessment.fsat);
+        }
       } else if (this.equipmentType == 'pump') {
+        if (calculator.systemAndEquipmentCurveData.systemCurveDataPoints) {
+          this.systemAndEquipmentCurveService.systemCurveDataPoints = calculator.systemAndEquipmentCurveData.systemCurveDataPoints;
+        } else {
+          this.systemAndEquipmentCurveService.systemCurveDataPoints = this.systemAndEquipmentCurveService.getPumpSystemCurveDataPoints(this.assessment.psat);
+        }
         this.systemAndEquipmentCurveService.pumpSystemCurveData.next(calculator.systemAndEquipmentCurveData.pumpSystemCurveData);
       }
       this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.next(calculator.systemAndEquipmentCurveData.equipmentCurveFormView);
+
+    } else {
+      if (this.equipmentType == 'fan') {
+        this.systemAndEquipmentCurveService.initializeDataFromFSAT(this.assessment.fsat);
+      } else if (this.equipmentType == 'pump') {
+        this.systemAndEquipmentCurveService.initializeDataFromPSAT(this.assessment.psat);
+      }
     }
     this.systemAndEquipmentCurveService.equipmentCurveCollapsed.next("open");
     this.systemAndEquipmentCurveService.systemCurveCollapsed.next("open");
@@ -249,4 +267,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       });
     }
   }
+
+
 }

@@ -22,14 +22,11 @@
             <span *ngIf="pumpSystemCurveForm.controls.systemLossExponent.errors.required">Value required.</span>
             <span *ngIf="pumpSystemCurveForm.controls.systemLossExponent.errors.min">Value can't be less than
                 {{pumpSystemCurveForm.controls.systemLossExponent.errors.min.min}}.</span>
-            <span class="alert-danger pull-right small"
-                *ngIf="exponentInputWarning !== null">{{exponentInputWarning}}</span>
         </span>
     </div>
     <!--Point 1-->
-    <div class="form-group">
-        <label class="group-label point-label" for="pointAdjustment">Point 1</label>
-    </div>
+
+    <label class="group-label" for="pointAdjustment">Point 1</label>
     <div class="form-group">
         <label class="small" for="pointOneFlowRate">Flow Rate</label>
         <div class="input-group calc-addon-group">
@@ -73,12 +70,14 @@
         </div>
     </div>
     <!--Point 2-->
+    <label class="group-label" for="pointTwo">Point 2</label>
     <div class="form-group">
-        <label class="group-label point-label" for="pointTwo">Point 2</label>
-        <!-- <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues()" formControlName="pointTwo"
+        <select class="form-control" *ngIf="showDataPointOptions" (change)="setFormValues()" formControlName="pointTwo"
             id="pointTwo" (focus)="focusField('pointTwo')">
-            <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
-        </select> -->
+            <option *ngFor="let dataPoint of assessmentDataPoints" [ngValue]="dataPoint.pointName">
+                {{dataPoint.pointName}}
+            </option>
+        </select>
     </div>
     <div class="form-group">
         <label class="small" for="pointTwoFlowRate">Flow Rate</label>

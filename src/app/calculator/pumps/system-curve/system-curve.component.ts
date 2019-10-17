@@ -68,37 +68,37 @@ export class SystemCurveComponent implements OnInit {
         this.psat.name = 'Baseline';
       }
       this.calculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-      if (this.calculator) {
-        this.calcExists = true;
-        if (this.calculator.systemCurve) {
-          this.initDefault();
-          this.setPointValuesFromCalc(true);
-          this.curveConstants.form.patchValue({
-            specificGravity: this.calculator.systemCurve.specificGravity,
-            systemLossExponent: this.calculator.systemCurve.systemLossExponent
-          });
-          this.showForm = true;
-        } else {
-          this.initializeCalculator();
-          this.initDefault();
-          this.setPointValuesFromCalc(true);
-          this.curveConstants.form.patchValue({
-            specificGravity: this.calculator.systemCurve.specificGravity,
-            systemLossExponent: this.calculator.systemCurve.systemLossExponent
-          });
-          this.showForm = true;
-        }
-      }
-      else {
-        this.initializeCalculator();
-        this.initDefault();
-        this.setPointValuesFromCalc(true);
-        this.curveConstants.form.patchValue({
-          specificGravity: this.calculator.systemCurve.specificGravity,
-          systemLossExponent: this.calculator.systemCurve.systemLossExponent
-        });
-        this.showForm = true;
-      }
+      // if (this.calculator) {
+      //   this.calcExists = true;
+      //   if (this.calculator.systemCurve) {
+      //     this.initDefault();
+      //     this.setPointValuesFromCalc(true);
+      //     this.curveConstants.form.patchValue({
+      //       specificGravity: this.calculator.systemCurve.specificGravity,
+      //       systemLossExponent: this.calculator.systemCurve.systemLossExponent
+      //     });
+      //     this.showForm = true;
+      //   } else {
+      //     this.initializeCalculator();
+      //     this.initDefault();
+      //     this.setPointValuesFromCalc(true);
+      //     this.curveConstants.form.patchValue({
+      //       specificGravity: this.calculator.systemCurve.specificGravity,
+      //       systemLossExponent: this.calculator.systemCurve.systemLossExponent
+      //     });
+      //     this.showForm = true;
+      //   }
+      // }
+      // else {
+      //   this.initializeCalculator();
+      //   this.initDefault();
+      //   this.setPointValuesFromCalc(true);
+      //   this.curveConstants.form.patchValue({
+      //     specificGravity: this.calculator.systemCurve.specificGravity,
+      //     systemLossExponent: this.calculator.systemCurve.systemLossExponent
+      //   });
+      //   this.showForm = true;
+      // }
     }
     //stand alone
     else {
@@ -159,42 +159,42 @@ export class SystemCurveComponent implements OnInit {
   }
 
   setPointValuesFromCalc(init?: boolean) {
-    if (this.pointOne && !init) {
-      this.calculator.systemCurve.selectedP1Name = this.pointTwo.form.controls.pointAdjustment.value + "1";
-    }
-    else {
-      this.calculator.systemCurve.selectedP1Name = "Baseline1";
-    }
-    if (this.pointTwo && !init) {
-      this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
-    }
-    else {
-      this.calculator.systemCurve.selectedP2Name = "Baseline";
-    }
+    // if (this.pointOne && !init) {
+    //   this.calculator.systemCurve.selectedP1Name = this.pointTwo.form.controls.pointAdjustment.value + "1";
+    // }
+    // else {
+    //   this.calculator.systemCurve.selectedP1Name = "Baseline1";
+    // }
+    // if (this.pointTwo && !init) {
+    //   this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
+    // }
+    // else {
+    //   this.calculator.systemCurve.selectedP2Name = "Baseline";
+    // }
 
-    let p1 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; });
-    if (p1 === undefined) {
-      p1 = {
-        flowRate: 0,
-        head: 0,
-        modName: this.calculator.systemCurve.selectedP1Name
-      };
-    }
-    this.pointOne.form.patchValue({
-      flowRate: p1.flowRate,
-      head: p1.head,
-      pointAdjustment: p1.modName
-    });
+    // let p1 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; });
+    // if (p1 === undefined) {
+    //   p1 = {
+    //     flowRate: 0,
+    //     head: 0,
+    //     modName: this.calculator.systemCurve.selectedP1Name
+    //   };
+    // }
+    // this.pointOne.form.patchValue({
+    //   flowRate: p1.flowRate,
+    //   head: p1.head,
+    //   pointAdjustment: p1.modName
+    // });
 
-    let p2 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; });
-    this.pointTwo.form.patchValue({
-      flowRate: p2.flowRate,
-      head: p2.head,
-      pointAdjustment: p2.modName
-    });
-    this.calculateP1Flow();
-    this.calculateP2Flow();
-    this.calculateValues();
+    // let p2 = _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; });
+    // this.pointTwo.form.patchValue({
+    //   flowRate: p2.flowRate,
+    //   head: p2.head,
+    //   pointAdjustment: p2.modName
+    // });
+    // this.calculateP1Flow();
+    // this.calculateP2Flow();
+    // this.calculateValues();
   }
 
   changes() {
@@ -334,24 +334,24 @@ export class SystemCurveComponent implements OnInit {
 
 
   initializeCalculator(reset?: boolean) {
-    let systemCurve: SystemCurve;
-    if (!this.isFan) {
-      systemCurve = this.initializePsatCalculator();
-    } else {
-      systemCurve = this.initializeFsatCalculator();
-    }
-    if (this.calculator) {
-      this.calculator.systemCurve = systemCurve;
-    } else {
-      this.calculator = {
-        assessmentId: this.assessment.id,
-        systemCurve: systemCurve
-      };
-    }
-    if (reset) {
-      this.setPointValuesFromCalc(true);
-      this.saveCalculator();
-    }
+    // let systemCurve: SystemCurve;
+    // if (!this.isFan) {
+    //   systemCurve = this.initializePsatCalculator();
+    // } else {
+    //   systemCurve = this.initializeFsatCalculator();
+    // }
+    // if (this.calculator) {
+    //   this.calculator.systemCurve = systemCurve;
+    // } else {
+    //   this.calculator = {
+    //     assessmentId: this.assessment.id,
+    //     systemCurve: systemCurve
+    //   };
+    // }
+    // if (reset) {
+    //   this.setPointValuesFromCalc(true);
+    //   this.saveCalculator();
+    // }
   }
 
   initializePsatCalculator() {
@@ -448,34 +448,34 @@ export class SystemCurveComponent implements OnInit {
   }
 
   saveCalculator() {
-    this.calculator.systemCurve.specificGravity = this.curveConstants.form.controls.specificGravity.value;
-    this.calculator.systemCurve.systemLossExponent = this.curveConstants.form.controls.systemLossExponent.value;
-    this.calculator.systemCurve.selectedP1Name = this.pointOne.form.controls.pointAdjustment.value;
-    this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
-    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; }).flowRate = this.pointOne.form.controls.flowRate.value;
-    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; }).head = this.pointOne.form.controls.head.value;
-    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; }).flowRate = this.pointTwo.form.controls.flowRate.value;
-    _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; }).head = this.pointTwo.form.controls.head.value;
-    if (!this.saving || this.calcExists) {
-      if (this.calcExists) {
-        this.indexedDbService.putCalculator(this.calculator).then(() => {
-          this.calculatorDbService.setAll();
-        });
-      } else {
-        this.saving = true;
-        this.calculator.assessmentId = this.assessment.id;
-        this.indexedDbService.addCalculator(this.calculator).then((result) => {
-          this.calculatorDbService.setAll().then(() => {
-            this.calculator.id = result;
-            this.calcExists = true;
-            this.saving = false;
-          });
-        });
-      }
-    }
-    this.calculateP1Flow();
-    this.calculateP2Flow();
-    this.calculateValues();
+    // this.calculator.systemCurve.specificGravity = this.curveConstants.form.controls.specificGravity.value;
+    // this.calculator.systemCurve.systemLossExponent = this.curveConstants.form.controls.systemLossExponent.value;
+    // this.calculator.systemCurve.selectedP1Name = this.pointOne.form.controls.pointAdjustment.value;
+    // this.calculator.systemCurve.selectedP2Name = this.pointTwo.form.controls.pointAdjustment.value;
+    // _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; }).flowRate = this.pointOne.form.controls.flowRate.value;
+    // _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP1Name; }).head = this.pointOne.form.controls.head.value;
+    // _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; }).flowRate = this.pointTwo.form.controls.flowRate.value;
+    // _.find(this.calculator.systemCurve.dataPoints, (point: CurveData) => { return point.modName === this.calculator.systemCurve.selectedP2Name; }).head = this.pointTwo.form.controls.head.value;
+    // if (!this.saving || this.calcExists) {
+    //   if (this.calcExists) {
+    //     this.indexedDbService.putCalculator(this.calculator).then(() => {
+    //       this.calculatorDbService.setAll();
+    //     });
+    //   } else {
+    //     this.saving = true;
+    //     this.calculator.assessmentId = this.assessment.id;
+    //     this.indexedDbService.addCalculator(this.calculator).then((result) => {
+    //       this.calculatorDbService.setAll().then(() => {
+    //         this.calculator.id = result;
+    //         this.calcExists = true;
+    //         this.saving = false;
+    //       });
+    //     });
+    //   }
+    // }
+    // this.calculateP1Flow();
+    // this.calculateP2Flow();
+    // this.calculateValues();
   }
 
 

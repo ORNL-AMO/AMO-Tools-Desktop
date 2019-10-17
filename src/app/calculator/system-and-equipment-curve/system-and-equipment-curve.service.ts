@@ -4,6 +4,8 @@ import { Settings } from '../../shared/models/settings';
 import { EquipmentCurveService } from './equipment-curve/equipment-curve.service';
 import { FanSystemCurveFormService } from './system-curve/fan-system-curve-form.service';
 import { PumpSystemCurveFormService } from './system-curve/pump-system-curve-form.service';
+import { PSAT } from '../../shared/models/psat';
+import { FSAT } from '../../shared/models/fans';
 
 @Injectable()
 export class SystemAndEquipmentCurveService {
@@ -23,6 +25,7 @@ export class SystemAndEquipmentCurveService {
   baselineEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
   modifiedEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
   systemCurveRegressionData: BehaviorSubject<Array<{ x: number, y: number, fluidPower: number }>>;
+  systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
   constructor(private equipmentCurveService: EquipmentCurveService,
     private fanSystemCurveFormService: FanSystemCurveFormService, private pumpSystemCurveFormService: PumpSystemCurveFormService) {
     this.currentField = new BehaviorSubject<string>('default');
@@ -88,6 +91,62 @@ export class SystemAndEquipmentCurveService {
       this.pumpSystemCurveData.next(pumpSystemCurveData);
     }
   }
+
+  initializeDataFromPSAT(psat: PSAT) {
+    let systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = this.getPumpSystemCurveDataPoints(psat);
+    // let pumpSystemCurveData: PumpSystemCurveData = {
+    //   specificGravity: number,
+    //   systemLossExponent: number,
+    //   pointOne: string,
+    //   pointOneFlowRate: number,
+    //   pointOneHead: number,
+    //   pointTwo: string,
+    //   pointTwoFlowRate: number,
+    //   pointTwoHead: number,
+    // }
+  }
+
+  getPumpSystemCurveDataPoints(psat: PSAT): Array<{ pointName: string, flowRate: number, yValue: number }> {
+    let dataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = new Array();
+    dataPoints.push({
+      pointName: 'Baseline',
+      flowRate: psat.inputs.flow_rate,
+      yValue: psat.inputs.head
+    });
+    if (psat.modifications) {
+      psat.modifications.forEach(modification => {
+        dataPoints.push({
+          pointName: modification.psat.name,
+          flowRate: modification.psat.inputs.flow_rate,
+          yValue: modification.psat.inputs.head
+        });
+      })
+    }
+    return dataPoints;
+  }
+
+  initializeDataFromFSAT(fsat: FSAT) {
+  }
+
+  getFanSystemCurveDataPoints(fsat: FSAT): Array<{ pointName: string, flowRate: number, yValue: number }> {
+    let dataPoints: Array<{ pointName: string, flowRate: number, yValue: number }> = new Array();
+    dataPoints.push({
+      pointName: 'Baseline',
+      flowRate: fsat.fieldData.flowRate,
+      yValue: fsat.fieldData.outletPressure - fsat.fieldData.inletPressure
+    });
+    if (fsat.modifications) {
+      fsat.modifications.forEach(modification => {
+        dataPoints.push({
+          pointName: modification.fsat.name,
+          flowRate: modification.fsat.fieldData.flowRate,
+          yValue: modification.fsat.fieldData.outletPressure - modification.fsat.fieldData.inletPressure
+        })
+      })
+    }
+    return dataPoints;
+  }
+
 
 }
 
