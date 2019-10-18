@@ -44,6 +44,7 @@ export class PieChartComponent implements OnInit {
   constructor(private svgToPngService: SvgToPngService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    console.log('initing');
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -409,7 +410,7 @@ export class PieChartComponent implements OnInit {
       .append("path")
       .attr("class", "slice")
       .attr("fill", color);
-      // .attr("fill", function (d, i) { return color(i); })
+    // .attr("fill", function (d, i) { return color(i); })
     path.transition().duration(500)
       .attrTween("d", function (d) {
         this._current = this._current || d;

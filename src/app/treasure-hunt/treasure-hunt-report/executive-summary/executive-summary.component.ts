@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { TreasureHuntResults } from '../../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
+import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
+import { OpportunityCardData } from '../../treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @Component({
   selector: 'app-executive-summary',
@@ -19,8 +21,11 @@ export class ExecutiveSummaryComponent implements OnInit {
   title: string;
   @Input()
   showPrint: boolean;
+  @Input()
+  opportunityCardsData: Array<OpportunityCardData>;
 
   @ViewChild('costSummaryChartContainer', { static: false }) costSummaryChartContainer: ElementRef;
+  @ViewChild('teamSummaryChartContainer', { static: false }) teamSummaryChartContainer: ElementRef;
 
   //data set titles describe the different sections of each bar, i.e. the legend titles
   dataSetTitles: Array<string> = ['Projected Cost', 'Savings'];
@@ -28,15 +33,25 @@ export class ExecutiveSummaryComponent implements OnInit {
   dataTitles: Array<string>;
   //data holds all the numerical data to be visualized in bar chart
   data: Array<Array<number>>;
+  teamData: Array<any>;
 
   chartContainerHeight: number;
   chartContainerWidth: number;
+
+  pieChartLabels: Array<string>;
+  pieChartValues: Array<number>;
+  graphColors: Array<string>;
 
 
   constructor() { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
     this.prepChartData();
+    if (this.opportunityCardsData) {
+      this.prepTeamData();
+      this.prepPieChartData();
+    }
   }
 
   prepChartData(): void {
@@ -83,22 +98,70 @@ export class ExecutiveSummaryComponent implements OnInit {
     this.dataTitles = dataTitles;
   }
 
-  getChartHeight(): number {
-    if (this.costSummaryChartContainer) {
-      return this.costSummaryChartContainer.nativeElement.clientHeight;
-    } else {
-      return 0;
+  prepPieChartData() {
+    this.pieChartValues = new Array<number>();
+    this.pieChartLabels = new Array<string>();
+    for (let i = 0; i < this.teamData.length; i++) {
+      this.pieChartLabels.push(this.teamData[i].team + ' $' + (Math.round(this.teamData[i].costSavings)));
+      this.pieChartValues.push(this.teamData[i].costSavings);
     }
   }
 
-  getChartWidth(): number {
-    if (this.costSummaryChartContainer) {
-      let width = this.costSummaryChartContainer.nativeElement.clientWidth;
-      width = width + 170;
-      return width;
-    } else {
-      return 0;
+  prepTeamData() {
+    let teams: Array<string> = new Array<string>();
+    this.teamData = new Array<any>();
+    for (let i = 0; i < this.opportunityCardsData.length; i++) {
+      if (!_.includes(teams, this.opportunityCardsData[i].teamName)) {
+        teams.push(this.opportunityCardsData[i].teamName);
+        let data = {
+          team: this.opportunityCardsData[i].teamName,
+          costSavings: this.opportunityCardsData[i].annualCostSavings,
+          implementationCost: this.opportunityCardsData[i].implementationCost,
+          payback: this.opportunityCardsData[i].paybackPeriod
+        };
+        this.teamData.push(data);
+      } else {
+        let index = _.indexOf(teams, this.opportunityCardsData[i].teamName);
+        this.teamData[index].costSavings += this.opportunityCardsData[index].annualCostSavings;
+        this.teamData[index].implementationCost += this.opportunityCardsData[index].implementationCost;
+        this.teamData[index].payback += this.opportunityCardsData[index].paybackPeriod;
+      }
     }
+  }
+
+  getChartHeight(chart: string): number {
+    if (chart == 'pie') {
+      if (this.teamSummaryChartContainer) {
+        return this.teamSummaryChartContainer.nativeElement.clientHeight;
+      } else {
+        return 0;
+      }
+    } else {
+      if (this.costSummaryChartContainer) {
+        return this.costSummaryChartContainer.nativeElement.clientHeight;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  getChartWidth(chart: string): number {
+    if (chart == 'pie') {
+      if (this.teamSummaryChartContainer) {
+        return this.teamSummaryChartContainer.nativeElement.clientWidth;
+      } else {
+        return 0;
+      }
+    } else {
+      if (this.costSummaryChartContainer) {
+        let width = this.costSummaryChartContainer.nativeElement.clientWidth;
+        width = width + 170;
+        return width;
+      } else {
+        return 0;
+      }
+    }
+
   }
 
 

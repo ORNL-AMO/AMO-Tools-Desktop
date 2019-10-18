@@ -1,6 +1,7 @@
-<div class="d-flex" [ngClass]="{'flex-row print-space-from-title' : title == 'Cost Summary', 'flex-column' : title != 'Cost Summary'}">
+<div class="d-flex"
+  [ngClass]="{'flex-row print-space-from-title' : title == 'Cost Summary', 'flex-row print-space-from-title' : title == 'Team Summary', 'flex-column' : title == 'Detailed Summary'}">
 
-  <div class="d-flex flex-column output-summary pb-5" #costSummaryChartContainer>
+  <div class="d-flex flex-column output-summary pb-5" *ngIf="title != 'Team Summary'" #costSummaryChartContainer>
 
     <label class="group-label">{{title}}</label>
     <table class="table table-striped table-hover">
@@ -340,7 +341,7 @@
             ${{treasureHuntResults.totalImplementationCost | number:'.0-0'}}
           </td>
           <td>
-            {{treasureHuntResults.paybackPeriod  | number:'1.0-2'}}
+            {{treasureHuntResults.paybackPeriod | number:'1.0-2'}}
           </td>
           <td *ngIf="treasureHuntResults.hasMixed == true">
 
@@ -350,7 +351,8 @@
     </table>
   </div>
 
-  <div class="alert-warning small" *ngIf="treasureHuntResults.hasMixed == true && showFullSummary">
+  <div class="alert-warning small mb-5"
+    *ngIf="treasureHuntResults.hasMixed == true && showFullSummary && title != 'Team Summary'">
     <span class="fa fa-asterisk"></span>
     Savings for opportunities with mixed utilities are under their respective utilities; implementation costs and
     payback
@@ -363,11 +365,44 @@
     </app-cost-summary-chart>
   </div>
 
+  <div *ngIf="title == 'Team Summary'" class="d-flex flex-column output-summary pb-5" #teamSummaryChartContainer>
+    <label class="group-label">Team Summary</label>
+    <table class="table table-striped table-hover">
+      <tbody>
+        <tr class="bold">
+          <td>Team</td>
+          <td>Cost Savings</td>
+          <td>Implementation Cost</td>
+          <td>Payback</td>
+        </tr>
+        <tr *ngFor="let data of teamData">
+          <td>{{data.team}}</td>
+          <td>${{data.costSavings | number:'.0-0'}}</td>
+          <td>${{data.implementationCost | number:'.0-0'}}</td>
+          <td>{{data.payback | number:'1.0-2'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex flex-column hide-print" *ngIf="title == 'Team Summary'">
+    <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels"
+      [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="getChartWidth('pie')"
+      [chartContainerHeight]="getChartHeight('pie')" [sideBySide]="false"></app-pie-chart>
+  </div>
+
 </div>
 
 <!-- print version of the chart -->
 <div class="d-flex flex-row show-print print-bottom-padding" *ngIf="title == 'Cost Summary' && showPrint">
   <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles" [data]="data"
-    [chartContainerWidth]="getChartWidth()" [chartContainerHeight]="getChartHeight()">
+    [chartContainerWidth]="getChartWidth('bar')" [chartContainerHeight]="getChartHeight('bar')">
   </app-cost-summary-chart>
+</div>
+
+
+<div class="d-flex flex-row show-print print-bottom-padding" *ngIf="title == 'Team Summary' && showPrint">
+  <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels" [printView]="showPrint"
+    [exportName]="treasure-hunt-team-savings" [chartContainerWidth]="getChartWidth('pie')"
+    [chartContainerHeight]="getChartHeight('pie')"></app-pie-chart>
 </div>
