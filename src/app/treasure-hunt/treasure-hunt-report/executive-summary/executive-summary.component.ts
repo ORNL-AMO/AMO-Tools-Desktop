@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
 import { OpportunityCardData } from '../../treasure-chest/opportunity-cards/opportunity-cards.service';
+import { TreasureChestMenuService } from '../../treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 
 @Component({
   selector: 'app-executive-summary',
@@ -33,17 +34,18 @@ export class ExecutiveSummaryComponent implements OnInit {
   dataTitles: Array<string>;
   //data holds all the numerical data to be visualized in bar chart
   data: Array<Array<number>>;
-  teamData: Array<any>;
+  teamData: Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>;
 
   chartContainerHeight: number;
   chartContainerWidth: number;
+  
 
   pieChartLabels: Array<string>;
   pieChartValues: Array<number>;
   graphColors: Array<string>;
 
 
-  constructor() { }
+  constructor(private treasureChestMenuService: TreasureChestMenuService) { }
 
   ngOnInit() {
     this.graphColors = graphColors;
@@ -108,25 +110,21 @@ export class ExecutiveSummaryComponent implements OnInit {
   }
 
   prepTeamData() {
-    let teams: Array<string> = new Array<string>();
-    this.teamData = new Array<any>();
-    for (let i = 0; i < this.opportunityCardsData.length; i++) {
-      if (!_.includes(teams, this.opportunityCardsData[i].teamName)) {
-        teams.push(this.opportunityCardsData[i].teamName);
-        let data = {
-          team: this.opportunityCardsData[i].teamName,
-          costSavings: this.opportunityCardsData[i].annualCostSavings,
-          implementationCost: this.opportunityCardsData[i].implementationCost,
-          payback: this.opportunityCardsData[i].paybackPeriod
-        };
-        this.teamData.push(data);
-      } else {
-        let index = _.indexOf(teams, this.opportunityCardsData[i].teamName);
-        this.teamData[index].costSavings += this.opportunityCardsData[index].annualCostSavings;
-        this.teamData[index].implementationCost += this.opportunityCardsData[index].implementationCost;
-        this.teamData[index].payback += this.opportunityCardsData[index].paybackPeriod;
-      }
-    }
+    let teams: Array<string> = this.treasureChestMenuService.getAllTeams(this.opportunityCardsData);
+    this.teamData = new Array<{ team: string, costSavings: number, implementationCost: number, paybackPeriod: number }>();
+    teams.forEach(team => {
+      let teamOpps: Array<OpportunityCardData> = this.opportunityCardsData.filter(cardData => { return cardData.teamName == team });
+      let teamName: string = team;
+      let costSavings: number = _.sumBy(teamOpps, 'annualCostSavings');
+      let implementationCost: number = _.sumBy(teamOpps, 'implementationCost');
+      let paybackPeriod: number = _.sumBy(teamOpps, 'paybackPeriod');
+      this.teamData.push({
+        team: teamName,
+        costSavings: costSavings,
+        implementationCost: implementationCost,
+        paybackPeriod: paybackPeriod
+      });
+    });
   }
 
   getChartHeight(chart: string): number {

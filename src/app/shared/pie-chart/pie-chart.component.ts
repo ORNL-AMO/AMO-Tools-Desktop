@@ -44,7 +44,6 @@ export class PieChartComponent implements OnInit {
   constructor(private svgToPngService: SvgToPngService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    console.log('initing');
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -361,11 +361,12 @@
 
   <div class="d-flex flex-column hide-print" *ngIf="title == 'Cost Summary'">
     <app-cost-summary-chart [settings]="settings" [dataSetTitles]="dataSetTitles" [dataTitles]="dataTitles"
-      [data]="data" [chartContainerWidth]="getChartWidth()" [chartContainerHeight]="getChartHeight()">
+      [data]="data" [chartContainerWidth]="getChartWidth('bar')" [chartContainerHeight]="getChartHeight('bar')">
     </app-cost-summary-chart>
   </div>
 
-  <div *ngIf="title == 'Team Summary'" class="d-flex flex-column output-summary pb-5" #teamSummaryChartContainer>
+  <div *ngIf="title == 'Team Summary' && teamData.length > 0" class="d-flex flex-column output-summary pb-5"
+    #teamSummaryChartContainer>
     <label class="group-label">Team Summary</label>
     <table class="table table-striped table-hover">
       <tbody>
@@ -379,13 +380,13 @@
           <td>{{data.team}}</td>
           <td>${{data.costSavings | number:'.0-0'}}</td>
           <td>${{data.implementationCost | number:'.0-0'}}</td>
-          <td>{{data.payback | number:'1.0-2'}}</td>
+          <td>{{data.paybackPeriod | number:'1.0-2'}}</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="d-flex flex-column hide-print" *ngIf="title == 'Team Summary'">
+  <div class="d-flex flex-column hide-print" *ngIf="title == 'Team Summary' && teamData.length > 0">
     <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels"
       [printView]="showPrint" [exportName]="'treasure-hunt-team-savings'" [chartContainerWidth]="getChartWidth('pie')"
       [chartContainerHeight]="getChartHeight('pie')" [sideBySide]="false"></app-pie-chart>
@@ -401,7 +402,8 @@
 </div>
 
 
-<div class="d-flex flex-row show-print print-bottom-padding" *ngIf="title == 'Team Summary' && showPrint">
+<div class="d-flex flex-row show-print print-bottom-padding"
+  *ngIf="title == 'Team Summary' && showPrint && teamData.length > 0">
   <app-pie-chart [graphColors]="graphColors" [values]="pieChartValues" [labels]="pieChartLabels" [printView]="showPrint"
     [exportName]="treasure-hunt-team-savings" [chartContainerWidth]="getChartWidth('pie')"
     [chartContainerHeight]="getChartHeight('pie')"></app-pie-chart>
