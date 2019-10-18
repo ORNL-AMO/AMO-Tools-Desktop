@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData } from '../system-and-equipment-curve.service';
+import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../system-and-equipment-curve.service';
 import * as _ from 'lodash';
 import { RegressionEquationsService } from '../regression-equations/regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
@@ -137,54 +137,7 @@ export class SystemAndEquipmentCurveGraphService {
   getIntersectionPoint(equipmentType: string, settings: Settings, curveDataPairs: Array<{ x: number, y: number }>, systemCurveRegressionData: Array<{ x: number, y: number, fluidPower: number }>) {
     let intersectionPoint: { x: number, y: number } = this.calculateIntersectionPoint(JSON.parse(JSON.stringify(systemCurveRegressionData)), JSON.parse(JSON.stringify(curveDataPairs)));
     if (intersectionPoint != undefined) {
-      let staticVal: number;
-      let coefficient: number;
-      let systemLossExponent: number;
-      let fluidPowerCalcVal: number;
-      if (equipmentType == 'fan') {
-        let fanSystemCurveData: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.getValue();
-        // coefficient = this.regressionEquationsService.calculateLossCoefficient(
-        //   fanSystemCurveData.pointOneFlowRate,
-        //   fanSystemCurveData.pointOnePressure,
-        //   fanSystemCurveData.pointTwoFlowRate,
-        //   fanSystemCurveData.pointTwoPressure,
-        //   fanSystemCurveData.systemLossExponent
-        // );
-        // staticVal = this.regressionEquationsService.calculateStaticHead(
-        //   fanSystemCurveData.pointOneFlowRate,
-        //   fanSystemCurveData.pointOnePressure,
-        //   fanSystemCurveData.pointTwoFlowRate,
-        //   fanSystemCurveData.pointTwoPressure,
-        //   fanSystemCurveData.systemLossExponent
-        // );
-        // systemLossExponent = fanSystemCurveData.systemLossExponent;
-        fluidPowerCalcVal = fanSystemCurveData.compressibilityFactor;
-      } else if (equipmentType == 'pump') {
-        let pumpSystemCurveData: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue();
-        // coefficient = this.regressionEquationsService.calculateLossCoefficient(
-        //   pumpSystemCurveData.pointOneFlowRate,
-        //   pumpSystemCurveData.pointOneHead,
-        //   pumpSystemCurveData.pointTwoFlowRate,
-        //   pumpSystemCurveData.pointTwoHead,
-        //   pumpSystemCurveData.systemLossExponent
-        // );
-        // staticVal = this.regressionEquationsService.calculateStaticHead(
-        //   pumpSystemCurveData.pointOneFlowRate,
-        //   pumpSystemCurveData.pointOneHead,
-        //   pumpSystemCurveData.pointTwoFlowRate,
-        //   pumpSystemCurveData.pointTwoHead,
-        //   pumpSystemCurveData.systemLossExponent
-        // );
-        // systemLossExponent = pumpSystemCurveData.systemLossExponent;
-        fluidPowerCalcVal = pumpSystemCurveData.specificGravity;
-      }
-      //   let calculatedFlowFromYIntersection: number = this.calculateXValFromY(yIntersectionPoint, staticVal, coefficient, systemLossExponent);
-      let fluidPower: number;
-      if (equipmentType == 'pump') {
-        fluidPower = this.regressionEquationsService.getPumpFluidPower(intersectionPoint.y, intersectionPoint.x, fluidPowerCalcVal, settings);
-      } else if (equipmentType == 'fan') {
-        fluidPower = this.regressionEquationsService.getFanFluidPower(intersectionPoint.y, intersectionPoint.x, fluidPowerCalcVal, settings);
-      }
+      let fluidPower: number = this.getFluidPowerFromIntersectionPoint(intersectionPoint.x, intersectionPoint.y, settings, equipmentType);
       return {
         x: intersectionPoint.x,
         y: intersectionPoint.y,
@@ -193,6 +146,32 @@ export class SystemAndEquipmentCurveGraphService {
     } else {
       return undefined;
     }
+  }
+
+  getModifiedIntersectionPoint(baselinePoint: { x: number, y: number }, settings: Settings, equipmentType: string, equipmentInputs: EquipmentInputs): { x: number, y: number, fluidPower: number } {
+    let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
+    let x: number = baselinePoint.x * ratio;
+    let y: number = baselinePoint.y * Math.pow(ratio, 2);
+    let fluidPower: number = this.getFluidPowerFromIntersectionPoint(x, y, settings, equipmentType);
+    return { x: x, y: y, fluidPower: fluidPower };
+  }
+
+  getFluidPowerFromIntersectionPoint(x: number, y: number, settings: Settings, equipmentType: string): number {
+    let fluidPowerCalcVal: number;
+    if (equipmentType == 'fan') {
+      let fanSystemCurveData: FanSystemCurveData = this.systemAndEquipmentCurveService.fanSystemCurveData.getValue();
+      fluidPowerCalcVal = fanSystemCurveData.compressibilityFactor;
+    } else if (equipmentType == 'pump') {
+      let pumpSystemCurveData: PumpSystemCurveData = this.systemAndEquipmentCurveService.pumpSystemCurveData.getValue();
+      fluidPowerCalcVal = pumpSystemCurveData.specificGravity;
+    }
+    let fluidPower: number;
+    if (equipmentType == 'pump') {
+      fluidPower = this.regressionEquationsService.getPumpFluidPower(y, x, fluidPowerCalcVal, settings);
+    } else if (equipmentType == 'fan') {
+      fluidPower = this.regressionEquationsService.getFanFluidPower(y, x, fluidPowerCalcVal, settings);
+    }
+    return fluidPower;
   }
 
   calculateIntersectionPoint(

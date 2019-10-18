@@ -320,14 +320,14 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   addIntersectionPoints() {
     d3.select(this.ngChart.nativeElement).selectAll('#intersectBaseline').remove();
     d3.select(this.ngChart.nativeElement).selectAll('#intersectModification').remove();
-    let intersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.baselineEquipmentCurveDataPairs, this.systemCurveRegressionData);
-    if (intersectionPoint != undefined) {
-      this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(intersectionPoint);
+    let baselineIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.baselineEquipmentCurveDataPairs, this.systemCurveRegressionData);
+    if (baselineIntersectionPoint != undefined) {
+      this.systemAndEquipmentCurveGraphService.baselineIntersectionPoint.next(baselineIntersectionPoint);
     }
     if (this.isEquipmentModificationShown && this.modifiedEquipmentCurveDataPairs != undefined) {
-      let intersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getIntersectionPoint(this.equipmentType, this.settings, this.modifiedEquipmentCurveDataPairs, this.systemCurveRegressionData);
-      if (intersectionPoint != undefined) {
-        this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(intersectionPoint);
+      let modifiedIntersectionPoint: { x: number, y: number, fluidPower: number } = this.systemAndEquipmentCurveGraphService.getModifiedIntersectionPoint(baselineIntersectionPoint, this.settings, this.equipmentType, this.equipmentInputs);
+      if (modifiedIntersectionPoint != undefined) {
+        this.systemAndEquipmentCurveGraphService.modificationIntersectionPoint.next(modifiedIntersectionPoint);
       }
     }
   }
