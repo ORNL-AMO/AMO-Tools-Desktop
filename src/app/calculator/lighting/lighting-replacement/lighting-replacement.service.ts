@@ -117,6 +117,15 @@ export class LightingReplacementService {
   }
 
   calculateTotalLighting(data: LightingReplacementData): LightingReplacementData {
+    if (!data.lumenDegradationFactor) {
+      data.lumenDegradationFactor = 1;
+    }
+    if (!data.coefficientOfUtilization) {
+      data.coefficientOfUtilization = 1;
+    }
+    if (!data.lumensPerLamp) {
+      data.lumensPerLamp = 1;
+    }
     data.totalLighting = data.coefficientOfUtilization * data.lumenDegradationFactor * data.lumensPerLamp * data.lampsPerFixture * data.ballastFactor * data.numberOfFixtures;
     return data;
   }
