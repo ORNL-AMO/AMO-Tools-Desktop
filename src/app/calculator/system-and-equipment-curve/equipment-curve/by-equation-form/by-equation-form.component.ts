@@ -35,20 +35,24 @@ export class ByEquationFormComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.resetFormsSub.unsubscribe();
   }
 
   initForm() {
     let defaultData: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
     if (defaultData == undefined) {
-      defaultData = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.distanceMeasurement);
+      if (this.equipmentType == 'fan') {
+        defaultData = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.fanPressureMeasurement, 'inH2o');
+      } else if (this.equipmentType == 'pump') {
+        defaultData = this.equipmentCurveService.getByEquationDefault(this.flowUnit, this.settings.distanceMeasurement, 'ft');
+      }
     }
     this.systemAndEquipmentCurveService.byEquationInputs.next(defaultData);
     this.byEquationForm = this.equipmentCurveService.getByEquationFormFromObj(defaultData);
   }
 
-  resetForm(){
+  resetForm() {
     let defaultData: ByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
     this.byEquationForm = this.equipmentCurveService.getByEquationFormFromObj(defaultData);
   }
@@ -64,13 +68,13 @@ export class ByEquationFormComponent implements OnInit {
   }
 
   save() {
-    if(this.byEquationForm.valid){
+    if (this.byEquationForm.valid) {
       let byEquationInputs: ByEquationInputs = this.equipmentCurveService.getByEquationObjFromForm(this.byEquationForm);
       this.systemAndEquipmentCurveService.byEquationInputs.next(byEquationInputs);
-    }else{
+    } else {
       this.systemAndEquipmentCurveService.byEquationInputs.next(undefined);
     }
-    
+
   }
 
   focusField(str: string) {

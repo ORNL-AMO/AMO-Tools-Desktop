@@ -57,15 +57,18 @@ export class SystemAndEquipmentCurveService {
     }
     let flowUnit: string;
     let yValueUnit: string;
+    let yImperialUnit: string;
     if (equipmentType == 'fan') {
       flowUnit = settings.fanFlowRate;
       yValueUnit = settings.fanPressureMeasurement;
+      yImperialUnit = 'inH2o';
     } else {
       flowUnit = settings.flowMeasurement;
       yValueUnit = settings.distanceMeasurement;
+      yImperialUnit = 'ft';
     }
 
-    let exampleByEquationInputs: ByEquationInputs = this.equipmentCurveService.getByEquationDefault(flowUnit, yValueUnit);
+    let exampleByEquationInputs: ByEquationInputs = this.equipmentCurveService.getByEquationDefault(flowUnit, yValueUnit, yImperialUnit);
     this.byEquationInputs.next(exampleByEquationInputs);
     let exampleEquipment: EquipmentInputs = this.equipmentCurveService.getEquipmentCurveDefault();
     this.equipmentInputs.next(exampleEquipment);

@@ -84,14 +84,14 @@ export class EquipmentCurveService {
   }
 
   //example/default same
-  getByEquationDefault(flowUnit: string, distanceUnit: string): ByEquationInputs {
+  getByEquationDefault(flowUnit: string, yUnit: string, yImperial: string): ByEquationInputs {
     let tmpMaxFlow = 1020;
     let tmpConstant = 356.96;
     if (flowUnit !== 'gpm') {
       tmpMaxFlow = Math.round(this.convertUnitsService.value(tmpMaxFlow).from('gpm').to(flowUnit) * 100) / 100;
     }
-    if (distanceUnit !== 'ft') {
-      tmpConstant = Math.round(this.convertUnitsService.value(tmpConstant).from('ft').to(distanceUnit) * 100) / 100;
+    if (yUnit !== yImperial) {
+      tmpConstant = Math.round(this.convertUnitsService.value(tmpConstant).from(yImperial).to(yUnit) * 100) / 100;
     }
     return {
       maxFlow: tmpMaxFlow,
@@ -106,7 +106,7 @@ export class EquipmentCurveService {
     }
   }
 
-  getResetByEquationInputs(): ByEquationInputs{
+  getResetByEquationInputs(): ByEquationInputs {
     return {
       maxFlow: 0,
       equationOrder: 3,
@@ -222,7 +222,7 @@ export class EquipmentCurveService {
   }
 
 
-  getResetByDataInputs():ByDataInputs {
+  getResetByDataInputs(): ByDataInputs {
     return {
       dataRows: [
         { flow: 0, yValue: 0 },
