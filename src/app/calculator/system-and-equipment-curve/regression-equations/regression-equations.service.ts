@@ -49,7 +49,7 @@ export class RegressionEquationsService {
 
     let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
 
-    if (maxDataFlow > maxFlowRate) {
+    if (maxDataFlow > maxFlowRate || byData.dataOrder > 3) {
       maxFlowRate = maxDataFlow;
     }
 
@@ -60,7 +60,7 @@ export class RegressionEquationsService {
     let modifiedDataPairs: Array<{ x: number, y: number }> = new Array<{ x: number, y: number }>();
     let modificationData: Array<Array<number>> = new Array();
     baselineData = new Array();
-    for (let i = 0; i <= maxFlowRate; i += 10) {
+    for (let i = 0; i <= maxDataFlow; i += 10) {
       let yVal = baselineResults.predict(i);
       if (yVal[1] > 0) {
         let xBaseline: number = i;
@@ -81,7 +81,6 @@ export class RegressionEquationsService {
     }
     let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 10 });
     let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byData.dataOrder, yValue);
-
     return {
       baselineRegressionEquation: baselineRegressionEquation,
       baselineRSquared: baselineResults.r2,
@@ -115,16 +114,16 @@ export class RegressionEquationsService {
   } {
     //baseline
     let baselineRegressionEquation = byEquationInputs.flowTwo + '(flow)&#x00B2; + ' + byEquationInputs.flow + ('(flow) +') + byEquationInputs.constant;
-    if (byEquationInputs.equationOrder > 2 && byEquationInputs.flowThree) {
+    if (byEquationInputs.equationOrder > 2) {
       baselineRegressionEquation = byEquationInputs.flowThree + '(flow)&#x00B3; + ' + baselineRegressionEquation;
     }
-    if (byEquationInputs.equationOrder > 3 && byEquationInputs.flowFour) {
+    if (byEquationInputs.equationOrder > 3) {
       baselineRegressionEquation = byEquationInputs.flowFour + '(flow)&#x2074; + ' + baselineRegressionEquation;
     }
-    if (byEquationInputs.equationOrder > 4 && byEquationInputs.flowFive) {
+    if (byEquationInputs.equationOrder > 4) {
       baselineRegressionEquation = byEquationInputs.flowFive + '(flow)&#x2075; + ' + baselineRegressionEquation;
     }
-    if (byEquationInputs.equationOrder > 5 && byEquationInputs.flowSix) {
+    if (byEquationInputs.equationOrder > 5) {
       baselineRegressionEquation = byEquationInputs.flowSix + '(flow)&#x2076; + ' + baselineRegressionEquation;
     }
     baselineRegressionEquation = secondValueLabel + ' = ' + baselineRegressionEquation;
