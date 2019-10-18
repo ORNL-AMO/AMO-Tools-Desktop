@@ -57,6 +57,7 @@ export class LightingReplacementFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.displayDetails = this.lightingReplacementService.showAdditionalDetails;
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
     }
@@ -65,8 +66,8 @@ export class LightingReplacementFormComponent implements OnInit {
     }
 
     this.form = this.lightingReplacementService.getFormFromObj(this.data);
-    this.checkSelectFixtureDiff();
     this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => { return fixtureCategory.category == this.form.controls.category.value }).fixturesData;
+    this.checkSelectFixtureDiff();
     this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
     if (this.selected == false) {
       this.form.disable();
@@ -96,6 +97,7 @@ export class LightingReplacementFormComponent implements OnInit {
   }
 
   focusField(str: string) {
+    this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
     this.emitFocusField.emit(str);
   }
 

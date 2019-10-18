@@ -6,6 +6,8 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { LightingFixtureData } from '../lighting-fixture-data/lighting-data';
+import { MetalHalideFixtures } from '../lighting-fixture-data/metal-halide';
+import { HighBayLEDFixtures } from '../lighting-fixture-data/high-bay-LED';
 
 @Injectable()
 export class LightingReplacementService {
@@ -16,6 +18,7 @@ export class LightingReplacementService {
   modificationElectricityCost: number;
   operatingHours: OperatingHours;
   selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
+  showAdditionalDetails: boolean = false;
   constructor(private fb: FormBuilder) {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
   }
@@ -87,28 +90,49 @@ export class LightingReplacementService {
   }
 
   generateExample(isBaseline: boolean): LightingReplacementData {
-    let exampleData: LightingReplacementData = {
-      name: 'Fixture #1',
-      hoursPerYear: 4368,
-      wattsPerLamp: 28,
-      lampsPerFixture: 6,
-      numberOfFixtures: 300,
-      lumensPerLamp: 2520,
-      totalLighting: 1,
-      electricityUse: 1,
-      lampLife: 1,
-      ballastFactor: 1,
-      lumenDegradationFactor: 1,
-      coefficientOfUtilization: 1,
-      category: 1,
-      type: 'Custom'
+    if (isBaseline) {
+      let fixtureData = MetalHalideFixtures.find(fixture => { return fixture.type == '350-W Metal Halide' });
+      let exampleData: LightingReplacementData = {
+        name: 'Fixture #1',
+        hoursPerYear: 8760,
+        wattsPerLamp: fixtureData.wattsPerLamp,
+        lampsPerFixture: fixtureData.lampsPerFixture,
+        numberOfFixtures: 452,
+        lumensPerLamp: fixtureData.lumensPerLamp,
+        totalLighting: 1,
+        electricityUse: 1,
+        lampLife: fixtureData.lampLife,
+        ballastFactor: fixtureData.ballastFactor,
+        lumenDegradationFactor: fixtureData.lumenDegradationFactor,
+        coefficientOfUtilization: fixtureData.coefficientOfUtilization,
+        category: 1,
+        type: '350-W Metal Halide'
+      }
+      exampleData = this.calculateElectricityUse(exampleData);
+      exampleData = this.calculateTotalLighting(exampleData);
+      return exampleData;
+    } else {
+      let fixtureData = HighBayLEDFixtures.find(fixture => { return fixture.type == 'LED HID Replacement - 150W Equivalent' });
+      let exampleData: LightingReplacementData = {
+        name: 'Fixture #1',
+        hoursPerYear: 8760,
+        wattsPerLamp: fixtureData.wattsPerLamp,
+        lampsPerFixture: fixtureData.lampsPerFixture,
+        numberOfFixtures: 452,
+        lumensPerLamp: fixtureData.lumensPerLamp,
+        totalLighting: 1,
+        electricityUse: 1,
+        lampLife: fixtureData.lampLife,
+        ballastFactor: fixtureData.ballastFactor,
+        lumenDegradationFactor: fixtureData.lumenDegradationFactor,
+        coefficientOfUtilization: fixtureData.coefficientOfUtilization,
+        category: 9,
+        type: 'LED HID Replacement - 150W Equivalent'
+      }
+      exampleData = this.calculateElectricityUse(exampleData);
+      exampleData = this.calculateTotalLighting(exampleData);
+      return exampleData;
     }
-    //modification
-    if (!isBaseline) {
-      exampleData.wattsPerLamp = 18;
-      exampleData.lumensPerLamp = 2200;
-    }
-    return exampleData;
   }
 
   calculateElectricityUse(data: LightingReplacementData): LightingReplacementData {
