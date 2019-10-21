@@ -9,7 +9,7 @@
             </tr>
             <tr>
                 <td class="pl-2">
-                    <span [innerHTML]="systemCurveRegressionEquation"></span>
+                    <span [innerHTML]="regressionEquationsService.systemCurveRegressionEquation"></span>
                 </td>
             </tr>
         </tbody>
@@ -23,13 +23,13 @@
             <tr>
                 <td class="pl-2">
                     <span *ngIf="selectedEquipmentCurveFormView == 'Data'"
-                        [innerHTML]="baselineEquipmentCurveByDataRegressionEquation"></span>
+                        [innerHTML]="regressionEquationsService.baselineEquipmentCurveByDataRegressionEquation"></span>
                     <span *ngIf="selectedEquipmentCurveFormView == 'Equation'"
-                        [innerHTML]="baselineEquipmentCurveByEquationRegressionEquation"></span>
+                        [innerHTML]="regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation"></span>
                 </td>
             </tr>
             <tr *ngIf="selectedEquipmentCurveFormView == 'Data'">
-                <td class="pl-2">r<sup>2</sup>: {{baselineEquipmentCurveByDataRSquared | number: '.1-4'}} </td>
+                <td class="pl-2">r<sup>2</sup>: {{regressionEquationsService.baselineEquipmentCurveByDataRSquared | number: '.1-4'}} </td>
             </tr>
             <tr>
                 <td class="bold">Modified {{equipmentLabel}} Curve</td>
@@ -37,13 +37,13 @@
             <tr>
                 <td class="pl-2">
                     <span *ngIf="selectedEquipmentCurveFormView == 'Data'"
-                        [innerHTML]="modificationEquipmentCurveByDataRegressionEquation"></span>
+                        [innerHTML]="regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation"></span>
                     <span *ngIf="selectedEquipmentCurveFormView == 'Equation'"
-                        [innerHTML]="modificationEquipmentCurveByEquationRegressionEquation"></span>
+                        [innerHTML]="regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation"></span>
                 </td>
             </tr>
             <tr *ngIf="selectedEquipmentCurveFormView == 'Data'">
-                <td class="pl-2">r<sup>2</sup>: {{modificationEquipmentCurveRSquared | number: '.1-4'}} </td>
+                <td class="pl-2">r<sup>2</sup>: {{regressionEquationsService.modificationEquipmentCurveRSquared | number: '.1-4'}} </td>
             </tr>
         </tbody>
     </table>

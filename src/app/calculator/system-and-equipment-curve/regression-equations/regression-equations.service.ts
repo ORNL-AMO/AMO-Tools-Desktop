@@ -8,27 +8,17 @@ import { Settings } from '../../../shared/models/settings';
 @Injectable()
 export class RegressionEquationsService {
 
-  baselineEquipmentCurveByDataRegressionEquation: BehaviorSubject<string>;
-  baselineEquipmentCurveByDataRSquared: BehaviorSubject<number>;
+  baselineEquipmentCurveByDataRegressionEquation: string;
+  baselineEquipmentCurveByDataRSquared: number;
 
-  modificationEquipmentCurveByDataRegressionEquation: BehaviorSubject<string>;
-  modificationEquipmentCurveRSquared: BehaviorSubject<number>;
+  modificationEquipmentCurveByDataRegressionEquation: string;
+  modificationEquipmentCurveRSquared: number;
 
-  baselineEquipmentCurveByEquationRegressionEquation: BehaviorSubject<string>;
-  modificationEquipmentCurveByEquationRegressionEquation: BehaviorSubject<string>;
+  baselineEquipmentCurveByEquationRegressionEquation: string;
+  modificationEquipmentCurveByEquationRegressionEquation: string;
 
-  systemCurveRegressionEquation: BehaviorSubject<string>;
+  systemCurveRegressionEquation: string;
   constructor(private convertUnitsService: ConvertUnitsService) {
-    this.baselineEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>(undefined);
-    this.baselineEquipmentCurveByDataRSquared = new BehaviorSubject<number>(undefined);
-
-    this.modificationEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>(undefined);
-    this.modificationEquipmentCurveRSquared = new BehaviorSubject<number>(undefined);
-
-    this.baselineEquipmentCurveByEquationRegressionEquation = new BehaviorSubject<string>(undefined);
-    this.modificationEquipmentCurveByEquationRegressionEquation = new BehaviorSubject<string>(undefined);
-
-    this.systemCurveRegressionEquation = new BehaviorSubject<string>(undefined);
   }
 
   getEquipmentCurveRegressionByData(byData: ByDataInputs, equipmentInputs: EquipmentInputs, yValue: string, maxFlowRate: number): {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from './regression-equations.service';
@@ -13,38 +13,18 @@ export class RegressionEquationsComponent implements OnInit {
   equipmentType: string;
   @Input()
   isEquipmentCurvePrimary: boolean;
-
-
   //subs
-  baselineEquipmentCurveByDataRegressionEquationSub: Subscription;
-  baselineEquipmentCurveByDataRSquaredSub: Subscription;
-  modificationEquipmentCurveByDataRegressionEquationSub: Subscription;
-  modificationEquipmentCurveRSquaredSub: Subscription;
   selectedEquipmentCurveFormViewSub: Subscription;
-  baselineEquipmentCurveByEquationRegressionEquationSub: Subscription;
-  modificationEquipmentCurveByEquationRegressionEquationSub: Subscription;
-  systemCurveRegressionEquationSub: Subscription;
-
   equipmentCurveCollapsedSub: Subscription;
   systemCurveCollapsedSub: Subscription;
 
-  //data
-  baselineEquipmentCurveByDataRegressionEquation: string;
-  baselineEquipmentCurveByDataRSquared: number;
-
-  modificationEquipmentCurveByDataRegressionEquation: string;
-  modificationEquipmentCurveRSquared: number;
-
-  baselineEquipmentCurveByEquationRegressionEquation: string;
-  modificationEquipmentCurveByEquationRegressionEquation: string;
-
-  systemCurveRegressionEquation: string;
+ 
   selectedEquipmentCurveFormView: string;
   equipmentCurveCollapsed: string;
   systemCurveCollapsed: string;
 
   equipmentLabel: string;
-  constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private cd: ChangeDetectorRef) { }
+  constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService) { }
 
   ngOnInit() {
     if (this.equipmentType == 'pump') {
@@ -64,48 +44,9 @@ export class RegressionEquationsComponent implements OnInit {
     this.systemCurveCollapsedSub = this.systemAndEquipmentCurveService.systemCurveCollapsed.subscribe(val => {
       this.systemCurveCollapsed = val;
     });
-
-    this.baselineEquipmentCurveByDataRegressionEquationSub = this.regressionEquationsService.baselineEquipmentCurveByDataRegressionEquation.subscribe(val => {
-      this.baselineEquipmentCurveByDataRegressionEquation = val;
-      this.cd.detectChanges();
-    });
-    this.baselineEquipmentCurveByDataRSquaredSub = this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.subscribe(val => {
-      this.baselineEquipmentCurveByDataRSquared = val;
-      this.cd.detectChanges();
-    });
-
-    this.modificationEquipmentCurveByDataRegressionEquationSub = this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.subscribe(val => {
-      this.modificationEquipmentCurveByDataRegressionEquation = val;
-      this.cd.detectChanges();
-    });
-    this.modificationEquipmentCurveRSquaredSub = this.regressionEquationsService.modificationEquipmentCurveRSquared.subscribe(val => {
-      this.modificationEquipmentCurveRSquared = val;
-      this.cd.detectChanges();
-    });
-
-    this.baselineEquipmentCurveByEquationRegressionEquationSub = this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.subscribe(val => {
-      this.baselineEquipmentCurveByEquationRegressionEquation = val;
-      this.cd.detectChanges();
-    });
-    this.modificationEquipmentCurveByEquationRegressionEquationSub = this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.subscribe(val => {
-      this.modificationEquipmentCurveByEquationRegressionEquation = val;
-      this.cd.detectChanges();
-    });
-
-    this.systemCurveRegressionEquationSub = this.regressionEquationsService.systemCurveRegressionEquation.subscribe(val => {
-      this.systemCurveRegressionEquation = val;
-      this.cd.detectChanges();
-    });
   }
 
   ngOnDestroy() {
-    this.baselineEquipmentCurveByDataRegressionEquationSub.unsubscribe();
-    this.baselineEquipmentCurveByDataRSquaredSub.unsubscribe();
-    this.modificationEquipmentCurveByDataRegressionEquationSub.unsubscribe();
-    this.modificationEquipmentCurveRSquaredSub.unsubscribe();
-    this.baselineEquipmentCurveByEquationRegressionEquationSub.unsubscribe();
-    this.modificationEquipmentCurveByEquationRegressionEquationSub.unsubscribe();
-    this.systemCurveRegressionEquationSub.unsubscribe();
     this.selectedEquipmentCurveFormViewSub.unsubscribe();
     this.equipmentCurveCollapsedSub.unsubscribe();
     this.systemCurveCollapsedSub.unsubscribe();
