@@ -84,6 +84,10 @@ export class SettingsDbService {
       settings.steamEnergyMeasurement = 'MMBtu';
     }
 
+    if (!settings.steamVolumeMeasurement) {
+      settings.steamVolumeMeasurement = 'gal';
+    }
+
     if (!settings.densityMeasurement ||
       !settings.fanFlowRate ||
       !settings.fanPressureMeasurement ||
