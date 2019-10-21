@@ -18,13 +18,16 @@ import { FormsModule } from '@angular/forms';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { SortSummariesPipe } from './opportunity-summary/sort-summaries.pipe';
+import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     FacilityInfoSummaryModule,
-    PrintOptionsMenuModule
+    PrintOptionsMenuModule,
+    PieChartModule
   ],
   declarations: [
     TreasureHuntReportComponent,

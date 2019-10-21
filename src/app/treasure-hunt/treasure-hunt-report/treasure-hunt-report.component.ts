@@ -7,6 +7,7 @@ import { TreasureHuntReportService } from './treasure-hunt-report.service';
 import { OpportunityPaybackService } from './opportunity-payback.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Subscription } from 'rxjs';
+import { OpportunityCardsService, OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -48,10 +49,12 @@ export class TreasureHuntReportComponent implements OnInit {
   assessmentDirectories: Array<Directory> = [];
   dataCalculated: boolean = true;
   treasureHuntResults: TreasureHuntResults;
+  opportunityCardsData: Array<OpportunityCardData>;
   opportunitiesPaybackDetails: OpportunitiesPaybackDetails;
   showPrintSub: Subscription;
   constructor(private treasureHuntReportService: TreasureHuntReportService,
-    private opportunityPaybackService: OpportunityPaybackService, private windowRefService: WindowRefService) { }
+    private opportunityPaybackService: OpportunityPaybackService, private windowRefService: WindowRefService,
+    private opportunityCardsService: OpportunityCardsService) { }
 
   ngOnInit() {
     if (this.assessment) {
@@ -59,6 +62,7 @@ export class TreasureHuntReportComponent implements OnInit {
     }
     if (this.assessment.treasureHunt.setupDone == true) {
       this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.assessment.treasureHunt, this.settings);
+      this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
       this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
     }
 
@@ -96,7 +100,7 @@ export class TreasureHuntReportComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.showPrintSub.unsubscribe();
   }
 
@@ -122,6 +126,7 @@ export class TreasureHuntReportComponent implements OnInit {
 
   updateResults(opportunitySummaries: Array<OpportunitySummary>) {
     this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResultsFromSummaries(opportunitySummaries, this.assessment.treasureHunt.currentEnergyUsage);
+    this.opportunityCardsData = this.opportunityCardsService.getOpportunityCardsData(this.assessment.treasureHunt, this.settings);
     this.opportunitiesPaybackDetails = this.opportunityPaybackService.getOpportunityPaybackDetails(this.treasureHuntResults.opportunitySummaries);
   }
 
