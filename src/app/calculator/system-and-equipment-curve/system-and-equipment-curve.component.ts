@@ -54,14 +54,14 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.pumpSystemCurveData.subscribe(val => {
         if (val != undefined) {
           let systemCurveRegressionEquation: string = this.regressionEquationsService.getPumpSystemCurveRegressionEquation(val);
-          this.regressionEquationsService.systemCurveRegressionEquation = systemCurveRegressionEquation;
+          this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
         }
       });
     } else {
       this.curveDataSubscription = this.systemAndEquipmentCurveService.fanSystemCurveData.subscribe(val => {
         if (val != undefined) {
           let systemCurveRegressionEquation: string = this.regressionEquationsService.getFanSystemCurveRegressionEquation(val);
-          this.regressionEquationsService.systemCurveRegressionEquation = systemCurveRegressionEquation;
+          this.regressionEquationsService.systemCurveRegressionEquation.next(systemCurveRegressionEquation);
         }
       });
     }
@@ -131,10 +131,10 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       secondValueLabel = 'Pressure';
     }
     let results = this.regressionEquationsService.getEquipmentCurveRegressionByData(byDataInputs, equipmentInputs, secondValueLabel, this.maxFlowRate);
-    this.regressionEquationsService.baselineEquipmentCurveByDataRegressionEquation = results.baselineRegressionEquation;
-    this.regressionEquationsService.baselineEquipmentCurveByDataRSquared = results.baselineRSquared;
-    this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation = results.modificationRegressionEquation;
-    this.regressionEquationsService.modificationEquipmentCurveRSquared = results.modificationRSquared;
+    this.regressionEquationsService.baselineEquipmentCurveByDataRegressionEquation.next(results.baselineRegressionEquation);
+    this.regressionEquationsService.baselineEquipmentCurveByDataRSquared.next(results.baselineRSquared);
+    this.regressionEquationsService.modificationEquipmentCurveByDataRegressionEquation.next(results.modificationRegressionEquation);
+    this.regressionEquationsService.modificationEquipmentCurveRSquared.next(results.modificationRSquared);
     if (this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Data') {
       this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.next(results.baselineDataPairs);
       this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.next(results.modifiedDataPairs);
@@ -147,8 +147,8 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       secondValueLabel = 'Pressure';
     }
     let results = this.regressionEquationsService.getEquipmentCurveRegressionByEquation(byEquationInputs, equipmentInputs, secondValueLabel, this.maxFlowRate);
-    this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation = results.baselineRegressionEquation;
-    this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation = results.modificationRegressionEquation;
+    this.regressionEquationsService.baselineEquipmentCurveByEquationRegressionEquation.next(results.baselineRegressionEquation);
+    this.regressionEquationsService.modificationEquipmentCurveByEquationRegressionEquation.next(results.modificationRegressionEquation);
     if (this.systemAndEquipmentCurveService.selectedEquipmentCurveFormView.getValue() == 'Equation') {
       this.systemAndEquipmentCurveService.baselineEquipmentCurveDataPairs.next(results.baselineDataPairs);
       this.systemAndEquipmentCurveService.modifiedEquipmentCurveDataPairs.next(results.modifiedDataPairs);
