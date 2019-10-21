@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import { BoilerBlowdownRateService, BoilerBlowdownRateInputs } from './boiler-blowdown-rate.service';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -10,6 +10,9 @@ import { Settings } from '../../../shared/models/settings';
   styleUrls: ['./boiler-blowdown-rate.component.css']
 })
 export class BoilerBlowdownRateComponent implements OnInit {
+  @Input()
+  settings: Settings;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.resizeTabs();
@@ -22,18 +25,17 @@ export class BoilerBlowdownRateComponent implements OnInit {
   modificationSub: Subscription;
   baselineSelected: boolean = true;
   tabSelect: string = 'results';
-  settings: Settings;
   headerHeight: number;
   constructor(private boilerBlowdownRateService: BoilerBlowdownRateService, private settingsDbService: SettingsDbService) { }
 
   ngOnInit() {
-    this.initData();
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     if (!this.settings) {
       this.settings = this.settingsDbService.globalSettings;
     }
+    this.initData();
     this.modificationSub = this.boilerBlowdownRateService.modificationInputs.subscribe(val => {
       if (val) {
         this.modificationExists = true;
