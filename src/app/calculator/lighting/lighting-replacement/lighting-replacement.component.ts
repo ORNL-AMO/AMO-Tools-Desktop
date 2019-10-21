@@ -77,6 +77,7 @@ export class LightingReplacementComponent implements OnInit {
       this.lightingReplacementService.baselineElectricityCost = undefined;
       this.lightingReplacementService.modificationElectricityCost = undefined;
     }
+    this.lightingReplacementService.showAdditionalDetails = false;
   }
 
 
@@ -217,18 +218,15 @@ export class LightingReplacementComponent implements OnInit {
     this.baselineData = [tmpObj];
     this.modificationData = new Array<LightingReplacementData>();
     this.modificationExists = false;
+    this.lightingReplacementService.showAdditionalDetails = false;
     this.getResults();
   }
 
   generateExample() {
     let tmpBaselineObj: LightingReplacementData = this.lightingReplacementService.generateExample(true);
-    tmpBaselineObj = this.lightingReplacementService.calculateElectricityUse(tmpBaselineObj);
-    tmpBaselineObj = this.lightingReplacementService.calculateTotalLighting(tmpBaselineObj);
     this.baselineData = [tmpBaselineObj];
     this.lightingReplacementService.baselineData = this.baselineData;
     let tmpModificationObj: LightingReplacementData = this.lightingReplacementService.generateExample(false);
-    tmpModificationObj = this.lightingReplacementService.calculateElectricityUse(tmpModificationObj);
-    tmpModificationObj = this.lightingReplacementService.calculateTotalLighting(tmpModificationObj);
     this.modificationData = [tmpModificationObj];
     this.lightingReplacementService.modificationData = this.modificationData;
     this.modificationExists = true;
@@ -236,6 +234,7 @@ export class LightingReplacementComponent implements OnInit {
     this.modificationElectricityCost = 0.062;
     this.lightingReplacementService.baselineElectricityCost = this.baselineElectricityCost;
     this.lightingReplacementService.modificationElectricityCost = this.modificationElectricityCost;
+    this.lightingReplacementService.showAdditionalDetails = true;
   }
 
   btnGenerateExample() {
