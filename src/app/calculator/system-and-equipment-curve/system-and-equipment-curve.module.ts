@@ -25,6 +25,7 @@ import { SystemAndEquipmentCurveGraphComponent } from './system-and-equipment-cu
 import { SystemAndEquipmentCurveGraphService } from './system-and-equipment-curve-graph/system-and-equipment-curve-graph.service';
 import { DataPointTableComponent } from './system-and-equipment-curve-graph/data-point-table/data-point-table.component';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     CommonModule,
     ReactiveFormsModule,
     SharedPipesModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    SimpleTooltipModule
   ],
   providers: [
     SystemAndEquipmentCurveService,

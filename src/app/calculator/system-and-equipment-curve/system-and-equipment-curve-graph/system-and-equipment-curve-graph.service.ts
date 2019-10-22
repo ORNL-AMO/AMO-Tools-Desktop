@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { SystemAndEquipmentCurveService, PumpSystemCurveData, FanSystemCurveData, EquipmentInputs } from '../system-and-equipment-curve.service';
 import * as _ from 'lodash';
 import { RegressionEquationsService } from '../regression-equations/regression-equations.service';
 import { BehaviorSubject } from 'rxjs';
+import { SvgToPngService } from '../../../shared/helper-services/svg-to-png.service';
 @Injectable()
 export class SystemAndEquipmentCurveGraphService {
 
@@ -16,7 +17,7 @@ export class SystemAndEquipmentCurveGraphService {
   yRef: any;
   svg: any;
   maxFlowRate: BehaviorSubject<number>;
-  constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private svgToPngService: SvgToPngService) {
     this.selectedDataPoint = new BehaviorSubject(undefined);
     this.baselineIntersectionPoint = new BehaviorSubject(undefined);
     this.modificationIntersectionPoint = new BehaviorSubject(undefined);
@@ -303,4 +304,20 @@ export class SystemAndEquipmentCurveGraphService {
     return tooltipData;
   }
 
+  downloadChart(ngChart: ElementRef, equipmentType: string) {
+    let exportName: string = this.getExportName(equipmentType);
+    this.svgToPngService.exportPNG(ngChart, exportName);
+  }
+
+  getExportName(equipmentType: string): string {
+    let exportName: string;
+    let isSystemCurveShown: boolean = this.systemAndEquipmentCurveService.systemCurveCollapsed.getValue() == 'open';
+    let isEquipmentCurveShown: boolean = this.systemAndEquipmentCurveService.equipmentCurveCollapsed.getValue() == 'open';
+    if (isSystemCurveShown) {
+      exportName = equipmentType + '-system-curve-graph';
+    } else if (isEquipmentCurveShown) {
+      exportName = equipmentType + '-curve-graph';
+    }
+    return exportName;
+  }
 }
