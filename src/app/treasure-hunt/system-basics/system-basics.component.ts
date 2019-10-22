@@ -7,6 +7,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../shared/models/operations';
 import { TreasureHuntService } from '../treasure-hunt.service';
+import { ConvertInputDataService } from '../convert-input-data.service';
 
 @Component({
   selector: 'app-system-basics',
@@ -31,26 +32,37 @@ export class SystemBasicsComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
 
   settingsForm: FormGroup;
-
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, 
-    private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService) { }
+  oldSettings: Settings;
+  showUpdateData: boolean = false;
+  dataUpdated: boolean = false;
+  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService,
+    private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService, private convertInputDataService: ConvertInputDataService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-    this.assessment.treasureHunt.operatingHours
+    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     setTimeout(() => {
       this.setOpHoursModalWidth();
     }, 100);
   }
 
-  save(){
+  save() {
     let id: number = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
     this.settings.assessmentId = this.assessment.id;
+    if (this.settings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
+      this.showUpdateData = true;
+      if (this.dataUpdated === true) {
+        this.dataUpdated = false;
+      }
+    } else {
+      this.showUpdateData = false;
+    }
+
     this.indexedDbService.putSettings(this.settings).then(
       results => {
         this.settingsDbService.setAll().then(() => {
@@ -61,7 +73,7 @@ export class SystemBasicsComponent implements OnInit {
     )
   }
 
-  saveTreasureHunt(){
+  saveTreasureHunt() {
     this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
   }
 
@@ -85,5 +97,11 @@ export class SystemBasicsComponent implements OnInit {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+
+
+  updateData() {
+    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
   }
 }

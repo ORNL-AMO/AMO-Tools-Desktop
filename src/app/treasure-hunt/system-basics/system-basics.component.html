@@ -1,6 +1,10 @@
 <div class="d-flex flex-column">
   <div class="header mr-2 ml-2">
     <h3>{{assessment.name}} Settings</h3>
+    <br>
+    <a class="no-data-link" *ngIf="showUpdateData" (click)="updateData()">Your units have changed! Click here to update
+      your data to reflect these changes!</a>
+    <span class="data-updated" *ngIf="dataUpdated">Data Updated!</span>
   </div>
   <div class="p-4">
     <app-application-settings [(settingsForm)]="settingsForm" [inPhast]="true" [inTreasureHunt]="true"
@@ -16,7 +20,8 @@
             <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
           </span>
           <input name="operatingHours" type="number" step="1" min="0" max="8760" id="operatingHours"
-            class="form-control" (input)="saveTreasureHunt()" [(ngModel)]="assessment.treasureHunt.operatingHours.hoursPerYear" />
+            class="form-control" (input)="saveTreasureHunt()"
+            [(ngModel)]="assessment.treasureHunt.operatingHours.hoursPerYear" />
           <span class="input-group-addon units">hrs/yr</span>
         </div>
       </div>
