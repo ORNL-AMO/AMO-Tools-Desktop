@@ -9,7 +9,16 @@ import { FSAT } from '../../shared/models/fans';
 
 @Injectable()
 export class SystemAndEquipmentCurveService {
+  //persistent equipment curve data
+  pumpByDataInputs: ByDataInputs;
+  pumpByEquationInputs: ByEquationInputs;
+  pumpEquipmentInputs: EquipmentInputs;
 
+  fanByDataInputs: ByDataInputs;
+  fanByEquationInputs: ByEquationInputs;
+  fanEquipmentInputs: EquipmentInputs;
+
+  //behavior subjects
   currentField: BehaviorSubject<string>;
   pumpSystemCurveData: BehaviorSubject<PumpSystemCurveData>;
   fanSystemCurveData: BehaviorSubject<FanSystemCurveData>;
@@ -25,6 +34,7 @@ export class SystemAndEquipmentCurveService {
   baselineEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
   modifiedEquipmentCurveDataPairs: BehaviorSubject<Array<{ x: number, y: number }>>;
   systemCurveRegressionData: BehaviorSubject<Array<{ x: number, y: number, fluidPower: number }>>;
+  //data points for system curve dropdown in assessment
   systemCurveDataPoints: Array<{ pointName: string, flowRate: number, yValue: number }>;
   constructor(private equipmentCurveService: EquipmentCurveService,
     private fanSystemCurveFormService: FanSystemCurveFormService, private pumpSystemCurveFormService: PumpSystemCurveFormService) {
