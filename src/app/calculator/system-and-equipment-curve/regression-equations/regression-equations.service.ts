@@ -44,7 +44,8 @@ export class RegressionEquationsService {
       baselineData.push([row.flow, row.yValue]);
     })
 
-    let baselineResults = regression.polynomial(baselineData, { order: byData.dataOrder, precision: 10 });
+    let baselineResults = regression.polynomial(baselineData, { order: byData.dataOrder, precision: 50 });
+    this.setSigFigs(baselineResults);
     let baselineRegressionEquation: string = baselineResults.string;
 
     let maxDataFlow: number = _.maxBy(byData.dataRows, (val) => { return val.flow }).flow;
@@ -79,7 +80,8 @@ export class RegressionEquationsService {
         baselineData.push([xBaseline, yBaseline]);
       }
     }
-    let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 10 });
+    let modificationResults = regression.polynomial(modificationData, { order: byData.dataOrder, precision: 50 });
+    this.setSigFigs(modificationResults);
     let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byData.dataOrder, yValue);
     return {
       baselineRegressionEquation: baselineRegressionEquation,
@@ -92,7 +94,18 @@ export class RegressionEquationsService {
 
   }
 
-  formatRegressionEquation(regressionEquation: string, order: number, secondValueLabel): string {
+  setSigFigs(data: { equation: Array<number>, string: string }) {
+    data.equation.forEach(val => {
+      if (val >= 1000 || val <= .0001) {
+        data.string = data.string.replace(val.toString(), Number(val.toPrecision(3)).toExponential());
+      } else {
+        data.string = data.string.replace(val.toString(), val.toPrecision(3));
+      }
+    });
+  }
+
+
+  formatRegressionEquation(regressionEquation: string, order: number, secondValueLabel: string): string {
     for (let i = 0; i < order; i++) {
       regressionEquation = regressionEquation.replace(/x/, '(flow)');
       regressionEquation = regressionEquation.replace('+ -', '- ');
@@ -136,7 +149,8 @@ export class RegressionEquationsService {
     //modification
     let ratio: number = equipmentInputs.modifiedMeasurement / equipmentInputs.baselineMeasurement;
     let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateByEquationData(byEquationInputs, ratio, maxFlowRate);
-    let modificationResults = regression.polynomial(modifiedData.calculationData, { order: byEquationInputs.equationOrder, precision: 10 });
+    let modificationResults = regression.polynomial(modifiedData.calculationData, { order: byEquationInputs.equationOrder, precision: 50 });
+    this.setSigFigs(modificationResults);
     let modificationRegressionEquation: string = this.formatRegressionEquation(modificationResults.string, byEquationInputs.equationOrder, secondValueLabel);
     return {
       baselineRegressionEquation: baselineRegressionEquation,
@@ -182,7 +196,7 @@ export class RegressionEquationsService {
       data.pointTwoHead,
       data.systemLossExponent
     );
-    return 'Head = ' + staticHead + ' + (' + lossCoefficient + ' \xD7 flow' + '<sup>' + data.systemLossExponent + '</sup>)';
+    return 'Head = ' + staticHead.toPrecision(3) + ' + (' + lossCoefficient.toPrecision(3) + ' \xD7 flow' + '<sup>' + data.systemLossExponent + '</sup>)';
   }
 
   getFanSystemCurveRegressionEquation(data: FanSystemCurveData): string {
@@ -200,7 +214,7 @@ export class RegressionEquationsService {
       data.pointTwoPressure,
       data.systemLossExponent
     );
-    return 'Pressure = ' + staticPressure + ' + (' + lossCoefficient + ' \xD7 flow' + '<sup>' + data.systemLossExponent + '</sup>)';
+    return 'Pressure = ' + staticPressure.toPrecision(3) + ' + (' + lossCoefficient.toPrecision(3) + ' \xD7 flow' + '<sup>' + data.systemLossExponent + '</sup>)';
   }
 
   calculateLossCoefficient(flowRateOne: number, headOne: number, flowRateTwo: number, headTwo: number, lossExponent: number): number {
