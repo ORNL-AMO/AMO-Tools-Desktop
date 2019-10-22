@@ -43,7 +43,9 @@
           <input class="form-control" name="fuelCost" id="{{'fuelCost_'+idString}}" formControlName="fuelCost"
             type="number" (input)="calculate()" (focus)="focusField('fuelCost')" (blur)="focusOut()"
             onfocus="this.select();">
-          <span class="units input-group-addon">$/<span [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
+          <span class="units input-group-addon">$/
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
           </span>
         </div> <span class="alert-danger pull-right small"
           *ngIf="form.controls.fuelCost.invalid && !form.controls.fuelCost.pristine">

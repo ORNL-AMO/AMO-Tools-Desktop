@@ -90,6 +90,7 @@ export class ConvertInputDataService {
   }
 
   convertNaturalGasReduction(reduction: NaturalGasReductionData, oldSettings: Settings, newSettings: Settings): NaturalGasReductionData {
+    //imperial: $/MMBtu, metric: $/GJ
     reduction.fuelCost
     //imperial: ft3/hr, metric: m3/hr
     reduction.flowMeterMethodData.flowRate
