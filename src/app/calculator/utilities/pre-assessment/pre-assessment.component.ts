@@ -108,7 +108,7 @@ export class PreAssessmentComponent implements OnInit {
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
-      this.preAssessments = this.preAssessmentService.generateExample(this.settings);
+      this.preAssessments = this.preAssessmentService.generateExample(this.settings, graphColors);
     }
   }
 
