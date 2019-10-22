@@ -31,10 +31,8 @@ import { FsatReportModule } from './fsat-report/fsat-report.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
 import { ConvertFsatService } from './convert-fsat.service';
 import { FsatSankeyModule } from './fsat-sankey/fsat-sankey.module';
-import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
 import { MotorPerformanceModule } from '../calculator/motors/motor-performance/motor-performance.module';
 import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
-import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
 import { FanEfficiencyModule } from '../calculator/fans/fan-efficiency/fan-efficiency.module';
 import { FsatDiagramComponent } from './fsat-diagram/fsat-diagram.component';
 import { FsatWarningService } from './fsat-warning.service';
@@ -44,6 +42,7 @@ import { OperatingHoursModalModule } from '../shared/operating-hours-modal/opera
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -58,17 +57,16 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
     FsatReportModule,
     HelpPanelModule,
     FsatSankeyModule,
-    SystemCurveModule,
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
-    PumpCurveModule,
     FanEfficiencyModule,
     CalculatePressuresModule,
     FanAnalysisModule,
     OperatingHoursModalModule,
     TabsTooltipModule,
     ToastModule,
-    SharedPipesModule
+    SharedPipesModule,
+    SystemAndEquipmentCurveModule
   ],
   declarations: [
     FsatComponent,

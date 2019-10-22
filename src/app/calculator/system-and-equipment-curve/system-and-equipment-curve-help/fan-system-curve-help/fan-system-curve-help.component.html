@@ -1,0 +1,109 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+    <!--DESCRIPTION-->
+    <h5>
+        System Curve Help
+        <br>
+        <small class="text-muted">
+            A system resistance curve is a graphical representation of the relationship between flow and pressure losses
+            in
+            a
+            given fan system. Some pressure losses are functions of rate of flow, size and length of duct, and size,
+            number and type of fittings, each system has its own characteristic curve and specific values.
+        </small>
+    </h5>
+
+    <!--FIELD BY FIELD-->
+
+    <div class="my-2" *ngIf="currentField == 'compressibilityFactor'">
+        <h6>
+            Compressibility Factor
+            <br>
+            <small class="text-muted">
+                The compressibility factor is the measure of how non-ideal the gas is. For most gases this is usually
+                around
+                1.
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'systemLossExponent'">
+        <h6>
+            System Loss Exponent, C
+            <br>
+            <small class="text-muted">
+                The system loss exponent, or system friction loss exponent, is that to which the flow rate is raised in
+                developing friction loss estimates. The Darcy-Weisbach equation, indicates a value of 2. Experiment with
+                values
+                between 1.8 and 2.0 to see how the system curve changes.
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'pointOneFlowRate'">
+        <h6>
+            Point 1 Flow Rate
+            <br>
+            <small class="text-muted">
+                Flow at one of two reference points, preferably zero
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'pointOnePressure'">
+        <h6>
+            Point 1 Pressure
+            <br>
+            <small class="text-muted">
+                Pressure at one of two reference points, preferably the static pressure.
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'pointTwoFlowRate'">
+        <h6>
+            Point 2 Flow Rate
+            <br>
+            <small class="text-muted">
+                Flow at one of two reference points, preferably at high flow
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="currentField == 'pointTwoPressure'">
+        <h6>
+            Point 2 Pressure
+            <br>
+            <small class="text-muted">
+                Pressure at one of two reference points, preferably at high flow
+            </small>
+        </h6>
+    </div>
+
+    <!--CURVE BASIS-->
+    <hr class="my-1 hr-spacer">
+    <div class="my-2">
+        <h6>
+            Curve basis
+            <br>
+            <small class="text-muted">
+                <u>If so:</u>
+                <br>P = P<sub>s</sub> + K'Q<sup>C</sup>
+                <br>P = total pressure
+                <br>Ps = Static Pressure
+                <br>K’ = Loss Coefficient
+                <br>Q = Flow Rate
+                <br>C = dynamic/friction loss exponent
+                <hr> Note 1: K' here applies to the volumetric flow rate,
+                <u>not</u> the velocity pressure.
+                <hr> Note 2: This simple system method does not apply to complex distribution systems where flow is
+                delivered
+                to multiple elevation or pressure systems.
+                <hr> Note 3: The compressibility factor does not affect the system resistance curve, but does affect the
+                fluid
+                power, which is directly proportional to the compressibility factor.
+                <hr>
+                Note 4: Fluid power is not interchangable with shaft or break/pump power.
+                <hr>
+            </small>
+        </h6>
+    </div>
+</div>

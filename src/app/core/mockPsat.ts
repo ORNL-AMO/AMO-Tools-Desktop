@@ -358,118 +358,123 @@ export const MockPsatSettings: Settings = {
 };
 
 export const MockPsatCalculator: Calculator = {
-    pumpCurve: {
-        dataRows: [
+    systemAndEquipmentCurveData: {
+        pumpSystemCurveData: {
+            specificGravity: 1.002,
+            systemLossExponent: 1.9,
+            pointOneFlowRate: 0,
+            pointOneHead: 50,
+            pointTwo: "Baseline",
+            pointTwoFlowRate: 3250,
+            pointTwoHead: 225,
+        },
+        equipmentCurveFormView: 'Data',
+        byEquationInputs: {
+            maxFlow: 3250,
+            equationOrder: 3,
+            constant: 245.03015298,
+            flow: -0.0767853775,
+            flowTwo: 0.0000277329,
+            flowThree: -5.7e-9,
+            flowFour: 0,
+            flowFive: 0,
+            flowSix: 0
+        },
+        equipmentInputs: {
+            measurementOption: 1,
+            baselineMeasurement: 1785,
+            modificationMeasurementOption: 1,
+            modifiedMeasurement: 1071
+        },
+        byDataInputs: {
+            dataRows: [
+                {
+                    flow: 0,
+                    yValue: 245
+                },
+                {
+                    yValue: 213,
+                    flow: 500
+                },
+                {
+                    yValue: 190,
+                    flow: 1000
+                },
+                {
+                    yValue: 173.1,
+                    flow: 1500
+                },
+                {
+                    yValue: 156.6,
+                    flow: 2000
+                },
+                {
+                    yValue: 136.9,
+                    flow: 2500
+                },
+                {
+                    yValue: 109.7,
+                    flow: 3000
+                },
+                {
+                    yValue: 91.9,
+                    flow: 3250
+                }
+            ],
+            dataOrder: 3
+        },
+        systemCurveDataPoints: [
             {
-                flow: 0,
-                head: 245
-            },
-            {
-                head: 213,
-                flow: 500
-            },
-            {
-                head: 190,
-                flow: 1000
-            },
-            {
-                head: 173.1,
-                flow: 1500
-            },
-            {
-                head: 156.6,
-                flow: 2000
-            },
-            {
-                head: 136.9,
-                flow: 2500
-            },
-            {
-                head: 109.7,
-                flow: 3000
-            },
-            {
-                head: 91.9,
-                flow: 3250
-            }
-        ],
-        maxFlow: 3250,
-        dataOrder: 3,
-        baselineMeasurement: 1785,
-        modifiedMeasurement: 1071,
-        exploreLine: 0,
-        exploreFlow: 0,
-        exploreHead: 0,
-        explorePumpEfficiency: 0,
-        headOrder: 3,
-        headConstant: 245.03015298,
-        headFlow: -0.0767853775,
-        headFlow2: 0.0000277329,
-        headFlow3: -5.7e-9,
-        headFlow4: 0,
-        headFlow5: 0,
-        headFlow6: 0,
-        pumpEfficiencyOrder: 3,
-        pumpEfficiencyConstant: 0,
-        measurementOption: "Speed"
-    },
-    systemCurve: {
-        specificGravity: 1.002,
-        systemLossExponent: 1.9,
-        dataPoints: [
-            {
-                modName: "Baseline1",
+                pointName: "Baseline1",
                 flowRate: 0,
-                head: 50
+                yValue: 50
             },
             {
-                modName: "Baseline",
+                pointName: "Baseline",
                 flowRate: 3250,
-                head: 225
+                yValue: 225
             },
             {
-                modName: "Optimize Pump & Motor Combo1",
+                pointName: "Optimize Pump & Motor Combo1",
                 flowRate: 0,
-                head: 0
+                yValue: 0
             },
             {
-                modName: "Optimize Pump & Motor Combo",
+                pointName: "Optimize Pump & Motor Combo",
                 flowRate: 2499.99,
-                head: 137.01
+                yValue: 137.01
             },
             {
-                modName: "Reduce speed to 60% with Static head1",
+                pointName: "Reduce speed to 60% with Static head1",
                 flowRate: 0,
-                head: 0
+                yValue: 0
             },
             {
-                modName: "Reduce speed to 60% with Static head",
+                pointName: "Reduce speed to 60% with Static head",
                 flowRate: 842,
-                head: 63
+                yValue: 63
             },
             {
-                modName: "Reduce speed to 60%1",
+                pointName: "Reduce speed to 60%1",
                 flowRate: 0,
-                head: 0
+                yValue: 0
             },
             {
-                modName: "Reduce speed to 60%",
+                pointName: "Reduce speed to 60%",
                 flowRate: 1475,
-                head: 50
+                yValue: 50
             },
             {
-                modName: "New1",
+                pointName: "New1",
                 flowRate: 0,
-                head: 0
+                yValue: 0
             },
             {
-                modName: "New",
+                pointName: "New",
                 flowRate: 2500,
-                head: 137
+                yValue: 137
             }
-        ],
-        selectedP1Name: "Baseline1",
-        selectedP2Name: "Baseline"
+        ]
     },
     motorPerformanceInputs: {
         frequency: 50,

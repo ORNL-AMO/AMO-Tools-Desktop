@@ -1,0 +1,255 @@
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Pump Curve Help
+    <br>
+    <small class="text-muted">Use pump curve calculator to develop a pump curve and explore the effects of changes in
+      head, flow, pump speed and impeller
+      diameter.
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+  <div class="my-2" *ngIf="currentField == 'maxFlow'">
+    <h6>
+      Max Flow
+      <br>
+      <small class="text-muted">
+        The max flow rate in the pump curve graph.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'equationOrder'">
+    <h6>
+      Head Order
+      <br>
+      <small class="text-muted">
+        Order of the polynomial used to find head as a function of flow rate the highest power flow is raised to.
+        <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> +
+        C<sub>3</sub>*(Flow)<sup>3</sup> has an order of 3.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+
+  <div class="my-2" *ngIf="currentField == 'constant'">
+    <h6>
+      Constant
+      <br>
+      <small class="text-muted">
+        Coefficient (constant) associated with flow to the zeroth power.
+        <br> Head =
+        <u>C
+          <sub>0</sub>
+        </u> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> +
+        C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup> + C<sub>6</sub>*(Flow)<sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flow'">
+    <h6>
+      Flow
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the first power.
+        <br> Head = C<sub>0</sub> +
+        <u>C
+          <sub>1</sub>
+        </u>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> +
+        C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup> + C<sub>6</sub>*(Flow)<sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flowTwo'">
+    <h6>
+      Flow
+      <sup>2</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the second power.
+        <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow +
+        <u>C
+          <sub>2</sub>
+        </u>*(Flow)<sup>2</sup> + C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> +
+        C<sub>5</sub>*(Flow)<sup>5</sup> + C<sub>6</sub>*(Flow)<sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+
+  <div class="my-2" *ngIf="currentField == 'flowThree'">
+    <h6>
+      Flow
+      <sup>3</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the third power.
+        <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> +
+        <u>C
+          <sub>3</sub>
+        </u>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup> +
+        C<sub>6</sub>*(Flow)<sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'flowFour'">
+    <h6>
+      Flow
+      <sup>4</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the fourth power.
+        <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> +
+        C<sub>3</sub>*(Flow)<sup>3</sup> +
+        <u>C<sub>4</sub>
+        </u>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup> + C<sub>6</sub>*(Flow)<sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'flowFive'">
+    <h6>
+      Flow
+      <sup>5</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the fifth power.
+        <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> +
+        C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> +
+        <u>C<sub>5</sub>
+        </u>*(Flow)<sup>5</sup> + C<sub>6</sub>*(Flow)<sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'flowSix'">
+    <h6>
+      Flow
+      <sup>5</sup>
+      <br>
+      <small class="text-muted">
+        Coefficient associated with flow to the sixth power.
+        <br> Head = C<sub>0</sub> + C<sub>1</sub>* Flow + C<sub>2</sub>*(Flow)<sup>2</sup> +
+        C<sub>3</sub>*(Flow)<sup>3</sup> + C<sub>4</sub>*(Flow)<sup>4</sup> + C<sub>5</sub>*(Flow)<sup>5</sup> +
+        <u>C<sub>6</sub>
+        </u>*(Flow)<sup>6</sup>
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'baselineMeasurement'">
+    <h6>
+      Baseline condition
+      <br>
+      <small class="text-muted">
+        The impeller diameter/speed of the system in the original pump curve.
+        <hr>
+      </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence
+          frequencies.
+        </small>
+      </div>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'measurementOption'">
+    <h6>
+      Diameter/Speed
+      <br>
+      <small class="text-muted">
+        Allows the user to make a new pump curve by simulating a change in pipe diameter or pump speed.
+        <hr>
+      </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence
+          frequencies.
+        </small>
+      </div>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'modifiedMeasurement'">
+    <h6>
+      Modified Condition
+      <br>
+      <small class="text-muted">
+        The impeller diameter/speed of the system in the modified pump curve.
+        <hr>
+      </small>
+      <div class="alert alert-warning">
+        <small class="text-muted">
+          Warning: Before reducing pump speed, it may be advisable to consult your manufacturer to avoid residence
+          frequencies.
+        </small>
+      </div>
+    </h6>
+  </div>
+
+  <!-- <div class="my-2" *ngIf="currentField == 'exploreFlow'">
+    <h6>
+      Explore Flow
+      <br>
+      <small class="text-muted">
+        Enter a flow rate to determine the corresponding head.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'exploreHead'">
+    <h6>
+      Explore Head
+      <br>
+      <small class="text-muted">
+        Enter a head value to determine the corresponding flow rate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2" *ngIf="currentField == 'explorePressure'">
+    <h6>
+      Explore Pressure
+      <br>
+      <small class="text-muted">
+        Enter a pressure value to determine the corresponding flow rate.
+        <hr>
+      </small>
+    </h6>
+  </div> 
+  <div class="my-2" *ngIf="currentField == 'head'">
+    <h6>
+      Head
+      <br>
+      <small class="text-muted">
+        A data point on the pump curve graph associated with the head in the adjacent field.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flow'">
+    <h6>
+      Flow
+      <br>
+      <small class="text-muted">
+        A data point on the pump curve graph associated with the flow in the adjacent field.
+        <hr>
+      </small>
+    </h6>
+  </div> -->
+
+
+</div>

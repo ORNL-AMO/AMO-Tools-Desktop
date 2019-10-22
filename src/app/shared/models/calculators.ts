@@ -7,6 +7,7 @@ import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energy
 import { FlowCalculations } from "./phast/flowCalculations";
 import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
 import { Fan203Inputs } from "./fans";
+import { SystemAndEquipmentCurveData } from "../../calculator/system-and-equipment-curve/system-and-equipment-curve.service";
 
 export interface Calculator {
     directoryId?: number;
@@ -18,8 +19,6 @@ export interface Calculator {
     headTool?: HeadTool;
     headToolSuction?: HeadToolSuction;
     headToolType?: string;
-    systemCurve?: SystemCurve;
-    pumpCurve?: PumpCurve;
     motorPerformanceInputs?: MotorPerformanceInputs;
     nemaInputs?: NemaInputs;
     specificSpeedInputs?: SpecificSpeedInputs;
@@ -33,6 +32,7 @@ export interface Calculator {
     fanEfficiencyInputs?: FanEfficiencyInputs;
     fan203Inputs?: Fan203Inputs;
     selected?: boolean;
+    systemAndEquipmentCurveData?: SystemAndEquipmentCurveData
 }
 
 export interface HeadToolSuction {

@@ -87,7 +87,7 @@ export class LineChartHelperService {
       .ticks(ticks)
       .tickFormat(tickFormat);
     xAxis = svg.append('g')
-      .attr("class", "x axis")
+      .attr("class", "axis-label")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
       .style("stroke-width", ".5px")
@@ -121,7 +121,7 @@ export class LineChartHelperService {
       .ticks(ticks)
       .tickFormat(tickFormat);
     yAxis = svg.append('g')
-      .attr("class", "y axis")
+      .attr("class", "axis-label")
       .call(yAxis)
       .style("stroke-width", ".5px")
       .selectAll('text')
@@ -159,14 +159,15 @@ export class LineChartHelperService {
     return line;
   }
 
-  drawLine(line: d3.Selection<any>, xScale: any, yScale: any, data: Array<any>): d3.Selection<any> {
+  drawLine(line: d3.Selection<any>, xScale: any, yScale: any, data: Array<any>, lineClass?: string): d3.Selection<any> {
     var currentLi = d3.line()
       .x(function (d) { return xScale(d.x); })
       .y(function (d) { return yScale(d.y); })
       .curve(d3.curveNatural);
     line.data([data])
       .attr("d", currentLi)
-      .style("display", null);
+      .style("display", null)
+      .attr("class", lineClass);
     return line;
   }
 
@@ -422,9 +423,6 @@ export class LineChartHelperService {
   tableFocusHelper(svg: d3.Selection<any>, id: string, fill: string, stroke: string, transX: number, transY: number, label?: string): d3.Selection<any> {
     let splitText = id.split('-', 2);
     let internalText = parseInt(splitText[splitText.length - 1]) + 1;
-    console.log('label = ');
-    console.log(label);
-
     let focus: d3.Selection<any> = svg.append("g")
       .attr("class", "tablePoint")
       .style("display", null)
@@ -440,6 +438,7 @@ export class LineChartHelperService {
     focus.append("text")
       .attr('dx', -4)
       .attr('dy', -10)
+      .attr("id", id)
       .text((label === undefined || label === null) ? internalText : label)
       .style('font-size', '12px')
       .style('font-weight', 'bold')

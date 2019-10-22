@@ -38,11 +38,11 @@
           <div class="p-2 col-2 d-flex justify-content-center align-items-center">
             <div class="calc-icon-div d-flex justify-content-center align-items-center">
               <img src="assets/images/calculator-icons/pump-curve.png" class="calc-img"
-                (click)="showTool('pump-curve')">
+                (click)="showTool('fan-curve')">
             </div>
           </div>
           <div class="d-flex flex-fill flex-column justify-content-center">
-            <a class="click-item" (click)="showTool('pump-curve')">Fan Curve</a>
+            <a class="click-item" (click)="showTool('fan-curve')">Fan Curve</a>
             <p>
               Develop a fan curve and explore the effects of changes in pressure, flow, fan speed and impeller diameter
             </p>
@@ -77,12 +77,13 @@
 </div>
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'system-curve'">
-  <app-pump-curve [isFan]="true" [pumpCurvePrimary]="false"></app-pump-curve>
-  <!-- <app-system-curve [isFan]="true" [pumpCurvePrimary]="false"></app-system-curve> -->
+  <app-system-and-equipment-curve [equipmentType]="'fan'" [isEquipmentCurvePrimary]="false">
+  </app-system-and-equipment-curve>
 </div>
 
-<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'pump-curve'">
-  <app-pump-curve [isFan]="true" [pumpCurvePrimary]="true"></app-pump-curve>
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fan-curve'">
+  <app-system-and-equipment-curve [equipmentType]="'fan'" [isEquipmentCurvePrimary]="true">
+  </app-system-and-equipment-curve>
 </div>
 
 <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'fan-efficiency'">
