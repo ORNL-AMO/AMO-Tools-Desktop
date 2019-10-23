@@ -93,7 +93,7 @@ export class PreAssessmentComponent implements OnInit {
 
   btnResetData() {
     this.nameIndex = 1;
-    this.initAssessments();
+    this.initAssessments(true);
   }
 
   btnGenerateExample() {
@@ -112,14 +112,14 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
-  initAssessments() {
+  initAssessments(isReset?: boolean) {
     if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
-      if (!this.inModal && !this.inAssessment && this.preAssessmentService.standaloneInputData) {
+      if (!this.inModal && !this.inAssessment && this.preAssessmentService.standaloneInputData && !isReset) {
         this.preAssessments = this.preAssessmentService.standaloneInputData;
       } else {
         if (this.inAssessment) {
