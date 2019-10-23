@@ -1,0 +1,12 @@
+<div class="d-block pt-3">
+    <h5 class="group-label" (click)="toggleCollapse()">System Curve Data
+        <span *ngIf="systemCurveCollapsed == 'open' && !isPrimaryCalculator"
+            class="remove-curve fa fa-minus pull-right"></span>
+        <span *ngIf="systemCurveCollapsed == 'closed' && !isPrimaryCalculator"
+            class="add-curve fa fa-plus pull-right"></span>
+    </h5>
+    <div class="mb-3 d-block" *ngIf="systemCurveCollapsed == 'open'">
+        <app-fan-system-curve-form *ngIf="equipmentType == 'fan'" [settings]="settings"></app-fan-system-curve-form>
+        <app-pump-system-curve-form *ngIf="equipmentType == 'pump'" [settings]="settings"></app-pump-system-curve-form>
+    </div>
+</div>

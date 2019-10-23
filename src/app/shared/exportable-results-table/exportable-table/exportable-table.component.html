@@ -4,12 +4,6 @@
 
 
 <textarea type="text" class="form-control clipboard-text" [(ngModel)]="tableString" placeholder="content will be copied after clicking the copy button"></textarea>
-<div class="d-flex w-100 justify-content-center pl-2 pr-2">
-  <span class="input-group-btn">
-    <button (mouseenter)="updateTableString()" class="btn-copy-table" type="button" ngxClipboard [cbContent]="tableString"
-      (cbOnSuccess)="copySuccess()" [class.btn-success]="isCopied1">Copy Table</button>
-  </span>
-</div>
 
 
 <table class="table table-hover table-striped">
@@ -51,6 +45,12 @@
   </tbody>
 </table>
 
+<div class="d-flex w-100 justify-content-center pl-2 pr-2">
+  <span class="input-group-btn">
+    <button (mouseenter)="updateTableString()" class="btn-copy-table" type="button" ngxClipboard [cbContent]="tableString"
+      (cbOnSuccess)="copySuccess()" [class.btn-success]="isCopied1">Copy Table</button>
+  </span>
+</div>
 
 <div class="clipboard-notification" [ngClass]="{'show-notification': showNotification }">
   <div class="checkmark-container">

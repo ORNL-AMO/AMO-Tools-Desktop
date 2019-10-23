@@ -49,8 +49,9 @@
 
   <!--calculators tab-->
   <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-pump-curve *ngIf="calcTab == 'system-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"
-      [inAssessment]="true" [assessment]="assessment" [pumpCurvePrimary]="false"></app-pump-curve>
+    <app-system-and-equipment-curve *ngIf="calcTab == 'system-curve'" [settings]="settings" [equipmentType]="'pump'"
+      [assessment]="assessment" [isEquipmentCurvePrimary]="false">
+    </app-system-and-equipment-curve>
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings"
       [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inAssessment]="true" [assessment]="assessment"
@@ -59,8 +60,8 @@
       [assessment]="assessment" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
     <app-specific-speed *ngIf="calcTab == 'specific-speed'" [settings]="settings" [inAssessment]="true"
       [assessment]="assessment" [psat]="_psat"></app-specific-speed>
-    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"
-      [inAssessment]="true" [assessment]="assessment" [pumpCurvePrimary]="true"></app-pump-curve>
+    <app-system-and-equipment-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [equipmentType]="'pump'"
+      [assessment]="assessment" [isEquipmentCurvePrimary]="true"></app-system-and-equipment-curve>
     <app-unit-converter *ngIf="calcTab == 'convert-units'" [inAssessment]="true"></app-unit-converter>
   </div>
   <!--end calculators-->

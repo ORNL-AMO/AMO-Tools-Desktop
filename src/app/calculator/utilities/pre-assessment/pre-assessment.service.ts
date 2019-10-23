@@ -5,6 +5,7 @@ import { DesignedEnergyService } from '../../../phast/designed-energy/designed-e
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
+import { DesignedZone } from '../../../shared/models/phast/designedEnergy';
 
 @Injectable()
 export class PreAssessmentService {
@@ -149,9 +150,98 @@ export class PreAssessmentService {
     return percent;
   }
 
-  generateExample(settings: Settings): Array<PreAssessment> {
+  generateExample(settings: Settings, graphColors: Array<string>): Array<PreAssessment> {
     let examples: Array<PreAssessment>;
-    let example: PreAssessment = {
+    let example1: PreAssessment = {
+      designedEnergy: {
+        zones: [
+          {
+            name: 'Top Preheat',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 60,
+              totalBurnerCapacity: 169,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Bottom Preheat',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 60,
+              totalBurnerCapacity: 169,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Top Heat',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 80,
+              totalBurnerCapacity: 81.6,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Bottom Heat',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 80,
+              totalBurnerCapacity: 102,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Screen',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 40,
+              totalBurnerCapacity: 41.4,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          },
+          {
+            name: 'Soak',
+            designedEnergyFuel: {
+              fuelType: 0,
+              percentCapacityUsed: 40,
+              totalBurnerCapacity: 34.8,
+              percentOperatingHours: 88
+            },
+            designedEnergySteam: null,
+            designedEnergyElectricity: null
+          }
+        ],
+        steam: false,
+        fuel: true,
+        electricity: false
+      },
+      meteredEnergy: null,
+      energyUsed: 334.541,
+      name: 'Reheat Furnace',
+      type: 'Designed',
+      settings: settings,
+      collapsed: false,
+      collapsedState: 'open',
+      borderColor: graphColors[0],
+      fuelCost: 3.99,
+      steamCost: 4.69,
+      electricityCost: 0.066,
+      fuel: true,
+      electric: false,
+      steam: false
+    }
+    let example2: PreAssessment = {
       designedEnergy: null,
       meteredEnergy: {
         meteredEnergyFuel: {
@@ -188,7 +278,7 @@ export class PreAssessmentService {
       settings: settings,
       collapsed: false,
       collapsedState: 'open',
-      borderColor: null,
+      borderColor: graphColors[1],
       fuelCost: 3.99,
       steamCost: 4.69,
       electricityCost: 0.066,
@@ -196,7 +286,7 @@ export class PreAssessmentService {
       electric: true,
       steam: false
     }
-    examples = [example];
+    examples = [example2, example1];
     return examples;
   }
 }

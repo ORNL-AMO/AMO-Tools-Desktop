@@ -1,0 +1,128 @@
+<form [formGroup]="fanSystemCurveForm" class="form-section">
+    <label class="group-label">
+        System Curve</label>
+    <div class="form-group">
+        <label class="small" for="compressibilityFactor">Compressibility Factor</label>
+        <input type="number" step="any" class="form-control" formControlName="compressibilityFactor"
+            id="compressibilityFactor" (input)="saveChanges()" onfocus="this.select();"
+            (focus)="focusField('compressibilityFactor')">
+        <span class="alert-danger pull-right small"
+            *ngIf="fanSystemCurveForm.controls.compressibilityFactor.invalid && !fanSystemCurveForm.controls.compressibilityFactor.pristine">
+            <span *ngIf="fanSystemCurveForm.controls.compressibilityFactor.errors.required">Value required.</span>
+            <span *ngIf="fanSystemCurveForm.controls.compressibilityFactor.errors.min">Value can't be less than
+                {{fanSystemCurveForm.controls.compressibilityFactor.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
+        <input type="number" min="1" max="2.5" step="any" class="form-control" formControlName="systemLossExponent"
+            id="systemLossExponent" (input)="saveChanges()" onfocus="this.select();"
+            (focus)="focusField('systemLossExponent')">
+        <span class="alert-danger pull-right small"
+            *ngIf="fanSystemCurveForm.controls.systemLossExponent.invalid && !fanSystemCurveForm.controls.systemLossExponent.pristine">
+            <span *ngIf="fanSystemCurveForm.controls.systemLossExponent.errors.required">Value required.</span>
+            <span *ngIf="fanSystemCurveForm.controls.systemLossExponent.errors.min">Value can't be less than
+                {{fanSystemCurveForm.controls.systemLossExponent.errors.min.min}}.</span>
+            <span class="alert-danger pull-right small"
+                *ngIf="exponentInputWarning !== null">{{exponentInputWarning}}</span>
+        </span>
+    </div>
+    <!--Point 1-->
+    <label class="group-label">Point 1</label>
+    <div class="form-group">
+        <label class="small" for="pointOneFlowRate">Flow Rate</label>
+        <div class="input-group calc-addon-group">
+            <input type="number" step="any" class="form-control addon-input" id="pointOneFlowRate"
+                formControlName="pointOneFlowRate" (input)="saveChanges()" onfocus="this.select();"
+                (focus)="focusField('pointOneFlowRate')">
+            <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="fanSystemCurveForm.controls.pointOneFlowRate.invalid && !fanSystemCurveForm.controls.pointOneFlowRate.pristine">
+            <span *ngIf="fanSystemCurveForm.controls.pointOneFlowRate.errors.required">Value required.</span>
+            <span *ngIf="fanSystemCurveForm.controls.pointOneFlowRate.errors.min">Value can't be less than
+                {{fanSystemCurveForm.controls.pointOneFlowRate.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label class="small" for="pointOnePressure">Pressure</label>
+        <div class="input-group calc-addon-group">
+            <input type="number" step="any" class="form-control addon-input" id="pointOnePressure"
+                formControlName="pointOnePressure" (input)="saveChanges()" onfocus="this.select();"
+                (focus)="focusField('pointOnePressure')">
+            <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="fanSystemCurveForm.controls.pointOnePressure.invalid && !fanSystemCurveForm.controls.pointOnePressure.pristine">
+            <span *ngIf="fanSystemCurveForm.controls.pointOnePressure.errors.required">Value required.</span>
+            <span *ngIf="fanSystemCurveForm.controls.pointOnePressure.errors.min">Value can't be less than
+                {{fanSystemCurveForm.controls.pointOnePressure.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <small>Fluid Power,
+                <span [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
+            </small>
+        </div>
+        <div class="col-6 text-center">
+            <small>
+                <strong>{{pointOneFluidPower | number:'2.2-2'}}</strong>
+            </small>
+        </div>
+    </div>
+    <!--Point 2-->
+    <label class="group-label" for="pointTwo">Point 2</label>
+    <div class="form-group">
+        <div class="form-group">
+            <select class="form-control" *ngIf="showDataPointOptions" (change)="setFormValues()"
+                formControlName="pointTwo" id="pointTwo" (focus)="focusField('pointTwo')">
+                <option *ngFor="let dataPoint of assessmentDataPoints" [ngValue]="dataPoint.pointName">
+                    {{dataPoint.pointName}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="small" for="pointTwoFlowRate">Flow Rate</label>
+        <div class="input-group calc-addon-group">
+            <input type="number" step="any" class="form-control addon-input" id="pointTwoFlowRate"
+                formControlName="pointTwoFlowRate" (input)="saveChanges()" onfocus="this.select();"
+                (focus)="focusField('pointTwoFlowRate')">
+            <span class="input-group-addon units" [innerHTML]="settings.fanFlowRate | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="fanSystemCurveForm.controls.pointTwoFlowRate.invalid && !fanSystemCurveForm.controls.pointTwoFlowRate.pristine">
+            <span *ngIf="fanSystemCurveForm.controls.pointTwoFlowRate.errors.required">Value required.</span>
+            <span *ngIf="fanSystemCurveForm.controls.pointTwoFlowRate.errors.min">Value can't be less than
+                {{fanSystemCurveForm.controls.pointTwoFlowRate.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="form-group">
+        <label class="small" for="pointTwoPressure">Pressure</label>
+        <div class="input-group calc-addon-group">
+            <input type="number" step="any" class="form-control addon-input" id="pointTwoPressure"
+                formControlName="pointTwoPressure" (input)="saveChanges()" onfocus="this.select();"
+                (focus)="focusField('pointTwoPressure')">
+            <span class="input-group-addon units" [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="fanSystemCurveForm.controls.pointTwoPressure.invalid && !fanSystemCurveForm.controls.pointTwoPressure.pristine">
+            <span *ngIf="fanSystemCurveForm.controls.pointTwoPressure.errors.required">Value required.</span>
+            <span *ngIf="fanSystemCurveForm.controls.pointTwoPressure.errors.min">Value can't be less than
+                {{fanSystemCurveForm.controls.pointTwoPressure.errors.min.min}}.</span>
+        </span>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <small>Fluid Power,
+                <span [innerHTML]="settings.fanPowerMeasurement | settingsLabel"></span>
+            </small>
+        </div>
+        <div class="col-6 text-center">
+            <small>
+                <strong>{{pointTwoFluidPower | number:'2.2-2'}}</strong>
+            </small>
+        </div>
+    </div>
+</form>
