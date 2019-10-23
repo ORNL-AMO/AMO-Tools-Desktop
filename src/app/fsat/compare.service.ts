@@ -44,7 +44,7 @@ export class CompareService {
         this.isBarometricPressureDifferent(baseline, modification) ||
         this.isGasDensityDifferent(baseline, modification) ||
         this.isGasTypeDifferent(baseline, modification) ||
-       // this.isConditionLocationDifferent(baseline, modification) ||
+        // this.isConditionLocationDifferent(baseline, modification) ||
         this.isSpecificGravityDifferent(baseline, modification) ||
         this.isInputTypeDifferent(baseline, modification) ||
         this.isDewPointDifferent(baseline, modification) ||
@@ -258,6 +258,12 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
+      console.log('fan setup');
+      console.log(this.isFanTypeDifferent(baseline, modification));
+      console.log(this.isFanSpeedDifferent(baseline, modification));
+      console.log(this.isDriveDifferent(baseline, modification));
+      console.log(this.isSpecifiedFanEfficiencyDifferent(baseline, modification));
+
       return (
         this.isFanTypeDifferent(baseline, modification) ||
         this.isFanSpeedDifferent(baseline, modification) ||
@@ -346,8 +352,12 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanSetup.fanEfficiency !== modification.fanSetup.fanEfficiency) {
-        return true;
+      if (baseline.fanSetup.drive == 4 || modification.fanSetup.drive == 4) {
+        if (baseline.fanSetup.specifiedDriveEfficiency !== modification.fanSetup.specifiedDriveEfficiency) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -651,8 +661,12 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      if (baseline.fanMotor.specifiedEfficiency !== modification.fanMotor.specifiedEfficiency) {
-        return true;
+      if (baseline.fanMotor.efficiencyClass == 3 || baseline.fanMotor.efficiencyClass == 3) {
+        if (baseline.fanMotor.specifiedEfficiency !== modification.fanMotor.specifiedEfficiency) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
