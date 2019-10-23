@@ -151,10 +151,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('graph, changes()');
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
-        console.log('toggleCalculate');
         if (this.checkForm()) {
           this.makeGraph();
         }
@@ -190,7 +188,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       formatX: false
     });
   }
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeGraph();
@@ -385,8 +383,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   makeGraph() {
-    console.log('makeGraph()');
-
     if (this.tempMotorPower !== this.performanceForm.controls.horsePower.value) {
       this.curveChanged = true;
       this.tempMotorPower = this.performanceForm.controls.horsePower.value;
@@ -454,6 +450,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg.append("path")
       .attr("id", "areaUnderCurve");
     this.lineChartHelperService.setXAxisLabel(this.svg, this.width, this.height, 0, 70, "Motor Shaft Load (%)");
+    this.lineChartHelperService.setYAxisLabel(this.svg, this.width, this.height, -60, 0, "Current (% FLA), Efficiency (%), PF (%)");
 
     // Define the div for the tooltip
     this.detailBox = this.lineChartHelperService.appendDetailBox(this.ngChart);
