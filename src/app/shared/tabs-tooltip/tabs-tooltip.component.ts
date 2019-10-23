@@ -21,7 +21,7 @@ export class TabsTooltipComponent implements OnInit {
     this.setMessage();
   }
 
-  ngOnChanges(changes: SimpleChanges) {1
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.badgeClass) {
       if (this.badgeClass !== undefined) {
         this.setMessage();
