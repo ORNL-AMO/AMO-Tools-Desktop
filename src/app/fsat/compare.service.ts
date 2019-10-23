@@ -258,12 +258,6 @@ export class CompareService {
       modification = this.modifiedFSAT;
     }
     if (baseline && modification) {
-      console.log('fan setup');
-      console.log(this.isFanTypeDifferent(baseline, modification));
-      console.log(this.isFanSpeedDifferent(baseline, modification));
-      console.log(this.isDriveDifferent(baseline, modification));
-      console.log(this.isSpecifiedFanEfficiencyDifferent(baseline, modification));
-
       return (
         this.isFanTypeDifferent(baseline, modification) ||
         this.isFanSpeedDifferent(baseline, modification) ||

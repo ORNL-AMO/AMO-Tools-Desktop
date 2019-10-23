@@ -151,10 +151,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('graph, changes()');
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
-        console.log('toggleCalculate');
         if (this.checkForm()) {
           this.makeGraph();
         }
@@ -385,8 +383,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
   }
 
   makeGraph() {
-    console.log('makeGraph()');
-
     if (this.tempMotorPower !== this.performanceForm.controls.horsePower.value) {
       this.curveChanged = true;
       this.tempMotorPower = this.performanceForm.controls.horsePower.value;
