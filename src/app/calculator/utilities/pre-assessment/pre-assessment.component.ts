@@ -93,7 +93,7 @@ export class PreAssessmentComponent implements OnInit {
 
   btnResetData() {
     this.nameIndex = 1;
-    this.initAssessments();
+    this.initAssessments(true);
   }
 
   btnGenerateExample() {
@@ -112,41 +112,53 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
-  initAssessments() {
+  initAssessments(isReset?: boolean) {
     if (this.settings.unitsOfMeasure == 'Custom') {
       this.settings.unitsOfMeasure = 'Imperial';
     }
     this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     if (!this.calculator) {
-      if (!this.inModal && !this.inAssessment && this.preAssessmentService.standaloneInputData) {
+      console.log('branch 1');
+      if (!this.inModal && !this.inAssessment && this.preAssessmentService.standaloneInputData && !isReset) {
+        console.log('1A');
         this.preAssessments = this.preAssessmentService.standaloneInputData;
       } else {
+        console.log('1B');
         if (this.inAssessment) {
+          console.log('1B1');
           this.getCalculator();
         } else {
+          console.log('1B2');
           this.preAssessments = new Array<PreAssessment>();
           this.addPreAssessment();
         }
       }
     } else {
+      console.log('branch 2');
       if (!this.calculator.name) {
+        console.log('2A');
         this.showName = true;
       }
       if (!this.calculator.type) {
+        console.log('2B');
         this.calculator.type = 'furnace';
       }
       this.type = this.calculator.type;
       if (this.calculator.preAssessments) {
+        console.log('2C');
         if (this.calculator.preAssessments.length !== 0) {
+          console.log('2C1');
           this.nameIndex = this.calculator.preAssessments.length;
           this.preAssessments = this.calculator.preAssessments;
         } else {
+          console.log('2C2');
           this.calculator.preAssessments = new Array<PreAssessment>();
           this.preAssessments = new Array<PreAssessment>();
           this.addPreAssessment();
         }
       } else {
+        console.log('2D');
         this.calculator.preAssessments = new Array<PreAssessment>();
         this.preAssessments = new Array<PreAssessment>();
         this.addPreAssessment();
