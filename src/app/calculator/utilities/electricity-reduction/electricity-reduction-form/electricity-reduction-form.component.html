@@ -145,7 +145,8 @@
           <input class="form-control" name="ratedMotorPower" id="{{'ratedMotorPower_'+idString}}"
             formControlName="ratedMotorPower" type="number" (input)="calculate()"
             (focus)="focusField('ratedMotorPower')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" [innerHTML]="settings.powerMeasurement | settingsLabel"></span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.ratedMotorPower.invalid && !form.controls.ratedMotorPower.pristine">

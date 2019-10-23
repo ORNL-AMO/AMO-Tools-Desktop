@@ -197,6 +197,14 @@ export const volume = {
             }
             , to_anchor: 957.506
         }
+        , kSCF: {
+            name: {
+                singular: 'Thousand Standard Cubic foot'
+                , plural: 'Thousand Standard Cubic feet' ,
+                 display:  '(kSCF;)'
+            }
+            , to_anchor: 957.506 / 1000
+        }
         , yd3: {
             name: {
                 singular: 'Cubic yard'

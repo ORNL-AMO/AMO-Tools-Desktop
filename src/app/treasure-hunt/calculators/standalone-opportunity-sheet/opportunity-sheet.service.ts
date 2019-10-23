@@ -35,12 +35,16 @@ export class OpportunitySheetService {
   }
 
   getResults(opportunitySheet: OpportunitySheet, settings: Settings): OpportunitySheetResults {
+    let GJtoMJCostConversion: number = 1;
+    if (settings.unitsOfMeasure != 'Imperial') {
+      GJtoMJCostConversion = 1000;
+    }
     let baselineElectricityResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.electricityCost, 'Electricity');
     let modificationElectricityResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.electricityCost, 'Electricity');
     let electricityResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineElectricityResult, modificationElectricityResult);
 
-    let baselineGasResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.fuelCost, 'Gas');
-    let modificationGasResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.fuelCost, 'Gas');
+    let baselineGasResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.fuelCost / GJtoMJCostConversion, 'Gas');
+    let modificationGasResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.fuelCost / GJtoMJCostConversion, 'Gas');
     let gasResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineGasResult, modificationGasResult);
 
     let baselineCompressedAirResult: { energyUse: number, energyCost: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.compressedAirCost, 'Compressed Air');

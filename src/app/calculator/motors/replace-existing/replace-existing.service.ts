@@ -93,7 +93,9 @@ export class ReplaceExistingService {
       rewoundEnergyUse: 0,
       rewoundEnergyCost: 0
     };
-
+    if (settings.unitsOfMeasure != 'Imperial') {
+      inputCpy.motorSize = this.convertUnitsService.value(inputCpy.motorSize).from('kW').to('hp');
+    }
     results.existingEnergyUse = this.getExistingEnergyUse(inputCpy, settings);
     results.newEnergyUse = this.getNewEnergyUse(inputCpy, settings);
     results.existingEnergyCost = this.getExistingEnergyCost(inputCpy, results);
@@ -101,22 +103,16 @@ export class ReplaceExistingService {
     results.annualEnergySavings = this.getAnnualEnergySavings(results);
     results.costSavings = this.getCostSavings(inputCpy, results);
     results.simplePayback = this.getSimplePayback(inputCpy, results);
-    results.rewoundEnergyUse = this.getRewoundEnergyUse(inputCpy);
+    results.rewoundEnergyUse = this.getRewoundEnergyUse(inputCpy, settings);
     results.rewoundEnergyCost = this.getRewoundEnergyCost(inputCpy, results);
     results.percentSavings = this.getPercentSavings(results);
     return results;
   }
 
   getExistingEnergyUse(inputs: ReplaceExistingData, settings: Settings): number {
-    if (settings.unitsOfMeasure != 'Imperial') {
-      inputs.motorSize = this.convertUnitsService.value(inputs.motorSize).from('kW').to('hp');
-    }
     return .746 * inputs.motorSize * inputs.load * inputs.operatingHours * (1 / inputs.existingEfficiency);
   }
   getNewEnergyUse(inputs: ReplaceExistingData, settings: Settings): number {
-    if (settings.unitsOfMeasure != 'Imperial') {
-      inputs.motorSize = this.convertUnitsService.value(inputs.motorSize).from('kW').to('hp');
-    }
     return .746 * inputs.motorSize * inputs.load * inputs.operatingHours * (1 / inputs.newEfficiency);
   }
   getExistingEnergyCost(inputs: ReplaceExistingData, results: ReplaceExistingResults): number {
@@ -135,7 +131,7 @@ export class ReplaceExistingService {
     return inputs.purchaseCost / results.costSavings;
   }
 
-  getRewoundEnergyUse(inputs: ReplaceExistingData): number {
+  getRewoundEnergyUse(inputs: ReplaceExistingData, settings: Settings): number {
     return 0.746 * inputs.motorSize * (inputs.load / 100) * inputs.operatingHours * (100 / (inputs.existingEfficiency - inputs.rewindEfficiencyLoss));
   }
   getRewoundEnergyCost(inputs: ReplaceExistingData, results: ReplaceExistingResults): number {

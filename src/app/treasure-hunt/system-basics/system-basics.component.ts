@@ -49,7 +49,7 @@ export class SystemBasicsComponent implements OnInit {
     }, 100);
   }
 
-  save() {
+  saveSettings() {
     let id: number = this.settings.id;
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.settings.id = id;
@@ -101,7 +101,15 @@ export class SystemBasicsComponent implements OnInit {
 
 
   updateData() {
-    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    console.log('convert before');
     this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
+    this.settings = this.convertInputDataService.convertSettingsUnitCosts(this.oldSettings, this.settings);
+    this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+    console.log('converted');
+    this.saveSettings();
+    this.saveTreasureHunt();
+    this.dataUpdated = true;
+    this.showUpdateData = false;
+    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
   }
 }
