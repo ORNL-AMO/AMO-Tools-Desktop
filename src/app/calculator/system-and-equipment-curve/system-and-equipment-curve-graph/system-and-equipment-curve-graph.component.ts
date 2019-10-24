@@ -81,7 +81,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   displayGridLinesTooltip: boolean = false;
   displayExpandTooltip: boolean = false;
   displayCollapseTooltip: boolean = false;
-  constructor(private lineChartHelperService: LineChartHelperService, private systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
+  constructor(private lineChartHelperService: LineChartHelperService, public systemAndEquipmentCurveGraphService: SystemAndEquipmentCurveGraphService,
     private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
