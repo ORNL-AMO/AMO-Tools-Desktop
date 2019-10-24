@@ -51,8 +51,8 @@ export class ConvertInputDataService {
     newSettings.steamCost = this.convertDollarsPerKlbAndTonne(newSettings.steamCost, oldSettings, newSettings);
     //imperial: $/gal, metric: $/L
     newSettings.waterCost = this.convertDollarsPerGalAndLiter(newSettings.waterCost, oldSettings, newSettings);
-    //imperial: $/MMBtu, metric: $/MJ
-    newSettings.otherFuelCost = this.convertDollarsPerMMBtuAndMJ(newSettings.otherFuelCost, oldSettings, newSettings);
+    //imperial: $/MMBtu, metric: $/GJ
+    newSettings.otherFuelCost = this.convertDollarsPerMMBtuAndGJ(newSettings.otherFuelCost, oldSettings, newSettings);
     //imperial: $/gal, metric: $/L
     newSettings.waterWasteCost = this.convertDollarsPerGalAndLiter(newSettings.waterWasteCost, oldSettings, newSettings);
     //imperial: $/SCF, metric: $/m2
@@ -75,7 +75,7 @@ export class ConvertInputDataService {
   convertEnergyUseItem(energyUseItem: EnergyUseItem, oldSettings: Settings, newSettings: Settings): EnergyUseItem {
     if (energyUseItem.type == 'Gas' || energyUseItem.type == 'Other Fuel') {
       //imperial: MMBtu, metric: MJ
-      energyUseItem.amount = this.convertMMBtuAndMJValue(energyUseItem.amount, oldSettings, newSettings);
+      energyUseItem.amount = this.convertMMBtuAndGJValue(energyUseItem.amount, oldSettings, newSettings);
     } else if (energyUseItem.type == 'Water' || energyUseItem.type == 'WWT') {
       //imperial: gal, metric: L 
       energyUseItem.amount = this.convertGalAndLiterValue(energyUseItem.amount, oldSettings, newSettings);
@@ -291,10 +291,10 @@ export class ConvertInputDataService {
   }
 
   convertCurrentEnergyUsage(currentEnergyUsage: EnergyUsage, oldSettings: Settings, newSettings: Settings): EnergyUsage {
-    //imperial: MMBtu/yr, metric: MJ/yr
-    currentEnergyUsage.naturalGasUsage = this.convertMMBtuAndMJValue(currentEnergyUsage.naturalGasUsage, oldSettings, newSettings);
-    //imperial: MMBtu/yr, metric: MJ/yr
-    currentEnergyUsage.otherFuelUsage = this.convertMMBtuAndMJValue(currentEnergyUsage.otherFuelUsage, oldSettings, newSettings);
+    //imperial: MMBtu/yr, metric: GJ/yr
+    currentEnergyUsage.naturalGasUsage = this.convertMMBtuAndGJValue(currentEnergyUsage.naturalGasUsage, oldSettings, newSettings);
+    //imperial: MMBtu/yr, metric: GJ/yr
+    currentEnergyUsage.otherFuelUsage = this.convertMMBtuAndGJValue(currentEnergyUsage.otherFuelUsage, oldSettings, newSettings);
     //imperial: kgal/yr, metric: L/yr
     currentEnergyUsage.waterUsage = this.convertKGalAndLiterValue(currentEnergyUsage.waterUsage, oldSettings, newSettings);
     //imperial: kgal/yr, metric: L/yr
@@ -320,14 +320,6 @@ export class ConvertInputDataService {
       return this.convertValue(val, 'MMBtu', 'GJ');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       return this.convertValue(val, 'GJ', 'MMBtu');
-    }
-  }
-
-  convertMMBtuAndMJValue(val: number, oldSettings: Settings, newSettings: Settings): number {
-    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      return this.convertValue(val, 'MMBtu', 'MJ');
-    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      return this.convertValue(val, 'MJ', 'MMBtu');
     }
   }
 
@@ -440,14 +432,6 @@ export class ConvertInputDataService {
       return this.convertValue(val, 'klb', 'tonne');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       return this.convertValue(val, 'tonne', 'klb');
-    }
-  }
-
-  convertDollarsPerMMBtuAndMJ(val: number, oldSettings: Settings, newSettings: Settings): number {
-    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      return this.convertDollarPerValue(val, 'MMBtu', 'MJ');
-    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      return this.convertDollarPerValue(val, 'MJ', 'MMBtu');
     }
   }
 
