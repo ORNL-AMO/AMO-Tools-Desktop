@@ -207,7 +207,7 @@ export class StandaloneService {
       let output: PipeSizes = standaloneAddon.airVelocity(inputCpy);
       //all sizes metric: cm imperial: in
       for (let key in output) {
-        output[key] = this.convertUnitsService.value(output[key]).from('in').to('cm');
+        output[key] = this.convertUnitsService.value(output[key]).from('ft').to('m');
       }
       return output;
     }
