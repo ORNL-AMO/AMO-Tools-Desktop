@@ -121,7 +121,9 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
     this.byDataSubscription.unsubscribe();
     this.curveDataSubscription.unsubscribe();
     this.maxFlowRateSubscription.unsubscribe();
-
+    if (this.assessment != undefined) {
+      this.saveCalculator();
+    }
     if (this.equipmentType == 'fan' && this.assessment == undefined) {
       this.systemAndEquipmentCurveService.fanByDataInputs = this.systemAndEquipmentCurveService.byDataInputs.getValue();
       this.systemAndEquipmentCurveService.fanByEquationInputs = this.systemAndEquipmentCurveService.byEquationInputs.getValue();
@@ -137,9 +139,7 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       this.systemAndEquipmentCurveService.byEquationInputs.next(undefined);
       this.systemAndEquipmentCurveService.equipmentInputs.next(undefined);
     }
-    if (this.assessment != undefined) {
-      this.saveCalculator();
-    }
+
     this.systemAndEquipmentCurveService.systemCurveDataPoints = undefined;
   }
 
