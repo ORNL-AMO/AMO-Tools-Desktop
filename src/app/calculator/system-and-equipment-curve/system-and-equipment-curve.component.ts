@@ -279,7 +279,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
       }
 
       this.indexedDbService.putCalculator(calculator).then(() => {
-        console.log('PUT!!')
         this.calculatorDbService.setAll();
       });
     } else {
@@ -295,7 +294,6 @@ export class SystemAndEquipmentCurveComponent implements OnInit {
         }
       };
       this.indexedDbService.addCalculator(calculator).then((result) => {
-        console.log('ADD!!');
         this.calculatorDbService.setAll();
       });
     }
