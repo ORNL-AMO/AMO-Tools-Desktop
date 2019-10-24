@@ -44,7 +44,7 @@ export class ReceiverTankComponent implements OnInit {
   ];
   currentField: string;
   currentFieldSub: Subscription;
-  constructor(private receiverTankService: ReceiverTankService, private settingsDbService: SettingsDbService) {
+  constructor(public receiverTankService: ReceiverTankService, private settingsDbService: SettingsDbService) {
   }
 
   ngOnInit() {
