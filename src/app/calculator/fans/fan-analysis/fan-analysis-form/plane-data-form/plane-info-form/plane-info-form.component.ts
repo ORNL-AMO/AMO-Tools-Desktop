@@ -37,7 +37,6 @@ export class PlaneInfoFormComponent implements OnInit {
   }
 
   resetData() {
-    console.log('reset data');
     this.planeInfoForm = this.planeDataFormService.getPlaneInfoFormFromObj(this.fanAnalysisService.inputData.PlaneData);
     this.cd.detectChanges();
   }
