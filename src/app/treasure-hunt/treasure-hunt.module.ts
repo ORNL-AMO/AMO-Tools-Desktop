@@ -28,6 +28,7 @@ import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-
 import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 import { ToastModule } from '../shared/toast/toast.module';
+import { ConvertInputDataService } from './convert-input-data.service';
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import { ToastModule } from '../shared/toast/toast.module';
     ImportOpportunitiesService, 
     OpportunityCardsService, 
     TreasureChestMenuService,
-    SortCardsService
+    SortCardsService,
+    ConvertInputDataService
   ]
 })
 export class TreasureHuntModule { }

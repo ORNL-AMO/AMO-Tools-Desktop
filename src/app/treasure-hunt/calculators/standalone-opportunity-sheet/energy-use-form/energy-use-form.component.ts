@@ -36,7 +36,7 @@ export class EnergyUseFormComponent implements OnInit {
       return 'kWh';
     } else if (this.settings.unitsOfMeasure == 'Metric') {
       if (str == 'Gas' || str == 'Other Fuel') {
-        return 'MJ';
+        return 'GJ';
       } else if (str == 'Water' || str == 'WWT') {
         return 'L';
       } else if (str == 'Compressed Air') {

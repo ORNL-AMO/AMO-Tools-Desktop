@@ -124,7 +124,6 @@ export class FolderSummaryComponent implements OnInit {
               }
             }
             else {
-              console.log('calculate');
               results = this.calculateModelService.initDataAndRun(assessment.ssmt, settings, true, false);
             }
             results.outputData.boilerFuelUsage = this.convertUnitsService.value(results.outputData.boilerFuelUsage).from(settings.steamEnergyMeasurement).to(this.directorySettings.energyResultUnit)
